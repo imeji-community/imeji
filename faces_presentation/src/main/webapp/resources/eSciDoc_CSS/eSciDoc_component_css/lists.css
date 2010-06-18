@@ -1,0 +1,400 @@
+@charset "UTF-8";
+
+/*
+*
+* CDDL HEADER START
+*
+* The contents of this file are subject to the terms of the
+* Common Development and Distribution License, Version 1.0 only
+* (the "License"). You may not use this file except in compliance
+* with the License.
+*
+* You can obtain a copy of the license at license/ESCIDOC.LICENSE
+* or http://www.escidoc.de/license.
+* See the License for the specific language governing permissions
+* and limitations under the License.
+*
+* When distributing Covered Code, include this CDDL HEADER in each
+* file and include the License file at license/ESCIDOC.LICENSE.
+* If applicable, add the following below this CDDL HEADER, with the
+* fields enclosed by brackets "[]" replaced with your own identifying
+* information: Portions Copyright [yyyy] [name of copyright owner]
+*
+* CDDL HEADER END
+*/
+
+/*
+* Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+* für wissenschaftlich-technische Information mbH and Max-Planck-
+* Gesellschaft zur Förderung der Wissenschaft e.V.
+* All rights reserved. Use is subject to license terms.
+*/
+
+/*GENERAL*/
+
+.itemList, .tiledList {
+	border-top-width: 0.19em !important;
+	border-bottom-width: 0.10em !important;
+	border-top-style: solid;
+	border-bottom-style: solid; 
+}
+
+.tiledList {
+	float: left;
+	margin-bottom: 0.74em;
+}
+
+.itemList .seperator, .tiledList .seperator {
+	float: left;
+	width: 0.10em;
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-top-width: 1.3em;
+	height: 0em;
+	border-style: solid;
+}
+
+.itemList .collapse, .itemList .expand {
+	display: none;
+}
+
+.itemList ol, .itemList ul, .tiledList ol, tiledList ul {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.tiledList .fullBrowse {
+	width: 75em;
+}
+
+.tiledList .metaDataSection {
+	margin-right: 0.74em;
+	margin-top: 0.74em;
+}
+
+.tiledList .albumBrowse {
+	width: 50em;
+}
+
+.itemList input[type="button"] {
+	border-width: 0px;
+}
+
+/*PRE-HEADER*/
+
+.preListHeader {
+	border-top: 0.09em solid !important;
+	padding-top: 0.19em;
+	padding-bottom: 0.19em;
+}
+
+/*LIST HEADER*/
+
+	/*GENERAL*/
+	
+.listHeader {
+	overflow: visible;
+}
+
+.listHeader input {
+	float: right;
+}
+	
+.listHeader a, .listHeader span {
+	padding-top: 0.37em;
+	padding-bottom: 0px;
+	margin: 0px;
+	margin-right: -0.11em;
+}
+
+.listHeader .collapse, .listHeader .collapse:hover, .listHeader .collapse:focus, .listHeader .expand, .listHeader .expand:hover, .listHeader .expand:focus {
+	line-height: normal;
+	margin-left: 0.19em;
+	background-position: left;
+}
+
+.listHeader .headerSwitchView {
+	padding-top: 0.37em;
+	padding-bottom: 0em;
+}
+	/*SELECT MENU*/
+	
+.itemList .checkboxSelectButton {
+	margin-top: 0.19em;
+	margin-right: 0.19em;
+}
+
+	/*REPLACEMENT HACK FOR IE LESS THAN 6*/
+	* html .itemList th .checkboxSelectButton {
+	margin-right: -1.19em;
+	}
+	/*REPLACEMENT HACK FOR IE 7*/
+	*:first-child+html .itemList th .checkboxSelectButton {
+	margin-right: -1.19em;
+	}
+
+.itemSelectArea {
+	overflow: visible;
+	padding-top: 0em;
+	padding-bottom: 0em;
+	width: 3.47em;
+}
+
+.selectMenu {
+	position: absolute;
+	border-style: solid;
+	border-top-width: 0px !important;
+	z-index: 3;
+}
+
+.selectMenu input {
+	margin-left: 0.56em;
+	margin-top: 0.19em;
+}
+
+.selectMenu span {
+	padding-top: 0.28em;
+	padding-bottom: 0em;
+}
+
+.selectMenu a span {
+	padding-top: 0em;
+}
+
+	/*STATUS RELATED HEADER ELEMENTS*/
+	
+.listHeader {
+	height: 2.37em;
+}
+
+.listHeader .statusArea {
+	width: 9.19em;
+}
+
+.listHeader th.statusArea {
+	width: 9.28em;
+}
+
+.listHeader .statusArea a {
+	width: 7.74em;
+}
+
+.listHeader span.statusArea a, .listHeader div.statusArea a {
+	padding-top: 0.00em;
+}
+
+/*LIST ITEM*/
+
+	/*GENERAL*/
+	
+.listItem {
+	list-style: none;
+}
+
+.listItem td {
+	 vertical-align: top;
+}
+	
+.listItem, .listItem td {
+	border-top-width: 0.09em !important;
+	border-top-style: solid !important;
+}
+
+.itemTile {
+	margin-right: 0.74em;
+	margin-top: 0.74em;
+}
+
+.itemTile .tileIconArea {
+	border: 0.10em;
+	height: 11.56em;
+	line-height: 11.56em;
+	text-align: center;
+}
+
+.itemTile .tileIconArea img {
+	border: 0px;
+}
+
+.itemTile .tileIconArea img.horizontal {
+	width: 100%;
+	vertical-align:middle;
+}
+		
+.itemTile .tileIconArea img.vertical {
+	height: 100%;
+	margin: 0 auto 0 auto !important;
+}
+
+.itemList tr.listItem {
+	border: 0px !important;
+}
+
+.listItem td span, .listItem td {
+	padding-top: 0px;
+	margin-right: 0px;
+}
+
+.listItem .itemHeader {
+	margin-bottom: -0.37em;
+}
+*/
+.loggedIn .listItem .itemHeader {
+	margin-bottom: -3.19em;
+}
+*/
+.listItem .shortView, .listItem .mediumView {
+	margin-bottom: 0.5em;
+}
+
+.listItem .shortView, .listItem .mediumView {
+	padding-bottom: 0.65em;
+}
+
+	/*ITEM HEADER*/
+
+.listItem .itemHeadline {
+	width: 59.56em;
+	padding-bottom: 1.00em;
+}
+
+.itemHeader label {
+	padding-top: 0em;
+}
+
+.listHeader .itemHeader {
+	width: 38.65em;
+}
+
+.loggedIn .listHeader .itemHeader {
+	width: 20.19em;
+}
+
+.listItem td .itemHeadline {
+	width: 28.01em;
+	padding-bottom: 0.19em;
+}
+
+.loggedIn .listItem td .itemHeadline {
+	width: 18.65em;
+}
+
+.listHeader th .itemHeadline {
+	width: 28.01em;
+}
+
+.loggedIn .listHeader th .itemHeadline {
+	width: 18.65em;
+}
+
+	/*ITEM BODY*/
+
+.listItem .collapse, .listItem .expand {
+	float: left;
+	line-height: normal;
+	padding-left: 1.36em;
+	margin-left: -0.65em;
+}
+
+.listItem .itemCheckBox {
+	float: right;
+}
+
+.listItem .itemCheckBox, .listItem .itemCheckBox * {
+	float: right;
+	border-width: 0px;
+}
+
+.listItem .statusIcon {
+	position: relative;
+	float: left;
+}
+
+.listItem td .statusIcon {
+	margin-top: 0.09em;
+	margin-left: 0em;
+}
+
+.listItem .listItemLine {
+	width: 75.92em; /*835px*/
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.listItemLine .labelLine {
+	text-align: right;
+	width: 22.45em;
+	margin-right: 0.82em !important;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.loggedIn .labelLine {
+	width: 12.19em;
+	padding-left: 11.00em !important;
+}
+
+.listItem .filesSection {
+	margin-top: 0.19em;
+}
+
+.listItem .files, .listItem .locators {
+	padding-left: 2.10em;
+	margin-left: 0.19em;
+}
+
+.listItem td .files, .listItem td .locators {
+	margin: 0px;
+}
+
+.tiledList .lineToolSection, .tiledList .sectionToolSection {
+	float: right;
+}
+
+.tiledList .lineToolSection .groupTool, .tiledList .sectionToolSection .groupTool {
+	float: left;
+}
+
+.tiledList .lineToolSection .sectionTool, .tiledList .sectionToolSection .sectionTool {
+	float: right;
+}
+
+	/*STATUS RELATED ITEM ELEMENTS*/
+
+.listHeader .status, .listItem .status {
+	display: none;
+}
+
+.loggedIn .status {
+	display: block;
+}
+
+.listItem .statusArea {
+	width: 7.65em;
+	padding-top: 0.28em;
+}
+
+.listItem td .statusArea {
+	width: 7.74em;
+	padding-top: 0em;
+}
+
+/*PRINT RELATED DEFINITIONS*/
+
+@media print {
+	.itemList input, .itemList select, .itemList .seperator, .itemList .collapse, .itemList .expand {
+		display: none !important;
+	}
+	
+	.itemSelectArea {
+		display: none !important;
+	}
+	
+	.itemList {
+		border-top-width: 0px !important;
+	}
+}

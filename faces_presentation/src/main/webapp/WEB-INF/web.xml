@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	CDDL HEADER START
+	
+	The contents of this file are subject to the terms of the
+	Common Development and Distribution License, Version 1.0 only
+	(the "License"). You may not use this file except in compliance
+	with the License.
+	
+	You can obtain a copy of the license at license/ESCIDOC.LICENSE
+	or http://www.escidoc.de/license.
+	See the License for the specific language governing permissions
+	and limitations under the License.
+	
+	When distributing Covered Code, include this CDDL HEADER in each
+	file and include the License file at license/ESCIDOC.LICENSE.
+	If applicable, add the following below this CDDL HEADER, with the
+	fields enclosed by brackets "[]" replaced with your own identifying
+	information: Portions Copyright [yyyy] [name of copyright owner]
+	
+	CDDL HEADER END
+	
+	
+	Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
+	für wissenschaftlich-technische Information mbH and Max-Planck-
+	Gesellschaft zur Förderung der Wissenschaft e.V.
+	All rights reserved. Use is subject to license terms.
+-->
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd">
+
+	<jsp-config>
+		<taglib>
+			<taglib-uri>escidoc.tld</taglib-uri>
+			<taglib-location>escidoc.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>client</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.CONFIG_FILES</param-name>
+		<param-value>/WEB-INF/navigation.xml,/WEB-INF/managed-beans.xml</param-value>
+	</context-param>
+
+	<context-param>
+		<!-- Maximum memory per request (in bytes) -->
+		<param-name>org.apache.myfaces.trinidad.UPLOAD_MAX_MEMORY</param-name>
+		<!-- Use 500K -->
+		<param-value>512000</param-value>
+	</context-param>
+	<context-param>
+		<!-- Maximum disk space per request (in bytes) -->
+		<param-name>org.apache.myfaces.trinidad.UPLOAD_MAX_DISK_SPACE</param-name>
+		<!-- Use 5,000K -->
+		<param-value>512000000</param-value>
+	</context-param>
+
+	<!-- Trinidad by default uses an optimized client-side state saving
+		mechanism. To disable that, uncomment the following -->
+	<!--context-param>
+		<param-name>org.apache.myfaces.trinidad.CLIENT_STATE_METHOD</param-name>
+		<param-value>all</param-value>
+		</context-param-->
+
+	<!-- Trinidad also supports an optimized strategy for caching some
+		view state at an application level, which significantly improves
+		scalability.  However, it makes it harder to develop (updates to
+		pages will not be noticed until the server is restarted), and in
+		some rare cases cannot be used for some pages (see Trinidad
+		documentation for more information) -->
+	<context-param>
+		<param-name>org.apache.myfaces.trinidad.USE_APPLICATION_VIEW_CACHE</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+	<!-- If this parameter is enabled, Trinidad will automatically
+		check the modification date of your JSPs, and discard saved
+		state when they change;  this makes development easier,
+		but adds overhead that should be avoided when your application
+		is deployed -->
+	<context-param>
+		<param-name>org.apache.myfaces.trinidad.CHECK_FILE_MODIFICATION</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+	<!-- Enables Change Persistence at a session scope.  By default,
+		Change Persistence is entirely disabled. The ChangeManager is
+		an API, which can persist component modifications (like,
+		is a showDetail or tree expanded or collapsed). For providing
+		a custom Change Persistence implementation inherit from the 
+		Trinidad API's ChangeManager class. As the value you have 
+		to use the fullqualified class name. -->
+	<context-param>
+		<param-name>org.apache.myfaces.trinidad.CHANGE_PERSISTENCE</param-name>
+		<param-value>session</param-value>
+	</context-param>
+
+	<!-- Faces Servlet -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<!-- Initializer Servlet -->
+	<servlet>
+		<servlet-name>Initializer Servlet</servlet-name>
+		<servlet-class>de.mpg.escidoc.faces.init.InitializerServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	
+	<!-- Image Servlet -->
+	<servlet>
+		<servlet-name>Image Servlet</servlet-name>
+		<servlet-class>de.mpg.escidoc.faces.servlet.ImageServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<!-- resource loader servlet -->
+	<servlet>
+		<servlet-name>resources</servlet-name>
+		<servlet-class>org.apache.myfaces.trinidad.webapp.ResourceServlet</servlet-class>
+	</servlet>
+	
+	<!--  This filter is used to perform pretty URL's -->
+	<filter>
+	   <filter-name>UrlRewriteFilter</filter-name>
+	   <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+	   <init-param>
+		   <param-name>logLevel</param-name>
+		   <param-value>info</param-value>
+	   </init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- This filter is always required;  one of its functions is 
+		file upload. -->
+	<filter>
+		<filter-name>trinidad</filter-name>
+		<filter-class>org.apache.myfaces.trinidad.webapp.TrinidadFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>trinidad</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+
+	<session-config>
+		<session-timeout>180</session-timeout>
+	</session-config>
+
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>/jsf/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>resources</servlet-name>
+		<url-pattern>/adf/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>Image Servlet</servlet-name>
+		<url-pattern>/image</url-pattern>
+	</servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>jsf/Welcome.jsp</welcome-file>
+	</welcome-file-list>
+
+</web-app>
+

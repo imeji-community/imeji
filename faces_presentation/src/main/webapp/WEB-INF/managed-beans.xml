@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License, Version 1.0 only
+ (the "License"). You may not use this file except in compliance
+ with the License.
+
+ You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ or http://www.escidoc.de/license.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at license/ESCIDOC.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+
+ Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+ für wissenschaftlich-technische Information mbH and Max-Planck-
+ Gesellschaft zur Förderung der Wissenschaft e.V.
+ All rights reserved. Use is subject to license terms.
+-->
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+	version="1.2"> 
+	<!-- Request Beans -->
+	<managed-bean>
+		<managed-bean-name>HomePage</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.HomePage</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>Search</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.search.Search</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>Pagination</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.Pagination</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>SortingBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.SortingBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>StaticContent</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.StaticContent</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>Detail</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.pictures.Detail</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>AlbumFormBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.AlbumFormBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>CleanerBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.CleanerBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>UrlHelper</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.util.UrlHelper</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>StatisticsBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.StatisticsBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>BlogBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.BlogBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>Canvas</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.Canvas</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>AlbumFormular</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.album.beans.AlbumFormularBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>AlbumListBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.album.list.beans.AlbumListBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>AlbumInterfaceBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.album.beans.AlbumInterfaceBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>ExportBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.album.beans.ExportBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>	
+	<managed-bean>
+		<managed-bean-name>ConeHelper</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.util.ConeHelper</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>AffiliationBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.affiliation.AffiliationBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>ActiveAlbumBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.album.beans.ActiveAlbumBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<!-- Session Beans -->
+	<managed-bean>
+		<managed-bean-name>SessionBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.SessionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>SearchSession</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.search.SearchSession</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>ScreenConfigurationSession</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.metadata.ScreenConfigurationSession</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>AlbumSession</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.album.beans.AlbumSession</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<!-- Application Beans -->
+	<managed-bean>
+		<managed-bean-name>ApplicationBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.ApplicationBean</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>Navigation</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.Navigation</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+</faces-config>

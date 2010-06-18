@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+        "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
+
+<!--
+
+    Configuration file for UrlRewriteFilter
+    http://tuckey.org/urlrewrite/
+
+-->
+<urlrewrite>
+
+    <rule>
+        <note>
+            The rule means that requests to /test/status/ will be redirected to /rewrite-status
+            the url will be rewritten.
+        </note>
+        <from>/test/status/</from>
+        <to type="redirect">%{context-path}/rewrite-status</to>
+    </rule>
+    
+    <!-- 
+    	Rules defined for Faces 
+    -->
+    
+    <!-- Robots.txt -->
+     	<rule match-type="wildcard">
+    		<from casesensitive="false">/robots.txt</from>
+    		<to>/jsf/robots.txt</to>
+   		</rule>
+    
+    <!-- Start Home -->
+	    <rule>
+	    	<from casesensitive="false">^/home$</from>
+	    	<to>/jsf/Welcome.jsp?currentUrl=welcome</to>
+	    </rule>
+	    <rule>	
+	    	<from casesensitive="false">^/$</from>
+	    	<to>/jsf/Welcome.jsp?currentUrl=welcome</to>
+	    </rule>
+	   
+	<!-- END Home -->
+	
+	 <!-- START Pictures -->
+	 	<rule>
+	    	<from casesensitive="false">^/pictures$</from>
+	    	<to>/jsf/Pictures.jsp?page=1&amp;show=12&amp;currentUrl=home</to>
+	    </rule>
+	    <!-- Page number, pictures per page -->
+	    <rule>
+	    	<from casesensitive="false">^/pictures/([0-9]+)/([0-9]+)$</from>
+	    	<to>/jsf/Pictures.jsp?page=$1&amp;show=$2&amp;currentUrl=home</to>
+	    </rule>
+	    <!-- Page number, pictures per page, 3 (sort,order) criteria -->
+	    <rule match-type="wildcard">
+	    	<from casesensitive="false">/pictures/*/*/*/*/*/*/*/*</from>
+	    	<to>/jsf/Pictures.jsp?page=$1&amp;show=$2&amp;sort1=$3&amp;order1=$4&amp;sort2=$5&amp;order2=$6&amp;sort3=$7&amp;order3=$8&amp;currentUrl=home</to>
+	    </rule>
+	    <!-- 1 active album -->
+	    <rule>
+	    	<from casesensitive="false">^/pictures/active/escidoc:([0-9]+)$</from>
+	    	<to>/jsf/Pictures.jsp?page=1&amp;show=12&amp;selection=escidoc:$1&amp;currentUrl=home</to>
+	    </rule>
+	    <!-- Page number, pictures per page, 3 (sort,order) criteria, 1 active album -->
+	     <rule  match-type="wildcard">
+	    	<from casesensitive="false">/pictures/*/*/*/*/*/*/*/*/active/*</from>
+	    	<to>/jsf/Pictures.jsp?page=$1&amp;show=$2&amp;sort1=$3&amp;order1=$4&amp;sort2=$5&amp;order2=$6&amp;sort3=$7&amp;order3=$8&amp;selection=$9&amp;currentUrl=home</to>
+	    </rule>
+	     <!-- Page number, pictures per page, 1 active album -->
+	     <rule  match-type="wildcard">
+	    	<from casesensitive="false">/pictures/*/*/active/*</from>
+	    	<to>/jsf/Pictures.jsp?page=$1&amp;show=$2&amp;selection=$3&amp;currentUrl=home</to>
+	    </rule>
+	    <!-- Page number, pictures per page, 1 (sort,order) criteria -->
+	     <rule match-type="wildcard">
+	    	<from casesensitive="false">/pictures/*/*/*/*</from>
+	    	<to>/jsf/Pictures.jsp?page=$1&amp;show=$2&amp;sort1=$3&amp;order1=$4&amp;currentUrl=home</to>
+	    </rule>
+    <!-- END Pictures -->
+    
+    
+    <!-- START Person -->
+	    <rule>
+	    	<from casesensitive="false">^/person/([A-Za-z0-9]+)$</from>
+	    	<to>/jsf/Pictures.jsp?page=1&amp;show=12&amp;person=$1&amp;currentUrl=person</to>
+	    </rule>
+	    <!-- 1 active album -->
+	    <rule>
+	    	<from casesensitive="false">^/person/([A-Za-z0-9]+)/active/escidoc:([0-9]+)$</from>
+	    	<to>/jsf/Pictures.jsp?page=1&amp;show=12&amp;person=$1&amp;selection=escidoc:$2&amp;currentUrl=person</to>
+	    </rule>
+	    <!-- Page number, pictures per page, 3 (sort,order) criteria -->
+	    <rule match-type="wildcard">
+	    	<from casesensitive="false">/person/*/*/*/*/*/*/*/*/*</from>
+	    	<to>/jsf/Pictures.jsp?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;person=$1&amp;currentUrl=person</to>
+   		</rule>
+	    <!-- Page number, pictures per page, 3 (sort,order) criteria, 1 active album -->
+	    <rule>
+	    	<from casesensitive="false">^/person/([0-9]+)/([0-9]+)/([0-9]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/active/escidoc:([A-Za-z0-9]+)$</from>
+	    	<to>/jsf/Pictures.jsp?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;person=$1&amp;currentUrl=person&amp;selection=escidoc:$10</to>
+	    </rule>
+	    <!-- Page number, pictures per page-->
+	    <rule match-type="wildcard">
+	    	<from casesensitive="false">/person/*/*/*</from>
+	    	<to>/jsf/Pictures.jsp?page=$2&amp;show=$3&amp;person=$1&amp;currentUrl=person</to>
+   		</rule>
+	    <!-- Page number, pictures per page, 1 active album -->
+	    <rule match-type="wildcard">
+	    	<from casesensitive="false">/person/*/*/*/active/*</from>
+	    	<to>/jsf/Pictures.jsp?page=$2&amp;show=$3&amp;person=$1&amp;currentUrl=person&amp;selection=escidoc:$4</to>
+	    </rule>
+	    
+	 <!-- END Person -->
+    
+    
+    <!-- START Export -->
+	    <rule>
+	    	<from casesensitive="false">^/export/escidoc:([A-Za-z0-9]+)$</from>
+	    	<to>/jsf/Export.jsp?currentUrl=export&amp;album=escidoc:$1</to>
+	    </rule>
+    <!-- END Export -->
+    
+    
+    <!-- START Album -->
+	    <rule>
+	    	<from casesensitive="false">^/album/escidoc:([0-9]+)$</from>
+	    	<to>/jsf/Pictures.jsp?page=1&amp;show=12&amp;album=escidoc:$1&amp;currentUrl=viewAlbum</to>
+	    </rule> 
+	     <!--  Page number, pictures per page, 3 (sort,order) criteria -->
+	     <rule match-type="wildcard">
+	    	<from casesensitive="false">/album/*/*/*/*/*/*/*/*/*</from>
+	    	<to>/jsf/Pictures.jsp?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;album=$1&amp;currentUrl=viewAlbum</to>
+	    </rule>
+	    <!--  Page number, pictures per page -->
+	     <rule>
+	    	<from casesensitive="false">^/album/escidoc:([0-9]+)/([0-9]+)/([0-9]+)$</from>
+	    	<to>/jsf/Pictures.jsp?page=$2&amp;show=$3&amp;album=escidoc:$1&amp;currentUrl=viewAlbum</to>
+	    </rule>
+	 <!-- END Album -->
+	    
+	     
+     <!-- START Details -->
+     	<!-- START From Pictures -->
+	     	<rule>
+	         	<from>^/details/escidoc:([A-Za-z0-9]+)$</from>
+	        	<to>/jsf/Details.jsp?item=escidoc:$1&amp;currentUrl=details&amp;page=1</to>
+	    	</rule>
+	    	<!-- 1 active album -->
+	    	<rule>
+		         <from>^/details/escidoc:([A-Za-z0-9]+)/active/escidoc:([0-9]+)$</from>
+		         <to>/jsf/Details.jsp?item=escidoc:$1&amp;selection=escidoc:$2&amp;currentUrl=details&amp;page=1</to>
+		    </rule>
+    	<!-- END FROM Pictures -->
+    	<!-- START From Album -->
+		    <rule>
+		         <from>^/album/escidoc:([0-9]+)/details/escidoc:([A-Za-z0-9]+)$</from>
+		         <to>/jsf/Details.jsp?item=escidoc:$2&amp;album=escidoc:$1&amp;currentUrl=detailsFromAlbum</to>
+		    </rule>
+		    <!-- 1 active album-->
+		    <rule>
+		         <from>^/album/escidoc:([0-9]+)/details/escidoc:([A-Za-z0-9]+)/active/escidoc:([0-9]+)$</from>
+		         <to>/jsf/Details.jsp?item=escidoc:$2&amp;album=escidoc:$1&amp;currentUrl=detailsFromAlbum&amp;selection=escidoc:$3</to>
+		    </rule>
+	    <!-- END From Album -->
+    <!-- END Details -->
+     
+    
+    <!-- START Comparison-->
+    	<!-- START From Pictures -->
+    		<rule>
+		         <from>^/comparison/escidoc:([A-Za-z0-9]+)$</from>
+		         <to>/jsf/Comparison.jsp?item=escidoc:$1&amp;currentUrl=comparison&amp;page=1</to>
+		    </rule>
+		    <!-- 1 active album -->
+		    <rule>
+		         <from>^/comparison/escidoc:([A-Za-z0-9]+)/active/escidoc:([0-9]+)$</from>
+		         <to>/jsf/Comparison.jsp?item=escidoc:$1&amp;selection=escidoc:$2&amp;currentUrl=comparison&amp;page=1</to>
+		    </rule>
+    	<!-- END FROM Pictures -->
+    	<!-- START From Album -->
+    		 <rule>
+		         <from>^/album/escidoc:([0-9]+)/Comparison/escidoc:([A-Za-z0-9]+)$</from>
+		         <to>/jsf/Comparison.jsp?item=escidoc:$2&amp;album=escidoc:$1&amp;currentUrl=comparisonFromAlbum</to>
+		    </rule> 
+		    <!-- 1 active album -->
+		    <rule>
+		         <from>^/album/escidoc:([0-9]+)/comparison/escidoc:([A-Za-z0-9]+)/active/escidoc:([0-9]+)$</from>
+		         <to>/jsf/Comparison.jsp?item=escidoc:$2&amp;album=escidoc:$1&amp;currentUrl=comparisonFromAlbum&amp;selection=escidoc:$3</to>
+		    </rule> 
+    	<!-- END From Album -->
+    <!-- END Comparison -->
+    
+    
+	<!-- START Search Result -->
+	    <!-- Default -->
+	    <rule match-type="wildcard">	
+	    	<from casesensitive="false">/search/result/*</from>
+	    	<to>/jsf/Pictures.jsp?currentUrl=searchResult&amp;page=1&amp;show=12&amp;query=$1</to>
+	    </rule>
+	    <!--  Page number, pictures per page -->
+	    <rule match-type="wildcard">
+	    	<from casesensitive="false">/search/result/active/*/*</from>
+	    	<to>/jsf/Pictures.jsp?currentUrl=searchResult&amp;page=1&amp;show=12&amp;selection=$1&amp;query=$2</to>
+	    </rule>
+	    <!--  Page number, pictures per page, 3 (sort,order) criteria -->
+	    <rule match-type="wildcard">
+	    	<from casesensitive="false">/search/result/*/*/*/*/*/*/*/*/*</from>
+	    	<to>/jsf/Pictures.jsp?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;sort1=$3&amp;order1=$4&amp;sort2=$5&amp;order2=$6&amp;sort3=$7&amp;order3=$8&amp;query=$9</to>
+	    </rule>
+	    
+	    <!-- Page number, pictures per page, 3 (sort,order) criteria, active album -->
+	    <rule>
+	    	<from casesensitive="false">/search/result/([0-9]+)/([0-9]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/active/escidoc:([0-9]+)/([^//?]+)</from>
+	    	<to>/jsf/Pictures.jsp?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;sort1=$3&amp;order1=$4&amp;sort2=$5&amp;order2=$6&amp;sort3=$7&amp;order3=$8&amp;selection=escidoc:$9&amp;query=$10</to>
+	    </rule>
+	    
+	    <!-- Page number, pictures per page -->
+	    <rule match-type="wildcard">
+	    	<from casesensitive="false">/search/result/*/*/*</from>
+	    	<to>/jsf/Pictures.jsp?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;query=$3</to>
+	    </rule>
+	    
+	    <!-- Page number, pictures per page, active album -->
+	    <rule match-type="wildcard">
+	    	<from casesensitive="false">/search/result/*/*/active/*/*</from>
+	    	<to>/jsf/Pictures.jsp?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;selection=$3&amp;query=$4</to>
+	    </rule>
+	<!-- END Search Result -->
+    
+    
+    <!-- Albums Page -->
+    <rule>
+    	<from casesensitive="false">^/albums$</from>
+    	<to>/jsf/Albums.jsp?currentUrl=albums</to>
+    </rule>
+     <!-- Default Browsing with active album -->
+    <rule>
+    	<from casesensitive="false">^/albums/active/([^//]+)$</from>
+    	<to>/jsf/Albums.jsp?selection=$1&amp;currentUrl=albums</to>
+    </rule>
+    <!-- Browsing without active album -->
+    <rule>
+    	<from casesensitive="false">^/albums/([A-Za-z]+)/([0-9]+)/([0-9]+)/([^//]+)/([A-Za-z]+)$</from>
+    	<to>/jsf/Albums.jsp?page=$2&amp;show=$3&amp;view=$1&amp;sort=$4&amp;order=$5&amp;currentUrl=albums</to>
+    </rule>
+    <!-- Browsing with active album -->
+    <rule>
+    	<from casesensitive="false">^/albums/([A-Za-z]+)/([0-9]+)/([0-9]+)/([^//]+)/([A-Za-z]+)/active/([^//]+)$</from>
+    	<to>/jsf/Albums.jsp?page=$2&amp;show=$3&amp;view=$1&amp;sort=$4&amp;order=$5&amp;selection=$6&amp;currentUrl=albums</to>
+    </rule>
+    
+    <!-- Public search -->
+   <rule>
+    	<from casesensitive="false">^/albums/search$</from>
+    	<to>/jsf/Albums.jsp?type=search&amp;currentUrl=albumssearch</to>
+    </rule>
+    <!-- Browsing without active album -->
+    <rule>
+    	<from casesensitive="false">^/albums/search/([A-Za-z]+)/([0-9]+)/([0-9]+)/([^//]+)/([A-Za-z]+)$</from>
+    	<to>/jsf/Albums.jsp?type=search&amp;page=$2&amp;show=$3&amp;view=$1&amp;sort=$4&amp;order=$5</to>
+    </rule>
+    
+    
+    <!-- View my public albums (needs of browsing parameters) -->
+    <rule>
+    	<from casesensitive="false">^/myalbums$</from>
+    	<to>/jsf/MyAlbums.jsp?currentUrl=myAlbums</to>
+    </rule>
+    <rule>
+    	<from casesensitive="false">^/myalbums/([0-9]+)/([0-9]+)/([A-Za-z]+)/([a-z]+)$</from>
+    	<to>/jsf/MyAlbums.jsp?currentUrl=myAlbums&amp;page=$1&amp;show=$2&amp;sortBy=$3&amp;order=$4</to>
+    </rule>
+    
+    <!-- View my the published albums (needs of browsing parameters) -->
+    <rule>
+    	<from casesensitive="false">^/publishedalbums$</from>
+    	<to>/jsf/PublishedAlbums.jsp?currentUrl=publishedalbums</to>
+    </rule>
+    <rule>
+    	<from casesensitive="false">^/publishedalbums/([0-9]+)/([0-9]+)/([A-Za-z]+)/([a-z]+)$</from>
+    	<to>/jsf/PublishedAlbums.jsp?currentUrl=publishedalbums&amp;page=$1&amp;show=$2&amp;sortBy=$3&amp;order=$4</to>
+    </rule>
+    
+    <!-- Action of an album -->
+    <!-- Action with an item with redirect-->
+    <rule>
+    	<from casesensitive="false">^/do/escidoc:([0-9a-z]+)/([A-Za-z]+)/escidoc:([0-9a-z]+)/([A-Za-z]+)$</from>
+    	<to>/jsf/AlbumInterface.jsp?currentUrl=actionAlbum&amp;album=escidoc:$1&amp;method=$2&amp;item=escidoc:$3&amp;redirect=$4</to>
+    </rule>
+    <!-- Action with an item without redirect-->
+    <rule>
+    	<from casesensitive="false">^/do/escidoc:([0-9a-z]+)/([A-Za-z]+)/escidoc:([0-9a-z]+)$</from>
+    	<to>/jsf/AlbumInterface.jsp?currentUrl=actionAlbum&amp;album=escidoc:$1&amp;method=$2&amp;item=escidoc:$3</to>
+    </rule>
+    <!-- Action without item -->
+     <rule>
+    	<from casesensitive="false">^/do/escidoc:([0-9a-z]+)/([A-Za-z]+)$</from>
+    	<to>/jsf/AlbumInterface.jsp?currentUrl=actionAlbum&amp;album=escidoc:$1&amp;method=$2</to>
+    </rule>
+    
+     <!-- Logout-->
+     <rule>
+    	<from casesensitive="false">^/logout$</from>
+    	<to>/jsf/AlbumAction.jsp?currentUrl=actionAlbum&amp;action=logout</to>
+    </rule>
+    
+     <!-- statistics-->
+     <rule>
+    	<from casesensitive="false">^/statistics/([a-z]+)$</from>
+    	<to>/jsf/Statistics.jsp?currentUrl=statistics&amp;action=$1</to>
+    </rule>
+    
+    <!-- Create a new album -->
+    <rule>
+    	<from casesensitive="false">^/album/new$</from>
+    	<to>/jsf/AlbumFormular.jsp?currentUrl=createalbum</to>
+    </rule>
+    
+     <!-- Edit an album -->
+    <rule>
+    	<from casesensitive="false">^/edit/escidoc:([0-9]+)$</from>
+    	<to>/jsf/AlbumFormular.jsp?currentUrl=editalbum&amp;album=escidoc:$1</to>
+    </rule>
+    
+    <!-- search formular page -->
+    <rule>
+    	<from>^/search$</from>
+    	<to>/jsf/Search.jsp?currentUrl=search</to>
+    </rule>
+    <!-- Revise search formular page -->
+    <rule>
+    	<from>^/search/revise$</from>
+    	<to>/jsf/Search.jsp?currentUrl=search&amp;action=revise</to>
+    </rule>
+    
+    <!-- Confirmation page -->
+     <rule>
+    	<from>^/confirmation/download$</from>
+    	<to>/jsf/Confirmation.jsp?currentUrl=confirmation&amp;method=download</to>
+    </rule>
+    
+    <rule>
+    	<from>^/confirmation/([A-Za-z]+)/escidoc:([0-9]+)$</from>
+    	<to>/jsf/Confirmation.jsp?currentUrl=confirmation&amp;method=$1&amp;album=escidoc:$2</to>
+    </rule>
+    
+    <!-- Confirmation page : several albums selected-->
+    <rule>
+    	<from>^/confirmation/selected/([A-Za-z]+)$</from>
+    	<to>/jsf/Confirmation.jsp?currentUrl=confirmation&amp;action=selected</to>
+    </rule>
+    <!-- About page -->
+    <rule>
+    	<from>^/about</from>
+    	<to>/jsf/About.jsp?currentUrl=about</to>
+    </rule>
+    
+    <!-- Legal Page -->
+    <rule>
+    	<from>^/legal</from>
+    	<to>/jsf/Legal.jsp?currentUrl=legal</to>
+    </rule>
+    
+    <!-- Help Page -->
+    <rule>
+    	<from>^/help</from>
+    	<to>/jsf/Help.jsp?currentUrl=help</to>
+    </rule>
+    
+    <rule>
+         <from>^/logoff$</from>
+         <to>/jsf/Logoff.jsp</to>
+    </rule> 
+
+	 <!-- Resource resolution -->
+    <rule match-type="wildcard">	
+    	<from casesensitive="false">/*</from>
+    	<to>/jsf/Pictures.jsp?currentUrl=resource&amp;resource=$1</to>
+    </rule>
+    <rule match-type="wildcard">	
+    	<from casesensitive="false">/*/*/*/*/*/*/*/*/*</from>
+    	<to>/jsf/Pictures.jsp?currentUrl=resource&amp;resource=$1&amp;page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9</to>
+    </rule>
+
+    <outbound-rule>
+        <note>
+            The outbound-rule specifies that when response.encodeURL is called (if you are using JSTL c:url)
+            the url /rewrite-status will be rewritten to /test/status/.
+
+            The above rule and this outbound-rule means that end users should never see the
+            url /rewrite-status only /test/status/ both in thier location bar and in hyperlinks
+            in your pages.
+        </note>
+        <from>/rewrite-status</from>
+        <to>/test/status/</to>
+    </outbound-rule>
+    
+    <!-- 
+    	Rules defined for Faces 
+    -->
+      
+     <!-- <outbound-rule >
+	     <from>jsf/Pictures.jsp/([0-9]+)/([0-9]+)</from>
+	     <to>home/$1/$2</to>
+     </outbound-rule> -->
+     
+    
+     
+     <!-- <outbound-rule >
+	     <from>jsf/Pictures.jsp</from>
+	     <to>home</to>
+     </outbound-rule> -->
+     
+     <!--    <outbound-rule>
+	     <from>jsf/Pictures.jsp/([0-9]+)/([0-9]+)/([A-Za-z]+)/([a-z]+)</from>
+	     <to>home/$1/$2/$3/$4</to>
+     </outbound-rule>
+     
+     <outbound-rule>
+	     <from>jsf/Details.jsp/([A-Za-z0-9]+)</from>
+	     <to>Details/$1</to>
+     </outbound-rule>
+     
+     <outbound-rule>
+	     <from>jsf/Comparison.jsp/([A-Za-z0-9]+)</from>
+	     <to>Comparison/$1</to>
+     </outbound-rule>
+     
+     <outbound-rule>
+	     <from>jsf/Search.jsp</from>
+	     <to>search</to>
+     </outbound-rule>
+     
+     <outbound-rule>
+	     <from>jsf/Help.jsp</from>
+	     <to>Help</to>
+     </outbound-rule>
+     
+     <outbound-rule>
+	     <from>jsf/Legal.jsp</from>
+	     <to>Legal</to>
+     </outbound-rule>
+
+	<outbound-rule>
+	     <from>faces/About.jsp</from>
+	     <to>About</to>
+     </outbound-rule>-->
+    <!--
+
+    INSTALLATION
+
+        in your web.xml add...
+
+        <filter>
+            <filter-name>UrlRewriteFilter</filter-name>
+            <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+            <init-param>
+                <param-name>logLevel</param-name>
+                <param-value>WARN</param-value>
+            </init-param>
+        </filter>
+        <filter-mapping>
+            <filter-name>UrlRewriteFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+
+     EXAMPLES
+
+     Redirect one url
+        <rule>
+            <from>/some/old/page.html</from>
+            <to type="redirect">/very/new/page.html</to>
+        </rule>
+
+    Redirect a directory
+        <rule>
+            <from>/some/olddir/(.*)</from>
+            <to type="redirect">/very/newdir/$1</to>
+        </rule>
+
+    Clean a url
+        <rule>
+            <from>/products/([0-9]+)</from>
+            <to>/products/index.jsp?product_id=$1</to>
+        </rule>
+    eg, /products/1234 will be passed on to /products/index.jsp?product_id=1234 without the user noticing.
+
+    Browser detection
+        <rule>
+            <condition name="user-agent">Mozilla/[1-4]</condition>
+            <from>/some/page.html</from>
+            <to>/some/page-for-old-browsers.html</to>
+        </rule>
+    eg, will pass the request for /some/page.html on to /some/page-for-old-browsers.html only for older
+    browsers whose user agent srtings match Mozilla/1, Mozilla/2, Mozilla/3 or Mozilla/4.
+
+    Centralised browser detection
+        <rule>
+            <condition name="user-agent">Mozilla/[1-4]</condition>
+            <set type="request" name="browser">moz</set>
+        </rule>
+    eg, all requests will be checked against the condition and if matched
+    request.setAttribute("browser", "moz") will be called.
+
+    -->
+
+</urlrewrite>
+

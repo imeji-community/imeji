@@ -1,0 +1,58 @@
+<%
+            /* 
+            CDDL HEADER START
+
+            The contents of this file are subject to the terms of the
+            Common Development and Distribution License, Version 1.0 only
+            (the "License"). You may not use this file except in compliance
+            with the License.
+
+            You can obtain a copy of the license at license/ESCIDOC.LICENSE
+            or http://www.escidoc.de/license.
+            See the License for the specific language governing permissions
+            and limitations under the License.
+
+            When distributing Covered Code, include this CDDL HEADER in each
+            file and include the License file at license/ESCIDOC.LICENSE.
+            If applicable, add the following below this CDDL HEADER, with the
+            fields enclosed by brackets "[]" replaced with your own identifying
+            information: Portions Copyright [yyyy] [name of copyright owner]
+
+            CDDL HEADER END
+
+
+            Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+            f�r wissenschaftlich-technische Information mbH and Max-Planck-
+            Gesellschaft zur F�rderung der Wissenschaft e.V.
+            All rights reserved. Use is subject to license terms.
+             */
+%>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+
+<div id="mainMenuSkipLinkAnchor" class="full_area0 mainMenu">
+
+	<!-- main Menu starts here -->
+	<h:outputLink id="lnkHome" styleClass="free_area0" value="#{Navigation.applicationUrl}" rendered="true">
+		<h:outputText value="HOME"/>
+	</h:outputLink>
+	<h:outputText id="txtHomeInactive" styleClass="free_area0" value="Home" rendered="false" />
+
+	<h:outputLink id="lnkBrowse" styleClass="free_area0" value="#{Navigation.browseUrl}" rendered="true">
+  		<h:outputText value="#{lbl.header_browse}"/>
+  	</h:outputLink>	
+	<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.browse}" rendered="false" />
+
+	<h:outputLink id="lnkMyAlbums" value="#{Navigation.albumsUrl}">
+		<h:outputText value="#{lbl.header_albums}"></h:outputText>
+	</h:outputLink>
+	<h:outputText id="txtMyAlbumsInactive" styleClass="free_area0" value="My Albums" rendered="false" />
+
+	<h:outputLink id="lnkStatistics" value="#{Navigation.statisticsUrl}/visit" rendered="#{SessionBean.admin && SessionBean.user != null}">
+		<h:outputText value="#{lbl.header_statistics}"></h:outputText>
+	</h:outputLink>
+	<h:outputText id="txtStatisticsInactive" styleClass="free_area0" value="Statistics" rendered="false" />
+	
+	<!-- main Menu ends here -->
+
+</div>

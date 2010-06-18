@@ -1,0 +1,9 @@
+Context: 
+http://134.76.24.61:8080/ir/context/escidoc:249
+
+Organizational Unit: 
+http://134.76.24.61:8080/oum/organizational-unit/escidoc:245
+
+ContentType (all face-items should have this content type as content type id in the properties): 
+http://134.76.24.61:8080/ctm/content-type/escidoc:faces40
+

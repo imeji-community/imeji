@@ -1,0 +1,1094 @@
+<?xml version="1.0" encoding="utf-8"?><taglib xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd" version="2.1">
+  
+  <display-name>Apache Trinidad HTML</display-name>
+  <tlib-version>1.2.6</tlib-version>
+  <short-name>trh</short-name>
+  <uri>http://myfaces.apache.org/trinidad/html</uri>
+
+  <tag>
+    
+    <description>The styleSheet tag generates the style
+          sheet link reference to a generated Apache Trinidad style sheet.
+          This is automatically included for you if you use the Trinidad head tag.</description><name>styleSheet</name>
+    <tag-class>org.apache.myfaces.trinidadinternal.taglib.core.CoreStyleSheetTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>&lt;html&gt;the identifier for the component.  The identifier
+must follow a subset of the syntax allowed in HTML:
+&lt;ul&gt;
+&lt;li&gt;Must not be a zero-length String.&lt;/li&gt;
+&lt;li&gt;First character must be an ASCII letter (A-Za-z) or an underscore ('_').&lt;/li&gt;
+&lt;li&gt;Subsequent characters must be an ASCII letter or digit (A-Za-z0-9), an underscore ('_'), or a dash ('-').&lt;/li&gt;
+&lt;/ul&gt;&lt;/html&gt;</description>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>whether the component is rendered. When set to false, no output
+                   will be delivered for this component.</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>an EL reference that will store the component instance on a
+bean.  This can be used to give programmatic access to a component
+from a backing bean, or to move creation of the component to a backing bean.</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>a method reference to an attribute change listener.  Attribute change events are not delivered for any programmatic change to a property.  They are only delivered when a renderer changes a property without the application's specific request.  An example of an attribute change events might include the width of a column that supported client-side resizing.</description>
+      <name>attributeChangeListener</name>
+    <deferred-method>
+      <method-signature>void myMethod(org.apache.myfaces.trinidad.event.AttributeChangeEvent)</method-signature></deferred-method>
+    </attribute>
+  </tag>
+  <tag>
+    
+    <description>Tag for the HTML body element.</description><name>body</name>
+    <tag-class>org.apache.myfaces.trinidadinternal.taglib.html.HtmlBodyTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>&lt;html&gt;the identifier for the component.  The identifier
+must follow a subset of the syntax allowed in HTML:
+&lt;ul&gt;
+&lt;li&gt;Must not be a zero-length String.&lt;/li&gt;
+&lt;li&gt;First character must be an ASCII letter (A-Za-z) or an underscore ('_').&lt;/li&gt;
+&lt;li&gt;Subsequent characters must be an ASCII letter or digit (A-Za-z0-9), an underscore ('_'), or a dash ('-').&lt;/li&gt;
+&lt;/ul&gt;&lt;/html&gt;</description>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>whether the component is rendered. When set to false, no output
+                   will be delivered for this component.</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>an EL reference that will store the component instance on a
+bean.  This can be used to give programmatic access to a component
+from a backing bean, or to move creation of the component to a backing bean.</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>a method reference to an attribute change listener.  Attribute change events are not delivered for any programmatic change to a property.  They are only delivered when a renderer changes a property without the application's specific request.  An example of an attribute change events might include the width of a column that supported client-side resizing.</description>
+      <name>attributeChangeListener</name>
+    <deferred-method>
+      <method-signature>void myMethod(org.apache.myfaces.trinidad.event.AttributeChangeEvent)</method-signature></deferred-method>
+    </attribute>
+    <attribute>
+      <description>whether or not Trinidad will allow the first click to go
+             through in certain instances. When a PPR event occurs, we block
+             all subsequent user input until it completes. However, there may
+             be instances where the client wants to receive the very first
+             click. For example, if the user entered text in an inputText
+             that fires a PPR request, then the user immediately clicked
+             a submit button two events will be triggered - an onchange
+             followed by an onclick. The onchange will trigger the client
+             action which will immediately start the PPR blocking, so the
+             onclick will get consumed by the blocking code and no submit will
+             occur. Setting this value to true will allow the click to go
+             through.
+
+    This attribute is not supported on the following agent types:
+ pda, phone, voice.</description>
+      <name>firstClickPassed</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>the short description of the bean.  This text
+         is commonly used by user agents to display tooltip help text.</description>
+      <name>shortDesc</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the IDs of the components that should trigger a partial update.
+         This component will listen on the trigger components. If one of the
+         trigger components receives an event that will cause it to update
+         in some way, this component will request to be updated too.</description>
+      <name>partialTriggers</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onclick Javascript handler.</description>
+      <name>onclick</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an ondblclick Javascript handler.</description>
+      <name>ondblclick</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmousedown Javascript handler.</description>
+      <name>onmousedown</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseup Javascript handler.</description>
+      <name>onmouseup</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseover Javascript handler.</description>
+      <name>onmouseover</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmousemove Javascript handler.</description>
+      <name>onmousemove</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseout Javascript handler.</description>
+      <name>onmouseout</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeypress Javascript handler.</description>
+      <name>onkeypress</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeydown Javascript handler.</description>
+      <name>onkeydown</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeyup Javascript handler.</description>
+      <name>onkeyup</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the CSS style class of the bean.</description>
+      <name>styleClass</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the inline CSS style for this element</description>
+      <name>inlineStyle</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onload Javascript handler.</description>
+      <name>onload</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onunload Javascript handler.</description>
+      <name>onunload</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the id of the component to which you want the
+        focus to be when the full page renders. The accessibility-mode
+        must be set to "inaccessible" for this feature to be on.
+
+    This attribute is not supported on the following agent types:
+ pda, phone, voice.</description>
+      <name>initialFocusId</name>
+      <deferred-value/>
+    </attribute>
+  </tag>
+  <tag>
+    
+    <description>CellFormat components are used to format cells in a
+          rowLayout component.</description><name>cellFormat</name>
+    <tag-class>org.apache.myfaces.trinidadinternal.taglib.html.HtmlCellFormatTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>&lt;html&gt;the identifier for the component.  The identifier
+must follow a subset of the syntax allowed in HTML:
+&lt;ul&gt;
+&lt;li&gt;Must not be a zero-length String.&lt;/li&gt;
+&lt;li&gt;First character must be an ASCII letter (A-Za-z) or an underscore ('_').&lt;/li&gt;
+&lt;li&gt;Subsequent characters must be an ASCII letter or digit (A-Za-z0-9), an underscore ('_'), or a dash ('-').&lt;/li&gt;
+&lt;/ul&gt;&lt;/html&gt;</description>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>whether the component is rendered. When set to false, no output
+                   will be delivered for this component.</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>an EL reference that will store the component instance on a
+bean.  This can be used to give programmatic access to a component
+from a backing bean, or to move creation of the component to a backing bean.</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>a method reference to an attribute change listener.  Attribute change events are not delivered for any programmatic change to a property.  They are only delivered when a renderer changes a property without the application's specific request.  An example of an attribute change events might include the width of a column that supported client-side resizing.</description>
+      <name>attributeChangeListener</name>
+    <deferred-method>
+      <method-signature>void myMethod(org.apache.myfaces.trinidad.event.AttributeChangeEvent)</method-signature></deferred-method>
+    </attribute>
+    <attribute>
+      <description>This attribute should be used to provide an abbreviated form of
+             the cell's content, and may be rendered by user agents when
+             appropriate in place of the cell's content. Abbreviated names
+             should be short since user agents may render them repeatedly
+             (especially if this cell is a header cell).</description>
+      <name>shortText</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the horizontal alignment of the grid row elements.
+              The acceptable values are "center", "left", "right", "start", and "end".</description>
+      <name>halign</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the vertical alignment of the grid row elements.
+              The acceptable values are "middle", "top", and "bottom".</description>
+      <name>valign</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the preferred width of the enclosed layout elements.</description>
+      <name>width</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the preferred height of the enclosed layout elements.</description>
+      <name>height</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the number of cells wide the child layout element will be.</description>
+      <name>columnSpan</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>the number of cells high the child layout element will be.</description>
+      <name>rowSpan</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>whether automatic text wrapping should be disabled for
+              this cell.</description>
+      <name>wrappingDisabled</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>Indicates which table cells are the headers for this cell. This
+             attribute is used by screen readers to associate header
+             information with data cells. This must be set to a
+             space-separated list of IDs. Each ID must be the ID of a
+             pertinent header cell.</description>
+      <name>headers</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>Indicates whether or not this table cell is a header cell or a data cell. 
+        Setting this attribute to 'true' will mark this cell as a header cell.</description>
+      <name>header</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>the short description of the bean.  This text
+         is commonly used by user agents to display tooltip help text.</description>
+      <name>shortDesc</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the IDs of the components that should trigger a partial update.
+         This component will listen on the trigger components. If one of the
+         trigger components receives an event that will cause it to update
+         in some way, this component will request to be updated too.</description>
+      <name>partialTriggers</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onclick Javascript handler.</description>
+      <name>onclick</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an ondblclick Javascript handler.</description>
+      <name>ondblclick</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmousedown Javascript handler.</description>
+      <name>onmousedown</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseup Javascript handler.</description>
+      <name>onmouseup</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseover Javascript handler.</description>
+      <name>onmouseover</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmousemove Javascript handler.</description>
+      <name>onmousemove</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseout Javascript handler.</description>
+      <name>onmouseout</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeypress Javascript handler.</description>
+      <name>onkeypress</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeydown Javascript handler.</description>
+      <name>onkeydown</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeyup Javascript handler.</description>
+      <name>onkeyup</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the CSS style class of the bean.</description>
+      <name>styleClass</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the inline CSS style for this element</description>
+      <name>inlineStyle</name>
+      <deferred-value/>
+    </attribute>
+  </tag>
+  <tag>
+    
+    <description>The frame component is used to specify attributes needed by an
+          HTML frame.</description><name>frame</name>
+    <tag-class>org.apache.myfaces.trinidadinternal.taglib.html.HtmlFrameTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>&lt;html&gt;the identifier for the component.  The identifier
+must follow a subset of the syntax allowed in HTML:
+&lt;ul&gt;
+&lt;li&gt;Must not be a zero-length String.&lt;/li&gt;
+&lt;li&gt;First character must be an ASCII letter (A-Za-z) or an underscore ('_').&lt;/li&gt;
+&lt;li&gt;Subsequent characters must be an ASCII letter or digit (A-Za-z0-9), an underscore ('_'), or a dash ('-').&lt;/li&gt;
+&lt;/ul&gt;&lt;/html&gt;</description>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>whether the component is rendered. When set to false, no output
+                   will be delivered for this component.</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>an EL reference that will store the component instance on a
+bean.  This can be used to give programmatic access to a component
+from a backing bean, or to move creation of the component to a backing bean.</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>a method reference to an attribute change listener.  Attribute change events are not delivered for any programmatic change to a property.  They are only delivered when a renderer changes a property without the application's specific request.  An example of an attribute change events might include the width of a column that supported client-side resizing.</description>
+      <name>attributeChangeListener</name>
+    <deferred-method>
+      <method-signature>void myMethod(org.apache.myfaces.trinidad.event.AttributeChangeEvent)</method-signature></deferred-method>
+    </attribute>
+    <attribute>
+      <description>the URI for the source of this frame</description>
+      <name>source</name>
+    <required>true</required>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>&lt;html&gt; This attribute specifies a link to a long description of the
+             frame. This description should supplement the short description
+             provided using the &lt;code&gt;shortDesc&lt;/code&gt; attribute, and
+             may be particularly useful for non-visual user agents.&lt;/html&gt;</description>
+      <name>longDescURL</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the name used to identify this frame</description>
+      <name>name</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the proposed width of this frame
+              This can be in pixels or percentage. This attribute is used only if this
+              frame is a left/right facet of a frameBorderLayout component.</description>
+      <name>width</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the proposed height of this frame.
+              This can be in pixels or percentage. This attribute is used only if this
+              frame is a top/bottom facet of a frameBorderLayout component.</description>
+      <name>height</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the width of the frame margin. The value must be greater than zero (pixels).</description>
+      <name>marginWidth</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>the width of the frame margin. The value must be greater than zero (pixels).</description>
+      <name>marginHeight</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>&lt;html&gt; whether or not scrollbars are available on this
+              frame. Valid values for this attribute are the following
+              constants:&lt;br/&gt;
+
+              
+     "yes" specifies that scrollbars are always available. &lt;br/&gt;
+     "no" specifies that scrollbars are never available. &lt;br/&gt;
+     "auto" specifies that the browser determines whether to display scroll
+              bars based on the size of the frame and its content. If
+              you do not specify a value for scrolling, the default
+              value is "auto"&lt;/html&gt;</description>
+      <name>scrolling</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the short description of the bean.  This text
+         is commonly used by user agents to display tooltip help text.</description>
+      <name>shortDesc</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the IDs of the components that should trigger a partial update.
+         This component will listen on the trigger components. If one of the
+         trigger components receives an event that will cause it to update
+         in some way, this component will request to be updated too.</description>
+      <name>partialTriggers</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the CSS style class of the bean.</description>
+      <name>styleClass</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the inline CSS style for this element</description>
+      <name>inlineStyle</name>
+      <deferred-value/>
+    </attribute>
+  </tag>
+  <tag>
+    
+    <description>frameBorderLayout is a layout bean which can be used to place seven
+          frames at left, right, top, bottom, innerLeft, innerRight and center
+          positions.</description><name>frameBorderLayout</name>
+    <tag-class>org.apache.myfaces.trinidadinternal.taglib.html.HtmlFrameBorderLayoutTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>&lt;html&gt;the identifier for the component.  The identifier
+must follow a subset of the syntax allowed in HTML:
+&lt;ul&gt;
+&lt;li&gt;Must not be a zero-length String.&lt;/li&gt;
+&lt;li&gt;First character must be an ASCII letter (A-Za-z) or an underscore ('_').&lt;/li&gt;
+&lt;li&gt;Subsequent characters must be an ASCII letter or digit (A-Za-z0-9), an underscore ('_'), or a dash ('-').&lt;/li&gt;
+&lt;/ul&gt;&lt;/html&gt;</description>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>whether the component is rendered. When set to false, no output
+                   will be delivered for this component.</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>an EL reference that will store the component instance on a
+bean.  This can be used to give programmatic access to a component
+from a backing bean, or to move creation of the component to a backing bean.</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>a method reference to an attribute change listener.  Attribute change events are not delivered for any programmatic change to a property.  They are only delivered when a renderer changes a property without the application's specific request.  An example of an attribute change events might include the width of a column that supported client-side resizing.</description>
+      <name>attributeChangeListener</name>
+    <deferred-method>
+      <method-signature>void myMethod(org.apache.myfaces.trinidad.event.AttributeChangeEvent)</method-signature></deferred-method>
+    </attribute>
+    <attribute>
+      <description>an onload Javascript handler.</description>
+      <name>onload</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onunload Javascript handler.</description>
+      <name>onunload</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>The proposed width of this frameBorderLayout.  This can be in
+           pixels or percentage. This attribute is used only if this a nested
+           frameBorderLayout in a left/right facet of a
+           frameBorderLayout.</description>
+      <name>width</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>The proposed height of this frameBorderLayout.  This can be in
+           pixels or percentage. This attribute is used only if this a nested
+           frameBorderLayout in a top/bottom facet of a
+           frameBorderLayout.</description>
+      <name>height</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>The size of frame spacing to be rendered.</description>
+      <name>frameSpacing</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>The size for the border width to be rendered.</description>
+      <name>borderWidth</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>The size for the frame border width to be rendered.</description>
+      <name>frameBorderWidth</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>the short description of the bean.  This text
+         is commonly used by user agents to display tooltip help text.</description>
+      <name>shortDesc</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the IDs of the components that should trigger a partial update.
+         This component will listen on the trigger components. If one of the
+         trigger components receives an event that will cause it to update
+         in some way, this component will request to be updated too.</description>
+      <name>partialTriggers</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the CSS style class of the bean.</description>
+      <name>styleClass</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the inline CSS style for this element</description>
+      <name>inlineStyle</name>
+      <deferred-value/>
+    </attribute>
+  </tag>
+  <tag>
+    
+    <description>Tag for the HTML head element.</description><name>head</name>
+    <tag-class>org.apache.myfaces.trinidadinternal.taglib.html.HtmlHeadTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>&lt;html&gt;the identifier for the component.  The identifier
+must follow a subset of the syntax allowed in HTML:
+&lt;ul&gt;
+&lt;li&gt;Must not be a zero-length String.&lt;/li&gt;
+&lt;li&gt;First character must be an ASCII letter (A-Za-z) or an underscore ('_').&lt;/li&gt;
+&lt;li&gt;Subsequent characters must be an ASCII letter or digit (A-Za-z0-9), an underscore ('_'), or a dash ('-').&lt;/li&gt;
+&lt;/ul&gt;&lt;/html&gt;</description>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>whether the component is rendered. When set to false, no output
+                   will be delivered for this component.</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>an EL reference that will store the component instance on a
+bean.  This can be used to give programmatic access to a component
+from a backing bean, or to move creation of the component to a backing bean.</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>a method reference to an attribute change listener.  Attribute change events are not delivered for any programmatic change to a property.  They are only delivered when a renderer changes a property without the application's specific request.  An example of an attribute change events might include the width of a column that supported client-side resizing.</description>
+      <name>attributeChangeListener</name>
+    <deferred-method>
+      <method-signature>void myMethod(org.apache.myfaces.trinidad.event.AttributeChangeEvent)</method-signature></deferred-method>
+    </attribute>
+    <attribute>
+      <description>The title of the document.  (This title doesn't have to match the
+            title on any contained panelPage.)</description>
+      <name>title</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the IDs of the components that should trigger a partial update.
+         This component will listen on the trigger components. If one of the
+         trigger components receives an event that will cause it to update
+         in some way, this component will request to be updated too.</description>
+      <name>partialTriggers</name>
+      <deferred-value/>
+    </attribute>
+  </tag>
+  <tag>
+    
+    <description>&lt;html&gt;
+          The html tag generates the &amp;lt;html&amp;gt; element for an HTML page.&lt;/html&gt;</description><name>html</name>
+    <tag-class>org.apache.myfaces.trinidadinternal.taglib.html.HtmlHtmlTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>&lt;html&gt;the identifier for the component.  The identifier
+must follow a subset of the syntax allowed in HTML:
+&lt;ul&gt;
+&lt;li&gt;Must not be a zero-length String.&lt;/li&gt;
+&lt;li&gt;First character must be an ASCII letter (A-Za-z) or an underscore ('_').&lt;/li&gt;
+&lt;li&gt;Subsequent characters must be an ASCII letter or digit (A-Za-z0-9), an underscore ('_'), or a dash ('-').&lt;/li&gt;
+&lt;/ul&gt;&lt;/html&gt;</description>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>whether the component is rendered. When set to false, no output
+                   will be delivered for this component.</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>an EL reference that will store the component instance on a
+bean.  This can be used to give programmatic access to a component
+from a backing bean, or to move creation of the component to a backing bean.</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>a method reference to an attribute change listener.  Attribute change events are not delivered for any programmatic change to a property.  They are only delivered when a renderer changes a property without the application's specific request.  An example of an attribute change events might include the width of a column that supported client-side resizing.</description>
+      <name>attributeChangeListener</name>
+    <deferred-method>
+      <method-signature>void myMethod(org.apache.myfaces.trinidad.event.AttributeChangeEvent)</method-signature></deferred-method>
+    </attribute>
+    <attribute>
+      <description>Set if the page should render in default standards mode, quirks mode, or strict mode.  Behavior of the modes are:&lt;ul&gt;
+&lt;li&gt;"default": renders as transitional doctypes for both XHTML and HTML,
+with &lt;a href="http://developer.mozilla.org/en/docs/Gecko's_%22Almost_Standards%22_Mode"&gt;"almost standards"&lt;/a&gt; rendering mode&lt;/li&gt;
+&lt;li&gt;"strict": renders as a strict doctype for both XHTML and HTML, also
+in standards rendering mode&lt;/li&gt;
+&lt;li&gt;"quirks": renders HTML pages in quirks mode, and XHTML with
+a transitional doctype, but standards mode  (there is no quirks mode for
+XHTML).&lt;/li&gt;&lt;/ul&gt;</description>
+      <name>mode</name>
+      <deferred-value/>
+    </attribute>
+  </tag>
+  <tag>
+    
+    <description>RowLayout components can be used on their own, or to
+          define a row of a tableLayout component.</description><name>rowLayout</name>
+    <tag-class>org.apache.myfaces.trinidadinternal.taglib.html.HtmlRowLayoutTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>&lt;html&gt;the identifier for the component.  The identifier
+must follow a subset of the syntax allowed in HTML:
+&lt;ul&gt;
+&lt;li&gt;Must not be a zero-length String.&lt;/li&gt;
+&lt;li&gt;First character must be an ASCII letter (A-Za-z) or an underscore ('_').&lt;/li&gt;
+&lt;li&gt;Subsequent characters must be an ASCII letter or digit (A-Za-z0-9), an underscore ('_'), or a dash ('-').&lt;/li&gt;
+&lt;/ul&gt;&lt;/html&gt;</description>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>whether the component is rendered. When set to false, no output
+                   will be delivered for this component.</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>an EL reference that will store the component instance on a
+bean.  This can be used to give programmatic access to a component
+from a backing bean, or to move creation of the component to a backing bean.</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>a method reference to an attribute change listener.  Attribute change events are not delivered for any programmatic change to a property.  They are only delivered when a renderer changes a property without the application's specific request.  An example of an attribute change events might include the width of a column that supported client-side resizing.</description>
+      <name>attributeChangeListener</name>
+    <deferred-method>
+      <method-signature>void myMethod(org.apache.myfaces.trinidad.event.AttributeChangeEvent)</method-signature></deferred-method>
+    </attribute>
+    <attribute>
+      <description>the default horizontal alignment of cells in this row.
+              The acceptable values are "center", "left", "right", "start", and "end".</description>
+      <name>halign</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the default vertical alignment of cells in this row.
+              The acceptable values are "middle", "top", and "bottom".</description>
+      <name>valign</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the preferred total width of the layout.
+              This attribute is ignored when the row layout is inside
+              of a table layout.</description>
+      <name>width</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the short description of the bean.  This text
+         is commonly used by user agents to display tooltip help text.</description>
+      <name>shortDesc</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the IDs of the components that should trigger a partial update.
+         This component will listen on the trigger components. If one of the
+         trigger components receives an event that will cause it to update
+         in some way, this component will request to be updated too.</description>
+      <name>partialTriggers</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onclick Javascript handler.</description>
+      <name>onclick</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an ondblclick Javascript handler.</description>
+      <name>ondblclick</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmousedown Javascript handler.</description>
+      <name>onmousedown</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseup Javascript handler.</description>
+      <name>onmouseup</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseover Javascript handler.</description>
+      <name>onmouseover</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmousemove Javascript handler.</description>
+      <name>onmousemove</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseout Javascript handler.</description>
+      <name>onmouseout</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeypress Javascript handler.</description>
+      <name>onkeypress</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeydown Javascript handler.</description>
+      <name>onkeydown</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeyup Javascript handler.</description>
+      <name>onkeyup</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the CSS style class of the bean.</description>
+      <name>styleClass</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the inline CSS style for this element</description>
+      <name>inlineStyle</name>
+      <deferred-value/>
+    </attribute>
+  </tag>
+  <tag>
+    
+    <description>The script component supports importing libraries, and inline scripts.</description><name>script</name>
+    <tag-class>org.apache.myfaces.trinidadinternal.taglib.html.HtmlScriptTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>&lt;html&gt;the identifier for the component.  The identifier
+must follow a subset of the syntax allowed in HTML:
+&lt;ul&gt;
+&lt;li&gt;Must not be a zero-length String.&lt;/li&gt;
+&lt;li&gt;First character must be an ASCII letter (A-Za-z) or an underscore ('_').&lt;/li&gt;
+&lt;li&gt;Subsequent characters must be an ASCII letter or digit (A-Za-z0-9), an underscore ('_'), or a dash ('-').&lt;/li&gt;
+&lt;/ul&gt;&lt;/html&gt;</description>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>whether the component is rendered. When set to false, no output
+                   will be delivered for this component.</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>an EL reference that will store the component instance on a
+bean.  This can be used to give programmatic access to a component
+from a backing bean, or to move creation of the component to a backing bean.</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>a method reference to an attribute change listener.  Attribute change events are not delivered for any programmatic change to a property.  They are only delivered when a renderer changes a property without the application's specific request.  An example of an attribute change events might include the width of a column that supported client-side resizing.</description>
+      <name>attributeChangeListener</name>
+    <deferred-method>
+      <method-signature>void myMethod(org.apache.myfaces.trinidad.event.AttributeChangeEvent)</method-signature></deferred-method>
+    </attribute>
+    <attribute>
+      <description>the inline script</description>
+      <name>text</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the URI of a script library to import.</description>
+      <name>source</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>if the script generates content 
+            using document.write() or document.writeln(), set this to true.
+            It defaults to false.</description>
+      <name>generatesContent</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>the IDs of the components that should trigger a partial update.
+         This component will listen on the trigger components. If one of the
+         trigger components receives an event that will cause it to update
+         in some way, this component will request to be updated too.</description>
+      <name>partialTriggers</name>
+      <deferred-value/>
+    </attribute>
+  </tag>
+  <tag>
+    
+    <description>&lt;html&gt;
+          A TableLayout is a thin wrapper around the HTML &amp;lt;table&amp;gt;
+          element.  It contains a series of row layout elements.&lt;/html&gt;</description><name>tableLayout</name>
+    <tag-class>org.apache.myfaces.trinidadinternal.taglib.html.HtmlTableLayoutTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>&lt;html&gt;the identifier for the component.  The identifier
+must follow a subset of the syntax allowed in HTML:
+&lt;ul&gt;
+&lt;li&gt;Must not be a zero-length String.&lt;/li&gt;
+&lt;li&gt;First character must be an ASCII letter (A-Za-z) or an underscore ('_').&lt;/li&gt;
+&lt;li&gt;Subsequent characters must be an ASCII letter or digit (A-Za-z0-9), an underscore ('_'), or a dash ('-').&lt;/li&gt;
+&lt;/ul&gt;&lt;/html&gt;</description>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>whether the component is rendered. When set to false, no output
+                   will be delivered for this component.</description>
+      <name>rendered</name>
+      <deferred-value>
+        <type>boolean</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>an EL reference that will store the component instance on a
+bean.  This can be used to give programmatic access to a component
+from a backing bean, or to move creation of the component to a backing bean.</description>
+      <name>binding</name>
+      <deferred-value>
+        <type>javax.faces.component.UIComponent</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>a method reference to an attribute change listener.  Attribute change events are not delivered for any programmatic change to a property.  They are only delivered when a renderer changes a property without the application's specific request.  An example of an attribute change events might include the width of a column that supported client-side resizing.</description>
+      <name>attributeChangeListener</name>
+    <deferred-method>
+      <method-signature>void myMethod(org.apache.myfaces.trinidad.event.AttributeChangeEvent)</method-signature></deferred-method>
+    </attribute>
+    <attribute>
+      <description>the preferred total width of the layout.</description>
+      <name>width</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the horizontal alignment of the table.
+              The acceptable values are "center", "left", "right", "start", and "end".</description>
+      <name>halign</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the spacing between cells.</description>
+      <name>cellSpacing</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>the spacing within cells.</description>
+      <name>cellPadding</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>the border width around each cell.</description>
+      <name>borderWidth</name>
+      <deferred-value>
+        <type>int</type>
+      </deferred-value>
+    </attribute>
+    <attribute>
+      <description>The summary of the table's purpose and structure
+             for user agents rendering to non-visual media. This attribute
+             must be set if this element is being used to implement a data
+             table (instead of a layout table).</description>
+      <name>summary</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the short description of the bean.  This text
+         is commonly used by user agents to display tooltip help text.</description>
+      <name>shortDesc</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the IDs of the components that should trigger a partial update.
+         This component will listen on the trigger components. If one of the
+         trigger components receives an event that will cause it to update
+         in some way, this component will request to be updated too.</description>
+      <name>partialTriggers</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onclick Javascript handler.</description>
+      <name>onclick</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an ondblclick Javascript handler.</description>
+      <name>ondblclick</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmousedown Javascript handler.</description>
+      <name>onmousedown</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseup Javascript handler.</description>
+      <name>onmouseup</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseover Javascript handler.</description>
+      <name>onmouseover</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmousemove Javascript handler.</description>
+      <name>onmousemove</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onmouseout Javascript handler.</description>
+      <name>onmouseout</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeypress Javascript handler.</description>
+      <name>onkeypress</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeydown Javascript handler.</description>
+      <name>onkeydown</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>an onkeyup Javascript handler.</description>
+      <name>onkeyup</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the CSS style class of the bean.</description>
+      <name>styleClass</name>
+      <deferred-value/>
+    </attribute>
+    <attribute>
+      <description>the inline CSS style for this element</description>
+      <name>inlineStyle</name>
+      <deferred-value/>
+    </attribute>
+  </tag>
+</taglib>

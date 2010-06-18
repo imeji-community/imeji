@@ -1,0 +1,85 @@
+<jsp:scriptlet>
+ /* 
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License, Version 1.0 only
+ (the "License"). You may not use this file except in compliance
+ with the License.
+
+ You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ or http://www.escidoc.de/license.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at license/ESCIDOC.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+
+ Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+ für wissenschaftlich-technische Information mbH and Max-Planck-
+ Gesellschaft zur Förderung der Wissenschaft e.V.
+ All rights reserved. Use is subject to license terms.
+  */
+</jsp:scriptlet>
+<%@ taglib uri="http://myfaces.apache.org/trinidad" prefix="tr"%>
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+ <%-- paginator for the browsing --%>
+<f:subview id="Pagination_Top">
+
+	<h:panelGroup layout="block" styleClass="full_area0 paginator">
+
+		<h:panelGroup layout="block" styleClass="large_area0 small_marginLIncl rangeSelector">
+			<h:selectOneMenu id="selNumberOfHitsList" value="#{AlbumListBean.firstPage}" styleClass="free_select" onchange="location.href=this.value">
+				<f:selectItems id="selNumberOfHits" value="#{AlbumListBean.showMenu}"/>
+			</h:selectOneMenu>
+			<h:outputLabel id="lblNumberOfHitsList" styleClass="free_label hitsLabel" value="of #{AlbumListBean.list.size} hits" />
+		</h:panelGroup>
+
+		<h:panelGroup layout="block" styleClass="small_marginLExcl pageBrowser">
+
+			<h:outputLink id="lnkPaginatorFirst" type="submit" styleClass="min_imgBtn skipToFirst" value="#{AlbumListBean.firstPage}" disabled="#{(AlbumListBean.url == AlbumListBean.firstPage)}">
+				<h:outputText value=" "></h:outputText>
+			</h:outputLink>
+			<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{AlbumListBean.previousPage}" disabled="#{AlbumListBean.previousPage == AlbumListBean.url}">
+				<h:outputText value="#{lbl.paginatorButton_prev_label}"></h:outputText>
+			</h:outputLink>
+			
+			<h:panelGroup styleClass="seperator" />
+
+			<tr:iterator id="PaginatorPageList" var="page" value="#{AlbumListBean.pages}">
+				<h:outputLink id="lnkPaginatorPageActive" value="#{page.value}" rendered="#{(AlbumListBean.url != page.value)}" styleClass="xSmall_txtBtn">
+					<h:outputText value="#{page.label}"></h:outputText>
+				</h:outputLink>
+				<h:outputLink id="lnkPaginatorPageInactive" value="#{page.label}" disabled="true" rendered="#{AlbumListBean.url == page.value}" styleClass="xSmall_txtBtn actual">
+					<h:outputText value="#{page.label}"></h:outputText>
+				</h:outputLink>
+				<h:panelGroup styleClass="seperator" rendered="true"></h:panelGroup>
+			</tr:iterator>
+			
+			<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{AlbumListBean.nextPage}" disabled="#{AlbumListBean.url == AlbumListBean.nextPage}">
+				<h:outputText value="#{lbl.paginatorButton_next_label}"></h:outputText>
+			</h:outputLink>
+			<h:outputLink id="lnkPaginatorLast" type="submit" styleClass="min_imgBtn skipToLast" value="#{AlbumListBean.lastPage}" disabled="#{AlbumListBean.url == AlbumListBean.lastPage}">
+				<h:outputText value=" "></h:outputText>
+			</h:outputLink>
+			
+		</h:panelGroup>
+
+		<h:panelGroup layout="block" styleClass="gotoBox">
+			<h:outputLabel id="lblGoTo" styleClass="free_label" value="Go to page" />
+			<h:inputText id="inpGoTo" value="" styleClass="tiny_txtInput" onkeypress="if (event.keyCode == 13 && this.value != '') { form.submit()}" onfocus="this.select()" valueChangeListener="#{AlbumListBean.goToPage}"/>
+			<h:outputLabel styleClass="free_label" value="of" />
+			<h:outputLabel id="lblNumberOfPages" styleClass="free_label" value="#{AlbumListBean.totalNumberOfPages}" />
+		</h:panelGroup>
+
+	</h:panelGroup>
+
+</f:subview>
+

@@ -1,0 +1,343 @@
+<generic-metadata-records:md-records xmlns:relations="http://www.escidoc.de/schemas/relations/0.3" xmlns:generic-metadata-records="http://purl.org/escidoc/schemas/generic-metadata/records/0.1" xmlns:generic-metadata="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1" xmlns:escidocContentStreams="http://www.escidoc.de/schemas/contentstreams/0.6" xmlns:escidocComponents="http://purl.org/escidoc/schemas/generic-metadata/components/0.9" xmlns:version="http://escidoc.de/core/01/properties/version/" xmlns:release="http://escidoc.de/core/01/properties/release/" xmlns:escidocItem="http://purl.org/escidoc/schemas/generic-metadata/item/0.9" xmlns:prop="http://escidoc.de/core/01/properties/" xmlns:srel="http://escidoc.de/core/01/structural-relations/" xmlns:xml="http://www.w3.org/XML/1998/namespace" objid="escidoc:13432" last-modification-date="2008-10-22T14:18:56.870Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://purl.org/escidoc/schemas/generic-metadata/item/0.9 .\item-scr.xsd">
+		<generic-metadata-records:md-record name="escidoc">
+			<!-- FACES -->
+			<generic-metadata:description screen-id="view" configuration="formatted" resource-class="face" xmlns:generic-metadata="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1 .\metadata-scr.xsd">
+				<generic-metadata:statement id="person" label="Person" display="true" repeatable="false" optional="false" gui-component="group" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:statement id="identifier" label="Person-ID" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/dc/elements/1.1/">
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:statement id="age" label="Age" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:statement id="age-group" label="Age Group" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:constraint occurence="mandatory">
+							<generic-metadata:LiteralOption xml:lang="en-US">young</generic-metadata:LiteralOption>
+							<generic-metadata:LiteralOption xml:lang="en-US">middle-age</generic-metadata:LiteralOption>
+							<generic-metadata:LiteralOption xml:lang="en-US">old</generic-metadata:LiteralOption>
+						</generic-metadata:constraint>
+						<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:statement id="gender" label="Gender" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:constraint occurence="mandatory">
+							<generic-metadata:LiteralOption xml:lang="en-US">male</generic-metadata:LiteralOption>
+							<generic-metadata:LiteralOption xml:lang="en-US">female</generic-metadata:LiteralOption>
+						</generic-metadata:constraint>
+						<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+					</generic-metadata:statement>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="picture" label="Picture" display="true" repeatable="false" optional="false" gui-component="group" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:statement id="emotion" label="Emotion" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:constraint occurence="mandatory">
+							<generic-metadata:LiteralOption xml:lang="en-US">happiness</generic-metadata:LiteralOption>
+							<generic-metadata:LiteralOption xml:lang="en-US">fear</generic-metadata:LiteralOption>
+							<generic-metadata:LiteralOption xml:lang="en-US">anger</generic-metadata:LiteralOption>
+							<generic-metadata:LiteralOption xml:lang="en-US">sadness</generic-metadata:LiteralOption>
+							<generic-metadata:LiteralOption xml:lang="en-US">disgust</generic-metadata:LiteralOption>
+							<generic-metadata:LiteralOption xml:lang="en-US">neutrality</generic-metadata:LiteralOption>
+						</generic-metadata:constraint>
+						<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:statement id="picture-group" label="Picture Set" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:constraint occurence="mandatory">
+							<generic-metadata:LiteralOption>a</generic-metadata:LiteralOption>
+							<generic-metadata:LiteralOption>b</generic-metadata:LiteralOption>
+						</generic-metadata:constraint>
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+				</generic-metadata:statement>
+			</generic-metadata:description>
+			<generic-metadata:description screen-id="sort" configuration="formatted" resource-class="face" xmlns:generic-metadata="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1 .\metadata-scr.xsd">
+				<generic-metadata:statement id="emotion" label="Emotion" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:constraint occurence="mandatory">
+						<generic-metadata:LiteralOption xml:lang="en-US">happiness</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">fear</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">anger</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">sadness</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">disgust</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">neutrality</generic-metadata:LiteralOption>
+					</generic-metadata:constraint>
+					<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="age" label="Age" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="picture-group" label="Picture Set" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:constraint occurence="mandatory">
+						<generic-metadata:LiteralOption>a</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption>b</generic-metadata:LiteralOption>
+					</generic-metadata:constraint>
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="identifier" label="Person-ID" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/dc/elements/1.1/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="gender" label="Gender" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:constraint occurence="mandatory">
+						<generic-metadata:LiteralOption xml:lang="en-US">male</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">female</generic-metadata:LiteralOption>
+					</generic-metadata:constraint>
+					<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+				</generic-metadata:statement>
+			</generic-metadata:description>
+			<generic-metadata:description screen-id="search" configuration="formatted" resource-class="face" xmlns:generic-metadata="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1 .\metadata-scr.xsd">
+				<generic-metadata:statement id="emotion" label="Emotion" display="true" optional="false" repeatable="false" gui-component="checkbox" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:constraint occurence="mandatory">
+						<generic-metadata:LiteralOption xml:lang="en-US">happiness</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">fear</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">anger</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">sadness</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">disgust</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">neutrality</generic-metadata:LiteralOption>
+					</generic-metadata:constraint>
+					<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="picture-group" label="Picture Set" display="true" optional="false" repeatable="false" gui-component="checkbox" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:constraint occurence="mandatory">
+						<generic-metadata:LiteralOption>a</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption>b</generic-metadata:LiteralOption>
+					</generic-metadata:constraint>
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="identifier" label="Person-ID" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/dc/elements/1.1/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="age" label="Age" display="true" repeatable="false" optional="false" gui-component="group" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:statement id="age-group" label="Age Group" display="true" repeatable="false" optional="false" gui-component="checkbox" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:constraint occurence="mandatory">
+								<generic-metadata:LiteralOption xml:lang="en-US">young</generic-metadata:LiteralOption>
+								<generic-metadata:LiteralOption xml:lang="en-US">middle-age</generic-metadata:LiteralOption>
+								<generic-metadata:LiteralOption xml:lang="en-US">old</generic-metadata:LiteralOption>
+							</generic-metadata:constraint>
+							<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:statement id="age" label="Age Range" display="true" repeatable="false" optional="false" gui-component="range" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="gender" label="Gender" display="true" repeatable="false" optional="false" gui-component="checkbox" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:constraint occurence="mandatory">
+						<generic-metadata:LiteralOption xml:lang="en-US">male</generic-metadata:LiteralOption>
+						<generic-metadata:LiteralOption xml:lang="en-US">female</generic-metadata:LiteralOption>
+					</generic-metadata:constraint>
+					<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+				</generic-metadata:statement>
+			</generic-metadata:description>
+			
+			<!-- Bretagne -->
+			<!--  <generic-metadata:description screen-id="view" configuration="formatted" resource-class="medium" xmlns:generic-metadata="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1 .\metadata-scr.xsd">
+				<generic-metadata:statement id="title" label="Title" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="description" label="Description" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="keywords" label="Keywords" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/dc/elements/1.1/">
+					<generic-metadata:statement id="keyword" label="Keyword" display="true" repeatable="true" optional="false" gui-component="text-field" namespace="http://purl.org/dc/elements/1.1/">
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="coordinates" label="Coordinates" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:statement id="longitude" label="Longitude" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:statement id="latitude" label="Latitude" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+			</generic-metadata:description>
+			<generic-metadata:description screen-id="search" configuration="formatted" resource-class="medium" xmlns:generic-metadata="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1 .\metadata-scr.xsd">
+				<generic-metadata:statement id="title" label="Title" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="description" label="Description" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="keywords" label="Keywords" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/dc/elements/1.1/">
+					<generic-metadata:statement id="keyword" label="Keyword" display="true" repeatable="true" optional="false" gui-component="text-field" namespace="http://purl.org/dc/elements/1.1/">
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="coordinates" label="Coordinates" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:statement id="longitude" label="Longitude" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:statement id="latitude" label="Latitude" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+			</generic-metadata:description>-->
+			
+			<!-- Diamonds -->
+			<!-- View -->
+			<!--  <generic-metadata:description screen-id="view" configuration="formatted" resource-class="diamond" xmlns:generic-metadata="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1 .\metadata-scr.xsd">
+				<generic-metadata:statement id="diamond-elements" label="Diamond Elements" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="shape" label="Shape" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="color" label="Color" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/dc/elements/1.1/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="mechanism" label="Mechanism" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="condition" label="Condition" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="temperature" label="Temperature" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="description" label="Description" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="abstract" label="Abstract" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="brief-details" label="Brief Details" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="full-details" label="Full Details" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="date" label="Date" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="identifier" label="Identifier" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="creator" label="Creator" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:statement id="person" label="Person" display="true" repeatable="false" optional="false" gui-component="none" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:statement id="complete-name" label="Complete Name" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:statement id="given-name" label="Given Name" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:statement id="family-name" label="Family Name" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:statement id="identifier" label="Identifier" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:statement id="organization" label="Organization" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:statement id="organization-name" label="Organization Name" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+								<generic-metadata:value></generic-metadata:value>
+							</generic-metadata:statement>
+							<generic-metadata:statement id="address" label="Address" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+								<generic-metadata:value></generic-metadata:value>
+							</generic-metadata:statement>
+							<generic-metadata:statement id="identifier" label="Identifier" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+								<generic-metadata:value></generic-metadata:value>
+							</generic-metadata:statement>
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+			</generic-metadata:description>
+			<generic-metadata:description screen-id="sort" configuration="formatted" resource-class="diamond" xmlns:generic-metadata="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1 .\metadata-scr.xsd">
+				<generic-metadata:statement id="diamond-elements" label="Diamond Elements" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="shape" label="Shape" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="mechanism" label="Mechanism" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="condition" label="Condition" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="temperature" label="Temperature" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="brief-details" label="Brief Details" display="false" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="full-details" label="Full Details" display="false" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="date" label="Date" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="creator" label="Creator" display="false" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:statement id="person" label="Person" display="false" repeatable="false" optional="false" gui-component="none" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:statement id="complete-name" label="Complete Name" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+			</generic-metadata:description>
+			<generic-metadata:description screen-id="search" configuration="formatted" resource-class="diamond" xmlns:generic-metadata="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://purl.org/escidoc/schemas/generic-metadata/metadata/0.1 .\metadata-scr.xsd">
+				<generic-metadata:statement id="diamond-elements" label="Diamond Elements" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value xml:lang="en-US"></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="shape" label="Shape" display="true" optional="false" repeatable="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="color" label="Color" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/dc/elements/1.1/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="mechanism" label="Mechanism" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="condition" label="Condition" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="temperature" label="Temperature" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="brief-details" label="Brief Details" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="full-details" label="Full Details" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="date" label="Date" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="identifier" label="Identifier" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+				<generic-metadata:statement id="creator" label="Creator" display="true" repeatable="false" optional="false" gui-component="none" namespace="http://purl.org/escidoc/metadata/terms/">
+					<generic-metadata:statement id="person" label="Person" display="true" repeatable="false" optional="false" gui-component="none" namespace="http://purl.org/escidoc/metadata/terms/">
+						<generic-metadata:statement id="complete-name" label="Complete Name" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:statement id="given-name" label="Given Name" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:statement id="family-name" label="Family Name" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:statement id="identifier" label="Identifier" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:statement id="organization" label="Organization" display="true" repeatable="false" optional="false" gui-component="none" namespace="http://purl.org/escidoc/metadata/terms/">
+							<generic-metadata:statement id="organization-name" label="Organization Name" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+								<generic-metadata:value></generic-metadata:value>
+							</generic-metadata:statement>
+							<generic-metadata:statement id="address" label="Address" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+								<generic-metadata:value></generic-metadata:value>
+							</generic-metadata:statement>
+							<generic-metadata:statement id="identifier" label="Identifier" display="true" repeatable="false" optional="false" gui-component="text-field" namespace="http://purl.org/escidoc/metadata/terms/">
+								<generic-metadata:value></generic-metadata:value>
+							</generic-metadata:statement>
+							<generic-metadata:value></generic-metadata:value>
+						</generic-metadata:statement>
+						<generic-metadata:value></generic-metadata:value>
+					</generic-metadata:statement>
+					<generic-metadata:value></generic-metadata:value>
+				</generic-metadata:statement>
+			</generic-metadata:description>-->
+		</generic-metadata-records:md-record>
+	</generic-metadata-records:md-records>

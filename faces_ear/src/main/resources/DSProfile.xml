@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DescriptionSetTemplate  xmlns="http://dublincore.org/xml/dc-dsp/2008/01/14" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://dublincore.org/xml/dc-dsp/2008/01/14 .\dcmi-dsp.xsd">
+	<DescriptionTemplate ID="diamond-item" minOccurs="1" maxOccurs="1" standalone="yes">
+		<ResourceClass>http://purl.org/escidoc/metadata/profiles/diamond-item</ResourceClass>
+		<StatementTemplate ID="diamond-elements" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/diamond-elements</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="shape" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/shape</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="color" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/color</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="mechanism" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/mechanism</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="condition" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/condition</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="temperature" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/temperature</Property>
+			<LiteralConstraint></LiteralConstraint>
+		</StatementTemplate>
+		<StatementTemplate ID="brief-details" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/dc/elements/description</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="full-details" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/dc/terms/abstract</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="date" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/dc/elements/date</Property>
+			<LiteralConstraint><SyntaxEncodingScheme>http://www.w3.org/TR/NOTE-datetime</SyntaxEncodingScheme></LiteralConstraint>
+		</StatementTemplate>
+		<StatementTemplate ID="identifier" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/dc/elements/1.1/identifier</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="creator" minOccurs="0" maxOccurs="1" type="nonliteral">
+			<Property>http://purl.org/escidoc/metadata/terms/creator</Property>
+			<NonLiteralConstraint descriptionTemplateRef="person"/>
+		</StatementTemplate>
+	</DescriptionTemplate>
+	<DescriptionTemplate ID="person" minOccurs="1" maxOccurs="1" standalone="no">
+		<ResourceClass>http://purl.org/escidoc/metadata/profiles/person</ResourceClass>
+		<StatementTemplate ID="complete-name" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/complete-name</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="given-name" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/given-name</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="family-name" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/family-name</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="organization" minOccurs="0" maxOccurs="1" type="nonliteral">
+			<Property>http://purl.org/escidoc/metadata/terms/organization</Property>
+			<NonLiteralConstraint descriptionTemplateRef="organization"/>
+		</StatementTemplate>
+		<StatementTemplate ID="identifier" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/identifier</Property>
+			<LiteralConstraint> 
+				<SyntaxEncodingScheme>http://escidoc.mpg.de/metadataprofile/schema/0.1/idtypes</SyntaxEncodingScheme>
+			</LiteralConstraint> 
+		</StatementTemplate>
+	</DescriptionTemplate>
+	<DescriptionTemplate ID="organization" minOccurs="1" maxOccurs="1" standalone="no">
+		<ResourceClass>http://purl.org/escidoc/metadata/profiles/organization</ResourceClass>
+		<StatementTemplate ID="organization-name" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/organization-name</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="address" minOccurs="0" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/address</Property>
+		</StatementTemplate>
+		<StatementTemplate ID="identifier" minOccurs="1" maxOccurs="1" type="literal">
+			<Property>http://purl.org/escidoc/metadata/terms/identifier</Property>
+		</StatementTemplate>
+	</DescriptionTemplate>
+</DescriptionSetTemplate>
+

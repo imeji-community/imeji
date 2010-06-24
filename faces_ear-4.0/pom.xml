@@ -1,19 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>faces</artifactId>
-		<groupId>de.mpg.escidoc.faces</groupId>
-		<version>3.3.1-SNAPSHOT</version>
+		<groupId>de.mpg.escidoc.faces4</groupId>
+		<version>4.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.mpg.escidoc.faces</groupId>
-	<artifactId>faces_ear</artifactId>
-	<name>faces_ear</name>
+	<groupId>de.mpg.escidoc.faces4</groupId>
+	<artifactId>faces_ear4</artifactId>
+	<name>faces_ear-4.0</name>
 	<packaging>ear</packaging>
-	<version>3.3.1-SNAPSHOT</version>
+	<version>4.0</version>
 
 	<scm>
-		<connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces/faces_ear</connection>
-		<developerConnection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces/faces_ear</developerConnection>
+		<connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_ear-4.0</connection>
+		<developerConnection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_ear-4.0</developerConnection>
 		<url>http://zim02.gwdg.de/repos/faces/</url>
 	</scm>
 
@@ -24,15 +24,15 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-ear-plugin</artifactId>
 				<configuration>
-					<displayName>faces</displayName>
-					<description>faces</description>
+					<displayName>faces4</displayName>
+					<description>faces4</description>
 					<resourcesDir>target/classes/in_ear</resourcesDir>
 					<version>5</version>
 					<modules>
 						<webModule>
-							<groupId>de.mpg.escidoc.faces</groupId>
-							<artifactId>faces_presentation</artifactId>
-							<contextRoot>/faces</contextRoot>
+							<groupId>de.mpg.escidoc.faces4</groupId>
+							<artifactId>faces_presentation4</artifactId>
+							<contextRoot>/faces4</contextRoot>
 						</webModule>
 						<webModule>
                             <groupId>de.mpg.escidoc.services</groupId>

@@ -1,0 +1,849 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.mpg.escidoc.faces</groupId>
+	<artifactId>faces</artifactId>
+	<packaging>pom</packaging>
+	<version>3.3.1-SNAPSHOT</version>
+	<name>faces</name>
+	<url>http://escidoc1.escidoc.mpg.de/projects/faces</url>
+	<description>
+		FACES is a lifespan database of adult emotional facial stimuli. 
+		It contains a set of images of naturalistic faces of 171 persons, separated in three different age groups (young, middle-aged and old) displaying each of 6 facial expressions: neutrality, sadness, disgust, fear, anger, and happiness.
+	</description>
+	<licenses>
+		<license>
+			<name>Common Development And Distribution License</name>
+			<url>http://www.sun.com/cddl/cddl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Max Planck Digital Library</name>
+		<url>http://www.mpdl.mpg.de/</url>
+	</organization>
+
+	<issueManagement>
+		<system>Jira</system>
+		<url>http://zim01.gwdg.de:8080/BrowseProject.jspa?id=10041</url>
+	</issueManagement>
+
+	<developers>
+		<developer>
+			<id>mdreyer</id>
+			<name>Malte Dreyer</name>
+			<email>dreyer@mpdl.mpg.de</email>
+			<roles>
+				<role>Project manager</role>
+				<role>Architect</role>
+			</roles>
+			<organization>Max Planck Digital Library</organization>
+			<timezone>+2</timezone>
+		</developer>
+		<developer>
+			<id>nab</id>
+			<name>Natasa Bulatovic</name>
+			<email>bulatovic@mpdl.mpg.de</email>
+			<roles>
+				<role>Software development manager</role>
+				<role>Architect</role>
+			</roles>
+			<organization>Max Planck Digital Library</organization>
+			<timezone>+2</timezone>
+		</developer>
+		<developer>
+			<id>bsaquet</id>
+			<name>Bastien Saquet</name>
+			<email>saquet@mpdl.mpg.de</email>
+			<roles>
+				<role>Software developer</role>
+			</roles>
+			<organization>Max Planck Digital Library</organization>
+			<timezone>+2</timezone>
+		</developer>
+		<developer>
+			<id>kbuechner</id>
+			<name>Kristina Büchner</name>
+			<email>buechner@mpdl.mpg.de</email>
+			<roles>
+				<role>Service management</role>
+			</roles>
+			<organization>Max Planck Digital Library</organization>
+			<timezone>+2</timezone>
+		</developer>
+		<developer>
+            <id>kleinfercher</id>
+            <name>Friederike Kleinfercher</name>
+            <email>kleinfercher@mpdl.mpg.de</email>
+            <roles>
+                <role>Software developer</role>
+            </roles>
+            <organization>Max Planck Digital Library</organization>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+          <id>haarlaender</id>
+            <name>Markus Haarlaender</name>
+            <email>haarlaender@mpdl.mpg.de</email>
+            <roles>
+                <role>Software developer</role>
+            </roles>
+            <organization>Max Planck Digital Library</organization>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+          <id>tendres</id>
+            <name>Thomas Endres</name>
+            <email>endres@mpdl.mpg.de</email>
+            <roles>
+                <role>Software developer</role>
+            </roles>
+            <organization>Max Planck Digital Library</organization>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>mfranke</id>
+            <name>Michael Franke</name>
+            <email>franke@mpdl.mpg.de</email>
+            <roles>
+                <role>Software developer</role>
+            </roles>
+            <organization>Max Planck Digital Library</organization>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>wfrank</id>
+            <name>Wilhelm Frank</name>
+            <email>frank@mpdl.mpg.de</email>
+            <roles>
+                <role>Software developer</role>
+            </roles>
+            <organization>Max Planck Digital Library</organization>
+            <timezone>+2</timezone>
+        </developer>
+	</developers>
+
+	<mailingLists>
+		<mailingList>
+			<name>Infolist about build-failures, source-code changes etc.</name>
+			<subscribe>https://listserv.gwdg.de/mailman/listinfo/escidoc-code</subscribe>
+			<unsubscribe>https://listserv.gwdg.de/mailman/listinfo/escidoc-code</unsubscribe>
+			<post>escidoc-code@gwdg.de</post>
+			<archive>
+				https://listserv.gwdg.de/mailman/private/escidoc-code/
+			</archive>
+		</mailingList>
+	</mailingLists>
+
+	<ciManagement>
+		<system>Continuum</system>
+		<url>http://continuum.mpdl.mpg.de/continuum</url>
+		<notifiers>
+			<notifier>
+				<type>mail</type>
+				<configuration>
+					<address>escidoc-code@gwdg.de</address>
+				</configuration>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+
+	<modules>
+		<module>faces_presentation</module>
+		<module>faces_ear</module>
+	</modules>
+
+	<scm>
+		<connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces</connection>
+		<developerConnection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces</developerConnection>
+		<url>https://zim02.gwdg.de/repos/faces/</url>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>deployment.webdav</id>
+			<name>Archiva deployment</name>
+			<url>
+				dav:http://archiva.mpdl.mpg.de/archiva/repository/internal/
+			</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots.webdav</id>
+			<url>
+				dav:http://archiva.mpdl.mpg.de/archiva/repository/snapshots/
+			</url>
+		</snapshotRepository>
+		<site>
+			<id>website</id>
+			<url>
+				scp://escidoc1.escidoc.mpg.de:/srv/www/staging/projects/faces
+			</url>
+		</site>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>deployment.webdav</id>
+			<name>Archiva Managed Internal Repository</name>
+			<url>
+				http://archiva.mpdl.mpg.de/archiva/repository/internal
+			</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>snapshots.webdav</id>
+			<name>Archiva Managed Snapshot Repository</name>
+			<url>
+				http://archiva.mpdl.mpg.de/archiva/repository/snapshots
+			</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>Archiva plugin snapshots</id>
+			<url>http://archiva.mpdl.mpg.de/archiva/repository/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository><pluginRepository>
+			<id>Archiva plugin internal</id>
+			<url>http://archiva.mpdl.mpg.de/archiva/repository/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav</artifactId>
+				<version>1.0-beta-2</version>
+			</extension>
+		</extensions>
+		<!-- if no tests are present don't fail the complete package process -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						 <!--  if there are no tests, don't bail out -->
+						<failIfNoTests>false</failIfNoTests>
+						<!-- avoid the outofmemory exception thrown in some test scenarios-->
+						<argLine>-Xmx1000M</argLine>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<!-- send an announcement email on release -->
+					<!--  <preparationGoals>changes:announcement-mail</preparationGoals> -->
+					<!-- all the submodules inherit the version of the project -->
+					<autoVersionSubmodules>false</autoVersionSubmodules>
+					<!-- snaphots identified by timestamp are allowed -->
+					<allowTimestampedSnapshots>true</allowTimestampedSnapshots>
+				</configuration>
+			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-changes-plugin</artifactId>-->
+<!--				<version>2.0-20080211.215359-1</version>-->
+<!--			</plugin>-->
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>taglist-maven-plugin</artifactId>
+			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-changes-plugin</artifactId>-->
+<!--				<configuration>-->
+<!--					<smtpHost>${changes.smtphost}</smtpHost>-->
+<!--					<smtpPort implementation="java.lang.Integer">25</smtpPort>-->
+<!--					<fromDeveloperId>${changes.developerid}</fromDeveloperId>-->
+<!--					<toAddresses>-->
+<!--						<toAddress implementation="java.lang.String">${changes.recipient.address}</toAddress>-->
+<!--					</toAddresses>-->
+<!--					<jiraUser>${changes.jira.user}</jiraUser>-->
+<!--					<jiraPassword>${changes.jira.password}</jiraPassword>-->
+<!--				    <onlyCurrentVersion>true</onlyCurrentVersion>-->
+<!--					<priorityIds>Blocker,Critical,Major,Minor,Trivial</priorityIds>-->
+<!--				</configuration>-->
+<!--				<reportSets>-->
+<!--					<reportSet>-->
+<!--						<reports>-->
+<!--							<report>jira-report</report>-->
+<!--							<report>changes-report</report>-->
+<!--						</reports>-->
+<!--					</reportSet>-->
+<!--				</reportSets>-->
+<!--			</plugin>-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<sourceEncoding>utf-8</sourceEncoding>
+					<minimumTokens>100</minimumTokens>
+					<targetJdk>${jdk.version}</targetJdk>
+				</configuration>
+			</plugin>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>changelog-maven-plugin</artifactId>
+            </plugin>
+			<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <configuration>
+                <configLocation>http://escidoc1.escidoc.mpg.de/resources/checkstyle/checkstyle.xml</configLocation>
+            </configuration>
+        </plugin>
+        <plugin>
+                <!-- JavaNCSS - A Source Measurement Suite for Java
+                    http://www.kclee.de/clemens/java/javancss/ -->
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>javancss-maven-plugin</artifactId>
+        </plugin>
+        <plugin>
+                <!-- A Java package dependency analyzer that generates
+                      design quality metrics http://clarkware.com/software/JDepend.html -->
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>jdepend-maven-plugin</artifactId>
+        </plugin>
+		</plugins>
+	</reporting>
+
+	<!-- properties valid for all profiles -->
+
+	<profiles>
+		<!-- this profile is used by developers -->
+		<profile>
+			<id>env-development</id>
+			<build>
+			   	<plugins>
+				 	 <plugin>
+						 <groupId>org.zeroturnaround</groupId>
+						 <artifactId>javarebel-maven-plugin</artifactId>
+						 <executions>
+							 <execution>
+								<id>generate-rebel-xml</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							 </execution>
+						 </executions>
+					 </plugin>
+			      </plugins>
+		        </build> 
+			<properties>
+				<!-- the jdk version to use -->
+				<jdk.version>1.5</jdk.version>
+
+				<!-- used by the cargo plugin to run a jboss server for integration-testing /goal: cargo:start-->
+				<cargo.port>8080</cargo.port>
+				<cargo.rmi.port>1099</cargo.rmi.port>
+				<cargo.log>high</cargo.log>
+				<cargo.jvmargs>
+					-Dcom.sun.xml.namespace.QName.useCompatibleSerialVersionUID=1.0 -Dpubman.properties.file=./pubman.properties
+				</cargo.jvmargs>
+				<!-- this path is used as root for all jboss installations -->
+				<cargo.install.dir>${user.home}/jboss</cargo.install.dir>
+				<!-- fetch the jboss from this url -->
+				<cargo.jboss.url>http://heanet.dl.sourceforge.net/sourceforge/jboss/jboss-4.2.2.GA.zip</cargo.jboss.url>
+				<!-- local intallation of the jboss for integration-tests -->
+				<cargo.jboss.install.dir>//${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir>
+
+				<!-- deploy the pubman ear to this server and port via jmx /goal: jboss:deploy -->
+				<jboss.deploy.host>localhost</jboss.deploy.host>
+				<jboss.deploy.port>8080</jboss.deploy.port>
+				<!-- the ears are deployed to this server using jboss:harddeploy -->
+				<jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir>
+
+				<!-- Flag to disable the GUI-entry points for UC_PM_SR_03 do advanced search -->
+				<escidoc.pubman_presentation.disable.advanced_search>false</escidoc.pubman_presentation.disable.advanced_search>
+				<escidoc.pubman_presentation.disable.export>false</escidoc.pubman_presentation.disable.export>
+				<escidoc.pubman_presentation.disable.modify>false</escidoc.pubman_presentation.disable.modify>
+				<escidoc.pubman_presentation.disable.new_revision>false</escidoc.pubman_presentation.disable.new_revision>
+				<escidoc.pubman_presentation.disable.view_statistics>false</escidoc.pubman_presentation.disable.view_statistics>
+				<escidoc.pubman_presentation.disable.view_revisions>false</escidoc.pubman_presentation.disable.view_revisions>
+
+				<!-- URL of this Faces instance -->
+				<escidoc.faces.instance.url>http://localhost:8080/faces/</escidoc.faces.instance.url>
+				<escidoc.faces.item.pattern>viewItemFullPage.jsp?itemId=$1</escidoc.faces.item.pattern>
+				<escidoc.faces.component.pattern>/viewComponentPage.jsp?componentId=$1</escidoc.faces.component.pattern>
+				
+				<escidoc.faces.instance.id>de.mpg.escidoc.faces.test</escidoc.faces.instance.id>
+				
+				<!-- URL of the FIZ framework instance -->
+				<!--<escidoc.framework_access.framework.url>http://134.76.28.244:8080</escidoc.framework_access.framework.url>-->
+				<escidoc.framework_access.framework.url>http://dev-coreservice.mpdl.mpg.de:8080</escidoc.framework_access.framework.url>
+                
+                         				
+				
+				<!--  Identifier of the content model "FACES" in the current framework instance -->
+				<!-- FACES -->
+				<escidoc.faces.content-model.id>escidoc:faces40</escidoc.faces.content-model.id>
+				<!-- DEV - Bretagne -->
+				<!--<escidoc.faces.content-model.id>escidoc:139003</escidoc.faces.content-model.id>-->
+				<!-- DEV Diamonds -->
+				<!--<escidoc.faces.content-model.id>escidoc:diamonds1</escidoc.faces.content-model.id>-->
+				
+				<!-- QA Diamonds -->
+				<!--<escidoc.faces.content-model.id>escidoc:259623</escidoc.faces.content-model.id>-->
+				
+				<!-- Identifier of the context of "FACES" in the current framework instance -->
+				<!-- DEV - FACES -->
+				 <escidoc.faces.context.id>escidoc:108013</escidoc.faces.context.id>
+				<!-- QA - FACES -->
+				<!--  <escidoc.faces.context.id>escidoc:40001</escidoc.faces.context.id>-->
+				<!-- DEV - Bretagne -->
+				<!--  <escidoc.faces.context.id>escidoc:album1</escidoc.faces.context.id>-->
+				<!-- Dev- Diamonds -->				
+				<!--<escidoc.faces.context.id>escidoc:200327</escidoc.faces.context.id>-->
+				<!-- QA- Diamonds -->	
+				<!--<escidoc.faces.context.id>escidoc:250191</escidoc.faces.context.id>-->
+				
+				<!--  Identifier of the content model " Faces Container Content Model" in the current framework instance -->
+				<escidoc.faces.container.content-model.id>escidoc:faces60</escidoc.faces.container.content-model.id>
+				
+				<!-- Number of albums in the album lists -->
+				<escidoc.faces.album.list.size>10</escidoc.faces.album.list.size>
+				
+				<!--  UI Config -->				
+				<escidoc.faces.album.list.size.options>10,25,50,75,100</escidoc.faces.album.list.size.options> <!-- User options for the displayed number of albums -->
+				<escidoc.organizationTree.integration>yes</escidoc.organizationTree.integration> <!-- User option, if organization selection should be displayed on create/edit album -->				
+								
+				<!-- Blog's URL -->
+				<!--<escidoc.faces.blog.url>http://faces.blogs.mpdl.mpg.de</escidoc.faces.blog.url>-->
+				<escidoc.faces.blog.url />
+				
+				<!-- Blog's RSS feed URL -->
+				<escidoc.faces.blog.rss.url>http://www.nims.go.jp/eng/news/nims.xml</escidoc.faces.blog.rss.url>
+				<!--<escidoc.faces.blog.rss.url>http://faces.blogs.mpdl.mpg.de/feed/</escidoc.faces.blog.rss.url>-->
+				
+				<escidoc.faces.impressum.url>http://colab.mpdl.mpg.de/mediawiki/Diamonds_Disclaimer_and_Copyright</escidoc.faces.impressum.url>
+				
+				<!--<escidoc.faces.impressum.url>http://colab.mpdl.mpg.de/mediawiki/Faces_Disclaimer_and_Copyright</escidoc.faces.impressum.url>-->
+				
+				<!-- Home URL -->
+				<escidoc.faces.home.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/diamonds/home.html</escidoc.faces.home.url>
+				
+				<!-- Logo Url -->
+				<escidoc.faces.logo.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/mpi_hd.png</escidoc.faces.logo.url>
+				
+				<!-- Logo Link Url -->
+				<escidoc.faces.logo.link.url>http://www.nims.go.jp/eng/index.html</escidoc.faces.logo.link.url>
+				
+				<!-- Help URL -->
+				<escidoc.faces.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.faces.help.url>
+				
+				<!-- About URL -->
+				<escidoc.faces.about.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_about.html</escidoc.faces.about.url>
+				
+				<!-- Legal URL -->
+				<escidoc.faces.legal.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_legal.html</escidoc.faces.legal.url>
+				
+				<!-- Confirmation URL -->
+				<escidoc.faces.confirmation.url />
+				
+				<!-- FACES Collection id -->
+				<escidoc.faces.collection.id>escidoc:219719</escidoc.faces.collection.id>
+				
+				<!-- License url  -->
+				<!--  <escidoc.faces.picture.license.url>http://creativecommons.org/licenses/by-nc-nd/3.0/de/</escidoc.faces.picture.license.url>-->
+				<escidoc.faces.picture.license.url />
+
+				<!-- License image  -->
+				<!-- <escidoc.faces.picture.license.image>http://i.creativecommons.org/l/by-nc-nd/3.0/80x15.png </escidoc.faces.picture.license.image>-->
+				<escidoc.faces.picture.license.image />
+				
+				<!-- FACES Collection file path -->
+				<escidoc.faces.collection.file.path>C:/Dokumente und Einstellungen/saquet/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA/server/default/data/Faces-collection.zip</escidoc.faces.collection.file.path>
+				
+				<!-- Faces statistics user -->
+				<escidoc.faces.statistics.password>escidoc</escidoc.faces.statistics.password>
+				<escidoc.faces.statistics.username>faces_statistics_user</escidoc.faces.statistics.username>
+				<!--<escidoc.faces.statistics.username>faces_statistics_editor</escidoc.faces.statistics.username>-->
+				
+				<!--  Due to a historical defect, QName was released with multiple 
+					serialVersionUID values even though its serialization was the
+					same.
+					To workaround this issue, serialVersionUID is set with either
+					a default value or a compatibility value.  To use the
+					compatibility value you have to set the following property to "1.0". -->
+				<com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>1.0</com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>
+
+				<!-- RE Pattern for retrieving determinators from item xml -->
+				<escidoc.content.model.pattern>:content-model objid=\"([^\"]*)\"</escidoc.content.model.pattern>
+				<escidoc.context.pattern>:context objid=\"([^\"]*)\"</escidoc.context.pattern>
+				
+				 <!-- Current XSD Schema versions -->
+				<!-- Current XSD Schema versions -->
+				<xsd.soap.common.prop>http://escidoc.de/core/01/properties/</xsd.soap.common.prop>
+				<xsd.soap.common.srel>http://escidoc.de/core/01/structural-relations/</xsd.soap.common.srel>
+				<xsd.soap.common.version>http://escidoc.de/core/01/properties/version/</xsd.soap.common.version>
+				<xsd.soap.common.release>http://escidoc.de/core/01/properties/release/</xsd.soap.common.release>
+				<xsd.soap.item.item>http://www.escidoc.de/schemas/item/0.9</xsd.soap.item.item>
+				<xsd.soap.context.context>http://www.escidoc.de/schemas/context/0.7</xsd.soap.context.context>
+				<xsd.soap.item.components>http://www.escidoc.de/schemas/components/0.9</xsd.soap.item.components>
+				<xsd.soap.context.contextlist>http://www.escidoc.de/schemas/contextlist/0.7</xsd.soap.context.contextlist>
+				<xsd.soap.item.itemlist>http://www.escidoc.de/schemas/itemlist/0.9</xsd.soap.item.itemlist>
+				<xsd.soap.common.mdrecords>http://www.escidoc.de/schemas/metadatarecords/0.5</xsd.soap.common.mdrecords>
+				<xsd.soap.common.relations>http://www.escidoc.de/schemas/relations/0.3</xsd.soap.common.relations>
+				<xsd.soap.searchresult.searchresult>http://www.escidoc.de/schemas/searchresult/0.8</xsd.soap.searchresult.searchresult>
+				<xsd.soap.useraccount.useraccount>http://www.escidoc.de/schemas/useraccount/0.7</xsd.soap.useraccount.useraccount>
+				<xsd.soap.useraccount.useraccountlist>http://www.escidoc.de/schemas/useraccountlist/0.7</xsd.soap.useraccount.useraccountlist>
+				<xsd.soap.usergroup.usergroup>http://www.escidoc.de/schemas/usergroup/0.6</xsd.soap.usergroup.usergroup>
+				<xsd.soap.usergroup.usergrouplist>http://www.escidoc.de/schemas/usergrouplist/0.6</xsd.soap.usergroup.usergrouplist>
+				<xsd.soap.ou.oupathlist>http://www.escidoc.de/schemas/organizationalunitpathlist/0.4</xsd.soap.ou.oupathlist>
+				<xsd.soap.ou.ou>http://www.escidoc.de/schemas/organizationalunit/0.8</xsd.soap.ou.ou>
+				<xsd.soap.ou.oulist>http://www.escidoc.de/schemas/organizationalunitlist/0.8</xsd.soap.ou.oulist>
+				<xsd.soap.ou.ousuccessors>http://www.escidoc.de/schemas/organizationalunitsuccessors/0.7</xsd.soap.ou.ousuccessors>
+				<xsd.soap.ou.ouref>http://www.escidoc.de/schemas/organizationalunitref/0.4</xsd.soap.ou.ouref>
+				<xsd.rest.stagingfile.stagingfile>http://www.escidoc.de/schemas/stagingfile/0.3</xsd.rest.stagingfile.stagingfile>
+				<xsd.soap.common.commontypes>http://www.escidoc.de/schemas/commontypes/0.4</xsd.soap.common.commontypes>
+				<xsd.soap.useraccount.grants>http://www.escidoc.de/schemas/grants/0.5</xsd.soap.useraccount.grants>
+				<xsd.soap.common.versionhistory>http://www.escidoc.de/schemas/versionhistory/0.3</xsd.soap.common.versionhistory>
+				<xsd.soap.common.memberlist>http://www.escidoc.de/schemas/memberlist/0.9</xsd.soap.common.memberlist>
+				<xsd.soap.container.container>http://www.escidoc.de/schemas/container/0.8</xsd.soap.container.container>
+				<xsd.soap.container.structmap>http://www.escidoc.de/schemas/structmap/0.4</xsd.soap.container.structmap>
+				<xsd.soap.container.containerlist>http://www.escidoc.de/schemas/containerlist/0.8</xsd.soap.container.containerlist>
+				<xsd.core.properties>http://escidoc.de/core/01/properties/</xsd.core.properties>
+				<xsd.soap.common.metadatarecords>http://www.escidoc.de/schemas/metadatarecords/0.5</xsd.soap.common.metadatarecords>
+				<xsd.soap.statistic.report>http://www.escidoc.de/schemas/report/0.3</xsd.soap.statistic.report>
+				<xsd.soap.statistic.reportparameters>http://www.escidoc.de/schemas/reportparameters/0.3</xsd.soap.statistic.reportparameters>
+				<xsd.soap.statistic.reportdefinitionlist>http://www.escidoc.de/schemas/reportdefinitionlist/0.3</xsd.soap.statistic.reportdefinitionlist>
+				<xsd.soap.statistic.reportdefinition>http://www.escidoc.de/schemas/reportdefinition/0.3</xsd.soap.statistic.reportdefinition>
+
+				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
+				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
+
+				<xsd.soap.toc.toc>http://www.escidoc.de/schemas/toc/0.6</xsd.soap.toc.toc>
+				<xsd.soap.toc.table-of-content>http://www.escidoc.de/schemas/tableofcontent/0.1</xsd.soap.toc.table-of-content>
+				<xsd.soap.result.result>http://www.escidoc.de/schemas/result/0.1</xsd.soap.result.result>
+
+				<xsd.metadata.organization>http://purl.org/escidoc/metadata/profiles/0.1/organization</xsd.metadata.organization>
+				<xsd.metadata.organizationalunit>http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit</xsd.metadata.organizationalunit>
+				<xsd.metadata.file>http://purl.org/escidoc/metadata/profiles/0.1/file</xsd.metadata.file>
+				<xsd.metadata.publication>http://purl.org/escidoc/metadata/profiles/0.1/publication</xsd.metadata.publication>
+				<xsd.metadata.face>http://purl.org/escidoc/metadata/profiles/0.1/face</xsd.metadata.face>
+				<xsd.metadata.escidocprofile>http://escidoc.mpg.de/metadataprofile/schema/0.1/</xsd.metadata.escidocprofile>
+				<xsd.metadata.escidocprofile.types>http://purl.org/escidoc/metadata/terms/0.1/</xsd.metadata.escidocprofile.types>
+				<xsd.metadata.terms>http://purl.org/escidoc/metadata/terms/0.1/</xsd.metadata.terms>
+				<xsd.metadata.escidocprofile.idtypes>http://purl.org/escidoc/metadata/terms/0.1/idtypes/</xsd.metadata.escidocprofile.idtypes>
+				<xsd.metadata.source>http://purl.org/escidoc/metadata/profiles/0.1/source</xsd.metadata.source>
+				<xsd.metadata.event>http://purl.org/escidoc/metadata/profiles/0.1/event</xsd.metadata.event>
+				<xsd.metadata.person>http://purl.org/escidoc/metadata/profiles/0.1/person</xsd.metadata.person>
+                
+                <xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
+                <xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
+                <xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
+                
+                <!-- Cone -->
+                <escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
+				
+			</properties>
+				<distributionManagement>
+				<repository>
+					<id>deployment.webdav</id>
+					<name>Archiva deployment</name>
+					<url>dav:http://archiva.mpdl.mpg.de/archiva/repository/internal/</url>
+				</repository>
+				<snapshotRepository>
+					<id>snapshots.webdav</id>
+					<url>dav:http://archiva.mpdl.mpg.de/archiva/repository/snapshots/</url>
+				</snapshotRepository>
+				<site>
+					<id>website</id>
+					<url>scp://escidoc1.escidoc.mpg.de:/srv/www/00_default/projects/faces</url>
+				</site>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>env-testing-continuum</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<!-- the jdk version to use -->
+				<jdk.version>1.5</jdk.version>
+
+				<!-- used by the cargo plugin to run a jboss server for integration-testing -->
+				<cargo.port>8080</cargo.port>
+				<cargo.rmi.port>1099</cargo.rmi.port>
+				<cargo.log>high</cargo.log>
+				<cargo.jvmargs>
+					-Dcom.sun.xml.namespace.QName.useCompatibleSerialVersionUID=1.0 -Dpubman.properties.file=./pubman.properties
+				</cargo.jvmargs>
+				<!-- this path is used as root for all jboss installations -->
+				<cargo.install.dir>${user.home}/jboss</cargo.install.dir>
+				<!-- fetch the jboss from this url -->
+				<cargo.jboss.url>http://heanet.dl.sourceforge.net/sourceforge/jboss/jboss-4.2.2.GA.zip</cargo.jboss.url>
+				<!-- local intallation of the jboss for integration-tests -->
+				<cargo.jboss.install.dir>${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir>
+
+				<!-- deploy the pubman ear to this server and port via jmx -->
+				<jboss.deploy.host>localhost</jboss.deploy.host>
+				<jboss.deploy.port>8889</jboss.deploy.port>
+				<!-- the ears are deployed to this server using jboss:harddeploy -->
+				<jboss.install.dir>/mnt/jboss/dev-faces</jboss.install.dir>
+
+				<!-- Flag to disable the GUI-entry points for UC_PM_SR_03 do advanced search -->
+				<escidoc.pubman_presentation.disable.advanced_search>false</escidoc.pubman_presentation.disable.advanced_search>
+				<escidoc.pubman_presentation.disable.export>false</escidoc.pubman_presentation.disable.export>
+				<escidoc.pubman_presentation.disable.modify>false</escidoc.pubman_presentation.disable.modify>
+				<escidoc.pubman_presentation.disable.new_revision>false</escidoc.pubman_presentation.disable.new_revision>
+				<escidoc.pubman_presentation.disable.view_statistics>false</escidoc.pubman_presentation.disable.view_statistics>
+				<escidoc.pubman_presentation.disable.view_revisions>false</escidoc.pubman_presentation.disable.view_revisions>
+
+				<!-- URL of this Faces instance -->
+				<escidoc.faces.instance.url>http://dev-faces.mpdl.mpg.de/</escidoc.faces.instance.url>
+				<escidoc.faces.item.pattern>viewItemFullPage.jsp?itemId=$1</escidoc.faces.item.pattern>
+				<escidoc.faces.component.pattern>/viewComponentPage.jsp?componentId=$1</escidoc.faces.component.pattern>
+
+				<escidoc.faces.instance.id>de.mpg.escidoc.faces</escidoc.faces.instance.id>
+						
+				<!-- URL of the FIZ framework instance -->
+				<escidoc.framework_access.framework.url>http://dev-coreservice.mpdl.mpg.de:8080</escidoc.framework_access.framework.url>
+								    
+				<!--  Identifier of the content model "FACES" in the current framework instance -->
+				<escidoc.faces.content-model.id>escidoc:faces40</escidoc.faces.content-model.id>
+				<!-- DEV - Bretagne -->
+				<!--<escidoc.faces.content-model.id>escidoc:139003</escidoc.faces.content-model.id>-->
+				<!-- DEV Diamonds -->
+				<!--<escidoc.faces.content-model.id>escidoc:diamonds1</escidoc.faces.content-model.id>-->
+				
+				<!-- Identifier of the context of "FACES" in the current framework instance -->
+				<!-- DEV - FACES -->
+				<escidoc.faces.context.id>escidoc:108013</escidoc.faces.context.id>
+				<!-- QA - FACES -->
+				<!--<escidoc.faces.context.id>escidoc:5094</escidoc.faces.context.id>-->
+				<!-- Dev- Diamonds -->				
+				<!--<escidoc.faces.context.id>escidoc:200327</escidoc.faces.context.id>-->
+				<!-- DEV - Bretagne -->
+				<!--<escidoc.faces.context.id>escidoc:album1</escidoc.faces.context.id>-->
+				
+				<!--  Identifier of the content model " Faces Container Content Model" in the current framework instance -->
+				<escidoc.faces.container.content-model.id>escidoc:faces60</escidoc.faces.container.content-model.id>
+				
+				<!-- Number of albums in the album lists -->
+				<escidoc.faces.album.list.size>10</escidoc.faces.album.list.size>
+				
+				
+				<!--  UI Config -->				
+				<escidoc.faces.album.list.size.options>10,25,50,75,100</escidoc.faces.album.list.size.options> <!-- User options for the displayed number of albums -->
+				<escidoc.organizationTree.integration>yes</escidoc.organizationTree.integration> <!-- User option, if organization selection should be displayed on create/edit album -->				
+				
+				
+				<!-- Blog's URL -->
+				<escidoc.faces.blog.url>http://faces.blogs.mpdl.mpg.de</escidoc.faces.blog.url>
+				
+				<!-- Blog's RSS feed URL -->
+				<escidoc.faces.blog.rss.url>http://faces.blogs.mpdl.mpg.de/feed/</escidoc.faces.blog.rss.url>
+				
+				<!-- Home URL -->
+				<escidoc.faces.home.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_home.html</escidoc.faces.home.url>
+				
+				<!-- Help URL -->
+				<escidoc.faces.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.faces.help.url>
+				
+				<!-- About URL -->
+				<escidoc.faces.about.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_about.html</escidoc.faces.about.url>
+				
+				<!-- Legal URL -->
+				<escidoc.faces.legal.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_legal.html</escidoc.faces.legal.url>
+				
+				<!-- Confirmation URL -->
+				<escidoc.faces.confirmation.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_export_confirmation.html</escidoc.faces.confirmation.url>
+				
+				<!-- Impressum URL -->
+				<escidoc.faces.impressum.url>http://colab.mpdl.mpg.de/mediawiki/Faces_Disclaimer_and_Copyright</escidoc.faces.impressum.url>
+				
+				<!-- Logo Link Url -->
+				<escidoc.faces.logo.link.url>http://www.mpib-berlin.mpg.de/</escidoc.faces.logo.link.url>
+				
+				<!-- Logo Url -->
+				<escidoc.faces.logo.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/mpi_hd.png</escidoc.faces.logo.url>
+				
+				<!-- FACES Collection id -->
+				<escidoc.faces.collection.id>escidoc:113634</escidoc.faces.collection.id>
+				
+				<!-- FACES Collection file path -->
+				<escidoc.faces.collection.file.path>C://Dokumente und Einstellungen/saquet/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA/server/default/data/Faces-collection.zip</escidoc.faces.collection.file.path>
+				
+				<!-- Faces statistics user -->
+				<escidoc.faces.statistics.password>escidoc</escidoc.faces.statistics.password>
+				<escidoc.faces.statistics.username>faces_statistics_user</escidoc.faces.statistics.username>
+				
+				<!--  Due to a historical defect, QName was released with multiple 
+					serialVersionUID values even though its serialization was the
+					same.
+					To workaround this issue, serialVersionUID is set with either
+					a default value or a compatibility value.  To use the
+					compatibility value you have to set the following property to "1.0". -->
+				<com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>1.0</com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>
+
+				<!-- RE Pattern for retrieving determinators from item xml -->
+				<escidoc.content.model.pattern>:content-model objid=\"([^\"]*)\"</escidoc.content.model.pattern>
+				<escidoc.context.pattern>:context objid=\"([^\"]*)\"</escidoc.context.pattern>
+				
+				 <!-- Current XSD Schema versions -->
+				<xsd.soap.common.prop>http://escidoc.de/core/01/properties/</xsd.soap.common.prop>
+				<xsd.soap.common.srel>http://escidoc.de/core/01/structural-relations/</xsd.soap.common.srel>
+				<xsd.soap.common.version>http://escidoc.de/core/01/properties/version/</xsd.soap.common.version>
+				<xsd.soap.common.release>http://escidoc.de/core/01/properties/release/</xsd.soap.common.release>
+				<xsd.soap.item.item>http://www.escidoc.de/schemas/item/0.8</xsd.soap.item.item>
+				<xsd.soap.context.context>http://www.escidoc.de/schemas/context/0.6</xsd.soap.context.context>
+				<xsd.soap.item.components>http://www.escidoc.de/schemas/components/0.8</xsd.soap.item.components>
+				<xsd.soap.context.contextlist>http://www.escidoc.de/schemas/contextlist/0.6</xsd.soap.context.contextlist>
+				<xsd.soap.item.itemlist>http://www.escidoc.de/schemas/itemlist/0.8</xsd.soap.item.itemlist>
+				<xsd.soap.common.mdrecords>http://www.escidoc.de/schemas/metadatarecords/0.4</xsd.soap.common.mdrecords>
+				<xsd.soap.common.relations>http://www.escidoc.de/schemas/relations/0.3</xsd.soap.common.relations>
+				<xsd.soap.searchresult.searchresult>http://www.escidoc.de/schemas/searchresult/0.7</xsd.soap.searchresult.searchresult>
+				<xsd.soap.useraccount.useraccount>http://www.escidoc.de/schemas/useraccount/0.6</xsd.soap.useraccount.useraccount>
+				<xsd.soap.useraccount.useraccountlist>http://www.escidoc.de/schemas/useraccountlist/0.6</xsd.soap.useraccount.useraccountlist>
+				<xsd.soap.usergroup.usergroup>http://www.escidoc.de/schemas/usergroup/0.5</xsd.soap.usergroup.usergroup>
+				<xsd.soap.usergroup.usergrouplist>http://www.escidoc.de/schemas/usergrouplist/0.5</xsd.soap.usergroup.usergrouplist>
+				<xsd.soap.ou.oupathlist>http://www.escidoc.de/schemas/organizationalunitpathlist/0.4</xsd.soap.ou.oupathlist>
+				<xsd.soap.ou.ou>http://www.escidoc.de/schemas/organizationalunit/0.7</xsd.soap.ou.ou>
+				<xsd.soap.ou.oulist>http://www.escidoc.de/schemas/organizationalunitlist/0.7</xsd.soap.ou.oulist>
+				<xsd.soap.ou.ousuccessors>http://www.escidoc.de/schemas/organizationalunitsuccessors/0.7</xsd.soap.ou.ousuccessors>
+				<xsd.soap.ou.ouref>http://www.escidoc.de/schemas/organizationalunitref/0.4</xsd.soap.ou.ouref>
+				<xsd.rest.stagingfile.stagingfile>http://www.escidoc.de/schemas/stagingfile/0.3</xsd.rest.stagingfile.stagingfile>
+				<xsd.soap.common.commontypes>http://www.escidoc.de/schemas/commontypes/0.4</xsd.soap.common.commontypes>
+				<xsd.soap.useraccount.grants>http://www.escidoc.de/schemas/grants/0.5</xsd.soap.useraccount.grants>
+				<xsd.soap.common.versionhistory>http://www.escidoc.de/schemas/versionhistory/0.3</xsd.soap.common.versionhistory>
+				<xsd.soap.common.memberlist>http://www.escidoc.de/schemas/memberlist/0.8</xsd.soap.common.memberlist>
+				<xsd.soap.container.container>http://www.escidoc.de/schemas/container/0.7</xsd.soap.container.container>
+				<xsd.soap.container.structmap>http://www.escidoc.de/schemas/structmap/0.4</xsd.soap.container.structmap>
+				<xsd.soap.container.containerlist>http://www.escidoc.de/schemas/containerlist/0.7</xsd.soap.container.containerlist>
+				<xsd.metadata.organization>http://escidoc.mpg.de/metadataprofile/schema/0.1/organization</xsd.metadata.organization>
+				<xsd.metadata.file>http://escidoc.mpg.de/metadataprofile/schema/0.1/file</xsd.metadata.file>
+				<xsd.metadata.publication>http://escidoc.mpg.de/metadataprofile/schema/0.1/publication</xsd.metadata.publication>
+				<xsd.metadata.escidocprofile>http://escidoc.mpg.de/metadataprofile/schema/0.1/</xsd.metadata.escidocprofile>
+				<xsd.metadata.escidocprofile.types>http://escidoc.mpg.de/metadataprofile/schema/0.1/types</xsd.metadata.escidocprofile.types>
+				<xsd.metadata.escidocprofile.idtypes>http://escidoc.mpg.de/metadataprofile/schema/0.1/idtypes</xsd.metadata.escidocprofile.idtypes>
+				<xsd.core.properties>http://escidoc.de/core/01/properties/</xsd.core.properties>
+				<xsd.soap.common.metadatarecords>http://www.escidoc.de/schemas/metadatarecords/0.4</xsd.soap.common.metadatarecords>
+				<xsd.soap.statistic.report>http://www.escidoc.de/schemas/report/0.3</xsd.soap.statistic.report>
+				<xsd.soap.statistic.reportparameters>http://www.escidoc.de/schemas/reportparameters/0.3</xsd.soap.statistic.reportparameters>
+				<xsd.soap.statistic.reportdefinitionlist>http://www.escidoc.de/schemas/reportdefinitionlist/0.3</xsd.soap.statistic.reportdefinitionlist>
+				<xsd.soap.statistic.reportdefinition>http://www.escidoc.de/schemas/reportdefinition/0.3</xsd.soap.statistic.reportdefinition>
+				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
+				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
+		
+				<xsd.soap.toc.toc>http://www.escidoc.de/schemas/toc/0.6</xsd.soap.toc.toc>
+				<xsd.soap.toc.table-of-content>http://www.escidoc.de/schemas/tableofcontent/0.1</xsd.soap.toc.table-of-content>
+				<xsd.soap.result.result>http://www.escidoc.de/schemas/result/0.1</xsd.soap.result.result>
+				
+				<xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
+                <xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
+                <xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
+                
+				<!-- Cone -->
+                <escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
+
+			</properties>
+				<distributionManagement>
+				<repository>
+					<id>deployment.webdav</id>
+					<name>Archiva deployment</name>
+					<url>dav:http://archiva.mpdl.mpg.de/archiva/repository/internal/</url>
+				</repository>
+				<snapshotRepository>
+					<id>snapshots.webdav</id>
+					<url>dav:http://archiva.mpdl.mpg.de/archiva/repository/snapshots/</url>
+				</snapshotRepository>
+				<site>
+					<id>website</id>
+					<url>scp://escidoc1.escidoc.mpg.de:/srv/www/00_default/projects/snapshots/faces</url>
+				</site>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>env-production-escidoc2</id>
+
+		</profile>
+		<profile>
+			<id>env-production-escidoc3</id>
+
+		</profile>
+		<profile>
+			<id>env-production-escidoc4</id>
+
+		</profile>
+		<profile>
+			<!-- this profile gets activated if os is windows -->
+			<id>Windows</id>
+			<activation>
+				<os>
+					<family>windows</family>
+				</os>
+			</activation>
+			<properties>
+				<!-- windows needs an extra slash in jboss-service.xml -->
+				<jboss.pathcorrection>/</jboss.pathcorrection>
+			</properties>
+		</profile>
+		<profile>
+			<!-- this profile gets activated if os is linux -->
+			<id>Linux</id>
+			<activation>
+				<os>
+					<name>Linux</name>
+					<family>linux</family>
+				</os>
+			</activation>
+			<properties>
+				<!-- linux doesn't need the extra slash like windows does -->
+				<jboss.pathcorrection />
+			</properties>
+		</profile>
+	</profiles>
+</project>

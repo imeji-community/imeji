@@ -3,6 +3,11 @@ package de.mpg.escidoc.faces.upload;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Thread started on initialization of Faces
+ * @author saquet
+ *
+ */
 public class UploadManager extends Thread
 {
 	private List<UploadThread> uploadThreads = null;
@@ -11,12 +16,11 @@ public class UploadManager extends Thread
 	public UploadManager() 
 	{
 		uploadThreads = new ArrayList<UploadThread>();
-		this.run();
 	}
 	
 	/**
 	 * Add a new Upload to the manager.
-	 * <br> At the end, the report of the upload will be written in 
+	 * <br> At the end, the report of the upload will be written 
 	 * <br> Upload will be removed when finished.
 	 * @param upload
 	 */

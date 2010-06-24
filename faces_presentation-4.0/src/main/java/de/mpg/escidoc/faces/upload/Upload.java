@@ -7,12 +7,17 @@ import java.util.List;
 
 import de.mpg.escidoc.faces.item.ItemVO;
 
+/**
+ * 
+ * @author saquet
+ *
+ */
 public class Upload 
 {
-	List<ItemVO> items = null;
-	String contentModelId = null;
-	Date startDate = null;
-	Date endDate = null;
+	private List<ItemVO> items = null;
+	private String contentModelId = null;
+	private Date startDate = null;
+	private Date endDate = null;
 		
 	public Upload(String contentModelId) 
 	{

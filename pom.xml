@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.mpg.escidoc.faces4</groupId>
-	<artifactId>faces-4.0</artifactId>
+	<artifactId>faces4</artifactId>
 	<packaging>pom</packaging>
 	<version>4.0</version>
-	<name>faces</name>
+	<name>faces4</name>
 	<url>http://escidoc1.escidoc.mpg.de/projects/faces</url>
 	<description>
 		FACES is a lifespan database of adult emotional facial stimuli. 
@@ -149,8 +149,8 @@
 	</ciManagement>
 
 	<modules>
-		<module>faces_presentation-4.0</module>
-		<module>faces_ear-4.0</module>
+		<module>faces_presentation4</module>
+		<module>faces_ear4</module>
 	</modules>
 
 	<scm>

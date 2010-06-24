@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.mpg.escidoc.faces4</groupId>
 	<artifactId>faces_ear4</artifactId>
-	<name>faces_ear-4.0</name>
+	<name>faces_ear4</name>
 	<packaging>ear</packaging>
 	<version>4.0</version>
 

@@ -149,8 +149,8 @@
 	</ciManagement>
 
 	<modules>
-		<module>faces_presentation4</module>
-		<module>faces_ear4</module>
+		<module>faces_presentation-4.0</module>
+		<module>faces_ear-4.0</module>
 	</modules>
 
 	<scm>

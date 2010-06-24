@@ -7,8 +7,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.mpg.escidoc.faces4</groupId>
   <artifactId>faces_presentation4</artifactId>
-  <packaging>war</packaging>
   <name>faces_presentation4</name>
+  <packaging>war</packaging>
   <version>4.0</version>
   <scm>
     <connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_presentation-4.0</connection>

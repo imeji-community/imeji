@@ -1,6 +1,7 @@
-package de.mpg.escidoc.faces.upload.helpert;
+package de.mpg.escidoc.faces.upload.helper;
 
 import java.io.File;
+
 
 
 public class UploadHelper 

@@ -1,5 +1,8 @@
 package de.mpg.escidoc.faces.container.album;
 
-public class AlbumVO {
+import de.mpg.escidoc.faces.container.FacesContainerVO;
+
+public class AlbumVO extends FacesContainerVO
+{
 
 }

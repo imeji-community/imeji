@@ -58,6 +58,7 @@ import de.escidoc.schemas.searchresult.x08.SearchResultRecordDocument;
 import de.escidoc.schemas.searchresult.x08.SearchResultRecordDocument.SearchResultRecord;
 import de.mpg.escidoc.faces.album.AlbumVO;
 import de.mpg.escidoc.faces.beans.SessionBean;
+import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.item.ItemVO;
 import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.common.valueobjects.ContainerResultVO;
@@ -71,6 +72,7 @@ public class QueryHelper
     
     private List<ItemVO> items = null;
     private List<AlbumVO> albums = null;
+    private List<FacesContainerVO> facesContainers = null;
     private XmlTransforming xmlTransforming = null;
     private int totalNumberOfItems = 0;
    
@@ -282,6 +284,7 @@ public class QueryHelper
      * @throws ServiceException
      * @throws URISyntaxException
      * @throws RemoteException
+     * @deprecated use executeQueryForFacesContainers instead
      */
     public void executeQueryForAlbums(String query, int itemsPerPage, int pageNumber, String sortedBy, String index) throws ServiceException, URISyntaxException, RemoteException
     {
@@ -320,6 +323,58 @@ public class QueryHelper
                         
                         ContainerResultVO containerResultVO = (ContainerResultVO)xmlTransforming.transformToSearchResult(containerXml);
                         albums.add(new AlbumVO(containerResultVO));
+                    }
+                }
+                totalNumberOfItems = searchResult.getNumberOfRecords().intValue();
+            }
+            // Delete list from component tree to let it be refreshed.
+            UIComponent component = FacesContext.getCurrentInstance().getViewRoot().findComponent("Start:listpanel:list");
+            if (component != null)
+            {
+                component.getParent().getChildren().remove(component);
+            }
+        } catch (Exception e) {
+            logger.error("No result for this request", e);// TODO: handle exception
+        }
+    }
+    
+    public void executeQueryForFacesContainers(String query, int itemsPerPage, int pageNumber, String sortedBy, String index) throws ServiceException, URISyntaxException, RemoteException
+    {
+        NonNegativeInteger show = new NonNegativeInteger(itemsPerPage + "");
+        PositiveInteger page = new PositiveInteger(pageNumber + "");
+        // creation of the request for the search method
+        SearchRetrieveRequestType searchRetrieveRequest = new SearchRetrieveRequestType();
+        searchRetrieveRequest.setVersion("1.1");
+        searchRetrieveRequest.setQuery(query);
+        if (sortedBy != null)
+        {
+            searchRetrieveRequest.setSortKeys(sortedBy);
+        }
+        searchRetrieveRequest.setStartRecord(page);
+        searchRetrieveRequest.setMaximumRecords(show);
+        searchRetrieveRequest.setRecordPacking("xml");
+        // Create XML Source
+        SRWPort searchHandler = ServiceLocator.getSearchHandler(index);
+        SearchRetrieveResponseType searchResult = searchHandler.searchRetrieveOperation(searchRetrieveRequest);
+        try
+        {
+            RecordsType recordsType = searchResult.getRecords();
+            facesContainers = new ArrayList<FacesContainerVO>();
+            totalNumberOfItems = 0;
+            if (recordsType != null)
+            {
+                RecordType[] records = recordsType.getRecord();
+    
+                for (RecordType record : records)
+                {
+                    MessageElement[] messages = record.getRecordData().get_any();
+                    for (MessageElement messageElement : messages)
+                    {
+                        String containerXml = messageElement.getAsString();
+                        //logger.debug("XML: " + itemXml);
+                        
+                        ContainerResultVO containerResultVO = (ContainerResultVO)xmlTransforming.transformToSearchResult(containerXml);
+                        facesContainers.add(new FacesContainerVO(containerResultVO));
                     }
                 }
                 totalNumberOfItems = searchResult.getNumberOfRecords().intValue();
@@ -530,13 +585,35 @@ public class QueryHelper
         }
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
     public List<AlbumVO> getAlbums()
     {
         return albums;
     }
 
+    /**
+     * @deprecated
+     * @param albums
+     */
     public void setAlbums(List<AlbumVO> albums)
     {
         this.albums = albums;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public List<FacesContainerVO> getFacesContainers()
+    {
+        return facesContainers;
+    }
+
+    public void setFacesContainers(List<FacesContainerVO> facesContainers)
+    {
+        this.facesContainers = facesContainers;
     }
 }

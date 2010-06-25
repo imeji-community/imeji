@@ -21,6 +21,8 @@ public class FacesContainerVO extends ContainerVO
      */
     private List<String> membersId = null;
 	
+    private boolean selected = false;
+    
 	public FacesContainerVO() 
 	{
 		super();
@@ -82,5 +84,15 @@ public class FacesContainerVO extends ContainerVO
     public void setMembersId(List<String> membersId)
     {
         this.membersId = membersId;
+    }
+    
+    public boolean isSelected()
+    {
+        return selected;
+    }
+
+    public void setSelected(boolean selected)
+    {
+        this.selected = selected;
     }
 }

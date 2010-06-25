@@ -43,13 +43,15 @@ public class ViewCollectionBean
 	public void init()
 	{
 		collectionVO = collectionSession.getCurrentCollection();
-		
 		screenManagerMenu.add(new SelectItem("escidoc:40", "Faces"));
 	}
 	
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	public void createCollection() throws Exception
 	{
-		collectionVO.setContext(screenManager.getContext());
 		collectionController.create(collectionVO, sessionBean.getUserHandle());
 	}
 	

@@ -24,9 +24,9 @@ public class UploadManager extends Thread
 	 * <br> Upload will be removed when finished.
 	 * @param upload
 	 */
-	public void addNewUpload(Upload upload)
+	public void addNewUpload(Upload upload, String userHandle)
 	{
-		uploadThreads.add(new UploadThread(upload));
+		uploadThreads.add(new UploadThread(upload, userHandle));
 	}
 	
 	/**

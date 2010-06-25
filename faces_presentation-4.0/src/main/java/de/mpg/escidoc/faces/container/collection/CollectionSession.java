@@ -28,7 +28,6 @@ public class CollectionSession
 		AlbumListParameters parameters = new AlbumListParameters("released", SortParameterType.LAST_MODIFICATION_DATE, OrderParameterType.DESCENDING, 10, 1, null, null);
 		parameters.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
 		collectionList = new FacesContainerListVO(list, parameters, HandlerType.SEARCH);
-		
 	}
 	
 	

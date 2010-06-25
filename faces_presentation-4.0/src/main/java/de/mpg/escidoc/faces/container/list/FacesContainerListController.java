@@ -198,15 +198,14 @@ public class FacesContainerListController
     public FacesContainerListVO search(FacesContainerListVO list, String userHandle) throws Exception
     {
         QueryHelper queryHelper  = new QueryHelper();
-        queryHelper
-            .executeQueryForAlbums(
+        queryHelper.executeQueryForFacesContainers(
                     list.getParameters().getParamtersAsSearchQuery()
                     , list.getParameters().getShow()
                     , (list.getParameters().getPage()-1) * list.getParameters().getShow() + 1 
                     , list.getParameters().getParametersAsSortingQuery()
                     , "escidoc_all");
         
-        list.setList(queryHelper.getAlbums());  
+        list.setList(queryHelper.getFacesContainers());  
         
         FacesContainerListVO albumListVO = new FacesContainerListVO(list);
         albumListVO.setSize(queryHelper.getTotalNumberOfItems());

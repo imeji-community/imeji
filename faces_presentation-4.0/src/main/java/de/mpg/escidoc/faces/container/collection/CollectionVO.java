@@ -37,6 +37,5 @@ public class CollectionVO extends FacesContainerVO
 	{
 		super();
 		this.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
-		this.setContext(screenManager.getContext());
 	}
 }

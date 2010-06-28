@@ -320,13 +320,13 @@
 		<dependency>
 			<groupId>trinidad</groupId>
 			<artifactId>trinidad-api</artifactId>
-			<version>1.2.6</version>
+			<version>1.2.11</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>trinidad</groupId>
 			<artifactId>trinidad-impl</artifactId>
-			<version>1.2.6</version>
+			<version>1.2.11</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

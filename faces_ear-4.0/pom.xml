@@ -32,7 +32,7 @@
 						<webModule>
 							<groupId>de.mpg.escidoc.faces4</groupId>
 							<artifactId>faces_presentation4</artifactId>
-							<contextRoot>/faces4</contextRoot>
+							<contextRoot>/faces</contextRoot>
 						</webModule>
 						<webModule>
                             <groupId>de.mpg.escidoc.services</groupId>
@@ -182,6 +182,11 @@
                             <artifactId>geoip</artifactId>
                             <includeInApplicationXml>true</includeInApplicationXml>
                         </jarModule>
+                        <jarModule>
+							<groupId>jsf-facelets</groupId>
+							<artifactId>jsf-facelets</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
 					</modules>
 				</configuration>
 			</plugin>
@@ -269,9 +274,9 @@
 			<type>ejb</type>
 		</dependency>
 		<dependency>
-			<groupId>de.mpg.escidoc.faces</groupId>
-			<artifactId>faces_presentation</artifactId>
-			<version>3.3.1-SNAPSHOT</version>
+			<groupId>de.mpg.escidoc.faces4</groupId>
+			<artifactId>faces_presentation4</artifactId>
+			<version>4.0</version>
 			<scope>compile</scope>
 			<type>war</type>
 		</dependency>
@@ -426,6 +431,12 @@
 	      	<groupId>com.maxmind.geoip</groupId>
 	      	<artifactId>geoip</artifactId>
 	      	<version>1.2.3</version>
+    	</dependency>
+    	<dependency>
+      		<groupId>jsf-facelets</groupId>
+      		<artifactId>jsf-facelets</artifactId>
+      		<version>1.1.13</version>
+      		<scope>provided</scope>
     	</dependency>
 	</dependencies>
 

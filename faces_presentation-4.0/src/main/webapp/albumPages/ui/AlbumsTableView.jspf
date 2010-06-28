@@ -146,7 +146,9 @@
 			</h:panelGroup>
 			<tr:iterator var="album" value="#{AlbumListBean.list.list}" id="list" rows="0">
 				<h:panelGroup>
-				    <tr class="full_0area0 listItem &lt;h:outputText value='activeAlbum' rendered='#{album.version.objectId == AlbumSession.active.version.objectId}' />">
+				   
+				    <tr class="full_0area0 listItem #{album.version.objectId == AlbumSession.active.version.objectId ? 'activeAlbum' : ''}">
+				      	
 				      	<td class="free_area0 endline">
 				      		<span class="free_area0_p8 endline itemSelectArea">
 								<tr:selectBooleanCheckbox id="selAlbum" simple="true" styleClass="itemCheckBox" value="#{album.selected}" immediate="true" valueChangeListener="#{AlbumListBean.selectAlbum}" onclick="saveScrollCoordinates()" rendered="#{album.state == 'PENDING'}">

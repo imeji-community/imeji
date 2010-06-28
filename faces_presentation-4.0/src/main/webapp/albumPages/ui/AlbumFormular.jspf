@@ -57,7 +57,6 @@
 				</h:panelGroup>
 			
 			<!-- Start of the album formular -->
-				
 				<h:panelGroup layout="block" styleClass="huge_area0">
 					<b><h:outputText id="txtAlbumName" styleClass="double_area0 endline" value="#{lbl.name}*" /></b>
 					<h:inputText id="nameField" value="#{AlbumFormular.album.mdRecord.title.value}" valueChangeListener="#{AlbumFormular.titleListener}" styleClass="double_txtInput" immediate="true"></h:inputText>
@@ -79,8 +78,8 @@
 				<h:panelGroup layout="block" styleClass="huge_area0">
 					<b><h:outputText id="txtAlbumAuthor" styleClass="huge_area0 endline" value="#{lbl.authors}" /></b>					
 					<tr:iterator var="creators" varStatus="status" value="#{AlbumFormular.album.mdRecord.creators}">
-						<h:panelGroup layout="block" styleClass="suggestAnchor">
-							<h:panelGroup class="huge_area0">
+						<div class="suggestAnchor">
+							<span class="huge_area0">
 								<h:outputText styleClass="large_area0 endline" value="#{lbl.author}"/>
 								<h:panelGroup styleClass="small_area0 sectionToolSection small_marginRIncl">
 									<tr:commandButton styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_author}" actionListener="#{AlbumFormular.removeAuthor}" disabled="#{AlbumFormular.numberOfCreators == '1'}" immediate="true">
@@ -88,35 +87,35 @@
 									</tr:commandButton>
 									<tr:commandButton styleClass="min_imgBtn add sectionTool" shortDesc="#{lbl.add_author}" action="#{AlbumFormular.addAuthor}" immediate="true"/>
 								</h:panelGroup>
-							</h:panelGroup>
+							</span>
 
 							<h:panelGroup layout="block" styleClass="double_area0">
 								<h:panelGroup styleClass="double_area0">
 									<h:outputText value="#{lbl.family_name}" />
 									<h:outputText value="*" />
 								</h:panelGroup>
-								<tr:inputText simple="true" id="familyname" value="#{creators.person.familyName}" styleClass="double_txtInput" immediate="true" valueChangeListener="#{AlbumFormular.familyNameListener}" >
+								<h:inputText id="familyname" value="#{creators.person.familyName}" styleClass="double_txtInput" immediate="true" valueChangeListener="#{AlbumFormular.familyNameListener}" >
 									<f:attribute name="index" value="#{status.index}"/>
-								</tr:inputText>
+								</h:inputText>
 								<h:panelGroup styleClass="double_area0">
 									<h:outputText value="#{lbl.first_name}" />
 								</h:panelGroup>
-								<tr:inputText simple="true" id="givenname" value="#{creators.person.givenName}" styleClass="double_txtInput" valueChangeListener="#{AlbumFormular.givenNameListener}" immediate="true">
+								<h:inputText id="givenname" value="#{creators.person.givenName}" styleClass="double_txtInput" valueChangeListener="#{AlbumFormular.givenNameListener}" immediate="true">
 									<f:attribute name="index" value="#{status.index}"/>
-								</tr:inputText>
+								</h:inputText>
 							</h:panelGroup>
 
-							<h:panelGroup class="huge_area0 endline">
+							<span class="huge_area0 endline">
 								<h:outputText id="txtAlbumAuthor" value="#{lbl.affiliation}" />
 								<h:outputText value="*" />
-							</h:panelGroup>
+							</span>
 							<h:panelGroup layout="block" styleClass="huge_area0">
 								<tr:iterator var="affiliations" value="#{creators.person.organizations}" varStatus="statusAffiliation">
 									<h:panelGroup styleClass="quad_area0">
-										<tr:inputText simple="true" id="affiliation" value="#{affiliations.name.value}" styleClass="double_txtInput endline" immediate="true" valueChangeListener="#{AlbumFormular.affiliationListener}">
+										<h:inputText id="affiliation" value="#{affiliations.name.value}" styleClass="double_txtInput endline" immediate="true" valueChangeListener="#{AlbumFormular.affiliationListener}">
 											<f:attribute name="indexCreator" value="#{status.index}" />
 											<f:attribute name="indexAffiliation" value="#{statusAffiliation.index}"/>
-										</tr:inputText>
+										</h:inputText>
 										<h:panelGroup styleClass="small_area0 sectionToolSection xLarge_marginRExcl">
 											<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add an affiliation" actionListener="#{AlbumFormular.addAffiliation}" immediate="true">
 												<f:attribute name="creator" value="#{creators}"></f:attribute>
@@ -130,12 +129,11 @@
 								</tr:iterator>
 							</h:panelGroup>
 							<h:panelGroup layout="block" styleClass="huge_area0">
-								<h:outputText value="&#160;"></h:outputText>
+								&#160;
 							</h:panelGroup>		
-						</h:panelGroup>		
+						</div>			
 					</tr:iterator>
 				</h:panelGroup>
-				
 				<h:outputText styleClass="huge_area0" escape="false" value="&#160;" />
 				<h:panelGroup layout="block" styleClass="huge_area0">
 					<h:outputText value="* #{lbl.mandatory_field}"/>

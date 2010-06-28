@@ -63,13 +63,13 @@ public class Canvas
         albums = new ArrayList<SelectItem>();
         if (sessionBean.getUser() != null)
         {
-            albums.add(new SelectItem(navigation.getApplicationUrl() + "jsf/Canvas.jsp", "Choose an Album"));
+            albums.add(new SelectItem(navigation.getApplicationUrl() + "jsf/Canvas.xhtml", "Choose an Album"));
             
             try
             {
                 for (int i = 0; i < albumSession.getMyAlbums().getSize(); i++)
                 {
-                    albums.add(new SelectItem( navigation.getApplicationUrl() + "jsf/Canvas.jsp?album=" 
+                    albums.add(new SelectItem( navigation.getApplicationUrl() + "jsf/Canvas.xhtml?album=" 
                             +  albumSession.getMyAlbums().getList().get(i).getVersion().getObjectId()
                             , albumSession.getMyAlbums().getList().get(i).getMdRecord().getTitle().getValue()));
                 }
@@ -79,7 +79,7 @@ public class Canvas
                 throw new RuntimeException(e);
             }       
             
-            selected = navigation.getApplicationUrl() + "jsf/Canvas.jsp";
+            selected = navigation.getApplicationUrl() + "jsf/Canvas.xhtml";
             
             if (request.getParameter("album") != null)
             {

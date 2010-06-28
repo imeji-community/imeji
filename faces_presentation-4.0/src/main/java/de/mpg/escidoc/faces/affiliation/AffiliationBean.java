@@ -204,11 +204,11 @@ public class AffiliationBean
         // Save the result in the sessionBean
         this.albumSession.setCurrent(viewAlbum);
         
-        if ("/faces/jsf/AddAlbum.jsp".equals(this.request.getRequestURI()))
+        if ("/faces/jsf/AddAlbum.xhtml".equals(this.request.getRequestURI()))
         {
             FacesContext.getCurrentInstance().getExternalContext().redirect(this.navigation.getCreateAlbumUrl());
         }
-        else if ("/faces/jsf/EditAlbum.jsp".equals(this.request.getRequestURI()))
+        else if ("/faces/jsf/EditAlbum.xhtml".equals(this.request.getRequestURI()))
         {
             FacesContext.getCurrentInstance().getExternalContext().redirect(
                     this.navigation.getEditAlbumUrl() + "/" + viewAlbum.getLatestVersion().getObjectId());
@@ -240,11 +240,11 @@ public class AffiliationBean
         // Save the result in the sessionBean
         this.albumSession.setCurrent(viewAlbum);
         // reload the page
-        if ("/faces/jsf/AddAlbum.jsp".equals(this.request.getRequestURI()))
+        if ("/faces/jsf/AddAlbum.xhtml".equals(this.request.getRequestURI()))
         {
             FacesContext.getCurrentInstance().getExternalContext().redirect(this.navigation.getCreateAlbumUrl());
         }
-        else if ("/faces/jsf/EditAlbum.jsp".equals(this.request.getRequestURI()))
+        else if ("/faces/jsf/EditAlbum.xhtml".equals(this.request.getRequestURI()))
         {
             FacesContext.getCurrentInstance().getExternalContext().redirect(
                     this.navigation.getEditAlbumUrl() + "/" + viewAlbum.getLatestVersion().getObjectId());
@@ -285,11 +285,11 @@ public class AffiliationBean
         // Save the result in the sessionBean
         this.albumSession.setCurrent(viewAlbum);
         // reload the page
-        if ("/faces/jsf/AddAlbum.jsp".equals(this.request.getRequestURI()))
+        if ("/faces/jsf/AddAlbum.xhtml".equals(this.request.getRequestURI()))
         {
             FacesContext.getCurrentInstance().getExternalContext().redirect(this.navigation.getCreateAlbumUrl());
         }
-        else if ("/faces/jsf/EditAlbum.jsp".equals(this.request.getRequestURI()))
+        else if ("/faces/jsf/EditAlbum.xhtml".equals(this.request.getRequestURI()))
         {
             FacesContext.getCurrentInstance().getExternalContext().redirect(
                     this.navigation.getEditAlbumUrl() + "/" + viewAlbum.getLatestVersion().getObjectId());

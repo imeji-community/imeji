@@ -1,4 +1,9 @@
-<%
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<ui:remove>
+<!--
             /* 
             CDDL HEADER START
 
@@ -26,9 +31,8 @@
             Gesellschaft zur F�rderung der Wissenschaft e.V.
             All rights reserved. Use is subject to license terms.
              */
-%>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+-->
+</ui:remove>
 
 <span id="metaMenuSkipLinkAnchor" class="full_area0 metaMenu">
 	<!-- meta Menu starts here -->
@@ -80,3 +84,4 @@
 
 	<!-- meta Menu ends here -->
 </span>
+</div>

@@ -1,4 +1,9 @@
-<%
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<ui:remove>
+<!--
             /* 
             CDDL HEADER START
 
@@ -26,26 +31,21 @@
             Gesellschaft zur F�rderung der Wissenschaft e.V.
             All rights reserved. Use is subject to license terms.
              */
-%>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://myfaces.apache.org/trinidad" prefix="tr"%>
+-->
+</ui:remove>
 
 <f:subview id="Breadcrumb">
 
-<div class="clear breadcrumb">
-	<!-- Breadcrumb starts here -->
-	<ol>
-		<li>
-			<h:outputLink id="lnkBackToResultList" value="#{SessionBean.backToResultList}" rendered="#{SessionBean.currentUrl != 'comparisonFromAlbum' and SessionBean.currentUrl != 'detailsFromAlbum' and SessionBean.currentUrl != 'personFromAlbum' and SessionBean.currentUrl != 'viewAlbum'  and SessionBean.currentUrl != 'home' and SessionBean.currentUrl != 'searchResult'}">
-				<h:outputText value="Back to pictures list"/>
-			</h:outputLink>
-			<h:outputLink id="lnkBackToAlbum" value="#{SessionBean.backToResultList}" rendered="#{SessionBean.currentUrl == 'comparisonFromAlbum' or SessionBean.currentUrl == 'detailsFromAlbum' or SessionBean.currentUrl == 'personFromAlbum' and SessionBean.currentUrl != 'searchResult'}">
-				<h:outputText value="Back to album"/>
-			</h:outputLink>
-		</li>
-</ol>
-	<!-- Breadcrumb ends here -->
-</div>
+			<ol>
+				<li>
+					<h:outputLink id="lnkBackToResultList" value="#{SessionBean.backToResultList}" rendered="#{SessionBean.currentUrl != 'comparisonFromAlbum' and SessionBean.currentUrl != 'detailsFromAlbum' and SessionBean.currentUrl != 'personFromAlbum' and SessionBean.currentUrl != 'viewAlbum'  and SessionBean.currentUrl != 'home' and SessionBean.currentUrl != 'searchResult'}">
+						<h:outputText value="Back to pictures list"/>
+					</h:outputLink>
+					<h:outputLink id="lnkBackToAlbum" value="#{SessionBean.backToResultList}" rendered="#{SessionBean.currentUrl == 'comparisonFromAlbum' or SessionBean.currentUrl == 'detailsFromAlbum' or SessionBean.currentUrl == 'personFromAlbum' and SessionBean.currentUrl != 'searchResult'}">
+						<h:outputText value="Back to album"/>
+					</h:outputLink>
+				</li>
+			</ol>
 
 </f:subview>
+</div>

@@ -154,6 +154,19 @@
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
 
+
+	<!-- FaceletViewHandler configuration -->
+	<context-param>
+	  <param-name>org.apache.myfaces.trinidad.ALTERNATE_VIEW_HANDLER</param-name>
+	  <param-value>com.sun.facelets.FaceletViewHandler</param-value>
+	</context-param>
+
+	<!-- Use documents saved as *.xhtml for Facelets -->
+	  <context-param>
+	    <param-name>facelets.VIEW_MAPPINGS</param-name>
+	    <param-value>*.xhtml</param-value>
+	  </context-param>     
+
 	<session-config>
 		<session-timeout>180</session-timeout>
 	</session-config>
@@ -174,7 +187,7 @@
 	</servlet-mapping>
 
 	<welcome-file-list>
-		<welcome-file>jsf/Welcome.jsp</welcome-file>
+		<welcome-file>jsf/Welcome.xhtml</welcome-file>
 	</welcome-file-list>
 
 </web-app>

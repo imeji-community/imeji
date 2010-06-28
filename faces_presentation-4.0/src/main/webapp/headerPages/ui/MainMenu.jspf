@@ -1,4 +1,9 @@
-<%
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<ui:remove>
+<!--
             /* 
             CDDL HEADER START
 
@@ -26,9 +31,8 @@
             Gesellschaft zur F�rderung der Wissenschaft e.V.
             All rights reserved. Use is subject to license terms.
              */
-%>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+-->
+</ui:remove>
 
 <div id="mainMenuSkipLinkAnchor" class="full_area0 mainMenu">
 
@@ -48,11 +52,12 @@
 	</h:outputLink>
 	<h:outputText id="txtMyAlbumsInactive" styleClass="free_area0" value="My Albums" rendered="false" />
 
-	<h:outputLink id="lnkStatistics" value="#{Navigation.statisticsUrl}/visit" rendered="#{SessionBean.admin && SessionBean.user != null}">
+	<h:outputLink id="lnkStatistics" value="#{Navigation.statisticsUrl}/visit" rendered="#{SessionBean.admin and SessionBean.user != null}">
 		<h:outputText value="#{lbl.header_statistics}"></h:outputText>
 	</h:outputLink>
 	<h:outputText id="txtStatisticsInactive" styleClass="free_area0" value="Statistics" rendered="false" />
 	
 	<!-- main Menu ends here -->
 
+</div>
 </div>

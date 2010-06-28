@@ -18,8 +18,8 @@ public class CleanerBean
         HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
         SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
         // Reinitialize the form when user not anymore in it
-        if (!"/faces/jsf/AddAlbum.jsp".equals(request.getRequestURI()) 
-                && !"/faces/jsf/EditAlbum.jsp".equals(request.getRequestURI())
+        if (!"/faces/jsf/AddAlbum.xhtml".equals(request.getRequestURI()) 
+                && !"/faces/jsf/EditAlbum.xhtml".equals(request.getRequestURI())
                 && request.getParameter("album") == null)
         {
            //TODO remove this.

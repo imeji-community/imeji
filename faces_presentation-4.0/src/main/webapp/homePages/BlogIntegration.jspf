@@ -1,5 +1,9 @@
-
-<%
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<ui:remove>
+<!--
             /* 
             CDDL HEADER START
 
@@ -27,11 +31,10 @@
             Gesellschaft zur F�rderung der Wissenschaft e.V.
             All rights reserved. Use is subject to license terms.
              */
-%>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+-->
+</ui:remove>
 
-<h:panelGroup>
+
     <script src="http://www.google.com/jsapi" type="text/javascript">&#160;</script> 
     <script type="text/javascript">
 	    google.load("feeds", "1");
@@ -52,6 +55,7 @@
 		<h:outputText id="rssFeedName" value="#{lbl.blog_title}" escape="false"/>
 	</h2>
 	<div id="feedControl" style="font-size: 0.4em"></div>
-</h:panelGroup>
+
+</div>
 
 

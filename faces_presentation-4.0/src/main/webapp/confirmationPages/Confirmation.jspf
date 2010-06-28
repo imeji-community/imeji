@@ -1,6 +1,10 @@
-
-<jsp:scriptlet>
-	/* 
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+<!-- 
 	CDDL HEADER START
 	
 	The contents of this file are subject to the terms of the
@@ -26,14 +30,11 @@
 	für wissenschaftlich-technische Information mbH and Max-Planck-
 	Gesellschaft zur Förderung der Wissenschaft e.V.	
 	All rights reserved. Use is subject to license terms.
-	 */
-</jsp:scriptlet>
-<%@ taglib uri="http://myfaces.apache.org/trinidad" prefix="tr"%>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+-->
+</ui:remove>
 <f:subview id="confirmationFormular">
 
-<%-- Confirmation for export --%>
+<!-- Confirmation for export -->
 	<h:panelGroup layout="block" styleClass="full_area0" rendered="#{SessionBean.action == 'export' || SessionBean.action == 'download'}">
 		<h:outputText value="#{ExportBean.checkExportFormat}" styleClass="noDisplay"></h:outputText>
 		<h:outputLink value="#{SessionBean.backToResultList}" rendered="#{SessionBean.action == 'export'}">
@@ -81,10 +82,10 @@
 						</b>
 						<span class="xHuge_area0 xTiny_marginLExcl endline">
 							<h:panelGroup layout="block" styleClass="xHuge_checkbox">
-								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{!SessionBean.agreement && SessionBean.action == 'export'}" simple="true" id="agreement_false" value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
-								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{SessionBean.agreement && SessionBean.action == 'export'}" simple="true" id="agreement_true"  value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
-								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{!SessionBean.agreement && SessionBean.action == 'download'}" simple="true" value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
-								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{SessionBean.agreement && SessionBean.action == 'download'}" simple="true" value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
+								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{!SessionBean.agreement and SessionBean.action == 'export'}" simple="true" id="agreement_false" value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
+								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{SessionBean.agreement and SessionBean.action == 'export'}" simple="true" id="agreement_true"  value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
+								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{!SessionBean.agreement and SessionBean.action == 'download'}" simple="true" value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
+								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{SessionBean.agreement and SessionBean.action == 'download'}" simple="true" value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
 							</h:panelGroup>
 						</span>
 					</div>
@@ -107,13 +108,13 @@
 			<h:outputLink styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" value="#{SessionBean.backToResultList}" rendered="#{SessionBean.action == 'download'}">
         		<h:outputText value="Cancel" />
         	</h:outputLink>
-     		<h:commandButton value="#{lbl.download}" action="#{ExportBean.exportWholeCollection}" immediate="true" styleClass="free_txtBtn activeButton" rendered="#{SessionBean.allowed && SessionBean.action == 'download'}"></h:commandButton>
+     		<h:commandButton value="#{lbl.download}" action="#{ExportBean.exportWholeCollection}" immediate="true" styleClass="free_txtBtn activeButton" rendered="#{SessionBean.allowed and SessionBean.action == 'download'}"></h:commandButton>
      		<h:commandButton value="#{lbl.download}" action="#{AlbumInterfaceBean.export}" immediate="true" styleClass="free_txtBtn activeButton"  rendered="#{SessionBean.action == 'export'}"></h:commandButton>
 		</div>
 	</h:panelGroup>
-<%-- End Confirmation for export --%>
+<!-- End Confirmation for export -->
 
-<%-- Confirmation for withdraw, delete and publish --%>
+<!-- Confirmation for withdraw, delete and publish -->
 	<h:panelGroup layout="block" styleClass="full_area0" rendered="#{SessionBean.action == 'delete' || SessionBean.action == 'publish' || SessionBean.action == 'withdraw'}">
 		<div class="full_area0 fullItem">
 			<div class="full_area0 itemHeader noTopBorder">
@@ -174,9 +175,9 @@
 			<h:commandButton value="Withdraw" immediate="true" action="#{AlbumInterfaceBean.withdrawAlbum}" rendered="#{SessionBean.action == 'withdraw'}" styleClass="free_txtBtn activeButton"></h:commandButton>
 		</div>
 	</h:panelGroup>
-<%-- End confirmation for withdraw, delete and publish --%>
+<!-- End confirmation for withdraw, delete and publish -->
 
-<%-- confirmation for delete of selected albums --%>
+<!-- confirmation for delete of selected albums -->
 		<h:panelGroup layout="block" styleClass="full_area0" rendered="#{SessionBean.action == 'selected'}">
 		<div class="full_area0 fullItem">
 			<div class="full_area0 itemHeader noTopBorder">
@@ -186,7 +187,7 @@
 					<h:panelGroup styleClass="seperator" />
 				<h:panelGroup styleClass="free_area0_p8 endline itemHeadline">
 					<b>
-						<h:outputText value="Please select 1 album!" rendered="#{AlbumSession.numberOfAlbumsSelected == 0 && albumInterfaceBean.albumId != AlbumSession.current.latestVersion.objectId}" />
+						<h:outputText value="Please select 1 album!" rendered="#{AlbumSession.numberOfAlbumsSelected == 0 and albumInterfaceBean.albumId != AlbumSession.current.latestVersion.objectId}" />
 						<h:outputText value="Confirm delete" rendered="#{AlbumSession.numberOfAlbumsSelected != 0}" />
 					</b>
 				</h:panelGroup>
@@ -228,7 +229,7 @@
      		<h:commandButton value="Delete" action="#{AlbumInterfaceBean.deleteAlbumsSelected}" styleClass="free_txtBtn activeButton"></h:commandButton>
 		</div>
 	</h:panelGroup>
-<%-- End confirmation for delete of selected albums --%>
+<!-- End confirmation for delete of selected albums -->
 
 
 	
@@ -239,10 +240,11 @@
 		}	
 		function checkIfSelected()
 		{
-			if( '<h:outputText value="#{SessionBean.action}"/>' == 'selected' && '<h:outputText value="#{AlbumSession.numberOfAlbumsSelected}"/>' == '0')
+			if( '<h:outputText value="#{SessionBean.action}"/>' == 'selected' and '<h:outputText value="#{AlbumSession.numberOfAlbumsSelected}"/>' == '0')
 			{
 				location.href = "<h:outputText value="#{Navigation.myAlbumsUrl}"></h:outputText>";
 			}
 		}	
 	</script>
 </f:subview>
+</div>

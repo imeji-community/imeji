@@ -31,15 +31,15 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <f:subview id="messages">
- 	<%-- Messages for Faces --%>
+ 	<!-- Messages for Faces -->
 
-	<h:outputText id="txtErrorMsg" styleClass="singleMessage messageError" value="#{SessionBean.message}" rendered="#{(SessionBean.message != null) && (SessionBean.information == null)}" />
+	<h:outputText id="txtErrorMsg" styleClass="singleMessage messageError" value="#{SessionBean.message}" rendered="#{(SessionBean.message != null) and (SessionBean.information == null)}" />
 	<h:outputText value="#{SessionBean.displayed}" />
 
-	<h:outputText id="txtStatusMsg" styleClass="singleMessage messageStatus" value="#{SessionBean.information}" rendered="#{(SessionBean.message == null) && (SessionBean.information != null)}" />
+	<h:outputText id="txtStatusMsg" styleClass="singleMessage messageStatus" value="#{SessionBean.information}" rendered="#{(SessionBean.message == null) and (SessionBean.information != null)}" />
 	<h:outputText value="#{SessionBean.displayed}" />
 
-	<h:outputText value="#{SessionBean.initializationMessage}" rendered="#{(SessionBean.message != null || SessionBean.information != null ) && SessionBean.messageDisplayed}" />
+	<h:outputText value="#{SessionBean.initializationMessage}" rendered="#{(SessionBean.message != null || SessionBean.information != null ) and SessionBean.messageDisplayed}" />
 	
 </f:subview>
 

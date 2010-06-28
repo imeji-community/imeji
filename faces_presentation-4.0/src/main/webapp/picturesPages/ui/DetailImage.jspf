@@ -1,5 +1,10 @@
-<jsp:scriptlet>
-            /* 
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+	  <!--  
             CDDL HEADER START
 
             The contents of this file are subject to the terms of the
@@ -25,11 +30,8 @@
             für wissenschaftlich-technische Information mbH and Max-Planck-
             Gesellschaft zur Förderung der Wissenschaft e.V.
             All rights reserved. Use is subject to license terms.
-             */
-</jsp:scriptlet>
-<%@ taglib uri="http://myfaces.apache.org/trinidad" prefix="tr"%>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+             -->
+</ui:remove>
 <f:subview id="Image">
 	<h:panelGroup layout="block" styleClass="half_area0"> 
 		<h:panelGroup layout="block" styleClass="half_area1_p8 endline detailedItem #{Detail.item.imageStyleClass}">
@@ -45,7 +47,7 @@
 		
 		<h:panelGroup layout="block" styleClass="half_area0">
 			<h:outputText styleClass="free_area0 xSmall_marginRExcl" rendered="#{Detail.item.type == 'face'}" value="#{Detail.item.mdRecords.label['escidoc.face.picture-group']} #{Detail.item.mdRecords.value['escidoc.face.picture-group']}" />
-			<h:outputLink id="lnkAddToAlbum" styleClass="free_area0 xSmall_marginRExcl" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}"  rendered="#{(!Detail.item.inAlbum) && (AlbumSession.active.latestVersion.objectId != null) && (AlbumSession.active.state == 'PENDING')}">
+			<h:outputLink id="lnkAddToAlbum" styleClass="free_area0 xSmall_marginRExcl" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}"  rendered="#{(!Detail.item.inAlbum) and (AlbumSession.active.latestVersion.objectId != null) and (AlbumSession.active.state == 'PENDING')}">
 				<h:outputText value="#{lbl.add_to_active}"/>
 			</h:outputLink>
 			 
@@ -58,3 +60,4 @@
 		</h:panelGroup>
 	</h:panelGroup>
 </f:subview>
+</div>

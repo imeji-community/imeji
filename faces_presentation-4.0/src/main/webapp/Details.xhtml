@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+<!--
+
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License, Version 1.0 only
+ (the "License"). You may not use this file except in compliance
+ with the License.
+
+ You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ or http://www.escidoc.de/license.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at license/ESCIDOC.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+
+ Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+ für wissenschaftlich-technische Information mbH and Max-Planck-
+ Gesellschaft zur Förderung der Wissenschaft e.V.
+ All rights reserved. Use is subject to license terms.
+-->
+</ui:remove>
+
+<body>
+	<ui:composition template="template.xhtml">	
+	
+		<ui:param name="headline" value="#{lbl.details}"/>
+					
+		<ui:define name="breadcrumb">
+			<ui:include src="headerPages/Breadcrumb.jspf"/>
+		</ui:define>		
+									
+		<ui:define name="contentMenu">
+			<h:outputText value="#{Detail.init}" styleClass="noDisplay" />
+			<h:outputText id="txtMenue" styleClass="free_area0" value="#{lbl.show}"/>
+		</ui:define>
+		
+		<ui:define name="actionsMenu"
+			<!-- Toggle between sets -->
+			<h:outputLink styleClass="free_area0" value="#{SessionBean.viewPictureForComparisonLink}" rendered="#{AlbumSession.current.version.objectId == null and Detail.item.type == 'face'}">
+				<h:outputText value="#{lbl.picture_for_comparison}"/>
+			</h:outputLink>
+			<h:outputText styleClass="seperator" rendered="#{AlbumSession.current.latestVersion.objectId == null and Detail.item.type == 'face'}"/>
+
+			<!-- View all pictures of this person -->
+			<h:outputLink id="lnkShowAll" styleClass="free_area0" value="#{Navigation.applicationUrl}person/#{Detail.item.mdRecords.screen.mdMap['face.person.identifier'].simpleValue}/#{Navigation.defaultBrowsingKeepShow}" rendered="#{Detail.item.type == 'face' and SessionBean.currentUrl != 'detailsFromAlbum'}">
+				<h:outputText value="#{lbl.show_persons_images}"/>
+			</h:outputLink>		
+
+			<!--<h:outputText styleClass="seperator" rendered="#{Detail.item.type == 'face'}" />-->
+			
+			<!-- Add/Remove to current album -->	
+			<!--<h:outputLink id="add" styleClass="active" rendered="#{AlbumSession.active.version.objectId != null and !Detail.item.inAlbum}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}">
+				<h:outputText value="#{lbl.add}"/>
+			</h:outputLink>-->
+
+			<!--<h:outputLink id="lnkRemoveFromAlbum" styleClass="free_area0" rendered="#{(AlbumSession.current.size != '0') and (AlbumSession.current.state == 'PENDING')}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.latestVersion.objectId}/REMOVEPICTURE/#{Detail.item.item.objid}/back">
+				<h:outputText value="Remove from Album"/>
+			</h:outputLink>-->
+
+		</ui:define>
+		
+		<ui:define name="mainContent">
+			<h:panelGroup layout="block" styleClass="full_area0">
+				<h:panelGroup layout="block" styleClass="large_area0 small_marginLIncl rangeSelector">&#160;</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="small_marginLExcl pageBrowser" rendered="true">
+					<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{Detail.previous}" disabled="#{Detail.previous == null}">
+						<h:outputText value="#{lbl.paginatorButton_prev_label}"></h:outputText>
+					</h:outputLink>
+	
+				<h:panelGroup styleClass="seperator" />
+					<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{Detail.next}" disabled="#{Detail.next == null}">
+						<h:outputText value="#{lbl.paginatorButton_next_label}"></h:outputText>
+					</h:outputLink>
+				</h:panelGroup>
+			</h:panelGroup>
+	
+			<jsp:directive.include file="picturesPages/ui/ActiveAlbumMenu.jspf" />
+			
+			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
+				<div class="small_area0">&#160;</div>
+				<jsp:directive.include file="picturesPages/ui/Details_Generic.jspf" />
+				<jsp:directive.include file="picturesPages/ui/DetailImage.jspf" />
+			</h:panelGroup>
+		
+		</ui:define>
+
+	</ui:composition>
+</body>
+</html>

@@ -1,10 +1,11 @@
-<div xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
 <ui:remove>
-<!-- 
+<!--
             CDDL HEADER START
 
             The contents of this file are subject to the terms of the
@@ -26,30 +27,29 @@
             CDDL HEADER END
 
 
-            Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
-            für wissenschaftlich-technische Information mbH and Max-Planck-
+            Copyright 2006-2010 Fachinformationszentrum Karlsruhe Gesellschaft
+			für wissenschaftlich-technische Information mbH and Max-Planck-
             Gesellschaft zur Förderung der Wissenschaft e.V.
             All rights reserved. Use is subject to license terms.
              
 -->
+-->
 </ui:remove>
-<f:subview id="Albums">
+
+<body>
+	<ui:composition template="template.xhtml">	
+	
+	
+	
+		<ui:param name="headline" value="#{lbl.legal}"/>
+		<ui:define name="mainContent">
+			<div class="full_area0_p8 infoPage">
+				<!-- Main Content -->
+				<h:outputText escape="false" value="#{StaticContent.legalContent}" />
+			</div>	
 		
-	<jsp:directive.include file="ui/PaginationTop.jspf" />
-	
-	<jsp:directive.include file="../picturesPages/ui/ActiveAlbumMenu.jspf"/>
-	
-	<h:panelGroup rendered="#{AlbumListBean.list.view == 'TABLE'}">
-		<jsp:directive.include file="ui/AlbumsTableView.jspf" />
-	</h:panelGroup>
-	<!--<h:panelGroup rendered="#{AlbumListBean.list.view == 'BIBLIOGRAPHIC'}">
-		<jsp:directive.include file="ui/AlbumsBibliographicView.jspf" />
-	</h:panelGroup>
-	<h:panelGroup rendered="#{AlbumListBean.list.view == 'ICON'}">
-		<jsp:directive.include file="ui/AlbumsIconView.jspf" />
-	</h:panelGroup>-->
-	
-	<jsp:directive.include file="ui/PaginationBottom.jspf" />
-			
-</f:subview>
-</div>
+		</ui:define>
+								
+	</ui:composition>
+</body>
+</html>

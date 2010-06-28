@@ -1,6 +1,10 @@
-
-<jsp:scriptlet>
-	/* 
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+<!-- 
 	CDDL HEADER START
 	
 	The contents of this file are subject to the terms of the
@@ -26,11 +30,8 @@
 	für wissenschaftlich-technische Information mbH and Max-Planck-
 	Gesellschaft zur Förderung der Wissenschaft e.V.	
 	All rights reserved. Use is subject to license terms.
-	 */
-</jsp:scriptlet>
-<%@ taglib uri="http://myfaces.apache.org/trinidad" prefix="tr"%>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+	-->
+</ui:remove>
 <f:subview id="ExportFormular">
 
 	<h:panelGroup layout="block" styleClass="full_area0 fullItem">
@@ -96,10 +97,10 @@
 							 <h:selectBooleanCheckbox id="selWeb" disabled="false" immediate="true" value="#{AlbumSession.exportManager.parameters.web}" valueChangeListener="#{AlbumSession.webResolutionListener}" ></h:selectBooleanCheckbox>
 							<h:outputLabel value="#{lbl.web_resolution}" ></h:outputLabel>
 						</h:panelGroup>
-						<%--<h:panelGroup layout="block" styleClass="xHuge_checkbox clear">
-							<h:selectBooleanCheckbox disabled="#{AlbumList.viewAlbum.exportFormat != 'xmlAndPict' && AlbumList.viewAlbum.exportFormat != 'csvAndPict' && AlbumList.viewAlbum.exportFormat != 'pict'}" id="ori" value="#{AlbumList.viewAlbum.originalResolution}"></h:selectBooleanCheckbox>
+						<!--<h:panelGroup layout="block" styleClass="xHuge_checkbox clear">
+							<h:selectBooleanCheckbox disabled="#{AlbumList.viewAlbum.exportFormat != 'xmlAndPict' and AlbumList.viewAlbum.exportFormat != 'csvAndPict' and AlbumList.viewAlbum.exportFormat != 'pict'}" id="ori" value="#{AlbumList.viewAlbum.originalResolution}"></h:selectBooleanCheckbox>
 							<h:outputLabel value="Original resolution" ></h:outputLabel>
-						</h:panelGroup>--%>
+						</h:panelGroup>-->
 					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
@@ -153,3 +154,4 @@
 	</script>
 
 </f:subview>
+</div>

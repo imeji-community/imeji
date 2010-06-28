@@ -1,5 +1,10 @@
-<jsp:scriptlet>
-            /* 
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+<!-- 
             CDDL HEADER START
 
             The contents of this file are subject to the terms of the
@@ -25,11 +30,9 @@
             für wissenschaftlich-technische Information mbH and Max-Planck-
             Gesellschaft zur Förderung der Wissenschaft e.V.
             All rights reserved. Use is subject to license terms.
-             */
-</jsp:scriptlet>
-<%@ taglib uri="http://myfaces.apache.org/trinidad" prefix="tr"%>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+             
+-->
+</ui:remove>
 <div>
 	<f:subview id="AlbumBibliographicView">
 			<h:panelGroup layout="block" styleClass="albumList full_area0">
@@ -42,13 +45,13 @@
 								</span>
 								<h:outputText value="#{lbl.name}" />
 							</h:commandLink>
-							<h:commandLink id="order_name_asc" styleClass="huge_area2_p2 ascSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{(AlbumListBean.list.parameters.orderBy == OrderParameterType.ASCENDING) && AlbumListBean.list.parameters.sortBy == SortParameterType.NAME}">
+							<h:commandLink id="order_name_asc" styleClass="huge_area2_p2 ascSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{(AlbumListBean.list.parameters.orderBy == OrderParameterType.ASCENDING) and AlbumListBean.list.parameters.sortBy == SortParameterType.NAME}">
 								<span class="noDisplay">
 									<h:outputText value="Sort by " />
 								</span>
 								<h:outputText value="#{lbl.name}" />
 							</h:commandLink>
-							<h:commandLink id="order_name_desc" styleClass="huge_area2_p2 desSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{(AlbumListBean.list.parameters.orderBy != OrderParameterType.ASCENDING) && AlbumListBean.list.parameters.sortBy == SortParameterType.NAME}">
+							<h:commandLink id="order_name_desc" styleClass="huge_area2_p2 desSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{(AlbumListBean.list.parameters.orderBy != OrderParameterType.ASCENDING) and AlbumListBean.list.parameters.sortBy == SortParameterType.NAME}">
 								<span class="noDisplay">
 									<h:outputText value="Sort by " />
 								</span>
@@ -69,13 +72,13 @@
 								</span>
 								<h:outputText value="#{lbl.date_last_modified}" />
 							</h:commandLink>
-							<h:commandLink id="order_date_asc" styleClass="xLarge_area2_p2 ascSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{(AlbumListBean.list.parameters.orderBy == OrderParameterType.ASCENDING) && AlbumListBean.list.parameters.sortBy == SortParameterType.LAST_MODIFICATION_DATE}">
+							<h:commandLink id="order_date_asc" styleClass="xLarge_area2_p2 ascSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{(AlbumListBean.list.parameters.orderBy == OrderParameterType.ASCENDING) and AlbumListBean.list.parameters.sortBy == SortParameterType.LAST_MODIFICATION_DATE}">
 								<span class="noDisplay">
 									<h:outputText value="Sort by " />
 								</span>
 								<h:outputText value="#{lbl.date_last_modified}" />
 							</h:commandLink>
-							<h:commandLink id="order_date_desc" styleClass="xLarge_area2_p2 desSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{(AlbumListBean.list.parameters.orderBy != OrderParameterType.ASCENDING) && AlbumListBean.list.parameters.sortBy == SortParameterType.LAST_MODIFICATION_DATE}">
+							<h:commandLink id="order_date_desc" styleClass="xLarge_area2_p2 desSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{(AlbumListBean.list.parameters.orderBy != OrderParameterType.ASCENDING) and AlbumListBean.list.parameters.sortBy == SortParameterType.LAST_MODIFICATION_DATE}">
 								<span class="noDisplay">
 									<h:outputText value="Sort by " />
 								</span>
@@ -90,13 +93,13 @@
 								</span>
 								<h:outputText value="#{lbl.state}" />
 							</h:commandLink>
-							<h:commandLink id="order_state_asc" styleClass="medium_area2_p2 ascSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{(AlbumListBean.list.parameters.orderBy == OrderParameterType.ASCENDING) && AlbumListBean.list.parameters.sortBy == SortParameterType.STATE}">
+							<h:commandLink id="order_state_asc" styleClass="medium_area2_p2 ascSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{(AlbumListBean.list.parameters.orderBy == OrderParameterType.ASCENDING) and AlbumListBean.list.parameters.sortBy == SortParameterType.STATE}">
 								<span class="noDisplay">
 									<h:outputText value="Sort by " />
 								</span>
 								<h:outputText value="#{lbl.state}" />
 							</h:commandLink>
-							<h:commandLink id="order_state_desc" styleClass="medium_area2_p2 desSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{!(AlbumListBean.list.parameters.orderBy == OrderParameterType.ASCENDING) && AlbumListBean.list.parameters.sortBy == SortParameterType.STATE}">
+							<h:commandLink id="order_state_desc" styleClass="medium_area2_p2 desSort" value=" " actionListener="#{AlbumListBean.list.toggleSortOrder}" rendered="#{!(AlbumListBean.list.parameters.orderBy == OrderParameterType.ASCENDING) and AlbumListBean.list.parameters.sortBy == SortParameterType.STATE}">
 								<span class="noDisplay">
 									<h:outputText value="Sort by " />
 								</span>
@@ -145,7 +148,8 @@
 					<h:outputLink value="#{Navigation.myAlbumsUrl}?action=noselect" rendered="#{AlbumListBean.list.parameters.show == 0}" styleClass="large_area0_p2 albumActionLink">
 						<h:outputText value="Delete"></h:outputText>
 					</h:outputLink>
-					<%--<h:commandButton label="Delete" styleClass="large_area0_p2 albumActionLink" value="Delete" action="#{SessionBean.testMultipleDelete}"></h:commandButton>--%>
+					<!--<h:commandButton label="Delete" styleClass="large_area0_p2 albumActionLink" value="Delete" action="#{SessionBean.testMultipleDelete}"></h:commandButton>-->
 			</h:panelGroup>
 	</f:subview>
+</div>
 </div>

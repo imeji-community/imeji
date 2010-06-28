@@ -1,5 +1,10 @@
-<jsp:scriptlet>
- /* 
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+<!-- 
  CDDL HEADER START
 
  The contents of this file are subject to the terms of the
@@ -25,12 +30,9 @@
  für wissenschaftlich-technische Information mbH and Max-Planck-
  Gesellschaft zur Förderung der Wissenschaft e.V.
  All rights reserved. Use is subject to license terms.
-  */
-</jsp:scriptlet>
-<%@ taglib uri="http://myfaces.apache.org/trinidad" prefix="tr"%>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
- <%-- paginator for the browsing --%>
+-->
+</ui:remove>
+ <!-- paginator for the browsing -->
 <f:subview id="Pagination_Top">
 
 	<h:panelGroup layout="block" styleClass="full_area0 paginator">
@@ -54,13 +56,15 @@
 			<h:panelGroup styleClass="seperator" />
 
 			<tr:iterator id="PaginatorPageList" var="page" value="#{AlbumListBean.pages}">
-				<h:outputLink id="lnkPaginatorPageActive" value="#{page.value}" rendered="#{(AlbumListBean.url != page.value)}" styleClass="xSmall_txtBtn">
-					<h:outputText value="#{page.label}"></h:outputText>
-				</h:outputLink>
-				<h:outputLink id="lnkPaginatorPageInactive" value="#{page.label}" disabled="true" rendered="#{AlbumListBean.url == page.value}" styleClass="xSmall_txtBtn actual">
-					<h:outputText value="#{page.label}"></h:outputText>
-				</h:outputLink>
-				<h:panelGroup styleClass="seperator" rendered="true"></h:panelGroup>
+				<h:panelGroup>
+					<h:outputLink id="lnkPaginatorPageActive" value="#{page.value}" rendered="#{(AlbumListBean.url != page.value)}" styleClass="xSmall_txtBtn">
+						<h:outputText value="#{page.label}"></h:outputText>
+					</h:outputLink>
+					<h:outputLink id="lnkPaginatorPageInactive" value="#{page.label}" disabled="true" rendered="#{AlbumListBean.url == page.value}" styleClass="xSmall_txtBtn actual">
+						<h:outputText value="#{page.label}"></h:outputText>
+					</h:outputLink>
+					<h:panelGroup styleClass="seperator" rendered="true"></h:panelGroup>
+				</h:panelGroup>
 			</tr:iterator>
 			
 			<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{AlbumListBean.nextPage}" disabled="#{AlbumListBean.url == AlbumListBean.nextPage}">
@@ -74,7 +78,7 @@
 
 		<h:panelGroup layout="block" styleClass="gotoBox">
 			<h:outputLabel id="lblGoTo" styleClass="free_label" value="Go to page" />
-			<h:inputText id="inpGoTo" value="" styleClass="tiny_txtInput" onkeypress="if (event.keyCode == 13 && this.value != '') { form.submit()}" onfocus="this.select()" valueChangeListener="#{AlbumListBean.goToPage}"/>
+			<h:inputText id="inpGoTo" value="" styleClass="tiny_txtInput" onkeypress="if (event.keyCode == 13 and this.value != '') { form.submit()}" onfocus="this.select()" valueChangeListener="#{AlbumListBean.goToPage}"/>
 			<h:outputLabel styleClass="free_label" value="of" />
 			<h:outputLabel id="lblNumberOfPages" styleClass="free_label" value="#{AlbumListBean.totalNumberOfPages}" />
 		</h:panelGroup>
@@ -82,4 +86,5 @@
 	</h:panelGroup>
 
 </f:subview>
+</div>
 

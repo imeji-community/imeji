@@ -1,5 +1,10 @@
-<jsp:scriptlet>
-  /* 
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+	  <!--  
   CDDL HEADER START
 
   The contents of this file are subject to the terms of the
@@ -25,23 +30,20 @@
   für wissenschaftlich-technische Information mbH and Max-Planck-
   Gesellschaft zur Förderung der Wissenschaft e.V.
   All rights reserved. Use is subject to license terms.
-   */
-</jsp:scriptlet>
-<%@ taglib uri="http://myfaces.apache.org/trinidad" prefix="tr"%>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+-->
+</ui:remove>
 <f:subview id="Album">
 
-<%-- First part of the page --%>
+<!-- First part of the page -->
 	<div class="small_area0">&#160;</div>
 	<h:panelGroup layout="block" styleClass="huge_area1_p4 metaDataSection">
 		<h2 class="xLarge_area0" style="text-align: center;">
 			<h:outputText value="#{AlbumSession.current.mdRecord.title.value}" rendered="#{SessionBean.currentUrl == 'viewAlbum' || SessionBean.currentUrl == 'resource'}"/>
 		</h2>
-<%-- Resolve album --%>
-	<%-- Non logged in user --%>
-		<h:panelGroup layout="block" rendered="#{SessionBean.user == null && AlbumSession.current != null && AlbumSession.current.version.objectId != null}">
-			<%-- Picture status of the album --%>
+<!-- Resolve album -->
+	<!-- Non logged in user -->
+		<h:panelGroup layout="block" rendered="#{SessionBean.user == null and AlbumSession.current != null and AlbumSession.current.version.objectId != null}">
+			<!-- Picture status of the album -->
 			<h:panelGroup styleClass="huge_area0">
 				<h:panelGroup layout="block" styleClass="small_area0 medium_marginLExcl statusIconArea">
 					<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{AlbumSession.current.state == 'PENDING'}"></h:panelGroup>
@@ -54,7 +56,7 @@
 					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
-			<%-- link to cite the public album --%>
+			<!-- link to cite the public album -->
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{AlbumSession.current.state != null}">
 				<b class="medium_area0 endline"><h:outputText value="Album Url"></h:outputText></b>
 				<h:panelGroup styleClass="xLarge_area0">
@@ -63,25 +65,25 @@
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="huge_area0">
 				<b class="huge_area0 endline"><h:outputLabel id="lblAlbumDates" value="Dates"></h:outputLabel></b>
-				<%-- All albums: date of creation --%>
+				<!-- All albums: date of creation -->
 				<h:panelGroup styleClass="huge_area0" rendered="true">
 					<h:outputText id="txtAlbumCreatedDate1" styleClass="medium_area0 endline" value="Date Created:"></h:outputText>
 					<h:outputText id="txtAlbumCreatedDateValue1" styleClass="xLarge_area0" value="#{AlbumSession.current.dateofCreation}"></h:outputText>
 				</h:panelGroup>
-				<%-- public  album --%>
+				<!-- public  album -->
 				<h:panelGroup styleClass="huge_area0">
 					<h:outputText id="txtAlbumPublishedDate1" styleClass="medium_area0 endline" value="Date published:"></h:outputText>
 					<h:outputText id="txtAlbumPublishedDateValue1" styleClass="xLarge_area0" value="#{AlbumSession.current.dateOfPublication}"></h:outputText>
 				</h:panelGroup>
-				<%-- withdrawn album --%>
+				<!-- withdrawn album -->
 				<h:panelGroup styleClass="huge_area0" rendered="#{AlbumSession.current.state == 'WITHDRAWN'}">
 					<h:outputText id="txtAlbumWithdrawnDate1" styleClass="medium_area0 endline alertMessage" value="Date WITHDRAWN:"></h:outputText>
 					<h:outputText id="txtAlbumWithdrawnDateValue1" styleClass="xLarge_area0 alertMessage" value="#{AlbumSession.current.dateOfPublication}"></h:outputText>
 				</h:panelGroup>
 			</h:panelGroup>
-			<%-- Author / creator --%>  
+			<!-- Author / creator -->  
 			<h:panelGroup layout="block" styleClass="huge_area0">
-				<sup>&nbsp;</sup><b><h:outputText styleClass="huge_area0" value="Author"></h:outputText></b>
+				<sup>&#160;</sup><b><h:outputText styleClass="huge_area0" value="Author"></h:outputText></b>
 				<h:panelGroup styleClass="huge_area0">
 					<tr:iterator id="AuthorList1" var="author" varStatus="authorStatus" value="#{AlbumSession.creatorsForDisplay}" >
 						<div>
@@ -96,7 +98,7 @@
 					</tr:iterator>
 				</h:panelGroup>
 			</h:panelGroup>
-			<%-- Affiliations --%>
+			<!-- Affiliations -->
 			<h:panelGroup layout="block" styleClass="huge_area0">
 				<b class="huge_area0 endline"><h:outputText value="Affiliation"></h:outputText></b>
 				<tr:iterator id="AffiliationList1" var="affiliation" varStatus="aff" value="#{AlbumSession.allAffiliations}">
@@ -107,14 +109,14 @@
 					</div>
 				</tr:iterator>
 			</h:panelGroup>
-		<%-- For the view of an album : description of the album --%>
+		<!-- For the view of an album : description of the album -->
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{AlbumSession.current.mdRecord.abstracts[0].value != ''}">
 				<b class="huge_area0"><h:outputText value="Description"></h:outputText></b>
 				<h:panelGroup styleClass="huge_area0">
 					<h:outputText escape="false" value="#{HomePage.albumDescriptionFullAsHtml}"/>
 				</h:panelGroup>
 			</h:panelGroup>
-		<%-- For the view of an album : withdraw comment --%>
+		<!-- For the view of an album : withdraw comment -->
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{AlbumSession.current.state == 'WITHDRAWN'}">
 				<b class="huge_area0 alertMessage"><h:outputLabel id="lblWithdrawCom1" value="Withdraw comment"></h:outputLabel></b>
 				<h:panelGroup styleClass="huge_area0 alertMessage">
@@ -122,12 +124,12 @@
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
-	<%-- End non logged in user --%>
+	<!-- End non logged in user -->
 	
-	<%-- Logged in user --%>
-		<h:panelGroup layout="block" rendered="#{SessionBean.user != null && AlbumSession.current != 'null' && AlbumSession.current.version.objectId != null}">
+	<!-- Logged in user -->
+		<h:panelGroup layout="block" rendered="#{SessionBean.user != null and AlbumSession.current != 'null' and AlbumSession.current.version.objectId != null}">
 			<br/><br/>
-			<%-- Picture status of the album --%>
+			<!-- Picture status of the album -->
 			<h:panelGroup styleClass="huge_area0">
 				<h:panelGroup layout="block" styleClass="small_area0 medium_marginLExcl statusIconArea">
 					<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{AlbumSession.current.state == 'PENDING'}"></h:panelGroup>
@@ -140,8 +142,8 @@
 					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
-			<%-- link to cite the public album --%>
-			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{AlbumSession.current.state != null && (AlbumSession.current.state == 'RELEASED' || AlbumSession.current.state == 'WITHDRAWN')}">
+			<!-- link to cite the public album -->
+			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{AlbumSession.current.state != null and (AlbumSession.current.state == 'RELEASED' || AlbumSession.current.state == 'WITHDRAWN')}">
 				<b><h:outputText id="txtAlbumUrl2" styleClass="medium_area0 endline" value="Album Url"></h:outputText></b>
 				<h:panelGroup styleClass="xLarge_area0" rendered="#{AlbumSession.current.state == 'RELEASED'}">
 					<h:outputText value="#{Navigation.applicationUrl}album/#{AlbumSession.current.latestVersion.objectId}"></h:outputText>
@@ -150,33 +152,33 @@
 					<h:outputText style="text-decoration: line-through;" value="#{Navigation.applicationUrl}album/#{AlbumSession.current.latestVersion.objectId}"></h:outputText>
 				</h:panelGroup>
 			</h:panelGroup>
-			<%-- For the view of an album : Dates associated to the album --%>
+			<!-- For the view of an album : Dates associated to the album -->
 			<h:panelGroup layout="block" styleClass="huge_area0">
 				<b><h:outputText id="txtAlbumDates2" styleClass="huge_area0" value="Dates"></h:outputText></b>
-				<%-- All albums: date of creation --%>
+				<!-- All albums: date of creation -->
 				<h:panelGroup styleClass="huge_area0" rendered="true">
 					<h:outputText id="txtAlbumCreatedDate2" styleClass="medium_area0 endline" value="Date Created:"></h:outputText>
 					<h:outputText id="txtAlbumCreatedDateValue2" styleClass="xLarge_area0" value="#{AlbumSession.current.dateofCreation}"></h:outputText>
 				</h:panelGroup>
-				<%-- private Album: date of publication --%>
+				<!-- private Album: date of publication -->
 			<h:panelGroup styleClass="huge_area0" rendered="#{AlbumSession.current.state == 'PENDING'}">
 					<h:outputText id="txtAlbumModifiedDate" styleClass="medium_area0 endline" value="Date last modified:"></h:outputText>
 					<h:outputText id="txtAlbumModifiedDateValue" styleClass="xLarge_area0" value="#{AlbumSession.current.dateOfModification}"></h:outputText>
 				</h:panelGroup>
-				<%-- public  album --%>
+				<!-- public  album -->
 				<h:panelGroup styleClass="huge_area0" rendered="#{AlbumSession.current.state == 'RELEASED' || AlbumSession.current.state == 'WITHDRAWN'}">
 					<h:outputText id="txtAlbumReleasedDate" styleClass="medium_area0 endline" value="Date published:"></h:outputText>
 					<h:outputText id="txtAlbumRelaesedDateValue" styleClass="xLarge_area0" value="#{AlbumSession.current.dateOfPublication}"></h:outputText>
 				</h:panelGroup>
-				<%-- WITHDRAWN album --%>
+				<!-- WITHDRAWN album -->
 				<h:panelGroup styleClass="huge_area0" rendered="#{AlbumSession.current.state == 'WITHDRAWN'}">
 					<h:outputText id="txtAlbumWithdrawnDate2" styleClass="medium_area0 endline alertMessage" value="Date withdraw:"></h:outputText>
 					<h:outputText id="txtAlbumWithdrawnDateValue2" styleClass="xLarge_area0 alertMessage" value="#{AlbumSession.current.dateOfModification}"></h:outputText>
 				</h:panelGroup>
 			</h:panelGroup>
-			<%-- Author / creator --%>  
+			<!-- Author / creator -->  
 			<h:panelGroup layout="block" styleClass="huge_area0">
-				<sup>&nbsp;</sup><b><h:outputText styleClass="huge_area0" value="Author"></h:outputText></b>
+				<sup>&#160;</sup><b><h:outputText styleClass="huge_area0" value="Author"></h:outputText></b>
 				<h:panelGroup styleClass="huge_area0">
 					<tr:iterator id="AuthorList2" var="author" varStatus="authorStatus" value="#{AlbumSession.creatorsForDisplay}" >
 						<div>
@@ -191,7 +193,7 @@
 					</tr:iterator>
 				</h:panelGroup>
 			</h:panelGroup>
-			<%-- Affiliations --%>
+			<!-- Affiliations -->
 			<h:panelGroup layout="block" styleClass="huge_area0">
 				<b class="huge_area0 endline"><h:outputText value="Affiliation"></h:outputText></b>
 				<tr:iterator id="AffiliationList2" var="affiliation" varStatus="aff" value="#{AlbumSession.allAffiliations}">
@@ -202,14 +204,14 @@
 					</div>
 				</tr:iterator>
 			</h:panelGroup>
-			<%-- For the view of an album : description of the album --%>
+			<!-- For the view of an album : description of the album -->
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{AlbumSession.current.mdRecord.abstracts[0].value != ''}">
 				<b class="huge_area0"><h:outputText value="Description"></h:outputText></b>
 				<h:panelGroup styleClass="huge_area0">
 					<h:outputText escape="false" value="#{HomePage.albumDescriptionFullAsHtml}"/>
 				</h:panelGroup>
 			</h:panelGroup>
-			<%-- For the view of an album : withdraw comment --%>
+			<!-- For the view of an album : withdraw comment -->
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{AlbumSession.current.state == 'WITHDRAWN'}">
 				<b class="huge_area0"><h:outputText value="#{lbl.withdraw_comment}"></h:outputText></b>
 				<h:panelGroup styleClass="huge_area0 alertMessage">
@@ -217,11 +219,11 @@
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
-	<%-- End Logged in user --%>
-<%-- End Resolve album --%>
+	<!-- End Logged in user -->
+<!-- End Resolve album -->
 
 	</h:panelGroup>
-<%-- End First part of the page --%>
+<!-- End First part of the page -->
 	<h:panelGroup styleClass="free_area0" rendered="#{HomePage.totalNumberOfItems == '0'}">
 		<!-- No Pictures on page -->
 		<br/>
@@ -232,7 +234,7 @@
 	<h:panelGroup layout="block" rendered="#{HomePage.totalNumberOfItems != '0'}">
 		<ul class="free_area0 albumBrowse">
 	
-			<jsp:directive.include file="ui/Images.jspf" />
+			<ui:include src="ui/Images.jspf" />
 	
 		</ul>
 	</h:panelGroup>
@@ -305,3 +307,4 @@
 
 	</script>
 </f:subview>
+</div>

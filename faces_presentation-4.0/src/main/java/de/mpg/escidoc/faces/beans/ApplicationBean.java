@@ -38,7 +38,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.escidoc.faces.metadata.ScreenManager;
+import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.faces.statistics.StatisticsBean;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.QueryHelper;
@@ -90,7 +90,7 @@ public class ApplicationBean
     
     public void initializeStatistics() throws Exception
     {   
-        ScreenManager sm = new ScreenManager("search");
+        ScreenConfiguration sm = new ScreenConfiguration("search");
         statisticsMapPrivate = new HashMap<String, Map<String,Integer>>();
         statisticsMapPublic = new HashMap<String, Map<String,Integer>>();
         

@@ -13,6 +13,7 @@ import de.mpg.escidoc.faces.album.ExportManager;
 import de.mpg.escidoc.faces.container.collection.CollectionVO;
 import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.common.valueobjects.ContainerVO;
+import de.mpg.escidoc.services.common.valueobjects.MetadataSetVO;
 import de.mpg.escidoc.services.common.valueobjects.PidTaskParamVO;
 import de.mpg.escidoc.services.common.valueobjects.ContainerVO.State;
 import de.mpg.escidoc.services.common.valueobjects.publication.MdsPublicationVO;
@@ -449,6 +450,11 @@ public class FacesContainerController
     public ContainerVO transformToContainerVO(FacesContainerVO facesContainerVO)
     {
     	ContainerVO ct = new ContainerVO(facesContainer);
+    	
+    	if (ct.getMetadataSets().size() == 0) 
+    	{
+			ct.getMetadataSets().add(new MetadataSetVO());
+		}
     	
     	ct.getMetadataSets().set(0, new MdsPublicationVO(facesContainer.getMdRecord()));
     	

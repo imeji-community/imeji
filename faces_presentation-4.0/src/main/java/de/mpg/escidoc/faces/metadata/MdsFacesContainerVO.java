@@ -1,13 +1,30 @@
 package de.mpg.escidoc.faces.metadata;
 
+import de.mpg.escidoc.services.common.valueobjects.metadata.CreatorVO;
+import de.mpg.escidoc.services.common.valueobjects.metadata.OrganizationVO;
+import de.mpg.escidoc.services.common.valueobjects.metadata.PersonVO;
+import de.mpg.escidoc.services.common.valueobjects.metadata.TextVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.CreatorVO.CreatorRole;
 import de.mpg.escidoc.services.common.valueobjects.publication.MdsPublicationVO;
 
 public class MdsFacesContainerVO  extends MdsPublicationVO
-{
+{	
+	private static final long serialVersionUID = 1L;
+	
 	public MdsFacesContainerVO() 
 	{
 		  super();
+		  this.setTitle(new TextVO(""));
+		  this.getAbstracts().add(new TextVO(""));
+		  CreatorVO creator = new CreatorVO();
+		  PersonVO person = new PersonVO();
+		  person.setFamilyName("");
+		  person.setGivenName("");
+		  person.getOrganizations().add(new OrganizationVO());
+		  person.getOrganizations().get(0).setName(new TextVO(""));
+		  person.getOrganizations().get(0).setIdentifier("");
+		  creator.setPerson(person);
+		  this.getCreators().add(creator);
 	}
 	
 	public MdsFacesContainerVO(MdsPublicationVO md)

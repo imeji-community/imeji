@@ -21,7 +21,7 @@ public class MdsItemVO
     /**
      * The screen Manager.
      */
-    private ScreenManager screen = null;
+    private ScreenConfiguration screen = null;
     
     /**
      * The generic md records after XSLT.
@@ -107,7 +107,7 @@ public class MdsItemVO
         System.out.println(firstMdRecord.xmlText());
         
         // Initialize the screen manager
-        screen = new ScreenManager(firstMdRecord);
+        screen = new ScreenConfiguration(firstMdRecord);
         
         // Initialize a MetadataWrapped to prepare tree initialization 
         
@@ -279,13 +279,13 @@ public class MdsItemVO
     }
 
 
-    public ScreenManager getScreen()
+    public ScreenConfiguration getScreen()
     {
         return screen;
     }
 
 
-    public void setScreen(ScreenManager screen)
+    public void setScreen(ScreenConfiguration screen)
     {
         this.screen = screen;
     }

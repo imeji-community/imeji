@@ -47,7 +47,7 @@ import de.mpg.escidoc.faces.album.list.AlbumsListController;
 import de.mpg.escidoc.faces.beans.Navigation;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.metadata.Metadata;
-import de.mpg.escidoc.faces.metadata.ScreenManager;
+import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.faces.metadata.wrapper.MetadataWrapped;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.UrlHelper;
@@ -90,7 +90,7 @@ public class Search
     private SearchSession session = null;
     private Navigation navigation = null;
     private UrlHelper urlHelper = null;
-    private ScreenManager screen = null;
+    private ScreenConfiguration screen = null;
     private AlbumSession albumSession = null;
 
     /**
@@ -106,7 +106,7 @@ public class Search
         albumSession = (AlbumSession)BeanHelper.getSessionBean(AlbumSession.class);
         
         // Object Initialization
-        screen = new ScreenManager("search");
+        screen = new ScreenConfiguration("search");
         
         if ("search".equals(sessionBean.getCurrentUrl()))
         {
@@ -360,12 +360,12 @@ public class Search
         this.session = session;
     }
 
-    public ScreenManager getScreen()
+    public ScreenConfiguration getScreen()
     {
         return screen;
     }
 
-    public void setScreen(ScreenManager screen)
+    public void setScreen(ScreenConfiguration screen)
     {
         this.screen = screen;
     }

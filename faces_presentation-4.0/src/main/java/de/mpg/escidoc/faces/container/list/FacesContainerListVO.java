@@ -32,7 +32,7 @@ public class FacesContainerListVO
         FILTER, SEARCH
     }
     /**
-     * The list of albums.
+     * The list of Containers.
      */
     private List<FacesContainerVO> list = new ArrayList<FacesContainerVO>();
     /**

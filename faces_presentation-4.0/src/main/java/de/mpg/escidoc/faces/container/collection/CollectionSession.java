@@ -9,44 +9,47 @@ import de.mpg.escidoc.faces.album.list.util.AlbumListParameters.SortParameterTyp
 import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO.HandlerType;
+import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.services.framework.PropertyReader;
 
 public class CollectionSession 
 {
-	private CollectionVO currentCollection = null;
-	private FacesContainerListVO collectionList = null;
+	private CollectionVO current = null;
+	private CollectionListVO collectionList = null;
 	
-	public CollectionSession() 
+	public CollectionSession() throws Exception
 	{
-		
-		
-	}
-	
-	public void init() throws Exception
-	{
+		current = new CollectionVO(new ScreenConfiguration());
 		List<FacesContainerVO> list = new ArrayList<FacesContainerVO>();
 		AlbumListParameters parameters = new AlbumListParameters("released", SortParameterType.LAST_MODIFICATION_DATE, OrderParameterType.DESCENDING, 10, 1, null, null);
 		parameters.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
-		collectionList = new FacesContainerListVO(list, parameters, HandlerType.SEARCH);
+		collectionList = new CollectionListVO(list, parameters, HandlerType.SEARCH);
 	}
 	
 	
-	public CollectionVO getCurrentCollection() 
+	/**
+	 * @return the current Collection in session
+	 */
+	public CollectionVO getCurrent()
 	{
-		return currentCollection;
+		return current;
 	}
 
-	public void setCurrentCollection(CollectionVO currentCollection) 
+	/**
+	 * Set a current collection in session
+	 * @param currentCollection
+	 */
+	public void setCurrent(CollectionVO currentCollection) 
 	{
-		this.currentCollection = currentCollection;
+		this.current= currentCollection;
 	}
 
-	public FacesContainerListVO getCollectionList() 
+	public CollectionListVO getCollectionList() 
 	{
 		return collectionList;
 	}
 
-	public void setCollectionList(FacesContainerListVO collectionList) 
+	public void setCollectionList(CollectionListVO collectionList) 
 	{
 		this.collectionList = collectionList;
 	}

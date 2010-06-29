@@ -83,6 +83,30 @@
 		
 		<ui:define name="actionsMenu">
 		
+			<h:panelGroup layout="block" styleClass="free_area0 sub action" rendered="#{HomePage.totalNumberOfItems != '0' and SessionBean.selectedMenu == 'SORTING'}">
+				<!-- SORTING content menu lower line starts here -->
+				<h:outputText id="txtSortBy" value="Sorted by " styleClass="free_area0"/>
+				<h:selectOneMenu id="selSortList1" value="#{SortingBean.selectedValue1}" styleClass="free_select">
+					<f:selectItems value="#{SortingBean.sortcriterialist1}" />
+				</h:selectOneMenu>
+				<h:outputLink id="lnkSort1" styleClass="#{SortingBean.style1}" onclick="javascript:toggleorder(this); return false" value="#">&#160;</h:outputLink>
+				<h:outputText styleClass="seperator void" />
+				<h:selectOneMenu id="selSortList2" value="#{SortingBean.selectedValue2}" styleClass="free_select">
+					<f:selectItems value="#{SortingBean.sortcriterialist2}" />
+				</h:selectOneMenu>
+				<h:outputLink id="lnkSort2" styleClass="#{SortingBean.style2}" onclick="javascript:toggleorder(this); return false" value="#">&#160;</h:outputLink>
+				<h:outputText styleClass="seperator void" />
+				<h:selectOneMenu id="selSortList3" value="#{SortingBean.selectedValue3}" styleClass="free_select">
+					<f:selectItems value="#{SortingBean.sortcriterialist3}" />
+				</h:selectOneMenu>
+				<h:outputLink id="lnkSort3" styleClass="#{SortingBean.style3}" onclick="javascript:toggleorder(this); return false" value="#">&#160;</h:outputLink>
+				<h:outputText styleClass="seperator void" />
+				<h:outputLink value="#" onclick="javascript:callsorting(); return null;" styleClass="free_area1_p2 activeButton">
+					<h:outputText value="Sort" />
+				</h:outputLink>
+				<!-- SORTING content menu lower line ends here -->
+			</h:panelGroup>
+		
 			<h:panelGroup rendered="#{SessionBean.selectedMenu == 'ORGANIZE' and AlbumSession.current.version.objectId != null}">
 				<!-- ORGANIZE content menu lower line FOR ALBUMS starts here -->
 				<h:outputLink id="lnkEditAlbum" styleClass="free_area0" value="#{Navigation.editAlbumUrl}/#{AlbumSession.current.latestVersion.objectId}" rendered="#{AlbumSession.current.state == 'PENDING'}">

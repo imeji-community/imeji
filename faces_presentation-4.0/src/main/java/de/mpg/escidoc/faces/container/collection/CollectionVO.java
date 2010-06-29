@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import de.mpg.escidoc.faces.container.FacesContainerVO;
-import de.mpg.escidoc.faces.metadata.ScreenManager;
+import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.services.framework.PropertyReader;
 
 /**
@@ -16,26 +16,33 @@ import de.mpg.escidoc.services.framework.PropertyReader;
  */
 public class CollectionVO extends FacesContainerVO
 {
+	private ScreenConfiguration screenConfiguration = null;
 	
+
 	/**
-	 * Default Constructor
+	 * Constructor with a {@link ScreenConfiguration} 
+	 * @param screeConfiguation defines the md-profile of the items of the collection
 	 * @throws URISyntaxException 
 	 * @throws IOException 
 	 */
-	public CollectionVO() throws IOException, URISyntaxException
+	public CollectionVO(ScreenConfiguration screenConfiguration) throws IOException, URISyntaxException 
 	{
 		super();
 		this.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
+		this.screenConfiguration = screenConfiguration;
 	}
-	/**
-	 * Constructor with a screenManager
-	 * @param screenManager
-	 * @throws URISyntaxException 
-	 * @throws IOException 
-	 */
-	public CollectionVO(ScreenManager screenManager) throws IOException, URISyntaxException 
+
+
+	public ScreenConfiguration getScreenConfiguration() 
 	{
-		super();
-		this.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
+		return screenConfiguration;
 	}
+
+
+	public void setScreenConfiguration(ScreenConfiguration screenConfiguration) 
+	{
+		this.screenConfiguration = screenConfiguration;
+	}
+	
+	
 }

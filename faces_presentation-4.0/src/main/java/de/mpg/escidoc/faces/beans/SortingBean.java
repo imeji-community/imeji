@@ -36,7 +36,7 @@ import java.util.List;
 import javax.faces.model.SelectItem;
 
 import de.mpg.escidoc.faces.beans.SessionBean.pageContextEnum;
-import de.mpg.escidoc.faces.metadata.ScreenManager;
+import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.UrlHelper;
 
@@ -44,7 +44,7 @@ public class SortingBean
 {
     UrlHelper urlHelper;
     
-    private ScreenManager sm = null;
+    private ScreenConfiguration sm = null;
     
     // Lists for the sorting select menus 
     private List<SelectItem> sortcriterialist1 = null;
@@ -72,7 +72,7 @@ public class SortingBean
         urlHelper = (UrlHelper) BeanHelper.getRequestBean(UrlHelper.class);
         
         // Get the ScreenManager for the sort features.
-        sm = new ScreenManager("sort");
+        sm = new ScreenConfiguration("sort");
     }
     
     public String getBaseUrl()

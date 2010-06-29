@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.mpg.escidoc.faces.metadata.Metadata;
-import de.mpg.escidoc.faces.metadata.ScreenManager;
+import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 
 /**
  * Parse an url search query according to a screen configuration.. 
@@ -30,7 +30,7 @@ public class UrlQueryParser
 	 * Constructor
 	 * @param urlQuery
 	 */
-	public UrlQueryParser(ScreenManager screen) 
+	public UrlQueryParser(ScreenConfiguration screen) 
 	{
 		initializesearchParameterMap(screen);
 	}
@@ -38,7 +38,7 @@ public class UrlQueryParser
     /**
      * Initialize the search parameters out of the screen configuration.
      */
-    private void initializesearchParameterMap(ScreenManager screen)
+    private void initializesearchParameterMap(ScreenConfiguration screen)
     {
     	searchParameterMap = new HashMap<String, Metadata>();
     	

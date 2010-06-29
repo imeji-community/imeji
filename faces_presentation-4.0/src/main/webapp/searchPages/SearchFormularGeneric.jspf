@@ -60,175 +60,179 @@
 		<!-- Album Search block ends here -->
 		
 		<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+			
+			<!-- List of first level metadata for the search formular -->
 			<tr:iterator id="mdTreeList" var="treeList" value="#{Search.formular}" varStatus="status">
+				
+				<!-- each first metadata is represented as a tree, with all metadata child in it  -->
 				<tr:tree value="#{treeList}" id="mdTree" var="mdTree" styleClass="" immediate="false" initiallyExpanded="true" varStatus="treePos">
+					
 					<f:facet name="nodeStamp">
 						<h:panelGroup>
-
-							<h:outputText escape='false' value='&lt;/div>&lt;div class="full_area0 itemBlock">' rendered="#{mdTree.group == 'title'}"/>
 							
-							
+							<!-- Separator beetween Metadata -->
+							<h:outputText escape='false' value='&lt;/div>&lt;div class="full_area0 itemBlock">' rendered="#{mdTree.group == 'title'}"/>							
 									
-								<!--  Element without search value/ -->
-								<h:panelGroup rendered="#{mdTree.guiComponent == 'none'}" styleClass="full_area0">
-									<h3 class="xLarge_area0_p8 endline blockHeader">
-											&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group == 'title'}" />
-									</h3>
-									<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
-									<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
-										<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-											<h3 class="xLarge_area0 endline clear">
-												&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group != 'title'}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
-											</h3>
-											<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
-												&#160;
-											</h:panelGroup>
+							<!--  Element without search value/ -->
+							<h:panelGroup rendered="#{mdTree.guiComponent == 'none'}" styleClass="full_area0">
+								<h3 class="xLarge_area0_p8 endline blockHeader">
+										&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group == 'title'}" />
+								</h3>
+								<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
+								<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<h3 class="xLarge_area0 endline clear">
+											&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group != 'title'}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
+										</h3>
+										<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
+											&#160;
 										</h:panelGroup>
 									</h:panelGroup>
 								</h:panelGroup>
+							</h:panelGroup>
 
-								<!--  Parent group element -->
-								<h:panelGroup rendered="#{(mdTree.guiComponent == 'group') and (treePos.index > 1)}" styleClass="full_area0">
-									<h3 class="xLarge_area0_p8 endline blockHeader">
-											&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group == 'title'}" />
-									</h3>
-									<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
-									<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
-										<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-											<h3 class="xLarge_area0 endline clear">
-												&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group != 'title'}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
-											</h3>
-											<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
-												&#160;
-											</h:panelGroup>
+							<!--  Parent group element -->
+							<h:panelGroup rendered="#{(mdTree.guiComponent == 'group') and (treePos.index > 1)}" styleClass="full_area0">
+								<h3 class="xLarge_area0_p8 endline blockHeader">
+										&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group == 'title'}" />
+								</h3>
+								<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
+								<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<h3 class="xLarge_area0 endline clear">
+											&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group != 'title'}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
+										</h3>
+										<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
+											&#160;
 										</h:panelGroup>
 									</h:panelGroup>
 								</h:panelGroup>
+							</h:panelGroup>
 
-								<!-- Title -->
-								<h:panelGroup rendered="#{(mdTree.guiComponent == 'group') and (treePos.index == 0)}" styleClass="full_area0">
-									<h3 class="xLarge_area0_p8 endline blockHeader">
-											&#160;<h:outputText value="#{mdTree.label}" />
-									</h3>
-									<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
-									<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
-										<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-											<b class="xLarge_area0_p8 endline labelLine clear">
-												&#160;<h:panelGroup styleClass="noDisplay"> </h:panelGroup>
-											</b>
-											<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
-												&#160;
-											</h:panelGroup>
+							<!-- Title -->
+							<h:panelGroup rendered="#{(mdTree.guiComponent == 'group') and (treePos.index == 0)}" styleClass="full_area0">
+								<h3 class="xLarge_area0_p8 endline blockHeader">
+										&#160;<h:outputText value="#{mdTree.label}" />
+								</h3>
+								<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
+								<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											&#160;<h:panelGroup styleClass="noDisplay"> </h:panelGroup>
+										</b>
+										<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
+											&#160;
 										</h:panelGroup>
 									</h:panelGroup>
 								</h:panelGroup>
+							</h:panelGroup>
 
-								<!-- Checkbox search element -->								
-								<h:panelGroup layout="block" rendered="#{(mdTree.node.guiComponent.stringValue == 'checkbox')}" styleClass="full_area0">
-									<h3 class="xLarge_area0_p8 endline blockHeader">
-											&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group == 'title'}" />
-									</h3>
-									<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
-									<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
-										 <h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-											<b class="xLarge_area0_p8 endline labelLine clear">
-												&#160;<h:outputText value="  #{mdTree.label}" rendered="#{mdTree.group != 'title'}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
-											</b>
-											<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
-												<tr:iterator id="constraintsList" var="constraints" value="#{mdTree.node.constraintArray}">
-													<tr:iterator id="optionsList" var="options" value="#{constraints.literalOptionArray}" varStatus="optionPosition ">
-														<h:panelGroup styleClass="large_checkbox tiny_marginRIncl">
-															<tr:selectBooleanCheckbox simple="true" id="checkSearch" value="#{Search.session.checkBox[mdTree.index][options.domNode.firstChild.nodeValue]}" immediate="false" valueChangeListener="#{Search.session.checkBoxListener}">
-																<f:attribute name="index" value="#{mdTree.index}"/>
-																<f:attribute name="constraint" value="#{options.domNode.firstChild.nodeValue}"/>
-															</tr:selectBooleanCheckbox>
-															<tr:inputHidden value="#{mdTree.index}.#{options.domNode.firstChild.nodeValue}"></tr:inputHidden>
-															<h:outputLabel>
-																<tr:outputText value="#{options.domNode.firstChild.nodeValue}"/> 
-																<tr:outputText rendered="#{!SessionBean.allowed}" value="   (#{ApplicationBean.statisticsMapPublic[mdTree.index][options.domNode.firstChild.nodeValue]})   "></tr:outputText>
-																<tr:outputText rendered="#{SessionBean.allowed}" value="   (#{ApplicationBean.statisticsMapPrivate[mdTree.index][options.domNode.firstChild.nodeValue]})   "></tr:outputText>
-															</h:outputLabel>
-														</h:panelGroup>
-													</tr:iterator>
+							<!-- Checkbox search element -->								
+							<h:panelGroup layout="block" rendered="#{(mdTree.node.guiComponent.stringValue == 'checkbox')}" styleClass="full_area0">
+								<h3 class="xLarge_area0_p8 endline blockHeader">
+										&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group == 'title'}" />
+								</h3>
+								<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
+								<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
+									 <h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											&#160;<h:outputText value="  #{mdTree.label}" rendered="#{mdTree.group != 'title'}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
+										</b>
+										<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
+											<tr:iterator id="constraintsList" var="constraints" value="#{mdTree.node.constraintArray}">
+												<tr:iterator id="optionsList" var="options" value="#{constraints.literalOptionArray}" varStatus="optionPosition ">
+													<h:panelGroup styleClass="large_checkbox tiny_marginRIncl">
+														<tr:selectBooleanCheckbox simple="true" id="checkSearch" value="#{Search.session.checkBox[mdTree.index][options.domNode.firstChild.nodeValue]}" immediate="false" valueChangeListener="#{Search.session.checkBoxListener}">
+															<f:attribute name="index" value="#{mdTree.index}"/>
+															<f:attribute name="constraint" value="#{options.domNode.firstChild.nodeValue}"/>
+														</tr:selectBooleanCheckbox>
+														<tr:inputHidden value="#{mdTree.index}.#{options.domNode.firstChild.nodeValue}"></tr:inputHidden>
+														<h:outputLabel>
+															<tr:outputText value="#{options.domNode.firstChild.nodeValue}"/> 
+															<tr:outputText rendered="#{!SessionBean.allowed}" value="   (#{ApplicationBean.statisticsMapPublic[mdTree.index][options.domNode.firstChild.nodeValue]})   "></tr:outputText>
+															<tr:outputText rendered="#{SessionBean.allowed}" value="   (#{ApplicationBean.statisticsMapPrivate[mdTree.index][options.domNode.firstChild.nodeValue]})   "></tr:outputText>
+														</h:outputLabel>
+													</h:panelGroup>
 												</tr:iterator>
-											</h:panelGroup>
+											</tr:iterator>
 										</h:panelGroup>
-									</h:panelGroup> 
-								</h:panelGroup>
-								
-								<!-- Text field element -->
-								<h:panelGroup layout="block" rendered="#{(mdTree.node.guiComponent.stringValue == 'text-field')}" styleClass="full_area0">
-									<h3 class="xLarge_area0_p8 endline blockHeader">
-										&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group == 'title'}"/>
-									</h3>
-									<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
-									<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
-										<tr:iterator var="values" value="#{Search.session.textfield[mdTree.index]}" varStatus="position">
-											<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-												<b class="xLarge_area0_p8 endline labelLine clear">
-													&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group != 'title'}"/><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
-												</b>
-												<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
-													<h:outputLabel styleClass="quad_label">
-														<h:outputText value="#{mdTree.label}" />
-													</h:outputLabel>
-													<h:inputText id="inputSearch" value="#{values}" styleClass="quad_txtInput" immediate="true" valueChangeListener="#{Search.session.textFieldListener}" onkeypress="searchOnEnter(event)">
-														<f:attribute name="index" value="#{mdTree.index}"/>
-														<f:attribute name="position" value="#{position.index}"/>
-													</h:inputText>
-													<tr:inputHidden value="#{mdTree.index}"></tr:inputHidden>
-												</h:panelGroup>
-												<span class="large_area0_p8 lineToolSection">
-													<tr:commandButton  id="cmdAdd" styleClass="min_imgBtn groupTool add" shortDesc="Add Field" actionListener="#{Search.session.addTextField}" immediate="true">
-														<f:attribute name="index" value="#{mdTree.index}"></f:attribute>
-													</tr:commandButton>
-													<tr:commandButton id="cmdRemove" styleClass="min_imgBtn groupTool remove" rendered="#{Search.textFieldSize != 0}" shortDesc="Remove Field" actionListener="#{Search.session.removeTextField}" immediate="true">
-														<f:attribute name="index" value="#{mdTree.index}"></f:attribute>
-														<f:attribute name="value" value="#{values}"></f:attribute>
-													</tr:commandButton>
-												</span>													
-											</h:panelGroup>
-										</tr:iterator>
 									</h:panelGroup>
-								</h:panelGroup>
+								</h:panelGroup> 
+							</h:panelGroup>
 								
-								<!-- Range types -->
-								<h:panelGroup layout="block" styleClass="full_area0" rendered="#{mdTree.node.guiComponent.stringValue == 'range'}">
-									<h3 class="xLarge_area0_p8 endline blockHeader">
-										&#160;
-									</h3>
-									<h:panelGroup styleClass="seperator" rendered="false"></h:panelGroup>
-									<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
+							<!-- Text field element -->
+							<h:panelGroup layout="block" rendered="#{(mdTree.node.guiComponent.stringValue == 'text-field')}" styleClass="full_area0">
+								<h3 class="xLarge_area0_p8 endline blockHeader">
+									&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group == 'title'}"/>
+								</h3>
+								<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
+								<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
+									<tr:iterator var="values" value="#{Search.session.textfield[mdTree.index]}" varStatus="position">
 										<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 											<b class="xLarge_area0_p8 endline labelLine clear">
-												&#160;<h:panelGroup styleClass="noDisplay"> </h:panelGroup>
+												&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group != 'title'}"/><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
 											</b>
-											<h:panelGroup layout="block" styleClass="xHuge_area0 xTiny_marginLExcl endline">
-												<h:panelGroup layout="block" styleClass="large_area0 tiny_marginRIncl">
-													<h:outputLabel for="rangeMin" styleClass="large_label" value="#{lbl.minimum}"/>
-													<h:inputText id="rangeMin" maxlength="2" styleClass="large_txtInput" value="#{Search.session.mdMap[mdTree.index].min}" immediate="true" valueChangeListener="#{Search.session.textFieldListener}" onkeypress="searchOnEnter(event)">
-														<f:attribute name="index" value="#{mdTree.index}.min"/>
-														<f:attribute name="position" value="#{position.index}"/>
-													</h:inputText>
-													<tr:inputHidden value="#{mdTree.index}.min"></tr:inputHidden>
-												</h:panelGroup>
-												<h:panelGroup layout="block" styleClass="large_area0 tiny_marginRIncl">
-													<h:outputLabel for="rangeMax" styleClass="large_label" value="#{lbl.maximum}"/>
-													<h:inputText id="rangeMax" maxlength="2" styleClass="large_txtInput" value="#{Search.session.mdMap[mdTree.index].max}" immediate="true" valueChangeListener="#{Search.session.textFieldListener}" onkeypress="searchOnEnter(event)">
-														<f:attribute name="index" value="#{mdTree.index}.max"/>
-														<f:attribute name="position" value="#{position.index}"/>
-													</h:inputText>
-													<tr:inputHidden value="#{mdTree.index}.max"></tr:inputHidden>
-												</h:panelGroup>
+											<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
+												<h:outputLabel styleClass="quad_label">
+													<h:outputText value="#{mdTree.label}" />
+												</h:outputLabel>
+												<h:inputText id="inputSearch" value="#{values}" styleClass="quad_txtInput" immediate="true" valueChangeListener="#{Search.session.textFieldListener}" onkeypress="searchOnEnter(event)">
+													<f:attribute name="index" value="#{mdTree.index}"/>
+													<f:attribute name="position" value="#{position.index}"/>
+												</h:inputText>
+												<tr:inputHidden value="#{mdTree.index}"></tr:inputHidden>
+											</h:panelGroup>
+											<span class="large_area0_p8 lineToolSection">
+												<tr:commandButton  id="cmdAdd" styleClass="min_imgBtn groupTool add" shortDesc="Add Field" actionListener="#{Search.session.addTextField}" immediate="true">
+													<f:attribute name="index" value="#{mdTree.index}"></f:attribute>
+												</tr:commandButton>
+												<tr:commandButton id="cmdRemove" styleClass="min_imgBtn groupTool remove" rendered="#{Search.textFieldSize != 0}" shortDesc="Remove Field" actionListener="#{Search.session.removeTextField}" immediate="true">
+													<f:attribute name="index" value="#{mdTree.index}"></f:attribute>
+													<f:attribute name="value" value="#{values}"></f:attribute>
+												</tr:commandButton>
+											</span>													
+										</h:panelGroup>
+									</tr:iterator>
+								</h:panelGroup>
+							</h:panelGroup>
+								
+							<!-- Range types -->
+							<h:panelGroup layout="block" styleClass="full_area0" rendered="#{mdTree.node.guiComponent.stringValue == 'range'}">
+								<h3 class="xLarge_area0_p8 endline blockHeader">
+									&#160;
+								</h3>
+								<h:panelGroup styleClass="seperator" rendered="false"></h:panelGroup>
+								<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											&#160;<h:panelGroup styleClass="noDisplay"> </h:panelGroup>
+										</b>
+										<h:panelGroup layout="block" styleClass="xHuge_area0 xTiny_marginLExcl endline">
+											<h:panelGroup layout="block" styleClass="large_area0 tiny_marginRIncl">
+												<h:outputLabel for="rangeMin" styleClass="large_label" value="#{lbl.minimum}"/>
+												<h:inputText id="rangeMin" maxlength="2" styleClass="large_txtInput" value="#{Search.session.mdMap[mdTree.index].min}" immediate="true" valueChangeListener="#{Search.session.textFieldListener}" onkeypress="searchOnEnter(event)">
+													<f:attribute name="index" value="#{mdTree.index}.min"/>
+													<f:attribute name="position" value="#{position.index}"/>
+												</h:inputText>
+												<tr:inputHidden value="#{mdTree.index}.min"></tr:inputHidden>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="large_area0 tiny_marginRIncl">
+												<h:outputLabel for="rangeMax" styleClass="large_label" value="#{lbl.maximum}"/>
+												<h:inputText id="rangeMax" maxlength="2" styleClass="large_txtInput" value="#{Search.session.mdMap[mdTree.index].max}" immediate="true" valueChangeListener="#{Search.session.textFieldListener}" onkeypress="searchOnEnter(event)">
+													<f:attribute name="index" value="#{mdTree.index}.max"/>
+													<f:attribute name="position" value="#{position.index}"/>
+												</h:inputText>
+												<tr:inputHidden value="#{mdTree.index}.max"></tr:inputHidden>
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>
 								</h:panelGroup>
+							</h:panelGroup>
 								
-								<!-- New component type -->
-								<h:panelGroup layout="block" styleClass="full_area0" rendered="#{mdTree.node.guiComponent.stringValue == 'component-type'}">
-									<!-- jsdfhiwjdfhwhifwisb -->
-								</h:panelGroup>
+							<!-- New component type -->
+							<h:panelGroup layout="block" styleClass="full_area0" rendered="#{mdTree.node.guiComponent.stringValue == 'component-type'}">
+								<!-- jsdfhiwjdfhwhifwisb -->
+							</h:panelGroup>
 	
 						</h:panelGroup>
 					 </f:facet>
@@ -249,7 +253,7 @@
 </f:subview>
 
 <script type="text/javascript">
-<![CDATA[
+//<![CDATA[
 function searchOnEnter(event)
 {
 	if (event.keyCode == 13)
@@ -297,16 +301,13 @@ function redirectToSearchPage()
 		}
 	}
 	
-	
 	if (query == '') 
 	{
 		query += 'error';
 	}
 	
-	
-	
 	window.location.href= './search/result/' + '<h:outputText value="#{Navigation.defaultBrowsingKeepShow}"/>' + '/' + query  ;
 }
-]]>
+//]]>
 </script>
 </div>

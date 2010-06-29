@@ -115,10 +115,17 @@ public class StatisticsBean
                 sessionBean.setMessage("Statistics user doesn't exist on FW. Check config file or FW");
             }
             
+            try
+            {
+            	 adminUserHandle = loginUser(
+                         PropertyReader.getProperty("framework.admin.username"),
+                         PropertyReader.getProperty("framework.admin.password"));
+            }
+            catch (Exception e)
+            {
+                sessionBean.setMessage("Wrong administrator user. Check config file or FW");
+            }
             
-            adminUserHandle = loginUser(
-                    PropertyReader.getProperty("framework.admin.username"),
-                    PropertyReader.getProperty("framework.admin.password"));
             
             // initialize FW configuration
             if (validFrameworkConfig())

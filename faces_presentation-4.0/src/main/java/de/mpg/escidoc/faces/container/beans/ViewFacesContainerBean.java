@@ -5,7 +5,7 @@ import de.mpg.escidoc.faces.container.FacesContainerVO;
 /**
  * JSF Bean for {@link FacesContainerVO}
  * <br> This class is directly reused by:
- * <br> - {@link ViewCollectionBean}
+ * <br> - {@link CollectionBean}
  * <br> - {@link ViewAlbumBean}
  * 
  * @author saquet

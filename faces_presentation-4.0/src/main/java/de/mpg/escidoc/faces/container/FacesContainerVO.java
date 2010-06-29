@@ -6,21 +6,20 @@ import java.util.List;
 import de.mpg.escidoc.faces.album.AlbumVO;
 import de.mpg.escidoc.faces.metadata.MdsAlbumVO;
 import de.mpg.escidoc.faces.metadata.MdsFacesContainerVO;
+import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.services.common.valueobjects.ContainerVO;
 import de.mpg.escidoc.services.common.valueobjects.publication.MdsPublicationVO;
 
 public class FacesContainerVO extends ContainerVO
-{
-	
-	/**
-    * The metadata record of an album 
-    */    
+{  
     private MdsFacesContainerVO mdRecord = null;
     /**
      * The list of IDs of all album's member
      */
     private List<String> membersId = null;
-	
+    /**
+     * Check if selected by user
+     */
     private boolean selected = false;
     
 	public FacesContainerVO() 

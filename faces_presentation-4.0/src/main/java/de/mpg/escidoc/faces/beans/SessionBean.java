@@ -57,7 +57,7 @@ import de.mpg.escidoc.faces.album.AlbumController;
 import de.mpg.escidoc.faces.album.beans.AlbumSession;
 import de.mpg.escidoc.faces.item.FacesItemVO;
 import de.mpg.escidoc.faces.item.ItemVO;
-import de.mpg.escidoc.faces.metadata.ScreenManager;
+import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.faces.pictures.Detail;
 import de.mpg.escidoc.faces.statistics.StatisticsBean;
 import de.mpg.escidoc.faces.util.BeanHelper;
@@ -209,7 +209,7 @@ public class SessionBean
             locale = new Locale("en");
             
             // initialization of the sort criteria
-            ScreenManager sm = new ScreenManager("sort");
+            ScreenConfiguration sm = new ScreenConfiguration("sort");
             
             for (int i = 0; i < sm.getMdList().size(); i++)
             {

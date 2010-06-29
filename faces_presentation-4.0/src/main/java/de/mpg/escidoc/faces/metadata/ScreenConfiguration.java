@@ -14,7 +14,7 @@ import org.purl.escidoc.schemas.genericMetadata.records.x01.MdRecordsDocument.Md
 import de.mpg.escidoc.faces.metadata.helper.ScreenManagerHelper;
 
 
-public class ScreenManager
+public class ScreenConfiguration
 {    
     /**
      * The id of the screen (for example view, search...).
@@ -51,7 +51,7 @@ public class ScreenManager
      * Default constructor.
      * The Screen manager is only initialized out of screenConfig.xml (i.e no values)
      */
-    public ScreenManager()
+    public ScreenConfiguration()
     {
         // Initialize helper for mdr.
         helper = new ScreenManagerHelper(); 
@@ -73,7 +73,7 @@ public class ScreenManager
      * The Screen manager is only initialized out of screenConfig.xml (i.e no values)
      * @param screenId - the id of the screen (view, search, edit...)
      */
-    public ScreenManager(String screenId)
+    public ScreenConfiguration(String screenId)
     {
         // Initialize helper for mdr.
         helper = new ScreenManagerHelper(screenId);   
@@ -95,7 +95,7 @@ public class ScreenManager
      * View and resource are initialized by default (first ones in the screenConfig.xml)
      * @param mdr - the metadata record.
      */
-    public ScreenManager(MdRecord mdr)
+    public ScreenConfiguration(MdRecord mdr)
     {
         // Initialize helper for mdr.
         helper = new ScreenManagerHelper(); 
@@ -119,7 +119,7 @@ public class ScreenManager
      * @param resourceClass - the class of the resource (face-item, medium, diamonds...).
      * @param mdr - the metadata record.
      */
-    public ScreenManager(MdRecord mdr, String screenId, String resourceClass)
+    public ScreenConfiguration(MdRecord mdr, String screenId, String resourceClass)
     {
         // Initialize helper for md-record, resource class and screen id.
         helper = new ScreenManagerHelper(mdr.getName().getStringValue(), resourceClass, screenId);

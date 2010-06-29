@@ -49,7 +49,7 @@
 			<h:outputText id="txtMenue" styleClass="free_area0" value="#{lbl.show}"/>
 		</ui:define>
 		
-		<ui:define name="actionsMenu"
+		<ui:define name="actionsMenu">
 			<!-- Toggle between sets -->
 			<h:outputLink styleClass="free_area0" value="#{SessionBean.viewPictureForComparisonLink}" rendered="#{AlbumSession.current.version.objectId == null and Detail.item.type == 'face'}">
 				<h:outputText value="#{lbl.picture_for_comparison}"/>
@@ -89,12 +89,12 @@
 				</h:panelGroup>
 			</h:panelGroup>
 	
-			<jsp:directive.include file="picturesPages/ui/ActiveAlbumMenu.jspf" />
+			<ui:include src="picturesPages/ui/ActiveAlbumMenu.jspf" />
 			
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 				<div class="small_area0">&#160;</div>
-				<jsp:directive.include file="picturesPages/ui/Details_Generic.jspf" />
-				<jsp:directive.include file="picturesPages/ui/DetailImage.jspf" />
+				<ui:include src="picturesPages/ui/Details_Generic.jspf" />
+				<ui:include src="picturesPages/ui/DetailImage.jspf" />
 			</h:panelGroup>
 		
 		</ui:define>

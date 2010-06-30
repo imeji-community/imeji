@@ -254,6 +254,7 @@
 
 <script type="text/javascript">
 
+//<![CDATA[
 function searchOnEnter(event)
 {
 	if (event.keyCode == 13)
@@ -270,7 +271,7 @@ function redirectToSearchPage()
 	{
 		var size = document.formular.elements[i].id.length - 15;
 		
-		if(document.formular.elements[i].type == 'select-one' and document.formular.elements[i].value != '#{lbl.collection_list_default}')
+		if(document.formular.elements[i].type == 'select-one' && document.formular.elements[i].value != '#{lbl.collection_list_default}')
 		{
 			query += document.formular.elements[i].id.substr(27, size) + ':' + document.formular.elements[i].value;
 		}
@@ -285,7 +286,7 @@ function redirectToSearchPage()
 				query += '_' + document.formular.elements[i+1].value ;		
 			}
 		}
-		if (document.formular.elements[i].type == 'text' and document.formular.elements[i].value != '') 
+		if (document.formular.elements[i].type == 'text' && document.formular.elements[i].value != '') 
 		{
 			if (query == '') 
 			{
@@ -303,8 +304,8 @@ function redirectToSearchPage()
 		query += 'error';
 	}
 	
-	window.location.href= './search/result/' + '<h:outputText value="#{Navigation.defaultBrowsingKeepShow}"/>' + '/' + query  ;
+	window.location.href= './search/result/' + '#{Navigation.defaultBrowsingKeepShow}' + '/' + query  ;
 }
-
+//]]>
 </script>
 </div>

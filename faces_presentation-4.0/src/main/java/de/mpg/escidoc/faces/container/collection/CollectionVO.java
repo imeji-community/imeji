@@ -3,13 +3,15 @@ package de.mpg.escidoc.faces.container.collection;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import de.escidoc.schemas.container.x08.ContainerDocument.Container;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
+import de.mpg.escidoc.services.common.referenceobjects.ContextRO;
 import de.mpg.escidoc.services.framework.PropertyReader;
 
 /**
  * A collection of Faces is defined by:
- * <br> * 1 context (via ScreenManager)
+ * <br> * 1 context 
  * 
  * @author saquet
  *
@@ -17,6 +19,7 @@ import de.mpg.escidoc.services.framework.PropertyReader;
 public class CollectionVO extends FacesContainerVO
 {
 	private ScreenConfiguration screenConfiguration = null;
+	private String mdProfileId = null;
 	
 
 	/**
@@ -30,18 +33,34 @@ public class CollectionVO extends FacesContainerVO
 		super();
 		this.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
 		this.screenConfiguration = screenConfiguration;
+		// TODO: change that.
+		this.mdProfileId = "escidoc:faces50";
 	}
-
 
 	public ScreenConfiguration getScreenConfiguration() 
 	{
 		return screenConfiguration;
 	}
 
-
 	public void setScreenConfiguration(ScreenConfiguration screenConfiguration) 
 	{
 		this.screenConfiguration = screenConfiguration;
+	}
+
+	/**
+	 * @return the mdProfileId
+	 */
+	public String getMdProfileId() 
+	{
+		return mdProfileId;
+	}
+
+	/**
+	 * @param mdProfileId the mdProfileId to set
+	 */
+	public void setMdProfileId(String mdProfileId) 
+	{
+		this.mdProfileId = mdProfileId;
 	}
 	
 	

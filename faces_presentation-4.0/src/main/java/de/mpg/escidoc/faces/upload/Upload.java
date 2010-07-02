@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 
+import de.mpg.escidoc.faces.container.collection.CollectionVO;
 import de.mpg.escidoc.faces.item.ItemVO;
 
 /**
@@ -16,6 +17,7 @@ public class Upload
 {
 	private List<ItemVO> items = null;
 	private String contentModelId = null;
+	private CollectionVO collection = null;
 	private Date startDate = null;
 	private Date endDate = null;
 		

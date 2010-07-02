@@ -62,7 +62,7 @@ public class ApplicationBean
 
     public ApplicationBean() throws Exception
     {
-        initializeStatistics();
+    	initializeStatistics();
     }
     
     public String getApplicationName()
@@ -88,6 +88,10 @@ public class ApplicationBean
         this.applicationName = applicationName;
     }
     
+    /**
+     * Initialize statistics of current instance
+     * @throws Exception
+     */
     public void initializeStatistics() throws Exception
     {   
         ScreenConfiguration sm = new ScreenConfiguration("search");

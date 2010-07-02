@@ -493,7 +493,8 @@ public class SessionBean
         StatisticsBean statisticsBean = (StatisticsBean) BeanHelper.getApplicationBean(StatisticsBean.class);
         
         if (userAgent.indexOf("OpenNMS HttpMonitor")==-1
-        		&& userAgent.indexOf("internal dummy connection")==-1) 
+        		&& userAgent.indexOf("internal dummy connection")==-1
+        		&& userAgent.indexOf("check_http/v1.4.14 (nagios-plugins 1.4.14)") == -1) 
         {
 			firstLoad = false;
 				

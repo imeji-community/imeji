@@ -4,20 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
-import de.mpg.escidoc.faces.album.AlbumVO;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.collection.CollectionController;
 import de.mpg.escidoc.faces.container.collection.CollectionSession;
 import de.mpg.escidoc.faces.container.collection.CollectionVO;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.faces.util.BeanHelper;
-import de.mpg.escidoc.services.common.valueobjects.metadata.CreatorVO;
-import de.mpg.escidoc.services.common.valueobjects.metadata.OrganizationVO;
-import de.mpg.escidoc.services.common.valueobjects.metadata.PersonVO;
-import de.mpg.escidoc.services.common.valueobjects.metadata.TextVO;
 
 /**
  * JSF bean for {@link CollectionVO}
@@ -58,6 +54,7 @@ public class CollectionBean
 		collectionsMenu = new ArrayList<SelectItem>();
 		fc =  FacesContext.getCurrentInstance();
 		request = (HttpServletRequest) fc.getExternalContext().getRequest();
+		
 		try 
 		{
 			init();
@@ -85,7 +82,7 @@ public class CollectionBean
 		{
 			pageType = CollectionPageType.CREATE;
 			collection = new CollectionVO(collectionSession.getCurrent().getScreenConfiguration());
-			collection.getMdRecord().getTitle().setValue("Test");
+			collectionSession.setCurrent(collection);
 		}
 		
 		for (CollectionVO c : collectionSession.getCollectionList().getCollectionVOList()) 
@@ -159,6 +156,30 @@ public class CollectionBean
 	{
 		this.pageType = pageType;
 	}
+	
+	 /**
+     * JSF Listener for the title value
+     * @param event
+     */
+    public void titleListener(ValueChangeEvent event)
+    {
+    	if (event.getNewValue() != null && !event.getNewValue().equals(event.getOldValue())) 
+    	{
+			collectionSession.getCurrent().getMdRecord().getTitle().setValue(event.getNewValue().toString());
+		}
+    }
+    
+    /**
+     * JSF Listener for the abstract value
+     * @param event
+     */
+    public void descriptionListener(ValueChangeEvent event)
+    {
+    	if (event.getNewValue() != null && !event.getNewValue().equals(event.getOldValue())) 
+    	{
+    		collectionSession.getCurrent().getMdRecord().getAbstracts().get(0).setValue(event.getNewValue().toString());
+		}
+    }
 
 	
 }

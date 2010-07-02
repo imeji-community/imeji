@@ -33,7 +33,7 @@ public class FacesContainerController
      */
     private FacesContainerVO facesContainer;
     
-    private XmlTransforming xmlTransforming = null;
+    protected XmlTransforming xmlTransforming = null;
     private String APPLICATION_URL = null;
     
     /**
@@ -180,7 +180,7 @@ public class FacesContainerController
     public FacesContainerVO create(FacesContainerVO facesContainer, String userHandle) throws Exception
     {
     	String facesContainerXml = xmlTransforming.transformToContainer(transformToContainerVO(facesContainer));
-        
+    	
         facesContainerXml = ServiceLocator.getContainerHandler(userHandle).create(facesContainerXml);
         
         ContainerVO containerVO = xmlTransforming.transformToContainer(facesContainerXml);

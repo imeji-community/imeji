@@ -1,0 +1,179 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+<!--
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License, Version 1.0 only
+ (the "License"). You may not use this file except in compliance
+ with the License.
+
+ You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ or http://www.escidoc.de/license.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at license/ESCIDOC.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+
+ Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+ für wissenschaftlich-technische Information mbH and Max-Planck-
+ Gesellschaft zur Förderung der Wissenschaft e.V.
+ All rights reserved. Use is subject to license terms.
+-->
+</ui:remove>
+
+<f:subview id="CollectionFormular">
+	<!-- First part of the page -->
+	<div class="small_area0">&#160;</div>
+	<h:panelGroup layout="block" styleClass="huge_area0">
+		<h:panelGroup layout="block" styleClass="huge_area1_p4 metaDataSection">
+			<h2 class="xLarge_area0" style="text-align: center;">
+				<h:outputText value="#{CollectionSession.current.mdRecord.title.value}" />
+			</h2>
+			<h:panelGroup>
+				<!-- Picture status of the album -->
+				<h:panelGroup styleClass="huge_area0">
+					<h:panelGroup layout="block" styleClass="small_area0 medium_marginLExcl statusIconArea">
+						<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{CollectionSession.current.state == 'PENDING'}"></h:panelGroup>
+						<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{CollectionSession.current.state == 'RELEASED'}"></h:panelGroup>
+						<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{CollectionSession.current.state == 'WITHDRAWN'}"></h:panelGroup>
+						<h:panelGroup layout="block" styleClass="small_area0">
+							<h:outputText value="#{lbl.private}" rendered="#{CollectionSession.current.state == 'PENDING'}"></h:outputText>
+							<h:outputText value="#{lbl.published}" rendered="#{CollectionSession.current.state == 'RELEASED'}"></h:outputText>
+							<h:outputText value="#{lbl.withdrawn}" rendered="#{CollectionSession.current.state == 'WITHDRAWN'}"></h:outputText>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			
+			<!-- Start of the album formular -->
+				
+				<h:panelGroup layout="block" styleClass="huge_area0">
+					<b><h:outputText id="txtAlbumName" styleClass="double_area0 endline" value="#{lbl.name}*" /></b>
+					<h:inputText id="nameField" value="#{CollectionBean.collection.mdRecord.title.value}" valueChangeListener="#{CollectionBean.titleListener}" styleClass="double_txtInput" immediate="true"></h:inputText>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="huge_area0">
+					<b><h:outputText id="txtAlbumDescription" styleClass="double_area0 endline" value="#{lbl.description}" /></b>
+					<h:panelGroup styleClass="double_area0">
+						<tr:iterator var="abstracts" value="#{CollectionBean.collection.mdRecord.abstracts}">
+							 <h:inputTextarea id="descriptionField" rows="4" value="#{abstracts.value}" styleClass="double_txtInput" immediate="true" valueChangeListener="#{CollectionBean.descriptionListener}"/>
+						</tr:iterator>
+					</h:panelGroup>
+				</h:panelGroup>
+
+				<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{CollectionBean.pageType == 'CREATE'}">
+					<tr:selectBooleanCheckbox styleClass="pushCheckbox" id="make_active" value="#{SessionBean.active}" immediate="true" valueChangeListener="#{SessionBean.makeActive}"/>
+					<h:outputLabel for="make_active" value="Make this my active album"></h:outputLabel>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" styleClass="huge_area0">
+					<b><h:outputText id="txtAlbumAuthor" styleClass="huge_area0 endline" value="#{lbl.authors}" /></b>					
+					<tr:iterator var="creators" varStatus="status" value="#{CollectionBean.collection.mdRecord.creators}">
+						<h:panelGroup layout="block" styleClass="suggestAnchor">
+							<h:panelGroup class="huge_area0">
+								<h:outputText styleClass="large_area0 endline" value="#{lbl.author}"/>
+								<h:panelGroup styleClass="small_area0 sectionToolSection small_marginRIncl">
+									<!--  <tr:commandButton styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_author}" actionListener="" disabled="#{AlbumFormular.numberOfCreators == '1'}" immediate="true">
+										<f:attribute name="creator" value="#{creators}"></f:attribute>
+									</tr:commandButton>
+									<tr:commandButton styleClass="min_imgBtn add sectionTool" shortDesc="#{lbl.add_author}" action="" immediate="true"/>-->
+								</h:panelGroup>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" styleClass="double_area0">
+								<h:panelGroup styleClass="double_area0">
+									<h:outputText value="#{lbl.family_name}" />
+									<h:outputText value="*" />
+								</h:panelGroup>
+								<!--  <tr:inputText simple="true" id="familyname" value="#{creators.person.familyName}" styleClass="double_txtInput" immediate="true" valueChangeListener="" >
+									<f:attribute name="index" value="#{status.index}"/>
+								</tr:inputText>-->
+								<h:panelGroup styleClass="double_area0">
+									<h:outputText value="#{lbl.first_name}" />
+								</h:panelGroup>
+								<!--  <tr:inputText simple="true" id="givenname" value="#{creators.person.givenName}" styleClass="double_txtInput" valueChangeListener="" immediate="true">
+									<f:attribute name="index" value="#{status.index}"/>
+								</tr:inputText>-->
+							</h:panelGroup>
+
+							<h:panelGroup class="huge_area0 endline">
+								<h:outputText id="txtAlbumAuthor" value="#{lbl.affiliation}" />
+								<h:outputText value="*" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="huge_area0">
+								<tr:iterator var="affiliations" value="#{creators.person.organizations}" varStatus="statusAffiliation">
+									<h:panelGroup styleClass="quad_area0">
+										<!--  <tr:inputText simple="true" id="affiliation" value="#{affiliations.name.value}" styleClass="double_txtInput endline" immediate="true" valueChangeListener="">
+											<f:attribute name="indexCreator" value="#{status.index}" />
+											<f:attribute name="indexAffiliation" value="#{statusAffiliation.index}"/>
+										</tr:inputText>
+										<h:panelGroup styleClass="small_area0 sectionToolSection xLarge_marginRExcl">
+											<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add an affiliation" actionListener="" immediate="true">
+												<f:attribute name="creator" value="#{creators}"></f:attribute>
+											</tr:commandButton>
+											<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove this affiliation" actionListener="" disabled="#{creators.person.organizationsSize == '1'}" immediate="true">
+												<f:attribute name="creator" value="#{creators}"></f:attribute>
+												<f:attribute name="affiliation" value="#{affiliations}"></f:attribute>
+											</tr:commandButton>
+										</h:panelGroup>-->
+									</h:panelGroup>
+								</tr:iterator>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="huge_area0">
+								<h:outputText value="&#160;"></h:outputText>
+							</h:panelGroup>		
+						</h:panelGroup>		
+					</tr:iterator>
+				</h:panelGroup>
+				
+				<h:outputText styleClass="huge_area0" escape="false" value="&#160;" />
+				<h:panelGroup layout="block" styleClass="huge_area0">
+					<h:outputText value="* #{lbl.mandatory_field}"/>
+				</h:panelGroup>
+	
+			</h:panelGroup>
+	<!-- End Resolve album -->
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="huge_area0 formButtonArea">
+			<h:panelGroup layout="block" styleClass="free_area0" style="float: right;">
+				<h:outputLink value="#{SessionBean.backUrl}" styleClass="small_area1_p8 large_marginRExcl cancelButton">
+        			<h:outputText value="#{lbl.cancel}" />
+        		</h:outputLink>
+        		<h:commandButton action="#{CollectionBean.save}" value="#{lbl.save}" styleClass="small_txtBtn activeButton endline" immediate="true"></h:commandButton>
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:panelGroup>
+<!-- End First part of the page -->
+
+	<h:panelGroup styleClass="free_area0" rendered="#{HomePage.totalNumberOfItems == '0'}">
+		<!-- No Pictures on page -->
+		<br/>
+		<h:outputText value="#{msg.message_album_wrong_id}" rendered="#{CollectionSession.current.version.objectId == null and SessionBean.currentUrl != 'createalbum'}"></h:outputText>
+		<h:outputText value="#{msg.message_album_empty}" rendered="#{(SessionBean.user != null) and (CollectionSession.current.version.objectId != null or SessionBean.currentUrl == 'createalbum')}"></h:outputText>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" rendered="#{HomePage.totalNumberOfItems != '0'}">
+		<ul class="free_area0 albumBrowse">
+	
+			<ui:include src="../../picturesPages/ui/Images.jspf" />
+	
+		</ul>
+	</h:panelGroup>	
+	<script>
+		function message(message)
+		{
+			document.getElementById('Start:message_javascript').innerHTML  = message;
+		}
+	</script>
+</f:subview>
+</div>

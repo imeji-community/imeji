@@ -14,7 +14,10 @@ import de.mpg.escidoc.services.framework.PropertyReader;
 
 public class CollectionSession 
 {
+	// Collection currently displayed (Via CollectionBean)
 	private CollectionVO current = null;
+	// Collection active (image browsed are in that collection)
+	private CollectionVO active = null;
 	private CollectionListVO collectionList = null;
 	
 	public CollectionSession() throws Exception
@@ -53,7 +56,22 @@ public class CollectionSession
 	{
 		this.collectionList = collectionList;
 	}
+	
+	/**
+	 * @return the active
+	 */
+	public CollectionVO getActive() 
+	{
+		return active;
+	}
 
+	/**
+	 * @param active the active to set
+	 */
+	public void setActive(CollectionVO active) 
+	{
+		this.active = active;
+	}
 
 
 }

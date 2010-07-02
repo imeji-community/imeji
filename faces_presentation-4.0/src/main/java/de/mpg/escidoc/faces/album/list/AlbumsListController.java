@@ -90,7 +90,7 @@ public class AlbumsListController
         }
         
         // START Workaround for FW Bug
-        if (albumSession.getFilter().equalsIgnoreCase("all"))
+        if (false)
         {
             list.getList().clear();
             

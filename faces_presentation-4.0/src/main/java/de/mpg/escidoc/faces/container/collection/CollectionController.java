@@ -56,11 +56,13 @@ public class CollectionController extends FacesContainerController
     	collectionVO.getMdRecord().getIdentifiers().add(
     			new IdentifierVO(IdType.URI, 
     					ServiceLocator.getFrameworkUrl() +  "/cmm/content-model/" + collectionVO.getMdProfileId()));
+    	
+    	String adminHandle = LoginHelper.loginSystemAdmin();
 
-    	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.DEPOSITOR.frameworkValue(), contextId), userHandle);
-    	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.MODERATOR.frameworkValue(), contextId), userHandle);
-    	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.PRIVILEGEDVIEWER.frameworkValue(), contextId), userHandle);
-		
+    	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.DEPOSITOR.frameworkValue(), contextId), adminHandle);
+    	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.MODERATOR.frameworkValue(), contextId),  adminHandle);
+    	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.PRIVILEGEDVIEWER.frameworkValue(), contextId),  adminHandle);
+		    	
         return  super.create(collectionVO, userHandle);
     }
 	

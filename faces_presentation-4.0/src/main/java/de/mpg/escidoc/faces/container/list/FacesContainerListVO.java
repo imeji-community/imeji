@@ -55,11 +55,15 @@ public class FacesContainerListVO
      * The filter to retrieve the list.
      * Used only if HandlerType is FILTER
      */
-    private AlbumListParameters parameters = new AlbumListParameters();
+    private FacesContainerListParameters parameters = new FacesContainerListParameters();
     /**
      * The view used to display the list
      */
     private ViewType view = ViewType.TABLE;
+    /**
+     * The name of the list
+     */
+    private String name = null;
     
     
     /**
@@ -68,7 +72,7 @@ public class FacesContainerListVO
      */
     public FacesContainerListVO() 
     {
-    	
+    	handler = HandlerType.FILTER;
     }
     
     /**
@@ -92,7 +96,7 @@ public class FacesContainerListVO
      * @param filter
      * @param type
      */
-    public FacesContainerListVO(List<FacesContainerVO> list, AlbumListParameters filter, HandlerType type)
+    public FacesContainerListVO(List<FacesContainerVO> list, FacesContainerListParameters filter, HandlerType type)
     {
         this.list = list;
         size = this.list.size();
@@ -172,12 +176,12 @@ public class FacesContainerListVO
         this.menu = menu;
     }
 
-    public AlbumListParameters getParameters()
+    public FacesContainerListParameters getParameters()
     {
         return parameters;
     }
 
-    public void setParameters(AlbumListParameters parameters)
+    public void setParameters(FacesContainerListParameters parameters)
     {
         this.parameters = parameters;
     }
@@ -206,5 +210,22 @@ public class FacesContainerListVO
             }
         }
     }
+
+	/**
+	 * @return the name
+	 */
+	public String getName() 
+	{
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+    
 }
 

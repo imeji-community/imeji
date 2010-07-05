@@ -35,10 +35,12 @@ public class UserHelper
 	public static void addGrantToUser(AccountUserVO user, GrantVO grant, String userHandle)
 	{
 		try 
-		{			
+		{
+			grant.setGrantType("user-account");
+			grant.setGrantedTo(user.getReference().getObjectId());
 			String grantXml = getXmlTransforming().transformToGrant(grant);
 			
-			ServiceLocator.getUserGroupHandler(userHandle).createGrant(user.getUserid(), grantXml);
+			ServiceLocator.getUserAccountHandler(userHandle).createGrant(user.getReference().getObjectId(), grantXml);
 		} 
 		catch (Exception e) 
 		{

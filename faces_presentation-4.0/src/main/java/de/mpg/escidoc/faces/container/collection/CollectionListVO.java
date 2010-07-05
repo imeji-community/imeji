@@ -3,22 +3,21 @@ package de.mpg.escidoc.faces.container.collection;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.escidoc.faces.album.list.util.AlbumListParameters;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
+import de.mpg.escidoc.faces.container.list.FacesContainerListParameters;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO;
-import de.mpg.escidoc.faces.container.list.FacesContainerListVO.HandlerType;
 
 public class CollectionListVO extends FacesContainerListVO
 {
-    
 	public CollectionListVO() 
 	{
 		super();
 	}
 	
-	public CollectionListVO(List<FacesContainerVO> list, AlbumListParameters filter, HandlerType type)
+	public CollectionListVO(List<FacesContainerVO> list, FacesContainerListParameters filter, HandlerType type)
 	{
 		super(list,  filter, type);
+		this.setName("Collections");
 	}
 
 	/**

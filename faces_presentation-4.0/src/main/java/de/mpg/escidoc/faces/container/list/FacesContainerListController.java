@@ -9,11 +9,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import de.escidoc.www.services.om.ContainerHandler;
-import de.mpg.escidoc.faces.album.AlbumVO;
 import de.mpg.escidoc.faces.album.beans.AlbumSession;
-import de.mpg.escidoc.faces.album.list.AlbumListVO.HandlerType;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
+import de.mpg.escidoc.faces.container.list.FacesContainerListVO.HandlerType;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.QueryHelper;
 import de.mpg.escidoc.services.common.XmlTransforming;
@@ -86,7 +85,7 @@ public class FacesContainerListController
         }
         
         // START Workaround for FW Bug
-        if (albumSession.getFilter().equalsIgnoreCase("all"))
+        if (false)
         {
             list.getList().clear();
             
@@ -172,7 +171,7 @@ public class FacesContainerListController
         }
         // END Workaround for FW Bug
         
-        FacesContainerListVO albumListVO = new FacesContainerListVO(list);
+        FacesContainerListVO containerListVO = new FacesContainerListVO(list);
         
         if (albumSession.getFilter().equalsIgnoreCase("all")) 
         {
@@ -180,13 +179,10 @@ public class FacesContainerListController
 		}
         else
         {
-        	albumListVO.setSize(Integer.parseInt(wrapper.getNumberOfRecords()));
+        	containerListVO.setSize(Integer.parseInt(wrapper.getNumberOfRecords()));
         }
         
-        //
-
-              
-        return albumListVO;
+        return containerListVO;
     }
     
     /**
@@ -199,7 +195,7 @@ public class FacesContainerListController
     {
         QueryHelper queryHelper  = new QueryHelper();
         queryHelper.executeQueryForFacesContainers(
-                    list.getParameters().getParamtersAsSearchQuery()
+                    list.getParameters().getParametersAsSearchQuery()
                     , list.getParameters().getShow()
                     , (list.getParameters().getPage()-1) * list.getParameters().getShow() + 1 
                     , list.getParameters().getParametersAsSortingQuery()

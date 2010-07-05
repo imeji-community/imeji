@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+<!--
+
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License, Version 1.0 only
+ (the "License"). You may not use this file except in compliance
+ with the License.
+
+ You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ or http://www.escidoc.de/license.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at license/ESCIDOC.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+
+ Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+ für wissenschaftlich-technische Information mbH and Max-Planck-
+ Gesellschaft zur Förderung der Wissenschaft e.V.
+ All rights reserved. Use is subject to license terms.
+-->
+
+</ui:remove>
+
+<body>
+	<ui:composition template="template.xhtml">	
+		
+		<ui:define name="contentMenu">
+			
+			<h:outputText value="#{FacesContainerListBean.init}" styleClass="noDisplay" />
+			<h:outputLink id="lnkFilter" styleClass="free_area0" value="?tab=FILTER" rendered="#{SessionBean.user != null and Session.selectedMenu != 'FILTER' and FacesContainerListBean.listType != 'search'}">
+				<h:outputText value="#{lbl.filter}"/>
+			</h:outputLink>
+			<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.filter}" rendered="#{SessionBean.user != null and Session.selectedMenu == 'FILTER'}" />
+			<h:outputText styleClass="seperator void" />
+			<h:outputLink id="lnkSort" styleClass="free_area0" value="?tab=SORTING" rendered="#{Session.selectedMenu != 'SORTING'}">
+				<h:outputText value="#{lbl.sort}"/>
+			</h:outputLink>
+			<h:outputText id="txtSortLink" styleClass="free_area0" value="#{lbl.sort}" rendered="#{Session.selectedMenu == 'SORTING'}" />
+			<h:outputText styleClass="seperator void" />
+			<h:outputLink id="lnkOrganize" styleClass="free_area0" value="?tab=ORGANIZE" rendered="#{Session.selectedMenu != 'ORGANIZE' and SessionBean.user != null and FacesContainerListBean.listType != 'search'}">
+				<h:outputText value="#{lbl.organize}"/>
+			</h:outputLink>
+			<h:outputText id="txtOrganizeLink" styleClass="free_area0" value="#{lbl.organize}" rendered="#{Session.selectedMenu == 'ORGANIZE' and SessionBean.user != null and FacesContainerListBean.listType != 'search' and SessionBean.currentUrl != 'home'}" />
+			<h:outputText styleClass="seperator void" />
+		</ui:define>
+									
+		<ui:define name="actionsMenu">
+			<h:panelGroup  rendered="#{Session.selectedMenu == 'VIEW'}">
+			<!-- VIEW content menu lower line starts here 
+				<tr:iterator id="viewList" var="menu" varStatus="status" value="#{FacesContainerListBean.viewMenu}">
+					<h:outputLink  id="lnkView" styleClass="free_area0" value="#{menu.value}" disabled="#{FacesContainerListBean.firstPage == menu.value}">
+						<h:outputText value="#{menu.label}"></h:outputText>
+					</h:outputLink>
+				</tr:iterator>
+			 VIEW content menu lower line ends here -->
+			</h:panelGroup>
+			<h:panelGroup rendered="#{SessionBean.user != null and Session.selectedMenu == 'FILTER'}">
+			<!-- FILTER content menu lower line starts here -->
+				<h:outputText id="txtFilter" value="Filtered by " styleClass="free_area0"/>
+				<h:selectOneMenu id="selFilter" value="#{FacesContainerListBean.url}?filter=#{Session.filter}" styleClass="free_select"  onchange="location.href=this.value">
+					<f:selectItems id="filterItem" value="#{FacesContainerListBean.filterMenu}"/>
+				</h:selectOneMenu>
+			<!-- FILTER content menu lower line ends here -->
+			</h:panelGroup>
+			<h:panelGroup rendered="#{Session.selectedMenu == 'SORTING'}">
+			<!-- SORTING content menu lower line starts here -->
+				<h:outputText id="txtSort" value="Sorted by " styleClass="free_area0"/>
+				<h:selectOneMenu id="selSort" value="#{FacesContainerListBean.url}" styleClass="free_select"  onchange="location.href=this.value">
+					<f:selectItems id="sortItem" value="#{FacesContainerListBean.sortMenu}"/>
+				</h:selectOneMenu>
+				<h:outputLink id="lnkSortAsc" styleClass="ascSort" value="#{FacesContainerListBean.toggleOrder}" rendered="#{FacesContainerListBean.list.parameters.orderBy == 'ASCENDING'}">&#160;</h:outputLink>
+				<h:outputLink id="lnkSortDesc" styleClass="desSort" value="#{FacesContainerListBean.toggleOrder}" rendered="#{FacesContainerListBean.list.parameters.orderBy != 'ASCENDING'}">&#160;</h:outputLink>
+				<h:outputText styleClass="seperator void" />
+			<!-- SORTING content menu lower line ends here -->
+			</h:panelGroup>
+			<h:panelGroup rendered="#{Session.selectedMenu == 'ORGANIZE' and SessionBean.user != null and FacesContainerListBean.listType != 'search' and SessionBean.currentUrl != 'home'}">
+			<!-- ORGANIZE content menu lower line starts here -->
+				<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.albumUrl}/new?action=init">
+						<h:outputText value="Create Album"></h:outputText>
+				</h:outputLink>
+				<h:outputText styleClass="seperator"/>
+				<h:commandLink id="lnkDelete" styleClass="free_area0" action="#{FacesContainerListBean.deleteLink}" immediate="true">
+						<h:outputText value="Delete Selected Albums"></h:outputText>
+				</h:commandLink>
+			<!-- ORGANIZE content menu lower line ends here -->
+			</h:panelGroup>
+
+		</ui:define>
+							
+		<ui:define name="mainContent">
+			<ui:include src="containerPages/Containers.jspf" />
+			<script type="text/javascript">
+					function searchOnEnter(event)
+					{
+						if (event.keyCode == 13)
+						{
+							search();
+						}
+					}
+					function search()
+					{
+						window.location.href= '<h:outputText value="#{Navigation.albumsSearchUrl}"/>' + '?query=' + document.getElementById('formAlbums:inputAlbumSearch').value;  
+					}
+					
+			</script>	
+		</ui:define>
+		
+		
+		</ui:composition>
+	</body>
+</html>
+									
+						
+
+					

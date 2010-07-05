@@ -1,0 +1,222 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+<!-- 
+            CDDL HEADER START
+
+            The contents of this file are subject to the terms of the
+            Common Development and Distribution License, Version 1.0 only
+            (the "License"). You may not use this file except in compliance
+            with the License.
+
+            You can obtain a copy of the license at license/ESCIDOC.LICENSE
+            or http://www.escidoc.de/license.
+            See the License for the specific language governing permissions
+            and limitations under the License.
+
+            When distributing Covered Code, include this CDDL HEADER in each
+            file and include the License file at license/ESCIDOC.LICENSE.
+            If applicable, add the following below this CDDL HEADER, with the
+            fields enclosed by brackets "[]" replaced with your own identifying
+            information: Portions Copyright [yyyy] [name of copyright owner]
+
+            CDDL HEADER END
+
+
+            Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+            für wissenschaftlich-technische Information mbH and Max-Planck-
+            Gesellschaft zur Förderung der Wissenschaft e.V.
+            All rights reserved. Use is subject to license terms.
+             
+-->
+</ui:remove>
+<f:subview id="ContainersTableView">
+	
+	<table class="full_area0 itemList loggedIn" rules="none" style="border-collapse: collapse;">
+		<thead class="listHeader" style="text-align: left; vertical-align:top;">
+		    <tr class="full_area0">
+		      	<th class="free_area0_p8 endline itemSelectArea">
+		      		<input type="button" class="min_imgBtn checkboxSelectButton"/>
+					<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none;">
+						<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
+						<span class="medium_area0_p8">
+							<h:outputText value="#{lbl.select_albums}"/>
+						</span>
+						<h:commandLink action="#{FacesContainerListBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" immediate="true" disabled="#{FacesContainerListBean.listType == 'search'}" styleClass="large_area0 selectAll">
+							<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
+						</h:commandLink>
+		 				<!-- <a class="large_area0 selectTotal"><span class="medium_area0_p8 tiny_marginLIncl">All</span></a>-->
+		 				<h:commandLink action="#{FacesContainerListBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" disabled="#{FacesContainerListBean.listType == 'search'}" immediate="true" styleClass="large_area0 selectNone">
+							<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
+						</h:commandLink>
+					</div>
+					&#160;
+		      	</th>
+		      	<th class="free_area0 endline status statusArea">
+		      		<span class="seperator"></span>
+					<h:outputLink id="lnkStateSort" styleClass="free_area0_p8" value="#{FacesContainerListBean.columnSortValuesMap['STATE']}"  rendered="#{FacesContainerListBean.list.parameters.sortBy != 'STATE'}">
+						<f:attribute name="sortField" value="#{lbl.state}"></f:attribute>
+						<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
+						<h:outputText value="#{lbl.state}" />
+					</h:outputLink>
+					<h:outputLink id="lnkStateSortAsc" styleClass="free_area0_p8 ascSort" value="#{FacesContainerListBean.columnSortValuesMap['STATE']}" rendered="#{(FacesContainerListBean.list.parameters.orderBy == 'ASCENDING') and FacesContainerListBean.list.parameters.sortBy == 'STATE'}">
+						<h:outputText id="txtSortBy2" styleClass="noDisplay" value="#{lbl.sort_by} " />
+						<h:outputText value="#{lbl.state}" />
+					</h:outputLink>
+					<h:outputLink id="lnkStateSortDesc" styleClass="free_area0_p8 desSort" value="#{FacesContainerListBean.columnSortValuesMap['STATE']}" rendered="#{!(FacesContainerListBean.list.parameters.orderBy == 'ASCENDING') and FacesContainerListBean.list.parameters.sortBy == 'STATE'}">
+						<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
+						<h:outputText value="#{lbl.state}" />
+					</h:outputLink>
+				</th>
+		      	<th class="free_area0">
+		      		<span class="seperator"></span>
+					<h:outputLink id="lnkNameSort" styleClass="free_area0_p8 itemHeadline" value="#{FacesContainerListBean.columnSortValuesMap['NAME']}" rendered="#{FacesContainerListBean.list.parameters.sortBy != 'NAME'}">
+						<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
+						<h:outputText value="#{lbl.name}" />
+					</h:outputLink>
+					<h:outputLink id="lnkNameSortAsc" styleClass="free_area0_p8 ascSort itemHeadline" value="#{FacesContainerListBean.columnSortValuesMap['NAME']}" rendered="#{(FacesContainerListBean.list.parameters.orderBy == 'ASCENDING') and FacesContainerListBean.list.parameters.sortBy == 'NAME'}">
+						<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
+						<h:outputText value="#{lbl.name}" />
+					</h:outputLink>
+					<h:outputLink id="lnkNameSortDesc" styleClass="free_area0_p8 desSort itemHeadline" value="#{FacesContainerListBean.columnSortValuesMap['NAME']}" rendered="#{(FacesContainerListBean.list.parameters.orderBy != 'ASCENDING') and FacesContainerListBean.list.parameters.sortBy == 'NAME'}">
+						<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
+						<h:outputText value="#{lbl.name}" />
+					</h:outputLink>
+		      	</th>
+				<th class="large_area0">
+		     		<span class="seperator"></span>
+					<h:outputText styleClass="large_area0_p8" value="#{lbl.album_owner}" />
+		      	</th>
+		      	<th class="small_area0">
+					<!-- Currently disabled bacause not possible to sort by this criterium at the moment -->
+		     		<span class="seperator"></span>
+					<h:outputText styleClass="small_area0_p8" value="#{lbl.number_pictures}" />
+		      	</th>
+		      	<th class="large_area0">
+					<!-- Currently disabled bacause not possible to sort by this criterium at the moment -->
+					<span class="seperator"></span>
+					<h:outputText styleClass="large_area0_p8" value="#{lbl.description}" />
+			  	</th>
+		      	<th class="medium_area0">
+					<span class="seperator"></span>
+					<h:outputLink id="lnkDateSort" styleClass="medium_area0_p8 " value="#{FacesContainerListBean.columnSortValuesMap['LAST_MODIFICATION_DATE']}" rendered="#{FacesContainerListBean.list.parameters.sortBy != 'LAST_MODIFICATION_DATE'}">
+						<f:attribute name="sortField" value="modificationdate"></f:attribute>
+						<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
+						<h:outputText value="#{lbl.last_modified}" />
+					</h:outputLink>
+					<h:outputLink id="lnkDateSortAsc" styleClass="medium_area0_p8 ascSort" value="#{FacesContainerListBean.columnSortValuesMap['LAST_MODIFICATION_DATE']}" rendered="#{(FacesContainerListBean.list.parameters.orderBy == 'ASCENDING') and FacesContainerListBean.list.parameters.sortBy == 'LAST_MODIFICATION_DATE'}">
+						<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
+						<h:outputText value="#{lbl.last_modified}" />
+					</h:outputLink>
+					<h:outputLink id="lnkDateSortDesc" styleClass="medium_area0_p8 desSort" value="#{FacesContainerListBean.columnSortValuesMap['LAST_MODIFICATION_DATE']}" rendered="#{(FacesContainerListBean.list.parameters.orderBy != 'ASCENDING') and FacesContainerListBean.list.parameters.sortBy == 'LAST_MODIFICATION_DATE'}">
+						<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
+						<h:outputText value="#{lbl.last_modified}" />
+					</h:outputLink>
+			  	</th>
+		      	<th class="medium_area0">
+					<span class="seperator"></span>
+					<h:outputText styleClass="medium_area0_p8" value="#{lbl.active_album}" />
+			  	</th>
+			</tr>
+		</thead>
+		<tbody style="text-align: left; vertical-align:top;">
+			<h:panelGroup rendered="#{FacesContainerListBean.listType == 'search'}">
+				<tr class="full_area0 listItem">
+					<td colspan="7" class="free_area0 endline">
+						<h:panelGroup styleClass="full_area0 searchMenu">
+							<h:panelGroup styleClass="free_area0 small_marginLIncl">
+								<h:inputText id="inputAlbumSearch" value="" styleClass="quad_txtInput" onkeypress="if (event.keyCode == 13) { albumSearch(); return false; }"/>
+							</h:panelGroup>
+							<h:outputLink id="lnkAlbumSearch" value="" onclick="albumSearch(); return false;" styleClass="free_area0_p8 activeButton quickSearchBtn">
+								<h:outputText value="Search" />
+							</h:outputLink>
+						</h:panelGroup>
+						<h:outputText styleClass="full_area0 small_marginLIncl" value="You searched for: #{FacesContainerListBean.list.parameters.mdSearch}" rendered="#{FacesContainerListBean.list.parameters.mdSearch != null and FacesContainerListBean.list.parameters.mdSearch != ''}"></h:outputText>
+						<h:outputLink styleClass="full_area0 small_marginLIncl" value="#{Navigation.albumsUrl}/search" rendered="#{FacesContainerListBean.list.parameters.mdSearch != null and FacesContainerListBean.list.parameters.mdSearch != ''}">
+							<h:outputText value="#{lbl.delete_search}"></h:outputText>
+						</h:outputLink>
+						<h:panelGroup styleClass="full_area0">
+							&#160;
+						</h:panelGroup>
+					</td>
+				</tr>
+			</h:panelGroup>
+			<tr:iterator var="album" value="#{FacesContainerListBean.list.list}" id="list" rows="0">
+				<h:panelGroup>
+				   
+				    <tr class="full_0area0 listItem #{album.version.objectId == AlbumSession.active.version.objectId ? 'activeAlbum' : ''}">
+				      	
+				      	<td class="free_area0 endline">
+				      		<span class="free_area0_p8 endline itemSelectArea">
+								<tr:selectBooleanCheckbox id="selAlbum" simple="true" styleClass="itemCheckBox" value="#{album.selected}" immediate="true" valueChangeListener="#{FacesContainerListBean.selectAlbum}" onclick="saveScrollCoordinates()" rendered="#{album.state == 'PENDING'}">
+									<f:attribute value="#{album}" name="album"/>
+								</tr:selectBooleanCheckbox>
+								&#160;
+				      		</span>
+				      	</td>
+				      	<td class="free_area0 endline status">
+				      		<span class="seperator"></span>
+				      		<span class="free_area0_p8 endline statusArea">
+								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{album.state == 'WITHDRAWN'}" />
+								<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{album.state == 'PENDING'}" />
+								<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{album.state == 'RELEASED'}" />
+								<h:outputLabel styleClass="medium_label endline" rendered="#{album.state == 'PENDING'}">
+									<h:outputText value="#{lbl.private}" />
+								</h:outputLabel>
+								<h:outputLabel styleClass="medium_label endline" rendered="#{album.state == 'RELEASED'}">
+									<h:outputText value="#{lbl.published}" />
+								</h:outputLabel>
+								<h:outputLabel styleClass="medium_label endline" rendered="#{album.state == 'WITHDRAWN'}">
+									<h:outputText value="#{lbl.withdrawn}" />
+								</h:outputLabel>
+							</span>
+				      	</td>
+				      	<td class="free_area0 endline">
+				      		<span class="seperator"></span>
+				      		<span class="free_area0_p8 itemHeadline">
+								<h:outputLink id="lnkAlbumUrl" value="#{Navigation.applicationUrl}album/#{album.latestVersion.objectId}/#{Navigation.defaultBrowsingKeepShowAlbum}">
+									<b><h:outputText value="#{album.mdRecord.title.value}" /></b>
+								</h:outputLink>
+				      		</span>
+				      	</td>
+						<td class="free_area0 endline">
+				      		<span class="seperator"></span>
+				      		<span class="large_area0_p8">
+				      			<h:outputText value="#{album.creator}"/>&#160;
+				      		</span>
+				      	</td>
+				      	<td class="free_area0 endline">
+				      		<span class="seperator"></span>
+				      		<span class="small_area0_p8">
+				      			<h:outputText value="#{album.size}"/>&#160;
+				      		</span>
+				      	</td>
+				      	<td class="free_area0 endline">
+				      		<span class="seperator"></span>
+					      	<h:outputText styleClass="large_area0_p8" escape="false" title="#{album.mdRecord.abstracts[0].value}" value="#{album.shortDescription} &#160;"/>
+					    </td>
+				      	<td class="free_area0 endline">
+				      		<span class="seperator"></span>
+				      		<span class="medium_area0_p8">
+				      			<h:outputText value="#{album.modificationDate}"/>&#160;
+				      		</span>
+				      	</td>
+				      	<td class="free_area0 endline">
+				      		<span class="seperator"></span>
+				      		<span class="medium_area0_p8 endline filesSection">
+				      			<h:outputLink id="lnkActiveAlbum" value="#{FacesContainerListBean.url}/active/#{album.version.objectId}" rendered="#{album.state == 'PENDING' and album.version.objectId != AlbumSession.active.version.objectId}" onclick="saveScrollCoordinates()">
+									<h:outputText value="#{lbl.make_active}"></h:outputText>
+								</h:outputLink>
+								&#160;
+				      		</span>
+				      	</td>
+				    </tr>
+				</h:panelGroup>
+			</tr:iterator>
+		</tbody>
+	</table>
+</f:subview>
+</div>

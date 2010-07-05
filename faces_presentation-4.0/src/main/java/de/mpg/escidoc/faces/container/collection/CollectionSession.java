@@ -3,11 +3,11 @@ package de.mpg.escidoc.faces.container.collection;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.escidoc.faces.album.list.util.AlbumListParameters;
-import de.mpg.escidoc.faces.album.list.util.AlbumListParameters.OrderParameterType;
-import de.mpg.escidoc.faces.album.list.util.AlbumListParameters.SortParameterType;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
+import de.mpg.escidoc.faces.container.list.FacesContainerListParameters;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO;
+import de.mpg.escidoc.faces.container.list.FacesContainerListParameters.OrderParameterType;
+import de.mpg.escidoc.faces.container.list.FacesContainerListParameters.SortParameterType;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO.HandlerType;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -20,13 +20,15 @@ public class CollectionSession
 	private CollectionVO active = null;
 	private CollectionListVO collectionList = null;
 	
+	 private String selectedMenu = "SORTING";
+	
 	public CollectionSession() throws Exception
 	{
 		current = new CollectionVO(new ScreenConfiguration());
 		List<FacesContainerVO> list = new ArrayList<FacesContainerVO>();
-		AlbumListParameters parameters = new AlbumListParameters("released", SortParameterType.LAST_MODIFICATION_DATE, OrderParameterType.DESCENDING, 10, 1, null, null);
+		FacesContainerListParameters parameters = new FacesContainerListParameters(null, SortParameterType.LAST_MODIFICATION_DATE, OrderParameterType.DESCENDING, 10, 1, null, null);
 		parameters.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
-		collectionList = new CollectionListVO(list, parameters, HandlerType.SEARCH);
+		collectionList = new CollectionListVO(list, parameters, HandlerType.FILTER);
 	}
 	
 	
@@ -71,6 +73,22 @@ public class CollectionSession
 	public void setActive(CollectionVO active) 
 	{
 		this.active = active;
+	}
+
+	/**
+	 * @return the selectedMenu
+	 */
+	public String getSelectedMenu()
+	{
+		return selectedMenu;
+	}
+
+	/**
+	 * @param selectedMenu the selectedMenu to set
+	 */
+	public void setSelectedMenu(String selectedMenu) 
+	{
+		this.selectedMenu = selectedMenu;
 	}
 
 

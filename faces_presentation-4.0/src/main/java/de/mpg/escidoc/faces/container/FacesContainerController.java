@@ -449,14 +449,14 @@ public class FacesContainerController
      */
     public ContainerVO transformToContainerVO(FacesContainerVO facesContainerVO)
     {
-    	ContainerVO ct = new ContainerVO(facesContainer);
+    	ContainerVO ct = new ContainerVO(facesContainerVO);
     	
     	if (ct.getMetadataSets().size() == 0) 
     	{
 			ct.getMetadataSets().add(new MetadataSetVO());
 		}
     	
-    	ct.getMetadataSets().set(0, new MdsPublicationVO(facesContainer.getMdRecord()));
+    	ct.getMetadataSets().set(0, new MdsPublicationVO(facesContainerVO.getMdRecord()));
     	
     	return ct;
     }

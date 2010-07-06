@@ -44,10 +44,10 @@ import javax.faces.model.SelectItem;
 import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
 
-import de.mpg.escidoc.faces.album.AlbumVO;
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
 import de.mpg.escidoc.faces.beans.Navigation;
 import de.mpg.escidoc.faces.beans.SessionBean;
+import de.mpg.escidoc.faces.container.album.AlbumSession;
+import de.mpg.escidoc.faces.container.album.AlbumVO;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.services.common.valueobjects.AffiliationVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.CreatorVO;

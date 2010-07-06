@@ -29,6 +29,12 @@ public class CollectionSession
 		FacesContainerListParameters parameters = new FacesContainerListParameters(null, SortParameterType.LAST_MODIFICATION_DATE, OrderParameterType.DESCENDING, 10, 1, null, null);
 		parameters.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
 		collectionList = new CollectionListVO(list, parameters, HandlerType.FILTER);
+		init();
+	}
+	
+	public void init()
+	{
+		
 	}
 	
 	

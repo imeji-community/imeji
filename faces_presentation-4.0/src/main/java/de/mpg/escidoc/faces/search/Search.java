@@ -42,10 +42,12 @@ import javax.faces.model.SelectItem;
 import org.apache.myfaces.trinidad.model.ChildPropertyTreeModel;
 
 import de.mpg.escidoc.faces.album.AlbumVO;
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
 import de.mpg.escidoc.faces.album.list.AlbumsListController;
 import de.mpg.escidoc.faces.beans.Navigation;
 import de.mpg.escidoc.faces.beans.SessionBean;
+import de.mpg.escidoc.faces.container.album.AlbumListVO;
+import de.mpg.escidoc.faces.container.album.AlbumSession;
+import de.mpg.escidoc.faces.container.list.FacesContainerListController;
 import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.faces.metadata.wrapper.MetadataWrapped;
@@ -136,12 +138,12 @@ public class Search
     private void initializeCollectionMenu()
     {
 		collectionMenu = new ArrayList<SelectItem>();
-		AlbumsListController albumsListController =new AlbumsListController();
+		FacesContainerListController controller =new FacesContainerListController();
 		collectionMenu.add(new SelectItem("", "All images"));
 		
 		try 
 		{
-			albumSession.setPublished(albumsListController.retrieve(albumSession.getPublished(), sessionBean.getUserHandle()));
+			albumSession.setPublished((AlbumListVO) controller.retrieve(albumSession.getPublished(), sessionBean.getUserHandle()));
 		} 
 		catch (Exception e) 
 		{

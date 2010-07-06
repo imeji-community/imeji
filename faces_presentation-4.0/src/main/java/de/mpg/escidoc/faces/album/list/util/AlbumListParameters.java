@@ -8,7 +8,7 @@ import de.mpg.escidoc.services.framework.PropertyReader;
 /**
  * 
  * @author saquet
- *
+ * @deprecated
  */
 public class AlbumListParameters
 {

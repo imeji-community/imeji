@@ -21,7 +21,7 @@ import de.mpg.escidoc.services.framework.ServiceLocator;
 /**
  * 
  * @author saquet
- *
+ * @deprecated
  */
 public class AlbumController
 {

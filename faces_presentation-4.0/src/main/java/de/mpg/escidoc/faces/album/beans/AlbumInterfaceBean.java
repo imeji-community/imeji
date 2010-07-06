@@ -88,7 +88,7 @@ public class AlbumInterfaceBean
     }
     
     private SessionBean sessionBean = null;
-    private AlbumSession albumSession = null;
+    private AlbumSessionOld albumSession = null;
     private AlbumController albumController = null;
     private Navigation navigation = null;
     
@@ -99,7 +99,7 @@ public class AlbumInterfaceBean
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        albumSession = (AlbumSession)BeanHelper.getSessionBean(AlbumSession.class);
+        albumSession = (AlbumSessionOld)BeanHelper.getSessionBean(AlbumSessionOld.class);
         albumController = new AlbumController();        
     }
     

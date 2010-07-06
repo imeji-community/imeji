@@ -231,8 +231,17 @@
     <!-- Albums Page -->
     <rule>
     	<from casesensitive="false">^/albums$</from>
-    	<to>/jsf/Albums.xhtml?currentUrl=albums</to>
+    	<to>/jsf/Containers.xhtml?list=albums&amp;currentUrl=albums</to>
     </rule>
+     <rule>
+    	<from casesensitive="false">^/publications$</from>
+    	<to>/jsf/Containers.xhtml?list=publications&amp;currentUrl=publications</to>
+    </rule>
+     <rule>
+    	<from casesensitive="false">^/collections$</from>
+    	<to>/jsf/Containers.xhtml?list=collections&amp;currentUrl=collections</to>
+    </rule>
+    
      <!-- Default Browsing with active album -->
     <rule>
     	<from casesensitive="false">^/albums/active/([^//]+)$</from>

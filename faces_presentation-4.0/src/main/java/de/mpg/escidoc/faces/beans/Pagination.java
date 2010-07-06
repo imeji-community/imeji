@@ -37,8 +37,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
 import de.mpg.escidoc.faces.beans.SessionBean.pageContextEnum;
+import de.mpg.escidoc.faces.container.album.AlbumSession;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.UrlHelper;
 

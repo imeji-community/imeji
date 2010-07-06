@@ -14,7 +14,11 @@ import de.mpg.escidoc.services.common.valueobjects.metadata.TextVO;
 import de.mpg.escidoc.services.common.valueobjects.publication.MdsPublicationVO;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
-
+/**
+ * 
+ * @author saquet
+ * @deprecated
+ */
 public class AlbumVO extends ContainerVO
 {
     /**

@@ -9,9 +9,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import de.escidoc.www.services.om.ContainerHandler;
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
+import de.mpg.escidoc.faces.container.album.AlbumSession;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO.HandlerType;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.QueryHelper;
@@ -84,103 +84,13 @@ public class FacesContainerListController
         	cth = ServiceLocator.getContainerHandler();
         }
         
-        // START Workaround for FW Bug
-        if (false)
-        {
-            list.getList().clear();
-            
-            //Get all albums (used for the sorting)
-            FacesContainerListVO listAll = new FacesContainerListVO(new ArrayList<FacesContainerVO>(), list.clone().getParameters(), list.getHandler());
-            listAll.getParameters().setPage(1);
-            listAll.getParameters().setShow(200);
-            listAll.getList().clear();
-            FacesContainerListVO listSorted = new FacesContainerListVO(new ArrayList<FacesContainerVO>(), list.clone().getParameters(), list.getHandler());
-            listSorted.getList().clear();
-          
-            String containerListXml = cth.retrieveContainers(listAll.getParameters().getParametersAsFilter());      
-            List<? extends ContainerVO> allAlbums = xmlTransforming.transformToContainerList(containerListXml);
-            listAll = addToList(listAll, allAlbums);
-            
-            int page = list.getParameters().getPage();
-            int show = list.getParameters().getShow();
-            
-            list.getParameters().setPage(1);
-            list.getParameters().setShow(200);
-            
-            //Add pending albums from user
-            if (sessionBean.getUser() != null) 
-            {
-            	 list.getParameters().setCreator(sessionBean.getUser().getReference().getObjectId());
-                 list.getParameters().setState("pending");
-                 containerListXml = cth.retrieveContainers(list.getParameters().getParametersAsFilter());      
-                 List<? extends ContainerVO> pendingAlbums = xmlTransforming.transformToContainerList(containerListXml);
-                 list = addToList(list, pendingAlbums);
-               
-                 //Add withdrawn albums from user
-                 list.getParameters().setCreator(sessionBean.getUser().getReference().getObjectId());
-                 list.getParameters().setState("withdrawn");
-                 containerListXml = cth.retrieveContainers(list.getParameters().getParametersAsFilter());      
-                 List<? extends ContainerVO> withdrawnAlbums = xmlTransforming.transformToContainerList(containerListXml);
-                 list = addToList(list, withdrawnAlbums);
-			}
-           
-            //Add all public albums
-            list.getParameters().setCreator(null);
-            list.getParameters().setState("released");
-            containerListXml = cth.retrieveContainers(list.getParameters().getParametersAsFilter());      
-            List<? extends ContainerVO> publicAlbums = xmlTransforming.transformToContainerList(containerListXml);
-            list = addToList(list, publicAlbums);
-            
-            //Check and set the sorting
-            for (int i = 0; i < listAll.getList().size(); i++) 
-            {
-            	for (int j = 0; j < list.getList().size(); j++) 
-            	{
-					if (list.getList().get(j).getVersion().getObjectId().equals(
-							listAll.getList().get(i).getVersion().getObjectId())) 
-					{
-						listSorted.getList().add(list.getList().get(j));
-					}
-				}
-			}
-            
-            list.getParameters().setPage(page);
-            list.getParameters().setShow(show);
-            
-            // Remove the album that not should be displayed on this page
-            int lastRecord = list.getParameters().getPage() * list.getParameters().getShow();
-            int firstRecord =  (list.getParameters().getPage() - 1) * list.getParameters().getShow();
-            list.getList().clear();
-            list.setList(listSorted.getList());
-            list.setSize(list.getList().size());
-            
-            if (lastRecord <= list.getList().size()) 
-            {
-            	list.setList(list.getList().subList(firstRecord, lastRecord));
-			}
-            else
-            {
-            	list.setList(list.getList().subList(firstRecord,  list.getList().size()));
-            }
-        }
-        else
-        {
-            String containerListXml = cth.retrieveContainers(list.getParameters().getParametersAsFilter());      
-            wrapper = xmlTransforming.transformToContainerListWrapper(containerListXml);
-            list = actualizeListWithNewList(list, wrapper.getContainerVOList());
-        }
-        // END Workaround for FW Bug
+        String containerListXml = cth.retrieveContainers(list.getParameters().getParametersAsFilter());      
+        wrapper = xmlTransforming.transformToContainerListWrapper(containerListXml);
+        list = actualizeListWithNewList(list, wrapper.getContainerVOList());
         
         FacesContainerListVO containerListVO = new FacesContainerListVO(list);
         
-        if (albumSession.getFilter().equalsIgnoreCase("all")) 
-        {
-        	//albumListVO.setSize(list.getList().size());
-		}
-        else
-        {
-        	containerListVO.setSize(Integer.parseInt(wrapper.getNumberOfRecords()));
-        }
+        containerListVO.setSize(Integer.parseInt(wrapper.getNumberOfRecords()));
         
         return containerListVO;
     }

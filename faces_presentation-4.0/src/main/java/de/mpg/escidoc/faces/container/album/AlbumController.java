@@ -1,9 +1,13 @@
 package de.mpg.escidoc.faces.container.album;
 
-public class AlbumController 
+import de.mpg.escidoc.faces.container.FacesContainerController;
+
+public class AlbumController extends FacesContainerController
 {
 	public AlbumController() 
 	{
-	// TODO Auto-generated constructor stub
+		super();
 	}
+	
+
 }

@@ -20,13 +20,13 @@ public class ExportBean
     private String FACES_COLLECTION_KEY = "escidoc.faces.collection.file.path";
     private String facesCollectionPath = null;
     
-    private AlbumSession albumSession = null;
+    private AlbumSessionOld albumSession = null;
     private Navigation navigation = null;
     private SessionBean sessionBean = null;
     
     public ExportBean()
     {
-        albumSession = (AlbumSession)BeanHelper.getSessionBean(AlbumSession.class);
+        albumSession = (AlbumSessionOld)BeanHelper.getSessionBean(AlbumSessionOld.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         

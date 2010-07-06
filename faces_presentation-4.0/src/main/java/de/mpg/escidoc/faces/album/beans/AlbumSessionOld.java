@@ -32,9 +32,9 @@ import de.mpg.escidoc.services.exportmanager.Export.ExportFormatTypes;
 /**
  * Session bean for all albums values.
  * @author saquet
- *
+ * @deprecated
  */
-public class AlbumSession
+public class AlbumSessionOld
 {
     /**
      * The active album.
@@ -70,7 +70,7 @@ public class AlbumSession
     /**
      * Default Constructor
      */
-    public AlbumSession()
+    public AlbumSessionOld()
     {
         active = new AlbumVO();
         current = new AlbumVO();

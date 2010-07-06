@@ -39,7 +39,7 @@
 	
 	<ui:include src="../picturesPages/ui/ActiveAlbumMenu.jspf"/>
 	
-	<h:panelGroup rendered="#{AlbumListBean.list.view == 'TABLE'}">
+	<h:panelGroup rendered="#{FacesContainerListBean.list.view == 'TABLE'}">
 		<ui:include src="ui/ContainersTableView.jspf" />
 	</h:panelGroup>
 	

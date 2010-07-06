@@ -53,8 +53,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.dom.ThisExpression;
 
-import de.mpg.escidoc.faces.album.AlbumController;
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
+import de.mpg.escidoc.faces.container.album.AlbumSession;
 import de.mpg.escidoc.faces.item.FacesItemVO;
 import de.mpg.escidoc.faces.item.ItemVO;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;

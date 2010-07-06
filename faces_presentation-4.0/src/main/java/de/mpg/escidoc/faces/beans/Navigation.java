@@ -36,8 +36,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
 import de.mpg.escidoc.faces.beans.SessionBean.pageContextEnum;
+import de.mpg.escidoc.faces.container.album.AlbumSession;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.UrlHelper;
 import de.mpg.escidoc.services.framework.PropertyReader;

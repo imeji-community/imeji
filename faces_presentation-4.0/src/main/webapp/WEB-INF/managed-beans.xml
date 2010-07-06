@@ -152,7 +152,7 @@
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>AlbumSession</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.album.beans.AlbumSession</managed-bean-class>
+		<managed-bean-class>de.mpg.escidoc.faces.container.album.AlbumSession</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>

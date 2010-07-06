@@ -30,10 +30,7 @@
 package de.mpg.escidoc.faces.container.beans;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -41,21 +38,20 @@ import javax.faces.event.ValueChangeEvent;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 
-import de.mpg.escidoc.faces.album.AlbumController;
-import de.mpg.escidoc.faces.album.AlbumVO;
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
-import de.mpg.escidoc.faces.album.list.AlbumsListController;
 import de.mpg.escidoc.faces.beans.Navigation;
 import de.mpg.escidoc.faces.beans.SessionBean;
+import de.mpg.escidoc.faces.container.album.AlbumController;
+import de.mpg.escidoc.faces.container.album.AlbumListVO;
+import de.mpg.escidoc.faces.container.album.AlbumSession;
+import de.mpg.escidoc.faces.container.album.AlbumVO;
+import de.mpg.escidoc.faces.container.list.FacesContainerListController;
 import de.mpg.escidoc.faces.item.ItemVO;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.services.common.valueobjects.metadata.CreatorVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.OrganizationVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.PersonVO;
-import de.mpg.escidoc.services.common.valueobjects.metadata.SourceVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.TextVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.CreatorVO.CreatorRole;
-import de.mpg.escidoc.services.common.valueobjects.metadata.IdentifierVO.IdType;
 
 /**
  * 
@@ -96,7 +92,7 @@ public class ViewAlbumBean
     }
     
     // Class declaration of other beans
-    private AlbumsListController albumsListController = null;
+    private FacesContainerListController controller = null;
     private AlbumController albumController = null;
     private SessionBean sessionBean = null;
     private AlbumSession albumSession = null;
@@ -117,7 +113,7 @@ public class ViewAlbumBean
         fc =  FacesContext.getCurrentInstance();
         request = (HttpServletRequest) fc.getExternalContext().getRequest();
         album = albumSession.getCurrent();
-        albumsListController = new AlbumsListController();
+        controller = new FacesContainerListController();
         albumController = new AlbumController();
         initAlbum();
     }
@@ -139,7 +135,7 @@ public class ViewAlbumBean
             {
                 try 
                 {
-					album = albumController.retrieve(albumId, sessionBean.getUserHandle());
+					album = (AlbumVO) albumController.retrieve(albumId, sessionBean.getUserHandle());
 				} 
                 catch (Exception e) 
                 {
@@ -345,7 +341,7 @@ public class ViewAlbumBean
                                 
                 AlbumController controller = new AlbumController();
                 album.getMetadataSets().add(album.getMdRecord());
-                album = controller.create(album, sessionBean.getUserHandle());
+                album = (AlbumVO) controller.create(album, sessionBean.getUserHandle());
             }
             catch (Exception e)
             {
@@ -394,12 +390,11 @@ public class ViewAlbumBean
                     creators.add(creatorVO.getPerson());
                 }
                 // edit in the FW
-                AlbumController controller = new AlbumController();
-                controller.edit(album.clone(), sessionBean.getUserHandle());
+                AlbumController albumController = new AlbumController();
+                albumController.edit(album.clone(), sessionBean.getUserHandle());
                 
                 // update the lists
-                albumSession.setMyAlbums(
-                        albumsListController.retrieve(
+                albumSession.setMyAlbums((AlbumListVO) controller.retrieve(
                                 albumSession.getMyAlbums()
                                 , sessionBean.getUserHandle()));
                

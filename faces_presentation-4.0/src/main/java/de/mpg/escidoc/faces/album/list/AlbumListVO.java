@@ -11,7 +11,7 @@ import de.mpg.escidoc.faces.album.list.util.AlbumListParameters;
 /**
  * 
  * @author saquet
- *
+ * @deprecated
  */
 public class AlbumListVO
 {

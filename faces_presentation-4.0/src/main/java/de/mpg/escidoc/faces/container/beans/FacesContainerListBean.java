@@ -13,10 +13,10 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
 import de.mpg.escidoc.faces.beans.Navigation;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
+import de.mpg.escidoc.faces.container.album.AlbumSession;
 import de.mpg.escidoc.faces.container.collection.CollectionSession;
 import de.mpg.escidoc.faces.container.list.FacesContainerListController;
 import de.mpg.escidoc.faces.container.list.FacesContainerListParameters;
@@ -32,7 +32,7 @@ public class FacesContainerListBean
 {
 	public enum ContainerListType
 	{
-		MYALBUMS, COLLECTIONS, PUBLISHEDALBUMS;
+		ALBUMS, COLLECTIONS, PUBLICATIONS;
 	}
 	
 	private static final int DISPLAYED_PAGES = 5;
@@ -45,13 +45,14 @@ public class FacesContainerListBean
 	private AlbumSession albumSession = null;
 		
 	private String url = null;
-	
+	private ContainerListType type = ContainerListType.COLLECTIONS;
 	//All menus if the page
     private List<SelectItem> showMenu = null;
     private List<SelectItem> viewMenu = null;
     private List<SelectItem> sortMenu = null;
     private List<SelectItem> filterMenu = null;
     private Map<String, String> columnSortValuesMap;
+    
 	
 	public FacesContainerListBean() 
 	{
@@ -82,14 +83,17 @@ public class FacesContainerListBean
 			if (ContainerListType.COLLECTIONS.name().equalsIgnoreCase(request.getParameter("list"))) 
             {
             	list = collectionSession.getCollectionList();
+            	type = ContainerListType.COLLECTIONS;
 			}
-            if (ContainerListType.MYALBUMS.name().equalsIgnoreCase(request.getParameter("list"))) 
+            if (ContainerListType.ALBUMS.name().equalsIgnoreCase(request.getParameter("list"))) 
             {
-            	//list = albumSession.getMyAlbums();
+            	list = albumSession.getMyAlbums();
+            	type = ContainerListType.ALBUMS;
 			}
-            if (ContainerListType.PUBLISHEDALBUMS.name().equalsIgnoreCase(request.getParameter("list"))) 
+            if (ContainerListType.PUBLICATIONS.name().equalsIgnoreCase(request.getParameter("list"))) 
             {
-            	//list = albumSession.getPublished();
+            	list = albumSession.getPublished();
+            	type = ContainerListType.PUBLICATIONS;
 			}
 		}
 		
@@ -132,12 +136,26 @@ public class FacesContainerListBean
         
         if (request.getParameter("tab") != null)
         {
-           albumSession.setSelectedMenu(request.getParameter("tab"));
+        	if (ContainerListType.COLLECTIONS.equals(type)) 
+        	{
+        		collectionSession.setSelectedMenu(request.getParameter("tab"));
+			}
+        	else 
+        	{
+        		albumSession.setSelectedMenu(request.getParameter("tab"));
+			}
         }
         
         if (request.getParameter("filter") != null) 
         {
-        	albumSession.setFilter(request.getParameter("filter"));
+        	if (ContainerListType.COLLECTIONS.equals(type)) 
+        	{
+        		collectionSession.setSelectedMenu(request.getParameter("filter"));
+			}
+        	else 
+        	{
+        		albumSession.setFilter(request.getParameter("filter"));
+			}
 		}
         
         if (request.getParameter("query") != null) 
@@ -240,14 +258,17 @@ public class FacesContainerListBean
     public int getTotalNumberOfPages()
     {
         int result = list.getSize() / list.getParameters().getShow();
+        
         if (result * list.getParameters().getShow() < list.getSize())
         {
             result++;
         }
+        
         if (result < 1)
         {
             result =1;
         }
+        
         return result;
     }
     
@@ -324,12 +345,14 @@ public class FacesContainerListBean
         List<SelectItem> pages = new ArrayList<SelectItem>();
         
         int minPage = 1;
+        
         if (list.getParameters().getPage() > DISPLAYED_PAGES / 2 + 1)
         {
             minPage = list.getParameters().getPage() - (int) (DISPLAYED_PAGES / 2);
         }
         
         int maxPage = minPage + DISPLAYED_PAGES - 1;
+        
         if (maxPage >= getTotalNumberOfPages())
         {
             maxPage = getTotalNumberOfPages();
@@ -349,6 +372,7 @@ public class FacesContainerListBean
                         , list.getParameters().getOrderBy())
                     , Integer.toString(minPage + i)));
         }
+        
         return pages;
     }
     
@@ -437,20 +461,27 @@ public class FacesContainerListBean
 	
 	public String getUrl(int page, int show, ViewType view, SortParameterType sortBy, OrderParameterType orderBy)
     {
-        String url = navigation.getAlbumsUrl();
+        String url = navigation.getApplicationUrl();
         
-        if (getListType().equals("search")) 
+        switch (type) 
         {
-			url = navigation.getAlbumsSearchUrl();
+			case ALBUMS:
+				url += ContainerListType.ALBUMS.name();
+				break;
+			case COLLECTIONS:
+				url += ContainerListType.COLLECTIONS.name();
+				break;
+			case PUBLICATIONS:
+				url += ContainerListType.PUBLICATIONS.name();
+				break;
+			default:
+				url += "";
+				break;
 		}
         
-        url += "/" + view.name() + 
-            "/" + page + 
-            "/" + show + 
-            "/" + sortBy.name() + 
-            "/" + orderBy.name();
+        url += "?view=" + view.name() + "&page=" + page + "&show=" + show + "&sort=" + sortBy.name() + "&order=" + orderBy.name();
         
-        return url;
+        return url.toLowerCase();
     }
 	
 	 /**

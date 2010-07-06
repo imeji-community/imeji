@@ -15,7 +15,7 @@ import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
 
 import de.mpg.escidoc.faces.album.AlbumVO;
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
+import de.mpg.escidoc.faces.album.beans.AlbumSessionOld;
 import de.mpg.escidoc.faces.album.list.AlbumListVO;
 import de.mpg.escidoc.faces.album.list.AlbumsListController;
 import de.mpg.escidoc.faces.album.list.AlbumListVO.ViewType;
@@ -74,7 +74,7 @@ public class AlbumListBean
     private String listType = "filter";
 
 	//Other bean declaration
-    private AlbumSession albumSession = null;
+    private AlbumSessionOld albumSession = null;
     private SessionBean sessionBean = null;
     private Navigation navigation = null;
     private XmlTransforming xmlTransforming = null; 
@@ -85,7 +85,7 @@ public class AlbumListBean
      */
     public AlbumListBean() throws Exception
     {
-        albumSession = (AlbumSession)BeanHelper.getSessionBean(AlbumSession.class);
+        albumSession = (AlbumSessionOld)BeanHelper.getSessionBean(AlbumSessionOld.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         InitialContext context = new InitialContext();

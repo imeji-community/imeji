@@ -40,7 +40,7 @@
 	<ui:composition template="template.xhtml">	
 		
 		<ui:define name="contentMenu">
-			
+			<h:outputText value="#{Session.selectedMenu}"/>
 			<h:outputText value="#{FacesContainerListBean.init}" styleClass="noDisplay" />
 			<h:outputLink id="lnkFilter" styleClass="free_area0" value="?tab=FILTER" rendered="#{SessionBean.user != null and Session.selectedMenu != 'FILTER' and FacesContainerListBean.listType != 'search'}">
 				<h:outputText value="#{lbl.filter}"/>

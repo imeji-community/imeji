@@ -40,39 +40,39 @@
 	<h:panelGroup layout="block" styleClass="full_area0 paginator">
 
 		<h:panelGroup layout="block" styleClass="large_area0 small_marginLIncl rangeSelector">
-			<h:selectOneMenu id="selNumberOfHitsList" value="#{AlbumListBean.firstPage}" styleClass="free_select" onchange="location.href=this.value">
-				<f:selectItems id="selNumberOfHits" value="#{AlbumListBean.showMenu}"/>
+			<h:selectOneMenu id="selNumberOfHitsList" value="#{FacesContainerListBean.firstPage}" styleClass="free_select" onchange="location.href=this.value">
+				<f:selectItems id="selNumberOfHits" value="#{FacesContainerListBean.showMenu}"/>
 			</h:selectOneMenu>
-			<h:outputLabel id="lblNumberOfHitsList" styleClass="free_label hitsLabel" value="of #{AlbumListBean.list.size} hits" />
+			<h:outputLabel id="lblNumberOfHitsList" styleClass="free_label hitsLabel" value="of #{FacesContainerListBean.list.size} hits" />
 		</h:panelGroup>
 
 		<h:panelGroup layout="block" styleClass="small_marginLExcl pageBrowser">
 
-			<h:outputLink id="lnkPaginatorFirst" type="submit" styleClass="min_imgBtn skipToFirst" value="#{AlbumListBean.firstPage}" disabled="#{(AlbumListBean.url == AlbumListBean.firstPage)}">
+			<h:outputLink id="lnkPaginatorFirst" type="submit" styleClass="min_imgBtn skipToFirst" value="#{FacesContainerListBean.firstPage}" disabled="#{(FacesContainerListBean.url == FacesContainerListBean.firstPage)}">
 				<h:outputText value=" "></h:outputText>
 			</h:outputLink>
-			<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{AlbumListBean.previousPage}" disabled="#{AlbumListBean.previousPage == AlbumListBean.url}">
+			<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{FacesContainerListBean.previousPage}" disabled="#{FacesContainerListBean.previousPage == FacesContainerListBean.url}">
 				<h:outputText value="#{lbl.paginatorButton_prev_label}"></h:outputText>
 			</h:outputLink>
 			
 			<h:panelGroup styleClass="seperator" />
 
-			<tr:iterator id="PaginatorPageList" var="page" value="#{AlbumListBean.pages}">
+			<tr:iterator id="PaginatorPageList" var="page" value="#{FacesContainerListBean.pages}">
 				<h:panelGroup>
-					<h:outputLink id="lnkPaginatorPageActive" value="#{page.value}" rendered="#{(AlbumListBean.url != page.value)}" styleClass="xSmall_txtBtn">
+					<h:outputLink id="lnkPaginatorPageActive" value="#{page.value}" rendered="#{(FacesContainerListBean.url != page.value)}" styleClass="xSmall_txtBtn">
 						<h:outputText value="#{page.label}"></h:outputText>
 					</h:outputLink>
-					<h:outputLink id="lnkPaginatorPageInactive" value="#{page.label}" disabled="true" rendered="#{AlbumListBean.url == page.value}" styleClass="xSmall_txtBtn actual">
+					<h:outputLink id="lnkPaginatorPageInactive" value="#{page.label}" disabled="true" rendered="#{FacesContainerListBean.url == page.value}" styleClass="xSmall_txtBtn actual">
 						<h:outputText value="#{page.label}"></h:outputText>
 					</h:outputLink>
 					<h:panelGroup styleClass="seperator" rendered="true"></h:panelGroup>
 				</h:panelGroup>
 			</tr:iterator>
 			
-			<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{AlbumListBean.nextPage}" disabled="#{AlbumListBean.url == AlbumListBean.nextPage}">
+			<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{FacesContainerListBean.nextPage}" disabled="#{FacesContainerListBean.url == FacesContainerListBean.nextPage}">
 				<h:outputText value="#{lbl.paginatorButton_next_label}"></h:outputText>
 			</h:outputLink>
-			<h:outputLink id="lnkPaginatorLast" type="submit" styleClass="min_imgBtn skipToLast" value="#{AlbumListBean.lastPage}" disabled="#{AlbumListBean.url == AlbumListBean.lastPage}">
+			<h:outputLink id="lnkPaginatorLast" type="submit" styleClass="min_imgBtn skipToLast" value="#{FacesContainerListBean.lastPage}" disabled="#{FacesContainerListBean.url == FacesContainerListBean.lastPage}">
 				<h:outputText value=" "></h:outputText>
 			</h:outputLink>
 			
@@ -80,9 +80,9 @@
 
 		<h:panelGroup layout="block" styleClass="gotoBox">
 			<h:outputLabel id="lblGoTo" styleClass="free_label" value="Go to page" />
-			<h:inputText id="inpGoTo" value="" styleClass="tiny_txtInput" onkeypress="if (event.keyCode == 13 and this.value != '') { form.submit()}" onfocus="this.select()" valueChangeListener="#{AlbumListBean.goToPage}"/>
+			<h:inputText id="inpGoTo" value="" styleClass="tiny_txtInput" onkeypress="if (event.keyCode == 13 and this.value != '') { form.submit()}" onfocus="this.select()" valueChangeListener="#{FacesContainerListBean.goToPage}"/>
 			<h:outputLabel styleClass="free_label" value="of" />
-			<h:outputLabel id="lblNumberOfPages" styleClass="free_label" value="#{AlbumListBean.totalNumberOfPages}" />
+			<h:outputLabel id="lblNumberOfPages" styleClass="free_label" value="#{FacesContainerListBean.totalNumberOfPages}" />
 		</h:panelGroup>
 
 	</h:panelGroup>

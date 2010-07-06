@@ -10,7 +10,7 @@ import javax.naming.NamingException;
 
 import de.escidoc.www.services.om.ContainerHandler;
 import de.mpg.escidoc.faces.album.AlbumVO;
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
+import de.mpg.escidoc.faces.album.beans.AlbumSessionOld;
 import de.mpg.escidoc.faces.album.list.AlbumListVO.HandlerType;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.util.BeanHelper;
@@ -23,7 +23,7 @@ import de.mpg.escidoc.services.framework.ServiceLocator;
 /**
  * 
  * @author saquet
- *
+ * @deprecated
  */
 public class AlbumsListController
 {
@@ -72,7 +72,7 @@ public class AlbumsListController
      */
     public AlbumListVO filter(AlbumListVO list, String userHandle) throws Exception
     {       
-        AlbumSession albumSession = (AlbumSession)BeanHelper.getSessionBean(AlbumSession.class);  
+        AlbumSessionOld albumSession = (AlbumSessionOld)BeanHelper.getSessionBean(AlbumSessionOld.class);  
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         ContainerVOListWrapper wrapper = null;
         InitialContext context = new InitialContext();
@@ -198,6 +198,7 @@ public class AlbumsListController
      * @param parameters
      * @param userHandle
      * @return
+     * {@link Deprecated}
      */
     public AlbumListVO search(AlbumListVO list, String userHandle) throws Exception
     {
@@ -210,7 +211,7 @@ public class AlbumsListController
                     , list.getParameters().getParametersAsSortingQuery()
                     , "escidoc_all");
         
-        list.setList(queryHelper.getAlbums());  
+        //list.setList(queryHelper.getAlbums());  
         
         AlbumListVO albumListVO = new AlbumListVO(list);
         albumListVO.setSize(queryHelper.getTotalNumberOfItems());

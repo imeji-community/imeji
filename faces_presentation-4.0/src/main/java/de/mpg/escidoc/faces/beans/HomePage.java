@@ -47,10 +47,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import de.escidoc.www.services.om.ItemHandler;
-import de.mpg.escidoc.faces.album.AlbumController;
-import de.mpg.escidoc.faces.album.AlbumVO;
-import de.mpg.escidoc.faces.album.beans.AlbumSession;
 import de.mpg.escidoc.faces.beans.SessionBean.pageContextEnum;
+import de.mpg.escidoc.faces.container.album.AlbumController;
+import de.mpg.escidoc.faces.container.album.AlbumSession;
+import de.mpg.escidoc.faces.container.album.AlbumVO;
 import de.mpg.escidoc.faces.item.ItemVO;
 import de.mpg.escidoc.faces.search.Search;
 import de.mpg.escidoc.faces.util.BeanHelper;
@@ -274,7 +274,7 @@ public class HomePage
         boolean resourceFound = false;
         try
         {
-            album = albumController.retrieve(resourceId, sessionBean.getUserHandle());
+            album = (AlbumVO) albumController.retrieve(resourceId, sessionBean.getUserHandle());
             resourceFound = true;
         }
         catch (Exception e)

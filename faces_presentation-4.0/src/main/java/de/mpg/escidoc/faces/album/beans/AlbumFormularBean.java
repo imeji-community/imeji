@@ -98,7 +98,7 @@ public class AlbumFormularBean
     private AlbumsListController albumsListController = null;
     private AlbumController albumController = null;
     private SessionBean sessionBean = null;
-    private AlbumSession albumSession = null;
+    private AlbumSessionOld albumSession = null;
     private Navigation navigation = null;
     private HttpServletRequest request = null;
     private FacesContext fc = null;
@@ -111,7 +111,7 @@ public class AlbumFormularBean
     {
         // Get the beans instance
         sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-        albumSession = (AlbumSession) BeanHelper.getSessionBean(AlbumSession.class);
+        albumSession = (AlbumSessionOld) BeanHelper.getSessionBean(AlbumSessionOld.class);
         navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
         fc =  FacesContext.getCurrentInstance();
         request = (HttpServletRequest) fc.getExternalContext().getRequest();

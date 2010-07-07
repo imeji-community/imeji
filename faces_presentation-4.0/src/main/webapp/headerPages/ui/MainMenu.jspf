@@ -42,14 +42,20 @@
 	</h:outputLink>
 	<h:outputText id="txtHomeInactive" styleClass="free_area0" value="Home" rendered="false" />
 
+	<h:outputLink id="lnkCollections" value="#{Navigation.collectionsUrl}">
+		<h:outputText value="#{lbl.header_collections}"></h:outputText>
+	</h:outputLink>
+	<h:outputText id="lnkCollectionsInactive" styleClass="free_area0" value="#{lbl.header_collections}" rendered="false" />
+	
 	<h:outputLink id="lnkBrowse" styleClass="free_area0" value="#{Navigation.browseUrl}" rendered="true">
   		<h:outputText value="#{lbl.header_browse}"/>
   	</h:outputLink>	
 	<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.browse}" rendered="false" />
 
-	<h:outputLink id="lnkMyAlbums" value="#{Navigation.albumsUrl}">
+	<h:outputLink id="lnkAlbums" value="#{Navigation.albumsUrl}">
 		<h:outputText value="#{lbl.header_albums}"></h:outputText>
 	</h:outputLink>
+	
 	<h:outputText id="txtMyAlbumsInactive" styleClass="free_area0" value="My Albums" rendered="false" />
 
 	<h:outputLink id="lnkStatistics" value="#{Navigation.statisticsUrl}/visit" rendered="#{SessionBean.admin and SessionBean.user != null}">

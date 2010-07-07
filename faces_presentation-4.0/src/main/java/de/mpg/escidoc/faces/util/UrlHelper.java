@@ -544,4 +544,9 @@ public class UrlHelper
         this.resource = resource;
     }
     
+    public String getCollection()
+    {
+    	return readSimpleParameter("collection");
+    }
+    
 }

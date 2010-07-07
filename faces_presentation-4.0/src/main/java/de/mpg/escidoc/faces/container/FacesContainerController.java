@@ -86,18 +86,18 @@ public class FacesContainerController
      */
     public FacesContainerVO retrieve(String id, String userHandle) throws Exception
     {       
-           ContainerHandler handler = ServiceLocator.getContainerHandler();
+         ContainerHandler handler = ServiceLocator.getContainerHandler();
             
-            if (userHandle != null)
-            {
-                handler = ServiceLocator.getContainerHandler(userHandle);
-            }
-            
-            String facesContainerXml= handler.retrieve(id);
-            
-            ContainerVO containerVo = xmlTransforming.transformToContainer(facesContainerXml);
-            
-            facesContainer = new FacesContainerVO(containerVo);
+        if (userHandle != null)
+        {
+            handler = ServiceLocator.getContainerHandler(userHandle);
+        }
+        
+        String facesContainerXml= handler.retrieve(id);
+        
+        ContainerVO containerVo = xmlTransforming.transformToContainer(facesContainerXml);
+        
+        facesContainer = new FacesContainerVO(containerVo);
 
         return facesContainer;
     }

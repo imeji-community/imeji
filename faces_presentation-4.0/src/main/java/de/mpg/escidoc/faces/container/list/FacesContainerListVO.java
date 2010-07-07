@@ -34,7 +34,7 @@ public class FacesContainerListVO
     /**
      * The list of Containers.
      */
-    private List<FacesContainerVO> list = new ArrayList<FacesContainerVO>();
+    protected List<FacesContainerVO> list = new ArrayList<FacesContainerVO>();
     /**
      * The value for drop down menu
      */

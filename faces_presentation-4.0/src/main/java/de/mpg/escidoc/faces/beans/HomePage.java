@@ -196,11 +196,14 @@ public class HomePage
             Search search = new Search();
             currentQuery = search.run();
             queryDisplayed = search.getPrettyQuery();
+           
             if (search.getCollectionVO() != null)
             {
                 collectionName = search.getCollectionVO().getMdRecord().getTitle().getValue();
             }
+            
             sessionBean.setUrlQuery(urlHelper.getQuery());
+            
             if (search.getError() != null)
             {
                 executeQuery = false;
@@ -220,7 +223,7 @@ public class HomePage
             album = albumSession.getCurrent();
             currentQuery = queryHelper.createAlbumQuery(album);
         }
-        
+                
         // Resource requested.
         if (urlHelper.getResource() != null)
         {
@@ -239,6 +242,7 @@ public class HomePage
                 }
                 albumSession.setCurrent(album);
             }
+            
             if ("item".equals(resourceType))
             {
                 currentQuery = "escidoc.objid=" + urlHelper.getResource();
@@ -246,6 +250,7 @@ public class HomePage
                 albumSession.setCurrent(album);
                 sessionBean.setMessage(null);
             }
+            
             if (resourceType == null)
             {
                 currentQuery = "(escidoc.objid=000)";

@@ -105,6 +105,16 @@ public class CollectionController extends FacesContainerController
 	}
 	
 	/**
+	 * @override
+	 */
+	public  CollectionVO retrieve(String id, String userHandle) throws Exception
+	{
+		FacesContainerVO fc = super.retrieve(id, userHandle);
+		
+		return new CollectionVO(fc);
+	}
+	
+	/**
 	 * TODO: Validate the {@link CollectionVO} against it's validation rules.
 	 * 
 	 * @param collectionVO

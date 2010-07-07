@@ -123,6 +123,7 @@
 			</tr>
 		</thead>
 		<tbody style="text-align: left; vertical-align:top;">
+			
 			<h:panelGroup rendered="#{FacesContainerListBean.listType == 'search'}">
 				<tr class="full_area0 listItem">
 					<td colspan="7" class="free_area0 endline">
@@ -144,70 +145,81 @@
 					</td>
 				</tr>
 			</h:panelGroup>
-			<tr:iterator var="album" value="#{FacesContainerListBean.list.list}" id="list" rows="0">
+			
+			<tr:iterator var="container" value="#{FacesContainerListBean.list.list}" id="list" rows="0">
 				<h:panelGroup>
 				   
-				    <tr class="full_0area0 listItem #{album.version.objectId == AlbumSession.active.version.objectId ? 'activeAlbum' : ''}">
+				    <tr class="full_0area0 listItem #{container.version.objectId == AlbumSession.active.version.objectId ? 'activeAlbum' : ''}">
 				      	
 				      	<td class="free_area0 endline">
 				      		<span class="free_area0_p8 endline itemSelectArea">
-								<tr:selectBooleanCheckbox id="selAlbum" simple="true" styleClass="itemCheckBox" value="#{album.selected}" immediate="true" valueChangeListener="#{FacesContainerListBean.selectAlbum}" onclick="saveScrollCoordinates()" rendered="#{album.state == 'PENDING'}">
-									<f:attribute value="#{album}" name="album"/>
+								<tr:selectBooleanCheckbox id="selAlbum" simple="true" styleClass="itemCheckBox" value="#{container.selected}" immediate="true" valueChangeListener="#{FacesContainerListBean.selectAlbum}" onclick="saveScrollCoordinates()" rendered="#{container.state == 'PENDING'}">
+									<f:attribute value="#{container}" name="album"/>
 								</tr:selectBooleanCheckbox>
 								&#160;
 				      		</span>
 				      	</td>
+				      	
 				      	<td class="free_area0 endline status">
 				      		<span class="seperator"></span>
 				      		<span class="free_area0_p8 endline statusArea">
-								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{album.state == 'WITHDRAWN'}" />
-								<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{album.state == 'PENDING'}" />
-								<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{album.state == 'RELEASED'}" />
-								<h:outputLabel styleClass="medium_label endline" rendered="#{album.state == 'PENDING'}">
+								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.state == 'WITHDRAWN'}" />
+								<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.state == 'PENDING'}" />
+								<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.state == 'RELEASED'}" />
+								<h:outputLabel styleClass="medium_label endline" rendered="#{container.state == 'PENDING'}">
 									<h:outputText value="#{lbl.private}" />
 								</h:outputLabel>
-								<h:outputLabel styleClass="medium_label endline" rendered="#{album.state == 'RELEASED'}">
+								<h:outputLabel styleClass="medium_label endline" rendered="#{container.state == 'RELEASED'}">
 									<h:outputText value="#{lbl.published}" />
 								</h:outputLabel>
-								<h:outputLabel styleClass="medium_label endline" rendered="#{album.state == 'WITHDRAWN'}">
+								<h:outputLabel styleClass="medium_label endline" rendered="#{container.state == 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.withdrawn}" />
 								</h:outputLabel>
 							</span>
 				      	</td>
+				      	
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="free_area0_p8 itemHeadline">
-								<h:outputLink id="lnkAlbumUrl" value="#{Navigation.applicationUrl}album/#{album.latestVersion.objectId}/#{Navigation.defaultBrowsingKeepShowAlbum}">
-									<b><h:outputText value="#{album.mdRecord.title.value}" /></b>
+								<h:outputLink rendered="#{FacesContainerListBean.type != 'COLLECTIONS'}" id="lnkAlbumUrl" value="#{Navigation.applicationUrl}album/#{container.latestVersion.objectId}/#{Navigation.defaultBrowsingKeepShowAlbum}">
+									<b><h:outputText value="#{container.mdRecord.title.value}" /></b>
+								</h:outputLink>
+								<h:outputLink rendered="#{FacesContainerListBean.type == 'COLLECTIONS'}" id="lnkCollectionUrl" value="#{Navigation.applicationUrl}collection/#{container.latestVersion.objectId}">
+									<b><h:outputText value="#{container.mdRecord.title.value}" /></b>
 								</h:outputLink>
 				      		</span>
 				      	</td>
+						
 						<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="large_area0_p8">
-				      			<h:outputText value="#{album.creator}"/>&#160;
+				      			<h:outputText value="#{container.creator}"/>&#160;
 				      		</span>
 				      	</td>
+				      	
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="small_area0_p8">
-				      			<h:outputText value="#{album.size}"/>&#160;
+				      			<h:outputText value="#{container.size}"/>&#160;
 				      		</span>
 				      	</td>
+				      	
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
-					      	<h:outputText styleClass="large_area0_p8" escape="false" title="#{album.mdRecord.abstracts[0].value}" value="#{album.shortDescription} &#160;"/>
+					      	<h:outputText styleClass="large_area0_p8" escape="false" title="#{container.mdRecord.abstracts[0].value}" value="#{container.shortDescription} &#160;"/>
 					    </td>
+				      	
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="medium_area0_p8">
-				      			<h:outputText value="#{album.modificationDate}"/>&#160;
+				      			<h:outputText value="#{container.modificationDate}"/>&#160;
 				      		</span>
 				      	</td>
+				      	
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="medium_area0_p8 endline filesSection">
-				      			<h:outputLink id="lnkActiveAlbum" value="#{FacesContainerListBean.url}/active/#{album.version.objectId}" rendered="#{album.state == 'PENDING' and album.version.objectId != AlbumSession.active.version.objectId}" onclick="saveScrollCoordinates()">
+				      			<h:outputLink id="lnkActiveAlbum" value="#{FacesContainerListBean.url}/active/#{container.version.objectId}" rendered="#{container.state == 'PENDING' and container.version.objectId != AlbumSession.active.version.objectId}" onclick="saveScrollCoordinates()">
 									<h:outputText value="#{lbl.make_active}"></h:outputText>
 								</h:outputLink>
 								&#160;

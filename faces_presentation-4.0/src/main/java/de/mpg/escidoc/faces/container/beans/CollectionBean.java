@@ -9,6 +9,7 @@ import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
 import de.mpg.escidoc.faces.beans.SessionBean;
+import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.collection.CollectionController;
 import de.mpg.escidoc.faces.container.collection.CollectionSession;
 import de.mpg.escidoc.faces.container.collection.CollectionVO;
@@ -71,25 +72,33 @@ public class CollectionBean
 	 */
 	public void init() throws Exception
 	{
-		String collectionId = request.getParameter("collection");
+		String collectionId = request.getParameter("id");
+		String page = request.getParameter("page");
 		
-		if (collectionId != null) 
+		if (collectionId != null && CollectionPageType.EDIT.name().equalsIgnoreCase(page)) 
 		{
 			pageType = CollectionPageType.EDIT;
-			collection = collectionSession.getCurrent();
+			collection = collectionController.retrieve(collectionId, sessionBean.getUserHandle());
+		}
+		else if (collectionId != null && CollectionPageType.VIEW.name().equalsIgnoreCase(page))
+		{
+			pageType = CollectionPageType.VIEW;
+			collection = collectionController.retrieve(collectionId, sessionBean.getUserHandle());
 		}
 		else 
 		{
 			pageType = CollectionPageType.CREATE;
 			collection = new CollectionVO(collectionSession.getCurrent().getScreenConfiguration());
-			collectionSession.setCurrent(collection);
 		}
 		
-		for (CollectionVO c : collectionSession.getCollectionList().getCollectionVOList()) 
+		collectionSession.setCurrent(collection);
+		
+		
+		for (FacesContainerVO c : collectionSession.getCollectionList().getList()) 
 		{
 			collectionsMenu.add(
-					new SelectItem(c.getScreenConfiguration().getScreenId()
-					, c.getScreenConfiguration().getResourceClass()));
+					new SelectItem(c.getContentModel()
+					, c.getMdRecord().getTitle().getValue()));
 		}
 	}
 	

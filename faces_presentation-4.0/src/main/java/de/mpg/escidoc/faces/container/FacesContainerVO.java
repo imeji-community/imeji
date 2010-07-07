@@ -33,6 +33,7 @@ public class FacesContainerVO extends ContainerVO
 		super();
         mdRecord = new MdsFacesContainerVO();
 	}
+	
 
 	public FacesContainerVO(ContainerVO ct) 
 	{
@@ -101,6 +102,7 @@ public class FacesContainerVO extends ContainerVO
         this.selected = selected;
     }
     
+
     /**
      * Returns a shorter description for albums list menu.
      * @return

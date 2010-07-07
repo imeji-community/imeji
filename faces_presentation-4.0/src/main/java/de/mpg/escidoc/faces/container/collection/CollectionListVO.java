@@ -7,17 +7,22 @@ import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.list.FacesContainerListParameters;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO;
 
+/**
+ * 
+ * @author saquet
+ *
+ */
 public class CollectionListVO extends FacesContainerListVO
 {
+	
 	public CollectionListVO() 
 	{
 		super();
 	}
-	
+		
 	public CollectionListVO(List<FacesContainerVO> list, FacesContainerListParameters filter, HandlerType type)
 	{
-		super(list,  filter, type);
-		this.setName("Collections");
+		super(list, filter, type);
 	}
 
 	/**
@@ -34,13 +39,4 @@ public class CollectionListVO extends FacesContainerListVO
 		
 		return list;
 	}
-
-	/**
-	 * @param list of {@link CollectionVO}
-	 */
-	public void setCollectionVOList(List<CollectionVO> list) 
-	{
-		super.getList().addAll(list);
-	}
-	
 }

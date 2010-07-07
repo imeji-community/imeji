@@ -176,6 +176,21 @@ public class Navigation
         return applicationUrl + "albums";
     }
     
+    public String getCollectionsUrl()
+    {
+    	 return applicationUrl + "collections";
+    }
+    
+    public String getCollectionUrl()
+    {
+    	return applicationUrl + "collection";
+    }
+    
+    public String getPublicationsUrl()
+    {
+    	 return applicationUrl + "publications";
+    }
+    
     public String getAlbumsSearchUrl()
     {
         return applicationUrl + "albums/search";

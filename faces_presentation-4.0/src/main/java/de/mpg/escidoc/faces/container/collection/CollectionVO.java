@@ -36,7 +36,12 @@ public class CollectionVO extends FacesContainerVO
 		// TODO: change that.
 		this.mdProfileId = "escidoc:faces50";
 	}
-
+	
+	public CollectionVO(FacesContainerVO fc)
+	{
+		super(fc);
+	}
+	
 	public ScreenConfiguration getScreenConfiguration() 
 	{
 		return screenConfiguration;

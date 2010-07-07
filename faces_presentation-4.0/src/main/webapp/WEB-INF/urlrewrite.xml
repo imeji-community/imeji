@@ -231,15 +231,26 @@
     <!-- Albums Page -->
     <rule>
     	<from casesensitive="false">^/albums$</from>
-    	<to>/jsf/Containers.xhtml?list=albums&amp;currentUrl=albums</to>
+    	<to>/jsf/Albums.xhtml?list=albums&amp;currentUrl=albums</to>
     </rule>
      <rule>
     	<from casesensitive="false">^/publications$</from>
-    	<to>/jsf/Containers.xhtml?list=publications&amp;currentUrl=publications</to>
+    	<to>/jsf/Publications.xhtml?list=publications&amp;currentUrl=publications</to>
     </rule>
-     <rule>
+    <rule>
     	<from casesensitive="false">^/collections$</from>
-    	<to>/jsf/Containers.xhtml?list=collections&amp;currentUrl=collections</to>
+    	<to>/jsf/Collections.xhtml?list=collections&amp;currentUrl=collections</to>
+    </rule>
+    
+    <!-- Collections Page -->
+    <rule>
+    	<from casesensitive="false">^/collection$</from>
+    	<to>/jsf/CollectionEditPage.xhtml?&amp;currentUrl=editCollection</to>
+    </rule>
+    
+    <rule match-type="wildcard">
+    	<from casesensitive="false">/collection/*</from>
+    	<to>/jsf/CollectionEntryPage.xhtml?page=view&amp;currentUrl=collections&amp;id=$1</to>
     </rule>
     
      <!-- Default Browsing with active album -->

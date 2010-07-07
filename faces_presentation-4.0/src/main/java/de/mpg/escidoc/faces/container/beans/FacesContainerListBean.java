@@ -703,6 +703,20 @@ public class FacesContainerListBean
 	public void setColumnSortValuesMap(Map<String, String> columnSortValuesMap) {
 		this.columnSortValuesMap = columnSortValuesMap;
 	}
+
+	/**
+	 * @return the type
+	 */
+	public ContainerListType getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(ContainerListType type) {
+		this.type = type;
+	}
 	
 	
 }

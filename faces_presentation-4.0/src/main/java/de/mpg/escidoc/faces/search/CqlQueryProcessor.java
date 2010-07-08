@@ -6,8 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.mpg.escidoc.faces.album.AlbumController;
-import de.mpg.escidoc.faces.album.AlbumVO;
+
+import de.mpg.escidoc.faces.container.album.AlbumController;
+import de.mpg.escidoc.faces.container.album.AlbumVO;
 import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.search.helper.MetadataComparator;
 
@@ -61,21 +62,21 @@ public class CqlQueryProcessor
 	 */
 	public CqlQueryProcessor(UrlQueryParser urlQueryParser)
 	{
-		this();
-		params.addAll(urlQueryParser.getSearchParameterMap().values());
-		
-		if (urlQueryParser.getCollectionId() != null) 
-        {
-        	AlbumController albumController = new AlbumController();
-        	try 
-        	{
-				collectionVO = albumController.retrieve(urlQueryParser.getCollectionId(), null);
-			} 
-        	catch (Exception e) 
-        	{
-				throw new RuntimeException(e);
-			}
-        }
+            this();
+            params.addAll(urlQueryParser.getSearchParameterMap().values());
+            
+            if (urlQueryParser.getCollectionId() != null) 
+            {
+                AlbumController albumController = new AlbumController();
+                try 
+                {
+            	collectionVO = (AlbumVO) albumController.retrieve(urlQueryParser.getCollectionId(), null);
+                } 
+                catch (Exception e) 
+                {
+            	throw new RuntimeException(e);
+                }
+            }
 	}
 
 	/**

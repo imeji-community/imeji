@@ -52,6 +52,10 @@ import de.mpg.escidoc.faces.container.album.AlbumController;
 import de.mpg.escidoc.faces.container.album.AlbumSession;
 import de.mpg.escidoc.faces.container.album.AlbumVO;
 import de.mpg.escidoc.faces.item.ItemVO;
+import de.mpg.escidoc.faces.pictures.Browse;
+import de.mpg.escidoc.faces.pictures.BrowseParameters;
+import de.mpg.escidoc.faces.pictures.BrowseSession;
+import de.mpg.escidoc.faces.pictures.SortingParameter;
 import de.mpg.escidoc.faces.search.Search;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.QueryHelper;
@@ -97,6 +101,10 @@ public class HomePage
     private String resolveAlbum = "";
     private List<SelectItem> multipleAddList  = null;
     private List<SelectItem> multipleDeleteList = null;
+    private HttpServletRequest request = null;
+    
+    private BrowseSession browseSession = null;
+    private Browse browse = null;
     
     /**
      * The Bean for the Pictures.jsp.
@@ -109,18 +117,197 @@ public class HomePage
         urlHelper = (UrlHelper) BeanHelper.getRequestBean(UrlHelper.class);
         queryHelper = new QueryHelper();
         albumSession = (AlbumSession)BeanHelper.getSessionBean(AlbumSession.class);
+        request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        browseSession = (BrowseSession) BeanHelper.getSessionBean(BrowseSession.class);
+    }
+    
+    public String getInit()
+    {
+    	try
+	{
+    	    initSessionBean();
+    	    initBrowse();
+    	    initQuery();
+    	    
+    	    if(executeQuery)
+            {
+    		this.executeQuery(query, browse.getShow(), browse.getStartRecord(), browse.getSorkeys());
+            }
+    	   
+    	    setVariables();
+	} 
+    	catch (Exception e)
+	{
+	    throw new RuntimeException("Error initializing Browse Page: ", e);
+	}
+	
+    	return "";
+    }
+    
+    /**
+     * Initialize the Browse of the current Page
+     * @throws Exception
+     */
+    public void initBrowse() throws Exception
+    {
+	if (sessionBean.getPageContext().equals(pageContextEnum.browsePage.toString()))
+        {
+            browse = browseSession.getBrowsePictures();
+        }
+        if (sessionBean.getPageContext().equals(pageContextEnum.albumPage.toString()))
+        {
+            browse = browseSession.getBrowseAlbums();
+        } 
+    	
+    	browse.parseUrl(request);
+    }
+    
+    /**
+     * Initialize the query according to browse type
+     * @throws Exception
+     */
+    public void initQuery() throws Exception
+    {
+	switch (browse.getType())
+	{
+    	case ALBUM:
+    	    initAlbumPage();
+    	    break;
+    	
+    	case COLLECTION:
+    	    initCollectionPage();
+    	    break;
+    	
+    	case PERSON:
+    	    initPersonPage();
+    	    break;
+    	
+    	case SEARCHRESULT:
+    	    initSearchResultPage();
+    	    break;
+    	
+    	case PICTURES:
+    	 
+    	    break;
+    	    
+    	default:
+    	    initResourcePage();
+    	    break;
+	}
+    }
+    
+    /**
+     * Set all variables which are needed for JSPF page
+     * @throws Exception
+     */
+    public void setVariables() throws Exception
+    {
+	itemsInAlbum = 0;
+        itemsOnPage = 0;
+        
+        // Calculate the number of items in album
+        if (items != null)
+        {
+            for (int i = 0; i < items.size(); i++)
+            {
+                itemsOnPage ++;
+                
+                if (items.get(i).getInAlbum())
+                {
+                    itemsInAlbum ++;
+                }
+            }
+        }
+    }
+
+    public void initCollectionPage()
+    {
+	
+    }
+    
+    public void initAlbumPage()
+    {
+	 album = albumSession.getCurrent();
+         query = queryHelper.createAlbumQuery(album);
+    }
+    
+    public void initPersonPage()
+    {
+	 query = "(escidoc.face.identifier=" + urlHelper.getPerson() + "*)";
+    }
+    
+    public void initSearchResultPage() throws Exception
+    {
+	Search search = new Search();
+	query = search.run();
+	queryDisplayed = search.getPrettyQuery();
+       
+        if (search.getCollectionVO() != null)
+        {
+            collectionName = search.getCollectionVO().getMdRecord().getTitle().getValue();
+        }
+        
+        sessionBean.setUrlQuery(urlHelper.getQuery());
+        
+        if (search.getError() != null)
+        {
+            executeQuery = false;
+            sessionBean.setUrlQuery("error");
+        }
+    }
+    
+    private void initResourcePage() throws Exception
+    {
+        if (urlHelper.getResource() != null)
+        {
+            String resourceType= retrieveResource(urlHelper.getResource());
+            if ("album".equals(resourceType))
+            {
+                if (sessionBean.getUserHandle() != null)
+                {
+                    query = queryHelper.createAlbumQuery(album);
+                }
+                else
+                {
+                    query = "(escidoc.objid=000)";
+                    totalNumberOfItems = 0;
+                    executeQuery = false;
+                }
+                albumSession.setCurrent(album);
+            }
+            
+            if ("item".equals(resourceType))
+            {
+                query = "escidoc.objid=" + urlHelper.getResource();
+                album = new AlbumVO();
+                albumSession.setCurrent(album);
+                sessionBean.setMessage(null);
+            }
+            
+            if (resourceType == null)
+            {
+                query = "(escidoc.objid=000)";
+                totalNumberOfItems = 0;
+                executeQuery = false;
+                album = new AlbumVO();
+                albumSession.setCurrent(album);
+                sessionBean.setMessage("The resource " + urlHelper.getResource() 
+                        + " was not found. Please check the ID.");
+            }
+        }
     }
     
     /**
      * Initialization method called from jsp.
      * @return
+     * @deprecated
      */
-    public String getInit()
+    public String getInitOld()
     {
         try
         {
-            // Set the different values relevant for the sessionBean
-            this.setSessionBean();
+        	// Set the different values relevant for the sessionBean
+            this.initSessionBean();
             
             // create the sorting query
             String sortQuery = queryHelper.createSortingQuery(
@@ -138,7 +325,7 @@ public class HomePage
             if (urlHelper.getShow() != null) 
             {
             	itemsPerPage = Integer.parseInt(urlHelper.getShow());
-			}
+            }
             
             int pageNumber = ((Integer.parseInt(urlHelper.getPage()) - 1)* Integer.parseInt(sessionBean.getItemsPerPageBrowse())) + 1;
             
@@ -149,6 +336,7 @@ public class HomePage
             if (executeQuery)
             {
                 this.executeQuery(query, itemsPerPage, pageNumber, sortQuery);
+
             }
             
             itemsInAlbum = 0;
@@ -184,6 +372,7 @@ public class HomePage
      * Create the query used by the FW according to current values in URL+ session.
      * @return the query.
      * @throws Exception
+     * @deprecated
      */
     public String createQuery() throws Exception
     {
@@ -331,19 +520,15 @@ public class HomePage
      */
     protected void executeQuery(String query, int itemsPerPage, int pageNumber, String sortedBy) throws Exception
     {
-        // initialization when the user call the home page 
         if (urlHelper.getCurrentUrl() == null)
         {
             sessionBean.setCurrentUrl("home");
             query = "";
         }
-        
-        // Check if the current search is not still stored in the sessionbean from last search
-        if ("set".equals(urlHelper.getAction()))
+        else if ("set".equals(urlHelper.getAction()))
         {
             items = sessionBean.getItems();
             
-            // Check that the items are in new active album
             for (int i = 0; i < items.size(); i++)
             {
                 items.get(i).init();
@@ -352,38 +537,22 @@ public class HomePage
         else
         {
             queryHelper.executeQuery(query, itemsPerPage, pageNumber, sortedBy);
-            //system.out.println("FW response saved");
             sessionBean.setItems(queryHelper.getItems());
             items = queryHelper.getItems();
             this.totalNumberOfItems = queryHelper.getTotalNumberOfItems();
-            // store the infi about this search
             sessionBean.setQuery(query);
             sessionBean.setPageNumber(pageNumber);
             sessionBean.setSortedBy(sortedBy);
         }
         
         sessionBean.setTotalNumberOfItems(this.totalNumberOfItems);
-//        if (sessionBean.getPageContext().equals(pageContextEnum.browsePage.toString()))
-//        {
-//            sessionBean.setTotalNumberOfPage((int) Math.ceil(((double) this.getTotalNumberOfItems())
-//                    / ((double) new Integer (sessionBean.getItemsPerPageBrowse()))));
-//        }
-//        if (sessionBean.getPageContext().equals(pageContextEnum.albumPage.toString()))
-//        {
-//            sessionBean.setTotalNumberOfPage((int) Math.ceil(((double) this.getTotalNumberOfItems())
-//                    / ((double) new Integer (sessionBean.getItemsPerPageAlbum()))));
-//        }
-
-        // Initialize the value of the paginator
         Pagination paginator = new Pagination();
-        //paginator.setLabels();
-
     }
     
     /**
      * Set all values/variable that need to be stored/modified in session. 
      */
-    private void setSessionBean()
+    private void initSessionBean()
     {
         // check the action the user want to do : delete, publish, export or withdraw
         if (urlHelper.getAction() != null)
@@ -402,8 +571,6 @@ public class HomePage
         {
             sessionBean.setSelectedMenu(request.getParameter("tab").toString());
         }
-        
-        //albumSession.getInitActiveAlbum();
     }
     
     /**

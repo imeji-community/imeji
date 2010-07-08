@@ -135,12 +135,12 @@ public class ViewAlbumBean
             {
                 try 
                 {
-					album = (AlbumVO) albumController.retrieve(albumId, sessionBean.getUserHandle());
-				} 
+                    album = (AlbumVO) albumController.retrieve(albumId, sessionBean.getUserHandle());
+		} 
                 catch (Exception e) 
                 {
-					sessionBean.setMessage(albumId + " not found!");
-				}
+                    sessionBean.setMessage(albumId + " not found!");
+		}
 
                 albumSession.setCurrent(album);
             }           

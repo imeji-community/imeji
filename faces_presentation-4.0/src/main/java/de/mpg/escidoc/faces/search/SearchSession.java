@@ -9,8 +9,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 
-import de.mpg.escidoc.faces.album.AlbumVO;
 import de.mpg.escidoc.faces.beans.Navigation;
+import de.mpg.escidoc.faces.container.album.AlbumVO;
 import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.util.BeanHelper;
 

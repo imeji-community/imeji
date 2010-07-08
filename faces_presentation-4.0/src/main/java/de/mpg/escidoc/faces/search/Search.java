@@ -41,13 +41,13 @@ import javax.faces.model.SelectItem;
 
 import org.apache.myfaces.trinidad.model.ChildPropertyTreeModel;
 
-import de.mpg.escidoc.faces.album.AlbumVO;
-import de.mpg.escidoc.faces.album.list.AlbumsListController;
 import de.mpg.escidoc.faces.beans.Navigation;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.album.AlbumListVO;
 import de.mpg.escidoc.faces.container.album.AlbumSession;
+import de.mpg.escidoc.faces.container.album.AlbumVO;
 import de.mpg.escidoc.faces.container.list.FacesContainerListController;
+import de.mpg.escidoc.faces.container.list.FacesContainerListVO;
 import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.faces.metadata.wrapper.MetadataWrapped;
@@ -143,11 +143,13 @@ public class Search
 		
 		try 
 		{
-			albumSession.setPublished((AlbumListVO) controller.retrieve(albumSession.getPublished(), sessionBean.getUserHandle()));
+		    FacesContainerListVO  list = controller.retrieve(albumSession.getPublished(), sessionBean.getUserHandle());
+		    albumSession.setPublished(new AlbumListVO(list.getList(), list.getParameters(), list.getHandler())) ;
 		} 
 		catch (Exception e) 
 		{
-			sessionBean.setMessage("Error updating list of collections");
+		    throw new RuntimeException("Error Updating list of Publications");
+		    //sessionBean.setMessage("Error updating list of collections");
 		}
 		
 		for (int i = 0; i < albumSession.getPublished().getSize(); i++) 
@@ -200,7 +202,7 @@ public class Search
         {
             sessionBean.setUrlQuery("error");
             error = sessionBean.getMessage();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUrl() + "search");
+           // FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUrl() + "search");
         }
         else
         {

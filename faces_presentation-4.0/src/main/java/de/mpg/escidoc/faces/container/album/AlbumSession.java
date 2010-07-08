@@ -99,12 +99,12 @@ public class AlbumSession
         {
             try 
             {
-				current = (AlbumVO) albumController.retrieve((String)request.getParameter("album"), sessionBean.getUserHandle());
-			} 
+		current = (AlbumVO) albumController.retrieve((String)request.getParameter("album"), sessionBean.getUserHandle());
+            } 
             catch (Exception e) 
             {
             	sessionBean.setMessage((String)request.getParameter("album") + " not found!");
-			}
+            }
         }
         else 
         {

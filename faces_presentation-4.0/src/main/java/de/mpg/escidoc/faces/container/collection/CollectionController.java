@@ -41,30 +41,30 @@ public class CollectionController extends FacesContainerController
 	}
 	
 	/**
-	 * Create a a new context for the collection before to create the collection itself
+	 * Create a collection.
+	 * The collection must have a valid context.
 	 */
 	public FacesContainerVO create(CollectionVO collectionVO, String userHandle) throws Exception
-    {
+	{
 		AccountUserVO accountUserVO = UserHelper.getAccounUserVO(userHandle);
-		
-		String contextId = addNewContext(collectionVO.getMdRecord().getTitle().getValue()
-			, collectionVO.getMdRecord().getAbstracts().get(0).getValue()
-			, userHandle, "escidoc:persistent13");
-		
-		collectionVO.setContext(new ContextRO(contextId));
+//		
+//		String contextId = addNewContext(collectionVO.getMdRecord().getTitle().getValue()
+//			, collectionVO.getMdRecord().getAbstracts().get(0).getValue()
+//			, userHandle, "escidoc:persistent13");
+//		
+//		collectionVO.setContext(context);
     	
-    	collectionVO.getMdRecord().getIdentifiers().add(
-    			new IdentifierVO(IdType.URI, 
-    					ServiceLocator.getFrameworkUrl() +  "/cmm/content-model/" + collectionVO.getMdProfileId()));
-    	
-    	String adminHandle = LoginHelper.loginSystemAdmin();
-
-    	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.DEPOSITOR.frameworkValue(), contextId), adminHandle);
-    	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.MODERATOR.frameworkValue(), contextId),  adminHandle);
-    	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.PRIVILEGEDVIEWER.frameworkValue(), contextId),  adminHandle);
+        	collectionVO.getMdRecord().getIdentifiers().add(
+        			new IdentifierVO(IdType.URI, 
+        					ServiceLocator.getFrameworkUrl() +  "/cmm/content-model/" + collectionVO.getMdProfileId()));
+        	
+        	String adminHandle = LoginHelper.loginSystemAdmin();
+    
+//        	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.MODERATOR.frameworkValue(), collectionVO.getContext().getObjectId()),  adminHandle);
+//        	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.PRIVILEGEDVIEWER.frameworkValue(), collectionVO.getContext().getObjectId()),  adminHandle);
 		    	
-        return  super.create(collectionVO, userHandle);
-    }
+        	return  super.create(collectionVO, userHandle);
+	}
 	
 	/**
 	 * Create a new context in FW

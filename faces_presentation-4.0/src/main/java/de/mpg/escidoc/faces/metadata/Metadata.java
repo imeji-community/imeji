@@ -63,6 +63,18 @@ public class Metadata
     private String max, min;
 
     /**
+     * Only for testing purpose
+     * @deprecated
+     * @param name
+     * @param label
+     */
+    public Metadata(String name, String label)
+    {
+	this.name = name;
+	this.label = label;
+    }
+    
+    /**
      * Constructor for a Metadata. 
      * @param node Description or StatementType.
      */

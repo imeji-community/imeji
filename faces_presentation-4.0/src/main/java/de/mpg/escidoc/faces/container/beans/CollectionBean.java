@@ -8,6 +8,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import de.escidoc.schemas.useraccount.x07.UserAccountDocument.UserAccount;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.collection.CollectionController;
@@ -15,6 +16,13 @@ import de.mpg.escidoc.faces.container.collection.CollectionSession;
 import de.mpg.escidoc.faces.container.collection.CollectionVO;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.faces.util.BeanHelper;
+import de.mpg.escidoc.faces.util.ContextHelper;
+import de.mpg.escidoc.faces.util.UserHelper;
+import de.mpg.escidoc.services.common.referenceobjects.ContextRO;
+import de.mpg.escidoc.services.common.referenceobjects.GrantRO;
+import de.mpg.escidoc.services.common.valueobjects.AccountUserVO;
+import de.mpg.escidoc.services.common.valueobjects.GrantVO;
+import de.mpg.escidoc.services.common.valueobjects.GrantVO.PredefinedRoles;
 
 /**
  * JSF bean for {@link CollectionVO}
@@ -43,6 +51,8 @@ public class CollectionBean
 	private CollectionPageType pageType = CollectionPageType.CREATE;
 	private HttpServletRequest request = null;
 	private FacesContext fc = null;
+	private List<SelectItem> userDepositorGrants = null;
+	private String selectedContext = null;
 	
 	/**
 	 * Default Constructor
@@ -53,6 +63,7 @@ public class CollectionBean
 		sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		collectionSession = (CollectionSession) BeanHelper.getSessionBean(CollectionSession.class);
 		collectionsMenu = new ArrayList<SelectItem>();
+		userDepositorGrants = new ArrayList<SelectItem>();
 		fc =  FacesContext.getCurrentInstance();
 		request = (HttpServletRequest) fc.getExternalContext().getRequest();
 		
@@ -93,13 +104,24 @@ public class CollectionBean
 		
 		collectionSession.setCurrent(collection);
 		
-		
 		for (FacesContainerVO c : collectionSession.getCollectionList().getList()) 
 		{
 			collectionsMenu.add(
 					new SelectItem(c.getContentModel()
 					, c.getMdRecord().getTitle().getValue()));
 		}
+		
+		for (GrantVO g : UserHelper.getGrants(sessionBean.getUserHandle()))
+		{
+		    if (PredefinedRoles.DEPOSITOR.frameworkValue().equals(g.getRole()))
+		    {
+			userDepositorGrants.add(new SelectItem(g.getObjectRef()
+				, ContextHelper.getContext(g.getObjectRef(), sessionBean.getUserHandle()).getName()));
+		    }
+		}
+		
+		selectedContext = "";
+		userDepositorGrants.add(new SelectItem("", "Select a context"));
 	}
 	
 	/**
@@ -113,10 +135,12 @@ public class CollectionBean
 		if (CollectionPageType.CREATE.equals(this.pageType)) 
 		{
 			collectionController.create(collection, sessionBean.getUserHandle());
+			sessionBean.setMessage("Collection successfully created");
 		}
 		if (CollectionPageType.EDIT.equals(this.pageType)) 
 		{
 			collectionController.edit(collection, sessionBean.getUserHandle());
+			sessionBean.setMessage("Collection successfully edited");
 		}
 	}
 	
@@ -190,5 +214,46 @@ public class CollectionBean
 		}
     }
 
+    /**
+     * @return the userDepositorGrants
+     */
+    public List<SelectItem> getUserDepositorGrants()
+    {
+        return userDepositorGrants;
+    }
+
+    /**
+     * @param userDepositorGrants the userDepositorGrants to set
+     */
+    public void setUserDepositorGrants(List<SelectItem> userDepositorGrants)
+    {
+        this.userDepositorGrants = userDepositorGrants;
+    }
+
+    /**
+     * @return the selectedContext
+     */
+    public String getSelectedContext()
+    {
+        return selectedContext;
+    }
+
+    /**
+     * @param selectedContext the selectedContext to set
+     */
+    public void setSelectedContext(String selectedContext)
+    {
+        this.selectedContext = selectedContext;
+    }
+    
+    
+    public void selectContextListener(ValueChangeEvent event)
+    {
+	if (event.getNewValue() != null && !event.getNewValue().equals(event.getOldValue())) 
+    	{
+	    selectedContext = event.getNewValue().toString();
+	    collection.setContext(new ContextRO(selectedContext));
+	}
+    }
 	
 }

@@ -208,21 +208,26 @@ public class ExportManager
 					 out.write(exportResult[i]);
 				 }
 				break;
+				
 			case XML:
 				out.write(itemToExportListXML);
 				break;
+				
 			case CSV_AND_PICTURES:
 				exportResult = exportHandler.getOutput("CSV", null, null, itemToExportListXMLFiltered);
 				resultFile = exportHandler.generateArchiveFile("CSV", "zip", exportResult, itemToExportListXMLFiltered);
 				break;
+				
 			case XML_AND_PICTURES:
 				resultFile =  exportHandler.generateArchiveFile("XML", "zip", itemToExportListXML.getBytes(),
 		                   										itemToExportListXMLFiltered);
 				break;
+				
 			case PICTURES:
 				resultFile =  exportHandler
                 				.generateArchiveFile(null, "zip", "".getBytes(), itemToExportListXMLFiltered);
 				break;
+				
 			default:
 				break;
 		 }

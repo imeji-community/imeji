@@ -136,6 +136,12 @@
 					</tr:iterator>
 				</h:panelGroup>
 				
+				<h:panelGroup layout="block" styleClass="huge_area0">
+					<h:selectOneMenu value="#{CollectionBean.selectedContext}" valueChangeListener="#{CollectionBean.selectContextListener}" immediate="true">
+						<f:selectItems value="#{CollectionBean.userDepositorGrants}"/>
+					</h:selectOneMenu>
+				</h:panelGroup>
+				
 				<h:outputText styleClass="huge_area0" escape="false" value="&#160;" />
 				<h:panelGroup layout="block" styleClass="huge_area0">
 					<h:outputText value="* #{lbl.mandatory_field}"/>

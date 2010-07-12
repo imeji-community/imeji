@@ -1,5 +1,7 @@
 package de.mpg.escidoc.faces.util;
 
+import java.util.List;
+
 import javax.naming.InitialContext;
 
 import de.escidoc.schemas.useraccount.x07.UserAccountDocument.UserAccount;
@@ -46,6 +48,20 @@ public class UserHelper
 		{
 			throw new RuntimeException("Error creating new Grants to creator: " + e);
 		}
+	}
+	
+	public static List<GrantVO> getGrants(String userHandle)
+	{
+	    try
+	    {
+		 AccountUserVO user = getAccounUserVO(userHandle);
+		 String userGrantXML = ServiceLocator.getUserAccountHandler(userHandle).retrieveCurrentGrants(user.getReference().getObjectId());
+	         return getXmlTransforming().transformToGrantVOList(userGrantXML);
+	    } 
+	    catch (Exception e)
+	    {
+		throw new RuntimeException("Error retrieving user grants: " + e);
+	    }
 	}
 	
 	public static AccountUserVO getAccounUserVO(String userHandle) 

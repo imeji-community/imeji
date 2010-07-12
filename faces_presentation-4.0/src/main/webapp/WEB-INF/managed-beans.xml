@@ -132,6 +132,11 @@
 		<managed-bean-class>de.mpg.escidoc.faces.container.beans.FacesContainerListBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+		<managed-bean>
+		<managed-bean-name>MdProfileBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.mdProfile.beans.MdProfileBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
 	
 	
 	<!-- Session Beans -->

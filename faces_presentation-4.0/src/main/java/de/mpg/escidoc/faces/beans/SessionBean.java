@@ -409,7 +409,6 @@ public class SessionBean
                                 return true;
                             }
                         }
-                   
                     }
                     
                    if (user.getAffiliations() != null)

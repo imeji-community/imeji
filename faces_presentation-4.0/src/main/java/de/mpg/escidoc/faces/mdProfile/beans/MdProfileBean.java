@@ -15,10 +15,16 @@ import de.mpg.escidoc.faces.util.BeanHelper;
 
 public class MdProfileBean
 {
+    public enum PageType
+    {
+	CREATE, EDIT, VIEW;
+    }
+    
     private List<Metadata> metadataList = new ArrayList<Metadata>();
     private List<SelectItem> metadataMenu = new ArrayList<SelectItem>();
     private List<MetadataBean> mdProfile = new ArrayList<MetadataBean>();
     private MdProfileSession session = null;
+    private PageType type = PageType.CREATE;
     
     /**
      * Bean for Metadata representation in MdProfile formular
@@ -108,6 +114,17 @@ public class MdProfileBean
 	    reset();
 	}
 	
+	if (request.getParameter("type") != null)
+	{
+	    for (PageType p : PageType.values())
+	    {
+		if (p.name().equalsIgnoreCase(request.getParameter("type")))
+		{
+		    type = p;
+		}
+	    }
+	}
+	
 	init();
     }
     
@@ -137,7 +154,15 @@ public class MdProfileBean
     
     public void save()
     {
-	
+	switch (type)
+	{
+	case CREATE:
+	    
+	    break;
+
+	default:
+	    break;
+	}
     }
     
     public void addMetadata(ActionEvent event)

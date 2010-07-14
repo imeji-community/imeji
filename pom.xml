@@ -422,7 +422,7 @@
 				
 				<!-- URL of the FIZ framework instance -->
 				<!--<escidoc.framework_access.framework.url>http://134.76.28.244:8080</escidoc.framework_access.framework.url>-->
-				<escidoc.framework_access.framework.url>http://dev-coreservice.mpdl.mpg.de:8080</escidoc.framework_access.framework.url>
+				<escidoc.framework_access.framework.url>http://dev-coreservice.mpdl.mpg.de:80</escidoc.framework_access.framework.url>
                 
                          				
 				
@@ -451,6 +451,10 @@
 				
 				<!--  Identifier of the content model " Faces Container Content Model" in the current framework instance -->
 				<escidoc.faces.container.content-model.id>escidoc:faces60</escidoc.faces.container.content-model.id>
+				
+				<!-- Indentifier of the content model "Faces collection content model": Not persistent, created only on dev so far -->
+				<escidoc.faces.collection.content-model.id>escidoc:194286</escidoc.faces.collection.content-model.id>
+				<!--  <escidoc.faces.collection.content-model.id>escidoc:faces70</escidoc.faces.collection.content-model.id>-->
 				
 				<!-- Number of albums in the album lists -->
 				<escidoc.faces.album.list.size>10</escidoc.faces.album.list.size>

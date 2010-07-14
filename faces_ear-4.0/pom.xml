@@ -14,7 +14,7 @@
 	<scm>
 		<connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_ear-4.0</connection>
 		<developerConnection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_ear-4.0</developerConnection>
-		<url>http://zim02.gwdg.de/repos/faces/</url>
+		<url>https://zim02.gwdg.de/repos/faces/</url>
 	</scm>
 
 
@@ -263,13 +263,13 @@
 		<dependency>
 			<groupId>de.mpg.escidoc.services</groupId>
 			<artifactId>framework_access</artifactId>
-			<version>1.0.44-SNAPSHOT</version>
+			<version>1.0.47</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.mpg.escidoc.services</groupId>
 			<artifactId>common_logic</artifactId>
-			<version>1.1.41-SNAPSHOT</version>
+			<version>1.1.45-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>ejb</type>
 		</dependency>

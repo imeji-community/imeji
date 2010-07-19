@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -14,6 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.services.common.util.ResourceUtil;
 
 public class MdRecordsHelper
@@ -24,10 +26,6 @@ public class MdRecordsHelper
     private static final String DEFAULT_XSLT = "WEB-INF/classes/xslt/transform2GenericMdRecord.xsl";
     //private static final String DEFAULT_XSLT = "src/main/resources/xslt/transform2GenericMdRecord.xsl";
     
-    public MdRecordsHelper()
-    {
-    }
-    
     /**
      * Transform the md-record xml into a generic format.
      * Valid the md-record according to template.
@@ -36,7 +34,7 @@ public class MdRecordsHelper
      * @throws TransformerException
      * @throws IOException
      */
-    public String transformToGenericMdRecord(String mds) throws TransformerException, IOException
+    public static String transformToGenericMdRecord(String mds) throws TransformerException, IOException
     {
         String genericMdRecord = "";
         InputStream is = new ByteArrayInputStream(mds.getBytes());
@@ -53,5 +51,32 @@ public class MdRecordsHelper
         genericMdRecord = os.toString();
         
         return genericMdRecord;
+    }
+    
+    public static String TransformToDefaultXMLSchema(List<Metadata> metadataList)
+    {
+	String xml = "";
+	
+	for (Metadata m : metadataList)
+	{
+	    xml += "<";
+	    if (m.getNamespace() != null)
+	    {
+		xml+= m.getNamespace() + ":";
+	    }
+	    xml += m.getName() + ">";
+	    if (m.getSimpleValue() != null)
+	    {
+		xml += m.getSimpleValue();
+	    }
+	    xml += "</";
+	    if (m.getNamespace() != null)
+	    {
+		xml+= m.getNamespace() + ":";
+	    }
+	    xml += m.getName() + ">";
+	}
+	
+	return xml;
     }
 }

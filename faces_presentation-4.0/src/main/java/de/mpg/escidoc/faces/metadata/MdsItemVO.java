@@ -78,13 +78,12 @@ public class MdsItemVO
         this();
     	// First initialization
         descriptionTreeList = new ArrayList<ChildPropertyTreeModel>();
-        MdRecordsHelper mdrh = new MdRecordsHelper();
         String genericMdRecordsXml = null;    
             
         // XSLT to transform a specific md-records into a generic md-records
         try
         {
-            genericMdRecordsXml = mdrh.transformToGenericMdRecord(mdrXml);
+            genericMdRecordsXml = MdRecordsHelper.transformToGenericMdRecord(mdrXml);
         }
         catch (Exception e)
         {

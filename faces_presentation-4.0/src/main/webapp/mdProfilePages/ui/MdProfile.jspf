@@ -34,30 +34,70 @@
 </ui:remove>
 
 <f:subview id="MdProfile">
-	<h:panelGroup layout="block" styleClass="xHuge_area0">
+	<h:messages></h:messages>
+	<h:panelGroup layout="block" styleClass="full_area0">
 	
 		<h2 class="huge_area0" style="text-align: center;">
-			<h:outputText value="#{lbl.profile_name} : "/>
-			<h:inputText value="#{MdProfileBean.name}" valueChangeListener="#{MdProfileBean.nameListener}"/>
+			<h:outputText value="#{lbl.profile_name}* : "/>
+			<h:inputText value="#{MdProfileBean.name}" valueChangeListener="#{MdProfileBean.nameListener}" immediate="false"/>
 		</h2>
 		<br/><br/>
-		<h:outputText value="#{lbl.metadata_select}"/>
+		<b class="large_area0_p8 endline labelLine">
+			<h:outputText value="#{lbl.metadata_select}"/>
+		</b>
+		<b class="large_area0_p8 endline labelLine">
+			<h:outputText value="#{lbl.minoccurs}"/>
+		</b>
+		<b class="large_area0_p8 endline labelLine">
+			<h:outputText value="#{lbl.maxoccurs}"/>
+		</b>
+		<b class="large_area0_p8 endline labelLine">
+			<h:outputText value="#{lbl.contraints}"/>
+		</b>
 		<br/>
-		<tr:iterator id="profile" var="profile" value="#{MdProfileBean.mdProfile}" varStatus="position">
-			<h:panelGroup layout="block" styleClass="xHuge_area0">
-				<h:selectOneMenu value="#{profile.selected.label}" valueChangeListener="#{profile.menuListener}" immediate="true">
-					<f:selectItems value="#{MdProfileBean.metadataMenu}"/>
-				</h:selectOneMenu>
-				<h:outputText value="#{lbl.metadata_value}"/>
-				<h:inputText value="#{profile.selected.simpleValue}" valueChangeListener="#{profile.valueListener}" immediate="true"/>
-				<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add Metadata" actionListener="#{MdProfileBean.addMetadata}">
-					<f:attribute name="position" value="#{position.index}"></f:attribute>
-				</tr:commandButton>
-				<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove Metadata" actionListener="#{MdProfileBean.removeMetadata}">
-					<f:attribute name="position" value="#{position.index}"></f:attribute>
-				</tr:commandButton>
-			</h:panelGroup>
-		</tr:iterator>
+		<h:panelGroup styleClass="free_area0 itemBlockContent endline">
+			<tr:iterator id="profile" var="profile" value="#{MdProfileBean.metadataBeanList}" varStatus="position">
+				<h:panelGroup layout="block" styleClass="full_area0 clean">
+					
+					<h:selectOneMenu value="#{profile.current.label}" valueChangeListener="#{profile.menuListener}" styleClass="large_select clean" immediate="false">
+						<f:selectItems value="#{MdProfileBean.metadataMenu}"/>
+					</h:selectOneMenu>
+					
+					<h:inputText value="#{profile.current.minOccurs}" valueChangeListener="#{profile.minOccursListener}" styleClass="large_txtInput clean" immediate="false"/>
+					
+					<h:inputText value="#{profile.current.maxOccurs}" valueChangeListener="#{profile.maxOccursListener}" styleClass="large_txtInput clean" immediate="false"/>
+					
+					<h:panelGroup layout="block" styleClass="huge_area0 clean">
+						<tr:iterator id="profile" var="constraint" value="#{profile.constraints}" varStatus="pos">
+							<h:panelGroup layout="block" styleClass="huge_area0 clean">
+								<h:inputText styleClass="large_txtInput clean" value="#{constraint.value}" valueChangeListener="#{constraint.listener}" immediate="false"/>
+								<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add constraint" actionListener="#{profile.addConstraint}" immediate="false">
+									<f:attribute name="index" value="#{pos.index}"/>
+								</tr:commandButton>
+								<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove Metadata" actionListener="#{profile.removeConstraint}">
+									<f:attribute name="index" value="#{pos.index}"/>
+								</tr:commandButton>
+							</h:panelGroup>
+						</tr:iterator>
+					</h:panelGroup>
+					
+					<br/><br/>
+					<h:panelGroup layout="block" styleClass="huge_area0 clean">
+						<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add Metadata" actionListener="#{MdProfileBean.addMetadata}" immediate="false">
+							<f:attribute name="position" value="#{position.index}"></f:attribute>
+						</tr:commandButton>
+						<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove Metadata" actionListener="#{MdProfileBean.removeMetadata}">
+							<f:attribute name="position" value="#{position.index}"></f:attribute>
+						</tr:commandButton>
+					</h:panelGroup>
+
+				</h:panelGroup>
+			</tr:iterator>
+			<h:outputLink id="lnkReset" value="?init=reset" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
+				<h:outputText value="#{lbl.clear}" />
+			</h:outputLink>
+			<h:commandButton id="btnSave" value="#{lbl.save}" action="#{MdProfileBean.save}" styleClass="free_area1_p8 activeButton" immediate="false"/>
+		</h:panelGroup>
 		
 	</h:panelGroup>
 </f:subview>

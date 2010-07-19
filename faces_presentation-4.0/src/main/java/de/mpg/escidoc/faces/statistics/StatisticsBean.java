@@ -149,7 +149,7 @@ public class StatisticsBean
         //facesScope = retrieveFacesScope();
         
         // define the default scope for statistics
-        facesScopeID = "1";
+        facesScopeID = "escidoc:scope1";
         
         if (statisitcsEditorHandle != null && facesScopeID != null)
         {

@@ -3,27 +3,36 @@ package de.mpg.escidoc.faces.mdProfile.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.escidoc.faces.mdProfile.beans.MdProfileBean.MetadataBean;
+import de.mpg.escidoc.faces.mdProfile.MdProfileVO;
 import de.mpg.escidoc.faces.metadata.Metadata;
+import de.mpg.escidoc.faces.metadata.MetadataBean;
 
 public class MdProfileSession
 {
     private List<Metadata> metadataList = null;
-    private List<MetadataBean> mdProfile = null;
+    private List<MetadataBean> metadataBeanList = null;
+    private MdProfileVO mdProfile = null;
     private String profileName = "";
     
     public MdProfileSession()
     {
-	mdProfile = new ArrayList<MetadataBean>(); 
+	mdProfile = new MdProfileVO();
 	metadataList = new ArrayList<Metadata>();
+	metadataBeanList = new ArrayList<MetadataBean>();
 	
 	// WorkAround until cone integration
-	Metadata emotion = new Metadata("emotion", "Emotion");
-	Metadata age = new Metadata("age", "Age");
-	emotion.setIndex("face.emotion");
-	age.setIndex("face.age");
+	Metadata emotion = new Metadata("emotion", "Emotion", "http://purl.org/mpdl/face/emotion");
+	Metadata age = new Metadata("age", "Age", "http://purl.org/mpdl/face/age");
+	Metadata pictureSet = new Metadata("picture-group", "Picture Set", "http://purl.org/mpdl/face/picture-group");
+	Metadata genre = new Metadata("genre", "Genre", "http://purl.org/mpdl/face/genre");
+	emotion.setIndex("emotion");
+	age.setIndex("age");
+	genre.setIndex("genre");
+	pictureSet.setIndex("picture-group");
 	metadataList.add(emotion);
 	metadataList.add(age);
+	metadataList.add(pictureSet);
+	metadataList.add(genre);
 	// End workaround
     }
 
@@ -43,10 +52,11 @@ public class MdProfileSession
         this.metadataList = metadataList;
     }
 
+
     /**
      * @return the mdProfile
      */
-    public List<MetadataBean> getMdProfile()
+    public MdProfileVO getMdProfile()
     {
         return mdProfile;
     }
@@ -54,7 +64,7 @@ public class MdProfileSession
     /**
      * @param mdProfile the mdProfile to set
      */
-    public void setMdProfile(List<MetadataBean> mdProfile)
+    public void setMdProfile(MdProfileVO mdProfile)
     {
         this.mdProfile = mdProfile;
     }
@@ -73,6 +83,22 @@ public class MdProfileSession
     public void setProfileName(String name)
     {
         this.profileName = name;
+    }
+
+    /**
+     * @return the metadataBeanList
+     */
+    public List<MetadataBean> getMetadataBeanList()
+    {
+        return metadataBeanList;
+    }
+
+    /**
+     * @param metadataBeanList the metadataBeanList to set
+     */
+    public void setMetadataBeanList(List<MetadataBean> metadataBeanList)
+    {
+        this.metadataBeanList = metadataBeanList;
     }
 
     

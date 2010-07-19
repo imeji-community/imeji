@@ -215,7 +215,7 @@ public class AlbumListParameters
     {
         if (SortParameterType.NAME.equals(sortedBy))
         {
-            return "/properties/name";
+            return "/md-records/md-record/publication/title";
         }
         if (SortParameterType.LAST_MODIFICATION_DATE.equals(sortedBy))
         {

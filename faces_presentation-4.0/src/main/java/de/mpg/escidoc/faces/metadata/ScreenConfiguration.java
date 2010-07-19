@@ -415,34 +415,6 @@ public class ScreenConfiguration
         this.resourceClass = resourceClass;
     }
 
-    /**
-     * Get The metadata Map with md-record values
-     * @return 
-     */
-//    public Map<String, Metadata> getMdMap()
-//    {
-//        return mdMap;
-//    }
-//    
-//    /**
-//     * Set The metadata Map with md-record values
-//     * @param mdMap
-//     */
-//    public void setMdMap(Map<String, Metadata> mdMap)
-//    {
-//        this.mdMap = mdMap;
-//    }
-//
-//    public List<Metadata> getMdList()
-//    {
-//        return mdList;
-//    }
-//
-//    public void setMdList(List<Metadata> mdList)
-//    {
-//        this.mdList = mdList;
-//   }
-
     public StatementType getParent()
     {
         return parent;

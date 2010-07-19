@@ -35,11 +35,11 @@ public class Charts  extends ChartModel
         if (month != 0) 
         {
         	this.month = month;
-		}
+	}
         if (year != 0) 
         {
         	 this.year = year;
-		}
+	}
         statisticsHelper =  new StatisticsHelper(this.statiscticRecordFW, this.month, this.year);
         this.chartName = chartName;
        
@@ -55,8 +55,11 @@ public class Charts  extends ChartModel
     	
     	if (month == null || year == null) 
     	{
-			labels.add(this.getDateOfLastStatistics());
-		}
+    	    if ( this.getDateOfLastStatistics() != null)
+    	    {
+    		 labels.add(this.getDateOfLastStatistics());
+    	    }
+	}
     	else
     	{
     		labels.add(month + "/" + year);
@@ -92,7 +95,7 @@ public class Charts  extends ChartModel
         {
             for (int i = 0; i < chartSize; i++)
             {
-                labels.add("");
+                labels.add("0");
             }
         }
     }

@@ -28,6 +28,8 @@ public class Metadata
      */
     private List<String> value = null;
     
+    private String namespace = null;
+    
     /**
      * The type of the metadata (i.e. parent name)
      */
@@ -61,6 +63,8 @@ public class Metadata
     
     private String simpleValue = null;
     private String max, min;
+    
+    private int maxOccurs = 1, minOccurs  =1;
 
     /**
      * Only for testing purpose
@@ -68,10 +72,12 @@ public class Metadata
      * @param name
      * @param label
      */
-    public Metadata(String name, String label)
+    public Metadata(String name, String label, String namespace)
     {
 	this.name = name;
 	this.label = label;
+	this.namespace = namespace;
+	this.constraint = new ArrayList<String>();
     }
     
     /**
@@ -364,6 +370,62 @@ public class Metadata
         this.guiComponent = guiComponent;
     }
 
+    /**
+     * @return the namespace
+     */
+    public String getNamespace()
+    {
+        return namespace;
+    }
 
+    /**
+     * @param namespace the namespace to set
+     */
+    public void setNamespace(String namespace)
+    {
+        this.namespace = namespace;
+    }
+
+    /**
+     * @return the maxOccurs
+     */
+    public int getMaxOccurs()
+    {
+        return maxOccurs;
+    }
+
+    /**
+     * @param maxOccurs the maxOccurs to set
+     */
+    public void setMaxOccurs(int maxOccurs)
+    {
+        this.maxOccurs = maxOccurs;
+    }
+
+    /**
+     * @return the minOccurs
+     */
+    public int getMinOccurs()
+    {
+        return minOccurs;
+    }
+
+    /**
+     * @param minOccurs the minOccurs to set
+     */
+    public void setMinOccurs(int minOccurs)
+    {
+        this.minOccurs = minOccurs;
+    }
+
+    /**
+     * @param constraint the constraint to set
+     */
+    public void setConstraint(List<String> constraint)
+    {
+        this.constraint = constraint;
+    }
+
+    
     
 }

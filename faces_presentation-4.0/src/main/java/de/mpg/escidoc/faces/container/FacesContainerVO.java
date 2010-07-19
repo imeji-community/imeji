@@ -37,21 +37,21 @@ public class FacesContainerVO extends ContainerVO
 
 	public FacesContainerVO(ContainerVO ct) 
 	{
-		 super(ct);
+	    super(ct);
 	        
-        if (ct.getStatusComment() != null) 
-        {
-        	this.setStatusComment(ct.getStatusComment());
-		}
-        
-        try
-        {
-            mdRecord = new MdsFacesContainerVO((MdsPublicationVO)ct.getMetadataSets().get(0));
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Error creating FacesContainerVO", e);
-        }
+            if (ct.getStatusComment() != null) 
+            {
+                this.setStatusComment(ct.getStatusComment());
+            }
+            
+            try
+            {
+                mdRecord = new MdsFacesContainerVO((MdsPublicationVO)ct.getMetadataSets().get(0));
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException("Error creating FacesContainerVO", e);
+            }
 	}
 	
 	@Override

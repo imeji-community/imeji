@@ -52,7 +52,8 @@ public class Browse
         	    || param != BrowseParemeterType.ALBUM
         	    || param != BrowseParemeterType.QUERY
         	    || param != BrowseParemeterType.PERSON
-        	    || param != BrowseParemeterType.SELECTION) 
+        	    || param != BrowseParemeterType.SELECTION
+        	    || param != BrowseParemeterType.COLLECTION) 
             {
         	browseParameters.put(param, new BrowseParameter(param, request.getParameter(param.name().toLowerCase())));
             }
@@ -119,7 +120,7 @@ public class Browse
         return sortKeys;
     }
     
-    public String getCollectionId()
+    public String getCollectionId() 
     {
 	if (browseParameters.get(BrowseParemeterType.COLLECTION) != null)
         {

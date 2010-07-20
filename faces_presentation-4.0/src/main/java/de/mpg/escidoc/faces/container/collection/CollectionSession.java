@@ -3,8 +3,12 @@ package de.mpg.escidoc.faces.container.collection;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
+import de.mpg.escidoc.faces.container.album.AlbumVO;
 import de.mpg.escidoc.faces.container.list.FacesContainerListController;
 import de.mpg.escidoc.faces.container.list.FacesContainerListParameters;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO;
@@ -23,6 +27,7 @@ public class CollectionSession
 	private CollectionVO active = null;
 	private CollectionListVO collectionList = null;
 	private FacesContainerListController controller = null;
+	private CollectionController collectionController = null;
 	private SessionBean sessionBean = null;
 	
 	private String selectedMenu = "SORTING";
@@ -30,6 +35,7 @@ public class CollectionSession
 	public CollectionSession()
 	{
 		controller = new FacesContainerListController();
+		collectionController = new CollectionController();
 		sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
 		
 		try 
@@ -49,6 +55,33 @@ public class CollectionSession
 		parameters.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
 		collectionList = new CollectionListVO( new ArrayList<FacesContainerVO>(), parameters, HandlerType.FILTER);
 	}
+	
+	/**
+     * Retrieve the current album
+     */
+    public String getInitCurrentCollection() throws Exception
+    {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        
+        if (request.getParameter("collection") != null 
+                && !"".equals(request.getParameter("album")))
+        {
+            try 
+            {
+		current = (CollectionVO) collectionController.retrieve((String)request.getParameter("collection"), sessionBean.getUserHandle());
+            } 
+            catch (Exception e) 
+            {
+            	sessionBean.setMessage((String)request.getParameter("collection") + " not found!");
+            }
+        }
+        else 
+        {
+            current = new CollectionVO(new ScreenConfiguration());
+        }
+        
+        return "";
+    }
 	
 	
 	/**

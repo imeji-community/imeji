@@ -56,6 +56,7 @@
 								
 		<ui:define name="contentMenu">
 				<h:outputText value="#{AlbumSession.initCurrentAlbum}" styleClass="noDisplay"></h:outputText>
+				<h:outputText value="#{CollectionSession.initCurrentCollection}" styleClass="noDisplay"></h:outputText>
 				<h:outputText value="#{HomePage.init}" styleClass="noDisplay" />
 				<h:outputText rendered="#{(SessionBean.user == null) and (SessionBean.currentUrl != 'resource') and (SessionBean.currentUrl == 'viewAlbum')}" value="#{HomePage.resolveAlbum}" />
 				
@@ -213,6 +214,10 @@
 			
 			<h:panelGroup layout="block" styleClass="full_area0 tiledList" rendered="#{(AlbumSession.current != null) and (AlbumSession.current.version.objectId != null)}">
 				<ui:include src="picturesPages/Album.jspf" />
+			</h:panelGroup>
+			
+			<h:panelGroup layout="block" styleClass="full_area0 tiledList" rendered="#{(CollectionSession.current != null) and (CollectionSession.current.version.objectId != null)}">
+				<ui:include src="picturesPages/Collection.xhtml" />
 			</h:panelGroup>
 
 			<ui:include src="picturesPages/ui/PaginationBottom.jspf"/>

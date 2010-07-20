@@ -88,6 +88,7 @@ public class SortingBean
             show = Integer.parseInt(sessionBean.getItemsPerPageAlbum());
         }
         
+        
         //return urlHelper.getBaseCurrentUrl() + "/" + urlHelper.getPage() + "/" + urlHelper.getShow();
         return urlHelper.getBaseCurrentUrl() + "/" + urlHelper.getPage() + "/" + show;
     }

@@ -48,9 +48,11 @@ import org.apache.log4j.Logger;
 
 import de.escidoc.www.services.om.ItemHandler;
 import de.mpg.escidoc.faces.beans.SessionBean.pageContextEnum;
+import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.album.AlbumController;
 import de.mpg.escidoc.faces.container.album.AlbumSession;
 import de.mpg.escidoc.faces.container.album.AlbumVO;
+import de.mpg.escidoc.faces.container.collection.CollectionSession;
 import de.mpg.escidoc.faces.item.ItemVO;
 import de.mpg.escidoc.faces.pictures.Browse;
 import de.mpg.escidoc.faces.pictures.BrowseSession;
@@ -70,6 +72,7 @@ public class HomePage
     private QueryHelper queryHelper = null;
     private AlbumController albumController = new AlbumController();
     private AlbumSession albumSession = null;
+    private CollectionSession collectionSession = null;
     /**
      * The total number of items of the current page request.
      */
@@ -77,7 +80,7 @@ public class HomePage
     /**
      * The album displayed.
      */
-    private AlbumVO album = null;
+    private FacesContainerVO album = null;
     /**
      * The list of items displayed.
      */
@@ -117,6 +120,7 @@ public class HomePage
         albumSession = (AlbumSession)BeanHelper.getSessionBean(AlbumSession.class);
         request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         browseSession = (BrowseSession) BeanHelper.getSessionBean(BrowseSession.class);
+        collectionSession = (CollectionSession) BeanHelper.getSessionBean(CollectionSession.class);
     }
     
     public String getInit()
@@ -220,13 +224,15 @@ public class HomePage
 
     public void initCollectionPage()
     {
-	
+    	album = collectionSession.getCurrent();
+    	query = queryHelper.createContainerQuery(album); 
     }
     
     public void initAlbumPage()
     {
-	 album = albumSession.getCurrent();
-         query = queryHelper.createAlbumQuery(album);
+	 album = albumSession.getCurrent(); 
+         query = queryHelper.createContainerQuery(album);
+         
     }
     
     public void initPersonPage()
@@ -263,7 +269,7 @@ public class HomePage
             {
                 if (sessionBean.getUserHandle() != null)
                 {
-                    query = queryHelper.createAlbumQuery(album);
+                    query = queryHelper.createContainerQuery(album);
                 }
                 else
                 {
@@ -271,14 +277,14 @@ public class HomePage
                     totalNumberOfItems = 0;
                     executeQuery = false;
                 }
-                albumSession.setCurrent(album);
+                albumSession.setCurrent(new AlbumVO(album));
             }
             
             if ("item".equals(resourceType))
             {
                 query = "escidoc.objid=" + urlHelper.getResource();
                 album = new AlbumVO();
-                albumSession.setCurrent(album);
+                albumSession.setCurrent(new AlbumVO(album));
                 sessionBean.setMessage(null);
             }
             
@@ -288,7 +294,7 @@ public class HomePage
                 totalNumberOfItems = 0;
                 executeQuery = false;
                 album = new AlbumVO();
-                albumSession.setCurrent(album);
+                albumSession.setCurrent(new AlbumVO(album));
                 sessionBean.setMessage("The resource " + urlHelper.getResource() 
                         + " was not found. Please check the ID.");
             }
@@ -408,7 +414,7 @@ public class HomePage
         if (urlHelper.getAlbumId() != null)
         {   
             album = albumSession.getCurrent();
-            currentQuery = queryHelper.createAlbumQuery(album);
+            currentQuery = queryHelper.createContainerQuery(album);
         }
                 
         // Resource requested.
@@ -419,7 +425,7 @@ public class HomePage
             {
                 if (sessionBean.getUserHandle() != null)
                 {
-                    currentQuery = queryHelper.createAlbumQuery(album);
+                    currentQuery = queryHelper.createContainerQuery(album);
                 }
                 else
                 {
@@ -427,14 +433,14 @@ public class HomePage
                     totalNumberOfItems = 0;
                     executeQuery = false;
                 }
-                albumSession.setCurrent(album);
+                albumSession.setCurrent(new AlbumVO(album));
             }
             
             if ("item".equals(resourceType))
             {
                 currentQuery = "escidoc.objid=" + urlHelper.getResource();
                 album = new AlbumVO();
-                albumSession.setCurrent(album);
+                albumSession.setCurrent(new AlbumVO(album));
                 sessionBean.setMessage(null);
             }
             
@@ -444,7 +450,7 @@ public class HomePage
                 totalNumberOfItems = 0;
                 executeQuery = false;
                 album = new AlbumVO();
-                albumSession.setCurrent(album);
+                albumSession.setCurrent(new AlbumVO(album));
                 sessionBean.setMessage("The resource " + urlHelper.getResource() 
                         + " was not found. Please check the ID.");
             }
@@ -518,7 +524,7 @@ public class HomePage
      */
     protected void executeQuery(String query, int itemsPerPage, int pageNumber, String sortedBy) throws Exception
     {
-        if (urlHelper.getCurrentUrl() == null)
+        if (urlHelper.getCurrentUrl() == null) 
         {
             sessionBean.setCurrentUrl("home");
             query = "";
@@ -586,7 +592,7 @@ public class HomePage
             
             if ("album".equals(resourceType))
             {
-                albumSession.setCurrent(album);
+                albumSession.setCurrent(new AlbumVO(album));
             }
             else
             {

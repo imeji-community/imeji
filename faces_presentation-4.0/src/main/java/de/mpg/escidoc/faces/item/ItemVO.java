@@ -59,6 +59,11 @@ public class ItemVO
     private String imageStyleClass;
     
     /**
+     * If the item checkbox is selected
+     */
+    private boolean selected;
+    
+    /**
      * Constructor for an ItemVO.
      * @param item
      */
@@ -408,4 +413,12 @@ public class ItemVO
     {
         this.type = type;
     }
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
 }

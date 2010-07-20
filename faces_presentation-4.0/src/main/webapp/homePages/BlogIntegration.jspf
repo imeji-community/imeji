@@ -43,7 +43,7 @@
 		{  	
 			var feedControl = new google.feeds.FeedControl();
 		
-			feedControl.addFeed(document.getElementById("formWelcome:rssFeedUrl").value, "<h:outputText value="#{lbl.blog_title}"/>");
+			feedControl.addFeed(document.getElementById("formular:rssFeedUrl").value, "<h:outputText value="#{lbl.blog_title}"/>");
 			feedControl.setNumEntries(8);
 			feedControl.setLinkTarget(google.feeds.LINK_TARGET_BLANK); 
 			feedControl.draw(document.getElementById("feedControl"));
@@ -54,7 +54,7 @@
 	<h2>
 		<h:outputText id="rssFeedName" value="#{lbl.blog_title}" escape="false"/>
 	</h2>
-	<div id="feedControl" style="font-size: 0.4em"></div>
+	<div id="feedControl" style="font-size: 0.4em;"></div>
 
 </div>
 

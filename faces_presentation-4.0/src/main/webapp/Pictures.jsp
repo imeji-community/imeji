@@ -244,6 +244,10 @@
 							<h:panelGroup layout="block" styleClass="full_area0 tiledList" rendered="#{(AlbumSession.current != null) and (AlbumSession.current.version.objectId != null)}">
 								<jsp:directive.include file="picturesPages/Album.jspf" />
 							</h:panelGroup>
+							
+							<h:panelGroup layout="block" styleClass="full_area0 tiledList" rendered="#{(CollectionSession.current != null) and (CollectionSession.current.version.objectId != null)}">
+								<jsp:directive.include file="picturesPages/Collection.xhtml" />
+							</h:panelGroup>
 
 							<jsp:directive.include file="picturesPages/ui/PaginationBottom.jspf"/>
 

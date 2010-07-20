@@ -41,7 +41,7 @@
 				<span> 
 				<!-- Image with link to the details view -->
 					<!-- from browsing with no album selected -->
-					<h:outputLink id="lnkPicDetailBrowse" value="#{Navigation.detailUrl}/#{item.item.objid}" rendered="#{(SessionBean.currentUrl == 'home' || SessionBean.currentUrl == 'searchResult' || SessionBean.currentUrl == 'person' || SessionBean.currentUrl == 'resource')}">
+					<h:outputLink id="lnkPicDetailBrowse" value="#{Navigation.detailUrl}/#{item.item.objid}" rendered="#{(SessionBean.currentUrl == 'home' || SessionBean.currentUrl == 'searchResult' || SessionBean.currentUrl == 'person' || SessionBean.currentUrl == 'resource' || SessionBean.currentUrl == 'browseCollection')}">
 						<h:graphicImage id="picThumbResolutionBrowse" styleClass="vertical" value="#{item.thumbnailUrl}" />
 					</h:outputLink>
 					<!-- from an album -->
@@ -55,6 +55,9 @@
 			<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->
 			<h:panelGroup styleClass="large_area0" rendered="#{(SessionBean.currentUrl == 'home' || SessionBean.currentUrl == 'searchResult' || SessionBean.currentUrl == 'person' || SessionBean.currentUrl == 'resource')}">
 			<!-- Album Selected -->
+				<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+					<tr:selectBooleanCheckbox id="pictureCheckbox" value="#{item.selected}"/>
+				</tr:panelGroupLayout>				
 				<!-- View details -->
 				<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
 					<h:outputLink id="lnkActiveAlbum" value="#{Navigation.detailUrl}/#{item.item.objid}">

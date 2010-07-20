@@ -138,6 +138,7 @@
 	    </rule>
 	 <!-- END Album -->
 	    
+	 
 	     
      <!-- START Details -->
      	<!-- START From Pictures -->
@@ -252,6 +253,23 @@
     	<from casesensitive="false">/collection/*</from>
     	<to>/jsf/CollectionEntryPage.xhtml?page=view&amp;currentUrl=collections&amp;id=$1</to>
     </rule>
+
+    <rule>
+    	<from casesensitive="false">^/collection/escidoc:([0-9]+)/browse$</from>
+    	<to>/jsf/Pictures.xhtml?page=1&amp;show=12&amp;collection=escidoc:$1&amp;currentUrl=browseCollection</to>
+    </rule> 
+     <!--  Page number, pictures per page, 3 (sort,order) criteria -->
+     <rule match-type="wildcard">
+    	<from casesensitive="false">/collection/*/browse/*/*/*/*/*/*/*/*</from>
+    	<to>/jsf/Pictures.xhtml?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;collection=$1&amp;currentUrl=browseCollection</to>
+    </rule>
+    <!--  Page number, pictures per page -->
+     <rule>
+    	<from casesensitive="false">^/collection/escidoc:([0-9]+)/([0-9]+)/([0-9]+)$/browse</from>
+    	<to>/jsf/Pictures.xhtml?page=$2&amp;show=$3&amp;collection=escidoc:$1&amp;currentUrl=browseCollection</to>
+    </rule>
+
+	    
     
      <!-- Default Browsing with active album -->
     <rule>

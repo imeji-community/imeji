@@ -51,7 +51,7 @@
 			<h:commandLink id="lnkOrganize" styleClass="free_area0" value="ORGANIZE" rendered="false" />
 			<h:outputText styleClass="free_area0" value="ORGANIZE" rendered="true" />
 			<h:outputText styleClass="seperator void" />
-			<h:outputLink id="lnkbrowseCollection" styleClass="free_area0" value="#{Navigation.homePageUrl}?collection=#{CollectionSession.current.latestVersion.objectId}" rendered="true">
+			<h:outputLink id="lnkbrowseCollection" styleClass="free_area0" value="#{Navigation.collectionUrl}/#{CollectionSession.current.latestVersion.objectId}/browse" rendered="true">
 				<h:outputText value="#{lbl.collection_browse}"/>
 			</h:outputLink>
 		</ui:define>

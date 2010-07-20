@@ -111,12 +111,12 @@ public class QueryHelper
      */
     public void executeQueryForItems(String query, int itemsPerPage, int pageNumber, String sortedBy, String queryExtension) throws Exception
     {
-        logger.debug("query : " + concatQuery(queryExtension, query));
-        logger.debug("itemsPerPage : " + itemsPerPage);
-        logger.debug("pageNumber : " + pageNumber);
-        logger.debug("sortedBy : " + sortedBy);
+        logger.info("query : " + concatQuery(queryExtension, query));
+        logger.info("itemsPerPage : " + itemsPerPage);
+        logger.info("pageNumber : " + pageNumber);
+        logger.info("sortedBy : " + sortedBy);
         
-        NonNegativeInteger show = new NonNegativeInteger(itemsPerPage + "");
+        NonNegativeInteger show = new NonNegativeInteger(itemsPerPage + ""); 
         PositiveInteger page = new PositiveInteger(pageNumber + "");
         // creation of the request for the search method
         SearchRetrieveRequestType searchRetrieveRequest = new SearchRetrieveRequestType();
@@ -395,18 +395,18 @@ public class QueryHelper
      * @param albumId: the id of the album
      * @return The query.
      */
-    public String createAlbumQuery(AlbumVO album)
+    public String createContainerQuery(FacesContainerVO container)
     {
         String query = "";
-        if (album != null)
+        if (container != null)
         {
-            if (album.getMembers().size() > 0) 
+            if (container.getMembers().size() > 0) 
             {
                 query = "escidoc.objid any \"";
-                for (int i = 0; i < album.getMembers().size(); i++)
+                for (int i = 0; i < container.getMembers().size(); i++)
                 {
-                    query += album.getMembers().get(i).getObjectId() ;
-                    if (i < album.getMembers().size() - 1)
+                    query += container.getMembers().get(i).getObjectId() ;
+                    if (i < container.getMembers().size() - 1)
                     {
                         query += "  ";
                     }
@@ -417,7 +417,7 @@ public class QueryHelper
                 }
             }
             // case of the album has no pictures within
-            if (album.getMembers().size() == 0)
+            if (container.getMembers().size() == 0)
             {
                 query = "";
                 query += "(escidoc.objid=000)";

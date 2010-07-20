@@ -22,7 +22,7 @@ public class MdProfileVO
     
     public MdProfileVO()
     {
-	ContentModelDocument cmd = ContentModelDocument.Factory.newInstance();
+    	ContentModelDocument cmd = ContentModelDocument.Factory.newInstance();
 	cmd.addNewContentModel();
 	contentModel = cmd.getContentModel();
 	metadataList = new ArrayList<Metadata>();

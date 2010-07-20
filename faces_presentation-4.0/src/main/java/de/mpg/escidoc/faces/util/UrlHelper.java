@@ -301,6 +301,7 @@ public class UrlHelper
         this.albumId = albumId;
     }
 
+    
     public String getSelection()
     {
         selection = StringHelper.encodeCqlParameter(this.readSimpleParameter("selection"));
@@ -374,14 +375,15 @@ public class UrlHelper
     public String getBaseCurrentUrl()
     {
         baseCurrentUrl = navigation.getApplicationUrl();
-        
+     
         if (!"searchResult".equals(currentUrl)
                 && !"viewAlbum".equals(currentUrl)
                 && !"detailsFromAlbum".equals(currentUrl)
                 && !"comparisonFromAlbum".equals(currentUrl)
                 && !"searchResultInAlbum".equals(currentUrl)
                 && !"comparisonFromAlbum".equals(currentUrl)
-                && !"resource".equals(currentUrl))
+                && !"resource".equals(currentUrl)
+        		&& !"browseCollection".equals(currentUrl))
         {
             baseCurrentUrl += currentUrl.toLowerCase();
         }
@@ -412,6 +414,11 @@ public class UrlHelper
                         || currentUrl.equals("searchResultInAlbum"))
         {
             baseCurrentUrl += "search/result";
+        }
+        
+        if("browseCollection".equals(currentUrl))
+        {
+        	baseCurrentUrl += "collection/" + getCollection() + "/browse";
         }
         return baseCurrentUrl;
     }

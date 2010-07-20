@@ -56,8 +56,8 @@ public class SchemaElement
 	XmlAttribute nameAttr = new XmlAttribute("name", name, null);
 	XmlAttribute typeAttr = new XmlAttribute("type", name + "Type", null);
 	XmlAttribute refAttr = new XmlAttribute("ref", prefix + name, null);
-	XmlAttribute maxOccurrsAttr = new XmlAttribute("maxoccurs", Integer.toString(metadata.getMaxOccurs()) , null);
-	XmlAttribute minOccursAttr = new XmlAttribute("minoccurs", Integer.toString(metadata.getMinOccurs()) , null);
+	XmlAttribute maxOccurrsAttr = new XmlAttribute("maxOccurs", Integer.toString(metadata.getMaxOccurs()) , null);
+	XmlAttribute minOccursAttr = new XmlAttribute("minOccurs", Integer.toString(metadata.getMinOccurs()) , null);
 	XmlAttribute namespaceAttr = new XmlAttribute("namespace", namespace, null);
 	XmlAttribute schemalocAttr = new XmlAttribute("schemaLocation", metadata.getSchemaLocation(), null);
 	
@@ -67,14 +67,15 @@ public class SchemaElement
 	{
 	    attributes.add(typeAttr);
 	}
-	attributes.add(maxOccurrsAttr);
-	attributes.add(minOccursAttr);
+	else
+	{
+	    attributes.add(maxOccurrsAttr);
+	    attributes.add(minOccursAttr);
+	}
 	element = new SchemaMarkup(SchemaMarkupType.ELEMENT, attributes);
 	
 	attributes =  new ArrayList<XmlAttribute>();
-	attributes.add(typeAttr);
-	attributes.add(maxOccurrsAttr);
-	attributes.add(minOccursAttr);
+	attributes.add(nameAttr);
 	complexType = new SchemaMarkup(SchemaMarkupType.COMPLEXTYPE, attributes);
 	
 	attributes = new ArrayList<XmlAttribute>();
@@ -82,7 +83,7 @@ public class SchemaElement
 	attributes.add(refAttr);
 	attributes.add(maxOccurrsAttr);
 	attributes.add(minOccursAttr);
-	reference =  new SchemaMarkup(SchemaMarkupType.COMPLEXTYPE, attributes);
+	reference =  new SchemaMarkup(SchemaMarkupType.ELEMENT, attributes);
 	
 	attributes = new ArrayList<XmlAttribute>();
 	attributes.add(namespaceAttr);

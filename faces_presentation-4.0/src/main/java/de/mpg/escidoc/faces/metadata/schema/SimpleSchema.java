@@ -49,11 +49,9 @@ public class SimpleSchema
 	    }
 	}
 	
-	rootMarkup = new SchemaMarkup(SchemaMarkupType.ELEMENT, rootAttributes);
+	rootMarkup = new SchemaMarkup(SchemaMarkupType.SCHEMA, rootAttributes);
 	
 	Metadata firstElementMetadata = new Metadata(name, name, "http://faces.mpdl.mpg.de/escidoc:123");
-	firstElementMetadata.setMaxOccurs(1);
-	firstElementMetadata.setMinOccurs(1);
 	firstElement = new SchemaElement(firstElementMetadata, null);
 	
 	firstElement.setChilds(elements);
@@ -64,7 +62,9 @@ public class SimpleSchema
      */
     public String getXsd()
     {
-	String xsd = rootMarkup.asStartTag();
+	String xsd = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	
+	xsd += rootMarkup.asStartTag();
 	
 	firstElement.getImportElement();
 	

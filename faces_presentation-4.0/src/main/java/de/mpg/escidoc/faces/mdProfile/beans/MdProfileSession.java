@@ -3,6 +3,8 @@ package de.mpg.escidoc.faces.mdProfile.beans;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bouncycastle.jce.provider.JCEBlockCipher.IDEA;
+
 import de.mpg.escidoc.faces.mdProfile.MdProfileVO;
 import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.metadata.MetadataBean;
@@ -21,18 +23,26 @@ public class MdProfileSession
 	metadataBeanList = new ArrayList<MetadataBean>();
 	
 	// WorkAround until cone integration
-	Metadata emotion = new Metadata("emotion", "Emotion", "http://purl.org/mpdl/face/emotion");
-	Metadata age = new Metadata("age", "Age", "http://purl.org/mpdl/face/age");
-	Metadata pictureSet = new Metadata("picture-group", "Picture Set", "http://purl.org/mpdl/face/picture-group");
-	Metadata genre = new Metadata("genre", "Genre", "http://purl.org/mpdl/face/genre");
+	Metadata emotion = new Metadata("emotion", "Emotion", "http://purl.org/escidoc/metadata/terms/0.1/");
+	Metadata age = new Metadata("age", "Age", "http://purl.org/escidoc/metadata/terms/0.1/");
+	Metadata pictureSet = new Metadata("picture-group", "Picture Set", "http://purl.org/escidoc/metadata/terms/0.1/");
+	Metadata genre = new Metadata("genre", "Genre", "http://purl.org/escidoc/metadata/terms/0.1/");
+	Metadata identifier = new Metadata("identifier", "Identifier", "http://purl.org/dc/elements/1.1/");
 	emotion.setIndex("emotion");
 	age.setIndex("age");
 	genre.setIndex("genre");
 	pictureSet.setIndex("picture-group");
+	identifier.setIndex("identifier");
+	emotion.setSchemaLocation("../../metadata/0.1/escidoctypes.xsd");
+	age.setSchemaLocation("../../metadata/0.1/escidoctypes.xsd");
+	genre.setSchemaLocation("../../metadata/0.1/escidoctypes.xsd");
+	pictureSet.setSchemaLocation("../../metadata/0.1/escidoctypes.xsd");
+	identifier.setSchemaLocation("http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd");
 	metadataList.add(emotion);
 	metadataList.add(age);
 	metadataList.add(pictureSet);
 	metadataList.add(genre);
+	metadataList.add(identifier);
 	// End workaround
     }
 

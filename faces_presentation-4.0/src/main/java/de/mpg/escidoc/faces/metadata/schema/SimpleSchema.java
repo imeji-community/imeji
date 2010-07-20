@@ -1,7 +1,11 @@
 package de.mpg.escidoc.faces.metadata.schema;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.map.HashedMap;
 
 import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.metadata.schema.SchemaElement.SchemaElementType;
@@ -11,7 +15,8 @@ public class SimpleSchema
 {
     private List<SchemaElement> elements = null;
     private String name = null;
-    private String namespace = null;
+    private String namespace= null;
+    private Map<String, String> namespaces = new HashMap<String, String>();
     
     private SchemaMarkup rootMarkup = null;
     private SchemaElement firstElement = null;
@@ -30,9 +35,17 @@ public class SimpleSchema
 	    int i = 0;
 	    for (Metadata m : metadataList)
 	    {
-		elements.add(new SchemaElement(m, "ns" + i));
-		rootAttributes.add(new XmlAttribute("ns" + i, m.getNamespace(), "xmlns"));
-		i++;
+		if (!namespaces.containsKey(m.getNamespace()))
+		{
+		    elements.add(new SchemaElement(m, "ns" + i));
+		    rootAttributes.add(new XmlAttribute("ns" + i, m.getNamespace(), "xmlns"));
+		    namespaces.put(m.getNamespace(), "ns" + i);
+		    i++;
+		}
+		else
+		{
+		    elements.add(new SchemaElement(m, namespaces.get(m.getNamespace())));
+		}
 	    }
 	}
 	
@@ -55,9 +68,14 @@ public class SimpleSchema
 	
 	firstElement.getImportElement();
 	
+	List<String> importElements = new ArrayList<String>();
 	for (SchemaElement se : elements)
 	{
-	    xsd += se.getImportElement();
+	    if (!importElements.contains(se.getImportElement()))
+	    {
+		 xsd += se.getImportElement();
+		 importElements.add(se.getImportElement());
+	    }
 	}
 	
 	xsd += firstElement.getElementWithComplexType();

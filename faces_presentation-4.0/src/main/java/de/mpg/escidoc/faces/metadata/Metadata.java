@@ -29,6 +29,7 @@ public class Metadata
     private List<String> value = null;
     
     private String namespace = null;
+    private String schemaLocation = null;
     
     /**
      * The type of the metadata (i.e. parent name)
@@ -74,6 +75,7 @@ public class Metadata
      */
     public Metadata(String name, String label, String namespace)
     {
+	this.node = StatementType.Factory.newInstance();   
 	this.name = name;
 	this.label = label;
 	this.namespace = namespace;
@@ -119,6 +121,9 @@ public class Metadata
         this.constraint = metadata.getConstraint();
         this.max = metadata.max;
         this.min = metadata.min;
+        this.namespace = metadata.getNamespace();
+        this.schemaLocation = metadata.getSchemaLocation();
+        this.name = metadata.getName();
     }
     
     private void initVariables()
@@ -424,6 +429,22 @@ public class Metadata
     public void setConstraint(List<String> constraint)
     {
         this.constraint = constraint;
+    }
+
+    /**
+     * @return the schemaLocation
+     */
+    public String getSchemaLocation()
+    {
+        return schemaLocation;
+    }
+
+    /**
+     * @param schemaLocation the schemaLocation to set
+     */
+    public void setSchemaLocation(String schemaLocation)
+    {
+        this.schemaLocation = schemaLocation;
     }
 
     

@@ -16,6 +16,7 @@ public class SchemaElement
     
     private String name = null;
     private String namespace = null;
+    private String prefix = null;
     private SchemaElementType type = SchemaElementType.COMPLEX;
     private List<SchemaElement> childs = null;
     
@@ -23,7 +24,7 @@ public class SchemaElement
     private SchemaMarkup reference = null;
     private SchemaMarkup complexType = null;
     private SchemaMarkup simpleType =  new SchemaMarkup(SchemaMarkupType.SIMPLETYPE, null);
-    private List<SchemaMarkup> enumerations =  new ArrayList<SchemaMarkup>();
+    private List<SchemaMarkup> enumerations =  null;
     private SchemaMarkup restriction =  new SchemaMarkup(SchemaMarkupType.RESTRICTION, null);;
     private SchemaMarkup sequence = new SchemaMarkup(SchemaMarkupType.SEQUENCE, null);
     private SchemaMarkup importElement = null;
@@ -33,6 +34,8 @@ public class SchemaElement
 	this.name = metadata.getName();
 	this.namespace = metadata.getNamespace();
 	this.type =  SchemaElementType.COMPLEX;
+	this.prefix = prefix;
+	this.enumerations =  new ArrayList<SchemaMarkup>();
 	
 	if (metadata.getConstraint().size() > 0)
 	{
@@ -56,7 +59,7 @@ public class SchemaElement
 	XmlAttribute maxOccurrsAttr = new XmlAttribute("maxoccurs", Integer.toString(metadata.getMaxOccurs()) , null);
 	XmlAttribute minOccursAttr = new XmlAttribute("minoccurs", Integer.toString(metadata.getMinOccurs()) , null);
 	XmlAttribute namespaceAttr = new XmlAttribute("namespace", namespace, null);
-	XmlAttribute schemalocAttr = new XmlAttribute("schemaLocation", "http://this.mpdl.mpg.de/location/of/schema.xsd", null);
+	XmlAttribute schemalocAttr = new XmlAttribute("schemaLocation", metadata.getSchemaLocation(), null);
 	
 	List<XmlAttribute> attributes = new ArrayList<XmlAttribute>();
 	attributes.add(nameAttr);
@@ -163,7 +166,36 @@ public class SchemaElement
     {	
 	return reference.asEmptyTag();
     }
-    
-    
-    
+
+    /**
+     * @return the namespace
+     */
+    public String getNamespace()
+    {
+        return namespace;
+    }
+
+    /**
+     * @param namespace the namespace to set
+     */
+    public void setNamespace(String namespace)
+    {
+        this.namespace = namespace;
+    }
+
+    /**
+     * @return the prefix
+     */
+    public String getPrefix()
+    {
+        return prefix;
+    }
+
+    /**
+     * @param prefix the prefix to set
+     */
+    public void setPrefix(String prefix)
+    {
+        this.prefix = prefix;
+    }
 }

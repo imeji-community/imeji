@@ -35,11 +35,11 @@ public class MetadataBean
 	    	    
 	    if (current == null)
 	    {
-	    	current = new Metadata(metadataList.get(0).getIndex()
-	    		, metadataList.get(0).getLabel()
-	    		, metadataList.get(0).getNamespace());
+	    	//current = new Metadata(metadataList.get(0).getIndex()
+	    	//	, metadataList.get(0).getLabel()
+	    	//	, metadataList.get(0).getNamespace());
 	    	//Correct is
-	    	// selected = new Metadata(metadataList.get(0));
+	    	current = new Metadata(metadataList.get(0));
 	    }
 	    
 	    for (Metadata m : list)
@@ -65,9 +65,9 @@ public class MetadataBean
 		{
 		    if (m.getIndex().equals(event.getNewValue().toString()))
 		    {
-			current = new Metadata(m.getIndex(), m.getLabel(), m.getNamespace());
+			//current = new Metadata(m.getIndex(), m.getLabel(), m.getNamespace());
 			//correct is
-			// select = new Metadata(m);
+			current = new Metadata(m);
 		    }
 		}
 	    }

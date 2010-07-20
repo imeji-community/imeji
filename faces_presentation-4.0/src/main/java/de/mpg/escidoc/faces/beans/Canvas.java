@@ -109,7 +109,7 @@ public class Canvas
             try
             {
                 queryHelper = new QueryHelper();
-                String query = queryHelper.createAlbumQuery(album);
+                String query = queryHelper.createContainerQuery(album);
                 
                 if (!"".equals(query))
                 {

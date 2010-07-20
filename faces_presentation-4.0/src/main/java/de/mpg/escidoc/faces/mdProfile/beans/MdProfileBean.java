@@ -119,7 +119,9 @@ public class MdProfileBean
 	int i = 0;
 	for (MetadataBean m : session.getMetadataBeanList())
 	{
-	    profile.getMetadataList().add(new Metadata(m.getCurrent().getName(), m.getCurrent().getIndex(), m.getCurrent().getNamespace()));
+	   // profile.getMetadataList().add(new Metadata(m.getCurrent().getName(), m.getCurrent().getIndex(), m.getCurrent().getNamespace()));
+	    profile.getMetadataList().add(new Metadata(m.getCurrent()));
+	    profile.getMetadataList().get(i).getConstraint().clear();
 	    
 	    for (ConstraintBean c : m.getConstraints())
 	    {

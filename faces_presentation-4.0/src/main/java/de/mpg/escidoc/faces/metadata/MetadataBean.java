@@ -22,7 +22,7 @@ public class MetadataBean
 	private List<Metadata> metadataList = new ArrayList<Metadata>();
 	private SessionBean sessionBean = null;
 	private List<ConstraintBean> constraints = null;
-	
+	private int constraintPosition;
 	/**
 	 * Constructor for a {@link MetadataBean}
 	 * @param list
@@ -114,25 +114,25 @@ public class MetadataBean
 	    }
 	}
 	
-	public void addConstraint(ActionEvent event)
+	public String addConstraint()
 	{
-	    if (event != null)
-	    {
-		int position = Integer.parseInt(event.getComponent().getAttributes().get("index").toString());
-		constraints.add(position + 1, new ConstraintBean(""));
-	    }
-	    MdProfileBean.reloadPage();
+	   
+		
+		constraints.add(getConstraintPosition() + 1, new ConstraintBean(""));
+	    
+	    return "";
+	    //MdProfileBean.reloadPage();
 	}
 	
-	public void removeConstraint(ActionEvent event)
+	public String removeConstraint()
 	{
-	    if (event != null)
-	    {
-		int position = Integer.parseInt(event.getComponent().getAttributes().get("index").toString());
-		constraints.remove(position);
-	    }
-	    MdProfileBean.reloadPage();
+	    
+
+		constraints.remove(getConstraintPosition());
+	    return"";
+	    //MdProfileBean.reloadPage();
 	}
+
 
 	public Metadata getCurrent()
 	{
@@ -168,6 +168,14 @@ public class MetadataBean
 	public void setConstraints(List<ConstraintBean> constraints)
 	{
 	    this.constraints = constraints;
+	}
+
+	public void setConstraintPosition(int constraintPosition) {
+		this.constraintPosition = constraintPosition;
+	}
+
+	public int getConstraintPosition() {
+		return constraintPosition;
 	}
 
 	/**

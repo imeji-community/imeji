@@ -34,6 +34,7 @@ public class MdProfileBean
     private MdProfileVO profile = null;
     private MdProfileController controller = null;
     private SessionBean sessionBean = null;
+    private int profilePosition;
     
   
     /**
@@ -166,29 +167,25 @@ public class MdProfileBean
 	 return list; 
     }
     
-    public void addMetadata(ActionEvent event)
+    public String addMetadata()
     {
-	if (event != null)
-	{
-	    int position = Integer.parseInt(event.getComponent().getAttributes().get("position").toString());
-	    metadataBeanList.add(position + 1, new MetadataBean(metadataList));
+	
+	   
+	    metadataBeanList.add(getProfilePosition() + 1, new MetadataBean(metadataList));
 	    session.setMetadataBeanList(metadataBeanList);
+	
+		return "";
 	}
-	reloadPage();
+    
+    public String removeMetadata()
+    {
+	    metadataBeanList.remove(getProfilePosition());
+	    session.setMetadataBeanList(metadataBeanList);
+		return "";
+		
     }
     
-    public void removeMetadata(ActionEvent event)
-    {
-	if (event != null)
-	{
-	    int position = Integer.parseInt(event.getComponent().getAttributes().get("position").toString());
-	    metadataBeanList.remove(position);
-	    session.setMetadataBeanList(metadataBeanList);
-	}
-	reloadPage();
-    }
-    
-    public static void reloadPage() 
+    public void reloadPage() 
     {
 	try
 	{
@@ -272,6 +269,14 @@ public class MdProfileBean
     {
         this.metadataMenu = metadataMenu;
     }
+
+	public void setProfilePosition(int profilePosition) {
+		this.profilePosition = profilePosition;
+	}
+
+	public int getProfilePosition() {
+		return profilePosition;
+	}
     
     
 }

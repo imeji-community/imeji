@@ -35,15 +35,9 @@
 
 <f:subview id="CollectionFormular">
 	<!-- First part of the page -->
-	<div class="small_area0">&#160;</div>
-	<h:panelGroup layout="block" styleClass="huge_area0">
-		<h:panelGroup layout="block" styleClass="huge_area1_p4 metaDataSection">
-			<h2 class="xLarge_area0" style="text-align: center;">
-				<h:outputText value="#{CollectionSession.current.mdRecord.title.value}" />
-			</h2>
-			<h:panelGroup>
-				<!-- Picture status of the album -->
-				<h:panelGroup styleClass="huge_area0">
+	<h:panelGroup layout="block" styleClass="full_area0 fullItem">	
+	
+		<h:panelGroup styleClass="huge_area0">
 					<h:panelGroup layout="block" styleClass="small_area0 medium_marginLExcl statusIconArea">
 						<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{CollectionSession.current.state == 'PENDING'}"></h:panelGroup>
 						<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{CollectionSession.current.state == 'RELEASED'}"></h:panelGroup>
@@ -55,132 +49,144 @@
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
+	
+	
+	<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 			
-			<!-- Start of the album formular -->
-				
-				<h:panelGroup layout="block" styleClass="huge_area0">
-					<b><h:outputText id="txtAlbumName" styleClass="double_area0 endline" value="#{lbl.name}*" /></b>
-					<h:inputText id="nameField" value="#{CollectionBean.collection.mdRecord.title.value}" valueChangeListener="#{CollectionBean.titleListener}" styleClass="double_txtInput" immediate="true"></h:inputText>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="huge_area0">
-					<b><h:outputText id="txtAlbumDescription" styleClass="double_area0 endline" value="#{lbl.description}" /></b>
-					<h:panelGroup styleClass="double_area0">
-						<tr:iterator var="abstracts" value="#{CollectionBean.collection.mdRecord.abstracts}">
-							 <h:inputTextarea id="descriptionField" rows="4" value="#{abstracts.value}" styleClass="double_txtInput" immediate="true" valueChangeListener="#{CollectionBean.descriptionListener}"/>
-						</tr:iterator>
-					</h:panelGroup>
-				</h:panelGroup>
-				
-				<!-- Selection of metadata profile -->
-				<h:panelGroup layout="block" styleClass="huge_area0">
-					<b><h:outputText id="txtMdProfile" styleClass="double_area0 endline" value="Metadata Profile" /></b>
-					<h:selectOneMenu value="#{CollectionBean.collection.mdProfileId}">
-						<f:selectItems value="#{CollectionBean.mdProfileList}"/>
-					</h:selectOneMenu>
-				</h:panelGroup>
-				<!-- End Selection of metadata profile -->
-				
 			
+			<h3 class="xLarge_area0_p8 endline blockHeader">
+				<h:outputText value="Collection Information"/>
+			</h3>
+			<span class="seperator"></span>
+			
+			<div class="free_area0 itemBlockContent endline">
+
+				<!-- Title -->
+				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+					<b class="xLarge_area0_p8 endline labelLine clear">
+						<h:outputText value="#{lbl.name}*"/>
+						<span class="noDisplay">: </span>
+					</b>
+					<span class="xHuge_area0 xTiny_marginLExcl endline">
+						<h:inputText id="inputTitleText" styleClass="quad_txtInput" value="#{CollectionBean.collection.mdRecord.title.value}"></h:inputText>
+					</span>
+				</h:panelGroup>
 				
-				<h:panelGroup layout="block" styleClass="huge_area0">
-					<b><h:outputText id="txtAlbumAuthor" styleClass="huge_area0 endline" value="#{lbl.authors}" /></b>					
-					<tr:iterator var="creators" varStatus="status" value="#{CollectionBean.collection.mdRecord.creators}">
-						<h:panelGroup layout="block" styleClass="suggestAnchor">
-							<h:panelGroup class="huge_area0">
-								<h:outputText styleClass="large_area0 endline" value="#{lbl.author}"/>
-								<h:panelGroup styleClass="small_area0 sectionToolSection small_marginRIncl">
-									<!--  <tr:commandButton styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_author}" actionListener="" disabled="#{AlbumFormular.numberOfCreators == '1'}" immediate="true">
-										<f:attribute name="creator" value="#{creators}"></f:attribute>
-									</tr:commandButton>
-									<tr:commandButton styleClass="min_imgBtn add sectionTool" shortDesc="#{lbl.add_author}" action="" immediate="true"/>-->
-								</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+					<b class="xLarge_area0_p8 endline labelLine clear">
+						<h:outputText value="#{lbl.description}"/>
+						<span class="noDisplay">: </span>
+					</b>
+					<span class="xHuge_area0 xTiny_marginLExcl endline">
+						<h:inputText id="inputDescription" styleClass="quad_txtArea inputTxtArea" cols="15" rows="3" value="#{CollectionBean.collection.mdRecord.abstracts[0].value}"></h:inputText>
+					</span>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+					<b class="xLarge_area0_p8 endline labelLine clear">
+						<h:outputText value="Context"/>
+						<span class="noDisplay">: </span>
+					</b>
+					<span class="xHuge_area0 xTiny_marginLExcl endline">
+						<h:selectOneMenu value="#{CollectionBean.selectedContext}" valueChangeListener="#{CollectionBean.selectContextListener}" immediate="true">
+							<f:selectItems value="#{CollectionBean.userDepositorGrants}"/>
+						</h:selectOneMenu>
+					</span>
+				</h:panelGroup>
+			
+			
+			
+			</div>
+		</h:panelGroup>
+		
+		
+		
+		<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+			<h3 class="xLarge_area0_p8 endline blockHeader">
+				<h:outputText value="Metadata Profile"/>
+			</h3>
+			<span class="seperator"></span>
+			
+			<div class="free_area0 itemBlockContent endline">
+	
+	
+				<!-- Title -->
+				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+					<b class="xLarge_area0_p8 endline labelLine clear">
+						<h:outputText value="#{lbl.profile_name}*"/>
+						<span class="noDisplay">: </span>
+					</b>
+					<span class="xHuge_area0 xTiny_marginLExcl endline">
+						<h:inputText id="inputTitleText" styleClass="quad_txtInput" value="#{MdProfileBean.name}" valueChangeListener="#{MdProfileBean.nameListener}" ></h:inputText>
+					</span>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+					<b class="xLarge_area0_p8 endline labelLine clear">
+						<h:outputText value="Profile"/>
+						<span class="noDisplay">: </span>
+					</b>
+					<tr:iterator id="profile" var="profile" value="#{MdProfileBean.metadataBeanList}" varStatus="position">
+						<h:panelGroup class="xHuge_area0 xTiny_marginLExcl endline">
+							<h:panelGroup styleClass="large_area0 tiny_marginRIncl">
+								<h:outputLabel styleClass="large_label" value="#{lbl.metadata_select}" />
+								<h:selectOneMenu styleClass="large_select" value="#{profile.current.label}" valueChangeListener="#{profile.menuListener}">
+										<f:selectItems value="#{MdProfileBean.metadataMenu}"/>
+								</h:selectOneMenu>
 							</h:panelGroup>
-
-							<h:panelGroup layout="block" styleClass="double_area0">
-								<h:panelGroup styleClass="double_area0">
-									<h:outputText value="#{lbl.family_name}" />
-									<h:outputText value="*" />
-								</h:panelGroup>
-								<!--  <tr:inputText simple="true" id="familyname" value="#{creators.person.familyName}" styleClass="double_txtInput" immediate="true" valueChangeListener="" >
-									<f:attribute name="index" value="#{status.index}"/>
-								</tr:inputText>-->
-								<h:panelGroup styleClass="double_area0">
-									<h:outputText value="#{lbl.first_name}" />
-								</h:panelGroup>
-								<!--  <tr:inputText simple="true" id="givenname" value="#{creators.person.givenName}" styleClass="double_txtInput" valueChangeListener="" immediate="true">
-									<f:attribute name="index" value="#{status.index}"/>
-								</tr:inputText>-->
+							<h:panelGroup styleClass="large_area0 tiny_marginRIncl">
+								<h:outputLabel styleClass="large_label" value="#{lbl.minoccurs}" />
+								<h:inputText styleClass="large_txtInput" value="#{profile.current.minOccurs}" valueChangeListener="#{profile.minOccursListener}"/>
 							</h:panelGroup>
-
-							<h:panelGroup class="huge_area0 endline">
-								<h:outputText id="txtAlbumAuthor" value="#{lbl.affiliation}" />
-								<h:outputText value="*" />
+							<h:panelGroup styleClass="large_area0 tiny_marginRIncl">
+								<h:outputLabel styleClass="large_label" value="#{lbl.maxoccurs}" />
+								<h:inputText styleClass="large_txtInput" value="#{profile.current.maxOccurs}" valueChangeListener="#{profile.maxOccursListener}"/>
 							</h:panelGroup>
-							<h:panelGroup layout="block" styleClass="huge_area0">
-								<tr:iterator var="affiliations" value="#{creators.person.organizations}" varStatus="statusAffiliation">
-									<h:panelGroup styleClass="quad_area0">
-										<!--  <tr:inputText simple="true" id="affiliation" value="#{affiliations.name.value}" styleClass="double_txtInput endline" immediate="true" valueChangeListener="">
-											<f:attribute name="indexCreator" value="#{status.index}" />
-											<f:attribute name="indexAffiliation" value="#{statusAffiliation.index}"/>
-										</tr:inputText>
-										<h:panelGroup styleClass="small_area0 sectionToolSection xLarge_marginRExcl">
-											<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add an affiliation" actionListener="" immediate="true">
-												<f:attribute name="creator" value="#{creators}"></f:attribute>
+							
+							<h:panelGroup styleClass="xLarge_area0 tiny_marginRIncl">
+								<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
+								<tr:iterator id="profile" var="constraint" value="#{profile.constraints}" varStatus="pos">
+									<h:panelGroup>
+										<h:inputText styleClass="large_txtInput" value="#{constraint.value}" valueChangeListener="#{constraint.listener}" />
+										<h:panelGroup styleClass="large_area0">
+											<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add constraint" action="#{profile.addConstraint}">
+												<f:setPropertyActionListener value="#{pos.index}" target="#{profile.constraintPosition}"/>
 											</tr:commandButton>
-											<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove this affiliation" actionListener="" disabled="#{creators.person.organizationsSize == '1'}" immediate="true">
-												<f:attribute name="creator" value="#{creators}"></f:attribute>
-												<f:attribute name="affiliation" value="#{affiliations}"></f:attribute>
+											<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove Metadata" action="#{profile.removeConstraint}">
+												<f:setPropertyActionListener value="#{pos.index}" target="#{profile.constraintPosition}"/>
 											</tr:commandButton>
-										</h:panelGroup>-->
+										</h:panelGroup>
+										
 									</h:panelGroup>
 								</tr:iterator>
 							</h:panelGroup>
-							<h:panelGroup layout="block" styleClass="huge_area0">
-								<h:outputText value="&#160;"></h:outputText>
-							</h:panelGroup>		
-						</h:panelGroup>		
+							
+						</h:panelGroup>
+						<span class="large_area0_p8 lineToolSection">
+							<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add Metadata" action="#{MdProfileBean.addMetadata}">
+								<f:setPropertyActionListener value="#{position.index}" target="#{MdProfileBean.profilePosition}"/>
+							</tr:commandButton>
+							<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove Metadata" action="#{MdProfileBean.removeMetadata}">
+								<f:setPropertyActionListener value="#{position.index}" target="#{MdProfileBean.profilePosition}"/>
+							</tr:commandButton>
+						</span>
 					</tr:iterator>
+					
 				</h:panelGroup>
-				
-				<h:panelGroup layout="block" styleClass="huge_area0">
-					<h:selectOneMenu value="#{CollectionBean.selectedContext}" valueChangeListener="#{CollectionBean.selectContextListener}" immediate="true">
-						<f:selectItems value="#{CollectionBean.userDepositorGrants}"/>
-					</h:selectOneMenu>
-				</h:panelGroup>
-				
-				<h:outputText styleClass="huge_area0" escape="false" value="&#160;" />
-				<h:panelGroup layout="block" styleClass="huge_area0">
-					<h:outputText value="* #{lbl.mandatory_field}"/>
-				</h:panelGroup>
-	
-			</h:panelGroup>
-	<!-- End Resolve album -->
+			
+			</div>
 		</h:panelGroup>
-		<h:panelGroup layout="block" styleClass="huge_area0 formButtonArea">
-			<h:panelGroup layout="block" styleClass="free_area0" style="float: right;">
-				<h:outputLink value="#{SessionBean.backUrl}" styleClass="small_area1_p8 large_marginRExcl cancelButton">
-        			<h:outputText value="#{lbl.cancel}" />
-        		</h:outputLink>
-        		<h:commandButton action="#{CollectionBean.save}" value="#{lbl.save}" styleClass="small_txtBtn activeButton endline"></h:commandButton>
-			</h:panelGroup>
-		</h:panelGroup>
-	</h:panelGroup>
-<!-- End First part of the page -->
-
-	<h:panelGroup styleClass="free_area0" rendered="#{HomePage.totalNumberOfItems == '0'}">
-		<!-- No Pictures on page -->
-		<br/>
-		<h:outputText value="#{msg.message_album_wrong_id}" rendered="#{CollectionSession.current.version.objectId == null and SessionBean.currentUrl != 'createalbum'}"></h:outputText>
-		<h:outputText value="#{msg.message_album_empty}" rendered="#{(SessionBean.user != null) and (CollectionSession.current.version.objectId != null or SessionBean.currentUrl == 'createalbum')}"></h:outputText>
-	</h:panelGroup>
-
-	<h:panelGroup layout="block" rendered="#{HomePage.totalNumberOfItems != '0'}">
-		<ul class="free_area0 albumBrowse">
 	
-			<ui:include src="../../picturesPages/ui/Images.jspf" />
+	</h:panelGroup>
 	
-		</ul>
-	</h:panelGroup>	
+	<div class="full_area0 formButtonArea">
+		<h:outputLink value="#{SessionBean.backUrl}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
+	    	<h:outputText value="#{lbl.cancel}" />
+	    </h:outputLink>
+	    <h:commandButton action="#{CollectionBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"></h:commandButton>					
+	</div>
+	
+
 	<script>
 		function message(message)
 		{

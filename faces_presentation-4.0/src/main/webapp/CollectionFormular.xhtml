@@ -40,8 +40,8 @@
 	
 		<ui:define name="headline">
 			<h1>
-				<h:outputText value="#{msg.create_album_00_headline}" rendered="#{CollectionBean.pageType == 'CREATE'}"/>
-				<h:outputText value="#{msg.edit_album_00_headline}" rendered="#{CollectionBean.pageType == 'EDIT'}"/>
+				<h:outputText value="#{lbl.createCollection}" rendered="#{CollectionBean.pageType == 'CREATE'}"/>
+				<h:outputText value="#{lbl.editCollection}" rendered="#{CollectionBean.pageType == 'EDIT'}"/>
 			</h1>
 		</ui:define>
 		
@@ -57,15 +57,9 @@
 		</ui:define>
 
 		<ui:define name="mainContent">
-			<ui:include src="picturesPages/ui/PaginationTop.jspf"/>	
-			<ui:include src="picturesPages/ui/ActiveAlbumMenu.jspf"/>			
-			
-			<h:panelGroup layout="block" styleClass="full_area0 tiledList" rendered="true">
+			<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
 				<ui:include src="collectionPages/ui/CollectionFormular.jspf" />
 			</h:panelGroup>
-
-			<ui:include src="picturesPages/ui/PaginationBottom.jspf"/>
-				
 		</ui:define>	
 	
 	</ui:composition>

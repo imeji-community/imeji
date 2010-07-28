@@ -246,7 +246,13 @@
     <!-- Collections Page -->
     <rule>
     	<from casesensitive="false">^/collection$</from>
-    	<to>/jsf/CollectionEditPage.xhtml?&amp;currentUrl=editCollection</to>
+    	<to>/jsf/CollectionFormular.xhtml?&amp;currentUrl=editCollection</to>
+    </rule>
+    
+    <!-- Create a new album -->
+    <rule>
+    	<from casesensitive="false">^/collection/new$</from>
+    	<to>/jsf/CollectionFormular.xhtml?currentUrl=createCollection</to>
     </rule>
     
     <rule match-type="wildcard">

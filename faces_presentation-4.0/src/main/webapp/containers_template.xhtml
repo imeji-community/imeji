@@ -99,7 +99,16 @@
 				</h:commandLink>
 			<!-- ORGANIZE content menu lower line ends here -->
 			</h:panelGroup>
-
+			
+			<h:panelGroup rendered="#{Session.selectedMenu == 'ORGANIZE' and SessionBean.user != null and FacesContainerListBean.listType != 'search' and SessionBean.currentUrl == 'collections'}">
+			<!-- ORGANIZE content menu lower line starts here -->
+				<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.collectionUrl}/new?action=init">
+						<h:outputText value="Create Collecion"></h:outputText>
+				</h:outputLink>
+				<h:outputText styleClass="seperator"/>
+			<!-- ORGANIZE content menu lower line ends here -->
+			</h:panelGroup>
+			
 		</ui:define>
 							
 		<ui:define name="mainContent">

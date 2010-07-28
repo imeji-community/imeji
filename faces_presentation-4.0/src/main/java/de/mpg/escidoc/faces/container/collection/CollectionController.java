@@ -18,9 +18,11 @@ import de.mpg.escidoc.faces.util.ContentModelHelper;
 import de.mpg.escidoc.faces.util.LoginHelper;
 import de.mpg.escidoc.faces.util.UserHelper;
 import de.mpg.escidoc.services.common.referenceobjects.ContextRO;
+import de.mpg.escidoc.services.common.referenceobjects.ItemRO;
 import de.mpg.escidoc.services.common.valueobjects.AccountUserVO;
 import de.mpg.escidoc.services.common.valueobjects.ContextVO;
 import de.mpg.escidoc.services.common.valueobjects.GrantVO;
+import de.mpg.escidoc.services.common.valueobjects.ItemRelationVO;
 import de.mpg.escidoc.services.common.valueobjects.TaskParamVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.IdentifierVO;
 import de.mpg.escidoc.services.common.valueobjects.metadata.IdentifierVO.IdType;
@@ -47,19 +49,22 @@ public class CollectionController extends FacesContainerController
 	public FacesContainerVO create(CollectionVO collectionVO, String userHandle) throws Exception
 	{
 		AccountUserVO accountUserVO = UserHelper.getAccounUserVO(userHandle);
-//		
+		collectionVO.getRelations().add(new ItemRelationVO("http://www.escidoc.de/ontologies/mpdl-ontologies/content-relations#hasPart", new ItemRO(collectionVO.getMdProfileId())));
+		
+		//		
 //		String contextId = addNewContext(collectionVO.getMdRecord().getTitle().getValue()
 //			, collectionVO.getMdRecord().getAbstracts().get(0).getValue()
 //			, userHandle, "escidoc:persistent13");
 //		
 //		collectionVO.setContext(context);
     	
+		/*
         	collectionVO.getMdRecord().getIdentifiers().add(
         			new IdentifierVO(IdType.URI, 
         					ServiceLocator.getFrameworkUrl() +  "/cmm/content-model/" + collectionVO.getMdProfileId()));
         	
         	String adminHandle = LoginHelper.loginSystemAdmin();
-    
+    */
 //        	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.MODERATOR.frameworkValue(), collectionVO.getContext().getObjectId()),  adminHandle);
 //        	UserHelper.addGrantToUser(accountUserVO, new GrantVO(GrantVO.PredefinedRoles.PRIVILEGEDVIEWER.frameworkValue(), collectionVO.getContext().getObjectId()),  adminHandle);
 		    	

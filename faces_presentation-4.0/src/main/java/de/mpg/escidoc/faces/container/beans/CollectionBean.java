@@ -8,12 +8,16 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import de.escidoc.schemas.useraccount.x07.UserAccountDocument.UserAccount;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.collection.CollectionController;
 import de.mpg.escidoc.faces.container.collection.CollectionSession;
 import de.mpg.escidoc.faces.container.collection.CollectionVO;
+import de.mpg.escidoc.faces.mdProfile.MdProfileController;
+import de.mpg.escidoc.faces.mdProfile.MdProfileVO;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.ContextHelper;
@@ -52,7 +56,11 @@ public class CollectionBean
 	private HttpServletRequest request = null;
 	private FacesContext fc = null;
 	private List<SelectItem> userDepositorGrants = null;
+	private List<SelectItem> mdProfileList = null;
 	private String selectedContext = null;
+	private String selectedMdProfile = null;
+	
+	private static Logger logger = Logger.getLogger(CollectionBean.class);
 	
 	/**
 	 * Default Constructor
@@ -65,6 +73,7 @@ public class CollectionBean
 		collectionsMenu = new ArrayList<SelectItem>();
 		userDepositorGrants = new ArrayList<SelectItem>();
 		fc =  FacesContext.getCurrentInstance();
+		mdProfileList = new ArrayList<SelectItem>();
 		request = (HttpServletRequest) fc.getExternalContext().getRequest();
 		
 		try 
@@ -74,6 +83,7 @@ public class CollectionBean
 		catch (Exception e) 
 		{
 			sessionBean.setMessage("Error Initializing Collection Bean" + e);
+			logger.error("Error initializing Collection Bean", e);
 		}
 	}
 	
@@ -118,6 +128,13 @@ public class CollectionBean
 			userDepositorGrants.add(new SelectItem(g.getObjectRef()
 				, ContextHelper.getContext(g.getObjectRef(), sessionBean.getUserHandle()).getName()));
 		    }
+		}
+		
+		MdProfileController mdProfilecontroller = new MdProfileController(); 
+		List<MdProfileVO> mdProfiles = mdProfilecontroller.retrieveMdProfiles(sessionBean.getUserHandle());
+		for(MdProfileVO mdProfile : mdProfiles)
+		{
+			mdProfileList.add(new SelectItem(mdProfile.getId(), mdProfile.getName() + " (" + mdProfile.getId() + ")"));
 		}
 		
 		selectedContext = "";
@@ -255,5 +272,23 @@ public class CollectionBean
 	    collection.setContext(new ContextRO(selectedContext));
 	}
     }
+    
+  
+
+	public void setMdProfileList(List<SelectItem> mdProfileList) {
+		this.mdProfileList = mdProfileList;
+	}
+
+	public List<SelectItem> getMdProfileList() {
+		return mdProfileList;
+	}
+
+	public void setSelectedMdProfile(String selectedMdProfile) {
+		this.selectedMdProfile = selectedMdProfile;
+	}
+
+	public String getSelectedMdProfile() {
+		return selectedMdProfile;
+	}
 	
 }

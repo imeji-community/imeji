@@ -34,7 +34,7 @@ public class CollectionVO extends FacesContainerVO
 		this.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
 		this.screenConfiguration = screenConfiguration;
 		// TODO: change that.
-		this.mdProfileId = "escidoc:faces50";
+		//this.mdProfileId = "escidoc:faces50";
 	}
 	
 	public CollectionVO(FacesContainerVO fc)

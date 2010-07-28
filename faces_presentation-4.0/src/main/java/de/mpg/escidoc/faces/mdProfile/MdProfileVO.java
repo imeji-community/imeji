@@ -3,28 +3,24 @@ package de.mpg.escidoc.faces.mdProfile;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.validation.Schema;
-import javax.xml.validation.Validator;
-import javax.xml.validation.ValidatorHandler;
-
 import de.escidoc.schemas.contentmodel.x01.ContentModelDocument;
 import de.escidoc.schemas.contentmodel.x01.ContentModelDocument.ContentModel;
 import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
-import de.mpg.escidoc.faces.metadata.helper.ScreenManagerHelper;
 
 public class MdProfileVO 
 {
-    private ContentModel contentModel = null;
+    //private ContentModel contentModel = null;
+    private String id;
     private List<Metadata> metadataList = null;
     private ScreenConfiguration screenConfiguration = null;
     private String name = null;
     
     public MdProfileVO()
     {
-    	ContentModelDocument cmd = ContentModelDocument.Factory.newInstance();
-	cmd.addNewContentModel();
-	contentModel = cmd.getContentModel();
+    	//ContentModelDocument cmd = ContentModelDocument.Factory.newInstance();
+	//cmd.addNewContentModel();
+	//contentModel = cmd.getContentModel();
 	metadataList = new ArrayList<Metadata>();
 	screenConfiguration = new ScreenConfiguration();
     }
@@ -35,8 +31,10 @@ public class MdProfileVO
 	this.metadataList = list;
 	this.name = name;
 	
+	/*
 	contentModel.addNewMdRecordDefinitions();
 	contentModel.getMdRecordDefinitions().getMdRecordDefinitionArray(0).setName(this.name);
+	*/
 
     }
 
@@ -71,6 +69,14 @@ public class MdProfileVO
     {
         this.name = name;
     }
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return id;
+	}
 
     
 }

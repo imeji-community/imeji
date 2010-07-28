@@ -70,11 +70,17 @@
 						</tr:iterator>
 					</h:panelGroup>
 				</h:panelGroup>
-
-				<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{CollectionBean.pageType == 'CREATE'}">
-					<tr:selectBooleanCheckbox styleClass="pushCheckbox" id="make_active" value="#{SessionBean.active}" immediate="true" valueChangeListener="#{SessionBean.makeActive}"/>
-					<h:outputLabel for="make_active" value="Make this my active album"></h:outputLabel>
+				
+				<!-- Selection of metadata profile -->
+				<h:panelGroup layout="block" styleClass="huge_area0">
+					<b><h:outputText id="txtMdProfile" styleClass="double_area0 endline" value="Metadata Profile" /></b>
+					<h:selectOneMenu value="#{CollectionBean.collection.mdProfileId}">
+						<f:selectItems value="#{CollectionBean.mdProfileList}"/>
+					</h:selectOneMenu>
 				</h:panelGroup>
+				<!-- End Selection of metadata profile -->
+				
+			
 				
 				<h:panelGroup layout="block" styleClass="huge_area0">
 					<b><h:outputText id="txtAlbumAuthor" styleClass="huge_area0 endline" value="#{lbl.authors}" /></b>					
@@ -155,7 +161,7 @@
 				<h:outputLink value="#{SessionBean.backUrl}" styleClass="small_area1_p8 large_marginRExcl cancelButton">
         			<h:outputText value="#{lbl.cancel}" />
         		</h:outputLink>
-        		<h:commandButton action="#{CollectionBean.save}" value="#{lbl.save}" styleClass="small_txtBtn activeButton endline" immediate="true"></h:commandButton>
+        		<h:commandButton action="#{CollectionBean.save}" value="#{lbl.save}" styleClass="small_txtBtn activeButton endline"></h:commandButton>
 			</h:panelGroup>
 		</h:panelGroup>
 	</h:panelGroup>

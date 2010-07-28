@@ -1,6 +1,7 @@
 package de.mpg.escidoc.faces.metastore;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,6 +33,7 @@ import com.hp.hpl.jena.vocabulary.RDFTest;
 
 import de.escidoc.schemas.item.x09.ItemDocument;
 import de.escidoc.schemas.item.x09.ItemDocument.Item;
+import de.mpg.escidoc.faces.metastore.util.NodeVisitor;
 import de.mpg.escidoc.faces.metastore.vocabulary.ESCIDOC;
 import de.mpg.escidoc.faces.metastore.vocabulary.FACES4;
 
@@ -132,7 +134,6 @@ public class ResourceHandler implements URIS
         }
         else if (properties && !metadata)
         {
-            System.out.println(QueryFor.faceItemRDFProperties(ids));
             query = QueryFactory.create(QueryFor.faceItemRDFProperties(ids));
         }
         else if (!properties && metadata)
@@ -145,13 +146,24 @@ public class ResourceHandler implements URIS
         qexec.close();
     }
     
-    public HashMap<String, String> retrieveFaceItemValues(String id)
+    public ArrayList<String[]> retrieveFaceItemValues(String id, boolean properties, boolean metadata)
     {
         Query query = null;
         String assemblerFile = FACES_DATASET_ASSEMBLER_FILE;
         Dataset dataset = DataFactory.dataset(assemblerFile);
-        HashMap<String, String> valueMap = new HashMap<String, String>();
-        query = QueryFactory.create(QueryFor.faceItemValuesAll(id));
+        ArrayList<String[]> valueMap = new ArrayList<String[]>();
+        if (properties && metadata)
+        {
+            query = QueryFactory.create(QueryFor.faceItemValuesAll(id));
+        }
+        else if (properties && !metadata)
+        {
+            query = QueryFactory.create(QueryFor.faceItemValuesProperties(id));
+        }
+        else if (!properties && metadata)
+        {
+            query = QueryFactory.create(QueryFor.faceItemValuesMetadata(id));
+        }
         QueryExecution qexec = QueryExecutionFactory.create(query, dataset);
         ResultSet result = qexec.execSelect();
         for (; result.hasNext(); )
@@ -159,7 +171,11 @@ public class ResourceHandler implements URIS
             QuerySolution solution = result.nextSolution();
             RDFNode predicate = solution.get("p");
             RDFNode object = solution.get("o");
-            valueMap.put(predicate.toString(), object.toString());
+            RDFVisitor visitor = new NodeVisitor();
+            String key = (String)predicate.visitWith(visitor);
+            String value = (String)object.visitWith(visitor);
+            String[] entry = new String[]{key, value};
+            valueMap.add(entry);
         }
         return valueMap;
     }

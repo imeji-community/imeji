@@ -96,4 +96,20 @@ public class QueryFor
         queryString += "FILTER regex(str(?s), \"" + id + "\") }";
         return queryString;
     }
+    
+    public static String faceItemValuesProperties(String id)
+    {
+        queryString = "SELECT ?p ?o ";
+        queryString += "{ ?s ?p ?o . ";
+        queryString += "FILTER regex(str(?s), \"" + id + "\") }";
+        return queryString;
+    }
+    
+    public static String faceItemValuesMetadata(String id)
+    {
+        queryString = "SELECT ?p ?o ";
+        queryString += "{ GRAPH ?g { ?s ?p ?o } ";
+        queryString += "FILTER regex(str(?s), \"" + id + "\") }";
+        return queryString;
+    }
 }

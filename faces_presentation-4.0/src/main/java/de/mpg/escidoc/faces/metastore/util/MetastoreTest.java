@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -48,7 +49,7 @@ public class MetastoreTest implements URIS
         //DataFactory.removeData(BASE_MODEL);
         //DataFactory.removeData(FACE_MODEL);
         //create();
-        getResource();
+        //getResource();
         //all();
         getValues("113");
     }
@@ -146,10 +147,10 @@ public class MetastoreTest implements URIS
     public static void getValues(String id)
     {
         ResourceHandler rh = new ResourceHandler();
-        HashMap<String, String> values = rh.retrieveFaceItemValues(id);
-        for (Entry<String, String> e : values.entrySet())
+        ArrayList<String[]> values = rh.retrieveFaceItemValues(id, true, true);
+        for (String[] e : values)
         {
-            System.out.println(e.getKey() + ":   " + e.getValue());
+            System.out.println(e[0] + ":   " + e[1]);
         }
     }
     

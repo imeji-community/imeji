@@ -18,8 +18,10 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.vocabulary.DC;
 
 import de.escidoc.core.common.exceptions.application.missing.MissingMethodParameterException;
 import de.escidoc.core.common.exceptions.application.notfound.ComponentNotFoundException;
@@ -51,7 +53,8 @@ public class MetastoreTest implements URIS
         //create();
         //getResource();
         //all();
-        getValues("113");
+        //getValues("114788");
+        updateValue();
     }
     
     public static void create()
@@ -160,7 +163,7 @@ public class MetastoreTest implements URIS
         Model f = DataFactory.model(FACE_MODEL);
         m.begin();
         f.begin();
-        DataFactory.removeResource(BASE_MODEL, "123456");
+        DataFactory.removeResource(BASE_MODEL, BASE_URI, "123456", null);
         f.removeAll(ResourceFactory.createResource(FACE_MD_URI + "123456"), null, null);
         m.commit();
         f.commit();
@@ -169,5 +172,25 @@ public class MetastoreTest implements URIS
         m.write(System.out, "RDF/XML-ABBREV");
         f.write(System.out, "RDF/XML-ABBREV");
         
+    }
+    
+    public static void updateValue()
+    {
+        Model base = DataFactory.model(BASE_MODEL);
+        ResIterator resi = base.listSubjectsWithProperty(ResourceFactory.createProperty(BASE_URI, "metadata"));
+        ArrayList<String> idList = new ArrayList<String>();
+        for (; resi.hasNext(); )
+        {
+            Resource res = resi.nextResource();
+            idList.add(res.getURI().substring(res.getURI().lastIndexOf("/") + 1));
+        }
+        Property prop = DC.identifier;
+        ResourceHandler rh = new ResourceHandler();
+
+        for (String id : idList)
+        {
+            Resource res = ResourceFactory.createResource(BASE_URI + id);
+            rh.updateFacesMetadataValue(id, prop, res);
+        }
     }
 }

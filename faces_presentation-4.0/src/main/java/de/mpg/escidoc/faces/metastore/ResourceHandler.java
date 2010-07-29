@@ -24,7 +24,9 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.RDFVisitor;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.shared.PrefixMapping;
+import com.hp.hpl.jena.sparql.engine.http.QueryEngineHTTP;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.tdb.solver.Explain.InfoLevel;
@@ -84,7 +86,7 @@ public class ResourceHandler implements URIS
             face.close();
         }
     }
-    
+
     public void createFaceMetadata(String itemId, HashMap<Property, RDFNode> metadataMap)
     {
         Model base = DataFactory.model(BASE_MODEL);
@@ -96,7 +98,8 @@ public class ResourceHandler implements URIS
         face.setNsPrefix("terms", TERMS_URI);
         try
         {
-            boolean hasMeta = base.contains(ResourceFactory.createResource(BASE_URI + itemId), ResourceFactory.createProperty(PROP_URI, "public-status"));
+            boolean hasMeta = base.contains(ResourceFactory.createResource(BASE_URI + itemId), ResourceFactory
+                    .createProperty(PROP_URI, "public-status"));
             if (hasMeta)
             {
                 base.begin();
@@ -122,7 +125,7 @@ public class ResourceHandler implements URIS
             face.close();
         }
     }
-    
+
     public void retrieveFaceItemRDF(String[] ids, boolean properties, boolean metadata)
     {
         Query query = null;
@@ -145,7 +148,7 @@ public class ResourceHandler implements URIS
         result.write(System.out, "RDF/XML-ABBREV");
         qexec.close();
     }
-    
+
     public ArrayList<String[]> retrieveFaceItemValues(String id, boolean properties, boolean metadata)
     {
         Query query = null;
@@ -165,8 +168,11 @@ public class ResourceHandler implements URIS
             query = QueryFactory.create(QueryFor.faceItemValuesMetadata(id));
         }
         QueryExecution qexec = QueryExecutionFactory.create(query, dataset);
+        // testing remote access to SPARQL endpoint:
+        // QueryExecution qexec =
+        // QueryExecutionFactory.sparqlService("http://dev-faces.mpdl.mpg.de:8080/metastore/sparql", query);
         ResultSet result = qexec.execSelect();
-        for (; result.hasNext(); )
+        for (; result.hasNext();)
         {
             QuerySolution solution = result.nextSolution();
             RDFNode predicate = solution.get("p");
@@ -174,10 +180,23 @@ public class ResourceHandler implements URIS
             RDFVisitor visitor = new NodeVisitor();
             String key = (String)predicate.visitWith(visitor);
             String value = (String)object.visitWith(visitor);
-            String[] entry = new String[]{key, value};
+            String[] entry = new String[] { key, value };
             valueMap.add(entry);
         }
         return valueMap;
+    }
+
+    public void updateFacesMetadataValue(String id, Property property, RDFNode newValue)
+    {
+        Model face = DataFactory.model(FACE_MODEL);
+        Resource resource = face.getResource(FACE_MD_URI + id);
+        if (resource.hasProperty(property))
+        {
+            Statement stmt = resource.getProperty(property);
+            stmt.changeObject(newValue);
+        }
+        face.write(System.out, "RDF/XML-ABBREV");
+        face.close();
     }
 
     public HashMap<Property, RDFNode> facesMetadataMap(Resource emotion, Resource pic_group, Literal identifier,

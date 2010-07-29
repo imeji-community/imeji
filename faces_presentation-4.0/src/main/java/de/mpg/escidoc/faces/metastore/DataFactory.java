@@ -7,6 +7,7 @@ import com.hp.hpl.jena.query.DataSource;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.DatasetFactory;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.tdb.solver.Explain.InfoLevel;
@@ -33,12 +34,19 @@ public class DataFactory implements URIS
         rdf_model.removeAll();
     }
     
-    public static void removeResource(String path2db, String id)
+    public static void removeResource(String path2db, String uri, String id, Property p)
     {
         TDB.setExecutionLogging(InfoLevel.INFO);
         TDB.getContext().set(TDB.symLogExec, true) ;
         rdf_model = TDBFactory.createModel(path2db);
-        rdf_model.removeAll(rdf_model.createResource(BASE_URI + id), null, null);
+        if (p == null)
+        {
+            rdf_model.removeAll(rdf_model.createResource(uri + id), null, null);
+        }
+        else
+        {
+            rdf_model.removeAll(rdf_model.createResource(uri + id), p, null);
+        }
     }
     
     public static Dataset dataset(String assemblerFile)

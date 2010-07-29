@@ -43,18 +43,19 @@ public class MetastoreTest implements URIS
     static Resource pic_group = null;
     static Resource age_group = null;
     static Resource gender = null;
-    static Literal identifier = null;
+    static Resource identifier = null;
     static Literal age = null;
     
     public static void main(String[] args)
     {
         //DataFactory.removeData(BASE_MODEL);
         //DataFactory.removeData(FACE_MODEL);
-        //create();
+        create();
         //getResource();
         //all();
-        //getValues("114788");
-        updateValue();
+        getValues("114788");
+        //updateValue();
+        //newModel();
     }
     
     public static void create()
@@ -65,12 +66,13 @@ public class MetastoreTest implements URIS
             ih = ServiceLocator.getItemHandler(new URL("http://dev-coreservice.mpdl.mpg.de"));
             String itemXml = ih.retrieve("escidoc:111992");
             ItemDocument iDoc = ItemDocument.Factory.parse(itemXml);
-
+            String id = iDoc.getItem().getObjid().substring(iDoc.getItem().getObjid().indexOf(":") + 1);
+            System.out.println(id);
             emotion = FACES4.Emotion.disgust;
             pic_group = FACES4.PictureGroup.a;
             age_group = FACES4.AgeGroup.middle;
             gender = FACES4.Gender.female;
-            identifier = ResourceFactory.createTypedLiteral(iDoc.getItem().getObjid());
+            identifier = ResourceFactory.createResource(BASE_URI + id);
             age = ResourceFactory.createTypedLiteral(54);
             
             ResourceHandler rh = new ResourceHandler();
@@ -150,7 +152,7 @@ public class MetastoreTest implements URIS
     public static void getValues(String id)
     {
         ResourceHandler rh = new ResourceHandler();
-        ArrayList<String[]> values = rh.retrieveFaceItemValues(id, true, true);
+        ArrayList<String[]> values = rh.retrieveFaceItemValues(id, false, true);
         for (String[] e : values)
         {
             System.out.println(e[0] + ":   " + e[1]);
@@ -192,5 +194,11 @@ public class MetastoreTest implements URIS
             Resource res = ResourceFactory.createResource(BASE_URI + id);
             rh.updateFacesMetadataValue(id, prop, res);
         }
+    }
+    
+    public static void newModel()
+    {
+        Model diamonds = DataFactory.model("/home/frank/TDB/md_diamonds");
+        diamonds.write(System.out, "RDF/XML-ABBREV");
     }
 }

@@ -183,6 +183,7 @@ public class ResourceHandler implements URIS
             String[] entry = new String[] { key, value };
             valueMap.add(entry);
         }
+        qexec.close();
         return valueMap;
     }
 
@@ -195,11 +196,15 @@ public class ResourceHandler implements URIS
             Statement stmt = resource.getProperty(property);
             stmt.changeObject(newValue);
         }
+        else
+        {
+            resource.addProperty(property, newValue);
+        }
         face.write(System.out, "RDF/XML-ABBREV");
         face.close();
     }
 
-    public HashMap<Property, RDFNode> facesMetadataMap(Resource emotion, Resource pic_group, Literal identifier,
+    public HashMap<Property, RDFNode> facesMetadataMap(Resource emotion, Resource pic_group, Resource identifier,
             Literal age, Resource age_group, Resource gender)
     {
         HashMap<Property, RDFNode> propMap = new HashMap<Property, RDFNode>();

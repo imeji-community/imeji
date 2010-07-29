@@ -29,7 +29,7 @@ public class NodeVisitor implements RDFVisitor
         }
         else
         {
-            localName = r.asNode().getLocalName();
+            localName = r.asNode().getURI();
         }
         return localName;
     }

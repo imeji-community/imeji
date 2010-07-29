@@ -2,6 +2,11 @@ package de.mpg.escidoc.faces.metastore;
 
 import java.util.HashMap;
 
+/**
+ * Helper class for querying the MPDL Metastore.
+ * @author frank
+ *
+ */
 public class QueryFor
 {
     private static String queryString;

@@ -39,8 +39,20 @@ import de.mpg.escidoc.faces.metastore.util.NodeVisitor;
 import de.mpg.escidoc.faces.metastore.vocabulary.ESCIDOC;
 import de.mpg.escidoc.faces.metastore.vocabulary.FACES4;
 
+/**
+ * Class to access the MPDL Metastore.
+ * @author frank
+ *
+ */
 public class ResourceHandler implements URIS
 {
+    /**
+     * Create an item resource in the base Metastore graph.
+     * Optionally create a related metadata resource in the Faces metadata graph.
+     * @param itemDoc {@link ItemDocument} the ItemDocument to derive the properties from.
+     * @param withMetadata {@link Boolean} create a Faces metadata resource.
+     * @param metadataMap {@link HashMap} properties and values of Faces metadata.
+     */
     public void createFaceItem(ItemDocument itemDoc, boolean withMetadata, HashMap<Property, RDFNode> metadataMap)
     {
         Item item = itemDoc.getItem();
@@ -87,6 +99,11 @@ public class ResourceHandler implements URIS
         }
     }
 
+    /**
+     * Create a Faces metadata resource in the Faces metadata graph.
+     * @param itemId id of the item resource.
+     * @param metadataMap properties and values of Faces metadata.
+     */
     public void createFaceMetadata(String itemId, HashMap<Property, RDFNode> metadataMap)
     {
         Model base = DataFactory.model(BASE_MODEL);
@@ -126,6 +143,12 @@ public class ResourceHandler implements URIS
         }
     }
 
+    /**
+     * Retrieve an RDF/XML representation of Faces item(s).
+     * @param ids item id(s).
+     * @param properties 
+     * @param metadata
+     */
     public void retrieveFaceItemRDF(String[] ids, boolean properties, boolean metadata)
     {
         Query query = null;
@@ -149,6 +172,13 @@ public class ResourceHandler implements URIS
         qexec.close();
     }
 
+    /**
+     * Retrieve the values (=objects) of a Faces resource.
+     * @param id
+     * @param properties
+     * @param metadata
+     * @return {@link ArrayList}
+     */
     public ArrayList<String[]> retrieveFaceItemValues(String id, boolean properties, boolean metadata)
     {
         Query query = null;
@@ -187,6 +217,14 @@ public class ResourceHandler implements URIS
         return valueMap;
     }
 
+    /**
+     * Update a Faces metadata resource.
+     * If the specified property does not exist, it will be added to the resource.
+     * Otherwise the existing value will be replaced with newValue.
+     * @param id resource id.
+     * @param property property to change.
+     * @param newValue new value of the specified property.
+     */
     public void updateFacesMetadataValue(String id, Property property, RDFNode newValue)
     {
         Model face = DataFactory.model(FACE_MODEL);
@@ -204,6 +242,16 @@ public class ResourceHandler implements URIS
         face.close();
     }
 
+    /**
+     * Create a Map with properties and values for Faces metadata resources.
+     * @param emotion
+     * @param pic_group
+     * @param identifier
+     * @param age
+     * @param age_group
+     * @param gender
+     * @return {@link HashMap}
+     */
     public HashMap<Property, RDFNode> facesMetadataMap(Resource emotion, Resource pic_group, Resource identifier,
             Literal age, Resource age_group, Resource gender)
     {

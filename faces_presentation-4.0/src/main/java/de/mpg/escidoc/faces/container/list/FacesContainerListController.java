@@ -8,8 +8,13 @@ import java.util.Map;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import de.escidoc.schemas.container.x08.ContainerDocument;
+import de.escidoc.schemas.container.x08.ContainerDocument.Container;
+import de.escidoc.schemas.containerlist.x08.ContainerListDocument;
+import de.escidoc.schemas.containerlist.x08.ContainerListDocument.ContainerList;
 import de.escidoc.www.services.om.ContainerHandler;
 import de.mpg.escidoc.faces.beans.SessionBean;
+import de.mpg.escidoc.faces.container.FacesContainerController;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.album.AlbumSession;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO.HandlerType;
@@ -22,7 +27,7 @@ import de.mpg.escidoc.services.framework.ServiceLocator;
 
 public class FacesContainerListController 
 {
-    private XmlTransforming xmlTransforming = null;
+    //private XmlTransforming xmlTransforming = null;
     
     public FacesContainerListController()
     {
@@ -30,7 +35,7 @@ public class FacesContainerListController
         try
         {
             context = new InitialContext();
-            xmlTransforming = (XmlTransforming)context.lookup(XmlTransforming.SERVICE_NAME);
+           
         }
         catch (NamingException e)
         {
@@ -46,7 +51,7 @@ public class FacesContainerListController
      */
     public FacesContainerListVO retrieve(FacesContainerListVO list, String userHandle) throws Exception
     {
-        if (HandlerType.SEARCH.equals(list.getHandler()))
+        if (HandlerType.SEARCH.equals(list.getHandler())) 
         {
             return search(list, userHandle);
         }
@@ -69,9 +74,8 @@ public class FacesContainerListController
     {       
         AlbumSession albumSession = (AlbumSession)BeanHelper.getSessionBean(AlbumSession.class);  
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        ContainerVOListWrapper wrapper = null;
         InitialContext context = new InitialContext();
-        xmlTransforming = (XmlTransforming)context.lookup(XmlTransforming.SERVICE_NAME);
+        
         
         ContainerHandler cth = null;
         
@@ -84,13 +88,23 @@ public class FacesContainerListController
         	cth = ServiceLocator.getContainerHandler();
         }
         
+        
         String containerListXml = cth.retrieveContainers(list.getParameters().getParametersAsFilter());      
-        wrapper = xmlTransforming.transformToContainerListWrapper(containerListXml);
-        list = actualizeListWithNewList(list, wrapper.getContainerVOList());
+        System.out.println(containerListXml);
+        ContainerListDocument containerListDoc = ContainerListDocument.Factory.parse(containerListXml);
+        List<ContainerVO> containerList = new ArrayList<ContainerVO>();
+        for(Container cont : containerListDoc.getContainerList().getContainerArray())
+        {
+        	ContainerDocument containerDoc = ContainerDocument.Factory.parse(cont.getDomNode());
+        	containerList.add(FacesContainerController.transformToContainerVO(containerDoc.xmlText()));
+        }
+        
+        
+        list = actualizeListWithNewList(list, containerList);
         
         FacesContainerListVO containerListVO = new FacesContainerListVO(list);
         
-        containerListVO.setSize(Integer.parseInt(wrapper.getNumberOfRecords()));
+        containerListVO.setSize(Integer.parseInt(containerListDoc.getContainerList().getNumberOfRecords().getStringValue()));
         
         return containerListVO;
     }
@@ -101,7 +115,7 @@ public class FacesContainerListController
      * @param userHandle
      * @return
      */
-    public FacesContainerListVO search(FacesContainerListVO list, String userHandle) throws Exception
+    public FacesContainerListVO search(FacesContainerListVO list, String userHandle) throws Exception 
     {
         QueryHelper queryHelper  = new QueryHelper();
         queryHelper.executeQueryForFacesContainers(

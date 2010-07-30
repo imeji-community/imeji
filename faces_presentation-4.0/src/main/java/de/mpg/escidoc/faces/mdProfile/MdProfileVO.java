@@ -38,6 +38,10 @@ public class MdProfileVO
 
     }
 
+    public void init()
+    {
+    	
+    }
     /**
      * @return the metadataList
      */

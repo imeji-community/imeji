@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 
 import de.escidoc.schemas.container.x08.ContainerDocument.Container;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
+import de.mpg.escidoc.faces.mdProfile.MdProfileVO;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.services.common.referenceobjects.ContextRO;
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -19,7 +20,7 @@ import de.mpg.escidoc.services.framework.PropertyReader;
 public class CollectionVO extends FacesContainerVO
 {
 	private ScreenConfiguration screenConfiguration = null;
-	private String mdProfileId = null;
+	private MdProfileVO mdProfile;
 	
 
 	/**
@@ -31,6 +32,7 @@ public class CollectionVO extends FacesContainerVO
 	public CollectionVO(ScreenConfiguration screenConfiguration) throws IOException, URISyntaxException 
 	{
 		super();
+		mdProfile = new MdProfileVO();
 		this.setContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"));
 		this.screenConfiguration = screenConfiguration;
 		// TODO: change that.
@@ -39,7 +41,9 @@ public class CollectionVO extends FacesContainerVO
 	
 	public CollectionVO(FacesContainerVO fc)
 	{
+		
 		super(fc);
+		mdProfile = new MdProfileVO();
 	}
 	
 	public ScreenConfiguration getScreenConfiguration() 
@@ -52,20 +56,12 @@ public class CollectionVO extends FacesContainerVO
 		this.screenConfiguration = screenConfiguration;
 	}
 
-	/**
-	 * @return the mdProfileId
-	 */
-	public String getMdProfileId() 
-	{
-		return mdProfileId;
+	public void setMdProfile(MdProfileVO mdProfile) {
+		this.mdProfile = mdProfile;
 	}
 
-	/**
-	 * @param mdProfileId the mdProfileId to set
-	 */
-	public void setMdProfileId(String mdProfileId) 
-	{
-		this.mdProfileId = mdProfileId;
+	public MdProfileVO getMdProfile() {
+		return mdProfile;
 	}
 	
 	

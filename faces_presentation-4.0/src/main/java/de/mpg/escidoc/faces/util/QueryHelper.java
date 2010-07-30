@@ -371,7 +371,7 @@ public class QueryHelper
                     for (MessageElement messageElement : messages)
                     {
                         String containerXml = messageElement.getAsString();
-                        //logger.debug("XML: " + itemXml);
+                        logger.info("XML: " + containerXml);
                         
                         ContainerResultVO containerResultVO = (ContainerResultVO)xmlTransforming.transformToSearchResult(containerXml);
                         facesContainers.add(new FacesContainerVO(containerResultVO));

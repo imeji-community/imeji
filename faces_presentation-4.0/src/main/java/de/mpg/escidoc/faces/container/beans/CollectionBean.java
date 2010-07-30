@@ -18,7 +18,10 @@ import de.mpg.escidoc.faces.container.collection.CollectionSession;
 import de.mpg.escidoc.faces.container.collection.CollectionVO;
 import de.mpg.escidoc.faces.mdProfile.MdProfileController;
 import de.mpg.escidoc.faces.mdProfile.MdProfileVO;
+import de.mpg.escidoc.faces.metadata.Metadata;
+import de.mpg.escidoc.faces.metadata.MetadataBean;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
+import de.mpg.escidoc.faces.metadata.MetadataBean.ConstraintBean;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.ContextHelper;
 import de.mpg.escidoc.faces.util.UserHelper;
@@ -56,9 +59,14 @@ public class CollectionBean
 	private HttpServletRequest request = null;
 	private FacesContext fc = null;
 	private List<SelectItem> userDepositorGrants = null;
-	private List<SelectItem> mdProfileList = null;
 	private String selectedContext = null;
-	private String selectedMdProfile = null;
+	
+	
+	private MdProfileSession mdProfileSession = null;
+	private List<Metadata> metadataList = new ArrayList<Metadata>();
+	private List<SelectItem> metadataMenu = new ArrayList<SelectItem>();
+    private List<MetadataBean> metadataBeanList = new ArrayList<MetadataBean>();
+	private int profilePosition;
 	
 	private static Logger logger = Logger.getLogger(CollectionBean.class);
 	
@@ -70,11 +78,14 @@ public class CollectionBean
 		collectionController = new CollectionController();
 		sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		collectionSession = (CollectionSession) BeanHelper.getSessionBean(CollectionSession.class);
+		mdProfileSession = (MdProfileSession) BeanHelper.getSessionBean(MdProfileSession.class);
 		collectionsMenu = new ArrayList<SelectItem>();
 		userDepositorGrants = new ArrayList<SelectItem>();
 		fc =  FacesContext.getCurrentInstance();
-		mdProfileList = new ArrayList<SelectItem>();
 		request = (HttpServletRequest) fc.getExternalContext().getRequest();
+		
+		metadataList = mdProfileSession.getMetadataList();
+		metadataBeanList = mdProfileSession.getMetadataBeanList();
 		
 		try 
 		{
@@ -93,23 +104,41 @@ public class CollectionBean
 	 */
 	public void init() throws Exception
 	{
+		metadataBeanList.clear();
+		for (Metadata m : metadataList)
+		{
+		    if (m.getSimpleValue() == null)
+		    {
+			m.setSimpleValue("");
+		    }
+		    metadataMenu.add(new SelectItem(m.getIndex(), m.getLabel()));
+		}
+
+		if (metadataBeanList.size() == 0)
+		{
+		    metadataBeanList.add(new MetadataBean(metadataList));
+		}
+		
+		
 		String collectionId = request.getParameter("id");
 		String page = request.getParameter("page");
 		
 		if (collectionId != null && CollectionPageType.EDIT.name().equalsIgnoreCase(page)) 
 		{
 			pageType = CollectionPageType.EDIT;
-			collection = collectionController.retrieve(collectionId, sessionBean.getUserHandle());
+			collection = (CollectionVO)collectionController.retrieve(collectionId, sessionBean.getUserHandle());
 		}
 		else if (collectionId != null && CollectionPageType.VIEW.name().equalsIgnoreCase(page))
 		{
 			pageType = CollectionPageType.VIEW;
-			collection = collectionController.retrieve(collectionId, sessionBean.getUserHandle());
+			collection = (CollectionVO)collectionController.retrieve(collectionId, sessionBean.getUserHandle());
 		}
 		else 
 		{
 			pageType = CollectionPageType.CREATE;
 			collection = new CollectionVO(collectionSession.getCurrent().getScreenConfiguration());
+			
+			//collection.setMdProfile(new );
 		}
 		
 		collectionSession.setCurrent(collection);
@@ -130,15 +159,9 @@ public class CollectionBean
 		    }
 		}
 		
-		MdProfileController mdProfilecontroller = new MdProfileController(); 
-		List<MdProfileVO> mdProfiles = mdProfilecontroller.retrieveMdProfiles(sessionBean.getUserHandle());
-		for(MdProfileVO mdProfile : mdProfiles)
-		{
-			mdProfileList.add(new SelectItem(mdProfile.getId(), mdProfile.getName() + " (" + mdProfile.getId() + ")"));
-		}
 		
 		selectedContext = "";
-		userDepositorGrants.add(new SelectItem("", "Select a context"));
+		//userDepositorGrants.add(new SelectItem("", "Select a context"));
 	}
 	
 	/**
@@ -149,6 +172,26 @@ public class CollectionBean
 	 */
 	public void save() throws Exception
 	{
+		collection.getMdProfile().getMetadataList().clear();
+		collection.getMdProfile().getMetadataList().add(new Metadata("title","Title","http://purl.org/dc/elements/1.1"));
+		collection.getMdProfile().getMetadataList().add(new Metadata("description","Description","http://purl.org/dc/elements/1.1"));
+		int i = 2;
+		for (MetadataBean m : mdProfileSession.getMetadataBeanList())
+		{
+		   // profile.getMetadataList().add(new Metadata(m.getCurrent().getName(), m.getCurrent().getIndex(), m.getCurrent().getNamespace()));
+		    collection.getMdProfile().getMetadataList().add(new Metadata(m.getCurrent()));
+		    collection.getMdProfile().getMetadataList().get(i).getConstraint().clear();
+		    
+		    for (ConstraintBean c : m.getConstraints())
+		    {
+			if (!"".equals(c.getValue()))
+			{
+				 collection.getMdProfile().getMetadataList().get(i).getConstraint().add(c.getValue());
+			} 
+		    }
+		    i++;
+		}
+		
 		if (CollectionPageType.CREATE.equals(this.pageType)) 
 		{
 			collectionController.create(collection, sessionBean.getUserHandle());
@@ -211,7 +254,7 @@ public class CollectionBean
      * JSF Listener for the title value
      * @param event
      */
-    public void titleListener(ValueChangeEvent event)
+    public void titleListener(ValueChangeEvent event) 
     {
     	if (event.getNewValue() != null && !event.getNewValue().equals(event.getOldValue())) 
     	{
@@ -273,22 +316,57 @@ public class CollectionBean
 	}
     }
     
-  
+    public String addMetadata()
+    {
+	    metadataBeanList.add(getProfilePosition() + 1, new MetadataBean(metadataList));
+		return "";
+	}
+    
+    public String removeMetadata()
+    {
+	    metadataBeanList.remove(getProfilePosition());
+		return "";
+		
+    }
+    
+    /**
+     * @return the mdProfile
+     */
+    public List<MetadataBean> getMetadataBeanList()
+    {
+        return metadataBeanList;
+    }
 
-	public void setMdProfileList(List<SelectItem> mdProfileList) {
-		this.mdProfileList = mdProfileList;
+    /**
+     * @param mdProfile the mdProfile to set
+     */
+    public void setMetadataBeanList(List<MetadataBean> metadataBeanList)
+    {
+        this.metadataBeanList = metadataBeanList;
+    }
+    
+    /**
+     * @return the metadataMenu
+     */
+    public List<SelectItem> getMetadataMenu()
+    {
+        return metadataMenu;
+    }
+
+    /**
+     * @param metadataMenu the metadataMenu to set
+     */
+    public void setMetadataMenu(List<SelectItem> metadataMenu)
+    {
+        this.metadataMenu = metadataMenu;
+    }
+
+	public void setProfilePosition(int profilePosition) {
+		this.profilePosition = profilePosition;
 	}
 
-	public List<SelectItem> getMdProfileList() {
-		return mdProfileList;
+	public int getProfilePosition() {
+		return profilePosition;
 	}
-
-	public void setSelectedMdProfile(String selectedMdProfile) {
-		this.selectedMdProfile = selectedMdProfile;
-	}
-
-	public String getSelectedMdProfile() {
-		return selectedMdProfile;
-	}
-	
+    
 }

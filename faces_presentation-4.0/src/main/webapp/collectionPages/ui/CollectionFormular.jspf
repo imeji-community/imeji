@@ -68,7 +68,7 @@
 						<span class="noDisplay">: </span>
 					</b>
 					<span class="xHuge_area0 xTiny_marginLExcl endline">
-						<h:inputText id="inputTitleText" styleClass="quad_txtInput" value="#{CollectionBean.collection.mdRecord.title.value}"></h:inputText>
+						<h:inputText id="inputTitleText" styleClass="quad_txtInput" value="#{CollectionBean.collection.mdRecord.title.value}" valueChangeListener="#{CollectionBean.titleListener}" immediate="true"></h:inputText>
 					</span>
 				</h:panelGroup>
 				
@@ -78,7 +78,7 @@
 						<span class="noDisplay">: </span>
 					</b>
 					<span class="xHuge_area0 xTiny_marginLExcl endline">
-						<h:inputText id="inputDescription" styleClass="quad_txtArea inputTxtArea" cols="15" rows="3" value="#{CollectionBean.collection.mdRecord.abstracts[0].value}"></h:inputText>
+						<h:inputText id="inputDescription" styleClass="quad_txtArea inputTxtArea" cols="15" rows="3" value="#{CollectionBean.collection.mdRecord.abstracts[0].value}" valueChangeListener="#{CollectionBean.descriptionListener}" immediate="true"></h:inputText>
 					</span>
 				</h:panelGroup>
 				
@@ -110,28 +110,19 @@
 			<div class="free_area0 itemBlockContent endline">
 	
 	
-				<!-- Title -->
-				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-					<b class="xLarge_area0_p8 endline labelLine clear">
-						<h:outputText value="#{lbl.profile_name}*"/>
-						<span class="noDisplay">: </span>
-					</b>
-					<span class="xHuge_area0 xTiny_marginLExcl endline">
-						<h:inputText id="inputTitleText" styleClass="quad_txtInput" value="#{MdProfileBean.name}" valueChangeListener="#{MdProfileBean.nameListener}" ></h:inputText>
-					</span>
-				</h:panelGroup>
+				
 				
 				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 					<b class="xLarge_area0_p8 endline labelLine clear">
 						<h:outputText value="Profile"/>
 						<span class="noDisplay">: </span>
 					</b>
-					<tr:iterator id="profile" var="profile" value="#{MdProfileBean.metadataBeanList}" varStatus="position">
+					<tr:iterator id="profile" var="profile" value="#{CollectionBean.metadataBeanList}" varStatus="position">
 						<h:panelGroup class="xHuge_area0 xTiny_marginLExcl endline">
 							<h:panelGroup styleClass="large_area0 tiny_marginRIncl">
 								<h:outputLabel styleClass="large_label" value="#{lbl.metadata_select}" />
 								<h:selectOneMenu styleClass="large_select" value="#{profile.current.label}" valueChangeListener="#{profile.menuListener}">
-										<f:selectItems value="#{MdProfileBean.metadataMenu}"/>
+										<f:selectItems value="#{CollectionBean.metadataMenu}"/>
 								</h:selectOneMenu>
 							</h:panelGroup>
 							<h:panelGroup styleClass="large_area0 tiny_marginRIncl">

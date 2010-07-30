@@ -2,16 +2,15 @@ package de.mpg.escidoc.faces.mdProfile.beans;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
 import de.mpg.escidoc.faces.beans.SessionBean;
+import de.mpg.escidoc.faces.container.beans.MdProfileSession;
 import de.mpg.escidoc.faces.mdProfile.MdProfileController;
 import de.mpg.escidoc.faces.mdProfile.MdProfileVO;
 import de.mpg.escidoc.faces.metadata.Metadata;
@@ -23,7 +22,7 @@ public class MdProfileBean
 {
     public enum PageType
     {
-	CREATE, EDIT, VIEW;
+    	CREATE, EDIT, VIEW;
     }
     
     private List<Metadata> metadataList = new ArrayList<Metadata>();
@@ -31,7 +30,6 @@ public class MdProfileBean
     private List<MetadataBean> metadataBeanList = new ArrayList<MetadataBean>();
     private MdProfileSession session = null;
     private PageType type = PageType.CREATE;
-    private MdProfileVO profile = null;
     private MdProfileController controller = null;
     private SessionBean sessionBean = null;
     private int profilePosition;
@@ -73,6 +71,7 @@ public class MdProfileBean
 	{
 	    //do what sould be done
 	}
+	
     }
     
     /**
@@ -116,7 +115,7 @@ public class MdProfileBean
      */
     public void save()
     {
-	profile = new MdProfileVO();
+	MdProfileVO profile = new MdProfileVO();
 	int i = 0;
 	for (MetadataBean m : session.getMetadataBeanList())
 	{
@@ -139,7 +138,7 @@ public class MdProfileBean
 	{
 	case CREATE:
 	    controller.create(session.getMdProfile(), sessionBean.getUserHandle());
-	    sessionBean.setInformation("Metadata Profile " + this.getName() + " created!");
+	    sessionBean.setInformation("Metadata Profile  created!");
 	    break;
 	
 	case EDIT:
@@ -197,46 +196,8 @@ public class MdProfileBean
 	}
     }
 
-    /**
-     * @return the metadataList
-     */
-    public List<Metadata> getMetadataList()
-    {
-        return metadataList;
-    }
-
-    /**
-     * @param metadataList the metadataList to set
-     */
-    public void setMetadataList(List<Metadata> metadataList)
-    {
-        this.metadataList = metadataList;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName()
-    {
-        return session.getProfileName();
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name)
-    {
-        session.setProfileName(name);
-    }
     
-    public void nameListener(ValueChangeEvent event)
-    {
-	 if (event != null 
-		    && event.getOldValue() != event.getNewValue())
-	 {
-	     session.getMdProfile().setName(event.getNewValue().toString());
-	 }
-    }
+
 
     /**
      * @return the mdProfile

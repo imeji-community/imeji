@@ -1,16 +1,32 @@
 package de.mpg.escidoc.faces.container;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.xml.namespace.QName;
 
+import org.apache.xmlbeans.XmlAnySimpleType;
+import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlObject;
+import org.apache.xmlbeans.impl.xb.xsdschema.Element;
+import org.apache.xmlbeans.impl.xb.xsdschema.ExplicitGroup;
+import org.apache.xmlbeans.impl.xb.xsdschema.NoFixedFacet;
+import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument;
+import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument.Restriction;
+import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument.Schema;
+
+import de.escidoc.schemas.container.x08.ContainerDocument;
+import de.escidoc.schemas.metadatarecords.x05.MdRecordDocument.MdRecord;
 import de.escidoc.www.services.om.ContainerHandler;
 import de.mpg.escidoc.faces.album.ExportManager;
 import de.mpg.escidoc.faces.container.collection.CollectionVO;
+import de.mpg.escidoc.faces.mdProfile.MdProfileVO;
+import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.common.valueobjects.ContainerVO;
 import de.mpg.escidoc.services.common.valueobjects.MetadataSetVO;
@@ -18,6 +34,7 @@ import de.mpg.escidoc.services.common.valueobjects.PidTaskParamVO;
 import de.mpg.escidoc.services.common.valueobjects.ContainerVO.State;
 import de.mpg.escidoc.services.common.valueobjects.publication.MdsPublicationVO;
 import de.mpg.escidoc.services.common.xmltransforming.JiBXHelper;
+import de.mpg.escidoc.services.common.xmltransforming.XmlTransformingBean;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 
@@ -33,7 +50,7 @@ public class FacesContainerController
      */
     private FacesContainerVO facesContainer;
     
-    protected XmlTransforming xmlTransforming = null;
+    protected static XmlTransforming xmlTransforming = null;
     private String APPLICATION_URL = null;
     
     /**
@@ -45,7 +62,7 @@ public class FacesContainerController
         {
             // Class initialization
             InitialContext context = new InitialContext();
-            xmlTransforming = (XmlTransforming) context.lookup(XmlTransforming.SERVICE_NAME);
+            xmlTransforming = new XmlTransformingBean();
             
             facesContainer = new FacesContainerVO();
         }
@@ -95,11 +112,11 @@ public class FacesContainerController
         
         String facesContainerXml= handler.retrieve(id);
         
-        ContainerVO containerVo = xmlTransforming.transformToContainer(facesContainerXml);
+        return transformToContainerVO(facesContainerXml);
         
-        facesContainer = new FacesContainerVO(containerVo);
+        //facesContainer = new FacesContainerVO(containerVo);
 
-        return facesContainer;
+        //return facesContainer;
     }
     
     /**
@@ -179,11 +196,11 @@ public class FacesContainerController
      */
     public FacesContainerVO create(FacesContainerVO facesContainer, String userHandle) throws Exception
     {
-    	String facesContainerXml = xmlTransforming.transformToContainer(transformToContainerVO(facesContainer));
+    	String facesContainerXml = transformToContainerXml(facesContainer); 
     	
         facesContainerXml = ServiceLocator.getContainerHandler(userHandle).create(facesContainerXml);
         
-        ContainerVO containerVO = xmlTransforming.transformToContainer(facesContainerXml);
+        ContainerVO containerVO = transformToContainerVO(facesContainerXml);
         
         return  new FacesContainerVO(containerVO);
     }
@@ -196,7 +213,7 @@ public class FacesContainerController
      */
     public void edit(FacesContainerVO facesContainer, String userHandle) throws Exception
     {        
-        String facesContainerXml = xmlTransforming.transformToContainer(transformToContainerVO(facesContainer));
+        String facesContainerXml = transformToContainerXml(facesContainer);
         
         ServiceLocator
         	.getContainerHandler(userHandle)
@@ -459,6 +476,152 @@ public class FacesContainerController
     	ct.getMetadataSets().set(0, new MdsPublicationVO(facesContainerVO.getMdRecord()));
     	
     	return ct;
+    }
+    
+    
+    /**
+     * Helper method that transforms an MDProfileVO object into a SchemaDocument (XMLBeans)
+     * @param mdProfileVO
+     * @return
+     * @throws Exception
+     */
+    private static SchemaDocument transformToXml(MdProfileVO mdProfileVO) throws Exception
+    {
+    	SchemaDocument schemaDoc = SchemaDocument.Factory.newInstance();
+    	Schema schema = schemaDoc.addNewSchema();
+    	Element rootElement = schema.addNewElement();
+    	rootElement.setName("imeji");
+    	ExplicitGroup sequ = rootElement.addNewComplexType().addNewSequence();
+    	
+    	for(Metadata mdVO : mdProfileVO.getMetadataList())
+    	{
+    		Element e = sequ.addNewElement();
+    		e.setName(mdVO.getName());
+    		e.setRef(new QName(mdVO.getNamespace(), mdVO.getName()));
+    		e.setMinOccurs(BigInteger.valueOf(mdVO.getMinOccurs()));
+    		e.setMaxOccurs(BigInteger.valueOf(mdVO.getMaxOccurs()));
+    		
+    		if(mdVO.getConstraint()!=null && mdVO.getConstraint().size() > 0)
+    		{
+    			Restriction r = e.addNewSimpleType().addNewRestriction();
+    			for(String constraint : mdVO.getConstraint())
+    			{
+    				r.addNewEnumeration().setValue(XmlAnySimpleType.Factory.newValue(constraint));
+    			}
+    		}
+    		
+    	}
+
+	    return schemaDoc;
+    	
+    	
+	    
+	    
+    }
+    
+    
+    public static FacesContainerVO transformToContainerVO(String containerXml) throws Exception 
+    {
+    	ContainerDocument containerDoc = ContainerDocument.Factory.parse(containerXml);
+    	
+    	for(MdRecord mdRec : containerDoc.getContainer().getMdRecords().getMdRecordArray())
+    	{
+    		if(mdRec.getName().equals("md-profile"))
+    		{
+    			MdProfileVO mdProfile = new MdProfileVO();
+    			XmlObject[] schemas = mdRec.selectChildren(new QName("http://www.w3.org/2001/XMLSchema","schema"));
+    			if(schemas!=null && schemas.length > 0)
+    			{
+	    			SchemaDocument schemaDoc = SchemaDocument.Factory.parse(schemas[0].getDomNode());
+	    			mdProfile = transformToMdProfileVO(schemaDoc);
+    			}
+    			XmlCursor mdRecCursor = mdRec.newCursor();
+    			mdRecCursor.removeXml();
+    			mdRecCursor.dispose();
+    			
+    			ContainerVO container = xmlTransforming.transformToContainer(containerDoc.xmlText());
+    			CollectionVO coll = new CollectionVO(new FacesContainerVO(container));
+    			coll.setMdProfile(mdProfile);
+    			return coll;
+    			
+    		}
+    	}
+    	ContainerVO container = xmlTransforming.transformToContainer(containerDoc.xmlText());
+		return new FacesContainerVO(container);
+
+    	
+    }
+    
+    public static String transformToContainerXml(CollectionVO coll) throws Exception
+    {
+    	if(coll.getMetadataSets().size()==0)
+    	{
+    		coll.getMetadataSets().add(coll.getMdRecord());
+    	}
+    	else
+    	{
+    		coll.getMetadataSets().set(0,coll.getMdRecord());
+    	}
+    	
+    	String facesContainerXml = xmlTransforming.transformToContainer(coll);
+		
+		//add md profile schema
+		ContainerDocument container = ContainerDocument.Factory.parse(facesContainerXml); 
+		MdRecord mdRec = container.getContainer().getMdRecords().addNewMdRecord();
+		mdRec.setName("md-profile");
+		XmlCursor mdRecCursor = mdRec.newCursor();
+	    mdRecCursor.toEndToken();
+	    XmlCursor schemaCursor = transformToXml(coll.getMdProfile()).newCursor();
+	    schemaCursor.copyXmlContents(mdRecCursor);
+	    mdRecCursor.dispose();
+	    schemaCursor.dispose();
+	    
+	    return container.xmlText();
+    	
+    }
+    
+    public static String transformToContainerXml(FacesContainerVO coll) throws Exception
+    {
+    	if(coll.getMetadataSets().size()==0)
+    	{
+    		coll.getMetadataSets().add(coll.getMdRecord());
+    	}
+    	else
+    	{
+    		coll.getMetadataSets().set(0,coll.getMdRecord());
+    	}
+    	return xmlTransforming.transformToContainer(coll);
+
+    	
+    }
+    
+    
+    private static MdProfileVO transformToMdProfileVO(SchemaDocument schemaDoc) throws Exception
+    {
+    	Element rootElem = schemaDoc.getSchema().getElementArray(0);
+    	String profileName = rootElem.getName();
+    	
+    	List<Metadata> mdList = new ArrayList<Metadata>();
+    	
+    	for (Element el : rootElem.getComplexType().getSequence().getElementArray())
+    	{
+    		Metadata md = new Metadata(el.getName(), el.getName(), el.getDomNode().getNamespaceURI());
+    		mdList.add(md);
+    		
+    		if (el.getSimpleType()!=null && el.getSimpleType().getRestriction()!=null)
+    		{
+    			List<String> constraintList = new ArrayList<String>();
+    			for(NoFixedFacet constraint :  el.getSimpleType().getRestriction().getEnumerationArray())
+    			{
+    				constraintList.add(constraint.getValue().toString());
+    			}
+    			md.setConstraint(constraintList);
+    		}
+    	}
+    	
+    	
+    	MdProfileVO mdProfile = new MdProfileVO(profileName, mdList);
+    	return mdProfile;
     }
 }
 

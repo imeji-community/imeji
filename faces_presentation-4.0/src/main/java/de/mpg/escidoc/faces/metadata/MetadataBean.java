@@ -116,8 +116,6 @@ public class MetadataBean
 	
 	public String addConstraint()
 	{
-	   
-		
 		constraints.add(getConstraintPosition() + 1, new ConstraintBean(""));
 	    
 	    return "";

@@ -1,4 +1,4 @@
-package de.mpg.escidoc.faces.mdProfile.beans;
+package de.mpg.escidoc.faces.container.beans;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.bouncycastle.jce.provider.JCEBlockCipher.IDEA;
 import de.mpg.escidoc.faces.mdProfile.MdProfileVO;
 import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.metadata.MetadataBean;
+import de.mpg.escidoc.faces.metadata.MetadataBean.ConstraintBean;
 
 public class MdProfileSession
 {
@@ -68,10 +69,32 @@ public class MdProfileSession
      */
     public MdProfileVO getMdProfile()
     {
+    	updateMdProfile();
         return mdProfile;
     }
 
-    /**
+    private void updateMdProfile() {
+    	mdProfile = new MdProfileVO();
+    	int i = 0;
+    	for (MetadataBean m : getMetadataBeanList())
+    	{
+    	   // profile.getMetadataList().add(new Metadata(m.getCurrent().getName(), m.getCurrent().getIndex(), m.getCurrent().getNamespace()));
+    		mdProfile.getMetadataList().add(new Metadata(m.getCurrent()));
+    		mdProfile.getMetadataList().get(i).getConstraint().clear();
+    	    
+    	    for (ConstraintBean c : m.getConstraints())
+    	    {
+    		if (!"".equals(c.getValue()))
+    		{
+    			mdProfile.getMetadataList().get(i).getConstraint().add(c.getValue());
+    		} 
+    	    }
+    	    i++;
+    	}
+		
+	}
+
+	/**
      * @param mdProfile the mdProfile to set
      */
     public void setMdProfile(MdProfileVO mdProfile)

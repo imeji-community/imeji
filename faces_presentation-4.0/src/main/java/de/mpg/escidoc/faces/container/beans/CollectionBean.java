@@ -10,14 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
-import de.escidoc.schemas.useraccount.x07.UserAccountDocument.UserAccount;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.collection.CollectionController;
 import de.mpg.escidoc.faces.container.collection.CollectionSession;
 import de.mpg.escidoc.faces.container.collection.CollectionVO;
-import de.mpg.escidoc.faces.mdProfile.MdProfileController;
-import de.mpg.escidoc.faces.mdProfile.MdProfileVO;
 import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.metadata.MetadataBean;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
@@ -26,8 +23,6 @@ import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.ContextHelper;
 import de.mpg.escidoc.faces.util.UserHelper;
 import de.mpg.escidoc.services.common.referenceobjects.ContextRO;
-import de.mpg.escidoc.services.common.referenceobjects.GrantRO;
-import de.mpg.escidoc.services.common.valueobjects.AccountUserVO;
 import de.mpg.escidoc.services.common.valueobjects.GrantVO;
 import de.mpg.escidoc.services.common.valueobjects.GrantVO.PredefinedRoles;
 
@@ -104,7 +99,7 @@ public class CollectionBean
 	 */
 	public void init() throws Exception
 	{
-		metadataBeanList.clear();
+		//metadataBeanList.clear();
 		for (Metadata m : metadataList)
 		{
 		    if (m.getSimpleValue() == null)
@@ -195,12 +190,12 @@ public class CollectionBean
 		if (CollectionPageType.CREATE.equals(this.pageType)) 
 		{
 			collectionController.create(collection, sessionBean.getUserHandle());
-			sessionBean.setMessage("Collection successfully created");
+			sessionBean.setInformation("Collection successfully created");
 		}
 		if (CollectionPageType.EDIT.equals(this.pageType)) 
 		{
 			collectionController.edit(collection, sessionBean.getUserHandle());
-			sessionBean.setMessage("Collection successfully edited");
+			sessionBean.setInformation("Collection successfully edited");
 		}
 	}
 	

@@ -109,61 +109,62 @@
 			
 			<div class="free_area0 itemBlockContent endline">
 	
-	
-				
-				
-				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-					<b class="xLarge_area0_p8 endline labelLine clear">
-						<h:outputText value="Profile"/>
-						<span class="noDisplay">: </span>
-					</b>
+
 					<tr:iterator id="profile" var="profile" value="#{CollectionBean.metadataBeanList}" varStatus="position">
+						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="Elements" rendered="#{position.index == 0}"/>
+									<h:outputText value="&#160;" rendered="#{position.index != 0}"/>
+									<span class="noDisplay">: </span>
+								</b>
+						
 						<h:panelGroup class="xHuge_area0 xTiny_marginLExcl endline">
 							<h:panelGroup styleClass="large_area0 tiny_marginRIncl">
 								<h:outputLabel styleClass="large_label" value="#{lbl.metadata_select}" />
-								<h:selectOneMenu styleClass="large_select" value="#{profile.current.label}" valueChangeListener="#{profile.menuListener}">
+								<tr:selectOneChoice simple="true" styleClass="large_select" value="#{profile.current.label}" valueChangeListener="#{profile.menuListener}">
 										<f:selectItems value="#{CollectionBean.metadataMenu}"/>
-								</h:selectOneMenu>
+								</tr:selectOneChoice>
 							</h:panelGroup>
 							<h:panelGroup styleClass="large_area0 tiny_marginRIncl">
 								<h:outputLabel styleClass="large_label" value="#{lbl.minoccurs}" />
-								<h:inputText styleClass="large_txtInput" value="#{profile.current.minOccurs}" valueChangeListener="#{profile.minOccursListener}"/>
+								<tr:inputText simple="true" styleClass="large_txtInput" value="#{profile.current.minOccurs}" valueChangeListener="#{profile.minOccursListener}"/>
 							</h:panelGroup>
 							<h:panelGroup styleClass="large_area0 tiny_marginRIncl">
 								<h:outputLabel styleClass="large_label" value="#{lbl.maxoccurs}" />
-								<h:inputText styleClass="large_txtInput" value="#{profile.current.maxOccurs}" valueChangeListener="#{profile.maxOccursListener}"/>
+								<tr:inputText simple="true" styleClass="large_txtInput" value="#{profile.current.maxOccurs}" valueChangeListener="#{profile.maxOccursListener}"/>
 							</h:panelGroup>
 							
-							<h:panelGroup styleClass="xLarge_area0 tiny_marginRIncl">
-								<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
-								<tr:iterator id="profile" var="constraint" value="#{profile.constraints}" varStatus="pos">
-									<h:panelGroup>
-										<h:inputText styleClass="large_txtInput" value="#{constraint.value}" valueChangeListener="#{constraint.listener}" />
+							
+								
+								<tr:iterator id="profile" var="constraint" value="#{profile.constraints}" varStatus="index">
+									<h:panelGroup styleClass="large_area0 tiny_marginRIncl">
+										<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
+										<tr:inputText simple="true" styleClass="large_txtInput" value="#{constraint.value}" valueChangeListener="#{constraint.listener}" />
 										<h:panelGroup styleClass="large_area0">
 											<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add constraint" action="#{profile.addConstraint}">
-												<f:setPropertyActionListener value="#{pos.index}" target="#{profile.constraintPosition}"/>
+												<f:setPropertyActionListener value="#{index.index}" target="#{profile.constraintPosition}"/>
 											</tr:commandButton>
 											<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove Metadata" action="#{profile.removeConstraint}">
-												<f:setPropertyActionListener value="#{pos.index}" target="#{profile.constraintPosition}"/>
+												<f:setPropertyActionListener value="#{index.index}" target="#{profile.constraintPosition}"/>
 											</tr:commandButton>
 										</h:panelGroup>
 										
 									</h:panelGroup>
 								</tr:iterator>
-							</h:panelGroup>
+							
 							
 						</h:panelGroup>
 						<span class="large_area0_p8 lineToolSection">
-							<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add Metadata" action="#{MdProfileBean.addMetadata}">
-								<f:setPropertyActionListener value="#{position.index}" target="#{MdProfileBean.profilePosition}"/>
+							<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add Metadata" action="#{CollectionBean.addMetadata}">
+								<f:setPropertyActionListener value="#{position.index}" target="#{CollectionBean.profilePosition}"/>
 							</tr:commandButton>
-							<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove Metadata" action="#{MdProfileBean.removeMetadata}">
-								<f:setPropertyActionListener value="#{position.index}" target="#{MdProfileBean.profilePosition}"/>
+							<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove Metadata" action="#{CollectionBean.removeMetadata}">
+								<f:setPropertyActionListener value="#{position.index}" target="#{CollectionBean.profilePosition}"/>
 							</tr:commandButton>
 						</span>
+					</h:panelGroup>
 					</tr:iterator>
 					
-				</h:panelGroup>
 			
 			</div>
 		</h:panelGroup>

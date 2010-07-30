@@ -3,11 +3,11 @@ package de.mpg.escidoc.faces.metadata;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.escidoc.faces.beans.SessionBean;
-import de.mpg.escidoc.faces.mdProfile.beans.MdProfileBean;
 import de.mpg.escidoc.faces.util.BeanHelper;
 
 
@@ -18,6 +18,8 @@ import de.mpg.escidoc.faces.util.BeanHelper;
  */
 public class MetadataBean
 {
+	private static Logger logger = Logger.getLogger(MetadataBean.class);
+	
    	private Metadata current = null;
 	private List<Metadata> metadataList = new ArrayList<Metadata>();
 	private SessionBean sessionBean = null;
@@ -116,8 +118,8 @@ public class MetadataBean
 	
 	public String addConstraint()
 	{
+		logger.info("Add Constraint at pos " + getConstraintPosition()); 
 		constraints.add(getConstraintPosition() + 1, new ConstraintBean(""));
-	    
 	    return "";
 	    //MdProfileBean.reloadPage();
 	}

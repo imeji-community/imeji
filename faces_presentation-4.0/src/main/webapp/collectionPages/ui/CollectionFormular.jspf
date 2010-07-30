@@ -108,7 +108,11 @@
 			<span class="seperator"></span>
 			
 			<div class="free_area0 itemBlockContent endline">
-	
+				<h:panelGroup styleClass="large_area0_p8" rendered="#{empty CollectionBean.metadataBeanList}">
+					<tr:commandButton styleClass="min_imgBtn add" shortDesc="Add Metadata" action="#{CollectionBean.addMetadata}">
+						
+					</tr:commandButton>
+				</h:panelGroup>
 
 					<tr:iterator id="profile" var="profile" value="#{CollectionBean.metadataBeanList}" varStatus="position">
 						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">

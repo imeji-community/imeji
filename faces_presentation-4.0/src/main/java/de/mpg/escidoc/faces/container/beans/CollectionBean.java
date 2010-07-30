@@ -108,11 +108,12 @@ public class CollectionBean
 		    }
 		    metadataMenu.add(new SelectItem(m.getIndex(), m.getLabel()));
 		}
-
+		/*
 		if (metadataBeanList.size() == 0)
 		{
 		    metadataBeanList.add(new MetadataBean(metadataList));
 		}
+		*/
 		
 		
 		String collectionId = request.getParameter("id");
@@ -313,7 +314,15 @@ public class CollectionBean
     
     public String addMetadata()
     {
-	    metadataBeanList.add(getProfilePosition() + 1, new MetadataBean(metadataList));
+    	if(metadataBeanList.size()==0)
+    	{
+    		 metadataBeanList.add(new MetadataBean(metadataList));
+    	}
+    	else
+    	{
+    		metadataBeanList.add(getProfilePosition() + 1, new MetadataBean(metadataList));
+    	}
+	    
 		return "";
 	}
     

@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -53,14 +54,12 @@ public class UploadServlet extends HttpServlet
 	private static String title;
 	private static String description;
 	private static String mimetype;
+	private static String format;
 	private String userHandle;
 	
-	private String targetDir = "C:\\Icons\\";
-//	private static int detailWidth = 357;
-//	private static int webWidth = 103;
-
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		System.err.println("doGet");
+		
+
 	}
 	
 	public  void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
@@ -69,19 +68,18 @@ public class UploadServlet extends HttpServlet
 		ServletInputStream inputStream = req.getInputStream();
 		BufferedImage bufferedImage = ImageIO.read(inputStream);
 		title = req.getParameter("name");
-		mimetype = req.getContentType();
+		StringTokenizer st = new StringTokenizer(title, ".");
+		while(st.hasMoreTokens())
+			format = st.nextToken();
+		
+		mimetype = "image/"+ format;
 		userHandle = req.getParameter("userHandle");
 	
-//		BufferedOutputStream outStream = new BufferedOutputStream( new FileOutputStream(targetDir + imageName));
-//		outStream.flush();
-//		ImageIO.write(image, "jpg", new File(targetDir + imageName));
-//		scaleImage(image, detailWidth,"C:\\Icons\\detail\\");
-//		scaleImage(image, webWidth, "C:\\Icons\\web\\");
-		
+	
 		//TODO remove static image description 
 		description = "";
 
-		ImejiItemVO item = DepositController.createImejiItem(bufferedImage, title, description, mimetype, userHandle );
+		ImejiItemVO item = DepositController.createImejiItem(bufferedImage, title, description, mimetype, format, userHandle );
 
 		try 
 		{
@@ -96,22 +94,6 @@ public class UploadServlet extends HttpServlet
 
 	}
 	
-//	public static boolean scaleImage(BufferedImage image, int width, String path) throws IOException{
-//		Image thumbnail = image.getScaledInstance(width, -1,Image.SCALE_SMOOTH);
-//		BufferedImage bufferedThumbnail = new BufferedImage(thumbnail.getWidth(null), thumbnail.getHeight(null),BufferedImage.TYPE_INT_RGB);
-//		
-//		
-//		Graphics g = bufferedThumbnail.getGraphics();
-//		g.drawImage(thumbnail, 0,0, null);
-//		BufferedOutputStream outStream = new BufferedOutputStream( new FileOutputStream( path+ imageName));
-//
-//		ImageIO.write(bufferedThumbnail, "jpg", new File(path + imageName));
-//		
-//		outStream.flush();
-//		return true;
-//	}
-	
-
 
 
 	

@@ -11,7 +11,7 @@
 	
 	<ui:define name="mainContent">
 	
-	<h:inputText id="userHandleHidden" style="visibility:false;" value="#{SessionBean.userHandle}"/>
+	<h:inputText id="userHandleHidden" style="visibility:hidden;" value="#{SessionBean.userHandle}"/>
 
 <!-- Load Queue widget CSS and jQuery -->
 <style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style>
@@ -42,7 +42,7 @@ $(function() {
 		unique_names : true,
 		filters : [
 			{title : "Image files", extensions : "jpg,gif,png,bmp"},
-			{title : "Zip files", extensions : "zip"}
+			//{title : "Zip files", extensions : "zip"}
 		],
 
 		// Resize images on clientside if we can
@@ -75,7 +75,7 @@ $(function() {
 });
 </script>
 		<div class="full_area0 infoPage">
-			<form method='get' action='/faces/jsf/upload.xhtml'>"
+			<form method='get' action='/faces/jsf/upload.xhtml'>
 				<div style="float: left; margin-right: 20px">
 					<div id="uploader" style="width: 450px; height: 330px;">You browser doesn't support native upload. Try Firefox 3 or Safari 4.</div>
 				</div>

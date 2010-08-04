@@ -94,13 +94,13 @@ public class ImejiItemVO {
 	 * @param userHandle
 	 * @throws Exception
 	 */
-	public void attachFile(BufferedImage bufferedImage, String fileName, String mimetype, String userHandle) throws Exception
+	public void attachFile(BufferedImage bufferedImage, String fileName, String mimetype, String format, String userHandle) throws Exception
 	{
 		ImageHelper imageHelper = new ImageHelper();
 		itemDoc.getItem().addNewContentStreams();
-		this.itemDoc.setItem(imageHelper.setComponent(imageHelper.getOrig(), itemDoc.getItem(), bufferedImage, fileName, mimetype, userHandle));
-		this.itemDoc.setItem(imageHelper.setComponent(imageHelper.getWeb(), itemDoc.getItem(), bufferedImage, fileName, mimetype, userHandle));
-		this.itemDoc.setItem(imageHelper.setComponent(imageHelper.getThumb(), itemDoc.getItem(), bufferedImage, fileName, mimetype, userHandle));
+		this.itemDoc.setItem(imageHelper.setComponent(imageHelper.getOrig(), itemDoc.getItem(), bufferedImage, fileName, mimetype, format, userHandle));
+		this.itemDoc.setItem(imageHelper.setComponent(imageHelper.getWeb(), itemDoc.getItem(), bufferedImage, fileName, mimetype, format, userHandle));
+		this.itemDoc.setItem(imageHelper.setComponent(imageHelper.getThumb(), itemDoc.getItem(), bufferedImage, fileName, mimetype, format, userHandle));
 	}
 	
 	public MdsImejiItemVO getMdRecords() {

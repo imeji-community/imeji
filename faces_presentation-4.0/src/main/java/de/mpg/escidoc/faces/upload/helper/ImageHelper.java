@@ -68,7 +68,7 @@ public class ImageHelper
 		web_width = PropertyReader.getProperty("xsd.resolution.web");
 	}
 
-	public Item setComponent(String contentCategory, Item item, BufferedImage bufferedImage, String fileName, String mimetype, String userHandle) throws Exception
+	public Item setComponent(String contentCategory, Item item, BufferedImage bufferedImage, String fileName, String mimetype, String format, String userHandle) throws Exception
 	{
 		ImageHelper helper = new ImageHelper();
 		URL url = null;
@@ -88,9 +88,7 @@ public class ImageHelper
 		propCursor.toEndToken();
 		propCursor.insertChars("private");
 		component.getProperties().setFileName(fileName);
-		component.getProperties().setMimeType("image/jpg");
-		
-//		BufferedImage bufferedImage = ImageIO.read(inputStream);
+		component.getProperties().setMimeType(mimetype);
 		
 		if(contentCategory.equals(thumb)){
 			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(thumb_width));
@@ -104,14 +102,13 @@ public class ImageHelper
 
 		//use imageIO.write to encode the image back into a byte[]
 		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-		ImageIO.write(bufferedImage,"jpg", byteOutput);
+		ImageIO.write(bufferedImage,format, byteOutput);
 		url = helper.uploadFile(new ByteArrayInputStream(byteOutput.toByteArray()), mimetype, userHandle);
 
 		component.getContent().setHref(url.toExternalForm());
 		Enum enu = Enum.forString("internal-managed");
 		component.getContent().setStorage(enu);
 
-//		item.getComponents().setComponentArray(0, component);
 		
 		return item;
 	}
@@ -141,7 +138,7 @@ public class ImageHelper
         String fwUrl = de.mpg.escidoc.services.framework.ServiceLocator.getFrameworkUrl();
         PutMethod method = new PutMethod(fwUrl + "/st/staging-file");
         method.setRequestEntity(new InputStreamRequestEntity(in));
-        method.setRequestHeader("Content-Type", "image/jpg");
+        method.setRequestHeader("Content-Type", mimetype);
         method.setRequestHeader("Cookie", "escidocCookie=" + userHandle);
         // Execute the method with HttpClient.
         HttpClient client = new HttpClient();

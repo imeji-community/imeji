@@ -34,18 +34,15 @@ import de.mpg.escidoc.services.framework.ServiceLocator;
 public class DepositController {
 
 	
-	public static ImejiItemVO createImejiItem(BufferedImage bufferedImage, String title, String description, String mimetype, String userHandle)
+	public static ImejiItemVO createImejiItem(BufferedImage bufferedImage, String title, String description, String mimetype, String format, String userHandle)
 	{
 
 	
 		ImejiItemVO imejiItem = new ImejiItemVO(title, description);
-//		MdsImejiItemVO mdRecord = imejiItem.getMdRecords();
-//		mdRecord.setTitle(imageName);
-
 		
 		try 
 		{
-			imejiItem.attachFile(bufferedImage, title, mimetype, userHandle);
+			imejiItem.attachFile(bufferedImage, title, mimetype, format, userHandle);
 		} 
 		catch (Exception e) 
 		{

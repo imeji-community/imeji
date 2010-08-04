@@ -1,52 +1,26 @@
 package de.mpg.escidoc.faces.deposit;
 
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.rmi.RemoteException;
-
-import javax.xml.rpc.ServiceException;
-
-import de.escidoc.core.common.exceptions.application.invalid.InvalidContentException;
-import de.escidoc.core.common.exceptions.application.invalid.InvalidStatusException;
-import de.escidoc.core.common.exceptions.application.invalid.InvalidXmlException;
-import de.escidoc.core.common.exceptions.application.missing.MissingAttributeValueException;
-import de.escidoc.core.common.exceptions.application.missing.MissingContentException;
-import de.escidoc.core.common.exceptions.application.missing.MissingElementValueException;
-import de.escidoc.core.common.exceptions.application.missing.MissingMdRecordException;
-import de.escidoc.core.common.exceptions.application.missing.MissingMethodParameterException;
-import de.escidoc.core.common.exceptions.application.notfound.ContentModelNotFoundException;
-import de.escidoc.core.common.exceptions.application.notfound.ContextNotFoundException;
-import de.escidoc.core.common.exceptions.application.notfound.FileNotFoundException;
-import de.escidoc.core.common.exceptions.application.notfound.ReferencedResourceNotFoundException;
-import de.escidoc.core.common.exceptions.application.notfound.RelationPredicateNotFoundException;
-import de.escidoc.core.common.exceptions.application.security.AuthenticationException;
-import de.escidoc.core.common.exceptions.application.security.AuthorizationException;
-import de.escidoc.core.common.exceptions.application.violated.ReadonlyAttributeViolationException;
-import de.escidoc.core.common.exceptions.application.violated.ReadonlyElementViolationException;
-import de.escidoc.core.common.exceptions.system.SystemException;
 import de.escidoc.schemas.item.x09.ItemDocument;
 import de.escidoc.schemas.result.x01.ResultDocument;
 import de.mpg.escidoc.faces.item.ImejiItemVO;
-import de.mpg.escidoc.faces.metadata.MdsImejiItemVO;
+
 import de.mpg.escidoc.services.framework.ServiceLocator;
+
+/**
+ * 
+ * @author yu
+ *
+ */
 
 public class DepositController {
 
 	
-	public static ImejiItemVO createImejiItem(BufferedImage bufferedImage, String title, String description, String mimetype, String format, String userHandle)
-	{
-
-	
-		ImejiItemVO imejiItem = new ImejiItemVO(title, description);
-		
-		try 
-		{
+	public static ImejiItemVO createImejiItem(BufferedImage bufferedImage, String title, String description, String mimetype, String format, String userHandle, String collection, String context){
+		ImejiItemVO imejiItem = new ImejiItemVO(title, description,collection,context);
+		try {
 			imejiItem.attachFile(bufferedImage, title, mimetype, format, userHandle);
-		} 
-		catch (Exception e) 
-		{
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

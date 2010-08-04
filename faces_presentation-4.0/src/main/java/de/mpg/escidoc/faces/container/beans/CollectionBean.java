@@ -116,7 +116,7 @@ public class CollectionBean
 		*/
 		
 		
-		String collectionId = request.getParameter("id");
+		String collectionId = request.getParameter("id"); 
 		String page = request.getParameter("page");
 		
 		if (collectionId != null && CollectionPageType.EDIT.name().equalsIgnoreCase(page)) 

@@ -10,8 +10,11 @@
 	<ui:param name="headline" value="#{lbl.HomePage}"/>
 	
 	<ui:define name="mainContent">
+	<h:outputText value="#{CollectionSession.initCurrentCollection}"/>
+	<h:inputText id="userHandleHidden" styleClass="noDisplay" value="#{SessionBean.userHandle}"/>
+	<h:inputText id="collectionIDHidden" styleClass="noDisplay" value="#{CollectionSession.current.latestVersion.objectId}"/>
+	<h:inputText id="contextIDHidden" styleClass="noDisplay" value="#{CollectionSession.current.context.objectId}"/>
 	
-	<h:inputText id="userHandleHidden" style="visibility:hidden;" value="#{SessionBean.userHandle}"/>
 
 <!-- Load Queue widget CSS and jQuery -->
 <style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style>
@@ -36,7 +39,7 @@ $(function() {
 	$("#uploader").pluploadQueue({
 		// General settings
 		runtimes : 'gears,html5,flash,silverlight,browserplus,html4',
-		url : '/faces/upload' + "?userHandle=" +document.getElementById("formular:userHandleHidden").value,
+		url : '/faces/upload' + "?userHandle=" +document.getElementById("formular:userHandleHidden").value + "&amp;collection=" + document.getElementById("formular:collectionIDHidden").value+"&amp;context=" + document.getElementById("formular:contextIDHidden").value,
 		max_file_size : '10mb',
 		chunk_size : '1mb',
 		unique_names : true,
@@ -45,45 +48,22 @@ $(function() {
 			//{title : "Zip files", extensions : "zip"}
 		],
 
-		// Resize images on clientside if we can
+		// Resize images on clientside
 		//resize : {width : 320, height : 240, quality : 90},
 
-	});
-    // Client side form validation
-	$('form').submit(function(e) {
-		var uploader = $("#uploader").pluploadQueue();
-
-		// Validate number of uploaded files
-		if (uploader.total.uploaded == 0) {
-			// Files in queue upload them first
-			if (uploader.files.length > 0) {
-				// When all files are uploaded submit form
-				uploader.bind('UploadProgress', function() {
-					if (uploader.total.uploaded == uploader.files.length)
-						$('form').submit();
-				});
-
-				uploader.start();
-
-			} else{
-				//alert('You must at least upload one file.');
-			}
-
-			e.preventDefault();
-		}
 	});
 });
 </script>
 		<div class="full_area0 infoPage">
-			<form method='get' action='/faces/jsf/upload.xhtml'>
 				<div style="float: left; margin-right: 20px">
 					<div id="uploader" style="width: 450px; height: 330px;">You browser doesn't support native upload. Try Firefox 3 or Safari 4.</div>
 				</div>
 				<br style="clear: both"/>
-				<input type="submit" value ="send more photos"></input>
-			</form>
-			</div>
-			</ui:define>
+			<h:outputLink method="get" styleClass="activeButton" value="/faces/jsf/upload.xhtml?collection=#{CollectionSession.current.latestVersion.objectId}">
+				<h:outputText value="Send more photos"/>
+			</h:outputLink>
+		</div>
+</ui:define>
 </ui:composition>
 
 </body>

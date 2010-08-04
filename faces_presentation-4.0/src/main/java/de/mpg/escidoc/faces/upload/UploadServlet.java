@@ -1,45 +1,18 @@
 package de.mpg.escidoc.faces.upload;
 
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.URISyntaxException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-
-
+import java.io.IOException;
+import java.util.StringTokenizer;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.rpc.ServiceException;
-
 import org.apache.log4j.Logger;
-
-import de.mpg.escidoc.faces.album.beans.AlbumSessionOld;
-import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.deposit.DepositController;
-import de.mpg.escidoc.faces.item.FacesItemVO;
 import de.mpg.escidoc.faces.item.ImejiItemVO;
-import de.mpg.escidoc.faces.item.ItemVO;
-import de.mpg.escidoc.faces.util.BeanHelper;
-import de.mpg.escidoc.services.common.referenceobjects.ContextRO;
-import de.mpg.escidoc.services.common.valueobjects.publication.PubItemVO;
-import de.mpg.escidoc.services.framework.PropertyReader;
 
 
 /**
@@ -55,11 +28,11 @@ public class UploadServlet extends HttpServlet
 	private static String description;
 	private static String mimetype;
 	private static String format;
-	private String userHandle;
+	private static String userHandle;
+	private static String collection;
+	private static String context;
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		
-
 	}
 	
 	public  void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
@@ -74,30 +47,24 @@ public class UploadServlet extends HttpServlet
 		
 		mimetype = "image/"+ format;
 		userHandle = req.getParameter("userHandle");
-	
+		collection = req.getParameter("collection");
+		context = req.getParameter("context");
 	
 		//TODO remove static image description 
 		description = "";
 
-		ImejiItemVO item = DepositController.createImejiItem(bufferedImage, title, description, mimetype, format, userHandle );
+		ImejiItemVO item = DepositController.createImejiItem(bufferedImage, title, description, mimetype, format, userHandle,collection, context );
 
-		try 
-		{
+		try {
 			String itemXml = DepositController.depositImejiItem(item, userHandle);
 			System.out.println(itemXml);
-		} 
-		catch (Exception e) 
+		} catch (Exception e) 
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 
 	}
-	
-
-
-	
-	
 
 	}
 

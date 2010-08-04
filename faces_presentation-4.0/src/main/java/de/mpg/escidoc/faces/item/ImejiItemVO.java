@@ -1,21 +1,12 @@
 package de.mpg.escidoc.faces.item;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import org.apache.xmlbeans.XmlAnySimpleType;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.UserDataHandler;
-
-import de.escidoc.schemas.contentstreams.x07.ContentStreamDocument.ContentStream;
 import de.escidoc.schemas.item.x09.ItemDocument;
 import de.escidoc.schemas.item.x09.ItemDocument.Item;
 import de.escidoc.schemas.metadatarecords.x05.MdRecordDocument;
@@ -32,7 +23,7 @@ public class ImejiItemVO {
     protected MdsImejiItemVO mdRecords = null;
     protected ItemDocument itemDoc = null;
 
-	public ImejiItemVO(String title, String description){
+	public ImejiItemVO(String title, String description, String collection,String context){
 		mdRecords = new MdsImejiItemVO(title, description);
     	itemDoc = ItemDocument.Factory.newInstance();
     	Item item = itemDoc.addNewItem();
@@ -65,22 +56,18 @@ public class ImejiItemVO {
     	item.setMdRecords(mdRecs);
     	
     	item.addNewRelations();
-    	//TODO: remove static collection id
-//    	Relation rel = item.getRelations().addNewRelation();
-//    	rel.setObjid("escidoc:201386");
-//    	rel.setPredicate(XmlAnySimpleType.Factory.newValue("http://www.escidoc.de/ontologies/mpdl-ontologies/content-relations#isMemberOf"));
+
+    	Relation rel = item.getRelations().addNewRelation();
+    	rel.setObjid(collection);
+    	rel.setPredicate(XmlAnySimpleType.Factory.newValue("http://www.escidoc.de/ontologies/mpdl-ontologies/content-relations#isMemberOf"));
     	
-    	//TODO remove static context id
     	item.addNewProperties().addNewContext();
-    	item.getProperties().getContext().setObjid("escidoc:108013");
+    	item.getProperties().getContext().setObjid(context);
 
     	item.getProperties().addNewContentModel();
     	try {
 			item.getProperties().getContentModel().setObjid(PropertyReader.getProperty("escidoc.faces.content-model.id"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}   

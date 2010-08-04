@@ -1,15 +1,10 @@
 package de.mpg.escidoc.faces.upload.helper;
 
 import java.awt.Graphics;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -21,21 +16,12 @@ import javax.naming.InitialContext;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PutMethod;
-import org.apache.xmlbeans.XmlAnySimpleType;
 import org.apache.xmlbeans.XmlCursor;
-import org.apache.xmlbeans.XmlObject;
-
 import de.escidoc.schemas.components.x09.ComponentDocument.Component;
-import de.escidoc.schemas.components.x09.ComponentDocument.Component.Content;
 import de.escidoc.schemas.components.x09.ComponentDocument.Component.Content.Storage.Enum;
-import de.escidoc.schemas.components.x09.ComponentsDocument.Components;
 import de.escidoc.schemas.components.x09.PropertiesDocument.Properties;
-import de.escidoc.schemas.contentstreams.x07.ContentStreamDocument.ContentStream;
 import de.escidoc.schemas.item.x09.ItemDocument.Item;
-import de.escidoc.schemas.metadatarecords.x05.MdRecordDocument.MdRecord;
-import de.escidoc.schemas.metadatarecords.x05.MdRecordsDocument.MdRecords;
 import de.mpg.escidoc.services.common.XmlTransforming;
-import de.mpg.escidoc.services.common.valueobjects.FileVO.Storage;
 import de.mpg.escidoc.services.framework.PropertyReader;
 
 public class ImageHelper 

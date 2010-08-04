@@ -74,6 +74,10 @@
 				<h:outputLink id="lnkWithdrawAlbum" styleClass="free_area0" value="#{Navigation.confirmationUrl}/withdraw/#{CollectionSession.current.latestVersion.objectId}type=collection" rendered="#{(CollectionSession.current.state == 'RELEASED') and (CollectionSession.current.owner.objectId == SessionBean.user.reference.objectId)}">
 					<h:outputText value="#{lbl.collection_withdraw}"></h:outputText>
 				</h:outputLink>
+				<h:outputText styleClass="seperator" rendered="#{CollectionSession.current.state == 'PENDING'}" />
+				<h:outputLink id="lnkDeleteAlbum" styleClass="free_area0" value="/faces/jsf/upload.xhtml?collection=#{CollectionSession.current.latestVersion.objectId}" rendered="#{SessionBean.userHandle != null}">
+					<h:outputText value="#{lbl.collection_upload}"></h:outputText>
+				</h:outputLink>
 			</h:panelGroup>
 		</ui:define>
 

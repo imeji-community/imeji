@@ -112,19 +112,26 @@
 		<load-on-startup>2</load-on-startup>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>Upload Servlet</servlet-name>
+		<servlet-class>de.mpg.escidoc.faces.upload.UploadServlet</servlet-class>
+	</servlet>
+	
 	<!-- Image Servlet -->
 	<servlet>
 		<servlet-name>Image Servlet</servlet-name>
 		<servlet-class>de.mpg.escidoc.faces.servlet.ImageServlet</servlet-class>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
+	
+	<!-- Upload Servlet -->
 
+	
 	<!-- resource loader servlet -->
 	<servlet>
 		<servlet-name>resources</servlet-name>
 		<servlet-class>org.apache.myfaces.trinidad.webapp.ResourceServlet</servlet-class>
 	</servlet>
-	
 	
 <!-- This filter is always required;  one of its functions is 
 		file upload. -->
@@ -178,6 +185,11 @@
 	<session-config>
 		<session-timeout>180</session-timeout>
 	</session-config>
+	
+	<servlet-mapping>
+		<servlet-name>Upload Servlet</servlet-name>
+		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -193,6 +205,8 @@
 		<servlet-name>Image Servlet</servlet-name>
 		<url-pattern>/image</url-pattern>
 	</servlet-mapping>
+	
+
 
 	<welcome-file-list>
 		<welcome-file>jsf/Welcome.xhtml</welcome-file>

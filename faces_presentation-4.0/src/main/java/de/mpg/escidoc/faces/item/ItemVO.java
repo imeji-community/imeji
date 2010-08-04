@@ -1,6 +1,7 @@
 package de.mpg.escidoc.faces.item;
 
 import java.io.IOException;
+
 import java.net.URISyntaxException;
 
 import javax.faces.context.FacesContext;

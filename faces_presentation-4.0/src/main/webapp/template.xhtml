@@ -45,6 +45,8 @@
 				
 				<link type="image/x-icon" href="#{Navigation.applicationUrl}resources/icon/escidoc.ico" rel="shortcut icon"/>
 				
+				<link href="#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css" type="text/css" media="screen" rel="stylesheet"/>
+				
 				<meta http-equiv="pragma" content="no-cache"/>
 				<meta http-equiv="cache-control" content="no-cache"/>
 				<meta http-equiv="expires" content="0"/>
@@ -54,10 +56,13 @@
 				<script type="text/javascript" language="JavaScript">
 					var cookieVersion = "1.0";
 					var coneURL = '<h:outputText value="#{Navigation.applicationUrl}"/>' + '../cone/';
-					var jsURL = '<h:outputText value="#{Navigation.applicationUrl}"/>' + 'resources/eSciDoc_JavaScript/';;
+					var jsURL = '<h:outputText value="#{Navigation.applicationUrl}"/>' + 'resources/eSciDoc_JavaScript/';
 				</script>
 				
 				<script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_javascript.js" language="JavaScript" type="text/javascript">;</script>
+
+
+				
 
 			</head>
 			

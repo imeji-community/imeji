@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
+<body>
+
+<ui:composition template="template.xhtml">
+	<ui:param name="headline" value="#{lbl.HomePage}"/>
+	
+	<ui:define name="mainContent">
+	
+	<h:inputText id="userHandleHidden" style="visibility:false;" value="#{SessionBean.userHandle}"/>
+
+<!-- Load Queue widget CSS and jQuery -->
+<style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	google.load("jquery", "1.3");
+</script>
+<!-- Thirdparty intialization scripts, needed for the Google Gears and BrowserPlus runtimes -->
+<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/gears_init.js"></script>
+<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+
+
+
+<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
+<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/jquery.plupload.queue.min.js"></script>
+
+<script>
+
+$(function() {
+	// Setup html5 version
+	$("#uploader").pluploadQueue({
+		// General settings
+		runtimes : 'gears,html5,flash,silverlight,browserplus,html4',
+		url : '/faces/upload' + "?userHandle=" +document.getElementById("formular:userHandleHidden").value,
+		max_file_size : '10mb',
+		chunk_size : '1mb',
+		unique_names : true,
+		filters : [
+			{title : "Image files", extensions : "jpg,gif,png,bmp"},
+			{title : "Zip files", extensions : "zip"}
+		],
+
+		// Resize images on clientside if we can
+		//resize : {width : 320, height : 240, quality : 90},
+
+	});
+    // Client side form validation
+	$('form').submit(function(e) {
+		var uploader = $("#uploader").pluploadQueue();
+
+		// Validate number of uploaded files
+		if (uploader.total.uploaded == 0) {
+			// Files in queue upload them first
+			if (uploader.files.length > 0) {
+				// When all files are uploaded submit form
+				uploader.bind('UploadProgress', function() {
+					if (uploader.total.uploaded == uploader.files.length)
+						$('form').submit();
+				});
+
+				uploader.start();
+
+			} else{
+				//alert('You must at least upload one file.');
+			}
+
+			e.preventDefault();
+		}
+	});
+});
+</script>
+		<div class="full_area0 infoPage">
+			<form method='get' action='/faces/jsf/upload.xhtml'>"
+				<div style="float: left; margin-right: 20px">
+					<div id="uploader" style="width: 450px; height: 330px;">You browser doesn't support native upload. Try Firefox 3 or Safari 4.</div>
+				</div>
+				<br style="clear: both"/>
+				<input type="submit" value ="send more photos"></input>
+			</form>
+			</div>
+			</ui:define>
+</ui:composition>
+
+</body>
+</html>
+
+
+
+
+

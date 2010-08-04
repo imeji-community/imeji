@@ -6,6 +6,7 @@ import java.util.List;
 
 
 import de.mpg.escidoc.faces.container.collection.CollectionVO;
+import de.mpg.escidoc.faces.item.ImejiItemVO;
 import de.mpg.escidoc.faces.item.ItemVO;
 
 /**
@@ -15,7 +16,7 @@ import de.mpg.escidoc.faces.item.ItemVO;
  */
 public class Upload 
 {
-	private List<ItemVO> items = null;
+	private List<ImejiItemVO> items = null;
 	private String contentModelId = null;
 	private CollectionVO collection = null;
 	private Date startDate = null;
@@ -23,16 +24,16 @@ public class Upload
 		
 	public Upload(String contentModelId) 
 	{
-		items = new ArrayList<ItemVO>();
+		items = new ArrayList<ImejiItemVO>();
 		this.contentModelId = contentModelId;
 	}
 
-	public List<ItemVO> getItems() 
+	public List<ImejiItemVO> getItems() 
 	{
 		return items;
 	}
 
-	public void setItems(List<ItemVO> items) 
+	public void setItems(List<ImejiItemVO> items) 
 	{
 		this.items = items;
 	}

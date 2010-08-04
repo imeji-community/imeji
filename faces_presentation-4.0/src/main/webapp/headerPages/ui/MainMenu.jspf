@@ -55,7 +55,6 @@
 	<h:outputLink id="lnkAlbums" value="#{Navigation.albumsUrl}">
 		<h:outputText value="#{lbl.header_albums}"></h:outputText>
 	</h:outputLink>
-	
 	<h:outputText id="txtMyAlbumsInactive" styleClass="free_area0" value="My Albums" rendered="false" />
 
 	<h:outputLink id="lnkStatistics" value="#{Navigation.statisticsUrl}/visit" rendered="#{SessionBean.admin and SessionBean.user != null}">

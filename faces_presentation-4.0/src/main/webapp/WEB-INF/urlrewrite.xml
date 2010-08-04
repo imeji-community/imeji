@@ -415,9 +415,16 @@
          <from>^/logoff$</from>
          <to>/jsf/Logoff.xhtml</to>
     </rule> 
+    
+   <!-- <rule>
+         <from>^/upload$</from>
+         <to type="redirect">/upload</to>
 
-	 <!-- Resource resolution -->
-    <rule match-type="wildcard">	
+    </rule> 
+
+	  Resource resolution -->
+	 <!-- 
+	 <rule match-type="wildcard">	
     	<from casesensitive="false">/*</from>
     	<to>/jsf/Pictures.xhtml?currentUrl=resource&amp;resource=$1</to>
     </rule>
@@ -425,6 +432,7 @@
     	<from casesensitive="false">/*/*/*/*/*/*/*/*/*</from>
     	<to>/jsf/Pictures.xhtml?currentUrl=resource&amp;resource=$1&amp;page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9</to>
     </rule>
+    -->
 
     <outbound-rule>
         <note>

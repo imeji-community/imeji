@@ -25,7 +25,7 @@ public class UploadThread extends Thread
 		{
 			try 
 			{
-				String itemXml = ServiceLocator.getItemHandler(userHandle).create(upload.getItems().get(0).getItem().xmlText());
+				String itemXml = ServiceLocator.getItemHandler(userHandle).create(upload.getItems().get(0).getItemDocument().xmlText());
 				itemXml = ServiceLocator.getItemHandler(userHandle).submit(itemXml, "TaskParam");
 				itemXml = ServiceLocator.getItemHandler(userHandle).assignObjectPid(itemXml, "");
 				itemXml = ServiceLocator.getItemHandler(userHandle).assignVersionPid(itemXml, "");

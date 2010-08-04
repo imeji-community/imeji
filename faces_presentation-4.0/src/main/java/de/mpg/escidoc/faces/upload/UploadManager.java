@@ -12,6 +12,7 @@ public class UploadManager extends Thread
 {
 	private List<UploadThread> uploadThreads = null;
 	private boolean signal = true;
+	private String userHandler = null;
 	
 	public UploadManager() 
 	{
@@ -26,7 +27,9 @@ public class UploadManager extends Thread
 	 */
 	public void addNewUpload(Upload upload, String userHandle)
 	{
-		uploadThreads.add(new UploadThread(upload, userHandle));
+
+		uploadThreads.add(new UploadThread(upload, userHandler));
+
 	}
 	
 	/**

@@ -1,15 +1,10 @@
 package de.mpg.escidoc.faces.init;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import de.escidoc.core.common.exceptions.application.notfound.ContentModelNotFoundException;
 import de.mpg.escidoc.faces.util.LoginHelper;
-import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 
@@ -37,8 +32,8 @@ public class InitializerServlet extends HttpServlet
     {
     	try 
     	{
-        	initContentModel(PropertyReader.getProperty("escidoc.faces.container.content-model.id"), "Faces Album Content Model");
-        	initContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"), "Faces Collection Content Model");
+        	//initContentModel(PropertyReader.getProperty("escidoc.faces.container.content-model.id"), "Faces Album Content Model");
+        	//initContentModel(PropertyReader.getProperty("escidoc.faces.collection.content-model.id"), "Faces Collection Content Model");
 		} 
     	catch (Exception e) 
     	{

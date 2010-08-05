@@ -35,7 +35,6 @@ public class ImejiItemVO {
     	MdRecord mdRec = mdRDoc.getMdRecord();
     	mdRec.setName("escidoc");
     	
-    	
     	XmlObject xmlObject = XmlObject.Factory.newInstance();
     	XmlCursor xmlCursor = xmlObject.newCursor();
     	xmlCursor.toNextToken();

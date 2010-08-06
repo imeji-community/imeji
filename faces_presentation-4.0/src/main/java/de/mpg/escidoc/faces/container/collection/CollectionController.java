@@ -53,7 +53,7 @@ public class CollectionController extends FacesContainerController
 	 */
 	public FacesContainerVO create(CollectionVO collectionVO, String userHandle) throws Exception
 	{
-		String container = transformToContainerXml(collectionVO);
+	    String container = transformToContainerXml(collectionVO);
 	    String createdCollection = ServiceLocator.getContainerHandler(userHandle).create(container); 
 	    return  new CollectionVO(new FacesContainerVO(transformToContainerVO(createdCollection)));
 

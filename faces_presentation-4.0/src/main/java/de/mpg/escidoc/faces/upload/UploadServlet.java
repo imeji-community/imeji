@@ -55,13 +55,14 @@ public class UploadServlet extends HttpServlet
 
 		ImejiItemVO item = DepositController.createImejiItem(bufferedImage, title, description, mimetype, format, userHandle,collection, context );
 
-		try {
+		try 
+		{
 			String itemXml = DepositController.depositImejiItem(item, userHandle);
 			System.out.println(itemXml);
-		} catch (Exception e) 
+		} 
+		catch (Exception e) 
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} 
 
 	}

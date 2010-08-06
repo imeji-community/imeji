@@ -1,5 +1,6 @@
 package de.mpg.escidoc.faces.metadata;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +67,8 @@ public class Metadata
     private String max, min;
     
     private int maxOccurs = 1, minOccurs  =1;
+    
+    private URI vocabulary = null;
 
     /**
      * Only for testing purpose
@@ -445,6 +448,22 @@ public class Metadata
     public void setSchemaLocation(String schemaLocation)
     {
         this.schemaLocation = schemaLocation;
+    }
+
+    /**
+     * @return the vocabulary
+     */
+    public URI getVocabulary()
+    {
+        return vocabulary;
+    }
+
+    /**
+     * @param vocabulary the vocabulary to set
+     */
+    public void setVocabulary(URI vocabulary)
+    {
+        this.vocabulary = vocabulary;
     }
 
     

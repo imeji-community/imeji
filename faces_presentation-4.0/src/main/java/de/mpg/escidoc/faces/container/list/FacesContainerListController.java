@@ -81,24 +81,23 @@ public class FacesContainerListController
         
         if (userHandle != null) 
         {
-			cth = ServiceLocator.getContainerHandler(userHandle);
-		}
+		cth = ServiceLocator.getContainerHandler(userHandle);
+	}
         else
         {
         	cth = ServiceLocator.getContainerHandler();
         }
         
-        
         String containerListXml = cth.retrieveContainers(list.getParameters().getParametersAsFilter());      
         System.out.println(containerListXml);
         ContainerListDocument containerListDoc = ContainerListDocument.Factory.parse(containerListXml);
         List<ContainerVO> containerList = new ArrayList<ContainerVO>();
+        
         for(Container cont : containerListDoc.getContainerList().getContainerArray())
         {
         	ContainerDocument containerDoc = ContainerDocument.Factory.parse(cont.getDomNode());
         	containerList.add(FacesContainerController.transformToContainerVO(containerDoc.xmlText()));
         }
-        
         
         list = actualizeListWithNewList(list, containerList);
         

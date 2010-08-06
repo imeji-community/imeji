@@ -60,7 +60,7 @@ public class CollectionBean
 	private MdProfileSession mdProfileSession = null;
 	private List<Metadata> metadataList = new ArrayList<Metadata>();
 	private List<SelectItem> metadataMenu = new ArrayList<SelectItem>();
-    private List<MetadataBean> metadataBeanList = new ArrayList<MetadataBean>();
+	private List<MetadataBean> metadataBeanList = new ArrayList<MetadataBean>();
 	private int profilePosition;
 	
 	private static Logger logger = Logger.getLogger(CollectionBean.class);
@@ -182,7 +182,7 @@ public class CollectionBean
 		    {
 			if (!"".equals(c.getValue()))
 			{
-				 collection.getMdProfile().getMetadataList().get(i).getConstraint().add(c.getValue());
+			    collection.getMdProfile().getMetadataList().get(i).getConstraint().add(c.getValue());
 			} 
 		    }
 		    i++;

@@ -2,6 +2,7 @@ package de.mpg.escidoc.faces.container;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +20,12 @@ import org.apache.xmlbeans.impl.xb.xsdschema.NoFixedFacet;
 import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument;
 import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument.Restriction;
 import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument.Schema;
+import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument;
+import org.dublincore.xml.dcDsp.x2008.x01.x14.LiteralConstraintType;
+import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.DescriptionSetTemplate;
+import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.DescriptionSetTemplate.DescriptionTemplate;
+import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.DescriptionSetTemplate.DescriptionTemplate.StatementTemplate;
+import org.dublincore.xml.dcDsp.x2008.x01.x14.LiteralConstraintType.LiteralOption;
 
 import de.escidoc.schemas.container.x08.ContainerDocument;
 import de.escidoc.schemas.metadatarecords.x05.MdRecordDocument.MdRecord;
@@ -470,8 +477,8 @@ public class FacesContainerController
     	
     	if (ct.getMetadataSets().size() == 0) 
     	{
-			ct.getMetadataSets().add(new MetadataSetVO());
-		}
+		ct.getMetadataSets().add(new MetadataSetVO());
+	}
     	
     	ct.getMetadataSets().set(0, new MdsPublicationVO(facesContainerVO.getMdRecord()));
     	
@@ -485,7 +492,7 @@ public class FacesContainerController
      * @return
      * @throws Exception
      */
-    private static SchemaDocument transformToXml(MdProfileVO mdProfileVO) throws Exception
+    private static SchemaDocument transformToSchema(MdProfileVO mdProfileVO) throws Exception
     {
     	SchemaDocument schemaDoc = SchemaDocument.Factory.newInstance();
     	Schema schema = schemaDoc.addNewSchema();
@@ -509,47 +516,95 @@ public class FacesContainerController
     				r.addNewEnumeration().setValue(XmlAnySimpleType.Factory.newValue(constraint));
     			}
     		}
-    		
     	}
 
-	    return schemaDoc;
-    	
-    	
+    	return schemaDoc;    
+    }
+    
+    /**
+     * Transform a {@link MdProfileVO} into a Description Set Profile Format.
+     * @param mdProfileVO
+     * @return
+     */
+    private static DescriptionSetTemplateDocument transformToDSP(MdProfileVO mdProfileVO)
+    {
+	DescriptionSetTemplateDocument dspDoc = DescriptionSetTemplateDocument.Factory.newInstance();
+	DescriptionSetTemplate dsp = dspDoc.addNewDescriptionSetTemplate();
+	DescriptionTemplate dt = dsp.addNewDescriptionTemplate();
+	dt.setID(mdProfileVO.getName());
+	dt.addNewResourceClass().setStringValue("http://metadata.mpdl.mpg.de/escidoc/metadata/profiles/" + mdProfileVO.getName());
+	
+	for (Metadata m : mdProfileVO.getMetadataList())
+	{
+	    StatementTemplate st = dt.addNewStatementTemplate();
+	    st.setID(m.getName());
+	    st.setMinOccurs(BigInteger.valueOf(m.getMinOccurs()));
+	    st.setMaxOccurs(BigInteger.valueOf(m.getMaxOccurs()));
 	    
+	    if (m.getVocabulary() != null)
+	    {
+		st.addNewNonLiteralConstraint().addNewVocabularyEncodingSchemeURI().setStringValue(m.getVocabulary().toString());
+	    }
 	    
+	    if(m.getConstraint()!=null && m.getConstraint().size() > 0)
+	    {
+		LiteralConstraintType lc = st.addNewLiteralConstraint();
+		for(String constraint : m.getConstraint())
+		{
+		    lc.addNewLiteralOption().setStringValue(constraint);
+		}
+	    }
+	}
+	
+	return dspDoc;
     }
     
     
     public static FacesContainerVO transformToContainerVO(String containerXml) throws Exception 
     {
     	ContainerDocument containerDoc = ContainerDocument.Factory.parse(containerXml);
+    	MdProfileVO mdProfile = new MdProfileVO();
+    	boolean hasSchema = false;
+    	boolean hasDsp = false;
     	
     	for(MdRecord mdRec : containerDoc.getContainer().getMdRecords().getMdRecordArray())
     	{
-    		if(mdRec.getName().equals("md-profile"))
+    	    XmlCursor mdRecCursor = mdRec.newCursor();
+    	    if(mdRec.getName().equals("schema"))
+    	    {
+    		hasSchema = true;
+    		XmlObject[] schemas = mdRec.selectChildren(new QName("http://www.w3.org/2001/XMLSchema","schema"));
+    		if(schemas != null && schemas.length > 0 && mdProfile.getId() == null)
     		{
-    			MdProfileVO mdProfile = new MdProfileVO();
-    			XmlObject[] schemas = mdRec.selectChildren(new QName("http://www.w3.org/2001/XMLSchema","schema"));
-    			if(schemas!=null && schemas.length > 0)
-    			{
-	    			SchemaDocument schemaDoc = SchemaDocument.Factory.parse(schemas[0].getDomNode());
-	    			mdProfile = transformToMdProfileVO(schemaDoc);
-    			}
-    			XmlCursor mdRecCursor = mdRec.newCursor();
-    			mdRecCursor.removeXml();
-    			mdRecCursor.dispose();
-    			
-    			ContainerVO container = xmlTransforming.transformToContainer(containerDoc.xmlText());
-    			CollectionVO coll = new CollectionVO(new FacesContainerVO(container));
-    			coll.setMdProfile(mdProfile);
-    			return coll;
-    			
+    		    SchemaDocument schemaDoc = SchemaDocument.Factory.parse(schemas[0].getDomNode());
+    		    mdProfile = transformToMdProfileVO(schemaDoc);
     		}
+    		mdRecCursor.removeXml();
+    	    }
+    	    else if("description-set-profile".equals(mdRec.getName()))
+    	    {
+    		hasDsp = true;
+    		XmlObject[] dsp = mdRec.selectChildren(new QName("http://dublincore.org/xml/dc-dsp/2008/01/14","DescriptionSetTemplate"));
+    		if(dsp!=null && dsp.length > 0)
+    		{
+    		    DescriptionSetTemplateDocument dspDoc = DescriptionSetTemplateDocument.Factory.parse(dsp[0].getDomNode());
+    		    mdProfile = transformToMdProfileVO(dspDoc);
+    		}
+    		mdRecCursor.removeXml();
+    	    }
+    	    mdRecCursor.dispose();
     	}
-    	ContainerVO container = xmlTransforming.transformToContainer(containerDoc.xmlText());
-		return new FacesContainerVO(container);
-
     	
+    	ContainerVO container = xmlTransforming.transformToContainer(containerDoc.xmlText());
+    	
+    	if (hasDsp || hasSchema)
+	{
+	    CollectionVO coll = new CollectionVO(new FacesContainerVO(container));
+	    coll.setMdProfile(mdProfile);
+	    return coll;
+	}
+	
+    	return new FacesContainerVO(container);
     }
     
     public static String transformToContainerXml(CollectionVO coll) throws Exception
@@ -565,19 +620,29 @@ public class FacesContainerController
     	
     	String facesContainerXml = xmlTransforming.transformToContainer(coll);
 		
-		//add md profile schema
-		ContainerDocument container = ContainerDocument.Factory.parse(facesContainerXml); 
-		MdRecord mdRec = container.getContainer().getMdRecords().addNewMdRecord();
-		mdRec.setName("md-profile");
-		XmlCursor mdRecCursor = mdRec.newCursor();
-	    mdRecCursor.toEndToken();
-	    XmlCursor schemaCursor = transformToXml(coll.getMdProfile()).newCursor();
-	    schemaCursor.copyXmlContents(mdRecCursor);
-	    mdRecCursor.dispose();
-	    schemaCursor.dispose();
+	//add md profile schema
+	ContainerDocument container = ContainerDocument.Factory.parse(facesContainerXml); 
+	MdRecord mdRec = container.getContainer().getMdRecords().addNewMdRecord();
+	mdRec.setName("schema");
+	XmlCursor mdRecCursor = mdRec.newCursor();
+	mdRecCursor.toEndToken();
+	XmlCursor schemaCursor = transformToSchema(coll.getMdProfile()).newCursor();
+	schemaCursor.copyXmlContents(mdRecCursor);
+	mdRecCursor.dispose();
+	schemaCursor.dispose();
+	
+	//add dsp
+	mdRec = container.getContainer().getMdRecords().addNewMdRecord();
+	mdRec.setName("description-set-profile");
+	XmlCursor cursor = mdRec.newCursor();
+	cursor.toEndToken();
+	XmlCursor dspCursor = transformToDSP(coll.getMdProfile()).newCursor();
+	cursor.toEndToken();
+	dspCursor.copyXmlContents(cursor);
+	cursor.dispose();
+	dspCursor.dispose();
 	    
-	    return container.xmlText();
-    	
+	return container.xmlText();
     }
     
     public static String transformToContainerXml(FacesContainerVO coll) throws Exception
@@ -590,9 +655,7 @@ public class FacesContainerController
     	{
     		coll.getMetadataSets().set(0,coll.getMdRecord());
     	}
-    	return xmlTransforming.transformToContainer(coll);
-
-    	
+    	return xmlTransforming.transformToContainer(coll);    	
     }
     
     
@@ -617,6 +680,44 @@ public class FacesContainerController
     			}
     			md.setConstraint(constraintList);
     		}
+    	}
+    	
+    	
+    	MdProfileVO mdProfile = new MdProfileVO(profileName, mdList);
+    	return mdProfile;
+    }
+    
+    private static MdProfileVO transformToMdProfileVO(DescriptionSetTemplateDocument dspDoc) throws Exception
+    {
+    	DescriptionTemplate dt = dspDoc.getDescriptionSetTemplate().getDescriptionTemplateArray(0);
+    	String profileName = dt.getID();
+    	
+    	List<Metadata> mdList = new ArrayList<Metadata>();
+    	
+    	for (StatementTemplate st : dt.getStatementTemplateArray())
+    	{
+    	    String namespace = null;
+    	    if (st.sizeOfPropertyArray() > 0)
+	    {
+		namespace = st.getPropertyArray(0);
+	    }
+    	    Metadata md = new Metadata(st.getID(), st.getID(), namespace);
+    	    mdList.add(md);
+    		
+    	    if (st.getLiteralConstraint() != null && st.getLiteralConstraint().sizeOfLiteralOptionArray() > 0)
+    	    {
+    		List<String> constraintList = new ArrayList<String>();
+    		for(LiteralOption option :  st.getLiteralConstraint().getLiteralOptionArray())
+  		{
+  			constraintList.add(option.getStringValue());
+  		}
+  		md.setConstraint(constraintList);
+    	    }
+    		
+    	    if (st.getNonLiteralConstraint() != null && st.getNonLiteralConstraint().sizeOfVocabularyEncodingSchemeURIArray() > 0)
+    	    {
+    		md.setVocabulary(new URI(st.getNonLiteralConstraint().getVocabularyEncodingSchemeURIArray(0)));
+    	    }
     	}
     	
     	

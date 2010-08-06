@@ -426,6 +426,15 @@ public class QueryHelper
         }
         return query;
     }
+    
+    public String createCollectionQuery(FacesContainerVO collection)
+    {
+	String query = "";
+	
+	
+	
+	return query;
+    }
 
     public static String concatQuery(String query1, String query2)
     {

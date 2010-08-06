@@ -225,7 +225,7 @@ public class HomePage
     public void initCollectionPage()
     {
     	album = collectionSession.getCurrent();
-    	query = queryHelper.createContainerQuery(album); 
+    	query = queryHelper.createContainerQuery(collectionSession.getCurrent()); 
     }
     
     public void initAlbumPage()

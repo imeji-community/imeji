@@ -55,9 +55,7 @@ public class CollectionController extends FacesContainerController
 	{
 	    String container = transformToContainerXml(collectionVO);
 	    String createdCollection = ServiceLocator.getContainerHandler(userHandle).create(container); 
-	    return  new CollectionVO(new FacesContainerVO(transformToContainerVO(createdCollection)));
-
-        	
+	    return  new CollectionVO(new FacesContainerVO(transformToContainerVO(createdCollection)));        	
 	}
 	
 	/**

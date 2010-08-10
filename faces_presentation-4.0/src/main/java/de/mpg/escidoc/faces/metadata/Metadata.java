@@ -69,10 +69,10 @@ public class Metadata
     private int maxOccurs = 1, minOccurs  =1;
     
     private URI vocabulary = null;
+    
+    private List<Metadata> childs = new ArrayList<Metadata>();
 
     /**
-     * Only for testing purpose
-     * @deprecated
      * @param name
      * @param label
      */
@@ -83,6 +83,7 @@ public class Metadata
 	this.label = label;
 	this.namespace = namespace;
 	this.constraint = new ArrayList<String>();
+	this.index = namespace + name;
     }
     
     /**
@@ -464,6 +465,22 @@ public class Metadata
     public void setVocabulary(URI vocabulary)
     {
         this.vocabulary = vocabulary;
+    }
+
+    /**
+     * @return the childs
+     */
+    public List<Metadata> getChilds()
+    {
+        return childs;
+    }
+
+    /**
+     * @param childs the childs to set
+     */
+    public void setChilds(List<Metadata> childs)
+    {
+        this.childs = childs;
     }
 
     

@@ -24,7 +24,7 @@ public class MetadataBean
 	private List<Metadata> metadataList = new ArrayList<Metadata>();
 	private SessionBean sessionBean = null;
 	private List<ConstraintBean> constraints = null;
-	private int constraintPosition;
+	private int constraintPosition = 0;
 	/**
 	 * Constructor for a {@link MetadataBean}
 	 * @param list
@@ -37,10 +37,6 @@ public class MetadataBean
 	    	    
 	    if (current == null)
 	    {
-	    	//current = new Metadata(metadataList.get(0).getIndex()
-	    	//	, metadataList.get(0).getLabel()
-	    	//	, metadataList.get(0).getNamespace());
-	    	//Correct is
 	    	current = new Metadata(metadataList.get(0));
 	    }
 	    
@@ -50,11 +46,6 @@ public class MetadataBean
 		{
 		    constraints.add(new ConstraintBean(str));
 		}
-	    }
-	    
-	    if (constraints.size() == 0)
-	    {
-		constraints.add(new ConstraintBean(""));
 	    }
 	}
 	
@@ -67,8 +58,6 @@ public class MetadataBean
 		{
 		    if (m.getIndex().equals(event.getNewValue().toString()))
 		    {
-			//current = new Metadata(m.getIndex(), m.getLabel(), m.getNamespace());
-			//correct is
 			current = new Metadata(m);
 		    }
 		}
@@ -84,53 +73,62 @@ public class MetadataBean
 	    }
 	}
 	
-	public void maxOccursListener(ValueChangeEvent event)
+	public void requiredListener(ValueChangeEvent event)
 	{
 	    if (event != null 
 		    && event.getOldValue() != event.getNewValue())
 	    {
-		try
+		boolean required =Boolean.getBoolean(event.getNewValue().toString());
+		if (required)
 		{
-		    current.setMaxOccurs(Integer.parseInt(event.getNewValue().toString()));
-		} 
-		catch (Exception e)
+		    this.current.setMinOccurs(1);
+		}
+		else
 		{
-		    sessionBean.setMessage("MaxOccurs should be an integer");
+		    current.setMinOccurs(0);
 		}
 	    }
 	}
 	
-	public void minOccursListener(ValueChangeEvent event)
+	public void multipleListener(ValueChangeEvent event)
 	{
 	    if (event != null 
 		    && event.getOldValue() != event.getNewValue())
 	    {
-		try
+		boolean multiple =Boolean.getBoolean(event.getNewValue().toString());
+		if (multiple)
 		{
-		    current.setMinOccurs(Integer.parseInt(event.getNewValue().toString()));
-		} 
-		catch (Exception e)
+		    this.current.setMaxOccurs(1000);
+		}
+		else
 		{
-		    sessionBean.setMessage("MinOccurs should be an integer");
+		    current.setMaxOccurs(1);
 		}
 	    }
+	}
+	
+	public int getConstraintsSize()
+	{
+	    return this.constraints.size();
 	}
 	
 	public String addConstraint()
 	{
-		logger.info("Add Constraint at pos " + getConstraintPosition()); 
-		constraints.add(getConstraintPosition() + 1, new ConstraintBean(""));
+	    if (getConstraintPosition() == 0)
+	    {
+		 constraints.add(new ConstraintBean(""));
+	    }
+	    else
+	    {
+		 constraints.add(getConstraintPosition() + 1, new ConstraintBean(""));
+	    }
 	    return "";
-	    //MdProfileBean.reloadPage();
 	}
 	
 	public String removeConstraint()
 	{
-	    
-
-		constraints.remove(getConstraintPosition());
+	    constraints.remove(getConstraintPosition());
 	    return"";
-	    //MdProfileBean.reloadPage();
 	}
 
 
@@ -170,11 +168,13 @@ public class MetadataBean
 	    this.constraints = constraints;
 	}
 
-	public void setConstraintPosition(int constraintPosition) {
+	public void setConstraintPosition(int constraintPosition) 
+	{
 		this.constraintPosition = constraintPosition;
 	}
 
-	public int getConstraintPosition() {
+	public int getConstraintPosition() 
+	{
 		return constraintPosition;
 	}
 

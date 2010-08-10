@@ -3,9 +3,11 @@ package de.mpg.escidoc.faces.container.beans;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+import javax.print.attribute.standard.Severity;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -19,6 +21,7 @@ import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.metadata.MetadataBean;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 import de.mpg.escidoc.faces.metadata.MetadataBean.ConstraintBean;
+import de.mpg.escidoc.faces.metadata.helper.VocabularyHelper;
 import de.mpg.escidoc.faces.util.BeanHelper;
 import de.mpg.escidoc.faces.util.ContextHelper;
 import de.mpg.escidoc.faces.util.UserHelper;
@@ -60,7 +63,6 @@ public class CollectionBean
 	private MdProfileSession mdProfileSession = null;
 	private List<Metadata> metadataList = new ArrayList<Metadata>();
 	private List<SelectItem> metadataMenu = new ArrayList<SelectItem>();
-	private List<MetadataBean> metadataBeanList = new ArrayList<MetadataBean>();
 	private int profilePosition;
 	
 	private static Logger logger = Logger.getLogger(CollectionBean.class);
@@ -80,8 +82,6 @@ public class CollectionBean
 		request = (HttpServletRequest) fc.getExternalContext().getRequest();
 		
 		metadataList = mdProfileSession.getMetadataList();
-		metadataBeanList = mdProfileSession.getMetadataBeanList();
-		
 		try 
 		{
 			init();
@@ -99,7 +99,11 @@ public class CollectionBean
 	 */
 	public void init() throws Exception
 	{
-		//metadataBeanList.clear();
+		if ("init".equals(request.getParameter("action")))
+		{
+		    mdProfileSession.getMetadataBeanList().clear();
+		}
+	    	
 		for (Metadata m : metadataList)
 		{
 		    if (m.getSimpleValue() == null)
@@ -108,13 +112,6 @@ public class CollectionBean
 		    }
 		    metadataMenu.add(new SelectItem(m.getIndex(), m.getLabel()));
 		}
-		/*
-		if (metadataBeanList.size() == 0)
-		{
-		    metadataBeanList.add(new MetadataBean(metadataList));
-		}
-		*/
-		
 		
 		String collectionId = request.getParameter("id"); 
 		String page = request.getParameter("page");
@@ -133,8 +130,6 @@ public class CollectionBean
 		{
 			pageType = CollectionPageType.CREATE;
 			collection = new CollectionVO(collectionSession.getCurrent().getScreenConfiguration());
-			
-			//collection.setMdProfile(new );
 		}
 		
 		collectionSession.setCurrent(collection);
@@ -153,13 +148,10 @@ public class CollectionBean
 			userDepositorGrants.add(new SelectItem(g.getObjectRef()
 				, ContextHelper.getContext(g.getObjectRef(), sessionBean.getUserHandle()).getName()));
 		    }
-		}
-		
-		
+		}		
 		selectedContext = "";
-		//userDepositorGrants.add(new SelectItem("", "Select a context"));
 	}
-	
+		
 	/**
 	 * Method to:
 	 * <br> * Create a new collection
@@ -168,13 +160,17 @@ public class CollectionBean
 	 */
 	public void save() throws Exception
 	{
-		collection.getMdProfile().getMetadataList().clear();
+	    if (valid())
+	    {
+	    	collection.getMdProfile().getMetadataList().clear();
 		collection.getMdProfile().getMetadataList().add(new Metadata("title","Title","http://purl.org/dc/elements/1.1"));
 		collection.getMdProfile().getMetadataList().add(new Metadata("description","Description","http://purl.org/dc/elements/1.1"));
+		collection.getMdProfile().setName(collection.getMdRecord().getTitle().getValue());
+		collection.getMdProfile().setId(collection.getMdRecord().getTitle().getValue());
+		
 		int i = 2;
 		for (MetadataBean m : mdProfileSession.getMetadataBeanList())
 		{
-		   // profile.getMetadataList().add(new Metadata(m.getCurrent().getName(), m.getCurrent().getIndex(), m.getCurrent().getNamespace()));
 		    collection.getMdProfile().getMetadataList().add(new Metadata(m.getCurrent()));
 		    collection.getMdProfile().getMetadataList().get(i).getConstraint().clear();
 		    
@@ -198,6 +194,20 @@ public class CollectionBean
 			collectionController.edit(collection, sessionBean.getUserHandle());
 			sessionBean.setInformation("Collection successfully edited");
 		}
+	    }
+	}
+	
+	public boolean valid()
+	{
+	    boolean valid = true;
+	    if (collection.getMdRecord().getTitle() == null
+		    || collection.getMdRecord().getTitle().getValue() == null
+		    || "".equals(collection.getMdRecord().getTitle().getValue()))
+	    {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR ,sessionBean.getMessage("collection_create_error_title"),sessionBean.getMessage("collection_create_error_title")));
+		valid =  false;
+	    }
+	    return valid;
 	}
 	
 	public CollectionVO getCollection() 
@@ -254,8 +264,8 @@ public class CollectionBean
     {
     	if (event.getNewValue() != null && !event.getNewValue().equals(event.getOldValue())) 
     	{
-			collectionSession.getCurrent().getMdRecord().getTitle().setValue(event.getNewValue().toString());
-		}
+    	    collectionSession.getCurrent().getMdRecord().getTitle().setValue(event.getNewValue().toString());
+	}
     }
     
     /**
@@ -266,8 +276,8 @@ public class CollectionBean
     {
     	if (event.getNewValue() != null && !event.getNewValue().equals(event.getOldValue())) 
     	{
-    		collectionSession.getCurrent().getMdRecord().getAbstracts().get(0).setValue(event.getNewValue().toString());
-		}
+    	    collectionSession.getCurrent().getMdRecord().getAbstracts().get(0).setValue(event.getNewValue().toString());
+	}
     }
 
     /**
@@ -314,23 +324,21 @@ public class CollectionBean
     
     public String addMetadata()
     {
-    	if(metadataBeanList.size()==0)
+    	if(mdProfileSession.getMetadataBeanList().size()==0)
     	{
-    		 metadataBeanList.add(new MetadataBean(metadataList));
+    	mdProfileSession.getMetadataBeanList().add(new MetadataBean(metadataList));
     	}
     	else
     	{
-    		metadataBeanList.add(getProfilePosition() + 1, new MetadataBean(metadataList));
+    	mdProfileSession.getMetadataBeanList().add(getProfilePosition() + 1, new MetadataBean(metadataList));
     	}
-	    
-		return "";
-	}
+    	return "";
+    }
     
     public String removeMetadata()
     {
-	    metadataBeanList.remove(getProfilePosition());
-		return "";
-		
+	mdProfileSession.getMetadataBeanList().remove(getProfilePosition());
+	return "";	
     }
     
     /**
@@ -338,7 +346,7 @@ public class CollectionBean
      */
     public List<MetadataBean> getMetadataBeanList()
     {
-        return metadataBeanList;
+        return mdProfileSession.getMetadataBeanList();
     }
 
     /**
@@ -346,7 +354,7 @@ public class CollectionBean
      */
     public void setMetadataBeanList(List<MetadataBean> metadataBeanList)
     {
-        this.metadataBeanList = metadataBeanList;
+        this.mdProfileSession.setMetadataBeanList(metadataBeanList);
     }
     
     /**

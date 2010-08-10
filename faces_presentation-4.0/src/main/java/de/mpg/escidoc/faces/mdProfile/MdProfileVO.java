@@ -12,16 +12,12 @@ import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
 
 public class MdProfileVO 
 {
-    //private ContentModel contentModel = null;
     private String id = null;;
     private List<Metadata> metadataList = null;
     private String name = null;
     
     public MdProfileVO()
     {
-    	//ContentModelDocument cmd = ContentModelDocument.Factory.newInstance();
-	//cmd.addNewContentModel();
-	//contentModel = cmd.getContentModel();
 	metadataList = new ArrayList<Metadata>();
     }
     

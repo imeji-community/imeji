@@ -53,6 +53,7 @@ import de.mpg.escidoc.faces.container.album.AlbumController;
 import de.mpg.escidoc.faces.container.album.AlbumSession;
 import de.mpg.escidoc.faces.container.album.AlbumVO;
 import de.mpg.escidoc.faces.container.collection.CollectionSession;
+import de.mpg.escidoc.faces.container.collection.CollectionVO;
 import de.mpg.escidoc.faces.item.ItemVO;
 import de.mpg.escidoc.faces.pictures.Browse;
 import de.mpg.escidoc.faces.pictures.BrowseSession;
@@ -81,6 +82,11 @@ public class HomePage
      * The album displayed.
      */
     private FacesContainerVO album = null;
+    
+    /**
+     * The collection displayed.
+     */
+//    private CollectionVO collection = null;
     /**
      * The list of items displayed.
      */
@@ -123,20 +129,17 @@ public class HomePage
         collectionSession = (CollectionSession) BeanHelper.getSessionBean(CollectionSession.class);
     }
     
-    public String getInit()
-    {
-    	try
-	{
+    public String getInit(){
+    	try{
     	    initSessionBean();
     	    initBrowse();
     	    initQuery();
     	    
-    	    if(executeQuery)
-            {
-    		this.executeQuery(query, browse.getShow(), browse.getStartRecord(), browse.getSorkeys());
+    	    if(executeQuery){
+    	    	this.executeQuery(query, browse.getShow(), browse.getStartRecord(), browse.getSorkeys());
             }
     	   
-    	    setVariables();
+    	    setVariable();
 	} 
     	catch (Exception e)
 	{
@@ -202,7 +205,7 @@ public class HomePage
      * Set all variables which are needed for JSPF page
      * @throws Exception
      */
-    public void setVariables() throws Exception
+    public void setVariable() throws Exception
     {
 	itemsInAlbum = 0;
         itemsOnPage = 0;
@@ -222,16 +225,14 @@ public class HomePage
         }
     }
 
-    public void initCollectionPage()
-    {
+    public void initCollectionPage(){
     	album = collectionSession.getCurrent();
-    	query = queryHelper.createContainerQuery(collectionSession.getCurrent()); 
+    	query  = queryHelper.createCollectionQuery(album);
     }
     
-    public void initAlbumPage()
-    {
-	 album = albumSession.getCurrent(); 
-         query = queryHelper.createContainerQuery(album);
+    public void initAlbumPage(){
+    	album = albumSession.getCurrent(); 
+    	query = queryHelper.createContainerQuery(album);
          
     }
     

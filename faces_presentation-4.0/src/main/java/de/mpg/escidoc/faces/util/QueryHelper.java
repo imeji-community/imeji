@@ -45,6 +45,7 @@ import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.naming.InitialContext;
+import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
 
 import org.apache.axis.message.MessageElement;
@@ -52,6 +53,7 @@ import org.apache.axis.types.NonNegativeInteger;
 import org.apache.axis.types.PositiveInteger;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlObject;
 
 import de.escidoc.schemas.item.x09.ItemDocument;
 import de.escidoc.schemas.searchresult.x08.SearchResultRecordDocument;
@@ -59,6 +61,7 @@ import de.escidoc.schemas.searchresult.x08.SearchResultRecordDocument.SearchResu
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.album.AlbumVO;
+import de.mpg.escidoc.faces.container.collection.CollectionVO;
 import de.mpg.escidoc.faces.item.ItemVO;
 import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.common.valueobjects.ContainerResultVO;
@@ -131,7 +134,8 @@ public class QueryHelper
         searchRetrieveRequest.setRecordPacking("xml");
         // Create XML Source
         SRWPort searchHandler = ServiceLocator.getSearchHandler("escidoc_all");
-        SearchRetrieveResponseType searchResult = searchHandler.searchRetrieveOperation(searchRetrieveRequest);        
+        SearchRetrieveResponseType searchResult = searchHandler.searchRetrieveOperation(searchRetrieveRequest);    
+        logger.info(searchRetrieveRequest.toString()); 
         
         try
         {
@@ -148,7 +152,7 @@ public class QueryHelper
                     for (MessageElement messageElement : messages)
                     {
                         String itemXml = messageElement.getAsString();
-                        //logger.debug("XML: " + itemXml);
+//                        logger.debug("XML: " + itemXml);
                         try
                         {
                             // Parse Search result document
@@ -162,9 +166,22 @@ public class QueryHelper
                             // Read xml to XPath
                             cursor.selectPath(namespace + "./escidocItem:item");
                             cursor.toNextSelection();
+                            
+                            ItemDocument itemDoc;
+                            
+                            //TODO to remove
+                            try{
                             // Create the item document
-                            ItemDocument itemDoc = ItemDocument.Factory.parse(cursor.xmlText());
+                            itemDoc = ItemDocument.Factory.parse(cursor.xmlText());
+                            }catch(Exception e){
+                            	cursor.toLastChild();
+                            	cursor.toFirstChild();
+                            	itemDoc = ItemDocument.Factory.parse(cursor.xmlText());
+                            }
+                            
+                            
                             cursor.dispose(); 
+
                             // Store results in item list.
                             items.add(new ItemVO(itemDoc));
                         }
@@ -427,13 +444,17 @@ public class QueryHelper
         return query;
     }
     
-    public String createCollectionQuery(FacesContainerVO collection)
-    {
-	String query = "";
+    public String createCollectionQuery(FacesContainerVO collection){
+    	String query = "";
+    	if(collection != null){
+    		String collectionID = collection.getLatestVersion().getObjectId();
+    		query = "(escidoc.content-relation="+collectionID+")";
+    	}
 	
 	
 	
-	return query;
+	
+    	return query;
     }
 
     public static String concatQuery(String query1, String query2)

@@ -1,4 +1,4 @@
-package de.mpg.escidoc.faces.metastore.vocabulary;
+package de.mpg.escidoc.faces.metastore_test.vocabulary;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;

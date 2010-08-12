@@ -35,9 +35,9 @@ import com.hp.hpl.jena.vocabulary.RDFTest;
 
 import de.escidoc.schemas.item.x09.ItemDocument;
 import de.escidoc.schemas.item.x09.ItemDocument.Item;
-import de.mpg.escidoc.faces.metastore.util.NodeVisitor;
-import de.mpg.escidoc.faces.metastore.vocabulary.ESCIDOC;
-import de.mpg.escidoc.faces.metastore.vocabulary.FACES4;
+import de.mpg.escidoc.faces.metastore_test.util.NodeVisitor;
+import de.mpg.escidoc.faces.metastore_test.vocabulary.ESCIDOC;
+import de.mpg.escidoc.faces.metastore_test.vocabulary.FACES4;
 
 /**
  * Class to access the MPDL Metastore.

@@ -1,4 +1,4 @@
-package de.mpg.escidoc.faces.metastore.util;
+package de.mpg.escidoc.faces.metastore_test.util;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -31,10 +31,10 @@ import de.escidoc.core.common.exceptions.application.security.AuthorizationExcep
 import de.escidoc.core.common.exceptions.system.SystemException;
 import de.escidoc.schemas.item.x09.ItemDocument;
 import de.escidoc.www.services.om.ItemHandler;
-import de.mpg.escidoc.faces.metastore.vocabulary.FACES4;
 import de.mpg.escidoc.faces.metastore_test.DataFactory;
 import de.mpg.escidoc.faces.metastore_test.ResourceHandler;
 import de.mpg.escidoc.faces.metastore_test.URIS;
+import de.mpg.escidoc.faces.metastore_test.vocabulary.FACES4;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 
 public class MetastoreTest implements URIS

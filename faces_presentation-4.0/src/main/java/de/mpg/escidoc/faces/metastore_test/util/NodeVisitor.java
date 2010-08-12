@@ -1,4 +1,4 @@
-package de.mpg.escidoc.faces.metastore.util;
+package de.mpg.escidoc.faces.metastore_test.util;
 
 import com.hp.hpl.jena.rdf.model.AnonId;
 import com.hp.hpl.jena.rdf.model.Literal;

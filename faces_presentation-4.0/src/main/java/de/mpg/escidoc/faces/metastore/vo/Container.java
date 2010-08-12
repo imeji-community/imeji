@@ -69,6 +69,26 @@ public class Container{
 	public Collection<URI> getImages() {
 		return images;
 	}
+
+
+	public void setMetadataSchema(XmlLiteral metadataSchema) {
+		this.metadataSchema = metadataSchema;
+	}
+
+
+	public XmlLiteral getMetadataSchema() {
+		return metadataSchema;
+	}
+
+
+	public void setMetadataDSP(XmlLiteral metadataDSP) {
+		this.metadataDSP = metadataDSP;
+	}
+
+
+	public XmlLiteral getMetadataDSP() {
+		return metadataDSP;
+	}
 	
 	
 

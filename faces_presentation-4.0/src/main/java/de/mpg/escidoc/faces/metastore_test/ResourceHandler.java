@@ -1,4 +1,4 @@
-package de.mpg.escidoc.faces.metastore;
+package de.mpg.escidoc.faces.metastore_test;
 
 import java.net.URL;
 import java.util.ArrayList;

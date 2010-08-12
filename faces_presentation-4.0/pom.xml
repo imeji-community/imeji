@@ -116,13 +116,13 @@
 		<dependency>
 			<groupId>com.hp.hpl.jena</groupId>
 			<artifactId>arq</artifactId>
-			<version>2.8.4</version>
+			<version>2.8.5</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.hpl.jena</groupId>
 			<artifactId>tdb</artifactId>
-			<version>0.8.6</version>
+			<version>0.8.7</version>
 			<scope>provided</scope>
 		</dependency>
     
@@ -132,5 +132,28 @@
       <version>1.0.0</version>
       <scope>compile</scope>
     </dependency>-->
+   	<dependency>
+		<groupId>org.richfaces.framework</groupId>
+		<artifactId>richfaces-api</artifactId>
+		<version>3.3.0.GA</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.richfaces.framework</groupId>
+		<artifactId>richfaces-impl</artifactId>
+		<version>3.3.0.GA</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency> 
+	   <groupId>thewebsemantic</groupId> 
+	   <artifactId>jenabean</artifactId> 
+	   <version>1.0.7-Imeji</version> 
+	</dependency>
+
+	<dependency> 
+	   <groupId>thewebsemantic</groupId> 
+	   <artifactId>jpa4jena</artifactId> 
+	   <version>0.7</version> 
+	</dependency>
   </dependencies>
 </project>

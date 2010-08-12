@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.mpg.escidoc.faces.metastore;
+package de.mpg.escidoc.faces.metastore_test;
 
 /**
  * @author frank

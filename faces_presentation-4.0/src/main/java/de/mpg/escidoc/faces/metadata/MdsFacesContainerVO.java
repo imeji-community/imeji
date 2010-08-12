@@ -9,25 +9,17 @@ import de.mpg.escidoc.services.common.valueobjects.publication.MdsPublicationVO;
 
 public class MdsFacesContainerVO  extends MdsPublicationVO
 {	
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 	
-	public MdsFacesContainerVO() 
-	{
-		  super();
-		  this.setTitle(new TextVO(""));
-		  this.getAbstracts().add(new TextVO(""));
-		  CreatorVO creator = new CreatorVO();
-		  PersonVO person = new PersonVO();
-		  person.setFamilyName("");
-		  person.setGivenName("");
-		  person.getOrganizations().add(new OrganizationVO());
-		  person.getOrganizations().get(0).setName(new TextVO(""));
-		  person.getOrganizations().get(0).setIdentifier("");
-		  creator.setPerson(person);
-		  this.getCreators().add(creator);
-	}
+    public MdsFacesContainerVO() 
+    {
+	super();
+	this.setTitle(new TextVO(""));
+	this.getAbstracts().add(new TextVO(""));
+	this.getCreators().add(initNewCreator());
+    }
 	
-	public MdsFacesContainerVO(MdsPublicationVO md)
+    public MdsFacesContainerVO(MdsPublicationVO md)
     {
         super(md);
         format();
@@ -37,6 +29,20 @@ public class MdsFacesContainerVO  extends MdsPublicationVO
     {
     	super.clone();
     	return new MdsFacesContainerVO(this);
+    }
+    
+    public CreatorVO initNewCreator()
+    {
+	CreatorVO creator = new CreatorVO();
+	PersonVO person = new PersonVO();
+	person.setFamilyName("");
+	person.setGivenName("");
+	person.getOrganizations().add(new OrganizationVO());
+	person.getOrganizations().get(0).setName(new TextVO(""));
+	person.getOrganizations().get(0).setIdentifier("");
+	creator.setPerson(person);
+	
+	return creator;
     }
     
     public void format()

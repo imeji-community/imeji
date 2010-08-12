@@ -678,7 +678,6 @@ public class SessionBean
         {
             currentUrl = url;
         }
-        System.err.println("currentURL = " + currentUrl);
         return currentUrl;
     }
 

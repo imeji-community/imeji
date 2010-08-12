@@ -28,6 +28,10 @@ import de.mpg.escidoc.faces.util.UserHelper;
 import de.mpg.escidoc.services.common.referenceobjects.ContextRO;
 import de.mpg.escidoc.services.common.valueobjects.GrantVO;
 import de.mpg.escidoc.services.common.valueobjects.GrantVO.PredefinedRoles;
+import de.mpg.escidoc.services.common.valueobjects.metadata.CreatorVO;
+import de.mpg.escidoc.services.common.valueobjects.metadata.OrganizationVO;
+import de.mpg.escidoc.services.common.valueobjects.metadata.PersonVO;
+import de.mpg.escidoc.services.common.valueobjects.metadata.CreatorVO.CreatorRole;
 
 /**
  * JSF bean for {@link CollectionVO}
@@ -64,6 +68,8 @@ public class CollectionBean
 	private List<Metadata> metadataList = new ArrayList<Metadata>();
 	private List<SelectItem> metadataMenu = new ArrayList<SelectItem>();
 	private int profilePosition;
+	private int authorPosition;
+	private int organizationPosition;
 	
 	private static Logger logger = Logger.getLogger(CollectionBean.class);
 	
@@ -80,7 +86,6 @@ public class CollectionBean
 		userDepositorGrants = new ArrayList<SelectItem>();
 		fc =  FacesContext.getCurrentInstance();
 		request = (HttpServletRequest) fc.getExternalContext().getRequest();
-		
 		metadataList = mdProfileSession.getMetadataList();
 		try 
 		{
@@ -129,7 +134,7 @@ public class CollectionBean
 		else 
 		{
 			pageType = CollectionPageType.CREATE;
-			collection = new CollectionVO(collectionSession.getCurrent().getScreenConfiguration());
+			collection = collectionSession.getCurrent();
 		}
 		
 		collectionSession.setCurrent(collection);
@@ -197,9 +202,15 @@ public class CollectionBean
 	    }
 	}
 	
+	/**
+	 * True if formular is valid. 
+	 * @return
+	 */
 	public boolean valid()
 	{
 	    boolean valid = true;
+	    boolean hasAuthor = false;
+	    
 	    if (collection.getMdRecord().getTitle() == null
 		    || collection.getMdRecord().getTitle().getValue() == null
 		    || "".equals(collection.getMdRecord().getTitle().getValue()))
@@ -207,9 +218,92 @@ public class CollectionBean
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR ,sessionBean.getMessage("collection_create_error_title"),sessionBean.getMessage("collection_create_error_title")));
 		valid =  false;
 	    }
+	    
+	    for (CreatorVO c : collection.getMdRecord().getCreators())
+	    {
+		boolean hasOrganization = true;
+		
+		if (!"".equals(c.getPerson().getFamilyName()))
+		{
+		    hasAuthor = true;
+		}
+		
+		for (OrganizationVO o : c.getPerson().getOrganizations())
+		{
+		    if ("".equals(o.getName().getValue()) && !"".equals(c.getPerson().getFamilyName()))
+		    {
+			hasOrganization = false;
+		    }
+		}
+		
+		if (!hasOrganization)
+		{
+		    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Author needs at least one organization"));
+		    valid = false;
+		}
+	    }
+	    
+	    if (!hasAuthor)
+	    {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Author needs at least one Author"));
+		valid = false;
+	    }	  
 	    return valid;
 	}
 	
+	public void addAuthor()
+	{
+	    collectionSession.getCurrent().getMdRecord().getCreators().add(authorPosition + 1, collection.getMdRecord().initNewCreator());
+	}
+	
+	public void removeAuthor()
+	{
+	    if (authorPosition > 0)
+	    {
+		  collectionSession.getCurrent().getMdRecord().getCreators().remove(authorPosition);
+	    }
+	}
+	
+	public void addCollection()
+	{
+	    OrganizationVO newOrg = collection.getMdRecord().initNewCreator().getPerson().getOrganizations().get(0);
+	    collectionSession.getCurrent().getMdRecord().getCreators().get(authorPosition).getPerson().getOrganizations().add(organizationPosition , newOrg);
+	}
+	
+	public void removeCollection()
+	{
+	    if (organizationPosition > 0)
+	    {
+		collectionSession.getCurrent().getMdRecord().getCreators().get(authorPosition).getPerson().getOrganizations().remove(organizationPosition);
+	    }
+	}
+	
+	public int getAuthorPosition()
+	{
+	    return authorPosition;
+	}
+	
+	public void setAuthorPosition(int pos)
+	{
+	    this.authorPosition = pos;
+	}
+	
+	/**
+	 * @return the collectionPosition
+	 */
+	public int getOrganizationPosition()
+	{
+	    return organizationPosition;
+	}
+
+	/**
+	 * @param collectionPosition the collectionPosition to set
+	 */
+	public void setOrganizationPosition(int organizationPosition)
+	{
+	    this.organizationPosition = organizationPosition;
+	}
+
 	public CollectionVO getCollection() 
 	{
 		return collection;

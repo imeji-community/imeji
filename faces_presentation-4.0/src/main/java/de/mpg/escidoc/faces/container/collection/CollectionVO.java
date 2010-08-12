@@ -41,7 +41,6 @@ public class CollectionVO extends FacesContainerVO
 	
 	public CollectionVO(FacesContainerVO fc)
 	{
-		
 		super(fc);
 		mdProfile = new MdProfileVO();
 	}

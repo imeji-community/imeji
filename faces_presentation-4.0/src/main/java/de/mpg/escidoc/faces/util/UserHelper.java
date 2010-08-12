@@ -69,7 +69,6 @@ public class UserHelper
 		try
 		{
 			String userXml = ServiceLocator.getUserAccountHandler(userHandle).retrieveCurrentUser();
-			
 			return getXmlTransforming().transformToAccountUser(userXml);
 		}
 		catch (Exception e)

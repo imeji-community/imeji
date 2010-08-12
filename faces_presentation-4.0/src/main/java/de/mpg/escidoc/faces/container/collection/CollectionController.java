@@ -57,44 +57,7 @@ public class CollectionController extends FacesContainerController
 	    String createdCollection = ServiceLocator.getContainerHandler(userHandle).create(container); 
 	    return  new CollectionVO(new FacesContainerVO(transformToContainerVO(createdCollection)));        	
 	}
-	
-	/**
-	 * Create a new context in FW
-	 * @param name
-	 * @param description
-	 * @param userhandle
-	 * @return
-	 */
-	public String addNewContext(String name, String description, String userHandle, String organizationnalUnitId)
-	{
-		ContextDocument contextDocument = ContextDocument.Factory.newInstance();
-		contextDocument.setContext(Context.Factory.newInstance());
-		contextDocument.getContext().setProperties(Properties.Factory.newInstance());
-		contextDocument.getContext().getProperties().setName(name);
-		contextDocument.getContext().getProperties().setDescription(description);
-		contextDocument.getContext().getProperties().setType("faces");
-		contextDocument.getContext().getProperties().setOrganizationalUnits(OrganizationalUnits.Factory.newInstance());
-		contextDocument.getContext().getProperties().getOrganizationalUnits().addNewOrganizationalUnit();
-		contextDocument.getContext().getProperties().getOrganizationalUnits().getOrganizationalUnitArray(0).setObjid(organizationnalUnitId);
-		
-		try 
-		{
-			String contextXml = ServiceLocator.getContextHandler(LoginHelper.loginSystemAdmin()).create(contextDocument.xmlText());
-			contextDocument = ContextDocument.Factory.parse(contextXml);
-			
-			TaskParamVO taskParamVO = new TaskParamVO(contextDocument.getContext().getLastModificationDate().getTime());
-			
-			String taskParam = xmlTransforming.transformToTaskParam(taskParamVO);
-			
-			ServiceLocator.getContextHandler(LoginHelper.loginSystemAdmin()).open(contextDocument.getContext().getObjid(), taskParam);
-		} 
-		catch (Exception e) 
-		{
-			throw new RuntimeException("Error creating new context", e);
-		}
-		
-		return contextDocument.getContext().getObjid();
-	}
+
 	
 	/**
 	 * @override

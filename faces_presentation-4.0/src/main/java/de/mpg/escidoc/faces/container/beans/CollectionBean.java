@@ -17,6 +17,7 @@ import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.collection.CollectionController;
 import de.mpg.escidoc.faces.container.collection.CollectionSession;
 import de.mpg.escidoc.faces.container.collection.CollectionVO;
+import de.mpg.escidoc.faces.metadata.MdsFacesContainerVO;
 import de.mpg.escidoc.faces.metadata.Metadata;
 import de.mpg.escidoc.faces.metadata.MetadataBean;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
@@ -48,7 +49,12 @@ public class CollectionBean
 	 */
 	public enum CollectionPageType
 	{
-		CREATE, EDIT, VIEW;
+	    CREATE, EDIT, VIEW;
+	}
+	
+	public enum CollectionTabType
+	{
+	    COLLECTION, PROFILE, HOME;
 	}
 	
 	private CollectionVO collection = null;
@@ -107,6 +113,9 @@ public class CollectionBean
 		if ("init".equals(request.getParameter("action")))
 		{
 		    mdProfileSession.getMetadataBeanList().clear();
+		    collectionSession.getCurrent().getMdRecord().getCreators().clear();
+		    collectionSession.getCurrent().getMdRecord().getCreators().add(MdsFacesContainerVO.newCreator());
+		    collectionSession.setTab(CollectionTabType.COLLECTION);
 		}
 	    	
 		for (Metadata m : metadataList)
@@ -153,7 +162,15 @@ public class CollectionBean
 			userDepositorGrants.add(new SelectItem(g.getObjectRef()
 				, ContextHelper.getContext(g.getObjectRef(), sessionBean.getUserHandle()).getName()));
 		    }
-		}		
+		}
+		
+		for (CollectionTabType tab: CollectionTabType.values())
+		{
+		    if (tab.toString().equalsIgnoreCase(request.getParameter("tab")))
+		    {
+			collectionSession.setTab(tab);
+		    }
+		}
 		selectedContext = "";
 	}
 		
@@ -202,6 +219,19 @@ public class CollectionBean
 	    }
 	}
 	
+	public void next()
+	{
+	    if (valid())
+	    {
+		collectionSession.setTab(CollectionTabType.PROFILE);
+	    }
+	}
+	
+	public void back()
+	{
+	    collectionSession.setTab(CollectionTabType.COLLECTION);
+	}
+	
 	/**
 	 * True if formular is valid. 
 	 * @return
@@ -221,7 +251,7 @@ public class CollectionBean
 	    
 	    for (CreatorVO c : collection.getMdRecord().getCreators())
 	    {
-		boolean hasOrganization = true;
+		boolean hasOrganization = false;
 		
 		if (!"".equals(c.getPerson().getFamilyName()))
 		{
@@ -230,9 +260,9 @@ public class CollectionBean
 		
 		for (OrganizationVO o : c.getPerson().getOrganizations())
 		{
-		    if ("".equals(o.getName().getValue()) && !"".equals(c.getPerson().getFamilyName()))
+		    if (!"".equals(o.getName().getValue()) || "".equals(c.getPerson().getFamilyName()))
 		    {
-			hasOrganization = false;
+			hasOrganization = true;
 		    }
 		}
 		
@@ -245,7 +275,7 @@ public class CollectionBean
 	    
 	    if (!hasAuthor)
 	    {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Author needs at least one Author"));
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Collection needs at least one Author"));
 		valid = false;
 	    }	  
 	    return valid;
@@ -253,7 +283,8 @@ public class CollectionBean
 	
 	public void addAuthor()
 	{
-	    collectionSession.getCurrent().getMdRecord().getCreators().add(authorPosition + 1, collection.getMdRecord().initNewCreator());
+	    collectionSession.getCurrent().getMdRecord().getCreators()
+	    	.add(authorPosition +1 , MdsFacesContainerVO.newCreator());
 	}
 	
 	public void removeAuthor()
@@ -266,15 +297,16 @@ public class CollectionBean
 	
 	public void addCollection()
 	{
-	    OrganizationVO newOrg = collection.getMdRecord().initNewCreator().getPerson().getOrganizations().get(0);
-	    collectionSession.getCurrent().getMdRecord().getCreators().get(authorPosition).getPerson().getOrganizations().add(organizationPosition , newOrg);
+	    collectionSession.getCurrent().getMdRecord().getCreators().get(authorPosition)
+	    	.getPerson().getOrganizations().add(organizationPosition + 1 , MdsFacesContainerVO.newOrganization());
 	}
 	
 	public void removeCollection()
 	{
 	    if (organizationPosition > 0)
 	    {
-		collectionSession.getCurrent().getMdRecord().getCreators().get(authorPosition).getPerson().getOrganizations().remove(organizationPosition);
+		collectionSession.getCurrent().getMdRecord().getCreators().get(authorPosition)
+			.getPerson().getOrganizations().remove(organizationPosition);
 	    }
 	}
 	

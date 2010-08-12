@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
 import de.mpg.escidoc.faces.container.album.AlbumVO;
+import de.mpg.escidoc.faces.container.beans.CollectionBean.CollectionTabType;
 import de.mpg.escidoc.faces.container.list.FacesContainerListController;
 import de.mpg.escidoc.faces.container.list.FacesContainerListParameters;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO;
@@ -26,15 +27,14 @@ public class CollectionSession
 	// Collection active (image browsed are in that collection)
 	private CollectionVO active = null;
 	private CollectionListVO collectionList = null;
-	private FacesContainerListController controller = null;
 	private CollectionController collectionController = null;
 	private SessionBean sessionBean = null;
 	
 	private String selectedMenu = "SORTING";
+	private CollectionTabType tab = CollectionTabType.HOME;
 	
 	public CollectionSession()
 	{
-		controller = new FacesContainerListController();
 		collectionController = new CollectionController();
 		sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
 		
@@ -143,5 +143,22 @@ public class CollectionSession
 		this.selectedMenu = selectedMenu;
 	}
 
+	/**
+	 * @return the tab
+	 */
+	public CollectionTabType getTab()
+	{
+	    return tab;
+	}
+
+	/**
+	 * @param tab the tab to set
+	 */
+	public void setTab(CollectionTabType tab)
+	{
+	    this.tab = tab;
+	}
+	
+	
 
 }

@@ -16,7 +16,7 @@ public class MdsFacesContainerVO  extends MdsPublicationVO
 	super();
 	this.setTitle(new TextVO(""));
 	this.getAbstracts().add(new TextVO(""));
-	this.getCreators().add(initNewCreator());
+	this.getCreators().add(newCreator());
     }
 	
     public MdsFacesContainerVO(MdsPublicationVO md)
@@ -31,18 +31,23 @@ public class MdsFacesContainerVO  extends MdsPublicationVO
     	return new MdsFacesContainerVO(this);
     }
     
-    public CreatorVO initNewCreator()
+    public static CreatorVO newCreator()
     {
 	CreatorVO creator = new CreatorVO();
 	PersonVO person = new PersonVO();
 	person.setFamilyName("");
 	person.setGivenName("");
-	person.getOrganizations().add(new OrganizationVO());
-	person.getOrganizations().get(0).setName(new TextVO(""));
-	person.getOrganizations().get(0).setIdentifier("");
+	person.getOrganizations().add(newOrganization());
 	creator.setPerson(person);
-	
 	return creator;
+    }
+    
+    public static OrganizationVO newOrganization()
+    {
+	OrganizationVO orga = new OrganizationVO();
+	orga.setName(new TextVO(""));
+	orga.setIdentifier("");
+	return orga;
     }
     
     public void format()

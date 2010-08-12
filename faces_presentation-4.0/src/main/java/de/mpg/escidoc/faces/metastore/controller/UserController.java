@@ -12,6 +12,7 @@ public class UserController extends ImejiController{
 		base.commit();
 		base.close();
 	}
+	
 
 	public User retrieve(String email, User user)
 	{

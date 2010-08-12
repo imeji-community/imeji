@@ -1,6 +1,7 @@
 package de.mpg.escidoc.faces.metastore.controller;
 
 import java.net.URI;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -114,8 +115,6 @@ public class ImageController extends ImejiController{
 	
 	public static void main(String[] arg) throws Exception
 	{
-
-		
 		CollectionController icc = new CollectionController();
 		ImageController iic = new ImageController();
 		
@@ -124,6 +123,10 @@ public class ImageController extends ImejiController{
 		user.setEmail("haarlaender@mpdl.mpg.de");
 		user.setName("Markus Haarländer");
 		user.setNick("haarlaender");
+		MessageDigest dig = MessageDigest.getInstance("MD5");
+		dig.update("mypass".getBytes("UTF-8"));
+		user.setEncryptedPassword(new String(dig.digest(), "UTF-8"));
+		System.out.println(user.getEncryptedPassword());
 	
 		
 		for(int j=0; j<1;j++)

@@ -54,7 +54,7 @@
 		</h:panelGroup>
 	
 	
-	<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+	<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{CollectionSession.tab == 'COLLECTION'}">
 			
 			
 			<h3 class="xLarge_area0_p8 endline blockHeader">
@@ -91,53 +91,68 @@
 				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 					<tr:iterator var="creator" value="#{CollectionBean.collection.mdRecord.creators}" varStatus="indexA">
 						<h:panelGroup>
-						<!-- Family Name -->
-						<b class="xLarge_area0_p8 endline labelLine clear">
-							<h:outputText value="#{lbl.familyName}"/>
-							<span class="noDisplay">: </span>
-						</b>
-						<span class="xHuge_area0 xTiny_marginLExcl endline">
-							<h:inputText id="inputCreator" styleClass="quad_txtInput" value="#{creator.person.familyName}"/>
-						</span>
-						
-						<h:panelGroup styleClass="small_area0">
-							<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_author}" action="#{CollectionBean.addAuthor}" immediate="true">
-								<f:setPropertyActionListener value="#{indexA.index}" target="#{CollectionBean.authorPosition}"/>
-							</tr:commandButton>
-							<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_author}" action="#{CollectionBean.removeAuthor}">
-								<f:setPropertyActionListener value="#{indexA.index}" target="#{CollectionBean.authorPosition}"/>
-							</tr:commandButton>
-						</h:panelGroup>
-						
-						<!-- Given Name -->
-						<b class="xLarge_area0_p8 endline labelLine clear">
-							<h:outputText value="#{lbl.givenName}"/>
-							<span class="noDisplay">: </span>
-						</b>
-						<span class="xHuge_area0 xTiny_marginLExcl endline">
-							<h:inputText id="inputCreator" styleClass="quad_txtInput" value="#{creator.person.givenName}"/>
-						</span>
-						
-						<!-- Organizations -->
-						<tr:iterator var="organization" value="#{creator.person.organizations}" varStatus="indexO">
-							<h:panelGroup>
 							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="#{lbl.organizationName}"/>
+								<h:outputText value="#{lbl.author}*"/>
 								<span class="noDisplay">: </span>
 							</b>
-							<span class="huge_area0 xTiny_marginLExcl endline">
-								<h:inputText id="inputCreator" styleClass="huge_txtInput" value="#{organization.name.value}"/>
+							
+							<!-- Family Name -->
+							<span class="xHuge_area0 xTiny_marginLExcl endline">
+								<h:outputLabel value="#{lbl.family_name}"/>
+								<h:inputText id="inputCreator" styleClass="quad_txtInput" value="#{creator.person.familyName}"/>
 							</span>
-							</h:panelGroup>
-							<h:panelGroup styleClass="large_area0">
-								<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_organization}" action="#{CollectionBean.addCollection}">
-									<f:setPropertyActionListener value="#{indexO.index}" target="#{CollectionBean.organizationPosition}"/>
+							<br/>
+							
+							<!-- Given Name -->
+							<b class="xLarge_area0_p8 endline labelLine clear">
+								<h:outputText value=" Given Name " style="visibility:hidden;"/>
+								<span class="noDisplay">: </span>
+							</b>
+							<span class="xHuge_area0 xTiny_marginLExcl endline">
+								<h:outputLabel value="#{lbl.first_name}"/>
+								<h:inputText id="inputCreator" styleClass="quad_txtInput" value="#{creator.person.givenName}"/>
+							</span>
+							
+							<h:panelGroup styleClass="small_area0">
+								<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_author}" action="#{CollectionBean.addAuthor}">
+									<f:setPropertyActionListener value="#{indexA.index}" target="#{CollectionBean.authorPosition}"/>
 								</tr:commandButton>
-								<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_organization}" action="#{CollectionBean.removeCollection}">
-									<f:setPropertyActionListener value="#{indexO.index}" target="#{CollectionBean.organizationPosition}"/>
+								<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_author}" action="#{CollectionBean.removeAuthor}">
+									<f:setPropertyActionListener value="#{indexA.index}" target="#{CollectionBean.authorPosition}"/>
 								</tr:commandButton>
-							</h:panelGroup>
-						</tr:iterator>
+							</h:panelGroup>	
+							
+							<!-- Organizations -->
+							<b class="xLarge_area0_p8 endline labelLine clear">
+								<h:outputText value=" Organization " style="visibility:hidden;"/>
+								<span class="noDisplay">: </span>
+							</b>
+							<span class="xHuge_area0 xTiny_marginLExcl endline">
+								<h:outputText value="#{lbl.organization}*"/>
+							</span>
+							<tr:iterator var="organization" value="#{creator.person.organizations}" varStatus="indexO">
+								<h:panelGroup styleClass="endline">
+									<h:panelGroup>
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value=" Organization" style="visibility:hidden;"/>
+											<span class="noDisplay">: </span>
+										</b>
+										<span class="huge_area0 xTiny_marginLExcl endline">
+											<h:inputText id="inputCreator" styleClass="huge_txtInput" value="#{organization.name.value}"/>
+										</span>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="large_area0 sectionToolSection xLarge_marginRExcl">
+										<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_organization}" action="#{CollectionBean.addCollection}">
+											<f:setPropertyActionListener value="#{indexA.index}" target="#{CollectionBean.authorPosition}"/>
+											<f:setPropertyActionListener value="#{indexO.index}" target="#{CollectionBean.organizationPosition}"/>
+										</tr:commandButton>
+										<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_organization}" action="#{CollectionBean.removeCollection}">
+											<f:setPropertyActionListener value="#{indexA.index}" target="#{CollectionBean.authorPosition}"/>
+											<f:setPropertyActionListener value="#{indexO.index}" target="#{CollectionBean.organizationPosition}"/>
+										</tr:commandButton>
+									</h:panelGroup>
+								</h:panelGroup>
+							</tr:iterator>
 						</h:panelGroup>
 					</tr:iterator>
 				</h:panelGroup>
@@ -158,16 +173,16 @@
 		
 		
 		
-		<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+		<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{CollectionSession.tab == 'PROFILE'}">
 			<h3 class="xLarge_area0_p8 endline blockHeader">
 				<h:outputText value="Metadata Profile"/>
 			</h3>
 			<span class="seperator"></span>
 			
 			<div class="free_area0 itemBlockContent endline">
-				<h:panelGroup styleClass="large_area0_p8" rendered="#{empty CollectionBean.metadataBeanList}">
-					<tr:commandButton styleClass="min_imgBtn add" shortDesc="Add Metadata" action="#{CollectionBean.addMetadata}">
-					</tr:commandButton>
+				<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{empty CollectionBean.metadataBeanList}">
+					<tr:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.add_metadata}" action="#{CollectionBean.addMetadata}"/>
+					<h:outputText value="#{lbl.add_metadata}"></h:outputText>
 				</h:panelGroup>
 
 					<tr:iterator id="profile" var="profile" value="#{CollectionBean.metadataBeanList}" varStatus="position">
@@ -224,10 +239,10 @@
 							
 						</h:panelGroup>
 						<span class="large_area0_p8 lineToolSection">
-							<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add Metadata" action="#{CollectionBean.addMetadata}">
+							<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" action="#{CollectionBean.addMetadata}">
 								<f:setPropertyActionListener value="#{position.index}" target="#{CollectionBean.profilePosition}"/>
 							</tr:commandButton>
-							<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove Metadata" action="#{CollectionBean.removeMetadata}">
+							<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{remove_metadata}" action="#{CollectionBean.removeMetadata}">
 								<f:setPropertyActionListener value="#{position.index}" target="#{CollectionBean.profilePosition}"/>
 							</tr:commandButton>
 						</span>
@@ -241,10 +256,12 @@
 	</h:panelGroup>
 	
 	<div class="full_area0 formButtonArea">
-		<h:outputLink value="#{SessionBean.backUrl}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
+		<h:outputLink value="#{SessionBean.backUrl}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" rendered="#{CollectionSession.tab == 'COLLECTION'}">
 	    	<h:outputText value="#{lbl.cancel}" />
 	    </h:outputLink>
-	    <h:commandButton action="#{CollectionBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"></h:commandButton>					
+	    <h:commandButton action="#{CollectionBean.back}" value="#{lbl.back}" rendered="#{CollectionSession.tab == 'PROFILE'}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl"/>					
+	    <h:commandButton action="#{CollectionBean.next}" value="#{lbl.next}" rendered="#{CollectionSession.tab == 'COLLECTION'}" styleClass="free_area1_p8 activeButton"/>					
+		<h:commandButton action="#{CollectionBean.save}" value="#{lbl.save}" rendered="#{CollectionSession.tab == 'PROFILE'}" styleClass="free_area1_p8 activeButton"/>					
 	</div>
 	
 

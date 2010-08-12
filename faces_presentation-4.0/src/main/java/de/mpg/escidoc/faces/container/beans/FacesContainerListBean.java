@@ -151,12 +151,12 @@ public class FacesContainerListBean
         	if (ContainerListType.COLLECTIONS.equals(type)) 
         	{
         		collectionSession.setSelectedMenu(request.getParameter("filter"));
-			}
+		}
         	else 
         	{
         		albumSession.setFilter(request.getParameter("filter"));
-			}
 		}
+	}
         
         if (request.getParameter("query") != null) 
         {

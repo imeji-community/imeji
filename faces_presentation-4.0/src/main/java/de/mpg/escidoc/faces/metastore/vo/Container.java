@@ -9,6 +9,7 @@ import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
 import thewebsemantic.RdfType;
+import thewebsemantic.custom_datatypes.XmlLiteral;
 
 
 
@@ -25,6 +26,11 @@ public class Container{
 	
 	private ContainerMetadata metadata = new ContainerMetadata();
 
+	private XmlLiteral metadataSchema;
+	
+	private XmlLiteral metadataDSP;
+	
+	
 
 	public void setId(URI id) {
 		this.id = id;
@@ -63,6 +69,8 @@ public class Container{
 	public Collection<URI> getImages() {
 		return images;
 	}
+	
+	
 
 
 	

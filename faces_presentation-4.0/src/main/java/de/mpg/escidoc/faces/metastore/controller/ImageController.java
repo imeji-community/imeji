@@ -219,7 +219,7 @@ public class ImageController extends ImejiController{
 		{
 			if (resColl.getImages().size()>1)
 			{
-				System.out.println("Collection " +resColl.getMetadata().getTitle() + " has " + resColl.getImages().size() + " images");
+				System.out.println(resColl.getId() + " Collection " +resColl.getMetadata().getTitle() + " has " + resColl.getImages().size() + " images");
 				
 				
 				

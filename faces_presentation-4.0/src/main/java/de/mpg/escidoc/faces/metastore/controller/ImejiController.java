@@ -3,23 +3,39 @@ package de.mpg.escidoc.faces.metastore.controller;
 import java.util.Date;
 import java.util.List;
 
-import com.hp.hpl.jena.rdf.model.Model;
-
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
+
+import com.hp.hpl.jena.rdf.model.Model;
+
 import de.mpg.escidoc.faces.metastore.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.escidoc.faces.metastore.util.Counter;
 import de.mpg.escidoc.faces.metastore.vo.Properties;
 import de.mpg.escidoc.faces.metastore.vo.User;
 import de.mpg.escidoc.faces.metastore_test.DataFactory;
+import de.mpg.escidoc.services.framework.PropertyReader;
 
 public class ImejiController {
 	
 	
-	protected static Model base = DataFactory.model("/home/haarlaender/Netzwerklaufwerke/escidoc/imeji_tdb/imeji_data");
+	protected static Model base = null;
 	
 	protected User user;
+	
+	static
+	{
+		try {
+			String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
+			base = DataFactory.model(tdbPath);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 	/*
 	protected static Model base = null;
 	static{

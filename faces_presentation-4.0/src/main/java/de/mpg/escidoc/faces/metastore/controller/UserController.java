@@ -4,6 +4,10 @@ import de.mpg.escidoc.faces.metastore.vo.User;
 
 public class UserController extends ImejiController{
 	
+	public UserController(User user)
+	{
+		super(user);
+	}
 	
 	public void create (User user)
 	{

@@ -20,8 +20,12 @@ import de.mpg.escidoc.faces.metastore.vo.Image.Visibility;
 public class ImageController extends ImejiController{
 	
 	
+	public ImageController(User user)
+	{
+		super(user);
+	}
 	
-	public void create(Image img, URI coll, User user)
+	public void create(Image img, URI coll)
 	{
 		writeCreateProperties(img.getProperties(), user);
 		img.setCollection(coll);
@@ -33,7 +37,7 @@ public class ImageController extends ImejiController{
 		base.commit();
 	}
 	
-	public void create(Collection<Image> images, URI coll, User user)
+	public void create(Collection<Image> images, URI coll)
 	{
 		base.begin();
 		CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, coll);
@@ -48,7 +52,7 @@ public class ImageController extends ImejiController{
 		base.commit();
 	}
 	
-	public void update(Image img, User user)
+	public void update(Image img)
 	{
 		writeUpdateProperties(img.getProperties(), user);
 		base.begin();
@@ -57,7 +61,7 @@ public class ImageController extends ImejiController{
 	}
 	
 
-	public void update(Collection<Image> images, User user)
+	public void update(Collection<Image> images)
 	{
 		base.begin();
 		for(Image img : images)
@@ -68,7 +72,7 @@ public class ImageController extends ImejiController{
 		base.commit();
 	}
 	
-	public Image retrieve(URI imgUri, User user)
+	public Image retrieve(URI imgUri)
 	{
 		return rdf2Bean.load(Image.class, imgUri);
 	}
@@ -80,7 +84,7 @@ public class ImageController extends ImejiController{
 	}
 	*/
 	
-	public Collection<Image> retrieveAll(User user)
+	public Collection<Image> retrieveAll()
 	{
 		return rdf2Bean.load(Image.class);
 	}
@@ -115,18 +119,20 @@ public class ImageController extends ImejiController{
 	
 	public static void main(String[] arg) throws Exception
 	{
-		CollectionController icc = new CollectionController();
-		ImageController iic = new ImageController();
-		
-		
 		User user = new User();
 		user.setEmail("haarlaender@mpdl.mpg.de");
 		user.setName("Markus Haarländer");
 		user.setNick("haarlaender");
+
+		
+		CollectionController icc = new CollectionController(user);
+		ImageController iic = new ImageController(user);
+
 		MessageDigest dig = MessageDigest.getInstance("MD5");
 		dig.update("mypass".getBytes("UTF-8"));
 		user.setEncryptedPassword(new String(dig.digest(), "UTF-8"));
 		System.out.println(user.getEncryptedPassword());
+
 	
 		
 		for(int j=0; j<1;j++)
@@ -148,7 +154,7 @@ public class ImageController extends ImejiController{
 			person.setOrganization(org);
 			
 			System.out.println("Create collection");
-			icc.create(coll, user);
+			icc.create(coll);
 			System.out.println("End create coll");
 			
 			List<Image> imgList = new LinkedList<Image>();
@@ -179,7 +185,7 @@ public class ImageController extends ImejiController{
 			
 			long startCreateImg = System.currentTimeMillis();
 			System.out.println("start creating "+ imgList.size() +"images");
-			iic.create(imgList, coll.getId(), user);
+			iic.create(imgList, coll.getId());
 			long stopCreatingImg = System.currentTimeMillis();
 			System.out.println("stop creating image in" + String.valueOf(stopCreatingImg-startCreateImg));
 			
@@ -202,7 +208,7 @@ public class ImageController extends ImejiController{
 		
 		long startR = System.currentTimeMillis();
 		System.out.println("start retrieving all collections");
-		Collection<CollectionImeji> result = icc.retrieveAll(user);
+		Collection<CollectionImeji> result = icc.retrieveAll();
 		long stopR = System.currentTimeMillis();
 		System.out.println("stop retriveing all collections in " + String.valueOf(stopR-startR));
 		//Collection<ImejiCollection> result = new RDF2Bean(base).load(ImejiCollection.class);
@@ -223,7 +229,7 @@ public class ImageController extends ImejiController{
 					
 					//long startRetrImg = System.currentTimeMillis();
 					//System.out.println("start retrieving img");
-					Image img = iic.retrieve(imgUri, user);
+					Image img = iic.retrieve(imgUri);
 					//long stopRetrImg = System.currentTimeMillis();
 					//System.out.println("stop retriveing img " + String.valueOf(stopRetrImg-startRetrImg));
 					
@@ -263,7 +269,7 @@ public class ImageController extends ImejiController{
 				
 				long start = System.currentTimeMillis();
 				System.out.println("start updating "+images.size() + " images");
-				iic.update(images, user);
+				iic.update(images);
 				long stop = System.currentTimeMillis();
 				System.out.println("end updating img in " + String.valueOf(stop-start));
 		

@@ -12,9 +12,23 @@ import de.mpg.escidoc.faces.metastore.vo.User;
 
 public class CollectionController extends ImejiController{
 
+	private User user;
 	
-	public void create(CollectionImeji ic, User user)
+	public CollectionController(User user)
 	{
+		super(user);
+	}
+	
+	/**
+	 * Creates a new collection. 
+	 * - Add a unique id
+	 * - Write user properties
+	 * @param ic
+	 * @param user
+	 */
+	public void create(CollectionImeji ic)
+	{
+		
 		writeCreateProperties(ic.getProperties(), user);
 		base.begin();
 		Bean2RDF writer = new Bean2RDF(base);
@@ -22,7 +36,24 @@ public class CollectionController extends ImejiController{
 		base.commit();
 	}
 	
-	public Collection<CollectionImeji> retrieveAll(User user)
+	/**
+	 * Updates a collection
+	 * -Logged in users:
+	 * --User is collection owner
+	 * --OR user is collection editor
+	 * @param ic
+	 * @param user
+	 */
+	public void update(CollectionImeji ic)
+	{
+		writeUpdateProperties(ic.getProperties(), user);
+		base.begin();
+		Bean2RDF writer = new Bean2RDF(base);
+		writer.saveDeep(ic);
+		base.commit();
+	}
+	
+	public Collection<CollectionImeji> retrieveAll()
 	{
 		RDF2Bean reader = new RDF2Bean(base);
 		return reader.load(CollectionImeji.class);
@@ -30,6 +61,20 @@ public class CollectionController extends ImejiController{
 	
 	
 	
+	/**
+	 * Search for collections
+	 * - Logged-out user:
+	 * --Collection must be released
+	 * 
+	 * -Logged-in users
+	 * --Collection is released
+	 * --OR Collection is pending AND user is owner
+	 * --OR Collection is withdrawn AND user is owner
+	 * --OR Collection is pending AND user has grant "Container Editor" for it.
+	 * @param user
+	 * @param scList
+	 * @return
+	 */
 	public Collection<CollectionImeji> search(User user, List<SearchCriterion> scList)
 	{
 		String query = createQuery(scList, "http://imeji.mpdl.mpg.de/collection");

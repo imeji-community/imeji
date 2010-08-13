@@ -17,6 +17,7 @@ public class ImejiController {
 	
 	protected static Model base = DataFactory.model("R://imeji_tdb//imeji_data");
 	
+	protected User user;
 	/*
 	protected static Model base = null;
 	static{
@@ -49,6 +50,10 @@ public class ImejiController {
 	*/
 	protected static Bean2RDF bean2RDF = new Bean2RDF(base);
 	protected static RDF2Bean rdf2Bean = new RDF2Bean(base);
+
+	public ImejiController(User user2) {
+		this.user = user;
+	}
 
 	protected static void writeCreateProperties(Properties properties, User user) {
 		Date now = new Date();

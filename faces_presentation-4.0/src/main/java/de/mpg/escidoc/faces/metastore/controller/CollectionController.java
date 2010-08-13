@@ -1,5 +1,6 @@
 package de.mpg.escidoc.faces.metastore.controller;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,10 +27,11 @@ public class CollectionController extends ImejiController{
 	 * @param ic
 	 * @param user
 	 */
-	public void create(CollectionImeji ic)
+	public void create(CollectionImeji ic) throws Exception
 	{
 		
 		writeCreateProperties(ic.getProperties(), user);
+		ic.setId(new URI("http://imeji.mpdl.mpg.de/collection/" + getUniqueId()));
 		base.begin();
 		Bean2RDF writer = new Bean2RDF(base);
 		writer.saveDeep(ic);

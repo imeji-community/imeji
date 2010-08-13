@@ -6,8 +6,10 @@ import java.util.List;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import thewebsemantic.Bean2RDF;
+import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 import de.mpg.escidoc.faces.metastore.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.escidoc.faces.metastore.util.Counter;
 import de.mpg.escidoc.faces.metastore.vo.Properties;
 import de.mpg.escidoc.faces.metastore.vo.User;
 import de.mpg.escidoc.faces.metastore_test.DataFactory;
@@ -15,7 +17,7 @@ import de.mpg.escidoc.faces.metastore_test.DataFactory;
 public class ImejiController {
 	
 	
-	protected static Model base = DataFactory.model("R://imeji_tdb//imeji_data");
+	protected static Model base = DataFactory.model("/home/haarlaender/Netzwerklaufwerke/escidoc/imeji_tdb/imeji_data");
 	
 	protected User user;
 	/*
@@ -115,5 +117,22 @@ public class ImejiController {
 			
 		System.out.println("Created Query:\n"+completeQuery);
 		return completeQuery;
+	}
+	
+	protected static int getUniqueId()
+	{
+		base.begin();
+		Counter c = new Counter();
+		try {
+			c = rdf2Bean.load(Counter.class, 0);
+		} catch (NotFoundException e) {
+			bean2RDF.save(c);
+		}
+		int id = c.getCounter();
+		c.setCounter(c.getCounter()+1);
+		bean2RDF.save(c);
+		base.commit();
+		return id;
+		
 	}
 }

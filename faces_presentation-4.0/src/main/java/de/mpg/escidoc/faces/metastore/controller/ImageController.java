@@ -140,7 +140,7 @@ public class ImageController extends ImejiController{
 			CollectionImeji coll = new CollectionImeji();
 
 			
-			coll.setId(new URI("http://imeji.mpdl.mpg.de/collection/" + UUID.randomUUID().toString()));
+			//coll.setId(new URI("http://imeji.mpdl.mpg.de/collection/" + UUID.randomUUID().toString()));
 			coll.getMetadata().setTitle("TestCollection " +j);
 			coll.getMetadata().setDescription("TestDesc " +j);
 			
@@ -158,7 +158,7 @@ public class ImageController extends ImejiController{
 			System.out.println("End create coll");
 			
 			List<Image> imgList = new LinkedList<Image>();
-			for(int i=0; i<10000;i++)
+			for(int i=0; i<10;i++)
 			{
 				System.out.println("Add image: " +i );
 				Image im = new Image();

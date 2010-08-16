@@ -280,7 +280,7 @@ public class AlbumListBean
 		}
     	if (albumSession.getFilter().equalsIgnoreCase("user")) 
     	{
-    		list.getParameters().setCreator(sessionBean.getUser().getReference().getObjectId());
+    		list.getParameters().setCreator(sessionBean.getUser().getEmail());
     		list.getParameters().setState(null);
 		}
     	if (albumSession.getFilter().equalsIgnoreCase("public")) 
@@ -290,17 +290,17 @@ public class AlbumListBean
 		}
     	if (albumSession.getFilter().equalsIgnoreCase("mypublic")) 
     	{
-    		list.getParameters().setCreator(sessionBean.getUser().getReference().getObjectId());
+    		list.getParameters().setCreator(sessionBean.getUser().getEmail());
     		list.getParameters().setState("released");
 		}
     	if (albumSession.getFilter().equalsIgnoreCase("private")) 
     	{
-    		list.getParameters().setCreator(sessionBean.getUser().getReference().getObjectId());
+    		list.getParameters().setCreator(sessionBean.getUser().getEmail());
     		list.getParameters().setState("pending");
 		}
     	if (albumSession.getFilter().equalsIgnoreCase("withdrawn")) 
     	{
-    		list.getParameters().setCreator(sessionBean.getUser().getReference().getObjectId());
+    		list.getParameters().setCreator(sessionBean.getUser().getEmail());
     		list.getParameters().setState("withdrawn");
 		}
     }

@@ -31,7 +31,7 @@ public class AlbumListQuery
         try
         {
             sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-            creator = sessionBean.getUser().getReference().getObjectId();
+            creator = sessionBean.getUser().getEmail();
             contentModel = PropertyReader.getProperty("escidoc.faces.container.content-model.id");
             context = PropertyReader.getProperty("escidoc.faces.context.id");
             id = new ArrayList<String>();

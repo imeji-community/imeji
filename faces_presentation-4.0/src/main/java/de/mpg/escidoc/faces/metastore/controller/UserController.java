@@ -1,5 +1,6 @@
 package de.mpg.escidoc.faces.metastore.controller;
 
+import java.net.URI;
 import java.security.MessageDigest;
 
 import de.mpg.escidoc.faces.metastore.vo.User;
@@ -20,7 +21,7 @@ public class UserController extends ImejiController{
 	}
 	
 
-	public User retrieve(String email, User user)
+	public User retrieve(String email)
 	{
 		return rdf2Bean.load(User.class, email);
 	}

@@ -57,6 +57,7 @@ import de.mpg.escidoc.faces.container.album.AlbumSession;
 import de.mpg.escidoc.faces.item.FacesItemVO;
 import de.mpg.escidoc.faces.item.ItemVO;
 import de.mpg.escidoc.faces.metadata.ScreenConfiguration;
+import de.mpg.escidoc.faces.metastore.vo.User;
 import de.mpg.escidoc.faces.pictures.Detail;
 import de.mpg.escidoc.faces.statistics.StatisticsBean;
 import de.mpg.escidoc.faces.util.BeanHelper;
@@ -87,7 +88,7 @@ public class SessionBean
     private AlbumSession albumSession = null;
     
     // The logged in user
-    private AccountUserVO user = null;
+    private User user = null;
     private List<AffiliationVO> affiliations = new ArrayList<AffiliationVO>();
     private List<String> affiliationsName = new ArrayList<String>();
     private boolean firstLoad = true;
@@ -96,6 +97,7 @@ public class SessionBean
     private Locale locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
     
     // His userHandle
+    @Deprecated
     private String userHandle;
     
     // The current search query used by the HomePage.
@@ -349,6 +351,7 @@ public class SessionBean
      * Check if the user has logged in
      * @return
      */
+    /*
     public boolean getCheckLogin()
     {
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -442,27 +445,9 @@ public class SessionBean
         }
         return false;
     }
+    */
     
-    private void  createLoginStatisticData() throws HttpException, ServiceException, IOException, URISyntaxException
-    {
-        // Create a statistic data "visit" for statistics "number of visits"
-        String statisticDataXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
-                "<statistic-record><scope objid=\"1\"/>" +
-                "<parameter name=\"handler\"><stringvalue>"+
-                StatisticsBean.INSTANCE_ID +
-                "</stringvalue></parameter>" +
-                "<parameter name=\"request\"><stringvalue>login</stringvalue></parameter>" +
-                "<parameter name=\"interface\"><stringvalue>SOAP</stringvalue></parameter>" +
-                "<parameter name=\"successful\"><stringvalue>1</stringvalue></parameter>" +
-                "<parameter name=\"internal\"><stringvalue>0</stringvalue></parameter>" +
-                "<parameter name=\"user_id\"><stringvalue>" + this.user.getReference().getObjectId() + "</stringvalue></parameter>" +
-                "</statistic-record>";
-//        StatisticsBean statisticsBean = (StatisticsBean) BeanHelper.getRequestBean(StatisticsBean.class);
-//        ServiceLocator.getStatisticDataHandler(statisticsBean.getStatisitcsEditorHandle()).create(statisticDataXml);
-        StatisticsBean statisticsBean = (StatisticsBean) BeanHelper.getApplicationBean(StatisticsBean.class);
-        
-        ServiceLocator.getStatisticDataHandler(statisticsBean.getAdminUserHandle()).create(statisticDataXml);
-    }
+   
     
     public String getCreateVisitStatisticData() throws Exception
     {
@@ -484,6 +469,8 @@ public class SessionBean
     	
     	return "";
     }
+    
+    
     
 	private void createVisitStatisticData(String userAgent) throws Exception
 	{
@@ -523,6 +510,7 @@ public class SessionBean
      * Logout the current user. Closes the user session on the frameworks and invalidates the HttpSession.
      * @return
      */
+	/*
     public String logout()
     {
         if (user != null)
@@ -548,6 +536,7 @@ public class SessionBean
         //return navigation.HOME_PAGE.getName();
     }
 
+	 */
     public String getBackToResultList()
     {
         return backToResultList;
@@ -587,26 +576,28 @@ public class SessionBean
     {
         this.viewImageAttributesLink = viewImageAttributesLink;
     }
-    public AccountUserVO getUser()
+    public User getUser()
     {
         return user;
     }
 
-    public void setUser(AccountUserVO user)
+    public void setUser(User user)
     {
         this.user = user;
     }
 
+    @Deprecated
     public String getUserHandle()
     {
         return userHandle;
     }
 
+    @Deprecated
     public void setUserHandle(String userHandle)
     {
         this.userHandle = userHandle;
     }
-
+     
     public void setLocale(Locale locale)
     {
         this.locale = locale;
@@ -1014,6 +1005,7 @@ public class SessionBean
         this.currentPage = currentPage;
     }
     
+    /*
     public String getLogoutAndRedirect() throws Exception
     {
         user = null;
@@ -1027,7 +1019,7 @@ public class SessionBean
         
         return "";
     }
-
+     */
     public String getSortedBy()
     {
         return sortedBy;

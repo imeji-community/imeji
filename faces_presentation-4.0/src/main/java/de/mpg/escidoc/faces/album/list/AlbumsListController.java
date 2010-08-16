@@ -115,14 +115,14 @@ public class AlbumsListController
             //Add pending albums from user
             if (sessionBean.getUser() != null) 
             {
-            	 list.getParameters().setCreator(sessionBean.getUser().getReference().getObjectId());
+            	 list.getParameters().setCreator(sessionBean.getUser().getEmail());
                  list.getParameters().setState("pending");
                  containerListXml = cth.retrieveContainers(list.getParameters().getParametersAsFilter());      
                  List<? extends ContainerVO> pendingAlbums = xmlTransforming.transformToContainerList(containerListXml);
                  list = addToList(list, pendingAlbums);
                
                  //Add withdrawn albums from user
-                 list.getParameters().setCreator(sessionBean.getUser().getReference().getObjectId());
+                 list.getParameters().setCreator(sessionBean.getUser().getEmail());
                  list.getParameters().setState("withdrawn");
                  containerListXml = cth.retrieveContainers(list.getParameters().getParametersAsFilter());      
                  List<? extends ContainerVO> withdrawnAlbums = xmlTransforming.transformToContainerList(containerListXml);

@@ -34,54 +34,58 @@
 -->
 </ui:remove>
 
-	<span id="metaMenuSkipLinkAnchor" class="full_area0 metaMenu">
-		<!-- meta Menu starts here -->
+<span id="metaMenuSkipLinkAnchor" class="full_area0 metaMenu">
+	<!-- meta Menu starts here -->
+
+	<!-- Language -->
+
+	<!-- Help -->
+	<h:outputLink id="lnkHelp" styleClass="xSmall_area0_p8 endline" value="#{Navigation.helpUrl}" target="_blank">
+		<h:outputText value="#{lbl.help}"/>
+	</h:outputLink>
+	<h:panelGroup styleClass="seperator"></h:panelGroup>
+
+	<!-- Blog -->
+	<h:outputLink id="lnkBlog" value="#{Navigation.blogUrl}" styleClass="small_area0_p8 endline" target="_blank" rendered="#{StaticContent.blog}">
+		<h:outputText value="#{lbl.blog}"/>
+	</h:outputLink>
+	<h:panelGroup styleClass="seperator" rendered="#{StaticContent.blog}"></h:panelGroup>
+
+	<!-- Imprint -->
+	<h:outputLink id="lnkImprint" value="#{Navigation.impressumUrl}" styleClass="large_area0_p8 endline" target="_blank">
+		<h:outputText value="#{lbl.imprint}"/>
+	</h:outputLink>
+	<h:panelGroup styleClass="seperator"></h:panelGroup>
+
+	<!-- Registration -->
+	<h:outputLink id="lnkLegal" value="#{Navigation.legalUrl}" styleClass="medium_area0_p8 endline" rendered="#{StaticContent.legal}">
+		<h:outputText value="#{lbl.legal}"/>
+	</h:outputLink>
+	<h:panelGroup styleClass="seperator" rendered="#{StaticContent.legal}"></h:panelGroup>
+
+	<!-- About -->
+	<h:outputLink id="lnkAbout" value="#{Navigation.aboutUrl}" styleClass="small_area0_p8 endline" rendered="#{StaticContent.about}">
+		<h:outputText value="#{lbl.about}"/>
+	</h:outputLink>
+	<h:panelGroup styleClass="seperator" rendered="#{StaticContent.about}"></h:panelGroup>
+
+	<!-- LogIn, LogOut -->
+	<h:panelGroup rendered="#{SessionBean.user == null}">
+		<h:inputText value="#{LoginBean.login}"/>
+		<h:inputText value="#{LoginBean.passwd}"/>
+		<h:commandButton id="lnkLogin" value="#{lbl.login}" action ="#{LoginBean.login}" styleClass="small_area0_p8 endline"/>
+	</h:panelGroup>
 	
-		<!-- Language -->
 	
-		<!-- Help -->
-		<h:outputLink id="lnkHelp" styleClass="xSmall_area0_p8 endline" value="#{Navigation.helpUrl}" target="_blank">
-			<h:outputText value="#{lbl.help}"/>
-		</h:outputLink>
-		<h:panelGroup styleClass="seperator"></h:panelGroup>
-	
-		<!-- Blog -->
-		<h:outputLink id="lnkBlog" value="#{Navigation.blogUrl}" styleClass="small_area0_p8 endline" target="_blank" rendered="#{StaticContent.blog}">
-			<h:outputText value="#{lbl.blog}"/>
-		</h:outputLink>
-		<h:panelGroup styleClass="seperator" rendered="#{StaticContent.blog}"></h:panelGroup>
-	
-		<!-- Imprint -->
-		<h:outputLink id="lnkImprint" value="#{Navigation.impressumUrl}" styleClass="large_area0_p8 endline" target="_blank">
-			<h:outputText value="#{lbl.imprint}"/>
-		</h:outputLink>
-		<h:panelGroup styleClass="seperator"></h:panelGroup>
-	
-		<!-- Registration -->
-		<h:outputLink id="lnkLegal" value="#{Navigation.legalUrl}" styleClass="medium_area0_p8 endline" rendered="#{StaticContent.legal}">
-			<h:outputText value="#{lbl.legal}"/>
-		</h:outputLink>
-		<h:panelGroup styleClass="seperator" rendered="#{StaticContent.legal}"></h:panelGroup>
-	
-		<!-- About -->
-		<h:outputLink id="lnkAbout" value="#{Navigation.aboutUrl}" styleClass="small_area0_p8 endline" rendered="#{StaticContent.about}">
-			<h:outputText value="#{lbl.about}"/>
-		</h:outputLink>
-		<h:panelGroup styleClass="seperator" rendered="#{StaticContent.about}"></h:panelGroup>
-	
-		<!-- LogIn, LogOut -->
-		<h:outputLink id="lnkLogin" value="#{Navigation.loginUrl}" styleClass="small_area0_p8 endline" rendered="#{SessionBean.user == null}">
-	    	<h:outputText value="#{lbl.login}"></h:outputText>
-	    </h:outputLink>
-	
-		<h:outputLink id="lnkLogout" value="#{Navigation.logOffUrl}" styleClass="small_area0_p8 endline" rendered="#{SessionBean.user != null}">
-	    	<h:outputText value="#{lbl.logout}"></h:outputText>
-	    </h:outputLink>
-	
-		<h:panelGroup styleClass="seperator"></h:panelGroup>
-	
-		<h:outputLabel id="txtAccountUserName" styleClass="free_area0_p8 endline" value="#{SessionBean.user.name}" rendered="#{SessionBean.user != null}"></h:outputLabel>
-	
-		<!-- meta Menu ends here -->
-	</span>
+
+	<h:outputLink id="lnkLogout" value="#{Navigation.logOffUrl}" styleClass="small_area0_p8 endline" rendered="#{SessionBean.user != null}">
+    	<h:outputText value="#{lbl.logout}"></h:outputText>
+    </h:outputLink>
+
+	<h:panelGroup styleClass="seperator"></h:panelGroup>
+
+	<h:outputLabel id="txtAccountUserName" styleClass="free_area0_p8 endline" value="#{SessionBean.user.name}" rendered="#{SessionBean.user != null}"></h:outputLabel>
+
+	<!-- meta Menu ends here -->
+</span>
 </div>

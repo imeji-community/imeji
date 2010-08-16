@@ -187,6 +187,47 @@
 							<artifactId>jsf-facelets</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
+						
+						<jarModule>
+							<groupId>com.hp.hpl.jena</groupId>
+							<artifactId>tdb</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							<groupId>com.hp.hpl.jena</groupId>
+							<artifactId>jena</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							<groupId>com.hp.hpl.jena</groupId>
+							<artifactId>arq</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							<groupId>com.hp.hpl.jena</groupId>
+							<artifactId>iri</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							<groupId>org.slf4j</groupId>
+							<artifactId>slf4j-api</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							<groupId>org.slf4j</groupId>
+							<artifactId>slf4j-log4j12</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							 <groupId>thewebsemantic</groupId> 
+		  					 <artifactId>jenabean</artifactId> 
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							 <groupId>thewebsemantic</groupId> 
+		   					<artifactId>jpa4jena</artifactId> 
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
 					</modules>
 				</configuration>
 			</plugin>
@@ -438,6 +479,28 @@
       		<version>1.1.13</version>
       		<scope>provided</scope>
     	</dependency>
+    	 <!-- Jena TDB 
+    	 BEWARE: This is a custom version of tdb where some subdependencies (jena-test-sources, jena-sources, arq-sources, iri-sources)
+    	 were removed. With the original version, the jar module integra
+    	 -->
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>tdb</artifactId>
+			<version>0.8.7</version>
+			<scope>compile</scope>
+		</dependency>
+    	<dependency> 
+		   <groupId>thewebsemantic</groupId> 
+		   <artifactId>jenabean</artifactId> 
+		   <version>1.0.7-Imeji</version>
+		   <scope>compile</scope>
+		</dependency>
+		<dependency> 
+		   <groupId>thewebsemantic</groupId> 
+		   <artifactId>jpa4jena</artifactId> 
+		   <version>0.7</version>
+		   <scope>compile</scope>
+		</dependency>
 	</dependencies>
 	
 

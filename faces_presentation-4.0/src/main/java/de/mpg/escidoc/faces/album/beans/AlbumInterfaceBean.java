@@ -452,7 +452,7 @@ public class AlbumInterfaceBean
          if (sessionBean.isAgreement())
          {
              albumSession.getExportManager().setUserHandle(sessionBean.getUserHandle());
-             albumSession.getExportManager().setUserId(sessionBean.getUser().getReference().getObjectId());
+             albumSession.getExportManager().setUserId(sessionBean.getUser().getEmail());
              albumController.export(albumSession.getCurrent(), albumSession.getExportManager());
          }
          else

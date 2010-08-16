@@ -113,25 +113,35 @@ public class ImageController extends ImejiController{
 	
 	
 	
-	
-	
+	public static User createUser() throws Exception
+	{
+		User user = new User();
+		user.setEmail("imeji@mpdl.mpg.de");
+		user.setName("Imeji Test User");
+		user.setNick("itu");
+		user.setEncryptedPassword(UserController.convertToMD5("test"));
+		System.out.println(user.getEncryptedPassword());
+		new UserController(null).create(user);
+		return user;
+		
+		
+	}
 	
 	
 	public static void main(String[] arg) throws Exception
 	{
-		User user = new User();
-		user.setEmail("haarlaender@mpdl.mpg.de");
-		user.setName("Markus Haarländer");
-		user.setNick("haarlaender");
-
+		createUser();
+	}
+	
+	public static void main2(String[] arg) throws Exception
+	{
+		
+		User user = createUser();
 		
 		CollectionController icc = new CollectionController(user);
 		ImageController iic = new ImageController(user);
 
-		MessageDigest dig = MessageDigest.getInstance("MD5");
-		dig.update("mypass".getBytes("UTF-8"));
-		user.setEncryptedPassword(new String(dig.digest(), "UTF-8"));
-		System.out.println(user.getEncryptedPassword());
+		
 
 	
 		

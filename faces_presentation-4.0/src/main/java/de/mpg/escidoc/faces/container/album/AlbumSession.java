@@ -432,6 +432,7 @@ public class AlbumSession
 	
 	public List <CreatorDisplayVO> getCreatorsForDisplay ()
 	{
+	
 	    List <CreatorDisplayVO> creatorsDisplay = new ArrayList<CreatorDisplayVO>();
 	    List <CreatorVO> creators = this.getCurrent().getMdRecord().getCreators();
 	    for (int i = 0; i < creators.size(); i++)

@@ -27,14 +27,18 @@ public class CollectionSession
 	// Collection active (image browsed are in that collection)
 	private CollectionVO active = null;
 	private CollectionListVO collectionList = null;
+	private FacesContainerListController controller = null;
 	private CollectionController collectionController = null;
 	private SessionBean sessionBean = null;
 	
 	private String selectedMenu = "SORTING";
 	private CollectionTabType tab = CollectionTabType.HOME;
 	
+	private String filter = "all";
+	
 	public CollectionSession()
 	{
+		controller = new FacesContainerListController();
 		collectionController = new CollectionController();
 		sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
 		
@@ -141,6 +145,16 @@ public class CollectionSession
 	public void setSelectedMenu(String selectedMenu) 
 	{
 		this.selectedMenu = selectedMenu;
+	}
+	
+	public String getFilter() 
+	{
+		return filter;
+	}
+
+	public void setFilter(String filter) 
+	{
+		this.filter = filter;
 	}
 
 	/**

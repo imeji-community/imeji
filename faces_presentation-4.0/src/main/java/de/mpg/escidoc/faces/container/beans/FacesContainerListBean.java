@@ -56,6 +56,7 @@ public class FacesContainerListBean
 	
 	public FacesContainerListBean() 
 	{
+		System.err.println("test");
 		list = new FacesContainerListVO();
 		controller = new FacesContainerListController();
 		
@@ -133,7 +134,7 @@ public class FacesContainerListBean
                 }
             }
         }
-        
+
         if (request.getParameter("tab") != null)
         {
         	if (ContainerListType.COLLECTIONS.equals(type)) 
@@ -560,13 +561,22 @@ public class FacesContainerListBean
                 , list.getView()
                 , list.getParameters().getSortBy()
                 , list.getParameters().getOrderBy()) ;
-        
-        filterMenu.add(new SelectItem(url + "?filter=all", "all albums"));
-        filterMenu.add(new SelectItem(url + "?filter=public", "all public albums"));
-        filterMenu.add(new SelectItem(url + "?filter=user", "my albums"));
-        filterMenu.add(new SelectItem(url + "?filter=mypublic", "my public albums"));
-        filterMenu.add(new SelectItem(url + "?filter=private", "my private albums"));
-        filterMenu.add(new SelectItem(url + "?filter=withdrawn", "my withdrawn albums"));
+        if(ContainerListType.COLLECTIONS.equals(type)){
+	        filterMenu.add(new SelectItem(url + "?filter=all", "all collections"));
+	        filterMenu.add(new SelectItem(url + "?filter=public", "all public collections"));
+	        filterMenu.add(new SelectItem(url + "?filter=user", "my collections"));
+	        filterMenu.add(new SelectItem(url + "?filter=mypublic", "my public collections"));
+	        filterMenu.add(new SelectItem(url + "?filter=private", "my private collections"));
+	        filterMenu.add(new SelectItem(url + "?filter=withdrawn", "my withdrawn collections"));
+        }
+        else {
+            filterMenu.add(new SelectItem(url + "?filter=all", "all albums"));
+            filterMenu.add(new SelectItem(url + "?filter=public", "all public albums"));
+            filterMenu.add(new SelectItem(url + "?filter=user", "my albums"));
+            filterMenu.add(new SelectItem(url + "?filter=mypublic", "my public albums"));
+            filterMenu.add(new SelectItem(url + "?filter=private", "my private albums"));
+            filterMenu.add(new SelectItem(url + "?filter=withdrawn", "my withdrawn albums"));
+        }
     }
 
 	/**

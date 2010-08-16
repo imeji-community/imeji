@@ -34,35 +34,35 @@
 -->
 </ui:remove>
 
-<div id="mainMenuSkipLinkAnchor" class="full_area0 mainMenu">
-
-	<!-- main Menu starts here -->
-	<h:outputLink id="lnkHome" styleClass="free_area0" value="#{Navigation.applicationUrl}" rendered="true">
-		<h:outputText value="HOME"/>
-	</h:outputLink>
-	<h:outputText id="txtHomeInactive" styleClass="free_area0" value="Home" rendered="false" />
-
-	<h:outputLink id="lnkCollections" value="#{Navigation.collectionsUrl}">
-		<h:outputText value="#{lbl.header_collections}"></h:outputText>
-	</h:outputLink>
-	<h:outputText id="lnkCollectionsInactive" styleClass="free_area0" value="#{lbl.header_collections}" rendered="false" />
+	<div id="mainMenuSkipLinkAnchor" class="full_area0 mainMenu">
 	
-	<h:outputLink id="lnkBrowse" styleClass="free_area0" value="#{Navigation.browseUrl}" rendered="true">
-  		<h:outputText value="#{lbl.header_browse}"/>
-  	</h:outputLink>	
-	<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.browse}" rendered="false" />
-
-	<h:outputLink id="lnkAlbums" value="#{Navigation.albumsUrl}">
-		<h:outputText value="#{lbl.header_albums}"></h:outputText>
-	</h:outputLink>
-	<h:outputText id="txtMyAlbumsInactive" styleClass="free_area0" value="My Albums" rendered="false" />
-
-	<h:outputLink id="lnkStatistics" value="#{Navigation.statisticsUrl}/visit" rendered="#{SessionBean.admin and SessionBean.user != null}">
-		<h:outputText value="#{lbl.header_statistics}"></h:outputText>
-	</h:outputLink>
-	<h:outputText id="txtStatisticsInactive" styleClass="free_area0" value="Statistics" rendered="false" />
+		<!-- main Menu starts here -->
+		<h:outputLink id="lnkHome" styleClass="free_area0" value="#{Navigation.applicationUrl}" rendered="true">
+			<h:outputText value="HOME"/>
+		</h:outputLink>
+		<h:outputText id="txtHomeInactive" styleClass="free_area0" value="Home" rendered="false" />
 	
-	<!-- main Menu ends here -->
-
-</div>
+		<h:outputLink id="lnkCollections" value="#{Navigation.collectionsUrl}">
+			<h:outputText value="#{lbl.header_collections}"></h:outputText>
+		</h:outputLink>
+		<h:outputText id="lnkCollectionsInactive" styleClass="free_area0" value="#{lbl.header_collections}" rendered="false" />
+		
+		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="#{Navigation.browseUrl}" rendered="true">
+	  		<h:outputText value="#{lbl.header_browse}"/>
+	  	</h:outputLink>	
+		<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.browse}" rendered="false" />
+	
+		<h:outputLink id="lnkAlbums" value="#{Navigation.albumsUrl}">
+			<h:outputText value="#{lbl.header_albums}"></h:outputText>
+		</h:outputLink>
+		<h:outputText id="txtMyAlbumsInactive" styleClass="free_area0" value="My Albums" rendered="false" />
+	
+		<h:outputLink id="lnkStatistics" value="#{Navigation.statisticsUrl}/visit" rendered="#{SessionBean.admin and SessionBean.user != null}">
+			<h:outputText value="#{lbl.header_statistics}"></h:outputText>
+		</h:outputLink>
+		<h:outputText id="txtStatisticsInactive" styleClass="free_area0" value="Statistics" rendered="false" />
+		
+		<!-- main Menu ends here -->
+	
+	</div>
 </div>

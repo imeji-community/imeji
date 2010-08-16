@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- 
+            /* 
+            CDDL HEADER START
+
+            The contents of this file are subject to the terms of the
+            Common Development and Distribution License, Version 1.0 only
+            (the "License"). You may not use this file except in compliance
+            with the License.
+
+            You can obtain a copy of the license at license/ESCIDOC.LICENSE
+            or http://www.escidoc.de/license.
+            See the License for the specific language governing permissions
+            and limitations under the License.
+
+            When distributing Covered Code, include this CDDL HEADER in each
+            file and include the License file at license/ESCIDOC.LICENSE.
+            If applicable, add the following below this CDDL HEADER, with the
+            fields enclosed by brackets "[]" replaced with your own identifying
+            information: Portions Copyright [yyyy] [name of copyright owner]
+
+            CDDL HEADER END
+
+
+            Copyright 2006-2010 Fachinformationszentrum Karlsruhe Gesellschaft
+			für wissenschaftlich-technische Information mbH and Max-Planck-
+            Gesellschaft zur Förderung der Wissenschaft e.V.
+            All rights reserved. Use is subject to license terms.
+             */
+-->
+<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets">
+		<f:loadBundle var="lbl" basename="labels"/>
+		<f:loadBundle var="msg" basename="messages"/>
+		<html xmlns="http://www.w3.org/1999/xhtml">
+			<head>
+
+				<title><h:outputText value="#{ApplicationBean.applicationName}"/></title>
+
+				<link href="#{Navigation.applicationUrl}resources/eSciDoc_CSS/main.css" type="text/css" rel="stylesheet"/>
+				<link href="#{Navigation.applicationUrl}resources/eSciDoc_CSS/themes/skin_highContrast/styles/theme.css" id="highContrastTheme" title="high contrast" type="text/css" rel="alternate stylesheet"/>
+				<link href="#{Navigation.applicationUrl}resources/eSciDoc_CSS/themes/skin_classic/styles/theme.css" id="classicTheme" title="classic" type="text/css" rel="alternate stylesheet"/>
+				<link href="#{Navigation.applicationUrl}resources/eSciDoc_CSS/themes/skin_FACES/styles/theme.css" id="PubManTheme" title="FACES" type="text/css" rel="stylesheet"/>
+				<link type="image/x-icon" href="#{Navigation.applicationUrl}resources/icon/escidoc.ico" rel="shortcut icon"/>
+				<link href="#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css" type="text/css" media="screen" rel="stylesheet"/>
+				
+				<meta http-equiv="pragma" content="no-cache"/>
+				<meta http-equiv="cache-control" content="no-cache"/>
+				<meta http-equiv="expires" content="0"/>
+				
+				<script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/main.js" language="JavaScript" type="text/javascript">;</script>
+				
+				<script type="text/javascript" language="JavaScript">
+					var cookieVersion = "1.0";
+					var coneURL = '<h:outputText value="#{Navigation.applicationUrl}"/>' + '../cone/';
+					var jsURL = '<h:outputText value="#{Navigation.applicationUrl}"/>' + 'resources/eSciDoc_JavaScript/';
+				</script>
+				
+				<script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_javascript.js" language="JavaScript" type="text/javascript">;</script>
+
+
+				
+
+			</head>
+			
+			<body lang="#{SessionBean.locale}">
+				<h:outputText value="#{SessionBean.checkLogin}" styleClass="noDisplay" />
+				<h:form id="formular">
+					<div class="full wrapper">
+						<h:inputHidden id="offset"></h:inputHidden>
+						<h:inputHidden id="rssFeedUrl" value="#{BlogBean.rssFeedUrl}"></h:inputHidden>
+		
+						<!-- import header -->
+						<ui:include src="/headerPages/Header.jspf" />
+						<div id="content" class="full_area0 clear">
+						
+						<!-- begin: content section (including elements that visualy belong to the header (breadcrumb, headline, subheader and content menu)) -->
+							<div class="clear">
+								
+								<div class="headerSection">
+									<div class="clear breadcrumb">
+										<ui:insert name="breadcrumb"></ui:insert>
+									</div>
+									<div id="contentSkipLinkAnchor" class="clear headLine">
+										<!-- Headline starts here, taken from facelets parameter -->
+										<ui:insert name="headline"><h1><h:outputText value="#{headline}" /></h1></ui:insert>
+										<!-- Headline ends here -->
+									</div>
+								</div>
+								
+								<div class="small_marginLIncl subHeaderSection">
+									
+									
+									<div class="contentMenu">
+										<!-- content menu starts here -->
+										<div class="free_area0 sub">
+										<!-- content menu upper line starts here -->
+											<ui:insert name="contentMenu">&#160;</ui:insert>
+										<!-- content menu upper line ends here -->
+										</div>
+										
+										<div class="free_area0 sub action">
+										<!-- content menu lower line starts here -->
+											<ui:insert name="actionsMenu"/>
+										<!-- content menu lower line ends here -->
+										</div>
+										
+										<div class="free_area0 sub action">
+										<!-- content menu lower line starts here -->
+											<ui:insert name="actionsMenu2"/>
+										<!-- content menu lower line ends here -->
+										</div>
+										
+										<div class="free_area0 sub action">
+										<!-- content menu lower line starts here -->
+											<ui:insert name="actionsMenu3"/>
+										<!-- content menu lower line ends here -->
+										</div>
+									<!-- content menu ends here -->
+									</div>
+									
+									<ui:insert name="additionalSubheaders">&#160;</ui:insert>
+									
+									<h:panelGroup layout="block" styleClass="subHeader" rendered="#{(SessionBean.urlQuery != 'error' || SessionBean.pageNotFound) and ((SessionBean.message != null) || (SessionBean.information != null))}">
+										<h:outputText id="txtErrorMsg" styleClass="singleMessage messageError" value="#{SessionBean.message}" rendered="#{(SessionBean.message != null) and (SessionBean.information == null)}" />
+										<h:outputText value="#{SessionBean.displayed}" />
+			
+										<h:outputText id="txtStatusMsg" styleClass="singleMessage messageStatus" value="#{SessionBean.information}" rendered="#{(SessionBean.message == null) and (SessionBean.information != null)}" />
+										<h:outputText value="#{SessionBean.displayed}" />
+			
+										<h:outputText value="#{SessionBean.initializationMessage}" rendered="#{(SessionBean.message != null or SessionBean.information != null ) and SessionBean.messageDisplayed}" />
+									</h:panelGroup>
+									
+								</div>
+							</div>
+						
+							<div class="full_area0">
+								<!-- Main Content -->
+								<ui:insert name="paginationTop">
+									&#160;
+								</ui:insert>
+								<ui:insert name="mainContent">
+									&#160;
+								</ui:insert>
+								<ui:insert name="paginationBottom">
+									&#160;
+								</ui:insert>
+							</div>
+						
+					    </div>
+					<!-- end: content section -->
+					</div>
+					
+					<ui:include src="/footerPages/Footer.jspf" />
+				
+			    </h:form>
+				<script type="text/javascript">
+				$("input[id$='offset']").submit(function() {
+					$(this).val($(window).scrollTop());
+				});
+				$(document).ready(function () {
+					$(window).scrollTop($("input[id$='offset']").val());
+					$(window).scroll(function(){$("input[id$='offset']").val($(window).scrollTop())});
+				});
+				</script>				
+			</body>
+		</html>
+</f:view>
+	
+						
+						

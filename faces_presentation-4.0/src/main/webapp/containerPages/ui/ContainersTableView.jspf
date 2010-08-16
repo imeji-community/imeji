@@ -33,6 +33,7 @@
              
 -->
 </ui:remove>
+
 <f:subview id="ContainersTableView">
 	
 	<table class="full_area0 itemList loggedIn" rules="none" style="border-collapse: collapse;">

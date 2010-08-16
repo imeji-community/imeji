@@ -36,9 +36,48 @@
 
 </ui:remove>
 	<body>
-		<ui:composition template="containers_template.xhtml">
+		<ui:composition template="templates/template_pagination_container.xhtml">
 			<ui:param name="Session" value="#{AlbumSession}"/>
-			<ui:param name="headline" value="#{msg.collections_headline}"/>
+			<ui:param name="headline" value="#{msg.albums_headline}"/>
+			
+			<ui:define name="actionsMenu">	
+			
+				<h:panelGroup rendered="#{Session.selectedMenu == 'FILTER'}">
+				<!-- FILTER content menu lower line starts here -->
+					<h:outputText id="txtFilter" value="Filtered by " styleClass="free_area0"/>
+					<h:selectOneMenu id="selFilter" value="#{FacesContainerListBean.url}?filter=#{Session.filter}" styleClass="free_select"  onchange="location.href=this.value">
+						<f:selectItems id="filterItem" value="#{FacesContainerListBean.filterMenu}"/>
+					</h:selectOneMenu>
+				<!-- FILTER content menu lower line ends here -->
+				</h:panelGroup>
+	
+			
+				<h:panelGroup rendered="#{Session.selectedMenu == 'SORTING'}">
+				<!-- SORTING content menu lower line starts here -->
+					<h:outputText id="txtSort" value="Sorted by " styleClass="free_area0"/>
+					<h:selectOneMenu id="selSort" value="#{FacesContainerListBean.url}" styleClass="free_select"  onchange="location.href=this.value">
+						<f:selectItems id="sortItem" value="#{FacesContainerListBean.sortMenu}"/>
+					</h:selectOneMenu>
+					<h:outputLink id="lnkSortAsc" styleClass="ascSort" value="#{FacesContainerListBean.toggleOrder}" rendered="#{FacesContainerListBean.list.parameters.orderBy == 'ASCENDING'}">&#160;</h:outputLink>
+					<h:outputLink id="lnkSortDesc" styleClass="desSort" value="#{FacesContainerListBean.toggleOrder}" rendered="#{FacesContainerListBean.list.parameters.orderBy != 'ASCENDING'}">&#160;</h:outputLink>
+					<h:outputText styleClass="seperator void" />
+				<!-- SORTING content menu lower line ends here -->
+				</h:panelGroup>
+			
+				<h:panelGroup rendered="#{Session.selectedMenu == 'ORGANIZE'}">
+				<!-- ORGANIZE content menu lower line starts here -->
+					<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.albumUrl}/new?action=init">
+							<h:outputText value="Create Album"></h:outputText>
+					</h:outputLink>
+					<h:outputText styleClass="seperator"/>
+					<h:commandLink id="lnkDelete" styleClass="free_area0" action="#{FacesContainerListBean.deleteLink}" immediate="true">
+							<h:outputText value="Delete Selected Albums"></h:outputText>
+					</h:commandLink>
+				<!-- ORGANIZE content menu lower line ends here -->
+				</h:panelGroup>
+				
+			</ui:define>
+
 		</ui:composition>
 	</body>
 </html>

@@ -35,6 +35,7 @@
 </ui:remove>
 
 <!-- bottom paginator -->
+
 <f:subview id="Pagination_Bottom">
 
 	<h:panelGroup layout="block" styleClass="full_area0 paginator">

@@ -34,13 +34,11 @@
 -->
 </ui:remove>
 
-
     <script src="http://www.google.com/jsapi" type="text/javascript">&#160;</script> 
     <script type="text/javascript">
 	    google.load("feeds", "1");
 		
-		function facesBlogInitialize() 
-		{  	
+		function facesBlogInitialize(){  	
 			var feedControl = new google.feeds.FeedControl();
 		
 			feedControl.addFeed(document.getElementById("formular:rssFeedUrl").value, "<h:outputText value="#{lbl.blog_title}"/>");

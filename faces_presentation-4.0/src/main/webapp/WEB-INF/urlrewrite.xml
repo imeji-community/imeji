@@ -82,32 +82,32 @@
     <!-- START Person -->
 	    <rule>
 	    	<from casesensitive="false">^/person/([A-Za-z0-9]+)$</from>
-	    	<to>/jsf/Pictures.xhtml?page=1&amp;show=12&amp;person=$1&amp;currentUrl=person</to>
+	    	<to>/jsf/PersonPictures.xhtml?page=1&amp;show=12&amp;person=$1&amp;currentUrl=person</to>
 	    </rule>
 	    <!-- 1 active album -->
 	    <rule>
 	    	<from casesensitive="false">^/person/([A-Za-z0-9]+)/active/escidoc:([0-9]+)$</from>
-	    	<to>/jsf/Pictures.xhtml?page=1&amp;show=12&amp;person=$1&amp;selection=escidoc:$2&amp;currentUrl=person</to>
+	    	<to>/jsf/PersonPictures.xhtml?page=1&amp;show=12&amp;person=$1&amp;selection=escidoc:$2&amp;currentUrl=person</to>
 	    </rule>
 	    <!-- Page number, pictures per page, 3 (sort,order) criteria -->
 	    <rule match-type="wildcard">
 	    	<from casesensitive="false">/person/*/*/*/*/*/*/*/*/*</from>
-	    	<to>/jsf/Pictures.xhtml?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;person=$1&amp;currentUrl=person</to>
+	    	<to>/jsf/PersonPictures.xhtml?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;person=$1&amp;currentUrl=person</to>
    		</rule>
 	    <!-- Page number, pictures per page, 3 (sort,order) criteria, 1 active album -->
 	    <rule>
 	    	<from casesensitive="false">^/person/([0-9]+)/([0-9]+)/([0-9]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/active/escidoc:([A-Za-z0-9]+)$</from>
-	    	<to>/jsf/Pictures.xhtml?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;person=$1&amp;currentUrl=person&amp;selection=escidoc:$10</to>
+	    	<to>/jsf/PersonPictures.xhtml?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;person=$1&amp;currentUrl=person&amp;selection=escidoc:$10</to>
 	    </rule>
 	    <!-- Page number, pictures per page-->
 	    <rule match-type="wildcard">
 	    	<from casesensitive="false">/person/*/*/*</from>
-	    	<to>/jsf/Pictures.xhtml?page=$2&amp;show=$3&amp;person=$1&amp;currentUrl=person</to>
+	    	<to>/jsf/PersonPictures.xhtml?page=$2&amp;show=$3&amp;person=$1&amp;currentUrl=person</to>
    		</rule>
 	    <!-- Page number, pictures per page, 1 active album -->
 	    <rule match-type="wildcard">
 	    	<from casesensitive="false">/person/*/*/*/active/*</from>
-	    	<to>/jsf/Pictures.xhtml?page=$2&amp;show=$3&amp;person=$1&amp;currentUrl=person&amp;selection=escidoc:$4</to>
+	    	<to>/jsf/PersonPictures.xhtml?page=$2&amp;show=$3&amp;person=$1&amp;currentUrl=person&amp;selection=escidoc:$4</to>
 	    </rule>
 	    
 	 <!-- END Person -->
@@ -124,17 +124,17 @@
     <!-- START Album -->
 	    <rule>
 	    	<from casesensitive="false">^/album/escidoc:([0-9]+)$</from>
-	    	<to>/jsf/Pictures.xhtml?page=1&amp;show=12&amp;album=escidoc:$1&amp;currentUrl=viewAlbum</to>
+	    	<to>/jsf/AlbumEntryPage.xhtml?page=1&amp;show=12&amp;album=escidoc:$1&amp;currentUrl=viewAlbum</to>
 	    </rule> 
 	     <!--  Page number, pictures per page, 3 (sort,order) criteria -->
 	     <rule match-type="wildcard">
 	    	<from casesensitive="false">/album/*/*/*/*/*/*/*/*/*</from>
-	    	<to>/jsf/Pictures.xhtml?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;album=$1&amp;currentUrl=viewAlbum</to>
+	    	<to>/jsf/AlbumEntryPage.xhtml?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;album=$1&amp;currentUrl=viewAlbum</to>
 	    </rule>
 	    <!--  Page number, pictures per page -->
 	     <rule>
 	    	<from casesensitive="false">^/album/escidoc:([0-9]+)/([0-9]+)/([0-9]+)$</from>
-	    	<to>/jsf/Pictures.xhtml?page=$2&amp;show=$3&amp;album=escidoc:$1&amp;currentUrl=viewAlbum</to>
+	    	<to>/jsf/AlbumEntryPage.xhtml?page=$2&amp;show=$3&amp;album=escidoc:$1&amp;currentUrl=viewAlbum</to>
 	    </rule>
 	 <!-- END Album -->
 	    
@@ -194,35 +194,35 @@
 	    <!-- Default -->
 	    <rule match-type="wildcard">	
 	    	<from casesensitive="false">/search/result/*</from>
-	    	<to>/jsf/Pictures.xhtml?currentUrl=searchResult&amp;page=1&amp;show=12&amp;query=$1</to>
+	    	<to>/jsf/SearchResult.xhtml?currentUrl=searchResult&amp;page=1&amp;show=12&amp;query=$1</to>
 	    </rule>
 	    <!--  Page number, pictures per page -->
 	    <rule match-type="wildcard">
 	    	<from casesensitive="false">/search/result/active/*/*</from>
-	    	<to>/jsf/Pictures.xhtml?currentUrl=searchResult&amp;page=1&amp;show=12&amp;selection=$1&amp;query=$2</to>
+	    	<to>/jsf/SearchResult.xhtml?currentUrl=searchResult&amp;page=1&amp;show=12&amp;selection=$1&amp;query=$2</to>
 	    </rule>
 	    <!--  Page number, pictures per page, 3 (sort,order) criteria -->
 	    <rule match-type="wildcard">
 	    	<from casesensitive="false">/search/result/*/*/*/*/*/*/*/*/*</from>
-	    	<to>/jsf/Pictures.xhtml?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;sort1=$3&amp;order1=$4&amp;sort2=$5&amp;order2=$6&amp;sort3=$7&amp;order3=$8&amp;query=$9</to>
+	    	<to>/jsf/SearchResult.xhtml?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;sort1=$3&amp;order1=$4&amp;sort2=$5&amp;order2=$6&amp;sort3=$7&amp;order3=$8&amp;query=$9</to>
 	    </rule>
 	    
 	    <!-- Page number, pictures per page, 3 (sort,order) criteria, active album -->
 	    <rule>
 	    	<from casesensitive="false">/search/result/([0-9]+)/([0-9]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/([^//]+)/active/escidoc:([0-9]+)/([^//?]+)</from>
-	    	<to>/jsf/Pictures.xhtml?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;sort1=$3&amp;order1=$4&amp;sort2=$5&amp;order2=$6&amp;sort3=$7&amp;order3=$8&amp;selection=escidoc:$9&amp;query=$10</to>
+	    	<to>/jsf/SearchResult.xhtml?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;sort1=$3&amp;order1=$4&amp;sort2=$5&amp;order2=$6&amp;sort3=$7&amp;order3=$8&amp;selection=escidoc:$9&amp;query=$10</to>
 	    </rule>
 	    
 	    <!-- Page number, pictures per page -->
 	    <rule match-type="wildcard">
 	    	<from casesensitive="false">/search/result/*/*/*</from>
-	    	<to>/jsf/Pictures.xhtml?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;query=$3</to>
+	    	<to>/jsf/SearchResult.xhtml?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;query=$3</to>
 	    </rule>
 	    
 	    <!-- Page number, pictures per page, active album -->
 	    <rule match-type="wildcard">
 	    	<from casesensitive="false">/search/result/*/*/active/*/*</from>
-	    	<to>/jsf/Pictures.xhtml?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;selection=$3&amp;query=$4</to>
+	    	<to>/jsf/SearchResult.xhtml?currentUrl=searchResult&amp;page=$1&amp;show=$2&amp;selection=$3&amp;query=$4</to>
 	    </rule>
 	<!-- END Search Result -->
     
@@ -232,10 +232,12 @@
     	<from casesensitive="false">^/albums$</from>
     	<to>/jsf/Albums.xhtml?list=albums&amp;currentUrl=albums</to>
     </rule>
-     <rule>
+    <!-- ToDelete: ersetzt durch /album/search 
+    <rule>
     	<from casesensitive="false">^/publications$</from>
     	<to>/jsf/Publications.xhtml?list=publications&amp;currentUrl=publications</to>
     </rule>
+    -->
     <rule>
     	<from casesensitive="false">^/collections$</from>
     	<to>/jsf/Collections.xhtml?list=collections&amp;currentUrl=collections</to>
@@ -243,8 +245,8 @@
     
     <!-- Collections Page -->
     <rule>
-    	<from casesensitive="false">^/collection$</from>
-    	<to>/jsf/CollectionFormular.xhtml?&amp;currentUrl=editCollection</to>
+    	<from casesensitive="false">^/collection/edit/*</from>
+    	<to>/jsf/CollectionFormular.xhtml?page=edit&amp;id=$1</to>
     </rule>
     
     <!-- Create a new album -->
@@ -260,17 +262,17 @@
 
     <rule>
     	<from casesensitive="false">^/collection/escidoc:([0-9]+)/browse$</from>
-    	<to>/jsf/Pictures.xhtml?page=1&amp;show=12&amp;collection=escidoc:$1&amp;currentUrl=browseCollection</to>
+    	<to>/jsf/CollectionBrowse.xhtml?page=1&amp;show=12&amp;collection=escidoc:$1&amp;currentUrl=browseCollection</to>
     </rule> 
      <!--  Page number, pictures per page, 3 (sort,order) criteria -->
      <rule match-type="wildcard">
     	<from casesensitive="false">/collection/*/browse/*/*/*/*/*/*/*/*</from>
-    	<to>/jsf/Pictures.xhtml?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;collection=$1&amp;currentUrl=browseCollection</to>
+    	<to>/jsf/CollectionBrowse.xhtml?page=$2&amp;show=$3&amp;sort1=$4&amp;order1=$5&amp;sort2=$6&amp;order2=$7&amp;sort3=$8&amp;order3=$9&amp;collection=$1&amp;currentUrl=browseCollection</to>
     </rule>
     <!--  Page number, pictures per page -->
      <rule>
     	<from casesensitive="false">^/collection/escidoc:([0-9]+)/([0-9]+)/([0-9]+)$/browse</from>
-    	<to>/jsf/Pictures.xhtml?page=$2&amp;show=$3&amp;collection=escidoc:$1&amp;currentUrl=browseCollection</to>
+    	<to>/jsf/CollectionBrowse.xhtml?page=$2&amp;show=$3&amp;collection=escidoc:$1&amp;currentUrl=browseCollection</to>
     </rule>
 
 	    
@@ -360,7 +362,7 @@
     
      <!-- Edit an album -->
     <rule>
-    	<from casesensitive="false">^/edit/escidoc:([0-9]+)$</from>
+    	<from casesensitive="false">^/album/edit/escidoc:([0-9]+)$</from>
     	<to>/jsf/AlbumFormular.xhtml?currentUrl=editalbum&amp;album=escidoc:$1</to>
     </rule>
     

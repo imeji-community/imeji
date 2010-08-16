@@ -35,15 +35,11 @@
 </ui:remove>
 <f:subview id="Containers">
 		
-	<ui:include src="ui/PaginationTop.jspf" />
+
 	
-	<ui:include src="../picturesPages/ui/ActiveAlbumMenu.jspf"/>
+
 	
-	<h:panelGroup rendered="#{FacesContainerListBean.list.view == 'TABLE'}">
-		<ui:include src="ui/ContainersTableView.jspf" />
-	</h:panelGroup>
-	
-	<ui:include src="ui/PaginationBottom.jspf" />
+
 			
 </f:subview>
 </div>

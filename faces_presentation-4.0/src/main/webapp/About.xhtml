@@ -35,17 +35,17 @@
 -->
 </ui:remove>
 
-<body>
-	
-	<ui:composition template="template.xhtml">	
-	<ui:param name="headline" value="#{lbl.about}"/>		
-			
-			<ui:define name="mainContent">
-			<div class="full_area0_p8 infoPage">
-				<!-- Main Content -->
-				<h:outputText escape="false" value="#{StaticContent.aboutContent}" />
-			</div>	
-			</ui:define>
-	</ui:composition>
-</body>
+	<body>
+		
+		<ui:composition template="templates/template.xhtml">	
+		<ui:param name="headline" value="#{lbl.about}"/>		
+				
+				<ui:define name="mainContent">
+				<div class="full_area0_p8 infoPage">
+					<!-- Main Content -->
+					<h:outputText escape="false" value="#{StaticContent.aboutContent}" />
+				</div>	
+				</ui:define>
+		</ui:composition>
+	</body>
 </html>

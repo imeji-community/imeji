@@ -36,30 +36,27 @@
 </ui:remove>
 
 <body>
-	<ui:composition template="template.xhtml">	
+	<ui:composition template="templates/template.xhtml">	
 	
-		<ui:define name="headline">
-			<h1>
-				<h:outputText value="#{msg.create_album_00_headline}" rendered="#{CollectionBean.pageType == 'CREATE'}"/>
-				<h:outputText value="#{msg.edit_album_00_headline}" rendered="#{CollectionBean.pageType == 'EDIT'}"/>
-				<h:outputText value="#{CollectionSession.current.mdRecord.title.value}" rendered="#{CollectionBean.pageType == 'VIEW'}"/>
-			</h1>
-		</ui:define>
-		
-		
 		<ui:define name="contentMenu">
 			<h:commandLink id="lnkOrganize" styleClass="free_area0" value="ORGANIZE" rendered="false" />
 			<h:outputText styleClass="free_area0" value="ORGANIZE" rendered="true" />
 			<h:outputText styleClass="seperator void" />
-			<h:outputLink id="lnkbrowseCollection" styleClass="free_area0" value="#{Navigation.collectionUrl}/#{CollectionSession.current.latestVersion.objectId}/browse" rendered="true">
-				<h:outputText value="#{lbl.collection_browse}"/>
-			</h:outputLink>
 		</ui:define>
-		
+	
 		<ui:define name="actionsMenu">
 			<h:panelGroup rendered="#{CollectionSession.current.version.objectId != null}">
 				<!-- ORGANIZE content menu lower line starts here -->
-				<h:outputLink id="lnkEditCollection" styleClass="free_area0" value="#{Navigation.collectionUrl}/#{CollectionSession.current.latestVersion.objectId}" rendered="#{CollectionSession.current.state == 'PENDING'}">
+				
+				<h:outputLink id="lnkbrowseCollection" styleClass="free_area0" value="#{Navigation.collectionUrl}/new?action=init" rendered="true">
+					<h:outputText value="#{lbl.collection_create}"/>
+			    </h:outputLink>
+			    <h:outputText styleClass="seperator" rendered="#{CollectionSession.current.state == 'PENDING'}" />
+				<h:outputLink id="lnkbrowseCollection" styleClass="free_area0" value="#{Navigation.collectionUrl}/#{CollectionSession.current.latestVersion.objectId}/browse" rendered="true">
+					<h:outputText value="#{lbl.collection_browse}"/>
+			    </h:outputLink>
+				<h:outputText styleClass="seperator" rendered="#{CollectionSession.current.state == 'PENDING'}" />
+				<h:outputLink id="lnkEditCollection" styleClass="free_area0" value="#{Navigation.collectionUrl}/edit/#{CollectionSession.current.latestVersion.objectId}" rendered="#{CollectionSession.current.state == 'PENDING'}">
 					<h:outputText value="#{lbl.collection_edit}"></h:outputText>
 				</h:outputLink>
 				<h:outputText styleClass="seperator" rendered="#{CollectionSession.current.state == 'PENDING'}" />
@@ -70,7 +67,7 @@
 				<h:outputLink id="lnkDeleteAlbum" styleClass="free_area0" value="#{Navigation.confirmationUrl}/delete/#{CollectionSession.current.latestVersion.objectId}type=collection" rendered="#{CollectionSession.current.state == 'PENDING'}">
 					<h:outputText value="#{lbl.collection_delete}"></h:outputText>
 				</h:outputLink>
-				<h:outputText styleClass="seperator" rendered="#{AlbumSession.current.state == 'PENDING'}" />
+				<h:outputText styleClass="seperator" rendered="#{AlbumSession.current.state == 'RELEASED'}" />
 				<h:outputLink id="lnkWithdrawAlbum" styleClass="free_area0" value="#{Navigation.confirmationUrl}/withdraw/#{CollectionSession.current.latestVersion.objectId}type=collection" rendered="#{(CollectionSession.current.state == 'RELEASED') and (CollectionSession.current.owner.objectId == SessionBean.user.reference.objectId)}">
 					<h:outputText value="#{lbl.collection_withdraw}"></h:outputText>
 				</h:outputLink>
@@ -80,9 +77,15 @@
 				</h:outputLink>
 			</h:panelGroup>
 		</ui:define>
+	
+		<ui:define name="headline">
+			<h1>
+				<h:outputText value="#{CollectionSession.current.mdRecord.title.value}" rendered="#{CollectionBean.pageType == 'VIEW'}"/>
+			</h1>
+		</ui:define>
 
 		<ui:define name="mainContent">
-			<ui:include src="picturesPages/ui/ActiveAlbumMenu.jspf"/>			
+			<!--  <ui:include src="picturesPages/ui/ActiveAlbumMenu.jspf"/>		-->	
 			
 			<h:panelGroup layout="block" styleClass="full_area0 " rendered="true">
 				<ui:include src="collectionPages/ui/ViewCollection.jspf" />

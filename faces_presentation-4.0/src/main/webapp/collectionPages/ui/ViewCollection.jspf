@@ -36,6 +36,7 @@
 <f:subview id="ViewCollection">
 	<!-- First part of the page -->
 	<div class="small_area0">&#160;</div>
+	
 	<h:panelGroup layout="block" styleClass="free_area0">
 		<h:panelGroup layout="block" styleClass="free_area0">
 		

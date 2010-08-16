@@ -34,48 +34,48 @@
 -->
 </ui:remove>
 
-<f:subview id="Header">
-
-<!-- start: skip link navigation -->
-	<h:outputLink id="lnkSkipMainMenu" styleClass="skipLink" title="#{lbl.skip_to_mainMenu}" value="#mainMenuSkipLinkAnchor">
-		<h:outputText value="#{lbl.skip_to_mainMenu}"/>
-	</h:outputLink>
-	<h:outputLink id="lnkSkipContent" styleClass="skipLink" title="#{lbl.skip_to_pageContent}" value="#contentSkipLinkAnchor">
-		<h:outputText value="#{lbl.skip_to_pageContent}"/>
-	</h:outputLink>
-	<h:outputLink id="lnkSkipSearchMenu" styleClass="skipLink" title="#{lbl.skip_to_searchMenu}" value="#searchMenuSkipLinkAnchor">
-		<h:outputText value="#{lbl.skip_to_searchMenu}"/>
-	</h:outputLink>
-	<h:outputLink id="lnkSkipMetaMenu" styleClass="skipLink" title="#{lbl.skip_to_metaMenu}" value="#metaMenuSkipLinkAnchor">
-		<h:outputText value="#{lbl.skip_to_metaMenu}"/>
-	</h:outputLink>
-<!-- end: skip link navigation -->
-
-<div class="full_area0 header clear">
-<!-- begin: header section (including meta menu, logo, searchMenu and main menu)-->
-
-	<!-- import meta menu here -->
-	<ui:include src="ui/MetaMenu.jspf"/>
-
-	<div class="full_area0 LogoNSearch">
-		<h:outputLink id="lnkStartPage" title="Go to start page." value="#{Navigation.applicationUrl}">
-			<h:panelGroup styleClass="xTiny_marginLExcl half_area0 headerLogo" style="#{StaticContent.headerLogo}">
-				<h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
-			</h:panelGroup>
-		</h:outputLink>
-
-		<!-- import search here-->
-		<ui:include src="ui/SearchMenu.jspf"/>
-
-	</div>
-
-	<!-- import main menu here -->
-	<ui:include src="ui/MainMenu.jspf"/>
+	<f:subview id="Header">
 	
-	<!-- Initialize visit statistics -->
-	<h:outputText value="#{SessionBean.createVisitStatisticData}"></h:outputText>
-<!-- end: header section -->
-</div>
-
-</f:subview>
+		<!-- start: skip link navigation -->
+		<h:outputLink id="lnkSkipMainMenu" styleClass="skipLink" title="#{lbl.skip_to_mainMenu}" value="#mainMenuSkipLinkAnchor">
+			<h:outputText value="#{lbl.skip_to_mainMenu}"/>
+		</h:outputLink>
+		<h:outputLink id="lnkSkipContent" styleClass="skipLink" title="#{lbl.skip_to_pageContent}" value="#contentSkipLinkAnchor">
+			<h:outputText value="#{lbl.skip_to_pageContent}"/>
+		</h:outputLink>
+		<h:outputLink id="lnkSkipSearchMenu" styleClass="skipLink" title="#{lbl.skip_to_searchMenu}" value="#searchMenuSkipLinkAnchor">
+			<h:outputText value="#{lbl.skip_to_searchMenu}"/>
+		</h:outputLink>
+		<h:outputLink id="lnkSkipMetaMenu" styleClass="skipLink" title="#{lbl.skip_to_metaMenu}" value="#metaMenuSkipLinkAnchor">
+			<h:outputText value="#{lbl.skip_to_metaMenu}"/>
+		</h:outputLink>
+		<!-- end: skip link navigation -->
+	
+		<div class="full_area0 header clear">
+		<!-- begin: header section (including meta menu, logo, searchMenu and main menu)-->
+		
+			<!-- import meta menu here -->
+			<ui:include src="ui/MetaMenu.jspf"/>
+		
+			<div class="full_area0 LogoNSearch">
+				<h:outputLink id="lnkStartPage" title="Go to start page." value="#{Navigation.applicationUrl}">
+					<h:panelGroup styleClass="xTiny_marginLExcl half_area0 headerLogo" style="#{StaticContent.headerLogo}">
+						<h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
+					</h:panelGroup>
+				</h:outputLink>
+		
+				<!-- import search here-->
+				<ui:include src="ui/SearchMenu.jspf"/>
+		
+			</div>
+		
+			<!-- import main menu here -->
+			<ui:include src="ui/MainMenu.jspf"/>
+			
+			<!-- Initialize visit statistics -->
+			<h:outputText value="#{SessionBean.createVisitStatisticData}"></h:outputText>
+		<!-- end: header section -->
+		</div>
+	
+	</f:subview>
 </div>

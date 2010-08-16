@@ -33,6 +33,7 @@
 -->
 </ui:remove>
  <!-- paginator for the browsing -->
+ 
 <f:subview id="Pagination_Top">
 
 	<h:panelGroup layout="block" styleClass="full_area0 paginator">

@@ -36,7 +36,7 @@
 </ui:remove>
 
 <body>
-	<ui:composition template="template.xhtml">	
+	<ui:composition template="templates/template.xhtml">	
 	
 		<ui:define name="headline">
 			<h1>
@@ -82,15 +82,13 @@
 		</ui:define>
 	
 		<ui:define name="mainContent">
-			<ui:include src="picturesPages/ui/PaginationTop.jspf"/>	
-			<ui:include src="picturesPages/ui/ActiveAlbumMenu.jspf"/>			
-			
+
+
 			<h:panelGroup layout="block" styleClass="full_area0 tiledList" rendered="#{(SessionBean.allowed)}">
 				<ui:include src="albumPages/ui/AlbumFormular.jspf" />
 			</h:panelGroup>
 
-			<ui:include src="picturesPages/ui/PaginationBottom.jspf"/>
-			
+	
 			<script type="text/javascript">
 				personSuggestURL = '<h:outputText value="#{ConeHelper.coneUrl}"/>json/persons/query';
 				personSuggestCommonParentClass = 'suggestAnchor';

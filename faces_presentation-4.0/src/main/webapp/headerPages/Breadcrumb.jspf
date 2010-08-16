@@ -2,8 +2,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
-<ui:remove>
-<!--
+	<ui:remove>
+	<!--
             /* 
             CDDL HEADER START
 
@@ -31,10 +31,10 @@
             Gesellschaft zur F�rderung der Wissenschaft e.V.
             All rights reserved. Use is subject to license terms.
              */
--->
-</ui:remove>
+	-->
+	</ui:remove>
 
-<f:subview id="Breadcrumb">
+	<f:subview id="Breadcrumb">
 
 			<ol>
 				<li>
@@ -47,5 +47,5 @@
 				</li>
 			</ol>
 
-</f:subview>
+	</f:subview>
 </div>

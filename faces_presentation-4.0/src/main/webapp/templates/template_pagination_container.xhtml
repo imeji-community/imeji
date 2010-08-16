@@ -37,30 +37,30 @@
 </ui:remove>
 
 <body>
-	<ui:composition template="template.xhtml">	
-		
+	<ui:composition template="template_pagination.xhtml">	
 		<ui:define name="contentMenu">
-			<h:outputText value="#{Session.selectedMenu}"/>
-			<h:outputText value="#{FacesContainerListBean.init}" styleClass="noDisplay" />
-			<h:outputLink id="lnkFilter" styleClass="free_area0" value="?tab=FILTER" rendered="#{SessionBean.user != null and Session.selectedMenu != 'FILTER' and FacesContainerListBean.listType != 'search'}">
+			<h:outputText value="#{FacesContainerListBean.init}" />	
+			<h:outputLink id="lnkFilter" styleClass="free_area0" value="?tab=FILTER" rendered="#{Session.selectedMenu != 'FILTER' and SessionBean.user != null}">
 				<h:outputText value="#{lbl.filter}"/>
 			</h:outputLink>
-			<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.filter}" rendered="#{SessionBean.user != null and Session.selectedMenu == 'FILTER'}" />
+			<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.filter}" rendered="#{Session.selectedMenu == 'FILTER' and SessionBean.user != null}" />
 			<h:outputText styleClass="seperator void" />
+			
 			<h:outputLink id="lnkSort" styleClass="free_area0" value="?tab=SORTING" rendered="#{Session.selectedMenu != 'SORTING'}">
 				<h:outputText value="#{lbl.sort}"/>
 			</h:outputLink>
 			<h:outputText id="txtSortLink" styleClass="free_area0" value="#{lbl.sort}" rendered="#{Session.selectedMenu == 'SORTING'}" />
 			<h:outputText styleClass="seperator void" />
-			<h:outputLink id="lnkOrganize" styleClass="free_area0" value="?tab=ORGANIZE" rendered="#{Session.selectedMenu != 'ORGANIZE' and SessionBean.user != null and FacesContainerListBean.listType != 'search'}">
+			
+			<h:outputLink id="lnkOrganize" styleClass="free_area0" value="?tab=ORGANIZE" rendered="#{Session.selectedMenu != 'ORGANIZE' and SessionBean.user != null}">
 				<h:outputText value="#{lbl.organize}"/>
 			</h:outputLink>
-			<h:outputText id="txtOrganizeLink" styleClass="free_area0" value="#{lbl.organize}" rendered="#{Session.selectedMenu == 'ORGANIZE' and SessionBean.user != null and FacesContainerListBean.listType != 'search' and SessionBean.currentUrl != 'home'}" />
+			<h:outputText id="txtOrganizeLink" styleClass="free_area0" value="#{lbl.organize}" rendered="#{Session.selectedMenu == 'ORGANIZE' and SessionBean.user != null}" />
 			<h:outputText styleClass="seperator void" />
 		</ui:define>
 									
-		<ui:define name="actionsMenu">
-			<h:panelGroup  rendered="#{Session.selectedMenu == 'VIEW'}">
+		<!--  <ui:define name="actionsMenu">
+			<h:panelGroup  rendered="#{Session.selectedMenu == 'VIEW'}">-->
 			<!-- VIEW content menu lower line starts here 
 				<tr:iterator id="viewList" var="menu" varStatus="status" value="#{FacesContainerListBean.viewMenu}">
 					<h:outputLink  id="lnkView" styleClass="free_area0" value="#{menu.value}" disabled="#{FacesContainerListBean.firstPage == menu.value}">
@@ -68,8 +68,14 @@
 					</h:outputLink>
 				</tr:iterator>
 			 VIEW content menu lower line ends here -->
-			</h:panelGroup>
-			<h:panelGroup rendered="#{SessionBean.user != null and Session.selectedMenu == 'FILTER'}">
+		<!--	</h:panelGroup>
+		</ui:define>
+		-->
+		
+
+						
+		<ui:define name="actionsMenu">	
+			<h:panelGroup rendered="#{Session.selectedMenu == 'FILTER'}">
 			<!-- FILTER content menu lower line starts here -->
 				<h:outputText id="txtFilter" value="Filtered by " styleClass="free_area0"/>
 				<h:selectOneMenu id="selFilter" value="#{FacesContainerListBean.url}?filter=#{Session.filter}" styleClass="free_select"  onchange="location.href=this.value">
@@ -77,6 +83,8 @@
 				</h:selectOneMenu>
 			<!-- FILTER content menu lower line ends here -->
 			</h:panelGroup>
+
+		
 			<h:panelGroup rendered="#{Session.selectedMenu == 'SORTING'}">
 			<!-- SORTING content menu lower line starts here -->
 				<h:outputText id="txtSort" value="Sorted by " styleClass="free_area0"/>
@@ -88,31 +96,15 @@
 				<h:outputText styleClass="seperator void" />
 			<!-- SORTING content menu lower line ends here -->
 			</h:panelGroup>
-			<h:panelGroup rendered="#{Session.selectedMenu == 'ORGANIZE' and SessionBean.user != null and FacesContainerListBean.listType != 'search' and SessionBean.currentUrl != 'home'}">
-			<!-- ORGANIZE content menu lower line starts here -->
-				<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.albumUrl}/new?action=init">
-						<h:outputText value="Create Album"></h:outputText>
-				</h:outputLink>
-				<h:outputText styleClass="seperator"/>
-				<h:commandLink id="lnkDelete" styleClass="free_area0" action="#{FacesContainerListBean.deleteLink}" immediate="true">
-						<h:outputText value="Delete Selected Albums"></h:outputText>
-				</h:commandLink>
-			<!-- ORGANIZE content menu lower line ends here -->
-			</h:panelGroup>
-			
-			<h:panelGroup rendered="#{Session.selectedMenu == 'ORGANIZE' and SessionBean.user != null and FacesContainerListBean.listType != 'search' and SessionBean.currentUrl == 'collections'}">
-			<!-- ORGANIZE content menu lower line starts here -->
-				<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.collectionUrl}/new?action=init">
-						<h:outputText value="Create Collecion"></h:outputText>
-				</h:outputLink>
-				<h:outputText styleClass="seperator"/>
-			<!-- ORGANIZE content menu lower line ends here -->
-			</h:panelGroup>
-			
 		</ui:define>
+
 							
 		<ui:define name="mainContent">
-			<ui:include src="containerPages/Containers.jspf" />
+			<!--  <ui:include src="/picturesPages/ui/ActiveAlbumMenu.jspf"/>-->
+				<h:panelGroup rendered="#{FacesContainerListBean.list.view == 'TABLE'}">
+					<ui:include src="/containerPages/ui/ContainersTableView.jspf" />
+				</h:panelGroup>
+			
 			<script type="text/javascript">
 					function searchOnEnter(event)
 					{
@@ -128,6 +120,7 @@
 					
 			</script>	
 		</ui:define>
+
 		
 		
 		</ui:composition>

@@ -36,20 +36,26 @@
 </ui:remove>
 
 <body>
+
 	<ui:composition template="templates/template_picture_list.xhtml">	
-			
-	
+		<ui:define name="headline">
+			<h1>
+				<h:outputText value="#{msg.browse_headline}" rendered="#{SessionBean.currentUrl == 'home'}" />
+			</h1>
+		</ui:define>
+		
+		<ui:define name="breadcrumb">
+			<ui:include src="headerPages/Breadcrumb.jspf"/>
+		</ui:define>	
+		
 		<ui:define name="mainContent">
-			<h:panelGroup styleClass="full_area0" rendered="#{HomePage.totalNumberOfItems == '0'}">
-				<h:outputText id="txtEmptySearch" styleClass="free_area0 small_marginLExcl" value="#{msg.message_search_results_empty}" rendered="#{SessionBean.currentUrl != 'viewAlbum'}"></h:outputText>
-			</h:panelGroup>
 
 			<ui:include src="picturesPages/ui/PaginationTop.jspf"/>		
 	
-			<h:panelGroup layout="block" styleClass="full_area0 tiledList" rendered="#{(AlbumSession.current.version.objectId == null) and !(SessionBean.currentUrl == 'viewAlbum') }">
-				<ui:include src="picturesPages/Browse.jspf" />
+			<h:panelGroup layout="block" styleClass="full_area0 tiledList" rendered="#{(CollectionSession.current != null) and (CollectionSession.current.version.objectId != null)}">
+				<ui:include src="picturesPages/Collection.xhtml" />
 			</h:panelGroup>
-			
+
 			<ui:include src="picturesPages/ui/PaginationBottom.jspf"/>
 							
 							
@@ -90,8 +96,7 @@
 				</script>	
 		
 		</ui:define>
-</ui:composition>
+		
+	</ui:composition>
 </body>
 </html>
-		
-				

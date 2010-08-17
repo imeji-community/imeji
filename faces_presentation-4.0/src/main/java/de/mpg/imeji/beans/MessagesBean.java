@@ -28,7 +28,7 @@
 * All rights reserved. Use is subject to license terms.
 */ 
 
-package de.mpg.imeji.util;
+package de.mpg.imeji.beans;
 
 import java.util.Iterator;
 

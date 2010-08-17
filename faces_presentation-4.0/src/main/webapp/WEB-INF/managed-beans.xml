@@ -187,7 +187,7 @@
 	<!-- New Imeji Beans -->
 	<managed-bean>
 		<managed-bean-name>MessagesBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.util.MessagesBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.beans.MessagesBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 

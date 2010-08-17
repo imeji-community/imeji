@@ -1,6 +1,6 @@
 package de.mpg.imeji.vo;
 
-import de.mpg.escidoc.faces.metastore.vo.CollectionImeji;
+import de.mpg.jena.vo.CollectionImeji;
 
 public class CollectionVO extends CollectionImeji
 {

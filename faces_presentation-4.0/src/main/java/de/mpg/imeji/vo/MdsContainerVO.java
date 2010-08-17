@@ -1,10 +1,8 @@
 package de.mpg.imeji.vo;
 
-import java.util.List;
-
-import de.mpg.escidoc.faces.metastore.vo.ContainerMetadata;
-import de.mpg.escidoc.faces.metastore.vo.Organization;
-import de.mpg.escidoc.faces.metastore.vo.Person;
+import de.mpg.jena.vo.ContainerMetadata;
+import de.mpg.jena.vo.Organization;
+import de.mpg.jena.vo.Person;
 
 public class MdsContainerVO extends ContainerMetadata
 {

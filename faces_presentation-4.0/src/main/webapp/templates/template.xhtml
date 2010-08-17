@@ -119,15 +119,20 @@
 									
 									<ui:insert name="additionalSubheaders">&#160;</ui:insert>
 									
-									<h:panelGroup layout="block" styleClass="subHeader" rendered="#{(SessionBean.urlQuery != 'error' || SessionBean.pageNotFound) and ((SessionBean.message != null) || (SessionBean.information != null))}">
-										<h:outputText id="txtErrorMsg" styleClass="singleMessage messageError" value="#{SessionBean.message}" rendered="#{(SessionBean.message != null) and (SessionBean.information == null)}" />
-										<h:outputText value="#{SessionBean.displayed}" />
-			
-										<h:outputText id="txtStatusMsg" styleClass="singleMessage messageStatus" value="#{SessionBean.information}" rendered="#{(SessionBean.message == null) and (SessionBean.information != null)}" />
-										<h:outputText value="#{SessionBean.displayed}" />
-			
-										<h:outputText value="#{SessionBean.initializationMessage}" rendered="#{(SessionBean.message != null or SessionBean.information != null ) and SessionBean.messageDisplayed}" />
-									</h:panelGroup>
+									<div class="subHeader">
+										<!-- Subheadline starts here -->
+										<h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
+										<h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
+											<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2>
+											<h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{MessagesBean.hasMessages and !MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
+											<h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2>
+											<h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
+										</h:panelGroup>
+										<h:outputText value="&#160;" rendered="#{!MessagesBean.hasErrorMessages}" />
+										<!-- Subheadline ends here -->
+									</div>
 									
 								</div>
 							</div>

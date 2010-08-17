@@ -5,29 +5,20 @@ import de.mpg.jena.vo.CollectionImeji;
 public class CollectionVO extends CollectionImeji
 {
     private MdProfileVO profile = null;
+    private boolean selected = false;
     
     public CollectionVO()
     {
 	profile = new MdProfileVO();
     }
-    
-    public CollectionVO(CollectionImeji ci)
-    {
-	this.setId(ci.getId());
-	this.setImages(ci.getImages());
-	this.setMetadata(ci.getMetadata());
-	this.setMetadataDSP(ci.getMetadataDSP());
-	this.setMetadataSchema(ci.getMetadataSchema());
-	this.setProperties(ci.getProperties());
-    }
-    
+
     public String getIdAsString()
     {
 	return this.getId().getPath();
     }
 
     /**
-     * @return the size
+     * Return the number of images
      */
     public int getSize()
     {
@@ -49,5 +40,22 @@ public class CollectionVO extends CollectionImeji
     {
         this.profile = profile;
     }
-        
+
+    /**
+     * @return the selected
+     */
+    public boolean isSelected()
+    {
+        return selected;
+    }
+
+    /**
+     * @param selected the selected to set
+     */
+    public void setSelected(boolean selected)
+    {
+        this.selected = selected;
+    }
+       
+    
 }

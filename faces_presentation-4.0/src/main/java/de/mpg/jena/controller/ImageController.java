@@ -160,7 +160,7 @@ public class ImageController extends ImejiController{
 			Organization org = new Organization();
 			org.setName("Test Org Unit");
 			coll.getMetadata().getPersons().add(person);
-			person.setOrganizations(org);
+			person.getOrganizations().add(org);
 			
 			System.out.println("Create collection");
 			icc.create(coll);

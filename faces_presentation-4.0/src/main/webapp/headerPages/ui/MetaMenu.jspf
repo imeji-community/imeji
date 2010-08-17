@@ -72,7 +72,7 @@
 	<!-- LogIn, LogOut -->
 	<h:panelGroup rendered="#{SessionBean.user == null}">
 		<h:inputText value="#{LoginBean.login}"/>
-		<h:inputText value="#{LoginBean.passwd}"/>
+		<h:inputSecret value="#{LoginBean.passwd}"/>
 		<h:commandButton id="lnkLogin" value="#{lbl.login}" action ="#{LoginBean.login}" styleClass="small_area0_p8 endline"/>
 	</h:panelGroup>
 	

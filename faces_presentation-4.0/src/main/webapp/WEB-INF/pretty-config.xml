@@ -1,0 +1,19 @@
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.0.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.0.2
+                                   		http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.0.2.xsd">
+
+	<!-- Begin RewriteRules -->
+	<!-- 
+	<rewrite trailingSlash="append" toCase="lowercase" />
+	<rewrite match="^/old-url/(\w+)/$" substitute="/new_url/$1/"
+		redirect="301" />
+	-->
+	<!-- Begin UrlMappings -->
+
+	<url-mapping id="home">
+		<pattern value="/" />
+		<view-id>/jsf/Welcome.xhtml</view-id>
+	</url-mapping>
+
+</pretty-config>

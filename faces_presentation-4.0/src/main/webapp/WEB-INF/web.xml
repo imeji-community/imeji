@@ -133,6 +133,20 @@
 		<servlet-class>org.apache.myfaces.trinidad.webapp.ResourceServlet</servlet-class>
 	</servlet>
 	
+	<filter>
+	   <filter-name>Pretty Filter</filter-name>
+	   <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>
+	</filter>
+	
+	<filter-mapping> 
+	   <filter-name>Pretty Filter</filter-name> 
+	   <url-pattern>/*</url-pattern> 
+	   <dispatcher>FORWARD</dispatcher> 
+	   <dispatcher>REQUEST</dispatcher> 
+	   <dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+	
+	
 <!-- This filter is always required;  one of its functions is 
 		file upload. -->
 	<filter>
@@ -147,25 +161,9 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
-
-<!--  This filter is used to perform pretty URL's -->
-	<filter>
-	   <filter-name>UrlRewriteFilter</filter-name>
-	   <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
-	   <init-param>
-		   <param-name>logLevel</param-name>
-		   <param-value>info</param-value>
-	   </init-param>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>UrlRewriteFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-		<dispatcher>FORWARD</dispatcher>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>ERROR</dispatcher>
-	</filter-mapping>
-
+	
+	
+	
 	
 
 

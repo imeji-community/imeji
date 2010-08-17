@@ -36,8 +36,6 @@
 <f:subview id="CollectionFormular">
 	<!-- First part of the page -->
 	
-	<h:messages styleClass="half_area2_p6 messageArea errorMessageArea"/>
-	
 	<h:panelGroup layout="block" styleClass="full_area0 fullItem">	
 	
 		<h:panelGroup styleClass="huge_area0">
@@ -181,8 +179,15 @@
 			
 			<div class="free_area0 itemBlockContent endline">
 				<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{empty CollectionBean.metadataBeanList}">
-					<tr:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.add_metadata}" action="#{CollectionBean.addMetadata}"/>
-					<h:outputText value="#{lbl.add_metadata}"></h:outputText>
+					<tr:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.create_profile}" action="#{CollectionBean.addMetadata}"/>
+					<h:outputText value="#{lbl.create_profile}"></h:outputText>
+				</h:panelGroup>
+				<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{empty CollectionBean.metadataBeanList}">
+					
+					<h:selectOneMenu value="#{CollectionBean.collectionMenuSelected}" valueChangeListener="#{CollectionBean.collectionsMenuListener}">
+						<f:selectItems value="#{CollectionBean.collectionsMenu}"/>
+					</h:selectOneMenu>
+					<tr:commandLink styleClass="" text="#{lbl.load_template}" shortDesc="#{lbl.load_template}" action="#{CollectionBean.loadTemplate}" immediate="true"/>
 				</h:panelGroup>
 
 					<tr:iterator id="profile" var="profile" value="#{CollectionBean.metadataBeanList}" varStatus="position">

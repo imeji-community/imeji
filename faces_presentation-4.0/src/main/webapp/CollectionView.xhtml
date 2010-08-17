@@ -1,10 +1,12 @@
-<div xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
 <ui:remove>
-<!--
+	<!--
+
  CDDL HEADER START
 
  The contents of this file are subject to the terms of the
@@ -33,9 +35,13 @@
 -->
 </ui:remove>
 
-<f:subview id="ViewCollection">
-	<!-- First part of the page -->
-	<div class="small_area0">&#160;</div>
+<body>
+<ui:composition template="templates/template_collection.xhtml">
+	
+	<ui:define name="mainContent">
+		<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
+		
+			<div class="small_area0">&#160;</div>
 	
 	<h:panelGroup layout="block" styleClass="free_area0">
 		<h:panelGroup layout="block" styleClass="free_area0">
@@ -77,13 +83,13 @@
 									<h:outputText value="#{lbl.family_name}" />
 								</h:panelGroup>
 								
-								<tr:outputText id="familyname" value="#{creators.familyName}" styleClass="double_area0"/>
+								<tr:outputText id="familyname" value="#{creators.person.familyName}" styleClass="double_area0"/>
 								
 								<h:panelGroup styleClass="double_area0">
 									<h:outputText value="#{lbl.first_name}" />
 								</h:panelGroup>
 								
-								<tr:outputText id="givenname" value="#{creators.givenName}" styleClass="double_area0"/>
+								<tr:outputText id="givenname" value="#{creators.person.givenName}" styleClass="double_area0"/>
 								
 							</h:panelGroup>
 
@@ -93,9 +99,9 @@
 							</h:panelGroup>
 							
 							<h:panelGroup layout="block" styleClass="full_area0">
-								<tr:iterator var="affiliation" value="#{creators.organizations}" varStatus="statusAffiliation">
+								<tr:iterator var="affiliations" value="#{creators.person.organizations}" varStatus="statusAffiliation">
 									<h:panelGroup styleClass="quad_area0">
-										<tr:outputText id="affiliation" value="#{affiliation.name}" styleClass="double_area0 endline"/>
+										<tr:outputText id="affiliation" value="#{affiliations.name.value}" styleClass="double_area0 endline"/>
 									</h:panelGroup>
 								</tr:iterator>
 							</h:panelGroup>
@@ -120,5 +126,16 @@
 			document.getElementById('Start:message_javascript').innerHTML  = message;
 		}
 	</script>
-</f:subview>
-</div>
+
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>
+
+
+</body>
+</html>
+
+
+
+
+

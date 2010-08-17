@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="template_collection.xhtml">
+		<!-- First part of the page -->
+			<h:panelGroup layout="block" styleClass="full_area0 fullItem">	
+				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{FormularBean.tab == 'COLLECTION'}">
+					<h3 class="xLarge_area0_p8 endline blockHeader">
+						<h:outputText value="Collection Information"/>
+					</h3>
+					<span class="seperator"></span>
+					
+					<div class="free_area0 itemBlockContent endline">
+		
+						<!-- Title -->
+						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+							<b class="xLarge_area0_p8 endline labelLine clear">
+								<h:outputText value="#{lbl.name}*"/>
+								<span class="noDisplay">: </span>
+							</b>
+							<span class="xHuge_area0 xTiny_marginLExcl endline">
+								<h:inputText id="inputTitleText" styleClass="quad_txtInput" value="#{FormularBean.collection.metadata.title}"/>
+							</span>
+						</h:panelGroup>
+						
+						<!-- Description -->
+						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+							<b class="xLarge_area0_p8 endline labelLine clear">
+								<h:outputText value="#{lbl.description}"/>
+								<span class="noDisplay">: </span>
+							</b>
+							<span class="xHuge_area0 xTiny_marginLExcl endline">
+								<h:inputText id="inputDescription" styleClass="quad_txtArea inputTxtArea" cols="15" rows="3" value="#{FormularBean.collection.metadata.description}"/>
+							</span>
+						</h:panelGroup>
+						
+						
+						<!-- Creator -->
+						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+							<tr:iterator var="creator" value="#{FormularBean.collection.metadata.persons}" varStatus="indexA">
+								<h:panelGroup>
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.author}*"/>
+										<span class="noDisplay">: </span>
+									</b>
+									
+									<!-- Family Name -->
+									<span class="xHuge_area0 xTiny_marginLExcl endline">
+										<h:outputLabel value="#{lbl.family_name}"/>
+										<h:inputText id="inputCreator" styleClass="quad_txtInput" value="#{creator.person.familyName}"/>
+									</span>
+									<br/>
+									
+									<!-- Given Name -->
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value=" Given Name " style="visibility:hidden;"/>
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline">
+										<h:outputLabel value="#{lbl.first_name}"/>
+										<h:inputText id="inputCreator" styleClass="quad_txtInput" value="#{creator.person.givenName}"/>
+									</span>
+									
+									<h:panelGroup styleClass="small_area0">
+										<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_author}" action="#{FormularBean.addAuthor}">
+											<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
+										</tr:commandButton>
+										<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_author}" action="#{FormularBean.removeAuthor}">
+											<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
+										</tr:commandButton>
+									</h:panelGroup>	
+									
+									<!-- Organizations -->
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value=" Organization " style="visibility:hidden;"/>
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline">
+										<h:outputText value="#{lbl.organization}*"/>
+									</span>
+									<tr:iterator var="organization" value="#{creator.person.organizations}" varStatus="indexO">
+										<h:panelGroup styleClass="endline">
+											<h:panelGroup>
+												<b class="xLarge_area0_p8 endline labelLine clear">
+													<h:outputText value=" Organization" style="visibility:hidden;"/>
+													<span class="noDisplay">: </span>
+												</b>
+												<span class="huge_area0 xTiny_marginLExcl endline">
+													<h:inputText id="inputCreator" styleClass="huge_txtInput" value="#{organization.name.value}"/>
+												</span>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="large_area0 sectionToolSection xLarge_marginRExcl">
+												<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_organization}" action="#{FormularBean.addCollection}">
+													<f:setPropertyActionListener value="#{indexA.index}" target="#{CollectionBean.authorPosition}"/>
+													<f:setPropertyActionListener value="#{indexO.index}" target="#{CollectionBean.organizationPosition}"/>
+												</tr:commandButton>
+												<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_organization}" action="#{FormularBean.removeCollection}">
+													<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
+													<f:setPropertyActionListener value="#{indexO.index}" target="#{FormularBean.organizationPosition}"/>
+												</tr:commandButton>
+											</h:panelGroup>
+										</h:panelGroup>
+									</tr:iterator>
+								</h:panelGroup>
+							</tr:iterator>
+						</h:panelGroup>
+					</div>
+				</h:panelGroup>
+				
+				
+				
+				<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{FormularBean.tab == 'PROFILE'}">
+					<h3 class="xLarge_area0_p8 endline blockHeader">
+						<h:outputText value="Metadata Profile"/>
+					</h3>
+					<span class="seperator"></span>
+					
+					<div class="free_area0 itemBlockContent endline">
+						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{empty FormularBean.mdProfileBean.statements}">
+							<tr:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.create_profile}" action="#{FormularBean.mdProfileBean.addStatement}"/>
+							<h:outputText value="#{lbl.create_profile}"></h:outputText>
+						</h:panelGroup>
+						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{empty CollectionBean.metadataBeanList}">
+							
+							<!--  <h:selectOneMenu value="#{FormularBean.collectionMenuSelected}" valueChangeListener="">
+								<f:selectItems value="#{FormularBean.collectionsMenu}"/>
+							</h:selectOneMenu>-->
+							<tr:commandLink styleClass="" text="#{lbl.load_template}" shortDesc="#{lbl.load_template}" action="#{FormularBean.loadTemplate}"/>
+						</h:panelGroup>
+		
+							<tr:iterator id="profile" var="profile" value="FormularBean.mdProfileBean.statements" varStatus="position">
+								<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="Elements" rendered="#{position.index == 0}"/>
+											<h:outputText value="&#160;" rendered="#{position.index != 0}"/>
+											<span class="noDisplay">: </span>
+										</b>
+								
+								<h:panelGroup class="full_area0 xLarge_marginLExcl endline">
+									
+									<h:panelGroup styleClass="huge_area0 tiny_marginLExcl">
+										<h:outputLabel styleClass="large_label" value="#{lbl.select_metadata}" />
+										<tr:selectOneChoice simple="true" styleClass="large_select" value="#{profile.label}" >
+												<f:selectItems value="#{CollectionSession.mdVocabulary}"/>
+										</tr:selectOneChoice>
+									</h:panelGroup>
+									
+									<h:panelGroup class="medium_area1 xmall_marginRIncl">
+										<h:outputLabel styleClass="large_label" value="#{lbl.multiple}"/>
+										<h:selectBooleanCheckbox valueChangeListener="#{profile.multipleListener}"/>
+									</h:panelGroup>	
+									
+									<h:panelGroup class="medium_area1 small_marginRIncl">
+										<h:outputLabel styleClass="large_label" value="#{lbl.required}" />
+										<h:selectBooleanCheckbox valueChangeListener="#{profile.requiredListener}"/>
+									</h:panelGroup>	
+									<br/><br/><br/>
+									
+									<h:panelGroup styleClass="xHuge_area0 xSmall_marginLExcl" rendered="#{profile.constraintsSize != 0}">
+										<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
+										<tr:iterator id="profile" var="constraint" value="#{profile.constraints}" varStatus="index">
+											<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
+												
+												<tr:inputText simple="true" styleClass="large_txtInput endline" value="#{constraint.value}" valueChangeListener="#{constraint.listener}" />
+												<h:panelGroup styleClass="large_area0 endline">
+													<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{profile.addConstraint}">
+														<f:setPropertyActionListener value="#{index.index}" target="#{profile.constraintPosition}"/>
+													</tr:commandButton>
+													<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}" action="#{profile.removeConstraint}">
+														<f:setPropertyActionListener value="#{index.index}" target="#{profile.constraintPosition}"/>
+													</tr:commandButton>
+												</h:panelGroup>
+											</h:panelGroup>
+										</tr:iterator>
+									</h:panelGroup>
+									
+									<h:panelGroup styleClass="xLarge_area0 xSmall_marginLExcl endline" rendered="#{profile.constraintsSize == 0}">
+										<tr:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_constraint}" action="#{profile.addConstraint}"/>
+										<h:outputLabel styleClass="" value="#{lbl.add_constraint}" />
+									</h:panelGroup>
+									
+									
+								</h:panelGroup>
+								<span class="large_area0_p8 lineToolSection">
+									<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" action="#{CollectionBean.addMetadata}">
+										<f:setPropertyActionListener value="#{position.index}" target="#{CollectionBean.profilePosition}"/>
+									</tr:commandButton>
+									<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{remove_metadata}" action="#{CollectionBean.removeMetadata}">
+										<f:setPropertyActionListener value="#{position.index}" target="#{CollectionBean.profilePosition}"/>
+									</tr:commandButton>
+								</span>
+							</h:panelGroup>
+							</tr:iterator>
+					</div>
+				</h:panelGroup>
+			
+			</h:panelGroup>
+			
+			<div class="full_area0 formButtonArea">
+				<h:outputLink value="#{SessionBean.backUrl}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" rendered="#{CollectionSession.tab == 'COLLECTION'}">
+			    	<h:outputText value="#{lbl.cancel}" />
+			    </h:outputLink>
+			    <h:commandButton action="#{CollectionBean.back}" value="#{lbl.back}" rendered="#{CollectionSession.tab == 'PROFILE'}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl"/>					
+			    <h:commandButton action="#{CollectionBean.next}" value="#{lbl.next}" rendered="#{CollectionSession.tab == 'COLLECTION'}" styleClass="free_area1_p8 activeButton"/>					
+				<h:commandButton action="#{CollectionBean.save}" value="#{lbl.save}" rendered="#{CollectionSession.tab == 'PROFILE'}" styleClass="free_area1_p8 activeButton"/>					
+			</div>
+			
+		
+			<script>
+				function message(message)
+				{
+					document.getElementById('Start:message_javascript').innerHTML  = message;
+				}
+			</script>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>
+</html>

@@ -160,16 +160,6 @@
 		<managed-bean-class>de.mpg.escidoc.faces.container.album.AlbumSession</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>CollectionSession</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.container.collection.CollectionSession</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-		<managed-bean>
-		<managed-bean-name>LoginBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.LoginBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
 
 	<!-- Application Beans -->
 	<managed-bean>
@@ -185,6 +175,35 @@
 	
 	
 	<!-- New Imeji Beans -->
+	
+	<!-- Collections Bean -->
+	<managed-bean>
+		<managed-bean-name>CollectionSession</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.collection.CollectionSessionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>CreateCollection</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.collection.CreateCollectionBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>EditCollection</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.collection.EditCollectionBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>ViewCollection</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.collection.ViewCollectionBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Other Beans -->
+	<managed-bean>
+		<managed-bean-name>LoginBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.beans.LoginBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>MessagesBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.beans.MessagesBean</managed-bean-class>

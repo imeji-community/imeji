@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="headline">
+		<h1><h:outputText value="#{lbl.createCollection}"
+			rendered="#{CollectionBean.pageType == 'CREATE'}" /> <h:outputText
+			value="#{lbl.editCollection}"
+			rendered="#{CollectionBean.pageType == 'EDIT'}" /></h1>
+	</ui:define>
+
+
+	<ui:define name="contentMenu">
+		<h:commandLink id="lnkOrganize" styleClass="free_area0"
+			value="ORGANIZE" rendered="false" />
+		<h:outputText styleClass="free_area0" value="ORGANIZE"
+			rendered="false" />
+		<h:outputText styleClass="seperator void" />
+	</ui:define>
+
+	<ui:define name="actionsMenu">
+
+		<h:panelGroup
+			rendered="#{false and (SessionBean.user != null) and (CollectionSession.current != 'viewCollection') and (CollectionSession.current.version.objectId != null)}">
+			<!-- ORGANIZE content menu lower line starts here -->
+			<h:outputLink id="lnkEditCollection" styleClass="free_area0"
+				value="#{Navigation.editCollectionUrl}/#{CollectionSession.current.latestVersion.objectId}"
+				rendered="#{CollectionSession.current.stateString == 'pending'}">
+				<h:outputText value="Edit  Collection"></h:outputText>
+			</h:outputLink>
+			<h:outputText styleClass="seperator"
+				rendered="#{CollectionSession.current.stateString == 'pending'}" />
+			<h:outputLink id="lnkPublishCollection" styleClass="free_area0"
+				value="#{Navigation.confirmationUrl}/publish/#{CollectionSession.current.latestVersion.objectId}"
+				rendered="#{(CollectionSession.current.stateString == 'pending') and (CollectionSession.current.size != '0')}">
+				<h:outputText value="Publish Collection"></h:outputText>
+			</h:outputLink>
+			<h:outputText styleClass="seperator"
+				rendered="#{(CollectionSession.current.stateString == 'pending') and (CollectionSession.current.size != '0')}" />
+			<h:outputLink id="lnkDeleteCollection" styleClass="free_area0"
+				value="#{Navigation.confirmationUrl}/delete/#{CollectionSession.current.latestVersion.objectId}"
+				rendered="#{CollectionSession.current.stateString == 'pending'}">
+				<h:outputText value="Delete Collection"></h:outputText>
+			</h:outputLink>
+			<h:outputText styleClass="seperator"
+				rendered="#{CollectionSession.current.stateString == 'pending'}" />
+			<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0"
+				value="#{Navigation.confirmationUrl}/withdraw/#{CollectionSession.current.latestVersion.objectId}"
+				rendered="#{(CollectionSession.current.stateString == 'released') and (CollectionSession.current.owner.objectId == SessionBean.user.reference.objectId)}">
+				<h:outputText value="Withdraw Collection"></h:outputText>
+			</h:outputLink>
+			<!-- ORGANIZE content menu lower line ends here -->
+		</h:panelGroup>
+	</ui:define>
+
+	<ui:define name="additionalSubheaders">
+		<h:panelGroup layout="block" styleClass="subHeader"
+			rendered="#{(SessionBean.user == null) and (SessionBean.currentUrl == 'home')}">
+			<h:outputText
+				value="#{HomePage.totalNumberOfItems} #{msg.browse_not_logged_in}" />
+		</h:panelGroup>
+	</ui:define>
+
+	<ui:define name="mainContent">
+		<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
+			<ui:include src="collectionPages/ui/CollectionFormular.jspf" />
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>
+</html>

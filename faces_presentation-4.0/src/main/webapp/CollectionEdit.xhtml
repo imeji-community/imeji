@@ -1,6 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<!--
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
+<ui:remove>
+	<!--
 
  CDDL HEADER START
 
@@ -28,26 +33,20 @@
  Gesellschaft zur Förderung der Wissenschaft e.V.
  All rights reserved. Use is subject to license terms.
 -->
+</ui:remove>
+
+<body>
+<ui:composition template="templates/collection_template_formular.xhtml">
+
+	<ui:param name="FormularBean" value="#{EditCollection}" />
+
+</ui:composition>
 
 
-<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets">
-		<f:loadBundle var="lbl" basename="labels"/>
-		<f:loadBundle var="msg" basename="messages"/>
-		<html xmlns="http://www.w3.org/1999/xhtml">
-			
-			<head>
-				<meta http-equiv="pragma" content="no-cache"/>
-				<meta http-equiv="cache-control" content="no-cache"/>
-				<meta http-equiv="expires" content="0"/>
-			</head>
-			<body>
-				<!-- DO NOT DELETE -->
-				<h:form id="formAlbumInterface">
-				<!-- Start initialization -->
-					<h:outputText value="#{AlbumInterfaceBean.init}" rendered="#{SessionBean.user != null}"></h:outputText>
-					<h:outputText value="Action not allowed!" rendered="#{SessionBean.user == null}"></h:outputText>
-				<!-- End initialization -->
-				</h:form>
-			</body>
-		</html>
-	</f:view>
+</body>
+</html>
+
+
+
+
+

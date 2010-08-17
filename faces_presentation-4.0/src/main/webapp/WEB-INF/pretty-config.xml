@@ -15,5 +15,25 @@
 		<pattern value="/" />
 		<view-id>/jsf/Welcome.xhtml</view-id>
 	</url-mapping>
+	
+	<url-mapping id="ViewCollection">
+		<pattern value="/collection/{ViewCollectionBean.id}"/>
+		<view-id>/jsf/CollectionFormular.xhtml</view-id>
+		<action onPostback="false">{ViewCollectionBean.init}</action>
+	</url-mapping>
+	
+	<url-mapping id="createCollection">
+		<pattern value="/collection/new"/>
+		<view-id>/jsf/CollectionFormular.xhtml</view-id>
+		<action onPostback="false">{EditCollectionBean.reset}</action>
+	</url-mapping>
+	
+	<url-mapping id="editCollection">
+		<pattern value="/collection/{EditCollectionBean.id}/edit"/>
+		<view-id>/jsf/CollectionFormular.xhtml</view-id>
+		<action onPostback="false">{EditCollectionBean.init}</action>
+	</url-mapping>
+	
+	
 
 </pretty-config>

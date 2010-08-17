@@ -3,39 +3,35 @@ package de.mpg.imeji.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument;
+import org.purl.escidoc.schemas.genericMetadata.metadata.x01.StatementType;
 
-import de.escidoc.schemas.contentmodel.x01.ContentModelDocument;
-import de.escidoc.schemas.contentmodel.x01.ContentModelDocument.ContentModel;
-import de.mpg.escidoc.faces.metadata.Metadata;
 
-public class MdProfileVO 
+public class MdProfileVO
 {
-    private String id = null;;
-    private List<Metadata> metadataList = null;
+    private List<StatementType> metadataList = null;
     private String name = null;
-    
+    private String description;
+
     public MdProfileVO()
     {
-	metadataList = new ArrayList<Metadata>();
+        metadataList = new ArrayList<StatementType>();
     }
-    
-    public MdProfileVO(String name, List<Metadata> list)
+
+    public MdProfileVO(String name, List<StatementType> list)
     {
-	this();
-	this.metadataList = list;
-	this.name = name;
+        this();
+        this.metadataList = list;
+        this.name = name;
     }
 
     public void init()
     {
-	
     }
-    
+
     /**
      * @return the metadataList
      */
-    public List<Metadata> getMetadataList()
+    public List<StatementType> getMetadataList()
     {
         return metadataList;
     }
@@ -43,7 +39,7 @@ public class MdProfileVO
     /**
      * @param metadataList the metadataList to set
      */
-    public void setMetadataList(List<Metadata> metadataList)
+    public void setMetadataList(List<StatementType> metadataList)
     {
         this.metadataList = metadataList;
     }
@@ -64,15 +60,21 @@ public class MdProfileVO
         this.name = name;
     }
 
-    public void setId(String id) 
+    /**
+     * @return the description
+     */
+    public String getDescription()
     {
-	this.id = id;
+        return description;
     }
-    
-   public String getId() 
-   {
-   	return id;
-   }
 
-    
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+
 }

@@ -24,7 +24,7 @@
 	
 	
 	<url-mapping id="viewCollection">
-		<pattern value="/collection/{ViewCollectionBean.id}"/>
+		<pattern value="/collection/#{ViewCollectionBean.id}"/>
 		<view-id>/jsf/CollectionFormular.xhtml</view-id>
 		<action onPostback="false">{ViewCollectionBean.init}</action>
 	</url-mapping>
@@ -36,7 +36,7 @@
 	</url-mapping>
 	
 	<url-mapping id="editCollection">
-		<pattern value="/collection/{EditCollectionBean.id}/edit"/>
+		<pattern value="/collection/#{EditCollectionBean.id}/edit"/>
 		<view-id>/jsf/CollectionFormular.xhtml</view-id>
 		<action onPostback="false">{EditCollectionBean.init}</action>
 	</url-mapping>

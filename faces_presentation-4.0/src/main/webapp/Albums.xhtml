@@ -36,10 +36,11 @@
 
 </ui:remove>
 	<body>
-		<ui:composition template="templates/template_pagination_container.xhtml">
-			<ui:param name="Session" value="#{AlbumSession}"/>
-			<ui:param name="headline" value="#{msg.albums_headline}"/>
+		<ui:composition template="templates/template_paginator_containers.xhtml">
 			
+			<ui:param name="paginatorListSessionBean" value="#{AlbumsBean}" />
+			<ui:param name="headline" value="#{msg.albums_headline}"/>
+			<ui:remove>
 			<ui:define name="actionsMenu">	
 			
 				<h:panelGroup rendered="#{Session.selectedMenu == 'FILTER'}">
@@ -75,8 +76,9 @@
 					</h:commandLink>
 				<!-- ORGANIZE content menu lower line ends here -->
 				</h:panelGroup>
-				
+			
 			</ui:define>
+			</ui:remove>
 
 		</ui:composition>
 	</body>

@@ -1,5 +1,9 @@
 package de.mpg.imeji.vo.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import de.mpg.imeji.vo.AlbumVO;
 import de.mpg.imeji.vo.CollectionVO;
 import de.mpg.imeji.vo.ImageVO;
@@ -29,6 +33,30 @@ public class ImejiFactory
 	vo.setMetadataSchema(ci.getMetadataSchema());
 	vo.setProperties(ci.getProperties());
 	return vo;
+    }
+    
+    
+    
+    public static List<CollectionVO> newCollectionList(Collection<CollectionImeji> ci)
+    {
+    	List<CollectionVO> collList = new ArrayList<CollectionVO>();
+    	for(CollectionImeji coll : ci)
+    	{
+    		collList.add(newCollection(coll));
+    	}
+    	
+    	return collList;
+    }
+    
+    public static List<AlbumVO> newAlbumList(Collection<Album> ci)
+    {
+        List<AlbumVO> collList = new ArrayList<AlbumVO>();
+        for(Album a : ci)
+        {
+            collList.add(newAlbum(a));
+        }
+        
+        return collList;
     }
     
     public static ImageVO newImage(Image im)

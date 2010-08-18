@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+            /* 
+            CDDL HEADER START
+
+            The contents of this file are subject to the terms of the
+            Common Development and Distribution License, Version 1.0 only
+            (the "License"). You may not use this file except in compliance
+            with the License.
+
+            You can obtain a copy of the license at license/ESCIDOC.LICENSE
+            or http://www.escidoc.de/license.
+            See the License for the specific language governing permissions
+            and limitations under the License.
+
+            When distributing Covered Code, include this CDDL HEADER in each
+            file and include the License file at license/ESCIDOC.LICENSE.
+            If applicable, add the following below this CDDL HEADER, with the
+            fields enclosed by brackets "[]" replaced with your own identifying
+            information: Portions Copyright [yyyy] [name of copyright owner]
+
+            CDDL HEADER END
+
+
+            Copyright 2006-2010 Fachinformationszentrum Karlsruhe Gesellschaft
+			für wissenschaftlich-technische Information mbH and Max-Planck-
+            Gesellschaft zur Förderung der Wissenschaft e.V.
+            All rights reserved. Use is subject to license terms.
+             */
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
+<body>
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="mainContent">
+		<div class="full_area0 paginator">
+			<h:outputText value="#{paginatorListSessionBean.init}" style="visibility:hidden;"/>
+		 	<div class="large_area0 small_marginLIncl rangeSelector">
+		 		<h:selectOneMenu id="extSelectTop" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageTop}" onchange="$(this).parents('div').find('.hiddenElementsNumberChangedButton').click();">
+		 			<f:selectItem itemValue="10" itemLabel="10"></f:selectItem>
+		 			<f:selectItem itemValue="25" itemLabel="25"></f:selectItem>
+		 			<f:selectItem itemValue="50" itemLabel="50"></f:selectItem>
+		 			<f:selectItem itemValue="100" itemLabel="100"></f:selectItem>
+		 			<f:selectItem itemValue="250" itemLabel="250"></f:selectItem>
+		 		</h:selectOneMenu>
+				<h:commandButton id="btnChangeElementsPerPageTop" title="#{lbl.paginator_go}" styleClass="xTiny_txtBtn paginatorFallbackGoBtn hiddenElementsNumberChangedButton"  value=""  action="#{paginatorListSessionBean.changeElementsPerPageTop}"/>
+		 		<h:outputLabel id="lblItemList_ObjectsPerPage" for="extSelectTop" styleClass="free_label hitsLabel" value=" #{lbl.paginator_objectsPerPage}" />
+		 	</div>
+		
+		 	<div class="small_marginLExcl pageBrowser">
+		 		<label id="lblPage" class="noDisplay pageLabel">Page</label>
+		 		<h:commandButton id="btPartListSize" styleClass="min_imgBtn skipToFirst" value=" " title="#{lbl.paginator_results} 1 - #{paginatorListSessionBean.partListSize}" disabled="#{paginatorListSessionBean.currentPageNumber == 1}" action="#{paginatorListSessionBean.goToFirstPage}"/>
+		 		<h:commandButton id="btList_lkPrevious" styleClass="backward" value="#{lbl.paginator_previous}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 - paginatorListSessionBean.elementsPerPage} - #{paginatorListSessionBean.offset}" disabled="#{paginatorListSessionBean.currentPageNumber == 1}" action="#{paginatorListSessionBean.goToPreviousPage}"/>
+		 		<h:panelGroup styleClass="seperator" />
+		 		<tr:iterator id="paginator" var="paginatorPage" value="#{paginatorListSessionBean.paginatorPages}" first="#{paginatorListSessionBean.firstPaginatorPageNumber - 1}" rows="7">
+		 	
+		 			<h:commandButton id="btPageNumber1" styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{!(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}"/>
+		 			<h:commandButton id="btPageNumber2" styleClass="xSmall_txtBtn actual" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" disabled="true" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}"/>
+		 			<h:panelGroup styleClass="seperator" />
+		 		
+		 		</tr:iterator>
+		 		<h:commandButton id="btList_lkNext" styleClass="forward" value="#{lbl.paginator_next}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 + paginatorListSessionBean.elementsPerPage} -  #{paginatorListSessionBean.offset + 1 + 2*paginatorListSessionBean.elementsPerPage}" disabled="#{paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}" action="#{paginatorListSessionBean.goToNextPage}"/>
+		 		<h:commandButton id="btLinkForLastPage" styleClass="min_imgBtn skipToLast" value=" " title="#{lbl.paginator_results} #{((paginatorListSessionBean.paginatorPageSize-1) * paginatorListSessionBean.elementsPerPage + 1)} - #{paginatorListSessionBean.totalNumberOfElements}" disabled="#{paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}" action="#{paginatorListSessionBean.goToLastPage}"/>
+		 	</div>
+		
+		 	<div class="gotoBox">
+		 		<label class="free_label gotoLabel"><h:outputText id="lblList_lblGoToPage" value="#{lbl.paginator_goToPage}"/></label>
+		 		<h:inputText id="inpGoToPageTop" styleClass="tiny_txtInput" value="#{paginatorListSessionBean.goToPageTop}"/>
+		 		<h:outputLabel id="lblItemList_of" styleClass="free_label" value="#{lbl.paginator_of} " />
+		 		<h:outputLabel id="lblPaginatorPageSize" styleClass="free_label" value="#{paginatorListSessionBean.paginatorPageSize}" />
+		 		<h:commandButton id="btList_btGo" styleClass="xTiny_txtBtn paginatorFallbackGoBtn" value="#{lbl.paginator_go}" title="#{tip.List_btGo}" action="#{paginatorListSessionBean.goToPageTop}"/>
+		 	</div>
+		 </div>
+		 
+		 
+		 <ui:insert name="list"/>
+		 
+		 <div class="full_area0 paginator">
+
+ 
+ 	<div class="large_area0 small_marginLIncl rangeSelector">
+		<h:selectOneMenu id="extSelectBottom" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageBottom}" onchange="$(this).parents('div').find('.hiddenElementsNumberChangedButton').click();">
+ 			<f:selectItem itemValue="10" itemLabel="10"></f:selectItem>
+ 			<f:selectItem itemValue="25" itemLabel="25"></f:selectItem>
+ 			<f:selectItem itemValue="50" itemLabel="50"></f:selectItem>
+ 			<f:selectItem itemValue="100" itemLabel="100"></f:selectItem>
+ 			<f:selectItem itemValue="250" itemLabel="250"></f:selectItem>
+ 		</h:selectOneMenu>
+		<h:commandButton id="btnChangeElementsPerPageBottom" title="#{lbl.paginator_go}" styleClass="xTiny_txtBtn paginatorFallbackGoBtn hiddenElementsNumberChangedButton"  value="#{lbl.paginator_go}"  action="#{paginatorListSessionBean.changeElementsPerPageBottom}"/>
+ 		<h:outputLabel id="lblItemList_ObjectsPerPageBottom" for="extSelectBottom" styleClass="free_label hitsLabel" value=" #{lbl.paginator_objectsPerPage}" />
+ 	</div>
+
+ 	<div class="small_marginLExcl pageBrowser">
+ 		<label class="noDisplay pageLabel"><h:outputText value="#{lbl.List_lblPage}"/></label>
+ 		<h:commandButton id="btPartListSizeBottom" styleClass="min_imgBtn skipToFirst" value=" " title="#{lbl.paginator_results} 1 - #{paginatorListSessionBean.partListSize}" disabled="#{paginatorListSessionBean.currentPageNumber == 1}" action="#{paginatorListSessionBean.goToFirstPage}"/>
+ 		<h:commandButton id="btList_lkPreviousBottom" styleClass="backward" value="#{lbl.paginator_previous}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 -paginatorListSessionBean.elementsPerPage} - #{paginatorListSessionBean.offset}" disabled="#{paginatorListSessionBean.currentPageNumber == 1}" action="#{paginatorListSessionBean.goToPreviousPage}"/>
+ 		<h:panelGroup styleClass="seperator" />
+ 		<tr:iterator id="paginator2" var="paginatorPage" value="#{paginatorListSessionBean.paginatorPages}" first="#{paginatorListSessionBean.firstPaginatorPageNumber - 1}" rows="7">
+ 	
+ 			<h:commandButton id="btPageNumber1Bottom" styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{!(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}"/>
+ 			<h:commandButton id="btPageNumber2Bottom" styleClass="xSmall_txtBtn actual" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" disabled="true" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}"/>
+ 			<h:panelGroup styleClass="seperator" />
+ 		
+ 		</tr:iterator>
+ 		<h:commandButton id="btList_lkNextBottom" styleClass="forward" value="#{lbl.paginator_next}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 +paginatorListSessionBean.elementsPerPage} -  #{paginatorListSessionBean.offset + 1 + 2*paginatorListSessionBean.elementsPerPage}" disabled="#{paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}" action="#{paginatorListSessionBean.goToNextPage}"/>
+ 		<h:commandButton id="btLinkForLastPageBottom" styleClass="min_imgBtn skipToLast" value=" " title="#{lbl.paginator_results} #{((paginatorListSessionBean.paginatorPageSize-1) * paginatorListSessionBean.elementsPerPage + 1)} - #{paginatorListSessionBean.totalNumberOfElements}" disabled="#{paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}" action="#{paginatorListSessionBean.goToLastPage}"/>
+ 	</div>
+
+	<div class="gotoBox">
+ 		<label class="free_label gotoLabel"><h:outputText value="#{lbl.paginator_goToPage}"/></label>
+ 		<h:inputText id="inpGoToPageBottom" styleClass="tiny_txtInput" value="#{paginatorListSessionBean.goToPageBottom}"/>
+ 		<h:outputLabel id="lblItemList_ofBottom" styleClass="free_label" value="#{lbl.paginator_of} " />
+ 		<h:outputLabel id="lblpaginatorPageSizeBottom" styleClass="free_label" value="#{paginatorListSessionBean.paginatorPageSize}" />
+ 		<h:commandButton id="btnGoToPageBottom" styleClass="xTiny_txtBtn paginatorFallbackGoBtn" value="#{lbl.paginator_go}" title="#{lbl.List_btGo}" action="#{paginatorListSessionBean.goToPageBottom}"/>
+ 	</div>
+
+</div>
+	</ui:define>
+
+</ui:composition>
+
+</body>
+</html>

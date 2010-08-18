@@ -9,6 +9,7 @@ import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.User;
+import de.mpg.jena.vo.Properties.Status;
 
 
 public class CollectionController extends ImejiController{
@@ -31,6 +32,7 @@ public class CollectionController extends ImejiController{
 	{
 		
 		writeCreateProperties(ic.getProperties(), user);
+	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(new URI("http://imeji.mpdl.mpg.de/collection/" + getUniqueId()));
 		base.begin();
 		Bean2RDF writer = new Bean2RDF(base);
@@ -77,9 +79,9 @@ public class CollectionController extends ImejiController{
 	 * @param scList
 	 * @return
 	 */
-	public Collection<CollectionImeji> search(User user, List<SearchCriterion> scList)
+	public Collection<CollectionImeji> search(User user, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
 	{
-		String query = createQuery(scList, "http://imeji.mpdl.mpg.de/collection");
+		String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
 		return Sparql.exec(base, CollectionImeji.class, query);
 	}
 	

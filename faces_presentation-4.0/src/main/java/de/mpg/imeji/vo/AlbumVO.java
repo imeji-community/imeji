@@ -2,6 +2,7 @@ package de.mpg.imeji.vo;
 
 import de.mpg.jena.vo.Album;
 
+
 public class AlbumVO extends Album
 {
     private boolean selected = false;

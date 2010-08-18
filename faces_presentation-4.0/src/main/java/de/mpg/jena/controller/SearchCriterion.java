@@ -7,7 +7,7 @@ public class SearchCriterion {
 		AND,OR
 	}
 
-	enum ImejiNamespaces {
+	public enum ImejiNamespaces {
 		
 		PROPERTIES("http://imeji.mpdl.mpg.de/properties"),
 		
@@ -15,13 +15,14 @@ public class SearchCriterion {
 		PROPERTIES_MODIFIED_BY("http://imeji.mpdl.mpg.de/modifiedBy", PROPERTIES),
 		PROPERTIES_CREATION_DATE("http://imeji.mpdl.mpg.de/creationDate", PROPERTIES),
 		PROPERTIES_LAST_MODIFICATION_DATE("http://imeji.mpdl.mpg.de/lastModificationDate", PROPERTIES),
+		PROPERTIES_STATUS("http://imeji.mpdl.mpg.de/status", PROPERTIES),
 		
 		IMAGE_METADATA("http://imeji.mpdl.mpg.de/image/metadata"),
 		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/image/elementNamespace", IMAGE_METADATA),
 		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/image/name", IMAGE_METADATA),
 		IMAGE_METADATA_VALUE("http://imeji.mpdl.mpg.de/image/value", IMAGE_METADATA),
 		
-		
+
 		CONTAINER_METADATA("http://imeji.mpdl.mpg.de/container/metadata"),
 		CONTAINER_METADATA_TITLE("http://purl.org/dc/elements/1.1/title", CONTAINER_METADATA),
 		CONTAINER_METADATA_DESCRIPTION("http://purl.org/dc/elements/1.1/description", CONTAINER_METADATA),

@@ -140,6 +140,7 @@
 	
 	
 	<!-- Session Beans -->
+
 	<managed-bean>
 		<managed-bean-name>SessionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.escidoc.faces.beans.SessionBean</managed-bean-class>
@@ -198,6 +199,13 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
+	<!-- Album Beans -->
+	<managed-bean>
+		<managed-bean-name>AlbumsBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.album.AlbumsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
 	<!-- Other Beans -->
 	<managed-bean>
 		<managed-bean-name>LoginBean</managed-bean-name>
@@ -209,5 +217,17 @@
 		<managed-bean-class>de.mpg.imeji.beans.MessagesBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
-
+	<managed-bean>
+		<managed-bean-name>CollectionsBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.collection.CollectionsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- 
+	<managed-bean>
+		<managed-bean-name>SessionBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.beans.SessionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+-->
 </faces-config>

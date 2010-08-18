@@ -1,6 +1,7 @@
 package de.mpg.imeji.vo;
 
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Person;
 
 public class CollectionVO extends CollectionImeji
 {
@@ -56,6 +57,19 @@ public class CollectionVO extends CollectionImeji
     {
         this.selected = selected;
     }
+    
+    public String getPersonString()
+    {
+        String personString = "";
+       for(Person p:  getMetadata().getPersons())
+       {
+           personString+=p.getFamilyName() +", " +p.getGivenName();
+           
+       }
+       return personString;
+    }
+    
+    
        
     
 }

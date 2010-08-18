@@ -127,13 +127,14 @@ public class ImageController extends ImejiController{
 		
 	}
 	
-	
-	public static void main(String[] arg) throws Exception
+	/*
+	public static void main2(String[] arg) throws Exception
 	{
 		createUser();
 	}
+	*/
 	
-	public static void main2(String[] arg) throws Exception
+	public static void main(String[] arg) throws Exception
 	{
 		
 		User user = createUser();
@@ -145,7 +146,7 @@ public class ImageController extends ImejiController{
 
 	
 		
-		for(int j=0; j<1;j++)
+		for(int j=5; j<1;j++)
 		{
 			CollectionImeji coll = new CollectionImeji();
 
@@ -163,6 +164,8 @@ public class ImageController extends ImejiController{
 			coll.getMetadata().getPerson().add(person);
 			person.setOrganization(org);
 			
+			Thread.sleep(1000);
+			
 			System.out.println("Create collection");
 			icc.create(coll);
 			System.out.println("End create coll");
@@ -175,7 +178,7 @@ public class ImageController extends ImejiController{
 				im.getMetadata().add(new ImageMetadata("http://purl.org/dc/elements/1.1/","description", "Test description for image in collection " + j + ", image "  + i));
 				im.getMetadata().add(new ImageMetadata("http://purl.org/dc/elements/1.1/","title", "Test title " + i));
 				
-				im.setId(new URI("http://dev-coreservice.mpdl.mpg.de/ir/item/escidoc:"+UUID.randomUUID()));
+				im.setId(new URI("http://dev-coreservice.mpdl.mpg.de/ir/item/escidoc:" + UUID.randomUUID()));
 				im.setFullImageUrl(new URI("http://dev-coreservice.mpdl.mpg.de/ir/item/escidoc:12345/component/blaaa/content"));
 				
 				im.setVisibility(Visibility.PUBLIC);
@@ -193,6 +196,7 @@ public class ImageController extends ImejiController{
 				
 			}
 			
+			Thread.sleep(1000);
 			long startCreateImg = System.currentTimeMillis();
 			System.out.println("start creating "+ imgList.size() +"images");
 			iic.create(imgList, coll.getId());
@@ -278,7 +282,7 @@ public class ImageController extends ImejiController{
 		
 				
 				long start = System.currentTimeMillis();
-				System.out.println("start updating "+images.size() + " images");
+				System.out.println("start updating " + images.size() + " images");
 				iic.update(images);
 				long stop = System.currentTimeMillis();
 				System.out.println("end updating img in " + String.valueOf(stop-start));

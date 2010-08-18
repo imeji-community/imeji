@@ -10,6 +10,7 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.VocabularyHelper;
 import de.mpg.imeji.vo.CollectionVO;
 import de.mpg.imeji.vo.MetadataVO;
+import de.mpg.imeji.vo.StatementVO;
 import de.mpg.imeji.vo.list.CollectionListVO;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.vo.CollectionImeji;
@@ -23,7 +24,7 @@ public class CollectionSessionBean
     private String selectedMenu = "SORTING";
     private String filter = "all";
     private CollectionListVO collections = null;
-    private List<SelectItem> mdVocabulary = null;
+    private List<StatementVO> mdVocabulary = null;
 
     public CollectionSessionBean()
     {
@@ -40,11 +41,11 @@ public class CollectionSessionBean
 
     public void init() throws Exception
     {
-        List<MetadataVO> mList = VocabularyHelper.getEtermsVocabulary();
+        List<StatementVO> mList = VocabularyHelper.getEtermsVocabulary();
         mList.addAll(VocabularyHelper.getDcTermsVocabulary());
-        for (MetadataVO m : mList)
+        for (StatementVO st : mList)
         {
-            mdVocabulary.add(new SelectItem(m, m.getLabel()));
+            mdVocabulary.add(st);
         }
     }
 
@@ -119,7 +120,7 @@ public class CollectionSessionBean
     /**
      * @return the mdVocabulary
      */
-    public List<SelectItem> getMdVocabulary()
+    public List<StatementVO> getMdVocabulary()
     {
         return mdVocabulary;
     }
@@ -127,10 +128,10 @@ public class CollectionSessionBean
     /**
      * @param mdVocabulary the mdVocabulary to set
      */
-    public void setMdVocabulary(List<SelectItem> mdVocabulary)
+    public void setMdVocabulary(List<StatementVO> mdVocabulary)
     {
         this.mdVocabulary = mdVocabulary;
     }
-    
+
     
 }

@@ -1,34 +1,59 @@
 package de.mpg.imeji.mdProfile;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.purl.escidoc.schemas.genericMetadata.metadata.x01.StatementType;
+import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.collection.CollectionSessionBean;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.MdProfileVO;
+import de.mpg.imeji.vo.StatementVO;
 
 public class MdProfileBean
 {
     private MdProfileVO mdProfile = null;
-    private List<StatementType> statements = null;
+    private List<StatementBean> statements = null;
+    private List<SelectItem> vocabulary = null;
+    private int statementPosition = 0;
+    
+    private CollectionSessionBean collectionSession = null;
 
     public MdProfileBean()
     {
         mdProfile = new MdProfileVO();
+        statements = new ArrayList<StatementBean>();
+        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
     }
 
     public void init()
     {
-        
+        for (StatementVO st : collectionSession.getMdVocabulary())
+        {
+            vocabulary.add(new SelectItem(st, st.getLabel()));
+        }
     }
     
-    public void addStatement()
+    public String addStatement()
     {
-        
+        StatementVO st = new StatementVO();
+        st.setName("");
+        StatementBean stBean = new StatementBean(st);
+        if (getStatementPosition() == 0)
+        {
+            statements.add(stBean);
+        }
+        else
+        {
+            statements.add(getStatementPosition() + 1, stBean);
+        }
+        return "";
     }
     
-    public void removeStatement()
+    public String removeStatement()
     {
-        
+        statements.remove(getStatementPosition());
+        return "";
     }
 
     /**
@@ -50,7 +75,7 @@ public class MdProfileBean
     /**
      * @return the metadataBeans
      */
-    public List<StatementType> getStatements()
+    public List<StatementBean> getStatements()
     {
         return statements;
     }
@@ -58,8 +83,26 @@ public class MdProfileBean
     /**
      * @param metadataBeans the metadataBeans to set
      */
-    public void setStatements(List<StatementType> statements)
+    public void setStatements(List<StatementBean> statements)
     {
         this.statements = statements;
     }
+
+    /**
+     * @return the statementPosition
+     */
+    public int getStatementPosition()
+    {
+        return statementPosition;
+    }
+
+    /**
+     * @param statementPosition the statementPosition to set
+     */
+    public void setStatementPosition(int statementPosition)
+    {
+        this.statementPosition = statementPosition;
+    }
+
+    
 }

@@ -11,17 +11,18 @@ import org.apache.xmlbeans.impl.xb.xsdschema.Element;
 import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument;
 
 import de.mpg.imeji.vo.MetadataVO;
+import de.mpg.imeji.vo.StatementVO;
 
 
 public class VocabularyHelper
 {
-    public static List<MetadataVO> getEtermsVocabulary()
+    public static List<StatementVO> getEtermsVocabulary()
     {
         SchemaDocument eTermsSchema = readSchema("http://metadata.mpdl.mpg.de/escidoc/metadata/schemas/0.1/escidoctypes.xsd");
         return parseVocabulary(eTermsSchema, "eTerms");
     }
 
-    public static List<MetadataVO> getDcTermsVocabulary()
+    public static List<StatementVO> getDcTermsVocabulary()
     {
         SchemaDocument eTermsSchema = readSchema("http://metadata.mpdl.mpg.de/escidoc/metadata/schemas/0.1/dcterms.xsd");
         return parseVocabulary(eTermsSchema, "dcTerms");
@@ -64,9 +65,9 @@ public class VocabularyHelper
      * @param schema
      * @return
      */
-    public static List<MetadataVO> parseVocabulary(SchemaDocument schema, String vocabularyName)
+    public static List<StatementVO> parseVocabulary(SchemaDocument schema, String vocabularyName)
     {
-        List<MetadataVO> list = new ArrayList<MetadataVO>();
+        List<StatementVO> list = new ArrayList<StatementVO>();
         List<String> complexTypes = new ArrayList<String>();
         for (ComplexType ct : schema.getSchema().getComplexTypeArray())
         {
@@ -85,9 +86,11 @@ public class VocabularyHelper
                 {
                     namespace = el.getSubstitutionGroup().getNamespaceURI();
                 }
-                MetadataVO md = new MetadataVO(el.getName(), namespace);
-                md.setLabel(vocabularyName + ":" + el.getName());
-                list.add(md);
+                StatementVO stVO = new StatementVO();
+                stVO.setName(el.getName());
+                stVO.setNamespace(namespace);
+                stVO.setLabel(vocabularyName + ":" + el.getName());
+                list.add(stVO);
             }
         }
         return list;

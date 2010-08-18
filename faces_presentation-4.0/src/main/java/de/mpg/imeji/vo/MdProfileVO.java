@@ -8,19 +8,19 @@ import org.purl.escidoc.schemas.genericMetadata.metadata.x01.StatementType;
 
 public class MdProfileVO
 {
-    private List<StatementType> metadataList = null;
+    private List<StatementVO> statements = null;
     private String name = null;
     private String description;
 
     public MdProfileVO()
     {
-        metadataList = new ArrayList<StatementType>();
+        statements = new ArrayList<StatementVO>();
     }
 
-    public MdProfileVO(String name, List<StatementType> list)
+    public MdProfileVO(String name, List<StatementVO> list)
     {
         this();
-        this.metadataList = list;
+        this.statements = list;
         this.name = name;
     }
 
@@ -31,17 +31,17 @@ public class MdProfileVO
     /**
      * @return the metadataList
      */
-    public List<StatementType> getMetadataList()
+    public List<StatementVO> getStatements()
     {
-        return metadataList;
+        return statements;
     }
 
     /**
      * @param metadataList the metadataList to set
      */
-    public void setMetadataList(List<StatementType> metadataList)
+    public void setStatements(List<StatementVO> statements)
     {
-        this.metadataList = metadataList;
+        this.statements = statements;
     }
 
     /**

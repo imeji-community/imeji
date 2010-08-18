@@ -15,7 +15,7 @@ public class ViewCollectionBean extends CollectionBean
     public void init()
     {
         collectionController = new CollectionController(sessionBean.getUser());
-        collectionController.search(sessionBean.getUser(), null);
+        //collectionController.search(sessionBean.getUser(), null);
         tab = TabType.HOME;
     }
 

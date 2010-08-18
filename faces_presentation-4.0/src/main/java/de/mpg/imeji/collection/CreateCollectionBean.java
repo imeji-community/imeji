@@ -12,7 +12,7 @@ public class CreateCollectionBean extends CollectionBean
     
     public void init()
     {
-        
+        this.tab = TabType.COLLECTION;
     }
     
     public void save() throws Exception

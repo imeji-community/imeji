@@ -48,4 +48,10 @@ public class ViewCollectionBean extends CollectionBean
                 break;
         }
     }
+
+    @Override
+    protected String getNavigationString()
+    {
+        return "pretty:viewCollection";
+    }
 }

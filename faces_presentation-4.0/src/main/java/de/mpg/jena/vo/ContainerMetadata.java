@@ -20,7 +20,7 @@ public class ContainerMetadata {
 	private String description;
 	
 	
-	private Collection<Person> persons = new LinkedList<Person>();
+	protected Collection<Person> persons = new LinkedList<Person>();
 
 
 	@RdfProperty("http://purl.org/dc/elements/1.1/title")

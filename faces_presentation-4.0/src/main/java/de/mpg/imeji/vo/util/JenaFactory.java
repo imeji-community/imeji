@@ -10,10 +10,13 @@ import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.Des
 
 import thewebsemantic.custom_datatypes.XmlLiteral;
 import de.mpg.imeji.vo.MdProfileVO;
+import de.mpg.imeji.vo.MdsContainerVO;
+import de.mpg.imeji.vo.PersonVO;
 import de.mpg.imeji.vo.StatementVO;
+import de.mpg.jena.vo.ContainerMetadata;
 
 public class JenaFactory
-{
+{    
     public static XmlLiteral newMdProfile(MdProfileVO vo)
     {
         DescriptionSetTemplateDocument dspDoc = DescriptionSetTemplateDocument.Factory.newInstance();

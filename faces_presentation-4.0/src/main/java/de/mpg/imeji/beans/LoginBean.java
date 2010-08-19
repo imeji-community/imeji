@@ -21,7 +21,7 @@ public class LoginBean
 
     public LoginBean()
     {
-        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+       // this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
     public void setLogin(String login)

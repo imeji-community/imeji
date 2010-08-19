@@ -1,5 +1,9 @@
 package de.mpg.imeji.vo;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Person;
 
@@ -7,15 +11,32 @@ public class CollectionVO extends CollectionImeji
 {
     private MdProfileVO profile = null;
     private boolean selected = false;
-    
+
     public CollectionVO()
     {
-	profile = new MdProfileVO();
+        profile = new MdProfileVO();
     }
 
+    public void addPerson(int pos , Person pers)
+    {
+        LinkedList<Person> persons = (LinkedList) getMetadata().getPersons();
+        persons.add(pos,pers);
+    }
+    
+    public void removePerson(int pos)
+    {
+        LinkedList<Person> persons = (LinkedList) getMetadata().getPersons();
+        persons.remove(pos);
+    }
+    
+    public Person getPerson(int pos)
+    {
+        LinkedList<Person> persons = (LinkedList) getMetadata().getPersons();
+        return persons.get(pos);
+    }
     public String getIdAsString()
     {
-	return this.getId().getPath();
+        return this.getId().getPath();
     }
 
     /**
@@ -23,7 +44,7 @@ public class CollectionVO extends CollectionImeji
      */
     public int getSize()
     {
-        return  this.getImages().size();
+        return this.getImages().size();
     }
 
     /**
@@ -57,19 +78,14 @@ public class CollectionVO extends CollectionImeji
     {
         this.selected = selected;
     }
-    
+
     public String getPersonString()
     {
         String personString = "";
-       for(Person p:  getMetadata().getPersons())
-       {
-           personString+=p.getFamilyName() +", " +p.getGivenName();
-           
-       }
-       return personString;
+        for (Person p : getMetadata().getPersons())
+        {
+            personString += p.getFamilyName() + ", " + p.getGivenName();
+        }
+        return personString;
     }
-    
-    
-       
-    
 }

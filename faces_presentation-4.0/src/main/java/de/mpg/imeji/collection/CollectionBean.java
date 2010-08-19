@@ -1,14 +1,17 @@
 package de.mpg.imeji.collection;
 
+import java.util.LinkedList;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.mdProfile.MdProfileBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.CollectionVO;
+import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 
-public class CollectionBean
+public abstract class CollectionBean
 {
     public enum TabType
     {
@@ -18,16 +21,20 @@ public class CollectionBean
     protected TabType tab = TabType.HOME;
     protected SessionBean sessionBean = null;
     protected CollectionVO collection = null;
+    protected CollectionSessionBean collectionSession = null;
     protected String id = null;
     protected MdProfileBean mdProfileBean = null;
     protected CollectionController collectionController = null;
+    private int authorPosition;
+    private int organizationPosition;
 
     public CollectionBean()
     {
         collection = new CollectionVO();
         mdProfileBean = new MdProfileBean();
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        collectionController = new CollectionController(sessionBean.getUser());
+        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
+        // sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        // collectionController = new CollectionController(sessionBean.getUser());
     }
 
     public boolean valid()
@@ -70,6 +77,67 @@ public class CollectionBean
             valid = false;
         }
         return valid;
+    }
+
+    public String addAuthor()
+    {
+        System.out.println("ADD AUTHOR");
+        collection.addPerson(authorPosition + 1, ImejiFactory.newPersonVO());
+        return getNavigationString();
+    }
+
+    public String removeAuthor()
+    {
+        if (authorPosition > 0)
+        {
+            collection.removePerson(authorPosition);
+        }
+        return getNavigationString();
+    }
+
+    public String addOrganization()
+    {
+        ((LinkedList)collection.getPerson(authorPosition).getOrganizations()).add(organizationPosition + 1,
+                ImejiFactory.newPersonVO().getOrganizations().get(0));
+        return getNavigationString();
+    }
+
+    public String removeOrganization()
+    {
+        if (organizationPosition > 0)
+        {
+            ((LinkedList)collection.getPerson(authorPosition).getOrganizations()).remove(organizationPosition);
+        }
+        return getNavigationString();
+    }
+
+    protected abstract String getNavigationString();
+
+
+    public int getAuthorPosition()
+    {
+        return authorPosition;
+    }
+
+    public void setAuthorPosition(int pos)
+    {
+        this.authorPosition = pos;
+    }
+
+    /**
+     * @return the collectionPosition
+     */
+    public int getOrganizationPosition()
+    {
+        return organizationPosition;
+    }
+
+    /**
+     * @param collectionPosition the collectionPosition to set
+     */
+    public void setOrganizationPosition(int organizationPosition)
+    {
+        this.organizationPosition = organizationPosition;
     }
 
     /**

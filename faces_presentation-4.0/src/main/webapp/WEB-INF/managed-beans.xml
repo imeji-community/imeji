@@ -123,11 +123,6 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>CollectionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.container.beans.CollectionBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>FacesContainerListBean</managed-bean-name>
 		<managed-bean-class>de.mpg.escidoc.faces.container.beans.FacesContainerListBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
@@ -184,24 +179,19 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>CreateCollection</managed-bean-name>
+		<managed-bean-name>CreateCollectionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.collection.CreateCollectionBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>EditCollection</managed-bean-name>
+		<managed-bean-name>EditCollectionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.collection.EditCollectionBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>ViewCollection</managed-bean-name>
+		<managed-bean-name>ViewCollectionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.collection.ViewCollectionBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>CollectionsBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.collection.CollectionsBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<!-- Images Beans -->

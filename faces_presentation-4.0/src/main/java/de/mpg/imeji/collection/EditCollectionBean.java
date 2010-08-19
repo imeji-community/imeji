@@ -55,4 +55,10 @@ public class EditCollectionBean extends CollectionBean
                 break;
         }
     }
+
+    @Override
+    protected String getNavigationString()
+    {
+        return "pretty:editCollection";
+    }
 }

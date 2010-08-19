@@ -36,19 +36,9 @@
 </ui:remove>
 
 <body>
-<ui:composition template="templates/collection_template.xhtml">
-
-	<ui:define name="mainContent">
-		<h:panelGroup layout="block" styleClass="full_area0">
-			<ui:insert name="collectionPages/ui/CollectionFormular.xhtml">
-				<ui:param name="FormularBean" value="#{CreateCollection}"/>
-			</ui:insert>
-		</h:panelGroup>
-	</ui:define>
-
+<ui:composition template="templates/template_collection_formular.xhtml">
+	<ui:param name="FormularBean" value="#{CreateCollectionBean}" />
 </ui:composition>
-
-
 </body>
 </html>
 

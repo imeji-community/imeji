@@ -29,7 +29,7 @@ public class Person {
 	
 	private URI role;
 	
-	private Collection<Organization> organizations = new LinkedList<Organization>();
+	protected Collection<Organization> organizations = new LinkedList<Organization>();
 
 	
 	@RdfProperty("http://purl.org/escidoc/metadata/terms/0.1/family-name")

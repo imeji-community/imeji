@@ -1,19 +1,12 @@
 package de.mpg.imeji.collection;
 
-import java.util.Collection;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
-
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.VocabularyHelper;
 import de.mpg.imeji.vo.CollectionVO;
-import de.mpg.imeji.vo.MetadataVO;
 import de.mpg.imeji.vo.StatementVO;
 import de.mpg.imeji.vo.list.CollectionListVO;
-import de.mpg.jena.controller.CollectionController;
-import de.mpg.jena.vo.CollectionImeji;
 
 public class CollectionSessionBean
 {
@@ -28,7 +21,7 @@ public class CollectionSessionBean
 
     public CollectionSessionBean()
     {
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        //sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         try
         {
             init();
@@ -42,11 +35,11 @@ public class CollectionSessionBean
     public void init() throws Exception
     {
         List<StatementVO> mList = VocabularyHelper.getEtermsVocabulary();
-        mList.addAll(VocabularyHelper.getDcTermsVocabulary());
-        for (StatementVO st : mList)
-        {
-            mdVocabulary.add(st);
-        }
+//        mList.addAll(VocabularyHelper.getDcTermsVocabulary());
+//        for (StatementVO st : mList)
+//        {
+//            mdVocabulary.add(st);
+//        }
     }
 
     public CollectionListVO getCollectionList()

@@ -44,14 +44,13 @@
 	</url-mapping>
 	
 	<url-mapping id="createCollection">
-		<pattern value="/collection/create/new"/>
-		<view-id>/jsf/CollectionFormular.xhtml</view-id>
-		<action onPostback="false">#{EditCollectionBean.reset}</action>
+		<pattern value="/collection"/>
+		<view-id>/jsf/CollectionCreate.xhtml</view-id>
 	</url-mapping>
 	
 	<url-mapping id="editCollection">
 		<pattern value="/collection/#{EditCollectionBean.id}/edit"/>
-		<view-id>/jsf/CollectionFormular.xhtml</view-id>
+		<view-id>/jsf/CollectionEdit.xhtml</view-id>
 		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>
 

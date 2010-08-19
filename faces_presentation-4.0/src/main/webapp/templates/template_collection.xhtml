@@ -7,10 +7,10 @@
 <ui:composition template="template.xhtml">
 
 	<ui:define name="headline">
-		<h1><h:outputText value="#{lbl.createCollection}"
-			rendered="#{CollectionBean.pageType == 'CREATE'}" /> <h:outputText
-			value="#{lbl.editCollection}"
-			rendered="#{CollectionBean.pageType == 'EDIT'}" /></h1>
+		<h1>
+			<h:outputText value="#{lbl.createCollection}" rendered="true" /> 
+			<h:outputText value="#{lbl.editCollection}"	rendered="false" />
+		</h1>
 	</ui:define>
 
 
@@ -62,12 +62,6 @@
 			rendered="#{(SessionBean.user == null) and (SessionBean.currentUrl == 'home')}">
 			<h:outputText
 				value="#{HomePage.totalNumberOfItems} #{msg.browse_not_logged_in}" />
-		</h:panelGroup>
-	</ui:define>
-
-	<ui:define name="mainContent">
-		<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
-			<ui:include src="collectionPages/ui/CollectionFormular.jspf" />
 		</h:panelGroup>
 	</ui:define>
 

@@ -1,5 +1,6 @@
 package de.mpg.imeji.vo.util;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,14 +11,20 @@ import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.Des
 import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.DescriptionSetTemplate.DescriptionTemplate.StatementTemplate;
 import org.dublincore.xml.dcDsp.x2008.x01.x14.LiteralConstraintType.LiteralOption;
 
+import de.mpg.escidoc.services.common.valueobjects.metadata.OrganizationVO;
+import de.mpg.escidoc.services.common.valueobjects.metadata.TextVO;
 import de.mpg.imeji.vo.AlbumVO;
 import de.mpg.imeji.vo.CollectionVO;
 import de.mpg.imeji.vo.ImageVO;
 import de.mpg.imeji.vo.MdProfileVO;
+import de.mpg.imeji.vo.MdsContainerVO;
+import de.mpg.imeji.vo.PersonVO;
 import de.mpg.imeji.vo.StatementVO;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.ContainerMetadata;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.Organization;
 
 public class ImejiFactory
 {
@@ -130,7 +137,29 @@ public class ImejiFactory
         }
         return vo;
     }
-
+    
+    public static MdsContainerVO newMdsContainerVO(ContainerMetadata cm)
+    {
+        MdsContainerVO vo = new MdsContainerVO();
+        vo.setDescription(cm.getDescription());
+        vo.setPersons(cm.getPersons());
+        vo.setTitle(cm.getTitle());
+        return vo;
+    }
+    
+    public static PersonVO newPersonVO()
+    {
+        PersonVO vo = new PersonVO();
+        vo.setFamilyName("");
+        vo.setAlternativeName("");
+        vo.setGivenName("");
+        vo.setIdentifier("");
+        vo.setRole(URI.create(""));
+        vo.getOrganizations().add(new Organization());
+        vo.getOrganizations().get(0).setName("");
+        return vo;
+    }
+    
     public static List<ImageVO> newImagesList(Collection<Image> images)
     {
        List<ImageVO> imgVOList = new ArrayList<ImageVO>();

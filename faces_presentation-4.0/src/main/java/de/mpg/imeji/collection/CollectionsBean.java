@@ -36,7 +36,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionVO>
     @Override
     public String getNavigationString()
     {
-        return "";
+        return "pretty:collections";
     }
 
     @Override

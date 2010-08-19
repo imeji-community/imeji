@@ -7,6 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import com.hp.hpl.jena.tdb.TDB;
+
+import thewebsemantic.Sparql;
+
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
@@ -76,6 +80,12 @@ public class ImageController extends ImejiController{
 		return rdf2Bean.load(Image.class, imgUri);
 	}
 	
+	public Collection<Image> search(User user, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+    {
+        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
+        return Sparql.exec(getModel(), Image.class, query);
+    }
+	
 	/*
 	public ImejiImage retrieve(Collection<URI> imgUris, ImejiUser user)
 	{
@@ -103,12 +113,6 @@ public class ImageController extends ImejiController{
 		
 	}
 	
-	public void search(User user, List<SearchCriterion> scList)
-	{
-		
-		
-		
-	}
 	
 	
 	
@@ -175,7 +179,9 @@ public class ImageController extends ImejiController{
 				im.getMetadata().add(new ImageMetadata("http://purl.org/dc/elements/1.1/","title", "Test title " + i));
 				
 				im.setId(new URI("http://dev-coreservice.mpdl.mpg.de/ir/item/escidoc:"+UUID.randomUUID()));
-				im.setFullImageUrl(new URI("http://dev-coreservice.mpdl.mpg.de/ir/item/escidoc:12345/component/blaaa/content"));
+				im.setFullImageUrl(new URI("http://colab.mpdl.mpg.de/mediawiki/skins/monobook/mpdl-logo.png"));
+				im.setThumbnailImageUrl(new URI("http://colab.mpdl.mpg.de/mediawiki/skins/monobook/mpdl-logo.png"));
+				im.setWebImageUrl(new URI("http://colab.mpdl.mpg.de/mediawiki/skins/monobook/mpdl-logo.png"));
 				
 				im.setVisibility(Visibility.PUBLIC);
 				im.setCollection(coll.getId());
@@ -283,7 +289,10 @@ public class ImageController extends ImejiController{
 				System.out.println("end updating img in " + String.valueOf(stop-start));
 		
 		
-				System.out.println(rdf2Bean.load(User.class, "haarlaender@mpdl.mpg.de").getName());		
+				base.close();
+                base.write(System.out);
+				System.out.println(rdf2Bean.load(User.class, "haarlaender@mpdl.mpg.de").getName());	
+				
 		/*
 		String q = "SELECT ?v00 WHERE { ?s a <http://imeji.mpdl.mpg.de/collection> . ?s <http://imeji.mpdl.mpg.de/container/metadata> ?v10 . ?v10 <http://purl.org/dc/elements/1.1/title> ?v00 }";
 		

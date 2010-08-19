@@ -18,11 +18,11 @@ import de.mpg.jena.vo.CollectionImeji;
 
 public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean<T>
 {
-    private CollectionController controller;
     private String selectedMenu;
     
     private String selectedSortCriterion;
     private String selectedSortOrder;
+
     
 
     
@@ -64,12 +64,12 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     
     public String selectAll()
     {
-        return null;
+        return getNavigationString();
     }
     
     public String selectNone()
     {
-        return null;
+        return getNavigationString();
     }
 
 

@@ -24,7 +24,16 @@
 	
 	<url-mapping id="collections">
 		<pattern value="/collections" />
+		<query-param name="elementsPerPage">#{CollectionsBean.elementsPerPage}</query-param>
+		<query-param name="page">#{CollectionsBean.currentPageNumber}</query-param>
+		<query-param name="sortBy">#{CollectionsBean.selectedSortCriterion}</query-param>
+		<query-param name="sortOrder">#{CollectionsBean.selectedSortOrder}</query-param>
 		<view-id>/jsf/Collections.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="images">
+		<pattern value="/images" />
+		<view-id>/jsf/Images.xhtml</view-id>
 	</url-mapping>
 	
 	

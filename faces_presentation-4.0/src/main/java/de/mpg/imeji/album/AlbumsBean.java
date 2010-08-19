@@ -37,7 +37,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumVO>
     @Override
     public String getNavigationString()
     {
-        return "";
+        return "pretty:albums";
     }
 
     @Override

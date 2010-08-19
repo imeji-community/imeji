@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad"
+	xmlns:pretty="http://ocpsoft.com/prettyfaces">
+<ui:remove>
+<!--
+
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License, Version 1.0 only
+ (the "License"). You may not use this file except in compliance
+ with the License.
+
+ You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ or http://www.escidoc.de/license.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at license/ESCIDOC.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+
+ Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+ für wissenschaftlich-technische Information mbH and Max-Planck-
+ Gesellschaft zur Förderung der Wissenschaft e.V.
+ All rights reserved. Use is subject to license terms.
+-->
+
+</ui:remove>
+	<body>
+		<ui:composition template="template_paginator.xhtml">		
+
+		
+			
+			<ui:define name="list">
+					<h:panelGroup layout="block" styleClass="full_area0 tiledList">
+					<ul class="free_area0 fullBrowse">
+					<!-- Images -->
+					<tr:iterator id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0">
+						<h:panelGroup>
+						<li class="large_area0 itemTile">
+							<h:panelGroup styleClass="large_area1_p2 tileIconArea free_area1 matrixItem">
+								<span> 
+								<!-- Image with link to the details view -->
+									<h:outputLink id="lnkPicDetailBrowse" value="">
+										<h:graphicImage id="picThumbResolutionBrowse" styleClass="vertical" value="#{item.thumbnailImageUrlAsString}" />
+									</h:outputLink>
+								<!-- End : Image with link to the details view -->									
+								</span>
+							</h:panelGroup>
+							
+							<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->
+							<h:panelGroup styleClass="large_area0">
+							<!-- Album Selected -->
+								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+									<tr:selectBooleanCheckbox id="pictureCheckbox" value="#{item.selected}"/>
+								</tr:panelGroupLayout>				
+								<!-- View details -->
+								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+									<h:outputLink id="lnkActiveAlbum" value="">
+										<h:outputText value="View"/>
+									</h:outputLink>
+								</tr:panelGroupLayout>
+								<!-- Add Active: Image not in Album AND Album is Private-->
+								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+									<h:outputLink id="lnkAddToActiveAlbumActive" value="" onclick="javascript:message('Adding...');">
+										<h:outputText value="#{lbl.add}"/>
+									</h:outputLink>
+								</tr:panelGroupLayout>
+								<!-- Add Inactive: Picture Already in Album -->
+								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+									<tr:commandLink id="lnkAddToActiveAlbumInactive1" disabled="true">
+										<h:outputText value="#{lbl.add}"/>
+									</tr:commandLink>
+								</tr:panelGroupLayout>
+							<!-- No album selected -->
+								<!-- add disabled to the current album : no album selected -->
+								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+									<tr:commandLink id="lnkAddToActiveAlbumInactive2" disabled="true">
+										<h:outputText value="#{lbl.add}"/>
+									</tr:commandLink>
+								</tr:panelGroupLayout>
+							</h:panelGroup>
+							<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
+							<ui:remove>
+							<!-- View Album Page -->
+							<h:panelGroup styleClass="large_area0" rendered="#{AlbumSession.current.size != '0' and SessionBean.currentUrl == 'viewAlbum'}">
+								<!-- view details -->
+								<h:panelGroup rendered="true" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+									<h:outputLink id="lnkAlbumDetails" value="#{Navigation.albumUrl}/#{AlbumSession.current.latestVersion.objectId}/details/#{item.item.objid}">
+										<h:outputText value="View"/>
+									</h:outputLink>
+								</h:panelGroup>
+								<!-- remove item from the view album -->
+								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea" rendered="#{AlbumSession.current.state == 'PENDING'}">
+									<h:outputLink id="lnkRemoveFromAlbum" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.version.objectId}/REMOVEPICTURE/#{item.item.objid}/back">
+										<h:outputText value="#{lbl.delete}"/>
+									</h:outputLink>
+								</tr:panelGroupLayout>
+							</h:panelGroup>
+							<!-- End View Album Page -->
+							</ui:remove>
+						</li>
+						</h:panelGroup>
+					</tr:iterator>
+				<!-- End images -->
+				</ul>
+			</h:panelGroup>
+			</ui:define>
+
+
+
+		</ui:composition>
+	</body>
+</html>								

@@ -130,4 +130,14 @@ public class ImejiFactory
         }
         return vo;
     }
+
+    public static List<ImageVO> newImagesList(Collection<Image> images)
+    {
+       List<ImageVO> imgVOList = new ArrayList<ImageVO>();
+       for(Image img : images)
+       {
+           imgVOList.add(newImage(img));
+       }
+       return  imgVOList;
+    }
 }

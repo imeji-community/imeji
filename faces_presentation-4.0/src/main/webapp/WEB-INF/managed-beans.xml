@@ -198,6 +198,18 @@
 		<managed-bean-class>de.mpg.imeji.collection.ViewCollectionBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>CollectionsBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.collection.CollectionsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Images Beans -->
+	<managed-bean>
+		<managed-bean-name>ImagesBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.image.ImagesBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	
 	<!-- Album Beans -->
 	<managed-bean>

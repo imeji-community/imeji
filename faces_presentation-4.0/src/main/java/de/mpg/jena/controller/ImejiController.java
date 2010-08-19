@@ -1,5 +1,7 @@
 package de.mpg.jena.controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 
@@ -206,4 +208,27 @@ public class ImejiController {
 		return id;
 		
 	}
+	
+	protected Model getModel()
+	{
+	    try
+        {
+	        base.close();
+            String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
+            base = DataFactory.model(tdbPath);
+            return base;
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (URISyntaxException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+	}
+	
 }

@@ -32,5 +32,10 @@ public class ImageVO extends Image
         this.selected = selected;
     }
     
+    public String getThumbnailImageUrlAsString()
+    {
+        return getThumbnailImageUrl().toString();
+    }
+    
     
 }

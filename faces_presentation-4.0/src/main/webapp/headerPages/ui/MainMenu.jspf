@@ -47,7 +47,7 @@
 		</h:outputLink>
 		<h:outputText id="lnkCollectionsInactive" styleClass="free_area0" value="#{lbl.header_collections}" rendered="false" />
 		
-		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="#{Navigation.browseUrl}" rendered="true">
+		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="/faces/images" rendered="true">
 	  		<h:outputText value="#{lbl.header_browse}"/>
 	  	</h:outputLink>	
 		<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.browse}" rendered="false" />

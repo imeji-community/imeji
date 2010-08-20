@@ -1,10 +1,11 @@
 package de.mpg.imeji.collection;
 
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.vo.CollectionVO;
 import de.mpg.imeji.vo.util.ImejiFactory;
+import de.mpg.jena.vo.CollectionImeji;
 
 public class CreateCollectionBean extends CollectionBean
 {
@@ -15,31 +16,35 @@ public class CreateCollectionBean extends CollectionBean
         super();
         this.tab = TabType.COLLECTION;
         collection = collectionSession.getActive();
+        super.getProfilesMenu().add(new SelectItem("sdsdss", "sdsad"));
         if ("1".equals(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("reset")))
         {
             this.reset();
         }
     }
 
-    public void save() throws Exception
+    public String loadProfile()
+    {
+        return getNavigationString();
+    }
+
+    public String save() throws Exception
     {
         if (valid())
         {
-            collection.setProfile(mdProfileBean.getMdProfile());
-            collection.getProfile().setName(collection.getMetadata().getTitle());
-            collection.getProfile().setDescription(collection.getMetadata().getDescription());
             collectionController.create(collection);
             BeanHelper.info("collection_success_create");
         }
+        return "pretty:collections";
     }
 
     public void reset()
     {
-        collection = new CollectionVO();
+        collection = new CollectionImeji();
         collection.getMetadata().setTitle("");
         collection.getMetadata().setDescription("");
         collection.getMetadata().getPersons().clear();
-        collection.addPerson(0, ImejiFactory.newPersonVO());
+        collection.getMetadata().getPersons().add(ImejiFactory.newPerson());
         collectionSession.setActive(collection);
         reset = "0";
     }

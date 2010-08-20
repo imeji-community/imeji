@@ -1,6 +1,5 @@
 package de.mpg.imeji.collection;
 
-import de.mpg.imeji.collection.CollectionBean.TabType;
 import de.mpg.imeji.util.BeanHelper;
 
 public class EditCollectionBean extends CollectionBean
@@ -18,9 +17,6 @@ public class EditCollectionBean extends CollectionBean
     {
         if (valid())
         {
-            collection.setProfile(mdProfileBean.getMdProfile());
-            collection.getProfile().setName(collection.getMetadata().getTitle());
-            collection.getProfile().setDescription(collection.getMetadata().getDescription());
             collectionController.update(collection);
             BeanHelper.info("collection_success_create");
         }

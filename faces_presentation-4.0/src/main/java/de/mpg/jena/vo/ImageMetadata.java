@@ -2,7 +2,6 @@ package de.mpg.jena.vo;
 
 
 import thewebsemantic.Embedded;
-import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
 import thewebsemantic.RdfType;

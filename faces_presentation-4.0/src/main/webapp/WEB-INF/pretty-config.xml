@@ -53,5 +53,10 @@
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>
 		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>
+	
+	<url-mapping id="createProfile">
+		<pattern value="/profile"/>
+		<view-id>/jsf/ProfileCreate.xhtml</view-id>
+	</url-mapping>
 
 </pretty-config>

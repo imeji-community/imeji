@@ -5,14 +5,14 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.vo.CollectionVO;
 import de.mpg.imeji.vo.list.util.ListParameters;
+import de.mpg.jena.vo.CollectionImeji;
 
 
 public class CollectionListVO extends ListVO
 {
 
-    protected List<CollectionVO> list = new ArrayList<CollectionVO>();
+    protected List<CollectionImeji> list = new ArrayList<CollectionImeji>();
     /**
      * The value for drop down menu
      */
@@ -24,7 +24,7 @@ public class CollectionListVO extends ListVO
      * @param filter
      * @param type
      */
-    public CollectionListVO(List<CollectionVO> list, ListParameters filter, HandlerType type)
+    public CollectionListVO(List<CollectionImeji> list, ListParameters filter, HandlerType type)
     {
         this.list = list;
         this.size = this.list.size();
@@ -43,12 +43,12 @@ public class CollectionListVO extends ListVO
         }
     }
 
-    public List<CollectionVO> getList()
+    public List<CollectionImeji> getList()
     {
         return list;
     }
 
-    public void setList(List<CollectionVO> list)
+    public void setList(List<CollectionImeji> list)
     {
         this.list = list;
     }

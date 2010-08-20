@@ -4,102 +4,67 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import thewebsemantic.Generated;
 import thewebsemantic.Id;
-import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
-import thewebsemantic.RdfType;
-import thewebsemantic.custom_datatypes.XmlLiteral;
 
+public class Container
+{
+    private URI id;
+    private Properties properties = new Properties();
+    private Collection<URI> images = new LinkedList<URI>();
+    private ContainerMetadata metadata = new ContainerMetadata();
+    private MetadataProfile profile = new MetadataProfile();
 
+    public void setId(URI id)
+    {
+        this.id = id;
+    }
 
-public class Container{
+    @Id
+    public URI getId()
+    {
+        return id;
+    }
 
-	
-	private URI id;
-	
-	
-	private Properties properties = new Properties();
+    public void setMetadata(ContainerMetadata metadata)
+    {
+        this.metadata = metadata;
+    }
 
-	private Collection<URI> images = new LinkedList<URI>();
+    @RdfProperty("http://imeji.mpdl.mpg.de/container/metadata")
+    public ContainerMetadata getMetadata()
+    {
+        return metadata;
+    }
 
-	
-	private ContainerMetadata metadata = new ContainerMetadata();
+    public void setProperties(Properties properties)
+    {
+        this.properties = properties;
+    }
 
-	private XmlLiteral metadataSchema;
-	
-	private XmlLiteral metadataDSP;
-	
+    @RdfProperty("http://imeji.mpdl.mpg.de/properties")
+    public Properties getProperties()
+    {
+        return properties;
+    }
 
-	public void setId(URI id) {
-		this.id = id;
-	}
+    public void setImages(Collection<URI> images)
+    {
+        this.images = images;
+    }
 
+    public Collection<URI> getImages()
+    {
+        return images;
+    }
 
-	@Id
-	public URI getId() {
-		return id;
-	}
+    public MetadataProfile getProfile()
+    {
+        return profile;
+    }
 
-	public void setMetadata(ContainerMetadata metadata) {
-		this.metadata = metadata;
-	}
-
-	@RdfProperty("http://imeji.mpdl.mpg.de/container/metadata")
-	public ContainerMetadata getMetadata() {
-		return metadata;
-	}
-
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
-
-	@RdfProperty("http://imeji.mpdl.mpg.de/properties")
-	public Properties getProperties() {
-		return properties;
-	}
-
-
-	public void setImages(Collection<URI> images) {
-		this.images = images;
-	}
-
-
-	public Collection<URI> getImages() {
-		return images;
-	}
-
-
-	public void setMetadataSchema(XmlLiteral metadataSchema) {
-		this.metadataSchema = metadataSchema;
-	}
-
-
-	public XmlLiteral getMetadataSchema() {
-		return metadataSchema;
-	}
-
-
-	public void setMetadataDSP(XmlLiteral metadataDSP) {
-		this.metadataDSP = metadataDSP;
-	}
-
-
-	public XmlLiteral getMetadataDSP() {
-		return metadataDSP;
-	}
-	
-	
-
-
-	
-
-
-
-	
-	
-	
-
-	
-
+    public void setProfile(MetadataProfile profile)
+    {
+        this.profile = profile;
+    }
 }

@@ -1,92 +1,98 @@
 package de.mpg.imeji.vo.util;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.xmlbeans.XmlException;
 import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument;
 import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.DescriptionSetTemplate.DescriptionTemplate;
 import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.DescriptionSetTemplate.DescriptionTemplate.StatementTemplate;
 import org.dublincore.xml.dcDsp.x2008.x01.x14.LiteralConstraintType.LiteralOption;
 
-import de.mpg.escidoc.services.common.valueobjects.metadata.OrganizationVO;
-import de.mpg.escidoc.services.common.valueobjects.metadata.TextVO;
-import de.mpg.imeji.vo.AlbumVO;
-import de.mpg.imeji.vo.CollectionVO;
-import de.mpg.imeji.vo.ImageVO;
+import thewebsemantic.LocalizedString;
+
 import de.mpg.imeji.vo.MdProfileVO;
-import de.mpg.imeji.vo.MdsContainerVO;
-import de.mpg.imeji.vo.PersonVO;
 import de.mpg.imeji.vo.StatementVO;
-import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ContainerMetadata;
-import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Organization;
+import de.mpg.jena.vo.Person;
+import de.mpg.jena.vo.Properties;
+import de.mpg.jena.vo.Statement;
 
 public class ImejiFactory
 {
-    public static AlbumVO newAlbum(Album al)
-    {
-        AlbumVO vo = new AlbumVO();
-        vo.setId(al.getId());
-        vo.setImages(al.getImages());
-        vo.setMetadata(al.getMetadata());
-        vo.setProperties(al.getProperties());
-        return vo;
-    }
+//    public static AlbumVO newAlbum(Album al)
+//    {
+//        AlbumVO vo = new AlbumVO();
+//        vo.setId(al.getId());
+//        vo.setImages(al.getImages());
+//        vo.setMetadata(al.getMetadata());
+//        vo.setProperties(al.getProperties());
+//        return vo;
+//    }
 
-    public static CollectionVO newCollection(CollectionImeji ci)
+    public static CollectionImeji newCollection()
     {
-        CollectionVO vo = new CollectionVO();
-        vo.setId(ci.getId());
-        vo.setImages(ci.getImages());
-        vo.setMetadata(ci.getMetadata());
-        vo.setMetadataDSP(ci.getMetadataDSP());
-        vo.setMetadataSchema(ci.getMetadataSchema());
-        vo.setProperties(ci.getProperties());
-        return vo;
-    }
-
-    
-    
-    public static List<CollectionVO> newCollectionList(Collection<CollectionImeji> ci)
-    {
-    	List<CollectionVO> collList = new ArrayList<CollectionVO>();
-    	for(CollectionImeji coll : ci)
-    	{
-    		collList.add(newCollection(coll));
-    	}
-    	
-    	return collList;
+        CollectionImeji coll = new CollectionImeji();
+        coll.setMetadata(newContainerMetadata());
+        coll.setProperties(newProperties());
+        coll.setProfile(new MetadataProfile());
+        return coll;
     }
     
-    public static List<AlbumVO> newAlbumList(Collection<Album> ci)
+    public static ContainerMetadata newContainerMetadata()
     {
-        List<AlbumVO> collList = new ArrayList<AlbumVO>();
-        for(Album a : ci)
-        {
-            collList.add(newAlbum(a));
-        }
-        
-        return collList;
+        ContainerMetadata cm = new ContainerMetadata();
+        return cm;
     }
     
-    public static ImageVO newImage(Image im)
+    public static Properties newProperties()
     {
-        ImageVO vo = new ImageVO();
-        vo.setCollection(im.getCollection());
-        vo.setFullImageUrl(im.getFullImageUrl());
-        vo.setId(im.getId());
-        vo.setMetadata(im.getMetadata());
-        vo.setProperties(im.getProperties());
-        vo.setThumbnailImageUrl(im.getThumbnailImageUrl());
-        vo.setVisibility(im.getVisibility());
-        vo.setWebImageUrl(im.getWebImageUrl());
-        return vo;
+        Properties props = new Properties();
+        return props;
     }
+    
+    public static Statement newStatement()
+    {
+        Statement s = new Statement();
+        s.getLabels().add(new LocalizedString("", ""));
+        return s;
+    }
+//    
+//    public static List<CollectionVO> newCollectionList(Collection<CollectionImeji> ci)
+//    {
+//    	List<CollectionVO> collList = new ArrayList<CollectionImeji>();
+//    	for(CollectionImeji coll : ci)
+//    	{
+//    		collList.add(newCollection(coll));
+//    	}
+//    	
+//    	return collList;
+//    }
+//    
+//    public static List<AlbumVO> newAlbumList(Collection<Album> ci)
+//    {
+//        List<AlbumVO> collList = new ArrayList<AlbumVO>();
+//        for(Album a : ci)
+//        {
+//            collList.add(newAlbum(a));
+//        }
+//        
+//        return collList;
+//    }
+//    
+//    public static ImageVO newImage(Image im)
+//    {
+//        ImageVO vo = new ImageVO();
+//        vo.setCollection(im.getCollection());
+//        vo.setFullImageUrl(im.getFullImageUrl());
+//        vo.setId(im.getId());
+//        vo.setMetadata(im.getMetadata());
+//        vo.setProperties(im.getProperties());
+//        vo.setThumbnailImageUrl(im.getThumbnailImageUrl());
+//        vo.setVisibility(im.getVisibility());
+//        vo.setWebImageUrl(im.getWebImageUrl());
+//        return vo;
+//    }
 
     public static MdProfileVO newMdProfile(String str)
     {
@@ -138,35 +144,30 @@ public class ImejiFactory
         return vo;
     }
     
-    public static MdsContainerVO newMdsContainerVO(ContainerMetadata cm)
+//    public static MdsContainerVO newMdsContainerVO(ContainerMetadata cm)
+//    {
+//        MdsContainerVO vo = new MdsContainerVO();
+//        vo.setDescription(cm.getDescription());
+//        vo.setPersons(cm.getPersons());
+//        vo.setTitle(cm.getTitle());
+//        return vo;
+//    }
+    
+    public static Person newPerson()
     {
-        MdsContainerVO vo = new MdsContainerVO();
-        vo.setDescription(cm.getDescription());
-        vo.setPersons(cm.getPersons());
-        vo.setTitle(cm.getTitle());
-        return vo;
+        Person pers = new Person();
+        pers.setAlternativeName("");
+        pers.setFamilyName("");
+        pers.setGivenName("");
+        pers.setIdentifier("");
+        pers.getOrganizations().add(newOrganization());
+        return pers;
     }
     
-    public static PersonVO newPersonVO()
+    public static Organization newOrganization()
     {
-        PersonVO vo = new PersonVO();
-        vo.setFamilyName("");
-        vo.setAlternativeName("");
-        vo.setGivenName("");
-        vo.setIdentifier("");
-        vo.setRole(URI.create(""));
-        vo.getOrganizations().add(new Organization());
-        vo.getOrganizations().get(0).setName("");
-        return vo;
-    }
-    
-    public static List<ImageVO> newImagesList(Collection<Image> images)
-    {
-       List<ImageVO> imgVOList = new ArrayList<ImageVO>();
-       for(Image img : images)
-       {
-           imgVOList.add(newImage(img));
-       }
-       return  imgVOList;
+        Organization org = new Organization();
+        org.setName("");
+        return org;
     }
 }

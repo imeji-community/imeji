@@ -1,13 +1,17 @@
 package de.mpg.imeji.collection;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+
+import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.mdProfile.MdProfileBean;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.vo.CollectionVO;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 
@@ -20,17 +24,18 @@ public abstract class CollectionBean
 
     protected TabType tab = TabType.HOME;
     protected SessionBean sessionBean = null;
-    protected CollectionVO collection = null;
+    protected CollectionImeji collection = null;
     protected CollectionSessionBean collectionSession = null;
     protected String id = null;
     protected MdProfileBean mdProfileBean = null;
     protected CollectionController collectionController = null;
     private int authorPosition;
     private int organizationPosition;
+    private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
 
     public CollectionBean()
     {
-        collection = new CollectionVO();
+        collection = new CollectionImeji();
         mdProfileBean = new MdProfileBean();
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         // sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -81,8 +86,8 @@ public abstract class CollectionBean
 
     public String addAuthor()
     {
-        System.out.println("ADD AUTHOR");
-        collection.addPerson(authorPosition + 1, ImejiFactory.newPersonVO());
+        LinkedList<Person> list =  (LinkedList<Person>)collection.getMetadata().getPersons();
+        list.add(authorPosition + 1, ImejiFactory.newPerson());
         return getNavigationString();
     }
 
@@ -90,15 +95,17 @@ public abstract class CollectionBean
     {
         if (authorPosition > 0)
         {
-            collection.removePerson(authorPosition);
+            LinkedList<Person> list =  (LinkedList<Person>)collection.getMetadata().getPersons();
+            list.remove(authorPosition);
         }
         return getNavigationString();
     }
 
     public String addOrganization()
     {
-        ((LinkedList)collection.getPerson(authorPosition).getOrganizations()).add(organizationPosition + 1,
-                ImejiFactory.newPersonVO().getOrganizations().get(0));
+        LinkedList<Person> persons =  (LinkedList<Person>)collection.getMetadata().getPersons();
+        LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
+        orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
         return getNavigationString();
     }
 
@@ -106,7 +113,9 @@ public abstract class CollectionBean
     {
         if (organizationPosition > 0)
         {
-            ((LinkedList)collection.getPerson(authorPosition).getOrganizations()).remove(organizationPosition);
+            LinkedList<Person> persons =  (LinkedList<Person>)collection.getMetadata().getPersons();
+            LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
+            orgs.remove(organizationPosition);
         }
         return getNavigationString();
     }
@@ -159,7 +168,7 @@ public abstract class CollectionBean
     /**
      * @return the collection
      */
-    public CollectionVO getCollection()
+    public CollectionImeji getCollection()
     {
         return collection;
     }
@@ -167,7 +176,7 @@ public abstract class CollectionBean
     /**
      * @param collection the collection to set
      */
-    public void setCollection(CollectionVO collection)
+    public void setCollection(CollectionImeji collection)
     {
         this.collection = collection;
     }
@@ -203,4 +212,16 @@ public abstract class CollectionBean
     {
         this.mdProfileBean = mdProfileBean;
     }
+
+    public List<SelectItem> getProfilesMenu()
+    {
+        return profilesMenu;
+    }
+
+    public void setProfilesMenu(List<SelectItem> profilesMenu)
+    {
+        this.profilesMenu = profilesMenu;
+    }
+    
+    
 }

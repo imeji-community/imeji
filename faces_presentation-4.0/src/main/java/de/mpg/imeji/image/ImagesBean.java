@@ -1,6 +1,7 @@
 package de.mpg.imeji.image;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
@@ -9,7 +10,7 @@ import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.vo.Image;
 
-public class ImagesBean extends BasePaginatorListSessionBean<ImageVO>
+public class ImagesBean extends BasePaginatorListSessionBean<Image>
 {
     private ImageController controller; 
     private int totalNumberOfRecords;
@@ -35,12 +36,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageVO>
     }
 
     @Override
-    public List<ImageVO> retrieveList(int offset, int limit)
+    public List<Image> retrieveList(int offset, int limit)
     {
         //totalNumberOfRecords = controller.search(null, null, null, 0, 0).size();
 
         Collection<Image> images = controller.search(null, null, null, limit, offset);
         
-        return ImejiFactory.newImagesList(images);
+        return (LinkedList<Image>)images;
     }
 }

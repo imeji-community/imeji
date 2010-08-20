@@ -1,91 +1,144 @@
 package de.mpg.imeji.mdProfile;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
+import javax.faces.event.ValueChangeEvent;
+
+import thewebsemantic.LocalizedString;
 
 import de.mpg.imeji.collection.CollectionSessionBean;
-import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.vo.MdProfileVO;
-import de.mpg.imeji.vo.StatementVO;
+import de.mpg.imeji.collection.CollectionBean.TabType;
+import de.mpg.imeji.vo.util.ImejiFactory;
+import de.mpg.jena.vo.MetadataProfile;
+import de.mpg.jena.vo.Statement;
 
 public class MdProfileBean
 {
-    private MdProfileVO mdProfile = null;
-    private List<StatementBean> statements = null;
-    private List<SelectItem> vocabulary = null;
+    private MetadataProfile profile = null;
     private int statementPosition = 0;
-    
+    private TabType tab = TabType.PROFILE;
     private CollectionSessionBean collectionSession = null;
+    private int constraintPosition;
 
     public MdProfileBean()
     {
-        mdProfile = new MdProfileVO();
-        statements = new ArrayList<StatementBean>();
-        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
+        profile = new MetadataProfile();
+        Statement s;
     }
 
     public void init()
     {
-        for (StatementVO st : collectionSession.getMdVocabulary())
-        {
-            vocabulary.add(new SelectItem(st, st.getLabel()));
-        }
     }
-    
+
     public String addStatement()
     {
-        StatementVO st = new StatementVO();
-        st.setName("");
-        StatementBean stBean = new StatementBean(st);
+        Statement st = ImejiFactory.newStatement();
         if (getStatementPosition() == 0)
         {
-            statements.add(stBean);
+            ((List<Statement>)profile.getStatements()).add(st);
         }
         else
         {
-            statements.add(getStatementPosition() + 1, stBean);
+            ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
         }
         return "";
     }
-    
+
     public String removeStatement()
     {
-        statements.remove(getStatementPosition());
+        ((List<Statement>)profile.getStatements()).remove(getStatementPosition());
         return "";
     }
 
-    /**
-     * @return the mdProfile
-     */
-    public MdProfileVO getMdProfile()
+    public String addConstraint()
     {
-        return mdProfile;
+        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+        if (getConstraintPosition() == 0)
+        {
+            ((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", ""));
+        }
+        else
+        {
+            ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition(),
+                    new LocalizedString("", ""));
+        }
+        return "";
     }
 
-    /**
-     * @param mdProfile the mdProfile to set
-     */
-    public void setMdProfile(MdProfileVO mdProfile)
+    public String removeConstraint()
     {
-        this.mdProfile = mdProfile;
+        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+        ((List<LocalizedString>)st.getLiteralConstraints()).remove(getConstraintPosition());
+        return "";
     }
 
-    /**
-     * @return the metadataBeans
-     */
-    public List<StatementBean> getStatements()
+    public void requiredListener(ValueChangeEvent event)
     {
-        return statements;
+        if (event != null && event.getOldValue() != event.getNewValue())
+        {
+            Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+            if (Boolean.getBoolean(event.getNewValue().toString()))
+            {
+                st.setMinOccurs("1");
+            }
+            else
+            {
+                st.setMinOccurs("0");
+            }
+        }
     }
 
-    /**
-     * @param metadataBeans the metadataBeans to set
-     */
-    public void setStatements(List<StatementBean> statements)
+    public void multipleListener(ValueChangeEvent event)
     {
-        this.statements = statements;
+        if (event != null && event.getOldValue() != event.getNewValue())
+        {
+            Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+            
+            if (Boolean.getBoolean(event.getNewValue().toString()))
+            {
+                st.setMaxOccurs("unbounded");
+            }
+            else
+            {
+                st.setMaxOccurs("1");
+            }
+        }
+    }
+
+    public int getConstraintsSize()
+    {
+        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+        return st.getLiteralConstraints().size();
+    }
+    
+    public int getConstraintPosition()
+    {
+        return constraintPosition;
+    }
+
+    public void setConstraintPosition(int constraintPosition)
+    {
+        this.constraintPosition = constraintPosition;
+    }
+
+    public MetadataProfile getProfile()
+    {
+        return profile;
+    }
+
+    public void setProfile(MetadataProfile profile)
+    {
+        this.profile = profile;
+    }
+
+    public TabType getTab()
+    {
+        return tab;
+    }
+
+    public void setTab(TabType tab)
+    {
+        this.tab = tab;
     }
 
     /**
@@ -103,6 +156,4 @@ public class MdProfileBean
     {
         this.statementPosition = statementPosition;
     }
-
-    
 }

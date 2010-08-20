@@ -126,13 +126,7 @@
 		<managed-bean-name>FacesContainerListBean</managed-bean-name>
 		<managed-bean-class>de.mpg.escidoc.faces.container.beans.FacesContainerListBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-		<managed-bean>
-		<managed-bean-name>MdProfileBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.mdProfile.beans.MdProfileBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	
+	</managed-bean>	
 	
 	<!-- Session Beans -->
 
@@ -191,6 +185,18 @@
 	<managed-bean>
 		<managed-bean-name>ViewCollectionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.collection.ViewCollectionBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Profiles bean -->
+	<managed-bean>
+		<managed-bean-name>MdProfileBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.mdProfile.MdProfileBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>CreateMdProfileBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.mdProfile.CreateMdProfileBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	

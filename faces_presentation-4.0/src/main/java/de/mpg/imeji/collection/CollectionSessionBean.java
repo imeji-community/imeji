@@ -4,14 +4,14 @@ import java.util.List;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.VocabularyHelper;
-import de.mpg.imeji.vo.CollectionVO;
 import de.mpg.imeji.vo.StatementVO;
 import de.mpg.imeji.vo.list.CollectionListVO;
+import de.mpg.jena.vo.CollectionImeji;
 
 public class CollectionSessionBean
 {
     // Collection active (image browsed are in that collection)
-    private CollectionVO active = null;
+    private CollectionImeji active = null;
     private CollectionListVO collectionList = null;
     private SessionBean sessionBean = null;
     private String selectedMenu = "SORTING";
@@ -55,7 +55,7 @@ public class CollectionSessionBean
     /**
      * @return the active
      */
-    public CollectionVO getActive()
+    public CollectionImeji getActive()
     {
         return active;
     }
@@ -63,7 +63,7 @@ public class CollectionSessionBean
     /**
      * @param active the active to set
      */
-    public void setActive(CollectionVO active)
+    public void setActive(CollectionImeji active)
     {
         this.active = active;
     }

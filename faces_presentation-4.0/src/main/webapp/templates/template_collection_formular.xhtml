@@ -10,8 +10,26 @@
 	<ui:define name="mainContent">
 		<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">	
-				<h:outputText value="#{FormularBean.tab}"/>
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{FormularBean.tab == 'COLLECTION'}">
+					<h3 class="xLarge_area0_p8 endline blockHeader">
+						<h:outputText value="Metadata profile"/>
+					</h3>
+					<span class="seperator"></span>
+					<div class="free_area0 itemBlockContent endline">
+						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+							<b class="xLarge_area0_p8 endline labelLine clear">
+								<h:outputText value="#{lbl.load_profile}"/>
+								<span class="noDisplay">: </span>
+							</b>
+							<span class="xHuge_area0 xTiny_marginLExcl endline">
+								<h:selectOneMenu value="" styleClass="double_select">
+									<f:selectItems value="#{FormularBean.profilesMenu}"/>
+								</h:selectOneMenu>
+							</span>
+						</h:panelGroup>
+					</div>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{FormularBean.tab == 'COLLECTION'}">
 					<h3 class="xLarge_area0_p8 endline blockHeader">
 						<h:outputText value="Collection Information"/>
 					</h3>

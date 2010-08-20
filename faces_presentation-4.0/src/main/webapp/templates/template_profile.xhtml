@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
+
+<ui:composition template="template_collection.xhtml">
+	<h:messages/>
+	<ui:define name="mainContent">
+		<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
+			<h:panelGroup layout="block" styleClass="full_area0 fullItem">	
+				
+				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{FormularBean.tab == 'PROFILE'}">
+					<h3 class="xLarge_area0_p8 endline blockHeader">
+						<h:outputText value="Metadata profile"/>
+					</h3>
+					<span class="seperator"></span>
+					<div class="free_area0 itemBlockContent endline">
+						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+							<b class="xLarge_area0_p8 endline labelLine clear">
+								<h:outputText value="#{lbl.load_profile}"/>
+								<span class="noDisplay">: </span>
+							</b>
+							<span class="xHuge_area0 xTiny_marginLExcl endline">
+								<h:selectOneMenu value="" styleClass="double_select">
+								</h:selectOneMenu>
+							</span>
+						</h:panelGroup>
+					</div>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{FormularBean.tab == 'PROFILE'}">
+					<h3 class="xLarge_area0_p8 endline blockHeader">
+						<h:outputText value="Metadata Profile"/>
+					</h3>
+					<span class="seperator"></span>
+					
+					<div class="free_area0 itemBlockContent endline">
+						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{empty FormularBean.profile.statements}">
+							<tr:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.create_profile}" action="#{FormularBean.addStatement}"/>
+							<h:outputText value="#{lbl.create_profile}"></h:outputText>
+						</h:panelGroup>
+									
+						<tr:iterator id="profile" var="statement" value="FormularBean.profile.statements" varStatus="position">
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="Elements" rendered="#{position.index == 0}"/>
+									<h:outputText value="&#160;" rendered="#{position.index != 0}"/>
+									<span class="noDisplay">: </span>
+								</b>
+								
+								<h:panelGroup class="full_area0 xLarge_marginLExcl endline">
+										
+									<h:panelGroup styleClass="huge_area0 tiny_marginLExcl">
+										<h:outputLabel styleClass="large_label" value="#{lbl.select_metadata}" />
+									</h:panelGroup>
+											
+									<h:panelGroup class="medium_area1 xmall_marginRIncl">
+										<h:outputLabel styleClass="large_label" value="#{lbl.multiple}"/>
+										<h:selectBooleanCheckbox valueChangeListener="#{FormularBean.multipleListener}">
+										</h:selectBooleanCheckbox>
+									</h:panelGroup>	
+											
+									<h:panelGroup class="medium_area1 small_marginRIncl">
+										<h:outputLabel styleClass="large_label" value="#{lbl.required}" />
+										<h:selectBooleanCheckbox valueChangeListener="#{FormularBean.requiredListener}">
+										</h:selectBooleanCheckbox>
+									</h:panelGroup>	
+							
+									<br/><br/><br/>
+											
+									<h:panelGroup styleClass="xHuge_area0 xSmall_marginLExcl" rendered="true">
+										<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
+										<tr:iterator id="profile" var="constraint" value="#{statement.literalConstraints}" varStatus="index">
+											<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
+												<tr:inputText simple="true" styleClass="large_txtInput endline" value="#{constraint}"/>
+												<h:panelGroup styleClass="large_area0 endline">
+													<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{FormularBean.addConstraint}">
+														<f:setPropertyActionListener value="#{index.index}" target="#{FormularBean.constraintPosition}"/>
+													</tr:commandButton>
+													<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}" action="#{FormularBean.removeConstraint}">
+														<f:setPropertyActionListener value="#{index.index}" target="#{FormularBean.constraintPosition}"/>
+													</tr:commandButton>
+												</h:panelGroup>
+											</h:panelGroup>
+										</tr:iterator>
+									</h:panelGroup>
+									
+									<!-- 		
+									<h:panelGroup styleClass="xLarge_area0 xSmall_marginLExcl endline" rendered="#{profile.constraintsSize == 0}">
+										<tr:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_constraint}" action="#{stBean.statement.addConstraint}"/>
+										<h:outputLabel styleClass="" value="#{lbl.add_constraint}" />
+									</h:panelGroup>
+									-->
+											
+								</h:panelGroup>
+										
+								<span class="large_area0_p8 lineToolSection">
+									<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" action="#{FormularBean.addStatement}">
+										<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+									</tr:commandButton>
+									<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{remove_metadata}" action="#{FormularBean.removeStatement}">
+										<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+									</tr:commandButton>
+								</span>
+							</h:panelGroup>
+						</tr:iterator>
+					</div>
+				</h:panelGroup>
+					
+				<div class="full_area0 formButtonArea">
+					<h:outputLink value="#{SessionBean.backUrl}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
+						<h:outputText value="#{lbl.cancel}" />
+					</h:outputLink>			
+					<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
+				</div>
+					
+				<script>
+						function message(message)
+						{
+							document.getElementById('Start:message_javascript').innerHTML  = message;
+						}
+				</script>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>
+</html>

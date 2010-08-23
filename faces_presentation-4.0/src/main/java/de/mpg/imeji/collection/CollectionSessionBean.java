@@ -1,12 +1,15 @@
 package de.mpg.imeji.collection;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.model.SelectItem;
+
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.util.VocabularyHelper;
-import de.mpg.imeji.vo.StatementVO;
 import de.mpg.imeji.vo.list.CollectionListVO;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.md.ComplexType;
+import de.mpg.jena.vo.md.ComplexType.AllowedTypes;
 
 public class CollectionSessionBean
 {
@@ -17,11 +20,11 @@ public class CollectionSessionBean
     private String selectedMenu = "SORTING";
     private String filter = "all";
     private CollectionListVO collections = null;
-    private List<StatementVO> mdVocabulary = null;
+    private List<ComplexType> metadataTypes = null;
 
     public CollectionSessionBean()
     {
-        //sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        // sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         try
         {
             init();
@@ -34,12 +37,12 @@ public class CollectionSessionBean
 
     public void init() throws Exception
     {
-        List<StatementVO> mList = VocabularyHelper.getEtermsVocabulary();
-//        mList.addAll(VocabularyHelper.getDcTermsVocabulary());
-//        for (StatementVO st : mList)
-//        {
-//            mdVocabulary.add(st);
-//        }
+        active = new CollectionImeji();
+        metadataTypes = new ArrayList<ComplexType>();
+        for (AllowedTypes t : AllowedTypes.values())
+        {
+            metadataTypes.add((ComplexType)t.getType().newInstance());
+        }
     }
 
     public CollectionListVO getCollectionList()
@@ -110,21 +113,13 @@ public class CollectionSessionBean
         this.collections = collections;
     }
 
-    /**
-     * @return the mdVocabulary
-     */
-    public List<StatementVO> getMdVocabulary()
+    public void setMetadataTypes(List<ComplexType> metadataTypes)
     {
-        return mdVocabulary;
+        this.metadataTypes = metadataTypes;
     }
 
-    /**
-     * @param mdVocabulary the mdVocabulary to set
-     */
-    public void setMdVocabulary(List<StatementVO> mdVocabulary)
+    public List<ComplexType> getMetadataTypes()
     {
-        this.mdVocabulary = mdVocabulary;
+        return metadataTypes;
     }
-
-    
 }

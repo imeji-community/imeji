@@ -57,6 +57,7 @@
 	<url-mapping id="createProfile">
 		<pattern value="/profile"/>
 		<view-id>/jsf/ProfileCreate.xhtml</view-id>
+		<action>#{CreateMdProfileBean.init}</action>
 	</url-mapping>
 
 </pretty-config>

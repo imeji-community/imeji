@@ -20,16 +20,6 @@ import de.mpg.jena.vo.Statement;
 
 public class ImejiFactory
 {
-//    public static AlbumVO newAlbum(Album al)
-//    {
-//        AlbumVO vo = new AlbumVO();
-//        vo.setId(al.getId());
-//        vo.setImages(al.getImages());
-//        vo.setMetadata(al.getMetadata());
-//        vo.setProperties(al.getProperties());
-//        return vo;
-//    }
-
     public static CollectionImeji newCollection()
     {
         CollectionImeji coll = new CollectionImeji();

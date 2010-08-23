@@ -6,11 +6,9 @@
 	xmlns:tr="http://myfaces.apache.org/trinidad">
 
 <ui:composition template="template_collection.xhtml">
-	<h:messages/>
 	<ui:define name="mainContent">
 		<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">	
-				
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{FormularBean.tab == 'PROFILE'}">
 					<h3 class="xLarge_area0_p8 endline blockHeader">
 						<h:outputText value="Metadata profile"/>
@@ -42,7 +40,7 @@
 							<h:outputText value="#{lbl.create_profile}"></h:outputText>
 						</h:panelGroup>
 									
-						<tr:iterator id="profile" var="statement" value="FormularBean.profile.statements" varStatus="position">
+						<tr:iterator id="profile" var="statement" value="#{FormularBean.statements}" varStatus="position">
 							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
 								<b class="xLarge_area0_p8 endline labelLine clear">
 									<h:outputText value="Elements" rendered="#{position.index == 0}"/>
@@ -52,25 +50,32 @@
 								
 								<h:panelGroup class="full_area0 xLarge_marginLExcl endline">
 										
-									<h:panelGroup styleClass="huge_area0 tiny_marginLExcl">
+									<h:panelGroup styleClass="large_area0 tiny_marginLExcl">
 										<h:outputLabel styleClass="large_label" value="#{lbl.select_metadata}" />
+										<h:selectOneMenu styleClass="medium_select" value="#{statement.mdType}">
+											<f:selectItems value="#{FormularBean.mdTypesMenu}"/>
+										</h:selectOneMenu>
 									</h:panelGroup>
-											
-									<h:panelGroup class="medium_area1 xmall_marginRIncl">
+									
+									<h:panelGroup styleClass="xLarge_area1 xmall_marginRIncl">
+										<h:outputLabel styleClass="large_label" value="#{lbl.name}"/>
+										<h:inputText value="#{statement.defaultLabel}" styleClass="large_txtInput"/>
+									</h:panelGroup>	
+										
+									<h:panelGroup styleClass="medium_area1 xmall_marginRIncl">
 										<h:outputLabel styleClass="large_label" value="#{lbl.multiple}"/>
-										<h:selectBooleanCheckbox valueChangeListener="#{FormularBean.multipleListener}">
-										</h:selectBooleanCheckbox>
+										<h:selectBooleanCheckbox value="#{statement.multiple}"/>
 									</h:panelGroup>	
 											
-									<h:panelGroup class="medium_area1 small_marginRIncl">
+									<h:panelGroup styleClass="medium_area1 small_marginRIncl">
 										<h:outputLabel styleClass="large_label" value="#{lbl.required}" />
-										<h:selectBooleanCheckbox valueChangeListener="#{FormularBean.requiredListener}">
-										</h:selectBooleanCheckbox>
+										<h:selectBooleanCheckbox value="#{statement.required}"/>
 									</h:panelGroup>	
+									
 							
 									<br/><br/><br/>
 											
-									<h:panelGroup styleClass="xHuge_area0 xSmall_marginLExcl" rendered="true">
+									<h:panelGroup styleClass="xHuge_area0 xSmall_marginLExcl" rendered="#{FormularBean.constraintsSize > 0}">
 										<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
 										<tr:iterator id="profile" var="constraint" value="#{statement.literalConstraints}" varStatus="index">
 											<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
@@ -86,13 +91,11 @@
 											</h:panelGroup>
 										</tr:iterator>
 									</h:panelGroup>
-									
-									<!-- 		
-									<h:panelGroup styleClass="xLarge_area0 xSmall_marginLExcl endline" rendered="#{profile.constraintsSize == 0}">
-										<tr:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_constraint}" action="#{stBean.statement.addConstraint}"/>
+											
+									<h:panelGroup styleClass="xLarge_area0 xSmall_marginLExcl endline" rendered="#{FormularBean.constraintsSize == 0}">
+										<tr:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_constraint}" action="#{FormularBean.addConstraint}"/>
 										<h:outputLabel styleClass="" value="#{lbl.add_constraint}" />
 									</h:panelGroup>
-									-->
 											
 								</h:panelGroup>
 										

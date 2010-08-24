@@ -7,7 +7,6 @@ import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.Des
 import org.dublincore.xml.dcDsp.x2008.x01.x14.LiteralConstraintType.LiteralOption;
 
 import thewebsemantic.LocalizedString;
-
 import de.mpg.imeji.vo.MdProfileVO;
 import de.mpg.imeji.vo.StatementVO;
 import de.mpg.jena.vo.CollectionImeji;

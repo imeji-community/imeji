@@ -18,7 +18,7 @@ import thewebsemantic.RdfType;
 public class Statement
 {
     private URI id;
-    private URI type;
+    private URI type = URI.create("http://imeji.mpdl.mpg.de/text");
     private List<LocalizedString> labels = new LinkedList<LocalizedString>();
     private URI vocabulary;
     private Collection<LocalizedString> literalConstraints = new LinkedList<LocalizedString>();

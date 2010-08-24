@@ -1,6 +1,5 @@
 package de.mpg.jena.vo;
 
-import de.mpg.jena.vo.md.ComplexType;
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;

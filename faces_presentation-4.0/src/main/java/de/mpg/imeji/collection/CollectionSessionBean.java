@@ -8,8 +8,8 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.vo.list.CollectionListVO;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.md.ComplexType;
-import de.mpg.jena.vo.md.ComplexType.AllowedTypes;
+import de.mpg.jena.vo.ComplexType;
+import de.mpg.jena.vo.ComplexType.AllowedTypes;
 
 public class CollectionSessionBean
 {

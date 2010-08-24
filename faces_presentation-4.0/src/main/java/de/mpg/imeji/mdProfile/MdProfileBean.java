@@ -1,5 +1,6 @@
 package de.mpg.imeji.mdProfile;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,9 +15,10 @@ import de.mpg.imeji.collection.CollectionBean.TabType;
 import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
+import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.md.ComplexType;
+import de.mpg.jena.vo.ComplexType.AllowedTypes;
 
 public class MdProfileBean
 {
@@ -30,13 +32,18 @@ public class MdProfileBean
 
     public MdProfileBean()
     {
-        profile = new MetadataProfile();
-        statements = new ArrayList<StatementWrapper>();
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
+        if (collectionSession.getActive() == null)
+        {
+            collectionSession.setActive(ImejiFactory.newCollection());
+        }
+        profile = collectionSession.getActive().getProfile();
+        statements = new ArrayList<StatementWrapper>();
         mdTypesMenu = new ArrayList<SelectItem>();
         for (ComplexType mdt : collectionSession.getMetadataTypes())
         {
-            mdTypesMenu.add(new SelectItem(mdt.getType(), mdt.getType().getLabel()));
+            String uri = mdt.getType().getNamespace() + mdt.getType().getRdfType();
+            mdTypesMenu.add(new SelectItem(mdt.getType().name(), mdt.getType().getLabel()));
         }
     }
 
@@ -50,15 +57,12 @@ public class MdProfileBean
 
     public String init()
     {
-        if (collectionSession.getActive() == null)
-        {
-            collectionSession.setActive(ImejiFactory.newCollection());
-        }
-        profile = collectionSession.getActive().getProfile();
         for (Statement st : profile.getStatements())
         {
             statements.add(new StatementWrapper(st));
         }
+        collectionSession.getActive().getProfile().getStatements().clear();
+        collectionSession.getActive().getProfile().getStatements().addAll(statements);
         return "";
     }
 
@@ -79,7 +83,7 @@ public class MdProfileBean
 
     public String removeStatement()
     {
-        statements.remove(getStatementPosition());
+        ((List<Statement>)profile.getStatements()).remove(getStatementPosition());
         collectionSession.getActive().setProfile(profile);
         return "pretty:createProfile";
     }
@@ -89,12 +93,12 @@ public class MdProfileBean
         Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
         if (getConstraintPosition() == 0)
         {
-            ((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", ""));
+            ((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", "eng"));
         }
         else
         {
-            ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition(),
-                    new LocalizedString("", ""));
+            ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition(), new LocalizedString("",
+                    "eng"));
         }
         collectionSession.getActive().setProfile(profile);
         return "pretty:createProfile";
@@ -107,12 +111,6 @@ public class MdProfileBean
             ((List<LocalizedString>)st.getLiteralConstraints()).remove(getConstraintPosition());
         collectionSession.getActive().setProfile(profile);
         return "pretty:createProfile";
-    }
-
-    public int getConstraintsSize()
-    {
-        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
-        return st.getLiteralConstraints().size();
     }
 
     public int getConstraintPosition()
@@ -180,5 +178,4 @@ public class MdProfileBean
     {
         this.mdTypesMenu = mdTypesMenu;
     }
-    
 }

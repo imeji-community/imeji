@@ -10,7 +10,7 @@
 				<h:outputText value="#{AlbumSession.initCurrentAlbum}" styleClass="noDisplay"></h:outputText>
 				<h:outputText value="#{CollectionSession.initCurrentCollection}" styleClass="noDisplay"></h:outputText>
 				<h:outputText value="#{HomePage.init}" styleClass="noDisplay" />
-				<h:outputText rendered="#{(SessionBean.user == null) and (SessionBean.currentUrl != 'resource') and (SessionBean.currentUrl == 'viewAlbum')}" value="#{HomePage.resolveAlbum}" />
+				<h:outputText rendered="#{(SessionBean.user == null) and (SessionBean.currentPage != 'RESOURCE') and (SessionBean.currentPage == 'ALBUM')}" value="#{HomePage.resolveAlbum}" />
 				
 				<h:outputLink id="lnkSort" styleClass="free_area0" value="?tab=SORTING" rendered="#{SessionBean.selectedMenu != 'SORTING' and HomePage.totalNumberOfItems != '0'}">
 					<h:outputText value="#{lbl.sort}"></h:outputText>
@@ -22,11 +22,11 @@
 				</h:outputLink>
 				<h:outputText styleClass="free_area0" value="#{lbl.organize}" rendered="#{SessionBean.selectedMenu == 'ORGANIZE' and (AlbumSession.current.version.objectId != null or AlbumSession.active.version.objectId != null)}" />
 				<h:outputText styleClass="seperator void" />
-				<h:outputLink id="lnkExportAlbum" styleClass="free_area0" value="?tab=EXPORT" rendered="#{SessionBean.selectedMenu != 'EXPORT' and AlbumSession.current.version.objectId != null and (SessionBean.currentUrl != 'resource') and (AlbumSession.current.state != 'WITHDRAWN') and (AlbumSession.current.size != '0') and (SessionBean.allowed)}">
+				<h:outputLink id="lnkExportAlbum" styleClass="free_area0" value="?tab=EXPORT" rendered="#{SessionBean.selectedMenu != 'EXPORT' and AlbumSession.current.version.objectId != null and (SessionBean.currentPage == 'RESOURCE') and (AlbumSession.current.state != 'WITHDRAWN') and (AlbumSession.current.size != '0') and (SessionBean.allowed)}">
 					<h:outputText value="#{lbl.export}" />
 				</h:outputLink>
-				<h:outputText styleClass="free_area0" value="#{lbl.export}" rendered="#{SessionBean.selectedMenu == 'EXPORT' and AlbumSession.current.version.objectId != null and (SessionBean.currentUrl != 'resource') and (AlbumSession.current.state != 'WITHDRAWN') and (AlbumSession.current.size != '0') and (SessionBean.allowed)}" />
-				<h:outputLink styleClass="free_area0" id="lnkDownload" value="#{Navigation.confirmationUrl}/download" rendered="#{SessionBean.user != null and SessionBean.currentUrl == 'home'}">
+				<h:outputText styleClass="free_area0" value="#{lbl.export}" rendered="#{SessionBean.selectedMenu == 'EXPORT' and AlbumSession.current.version.objectId != null and (SessionBean.currentPage != 'resource') and (AlbumSession.current.state != 'WITHDRAWN') and (AlbumSession.current.size != '0') and (SessionBean.allowed)}" />
+				<h:outputLink styleClass="free_area0" id="lnkDownload" value="#{Navigation.confirmationUrl}/download" rendered="#{SessionBean.user != null and SessionBean.currentPage == 'home'}">
 					<h:outputText value="#{lbl.download_collection}"></h:outputText>
 				</h:outputLink>
 				
@@ -103,7 +103,7 @@
 		</ui:define>
 		
 		<ui:define name="actionsMenu3">
-			<h:panelGroup rendered="#{SessionBean.selectedMenu == 'EXPORT' and AlbumSession.current.version.objectId != null and (SessionBean.currentUrl != 'resource') and (AlbumSession.current.state != 'WITHDRAWN') and (AlbumSession.current.size != '0') and (SessionBean.allowed)}">
+			<h:panelGroup rendered="#{SessionBean.selectedMenu == 'EXPORT' and AlbumSession.current.version.objectId != null and (SessionBean.currentPage != 'RESOURCE') and (AlbumSession.current.state != 'WITHDRAWN') and (AlbumSession.current.size != '0') and (SessionBean.allowed)}">
 				<!-- EXPORT content menu lower line starts here -->
 				<h:selectOneMenu id="selExportFormat" label="#{lbl.attributes}" value="#{AlbumSession.exportManager.parameters.exportFormatAsString}" valueChangeListener="#{AlbumSession.exportFormatListener}" immediate="true"  onclick="changeDisabled(this.value); return null;">
 					<f:selectItem  itemLabel="#{lbl.attributes_in_xml}" itemValue="XML" />
@@ -128,17 +128,17 @@
 		</ui:define>
 		
 		<ui:define name="additionalSubheaders">
-			<h:panelGroup layout="block" styleClass="subHeader" id="welcome" rendered="#{(SessionBean.user == null) and (SessionBean.currentUrl == 'home')}">
+			<h:panelGroup layout="block" styleClass="subHeader" id="welcome" rendered="#{(SessionBean.user == null) and (SessionBean.currentPage == 'HOME')}">
 				<!-- Welcome (not logged in) -->
 				<h:outputText value="#{HomePage.totalNumberOfItems} #{msg.browse_not_logged_in}" />
 			</h:panelGroup>
 	
-			<h:panelGroup layout="block" styleClass="subHeader" rendered="#{(SessionBean.query != '') and (SessionBean.query != null) and (SessionBean.currentUrl == 'searchResult')}">
+			<h:panelGroup layout="block" styleClass="subHeader" rendered="#{(SessionBean.query != '') and (SessionBean.query != null) and (SessionBean.currentPage == 'SEARCHRESULT')}">
 				<a class="free_area0 xTiny_marginRExcl" href="#" onclick="$(this).parents('.subHeaderSection').find('.searchQuery').slideToggle('slow'); $(this).hide();"><h:outputText id="lblShowQuery" value="Show Query"/></a>								
 				<h:outputLink id="lnkReviseSearcg" title="Revise the last Search"  value="#{Navigation.searchUrl}?action=revise">Revise Search</h:outputLink>
 			</h:panelGroup>
 	
-			<h:panelGroup layout="block" styleClass="subHeader" rendered="#{(SessionBean.query != '') and (SessionBean.query != null) and (SessionBean.currentUrl == 'searchResult')}">
+			<h:panelGroup layout="block" styleClass="subHeader" rendered="#{(SessionBean.query != '') and (SessionBean.query != null) and (SessionBean.currentPage == 'SEARCHRESULT')}">
 				<!-- Search Query -->
 				<h:panelGroup layout="block" styleClass="full_area0 searchQuery" style="display: none;">
 					<h:outputText value="#{msg.search_results_query_01}" ></h:outputText>

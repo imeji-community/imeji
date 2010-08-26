@@ -6,6 +6,7 @@ import java.util.List;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.list.CollectionListVO;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType;
@@ -24,7 +25,7 @@ public class CollectionSessionBean
 
     public CollectionSessionBean()
     {
-        // sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         try
         {
             init();
@@ -44,7 +45,7 @@ public class CollectionSessionBean
             metadataTypes.add((ComplexType)t.getType().newInstance());
         }
     }
-
+    
     public CollectionListVO getCollectionList()
     {
         return collectionList;

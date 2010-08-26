@@ -10,6 +10,7 @@ import org.apache.commons.httpclient.HttpException;
 import de.mpg.escidoc.faces.statistics.StatisticsBean;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.vo.User;
 
@@ -21,7 +22,7 @@ public class LoginBean
 
     public LoginBean()
     {
-       // this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
     public void setLogin(String login)
@@ -44,7 +45,7 @@ public class LoginBean
         return passwd;
     }
 
-    public String login()
+    public String login() throws Exception
     {
         UserController uc = new UserController(null);
         try

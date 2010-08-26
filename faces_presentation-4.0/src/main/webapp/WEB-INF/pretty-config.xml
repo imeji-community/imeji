@@ -39,7 +39,7 @@
 	
 	<url-mapping id="viewCollection">
 		<pattern value="/collection/#{ViewCollectionBean.id}"/>
-		<view-id>/jsf/CollectionFormular.xhtml</view-id>
+		<view-id>/jsf/CollectionView.xhtml</view-id>
 		<action onPostback="false">#{ViewCollectionBean.init}</action>
 	</url-mapping>
 	
@@ -61,17 +61,17 @@
 	</url-mapping>
 	
 	<url-mapping id="searchPictures">
-		<pattern>/search</pattern>
+		<pattern value="/search"></pattern>
 		<view-id>/jsf/SearchPictures.xhtml</view-id>
 	</url-mapping>
 	
 	<url-mapping id="searchCollections">
-		<pattern>/search/collections</pattern>
+		<pattern value="/search/collections"></pattern>
 		<view-id>/jsf/SearchCollections.xhtml</view-id>
 	</url-mapping>
 	
 	<url-mapping id="searchAlbums">
-		<pattern>/search/albums</pattern>
+		<pattern value="/search/albums"></pattern>
 		<view-id>/jsf/ASearchAlbums.xhtml</view-id>
 	</url-mapping>
 	

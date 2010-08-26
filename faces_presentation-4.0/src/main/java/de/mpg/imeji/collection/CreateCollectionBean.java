@@ -3,19 +3,29 @@ package de.mpg.imeji.collection;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
+import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.MetadataProfile;
 
 public class CreateCollectionBean extends CollectionBean
 {
     private String reset;
+    private CollectionController collectionController = null;
+    private SessionBean sessionBean = null;
+    private CollectionSessionBean collectionSession = null;
 
     public CreateCollectionBean()
-    {
+    {   
         super();
-        this.tab = TabType.COLLECTION;
-        collection = collectionSession.getActive();
+        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        collectionController = new CollectionController(sessionBean.getUser());
+        super.setTab(TabType.COLLECTION);
+        super.setCollection(collectionSession.getActive());
         super.getProfilesMenu().add(new SelectItem("sdsdss", "sdsad"));
         if ("1".equals(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("reset")))
         {
@@ -32,7 +42,13 @@ public class CreateCollectionBean extends CollectionBean
     {
         if (valid())
         {
-            collectionController.create(collection);
+            ProfileController profileController = new ProfileController(sessionBean.getUser());
+            MetadataProfile mdp = new MetadataProfile();
+            mdp.setDescription(super.getCollection().getMetadata().getDescription());
+            mdp.setTitle(super.getCollection().getMetadata().getDescription());
+            MetadataProfile profile = profileController.create(new MetadataProfile());
+            super.getCollection().setProfile(profile);
+            collectionController.create(super.getCollection());
             BeanHelper.info("collection_success_create");
         }
         return "pretty:collections";
@@ -40,45 +56,16 @@ public class CreateCollectionBean extends CollectionBean
 
     public void reset()
     {
-        collection = new CollectionImeji();
-        collection.getMetadata().setTitle("");
-        collection.getMetadata().setDescription("");
-        collection.getMetadata().getPersons().clear();
-        collection.getMetadata().getPersons().add(ImejiFactory.newPerson());
-        collectionSession.setActive(collection);
+        super.setCollection(new CollectionImeji());
+        super.getCollection().getMetadata().setTitle("");
+        super.getCollection().getMetadata().setDescription("");
+        super.getCollection().getMetadata().getPersons().clear();
+        super.getCollection().getMetadata().getPersons().add(ImejiFactory.newPerson());
+        collectionSession.setActive(super.getCollection());
         reset = "0";
     }
 
-    public void next()
-    {
-        switch (tab)
-        {
-            case PROFILE:
-                tab = TabType.HOME;
-                break;
-            case COLLECTION:
-                tab = TabType.PROFILE;
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void back()
-    {
-        switch (tab)
-        {
-            case HOME:
-                tab = TabType.PROFILE;
-                break;
-            case PROFILE:
-                tab = TabType.COLLECTION;
-                break;
-            default:
-                break;
-        }
-    }
-
+    
     @Override
     protected String getNavigationString()
     {

@@ -131,12 +131,12 @@ public class ImageController extends ImejiController{
 	}
 	
 	
-	public static void main2(String[] arg) throws Exception
+	public static void main(String[] arg) throws Exception
 	{
 		createUser();
 	}
 	
-	public static void main(String[] arg) throws Exception
+	public static void main2(String[] arg) throws Exception
 	{
 		
 		User user = createUser();

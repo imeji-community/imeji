@@ -1,12 +1,19 @@
 package de.mpg.imeji.collection;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.CollectionController;
 
 public class EditCollectionBean extends CollectionBean
 {
+    private CollectionController collectionController;
+    private SessionBean sessionBean;
+
     public EditCollectionBean()
     {
-        // TODO Auto-generated constructor stub
+        super();
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        collectionController = new CollectionController(sessionBean.getUser());
     }
 
     public void init()
@@ -17,38 +24,8 @@ public class EditCollectionBean extends CollectionBean
     {
         if (valid())
         {
-            collectionController.update(collection);
+            collectionController.update(super.getCollection());
             BeanHelper.info("collection_success_create");
-        }
-    }
-
-    public void next()
-    {
-        switch (tab)
-        {
-            case PROFILE:
-                tab = TabType.HOME;
-                break;
-            case COLLECTION:
-                tab = TabType.PROFILE;
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void back()
-    {
-        switch (tab)
-        {
-            case HOME:
-                tab = TabType.PROFILE;
-                break;
-            case PROFILE:
-                tab = TabType.COLLECTION;
-                break;
-            default:
-                break;
         }
     }
 

@@ -1,11 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:tr="http://myfaces.apache.org/trinidad">
-<ui:remove>
-	<!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:tr="http://myfaces.apache.org/trinidad">
+	<ui:remove>
+		<!--
 
  CDDL HEADER START
 
@@ -33,109 +29,119 @@
  Gesellschaft zur Förderung der Wissenschaft e.V.
  All rights reserved. Use is subject to license terms.
 -->
-</ui:remove>
+	</ui:remove>
+	<body>
+		<ui:composition template="templates/template_collection.xhtml">
+			<ui:define name="mainContent">
+				<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
+					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
+						<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+							<h:panelGroup styleClass="full_area0 fullItemControls">
+								<h:outputLink value="?tab=profile">
+									<h:outputText value="#{lbl.profile}"/>
+								</h:outputLink>
+								<span class="seperator"/>
+								<h:outputLink value="?tab=collection">
+									<h:outputText value="#{lbl.metadata}"/>
+								</h:outputLink>
+								<span class="seperator"/>
+								<h:outputLink value="?tab=home">
+									<h:outputText value="#{lbl.home}"/>
+								</h:outputLink>
+							</h:panelGroup>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{ViewCollectionBean.tab == 'HOME'}">
+							<h:panelGroup styleClass="full_area0">
+								<h:graphicImage value="http://pepinemom.p.e.pic.centerblog.net/yfbh2ym7.jpg"/>
+							</h:panelGroup>
+						</h:panelGroup>
 
-<body>
-<ui:composition template="templates/template_collection.xhtml">
-	
-	<ui:define name="mainContent">
-		<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
-		
-			<div class="small_area0">&#160;</div>
-	
-	<h:panelGroup layout="block" styleClass="free_area0">
-		<h:panelGroup layout="block" styleClass="free_area0">
-		
-			<h:panelGroup>
-				<!-- Picture status of the Collection -->
-				<h:panelGroup styleClass="full_area0">
-					<h:panelGroup layout="block" styleClass="small_area0 medium_marginLExcl statusIconArea">
-						<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{CollectionSession.current.state == 'PENDING'}"></h:panelGroup>
-						<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{CollectionSession.current.state == 'RELEASED'}"></h:panelGroup>
-						<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{CollectionSession.current.state == 'WITHDRAWN'}"></h:panelGroup>
-						<h:panelGroup layout="block" styleClass="small_area0">
-							<h:outputText value="#{lbl.private}" rendered="#{CollectionSession.current.state == 'PENDING'}"></h:outputText>
-							<h:outputText value="#{lbl.published}" rendered="#{CollectionSession.current.state == 'RELEASED'}"></h:outputText>
-							<h:outputText value="#{lbl.withdrawn}" rendered="#{CollectionSession.current.state == 'WITHDRAWN'}"></h:outputText>
+						<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{ViewCollectionBean.tab == 'COLLECTION'}">
+							<h3 class="xLarge_area0_p8 endline blockHeader">
+								<h:outputText value="Metadata"/>
+							</h3>
+							<span class="seperator"/>
+							<h:panelGroup>
+								<!-- Picture status of the Collection -->
+								<div class="free_area0 itemBlockContent endline">	
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.status}"/>
+											<span class="noDisplay">: </span>
+										</b>
+										<h:panelGroup layout="block" styleClass="small_area0 medium_marginLExcl statusIconArea">
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}"/>
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewCollectionBean.collection.properties.status == 'RELEASED'}"/>
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}"/>
+											<h:panelGroup layout="block" styleClass="small_area0">
+												<h:outputText value="#{lbl.private}" rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}"/>
+												<h:outputText value="#{lbl.published}" rendered="#{ViewCollectionBean.collection.properties.status == 'RELEASED'}"/>
+												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}"/>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+									
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.description}"/>
+											<span class="noDisplay">: </span>
+										</b>
+										<span class="xHuge_area0 xTiny_marginLExcl endline">
+											<h:outputText id="description" value="#{ViewCollectionBean.collection.metadata.description}" styleClass=""/>
+										</span>
+									</h:panelGroup>
+									
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<tr:iterator var="creator" varStatus="status" value="#{ViewCollectionBean.persons}">
+											<b class="xLarge_area0_p8 endline labelLine clear">
+												<h:outputText value="#{lbl.authors}"/>
+												<span class="noDisplay">: </span>
+											</b>
+											
+											<span class="xHuge_area0 xTiny_marginLExcl endline">
+												<h:outputLabel value="#{lbl.family_name} :   "/>
+												<h:outputText id="inputCreator" styleClass="quad_txtOutput" value="  #{creator.familyName}"/>
+											</span>
+											
+											<b class="xLarge_area0_p8 endline labelLine clear">
+												<h:outputText value=" Given Name " style="visibility:hidden;"/>
+												<span class="noDisplay">: </span>
+											</b>
+											<span class="xHuge_area0 xTiny_marginLExcl endline">
+												<h:outputLabel value="#{lbl.first_name} :   "/>
+												<h:outputText id="inputCreator" styleClass="quad_txtOutput" value="   #{creator.givenName}"/>
+											</span>
+												
+											<b class="xLarge_area0_p8 endline labelLine clear">
+												<h:outputText value=" Organization " style="visibility:hidden;"/>
+												<span class="noDisplay">: </span>
+											</b>
+											<span class="xTiny_marginLExcl endline">
+												<h:outputText value="#{lbl.organization} : "/>
+											</span>
+											<tr:iterator var="organization" value="#{creator.organizations}" varStatus="indexO">
+												<h:panelGroup styleClass="endline">
+													<span class="endline">
+														<h:outputText value="#{organization.name}"/>
+														<h:outputText value=", " rendered="#{indexO.index > 0}"/>
+													</span>
+												</h:panelGroup>
+											</tr:iterator>
+										</tr:iterator>
+									</h:panelGroup>
+								</div>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
-				</h:panelGroup>
-				
-				<h:panelGroup layout="block" styleClass="full_area0">
-					<b><h:outputText id="txtAlbumDescription" styleClass="free_area0 endline" value="#{lbl.description}" /></b>
-					<h:panelGroup styleClass="double_area0">
-						<tr:iterator var="abstracts" value="#{CollectionBean.collection.mdRecord.abstracts}">
-							 <h:outputText id="description" value="#{abstracts.value}" styleClass="double_txtInput"/>
-						</tr:iterator>
-					</h:panelGroup>
-				</h:panelGroup>
-
-				<h:panelGroup layout="block" styleClass="full_area0">
-					<b><h:outputText id="txtAlbumAuthor" styleClass="full_area0 endline" value="#{lbl.authors}" /></b>					
-					<tr:iterator var="creators" varStatus="status" value="#{CollectionBean.collection.mdRecord.creators}">
-						<h:panelGroup layout="block" styleClass="suggestAnchor">
-							<h:panelGroup class="huge_area0">
-								<h:outputText styleClass="large_area0 endline" value="#{lbl.author}"/>
-							</h:panelGroup>
-
-							<h:panelGroup layout="block" styleClass="double_area0">
-								<h:panelGroup styleClass="double_area0">
-									<h:outputText value="#{lbl.family_name}" />
-								</h:panelGroup>
-								
-								<tr:outputText id="familyname" value="#{creators.person.familyName}" styleClass="double_area0"/>
-								
-								<h:panelGroup styleClass="double_area0">
-									<h:outputText value="#{lbl.first_name}" />
-								</h:panelGroup>
-								
-								<tr:outputText id="givenname" value="#{creators.person.givenName}" styleClass="double_area0"/>
-								
-							</h:panelGroup>
-
-							<h:panelGroup class="full_area0 endline">
-								<h:outputText id="txtAlbumAuthor" value="#{lbl.affiliation}" />
-								<h:outputText value="*" />
-							</h:panelGroup>
-							
-							<h:panelGroup layout="block" styleClass="full_area0">
-								<tr:iterator var="affiliations" value="#{creators.person.organizations}" varStatus="statusAffiliation">
-									<h:panelGroup styleClass="quad_area0">
-										<tr:outputText id="affiliation" value="#{affiliations.name.value}" styleClass="double_area0 endline"/>
-									</h:panelGroup>
-								</tr:iterator>
-							</h:panelGroup>
-							
-							<h:panelGroup layout="block" styleClass="huge_area0">
-								<h:outputText value="&#160;"></h:outputText>
-							
-							</h:panelGroup>		
-						</h:panelGroup>		
-					</tr:iterator>
-				</h:panelGroup>
-				
-				<h:outputText styleClass="huge_area0" escape="false" value="&#160;" />
-	
-			</h:panelGroup>
-		</h:panelGroup>
-	</h:panelGroup>
-
-	<script>
+					<script>
 		function message(message)
 		{
 			document.getElementById('Start:message_javascript').innerHTML  = message;
 		}
 	</script>
-
-		</h:panelGroup>
-	</ui:define>
-</ui:composition>
-
-
-</body>
+				</h:panelGroup>
+			</ui:define>
+		</ui:composition>
+	</body>
 </html>
-
-
-
-
-

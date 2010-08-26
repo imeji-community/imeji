@@ -7,6 +7,7 @@ import java.util.List;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Properties.Status;
@@ -61,6 +62,12 @@ public class CollectionController extends ImejiController{
 	{
 		RDF2Bean reader = new RDF2Bean(base);
 		return reader.load(CollectionImeji.class);
+	}
+	
+	public CollectionImeji retrieve(String id)
+	{
+	    RDF2Bean reader = new RDF2Bean(base);
+        return (CollectionImeji)reader.load(ObjectHelper.getURI(CollectionImeji.class, id).toString());
 	}
 	
 	

@@ -72,8 +72,6 @@
 			<!-- import main menu here -->
 			<ui:include src="ui/MainMenu.jspf"/>
 			
-			<!-- Initialize visit statistics -->
-			<h:outputText value="#{SessionBean.createVisitStatisticData}"></h:outputText>
 		<!-- end: header section -->
 		</div>
 	

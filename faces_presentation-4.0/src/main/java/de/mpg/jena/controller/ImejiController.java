@@ -74,7 +74,7 @@ public class ImejiController {
 	protected static RDF2Bean rdf2Bean = new RDF2Bean(base);
 
 	public ImejiController(User user2) {
-		this.user = user;
+		this.user = user2;
 	}
 
 	protected static void writeCreateProperties(Properties properties, User user) {

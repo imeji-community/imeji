@@ -10,15 +10,13 @@ import thewebsemantic.RdfProperty;
 import thewebsemantic.RdfType;
 
 @Namespace("http://imeji.mpdl.mpg.de/")
-@RdfType("mdProfile")
+@RdfType("mdprofile")
 public class MetadataProfile
 {
+    private Properties properties = new Properties();
     private URI id;
-    
     private String title;
-    
     private String description;
-    
     private Collection<Statement> statements = new LinkedList<Statement>();
 
     @Id
@@ -42,13 +40,13 @@ public class MetadataProfile
     {
         this.title = title;
     }
-    
+
     @RdfProperty("http://purl.org/dc/elements/1.1/description")
     public String getDescription()
     {
         return description;
     }
-    
+
     @RdfProperty("http://purl.org/dc/elements/1.1/title")
     public void setDescription(String description)
     {
@@ -65,6 +63,16 @@ public class MetadataProfile
         this.statements = statements;
     }
     
+    public void setProperties(Properties properties)
+    {
+        this.properties = properties;
+    }
+    
+    @RdfProperty("http://imeji.mpdl.mpg.de/properties")
+    public Properties getProperties()
+    {
+        return properties;
+    }
 
     
 }

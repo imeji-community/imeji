@@ -93,7 +93,7 @@
 							<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
 							<ui:remove>
 							<!-- View Album Page -->
-							<h:panelGroup styleClass="large_area0" rendered="#{AlbumSession.current.size != '0' and SessionBean.currentUrl == 'viewAlbum'}">
+							<h:panelGroup styleClass="large_area0" rendered="#{AlbumSession.current.size != '0' and SessionBean.currentPage == 'ALBUM'}">
 								<!-- view details -->
 								<h:panelGroup rendered="true" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
 									<h:outputLink id="lnkAlbumDetails" value="#{Navigation.albumUrl}/#{AlbumSession.current.latestVersion.objectId}/details/#{item.item.objid}">

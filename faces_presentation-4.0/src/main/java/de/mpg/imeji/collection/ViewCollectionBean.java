@@ -1,52 +1,69 @@
 package de.mpg.imeji.collection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.vo.Organization;
+import de.mpg.jena.vo.Person;
+import de.mpg.jena.vo.User;
 
 public class ViewCollectionBean extends CollectionBean
 {
     private CollectionController collectionController = null;
     private SessionBean sessionBean = null;
+    private List<Person> persons = null;
 
     public ViewCollectionBean()
     {
+        super();
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        collectionController = new CollectionController(sessionBean.getUser());
     }
 
     public void init()
     {
-        collectionController = new CollectionController(sessionBean.getUser());
-        //collectionController.search(sessionBean.getUser(), null);
-        tab = TabType.HOME;
-    }
-
-    public void next()
-    {
-        switch (tab)
+        try
         {
-            case HOME:
-                tab = TabType.COLLECTION;
-                break;
-            case COLLECTION:
-                tab = TabType.PROFILE;
-                break;
-            default:
-                break;
+            User user = sessionBean.getUser();
+            collectionController = new CollectionController(user);
+            String id = super.getId();
+            super.setCollection(collectionController.retrieve(id));
+            super.setTab(TabType.COLLECTION);
+            
+            persons = new ArrayList<Person>();
+            for (Person p : super.getCollection().getMetadata().getPersons())
+            {
+                List<Organization> orgs = new ArrayList<Organization>();
+                for (Organization o : p.getOrganizations())
+                {
+                    orgs.add(o);
+                }
+                p.setOrganizations(orgs);
+                persons.add(p);
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("ERROR");
         }
     }
 
-    public void back()
+    /**
+     * Transform Persons from HashSet to List TODO: Check why persons are return in hashSet
+     * 
+     * @return
+     */
+    public List<Person> getPersons()
     {
-        switch (tab)
-        {
-            case COLLECTION:
-                tab = TabType.HOME;
-                break;
-            case PROFILE:
-                tab = TabType.COLLECTION;
-                break;
-            default:
-                break;
-        }
+        return persons;
+    }
+    
+    public void setPersons(List<Person> persons)
+    {
+        this.persons = persons;
     }
 
     @Override

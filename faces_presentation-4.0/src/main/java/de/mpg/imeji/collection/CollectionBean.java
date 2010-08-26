@@ -9,6 +9,7 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.mdProfile.MdProfileBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.UrlHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.vo.CollectionImeji;
@@ -22,13 +23,13 @@ public abstract class CollectionBean
         COLLECTION, PROFILE, HOME;
     }
 
-    protected TabType tab = TabType.HOME;
-    protected SessionBean sessionBean = null;
-    protected CollectionImeji collection = null;
-    protected CollectionSessionBean collectionSession = null;
-    protected String id = null;
-    protected MdProfileBean mdProfileBean = null;
-    protected CollectionController collectionController = null;
+    private TabType tab = TabType.HOME;
+    private SessionBean sessionBean = null;
+    private CollectionImeji collection = null;
+    private CollectionSessionBean collectionSession = null;
+    private String id = null;
+    private MdProfileBean mdProfileBean = null;
+    private CollectionController collectionController = null;
     private int authorPosition;
     private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
@@ -38,8 +39,8 @@ public abstract class CollectionBean
         collection = new CollectionImeji();
         mdProfileBean = new MdProfileBean();
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
-        // sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        // collectionController = new CollectionController(sessionBean.getUser());
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        collectionController = new CollectionController(sessionBean.getUser());
     }
 
     public boolean valid()
@@ -154,6 +155,10 @@ public abstract class CollectionBean
      */
     public TabType getTab()
     {
+        if (UrlHelper.getParameterValue("tab") != null)
+        {
+            tab = TabType.valueOf(UrlHelper.getParameterValue("tab").toUpperCase());
+        }
         return tab;
     }
 

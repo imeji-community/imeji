@@ -58,7 +58,7 @@
 									
 									<h:panelGroup styleClass="xLarge_area1 xmall_marginRIncl">
 										<h:outputLabel styleClass="large_label" value="#{lbl.name}"/>
-										<h:inputText value="#{statement.defaultLabel}" styleClass="large_txtInput"/>
+										<h:inputText value="#{statement.defaultLabel}" styleClass="large_txtInput" valueChangeListener="#{statement.labelListener}"/>
 									</h:panelGroup>	
 										
 									<h:panelGroup styleClass="medium_area1 xmall_marginRIncl">
@@ -77,7 +77,9 @@
 										<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
 										<tr:iterator id="constraints" var="constraint" value="#{statement.literalConstraints}" varStatus="index">
 											<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
-												<h:inputText styleClass="large_txtInput endline" value="#{constraint}"/>
+												<h:inputText styleClass="large_txtInput endline" value="#{constraint}" valueChangeListener="#{statement.constraintListener}">
+													<f:attribute name="position" value="#{index.index}"/>
+												</h:inputText>
 												<h:panelGroup styleClass="large_area0 endline">
 													<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{FormularBean.addConstraint}">
 														<f:setPropertyActionListener value="#{index.index}" target="#{FormularBean.constraintPosition}"/>

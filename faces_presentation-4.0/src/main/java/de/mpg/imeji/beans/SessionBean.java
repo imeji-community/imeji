@@ -9,6 +9,7 @@ import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.beans.Navigation.Page;
 import de.mpg.jena.vo.User;
 
 public class SessionBean
@@ -21,6 +22,8 @@ public class SessionBean
     public static final String METADATA_BUNDLE = "metadata";
     // His locale
     private Locale locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+    private Page currentPage = null;
+    private boolean admin = false;
 
     public SessionBean()
     {
@@ -119,5 +122,25 @@ public class SessionBean
     public void setUser(User user)
     {
         this.user = user;
+    }
+
+    public Page getCurrentPage()
+    {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Page currentPage)
+    {
+        this.currentPage = currentPage;
+    }
+
+    public boolean isAdmin()
+    {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin)
+    {
+        this.admin = admin;
     }
 }

@@ -1,6 +1,7 @@
 package de.mpg.imeji.mdProfile.wrapper;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 
@@ -13,8 +14,7 @@ public class StatementWrapper extends Statement
     private boolean required = false;
     private boolean multiple = false;
     private AllowedTypes mdType;
-    private String defaultLabel = "";
-    private String defaultLanguage = "eng";
+    private String defaultLabel;
 
     public StatementWrapper(Statement st)
     {
@@ -27,7 +27,10 @@ public class StatementWrapper extends Statement
         {
             multiple = true;
         }
-        this.getLabels().add(new LocalizedString(defaultLabel, defaultLanguage));
+        if (st.getLabels().size() > 0)
+        {
+            this.defaultLabel = st.getLabels().get(0).toString();
+        }
         this.setType(st.getType());
         if (st.getType() != null)
         {
@@ -39,6 +42,25 @@ public class StatementWrapper extends Statement
                     this.setMdType(type);
                 }
             }
+        }
+    }
+    
+    public void constraintListener(ValueChangeEvent event)
+    {
+        if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
+        {
+            int pos = Integer.parseInt(event.getComponent().getAttributes().get("position").toString());
+            ((List<LocalizedString>)this.getLiteralConstraints()).set(pos, new LocalizedString(event.getNewValue().toString(), "eng"));
+        }
+    }
+    
+    public void labelListener(ValueChangeEvent event)
+    {
+        if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
+        {
+            this.defaultLabel = event.getNewValue().toString();
+            this.getLabels().clear();
+            this.getLabels().add(new LocalizedString(defaultLabel, "eng"));
         }
     }
 
@@ -77,7 +99,7 @@ public class StatementWrapper extends Statement
     {
         return this.getLiteralConstraints().size();
     }
-    
+
     public AllowedTypes getMdType()
     {
         return mdType;
@@ -116,6 +138,5 @@ public class StatementWrapper extends Statement
     public void setDefaultLabel(String defaultLabel)
     {
         this.defaultLabel = defaultLabel;
-        this.getLabels().set(0, new LocalizedString(defaultLabel, defaultLanguage));
     }
 }

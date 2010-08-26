@@ -1,0 +1,79 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:tr="http://myfaces.apache.org/trinidad"
+      xmlns:pretty="http://ocpsoft.com/prettyfaces">
+<ui:remove>
+	  <!--  
+  CDDL HEADER START
+
+  The contents of this file are subject to the terms of the
+  Common Development and Distribution License, Version 1.0 only
+  (the "License"). You may not use this file except in compliance
+  with the License.
+
+  You can obtain a copy of the license at license/ESCIDOC.LICENSE
+  or http://www.escidoc.de/license.
+  See the License for the specific language governing permissions
+  and limitations under the License.
+
+  When distributing Covered Code, include this CDDL HEADER in each
+  file and include the License file at license/ESCIDOC.LICENSE.
+  If applicable, add the following below this CDDL HEADER, with the
+  fields enclosed by brackets "[]" replaced with your own identifying
+  information: Portions Copyright [yyyy] [name of copyright owner]
+
+  CDDL HEADER END
+
+
+  Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+  für wissenschaftlich-technische Information mbH and Max-Planck-
+  Gesellschaft zur Förderung der Wissenschaft e.V.
+  All rights reserved. Use is subject to license terms.
+-->
+</ui:remove>
+	<f:subview id="Collection">
+	
+		<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+			<h3 class="xLarge_area0_p8 endline blockHeader">
+				<h:outputText value="Search Collections" />
+			</h3>
+			<span class="seperator"></span>
+			
+			
+			
+			<div class="free_area0 itemBlockContent hideAdvSearchGenreBlockIfVoid endline">
+				
+
+					<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+						<b class="xLarge_area0_p8 endline labelLine clear">
+							&#160;<span class="noDisplay"> </span>
+						</b>
+						<span class="xHuge_area0 xTiny_marginLExcl endline">
+
+							<h:selectOneMenu styleClass="small_select replace" id="selectCollection" value="#{collectionCriterionBean.collectionCriterionVO.collection}" >
+								<f:selectItems value="#{collectionCriterionBean.collectionList}"/>
+							</h:selectOneMenu>
+						</span>					
+					</h:panelGroup>	    
+ 	
+		     	
+		     	
+				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder"></h:panelGroup>
+				<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
+						<h:selectOneMenu id="selCollectionCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{collectionCriterionBean.logicOperator}">
+							<f:selectItems value="#{collectionCriterionBean.logicOperatorItems}"/>
+						</h:selectOneMenu>		
+				</h:panelGroup>
+
+	     		<a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide: Collection" /></a>
+	    	</div>
+	    	<a class="free_area0 expand"><h:outputText value="Show: Collection" /></a>
+	     </h:panelGroup>
+
+
+	
+	
+	</f:subview>
+</div>

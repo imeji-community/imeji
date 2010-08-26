@@ -59,5 +59,21 @@
 		<view-id>/jsf/ProfileCreate.xhtml</view-id>
 		<action>#{CreateMdProfileBean.init}</action>
 	</url-mapping>
+	
+	<url-mapping id="searchPictures">
+		<pattern>/search</pattern>
+		<view-id>/jsf/SearchPictures.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="searchCollections">
+		<pattern>/search/collections</pattern>
+		<view-id>/jsf/SearchCollections.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="searchAlbums">
+		<pattern>/search/albums</pattern>
+		<view-id>/jsf/ASearchAlbums.xhtml</view-id>
+	</url-mapping>
+	
 
 </pretty-config>

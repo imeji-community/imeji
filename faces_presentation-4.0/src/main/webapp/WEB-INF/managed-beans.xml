@@ -126,7 +126,33 @@
 		<managed-bean-name>FacesContainerListBean</managed-bean-name>
 		<managed-bean-class>de.mpg.escidoc.faces.container.beans.FacesContainerListBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+		<managed-bean>
+		<managed-bean-name>MdProfileBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.mdProfile.beans.MdProfileBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>SearchImageBean</managed-bean-name>
+		<managed-bean-class>
+			de.mpg.imeji.search.SearchImageBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>	
+	<managed-bean>
+		<managed-bean-name>SearchCollectionBean</managed-bean-name>
+		<managed-bean-class>
+			de.mpg.imeji.search.SearchCollectionBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>SearcAlbumBean</managed-bean-name>
+		<managed-bean-class>
+			de.mpg.imeji.search.SearchAlbumBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
 	
 	<!-- Session Beans -->
 
@@ -185,8 +211,28 @@
 	<managed-bean>
 		<managed-bean-name>ViewCollectionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.collection.ViewCollectionBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope> 
+	</managed-bean>
+	
+	
+	<!-- Search Bean -->
+	<managed-bean>
+		<managed-bean-name>MDCriterionBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.search.beans.MDCriterionBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>CollectionCriterionBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.search.beans.CollectionCriterionBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>CriterionBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.search.beans.CriterionBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	
 	
 	<!-- Profiles bean -->
 	<managed-bean>

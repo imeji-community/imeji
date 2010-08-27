@@ -38,12 +38,29 @@
 </ui:remove>
 	<body>
 		<ui:composition template="template_paginator.xhtml">		
-
-		
-			
-			<ui:define name="list">
-					<h:panelGroup layout="block" styleClass="full_area0 tiledList">
+			<ui:define name="list">				
+				<h:panelGroup layout="block" styleClass="full_area0 tiledList">
 					<ul class="free_area0 fullBrowse">
+					<!-- Container tabs -->
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{ImagesBean.objectClass == 'collection'}">
+						<h:panelGroup styleClass="full_area0 fullItemControls" >
+							<h:outputLink value="#{Navigation.imagesUrl}/#{ImagesBean.objectClass}/#{ImagesBean.id}">
+								<h:outputText value="#{lbl.images}"/>
+							</h:outputLink>
+							<span class="seperator"/>
+							<h:outputLink value="#{Navigation.collectionUrl}/#{ImagesBean.id}?tab=profile">
+								<h:outputText value="#{lbl.profile}"/>
+							</h:outputLink>
+							<span class="seperator"/>
+							<h:outputLink value="#{Navigation.collectionUrl}/#{ImagesBean.id}?tab=collection">
+								<h:outputText value="#{lbl.metadata}"/>
+							</h:outputLink>
+							<span class="seperator"/>
+							<h:outputLink value="#{Navigation.collectionUrl}/#{ImagesBean.id}?tab=home">
+								<h:outputText value="#{lbl.home}"/>
+							</h:outputLink>
+						</h:panelGroup>
+					</h:panelGroup>
 					<!-- Images -->
 					<tr:iterator id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0">
 						<h:panelGroup>

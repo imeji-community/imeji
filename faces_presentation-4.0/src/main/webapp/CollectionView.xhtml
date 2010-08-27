@@ -37,6 +37,10 @@
 					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 							<h:panelGroup styleClass="full_area0 fullItemControls">
+								<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}">
+									<h:outputText value="#{lbl.images}"/>
+								</h:outputLink>
+								<span class="seperator"/>
 								<h:outputLink value="?tab=profile">
 									<h:outputText value="#{lbl.profile}"/>
 								</h:outputLink>
@@ -135,11 +139,11 @@
 						</h:panelGroup>
 					</h:panelGroup>
 					<script>
-		function message(message)
-		{
-			document.getElementById('Start:message_javascript').innerHTML  = message;
-		}
-	</script>
+						function message(message)
+						{
+							document.getElementById('Start:message_javascript').innerHTML  = message;
+						}
+					</script>
 				</h:panelGroup>
 			</ui:define>
 		</ui:composition>

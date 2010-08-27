@@ -34,16 +34,11 @@
  All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
-
-<body>
-<ui:composition template="templates/collection_template_formular.xhtml">
-
-	<ui:param name="FormularBean" value="#{EditCollection}" />
-
-</ui:composition>
-
-
-</body>
+	<body>
+		<ui:composition template="templates/template_collection_formular.xhtml">
+			<ui:param name="FormularBean" value="#{EditCollectionBean}" />
+		</ui:composition>
+	</body>
 </html>
 
 

@@ -1,10 +1,10 @@
 package de.mpg.imeji.collection;
 
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.UrlHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ProfileController;
@@ -27,7 +27,7 @@ public class CreateCollectionBean extends CollectionBean
         super.setTab(TabType.COLLECTION);
         super.setCollection(collectionSession.getActive());
         super.getProfilesMenu().add(new SelectItem("sdsdss", "sdsad"));
-        if ("1".equals(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("reset")))
+        if ("1".equals(UrlHelper.getParameterValue("reset")))
         {
             this.reset();
         }

@@ -26,10 +26,9 @@ public abstract class CollectionBean
     private TabType tab = TabType.HOME;
     private SessionBean sessionBean = null;
     private CollectionImeji collection = null;
-    private CollectionSessionBean collectionSession = null;
+   
     private String id = null;
     private MdProfileBean mdProfileBean = null;
-    private CollectionController collectionController = null;
     private int authorPosition;
     private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
@@ -38,9 +37,7 @@ public abstract class CollectionBean
     {
         collection = new CollectionImeji();
         mdProfileBean = new MdProfileBean();
-        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        collectionController = new CollectionController(sessionBean.getUser());
     }
 
     public boolean valid()

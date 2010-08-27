@@ -23,36 +23,14 @@
 	</ui:define>
 
 	<ui:define name="actionsMenu">
-
-		<h:panelGroup
-			rendered="#{false and (SessionBean.user != null) and (CollectionSession.active != 'viewCollection') and (CollectionSession.active.version.objectId != null)}">
+		<h:panelGroup rendered="true">
 			<!-- ORGANIZE content menu lower line starts here -->
-			<h:outputLink id="lnkEditCollection" styleClass="free_area0"
-				value="#{Navigation.editCollectionUrl}/#{CollectionSession.active.latestVersion.objectId}"
-				rendered="#{CollectionSession.active.stateString == 'pending'}">
-				<h:outputText value="Edit  Collection"></h:outputText>
+			<h:outputLink id="lnkEditCollection" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}" 
+				rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}">
+				<h:outputText value="Edit Collection"></h:outputText>
 			</h:outputLink>
 			<h:outputText styleClass="seperator"
-				rendered="#{CollectionSession.active.stateString == 'pending'}" />
-			<h:outputLink id="lnkPublishCollection" styleClass="free_area0"
-				value="#{Navigation.confirmationUrl}/publish/#{CollectionSession.active.latestVersion.objectId}"
-				rendered="#{(CollectionSession.active.stateString == 'pending') and (CollectionSession.active.size != '0')}">
-				<h:outputText value="Publish Collection"></h:outputText>
-			</h:outputLink>
-			<h:outputText styleClass="seperator"
-				rendered="#{(CollectionSession.active.stateString == 'pending') and (CollectionSession.active.size != '0')}" />
-			<h:outputLink id="lnkDeleteCollection" styleClass="free_area0"
-				value="#{Navigation.confirmationUrl}/delete/#{CollectionSession.active.latestVersion.objectId}"
-				rendered="#{CollectionSession.active.stateString == 'pending'}">
-				<h:outputText value="Delete Collection"></h:outputText>
-			</h:outputLink>
-			<h:outputText styleClass="seperator"
-				rendered="#{CollectionSession.active.stateString == 'pending'}" />
-			<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0"
-				value="#{Navigation.confirmationUrl}/withdraw/#{CollectionSession.active.latestVersion.objectId}"
-				rendered="#{(CollectionSession.active.stateString == 'released') and (CollectionSession.active.owner.objectId == SessionBean.user.reference.objectId)}">
-				<h:outputText value="Withdraw Collection"></h:outputText>
-			</h:outputLink>
+				rendered="#{FormularBean.collection.properties.status == 'PENDING'}" />
 			<!-- ORGANIZE content menu lower line ends here -->
 		</h:panelGroup>
 	</ui:define>

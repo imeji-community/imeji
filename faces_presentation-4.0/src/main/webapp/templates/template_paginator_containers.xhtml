@@ -231,11 +231,9 @@
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="free_area0_p8 itemHeadline">
-								<pretty:link mappingId="viewCollection">
-									<f:param value="#{container.id}" />
-									<b><h:outputText value="#{container.metadata.title}" /></b>
-								</pretty:link>
-								
+				      			<h:outputLink value="#{Navigation.applicationUri}#{container.id.path}">
+				      				<b><h:outputText value="#{container.metadata.title}" /></b>
+				      			</h:outputLink>								
 				      		</span>
 				      	</td>
 						

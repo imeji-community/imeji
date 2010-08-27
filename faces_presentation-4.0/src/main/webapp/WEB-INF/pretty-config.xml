@@ -43,13 +43,18 @@
 		<action onPostback="false">#{ViewCollectionBean.init}</action>
 	</url-mapping>
 	
+		<url-mapping id="collectionImages">
+		<pattern value="/images/#{ImagesBean.objectClass}/#{ImagesBean.id}"/>
+		<view-id>/jsf/Images.xhtml</view-id>
+	</url-mapping>
+
 	<url-mapping id="createCollection">
 		<pattern value="/collection"/>
 		<view-id>/jsf/CollectionCreate.xhtml</view-id>
 	</url-mapping>
 	
 	<url-mapping id="editCollection">
-		<pattern value="/collection/#{EditCollectionBean.id}/edit"/>
+		<pattern value="/edit/collection/#{EditCollectionBean.id}"/>
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>
 		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>

@@ -65,6 +65,7 @@ public class Navigation
     public final Page STATISTICS = new Page("statistics", "statistics");
     public final Page PERSON = new Page("person", "person");
     public final Page ALBUM_INTERFACE = new Page("Album Interface", "do");
+    public final Page IMAGES = new Page("Images", "images");
     private SessionBean sessionBean = null;
 
     public class Page
@@ -144,6 +145,11 @@ public class Navigation
     public String getApplicationUrl()
     {
         return applicationUrl;
+    }
+    
+    public String getApplicationUri()
+    {
+        return applicationUrl.substring(0, applicationUrl.length() - 1);
     }
 
     public String getMyAlbumsUrl()
@@ -239,6 +245,11 @@ public class Navigation
     public String getAlbumInterfaceUrl()
     {
         return applicationUrl + ALBUM_INTERFACE.getFile();
+    }
+    
+    public String getImagesUrl()
+    {
+        return applicationUrl + IMAGES.getFile();
     }
 
     /**

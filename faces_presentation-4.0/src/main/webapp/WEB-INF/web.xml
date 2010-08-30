@@ -114,7 +114,7 @@
 	
 	<servlet>
 		<servlet-name>Upload Servlet</servlet-name>
-		<servlet-class>de.mpg.escidoc.faces.upload.UploadServlet</servlet-class>
+		<servlet-class>de.mpg.imeji.upload.UploadServlet</servlet-class>
 	</servlet>
 	
 	<!-- Image Servlet -->

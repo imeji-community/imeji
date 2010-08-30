@@ -132,6 +132,7 @@
         </exclusions>
 	</dependency>
 	
+	<!-- 
 	<dependency>
 		<groupId>mysql</groupId>
 		<artifactId>mysql</artifactId>
@@ -139,6 +140,8 @@
 		<scope>system</scope>
 		<systemPath>/home/haarlaender/Programs/mysql-connector-java-5.1.13/mysql-connector-java-5.1.13-bin.jar</systemPath>
 	</dependency>
+	-->
+	
 	<!-- XercesImpl has to be removed, otherwise this library collides with jboss-internal libraries -->
 	<dependency>
 		<groupId>com.hp.hpl.jena</groupId>

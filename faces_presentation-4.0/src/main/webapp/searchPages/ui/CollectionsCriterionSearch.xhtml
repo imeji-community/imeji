@@ -35,7 +35,7 @@
 </ui:remove>
 	<f:subview id="Collection">
 	
-		<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+		<div class="full_area0 itemBlock noTopBorder">
 			<h3 class="xLarge_area0_p8 endline blockHeader">
 				<h:outputText value="Search Collections" />
 			</h3>
@@ -43,34 +43,30 @@
 			
 			
 			
-			<div class="free_area0 itemBlockContent hideAdvSearchGenreBlockIfVoid endline">
-				
+			<div class="free_area0 itemBlockContent endline">
+ 				<tr:iterator id="collectionCriterion" var="CollectionCriterionBean" value="#{AdvancedSearchController.collectionCriterionController.collectionCriterionManager.objectDM}" varStatus="index"> 
+
 
 					<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 						<b class="xLarge_area0_p8 endline labelLine clear">
 							&#160;<span class="noDisplay"> </span>
 						</b>
 						<span class="xHuge_area0 xTiny_marginLExcl endline">
-
-							<h:selectOneMenu styleClass="small_select replace" id="selectCollection" value="#{collectionCriterionBean.collectionCriterionVO.collection}" >
-								<f:selectItems value="#{collectionCriterionBean.collectionList}"/>
+							<h:outputLabel styleClass="large_select replace" for="selectCollection" value="Select Collection" />
+							<h:selectOneMenu styleClass="small_select replace" id="selectCollection" value="#{CollectionCriterionBean.collectionCriterionVO.collection}" onchange="this.form.submit()" valueChangeListener="#{CollectionCriterionBean.collectionChanged}" immediate="true">
+								<f:selectItems value="#{CollectionCriterionBean.collectionList}"/>
 							</h:selectOneMenu>
 						</span>					
-					</h:panelGroup>	    
- 	
-		     	
-		     	
-				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder"></h:panelGroup>
-				<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
-						<h:selectOneMenu id="selCollectionCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{collectionCriterionBean.logicOperator}">
-							<f:selectItems value="#{collectionCriterionBean.logicOperatorItems}"/>
-						</h:selectOneMenu>		
-				</h:panelGroup>
+					</h:panelGroup>
 
-	     		<a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide: Collection" /></a>
+					<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
+							<h:selectOneMenu id="selCollectionCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{CollectionCriterionBean.logicOperator}">
+								<f:selectItems value="#{CollectionCriterionBean.logicOperatorItems}"/>
+							</h:selectOneMenu>		
+					</h:panelGroup>
+				</tr:iterator>
 	    	</div>
-	    	<a class="free_area0 expand"><h:outputText value="Show: Collection" /></a>
-	     </h:panelGroup>
+	     </div>
 
 
 	

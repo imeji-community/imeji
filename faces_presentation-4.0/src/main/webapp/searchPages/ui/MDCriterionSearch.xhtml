@@ -34,49 +34,62 @@
 -->
 </ui:remove>
 <f:subview id="MD">			
-		<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-			<h3 class="xLarge_area0_p8 endline blockHeader">
-				<h:outputText value="Search MD" />
-			</h3>
-			<span class="seperator"></span>
+	<h:panelGroup styleClass="full_area0 itemBlock">
+		<h3 class="xLarge_area0_p8 endline blockHeader">
+			<h:outputText value="Search MD" />
+		</h3>
+		<span class="seperator"></span>
 			
 			
-			<div class="free_area0 itemBlockContent hideBlockIfVoid endline">
-			
-			<tr:iterator id="mdCriterion" var="mdCriterionBean" value="#{AdvancedSearchController.mdCriterionController.mdCriterionManager.objectDM}" binding="#{mdCriterionIterator}" varStatus="index">
-				
-				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder" >
+		<div class="free_area0 itemBlockContent hideBlockIfVoid endline">
+ 			<tr:iterator id="mdCriterion" var="MDCriterionBean" value="#{AdvancedSearchController.mdCriterionController.mdCriterionManager.objectDM}" varStatus="index"> 
+				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 
-						<b class="xLarge_area0_p8 endline labelLine clear">
-							&#160;<span class="noDisplay"> </span>
-						</b>
+
 						
 		
-						
+					<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder"  rendered = "#{index.index == 0}">
+						<b class="xLarge_area0_p8 endline labelLine clear">&#160;
+							<span class="noDisplay"> </span>
+						</b>
 						<span class="xHuge_area0 xTiny_marginLExcl endline">
-							<h:selectOneMenu styleClass="large_select replace" id="selectMd" value="#{MDCriterionBean.mdCriterionVO.md}" >
+							<h:selectOneMenu styleClass="large_select replace" id="selectMd" value="#{MDCriterionBean.mdCriterionVO.md}">
 								<f:selectItems value="#{MDCriterionBean.mdList}"/>
 							</h:selectOneMenu>
 							<h:inputText styleClass="large_txtInput" id="md" value="#{MDCriterionBean.mdCriterionVO.mdText}" />
 						</span>
-						
-						<span class="large_area0_p8 lineToolSection">
-							<tr:commandButton id="btnAddFirst" styleClass="min_imgBtn groupTool add" text=" " shortDesc="#{tip.search_btAdd}" action="#{AdvancedSearchController.mdCriterionCollection.mdCriterionManager.addObject}" />
-                            <tr:commandButton id="btnRemove" styleClass="min_imgBtn groupTool remove" text=" " shortDesc="#{tip.search_btRemove}" disabled="#{AdvancedSearchController.mdCriterionCollection.mdCriterionManager.size == 1}" action="#{AdvancedSearchController.mdCriterionCollection.mdCriterionManager.removeObject}"/>
-						</span>
+							<tr:commandButton id="btnAddFirst" styleClass="min_imgBtn groupTool add" text=" " shortDesc="#{tip.search_btAdd}" action="#{AdvancedSearchController.mdCriterionController.mdCriterionManager.addObject}" />
+	                        <tr:commandButton id="btnRemoveFirst" styleClass="min_imgBtn groupTool remove" text=" " shortDesc="#{tip.search_btRemove}" disabled="#{AdvancedSearchController.mdCriterionController.mdCriterionManager.size == 1}" action="#{AdvancedSearchController.mdCriterionController.mdCriterionManager.removeObject}"/>
+			     	</h:panelGroup>
 		     	
+			     	<h:panelGroup layout="block" styleClass="free_area0 endline itemLine" rendered="#{index.index > 0}">
+						<b class="xLarge_area0_p8 endline labelLine clear">&#160;
+							<span class="noDisplay"> </span>
+						</b>
+						<span class="xHuge_area0 xTiny_marginLExcl endline">
+							<h:selectOneMenu styleClass="large_select replace" id="selectMd" value="#{MDCriterionBean.mdCriterionVO.md}">
+								<f:selectItems value="#{MDCriterionBean.mdList}"/>
+							</h:selectOneMenu>
+							<h:inputText styleClass="large_txtInput" id="md" value="#{MDCriterionBean.mdCriterionVO.mdText}" />					
+						</span>
+	
+							<tr:commandButton id="btnAddFollowing" styleClass="min_imgBtn groupTool add" text=" " shortDesc="#{tip.search_btAdd}" action="#{AdvancedSearchController.mdCriterionController.mdCriterionManager.addObject}" />
+							<tr:commandButton id="btnRemoveFollowing" styleClass="min_imgBtn groupTool remove" text=" " shortDesc="#{tip.search_btRemove}" disabled="#{AdvancedSearchController.mdCriterionController.mdCriterionManager.size == 1}" action="#{AdvancedSearchController.mdCriterionController.mdCriterionManager.removeObject}"/>
+	
+					</h:panelGroup>
 		     	</h:panelGroup>
+		     	
 		     	<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder"></h:panelGroup>
 				<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
-						<h:selectOneMenu id="selCollectionCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{collectionCriterionBean.logicOperator}">
-							<f:selectItems value="#{collectionCriterionBean.logicOperatorItems}"/>
+						<h:selectOneMenu id="selMDCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{MDCriterionBean.logicOperator}">
+							<f:selectItems value="#{MDCriterionBean.logicOperatorItems}"/>
 						</h:selectOneMenu>		
 				</h:panelGroup>
-  		     </tr:iterator>
-	     		<a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide: MD Profile" /></a>  		     
-		     </div>
-		     <a class="free_area0 expand"><h:outputText value="Show: MD Profile" /></a>
+        	</tr:iterator>
+	     		 <a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide: MD Profile" /></a>  		     
+		</div>
+		   <a class="free_area0 expand"><h:outputText value="Show: MD Profile" /></a>
 		     
-	     </h:panelGroup>
+	</h:panelGroup>
 </f:subview>
 </div>

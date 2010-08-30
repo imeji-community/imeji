@@ -13,7 +13,7 @@ public abstract class Criterion {
 	 * @return a metadata serach criterion
 	 * @throws TechnicalException if MetadataSearchCriterion cannot be instantiated
 	 */
-	public abstract ArrayList<SearchCriterion> createSearchCriterion();
+	public abstract ArrayList<String> createSearchCriterion();
 
 	//logic operator between the search criteria
 	private String logicOperator;
@@ -31,15 +31,15 @@ public abstract class Criterion {
 	public final void setLogicOperator(String logicOperator)
 	{
 		this.logicOperator = logicOperator;
-		if (logicOperator.equals("LOGIC_AND"))
+		if (logicOperator.equals("AND"))
 		{
 			logicOperator = "AND";
 		}
-		else if (logicOperator.equals("LOGIC_OR"))
+		else if (logicOperator.equals("OR"))
 		{
 			logicOperator = "OR";
 		}
-		else if (logicOperator.equals("LOGIC_NOT"))
+		else if (logicOperator.equals("NOT"))
 		{
 			logicOperator = "NOT";
 		}

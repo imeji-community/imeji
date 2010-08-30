@@ -25,11 +25,19 @@ public class MDCriterion extends Criterion{
 		this.mdText = mdText;
 	}
 
-	@Override
-	public ArrayList<SearchCriterion> createSearchCriterion() {
-		ArrayList<SearchCriterion> criterions = new ArrayList<SearchCriterion>();
+	public ArrayList<String> createSearchCriterion() {
+		ArrayList<String> criterions = new ArrayList<String>();
+	
+		if(isSearchStringEmpty() == true)
+			return criterions;
+		else{
+			String criterion = new String();
+			criterion += "MD=" + getMd() +"&MDText=" + getMdText();
+			System.err.println(criterion);
+			criterions.add(criterion);
+		}
 
-		return null;
+		return  criterions;
 	}
 	
 }

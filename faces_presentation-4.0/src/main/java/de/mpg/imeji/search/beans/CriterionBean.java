@@ -13,7 +13,8 @@ import de.mpg.imeji.util.BeanHelper;
 public class CriterionBean extends BeanHelper{
 	
 	private String logicOperator;
-	enum LogicOperator
+	private List<SelectItem> logicOperatorItems;
+	enum LogicOperatorItems
 	{
 		AND ("and"),
 		OR ("or"),
@@ -21,7 +22,7 @@ public class CriterionBean extends BeanHelper{
 		
 		private String query;
 
-		LogicOperator(String query)
+		LogicOperatorItems(String query)
 		{
 			this.query = query;
 		}
@@ -34,35 +35,33 @@ public class CriterionBean extends BeanHelper{
 			return query;
 		}
 	}
+	public void setLogicOperatorItems(List<SelectItem> logicOperatorItems){
+		this.logicOperatorItems = logicOperatorItems;
+	}
 	
     public List<SelectItem> getLogicOperatorItems() 
     {
     	List<SelectItem> selectItems = new ArrayList<SelectItem>();
-    	for (LogicOperator op :LogicOperator.values())
+    	for (LogicOperatorItems op :LogicOperatorItems.values())
     	{
     		selectItems.add(new SelectItem(op.name(), op.name()));
     	}
     	return selectItems;
     }
     
-	public final String getLogicOperator()
-	{
+	public final String getLogicOperator(){
 		return logicOperator;
 	}
 	
-	public final void setLogicOperator(String logicOperator)
-	{
+	public final void setLogicOperator(String logicOperator){
 		this.logicOperator = logicOperator;
-		if (logicOperator.equals("LOGIC_AND"))
-		{
+		if (logicOperator.equals("AND")){
 			logicOperator = "AND";
 		}
-		else if (logicOperator.equals("LOGIC_OR"))
-		{
+		else if (logicOperator.equals("OR")){
 			logicOperator = "OR";
 		}
-		else if (logicOperator.equals("LOGIC_NOT"))
-		{
+		else if (logicOperator.equals("NOT")){
 			logicOperator = "NOT";
 		}
 	}

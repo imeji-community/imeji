@@ -85,6 +85,7 @@ public abstract class DataModelManager<T> {
 			objectDM.setWrappedData(objectList);
 		}
 		return objectDM;
+
 	}
 
 	/**

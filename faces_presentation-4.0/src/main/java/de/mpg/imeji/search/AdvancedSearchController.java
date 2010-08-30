@@ -1,21 +1,10 @@
 package de.mpg.imeji.search;
 
-import java.io.Serializable;
-
-
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-
 import org.apache.log4j.Logger;
 import org.apache.myfaces.trinidad.component.UIXIterator;
-
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryFactory;
-
-import de.mpg.imeji.search.beans.CriterionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.SearchCriterion;
 
 
 
@@ -23,49 +12,46 @@ import de.mpg.imeji.util.BeanHelper;
 
 public class AdvancedSearchController extends BeanHelper{
 
-
-
 	private static Logger logger = Logger.getLogger(AdvancedSearchController.class);
 	private String userHandle;	
 	
-	private CollectionCriterionController collectionCriterionController;
-	private MDCriterionController mdCriterionController;
+	private CollectionCriterionController collectionCriterionController = null;
+	private MDCriterionController mdCriterionController = null;
 	
-	private UIXIterator mdCriterionIterator;
+	private UIXIterator mdCriterionIterator= new UIXIterator();
 	
 	public AdvancedSearchController(){
 		collectionCriterionController = new CollectionCriterionController();
 		mdCriterionController = new MDCriterionController();
-		
-		mdCriterionIterator = new UIXIterator();
 	}
 	
 	public void clearAndInitialAllForms(){
 		collectionCriterionController = new CollectionCriterionController();
 		mdCriterionController = new MDCriterionController();
+		this.getCollectionCriterionController().getCollectionCriterionManager().getObjectDM();
 	}
 	
-	public String clearAllForms(){
+	public boolean clearAllForms(){
 		collectionCriterionController.clearAllForms();
 		mdCriterionController.clearAllForms();
-		return null;
+		return true;
 	}
 	
 	public String startSearch(){
-		ArrayList<Criterion> criterionList = new ArrayList<Criterion>();
+		String searchString = "";
+		for(String c : collectionCriterionController.getCollectionCriterionManager().getSearchCriterion())
+			searchString += c + " ";
+		for (String c : mdCriterionController.getMdCriterionManager().getSearchCriterion())
+			searchString += c + " ";
 		
-		criterionList.addAll(collectionCriterionController.getFilledCriterion());
-		criterionList.addAll(mdCriterionController.getFilledCriterion());
+		System.err.println("searchString = " + searchString);
 		
-		String q = "SELECT ?v00 WHERE { ?s a <http://imeji.mpdl.mpg.de/collection> . ?s <http://imeji.mpdl.mpg.de/container/metadata> ?v10 . ?v10 <http://purl.org/dc/elements/1.1/title> ?v00 }";
+		return searchString;
+	}
+	
+	private ArrayList<SearchCriterion> transformToSparklSearchCriteria(Criterion predecessor, Criterion transformer){
+		return null;
 		
-//		Query queryObject = QueryFactory.create(q);
-//		QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
-//		ResultSet results = qe.execSelect();
-//		ResultSetFormatter.out(System.out, results);
-//		qe.close();
-		
-		return q;
 	}
 
 	public CollectionCriterionController getCollectionCriterionController() {

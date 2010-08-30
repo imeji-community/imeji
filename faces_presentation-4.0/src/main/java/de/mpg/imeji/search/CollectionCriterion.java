@@ -18,13 +18,17 @@ public class CollectionCriterion extends Criterion{
 		this.collection = collection;
 	}
 	@Override
-	public ArrayList<SearchCriterion> createSearchCriterion() {
-		ArrayList<SearchCriterion> criterions = new ArrayList<SearchCriterion>();
-		if(this.collection != null){
-//			SearchCriterion creterionPre = new SeachCriterion();
-//			criterions.add(getCollection());
+	public ArrayList<String> createSearchCriterion() {
+		ArrayList<String> criterions = new ArrayList<String>();
+		if(isSearchStringEmpty() == true)
+			return criterions;
+		else{
+			String criterion = new String();
+			criterion += "Collection=" + getCollection();
+			System.err.println(criterion);
+			criterions.add(criterion);
 		}
-			
+
 			
 		return criterions;
 	}

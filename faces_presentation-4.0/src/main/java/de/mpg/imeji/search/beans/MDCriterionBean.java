@@ -1,16 +1,19 @@
 package de.mpg.imeji.search.beans;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.search.MDCriterion;
+import de.mpg.imeji.search.simulator.Simulator;
 import de.mpg.jena.controller.SearchCriterion;
 
 public class MDCriterionBean extends CriterionBean {
 	public static final String BEAN_NAME = "MDCriterionBean";
-	private List<SelectItem> mdList;
+	private List<SelectItem> mdList = null;
 	private MDCriterion mdCriterionVO;
 	
 
@@ -22,16 +25,21 @@ public class MDCriterionBean extends CriterionBean {
 		setMdCriterionVO(mdCriterionVO);
 	}
 
-	public List<SelectItem> getMdList() {
+	public List<SelectItem> getMdList(){
 		mdList = new ArrayList<SelectItem>();
 		//TODO: remove static mdprofile list
-		mdList.add(new SelectItem("Author","Author"));
-		mdList.add(new SelectItem("Genre","Genre"));
-		mdList.add(new SelectItem("Datum","Datum"));
-		mdList.add(new SelectItem("Country","Country"));
-		
+		Simulator s = new Simulator();
+		try{
+			for(int i=0; i<s.getSelectedCollection().getMdList().size(); i++)
+				mdList.add(new SelectItem(s.getSelectedCollection().getMdList().get(i).getValue(),s.getSelectedCollection().getMdList().get(i).getLabel()));
+		}catch(Exception e){
+			for(int i=0; i<s.getDefaultCollection().getMdList().size(); i++)
+				mdList.add(new SelectItem(s.getDefaultCollection().getMdList().get(i).getValue(),s.getDefaultCollection().getMdList().get(i).getLabel()));
+
+			}
 		return mdList;
 	}
+	
 	public void setMdList(List<SelectItem> mdList) {
 		this.mdList = mdList;
 	}
@@ -50,9 +58,11 @@ public class MDCriterionBean extends CriterionBean {
 		
 	}
 
-	public void clearCriterion() {
+	public boolean clearCriterion() {
 		mdCriterionVO.setMd(null);
 		mdCriterionVO.setMdText(null);
+		return true;
+		
 
 		
 	}

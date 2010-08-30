@@ -75,7 +75,7 @@
 									
 									<h:panelGroup styleClass="huge_area0 xSmall_marginLExcl" rendered="#{statement.constraintsSize > 0}">
 										<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
-										<tr:iterator id="constraints" var="constraint" value="#{statement.literalConstraints}" varStatus="index">
+										<tr:iterator id="constraints" var="constraint" value="#{statement.statement.literalConstraints}" varStatus="index">
 											<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
 												<h:inputText styleClass="large_txtInput endline" value="#{constraint}" valueChangeListener="#{statement.constraintListener}">
 													<f:attribute name="position" value="#{index.index}"/>
@@ -117,7 +117,7 @@
 				</h:panelGroup>
 					
 				<div class="full_area0 formButtonArea">
-					<h:outputLink value="#{SessionBean.backUrl}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
+					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
 						<h:outputText value="#{lbl.cancel}" />
 					</h:outputLink>			
 					<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					

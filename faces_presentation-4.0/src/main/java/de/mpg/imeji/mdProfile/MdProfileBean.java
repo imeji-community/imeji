@@ -29,15 +29,16 @@ public class MdProfileBean
     private int constraintPosition;
     private List<StatementWrapper> statements = null;
     private List<SelectItem> mdTypesMenu = null;
+    private String id = null;
 
     public MdProfileBean()
     {
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
-        if (collectionSession.getActive() == null)
+        if (collectionSession.getProfile() == null)
         {
-            collectionSession.setActive(ImejiFactory.newCollection());
+            collectionSession.setProfile(new MetadataProfile());
         }
-        profile = collectionSession.getActive().getProfile();
+        profile = collectionSession.getProfile();
         statements = new ArrayList<StatementWrapper>();
         mdTypesMenu = new ArrayList<SelectItem>();
         for (ComplexType mdt : collectionSession.getMetadataTypes())
@@ -55,15 +56,17 @@ public class MdProfileBean
         collectionSession.getActive().setProfile(profile);
     }
 
-    public String init()
+    public void init()
     {
         for (Statement st : profile.getStatements())
         {
             statements.add(new StatementWrapper(st));
         }
-        collectionSession.getActive().getProfile().getStatements().clear();
-        collectionSession.getActive().getProfile().getStatements().addAll(statements);
-        return "";
+    }
+
+    protected String getNavigationString()
+    {
+        return "pretty:";
     }
 
     public String addStatement()
@@ -77,15 +80,15 @@ public class MdProfileBean
         {
             ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
         }
-        collectionSession.getActive().setProfile(profile);
-        return "pretty:createProfile";
+        collectionSession.setProfile(profile);
+        return getNavigationString();
     }
 
     public String removeStatement()
     {
         ((List<Statement>)profile.getStatements()).remove(getStatementPosition());
-        collectionSession.getActive().setProfile(profile);
-        return "pretty:createProfile";
+        collectionSession.setProfile(profile);
+        return getNavigationString();
     }
 
     public String addConstraint()
@@ -100,8 +103,8 @@ public class MdProfileBean
             ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition(), new LocalizedString("",
                     "eng"));
         }
-        collectionSession.getActive().setProfile(profile);
-        return "pretty:createProfile";
+        collectionSession.setProfile(profile);
+        return getNavigationString();
     }
 
     public String removeConstraint()
@@ -109,8 +112,8 @@ public class MdProfileBean
         Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
         if (getConstraintPosition() != 0)
             ((List<LocalizedString>)st.getLiteralConstraints()).remove(getConstraintPosition());
-        collectionSession.getActive().setProfile(profile);
-        return "pretty:createProfile";
+        collectionSession.setProfile(profile);
+        return getNavigationString();
     }
 
     public int getConstraintPosition()
@@ -177,5 +180,15 @@ public class MdProfileBean
     public void setMdTypesMenu(List<SelectItem> mdTypesMenu)
     {
         this.mdTypesMenu = mdTypesMenu;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
     }
 }

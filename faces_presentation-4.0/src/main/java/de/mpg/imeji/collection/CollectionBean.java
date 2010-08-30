@@ -28,7 +28,6 @@ public abstract class CollectionBean
     private CollectionImeji collection = null;
    
     private String id = null;
-    private MdProfileBean mdProfileBean = null;
     private int authorPosition;
     private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
@@ -37,15 +36,12 @@ public abstract class CollectionBean
     public CollectionBean(CollectionImeji coll)
     {
         this.collection = coll;
-        mdProfileBean = new MdProfileBean();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        
     }
     
     public CollectionBean()
     {
         collection = new CollectionImeji();
-        mdProfileBean = new MdProfileBean();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
@@ -206,22 +202,6 @@ public abstract class CollectionBean
     public void setId(String id)
     {
         this.id = id;
-    }
-
-    /**
-     * @return the mdProfileBean
-     */
-    public MdProfileBean getMdProfileBean()
-    {
-        return mdProfileBean;
-    }
-
-    /**
-     * @param mdProfileBean the mdProfileBean to set
-     */
-    public void setMdProfileBean(MdProfileBean mdProfileBean)
-    {
-        this.mdProfileBean = mdProfileBean;
     }
 
     public List<SelectItem> getProfilesMenu()

@@ -34,7 +34,7 @@ public class CollectionController extends ImejiController{
 		
 		writeCreateProperties(ic.getProperties(), user);
 	    ic.getProperties().setStatus(Status.PENDING); 
-		ic.setId(new URI("http://imeji.mpdl.mpg.de/collection/" + getUniqueId()));
+		ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
 		base.begin();
 		Bean2RDF writer = new Bean2RDF(base);
 		writer.saveDeep(ic);

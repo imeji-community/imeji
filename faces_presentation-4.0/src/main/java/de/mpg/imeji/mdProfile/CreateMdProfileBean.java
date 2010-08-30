@@ -4,6 +4,7 @@ import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
 
 public class CreateMdProfileBean extends MdProfileBean
@@ -13,7 +14,7 @@ public class CreateMdProfileBean extends MdProfileBean
     {
        super();
        session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-       if ("1".equals(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("reset")))
+       if (UrlHelper.getParameterBoolean("reset"))
        {
            this.reset();
        }
@@ -26,4 +27,12 @@ public class CreateMdProfileBean extends MdProfileBean
         BeanHelper.info(session.getMessage("profile_save_success"));
         return "pretty:";
     }
+
+    @Override
+    protected String getNavigationString()
+    {
+       return "pretty:createProfile";
+    }
+    
+    
 }

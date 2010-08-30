@@ -1,19 +1,14 @@
 package de.mpg.imeji.collection;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.collection.CollectionBean.TabType;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.CollectionController;
-import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
-import de.mpg.jena.vo.User;
 
 public class EditCollectionBean extends CollectionBean
 {

@@ -216,7 +216,7 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>SearcAlbumBean</managed-bean-name>
+		<managed-bean-name>SearchAlbumBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.search.SearchAlbumBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
@@ -230,6 +230,11 @@
 	<managed-bean>
 		<managed-bean-name>CreateMdProfileBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.mdProfile.CreateMdProfileBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>EditMdProfileBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.mdProfile.EditMdProfileBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 

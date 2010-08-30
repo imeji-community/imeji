@@ -10,12 +10,14 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.list.CollectionListVO;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.ComplexType.AllowedTypes;
 
 public class CollectionSessionBean
 {
     // Collection active (image browsed are in that collection)
     private CollectionImeji active = null;
+    private MetadataProfile profile = null;
     private CollectionListVO collectionList = null;
     private SessionBean sessionBean = null;
     private String selectedMenu = "SORTING";
@@ -39,6 +41,7 @@ public class CollectionSessionBean
     public void init() throws Exception
     {
         active = new CollectionImeji();
+        profile = new MetadataProfile();
         metadataTypes = new ArrayList<ComplexType>();
         for (AllowedTypes t : AllowedTypes.values())
         {
@@ -123,4 +126,15 @@ public class CollectionSessionBean
     {
         return metadataTypes;
     }
+
+    public MetadataProfile getProfile()
+    {
+        return profile;
+    }
+
+    public void setProfile(MetadataProfile profile)
+    {
+        this.profile = profile;
+    }
+    
 }

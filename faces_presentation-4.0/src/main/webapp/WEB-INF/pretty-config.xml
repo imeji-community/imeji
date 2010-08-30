@@ -60,10 +60,17 @@
 		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>
 	
+	<!-- Profile Pages -->
 	<url-mapping id="createProfile">
-		<pattern value="/profile"/>
+		<pattern value="/mdprofile"/>
 		<view-id>/jsf/ProfileCreate.xhtml</view-id>
 		<action>#{CreateMdProfileBean.init}</action>
+	</url-mapping>
+	
+	<url-mapping id="editProfile">
+		<pattern value="/edit/mdprofile/#{EditMdProfileBean.id}"/>
+		<view-id>/jsf/ProfileEdit.xhtml</view-id>
+		<action onPostback="true">#{EditMdProfileBean.init}</action>
 	</url-mapping>
 	
 	<url-mapping id="searchPictures">

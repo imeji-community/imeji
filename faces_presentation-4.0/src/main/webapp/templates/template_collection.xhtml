@@ -23,14 +23,17 @@
 	</ui:define>
 
 	<ui:define name="actionsMenu">
-		<h:panelGroup rendered="true">
+		<h:panelGroup rendered="">
 			<!-- ORGANIZE content menu lower line starts here -->
-			<h:outputLink id="lnkEditCollection" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}" 
-				rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}">
-				<h:outputText value="Edit Collection"></h:outputText>
+			<h:outputLink id="lnkEditCollection" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}?init=1" 
+				rendered="true">
+				<h:outputText value="#{lbl.collection_edit}"></h:outputText>
 			</h:outputLink>
-			<h:outputText styleClass="seperator"
-				rendered="#{FormularBean.collection.properties.status == 'PENDING'}" />
+			<h:outputText styleClass="seperator" rendered="#{FormularBean.collection.properties.status == 'PENDING'}" />
+			<h:outputLink id="lnkEditProfile" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.profile.id.path}?init=1" 
+				rendered="true">
+				<h:outputText value="#{lbl.profile_edit}"></h:outputText>
+			</h:outputLink>
 			<!-- ORGANIZE content menu lower line ends here -->
 		</h:panelGroup>
 	</ui:define>

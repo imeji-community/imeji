@@ -9,16 +9,23 @@ import thewebsemantic.LocalizedString;
 import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.ComplexType.AllowedTypes;
 
-public class StatementWrapper extends Statement
+public class StatementWrapper
 {
     private boolean required = false;
     private boolean multiple = false;
+    private Statement statement;
     private AllowedTypes mdType;
     private String defaultLabel;
 
     public StatementWrapper(Statement st)
     {
-        this.setLiteralConstraints(st.getLiteralConstraints());
+        statement = st;
+        statement.setLiteralConstraints(st.getLiteralConstraints());
+        statement.setMinOccurs(st.getMinOccurs());
+        statement.setMaxOccurs(st.getMaxOccurs());
+        statement.setLabels(st.getLabels());
+        statement.setType(st.getType());
+        // Wrapper variable initialization
         if (Integer.parseInt(st.getMinOccurs()) > 0)
         {
             required = true;
@@ -29,9 +36,11 @@ public class StatementWrapper extends Statement
         }
         if (st.getLabels().size() > 0)
         {
-            this.defaultLabel = st.getLabels().get(0).toString();
+            for (LocalizedString lstr: st.getLabels())
+            {
+                this.defaultLabel = lstr.toString();
+            }
         }
-        this.setType(st.getType());
         if (st.getType() != null)
         {
             for (AllowedTypes type : AllowedTypes.values())
@@ -44,23 +53,24 @@ public class StatementWrapper extends Statement
             }
         }
     }
-    
+
     public void constraintListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
             int pos = Integer.parseInt(event.getComponent().getAttributes().get("position").toString());
-            ((List<LocalizedString>)this.getLiteralConstraints()).set(pos, new LocalizedString(event.getNewValue().toString(), "eng"));
+            ((List<LocalizedString>)statement.getLiteralConstraints()).set(pos, new LocalizedString(event.getNewValue()
+                    .toString(), "eng"));
         }
     }
-    
+
     public void labelListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
             this.defaultLabel = event.getNewValue().toString();
-            this.getLabels().clear();
-            this.getLabels().add(new LocalizedString(defaultLabel, "eng"));
+            statement.getLabels().clear();
+            statement.getLabels().add(new LocalizedString(defaultLabel, "eng"));
         }
     }
 
@@ -69,7 +79,7 @@ public class StatementWrapper extends Statement
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
             this.mdType = AllowedTypes.valueOf(event.getNewValue().toString());
-            this.setType(URI.create(mdType.getNamespace() + mdType.getRdfType()));
+            statement.setType(URI.create(mdType.getNamespace() + mdType.getRdfType()));
         }
     }
 
@@ -79,7 +89,7 @@ public class StatementWrapper extends Statement
         {
             if ((Boolean)event.getNewValue())
             {
-                this.setMinOccurs("1");
+                statement.setMinOccurs("1");
             }
         }
     }
@@ -90,14 +100,24 @@ public class StatementWrapper extends Statement
         {
             if ((Boolean)event.getNewValue())
             {
-                this.setMaxOccurs("unbounded");
+                statement.setMaxOccurs("unbounded");
             }
         }
     }
 
+    public Statement getStatement()
+    {
+        return statement;
+    }
+
+    public void setStatement(Statement statement)
+    {
+        this.statement = statement;
+    }
+
     public int getConstraintsSize()
     {
-        return this.getLiteralConstraints().size();
+        return statement.getLiteralConstraints().size();
     }
 
     public AllowedTypes getMdType()

@@ -17,24 +17,12 @@ import thewebsemantic.RdfType;
 @Embedded
 public class Statement
 {
-    private URI id;
     private URI type = URI.create("http://imeji.mpdl.mpg.de/text");
-    private List<LocalizedString> labels = new LinkedList<LocalizedString>();
+    private Collection<LocalizedString> labels = new LinkedList<LocalizedString>();
     private URI vocabulary;
     private Collection<LocalizedString> literalConstraints = new LinkedList<LocalizedString>();
     private String minOccurs = "0";
     private String maxOccurs = "1";
-
-    @Id
-    public URI getId()
-    {
-        return id;
-    }
-
-    public void setId(URI id)
-    {
-        this.id = id;
-    }
 
     @RdfProperty("http://purl.org/dc/terms/type")
     public URI getType()
@@ -47,12 +35,12 @@ public class Statement
         this.type = type;
     }
 
-    public List<LocalizedString> getLabels()
+    public Collection<LocalizedString> getLabels()
     {
         return labels;
     }
 
-    public void setLabels(List<LocalizedString> labels)
+    public void setLabels(Collection<LocalizedString> labels)
     {
         this.labels = labels;
     }

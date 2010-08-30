@@ -6,66 +6,69 @@
 	xmlns:tr="http://myfaces.apache.org/trinidad">
 <body>
 
-<ui:composition template="templates/template_collection_entry.xhtml">
-	<ui:param name="headline" value="#{CollectionSession.current.mdRecord.title.value}"/>
+	<ui:composition template="templates/template_collection_organize.xhtml">
+
+		<ui:param name="headline" value="#{CollectionSession.current.mdRecord.title.value}"/>
 	
 
-	<ui:define name="mainContent">
-		<h:outputText value="#{CollectionSession.initCurrentCollection}"/>
-		<h:inputText id="userHandleHidden" styleClass="noDisplay" value="#{SessionBean.userHandle}"/>
-		<h:inputText id="collectionIDHidden" styleClass="noDisplay" value="#{CollectionSession.current.latestVersion.objectId}"/>
-		<h:inputText id="contextIDHidden" styleClass="noDisplay" value="#{CollectionSession.current.context.objectId}"/>
 		
-	
-		<!-- Load Queue widget CSS and jQuery -->
-		<style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style>
-		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-		<script type="text/javascript">
-			google.load("jquery", "1.3");
-		</script>
-		<!-- Thirdparty intialization scripts, needed for the Google Gears and BrowserPlus runtimes -->
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/gears_init.js"></script>
-		<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+		<ui:define name="mainContent">
+			<h:outputText value="#{CollectionSession.initCurrentCollection}"/>
+			<h:inputText id="userHandleHidden" styleClass="noDisplay" value="#{SessionBean.userHandle}"/>
+			<h:inputText id="collectionIDHidden" styleClass="noDisplay" value="#{CollectionSession.current.latestVersion.objectId}"/>
+			<h:inputText id="contextIDHidden" styleClass="noDisplay" value="#{CollectionSession.current.context.objectId}"/>
+			
 		
+			<!-- Load Queue widget CSS and jQuery -->
+			<style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style>
+			<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+			<script type="text/javascript">
+				google.load("jquery", "1.3");
+			</script>
+			<!-- Thirdparty intialization scripts, needed for the Google Gears and BrowserPlus runtimes -->
+			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/gears_init.js"></script>
+			<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+			
+			
+			
+			<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
+			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/plupload.full.min.js"></script>
+			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/jquery.plupload.queue.min.js"></script>
+			
+			<script>
 		
-		
-		<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/plupload.full.min.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/jquery.plupload.queue.min.js"></script>
-		
-		<script>
-	
-		$(function() {
-			// Setup html5 version
-			$("#uploader").pluploadQueue({
-				// General settings
-				runtimes : 'gears,html5,flash,silverlight,browserplus,html4',
-				url : '/faces/upload' + "?userHandle=" +document.getElementById("formular:userHandleHidden").value + "&amp;collection=" + document.getElementById("formular:collectionIDHidden").value+"&amp;context=" + document.getElementById("formular:contextIDHidden").value,
-				max_file_size : '10mb',
-				chunk_size : '1mb',
-				unique_names : true,
-				filters : [
-					{title : "Image files", extensions : "jpg,gif,png,bmp,tif"},
-					//{title : "Zip files", extensions : "zip"}
-				],
-		
-				// Resize images on clientside
-				//resize : {width : 320, height : 240, quality : 90},
-		
+			$(function() {
+				// Setup html5 version
+				$("#uploader").pluploadQueue({
+					// General settings
+					runtimes : 'gears,html5,flash,silverlight,browserplus,html4',
+					url : '/faces/upload' + "?userHandle=" +document.getElementById("formular:userHandleHidden").value + "&amp;collection=" + document.getElementById("formular:collectionIDHidden").value+"&amp;context=" + document.getElementById("formular:contextIDHidden").value,
+					max_file_size : '10mb',
+					chunk_size : '1mb',
+					unique_names : true,
+					filters : [
+						{title : "Image files", extensions : "jpg,gif,png,bmp,tif"},
+						//{title : "Zip files", extensions : "zip"}
+					],
+			
+					// Resize images on clientside
+					//resize : {width : 320, height : 240, quality : 90},
+			
+				});
 			});
-		});
-		</script>
-			<div class="full_area0 infoPage">
-					<div style="float: left; margin-right: 20px">
-						<div id="uploader" style="width: 450px; height: 330px;">You browser doesn't support native upload. Try Firefox 3 or Safari 4.</div>
-					</div>
-					<br style="clear: both"/>
-				<h:outputLink method="get" styleClass="activeButton" value="/faces/jsf/Upload.xhtml?collection=#{CollectionSession.current.latestVersion.objectId}">
-					<h:outputText value="Send more photos"/>
-				</h:outputLink>
-			</div>
-	</ui:define>
-</ui:composition>
+			</script>
+				<div class="full_area0 infoPage">
+						<div style="float: left; margin-right: 20px">
+							<div id="uploader" style="width: 450px; height: 330px;">You browser doesn't support native upload. Try Firefox 3 or Safari 4.</div>
+						</div>
+						<br style="clear: both"/>
+					<h:outputLink method="get" styleClass="activeButton" value="/faces/jsf/Upload.xhtml?collection=#{CollectionSession.current.latestVersion.objectId}">
+						<h:outputText value="Send more photos"/>
+					</h:outputLink>
+				</div>
+		</ui:define>
+		
+	</ui:composition>
 
 </body>
 </html>

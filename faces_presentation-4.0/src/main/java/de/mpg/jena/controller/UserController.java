@@ -16,7 +16,6 @@ public class UserController extends ImejiController{
 		base.begin();
 		bean2RDF.saveDeep(user);
 		base.commit();
-		base.close();
 	}
 	
 

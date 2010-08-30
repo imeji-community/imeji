@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.beans.SuperContainerBean;
+import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SortCriterion;
@@ -12,7 +13,7 @@ import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.vo.CollectionImeji;
 
-public class CollectionsBean extends SuperContainerBean<CollectionImeji>
+public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 {
     private CollectionController controller;
     private int totalNumberOfRecords;
@@ -38,7 +39,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionImeji>
     }
 
     @Override
-    public List<CollectionImeji> retrieveList(int offset, int limit)
+    public List<ViewCollectionBean> retrieveList(int offset, int limit)
     {
         Collection<CollectionImeji> collections = controller.retrieveAll();
         totalNumberOfRecords = collections.size();
@@ -51,7 +52,8 @@ public class CollectionsBean extends SuperContainerBean<CollectionImeji>
         
         collections = controller.search(null, new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
         
-        return (List<CollectionImeji>)collections;
+        
+        return ImejiFactory.collectionListToBeanList(collections);
     }
 
 

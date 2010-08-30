@@ -6,6 +6,7 @@ import java.util.List;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.User;
@@ -16,6 +17,14 @@ public class ViewCollectionBean extends CollectionBean
     private SessionBean sessionBean = null;
     private List<Person> persons = null;
 
+   
+    public ViewCollectionBean(CollectionImeji coll)
+    {
+        super(coll);
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        collectionController = new CollectionController(sessionBean.getUser());
+    }
+    
     public ViewCollectionBean()
     {
         super();
@@ -70,5 +79,15 @@ public class ViewCollectionBean extends CollectionBean
     protected String getNavigationString()
     {
         return "pretty:viewCollection";
+    }
+    
+    public String getPersonString()
+    {
+        String personString = "";
+        for (Person p : getCollection().getMetadata().getPersons())
+        {
+            personString += p.getFamilyName() + ", " + p.getGivenName();
+        }
+        return personString;
     }
 }

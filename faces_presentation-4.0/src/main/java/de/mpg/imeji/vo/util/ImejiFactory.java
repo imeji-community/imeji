@@ -1,5 +1,9 @@
 package de.mpg.imeji.vo.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.xmlbeans.XmlException;
 import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument;
 import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.DescriptionSetTemplate.DescriptionTemplate;
@@ -7,6 +11,8 @@ import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.Des
 import org.dublincore.xml.dcDsp.x2008.x01.x14.LiteralConstraintType.LiteralOption;
 
 import thewebsemantic.LocalizedString;
+import de.mpg.imeji.collection.CollectionBean;
+import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.vo.MdProfileVO;
 import de.mpg.imeji.vo.StatementVO;
 import de.mpg.jena.vo.CollectionImeji;
@@ -158,5 +164,17 @@ public class ImejiFactory
         Organization org = new Organization();
         org.setName("");
         return org;
+    }
+    
+    public static List<ViewCollectionBean> collectionListToBeanList(Collection<CollectionImeji> collList)
+    {
+        List<ViewCollectionBean> beanList = new ArrayList<ViewCollectionBean>();
+        for(CollectionImeji coll : collList)
+        {
+            beanList.add(new ViewCollectionBean(coll));
+        }
+        
+        return beanList;
+        
     }
 }

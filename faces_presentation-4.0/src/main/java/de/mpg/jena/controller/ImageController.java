@@ -1,5 +1,7 @@
 package de.mpg.jena.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,8 +9,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.tdb.TDB;
 
+import thewebsemantic.Bean2RDF;
 import thewebsemantic.Sparql;
 
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
@@ -42,17 +47,31 @@ public class ImageController extends ImejiController{
 	
 	public void create(Collection<Image> images, URI coll)
 	{
-		base.begin();
+	    //store.getLoader().startBulkUpdate();
+		
+	    Model createModel = ModelFactory.createDefaultModel();
+	    
+	    
+	   
 		CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, coll);
+		Bean2RDF createModelBean = new Bean2RDF(createModel);
 		for(Image img : images)
 		{
 			writeCreateProperties(img.getProperties(), user);
 			img.setCollection(coll);
 			ic.getImages().add(img.getId());
-			bean2RDF.saveDeep(img);
+			createModelBean.saveDeep(img);
+			//System.out.println("Img created!");
 		}
-		bean2RDF.saveDeep(ic);
+		
+		
+		createModelBean.saveDeep(ic);
+		System.out.println("real writing");
+		//base.begin();
+		base.add(createModel);
+		
 		base.commit();
+		createModel.close();
 	}
 	
 	public void update(Image img)
@@ -66,13 +85,18 @@ public class ImageController extends ImejiController{
 
 	public void update(Collection<Image> images)
 	{
-		base.begin();
+	    Model createModel = ModelFactory.createDefaultModel();
+	    Bean2RDF createModelBean = new Bean2RDF(createModel);
 		for(Image img : images)
 		{
 			writeUpdateProperties(img.getProperties(), user);
-			bean2RDF.saveDeep(img);
+			createModelBean.saveDeep(img);
 		}
+	      System.out.println("real writing");
+		base.begin();
+		base.add(createModel);
 		base.commit();
+		createModel.close();
 	}
 	
 	public Image retrieve(URI imgUri)
@@ -133,7 +157,12 @@ public class ImageController extends ImejiController{
 	
 	public static void main(String[] arg) throws Exception
 	{
-		createUser();
+	    File f = new File("/home/haarlaender/basic_imeji_data.rdf");
+	    f.createNewFile();
+		FileOutputStream fos = new FileOutputStream(f);
+		base.write(fos, "RDF/XML");
+		fos.flush();
+		fos.close();
 	}
 	
 	public static void main2(String[] arg) throws Exception
@@ -148,7 +177,7 @@ public class ImageController extends ImejiController{
 
 	
 		
-		for(int j=0; j<20;j++)
+		for(int j=0; j<10;j++)
 		{
 			CollectionImeji coll = new CollectionImeji();
 
@@ -171,7 +200,7 @@ public class ImageController extends ImejiController{
 			System.out.println("End create coll");
 			
 			List<Image> imgList = new LinkedList<Image>();
-			for(int i=0; i<10;i++)
+			for(int i=0; i<100;i++)
 			{
 				System.out.println("Add image: " +i );
 				Image im = new Image();
@@ -289,9 +318,10 @@ public class ImageController extends ImejiController{
 				System.out.println("end updating img in " + String.valueOf(stop-start));
 		
 		
-				base.close();
+				
                 base.write(System.out);
 				System.out.println(rdf2Bean.load(User.class, "haarlaender@mpdl.mpg.de").getName());	
+				base.close();
 				
 		/*
 		String q = "SELECT ?v00 WHERE { ?s a <http://imeji.mpdl.mpg.de/collection> . ?s <http://imeji.mpdl.mpg.de/container/metadata> ?v10 . ?v10 <http://purl.org/dc/elements/1.1/title> ?v00 }";

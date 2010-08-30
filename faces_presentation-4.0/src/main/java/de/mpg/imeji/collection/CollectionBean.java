@@ -32,7 +32,16 @@ public abstract class CollectionBean
     private int authorPosition;
     private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
+    private boolean selected;
 
+    public CollectionBean(CollectionImeji coll)
+    {
+        this.collection = coll;
+        mdProfileBean = new MdProfileBean();
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        
+    }
+    
     public CollectionBean()
     {
         collection = new CollectionImeji();
@@ -223,6 +232,27 @@ public abstract class CollectionBean
     public void setProfilesMenu(List<SelectItem> profilesMenu)
     {
         this.profilesMenu = profilesMenu;
+    }
+    
+    /**
+     * @return the selected
+     */
+    public boolean isSelected()
+    {
+        return selected;
+    }
+
+    /**
+     * @param selected the selected to set
+     */
+    public void setSelected(boolean selected)
+    {
+        this.selected = selected;
+    }
+
+    public int getSize()
+    {
+        return collection.getImages().size();
     }
     
     

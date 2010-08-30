@@ -10,6 +10,14 @@ import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.sdb.SDBFactory;
+import com.hp.hpl.jena.sdb.Store;
+import com.hp.hpl.jena.sdb.StoreDesc;
+import com.hp.hpl.jena.sdb.sql.JDBC;
+import com.hp.hpl.jena.sdb.sql.SDBConnection;
+import com.hp.hpl.jena.sdb.store.DatabaseType;
+import com.hp.hpl.jena.sdb.store.LayoutType;
 
 import de.mpg.escidoc.faces.metastore_test.DataFactory;
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -18,15 +26,16 @@ import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.Counter;
 import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.User;
-import de.mpg.jena.vo.Properties.Status;
 
 public class ImejiController {
 	
 	
-	protected static Model base = null;
+	
 	
 	protected User user;
 	
+	
+	protected static Model base = null;
 	static
 	{
 		try {
@@ -40,16 +49,38 @@ public class ImejiController {
 	}
 	
 	
+	
 	/*
 	protected static Model base = null;
+	protected static Store store = null;
+	
+	static{
+        
+        
+        StoreDesc storeDesc = new StoreDesc(LayoutType.LayoutTripleNodesHash, DatabaseType.MySQL) ;
+        JDBC.loadDriverMySQL();
+        String jdbcURL = "jdbc:mysql://dev-faces.mpdl.mpg.de:5432/imeji"; 
+        SDBConnection conn = new SDBConnection(jdbcURL, "imeji", "dev-faces") ;
+        store = SDBFactory.connectStore(conn, storeDesc);
+        store.getLoader().setChunkSize(5000000);
+        store.getLoader().setUseThreading(true);
+        base = SDBFactory.connectDefaultModel(store);
+        
+    }
+	*/
+	
+	/*
+	
 	static{
 		
 		
 		StoreDesc storeDesc = new StoreDesc(LayoutType.LayoutTripleNodesHash, DatabaseType.PostgreSQL) ;
 		JDBC.loadDriverPGSQL();
-		String jdbcURL = "jdbc:postgresql://dev-coreservice.mpdl.mpg.de:5432/imeji"; 
+		String jdbcURL = "jdbc:postgresql://localhost:5432/imeji"; 
 		SDBConnection conn = new SDBConnection(jdbcURL, "postgres", "postgres") ;
-		Store store = SDBFactory.connectStore(conn, storeDesc);
+		store = SDBFactory.connectStore(conn, storeDesc);
+		//store.getLoader().setChunkSize(50000);
+		store.getLoader().
 		base = SDBFactory.connectDefaultModel(store);
 		
 
@@ -197,7 +228,7 @@ public class ImejiController {
 		base.begin();
 		Counter c = new Counter();
 		try {
-			c = rdf2Bean.load(Counter.class, 0);
+			c = new RDF2Bean(base).load(Counter.class, 0);
 		} catch (NotFoundException e) {
 			bean2RDF.save(c);
 		}

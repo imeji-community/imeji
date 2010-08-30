@@ -213,16 +213,16 @@
 				      	<td class="free_area0 endline status">
 				      		<span class="seperator"></span>
 				      		<span class="free_area0_p8 endline statusArea">
-								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.properties.status == 'WITHDRAWN'}" />
-								<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.properties.status == 'PENDING'}" />
-								<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.properties.status == 'RELEASED'}" />
-								<h:outputLabel styleClass="medium_label endline" rendered="#{container.properties.status == 'PENDING'}">
+								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.collection.properties.status == 'WITHDRAWN'}" />
+								<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.collection.properties.status == 'PENDING'}" />
+								<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.collection.properties.status == 'RELEASED'}" />
+								<h:outputLabel styleClass="medium_label endline" rendered="#{container.collection.properties.status == 'PENDING'}">
 									<h:outputText value="#{lbl.private}" />
 								</h:outputLabel>
-								<h:outputLabel styleClass="medium_label endline" rendered="#{container.properties.status == 'RELEASED'}">
+								<h:outputLabel styleClass="medium_label endline" rendered="#{container.collection.properties.status == 'RELEASED'}">
 									<h:outputText value="#{lbl.published}" />
 								</h:outputLabel>
-								<h:outputLabel styleClass="medium_label endline" rendered="#{container.properties.status == 'WITHDRAWN'}">
+								<h:outputLabel styleClass="medium_label endline" rendered="#{container.collection.properties.status == 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.withdrawn}" />
 								</h:outputLabel>
 							</span>
@@ -231,8 +231,8 @@
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="free_area0_p8 itemHeadline">
-				      			<h:outputLink value="#{Navigation.applicationUri}#{container.id.path}">
-				      				<b><h:outputText value="#{container.metadata.title}" /></b>
+				      			<h:outputLink value="#{Navigation.applicationUri}#{container.collection.id.path}">
+				      				<b><h:outputText value="#{container.collection.metadata.title}" /></b>
 				      			</h:outputLink>								
 				      		</span>
 				      	</td>
@@ -253,13 +253,13 @@
 				      	
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
-					      	<h:outputText styleClass="large_area0_p8" escape="false" title="#{container.metadata.description}" value="#{container.metadata.description} &#160;"/>
+					      	<h:outputText styleClass="large_area0_p8" escape="false" title="#{container.collection.metadata.description}" value="#{container.collection.metadata.description} &#160;"/>
 					    </td>
 				      	
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="medium_area0_p8">
-				      			<h:outputText value="#{container.properties.lastModificationDate}"/>&#160;
+				      			<h:outputText value="#{container.collection.properties.lastModificationDate}"/>&#160;
 				      		</span>
 				      	</td>
 				    </tr>

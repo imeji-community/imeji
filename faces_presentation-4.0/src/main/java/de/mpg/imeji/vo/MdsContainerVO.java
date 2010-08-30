@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.mpg.escidoc.services.common.valueobjects.metadata.PersonVO;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.vo.ContainerMetadata;
 import de.mpg.jena.vo.Organization;
@@ -11,6 +12,7 @@ import de.mpg.jena.vo.Person;
 
 public class MdsContainerVO extends ContainerMetadata
 {
+    /*
     private List<PersonVO> personsVO;
     public MdsContainerVO()
     {
@@ -37,9 +39,7 @@ public class MdsContainerVO extends ContainerMetadata
         }
     }
     
-    /*
-     * Methods for Persons
-     */
+
     
     public PersonVO getPerson(int pos)
     {
@@ -57,5 +57,5 @@ public class MdsContainerVO extends ContainerMetadata
         this.getPersonsVO().remove(pos);
         this.setPersons(this.getPersonsVO());
     }
-
+*/
 }

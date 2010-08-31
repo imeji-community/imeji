@@ -244,7 +244,6 @@ public class ImejiController {
 	{
 	    try
         {
-	        base.close();
             String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
             base = DataFactory.model(tdbPath);
             return base;
@@ -261,5 +260,12 @@ public class ImejiController {
         }
         return null;
 	}
+	
+	protected void closeModel()
+    {
+       base.close();
+    }
+	
+	
 	
 }

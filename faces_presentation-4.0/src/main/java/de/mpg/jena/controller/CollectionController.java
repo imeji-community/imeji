@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
+import com.hp.hpl.jena.tdb.TDB;
+
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
@@ -89,7 +91,9 @@ public class CollectionController extends ImejiController{
 	public Collection<CollectionImeji> search(User user, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
 	{
 		String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
-		return Sparql.exec(base, CollectionImeji.class, query);
+		Collection<CollectionImeji> res = Sparql.exec(getModel(), CollectionImeji.class, query);
+		closeModel();
+		return res;
 	}
 	
 }

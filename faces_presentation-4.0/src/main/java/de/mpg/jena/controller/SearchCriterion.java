@@ -9,9 +9,16 @@ public class SearchCriterion {
 
 	public enum ImejiNamespaces {
 		
+	    
+	    
+	    
 		PROPERTIES("http://imeji.mpdl.mpg.de/properties"),
 		
 		PROPERTIES_CREATED_BY("http://imeji.mpdl.mpg.de/createdBy", PROPERTIES),
+		PROPERTIES_CREATED_BY_USER_GRANT("http://xmlns.com/foaf/0.1/grants", PROPERTIES_CREATED_BY),
+		PROPERTIES_CREATED_BY_USER_GRANT_TYPE("http://imeji.mpdl.mpg.de/grantType", PROPERTIES_CREATED_BY_USER_GRANT),
+		PROPERTIES_CREATED_BY_USER_GRANT_FOR("http://imeji.mpdl.mpg.de/grantFor", PROPERTIES_CREATED_BY_USER_GRANT),
+		
 		PROPERTIES_MODIFIED_BY("http://imeji.mpdl.mpg.de/modifiedBy", PROPERTIES),
 		PROPERTIES_CREATION_DATE("http://imeji.mpdl.mpg.de/creationDate", PROPERTIES),
 		PROPERTIES_LAST_MODIFICATION_DATE("http://imeji.mpdl.mpg.de/lastModificationDate", PROPERTIES),

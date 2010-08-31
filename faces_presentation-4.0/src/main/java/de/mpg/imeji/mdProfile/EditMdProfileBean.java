@@ -31,7 +31,14 @@ public class EditMdProfileBean extends MdProfileBean
         {
             if (this.getId() != null)
             {
-                this.setProfile(profileController.retrieve(this.getId()));
+                try
+                {
+                    this.setProfile(profileController.retrieve(this.getId()));
+                }
+                catch (Exception e)
+                {
+                    throw new RuntimeException(e);
+                }
             }
             else
             {
@@ -44,13 +51,8 @@ public class EditMdProfileBean extends MdProfileBean
 
     public String save()
     {
-        for (Statement st : this.getProfile().getStatements())
-        {
-            System.out.println(st.getType());
-            
-        }
         profileController.update(this.getProfile());
-        return null;
+        return "pretty:";
     }
 
     @Override

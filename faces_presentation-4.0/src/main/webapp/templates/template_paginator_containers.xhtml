@@ -63,15 +63,18 @@
 					<h:outputText styleClass="seperator void" />
 				<!-- SORTING content menu lower line ends here -->
 				</h:panelGroup>
+				
+				<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.collectionUrl}?reset=1">
+							<h:outputText value="#{lbl.collection_create}"></h:outputText>
+					</h:outputLink>
 			
 				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'ORGANIZE'}">
 				<!-- ORGANIZE content menu lower line starts here -->
-					<!-- 
-					<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.collectionUrl}/new?action=init">
+					<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.collectionUrl}?reset=1">
 							<h:outputText value="#{lbl.collection_create}"></h:outputText>
 					</h:outputLink>
 					<h:outputText styleClass="seperator"/>
-					<h:commandLink id="lnkDelete" styleClass="free_area0" action="#{FacesContainerListBean.deleteLink}" immediate="true">
+					<!-- <h:commandLink id="lnkDelete" styleClass="free_area0" action="#{FacesContainerListBean.deleteLink}" immediate="true">
 							<h:outputText value="#{lbl.collection_delete_selected}"></h:outputText>
 					</h:commandLink>
 					-->

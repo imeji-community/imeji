@@ -2,19 +2,16 @@ package de.mpg.jena.controller;
 
 import java.net.URI;
 
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
-
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.LocalizedString;
 import thewebsemantic.RDF2Bean;
-import thewebsemantic.custom_datatypes.XmlLiteral;
 
-import com.hp.hpl.jena.datatypes.xsd.impl.XMLLiteralType;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.MetadataProfile;
+import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Properties.Status;
@@ -47,7 +44,7 @@ public class ProfileController extends ImejiController
         RDF2Bean reader = new RDF2Bean(base);
         mdp = (MetadataProfile)reader.load(r.getURI());
         base.commit();
-        return mdp;
+        return (MetadataProfile)ObjectHelper.castAllHashSetToList(mdp);
     }
     
     /**
@@ -67,16 +64,24 @@ public class ProfileController extends ImejiController
         base.commit();
     }
     
-    public MetadataProfile retrieve(String id)
+    public MetadataProfile retrieve(String id) throws Exception
+    {
+        return this.retrieve(ObjectHelper.getURI(MetadataProfile.class, id));
+    }
+    
+    public MetadataProfile retrieve(URI uri) throws Exception
     {
         RDF2Bean reader = new RDF2Bean(base);
-        return (MetadataProfile)reader.load(ObjectHelper.getURI(MetadataProfile.class, id).toString());
+        return ((MetadataProfile)ObjectHelper.castAllHashSetToList(reader.load(uri.toString())));
     }
     
     public static void main(String[] arg) throws Exception
     {
         
         MetadataProfile mdp = new MetadataProfile();
+        CollectionImeji coll = new CollectionImeji();
+        coll.getMetadata().setTitle("title");
+        coll.getMetadata().getPersons().add(new Person());
         mdp.setTitle("Test MDProfile");
         Statement st = new Statement();
         st.setType(new URI("http://testtype"));
@@ -86,11 +91,18 @@ public class ProfileController extends ImejiController
         mdp.getStatements().add(st);
         
         ProfileController pc = new ProfileController(null);
+        CollectionController cc = new CollectionController(null);
         mdp = pc.create(mdp);
-        
+        coll.setProfile(mdp);
+        coll = cc.create(coll);
+        coll.getMetadata().setDescription("update");
+        cc.update(coll);
+        coll = cc.retrieve(coll.getId());
         mdp.setTitle("new title");
         
         pc.update(mdp);
+        
+        mdp = pc.retrieve(mdp.getId());
         
         base.write(System.out, "RDF/XML");
         

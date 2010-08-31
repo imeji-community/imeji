@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
+import com.hp.hpl.jena.rdf.model.Resource;
+
 import com.hp.hpl.jena.tdb.TDB;
 
 import thewebsemantic.Bean2RDF;
@@ -11,68 +13,70 @@ import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Properties.Status;
 
+public class CollectionController extends ImejiController
+{
+    private User user;
 
-public class CollectionController extends ImejiController{
+    public CollectionController(User user)
+    {
+        super(user);
+    }
+    /**
+     * Creates a new collection. - Add a unique id - Write user properties
+     * 
+     * @param ic
+     * @param user
+     */
+    public CollectionImeji create(CollectionImeji ic) throws Exception
+    {
+        writeCreateProperties(ic.getProperties(), user);
+        ic.getProperties().setStatus(Status.PENDING);
+        ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
+        base.begin();
+        Bean2RDF writer = new Bean2RDF(base);
+        Resource r = writer.saveDeep(ic);
+        RDF2Bean reader = new RDF2Bean(base);
+        ic = retrieve(URI.create(r.getURI()));
+        base.commit();
+        return (CollectionImeji)ObjectHelper.castAllHashSetToList(ic);
+    }
 
-	private User user;
-	
-	public CollectionController(User user)
-	{
-		super(user);
-	}
-	
-	/**
-	 * Creates a new collection. 
-	 * - Add a unique id
-	 * - Write user properties
-	 * @param ic
-	 * @param user
-	 */
-	public void create(CollectionImeji ic) throws Exception
-	{
-		
-		writeCreateProperties(ic.getProperties(), user);
-	    ic.getProperties().setStatus(Status.PENDING); 
-		ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
-		base.begin();
-		Bean2RDF writer = new Bean2RDF(base);
-		writer.saveDeep(ic);
-		base.commit();
-	}
-	
-	/**
-	 * Updates a collection
-	 * -Logged in users:
-	 * --User is collection owner
-	 * --OR user is collection editor
-	 * @param ic
-	 * @param user
-	 */
-	public void update(CollectionImeji ic)
-	{
-		writeUpdateProperties(ic.getProperties(), user);
-		base.begin();
-		Bean2RDF writer = new Bean2RDF(base);
-		writer.saveDeep(ic);
-		base.commit();
-	}
-	
-	public Collection<CollectionImeji> retrieveAll()
-	{
-		RDF2Bean reader = new RDF2Bean(base);
-		return reader.load(CollectionImeji.class);
-	}
-	
-	public CollectionImeji retrieve(String id)
-	{
-	    RDF2Bean reader = new RDF2Bean(base);
-        return (CollectionImeji)reader.load(ObjectHelper.getURI(CollectionImeji.class, id).toString());
-	}
-	
-	
+    /**
+     * Updates a collection -Logged in users: --User is collection owner --OR user is collection editor
+     * 
+     * @param ic
+     * @param user
+     */
+    public void update(CollectionImeji ic)
+    {
+        writeUpdateProperties(ic.getProperties(), user);
+        base.begin();
+        Bean2RDF writer = new Bean2RDF(base);
+        writer.saveDeep(ic);
+        base.commit();
+    }
+
+    public Collection<CollectionImeji> retrieveAll()
+    {
+        RDF2Bean reader = new RDF2Bean(base);
+        return reader.load(CollectionImeji.class);
+    }
+
+    public CollectionImeji retrieve(String id)  throws Exception
+    {
+        return this.retrieve(ObjectHelper.getURI(CollectionImeji.class, id));
+    }
+
+    public CollectionImeji retrieve(URI uri) throws Exception
+    {
+        RDF2Bean reader = new RDF2Bean(base);
+        return (CollectionImeji)ObjectHelper.castAllHashSetToList(reader.load(uri.toString()));
+    }
+
 	
 	/**
 	 * Search for collections
@@ -95,5 +99,5 @@ public class CollectionController extends ImejiController{
 		closeModel();
 		return res;
 	}
-	
+
 }

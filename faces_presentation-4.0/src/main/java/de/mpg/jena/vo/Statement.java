@@ -18,6 +18,7 @@ import thewebsemantic.RdfType;
 public class Statement
 {
     private URI type = URI.create("http://imeji.mpdl.mpg.de/text");
+    private String name;
     private Collection<LocalizedString> labels = new LinkedList<LocalizedString>();
     private URI vocabulary;
     private Collection<LocalizedString> literalConstraints = new LinkedList<LocalizedString>();
@@ -84,5 +85,16 @@ public class Statement
     public void setMaxOccurs(String maxOccurs)
     {
         this.maxOccurs = maxOccurs;
+    }
+
+    @RdfProperty("http://purl.org/dc/elements/1.1/title")
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 }

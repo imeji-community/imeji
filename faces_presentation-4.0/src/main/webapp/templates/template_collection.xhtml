@@ -6,12 +6,6 @@
 
 <ui:composition template="template.xhtml">
 
-	<ui:define name="headline">
-		<h1>
-			<h:outputText value="#{lbl.createCollection}" rendered="true" /> 
-			<h:outputText value="#{lbl.editCollection}"	rendered="false" />
-		</h1>
-	</ui:define>
 
 
 	<ui:define name="contentMenu">
@@ -22,21 +16,7 @@
 		<h:outputText styleClass="seperator void" />
 	</ui:define>
 
-	<ui:define name="actionsMenu">
-		<h:panelGroup rendered="">
-			<!-- ORGANIZE content menu lower line starts here -->
-			<h:outputLink id="lnkEditCollection" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}?init=1" 
-				rendered="true">
-				<h:outputText value="#{lbl.collection_edit}"></h:outputText>
-			</h:outputLink>
-			<h:outputText styleClass="seperator" rendered="#{FormularBean.collection.properties.status == 'PENDING'}" />
-			<h:outputLink id="lnkEditProfile" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.profile.id.path}?init=1" 
-				rendered="true">
-				<h:outputText value="#{lbl.profile_edit}"></h:outputText>
-			</h:outputLink>
-			<!-- ORGANIZE content menu lower line ends here -->
-		</h:panelGroup>
-	</ui:define>
+
 
 	<ui:define name="additionalSubheaders">
 		<h:panelGroup layout="block" styleClass="subHeader"

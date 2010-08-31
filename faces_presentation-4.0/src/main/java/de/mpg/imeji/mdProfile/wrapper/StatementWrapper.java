@@ -25,6 +25,7 @@ public class StatementWrapper
         statement.setMaxOccurs(st.getMaxOccurs());
         statement.setLabels(st.getLabels());
         statement.setType(st.getType());
+        statement.setName(st.getName());
         // Wrapper variable initialization
         if (Integer.parseInt(st.getMinOccurs()) > 0)
         {
@@ -64,11 +65,12 @@ public class StatementWrapper
         }
     }
 
-    public void labelListener(ValueChangeEvent event)
+    public void nameListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
             this.defaultLabel = event.getNewValue().toString();
+            this.getStatement().setName(defaultLabel);
             statement.getLabels().clear();
             statement.getLabels().add(new LocalizedString(defaultLabel, "eng"));
         }

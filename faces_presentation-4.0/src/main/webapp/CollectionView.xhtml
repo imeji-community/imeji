@@ -32,6 +32,30 @@
 	</ui:remove>
 	<body>
 		<ui:composition template="templates/template_collection.xhtml">
+			
+			<ui:define name="headline">
+				<h1>
+					<h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> 
+				</h1>
+			</ui:define>
+			
+			<ui:define name="actionsMenu">
+				<h:panelGroup>
+					<!-- ORGANIZE content menu lower line starts here -->
+					<h:outputLink id="lnkEditCollection" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}?init=1" 
+						rendered="true">
+						<h:outputText value="#{lbl.collection_edit}"></h:outputText>
+					</h:outputLink>
+					<h:outputText styleClass="seperator" rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}" />
+					<h:outputLink id="lnkEditProfile" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.profile.id.path}?init=1" 
+						rendered="true">
+						<h:outputText value="#{lbl.profile_edit}"></h:outputText>
+					</h:outputLink>
+					<!-- ORGANIZE content menu lower line ends here -->
+				</h:panelGroup>
+			</ui:define>
+			
+			
 			<ui:define name="mainContent">
 				<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
 					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
@@ -128,6 +152,56 @@
 												<h:panelGroup styleClass="endline">
 													<span class="endline">
 														<h:outputText value="#{organization.name}"/>
+														<h:outputText value=", " rendered="#{indexO.index > 0}"/>
+													</span>
+												</h:panelGroup>
+											</tr:iterator>
+										</tr:iterator>
+									</h:panelGroup>
+								</div>
+							</h:panelGroup>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{ViewCollectionBean.tab == 'PROFILE'}">
+							<h3 class="xLarge_area0_p8 endline blockHeader">
+								<h:outputText value="Profile"/>
+							</h3>
+							<span class="seperator"/>
+							<h:panelGroup>
+								<!-- Picture status of the Collection -->
+								<div class="free_area0 itemBlockContent endline">	
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<tr:iterator var="statement" varStatus="status" value="#{ViewCollectionBean.collection.profile.statements}">
+											<b class="xLarge_area0_p8 endline labelLine clear">
+												<h:outputText value="#{lbl.metadata}"/>
+												<span class="noDisplay">: </span>
+											</b>
+											
+											<span class="xHuge_area0 xTiny_marginLExcl endline">
+												<h:outputLabel value="#{lbl.metadata_name} :   "/>
+												<h:outputText id="inputCreator" styleClass="quad_txtOutput" value="  #{statement.name}"/>
+											</span>
+											
+											<b class="xLarge_area0_p8 endline labelLine clear">
+												<h:outputText value=" type " style="visibility:hidden;"/>
+												<span class="noDisplay">: </span>
+											</b>
+											<span class="xHuge_area0 xTiny_marginLExcl endline">
+												<h:outputLabel value="#{lbl.metadata_type} :   "/>
+												<h:outputText id="inputCreator" styleClass="quad_txtOutput" value="   #{statement.type}"/>
+											</span>
+												
+											<b class="xLarge_area0_p8 endline labelLine clear">
+												<h:outputText value=" labels " style="visibility:hidden;"/>
+												<span class="noDisplay">: </span>
+											</b>
+											<span class="xTiny_marginLExcl endline">
+												<h:outputText value="#{lbl.labels} : "/>
+											</span>
+											<tr:iterator var="label" value="#{statement.labels}" varStatus="indexO">
+												<h:panelGroup styleClass="endline">
+													<span class="endline">
+														<h:outputText value="#{label} (#{label.lang})"/>
 														<h:outputText value=", " rendered="#{indexO.index > 0}"/>
 													</span>
 												</h:panelGroup>

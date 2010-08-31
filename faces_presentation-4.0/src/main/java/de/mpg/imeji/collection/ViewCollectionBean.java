@@ -9,6 +9,7 @@ import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
+import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.User;
 
 public class ViewCollectionBean extends CollectionBean
@@ -30,6 +31,7 @@ public class ViewCollectionBean extends CollectionBean
         super();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         collectionController = new CollectionController(sessionBean.getUser());
+        Statement st = new Statement();
     }
 
     public void init()

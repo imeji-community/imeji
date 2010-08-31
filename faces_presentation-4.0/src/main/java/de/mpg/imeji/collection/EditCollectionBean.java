@@ -28,7 +28,7 @@ public class EditCollectionBean extends CollectionBean
         super.setCollection(collectionSession.getActive());
     }
 
-    public void init()
+    public void init() throws Exception
     {
         if (init)
         {

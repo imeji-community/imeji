@@ -62,17 +62,15 @@ public class MetadataProfile
     {
         this.statements = statements;
     }
-    
+
     public void setProperties(Properties properties)
     {
         this.properties = properties;
     }
-    
+
     @RdfProperty("http://imeji.mpdl.mpg.de/properties")
     public Properties getProperties()
     {
         return properties;
     }
-
-    
 }

@@ -7,14 +7,17 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import org.apache.xalan.xsltc.compiler.sym;
+
 import de.mpg.imeji.search.MDCriterion;
 import de.mpg.imeji.search.simulator.Simulator;
 import de.mpg.jena.controller.SearchCriterion;
 
 public class MDCriterionBean extends CriterionBean {
 	public static final String BEAN_NAME = "MDCriterionBean";
-	private List<SelectItem> mdList = null;
+
 	private MDCriterion mdCriterionVO;
+	private Simulator s = new Simulator();
 	
 
 	public MDCriterionBean(){
@@ -25,24 +28,9 @@ public class MDCriterionBean extends CriterionBean {
 		setMdCriterionVO(mdCriterionVO);
 	}
 
-	public List<SelectItem> getMdList(){
-		mdList = new ArrayList<SelectItem>();
-		//TODO: remove static mdprofile list
-		Simulator s = new Simulator();
-		try{
-			for(int i=0; i<s.getSelectedCollection().getMdList().size(); i++)
-				mdList.add(new SelectItem(s.getSelectedCollection().getMdList().get(i).getValue(),s.getSelectedCollection().getMdList().get(i).getLabel()));
-		}catch(Exception e){
-			for(int i=0; i<s.getDefaultCollection().getMdList().size(); i++)
-				mdList.add(new SelectItem(s.getDefaultCollection().getMdList().get(i).getValue(),s.getDefaultCollection().getMdList().get(i).getLabel()));
 
-			}
-		return mdList;
-	}
 	
-	public void setMdList(List<SelectItem> mdList) {
-		this.mdList = mdList;
-	}
+
 	
 	public MDCriterion getMdCriterionVO() {
 		return mdCriterionVO;

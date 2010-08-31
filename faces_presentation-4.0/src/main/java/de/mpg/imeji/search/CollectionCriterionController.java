@@ -47,6 +47,18 @@ public class CollectionCriterionController {
 			setParentVO(parentVO);
 		}
 		
+		public void setParentVO(List<CollectionCriterion> parentVO){
+			this.parentVO = parentVO;
+			List<CollectionCriterionBean> beanList = new ArrayList<CollectionCriterionBean>();
+            for (CollectionCriterion collectionCriterionVO : parentVO)
+            {
+                beanList.add(new CollectionCriterionBean(collectionCriterionVO));
+            }
+            setObjectList(beanList);			
+		}
+	    
+	    
+		
 		public CollectionCriterionBean createNewObject() {
 			CollectionCriterion newVO = new CollectionCriterion();
 			CollectionCriterionBean collectionCriterionBean = new CollectionCriterionBean(newVO);

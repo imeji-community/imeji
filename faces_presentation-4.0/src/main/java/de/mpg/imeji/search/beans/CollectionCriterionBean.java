@@ -28,17 +28,7 @@ public class CollectionCriterionBean extends CriterionBean {
 		setCollectionCriterionVO(collectionCriterionVO);
 	}
 	
-	public List<SelectItem> getCollectionList() {
-		List<SelectItem> collectionList = new ArrayList<SelectItem>();
-		//TODO: remove static collection list
-		s = new Simulator();
-		collectionList.add(new SelectItem(null,"--"));		
-		collectionList.add(new SelectItem(s.getCollection1().getTitle(),s.getCollection1().getTitle()));
-		collectionList.add(new SelectItem(s.getCollection2().getTitle(),s.getCollection2().getTitle()));
-		collectionList.add(new SelectItem(s.getCollection3().getTitle(),s.getCollection3().getTitle()));
 
-		return collectionList;
-	}
 	
 	public CollectionCriterion getCollectionCriterionVO() {
 		return collectionCriterionVO;
@@ -60,19 +50,7 @@ public class CollectionCriterionBean extends CriterionBean {
 	}
 
 
-	public void collectionChanged(ValueChangeEvent event){
-		String selectedCollection = event.getNewValue().toString();
-		if(selectedCollection.equals("Birds"))
-			s.setSelectedCollection(s.getCollection1());
-		else if(selectedCollection.equals("Faces"))
-			s.setSelectedCollection(s.getCollection2());
-		else if(selectedCollection.equals("Diamonds"))
-			s.setSelectedCollection(s.getCollection3());
-		else
-			s.setSelectedCollection(s.getDefaultCollection());
-			
 
-	}
 
 
 

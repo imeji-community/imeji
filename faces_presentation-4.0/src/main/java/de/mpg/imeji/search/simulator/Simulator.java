@@ -31,6 +31,7 @@ public class Simulator {
 
 
 	public void setSelectedCollection(CollectionSimulator selectedCollection) {
+
 		this.selectedCollection = selectedCollection;
 	}
 

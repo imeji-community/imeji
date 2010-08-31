@@ -1,8 +1,15 @@
 package de.mpg.imeji.search;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+
 import org.apache.log4j.Logger;
 import org.apache.myfaces.trinidad.component.UIXIterator;
+
+import de.mpg.imeji.search.simulator.Simulator;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.SearchCriterion;
 
@@ -19,6 +26,55 @@ public class AdvancedSearchController extends BeanHelper{
 	private MDCriterionController mdCriterionController = null;
 	
 	private UIXIterator mdCriterionIterator= new UIXIterator();
+	
+	private Simulator s = new Simulator();
+	
+	public List<SelectItem> getMdList(){
+		List<SelectItem> mdList = new ArrayList<SelectItem>();
+		//TODO: remove static mdprofile list
+		try{ 
+			for(int i=0; i<s.getSelectedCollection().getMdList().size(); i++){
+				System.err.println("s.getSelected ="+s.getSelectedCollection());
+				mdList.add(new SelectItem(s.getSelectedCollection().getMdList().get(i).getValue(),s.getSelectedCollection().getMdList().get(i).getLabel()));
+			}
+		}catch(Exception e){
+			System.err.println(e);
+			for(int i=0; i<s.getDefaultCollection().getMdList().size(); i++){
+				System.err.println("s.getDefault ="+s.getDefaultCollection());
+				mdList.add(new SelectItem(s.getDefaultCollection().getMdList().get(i).getValue(),s.getDefaultCollection().getMdList().get(i).getLabel()));
+			}
+
+			}
+		return mdList;
+	}
+	
+
+	
+	public List<SelectItem> getCollectionList() {
+		List<SelectItem> collectionList = new ArrayList<SelectItem>();
+		//TODO: remove static collection list
+		collectionList.add(new SelectItem(null,"--"));		
+		collectionList.add(new SelectItem(s.getCollection1().getTitle(),s.getCollection1().getTitle()));
+		collectionList.add(new SelectItem(s.getCollection2().getTitle(),s.getCollection2().getTitle()));
+		collectionList.add(new SelectItem(s.getCollection3().getTitle(),s.getCollection3().getTitle()));
+
+		return collectionList;
+	}
+	
+	public void collectionChanged(ValueChangeEvent event){
+		String selectedCollection = event.getNewValue().toString();
+		System.err.println("selectedCollection = " + selectedCollection);
+		if(selectedCollection.equals("Birds"))
+			s.setSelectedCollection(s.getCollection1());
+		else if(selectedCollection.equals("Faces"))
+			s.setSelectedCollection(s.getCollection2());
+		else if(selectedCollection.equals("Diamonds"))
+			s.setSelectedCollection(s.getCollection3());
+		else
+			s.setSelectedCollection(s.getDefaultCollection());
+			
+
+	}
 	
 	public AdvancedSearchController(){
 		collectionCriterionController = new CollectionCriterionController();
@@ -40,9 +96,9 @@ public class AdvancedSearchController extends BeanHelper{
 	public String startSearch(){
 		String searchString = "";
 		for(String c : collectionCriterionController.getCollectionCriterionManager().getSearchCriterion())
-			searchString += c + " ";
+			searchString += c + "&";
 		for (String c : mdCriterionController.getMdCriterionManager().getSearchCriterion())
-			searchString += c + " ";
+			searchString += c + "&";
 		
 		System.err.println("searchString = " + searchString);
 		

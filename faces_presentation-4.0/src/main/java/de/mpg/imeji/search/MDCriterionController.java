@@ -49,6 +49,16 @@ public class MDCriterionController {
 			return mdCriterionBean;
 		}
 		
+		public void setParentVO(List<MDCriterion> parentVO){
+			this.parentVO = parentVO;
+			List<MDCriterionBean> beanList = new ArrayList<MDCriterionBean>();
+            for (MDCriterion mdCriterionVO : parentVO)
+            {
+                beanList.add(new MDCriterionBean(mdCriterionVO));
+            }
+            setObjectList(beanList);			
+		}
+		
 		public List<String> getSearchCriterion() {
 			List<String> criterions = new ArrayList<String>();
 

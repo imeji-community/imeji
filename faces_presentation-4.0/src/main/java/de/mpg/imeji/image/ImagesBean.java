@@ -14,7 +14,7 @@ import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 
-public class ImagesBean extends BasePaginatorListSessionBean<Image>
+public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
     private ImageController controller;
     private int totalNumberOfRecords;
@@ -42,7 +42,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<Image>
     }
 
     @Override
-    public List<Image> retrieveList(int offset, int limit)
+    public List<ImageBean> retrieveList(int offset, int limit)
     {
         if ("collection".equals(objectClass))
         {
@@ -54,7 +54,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<Image>
         }
         // totalNumberOfRecords = controller.search(null, null, null, 0, 0).size();
         Collection<Image> images = controller.search(null, null, null, limit, offset);
-        return (LinkedList<Image>)images;
+        return ImejiFactory.imageListToBeanList(images);
     }
 
     public String getId()

@@ -13,10 +13,12 @@ import org.dublincore.xml.dcDsp.x2008.x01.x14.LiteralConstraintType.LiteralOptio
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.collection.CollectionBean;
 import de.mpg.imeji.collection.ViewCollectionBean;
+import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.vo.MdProfileVO;
 import de.mpg.imeji.vo.StatementVO;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ContainerMetadata;
+import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
@@ -172,6 +174,18 @@ public class ImejiFactory
         for(CollectionImeji coll : collList)
         {
             beanList.add(new ViewCollectionBean(coll));
+        }
+        
+        return beanList;
+        
+    }
+    
+    public static List<ImageBean> imageListToBeanList(Collection<Image> imgList)
+    {
+        List<ImageBean> beanList = new ArrayList<ImageBean>();
+        for(Image img : imgList)
+        {
+            beanList.add(new ImageBean(img));
         }
         
         return beanList;

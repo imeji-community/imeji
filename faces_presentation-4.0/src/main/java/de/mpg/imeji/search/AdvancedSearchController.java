@@ -34,20 +34,16 @@ public class AdvancedSearchController extends BeanHelper{
 		//TODO: remove static mdprofile list
 		try{ 
 			for(int i=0; i<s.getSelectedCollection().getMdList().size(); i++){
-				System.err.println("s.getSelected ="+s.getSelectedCollection());
 				mdList.add(new SelectItem(s.getSelectedCollection().getMdList().get(i).getValue(),s.getSelectedCollection().getMdList().get(i).getLabel()));
 			}
 		}catch(Exception e){
-			System.err.println(e);
 			for(int i=0; i<s.getDefaultCollection().getMdList().size(); i++){
-				System.err.println("s.getDefault ="+s.getDefaultCollection());
 				mdList.add(new SelectItem(s.getDefaultCollection().getMdList().get(i).getValue(),s.getDefaultCollection().getMdList().get(i).getLabel()));
 			}
 
 			}
 		return mdList;
 	}
-	
 
 	
 	public List<SelectItem> getCollectionList() {
@@ -63,7 +59,6 @@ public class AdvancedSearchController extends BeanHelper{
 	
 	public void collectionChanged(ValueChangeEvent event){
 		String selectedCollection = event.getNewValue().toString();
-		System.err.println("selectedCollection = " + selectedCollection);
 		if(selectedCollection.equals("Birds"))
 			s.setSelectedCollection(s.getCollection1());
 		else if(selectedCollection.equals("Faces"))
@@ -94,15 +89,15 @@ public class AdvancedSearchController extends BeanHelper{
 	}
 	
 	public String startSearch(){
-		String searchString = "";
+		String searchQuery = "";
 		for(String c : collectionCriterionController.getCollectionCriterionManager().getSearchCriterion())
-			searchString += c + "&";
+			searchQuery += c + " ";
 		for (String c : mdCriterionController.getMdCriterionManager().getSearchCriterion())
-			searchString += c + "&";
+			searchQuery += c + " ";
 		
-		System.err.println("searchString = " + searchString);
+		System.err.println("searchString = " + searchQuery);
 		
-		return searchString;
+		return searchQuery;
 	}
 	
 	private ArrayList<SearchCriterion> transformToSparklSearchCriteria(Criterion predecessor, Criterion transformer){

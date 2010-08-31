@@ -40,12 +40,9 @@
 				<h:outputText value="Search Collections" />
 			</h3>
 			<span class="seperator"></span>
-			
-			
-			
+
 			<div class="free_area0 itemBlockContent endline">
  				<tr:iterator id="collectionCriterion" var="CollectionCriterionBean" value="#{AdvancedSearchController.collectionCriterionController.collectionCriterionManager.objectDM}" varStatus="index"> 
-
 
 					<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 						<b class="xLarge_area0_p8 endline labelLine clear">
@@ -53,8 +50,8 @@
 						</b>
 						<span class="xHuge_area0 xTiny_marginLExcl endline">
 							<h:outputLabel styleClass="large_select replace" for="selectCollection" value="Select Collection" />
-							<h:selectOneMenu styleClass="small_select replace" id="selectCollection" value="#{CollectionCriterionBean.collectionCriterionVO.collection}" onchange="this.form.submit()" valueChangeListener="#{CollectionCriterionBean.collectionChanged}" immediate="true">
-								<f:selectItems value="#{CollectionCriterionBean.collectionList}"/>
+							<h:selectOneMenu styleClass="small_select replace" id="selectCollection" value="#{CollectionCriterionBean.collectionCriterionVO.collection}" onchange="submit()" valueChangeListener="#{AdvancedSearchController.collectionChanged}" immediate="true">
+								<f:selectItems value="#{AdvancedSearchController.collectionList}"/>
 							</h:selectOneMenu>
 						</span>					
 					</h:panelGroup>

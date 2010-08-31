@@ -1,6 +1,7 @@
 package de.mpg.jena.vo;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -19,7 +20,7 @@ public class User {
 	
 	private String encryptedPassword;
 	
-	private Collection<Grant> grants;
+	private Collection<Grant> grants = new LinkedList<Grant>();
 	
 	@Id
 	public String getEmail() {

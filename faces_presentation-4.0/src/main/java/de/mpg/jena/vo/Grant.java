@@ -3,13 +3,17 @@ package de.mpg.jena.vo;
 import java.net.URI;
 
 import thewebsemantic.Embedded;
+import thewebsemantic.Namespace;
 import thewebsemantic.RdfType;
 
-@Embedded
+@Namespace("http://imeji.mpdl.mpg.de/")
 @RdfType("grant")
+@Embedded
 public class Grant {
 
-	enum GrantType {
+    @Namespace("http://imeji.mpdl.mpg.de/")
+    @RdfType("grantType")
+	public enum GrantType {
 		CONTAINER_ADMIN, CONTAINER_EDITOR, IMAGE_UPLOADER, IMAGE_EDITOR, PRIVILEGED_VIEWER
 	}
 	
@@ -17,6 +21,16 @@ public class Grant {
 	
 	private URI grantFor;
 	
+	public Grant()
+	{
+	    
+	}
+	
+	public Grant(GrantType gt, URI gf)
+	{
+	    this.grantType = gt;
+	    this.grantFor = gf;
+	}
 	
 	
 	public void setGrantType(GrantType grantType) {

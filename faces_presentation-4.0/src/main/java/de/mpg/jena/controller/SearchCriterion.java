@@ -28,7 +28,7 @@ public class SearchCriterion {
 		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/image/elementNamespace", IMAGE_METADATA),
 		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/image/name", IMAGE_METADATA),
 		IMAGE_METADATA_VALUE("http://imeji.mpdl.mpg.de/image/value", IMAGE_METADATA),
-		
+		IMAGE_COLLECTION("http://imeji.mpdl.mpg.de/collection", null, true),
 
 		CONTAINER_METADATA("http://imeji.mpdl.mpg.de/container/metadata"),
 		CONTAINER_METADATA_TITLE("http://purl.org/dc/elements/1.1/title", CONTAINER_METADATA),
@@ -42,6 +42,7 @@ public class SearchCriterion {
 
 		private String ns;
 		private ImejiNamespaces parent;
+		private boolean isUri;
 		
 		private ImejiNamespaces(String ns) {
 			this.ns = ns;
@@ -51,6 +52,12 @@ public class SearchCriterion {
 			this.ns = ns;
 			this.parent = parent;
 		}
+		
+		private ImejiNamespaces(String ns, ImejiNamespaces parent, boolean isUri) {
+            this.ns = ns;
+            this.parent = parent;
+            this.isUri = isUri;
+        }
 
 		public void setNs(String ns) {
 			this.ns = ns;
@@ -67,6 +74,16 @@ public class SearchCriterion {
 		public void setParent(ImejiNamespaces parent) {
 			this.parent = parent;
 		}
+
+        public void setIsUri(boolean direct)
+        {
+            this.isUri = direct;
+        }
+
+        public boolean getIsUri()
+        {
+            return isUri;
+        }
 	}
 	
 	private ImejiNamespaces namespace;

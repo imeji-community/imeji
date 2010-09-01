@@ -53,7 +53,6 @@ public class MdProfileBean
         mdTypesMenu = new ArrayList<SelectItem>();
         for (ComplexType mdt : collectionSession.getMetadataTypes())
         {
-            String uri = mdt.getType().getNamespace() + mdt.getType().getRdfType();
             mdTypesMenu.add(new SelectItem(mdt.getType().name(), mdt.getType().getLabel()));
         }
     }

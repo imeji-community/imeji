@@ -4,18 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.xmlbeans.XmlException;
-import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument;
-import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.DescriptionSetTemplate.DescriptionTemplate;
-import org.dublincore.xml.dcDsp.x2008.x01.x14.DescriptionSetTemplateDocument.DescriptionSetTemplate.DescriptionTemplate.StatementTemplate;
-import org.dublincore.xml.dcDsp.x2008.x01.x14.LiteralConstraintType.LiteralOption;
-
 import thewebsemantic.LocalizedString;
-import de.mpg.imeji.collection.CollectionBean;
 import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.image.ImageBean;
-import de.mpg.imeji.vo.MdProfileVO;
-import de.mpg.imeji.vo.StatementVO;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ContainerMetadata;
 import de.mpg.jena.vo.Image;
@@ -91,55 +82,55 @@ public class ImejiFactory
 //        return vo;
 //    }
 
-    public static MdProfileVO newMdProfile(String str)
-    {
-        MdProfileVO vo = new MdProfileVO();
-        DescriptionSetTemplateDocument dstDoc;
-        try
-        {
-            dstDoc = DescriptionSetTemplateDocument.Factory.parse(str);
-        }
-        catch (XmlException e)
-        {
-            throw new RuntimeException("Error parsing Md-Profile: ", e);
-        }
-        
-        for (DescriptionTemplate dt : dstDoc.getDescriptionSetTemplate().getDescriptionTemplateArray())
-        {
-            for (StatementTemplate st : dt.getStatementTemplateArray())
-            {
-               vo.getStatements().add(newStatementVO(st));
-            }
-        }
-        return vo;
-    }
-    
-    public static StatementVO newStatementVO(StatementTemplate st)
-    {
-        StatementVO vo = new StatementVO();
-        vo.setName(st.getID());
-        if (st.getPropertyArray().length > 0)
-        {
-            vo.setElementNamespace(st.getPropertyArray(0));
-        }
-        if (st.getNonLiteralConstraint().getVocabularyEncodingSchemeURIArray().length > 0)
-        {
-            vo.setVocabulary(st.getNonLiteralConstraint().getVocabularyEncodingSchemeURIArray(0));
-        }
-        if (st.getMinOccurs().intValue() > 0)
-        {
-            vo.setRequired(true);
-        }
-        if (st.getMaxOccurs().intValue() > 1)
-        {
-            vo.setMultiple(true);
-        }
-        for (LiteralOption lo : st.getLiteralConstraint().getLiteralOptionArray())
-        {
-            vo.getConstraints().add(lo.getStringValue());
-        }
-        return vo;
-    }
+//    public static MdProfileVO newMdProfile(String str)
+//    {
+//        MdProfileVO vo = new MdProfileVO();
+//        DescriptionSetTemplateDocument dstDoc;
+//        try
+//        {
+//            dstDoc = DescriptionSetTemplateDocument.Factory.parse(str);
+//        }
+//        catch (XmlException e)
+//        {
+//            throw new RuntimeException("Error parsing Md-Profile: ", e);
+//        }
+//        
+//        for (DescriptionTemplate dt : dstDoc.getDescriptionSetTemplate().getDescriptionTemplateArray())
+//        {
+//            for (StatementTemplate st : dt.getStatementTemplateArray())
+//            {
+//               vo.getStatements().add(newStatementVO(st));
+//            }
+//        }
+//        return vo;
+//    }
+//    
+//    public static StatementVO newStatementVO(StatementTemplate st)
+//    {
+//        StatementVO vo = new StatementVO();
+//        vo.setName(st.getID());
+//        if (st.getPropertyArray().length > 0)
+//        {
+//            vo.setElementNamespace(st.getPropertyArray(0));
+//        }
+//        if (st.getNonLiteralConstraint().getVocabularyEncodingSchemeURIArray().length > 0)
+//        {
+//            vo.setVocabulary(st.getNonLiteralConstraint().getVocabularyEncodingSchemeURIArray(0));
+//        }
+//        if (st.getMinOccurs().intValue() > 0)
+//        {
+//            vo.setRequired(true);
+//        }
+//        if (st.getMaxOccurs().intValue() > 1)
+//        {
+//            vo.setMultiple(true);
+//        }
+//        for (LiteralOption lo : st.getLiteralConstraint().getLiteralOptionArray())
+//        {
+//            vo.getConstraints().add(lo.getStringValue());
+//        }
+//        return vo;
+//    }
     
 //    public static MdsContainerVO newMdsContainerVO(ContainerMetadata cm)
 //    {

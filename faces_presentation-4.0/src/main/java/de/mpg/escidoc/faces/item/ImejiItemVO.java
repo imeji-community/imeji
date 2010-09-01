@@ -2,11 +2,10 @@ package de.mpg.escidoc.faces.item;
 
 import java.awt.image.BufferedImage;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import org.apache.xmlbeans.XmlAnySimpleType;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
+
 import de.escidoc.schemas.item.x09.ItemDocument;
 import de.escidoc.schemas.item.x09.ItemDocument.Item;
 import de.escidoc.schemas.metadatarecords.x05.MdRecordDocument;

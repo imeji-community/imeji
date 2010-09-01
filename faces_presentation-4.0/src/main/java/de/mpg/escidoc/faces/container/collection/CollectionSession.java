@@ -1,18 +1,15 @@
 package de.mpg.escidoc.faces.container.collection;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.faces.container.FacesContainerVO;
-import de.mpg.escidoc.faces.container.album.AlbumVO;
 import de.mpg.escidoc.faces.container.beans.CollectionBean.CollectionTabType;
 import de.mpg.escidoc.faces.container.list.FacesContainerListController;
 import de.mpg.escidoc.faces.container.list.FacesContainerListParameters;
-import de.mpg.escidoc.faces.container.list.FacesContainerListVO;
 import de.mpg.escidoc.faces.container.list.FacesContainerListParameters.OrderParameterType;
 import de.mpg.escidoc.faces.container.list.FacesContainerListParameters.SortParameterType;
 import de.mpg.escidoc.faces.container.list.FacesContainerListVO.HandlerType;

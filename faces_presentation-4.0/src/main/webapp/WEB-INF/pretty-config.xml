@@ -37,6 +37,12 @@
 		<view-id>/jsf/Images.xhtml</view-id>
 	</url-mapping>
 	
+	<!-- Collection Pages -->
+	<url-mapping id="uploadCollection">
+		<pattern value="/upload/collection/#{UploadBean.id}"/>
+		<view-id>/jsf/Upload.xhtml</view-id>
+		<action onPostback="false">#{UploadBean.init}</action>
+	</url-mapping>
 	
 	<url-mapping id="viewCollection">
 		<pattern value="/collection/#{ViewCollectionBean.id}"/>
@@ -73,6 +79,7 @@
 		<action onPostback="true">#{EditMdProfileBean.init}</action>
 	</url-mapping>
 	
+	<!-- Search Pages -->
 	<url-mapping id="searchPictures">
 		<pattern value="/search"></pattern>
 		<view-id>/jsf/SearchPictures.xhtml</view-id>

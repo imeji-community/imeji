@@ -5,9 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 
-import de.mpg.escidoc.faces.container.collection.CollectionVO;
-import de.mpg.escidoc.faces.item.ImejiItemVO;
-import de.mpg.escidoc.faces.item.ItemVO;
+import de.mpg.imeji.escidoc.ItemVO;
+import de.mpg.jena.vo.CollectionImeji;
 
 /**
  * 
@@ -16,24 +15,24 @@ import de.mpg.escidoc.faces.item.ItemVO;
  */
 public class Upload 
 {
-	private List<ImejiItemVO> items = null;
+	private List<ItemVO> items = null;
 	private String contentModelId = null;
-	private CollectionVO collection = null;
+	private CollectionImeji collection = null;
 	private Date startDate = null;
 	private Date endDate = null;
 		
 	public Upload(String contentModelId) 
 	{
-		items = new ArrayList<ImejiItemVO>();
+		items = new ArrayList<ItemVO>();
 		this.contentModelId = contentModelId;
 	}
 
-	public List<ImejiItemVO> getItems() 
+	public List<ItemVO> getItems() 
 	{
 		return items;
 	}
 
-	public void setItems(List<ImejiItemVO> items) 
+	public void setItems(List<ItemVO> items) 
 	{
 		this.items = items;
 	}
@@ -57,6 +56,26 @@ public class Upload
 	{
 		this.endDate = endDate;
 	}
+
+    public String getContentModelId()
+    {
+        return contentModelId;
+    }
+
+    public void setContentModelId(String contentModelId)
+    {
+        this.contentModelId = contentModelId;
+    }
+
+    public CollectionImeji getCollection()
+    {
+        return collection;
+    }
+
+    public void setCollection(CollectionImeji collection)
+    {
+        this.collection = collection;
+    }
 
 	
 }

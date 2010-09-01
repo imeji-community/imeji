@@ -1,19 +1,18 @@
-ö<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
 	<ui:composition template="template.xhtml">
-		<ui:define name="contentMenu">
+		 <ui:define name="contentMenu">
 			<h:commandLink id="lnkOrganize" styleClass="free_area0" value="ORGANIZE" rendered="false" />
 			<h:outputText styleClass="free_area0" value="ORGANIZE" rendered="true" />
 			<h:outputText styleClass="seperator void" />
 		</ui:define>
-		
+		<!--
 		<ui:define name="actionsMenu">
 			<h:panelGroup rendered="#{CollectionSession.current.version.objectId != null}">
-				<!-- ORGANIZE content menu lower line starts here -->
 				
 				<h:outputLink id="lnkbrowseCollection" styleClass="free_area0" value="#{Navigation.collectionUrl}/new?action=init" rendered="true">
 					<h:outputText value="#{lbl.collection_create}"/>
@@ -43,9 +42,7 @@
 					<h:outputText value="#{lbl.collection_upload}"></h:outputText>
 				</h:outputLink>
 			</h:panelGroup>
-		</ui:define>
-
-		
+		</ui:define>-->
 
 	</ui:composition>
 

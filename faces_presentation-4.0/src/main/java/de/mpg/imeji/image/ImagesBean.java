@@ -3,13 +3,11 @@ package de.mpg.imeji.image;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.vo.ImageVO;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.util.ObjectHelper;

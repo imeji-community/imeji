@@ -164,6 +164,11 @@
 		<managed-bean-class>de.mpg.imeji.beans.BlogBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>StatisticsBean</managed-bean-name>
+		<managed-bean-class>de.mpg.escidoc.faces.beans.StatisticsBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
 
 
 	<!-- Collections Bean -->
@@ -185,6 +190,11 @@
 	<managed-bean>
 		<managed-bean-name>ViewCollectionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.collection.ViewCollectionBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope> 
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>UploadBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.upload.UploadBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope> 
 	</managed-bean>
 	

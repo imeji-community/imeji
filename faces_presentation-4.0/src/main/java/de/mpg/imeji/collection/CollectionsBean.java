@@ -17,7 +17,7 @@ import de.mpg.jena.vo.CollectionImeji;
 
 public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 {
-    private CollectionController controller;
+  
     private int totalNumberOfRecords;
     private SessionBean sb;
   
@@ -27,7 +27,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        this.controller = new CollectionController(sb.getUser());
+       
         
     }
 
@@ -46,6 +46,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
     @Override
     public List<ViewCollectionBean> retrieveList(int offset, int limit)
     {
+        CollectionController controller = new CollectionController(sb.getUser());
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         try
         {

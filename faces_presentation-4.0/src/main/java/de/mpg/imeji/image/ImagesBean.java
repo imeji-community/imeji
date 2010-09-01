@@ -17,7 +17,7 @@ import de.mpg.jena.vo.Image;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
-    private ImageController controller;
+ 
     private int totalNumberOfRecords;
     private String id = null;
     private String objectClass;
@@ -29,7 +29,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        controller = new ImageController(sb.getUser());
+
     }
 
     @Override
@@ -48,6 +48,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     @Override
     public List<ImageBean> retrieveList(int offset, int limit)
     {
+        ImageController controller = new ImageController(sb.getUser());
+        
         if ("collection".equals(objectClass))
         {
             uri = ObjectHelper.getURI(CollectionImeji.class, id);

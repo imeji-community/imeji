@@ -1,6 +1,7 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -45,7 +46,8 @@ public class ImageController extends ImejiController{
 	    
 		writeCreateProperties(img.getProperties(), user);
 		checkUserCredentials(img,ic);
-		
+		//img.getProperties().setStatus(Status.RELEASED);
+		img.setVisibility(Visibility.PUBLIC);
 		img.setCollection(coll);
 		base.begin();
 		ic.getImages().add(img.getId());
@@ -63,6 +65,8 @@ public class ImageController extends ImejiController{
 		{
 			writeCreateProperties(img.getProperties(), user);
 	         checkUserCredentials(img,ic);
+	         //img.getProperties().setStatus(Status.RELEASED);
+	         img.setVisibility(Visibility.PUBLIC);
 			img.setCollection(coll);
 			ic.getImages().add(img.getId());
 			bean2RDF.saveDeep(img);
@@ -178,7 +182,7 @@ public class ImageController extends ImejiController{
 	}
 	
 	
-	public static void main2(String[] arg) throws Exception
+	public static void main(String[] arg) throws Exception
 	{
 	    /*
 	    File f = new File("/home/haarlaender/basic_imeji_data.rdf");
@@ -188,16 +192,16 @@ public class ImageController extends ImejiController{
 		fos.flush();
 		fos.close();
 		*/
-	    //base.write(System.out);
+	    base.write(System.out);
 	    User user = createUser(); 
-	    ImageController ic = new ImageController(null);
+	    ImageController ic = new ImageController(user);
 	    
-	    String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/collection", 100, 0);
-        Collection<CollectionImeji> result = Sparql.exec(base, CollectionImeji.class, query);
+	    String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/image", 100, 0);
+        Collection<Image> result = Sparql.exec(base, Image.class, query);
         System.out.println("Found: " +result.size() + "results ");
 	   
 	    
-	    String q = "SELECT * WHERE { ?s a <http://imeji.mpdl.mpg.de/collection>  . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . FILTER((?status=<http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<http://xmlns.com/foaf/0.1/Person/imeji@mpdl.mpg.de>))}";
+	    String q = "SELECT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?createdBy <http://xmlns.com/foaf/0.1/grants> ?grants . ?grants <http://imeji.mpdl.mpg.de/grantFor> ?grantFor . ?grants <http://imeji.mpdl.mpg.de/grantType> ?grantType . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus }";
 	    
 	  
 	    Query queryObject = QueryFactory.create(q);
@@ -208,7 +212,7 @@ public class ImageController extends ImejiController{
        
 	}
 	
-	public static void main(String[] arg) throws Exception
+	public static void main2(String[] arg) throws Exception
 	{
 		
 	    User user = createUser(); 
@@ -382,5 +386,49 @@ public class ImageController extends ImejiController{
 		qe.close();
 		*/
 	}
+	
+	 @Override
+	    protected String getSpecificFilter() throws Exception
+	    {
+	        //Add filters for user management
+	        String filter ="(";
+	     
+	          
+	         
+	         if(user==null)
+	         {
+	            
+	             filter += "?collStatus = <http://imeji.mpdl.mpg.de/status/RELEASED> && ?visibility = <http://imeji.mpdl.mpg.de/image/visibility/PUBLIC>";
+	         }
+	         else
+	         {
+	            
+	             String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
+	             filter += "(?collStatus = <http://imeji.mpdl.mpg.de/status/RELEASED> && ?visibility = <http://imeji.mpdl.mpg.de/image/visibility/PUBLIC>)";
+	             filter += " || ?collCreatedBy=<" +  userUri + ">";
+	             
+	            
+	                 for(Grant grant : user.getGrants())
+	                 {
+	                     switch(grant.getGrantType())
+	                     {
+	                         case CONTAINER_ADMIN : //Add specifics here
+	                             
+	                         default : filter += " || ?collection=<" + grant.getGrantFor().toString() + ">";
+	                     }
+	                     
+	                 }
+	             }
+	         
+	     
+	          filter += ")";
+	         return filter;
+	    }
+
+    @Override
+    protected String getSpecificQuery() throws Exception
+    {
+        return " . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus ";
+    }
 	
 }

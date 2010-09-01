@@ -1,6 +1,7 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.List;
 
@@ -121,5 +122,50 @@ public class CollectionController extends ImejiController{
 		Collection<CollectionImeji> res = Sparql.exec(getModel(), CollectionImeji.class, query);
 		return res;
 	}
+
+  @Override
+    protected String getSpecificQuery() throws Exception
+    {
+      return " . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy";
+    }
+	
+    @Override
+    protected String getSpecificFilter() throws Exception
+    {
+        //Add filters for user management
+        String filter ="(";
+      
+          
+         
+         if(user==null)
+         {
+             
+             filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED>";
+         }
+         else
+         {
+            
+             String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
+             filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<" +  userUri + ">";
+             
+            
+                 for(Grant grant : user.getGrants())
+                 {
+                     switch(grant.getGrantType())
+                     {
+                         case CONTAINER_ADMIN : //Add specifics here
+                             
+                         default : filter += " || ?s=<" + grant.getGrantFor().toString() + ">";
+                     }
+                     
+                 }
+             }
+         
+     
+          filter += ")";
+         return filter;
+    }
+
+  
 	
 }

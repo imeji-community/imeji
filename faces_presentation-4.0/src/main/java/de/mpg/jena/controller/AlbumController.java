@@ -86,5 +86,17 @@ public class AlbumController extends ImejiController{
 		//base.write(System.out);
 		return Sparql.exec(base, Album.class, query);
 	}
+
+    @Override
+    protected String getSpecificFilter() throws Exception
+    {
+       return "";
+    }
+
+    @Override
+    protected String getSpecificQuery() throws Exception
+    {
+        return "";
+    }
 	
 }

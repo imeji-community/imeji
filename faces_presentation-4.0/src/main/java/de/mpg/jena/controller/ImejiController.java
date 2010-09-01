@@ -31,7 +31,7 @@ import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Grant.GrantType;
 
-public class ImejiController {
+public abstract class ImejiController {
 	
 	
 	
@@ -131,7 +131,9 @@ public class ImejiController {
 	{
 		
 	    //Add variables for user management
-        String query = " . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?createdBy <http://xmlns.com/foaf/0.1/grants> ?grants . ?grants <http://imeji.mpdl.mpg.de/grantFor> ?grantFor . ?grants <http://imeji.mpdl.mpg.de/grantType> ?grantType";
+        String query = "";
+		query += getSpecificQuery();
+        
 		String filter = "";
 		
 		//Create query for searchCriterions
@@ -158,44 +160,17 @@ public class ImejiController {
     		
     		
 		filter = " . FILTER(";
-		//Add filters for user management
-		filter+="(";
 		
-		
-		if(user==null)
-		{
-		    filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED>";
-		}
-		else
-		{
-		    String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
-		    
-		    filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<" +  userUri + ">";
-		    
-		    if(type.equals("http://imeji.mpdl.mpg.de/collection") || type.equals("http://imeji.mpdl.mpg.de/album")) 
-		    {
-		        for(Grant grant : user.getGrants())
-                {
-		            switch(grant.getGrantType())
-		            {
-		                case CONTAINER_ADMIN : //Add specifics here
-		                    
-		                default : filter += " || ?s=<" + grant.getGrantFor().toString() + ">";
-		            }
-                    
-                }
-		    }
-		    
-		    
-		   
-		}
-		 filter += ")";
+		filter+=getSpecificFilter();
 		
 		if(scList!=null && scList.size()>0)
 	    {
-		    
     		//Add regex filters
-    		filter += " && (";
+    		if(getSpecificFilter() != null || !getSpecificFilter().isEmpty()) 
+		    {
+    		    filter += " && (";
+		    }
+    		
 		    int j=0;
     		for(SearchCriterion sc : scList)
     		{
@@ -316,6 +291,9 @@ public class ImejiController {
     {
        base.close();
     }
+	
+	protected abstract String getSpecificQuery() throws Exception;
+	protected abstract String getSpecificFilter() throws Exception;
 	
 	
 	

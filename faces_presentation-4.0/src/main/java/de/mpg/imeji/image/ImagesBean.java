@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
+import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.ImageVO;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.ImageController;
@@ -22,11 +24,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private String id = null;
     private String objectClass;
     private URI uri;
+    private SessionBean sb;
+    
 
     public ImagesBean()
     {
         super();
-        controller = new ImageController(null);
+        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        controller = new ImageController(sb.getUser());
     }
 
     @Override
@@ -58,7 +63,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         try
         {
         
-            totalNumberOfRecords = controller.search(null, null, null, limit, offset).size();
+            totalNumberOfRecords = controller.search(null, null, null, -1, offset).size();
             images = controller.search(null, null, null, limit, offset);
         }
         catch (Exception e)

@@ -68,7 +68,7 @@ public class LoginBean
             BeanHelper.error(sb.getMessage("error_log_in"));
             logger.error("Problem logging in User", e);
         }
-        return "";
+        return "pretty:";
     }
 
     public String logout()

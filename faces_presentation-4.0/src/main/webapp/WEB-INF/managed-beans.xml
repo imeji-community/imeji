@@ -281,5 +281,11 @@
 		<managed-bean-class>de.mpg.imeji.beans.SessionBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	
+	<converter>
+	    <converter-id>ProfileConverter</converter-id>
+	    <converter-class>de.mpg.imeji.mdProfile.util.ProfileConverter</converter-class>
+	</converter>
+	
 
 </faces-config>

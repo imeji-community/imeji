@@ -7,27 +7,9 @@
 
 <ui:composition template="template_collection.xhtml">
 	<ui:define name="mainContent">
+		
 		<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
-			<h:panelGroup layout="block" styleClass="full_area0 fullItem">	
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{FormularBean.tab == 'PROFILE'}">
-					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="Metadata profile"/>
-					</h3>
-					<span class="seperator"></span>
-					<div class="free_area0 itemBlockContent endline">
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="#{lbl.load_profile}"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:selectOneMenu value="" styleClass="double_select">
-								</h:selectOneMenu>
-							</span>
-						</h:panelGroup>
-					</div>
-				</h:panelGroup>
-				
+			<h:panelGroup layout="block" styleClass="full_area0 fullItem">					
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{FormularBean.tab == 'PROFILE'}">
 					<h3 class="xLarge_area0_p8 endline blockHeader">
 						<h:outputText value="Metadata Profile"/>
@@ -35,9 +17,20 @@
 					<span class="seperator"></span>
 					
 					<div class="free_area0 itemBlockContent endline">
-						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{empty FormularBean.profile.statements}">
-							<tr:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.create_profile}" action="#{FormularBean.addStatement}"/>
-							<h:outputText value="#{lbl.create_profile}"></h:outputText>
+						<h:panelGroup styleClass="full_area0_p8" rendered="#{empty FormularBean.profile.statements}">
+							<h:panelGroup styleClass="xLargr_area0">
+								<tr:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.create_profile}" action="#{FormularBean.addStatement}"/>
+								<h:outputText value="#{lbl.profile_start_new}"></h:outputText>
+							</h:panelGroup>
+							<h:outputText value=" #{lbl.or_small} "/>
+							<h:panelGroup styleClass="xLargr_area0">
+								<h:outputText value=" #{lbl.profile_use_template} "/>
+								<span class="xTiny_marginLExcl">
+									<h:selectOneMenu value="#{FormularBean.template}" styleClass="" onchange="submit();" valueChangeListener="#{FormularBean.templateListener}">
+										<f:selectItems value="#{FormularBean.profilesMenu}"/>
+									</h:selectOneMenu>
+								</span>
+							</h:panelGroup>
 						</h:panelGroup>
 									
 						<tr:iterator id="profile" var="statement" value="#{FormularBean.statements}" varStatus="position">
@@ -118,7 +111,7 @@
 					
 				<div class="full_area0 formButtonArea">
 					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
-						<h:outputText value="#{lbl.cancel}" />
+						<h:outputText value="#{lbl.reset}" />
 					</h:outputLink>			
 					<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
 				</div>

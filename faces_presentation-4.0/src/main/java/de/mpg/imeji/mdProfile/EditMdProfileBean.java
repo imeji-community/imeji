@@ -1,15 +1,9 @@
 package de.mpg.imeji.mdProfile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
-import de.mpg.jena.vo.MetadataProfile;
-import de.mpg.jena.vo.Statement;
 
 public class EditMdProfileBean extends MdProfileBean
 {

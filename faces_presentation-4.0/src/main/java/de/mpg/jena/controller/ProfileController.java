@@ -1,6 +1,7 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.LocalizedString;
@@ -62,6 +63,12 @@ public class ProfileController extends ImejiController
         Bean2RDF writer = new Bean2RDF(base);
         Resource r = writer.saveDeep(mdp);
         base.commit();
+    }
+    
+    public List<MetadataProfile> retrieveAll()
+    {
+        RDF2Bean reader = new RDF2Bean(base);
+        return (List<MetadataProfile>)reader.load(MetadataProfile.class);
     }
     
     public MetadataProfile retrieve(String id) throws Exception

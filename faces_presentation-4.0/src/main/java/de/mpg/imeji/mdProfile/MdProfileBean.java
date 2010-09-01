@@ -10,11 +10,14 @@ import javax.faces.model.SelectItem;
 
 import thewebsemantic.LocalizedString;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.collection.CollectionBean.TabType;
 import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.UrlHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
@@ -30,15 +33,22 @@ public class MdProfileBean
     private List<StatementWrapper> statements = null;
     private List<SelectItem> mdTypesMenu = null;
     private String id = null;
+    private List<SelectItem> profilesMenu = null;
+    private SessionBean sessionBean;
+    private String template;
+    private ProfileController pc;
 
     public MdProfileBean()
     {
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        pc = new ProfileController(sessionBean.getUser());
         if (collectionSession.getProfile() == null)
         {
             collectionSession.setProfile(new MetadataProfile());
         }
         profile = collectionSession.getProfile();
+        profilesMenu = new ArrayList<SelectItem>();
         statements = new ArrayList<StatementWrapper>();
         mdTypesMenu = new ArrayList<SelectItem>();
         for (ComplexType mdt : collectionSession.getMetadataTypes())
@@ -50,17 +60,52 @@ public class MdProfileBean
 
     public void reset()
     {
-        profile.setDescription("");
-        profile.setTitle("");
         profile.getStatements().clear();
-        collectionSession.getActive().setProfile(profile);
+        statements.clear();
+        collectionSession.setProfile(profile);
     }
 
     public void init()
     {
-        for (Statement st : profile.getStatements())
+        if (UrlHelper.getParameterBoolean("reset"))
+        {
+            reset();
+        }
+        loadtemplates();
+        setStatementWrappers(profile);
+    }
+    
+    public void setStatementWrappers(MetadataProfile mdp)
+    {
+        statements.clear();
+        for (Statement st : mdp.getStatements())
         {
             statements.add(new StatementWrapper(st));
+        }
+    }
+
+    public void loadtemplates()
+    {
+        profilesMenu.add(new SelectItem(null, "Select Template"));
+        for (MetadataProfile mdp : pc.retrieveAll())
+        {
+            if (mdp.getId().toString() != profile.getId().toString())
+            {
+                profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
+            }
+        }
+    }
+
+    public void templateListener(ValueChangeEvent event) throws Exception
+    {
+        if (event != null && event.getNewValue() != event.getOldValue())
+        {
+            this.template = event.getNewValue().toString();
+            MetadataProfile tp = pc.retrieve(URI.create(this.template));
+            profile.getStatements().clear();
+            profile.setStatements(tp.getStatements());
+            collectionSession.setProfile(profile);
+            setStatementWrappers(profile);
         }
     }
 
@@ -190,5 +235,25 @@ public class MdProfileBean
     public void setId(String id)
     {
         this.id = id;
+    }
+
+    public List<SelectItem> getProfilesMenu()
+    {
+        return profilesMenu;
+    }
+
+    public void setProfilesMenu(List<SelectItem> profilesMenu)
+    {
+        this.profilesMenu = profilesMenu;
+    }
+
+    public String getTemplate()
+    {
+        return template;
+    }
+
+    public void setTemplate(String template)
+    {
+        this.template = template;
     }
 }

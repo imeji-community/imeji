@@ -1,7 +1,5 @@
 package de.mpg.imeji.mdProfile;
 
-import javax.faces.context.FacesContext;
-
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;

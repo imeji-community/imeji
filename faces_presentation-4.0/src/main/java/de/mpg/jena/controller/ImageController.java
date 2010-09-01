@@ -1,7 +1,5 @@
 package de.mpg.jena.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,23 +7,29 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.tdb.TDB;
-
-import thewebsemantic.Bean2RDF;
 import thewebsemantic.Sparql;
 
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
+
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.exceptions.AuthenticationException;
+import de.mpg.jena.controller.exceptions.AuthorizationException;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image.Visibility;
+import de.mpg.jena.vo.Properties.Status;
 
 public class ImageController extends ImejiController{
 	
@@ -35,19 +39,22 @@ public class ImageController extends ImejiController{
 		super(user);
 	}
 	
-	public void create(Image img, URI coll)
+	public void create(Image img, URI coll) throws Exception
 	{
+	    CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, coll);
+	    
 		writeCreateProperties(img.getProperties(), user);
+		checkUserCredentials(img,ic);
+		
 		img.setCollection(coll);
 		base.begin();
-		CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, coll);
 		ic.getImages().add(img.getId());
 		bean2RDF.saveDeep(img);
 		bean2RDF.saveDeep(ic);
 		base.commit();
 	}
 	
-	public void create(Collection<Image> images, URI coll)
+	public void create(Collection<Image> images, URI coll) throws Exception
 	{
 	    //store.getLoader().startBulkUpdate();
 		base.begin();
@@ -55,28 +62,35 @@ public class ImageController extends ImejiController{
 		for(Image img : images)
 		{
 			writeCreateProperties(img.getProperties(), user);
+	         checkUserCredentials(img,ic);
 			img.setCollection(coll);
 			ic.getImages().add(img.getId());
 			bean2RDF.saveDeep(img);
 			//System.out.println("Img created!");
 		}
+		bean2RDF.saveDeep(ic);
 		base.commit();
 	}
 	
-	public void update(Image img)
+	public void update(Image img) throws Exception
 	{
-		writeUpdateProperties(img.getProperties(), user);
+	    CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, img.getCollection());
+	    checkUserCredentials(img, ic);
+	    writeUpdateProperties(img.getProperties(), user);
+
 		base.begin();
 		bean2RDF.saveDeep(img);
 		base.commit();
 	}
 	
 
-	public void update(Collection<Image> images)
+	public void update(Collection<Image> images) throws Exception
 	{
 	    base.begin();
 		for(Image img : images)
 		{
+		    CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, img.getCollection());
+		    checkUserCredentials(img, ic);
 			writeUpdateProperties(img.getProperties(), user);
 			bean2RDF.saveDeep(img);
 		}
@@ -88,7 +102,7 @@ public class ImageController extends ImejiController{
 		return rdf2Bean.load(Image.class, imgUri);
 	}
 	
-	public Collection<Image> search(User user, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+	public Collection<Image> search(User user, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
     {
         String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
         return Sparql.exec(getModel(), Image.class, query);
@@ -101,10 +115,12 @@ public class ImageController extends ImejiController{
 	}
 	*/
 	
+	/*
 	public Collection<Image> retrieveAll()
 	{
 		return rdf2Bean.load(Image.class);
 	}
+	*/
 	
 	public void delete(Image img, User user)
 	{
@@ -121,6 +137,28 @@ public class ImageController extends ImejiController{
 		
 	}
 	
+	
+	
+	private void checkUserCredentials(Image i, CollectionImeji c) throws Exception
+    {
+        if(user==null)
+        {
+            throw new AuthenticationException("User is null!");
+        }
+        else if (!user.getEmail().equals(i.getProperties().getCreatedBy().getEmail()))
+        {
+            for (Grant g : user.getGrants())
+            {
+                if(g.getGrantFor().equals(c.getId()) && (g.getGrantType().equals(GrantType.CONTAINER_ADMIN) || g.getGrantType().equals(GrantType.CONTAINER_EDITOR) || g.getGrantType().equals(GrantType.IMAGE_EDITOR) || g.getGrantType().equals(GrantType.IMAGE_UPLOADER)))
+                {
+                    return;
+                }
+            }
+            throw new AuthorizationException("User not authorized to create/update image " + c.getId());
+        }
+            
+        
+    }
 	
 	
 	
@@ -140,7 +178,7 @@ public class ImageController extends ImejiController{
 	}
 	
 	
-	public static void main(String[] arg) throws Exception
+	public static void main2(String[] arg) throws Exception
 	{
 	    /*
 	    File f = new File("/home/haarlaender/basic_imeji_data.rdf");
@@ -150,29 +188,34 @@ public class ImageController extends ImejiController{
 		fos.flush();
 		fos.close();
 		*/
-	    base.write(System.out);
-	    
-	    SearchCriterion sc = new SearchCriterion(ImejiNamespaces.PROPERTIES_CREATED_BY_USER_GRANT_TYPE, "http://imeji.mpdl.mpg.de/grantType/CONTAINER_ADMIN");
-	    SearchCriterion sc2 = new SearchCriterion(ImejiNamespaces.PROPERTIES_CREATED_BY_USER_GRANT_FOR, "http://test.de");
-	    
-	    List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-	    scList.add(sc);
-	    scList.add(sc2);
-	    
+	    //base.write(System.out);
+	    User user = createUser(); 
 	    ImageController ic = new ImageController(null);
-	    String qu = ic.createQuery(scList, null, "http://imeji.mpdl.mpg.de/collection", 10 ,0);
 	    
-	    Collection<CollectionImeji> result = Sparql.exec(base, CollectionImeji.class, qu);
-	    System.out.println("Found: " +result.size() + "results ");
+	    String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/collection", 100, 0);
+        Collection<CollectionImeji> result = Sparql.exec(base, CollectionImeji.class, query);
+        System.out.println("Found: " +result.size() + "results ");
+	   
+	    
+	    String q = "SELECT * WHERE { ?s a <http://imeji.mpdl.mpg.de/collection>  . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . FILTER((?status=<http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<http://xmlns.com/foaf/0.1/Person/imeji@mpdl.mpg.de>))}";
+	    
+	  
+	    Query queryObject = QueryFactory.create(q);
+        QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
+        ResultSet results = qe.execSelect();
+        ResultSetFormatter.out(System.out, results);
+        qe.close();
+       
 	}
 	
-	public static void main2(String[] arg) throws Exception
+	public static void main(String[] arg) throws Exception
 	{
 		
-		User user = createUser();
+	    User user = createUser(); 
 		
 		CollectionController icc = new CollectionController(user);
 		ImageController iic = new ImageController(user);
+		ProfileController pc = new ProfileController(user);
 		
 
 	
@@ -185,7 +228,6 @@ public class ImageController extends ImejiController{
 			//coll.setId(new URI("http://imeji.mpdl.mpg.de/collection/" + UUID.randomUUID().toString()));
 			coll.getMetadata().setTitle("TestCollection " +j);
 			coll.getMetadata().setDescription("TestDesc " +j);
-			coll.setProfile(null);
 			
 			
 			Person person = new Person();
@@ -195,6 +237,11 @@ public class ImageController extends ImejiController{
 			org.setName("Test Org Unit");
 			coll.getMetadata().getPersons().add(person);
 			person.getOrganizations().add(org);
+			
+			MetadataProfile mdp = new MetadataProfile();
+			mdp.setDescription("blaaaa");
+			pc.create(mdp);
+			coll.setProfile(mdp);
 			
 			System.out.println("Create collection");
 			icc.create(coll);
@@ -254,7 +301,7 @@ public class ImageController extends ImejiController{
 		
 		long startR = System.currentTimeMillis();
 		System.out.println("start retrieving all collections");
-		Collection<CollectionImeji> result = icc.retrieveAll();
+		Collection<CollectionImeji> result = icc.search(user, null, null, 1000, 0);
 		long stopR = System.currentTimeMillis();
 		System.out.println("stop retriveing all collections in " + String.valueOf(stopR-startR));
 		//Collection<ImejiCollection> result = new RDF2Bean(base).load(ImejiCollection.class);
@@ -263,8 +310,8 @@ public class ImageController extends ImejiController{
 		Collection<Image> images = new LinkedList<Image>();
 		for(CollectionImeji resColl : result)
 		{
-			if (resColl.getImages().size()>1)
-			{
+		    resColl.getProperties().setStatus(Status.RELEASED);
+			
 				System.out.println(resColl.getId() + " Collection " +resColl.getMetadata().getTitle() + " has " + resColl.getImages().size() + " images");
 				
 				
@@ -309,7 +356,7 @@ public class ImageController extends ImejiController{
 				System.out.println("end updating in " + String.valueOf(stop-start));
 				*/
 			
-			}
+			
 		}
 		
 				

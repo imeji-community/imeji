@@ -4,79 +4,102 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
-import com.hp.hpl.jena.rdf.model.Resource;
-
 import com.hp.hpl.jena.tdb.TDB;
 
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
+import de.mpg.jena.controller.exceptions.AuthenticationException;
+import de.mpg.jena.controller.exceptions.AuthorizationException;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.MetadataProfile;
+import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.User;
+import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Properties.Status;
 
-public class CollectionController extends ImejiController
-{
-    private User user;
 
-    public CollectionController(User user)
-    {
-        super(user);
-    }
+public class CollectionController extends ImejiController{
+	
+	public CollectionController(User user)
+	{
+		super(user);
+	}
+	
+	/**
+	 * Creates a new collection. 
+	 * - Add a unique id
+	 * - Write user properties
+	 * @param ic
+	 * @param user
+	 */
+	public CollectionImeji create(CollectionImeji ic) throws Exception
+	{
+	    //first write properties
+	    writeCreateProperties(ic.getProperties(), user);
+	    
+	    //then check user credentials
+	    checkUserCredentials(ic);
+
+	    ic.getProperties().setStatus(Status.PENDING); 
+		ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
+		base.begin();
+		bean2RDF.saveDeep(ic);
+		base.commit();
+		return ic;
+	}
+	
+	
     /**
-     * Creates a new collection. - Add a unique id - Write user properties
-     * 
-     * @param ic
-     * @param user
-     */
-    public CollectionImeji create(CollectionImeji ic) throws Exception
+	 * Updates a collection
+	 * -Logged in users:
+	 * --User is collection owner
+	 * --OR user is collection editor
+	 * @param ic
+	 * @param user
+	 */
+	public void update(CollectionImeji ic) throws Exception
+	{
+	    //first check user credentials
+	    checkUserCredentials(ic);
+		writeUpdateProperties(ic.getProperties(), user);
+		base.begin();
+		bean2RDF.saveDeep(ic);
+		base.commit();
+	}
+	
+	private void checkUserCredentials(CollectionImeji c) throws Exception
     {
-        writeCreateProperties(ic.getProperties(), user);
-        ic.getProperties().setStatus(Status.PENDING);
-        ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
-        base.begin();
-        Bean2RDF writer = new Bean2RDF(base);
-        Resource r = writer.saveDeep(ic);
-        RDF2Bean reader = new RDF2Bean(base);
-        ic = retrieve(URI.create(r.getURI()));
-        base.commit();
-        return (CollectionImeji)ObjectHelper.castAllHashSetToList(ic);
+        if(user==null)
+        {
+            throw new AuthenticationException("User is null!");
+        }
+        else if (!user.getEmail().equals(c.getProperties().getCreatedBy().getEmail()))
+        {
+            for (Grant g : user.getGrants())
+            {
+                if(g.getGrantFor().equals(c.getId()) && (g.getGrantType().equals(GrantType.CONTAINER_ADMIN) || g.getGrantType().equals(GrantType.CONTAINER_EDITOR)))
+                {
+                    return;
+                }
+            }
+            throw new AuthorizationException("User not authorized to create/update Collection " + c.getId());
+        }
+            
+        
     }
 
-    /**
-     * Updates a collection -Logged in users: --User is collection owner --OR user is collection editor
-     * 
-     * @param ic
-     * @param user
-     */
-    public void update(CollectionImeji ic)
+	public CollectionImeji retrieve(String id)
+	{
+        return (CollectionImeji)rdf2Bean.load(ObjectHelper.getURI(CollectionImeji.class, id).toString());
+	}
+	
+	public CollectionImeji retrieve(URI uri)
     {
-        writeUpdateProperties(ic.getProperties(), user);
-        base.begin();
-        Bean2RDF writer = new Bean2RDF(base);
-        writer.saveDeep(ic);
-        base.commit();
+        return (CollectionImeji)rdf2Bean.load(CollectionImeji.class, uri);
     }
-
-    public Collection<CollectionImeji> retrieveAll()
-    {
-        RDF2Bean reader = new RDF2Bean(base);
-        return reader.load(CollectionImeji.class);
-    }
-
-    public CollectionImeji retrieve(String id)  throws Exception
-    {
-        return this.retrieve(ObjectHelper.getURI(CollectionImeji.class, id));
-    }
-
-    public CollectionImeji retrieve(URI uri) throws Exception
-    {
-        RDF2Bean reader = new RDF2Bean(base);
-        return (CollectionImeji)ObjectHelper.castAllHashSetToList(reader.load(uri.toString()));
-    }
-
+	
+	
 	
 	/**
 	 * Search for collections
@@ -92,12 +115,11 @@ public class CollectionController extends ImejiController
 	 * @param scList
 	 * @return
 	 */
-	public Collection<CollectionImeji> search(User user, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+	public Collection<CollectionImeji> search(User user, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
 		String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
 		Collection<CollectionImeji> res = Sparql.exec(getModel(), CollectionImeji.class, query);
-		closeModel();
 		return res;
 	}
-
+	
 }

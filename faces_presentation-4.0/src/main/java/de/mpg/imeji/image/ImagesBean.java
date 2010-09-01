@@ -1,6 +1,7 @@
 package de.mpg.imeji.image;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,8 +53,18 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         {
             uri = ObjectHelper.getURI(Album.class, id);
         }
-        // totalNumberOfRecords = controller.search(null, null, null, 0, 0).size();
-        Collection<Image> images = controller.search(null, null, null, limit, offset);
+        Collection<Image> images = new ArrayList<Image>();
+        
+        try
+        {
+        
+            totalNumberOfRecords = controller.search(null, null, null, limit, offset).size();
+            images = controller.search(null, null, null, limit, offset);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return ImejiFactory.imageListToBeanList(images);
     }
 

@@ -41,16 +41,26 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
     @Override
     public List<ViewCollectionBean> retrieveList(int offset, int limit)
     {
-        Collection<CollectionImeji> collections = controller.retrieveAll();
-        totalNumberOfRecords = collections.size();
+        Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
+        try
+        {
+            collections = controller.search(null, new ArrayList<SearchCriterion>(), null, -1, offset);
+            totalNumberOfRecords = collections.size();
+            
+            
+            SortCriterion sortCriterion = new SortCriterion();
+            sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+            sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         
         
-        SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
-        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        
-        
-        collections = controller.search(null, new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
+      
+            collections = controller.search(null, new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
         
         return ImejiFactory.collectionListToBeanList(collections);

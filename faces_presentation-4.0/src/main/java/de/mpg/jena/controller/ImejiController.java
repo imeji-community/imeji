@@ -1,7 +1,9 @@
 package de.mpg.jena.controller;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
@@ -24,8 +26,10 @@ import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.Counter;
+import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.User;
+import de.mpg.jena.vo.Grant.GrantType;
 
 public class ImejiController {
 	
@@ -123,14 +127,16 @@ public class ImejiController {
 		properties.setLastModificationDate(now);
 	}
 	
-	protected String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String type, int limit, int offset)
+	protected String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String type, int limit, int offset) throws Exception
 	{
-		String query = "";
+		
+	    //Add variables for user management
+        String query = " . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?createdBy <http://xmlns.com/foaf/0.1/grants> ?grants . ?grants <http://imeji.mpdl.mpg.de/grantFor> ?grantFor . ?grants <http://imeji.mpdl.mpg.de/grantType> ?grantType";
 		String filter = "";
+		
+		//Create query for searchCriterions
 		if(scList!=null && scList.size()>0)
 		{
-		    
-		
     		int j = 0;
     		for(SearchCriterion sc : scList)
     		{
@@ -148,10 +154,49 @@ public class ImejiController {
     			query = query.replaceAll(java.util.regex.Pattern.quote(variablename), "?s");
     			j++;
     		}
+		}
     		
     		
-    		filter = " . FILTER(";
-    		j=0;
+		filter = " . FILTER(";
+		//Add filters for user management
+		filter+="(";
+		
+		
+		if(user==null)
+		{
+		    filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED>";
+		}
+		else
+		{
+		    String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
+		    
+		    filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<" +  userUri + ">";
+		    
+		    if(type.equals("http://imeji.mpdl.mpg.de/collection") || type.equals("http://imeji.mpdl.mpg.de/album")) 
+		    {
+		        for(Grant grant : user.getGrants())
+                {
+		            switch(grant.getGrantType())
+		            {
+		                case CONTAINER_ADMIN : //Add specifics here
+		                    
+		                default : filter += " || ?s=<" + grant.getGrantFor().toString() + ">";
+		            }
+                    
+                }
+		    }
+		    
+		    
+		   
+		}
+		 filter += ")";
+		
+		if(scList!=null && scList.size()>0)
+	    {
+		    
+    		//Add regex filters
+    		filter += " && (";
+		    int j=0;
     		for(SearchCriterion sc : scList)
     		{
     			if (j > 0)
@@ -170,6 +215,7 @@ public class ImejiController {
     		filter+=")";
 		
 		}
+		filter+=")";
 		
 		//Add sort criterion
         String sortQuery = "";
@@ -196,9 +242,14 @@ public class ImejiController {
             
         }
 		
-        String queryOffset = "";
+
 		//offset++;
-		String completeQuery = "SELECT ?s WHERE { ?s a <" + type + "> " + query + filter + " } " + sortQuery + " LIMIT " + limit + " OFFSET " + offset;
+        String limitString = "";
+        if (limit > -1)
+        {
+         limitString = " LIMIT " + limit;   
+        }
+		String completeQuery = "SELECT ?s WHERE { ?s a <" + type + "> " + query + filter + " } " + sortQuery + limitString + " OFFSET " + offset;
 			
 		System.out.println("Created Query:\n"+completeQuery);
 		return completeQuery;

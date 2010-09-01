@@ -49,7 +49,15 @@ public class AlbumsBean extends SuperContainerBean<Album>
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         
         
-        albums = controller.search(null, new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
+        try
+        {
+            albums = controller.search(null, new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
         return (List<Album>)albums;
     }

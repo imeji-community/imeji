@@ -3,6 +3,8 @@ package de.mpg.imeji.beans;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 import javax.xml.rpc.ServiceException;
 
 import org.apache.commons.httpclient.HttpException;
@@ -73,7 +75,10 @@ public class LoginBean
     {
         sb.setUser(null);
         BeanHelper.info(sb.getMessage("success_log_out"));
-        return "";
+        FacesContext fc = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+        session.invalidate();
+        return "pretty:home";
     }
 
     private void createLoginStatisticData(User user) throws HttpException, ServiceException, IOException,

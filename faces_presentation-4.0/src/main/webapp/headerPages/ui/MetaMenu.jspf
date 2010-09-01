@@ -78,9 +78,9 @@
 	
 	
 
-	<h:outputLink id="lnkLogout" value="#{Navigation.logOffUrl}" styleClass="small_area0_p8 endline" rendered="#{SessionBean.user != null}">
+	<h:commandLink id="lnkLogout" action ="#{LoginBean.logout}" styleClass="small_area0_p8 endline" rendered="#{SessionBean.user != null}">
     	<h:outputText value="#{lbl.logout}"></h:outputText>
-    </h:outputLink>
+    </h:commandLink>
 
 	<h:panelGroup styleClass="seperator"></h:panelGroup>
 

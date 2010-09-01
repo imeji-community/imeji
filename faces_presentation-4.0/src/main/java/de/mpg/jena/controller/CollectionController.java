@@ -91,7 +91,7 @@ public class CollectionController extends ImejiController{
 
 	public CollectionImeji retrieve(String id)
 	{
-        return (CollectionImeji)rdf2Bean.load(ObjectHelper.getURI(CollectionImeji.class, id).toString());
+        return (CollectionImeji)rdf2Bean.load(id);
 	}
 	
 	public CollectionImeji retrieve(URI uri)

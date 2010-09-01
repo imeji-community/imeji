@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.beans.SuperContainerBean;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
@@ -17,13 +19,16 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 {
     private CollectionController controller;
     private int totalNumberOfRecords;
+    private SessionBean sb;
   
     
 
     public CollectionsBean()
     {
         super();
-        this.controller = new CollectionController(null);
+        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        this.controller = new CollectionController(sb.getUser());
+        
     }
 
     @Override

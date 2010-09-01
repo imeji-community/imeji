@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import javax.xml.rpc.ServiceException;
 
 import org.apache.commons.httpclient.HttpException;
+import org.apache.log4j.Logger;
 
 import de.mpg.escidoc.faces.statistics.StatisticsBean;
 import de.mpg.escidoc.services.framework.ServiceLocator;
@@ -19,6 +20,8 @@ public class LoginBean
     private String login;
     private String passwd;
     private SessionBean sb;
+    
+    private Logger logger = Logger.getLogger(LoginBean.class);
 
     public LoginBean()
     {
@@ -61,6 +64,7 @@ public class LoginBean
         catch (Exception e)
         {
             BeanHelper.error(sb.getMessage("error_log_in"));
+            logger.error("Problem logging in User", e);
         }
         return "";
     }

@@ -51,6 +51,11 @@
 						rendered="true">
 						<h:outputText value="#{lbl.profile_edit}"></h:outputText>
 					</h:outputLink>
+					<h:outputText styleClass="seperator" rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}" />
+					<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" 
+						rendered="true">
+						<h:outputText value="#{lbl.upload_images}"></h:outputText>
+					</h:outputLink>
 					<!-- ORGANIZE content menu lower line ends here -->
 				</h:panelGroup>
 			</ui:define>

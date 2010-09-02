@@ -2,25 +2,17 @@ package de.mpg.imeji.search;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-
 import org.apache.log4j.Logger;
 import org.apache.myfaces.trinidad.component.UIXIterator;
-
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.collection.CollectionsBean;
-import de.mpg.imeji.search.simulator.Simulator;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
-
-
 
 
 
@@ -31,8 +23,6 @@ public class AdvancedSearchController<ci> extends BeanHelper{
 	
 	private CollectionCriterionController collectionCriterionController = null;
 	private MDCriterionController mdCriterionController = null;
-	
-	private UIXIterator mdCriterionIterator= new UIXIterator();
 	
 	private CollectionController controller;
 	private Collection<CollectionImeji> collections ;
@@ -72,7 +62,6 @@ public class AdvancedSearchController<ci> extends BeanHelper{
 		}
 	}
 	
-	
 	public List<SelectItem> getMdList(){ 
 		List<SelectItem> mdList = new ArrayList<SelectItem>();
 		try{
@@ -91,11 +80,6 @@ public class AdvancedSearchController<ci> extends BeanHelper{
 		return mdList;
 	}
 	 
-
-	
-
-
-	
 	public void clearAndInitialAllForms(){
 		collectionCriterionController = new CollectionCriterionController();
 		mdCriterionController = new MDCriterionController();
@@ -141,27 +125,6 @@ public class AdvancedSearchController<ci> extends BeanHelper{
 	public void setMdCriterionController(MDCriterionController mdCriterionController) {
 		this.mdCriterionController = mdCriterionController;
 	}
-
-	public UIXIterator getMdCriterionIterator() {
-		return mdCriterionIterator;
-	}
-
-	public void setMdCriterionIterator(UIXIterator mdCriterionIterator) {
-		this.mdCriterionIterator = mdCriterionIterator;
-	}
-
-
-	
-
-	
-	
-
-
-
-
-	
-
-
 	
 //	private List<ResultVO> resultList;
 	

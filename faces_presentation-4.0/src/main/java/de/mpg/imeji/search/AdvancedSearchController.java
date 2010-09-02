@@ -36,9 +36,7 @@ public class AdvancedSearchController<ci> extends BeanHelper{
 	
 	private CollectionController controller;
 	private Collection<CollectionImeji> collections ;
-	private CollectionImeji selectedCollection;
-	
-	private Simulator s = new Simulator();
+	private CollectionImeji selectedCollection;;
 	
 	public AdvancedSearchController(){
 		collectionCriterionController = new CollectionCriterionController();
@@ -63,22 +61,32 @@ public class AdvancedSearchController<ci> extends BeanHelper{
 	}
 	
 	public void collectionChanged(ValueChangeEvent event){
-		String selectedCollection = event.getNewValue().toString();
-		for(CollectionImeji ci : collections){
-			if(ci.getMetadata().getTitle().endsWith(selectedCollection))
-				this.selectedCollection = ci;
+		try{
+			String coTitle = event.getNewValue().toString();
+			for(CollectionImeji ci : collections){
+				if(ci.getMetadata().getTitle().equalsIgnoreCase(coTitle))
+					this.selectedCollection = ci;
+		}
+		}catch(Exception e){
+			this.selectedCollection = new CollectionImeji();
 		}
 	}
 	
 	
-	public List<SelectItem> getMdList(){
+	public List<SelectItem> getMdList(){ 
 		List<SelectItem> mdList = new ArrayList<SelectItem>();
-		//TODO: remove static mdprofile list
-		try{ 
+		try{
+		Collection<Statement> s = selectedCollection.getProfile().getStatements();
+		if(s.size()!=0){
 			for(Statement statement: selectedCollection.getProfile().getStatements())
 				mdList.add(new SelectItem(statement.getName(),statement.getName()));
+		}
+		else
+			//TODO use default mdList ?
+			mdList.add(new SelectItem("title","title"));
 		}catch(Exception e){
-				mdList.add(new SelectItem("title","title"));
+			//TODO use default mdList ?
+			mdList.add(new SelectItem("title","title"));
 		}
 		return mdList;
 	}

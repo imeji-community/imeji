@@ -1,5 +1,6 @@
 package de.mpg.imeji.collection;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,9 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 
@@ -26,7 +29,6 @@ public abstract class CollectionBean
     private TabType tab = TabType.HOME;
     private SessionBean sessionBean = null;
     private CollectionImeji collection = null;
-   
     private String id = null;
     private int authorPosition;
     private int organizationPosition;
@@ -38,7 +40,7 @@ public abstract class CollectionBean
         this.collection = coll;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
-    
+
     public CollectionBean()
     {
         collection = new CollectionImeji();
@@ -89,7 +91,7 @@ public abstract class CollectionBean
 
     public String addAuthor()
     {
-        LinkedList<Person> list =  (LinkedList<Person>)collection.getMetadata().getPersons();
+        LinkedList<Person> list = (LinkedList<Person>)collection.getMetadata().getPersons();
         list.add(authorPosition + 1, ImejiFactory.newPerson());
         return getNavigationString();
     }
@@ -98,7 +100,7 @@ public abstract class CollectionBean
     {
         if (authorPosition > 0)
         {
-            LinkedList<Person> list =  (LinkedList<Person>)collection.getMetadata().getPersons();
+            LinkedList<Person> list = (LinkedList<Person>)collection.getMetadata().getPersons();
             list.remove(authorPosition);
         }
         return getNavigationString();
@@ -106,7 +108,7 @@ public abstract class CollectionBean
 
     public String addOrganization()
     {
-        LinkedList<Person> persons =  (LinkedList<Person>)collection.getMetadata().getPersons();
+        LinkedList<Person> persons = (LinkedList<Person>)collection.getMetadata().getPersons();
         LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
         orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
         return getNavigationString();
@@ -116,7 +118,7 @@ public abstract class CollectionBean
     {
         if (organizationPosition > 0)
         {
-            LinkedList<Person> persons =  (LinkedList<Person>)collection.getMetadata().getPersons();
+            LinkedList<Person> persons = (LinkedList<Person>)collection.getMetadata().getPersons();
             LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
             orgs.remove(organizationPosition);
         }
@@ -124,7 +126,6 @@ public abstract class CollectionBean
     }
 
     protected abstract String getNavigationString();
-
 
     public int getAuthorPosition()
     {
@@ -213,7 +214,7 @@ public abstract class CollectionBean
     {
         this.profilesMenu = profilesMenu;
     }
-    
+
     /**
      * @return the selected
      */
@@ -234,6 +235,4 @@ public abstract class CollectionBean
     {
         return collection.getImages().size();
     }
-    
-    
 }

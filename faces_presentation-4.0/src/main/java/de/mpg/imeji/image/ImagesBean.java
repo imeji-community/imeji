@@ -17,17 +17,26 @@ import de.mpg.jena.vo.Image;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
- 
     private int totalNumberOfRecords;
     private String objectClass;
     private SessionBean sb;
-    
+    private List<Image> selected;
 
     public ImagesBean()
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        selected = new ArrayList<Image>();
+    }
 
+    public List<Image> getSelected()
+    {
+        return selected;
+    }
+
+    public void setSelected(List<Image> selected)
+    {
+        this.selected = selected;
     }
 
     @Override
@@ -47,12 +56,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public List<ImageBean> retrieveList(int offset, int limit)
     {
         ImageController controller = new ImageController(sb.getUser());
-      
         Collection<Image> images = new ArrayList<Image>();
-        
         try
         {
-        
             totalNumberOfRecords = controller.search(null, null, -1, offset).size();
             images = controller.search(null, null, limit, offset);
         }
@@ -63,8 +69,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         return ImejiFactory.imageListToBeanList(images);
     }
 
-    
-
     public String getObjectClass()
     {
         return objectClass;
@@ -74,6 +78,4 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     {
         this.objectClass = objectClass;
     }
-
-    
 }

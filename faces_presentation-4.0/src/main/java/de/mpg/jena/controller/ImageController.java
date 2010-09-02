@@ -35,7 +35,9 @@ import de.mpg.jena.vo.Properties.Status;
 public class ImageController extends ImejiController{
 	
 	
-	public ImageController(User user)
+	private String additionalQuery = "";
+
+    public ImageController(User user)
 	{
 		super(user);
 	}
@@ -106,9 +108,16 @@ public class ImageController extends ImejiController{
 		return rdf2Bean.load(Image.class, imgUri);
 	}
 	
-	public Collection<Image> search(User user, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+	public Collection<Image> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
     {
-	    String additionalQuery = "";
+	    additionalQuery = "";
+        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
+        return Sparql.exec(getModel(), Image.class, query);
+    }
+	
+	public Collection<Image> searchImageInContainer(URI containerUri, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+    {
+        additionalQuery = " . <" + containerUri.toString() + "> <http://imeji.mpdl.mpg.de/images> ?s";
         String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
         return Sparql.exec(getModel(), Image.class, query);
     }
@@ -199,12 +208,14 @@ public class ImageController extends ImejiController{
 	    User user = createUser(); 
 	    ImageController ic = new ImageController(user);
 	    
-	    String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/image", 100, 0);
-        Collection<Image> result = Sparql.exec(base, Image.class, query);
+	    //String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/image", 100, 0);
+        //Collection<Image> result = Sparql.exec(base, Image.class, query);
+	    
+	    Collection<Image> result = ic.searchImageInContainer(new URI("http://imeji.mpdl.mpg.de/collection/1"), null, null, -1, 0);
         System.out.println("Found: " +result.size() + "results ");
 	   
 	    
-	    String q = "SELECT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?createdBy <http://xmlns.com/foaf/0.1/grants> ?grants . ?grants <http://imeji.mpdl.mpg.de/grantFor> ?grantFor . ?grants <http://imeji.mpdl.mpg.de/grantType> ?grantType . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus }";
+	    String q = "SELECT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  . ?coll a <http://imeji.mpdl.mpg.de/collection> . ?coll <http://imeji.mpdl.mpg.de/images> ?s . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?createdBy <http://xmlns.com/foaf/0.1/grants> ?grants . ?grants <http://imeji.mpdl.mpg.de/grantFor> ?grantFor . ?grants <http://imeji.mpdl.mpg.de/grantType> ?grantType . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus }";
 	    
 	  
 	    Query queryObject = QueryFactory.create(q);
@@ -308,7 +319,7 @@ public class ImageController extends ImejiController{
 		
 		long startR = System.currentTimeMillis();
 		System.out.println("start retrieving all collections");
-		Collection<CollectionImeji> result = icc.search(user, null, null, 1000, 0);
+		Collection<CollectionImeji> result = icc.search(null, null, 1000, 0);
 		long stopR = System.currentTimeMillis();
 		System.out.println("stop retriveing all collections in " + String.valueOf(stopR-startR));
 		//Collection<ImejiCollection> result = new RDF2Bean(base).load(ImejiCollection.class);
@@ -431,7 +442,7 @@ public class ImageController extends ImejiController{
     @Override
     protected String getSpecificQuery() throws Exception
     {
-        return " . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus ";
+        return additionalQuery  + " . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus ";
     }
 	
 }

@@ -80,7 +80,7 @@ public class AlbumController extends ImejiController{
 	 * @param scList
 	 * @return
 	 */
-	public Collection<Album> search(User user, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+	public Collection<Album> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
 		String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
 		//base.write(System.out);

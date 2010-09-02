@@ -133,7 +133,7 @@ public abstract class ImejiController {
 	    //Add variables for user management
         String query = "";
 		query += getSpecificQuery();
-        
+       
 		String filter = "";
 		
 		//Create query for searchCriterions

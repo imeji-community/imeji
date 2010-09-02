@@ -116,7 +116,7 @@ public class CollectionController extends ImejiController{
 	 * @param scList
 	 * @return
 	 */
-	public Collection<CollectionImeji> search(User user, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+	public Collection<CollectionImeji> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
 		String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
 		Collection<CollectionImeji> res = Sparql.exec(getModel(), CollectionImeji.class, query);

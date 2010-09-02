@@ -57,7 +57,7 @@ public class AlbumsBean extends SuperContainerBean<Album>
         
         try
         {
-            albums = controller.search(null, new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
+            albums = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
         }
         catch (Exception e)
         {

@@ -50,7 +50,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         try
         {
-            collections = controller.search(null, new ArrayList<SearchCriterion>(), null, -1, offset);
+            collections = controller.search(new ArrayList<SearchCriterion>(), null, -1, offset);
             totalNumberOfRecords = collections.size();
             
             
@@ -60,7 +60,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         
         
       
-            collections = controller.search(null, new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
+            collections = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
         }
         catch (Exception e)
         {

@@ -63,8 +63,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         try
         {
         
-            totalNumberOfRecords = controller.search(null, null, null, -1, offset).size();
-            images = controller.search(null, null, null, limit, offset);
+            totalNumberOfRecords = controller.search(null, null, -1, offset).size();
+            images = controller.search(null, null, limit, offset);
         }
         catch (Exception e)
         {

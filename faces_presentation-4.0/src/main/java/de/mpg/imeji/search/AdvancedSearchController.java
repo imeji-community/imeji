@@ -1,6 +1,8 @@
 package de.mpg.imeji.search;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
@@ -9,140 +11,153 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 import org.apache.myfaces.trinidad.component.UIXIterator;
 
+import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.collection.CollectionsBean;
 import de.mpg.imeji.search.simulator.Simulator;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Statement;
 
-public class AdvancedSearchController extends BeanHelper
-{
-    private static Logger logger = Logger.getLogger(AdvancedSearchController.class);
-    private String userHandle;
-    private CollectionCriterionController collectionCriterionController = null;
-    private MDCriterionController mdCriterionController = null;
-    private UIXIterator mdCriterionIterator = new UIXIterator();
-    private Simulator s = new Simulator();
 
-    public List<SelectItem> getMdList()
-    {
-        List<SelectItem> mdList = new ArrayList<SelectItem>();
-        // TODO: remove static mdprofile list
-        try
-        {
-            for (int i = 0; i < s.getSelectedCollection().getMdList().size(); i++)
-            {
-                mdList.add(new SelectItem(s.getSelectedCollection().getMdList().get(i).getValue(), s
-                        .getSelectedCollection().getMdList().get(i).getLabel()));
-            }
-        }
-        catch (Exception e)
-        {
-            for (int i = 0; i < s.getDefaultCollection().getMdList().size(); i++)
-            {
-                mdList.add(new SelectItem(s.getDefaultCollection().getMdList().get(i).getValue(), s
-                        .getDefaultCollection().getMdList().get(i).getLabel()));
-            }
-        }
-        return mdList;
-    }
 
-    public List<SelectItem> getCollectionList()
-    {
-        List<SelectItem> collectionList = new ArrayList<SelectItem>();
-        // TODO: remove static collection list
-        collectionList.add(new SelectItem(null, "--"));
-        collectionList.add(new SelectItem(s.getCollection1().getTitle(), s.getCollection1().getTitle()));
-        collectionList.add(new SelectItem(s.getCollection2().getTitle(), s.getCollection2().getTitle()));
-        collectionList.add(new SelectItem(s.getCollection3().getTitle(), s.getCollection3().getTitle()));
-        return collectionList;
-    }
 
-    public void collectionChanged(ValueChangeEvent event)
-    {
-        String selectedCollection = event.getNewValue().toString();
-        if (selectedCollection.equals("Birds"))
-            s.setSelectedCollection(s.getCollection1());
-        else if (selectedCollection.equals("Faces"))
-            s.setSelectedCollection(s.getCollection2());
-        else if (selectedCollection.equals("Diamonds"))
-            s.setSelectedCollection(s.getCollection3());
-        else
-            s.setSelectedCollection(s.getDefaultCollection());
-    }
 
-    public AdvancedSearchController()
-    {
-        collectionCriterionController = new CollectionCriterionController();
-        mdCriterionController = new MDCriterionController();
-    }
+public class AdvancedSearchController<ci> extends BeanHelper{
 
-    public void clearAndInitialAllForms()
-    {
-        collectionCriterionController = new CollectionCriterionController();
-        mdCriterionController = new MDCriterionController();
-        this.getCollectionCriterionController().getCollectionCriterionManager().getObjectDM();
-    }
+	private static Logger logger = Logger.getLogger(AdvancedSearchController.class);
+	private SessionBean sb;	
+	
+	private CollectionCriterionController collectionCriterionController = null;
+	private MDCriterionController mdCriterionController = null;
+	
+	private UIXIterator mdCriterionIterator= new UIXIterator();
+	
+	private CollectionController controller;
+	private Collection<CollectionImeji> collections ;
+	private CollectionImeji selectedCollection;
+	
+	private Simulator s = new Simulator();
+	
+	public AdvancedSearchController(){
+		collectionCriterionController = new CollectionCriterionController();
+		mdCriterionController = new MDCriterionController();
+		sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+		controller = new CollectionController(sb.getUser());
+	}
+	
+	public List<SelectItem> getCollectionList() {
+		List<SelectItem> collectionList = new ArrayList<SelectItem>();
+		collectionList.add(new SelectItem(null,"--"));		
+		collections = new ArrayList<CollectionImeji>();
+		try{
+			collections = controller.search(sb.getUser(), new ArrayList<SearchCriterion>(), null, -1, 0);
+			for(CollectionImeji ci  :  collections){
+				collectionList.add(new SelectItem(ci.getMetadata().getTitle(), ci.getMetadata().getTitle()));
+			}
+		}catch(Exception e){
+			
+		}
+		return collectionList;
+	}
+	
+	public void collectionChanged(ValueChangeEvent event){
+		String selectedCollection = event.getNewValue().toString();
+		for(CollectionImeji ci : collections){
+			if(ci.getMetadata().getTitle().endsWith(selectedCollection))
+				this.selectedCollection = ci;
+		}
+	}
+	
+	
+	public List<SelectItem> getMdList(){
+		List<SelectItem> mdList = new ArrayList<SelectItem>();
+		//TODO: remove static mdprofile list
+		try{ 
+			for(Statement statement: selectedCollection.getProfile().getStatements())
+				mdList.add(new SelectItem(statement.getName(),statement.getName()));
+		}catch(Exception e){
+				mdList.add(new SelectItem("title","title"));
+		}
+		return mdList;
+	}
+	 
 
-    public boolean clearAllForms()
-    {
-        collectionCriterionController.clearAllForms();
-        mdCriterionController.clearAllForms();
-        return true;
-    }
+	
 
-    public String startSearch()
-    {
-        String searchQuery = "";
-        for (String c : collectionCriterionController.getCollectionCriterionManager().getSearchCriterion())
-            searchQuery += c + " ";
-        for (String c : mdCriterionController.getMdCriterionManager().getSearchCriterion())
-            searchQuery += c + " ";
-        System.err.println("searchString = " + searchQuery);
-        return searchQuery;
-    }
 
-    private ArrayList<SearchCriterion> transformToSparklSearchCriteria(Criterion predecessor, Criterion transformer)
-    {
-        return null;
-    }
+	
+	public void clearAndInitialAllForms(){
+		collectionCriterionController = new CollectionCriterionController();
+		mdCriterionController = new MDCriterionController();
+		this.getCollectionCriterionController().getCollectionCriterionManager().getObjectDM();
+	}
+	
+	public boolean clearAllForms(){
+		collectionCriterionController.clearAllForms();
+		mdCriterionController.clearAllForms();
+		return true;
+	}
+	
+	public String startSearch(){
+		String searchQuery = "";
+		for(String c : collectionCriterionController.getCollectionCriterionManager().getSearchCriterion())
+			searchQuery += c + " ";
+		for (String c : mdCriterionController.getMdCriterionManager().getSearchCriterion())
+			searchQuery += c + " ";
+		
+		System.err.println("searchString = " + searchQuery);
+		
+		return searchQuery;
+	}
+	
+	private ArrayList<SearchCriterion> transformToSparklSearchCriteria(Criterion predecessor, Criterion transformer){
+		return null;
+		
+	}
 
-    public CollectionCriterionController getCollectionCriterionController()
-    {
-        return collectionCriterionController;
-    }
+	public CollectionCriterionController getCollectionCriterionController() {
+		return collectionCriterionController;
+	}
 
-    public void setCollectionCriterionController(CollectionCriterionController collectionCriterionController)
-    {
-        this.collectionCriterionController = collectionCriterionController;
-    }
+	public void setCollectionCriterionController(
+			CollectionCriterionController collectionCriterionController) {
+		this.collectionCriterionController = collectionCriterionController;
+	}
 
-    public MDCriterionController getMdCriterionController()
-    {
-        return mdCriterionController;
-    }
+	public MDCriterionController getMdCriterionController() {
+		return mdCriterionController;
+	}
 
-    public void setMdCriterionController(MDCriterionController mdCriterionController)
-    {
-        this.mdCriterionController = mdCriterionController;
-    }
+	public void setMdCriterionController(MDCriterionController mdCriterionController) {
+		this.mdCriterionController = mdCriterionController;
+	}
 
-    public UIXIterator getMdCriterionIterator()
-    {
-        return mdCriterionIterator;
-    }
+	public UIXIterator getMdCriterionIterator() {
+		return mdCriterionIterator;
+	}
 
-    public void setMdCriterionIterator(UIXIterator mdCriterionIterator)
-    {
-        this.mdCriterionIterator = mdCriterionIterator;
-    }
+	public void setMdCriterionIterator(UIXIterator mdCriterionIterator) {
+		this.mdCriterionIterator = mdCriterionIterator;
+	}
 
-    public String getUserHandle()
-    {
-        return userHandle;
-    }
 
-    public void setUserHandle(String userHandle)
-    {
-        this.userHandle = userHandle;
-    }
-    // private List<ResultVO> resultList;
+	
+
+	
+	
+
+
+
+
+	
+
+
+	
+//	private List<ResultVO> resultList;
+	
+	
+	
+
 }

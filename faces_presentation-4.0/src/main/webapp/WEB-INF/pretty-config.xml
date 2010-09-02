@@ -51,8 +51,8 @@
 	</url-mapping>
 	
 		<url-mapping id="collectionImages">
-		<pattern value="/images/#{ImagesBean.objectClass}/#{ImagesBean.id}"/>
-		<view-id>/jsf/Images.xhtml</view-id>
+		<pattern value="/images/#{CollectionImagesBean.objectClass}/#{CollectionImagesBean.id}"/>
+		<view-id>/jsf/CollectionBrowse.xhtml</view-id>
 	</url-mapping>
 
 	<url-mapping id="createCollection">

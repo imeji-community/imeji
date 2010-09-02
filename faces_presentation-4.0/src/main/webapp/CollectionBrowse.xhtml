@@ -36,7 +36,13 @@
 </ui:remove>
 
 <body>
+	<ui:composition template="templates/template_paginator_images.xhtml">	
+			<ui:param name="paginatorListSessionBean" value="#{CollectionImagesBean}" />
+			<ui:param name="headline" value="#{msg.pictures_headline}"/>
+	</ui:composition>
 
+
+<!-- 
 	<ui:composition template="templates/template_picture_list.xhtml">	
 		<ui:define name="headline">
 			<h1>
@@ -98,5 +104,6 @@
 		</ui:define>
 		
 	</ui:composition>
+	 -->
 </body>
 </html>

@@ -19,9 +19,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
  
     private int totalNumberOfRecords;
-    private String id = null;
     private String objectClass;
-    private URI uri;
     private SessionBean sb;
     
 
@@ -49,15 +47,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public List<ImageBean> retrieveList(int offset, int limit)
     {
         ImageController controller = new ImageController(sb.getUser());
-        
-        if ("collection".equals(objectClass))
-        {
-            uri = ObjectHelper.getURI(CollectionImeji.class, id);
-        }
-        if ("album".equals(objectClass))
-        {
-            uri = ObjectHelper.getURI(Album.class, id);
-        }
+      
         Collection<Image> images = new ArrayList<Image>();
         
         try
@@ -73,15 +63,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         return ImejiFactory.imageListToBeanList(images);
     }
 
-    public String getId()
-    {
-        return id;
-    }
-
-    public void setId(String id)
-    {
-        this.id = id;
-    }
+    
 
     public String getObjectClass()
     {

@@ -1,8 +1,11 @@
 package de.mpg.imeji.search;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
@@ -106,7 +109,7 @@ public class AdvancedSearchController<ci> extends BeanHelper
         return true;
     }
 
-    public String startSearch()
+    public String startSearch() throws IOException
     {
         String searchQuery = "";
         for (String c : collectionCriterionController.getCollectionCriterionManager().getSearchCriterion())
@@ -114,6 +117,7 @@ public class AdvancedSearchController<ci> extends BeanHelper
         for (String c : mdCriterionController.getMdCriterionManager().getSearchCriterion())
             searchQuery += c + " ";
         System.err.println("searchString = " + searchQuery);
+        FacesContext.getCurrentInstance().getExternalContext().redirect("SearchResult.xhtml?"+searchQuery);
         return searchQuery;
     }
 

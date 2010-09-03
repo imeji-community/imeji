@@ -37,6 +37,11 @@
 		<view-id>/jsf/Images.xhtml</view-id>
 	</url-mapping>
 	
+	<url-mapping id="selected">
+		<pattern value="/images/selected" />
+		<view-id>/jsf/SelectedView.xhtml</view-id>
+	</url-mapping>
+	
 	<!-- Collection Pages -->
 	<url-mapping id="uploadCollection">
 		<pattern value="/upload/collection/#{UploadBean.id}"/>

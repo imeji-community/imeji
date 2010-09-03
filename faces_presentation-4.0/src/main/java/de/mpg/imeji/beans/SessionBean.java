@@ -1,5 +1,8 @@
 package de.mpg.imeji.beans;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -24,10 +27,11 @@ public class SessionBean
     private Locale locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
     private Page currentPage = null;
     private boolean admin = false;
+    private List<URI> selected;
 
     public SessionBean()
     {
-        // TODO Auto-generated constructor stub
+        selected = new ArrayList<URI>();
     }
 
     /**
@@ -142,5 +146,20 @@ public class SessionBean
     public void setAdmin(boolean admin)
     {
         this.admin = admin;
+    }
+
+    public List<URI> getSelected()
+    {
+        return selected;
+    }
+
+    public void setSelected(List<URI> selected)
+    {
+        this.selected = selected;
+    }
+    
+    public int getSelectedSize()
+    {
+        return this.selected.size();
     }
 }

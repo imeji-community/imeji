@@ -232,7 +232,7 @@ public abstract class ImejiController {
                     }
     			    else if(sc.getFilterType().equals(Filtertype.URI) && sc.getNamespace().equals(ImejiNamespaces.ID_URI))
                     {
-    			        filter += "?s" + j + "=<" + sc.getValue() + ">";
+    			        filter += "?s=<" + sc.getValue() + ">";
                     }
                     else if(sc.getFilterType().equals(Filtertype.REGEX))
                     {

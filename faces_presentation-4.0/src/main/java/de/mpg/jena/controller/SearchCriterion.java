@@ -4,10 +4,11 @@ import java.util.List;
 
 public class SearchCriterion {
 
-	enum Operator
+	public enum Operator
 	{
 		AND,OR
 	}
+
 
 	public enum Filtertype
 	{
@@ -15,10 +16,9 @@ public class SearchCriterion {
 	}
 	
 	public enum ImejiNamespaces {
-		
+
 	    ID_URI(""),
-	    
-	    
+
 		PROPERTIES("http://imeji.mpdl.mpg.de/properties"),
 		
 		PROPERTIES_CREATED_BY("http://imeji.mpdl.mpg.de/createdBy", PROPERTIES),

@@ -1,5 +1,9 @@
 package de.mpg.jena.vo;
 
+import java.net.URI;
+
+import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.ComplexType.AllowedTypes;
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
@@ -13,13 +17,21 @@ public class ImageMetadata
     private String elementNamespace;
     private String name;
     private String value;
-    private ComplexType type;
+    private URI type;
 
     public ImageMetadata(String ns, String name, String value)
     {
         this.elementNamespace = ns;
         this.name = name;
         this.value = value;
+    }
+
+    public ImageMetadata(URI type)
+    {
+        this.type = type;
+        this.elementNamespace = ObjectHelper.getAllowedType(type).getNamespace();
+        this.name = ObjectHelper.getAllowedType(type).getLabel();
+        this.value = "";
     }
 
     public ImageMetadata()
@@ -57,5 +69,17 @@ public class ImageMetadata
     public String getElementNamespace()
     {
         return elementNamespace;
+    }
+
+    
+    @RdfProperty("http://purl.org/dc/terms/type")
+    public URI getType()
+    {
+        return type;
+    }
+
+    public void setType(URI type)
+    {
+        this.type = type;
     }
 }

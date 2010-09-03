@@ -29,29 +29,15 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private List<SelectItem> sortMenu;
     private String selectedSortCriterion;
     private String selectedSortOrder;
-    private List<Image> selected;
     
 
     public ImagesBean()
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        selected = new ArrayList<Image>();
         initMenus();
-
-    }
-    
-    public List<Image> getSelected()
-    {
-        return selected;
     }
 
-    public void setSelected(List<Image> selected)
-    {
-        this.selected = selected;
-    }
-    
-    
 
     private void initMenus()
     {

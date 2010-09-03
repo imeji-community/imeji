@@ -12,6 +12,7 @@ import java.util.List;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.ComplexType.AllowedTypes;
 
 public class ObjectHelper
 {
@@ -81,5 +82,18 @@ public class ObjectHelper
         if (cl.getSuperclass() != null)
             fields.addAll(getAllObjectFields(cl.getSuperclass()));
         return fields;
+    }
+
+    public static AllowedTypes getAllowedType(URI uri)
+    {
+        for (AllowedTypes type : AllowedTypes.values())
+        {
+            URI uri1 = URI.create(type.getNamespace() + type.getRdfType());
+            if (uri.equals(uri1))
+            {
+                return type;
+            }
+        }
+        return null;
     }
 }

@@ -29,6 +29,7 @@
 package de.mpg.imeji.beans;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.Image;
 
 /**
@@ -152,7 +154,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         previousPartList = new ArrayList<ListElementType>();
         previousPartList.addAll(currentPartList);
         currentPartList = retrieveList(getOffset(), elementsPerPage);
-        copySelectedFromPreviousToCurrent();
+        copySelectedListElementInCurrentList();
         totalNumberOfElements = getTotalNumberOfRecords();
         // reset current page and reload list if list is shorter than the given current page number allows
         if (getTotalNumberOfElements() <= getOffset())
@@ -168,18 +170,19 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         }
     }
 
-    public void copySelectedFromPreviousToCurrent()
+    public void copySelectedListElementInCurrentList()
     {
+        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         for (ListElementType current : currentPartList)
         {
             String currentId = getListElementTypeId(current);
             if (currentId != null)
             {
-                for (ListElementType previous : previousPartList)
+                for (URI uri : sb.getSelected())
                 {
-                    if (currentId.equals(getListElementTypeId(previous)))
+                    if (currentId.equals(uri.toString()))
                     {
-                        setListElementTypeIdSelected(previous, current);
+                        setListElementTypeIdSelected(current);
                     }
                 }
             }
@@ -199,12 +202,12 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         return null;
     }
 
-    public void setListElementTypeIdSelected(ListElementType source, ListElementType dest)
+    public void setListElementTypeIdSelected(ListElementType dest)
     {
         try
         {
             dest.getClass().getDeclaredField("selected").setAccessible(true);
-            dest.getClass().getDeclaredField("selected").set(dest, source.getClass().getDeclaredField("selected").getBoolean(source));
+            dest.getClass().getDeclaredField("selected").set(dest, true);
         }
         catch (Exception e)
         {

@@ -42,42 +42,30 @@
 			<ui:define name="actionsMenu">
 				<h:panelGroup>
 					<!-- SORTING content menu lower line starts here -->
-						<h:outputText id="txtSort" value="Sorted by " styleClass="free_area0"/>
-						<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
-							<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}"/>
-						</h:selectOneMenu>
-						<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-						<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-						<h:outputText styleClass="seperator void" />
+					<h:outputText id="txtSort" value="Sorted by " styleClass="free_area0"/>
+					<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
+						<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}"/>
+					</h:selectOneMenu>
+					<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
+					<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
+					<h:outputText styleClass="seperator void" />
 					<!-- SORTING content menu lower line ends here -->
 				</h:panelGroup>
 			</ui:define>
 			
 			<ui:define name="list">				
+			
+				<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
+					<h:outputLabel value=" sds " styleClass="small_area0" style="visibility: hidden"></h:outputLabel>
+					<h:outputLink value="#{Navigation.imagesUrl}/selected" styleClass="large_area0">
+						<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})"/>
+					</h:outputLink>
+				</h:panelGroup>
+				
 				<h:panelGroup layout="block" styleClass="full_area0 tiledList">
-					<ul class="free_area0 fullBrowse">
-					<!-- Container tabs -->
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{ImagesBean.objectClass == 'collection'}">
-						<h:panelGroup styleClass="full_area0 fullItemControls" >
-							<h:outputLink value="#{Navigation.imagesUrl}/#{ImagesBean.objectClass}/#{ImagesBean.id}">
-								<h:outputText value="#{lbl.images}"/>
-							</h:outputLink>
-							<span class="seperator"/>
-							<h:outputLink value="#{Navigation.collectionUrl}/#{ImagesBean.id}?tab=profile">
-								<h:outputText value="#{lbl.profile}"/>
-							</h:outputLink>
-							<span class="seperator"/>
-							<h:outputLink value="#{Navigation.collectionUrl}/#{ImagesBean.id}?tab=collection">
-								<h:outputText value="#{lbl.metadata}"/>
-							</h:outputLink>
-							<span class="seperator"/>
-							<h:outputLink value="#{Navigation.collectionUrl}/#{ImagesBean.id}?tab=home">
-								<h:outputText value="#{lbl.home}"/>
-							</h:outputLink>
-						</h:panelGroup>
-					</h:panelGroup>
+					<ul class="free_area0 fullBrowse">					
 					<!-- Images -->
-					<tr:iterator id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0">
+					<tr:iterator id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" varStatus="index">
 						<h:panelGroup id="itemBlock">
 						<li class="large_area0 itemTile">
 							<h:panelGroup styleClass="large_area1_p2 tileIconArea free_area1 matrixItem">
@@ -94,9 +82,8 @@
 							<h:panelGroup styleClass="large_area0">
 							<!-- Album Selected -->
 								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-									<tr:selectBooleanCheckbox partialTriggers="selectBtn" id="pictureCheckbox" value="#{item.selected}" autoSubmit="true"/>
+									<tr:selectBooleanCheckbox id="pictureCheckbox" value="#{item.selected}" autoSubmit="true" valueChangeListener="#{item.selectListener}"/>
 								</tr:panelGroupLayout>		
-								<tr:commandButton id="selectBtn" text="select" partialSubmit="true" actionListener="#{item.select}" inlineStyle="visibility:hidden;"/>
 										
 								<!-- View details -->
 								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
@@ -148,11 +135,34 @@
 					</tr:iterator>
 				<!-- End images -->
 				</ul>
+				
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
+				<h:panelGroup layout="block" styleClass="full_area1_p8">
+					<h:outputText value="#{lbl.metadata_edit}" styleClass="large_label"/>
+					<tr:iterator var="metadata" value="" varstatus="index">
+						<h:outputLabel value="#{lbl.metadata_select}" styleClass="medium_label"/>
+						<h:selectOneMenu value="" styleClass="large_select">
+							<f:selectItems  value="#{SelectedBean.metadata}"/>
+						</h:selectOneMenu>
+						<h:outputLabel value="#{lbl.metadata_assign_value}" styleClass="xLarge_label"/>
+						<h:inputText styleClass="xLarge_txtInput"></h:inputText>
+						<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" >
+							<f:setPropertyActionListener value="#{index.index}" target=""/>
+						</tr:commandButton>
+						<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}">
+							<f:setPropertyActionListener value="#{index.index}" target=""/>
+						</tr:commandButton>
+					</tr:iterator>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
+					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton ">
+						<h:outputText value="#{lbl.reset}" />
+					</h:outputLink>			
+					<h:commandButton value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>	
+				</h:panelGroup>
 			</h:panelGroup>
 			</ui:define>
-
-
-
 		</ui:composition>
 	</body>
 </html>								

@@ -2,6 +2,7 @@ package de.mpg.jena.vo;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;

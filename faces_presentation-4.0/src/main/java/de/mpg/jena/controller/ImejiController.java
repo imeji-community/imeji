@@ -5,12 +5,17 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
+import com.hp.hpl.jena.query.larq.IndexBuilderString;
+import com.hp.hpl.jena.query.larq.IndexLARQ;
+import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.sdb.SDBFactory;
@@ -23,6 +28,7 @@ import com.hp.hpl.jena.sdb.store.LayoutType;
 
 import de.mpg.escidoc.faces.metastore_test.DataFactory;
 import de.mpg.escidoc.services.framework.PropertyReader;
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.Counter;
@@ -45,6 +51,14 @@ public abstract class ImejiController {
 		try {
 			String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
 			base = DataFactory.model(tdbPath);
+			/*
+			IndexBuilderString larqBuilder = new IndexBuilderString() ;
+			larqBuilder.indexStatements(base.listStatements()) ;
+			base.register(larqBuilder);
+			larqBuilder.closeWriter();
+			IndexLARQ index = larqBuilder.getIndex() ;
+			LARQ.setDefaultIndex(index) ;
+			 */
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -135,6 +149,7 @@ public abstract class ImejiController {
 		query += getSpecificQuery();
        
 		String filter = "";
+		Map<ImejiNamespaces, String> variableMap = new HashMap<ImejiNamespaces, String>();
 		
 		//Create query for searchCriterions
 		if(scList!=null && scList.size()>0)
@@ -142,19 +157,47 @@ public abstract class ImejiController {
     		int j = 0;
     		for(SearchCriterion sc : scList)
     		{
-    			ImejiNamespaces ns = sc.getNamespace();
-    			int i = 0;
-    			String variablename = "";
-    			while (ns != null) {
-    				variablename = "?v" +  String.valueOf(i+1) + String.valueOf(j);
-    				String lastVariablename = "?v" +  String.valueOf(i) + String.valueOf(j);
-    				query = ". " + variablename + " <" + ns.getNs() + "> " + lastVariablename + " "  + query;
-    				ns = ns.getParent();
-    				i++;
-    			}
-    			
-    			query = query.replaceAll(java.util.regex.Pattern.quote(variablename), "?s");
-    			j++;
+        		    if(!sc.getNamespace().equals(ImejiNamespaces.ID_URI))
+        		    {
+        		        
+        		    
+        		    String subquery = "";
+        			ImejiNamespaces ns = sc.getNamespace();
+        			int i = 0;
+        			String variablename = "";
+        			String lastVariablename = "";
+        			while (ns != null) {
+        				/*
+        			    if(variableMap.containsKey(ns))
+        				{
+        				    replace=false;
+        				    break;
+        				    
+        				}
+        				if(variableMap.containsKey(ns.getParent()))
+    			        {
+        				    variablename=variableMap.get(ns.getParent());
+    			        }
+        				else
+        				{
+        				    
+        				}
+        				*/
+        				 variablename = "?v" +  String.valueOf(i+1) + String.valueOf(j);
+                         lastVariablename = "?v" +  String.valueOf(i) + String.valueOf(j);
+                         subquery = ". " + variablename + " <" + ns.getNs() + "> " + lastVariablename + " "  + subquery;
+                         variableMap.put(ns, lastVariablename);
+        				
+        				ns = ns.getParent();
+        				i++;
+        			}
+        			
+        			variableMap.put(sc.getNamespace(), lastVariablename);
+        			subquery = subquery.replaceAll(java.util.regex.Pattern.quote(variablename), "?s");
+        			
+        			j++;
+        			query += subquery;
+        		}
     		}
 		}
     		
@@ -181,16 +224,26 @@ public abstract class ImejiController {
     				else if(sc.getOperator().equals(SearchCriterion.Operator.OR))
     					filter += " || ";
     			}
-    			if(sc.getNamespace().getIsUri())
+    			if(sc.getValue()!=null)
     			{
-    			    filter += "?v0" + j + "=<" + sc.getValue() + ">";
+    			    if(sc.getFilterType().equals(Filtertype.URI) && !sc.getNamespace().equals(ImejiNamespaces.ID_URI))
+                    {
+                        filter += "?v0" + j + "=<" + sc.getValue() + ">";
+                    }
+    			    else if(sc.getFilterType().equals(Filtertype.URI) && sc.getNamespace().equals(ImejiNamespaces.ID_URI))
+                    {
+    			        filter += "?s" + j + "=<" + sc.getValue() + ">";
+                    }
+                    else if(sc.getFilterType().equals(Filtertype.REGEX))
+                    {
+                        filter += "regex(?v0" + j + ", '" + sc.getValue() + "')";
+                    }
+                    else if(sc.getFilterType().equals(Filtertype.EQUALS))
+                    {
+                        filter += "?v0" + j + "='" + sc.getValue() + "'";
+                    }
     			}
-    			else
-    			{
-    			    filter += "regex(?v0" + j + ", '" + sc.getValue() + "')";
-    			}
-    			
-    			
+   
     			j++;
     			
     		}
@@ -201,27 +254,41 @@ public abstract class ImejiController {
 		
 		//Add sort criterion
         String sortQuery = "";
+        String sortVariable = "?sort0";
+       
+        
         if(sortCriterion!=null)
         {
-            ImejiNamespaces ns = sortCriterion.getSortingCriterion();
-            int i = 0;
-            String variablename = "";
-            while (ns != null) {
-                variablename = "?sort" +  String.valueOf(i+1);
-                String lastVariablename = "?sort" +  String.valueOf(i);
-                query = ". " + variablename + " <" + ns.getNs() + "> " + lastVariablename + " "  + query;
-                ns = ns.getParent();
-                i++;
+            if(variableMap.containsKey(sortCriterion.getSortingCriterion()))
+            {
+                sortVariable = variableMap.get(sortCriterion);
             }
-            query = query.replaceAll(java.util.regex.Pattern.quote(variablename), "?s");
-            
-            if(sortCriterion.getSortOrder().equals(SortOrder.DESCENDING))
-                sortQuery="ORDER BY DESC(?sort0)";
             else
             {
-                sortQuery="ORDER BY ?sort";
+                ImejiNamespaces ns = sortCriterion.getSortingCriterion();
+                int i = 0;
+                String variablename = "";
+                while (ns != null) {
+                    
+                    
+                    
+                    variablename = "?sort" +  String.valueOf(i+1);
+                    String lastVariablename = "?sort" +  String.valueOf(i);
+                    query = ". " + variablename + " <" + ns.getNs() + "> " + lastVariablename + " "  + query;
+                    ns = ns.getParent();
+                    i++;
+                }
+                query = query.replaceAll(java.util.regex.Pattern.quote(variablename), "?s");
+                
+               
             }
-            
+            if(sortCriterion.getSortOrder().equals(SortOrder.DESCENDING))
+                sortQuery="ORDER BY DESC(" + sortVariable + ")";
+            else
+            {
+                sortQuery="ORDER BY " + sortVariable;
+            }
+
         }
 		
 
@@ -255,6 +322,8 @@ public abstract class ImejiController {
         j++;
 	}
 	*/
+	
+	
 	
 	protected static int getUniqueId()
 	{

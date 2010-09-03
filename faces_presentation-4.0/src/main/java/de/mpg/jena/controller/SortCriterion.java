@@ -13,6 +13,12 @@ public class SortCriterion
     
     private SortOrder sortOrder;
 
+    public SortCriterion(ImejiNamespaces sc, SortOrder so)
+    {
+        this.sortingCriterion = sc;
+        this.sortOrder = so;
+    }
+    
     public SortCriterion()
     {
         this.sortOrder = SortOrder.ASCENDING;

@@ -1,5 +1,7 @@
 package de.mpg.jena.controller;
 
+import java.util.List;
+
 public class SearchCriterion {
 
 	enum Operator
@@ -7,9 +9,14 @@ public class SearchCriterion {
 		AND,OR
 	}
 
+	public enum Filtertype
+	{
+	    REGEX, URI, EQUALS;
+	}
+	
 	public enum ImejiNamespaces {
 		
-	    
+	    ID_URI(""),
 	    
 	    
 		PROPERTIES("http://imeji.mpdl.mpg.de/properties"),
@@ -25,15 +32,15 @@ public class SearchCriterion {
 		PROPERTIES_STATUS("http://imeji.mpdl.mpg.de/status", PROPERTIES),
 		
 		IMAGE_METADATA("http://imeji.mpdl.mpg.de/image/metadata"),
-		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/image/elementNamespace", IMAGE_METADATA),
-		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/image/name", IMAGE_METADATA),
-		IMAGE_METADATA_VALUE("http://imeji.mpdl.mpg.de/image/value", IMAGE_METADATA),
-		IMAGE_COLLECTION("http://imeji.mpdl.mpg.de/collection", null, true),
+		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/image/metadata/elementNamespace", IMAGE_METADATA),
+		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/image/metadata/name", IMAGE_METADATA),
+		IMAGE_METADATA_VALUE("http://imeji.mpdl.mpg.de/image/metadata/value", IMAGE_METADATA),
+		IMAGE_COLLECTION("http://imeji.mpdl.mpg.de/collection"),
 
 		CONTAINER_METADATA("http://imeji.mpdl.mpg.de/container/metadata"),
 		CONTAINER_METADATA_TITLE("http://purl.org/dc/elements/1.1/title", CONTAINER_METADATA),
 		CONTAINER_METADATA_DESCRIPTION("http://purl.org/dc/elements/1.1/description", CONTAINER_METADATA),
-		CONTAINER_METADATA_PERSON("http://purl.org/escidoc/metadata/profiles/0.1/person", CONTAINER_METADATA),
+		CONTAINER_METADATA_PERSON("http://purl.org/escidoc/metadata/terms/0.1/creator", CONTAINER_METADATA),
 		CONTAINER_METADATA_PERSON_FAMILY_NAME("http://purl.org/escidoc/metadata/terms/0.1/family-name", CONTAINER_METADATA_PERSON),
 		CONTAINER_METADATA_PERSON_GIVEN_NAME("http://purl.org/escidoc/metadata/terms/0.1/given-name", CONTAINER_METADATA_PERSON),
 		CONTAINER_METADATA_PERSON_ORGANIZATION("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit", CONTAINER_METADATA_PERSON),
@@ -42,7 +49,7 @@ public class SearchCriterion {
 
 		private String ns;
 		private ImejiNamespaces parent;
-		private boolean isUri;
+		
 		
 		private ImejiNamespaces(String ns) {
 			this.ns = ns;
@@ -53,11 +60,7 @@ public class SearchCriterion {
 			this.parent = parent;
 		}
 		
-		private ImejiNamespaces(String ns, ImejiNamespaces parent, boolean isUri) {
-            this.ns = ns;
-            this.parent = parent;
-            this.isUri = isUri;
-        }
+		
 
 		public void setNs(String ns) {
 			this.ns = ns;
@@ -75,21 +78,14 @@ public class SearchCriterion {
 			this.parent = parent;
 		}
 
-        public void setIsUri(boolean direct)
-        {
-            this.isUri = direct;
-        }
-
-        public boolean getIsUri()
-        {
-            return isUri;
-        }
+       
 	}
 	
 	private ImejiNamespaces namespace;
 	private String value;
 	private Operator operator = Operator.AND;
-			
+	private List<SearchCriterion> scList = null;		
+	private Filtertype filterType = Filtertype.REGEX;
 	
 	
 	
@@ -100,13 +96,21 @@ public class SearchCriterion {
 		
 	}
 	
-	public SearchCriterion(Operator op, ImejiNamespaces namespace, String value)
+	public SearchCriterion(Operator op, ImejiNamespaces namespace, String value, Filtertype filterType)
 	{
 		this.namespace = namespace;
 		this.value = value;
 		this.operator = op;
+		this.filterType = filterType;
 		
 	}
+	
+	public SearchCriterion(Operator op,  List<SearchCriterion> scList)
+	{
+        this.operator = op;
+	    this.setScList(scList);
+        
+    }
 
 	public ImejiNamespaces getNamespace() {
 		return namespace;
@@ -131,4 +135,24 @@ public class SearchCriterion {
 	public void setOperator(Operator operator) {
 		this.operator = operator;
 	}
+
+    public void setScList(List<SearchCriterion> scList)
+    {
+        this.scList = scList;
+    }
+
+    public List<SearchCriterion> getScList()
+    {
+        return scList;
+    }
+
+    public void setFilterType(Filtertype filterType)
+    {
+        this.filterType = filterType;
+    }
+
+    public Filtertype getFilterType()
+    {
+        return filterType;
+    }
 }

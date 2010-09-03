@@ -46,6 +46,7 @@ public class CollectionController extends ImejiController{
 		ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
 		base.begin();
 		bean2RDF.saveDeep(ic);
+		CollectionImeji res = rdf2Bean.load(CollectionImeji.class, ic.getId());
 		base.commit();
 		return ic;
 	}
@@ -126,7 +127,7 @@ public class CollectionController extends ImejiController{
   @Override
     protected String getSpecificQuery() throws Exception
     {
-      return " . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy";
+      return " . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status";
     }
 	
     @Override

@@ -38,6 +38,21 @@
 </ui:remove>
 	<body>
 		<ui:composition template="template_paginator.xhtml">		
+			
+			<ui:define name="actionsMenu">
+				<h:panelGroup>
+					<!-- SORTING content menu lower line starts here -->
+						<h:outputText id="txtSort" value="Sorted by " styleClass="free_area0"/>
+						<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
+							<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}"/>
+						</h:selectOneMenu>
+						<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
+						<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
+						<h:outputText styleClass="seperator void" />
+					<!-- SORTING content menu lower line ends here -->
+				</h:panelGroup>
+			</ui:define>
+			
 			<ui:define name="list">				
 				<h:panelGroup layout="block" styleClass="full_area0 tiledList">
 					<ul class="free_area0 fullBrowse">

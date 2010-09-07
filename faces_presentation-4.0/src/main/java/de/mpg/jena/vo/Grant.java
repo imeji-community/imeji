@@ -14,6 +14,7 @@ public class Grant {
     @Namespace("http://imeji.mpdl.mpg.de/")
     @RdfType("grantType")
 	public enum GrantType {
+        SYSADMIN,
 		CONTAINER_ADMIN, CONTAINER_EDITOR, IMAGE_UPLOADER, IMAGE_EDITOR, PRIVILEGED_VIEWER
 	}
 	

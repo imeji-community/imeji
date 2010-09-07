@@ -108,7 +108,7 @@
 	<!-- Initializer Servlet -->
 	<servlet>
 		<servlet-name>Initializer Servlet</servlet-name>
-		<servlet-class>de.mpg.escidoc.faces.init.InitializerServlet</servlet-class>
+		<servlet-class>de.mpg.imeji.init.InitializerServlet</servlet-class>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
 	

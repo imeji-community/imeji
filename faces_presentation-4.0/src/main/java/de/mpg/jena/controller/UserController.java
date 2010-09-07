@@ -1,8 +1,11 @@
 package de.mpg.jena.controller;
 
+import java.net.URI;
 import java.security.MessageDigest;
 
+import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.User;
+import de.mpg.jena.vo.Grant.GrantType;
 
 public class UserController extends ImejiController{
 	
@@ -38,6 +41,8 @@ public class UserController extends ImejiController{
 
 	}
 	
+	
+	
 	  @Override
 	    protected String getSpecificFilter() throws Exception
 	    {
@@ -49,6 +54,8 @@ public class UserController extends ImejiController{
 	    {
 	        return "";
 	    }
+	    
+	    
 
 	
 	

@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
 
+import thewebsemantic.NotFoundException;
+
 import de.escidoc.core.common.exceptions.application.notfound.ContentModelNotFoundException;
 import de.mpg.escidoc.faces.util.LoginHelper;
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -43,15 +45,26 @@ public class InitializerServlet extends HttpServlet
 	
 	public void createTestUser() throws Exception
     {
+	    
         UserController uc = new UserController(null);
-        User user = new User();
-        user.setEmail("imeji@mpdl.mpg.de");
-        user.setName("Imeji Test User");
-        user.setNick("itu");
-        user.setEncryptedPassword(UserController.convertToMD5("test"));
-        user.getGrants().add(new Grant(GrantType.CONTAINER_ADMIN, URI.create("http://test.de")));
-        uc.create(user);
-        logger.info("Created test user successfully");
+        try
+        {
+            User u = uc.retrieve("imeji@mpdl.mpg.de");
+            logger.info("Test User " + u.getEmail() + " already exists!");
+        }
+        catch (NotFoundException e)
+        {
+            User user = new User();
+            user.setEmail("imeji@mpdl.mpg.de");
+            user.setName("Imeji Test User");
+            user.setNick("itu");
+            user.setEncryptedPassword(UserController.convertToMD5("test"));
+            user.getGrants().add(new Grant(GrantType.CONTAINER_ADMIN, URI.create("http://test.de")));
+            uc.create(user);
+            logger.info("Created test user successfully");
+        }
+        
+        
     }
     
 	public void createSysadminUser() throws Exception

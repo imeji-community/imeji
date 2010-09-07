@@ -303,6 +303,12 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
+	<managed-bean>
+		<managed-bean-name>UserCreationBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.user.UserCreationBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
 	<converter>
 	    <converter-id>ProfileConverter</converter-id>
 	    <converter-class>de.mpg.imeji.mdProfile.util.ProfileConverter</converter-class>

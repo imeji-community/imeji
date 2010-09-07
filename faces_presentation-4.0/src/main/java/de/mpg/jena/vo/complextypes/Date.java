@@ -10,6 +10,6 @@ public class Date extends ComplexType
 {
     public Date()
     {
-        super(AllowedTypes.DATE);
+        super(ComplexTypes.DATE);
     }
 }

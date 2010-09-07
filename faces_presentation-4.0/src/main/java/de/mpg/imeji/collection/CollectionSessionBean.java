@@ -11,7 +11,7 @@ import de.mpg.imeji.vo.list.CollectionListVO;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.MetadataProfile;
-import de.mpg.jena.vo.ComplexType.AllowedTypes;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class CollectionSessionBean
 {
@@ -43,9 +43,9 @@ public class CollectionSessionBean
         active = new CollectionImeji();
         profile = new MetadataProfile();
         metadataTypes = new ArrayList<ComplexType>();
-        for (AllowedTypes t : AllowedTypes.values())
+        for (ComplexTypes t : ComplexTypes.values())
         {
-            metadataTypes.add((ComplexType)t.getType().newInstance());
+            metadataTypes.add((ComplexType)t.getClassType().newInstance());
         }
     }
     

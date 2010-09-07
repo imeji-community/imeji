@@ -7,14 +7,14 @@ import javax.faces.event.ValueChangeEvent;
 
 import thewebsemantic.LocalizedString;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.ComplexType.AllowedTypes;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class StatementWrapper
 {
     private boolean required = false;
     private boolean multiple = false;
     private Statement statement;
-    private AllowedTypes mdType;
+    private ComplexTypes mdType;
     private String defaultLabel;
 
     public StatementWrapper(Statement st)
@@ -44,7 +44,7 @@ public class StatementWrapper
         }
         if (st.getType() != null)
         {
-            for (AllowedTypes type : AllowedTypes.values())
+            for (ComplexTypes type : ComplexTypes.values())
             {
                 URI uri = URI.create(type.getNamespace() + type.getRdfType());
                 if (st.getType().equals(uri))
@@ -80,7 +80,7 @@ public class StatementWrapper
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
-            this.mdType = AllowedTypes.valueOf(event.getNewValue().toString());
+            this.mdType = ComplexTypes.valueOf(event.getNewValue().toString());
             statement.setType(URI.create(mdType.getNamespace() + mdType.getRdfType()));
         }
     }
@@ -122,12 +122,12 @@ public class StatementWrapper
         return statement.getLiteralConstraints().size();
     }
 
-    public AllowedTypes getMdType()
+    public ComplexTypes getMdType()
     {
         return mdType;
     }
 
-    public void setMdType(AllowedTypes mdType)
+    public void setMdType(ComplexTypes mdType)
     {
         this.mdType = mdType;
     }

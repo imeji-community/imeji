@@ -9,20 +9,25 @@ import de.mpg.jena.vo.ComplexType;
 public class Text extends ComplexType
 {
     private String text;
-    
+
     public Text()
     {
-        super(AllowedTypes.TEXT);
+        super(ComplexTypes.TEXT);
     }
-    
+
     public Text(String value)
     {
-        super(AllowedTypes.TEXT);
+        super(ComplexTypes.TEXT);
         text = value;
     }
-    
+
     public String getText()
     {
         return text;
+    }
+
+    public void setText(String str)
+    {
+        text = str;
     }
 }

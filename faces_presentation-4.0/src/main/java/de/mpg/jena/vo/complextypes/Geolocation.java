@@ -10,11 +10,11 @@ public class Geolocation extends ComplexType
 {
     public Geolocation()
     {
-        super(AllowedTypes.GEOLOCATION);
+        super(ComplexTypes.GEOLOCATION);
     }
     
     public Geolocation(String latitude, String longitude)
     {
-        super(AllowedTypes.GEOLOCATION);
+        super(ComplexTypes.GEOLOCATION);
     }
 }

@@ -21,7 +21,7 @@ import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.ComplexType.AllowedTypes;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class MdProfileBean
 {
@@ -53,7 +53,7 @@ public class MdProfileBean
         mdTypesMenu = new ArrayList<SelectItem>();
         for (ComplexType mdt : collectionSession.getMetadataTypes())
         {
-            mdTypesMenu.add(new SelectItem(mdt.getType().name(), mdt.getType().getLabel()));
+            mdTypesMenu.add(new SelectItem(mdt.getEnumType().name(), mdt.getEnumType().getLabel()));
         }
     }
 

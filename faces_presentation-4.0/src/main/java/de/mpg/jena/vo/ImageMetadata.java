@@ -1,9 +1,5 @@
 package de.mpg.jena.vo;
 
-import java.net.URI;
-
-import de.mpg.jena.util.ObjectHelper;
-import de.mpg.jena.vo.ComplexType.AllowedTypes;
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
@@ -14,39 +10,18 @@ import thewebsemantic.RdfType;
 @Embedded
 public class ImageMetadata
 {
-    private String elementNamespace;
     private String name;
-    private String value;
-    private URI type;
+    private ComplexType type;
+    private String namespace;
 
-    public ImageMetadata(String ns, String name, String value)
-    {
-        this.elementNamespace = ns;
-        this.name = name;
-        this.value = value;
-    }
-
-    public ImageMetadata(URI type)
+    public ImageMetadata(String name, ComplexType type)
     {
         this.type = type;
-        this.elementNamespace = ObjectHelper.getAllowedType(type).getNamespace();
-        this.name = ObjectHelper.getAllowedType(type).getLabel();
-        this.value = "";
+        this.name = name;
     }
 
     public ImageMetadata()
     {
-    }
-
-    @RdfProperty("http://imeji.mpdl.mpg.de/image/metadata/value")
-    public String getValue()
-    {
-        return value;
-    }
-
-    public void setValue(String value)
-    {
-        this.value = value;
     }
 
     public void setName(String name)
@@ -60,25 +35,24 @@ public class ImageMetadata
         return name;
     }
 
-    public void setElementNamespace(String elementNamespace)
+    public void setNamespace(String namespace)
     {
-        this.elementNamespace = elementNamespace;
+        this.namespace = namespace;
     }
 
     @RdfProperty("http://imeji.mpdl.mpg.de/image/metadata/elementNamespace")
-    public String getElementNamespace()
+    public String getNamespace()
     {
-        return elementNamespace;
+        return namespace;
     }
 
-    
     @RdfProperty("http://purl.org/dc/terms/type")
-    public URI getType()
+    public ComplexType getType()
     {
         return type;
     }
 
-    public void setType(URI type)
+    public void setType(ComplexType type)
     {
         this.type = type;
     }

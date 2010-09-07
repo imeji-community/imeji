@@ -18,12 +18,12 @@ public class ConePerson extends ComplexType
     
     public ConePerson()
     {
-        super(AllowedTypes.CONE_AUTHOR);
+        super(ComplexTypes.CONE_AUTHOR);
     }
     
     public ConePerson(Person pers)
     {
-        super(AllowedTypes.CONE_AUTHOR);
+        super(ComplexTypes.CONE_AUTHOR);
         this.person = pers;
     }
 

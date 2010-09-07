@@ -9,14 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 import thewebsemantic.Sparql;
-
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
-
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.exceptions.AuthenticationException;
 import de.mpg.jena.controller.exceptions.AuthorizationException;
@@ -32,6 +24,7 @@ import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image.Visibility;
 import de.mpg.jena.vo.Properties.Status;
+import de.mpg.jena.vo.complextypes.Text;
 
 public class ImageController extends ImejiController{
 	
@@ -274,8 +267,8 @@ public class ImageController extends ImejiController{
 			{
 				System.out.println("Add image: " +i );
 				Image im = new Image();
-				im.getMetadata().add(new ImageMetadata("http://purl.org/dc/elements/1.1/","description", "Test description for image in collection " + j + ", image "  + i));
-				im.getMetadata().add(new ImageMetadata("http://purl.org/dc/elements/1.1/","title", "Test title " + i));
+				im.getMetadata().add(new ImageMetadata("description", new Text("description for coll " + j + " image " + i ))); 
+				im.getMetadata().add(new ImageMetadata("title" , new Text("title for coll " + j + " image " + i )));
 				
 				im.setId(new URI("http://dev-coreservice.mpdl.mpg.de/ir/item/escidoc:"+UUID.randomUUID()));
 				im.setFullImageUrl(new URI("http://colab.mpdl.mpg.de/mediawiki/skins/monobook/mpdl-logo.png"));
@@ -284,11 +277,7 @@ public class ImageController extends ImejiController{
 				
 				im.setVisibility(Visibility.PUBLIC);
 				im.setCollection(coll.getId());
-				ImageMetadata imm = new ImageMetadata();
-				imm.setElementNamespace("http://example"+i);
-				imm.setName("gender");
-				imm.setValue("emotion");
-				im.getMetadata().add(imm);
+				im.getMetadata().add(new ImageMetadata("emotion", new Text("happy"))); 
 				//XmlLiteral xmlString = new XmlLiteral("<faces-md>age</faces-md>");
 				//im.setMetadata(xmlString);
 				
@@ -349,7 +338,7 @@ public class ImageController extends ImejiController{
 					
 					
 					
-					img.getMetadata().add(new ImageMetadata("markus","mh", "test"));
+					img.getMetadata().add(new ImageMetadata("markus", new Text("mh")));
 					
 
 					images.add(img);

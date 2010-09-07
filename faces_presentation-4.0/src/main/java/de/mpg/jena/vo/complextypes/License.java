@@ -16,12 +16,12 @@ public class License extends ComplexType
 
     public License()
     {
-        super(AllowedTypes.LICENCE);
+        super(ComplexTypes.LICENCE);
     }
 
     public License(SimpleDateFormat date)
     {
-        super(AllowedTypes.LICENCE);
+        super(ComplexTypes.LICENCE);
         this.date = date;
         date.applyPattern(dateFormat);
     }

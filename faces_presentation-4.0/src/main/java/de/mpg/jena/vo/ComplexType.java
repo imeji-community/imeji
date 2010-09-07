@@ -14,7 +14,7 @@ import de.mpg.jena.vo.complextypes.Text;
 
 public abstract class ComplexType
 {
-    public enum AllowedTypes
+    public enum ComplexTypes
     {
         CONE_AUTHOR(ConePerson.class, "Cone Author"), TEXT(Text.class, "Text"), NUMBER(Number.class, "Number"), DATE(
                 Date.class, "Date"), LICENCE(License.class, "Licence"), GEOLOCATION(Geolocation.class,
@@ -22,13 +22,13 @@ public abstract class ComplexType
         private Class<? extends ComplexType> type;
         private String label;
 
-        private AllowedTypes(Class<? extends ComplexType> type, String label)
+        private ComplexTypes(Class<? extends ComplexType> type, String label)
         {
             this.type = type;
             this.label = label;
         }
 
-        public Class<? extends ComplexType> getType()
+        public Class<? extends ComplexType> getClassType()
         {
             return type;
         }
@@ -45,7 +45,7 @@ public abstract class ComplexType
          */
         public String getNamespace()
         {
-            Annotation namespaceAnn = this.getType().getAnnotation(thewebsemantic.Namespace.class);
+            Annotation namespaceAnn = this.getClassType().getAnnotation(thewebsemantic.Namespace.class);
             return namespaceAnn.toString().split("@thewebsemantic.Namespace\\(value=")[1].split("\\)")[0];
         }
 
@@ -56,26 +56,26 @@ public abstract class ComplexType
          */
         public String getRdfType()
         {
-            Annotation rdfTypeAnn = this.getType().getAnnotation(thewebsemantic.RdfType.class);
+            Annotation rdfTypeAnn = this.getClassType().getAnnotation(thewebsemantic.RdfType.class);
             return rdfTypeAnn.toString().split("@thewebsemantic.RdfType\\(value=")[1].split("\\)")[0];
         }
     }
 
-    private AllowedTypes type;
+    private ComplexTypes type;
     private String label;
 
-    public ComplexType(AllowedTypes type)
+    public ComplexType(ComplexTypes type)
     {
         this.type = type;
         label = type.getLabel();
     }
 
-    public AllowedTypes getType()
+    public ComplexTypes getEnumType()
     {
         return type;
     }
 
-    public void setType(AllowedTypes type)
+    public void setEnumType(ComplexTypes type)
     {
         this.type = type;
     }

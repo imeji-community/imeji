@@ -48,8 +48,6 @@
 	<h:panelGroup rendered="#{AlbumListBean.list.view == 'ICON'}">
 		<jsp:directive.include file="ui/AlbumsIconView.jspf" />
 	</h:panelGroup>-->
-	
 	<ui:include src="ui/PaginationBottom.jspf" />
-			
 </f:subview>
 </div>

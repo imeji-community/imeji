@@ -8,6 +8,7 @@ import javax.faces.event.ValueChangeEvent;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.ImageMetadata;
 
 public class ImageBean
 {
@@ -60,7 +61,7 @@ public class ImageBean
 
     public String getThumbnailImageUrlAsString()
     {
-         return ""; //image.getThumbnailImageUrl().toString();
+         return image.getThumbnailImageUrl().toString();
     }
 
     public String getId()

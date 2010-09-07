@@ -12,12 +12,12 @@ public class Number extends ComplexType
 
     public Number()
     {
-        super(AllowedTypes.NUMBER);
+        super(ComplexTypes.NUMBER);
     }
     
     public Number(Integer value)
     {
-        super(AllowedTypes.NUMBER);
+        super(ComplexTypes.NUMBER);
         number = value;
     }
 

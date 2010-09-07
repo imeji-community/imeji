@@ -12,7 +12,7 @@ import java.util.List;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.ComplexType.AllowedTypes;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class ObjectHelper
 {
@@ -22,7 +22,7 @@ public class ObjectHelper
      * @param o
      * @return
      */
-    public static URI getURI(Class c, String id)
+    public static URI getURI(Class<?> c, String id)
     {
         Annotation namespaceAnn = c.getAnnotation(thewebsemantic.Namespace.class);
         String namespace = namespaceAnn.toString().split("@thewebsemantic.Namespace\\(value=")[1].split("\\)")[0];
@@ -67,33 +67,39 @@ public class ObjectHelper
     }
 
     /**
-     * Returns all Field of a class, including those of superclass.
+     * Return Fields of this class (excluding superclass fields)
      * 
      * @param cl
      * @return
      */
-    public static List<Field> getAllObjectFields(Class cl)
+    public static List<Field> getObjectFields(Class<?> cl)
     {
         List<Field> fields = new ArrayList<Field>();
         for (Field f : cl.getDeclaredFields())
         {
             fields.add(f);
         }
+        return fields;
+    }
+
+    /**
+     * Returns all Field of a class, including those of superclass.
+     * 
+     * @param cl
+     * @return
+     */
+    public static List<Field> getAllObjectFields(Class<?> cl)
+    {
+        List<Field> fields = getObjectFields(cl);
         if (cl.getSuperclass() != null)
             fields.addAll(getAllObjectFields(cl.getSuperclass()));
         return fields;
     }
 
-    public static AllowedTypes getAllowedType(URI uri)
+    public static boolean hasFields(Object obj)
     {
-        for (AllowedTypes type : AllowedTypes.values())
-        {
-            URI uri1 = URI.create(type.getNamespace() + type.getRdfType());
-            if (uri.equals(uri1))
-            {
-                return type;
-            }
-        }
-        return null;
+        if (getObjectFields(obj.getClass()).size() > 0)
+            return true;
+        return false;
     }
 }

@@ -1,9 +1,7 @@
 package de.mpg.jena.controller;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,18 +11,7 @@ import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
-import com.hp.hpl.jena.query.larq.IndexBuilderString;
-import com.hp.hpl.jena.query.larq.IndexLARQ;
-import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.sdb.SDBFactory;
-import com.hp.hpl.jena.sdb.Store;
-import com.hp.hpl.jena.sdb.StoreDesc;
-import com.hp.hpl.jena.sdb.sql.JDBC;
-import com.hp.hpl.jena.sdb.sql.SDBConnection;
-import com.hp.hpl.jena.sdb.store.DatabaseType;
-import com.hp.hpl.jena.sdb.store.LayoutType;
 
 import de.mpg.escidoc.faces.metastore_test.DataFactory;
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -32,10 +19,8 @@ import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.Counter;
-import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.User;
-import de.mpg.jena.vo.Grant.GrantType;
 
 public abstract class ImejiController {
 	
@@ -298,7 +283,7 @@ public abstract class ImejiController {
         {
          limitString = " LIMIT " + limit;   
         }
-		String completeQuery = "SELECT ?s WHERE { ?s a <" + type + "> " + query + filter + " } " + sortQuery + limitString + " OFFSET " + offset;
+		String completeQuery = "SELECT DISTINCT ?s WHERE { ?s a <" + type + "> " + query + filter + " } " + sortQuery + limitString + " OFFSET " + offset;
 			
 		System.out.println("Created Query:\n"+completeQuery);
 		return completeQuery;

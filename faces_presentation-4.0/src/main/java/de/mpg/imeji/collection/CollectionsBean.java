@@ -52,7 +52,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         {
             collections = controller.search(new ArrayList<SearchCriterion>(), null, -1, offset);
             totalNumberOfRecords = collections.size();
-            
+            logger.info("Found " + totalNumberOfRecords + "collections");
             
             SortCriterion sortCriterion = new SortCriterion();
             sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));

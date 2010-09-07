@@ -69,15 +69,19 @@ public class InitializerServlet extends HttpServlet
     
 	public void createSysadminUser() throws Exception
     {
-	    UserController uc = new UserController(null);
-        User user = new User();
-        user.setEmail(PropertyReader.getProperty("imeji.sysadmin.email"));
-        user.setName("Imeji Sysadmin");
-        user.setNick("sysadmin");
-        user.setEncryptedPassword(UserController.convertToMD5(PropertyReader.getProperty("imeji.sysadmin.password")));
-        user.getGrants().add(new Grant(GrantType.SYSADMIN, null));
-        uc.create(user);
-        logger.info("Created sysadmin successfully");
+	    if(PropertyReader.getProperty("imeji.sysadmin.email")!=null)
+	    {
+	        UserController uc = new UserController(null);
+	        User user = new User();
+	        user.setEmail(PropertyReader.getProperty("imeji.sysadmin.email"));
+	        user.setName("Imeji Sysadmin");
+	        user.setNick("sysadmin");
+	        user.setEncryptedPassword(UserController.convertToMD5(PropertyReader.getProperty("imeji.sysadmin.password")));
+	        user.getGrants().add(new Grant(GrantType.SYSADMIN, null));
+	        uc.create(user);
+	        logger.info("Created sysadmin successfully");
+	    }
+	   
     }
   
     public void destroy()

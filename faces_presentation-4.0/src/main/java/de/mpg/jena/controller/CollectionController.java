@@ -70,6 +70,13 @@ public class CollectionController extends ImejiController{
 		base.commit();
 	}
 	
+	public void release(CollectionImeji ic) throws Exception
+    {
+        //first check user credentials
+	    ic.getProperties().setStatus(Status.RELEASED);
+        update(ic);
+    }
+	
 	private void checkUserCredentials(CollectionImeji c) throws Exception
     {
         if(user==null)

@@ -235,4 +235,22 @@ public abstract class CollectionBean
     {
         return collection.getImages().size();
     }
+    
+    public boolean getIsOwner()
+    {
+        if(sessionBean.getUser()!=null) 
+        {
+            return collection.getProperties().getCreatedBy().getEmail().equals(sessionBean.getUser().getEmail());
+        }
+        else
+            return false;
+        
+    }
+    
+    public String release() throws Exception
+    {
+        CollectionController cc = new CollectionController(sessionBean.getUser());
+        cc.release(collection);
+        return "pretty:";
+    }
 }

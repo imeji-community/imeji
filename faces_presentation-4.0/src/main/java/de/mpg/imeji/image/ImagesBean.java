@@ -19,17 +19,16 @@ import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.ImageMetadata;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
-    
     private String objectClass;
     private int totalNumberOfRecords;
     private SessionBean sb;
     private List<SelectItem> sortMenu;
     private String selectedSortCriterion;
     private String selectedSortOrder;
-    
 
     public ImagesBean()
     {
@@ -38,17 +37,17 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         initMenus();
     }
 
-
     private void initMenus()
     {
-         sortMenu = new ArrayList<SelectItem>();
-         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_CREATION_DATE,ImejiNamespaces.PROPERTIES_CREATION_DATE.name()));
-         sortMenu.add(new SelectItem(ImejiNamespaces.IMAGE_COLLECTION,ImejiNamespaces.IMAGE_COLLECTION.name()));
-         //
-         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE,ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name()));
-         selectedSortCriterion = ImejiNamespaces.PROPERTIES_CREATION_DATE.name();
-         selectedSortOrder = SortOrder.DESCENDING.name();
-        
+        sortMenu = new ArrayList<SelectItem>();
+        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_CREATION_DATE, ImejiNamespaces.PROPERTIES_CREATION_DATE
+                .name()));
+        sortMenu.add(new SelectItem(ImejiNamespaces.IMAGE_COLLECTION, ImejiNamespaces.IMAGE_COLLECTION.name()));
+        //
+        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE,
+                ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name()));
+        selectedSortCriterion = ImejiNamespaces.PROPERTIES_CREATION_DATE.name();
+        selectedSortOrder = SortOrder.DESCENDING.name();
     }
 
     @Override
@@ -68,15 +67,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public List<ImageBean> retrieveList(int offset, int limit)
     {
         ImageController controller = new ImageController(sb.getUser());
-      
         Collection<Image> images = new ArrayList<Image>();
-        
         try
         {
             SortCriterion sortCriterion = new SortCriterion();
             sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        
             totalNumberOfRecords = controller.search(null, null, -1, offset).size();
             images = controller.search(null, sortCriterion, limit, offset);
         }
@@ -92,48 +88,42 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         return sortMenu;
     }
 
-
     public void setSortMenu(List<SelectItem> sortMenu)
     {
         this.sortMenu = sortMenu;
     }
-
 
     public String getSelectedSortCriterion()
     {
         return selectedSortCriterion;
     }
 
-
     public void setSelectedSortCriterion(String selectedSortCriterion)
     {
         this.selectedSortCriterion = selectedSortCriterion;
     }
-
 
     public String getSelectedSortOrder()
     {
         return selectedSortOrder;
     }
 
-
     public void setSelectedSortOrder(String selectedSortOrder)
     {
         this.selectedSortOrder = selectedSortOrder;
     }
-    
+
     public String toggleSortOrder()
     {
-        if(selectedSortOrder.equals("DESCENDING"))
+        if (selectedSortOrder.equals("DESCENDING"))
         {
-            selectedSortOrder="ASCENDING";
+            selectedSortOrder = "ASCENDING";
         }
         else
         {
-            selectedSortOrder="DESCENDING";
+            selectedSortOrder = "DESCENDING";
         }
         return getNavigationString();
-        
     }
 
     public String getObjectClass()

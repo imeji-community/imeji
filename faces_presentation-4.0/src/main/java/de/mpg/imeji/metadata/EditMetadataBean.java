@@ -71,7 +71,7 @@ public class EditMetadataBean
 
     public Image setMetadataValue(Image im, MdField f) throws Exception
     {
-        if (!hasMetadata(im, f.getName()))
+        if (!hasMetadata(im, f.getParent().getName()))
             im.getMetadata().add(
                     new ImageMetadata(f.getParent().getName(), ComplexTypeHelper.setComplexTypeValue(f.getParent()
                             .getType(), f.getName(), f.getValue())));
@@ -79,7 +79,7 @@ public class EditMetadataBean
         {
             for (ImageMetadata md : im.getMetadata())
             {
-                if (md.getName().equals(f.getName()))
+                if (md.getName().equals(f.getParent().getName()))
                     md.setType(ComplexTypeHelper
                             .setComplexTypeValue(f.getParent().getType(), f.getName(), f.getValue()));
             }

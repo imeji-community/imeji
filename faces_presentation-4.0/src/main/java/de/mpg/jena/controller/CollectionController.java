@@ -15,6 +15,7 @@ import de.mpg.jena.controller.exceptions.AuthorizationException;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
+import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Properties.Status;
@@ -45,6 +46,12 @@ public class CollectionController extends ImejiController{
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
 		base.begin();
+		//Workarround: activate lazylist
+		ic.getImages().size();
+		for(Person p : ic.getMetadata().getPersons())
+        {
+           p.getOrganizations().size();
+        }
 		bean2RDF.saveDeep(ic);
 		CollectionImeji res = rdf2Bean.load(CollectionImeji.class, ic.getId());
 		base.commit();
@@ -66,7 +73,15 @@ public class CollectionController extends ImejiController{
 	    checkUserCredentials(ic);
 		writeUpdateProperties(ic.getProperties(), user);
 		base.begin();
+		//Workarround: activate lazylist
+        ic.getImages().size();
+        for(Person p : ic.getMetadata().getPersons())
+        {
+           p.getOrganizations().size();
+        }
 		bean2RDF.saveDeep(ic);
+		ic = rdf2Bean.load(CollectionImeji.class, ic.getId());
+		System.out.println(ic.getImages().size());
 		base.commit();
 	}
 	

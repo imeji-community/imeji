@@ -49,6 +49,13 @@ public class ImageController extends ImejiController{
 		base.begin();
 		ic.getImages().add(img.getId());
 		bean2RDF.saveDeep(img);
+		
+		//Workarround: activate lazylist
+		for(Person p : ic.getMetadata().getPersons())
+		{
+		   p.getOrganizations().size();
+		}
+		
 		bean2RDF.saveDeep(ic);
 		base.commit();
 	}
@@ -69,6 +76,11 @@ public class ImageController extends ImejiController{
 			bean2RDF.saveDeep(img);
 			//System.out.println("Img created!");
 		}
+		//Workarround: activate lazylist
+        for(Person p : ic.getMetadata().getPersons())
+        {
+           p.getOrganizations().size();
+        }
 		bean2RDF.saveDeep(ic);
 		base.commit();
 	}

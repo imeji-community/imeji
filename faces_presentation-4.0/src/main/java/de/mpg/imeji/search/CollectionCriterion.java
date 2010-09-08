@@ -7,21 +7,18 @@ import de.mpg.jena.controller.SearchCriterion;
 
 public class CollectionCriterion extends Criterion{
 	private String collection;
-    private MDCriterionController mdCriterionController = null;
+
 	
 	public CollectionCriterion(){
-        mdCriterionController = new MDCriterionController();		
 	}
 	
-    public MDCriterionController getMdCriterionController()
-    {
-        return mdCriterionController;
-    }
+	public String getCollection() {
+		return collection;
+	}
 
-    public void setMdCriterionController(MDCriterionController mdCriterionController)
-    {
-        this.mdCriterionController = mdCriterionController;
-    }
+	public void setCollection(String collection) {
+		this.collection = collection;
+	}
 	
 	@Override
 	public ArrayList<String> createSearchCriterion() {
@@ -38,11 +35,5 @@ public class CollectionCriterion extends Criterion{
 		return criterions;
 	}
 
-	public String getCollection() {
-		return collection;
-	}
 
-	public void setCollection(String collection) {
-		this.collection = collection;
-	}
 }

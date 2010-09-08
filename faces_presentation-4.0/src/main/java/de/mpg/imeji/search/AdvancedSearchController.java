@@ -93,7 +93,7 @@ public class AdvancedSearchController extends BeanHelper
     public void clearAndInitialAllForms(){
         collectionCriterionController = new CollectionCriterionController();
         anyFieldCriterionController = new AnyFieldCriterionController();
-        this.getCollectionCriterionController().getCollectionCriterionManager().getObjectDM();
+//        this.getCollectionCriterionController().getCollectionCriterionManager().getObjectDM();
     }
 
     public boolean clearAllForms(){
@@ -104,8 +104,8 @@ public class AdvancedSearchController extends BeanHelper
 
     public String startSearch() throws IOException{
         String searchQuery = "";
-        for (String c : collectionCriterionController.getCollectionCriterionManager().getSearchCriterion())
-            searchQuery += c + " ";
+ //       for (String c : collectionCriterionController.getCollectionCriterionManager().getSearchCriterion())
+//            searchQuery += c + " ";
 
         System.err.println("searchString = " + searchQuery);
         FacesContext.getCurrentInstance().getExternalContext().redirect("SearchResult.xhtml?"+searchQuery);

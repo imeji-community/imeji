@@ -20,6 +20,7 @@ public class MDCriterionBean extends CriterionBean {
 
 	public MDCriterionBean(){
 		this(new MDCriterion());
+
 	}
 	
 	public MDCriterionBean(MDCriterion mdCriterionVO) {

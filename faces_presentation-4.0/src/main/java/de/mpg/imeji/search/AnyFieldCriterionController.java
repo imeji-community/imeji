@@ -13,14 +13,14 @@ public class AnyFieldCriterionController {
 	}
 	
 	public AnyFieldCriterionController(List<AnyFieldCriterionBean> anyFieldCriterionBean){
-		setAnyFieldCriterionBean(anyFieldCriterionBean);
+		setAnyFieldCriterionBeanList(anyFieldCriterionBean);
 	}
 	
 	public List<AnyFieldCriterionBean> getAnyFieldCriterionBeanList(){
 		return anyFieldCriterionBeanList;
 	}
 	
-    public void setAnyFieldCriterionBean(List<AnyFieldCriterionBean> anyFieldCriterionBeanList){
+    public void setAnyFieldCriterionBeanList(List<AnyFieldCriterionBean> anyFieldCriterionBeanList){
         this.anyFieldCriterionBeanList = anyFieldCriterionBeanList;
     }
 
@@ -46,7 +46,6 @@ public class AnyFieldCriterionController {
 		
 	public List<String> getSearchCriterion() {
 		List<String> criterions = new ArrayList<String>();
-
 		for(int i=0; i<anyFieldCriterionBeanList.size(); i++){
 			String criterion = new String();
 			criterion +=anyFieldCriterionBeanList.get(i).getCriterionVO().getLogicOperator()+ "any=" + anyFieldCriterionBeanList.get(i).getAnyFieldCriterionVO().getSearchTerm() ;

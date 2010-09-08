@@ -3,106 +3,81 @@ package de.mpg.imeji.search;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import de.mpg.imeji.search.beans.AnyFieldCriterionBean;
 import de.mpg.imeji.search.beans.CollectionCriterionBean;
+import de.mpg.imeji.search.beans.MDCriterionBean;
 
 
 
 
 public class CollectionCriterionController {
 	
-	private List<CollectionCriterion> parentVO;
-	private CollectionCriterionManager collectionCriterionManager;
-
+	private List<CollectionCriterionBean> collectionCriterionBeanList;
+	private int flag;
 
 	public CollectionCriterionController(){
-		parentVO =new ArrayList<CollectionCriterion>();
-		parentVO.add(new CollectionCriterion());
-		collectionCriterionManager = new CollectionCriterionManager(parentVO);
+		collectionCriterionBeanList =new ArrayList<CollectionCriterionBean>();
+		collectionCriterionBeanList.add(new CollectionCriterionBean());
 	}
 
-	public CollectionCriterionController(List<CollectionCriterion> parentVO){
-		setParentVO(parentVO);
+	public int getFlag() {
+		return flag;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
+
+	public CollectionCriterionController(List<CollectionCriterionBean> collectionCriterionBean){
+		setCollectionCriterionBeanList(collectionCriterionBean);
+	}
+	 
+	public CollectionCriterionBean getCurrentCollectionCriterionBean(){
+		return collectionCriterionBeanList.get(getFlag());
 	}
 	
-	public List<CollectionCriterion> getParentVO(){
-		return parentVO;
+	public List<CollectionCriterionBean> getCollectionCriterionBeanList(){
+		return collectionCriterionBeanList;
 	}
 	
-	
-    public void setParentVO(List<CollectionCriterion> parentVO){
-        this.parentVO = parentVO;
+    public void setCollectionCriterionBeanList(List<CollectionCriterionBean> collectionCriterionBeanList){
+        this.collectionCriterionBeanList = collectionCriterionBeanList;
     }
 
 	public void clearAllForms() {
-        for (CollectionCriterionBean bean : collectionCriterionManager.getObjectList())
+        for (CollectionCriterionBean bean : collectionCriterionBeanList)
             bean.clearCriterion();
-
     }
 	
-	public class CollectionCriterionManager extends DataModelManager<CollectionCriterionBean>{
-		List<CollectionCriterion> parentVO;
-		
-		public List<CollectionCriterion> getParentVO() {
-			return parentVO;
-		}
-		
-		public CollectionCriterionManager(List<CollectionCriterion> parentVO) {
-
-			setParentVO(parentVO);
-		}
-		
-		public void setParentVO(List<CollectionCriterion> parentVO){
-			this.parentVO = parentVO;
-			List<CollectionCriterionBean> beanList = new ArrayList<CollectionCriterionBean>();
-            for (CollectionCriterion collectionCriterionVO : parentVO)
-            {
-                beanList.add(new CollectionCriterionBean(collectionCriterionVO));
-            }
-            setObjectList(beanList);			
-		}
-		
-		public CollectionCriterionBean createNewObject() {
-			CollectionCriterion newVO = new CollectionCriterion();
-			CollectionCriterionBean collectionCriterionBean = new CollectionCriterionBean(newVO);
-			parentVO.add(newVO);
-			return collectionCriterionBean;
-		}
-		
-		public List<String> getSearchCriterion() {
-			List<String> criterions = new ArrayList<String>();
-
-			for(int i=0; i<collectionCriterionManager.getObjectList().size(); i++){
-				for(int j=0; j<parentVO.size();j++){
-					if(i==j){		
-						String criterion = new String();
-						criterion +=collectionCriterionManager.getObjectList().get(i).getCriterionVO().getLogicOperator()+ "Collection=" + parentVO.get(j).getCollection() ;
-						System.err.println(criterion);
-						criterions.add(criterion);			
-					}						
-				}
-			}
-			return criterions;
-		}
-		
-
-		
-        public int getSize(){
-            return getObjectDM().getRowCount();
-        }
-	
+	public CollectionCriterionBean addObject() {
+		CollectionCriterion newVO = new CollectionCriterion();
+		List<MDCriterionBean> newMdList = new ArrayList<MDCriterionBean>();
+		CollectionCriterionBean newBean = new CollectionCriterionBean(newVO, newMdList);
+		collectionCriterionBeanList.add(newBean);
+		return newBean;
 	}
+	
+	public CollectionCriterionBean removeObject(){
+		int i = collectionCriterionBeanList.size();
+		CollectionCriterionBean beanToRemove = collectionCriterionBeanList.get(i-1);
+		collectionCriterionBeanList.remove(beanToRemove);
+		return beanToRemove;
+	}
+		
+	public List<String> getSearchCriterion() {
+		List<String> criterions = new ArrayList<String>();
 
-    public CollectionCriterionManager getCollectionCriterionManager(){
-        return collectionCriterionManager;
-    }
-
-    public void setCollectionCriterionManager(CollectionCriterionManager collectionCriterionManager){
-        this.collectionCriterionManager = collectionCriterionManager;
-    }
-    
-
-
-
-
-
+		for(int i=0; i<collectionCriterionBeanList.size(); i++){
+			String criterion = new String();
+			criterion +=collectionCriterionBeanList.get(i).getCriterionVO().getLogicOperator()+ "collection=" + collectionCriterionBeanList.get(i).getCollectionCriterionVO().getCollection() ;
+			System.err.println(criterion);
+			criterions.add(criterion);			
+		}
+		return criterions;
+	}
+	
+	public int getSize(){
+		return collectionCriterionBeanList.size();
+	}
 }

@@ -50,23 +50,19 @@
 		
 		<ui:define name="actionsMenu">
 			<h:panelGroup id="advancedSearchMenu">
-				<pretty:link  id="lnkPictures" styleClass="free_area0" mappingId="searchPictures" rendered="#{prettyContext.currentMapping.id != 'searchPictures'}">
-					<h:outputText value="#{lbl.search_advanced_pictures}"></h:outputText>
+				<pretty:link  id="lnkImages" styleClass="free_area0" mappingId="forImages" rendered="#{prettyContext.currentMapping.id != 'forImages'}">
+					<h:outputText value="#{lbl.for_images}"></h:outputText>
 				</pretty:link>
-				<h:outputText id="txtPicturesLink" styleClass="free_area0" value="#{lbl.search_advanced_pictures}" rendered="#{prettyContext.currentMapping.id == 'searchPictures'}" />
+				<h:outputText id="txtImagesLink" styleClass="free_area0" value="#{lbl.for_images}" rendered="#{prettyContext.currentMapping.id == 'forImages'}" />
 				<h:outputText styleClass="seperator" />
 	
-				<pretty:link  id="lnkCollections" styleClass="free_area0" mappingId="searchCollections" rendered="#{prettyContext.currentMapping.id != 'searchCollections'}">
-					<h:outputText value="#{lbl.search_advanced_collections}"></h:outputText>
+				<pretty:link  id="lnkContainers" styleClass="free_area0" mappingId="forContainers" rendered="#{prettyContext.currentMapping.id != 'forContainers'}">
+					<h:outputText value="#{lbl.for_albums_and_collections}"></h:outputText>
 				</pretty:link>
-				<h:outputText id="txtCollectionsLink" styleClass="free_area0" value="#{lbl.search_advanced_collections}" rendered="#{prettyContext.currentMapping.id == 'searchCollections'}" />
+				<h:outputText id="txtCollectionsLink" styleClass="free_area0" value="#{lbl.for_albums_and_collections}" rendered="#{prettyContext.currentMapping.id == 'forContainers'}" />
 				<h:outputText styleClass="seperator " />
-	
-				<pretty:link  id="lnkAlbums" styleClass="free_area0" mappingId="searchAlbums" rendered="#{prettyContext.currentMapping.id != 'searchAlbums'}">
-					<h:outputText value="#{lbl.search_advanced_albums}"></h:outputText>
-				</pretty:link>
-				<h:outputText id="txtAlbumsLink" styleClass="free_area0" value="#{lbl.search_advanced_albums}" rendered="#{prettyContext.currentMapping.id == 'searchAlbums'}" />
 			</h:panelGroup>
+
 			
 		</ui:define>
 		

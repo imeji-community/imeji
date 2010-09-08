@@ -49,8 +49,14 @@
 		<action onPostback="false">#{UploadBean.init}</action>
 	</url-mapping>
 	
-	<url-mapping id="viewCollection">
+	<url-mapping id="homeCollection">
 		<pattern value="/collection/#{ViewCollectionBean.id}"/>
+		<view-id>/jsf/CollectionEntryPage.xhtml</view-id>
+		<action>#{ViewCollectionBean.init}</action>
+	</url-mapping>
+	
+	<url-mapping id="viewCollection">
+		<pattern value="/collection/#{ViewCollectionBean.id}/details"/>
 		<view-id>/jsf/CollectionView.xhtml</view-id>
 		<action>#{ViewCollectionBean.init}</action>
 	</url-mapping>
@@ -72,6 +78,12 @@
 	</url-mapping>
 	
 	<!-- Profile Pages -->
+	<url-mapping id="viewProfile">
+		<pattern value="/mdprofile/#{ViewMdProfileBean.id}"/>
+		<view-id>/jsf/ProfileView.xhtml</view-id>
+		<action>#{ViewMdProfileBean.init}</action>
+	</url-mapping>
+	
 	<url-mapping id="createProfile">
 		<pattern value="/mdprofile"/>
 		<view-id>/jsf/ProfileCreate.xhtml</view-id>

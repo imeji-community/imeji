@@ -26,7 +26,7 @@
 							<h:panelGroup styleClass="xLargr_area0">
 								<h:outputText value=" #{lbl.profile_use_template} "/>
 								<span class="xTiny_marginLExcl">
-									<h:selectOneMenu value="#{FormularBean.template}" styleClass="" onchange="submit();" valueChangeListener="#{FormularBean.templateListener}">
+									<h:selectOneMenu value="#{FormularBean.template}" styleClass="" onchange="submit(); window.location.href=window.location.pathname;" valueChangeListener="#{FormularBean.templateListener}">
 										<f:selectItems value="#{FormularBean.profilesMenu}"/>
 									</h:selectOneMenu>
 								</span>

@@ -19,7 +19,7 @@ public class CreateCollectionBean extends CollectionBean
     private CollectionSessionBean collectionSession = null;
 
     public CreateCollectionBean()
-    {   
+    {
         super();
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -27,10 +27,8 @@ public class CreateCollectionBean extends CollectionBean
         super.setTab(TabType.COLLECTION);
         super.setCollection(collectionSession.getActive());
         super.getProfilesMenu().add(new SelectItem("sdsdss", "sdsad"));
-        if ("1".equals(UrlHelper.getParameterValue("reset")))
-        {
+        if (UrlHelper.getParameterBoolean("reset"))
             this.reset();
-        }
     }
 
     public String loadProfile()
@@ -45,8 +43,8 @@ public class CreateCollectionBean extends CollectionBean
             ProfileController profileController = new ProfileController(sessionBean.getUser());
             MetadataProfile mdp = new MetadataProfile();
             mdp.setDescription(super.getCollection().getMetadata().getDescription());
-            mdp.setTitle(super.getCollection().getMetadata().getDescription());
-            MetadataProfile profile = profileController.create(new MetadataProfile());
+            mdp.setTitle(super.getCollection().getMetadata().getTitle());
+            MetadataProfile profile = profileController.create(mdp);
             super.getCollection().setProfile(profile);
             collectionController.create(super.getCollection());
             BeanHelper.info("collection_success_create");
@@ -65,7 +63,6 @@ public class CreateCollectionBean extends CollectionBean
         reset = "0";
     }
 
-    
     @Override
     protected String getNavigationString()
     {

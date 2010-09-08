@@ -55,6 +55,8 @@ public class MdProfileBean
         {
             mdTypesMenu.add(new SelectItem(mdt.getEnumType().name(), mdt.getEnumType().getLabel()));
         }
+        if (this.getId() == null && this.getProfile().getId() != null)
+            this.setId(this.getProfile().getId().getPath().split("/")[2]);
     }
 
     public void reset()

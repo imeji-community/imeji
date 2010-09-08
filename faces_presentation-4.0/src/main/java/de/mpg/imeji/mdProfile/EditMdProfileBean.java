@@ -46,7 +46,7 @@ public class EditMdProfileBean extends MdProfileBean
     public String save()
     {
         profileController.update(this.getProfile());
-        return "pretty:";
+        return "pretty:viewProfile";
     }
 
     @Override

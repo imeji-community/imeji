@@ -248,6 +248,11 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
+		<managed-bean-name>ViewMdProfileBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.mdProfile.ViewMdProfileBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>CreateMdProfileBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.mdProfile.CreateMdProfileBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>

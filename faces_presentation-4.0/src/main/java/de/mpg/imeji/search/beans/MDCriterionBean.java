@@ -1,6 +1,7 @@
 package de.mpg.imeji.search.beans;
 
 import java.util.ArrayList;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,15 +11,12 @@ import javax.faces.model.SelectItem;
 import org.apache.xalan.xsltc.compiler.sym;
 
 import de.mpg.imeji.search.MDCriterion;
-import de.mpg.imeji.search.simulator.Simulator;
 import de.mpg.jena.controller.SearchCriterion;
 
 public class MDCriterionBean extends CriterionBean {
 	public static final String BEAN_NAME = "MDCriterionBean";
 
 	private MDCriterion mdCriterionVO;
-	private Simulator s = new Simulator();
-	
 
 	public MDCriterionBean(){
 		this(new MDCriterion());
@@ -28,10 +26,6 @@ public class MDCriterionBean extends CriterionBean {
 		setMdCriterionVO(mdCriterionVO);
 	}
 
-
-	
-
-	
 	public MDCriterion getMdCriterionVO() {
 		return mdCriterionVO;
 	}
@@ -50,9 +44,6 @@ public class MDCriterionBean extends CriterionBean {
 		mdCriterionVO.setMd(null);
 		mdCriterionVO.setMdText(null);
 		return true;
-		
-
-		
 	}
 
 

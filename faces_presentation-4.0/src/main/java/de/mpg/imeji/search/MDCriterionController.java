@@ -1,11 +1,8 @@
 package de.mpg.imeji.search;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
 import de.mpg.imeji.search.beans.MDCriterionBean;
-import de.mpg.imeji.search.MDCriterion;
 
 public class MDCriterionController {
 	
@@ -13,7 +10,6 @@ public class MDCriterionController {
 	private MDCriterionManager mdCriterionManager;
 	
 	public MDCriterionController(){
-		
 		parentVO = new ArrayList<MDCriterion>();
 		parentVO.add(new MDCriterion());
 		mdCriterionManager = new MDCriterionManager(parentVO);
@@ -66,7 +62,7 @@ public class MDCriterionController {
 				for(int j=0; j<parentVO.size();j++){
 					if(i==j){	
 						String criterion = new String();
-						criterion += mdCriterionManager.getObjectList().get(i).getLogicOperator() + "MD=" + parentVO.get(j).getMd() +"&MDText=" + parentVO.get(j).getMdText();
+						criterion += mdCriterionManager.getObjectList().get(i).getCriterionVO().getLogicOperator() + "MD=" + parentVO.get(j).getMd() +"&MDText=" + parentVO.get(j).getMdText();
 						System.err.println(criterion);
 						criterions.add(criterion);			
 					}						

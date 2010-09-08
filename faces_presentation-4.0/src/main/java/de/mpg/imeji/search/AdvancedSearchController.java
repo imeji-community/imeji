@@ -17,48 +17,43 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
 
-public class AdvancedSearchController<ci> extends BeanHelper
+public class AdvancedSearchController extends BeanHelper
 {
     private static Logger logger = Logger.getLogger(AdvancedSearchController.class);
     private SessionBean sb;
     private CollectionCriterionController collectionCriterionController = null;
-    private MDCriterionController mdCriterionController = null;
+    private AnyFieldCriterionController anyFieldCriterionController = null;
+    
     private CollectionController controller;
-    private Collection<CollectionImeji> collections;
-    private CollectionImeji selectedCollection;;
 
-    public AdvancedSearchController()
-    {
+    private Collection<CollectionImeji> collections;
+    private CollectionImeji selectedCollection;
+    
+    public AdvancedSearchController(){
         collectionCriterionController = new CollectionCriterionController();
-        mdCriterionController = new MDCriterionController();
+        anyFieldCriterionController = new AnyFieldCriterionController();
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         controller = new CollectionController(sb.getUser());
     }
 
-    public List<SelectItem> getCollectionList()
-    {
+    public List<SelectItem> getCollectionList(){
         List<SelectItem> collectionList = new ArrayList<SelectItem>();
         controller = new CollectionController(sb.getUser());
         collectionList.add(new SelectItem(null, "--"));
         collections = new ArrayList<CollectionImeji>();
-        try
-        {
+        try{
             collections = controller.search(new ArrayList<SearchCriterion>(), null, -1, 0);
             for (CollectionImeji ci : collections)
             {
                 collectionList.add(new SelectItem(ci.getMetadata().getTitle(), ci.getMetadata().getTitle()));
             }
-        }
-        catch (Exception e)
-        {
+        }catch (Exception e){
         }
         return collectionList;
     }
 
-    public void collectionChanged(ValueChangeEvent event)
-    {
-        try
-        {
+    public void collectionChanged(ValueChangeEvent event){
+        try{
             String coTitle = event.getNewValue().toString();
             for (CollectionImeji ci : collections)
             {
@@ -95,55 +90,51 @@ public class AdvancedSearchController<ci> extends BeanHelper
         return mdList;
     }
 
-    public void clearAndInitialAllForms()
-    {
+    public void clearAndInitialAllForms(){
         collectionCriterionController = new CollectionCriterionController();
-        mdCriterionController = new MDCriterionController();
+        anyFieldCriterionController = new AnyFieldCriterionController();
         this.getCollectionCriterionController().getCollectionCriterionManager().getObjectDM();
     }
 
-    public boolean clearAllForms()
-    {
+    public boolean clearAllForms(){
         collectionCriterionController.clearAllForms();
-        mdCriterionController.clearAllForms();
+        anyFieldCriterionController.clearAllForms();
         return true;
     }
 
-    public String startSearch() throws IOException
-    {
+    public String startSearch() throws IOException{
         String searchQuery = "";
         for (String c : collectionCriterionController.getCollectionCriterionManager().getSearchCriterion())
             searchQuery += c + " ";
-        for (String c : mdCriterionController.getMdCriterionManager().getSearchCriterion())
-            searchQuery += c + " ";
+
         System.err.println("searchString = " + searchQuery);
         FacesContext.getCurrentInstance().getExternalContext().redirect("SearchResult.xhtml?"+searchQuery);
         return searchQuery;
     }
 
-    private ArrayList<SearchCriterion> transformToSparklSearchCriteria(Criterion predecessor, Criterion transformer)
-    {
+    private ArrayList<SearchCriterion> transformToSparkqlSearchCriteria(Criterion predecessor, Criterion transformer){
         return null;
     }
 
-    public CollectionCriterionController getCollectionCriterionController()
-    {
+
+
+	public CollectionCriterionController getCollectionCriterionController(){
         return collectionCriterionController;
     }
 
-    public void setCollectionCriterionController(CollectionCriterionController collectionCriterionController)
+    public AnyFieldCriterionController getAnyFieldCriterionController() {
+		return anyFieldCriterionController;
+	}
+
+	public void setAnyFieldCriterionController(AnyFieldCriterionController anyFieldCriterionController) {
+		this.anyFieldCriterionController = anyFieldCriterionController;
+	}
+
+	public void setCollectionCriterionController(CollectionCriterionController collectionCriterionController)
     {
         this.collectionCriterionController = collectionCriterionController;
     }
 
-    public MDCriterionController getMdCriterionController()
-    {
-        return mdCriterionController;
-    }
 
-    public void setMdCriterionController(MDCriterionController mdCriterionController)
-    {
-        this.mdCriterionController = mdCriterionController;
-    }
     // private List<ResultVO> resultList;
 }

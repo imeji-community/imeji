@@ -2,14 +2,11 @@ package de.mpg.imeji.search;
 
 import java.util.ArrayList;
 
-import de.mpg.jena.controller.SearchCriterion;
-
 public class MDCriterion extends Criterion{
 	private String md;
 	private String mdText;
 	
-	public MDCriterion(){
-		
+	public MDCriterion(){		
 	}
 	
 	public String getMd() {
@@ -24,7 +21,7 @@ public class MDCriterion extends Criterion{
 	public void setMdText(String mdText) {
 		this.mdText = mdText;
 	}
-
+	
 	public ArrayList<String> createSearchCriterion() {
 		ArrayList<String> criterions = new ArrayList<String>();
 	
@@ -32,11 +29,10 @@ public class MDCriterion extends Criterion{
 			return criterions;
 		else{
 			String criterion = new String();
-			criterion += "MD=" + getMd() +"&MDText=" + getMdText();
+			criterion += "md=" + getMd() +"&mdText=" + getMdText();
 			System.err.println(criterion);
 			criterions.add(criterion);
 		}
-
 		return  criterions;
 	}
 	

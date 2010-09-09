@@ -52,7 +52,7 @@ public class CollectionController extends ImejiController{
         {
            p.getOrganizations().size();
         }
-		bean2RDF.saveDeep(ic);
+		bean2RDF.saveDeep(ic); 
 		CollectionImeji res = rdf2Bean.load(CollectionImeji.class, ic.getId());
 		base.commit();
 		return ic;
@@ -98,7 +98,7 @@ public class CollectionController extends ImejiController{
         {
             throw new AuthenticationException("User is null!");
         }
-        else if (!user.getEmail().equals(c.getProperties().getCreatedBy().getEmail()))
+        else if (!ObjectHelper.getURI(User.class, user.getEmail()).equals(c.getProperties().getCreatedBy()))
         {
             for (Grant g : user.getGrants())
             {

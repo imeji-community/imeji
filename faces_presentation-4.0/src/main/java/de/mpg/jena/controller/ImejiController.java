@@ -19,6 +19,7 @@ import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.Counter;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.User;
 
@@ -113,8 +114,8 @@ public abstract class ImejiController {
 
 	protected static void writeCreateProperties(Properties properties, User user) {
 		Date now = new Date();
-		properties.setCreatedBy(user);
-		properties.setModifiedBy(user);
+		properties.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail()));
+		properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
 		properties.setCreationDate(now);
 		properties.setLastModificationDate(now);
 
@@ -122,7 +123,7 @@ public abstract class ImejiController {
 	
 	protected static void writeUpdateProperties(Properties properties, User user) {
 		Date now = new Date();
-		properties.setModifiedBy(user);
+		properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
 		properties.setLastModificationDate(now);
 	}
 	

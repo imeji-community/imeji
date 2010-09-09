@@ -168,7 +168,7 @@ public class ImageController extends ImejiController{
         {
             throw new AuthenticationException("User is null!");
         }
-        else if (!user.getEmail().equals(i.getProperties().getCreatedBy().getEmail()))
+        else if (!ObjectHelper.getURI(User.class, user.getEmail()).equals(c.getProperties().getCreatedBy()))
         {
             for (Grant g : user.getGrants())
             {

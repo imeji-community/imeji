@@ -19,7 +19,6 @@ import de.mpg.jena.vo.Properties.Status;
 
 public class ProfileController extends ImejiController
 {
-    private User user;
     
     public ProfileController(User user)
     {

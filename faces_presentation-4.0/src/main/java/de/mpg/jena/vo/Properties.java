@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.net.URI;
 import java.util.Date;
 
 import thewebsemantic.Embedded;
@@ -14,9 +15,9 @@ import thewebsemantic.RdfProperty;
 @Embedded
 public class Properties {
 	
-	private User createdBy;
+	private URI createdBy;
 	
-	private User modifiedBy;
+	private URI modifiedBy;
 	
 	private Date creationDate;
 
@@ -44,19 +45,19 @@ public class Properties {
 		return lastModificationDate;
 	}
 	
-	public void setCreatedBy(User createdBy) {
+	public void setCreatedBy(URI createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public User getCreatedBy() {
+	public URI getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setModifiedBy(User modifiedBy) {
+	public void setModifiedBy(URI modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
-	public User getModifiedBy() {
+	public URI getModifiedBy() {
 		return modifiedBy;
 	}
 

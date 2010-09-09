@@ -1,8 +1,10 @@
 package de.mpg.jena.util;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,7 +30,16 @@ public class ObjectHelper
         String namespace = namespaceAnn.toString().split("@thewebsemantic.Namespace\\(value=")[1].split("\\)")[0];
         Annotation rdfTypeAnn = c.getAnnotation(thewebsemantic.RdfType.class);
         String objectType = rdfTypeAnn.toString().split("@thewebsemantic.RdfType\\(value=")[1].split("\\)")[0];
-        return URI.create(namespace + objectType + "/" + id);
+        String encodedId = id;
+        try
+        {
+            encodedId = URLEncoder.encode(id, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+           
+        }
+        return URI.create(namespace + objectType + "/" + encodedId);
     }
 
     /**

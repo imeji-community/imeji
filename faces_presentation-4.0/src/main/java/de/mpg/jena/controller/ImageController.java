@@ -48,14 +48,12 @@ public class ImageController extends ImejiController{
 		img.setId(ObjectHelper.getURI(Image.class, Integer.toString(getUniqueId())));
 		base.begin();
 		ic.getImages().add(img.getId());
+		//Workarround: activate lazylist
+		img.getMetadata().size();
 		bean2RDF.saveDeep(img);
 		
 		//Workarround: activate lazylist
-		for(Person p : ic.getMetadata().getPersons())
-		{
-		   p.getOrganizations().size();
-		}
-		
+		CollectionController.activateLazyLists(ic);
 		bean2RDF.saveDeep(ic);
 		base.commit();
 	}
@@ -73,14 +71,13 @@ public class ImageController extends ImejiController{
 	         img.setVisibility(Visibility.PUBLIC);
 			img.setCollection(coll);
 			ic.getImages().add(img.getId());
+			//Workarround: activate lazylist
+	        img.getMetadata().size();
 			bean2RDF.saveDeep(img);
 			//System.out.println("Img created!");
 		}
 		//Workarround: activate lazylist
-        for(Person p : ic.getMetadata().getPersons())
-        {
-           p.getOrganizations().size();
-        }
+		CollectionController.activateLazyLists(ic);
 		bean2RDF.saveDeep(ic);
 		base.commit();
 	}
@@ -92,6 +89,8 @@ public class ImageController extends ImejiController{
 	    writeUpdateProperties(img.getProperties(), user);
 
 		base.begin();
+		//Workarround: activate lazylist
+        img.getMetadata().size();
 		bean2RDF.saveDeep(img);
 		base.commit();
 	}
@@ -105,6 +104,8 @@ public class ImageController extends ImejiController{
 		    CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, img.getCollection());
 		    checkUserCredentials(img, ic);
 			writeUpdateProperties(img.getProperties(), user);
+			//Workarround: activate lazylist
+	        img.getMetadata().size();
 			bean2RDF.saveDeep(img);
 		}
 		base.commit();

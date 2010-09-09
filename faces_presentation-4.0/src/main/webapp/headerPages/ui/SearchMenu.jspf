@@ -37,12 +37,26 @@
 	<div id="searchMenuSkipLinkAnchor" class="free_area0 searchMenu">
 		<!-- search Menu starts here -->
 	
+		<span class="std_imgArea quickSearchIcon">&#160;</span>
+		<span class="large_area0 quickSearchMenu">
+			<h:inputText id="quickSearchString" styleClass="large_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}"/>
+			<h:panelGroup styleClass="large_checkbox quickSearchCheckBoxMenu">
+				<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}">
+					<f:selectItem itemLabel="#{lbl.image}" itemValue="images"/>
+					<f:selectItem itemLabel="#{lbl.collections}" itemValue="collections"/>
+				</h:selectOneRadio>
+			</h:panelGroup>
+		</span>
+		<h:commandButton id="btnQuickSearchStart" styleClass="xSmall_txtBtn activeButton quickSearchBtn" value="Go" action="#{QuickSearchBean.search}"/>
+		
 		<h:outputLink id="lnkAdvancedSearch" styleClass="medium_area0_p3 advancedSearchMenu" value="#{Navigation.searchUrl}">
 	   		<h:outputText value="#{lbl.advanced_search}"/>
 	   	</h:outputLink>
+	   <!-- 
 	   	<h:outputLink id="lnkPublicSearch" styleClass="xLarge_area0_p3 advancedSearchMenu" value="#{Navigation.albumsSearchUrl}">
 	   		<h:outputText value="#{lbl.public_search}"/>
 	   	</h:outputLink>
+	   	-->
 	
 		<!-- search Menu ends here -->
 	</div>

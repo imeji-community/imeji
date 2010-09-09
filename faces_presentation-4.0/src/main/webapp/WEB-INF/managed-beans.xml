@@ -203,6 +203,12 @@
 		<managed-bean-scope>session</managed-bean-scope> 
 	</managed-bean>
 	
+	<managed-bean>
+		<managed-bean-name>CollectionsSearchResultBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.collection.CollectionsSearchResultBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
 	
 	<!-- Search Bean -->
 	<managed-bean>
@@ -311,6 +317,12 @@
 	<managed-bean>
 		<managed-bean-name>UserCreationBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.user.UserCreationBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>QuickSearchBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.search.QuickSearchBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	

@@ -112,5 +112,11 @@
 		<view-id>/jsf/ASearchAlbums.xhtml</view-id>
 	</url-mapping>
 	
+	<url-mapping id="collectionsSearchResults">
+		<pattern value="/search/collections/result"></pattern>
+		<query-param name="q">#{CollectionsSearchResultBean.query}</query-param>
+		<view-id>/jsf/CollectionsSearchResults.xhtml</view-id>
+	</url-mapping>
+	
 
 </pretty-config>

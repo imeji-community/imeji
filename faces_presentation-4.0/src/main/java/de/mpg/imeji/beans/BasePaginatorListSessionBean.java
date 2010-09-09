@@ -34,9 +34,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.facet.FacetsBean;
+import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.Image;
 
@@ -104,6 +107,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      * BaseListRetrieverRequestBean.
      */
     private int totalNumberOfElements = 0;
+  
 
     /**
      * Initializes a new BasePaginatorListSessionBean

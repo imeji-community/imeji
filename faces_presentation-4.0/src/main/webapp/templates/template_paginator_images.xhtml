@@ -57,8 +57,11 @@
 			
 				<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
 					<h:outputLabel value=" sds " styleClass="small_area0" style="visibility: hidden"></h:outputLabel>
-					<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1" styleClass="large_area0">
-						<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})"/>
+					<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}" styleClass="large_area0">
+						<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
+					</h:outputLink>
+					<h:outputLink value="#{Navigation.imagesUrl}" styleClass="large_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
+						<h:outputText value="#{lbl.images_all}"/>
 					</h:outputLink>
 				</h:panelGroup>
 				
@@ -137,7 +140,6 @@
 				</ul>
 				
 			</h:panelGroup>
-			<messages/>
 			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
 				<h:panelGroup rendered="#{SelectedBean.editMetadataBean.numberOfProfiles == '1'}">
 					<h:panelGroup layout="block" styleClass="full_area1_p8">
@@ -171,6 +173,26 @@
 					<h:outputText value="#{SelectedBean.editMetadataBean.numberOfProfiles} found!" styleClass="full_label"/>
 				</h:panelGroup>
 			</h:panelGroup>
+
+			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">	
+				<h:panelGroup layout="block" styleClass="full_area1_p8">
+					<tr:iterator var="group" value="#{paginatorListSessionBean.facets.groups}" varstatus="index">
+						<h:panelGroup layout="block" styleClass="full_area0" rendered="#{!empty group.list}">
+							<h:outputText value="#{group.label}"/> 
+							<h:outputText value="No title" rendered="#{empty group.label}"/> 
+							<span style="padding-left:20px"/>
+							<tr:iterator var="facet" value="#{group.list}" varstatus="index">
+								<h:outputLink value="#{facet.uri}">
+									<h:outputText value="#{facet.label}(#{facet.count})"/>
+								</h:outputLink>
+								<span style="padding-left:20px"/>
+							</tr:iterator>
+							<br/>
+						</h:panelGroup>
+					</tr:iterator>
+				</h:panelGroup>
+			</h:panelGroup>
+			
 			</ui:define>
 		</ui:composition>
 	</body>

@@ -2,14 +2,12 @@ package de.mpg.imeji.mdProfile;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import thewebsemantic.LocalizedString;
-
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.collection.CollectionBean.TabType;
@@ -21,7 +19,6 @@ import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class MdProfileBean
 {
@@ -44,17 +41,13 @@ public class MdProfileBean
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         pc = new ProfileController(sessionBean.getUser());
         if (collectionSession.getProfile() == null)
-        {
             collectionSession.setProfile(new MetadataProfile());
-        }
         profile = collectionSession.getProfile();
         profilesMenu = new ArrayList<SelectItem>();
         statements = new ArrayList<StatementWrapper>();
         mdTypesMenu = new ArrayList<SelectItem>();
         for (ComplexType mdt : collectionSession.getMetadataTypes())
-        {
             mdTypesMenu.add(new SelectItem(mdt.getEnumType().name(), mdt.getEnumType().getLabel()));
-        }
         if (this.getId() == null && this.getProfile().getId() != null)
             this.setId(this.getProfile().getId().getPath().split("/")[2]);
     }
@@ -69,20 +62,16 @@ public class MdProfileBean
     public void init()
     {
         if (UrlHelper.getParameterBoolean("reset"))
-        {
             reset();
-        }
         loadtemplates();
         setStatementWrappers(profile);
     }
-    
+
     public void setStatementWrappers(MetadataProfile mdp)
     {
         statements.clear();
         for (Statement st : mdp.getStatements())
-        {
             statements.add(new StatementWrapper(st));
-        }
     }
 
     public void loadtemplates()
@@ -91,9 +80,7 @@ public class MdProfileBean
         for (MetadataProfile mdp : pc.retrieveAll())
         {
             if (mdp.getId().toString() != profile.getId().toString())
-            {
                 profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
-            }
         }
     }
 
@@ -119,13 +106,9 @@ public class MdProfileBean
     {
         Statement st = ImejiFactory.newStatement();
         if (getStatementPosition() == 0)
-        {
             profile.getStatements().add(st);
-        }
         else
-        {
             ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
-        }
         collectionSession.setProfile(profile);
         return getNavigationString();
     }

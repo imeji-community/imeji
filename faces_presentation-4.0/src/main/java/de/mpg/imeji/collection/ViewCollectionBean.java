@@ -1,11 +1,16 @@
 package de.mpg.imeji.collection;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+
+import thewebsemantic.LocalizedString;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
@@ -18,14 +23,13 @@ public class ViewCollectionBean extends CollectionBean
     private SessionBean sessionBean = null;
     private List<Person> persons = null;
 
-   
     public ViewCollectionBean(CollectionImeji coll)
     {
         super(coll);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         collectionController = new CollectionController(sessionBean.getUser());
     }
-    
+
     public ViewCollectionBean()
     {
         super();
@@ -43,7 +47,6 @@ public class ViewCollectionBean extends CollectionBean
             String id = super.getId();
             super.setCollection(collectionController.retrieve(id));
             super.setTab(TabType.COLLECTION);
-            
             persons = new ArrayList<Person>();
             for (Person p : super.getCollection().getMetadata().getPersons())
             {
@@ -55,10 +58,14 @@ public class ViewCollectionBean extends CollectionBean
                 p.setOrganizations(orgs);
                 persons.add(p);
             }
+            this.getCollection().getMetadata().setPersons(persons);
+            
+            ProfileController profileController = new ProfileController(sessionBean.getUser());
+            this.getCollection().setProfile(profileController.retrieve(this.getCollection().getProfile().getId()));
         }
         catch (Exception e)
         {
-            System.out.println("ERROR");
+           throw new RuntimeException(e);
         }
     }
 
@@ -71,7 +78,7 @@ public class ViewCollectionBean extends CollectionBean
     {
         return persons;
     }
-    
+
     public void setPersons(List<Person> persons)
     {
         this.persons = persons;
@@ -82,7 +89,7 @@ public class ViewCollectionBean extends CollectionBean
     {
         return "pretty:viewCollection";
     }
-    
+
     public String getPersonString()
     {
         String personString = "";

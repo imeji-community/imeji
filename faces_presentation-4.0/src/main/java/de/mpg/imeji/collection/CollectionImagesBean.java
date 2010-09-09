@@ -9,6 +9,7 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.util.BeanHelper;
@@ -69,6 +70,7 @@ public class CollectionImagesBean extends ImagesBean
         {
             e.printStackTrace();
         }
+        super.setFacets(new FacetsBean((List<Image>)images));
         return ImejiFactory.imageListToBeanList(images);
     }
 

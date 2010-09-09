@@ -167,7 +167,7 @@
 											</b>
 											
 											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputLabel value="#{lbl.metadata_name} :   "/>
+												<h:outputLabel value="#{lbl.name} :   "/>
 												<h:outputText id="inputCreator" styleClass="quad_txtOutput" value="  #{statement.name}"/>
 											</span>
 											
@@ -176,7 +176,7 @@
 												<span class="noDisplay">: </span>
 											</b>
 											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputLabel value="#{lbl.metadata_type} :   "/>
+												<h:outputLabel value="#{lbl.type} :   "/>
 												<h:outputText id="inputCreator" styleClass="quad_txtOutput" value="   #{statement.type}"/>
 											</span>
 												
@@ -184,17 +184,18 @@
 												<h:outputText value=" labels " style="visibility:hidden;"/>
 												<span class="noDisplay">: </span>
 											</b>
-											<span class="xTiny_marginLExcl endline">
+											<span class="xHuge_area0 xTiny_marginLExcl endline">
 												<h:outputText value="#{lbl.labels} : "/>
+											
+												<tr:iterator var="label" value="#{statement.labels}" varStatus="indexO">
+													<h:panelGroup styleClass="endline">
+														<span class="endline">
+															<h:outputText value="#{label} (#{label.lang})"/>
+															<h:outputText value=", " rendered="#{indexO.index > 0}"/>
+														</span>
+													</h:panelGroup>
+												</tr:iterator>
 											</span>
-											<tr:iterator var="label" value="#{statement.labels}" varStatus="indexO">
-												<h:panelGroup styleClass="endline">
-													<span class="endline">
-														<h:outputText value="#{label} (#{label.lang})"/>
-														<h:outputText value=", " rendered="#{indexO.index > 0}"/>
-													</span>
-												</h:panelGroup>
-											</tr:iterator>
 										</tr:iterator>
 									</h:panelGroup>
 								</div>

@@ -9,6 +9,7 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.ImageController;
@@ -29,6 +30,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private List<SelectItem> sortMenu;
     private String selectedSortCriterion;
     private String selectedSortOrder;
+    private FacetsBean facets;
 
     public ImagesBean()
     {
@@ -80,6 +82,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         {
             e.printStackTrace();
         }
+        this.setFacets(new FacetsBean((List<Image>)images));
         return ImejiFactory.imageListToBeanList(images);
     }
 
@@ -134,5 +137,15 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public void setObjectClass(String objectClass)
     {
         this.objectClass = objectClass;
+    }
+
+    public FacetsBean getFacets()
+    {
+        return facets;
+    }
+
+    public void setFacets(FacetsBean facets)
+    {
+        this.facets = facets;
     }
 }

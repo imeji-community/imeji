@@ -14,13 +14,12 @@ public class ConePerson extends ComplexType
 {
     private Person person;
     private URI coneId;
-    private String role = "author";
-    
+
     public ConePerson()
     {
         super(ComplexTypes.CONE_AUTHOR);
     }
-    
+
     public ConePerson(Person pers)
     {
         super(ComplexTypes.CONE_AUTHOR);
@@ -46,16 +45,4 @@ public class ConePerson extends ComplexType
     {
         this.coneId = coneId;
     }
-
-    public String getRole()
-    {
-        return role;
-    }
-
-    public void setRole(String role)
-    {
-        this.role = role;
-    }
-    
-    
 }

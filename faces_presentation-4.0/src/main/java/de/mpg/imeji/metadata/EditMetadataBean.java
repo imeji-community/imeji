@@ -14,6 +14,7 @@ import thewebsemantic.LocalizedString;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.MetadataBean.MdField;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -37,8 +38,8 @@ public class EditMetadataBean
     {
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.images = images;
-        profiles = loadProfiles(images);
-        mdFields = getFields(profiles);
+        profiles = ProfileHelper.loadProfiles(images);
+        mdFields = ProfileHelper.getFields(profiles);
         metadata = new ArrayList<MetadataBean>();
         addMetadata();
     }
@@ -52,7 +53,7 @@ public class EditMetadataBean
                 im = setImageMetadata(im, metadata);
             }
             ImageController ic = new ImageController(sb.getUser());
-            ic.update(images);         
+            ic.update(images);
         }
         catch (Exception e)
         {
@@ -100,10 +101,10 @@ public class EditMetadataBean
 
     public String addMetadata()
     {
-        if (getComplextTypes(profiles).size() > 0)
+        if (ProfileHelper.getComplextTypes(profiles).size() > 0)
         {
-            MetadataBean mdb = new MetadataBean(new ImageMetadata(getComplextTypes(profiles).get(0).getLabel(),
-                    getComplextTypes(profiles).get(0)));
+            MetadataBean mdb = new MetadataBean(new ImageMetadata(ProfileHelper.getComplextTypes(profiles).get(0)
+                    .getLabel(), ProfileHelper.getComplextTypes(profiles).get(0)));
             mdb.setMdFields(this.mdFields);
             metadata.add(mdb);
         }
@@ -117,54 +118,6 @@ public class EditMetadataBean
             metadata.remove(metadata.size() - 1);
         }
         return "pretty:";
-    }
-
-    /**
-     * Load profiles defined in a list of images
-     */
-    public Map<URI, MetadataProfile> loadProfiles(List<Image> imgs)
-    {
-        CollectionController c = new CollectionController(sb.getUser());
-        Map<URI, MetadataProfile> pMap = new HashMap<URI, MetadataProfile>();
-        for (Image im : imgs)
-        {
-            CollectionImeji coll = c.retrieve(im.getCollection());
-            if (pMap.get(coll.getProfile().getId()) == null)
-            {
-                pMap.put(coll.getProfile().getId(), coll.getProfile());
-            }
-        }
-        return pMap;
-    }
-
-    public List<ComplexType> getComplextTypes(Map<URI, MetadataProfile> pMap)
-    {
-        List<ComplexType> cts = new ArrayList<ComplexType>();
-        for (MetadataProfile mdp : pMap.values())
-        {
-            for (Statement s : mdp.getStatements())
-            {
-                ComplexType ct = ImejiFactory.newComplexType(s.getType());
-                if (s.getLabels().size() > 0)
-                ct.setLabel(s.getLabels().toArray()[0].toString());
-                cts.add(ct);
-            }
-        }
-        return cts;
-    }
-
-    public List<MdField> getFields(Map<URI, MetadataProfile> pMap)
-    {
-        List<MdField> mdfs = new ArrayList<MdField>();
-        for (ComplexType ct : getComplextTypes(pMap))
-        {
-            MetadataBean mb = new MetadataBean(new ImageMetadata(ct.getLabel(), ct));
-            for (MdField mdf : mb.getMdFields())
-            {
-                mdfs.add(mdf);
-            }
-        }
-        return mdfs;
     }
 
     public List<MetadataBean> getMetadata()

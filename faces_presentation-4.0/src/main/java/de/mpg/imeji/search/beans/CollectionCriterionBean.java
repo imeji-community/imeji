@@ -15,7 +15,7 @@ public class CollectionCriterionBean extends CriterionBean {
 	
 	public static final String BEAN_NAME = "CollectionCriterionBean";
 	
-	private CollectionCriterion collectionCriterionVO;
+	private CollectionCriterion collectionCriterionVO = new CollectionCriterion();
 	private List<MDCriterionBean> mdCriterionBeanList = null;
  
 	public CollectionCriterionBean(){
@@ -28,6 +28,8 @@ public class CollectionCriterionBean extends CriterionBean {
 		this.mdCriterionBeanList = mdCriterionBeanList;
 //		setCollectionCriterionVO(collectionCriterionVO);
 	}
+	
+
 	
 	public CollectionCriterion getCollectionCriterionVO() {
 		return collectionCriterionVO;

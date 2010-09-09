@@ -28,20 +28,19 @@ public class AnyFieldCriterionController {
         for (AnyFieldCriterionBean bean : anyFieldCriterionBeanList)
             bean.clearCriterion();
     }
-	
-	public AnyFieldCriterionBean addObject() {
+	 
+	public String addObject() {
 		AnyFieldCriterion newVO = new AnyFieldCriterion();
 		AnyFieldCriterionBean newBean = new AnyFieldCriterionBean(newVO);
-		int i = anyFieldCriterionBeanList.size();
 		anyFieldCriterionBeanList.add(newBean);
-		return newBean;
+		return "";
 	}
 	
-	public AnyFieldCriterionBean removeObject(){
+	public String removeObject(){
 		int i = anyFieldCriterionBeanList.size();
 		AnyFieldCriterionBean beanToRemove = anyFieldCriterionBeanList.get(i-1);
 		anyFieldCriterionBeanList.remove(beanToRemove);
-		return beanToRemove;
+		return "";
 	}
 		
 	public List<String> getSearchCriterion() {

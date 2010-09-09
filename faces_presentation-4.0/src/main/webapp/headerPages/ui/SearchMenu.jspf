@@ -42,7 +42,7 @@
 			<h:inputText id="quickSearchString" styleClass="large_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}"/>
 			<h:panelGroup styleClass="large_checkbox quickSearchCheckBoxMenu">
 				<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}">
-					<f:selectItem itemLabel="#{lbl.image}" itemValue="images"/>
+					<!-- <f:selectItem itemLabel="#{lbl.image}" itemValue="images"/>-->
 					<f:selectItem itemLabel="#{lbl.collections}" itemValue="collections"/>
 				</h:selectOneRadio>
 			</h:panelGroup>

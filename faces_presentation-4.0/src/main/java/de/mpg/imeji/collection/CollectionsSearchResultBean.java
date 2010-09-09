@@ -55,6 +55,9 @@ public class CollectionsSearchResultBean extends SuperContainerBean<ViewCollecti
         List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
         scList.add(new SearchCriterion(ImejiNamespaces.CONTAINER_METADATA_TITLE, getQuery()));
         scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_DESCRIPTION, getQuery(), Filtertype.REGEX));
+        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_FAMILY_NAME, getQuery(), Filtertype.REGEX));
+        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_GIVEN_NAME, getQuery(), Filtertype.REGEX));
+        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, getQuery(), Filtertype.REGEX));
         try
         {
             collections = controller.search(scList, null, -1, offset);

@@ -222,7 +222,7 @@ public abstract class ImejiController {
                     }
                     else if(sc.getFilterType().equals(Filtertype.REGEX))
                     {
-                        filter += "regex(?v0" + j + ", '" + sc.getValue() + "')";
+                        filter += "regex(?v0" + j + ", '" + sc.getValue() + "', 'i')";
                     }
                     else if(sc.getFilterType().equals(Filtertype.EQUALS))
                     {

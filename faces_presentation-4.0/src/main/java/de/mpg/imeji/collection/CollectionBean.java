@@ -1,6 +1,5 @@
 package de.mpg.imeji.collection;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,15 +7,12 @@ import java.util.List;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.mdProfile.MdProfileBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
-import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.User;
@@ -180,7 +176,7 @@ public abstract class CollectionBean
      */
     public CollectionImeji getCollection()
     {
-        return collection;
+        return collection; 
     }
 
     /**

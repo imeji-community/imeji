@@ -47,8 +47,6 @@ public class CollectionController extends ImejiController{
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
 		base.begin();
-		//Workarround: activate lazylist
-		activateLazyLists(ic);
 		bean2RDF.saveDeep(ic); 
 		CollectionImeji res = rdf2Bean.load(CollectionImeji.class, ic.getId());
 		base.commit();
@@ -70,8 +68,6 @@ public class CollectionController extends ImejiController{
 	    checkUserCredentials(ic);
 		writeUpdateProperties(ic.getProperties(), user);
 		base.begin();
-		//Workarround: activate lazylist
-        activateLazyLists(ic);
 		bean2RDF.saveDeep(ic);
 		ic = rdf2Bean.load(CollectionImeji.class, ic.getId());
 		System.out.println(ic.getImages().size());
@@ -139,25 +135,7 @@ public class CollectionController extends ImejiController{
 		return res;
 	}
 
-	public static void activateLazyLists(CollectionImeji ic)
-	{
-	    ic.getImages().size();
-        for(Person p : ic.getMetadata().getPersons())
-        {
-           p.getOrganizations().size();
-        }
-        if (ic.getProfile()!= null)
-        {
-            if(ic.getProfile().getStatements()!=null)
-            {
-                for(Statement s : ic.getProfile().getStatements())
-                {
-                    s.getLabels().size();
-                    s.getLiteralConstraints().size();
-                }
-            }
-        }
-	}
+	
 	
   @Override
     protected String getSpecificQuery() throws Exception

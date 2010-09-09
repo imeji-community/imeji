@@ -47,13 +47,8 @@ public class ImageController extends ImejiController{
 		img.setCollection(coll);
 		img.setId(ObjectHelper.getURI(Image.class, Integer.toString(getUniqueId())));
 		base.begin();
-		ic.getImages().add(img.getId());
-		//Workarround: activate lazylist
-		img.getMetadata().size();
+		ic.getImages().add(img.getId());	
 		bean2RDF.saveDeep(img);
-		
-		//Workarround: activate lazylist
-		CollectionController.activateLazyLists(ic);
 		bean2RDF.saveDeep(ic);
 		base.commit();
 	}
@@ -71,13 +66,11 @@ public class ImageController extends ImejiController{
 	         img.setVisibility(Visibility.PUBLIC);
 			img.setCollection(coll);
 			ic.getImages().add(img.getId());
-			//Workarround: activate lazylist
-	        img.getMetadata().size();
+			
 			bean2RDF.saveDeep(img);
 			//System.out.println("Img created!");
 		}
 		//Workarround: activate lazylist
-		CollectionController.activateLazyLists(ic);
 		bean2RDF.saveDeep(ic);
 		base.commit();
 	}

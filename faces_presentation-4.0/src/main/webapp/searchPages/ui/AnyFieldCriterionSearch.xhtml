@@ -33,7 +33,7 @@
   All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
-<f:subview id="Any">			
+<f:subview id="AnyFieldCriterionSearch">			
 	<h:panelGroup styleClass="full_area0 itemBlock">
 		<h3 class="xLarge_area0_p8 endline blockHeader">
 			<h:outputText value="#{lbl.word_or_phase}" />
@@ -45,7 +45,6 @@
  			<tr:iterator id="anyFieldCriterion" var="AnyFieldCriterionBean" value="#{AdvancedSearchController.anyFieldCriterionController.anyFieldCriterionBeanList}" varStatus="index"> 
 
 					<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder"  rendered = "#{index.index == 0}">
-						<h:outputText value="#{AdvancedSearchController.anyFieldCriterionController.size}" />
 						<b class="xLarge_area0_p8 endline labelLine clear">&#160;
 							<span class="noDisplay"> </span>
 						</b>
@@ -53,10 +52,6 @@
 							<h:outputLabel id="lblSearchTermFirst" styleClass="quad_label" value="#{lbl.adv_search_lblSearchTerm}" />
 							<h:inputText id="anyFieldSearchStringFirst" styleClass="quad_txtInput" value="#{AnyFieldCriterionBean.anyFieldCriterionVO.searchTerm}" />
 						</span>
-						<span class="large_area0_p8 lineToolSection">
-							<tr:commandButton id="btnAddFirst" styleClass="min_imgBtn groupTool add" text=" " shortDesc="#{tip.search_btAdd}" action="#{AdvancedSearchController.anyFieldCriterionController.addObject}" />
-	                        <tr:commandButton id="btnRemoveFirst" styleClass="min_imgBtn groupTool remove" text=" " shortDesc="#{tip.search_btRemove}" disabled="#{AdvancedSearchController.anyFieldCriterionController.size == 1}" action="#{AdvancedSearchController.anyFieldCriterionController.removeObject}"/>
-			     		</span>
 			     	</h:panelGroup>
 		     	
 			     	<h:panelGroup layout="block" styleClass="free_area0 endline itemLine" rendered="#{index.index > 0}">
@@ -66,19 +61,20 @@
 						<span class="xHuge_area0 xTiny_marginLExcl endline">
 							<h:outputLabel id="lblSearchTermFollowing" styleClass="quad_label" value="#{lbl.adv_search_lblSearchTerm}" />
 							<h:inputText id="anyFieldSearchStringFollowing" styleClass="quad_txtInput" value="#{AnyFieldCriterionBean.anyFieldCriterionVO.searchTerm}" />						</span>
-						<span class="large_area0_p8 lineToolSection">
-							<tr:commandButton id="btnAddFollowing" styleClass="min_imgBtn groupTool add" text=" " shortDesc="#{tip.search_btAdd}" action="#{AdvancedSearchController.anyFieldCriterionController.addObject}" />
-							<tr:commandButton id="btnRemoveFollowing" styleClass="min_imgBtn groupTool remove" text=" " shortDesc="#{tip.search_btRemove}" disabled="#{AdvancedSearchController.anyFieldCriterionController.size == 1}" action="#{AdvancedSearchController.anyFieldCriterionController.removeObject}"/>
-						</span>
 					</h:panelGroup>
 
 		     	
 		     	<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder"></h:panelGroup>
 				<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
-						<h:selectOneMenu id="selMDCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{AnyFieldCriterionBean.anyFieldCriterionVO.logicOperator}">
-							<f:selectItems value="#{AnyFieldCriterionBean.anyFieldCriterionVO.logicOperatorItems}"/>
-						</h:selectOneMenu>		
+				
+					<tr:commandButton id="btnAddFirst4" styleClass="min_imgBtn groupTool add" text=" " shortDesc="#{tip.search_btAdd}" action="#{AdvancedSearchController.anyFieldCriterionController.addObject}" />
+	                <tr:commandButton id="btnRemoveFirst4" styleClass="min_imgBtn groupTool remove" text=" " shortDesc="#{tip.search_btRemove}" disabled="#{AdvancedSearchController.anyFieldCriterionController.size == 1}" action="#{AdvancedSearchController.anyFieldCriterionController.removeObject}"/>
+			     		
+					<h:selectOneMenu id="selMDCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{AnyFieldCriterionBean.anyFieldCriterionVO.logicOperator}">
+						<f:selectItems value="#{AnyFieldCriterionBean.anyFieldCriterionVO.logicOperatorItems}"/>
+					</h:selectOneMenu>		
 				</h:panelGroup>
+        	
         	</tr:iterator>
 	     		 <a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide" /></a>  		     
 		</div>

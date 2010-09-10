@@ -33,81 +33,96 @@
   All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
-<f:subview id="MD">			
-	<h:panelGroup styleClass="full_area0 itemBlock">
- 					<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-						<b class="xLarge_area0_p8 endline labelLine clear">&#160;
-							<span class="noDisplay"> </span>
-						</b>
-						<span class="xHuge_area0 xTiny_marginLExcl endline">
+<f:subview id="MDCrietrionSearch">			
+	<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+		<h3 class="xLarge_area0_p8 endline blockHeader">
+			<h:outputText value="Search MD"/>
+		</h3>
+		<span class="seperator"></span>
+				
+		<div class="free_area0 itemBlockContent endline">	
+			<h:panelGroup layout="block" styleClass="free_area0 endline itemLine">
+				<tr:iterator var="collection" value="#{AdvancedSearchController.collectionCriterionController.collectionCriterionList}" varStatus="indexCollection">
+					<h:panelGroup>
+					
+						<!-- Collection -->
+						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine">
+							<b class="xLarge_area0_p8 endline labelLine clear">&#160;
+								<span class="noDisplay"> </span>
+							</b>
+						<span class="xHuge_area0 xTiny_marginLExcl endline"> 
 							<h:outputLabel id="lblSearchTermFirst" styleClass="quad_label" value="#{lbl.adv_search_lblCollection}" />
-					  		<h:selectOneMenu styleClass="small_select replace" id="selectCollection" value="#{CollectionCriterionBean.collectionCriterionVO.collection}" onchange="submit()" valueChangeListener="#{AdvancedSearchController.collectionChanged}" immediate="true">
-								<f:selectItems value="#{AdvancedSearchController.collectionList}"/>
+						  	<h:selectOneMenu styleClass="small_select replace" id="selectCollection" value="#{collection.collectionName}" onchange="submit()" valueChangeListener="#{collection.collectionChanged}" immediate="true">
+								<f:selectItems value="#{collection.collectionList}"/>
 							</h:selectOneMenu>
 						</span>
-					</h:panelGroup>	
-
-		
-	 				<tr:iterator id="mdCriterion" var="mdCriterionBean" value="#{AdvancedSearchController.collectionCriterionController.collectionCriterionManager.parentVO}" varStatus="index"> 
-	 				
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder"  rendered = "#{index.index == 0}">
-							<h:outputLabel value="#{mdCriterion.mdCriterionController.mdCriterionManager.size}" />
-							<b class="xLarge_area0_p8 endline labelLine clear">&#160;
-								<span class="noDisplay"> </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-							<span class="free_area0">
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:outputLabel id="lblSearchTermFirst" styleClass="quad_label" value="#{lbl.adv_search_lblMetaData}" />
-				  					<h:selectOneMenu styleClass="large_select replace" id="selectMd" value="#{MDCriterionBean.mdCriterionVO.md}">
-										<f:selectItems value="#{AdvancedSearchController.mdList}"/>
-									</h:selectOneMenu>
-									<h:inputText styleClass="large_txtInput" id="md" value="#{MDCriterionBean.mdCriterionVO.mdText}" />
-								</span>
-								<span class="large_area0 tiny_marginRIncl">
-									<h:selectOneMenu id="selMDCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{MDCriterionBean.logicOperator}">
-										<f:selectItems value="#{MDCriterionBean.logicOperatorItems}"/>
-									</h:selectOneMenu>
-								
-								</span>
-								</span>
-							</span>
-							<span class="large_area0_p8 lineToolSection">
-								<tr:commandButton id="btnAddFirst" styleClass="min_imgBtn groupTool add" text=" " shortDesc="#{tip.search_btAdd}" action="#{mdCriterion.mdCriterionController.mdCriterionManager.addObject}" />
-			                    <tr:commandButton id="btnRemoveFirst" styleClass="min_imgBtn groupTool remove" text=" " shortDesc="#{tip.search_btRemove}" disabled="#{mdCriterion.mdCriterionController.mdCriterionManager.size== 1}" action="#{mdCriterion.mdCriterionController.mdCriterionManager.removeObject}"/>
-				     	    </span>
-				     	</h:panelGroup>
-			     	
-				     	<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder" rendered="#{index.index > 0}">
-							<b class="xLarge_area0_p8 endline labelLine clear">&#160;
-								<span class="noDisplay"> </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-							<span class="free_area0">
-								<span class="xHuge_area0 xTiny_marginLExcl endline ">
-									<h:selectOneMenu styleClass="large_select replace" id="selectMd" value="#{MDCriterionBean.mdCriterionVO.md}">
-										<f:selectItems value="#{AdvancedSearchController.mdList}"/>
-									</h:selectOneMenu>
-									<h:inputText styleClass="large_txtInput" id="md" value="#{MDCriterionBean.mdCriterionVO.mdText}" />					
-								</span>
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:selectOneMenu id="selMDCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{MDCriterionBean.logicOperator}">
-										<f:selectItems value="#{MDCriterionBean.logicOperatorItems}"/>
-									</h:selectOneMenu>
-								</span>
-								</span>
-							</span>
-							<span class="large_area0_p8 lineToolSection">
-								<tr:commandButton id="btnAddFollowing" styleClass="min_imgBtn groupTool add" text=" " shortDesc="#{tip.search_btAdd}" action="#{mdCriterion.mdCriterionController.mdCriterionManager.addObject}" />
-								<tr:commandButton id="btnRemoveFollowing" styleClass="min_imgBtn groupTool remove" text=" " shortDesc="#{tip.search_btRemove}" disabled="#{mdriterion.mdCriterionController.mdCriterionManager.size == 1}" action="#{mdCriterion.mdCriterionController.mdCriterionManager.removeObject}"/>
-							</span>
 						</h:panelGroup>
-	        		</tr:iterator>
+									
 
+											
+						<!-- MD -->
+						<b class="xLarge_area0_p8 endline labelLine clear">
+							<h:outputText value=" Organization " style="visibility:hidden;"/>
+							<span class="noDisplay">: </span>
+						</b>
+						<span class="xHuge_area0 xTiny_marginLExcl endline">
+							<h:outputText value="#{lbl.adv_search_lblMetaData}"/>
+						</span>
+									
+						<tr:iterator var="md" value="#{collection.mdCriterionList}" varStatus="indexMD">
+							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+								<h:panelGroup>
+									<b class="xHuge_area0 xTiny_marginLExcl endline">
+										<h:outputText value=" lbl.adv_search_lblMetaData" style="visibility:hidden;"/>
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline">
+									 	<h:selectOneMenu styleClass="large_select replace" id="selectMd" value="#{md.mdName}">
+											<f:selectItems value="#{md.mdList}"/>
+										</h:selectOneMenu>
+										<h:inputText styleClass="large_txtInput" id="md" value="#{md.mdText}" />
+									</span>
+									<span class="xHuge_area0 xTiny_marginLExcl endline">
+										<h:selectOneMenu id="selMDCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{md.logicOperator}">
+											<f:selectItems value="#{md.logicOperatorItems}"/>
+										</h:selectOneMenu>
+									</span>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
+									<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_md}" action="#{AdvancedSearchController.collectionCriterionController.addMd}">
+										<f:setPropertyActionListener value="#{indexCollection.index}" target="#{AdvancedSearchController.collectionCriterionController.collectionPosition}"/>
+										<f:setPropertyActionListener value="#{indexMD.index}" target="#{AdvancedSearchController.collectionCriterionController.mdPosition}"/>
+									</tr:commandButton>
+									<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_md}" disabled="#{AdvancedSearchController.collectionCriterionController.mdPosition == 0}" action="#{AdvancedSearchController.collectionCriterionController.removeMd}">
+										<f:setPropertyActionListener value="#{indexCollection.index}" target="#{AdvancedSearchController.collectionCriterionController.collectionPosition}"/>
+										<f:setPropertyActionListener value="#{indexMD.index}" target="#{AdvancedSearchController.collectionCriterionController.mdPosition}"/>
+									</tr:commandButton>
+								</h:panelGroup>
+							</h:panelGroup>
+						</tr:iterator>
+						
+						<span class="large_area0_p8 lineToolSection">
+				    		<h:selectOneMenu id="selCollectionCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{collection.logicOperator}">
+								<f:selectItems value="#{collection.logicOperatorItems}"/>
+							</h:selectOneMenu>	
+				    	</span>
+				    	
+						<!-- Add/Remove Collection buttons -->		
+						<h:panelGroup styleClass="large_area0_p8 lineToolSection">
+							<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_collection}" action="#{AdvancedSearchController.collectionCriterionController.addCollection}">
+								<f:setPropertyActionListener value="#{indexCollection.index}" target="#{AdvancedSearchController.collectionCriterionController.collectionPosition}"/>
+							</tr:commandButton>
+							<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_collection}" disabled="#{AdvancedSearchController.collectionCriterionController.collectionPosition == 0}" action="#{AdvancedSearchController.collectionCriterionController.removeCollection}">
+								<f:setPropertyActionListener value="#{indexCollection.index}" target="#{AdvancedSearchController.collectionCriterionController.collectionPosition}"/>
+							</tr:commandButton>
+						</h:panelGroup>	
+					</h:panelGroup>
+				</tr:iterator>
+			</h:panelGroup>
+				     		 <a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide: MD Profile" /></a>  		     
+		</div>
+		   <a class="free_area0 expand"><h:outputText value="Show: MD Profile" /></a>
 
-        	
-
-		     
 	</h:panelGroup>
 </f:subview>
 </div>

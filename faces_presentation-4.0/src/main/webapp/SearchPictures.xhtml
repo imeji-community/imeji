@@ -39,34 +39,29 @@
 	<body>
 
 	<ui:composition template="templates/template_advancedsearch.xhtml">
-		
-
-	
 		<ui:define name="mainContent">
-			<h:panelGroup layout="block" >
-				<div class="small_area0">&#160;</div>
-
+			<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
+				<h:panelGroup layout="block" styleClass="full_area0 fullItem">
+				
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+						<h:panelGroup styleClass="full_area0 fullItemControls">
+							<h:outputLink value="">
+								<h:outputText value="#{lbl.images}"/>
+							</h:outputLink>
+						</h:panelGroup>
+					</h:panelGroup>
 					
-					
-				<div class="full_area0">
-					<div class="full_area0 fullItem">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<!-- import search here -->
-						<ui:include src="searchPages/ui/CollectionsCriterionSearch.xhtml"/>							
+						<ui:include src="searchPages/ui/AnyFieldCriterionSearch.xhtml"/>
 						<ui:include src="searchPages/ui/MDCriterionSearch.xhtml"/>
-
-					</div>
-				</div>
+					</h:panelGroup>
+				</h:panelGroup>			
 				
-				
-				<div class="full_area0 formButtonArea">
+				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 					<h:commandLink id="lnkAdvancedSearchClearAll" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" value="#{lbl.search_bt_ClearAll}" action="#{AdvancedSearchController.clearAllForms}"/>						
 					<h:commandLink id="lnkAdvancedSearchStartSearch" styleClass="free_area1_p8 activeButton" value="#{lbl.search_bt_Start}" action="#{AdvancedSearchController.startSearch}"/>
-				</div>
-
-			
-			
-			
-				
+				</h:panelGroup>
 			</h:panelGroup>
 		</ui:define>
 

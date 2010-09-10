@@ -38,18 +38,18 @@ public class AdvancedSearchController extends BeanHelper
     }
 
     public String startSearch() throws IOException{
-        String searchQuery = "";
+        String q = "q=";
         for(String s : anyFieldCriterionController.getSearchCriterion())
-        	searchQuery += s + "";
+        	q += s + "";
         for (String c : collectionCriterionController.getSearchCriterion())
-            searchQuery += c + " ";
+            q += c + " ";
 
-        System.err.println("searchString = " + searchQuery);
-        FacesContext.getCurrentInstance().getExternalContext().redirect("SearchResult.xhtml?"+searchQuery);
-        return searchQuery;
+        System.err.println("searchString = " + q);
+        FacesContext.getCurrentInstance().getExternalContext().redirect("Images.xhtml?"+ q);
+        return q;
     }
 
-    private ArrayList<SearchCriterion> transformToSparkqlSearchCriteria(Criterion predecessor, Criterion transformer){
+    private ArrayList<SearchCriterion> transformToSparqlSearchCriteria(Criterion predecessor, Criterion transformer){
         return null;
     }
 

@@ -22,6 +22,7 @@ public class MetadataBean
         private String label;
         private String value;
         private ImageMetadata parent;
+        private List<String> literalOptions;
 
         public MdField(String name, String value, ImageMetadata parent)
         {
@@ -29,6 +30,7 @@ public class MetadataBean
             this.value = value;
             this.parent = parent;
             label = parent.getType().getLabel() + " - " + name;
+            literalOptions = new ArrayList<String>();
         }
 
         public String getName()
@@ -70,7 +72,16 @@ public class MetadataBean
         {
             this.label = label;
         }
-        
+
+        public List<String> getLiteralOptions()
+        {
+            return literalOptions;
+        }
+
+        public void setLiteralOptions(List<String> literalOptions)
+        {
+            this.literalOptions = literalOptions;
+        }
     }
 
     public MetadataBean(ImageMetadata metadata)
@@ -94,9 +105,7 @@ public class MetadataBean
         }
         List<MdField> fs = new ArrayList<MdField>();
         for (Field f : l)
-        {
             fs.add(new MdField(f.getName(), "", md));
-        }
         return fs;
     }
 

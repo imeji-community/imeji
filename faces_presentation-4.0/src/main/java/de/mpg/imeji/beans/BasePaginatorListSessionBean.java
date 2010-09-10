@@ -107,7 +107,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      * BaseListRetrieverRequestBean.
      */
     private int totalNumberOfElements = 0;
-  
 
     /**
      * Initializes a new BasePaginatorListSessionBean
@@ -181,15 +180,9 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         {
             String currentId = getListElementTypeId(current);
             if (currentId != null)
-            {
                 for (URI uri : sb.getSelected())
-                {
                     if (currentId.equals(uri.toString()))
-                    {
                         setListElementTypeIdSelected(current);
-                    }
-                }
-            }
         }
     }
 
@@ -201,7 +194,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         }
         catch (Exception e)
         {
-            logger.debug("Element has no getID method");
+            logger.warn("Element has no getID method");
         }
         return null;
     }
@@ -215,7 +208,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         }
         catch (Exception e)
         {
-            logger.debug("Element has no getID method");
+            logger.warn("Element has no getID method");
         }
     }
 

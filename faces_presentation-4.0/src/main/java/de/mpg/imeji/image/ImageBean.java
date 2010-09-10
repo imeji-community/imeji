@@ -1,14 +1,13 @@
 package de.mpg.imeji.image;
 
-import java.net.URI;
-import java.util.ArrayList;
-
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
+
+import org.apache.myfaces.trinidad.component.core.nav.CoreCommandButton;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.ImageMetadata;
 
 public class ImageBean
 {
@@ -43,6 +42,15 @@ public class ImageBean
             sb.getSelected().add(this.image.getId());
     }
 
+    public void select(ActionEvent event)
+    {
+        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        if (!selected)
+            sb.getSelected().remove(image.getId());
+        else
+            sb.getSelected().add(this.image.getId());
+    }
+
     /**
      * @return the selected
      */
@@ -61,7 +69,7 @@ public class ImageBean
 
     public String getThumbnailImageUrlAsString()
     {
-         return image.getThumbnailImageUrl().toString();
+        return image.getThumbnailImageUrl().toString();
     }
 
     public String getId()

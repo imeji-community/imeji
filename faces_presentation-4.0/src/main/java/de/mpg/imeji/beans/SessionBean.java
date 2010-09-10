@@ -11,8 +11,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
+import org.apache.myfaces.trinidad.component.core.nav.CoreCommandButton;
 
 import de.mpg.imeji.beans.Navigation.Page;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.User;
 
 public class SessionBean
@@ -157,7 +159,7 @@ public class SessionBean
     {
         this.selected = selected;
     }
-    
+
     public int getSelectedSize()
     {
         return this.selected.size();

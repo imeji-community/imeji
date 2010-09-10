@@ -58,7 +58,6 @@
 		<h:panelGroup styleClass="free_area0 itemBlockContent endline">
 			<tr:iterator id="profile" var="profile" value="#{MdProfileBean.metadataBeanList}" varStatus="position">
 				<h:panelGroup layout="block" styleClass="full_area0 clean">
-					
 					<h:selectOneMenu value="#{profile.current.label}" valueChangeListener="#{profile.menuListener}" styleClass="large_select clean" immediate="false">
 						<f:selectItems value="#{MdProfileBean.metadataMenu}"/>
 					</h:selectOneMenu>

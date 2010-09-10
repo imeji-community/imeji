@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import thewebsemantic.LocalizedString;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.MetadataBean;
 import de.mpg.imeji.metadata.MetadataBean.MdField;
@@ -62,15 +64,36 @@ public class ProfileHelper
         return cts;
     }
 
-    public static List<MdField> getFields(Map<URI, MetadataProfile> pMap)
+    public static List<MdField> getComplexTypes(MetadataProfile mdp)
     {
         List<MdField> mdfs = new ArrayList<MdField>();
-        for (ComplexType ct : getComplextTypes(pMap))
+        for (Statement s : mdp.getStatements())
         {
+            ComplexType ct = ImejiFactory.newComplexType(s.getType());
+            if (s.getLabels().size() > 0)
+                ct.setLabel(s.getLabels().toArray()[0].toString());
             MetadataBean mb = new MetadataBean(new ImageMetadata(ct.getLabel(), ct));
+            for (LocalizedString str : s.getLiteralConstraints())
+                mb.getField().getLiteralOptions().add(str.toString());
             for (MdField mdf : mb.getMdFields())
                 mdfs.add(mdf);
         }
+        return mdfs;
+    }
+
+    public static List<MdField> getFields(Map<URI, MetadataProfile> pMap)
+    {
+        List<MdField> mdfs = new ArrayList<MdField>();
+        for (MetadataProfile mdp : pMap.values())
+        {
+           mdfs.addAll(getComplexTypes(mdp));
+        }
+//        for (ComplexType ct : getComplextTypes(pMap))
+//        {
+//            MetadataBean mb = new MetadataBean(new ImageMetadata(ct.getLabel(), ct));
+//            for (MdField mdf : mb.getMdFields())
+//                mdfs.add(mdf);
+//        }
         return mdfs;
     }
 }

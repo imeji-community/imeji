@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
-import de.mpg.escidoc.services.search.query.MetadataSearchCriterion.LogicalOperator;
 import de.mpg.imeji.search.Criterion;
 import de.mpg.imeji.util.BeanHelper;
 

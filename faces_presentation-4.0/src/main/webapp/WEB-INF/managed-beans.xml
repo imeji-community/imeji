@@ -212,39 +212,14 @@
 	
 	<!-- Search Bean -->
 	<managed-bean>
-		<managed-bean-name>MDCriterionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.search.beans.MDCriterionBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>CollectionCriterionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.search.beans.CollectionCriterionBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>CriterionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.search.beans.CriterionBean</managed-bean-class>
+		<managed-bean-name>AnyFieldCriterionBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.search.beans.AnyFieldCriterionBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>AdvancedSearchController</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.search.AdvancedSearchController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>SearchImageBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.search.SearchImageBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>	
-	<managed-bean>
-		<managed-bean-name>SearchCollectionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.search.SearchCollectionBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>SearchAlbumBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.search.SearchAlbumBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
 	<!-- Profiles bean -->

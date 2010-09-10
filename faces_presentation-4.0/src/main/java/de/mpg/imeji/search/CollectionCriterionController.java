@@ -2,55 +2,89 @@ package de.mpg.imeji.search;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-
-import javax.faces.event.ValueChangeEvent;
-
-import de.mpg.imeji.search.beans.AnyFieldCriterionBean;
-import de.mpg.imeji.search.beans.CollectionCriterionBean;
-import de.mpg.imeji.search.beans.MDCriterionBean;
-
-
-
+import javax.faces.model.SelectItem;
+import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.vo.CollectionImeji;
 
 public class CollectionCriterionController {
 	
-	private List<CollectionCriterionBean> collectionCriterionBeanList;
+	private List<CollectionCriterion> collectionCriterionList;
 	private int collectionPosition;
 	private int mdPosition;
-
+	
+    private SessionBean sb;
+    private CollectionController controller;
+	private List<SelectItem> collectionList;
+    private Collection<CollectionImeji> collections;	
+//    private ArrayList<CollectionImeji> collectionImejiList;
+	
 	public CollectionCriterionController(){
-		collectionCriterionBeanList = new ArrayList<CollectionCriterionBean>();
-		collectionCriterionBeanList.add(new CollectionCriterionBean());
+        sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        controller = new CollectionController(sb.getUser());
+        collectionList = new ArrayList<SelectItem>();
+        collectionList.add(new SelectItem(null, "--"));
+        collections = new ArrayList<CollectionImeji>();
+        try{
+            collections = controller.search(new ArrayList<SearchCriterion>(), null, -1, 0);
+            for (CollectionImeji ci : collections)
+            {
+                collectionList.add(new SelectItem(ci.getMetadata().getTitle(), ci.getMetadata().getTitle()));
+            }
+        }catch (Exception e){
+        }  
+        
+        
+		collectionCriterionList = new ArrayList<CollectionCriterion>();
+//		collectionImejiList =  new ArrayList<CollectionImeji>();
+		//insure there is at one collection with meta data in the list
+//		collectionImejiList.add(new CollectionImeji());
+		CollectionCriterion newCollection = new CollectionCriterion(collections);
+		newCollection .setCollectionName("");
+		newCollection .setCollectionList(collectionList);
+		newCollection .setMdCriterionList(newCollection.newMdCriterionList());
+		collectionCriterionList.add(newCollection);
+		
 	}
+	 
 
+    
+    
+
+
+	
 	public String addCollection() {
-		CollectionCriterion newVO = new CollectionCriterion();
-		List<MDCriterionBean> newMdList = new ArrayList<MDCriterionBean>();
-		CollectionCriterionBean newBean = new CollectionCriterionBean(newVO, newMdList);
-		collectionCriterionBeanList.add(collectionPosition+1,newBean);
+//		collectionImejiList.add(new CollectionImeji());
+		CollectionCriterion newCollection = new CollectionCriterion(collections);
+		newCollection .setCollectionName("");
+		newCollection .setCollectionList(collectionList);
+		newCollection .setMdCriterionList(newCollection.newMdCriterionList());
+		collectionCriterionList.add(collectionPosition+1,newCollection);
 		return getNavigationString();
 	}
 	
 	public String removeCollection(){
 		if(collectionPosition > 0)
-			collectionCriterionBeanList.remove(collectionPosition);
+			collectionCriterionList.remove(collectionPosition);
 		return getNavigationString();
 	}
 	
 	public String addMd(){
-		ArrayList<MDCriterionBean> mds = (ArrayList<MDCriterionBean>)collectionCriterionBeanList.get(collectionPosition).getMdCriterionBeanList();
-		MDCriterion newVO = new MDCriterion();
-		MDCriterionBean newBean = new MDCriterionBean(newVO);		
-		mds.add(mdPosition +1, newBean);	
+		ArrayList<MDCriterion> mds = (ArrayList<MDCriterion>)collectionCriterionList.get(collectionPosition).getMdCriterionList();
+    	MDCriterion newMd = new MDCriterion(collections, collectionCriterionList.get(collectionPosition).getCollectionName());
+    	newMd.setMdName("");
+    	newMd.setMdList(newMd.newMdList());
+    	newMd.setMdText("");	
+		mds.add(mdPosition +1, newMd);	
 		return getNavigationString();
 	}
 	
 	public String removeMd(){
 		if(mdPosition >0){
-			ArrayList<MDCriterionBean> mds = (ArrayList<MDCriterionBean>)collectionCriterionBeanList.get(collectionPosition).getMdCriterionBeanList();
+			ArrayList<MDCriterion> mds = (ArrayList<MDCriterion>)collectionCriterionList.get(collectionPosition).getMdCriterionList();
 			mds.remove(mdPosition);			
 		}
 		return getNavigationString();
@@ -74,23 +108,23 @@ public class CollectionCriterionController {
 		this.mdPosition = mdPosition;
 	}
 
-	public CollectionCriterionController(List<CollectionCriterionBean> collectionCriterionBean){
-		setCollectionCriterionBeanList(collectionCriterionBean);
+	public CollectionCriterionController(List<CollectionCriterion> collectionCriterion){
+		setCollectionCriterionList(collectionCriterion);
 	}
 	 
 
 	
-	public List<CollectionCriterionBean> getCollectionCriterionBeanList(){
-		return collectionCriterionBeanList;
+	public List<CollectionCriterion> getCollectionCriterionList(){
+		return collectionCriterionList;
 	}
 	
-    public void setCollectionCriterionBeanList(List<CollectionCriterionBean> collectionCriterionBeanList){
-        this.collectionCriterionBeanList = collectionCriterionBeanList;
+    public void setCollectionCriterionList(List<CollectionCriterion> collectionCriterionList){
+        this.collectionCriterionList = collectionCriterionList;
     }
 
 	public void clearAllForms() {
-        for (CollectionCriterionBean bean : collectionCriterionBeanList)
-            bean.clearCriterion();
+        for (CollectionCriterion vo : collectionCriterionList)
+            vo.clearCriterion();
     }
 	
 
@@ -98,22 +132,25 @@ public class CollectionCriterionController {
 	public List<String> getSearchCriterion() {
 		List<String> criterions = new ArrayList<String>();
 
-		for(int i=0; i<collectionCriterionBeanList.size(); i++){
+		for(int i=0; i<collectionCriterionList.size(); i++){
 			String criterion = new String();
-			criterion +=collectionCriterionBeanList.get(i).getCriterionVO().getLogicOperator()+ "collection=" + collectionCriterionBeanList.get(i).getCollectionCriterionVO().getCollection() ;
+			criterion += "("+collectionCriterionList.get(i).getLogicOperator()+"("+ "imeji.collection=" + collectionCriterionList.get(i).getCollectionName() ;
+			for(int j=0;j<collectionCriterionList.get(i).getMdCriterionList().size(); j++){
+				criterion += "(" + collectionCriterionList.get(i).getMdCriterionList().get(j).getLogicOperator()+"(" +"imeji.mdName = " + collectionCriterionList.get(i).getMdCriterionList().get(j).getMdName()+"imeji.mdText = " + collectionCriterionList.get(i).getMdCriterionList().get(j).getMdText()+")"+")";
+			}
+			criterion +=")"+")";
+
 			System.err.println(criterion);
 			criterions.add(criterion);			
 		}
 		return criterions;
 	}
 	
-	public int getSize(){
-		return collectionCriterionBeanList.size();
-	}
-	
     protected String getNavigationString()
     {
         return "pretty:";
     }
+    
+
 	
 }

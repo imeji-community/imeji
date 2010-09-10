@@ -47,7 +47,7 @@ public class AnyFieldCriterionController {
 		List<String> criterions = new ArrayList<String>();
 		for(int i=0; i<anyFieldCriterionBeanList.size(); i++){
 			String criterion = new String();
-			criterion +=anyFieldCriterionBeanList.get(i).getCriterionVO().getLogicOperator()+ "any=" + anyFieldCriterionBeanList.get(i).getAnyFieldCriterionVO().getSearchTerm() ;
+			criterion +="("+anyFieldCriterionBeanList.get(i).getAnyFieldCriterionVO().getLogicOperator()+ "(" + anyFieldCriterionBeanList.get(i).getAnyFieldCriterionVO().getSearchTerm() +")" +")";
 			System.err.println(criterion);
 			criterions.add(criterion);			
 		}

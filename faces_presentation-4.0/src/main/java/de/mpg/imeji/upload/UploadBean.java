@@ -1,5 +1,6 @@
 package de.mpg.imeji.upload;
 
+import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.util.BeanHelper;
@@ -57,8 +58,8 @@ public class UploadBean
 
     public void logInEscidoc() throws Exception
     {
-        String userName = "faces_user";
-        String password = "escidoc";
+        String userName = PropertyReader.getProperty("imeji.escidoc.user");
+        String password = PropertyReader.getProperty("imeji.escidoc.password");
         escidocUserHandle = LoginHelper.login(userName, password);
     }
 

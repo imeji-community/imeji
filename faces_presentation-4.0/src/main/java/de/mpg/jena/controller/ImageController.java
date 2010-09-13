@@ -9,6 +9,20 @@ import java.util.List;
 import java.util.UUID;
 
 import thewebsemantic.Sparql;
+
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.query.larq.IndexBuilderBase;
+import com.hp.hpl.jena.query.larq.IndexBuilderModel;
+import com.hp.hpl.jena.query.larq.IndexBuilderString;
+import com.hp.hpl.jena.query.larq.IndexBuilderSubject;
+import com.hp.hpl.jena.query.larq.IndexLARQ;
+import com.hp.hpl.jena.query.larq.LARQ;
+
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.exceptions.AuthenticationException;
 import de.mpg.jena.controller.exceptions.AuthorizationException;
@@ -207,24 +221,36 @@ public class ImageController extends ImejiController{
 		*/
 	    //base.write(System.out);
 	    User user = createUser();
-	    base.write(System.out);
-//	    ImageController ic = new ImageController(user);
-//	    
-//	    //String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/image", 100, 0);
-//        //Collection<Image> result = Sparql.exec(base, Image.class, query);
-//	    
-//	    Collection<Image> result = ic.searchImageInContainer(new URI("http://imeji.mpdl.mpg.de/collection/1"), null, null, -1, 0);
-//        System.out.println("Found: " +result.size() + "results ");
-//	   
-//	    
-//	    String q = "SELECT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  . ?coll a <http://imeji.mpdl.mpg.de/collection> . ?coll <http://imeji.mpdl.mpg.de/images> ?s . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?createdBy <http://xmlns.com/foaf/0.1/grants> ?grants . ?grants <http://imeji.mpdl.mpg.de/grantFor> ?grantFor . ?grants <http://imeji.mpdl.mpg.de/grantType> ?grantType . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus }";
-//	    
-//	  
-//	    Query queryObject = QueryFactory.create(q);
-//        QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
-//        ResultSet results = qe.execSelect();
-//        ResultSetFormatter.out(System.out, results);
-//        qe.close();
+	    //base.write(System.out);
+	    ImageController ic = new ImageController(user);
+	    
+	    //String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/image", 100, 0);
+        //Collection<Image> result = Sparql.exec(base, Image.class, query);
+	    
+	    /*
+	    IndexBuilderTest larqBuilder = new IndexBuilderTest() ;
+	    base.register(larqBuilder) ;
+	    larqBuilder.indexStatements(base.listStatements()) ;
+	    // -- Finish indexing
+	    larqBuilder.closeWriter() ;
+	    // -- Create the access index  
+	    IndexLARQ index = larqBuilder.getIndex() ;
+	    LARQ.setDefaultIndex(index) ;
+*/
+	    
+	    Collection<Image> result = ic.searchImageInContainer(new URI("http://imeji.mpdl.mpg.de/collection/1"), null, null, -1, 0);
+        System.out.println("Found: " +result.size() + "results ");
+	   
+        String q1 ="SELECT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/image/metadata> ?md . ?md <http://imeji.mpdl.mpg.de/image/metadata/name> ?mdName . ?md <http://purl.org/dc/terms/type> ?complexType }"; 
+	    
+	    String q = "SELECT * WHERE { ?s1 ?p1 ?md1 . ?s2 ?p2 ?md2 . ?md2 <http://jena.hpl.hp.com/ARQ/property#textMatch> 'ewf*' }";
+	    
+	  
+	    Query queryObject = QueryFactory.create(q);
+        QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
+        ResultSet results = qe.execSelect();
+        ResultSetFormatter.out(System.out, results);
+        qe.close();
        
 	}
 	

@@ -8,8 +8,22 @@ import de.mpg.jena.vo.ComplexType;
 @RdfType("date")
 public class Date extends ComplexType
 {
+    private Date date;
+    
     public Date()
     {
         super(ComplexTypes.DATE);
     }
+
+    public void setDate(Date date)
+    {
+        this.date = date;
+    }
+
+    public Date getDate()
+    {
+        return date;
+    }
+    
+    
 }

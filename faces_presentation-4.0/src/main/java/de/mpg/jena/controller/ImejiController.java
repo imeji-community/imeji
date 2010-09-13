@@ -140,6 +140,7 @@ public abstract class ImejiController {
 		//Create query for searchCriterions
 		if(scList!=null && scList.size()>0)
 		{
+		    query += ". OPTIONAL { ";
     		int j = 0;
     		for(SearchCriterion sc : scList)
     		{
@@ -152,24 +153,28 @@ public abstract class ImejiController {
         			int i = 0;
         			String variablename = "";
         			String lastVariablename = "";
+        			boolean replace =true;
         			while (ns != null) {
-        				/*
+        				
+        			    
         			    if(variableMap.containsKey(ns))
         				{
         				    replace=false;
         				    break;
         				    
         				}
+        				
+        			    
         				if(variableMap.containsKey(ns.getParent()))
     			        {
         				    variablename=variableMap.get(ns.getParent());
     			        }
         				else
         				{
-        				    
+        				    variablename = "?v" +  String.valueOf(i+1) + String.valueOf(j);
         				}
-        				*/
-        				 variablename = "?v" +  String.valueOf(i+1) + String.valueOf(j);
+        				
+        				 //variablename = "?v" +  String.valueOf(i+1) + String.valueOf(j);
                          lastVariablename = "?v" +  String.valueOf(i) + String.valueOf(j);
                          subquery = ". " + variablename + " <" + ns.getNs() + "> " + lastVariablename + " "  + subquery;
                          variableMap.put(ns, lastVariablename);
@@ -178,13 +183,18 @@ public abstract class ImejiController {
         				i++;
         			}
         			
-        			variableMap.put(sc.getNamespace(), lastVariablename);
-        			subquery = subquery.replaceAll(java.util.regex.Pattern.quote(variablename), "?s");
+        			//variableMap.put(sc.getNamespace(), lastVariablename);
+        			if(replace)
+        			{
+        			    subquery = subquery.replaceAll(". " + java.util.regex.Pattern.quote(variablename), "?s");
+        			}
+        			
         			
         			j++;
         			query += subquery;
         		}
     		}
+    		query += " }";
 		}
     		
     		
@@ -247,7 +257,7 @@ public abstract class ImejiController {
         {
             if(variableMap.containsKey(sortCriterion.getSortingCriterion()))
             {
-                sortVariable = variableMap.get(sortCriterion);
+                sortVariable = variableMap.get(sortCriterion.getSortingCriterion());
             }
             else
             {

@@ -37,7 +37,7 @@ public class CollectionsSearchResultBean extends SuperContainerBean<ViewCollecti
     @Override
     public String getNavigationString()
     {
-        return "pretty:collections";
+        return "pretty:collectionsSearchResults";
     }
 
     @Override

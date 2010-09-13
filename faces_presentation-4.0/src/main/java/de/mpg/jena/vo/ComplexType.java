@@ -5,6 +5,9 @@ import java.net.URI;
 
 import org.apache.tools.ant.types.selectors.ExtendSelector;
 
+import thewebsemantic.Namespace;
+import thewebsemantic.RdfType;
+
 import de.mpg.jena.vo.complextypes.ConePerson;
 import de.mpg.jena.vo.complextypes.Date;
 import de.mpg.jena.vo.complextypes.Geolocation;
@@ -14,6 +17,8 @@ import de.mpg.jena.vo.complextypes.Text;
 
 public abstract class ComplexType
 {
+    @Namespace("http://imeji.mpdl.mpg.de/")
+    @RdfType("complexTypes")
     public enum ComplexTypes
     {
         CONE_AUTHOR(ConePerson.class, "Cone Author"), TEXT(Text.class, "Text"), NUMBER(Number.class, "Number"), DATE(

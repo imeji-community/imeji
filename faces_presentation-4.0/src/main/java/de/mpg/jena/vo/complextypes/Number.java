@@ -8,20 +8,20 @@ import de.mpg.jena.vo.ComplexType;
 @RdfType("number")
 public class Number extends ComplexType
 {
-    private Integer number;
+    private double number;
 
     public Number()
     {
         super(ComplexTypes.NUMBER);
     }
     
-    public Number(Integer value)
+    public Number(double value)
     {
         super(ComplexTypes.NUMBER);
         number = value;
     }
 
-    public int getInteger()
+    public double getDouble()
     {
         return number;
     }

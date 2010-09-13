@@ -228,6 +228,11 @@
 		   					<artifactId>jpa4jena</artifactId> 
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
+						<jarModule>
+							 <groupId>com.ibm.icu</groupId> 
+		   					<artifactId>icu4j</artifactId> 
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
 					</modules>
 				</configuration>
 			</plugin>
@@ -487,24 +492,29 @@
 			<groupId>com.hp.hpl.jena</groupId>
 			<artifactId>tdb</artifactId>
 			<version>0.8.7</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
     	<dependency> 
 		   <groupId>thewebsemantic</groupId> 
 		   <artifactId>jenabean</artifactId> 
 		   <version>1.0.7-Imeji</version>
-		   <scope>compile</scope>
+		   <scope>provided</scope>
 		</dependency>
 		<dependency> 
 		   <groupId>thewebsemantic</groupId> 
 		   <artifactId>jpa4jena</artifactId> 
 		   <version>0.7</version>
-		   <scope>compile</scope>
+		   <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.ocpsoft</groupId>
 			<artifactId>prettyfaces-jsf12</artifactId>
 			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.icu</groupId>
+			<artifactId>icu4j</artifactId>
+			<version>3.4.4</version>
 		</dependency>
 	</dependencies>
 	

@@ -120,7 +120,7 @@
 	<!-- Image Servlet -->
 	<servlet>
 		<servlet-name>Image Servlet</servlet-name>
-		<servlet-class>de.mpg.escidoc.faces.servlet.ImageServlet</servlet-class>
+		<servlet-class>de.mpg.imeji.servlet.ImageServlet</servlet-class>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
 	
@@ -201,7 +201,7 @@
 
 	<servlet-mapping>
 		<servlet-name>Image Servlet</servlet-name>
-		<url-pattern>/image</url-pattern>
+		<url-pattern>/coreserviceimage</url-pattern>
 	</servlet-mapping>
 	
 

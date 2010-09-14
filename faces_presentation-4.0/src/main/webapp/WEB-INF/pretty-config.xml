@@ -42,6 +42,12 @@
 		<view-id>/jsf/SelectedView.xhtml</view-id>
 	</url-mapping>
 	
+	<url-mapping id="image">
+		<pattern value="/image/#{ImageBean.id}" />
+		<view-id>/jsf/Details.xhtml</view-id>
+		<action>#{ImageBean.init}</action>
+	</url-mapping> 
+	
 	<!-- Collection Pages -->
 	<url-mapping id="uploadCollection">
 		<pattern value="/upload/collection/#{UploadBean.id}"/>
@@ -97,20 +103,17 @@
 	</url-mapping>
 	
 	<!-- Search Pages -->
-	<url-mapping id="searchPictures">
+	<url-mapping id="forImages">
 		<pattern value="/search"></pattern>
 		<view-id>/jsf/SearchPictures.xhtml</view-id>
 	</url-mapping>
 	
-	<url-mapping id="searchCollections">
+	<url-mapping id="forContainers">
 		<pattern value="/search/collections"></pattern>
 		<view-id>/jsf/SearchCollections.xhtml</view-id>
 	</url-mapping>
 	
-	<url-mapping id="searchAlbums">
-		<pattern value="/search/albums"></pattern>
-		<view-id>/jsf/ASearchAlbums.xhtml</view-id>
-	</url-mapping>
+
 	
 	<url-mapping id="collectionsSearchResults">
 		<pattern value="/search/collections/result"></pattern>

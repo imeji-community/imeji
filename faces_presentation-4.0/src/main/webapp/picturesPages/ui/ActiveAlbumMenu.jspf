@@ -49,9 +49,10 @@
 		<h:outputLabel id="lblNumberOfPicsInAlbum" styleClass="free_label">
 			<h:outputText value="#{AlbumSession.active.size}" />
 			<h:outputText  value=" pictures in  "/>
-			<h:outputLink id="lnkActiveAlbumName" value="#{Navigation.albumUrl}/#{AlbumSession.active.version.objectId}/#{Navigation.defaultBrowsingKeepShowAlbum}" rendered="true">
+			  
+			<!--<h:outputLink id="lnkActiveAlbumName" value="#{Navigation.albumUrl}/#{AlbumSession.active.version.objectId}/#{Navigation.defaultBrowsingKeepShowAlbum}" rendered="true">
 				<h:outputText value="#{AlbumSession.active.mdRecord.title}" rendered="true"></h:outputText>
-			</h:outputLink>
+			</h:outputLink>-->
 		</h:outputLabel>
 	</h:panelGroup>
 </f:subview>

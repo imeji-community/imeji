@@ -37,9 +37,19 @@
 	<h:panelGroup layout="block" styleClass="huge_area1_p4 metaDataSection">
 	
 		<h2 class="xLarge_area0" style="text-align: center;">
-			<h:outputText value="#{AlbumSession.current.mdRecord.title.value}" rendered="#{SessionBean.currentUrl == 'detailsFromAlbum'}"/>
+			<h:outputText value="#{ImageBean.collection.metadata.title}"/>
 		</h2>
 		
+		<tr:iterator id="mdList" var="md" value="#{ImageBean.imgMetadata}">
+			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
+						<h:panelGroup styleClass="free_area0 detailsLine" >
+								<h:outputLabel value="#{md.type.label}" />
+								<h:outputLabel value="#{md.type.person.familyName}"/>
+						</h:panelGroup> 
+
+			</h:panelGroup>
+		</tr:iterator>
+		<!-- 
 		<tr:iterator id="mdTreeList" var="treeList" value="#{Detail.item.mdRecords.descriptionTreeList}">
 			<h:panelGroup layout="block" styleClass="huge_area0">
 			<tr:tree id="mdTree" value="#{treeList}" var="mdTree" initiallyExpanded="true">
@@ -70,18 +80,18 @@
 			<h:outputLink id="lnkTechMd" styleClass="xLarge_area0" value="#{Detail.item.technicalMetadata}" target="_blank" title="To Download Technical Metadata, Please Save with Right Click Mouse">
 				<h:outputText value="View Metadata"/>
 			</h:outputLink>
-		</h:panelGroup>
+		</h:panelGroup>-->
 
 
 
 		<!-- Generic Metadata -->
-		<div class="half_area0 endline pictureDetails">
+		<!-- <div class="half_area0 endline pictureDetails">
 			<h:panelGroup rendered="false">
 				<tr:outputText inlineStyle="font:bold 12px sans-serif;" value="#{Detail.item.mdRecords.screen.resourceClass}" rendered="#{Detail.item.mdRecords.screen.resourceClass != null}"/>
 				<tr:outputText value="Metadata" rendered="#{Detail.item.mdRecords.screen.resourceClass == null}"/>
 				<br/><br/>
 			</h:panelGroup>
-		</div>
+		</div>-->
 
 	</h:panelGroup>
 </f:subview>

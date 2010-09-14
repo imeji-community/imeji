@@ -34,18 +34,17 @@
 </ui:remove>
 <f:subview id="Image">
 	<h:panelGroup layout="block" styleClass="half_area0"> 
-		<h:panelGroup layout="block" styleClass="half_area1_p8 endline detailedItem #{Detail.item.imageStyleClass}">
+		<h:panelGroup layout="block" styleClass="half_area1_p8 endline detailedItem">
 			<span>
-				<h:outputLink id="lnkPicFullResolution" value="#{Detail.item.originalUrl}" target="_blank" rendered="#{SessionBean.currentUrl != 'comparison'}">
-					<h:graphicImage id="picWebResolution" title="#{Detail.item.fileName}" alt="#{Detail.item.fileName}" styleClass="vertical" url="#{Detail.item.webResolutionUrl}" />
+				<h:outputLink id="lnkPicFullResolution" value="#{ImageBean.image.fullImageUrl}" target="_blank">
+					<h:graphicImage id="picWebResolution" title="ImageBean.image.id" alt="ImageBean.image.id" styleClass="vertical" url="#{ImageBean.image.webImageUrl}" />
 				</h:outputLink>
-				<h:outputLink id="lnkPicFullResolutionForComparison" value="#{Navigation.detailUrl}/#{Detail.item.item.objid}" rendered="#{SessionBean.currentUrl == 'comparison'}">
-					<h:graphicImage id="picWebResolutionForComparison" title="#{Detail.item.fileName}" alt="#{Detail.item.fileName}" styleClass="vertical" url="#{Detail.item.webResolutionUrl}"/>
-				</h:outputLink>
+				<!-- Comparison -->
+
 			</span>
 		</h:panelGroup>
-		
-		<h:panelGroup layout="block" styleClass="half_area0">
+		 
+		<!-- <h:panelGroup layout="block" styleClass="half_area0">
 			<h:outputText styleClass="free_area0 xSmall_marginRExcl" rendered="#{Detail.item.type == 'face'}" value="#{Detail.item.mdRecords.label['escidoc.face.picture-group']} #{Detail.item.mdRecords.value['escidoc.face.picture-group']}" />
 			<h:outputLink id="lnkAddToAlbum" styleClass="free_area0 xSmall_marginRExcl" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}"  rendered="#{(!Detail.item.inAlbum) and (AlbumSession.active.latestVersion.objectId != null) and (AlbumSession.active.state == 'PENDING')}">
 				<h:outputText value="#{lbl.add_to_active}"/>
@@ -57,7 +56,7 @@
 			<h:outputLink id="lnkLicense" styleClass="free_area0 sectionToolSection" target="_blank" value="#{ApplicationBean.licenseUrl}" rendered="#{ApplicationBean.licenseUrl != ''}">
 				<h:graphicImage id="imageLicense" styleClass="free_area0" url="#{ApplicationBean.licenseImage}" rendered="#{ApplicationBean.licenseImage != ''}" />
 			</h:outputLink>
-		</h:panelGroup>
+		</h:panelGroup> -->
 	</h:panelGroup>
 </f:subview>
 </div>

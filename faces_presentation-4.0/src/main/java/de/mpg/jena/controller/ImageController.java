@@ -123,6 +123,12 @@ public class ImageController extends ImejiController{
 		return rdf2Bean.load(Image.class, imgUri);
 	}
 	
+	public Image retrieve(String id)
+	{
+		return (Image)rdf2Bean.load(ObjectHelper.getURI(Image.class, id).toString());
+	}
+	
+	
 	public Collection<Image> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
     {
 	    additionalQuery = "";

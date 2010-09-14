@@ -15,6 +15,7 @@ import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
+import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.complextypes.ConePerson;
 
@@ -23,10 +24,10 @@ public class ImageBean
     private SessionBean sessionBean = null;
     private Image image;
     private String id = null;
-    private URI imgUri; 
+//    private URI imgUri; 
     private boolean selected;
     private ImageController imageController= null;
-    private List<ImageMetadata> imgMetadata = null;
+    private Collection<ImageMetadata> imgMetadata;
     private CollectionImeji  collection;
     private CollectionController collectionController;
 
@@ -48,8 +49,8 @@ public class ImageBean
     }
     
     public void init() throws Exception{ 
-    	imgUri = new URI("http://imeji.mpdl.mpg.de/image/" + id);
-    	image = imageController.retrieve(imgUri);
+//    	imgUri = new URI("http://imeji.mpdl.mpg.de/image/" + id);
+    	image = imageController.retrieve(id);
     	collection = collectionController.retrieve(this.getImage().getCollection());
    }
     
@@ -60,36 +61,20 @@ public class ImageBean
 	public void setCollection(CollectionImeji collection) {
 		this.collection = collection;
 	}
-
-	public List<ImageMetadata> getImgMetadata() {
-		for(ImageMetadata im: image.getMetadata() ){
+ 
+	public Collection<ImageMetadata> getImgMetadata() {
+		for(ImageMetadata im : image.getMetadata()){ 
+			im.getType().getEnumType();
 			
-			
-			if(im.getType().getEnumType().equals(ComplexTypes.CONE_AUTHOR)){
-				System.err.println(((ConePerson)im.getType()).getPerson().getFamilyName());
-				System.err.println(((ConePerson)im.getType()).getPerson().getAlternativeName());
-				System.err.println(((ConePerson)im.getType()).getPerson().getGivenName());
-				System.err.println(((ConePerson)im.getType()).getPerson().getIdentifier());
-
-				
-			}
-
 		}
-    	imgMetadata = new ArrayList<ImageMetadata>(image.getMetadata());
-		return imgMetadata;
+		return  new ArrayList<ImageMetadata>(image.getMetadata());
 	}
 
-	public void setImgMetadata(List<ImageMetadata> imgMetadata) {
+	public void setImgMetadata(Collection<ImageMetadata> imgMetadata) {
 		this.imgMetadata = imgMetadata;
 	} 
     
-    public URI getImgUri() {
-		return imgUri;
-	}
 
-	public void setImgUri(URI imgUri) {
-		this.imgUri = imgUri;
-	}
 
 	public void setImage(Image image)
     {

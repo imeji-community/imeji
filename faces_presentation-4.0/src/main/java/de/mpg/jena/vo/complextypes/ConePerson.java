@@ -2,6 +2,7 @@ package de.mpg.jena.vo.complextypes;
 
 import java.net.URI;
 
+import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfType;
 
@@ -10,6 +11,7 @@ import de.mpg.jena.vo.Person;
 
 @Namespace("http://imeji.mpdl.mpg.de/metadata/")
 @RdfType("cone-person")
+@Embedded
 public class ConePerson extends ComplexType
 {
     private Person person;

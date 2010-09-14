@@ -13,8 +13,11 @@ import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SortCriterion;
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
@@ -31,6 +34,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private String selectedSortCriterion;
     private String selectedSortOrder;
     private FacetsBean facets;
+    
+    private String query;
 
     public ImagesBean()
     {
@@ -75,8 +80,21 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
             SortCriterion sortCriterion = new SortCriterion();
             sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-            totalNumberOfRecords = controller.search(null, null, -1, offset).size();
-            images = controller.search(null, sortCriterion, limit, offset);
+            
+            
+            List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+            if(query!=null && !query.equals(""))
+            {
+                scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, getQuery(), Filtertype.REGEX));
+                scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER, getQuery(), Filtertype.REGEX));
+                scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, getQuery(), Filtertype.REGEX));
+                scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME, getQuery(), Filtertype.REGEX));
+                scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME, getQuery(), Filtertype.REGEX));
+            }
+            
+            
+            totalNumberOfRecords = controller.search(scList, null, -1, offset).size();
+            images = controller.search(scList, sortCriterion, limit, offset);
         }
         catch (Exception e)
         {
@@ -147,5 +165,15 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public void setFacets(FacetsBean facets)
     {
         this.facets = facets;
+    }
+
+    public void setQuery(String query)
+    {
+        this.query = query;
+    }
+
+    public String getQuery()
+    {
+        return query;
     }
 }

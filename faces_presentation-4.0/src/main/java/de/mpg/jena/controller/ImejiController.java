@@ -12,6 +12,7 @@ import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.sparql.function.library.substring;
 
 import de.mpg.escidoc.faces.metastore_test.DataFactory;
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -140,7 +141,7 @@ public abstract class ImejiController {
 		//Create query for searchCriterions
 		if(scList!=null && scList.size()>0)
 		{
-		    query += ". OPTIONAL { ";
+		    //query += ". OPTIONAL { ";
     		int j = 0;
     		for(SearchCriterion sc : scList)
     		{
@@ -156,7 +157,7 @@ public abstract class ImejiController {
         			boolean replace =true;
         			while (ns != null) {
         				
-        			    
+        			    /*
         			    if(variableMap.containsKey(ns))
         				{
         				    replace=false;
@@ -171,30 +172,40 @@ public abstract class ImejiController {
     			        }
         				else
         				{
+        				*/
         				    variablename = "?v" +  String.valueOf(i+1) + String.valueOf(j);
-        				}
+        				//}
         				
         				 //variablename = "?v" +  String.valueOf(i+1) + String.valueOf(j);
                          lastVariablename = "?v" +  String.valueOf(i) + String.valueOf(j);
+                        
                          subquery = ". " + variablename + " <" + ns.getNs() + "> " + lastVariablename + " "  + subquery;
+                         
                          variableMap.put(ns, lastVariablename);
         				
         				ns = ns.getParent();
         				i++;
         			}
         			
-        			//variableMap.put(sc.getNamespace(), lastVariablename);
+        			//Remove first dot in first round
+        			//if(j==0)
+        			//{
+        			    subquery = subquery.substring(2, subquery.length());
+        			//}
+        			
+    			    
+        			
         			if(replace)
         			{
-        			    subquery = subquery.replaceAll(". " + java.util.regex.Pattern.quote(variablename), "?s");
+        			    subquery = subquery.replaceAll(java.util.regex.Pattern.quote(variablename), "?s");
         			}
         			
         			
         			j++;
-        			query += subquery;
+        			query += " . OPTIONAL { " + subquery + " }";
         		}
     		}
-    		query += " }";
+    		//query += " }";
 		}
     		
     		

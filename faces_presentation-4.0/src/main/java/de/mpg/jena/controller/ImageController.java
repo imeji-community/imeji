@@ -221,7 +221,7 @@ public class ImageController extends ImejiController{
 		*/
 	    //base.write(System.out);
 	    User user = createUser();
-	    //base.write(System.out);
+	    base.write(System.out);
 	    ImageController ic = new ImageController(user);
 	    
 	    //String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/image", 100, 0);
@@ -241,9 +241,9 @@ public class ImageController extends ImejiController{
 	    Collection<Image> result = ic.searchImageInContainer(new URI("http://imeji.mpdl.mpg.de/collection/1"), null, null, -1, 0);
         System.out.println("Found: " +result.size() + "results ");
 	   
-        String q1 ="SELECT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/image/metadata> ?md . ?md <http://imeji.mpdl.mpg.de/image/metadata/name> ?mdName . ?md <http://purl.org/dc/terms/type> ?complexType }"; 
+         
 	    
-	    String q = "SELECT * WHERE { ?s1 ?p1 ?md1 . ?s2 ?p2 ?md2 . ?md2 <http://jena.hpl.hp.com/ARQ/property#textMatch> 'ewf*' }";
+	    String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v20 . ?v20 <http://purl.org/dc/terms/type> ?v10 . ?v10 <http://imeji.mpdl.mpg.de/metadata/text> ?v00  } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v21 . ?v21 <http://purl.org/dc/terms/type> ?v11 . ?v11 <http://imeji.mpdl.mpg.de/metadata/double> ?v01  } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v32 . ?v32 <http://purl.org/dc/terms/type> ?v22 . ?v22 <http://imeji.mpdl.mpg.de/metadata/person> ?v12 . ?v12 <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?v02  } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v33 . ?v33 <http://purl.org/dc/terms/type> ?v23 . ?v23 <http://imeji.mpdl.mpg.de/metadata/person> ?v13 . ?v13 <http://purl.org/escidoc/metadata/terms/0.1/given-name> ?v03  } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v44 . ?v44 <http://purl.org/dc/terms/type> ?v34 . ?v34 <http://imeji.mpdl.mpg.de/metadata/person> ?v24 . ?v24 <http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit> ?v14 . ?v14 <http://purl.org/dc/elements/1.1/title> ?v04  } . FILTER((regex(?v00, 'happy', 'i') || regex(?v01, 'meier', 'i') || regex(?v02, 'meier', 'i') || regex(?v03, 'meier', 'i') || regex(?v04, 'meier', 'i'))) }";
 	    
 	  
 	    Query queryObject = QueryFactory.create(q);
@@ -299,8 +299,8 @@ public class ImageController extends ImejiController{
 			{
 				System.out.println("Add image: " +i );
 				Image im = new Image();
-				im.getMetadata().add(new ImageMetadata("description", new Text("description for coll " + j + " image " + i ))); 
-				im.getMetadata().add(new ImageMetadata("title" , new Text("title for coll " + j + " image " + i )));
+				//im.getMetadata().add(new ImageMetadata("description", new Text("description for coll " + j + " image " + i ))); 
+				//im.getMetadata().add(new ImageMetadata("title" , new Text("title for coll " + j + " image " + i )));
 				
 				im.setId(new URI("http://dev-coreservice.mpdl.mpg.de/ir/item/escidoc:"+UUID.randomUUID()));
 				im.setFullImageUrl(new URI("http://colab.mpdl.mpg.de/mediawiki/skins/monobook/mpdl-logo.png"));
@@ -309,7 +309,7 @@ public class ImageController extends ImejiController{
 				
 				im.setVisibility(Visibility.PUBLIC);
 				im.setCollection(coll.getId());
-				im.getMetadata().add(new ImageMetadata("emotion", new Text("happy"))); 
+				//im.getMetadata().add(new ImageMetadata("emotion", new Text("happy"))); 
 				//XmlLiteral xmlString = new XmlLiteral("<faces-md>age</faces-md>");
 				//im.setMetadata(xmlString);
 				
@@ -370,7 +370,7 @@ public class ImageController extends ImejiController{
 					
 					
 					
-					img.getMetadata().add(new ImageMetadata("markus", new Text("mh")));
+					//img.getMetadata().add(new ImageMetadata("markus", new Text("mh")));
 					
 
 					images.add(img);

@@ -206,7 +206,7 @@
 	<managed-bean>
 		<managed-bean-name>CollectionsSearchResultBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.collection.CollectionsSearchResultBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	
@@ -256,6 +256,7 @@
 		<managed-bean-class>de.mpg.imeji.image.SelectedBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+
 	
 	<managed-bean>
 		<managed-bean-name>ImageBean</managed-bean-name>
@@ -304,7 +305,13 @@
 	<managed-bean>
 		<managed-bean-name>QuickSearchBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.search.QuickSearchBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>ApplicationBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.beans.ApplicationBean</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
 	
 	<converter>

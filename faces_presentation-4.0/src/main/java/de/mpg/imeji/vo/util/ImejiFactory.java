@@ -73,7 +73,12 @@ public class ImejiFactory
             case NUMBER:
                 return new Number(0);
             default:
-                return new Text("");
+            {
+                Text t = new Text();
+                t.setText("");
+                return t;
+            }
+                
         }
     }
 

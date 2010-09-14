@@ -53,7 +53,7 @@
 						<span class="xHuge_area0 xTiny_marginLExcl endline"> 
 							<h:outputLabel id="lblSearchTermFirst" styleClass="quad_label" value="#{lbl.adv_search_lblCollection}" />
 						  	<h:selectOneMenu styleClass="small_select replace" id="selectCollection" value="#{collection.collectionName}" onchange="submit()" valueChangeListener="#{collection.collectionChanged}" immediate="true">
-								<f:selectItems value="#{collection.collectionList}"/>
+								<f:selectItems value="#{AdvancedSearchController.collectionCriterionController.collectionList}"/>
 							</h:selectOneMenu>
 						</span>
 						</h:panelGroup>

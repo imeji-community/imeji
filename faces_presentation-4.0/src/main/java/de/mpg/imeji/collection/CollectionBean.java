@@ -1,18 +1,24 @@
 package de.mpg.imeji.collection;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import thewebsemantic.JenaHelper;
+
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.User;
@@ -249,5 +255,13 @@ public abstract class CollectionBean
         CollectionController cc = new CollectionController(sessionBean.getUser());
         cc.release(collection);
         return "pretty:";
+    }
+    
+    public List<ImageBean> getImages() throws Exception
+    {
+        ImageController ic = new ImageController(sessionBean.getUser()); 
+        
+        Collection<Image> imgList = ic.searchImageInContainer(collection.getId(), null, null, 5, 0);
+        return ImejiFactory.imageListToBeanList(imgList); 
     }
 }

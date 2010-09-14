@@ -73,18 +73,25 @@
 								<h1><h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> </h1>
 							</h:panelGroup>
 							<h:panelGroup styleClass="full_area1_p8">
-								<h:panelGroup styleClass="half_area0">
-									<h:outputText value="First paragraph"/>
-								</h:panelGroup>
-								<h:graphicImage value="http://pepinemom.p.e.pic.centerblog.net/yfbh2ym7.jpg"/>
+							<tr:iterator var="img" value="#{ViewCollectionBean.images}">
+								
+									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
+								
+							</tr:iterator>
+							<h2>
+								<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}">
+									<h:outputText value ="#{lbl.collection_view__all_images}"/>
+								</h:outputLink>
+							</h2>
 							</h:panelGroup>
 							<h:panelGroup styleClass="full_area1_p8">
-								<h2>
-									<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}">
-										<h:outputText value ="#{lbl.collection_view_images}"/>
-									</h:outputLink>
-								</h2>
+								<h:panelGroup styleClass="half_area0">
+									<h:outputText value="#{ViewCollectionBean.collection.metadata.description}"/>
+								</h:panelGroup>
+								
+								
 							</h:panelGroup>
+			
 							<h:panelGroup styleClass="full_area1_p8">
 								<h:outputText value="Second paragraph"/>
 							</h:panelGroup>

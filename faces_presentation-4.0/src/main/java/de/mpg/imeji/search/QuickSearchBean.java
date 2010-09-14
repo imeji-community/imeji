@@ -8,7 +8,7 @@ public class QuickSearchBean
 {
     
     private String searchString;
-    private String selectedSearchType = "collections";
+    private String selectedSearchType = "images";
 
     public void setSearchString(String searchString)
     {

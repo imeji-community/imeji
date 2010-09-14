@@ -97,4 +97,7 @@ public class ViewCollectionBean extends CollectionBean
         }
         return personString;
     }
+    
+    
+    
 }

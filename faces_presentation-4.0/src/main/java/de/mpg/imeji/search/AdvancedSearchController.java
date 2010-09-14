@@ -24,8 +24,6 @@ public class AdvancedSearchController extends BeanHelper
     private CollectionCriterionController collectionCriterionController = null;
     private AnyFieldCriterionController anyFieldCriterionController = null;
     
-
-    
     public AdvancedSearchController(){
         collectionCriterionController = new CollectionCriterionController();
         anyFieldCriterionController = new AnyFieldCriterionController();
@@ -44,7 +42,7 @@ public class AdvancedSearchController extends BeanHelper
         for (String c : collectionCriterionController.getSearchCriterion())
             q += c + " ";
 
-        System.err.println("searchString = " + q);
+        System.err.println("q = " + q);
         FacesContext.getCurrentInstance().getExternalContext().redirect("Images.xhtml?"+ q);
         return q;
     }
@@ -52,8 +50,6 @@ public class AdvancedSearchController extends BeanHelper
     private ArrayList<SearchCriterion> transformToSparqlSearchCriteria(Criterion predecessor, Criterion transformer){
         return null;
     }
-
-
 
 	public CollectionCriterionController getCollectionCriterionController(){
         return collectionCriterionController;
@@ -67,11 +63,7 @@ public class AdvancedSearchController extends BeanHelper
 		this.anyFieldCriterionController = anyFieldCriterionController;
 	}
 
-	public void setCollectionCriterionController(CollectionCriterionController collectionCriterionController)
-    {
+	public void setCollectionCriterionController(CollectionCriterionController collectionCriterionController){
         this.collectionCriterionController = collectionCriterionController;
     }
-
-
-    // private List<ResultVO> resultList;
 }

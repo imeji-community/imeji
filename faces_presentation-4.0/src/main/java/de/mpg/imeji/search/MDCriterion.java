@@ -1,7 +1,6 @@
 package de.mpg.imeji.search;
 
 import java.util.ArrayList;
-
 import java.util.Collection;
 import java.util.List;
 import javax.faces.model.SelectItem;
@@ -24,9 +23,6 @@ public class MDCriterion extends Criterion{
     // TODO use default mdList ?
     public List<SelectItem> newMdList(){
     	List<SelectItem> newMdList = new ArrayList<SelectItem>();
-    	System.out.println("collectionName = " +collectionName); 
-    	if(collectionName == null || collectionName.equalsIgnoreCase("--") || collectionName == "")
-    		newMdList.add(new SelectItem("title", "title"));
         try{
         	for (CollectionImeji ci : collections){
         		if (ci.getMetadata().getTitle().equalsIgnoreCase(collectionName)){
@@ -35,13 +31,9 @@ public class MDCriterion extends Criterion{
                         for (Statement statement : ci.getProfile().getStatements())
                         	newMdList.add(new SelectItem(statement.getName(), statement.getName()));
                     }
-                    else
-                       // TODO use default mdList ?
-                       newMdList.add(new SelectItem("title", "title"));
                     }
         		}
         }catch (Exception e){
-        	newMdList.add(new SelectItem("title", "title"));
         }		
         return newMdList;
     	
@@ -49,6 +41,14 @@ public class MDCriterion extends Criterion{
 	
 	public List<SelectItem> getMdList() {
 		return mdList;
+	}
+
+	public Collection<CollectionImeji> getCollections() {
+		return collections;
+	}
+
+	public void setCollections(Collection<CollectionImeji> collections) {
+		this.collections = collections;
 	}
 
 	public void setMdList(List<SelectItem> mdList) {
@@ -73,19 +73,4 @@ public class MDCriterion extends Criterion{
 		setMdText("");
 		return true;
 	}
-	
-	public ArrayList<String> createSearchCriterion() {
-		ArrayList<String> criterions = new ArrayList<String>();
-	
-		if(isSearchStringEmpty() == true)
-			return criterions;
-		else{
-			String criterion = new String();
-			criterion += "md=" + getMdName() +"&mdText=" + getMdText();
-			System.err.println(criterion);
-			criterions.add(criterion);
-		}
-		return  criterions;
-	}
-	
 }

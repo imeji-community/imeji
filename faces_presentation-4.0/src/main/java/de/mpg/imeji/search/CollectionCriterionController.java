@@ -15,52 +15,58 @@ public class CollectionCriterionController {
 	private List<CollectionCriterion> collectionCriterionList;
 	private int collectionPosition;
 	private int mdPosition;
-	
     private SessionBean sb;
     private CollectionController controller;
 	private List<SelectItem> collectionList;
-    private Collection<CollectionImeji> collections;	
-//    private ArrayList<CollectionImeji> collectionImejiList;
-	
+	private Collection<CollectionImeji> collections;	
+ 
 	public CollectionCriterionController(){
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         controller = new CollectionController(sb.getUser());
-        collectionList = new ArrayList<SelectItem>();
-        collectionList.add(new SelectItem(null, "--"));
-        collections = new ArrayList<CollectionImeji>();
-        try{
-            collections = controller.search(new ArrayList<SearchCriterion>(), null, -1, 0);
-            for (CollectionImeji ci : collections)
-            {
-                collectionList.add(new SelectItem(ci.getMetadata().getTitle(), ci.getMetadata().getTitle()));
-            }
-        }catch (Exception e){
-        }  
-        
-        
+        try {
+			getCollectionList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 		collectionCriterionList = new ArrayList<CollectionCriterion>();
-//		collectionImejiList =  new ArrayList<CollectionImeji>();
-		//insure there is at one collection with meta data in the list
-//		collectionImejiList.add(new CollectionImeji());
 		CollectionCriterion newCollection = new CollectionCriterion(collections);
-		newCollection .setCollectionName("");
 		newCollection .setCollectionList(collectionList);
+		newCollection .setCollectionName(collectionList.get(0).getValue().toString());
 		newCollection .setMdCriterionList(newCollection.newMdCriterionList());
 		collectionCriterionList.add(newCollection);
 		
+	}     
+	
+	public void getUserCollecitons() throws Exception{
+        collections = new ArrayList<CollectionImeji>();
+		collections = controller.search(new ArrayList<SearchCriterion>(), null, -1, 0);
+		if(collectionCriterionList != null){
+			for(int i=0; i<collectionCriterionList.size(); i++){
+				collectionCriterionList.get(i).setCollections(collections);
+				for(int j=0; j<collectionCriterionList.get(i).getMdCriterionList().size(); j++)
+					collectionCriterionList.get(i).getMdCriterionList().get(j).setCollections(collections);
+			}
+		}
 	}
-	 
-
-    
-    
-
-
+	
+	public List<SelectItem> getCollectionList() throws Exception {
+		getUserCollecitons();
+        collectionList = new ArrayList<SelectItem>();
+        for (CollectionImeji ci : collections)
+        {
+            collectionList.add(new SelectItem(ci.getMetadata().getTitle(), ci.getMetadata().getTitle()));
+        }
+		return collectionList;
+	}
+	
+	public void setCollectionList(List<SelectItem> collectionList) {
+		this.collectionList = collectionList;
+	}
 	
 	public String addCollection() {
-//		collectionImejiList.add(new CollectionImeji());
 		CollectionCriterion newCollection = new CollectionCriterion(collections);
-		newCollection .setCollectionName("");
 		newCollection .setCollectionList(collectionList);
+		newCollection .setCollectionName(collectionList.get(0).getValue().toString());
 		newCollection .setMdCriterionList(newCollection.newMdCriterionList());
 		collectionCriterionList.add(collectionPosition+1,newCollection);
 		return getNavigationString();
@@ -89,8 +95,6 @@ public class CollectionCriterionController {
 		}
 		return getNavigationString();
 	}
-	  
-
 
 	public int getCollectionPosition() {
 		return collectionPosition;
@@ -111,8 +115,6 @@ public class CollectionCriterionController {
 	public CollectionCriterionController(List<CollectionCriterion> collectionCriterion){
 		setCollectionCriterionList(collectionCriterion);
 	}
-	 
-
 	
 	public List<CollectionCriterion> getCollectionCriterionList(){
 		return collectionCriterionList;
@@ -126,31 +128,26 @@ public class CollectionCriterionController {
         for (CollectionCriterion vo : collectionCriterionList)
             vo.clearCriterion();
     }
-	
-
 		
 	public List<String> getSearchCriterion() {
 		List<String> criterions = new ArrayList<String>();
 
 		for(int i=0; i<collectionCriterionList.size(); i++){
 			String criterion = new String();
-			criterion += "("+collectionCriterionList.get(i).getLogicOperator()+"("+ "imeji.collection=" + collectionCriterionList.get(i).getCollectionName() ;
+			if(!(collectionCriterionList.get(i).getCollectionName().equals("")))
+				criterion += "("+collectionCriterionList.get(i).getLogicOperator()+"("+ "imeji.collection=" + collectionCriterionList.get(i).getCollectionName() ;
 			for(int j=0;j<collectionCriterionList.get(i).getMdCriterionList().size(); j++){
-				criterion += "(" + collectionCriterionList.get(i).getMdCriterionList().get(j).getLogicOperator()+"(" +"imeji.mdName = " + collectionCriterionList.get(i).getMdCriterionList().get(j).getMdName()+"imeji.mdText = " + collectionCriterionList.get(i).getMdCriterionList().get(j).getMdText()+")"+")";
+				if(!(collectionCriterionList.get(i).getMdCriterionList().get(j).getMdText().equals("")))
+					criterion += "(" + collectionCriterionList.get(i).getMdCriterionList().get(j).getLogicOperator()+"(" +"imeji.mdName = " + collectionCriterionList.get(i).getMdCriterionList().get(j).getMdName()+")"+"("+"imeji.mdText = " + collectionCriterionList.get(i).getMdCriterionList().get(j).getMdText()+")"+")";
 			}
 			criterion +=")"+")";
-
-			System.err.println(criterion);
 			criterions.add(criterion);			
 		}
 		return criterions;
 	}
 	
-    protected String getNavigationString()
-    {
+    protected String getNavigationString(){
         return "pretty:";
     }
-    
-
 	
 }

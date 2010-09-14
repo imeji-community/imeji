@@ -12,7 +12,7 @@ public abstract class Criterion {
 	 * @return a metadata serach criterion
 	 * @throws TechnicalException if MetadataSearchCriterion cannot be instantiated
 	 */
-	public abstract ArrayList<String> createSearchCriterion();
+//	public abstract ArrayList<String> createSearchCriterion();
 
 	//logic operator between the search criteria
 	private String logicOperator;

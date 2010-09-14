@@ -14,7 +14,6 @@ import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
-import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.User;
 
 public class ViewCollectionBean extends CollectionBean
@@ -35,7 +34,6 @@ public class ViewCollectionBean extends CollectionBean
         super();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         collectionController = new CollectionController(sessionBean.getUser());
-        Statement st = new Statement();
     }
 
     public void init()
@@ -44,7 +42,7 @@ public class ViewCollectionBean extends CollectionBean
         {
             User user = sessionBean.getUser();
             collectionController = new CollectionController(user);
-            String id = super.getId();
+            String id = super.getId(); 
             super.setCollection(collectionController.retrieve(id));
             super.setTab(TabType.COLLECTION);
             persons = new ArrayList<Person>();

@@ -57,20 +57,16 @@
 			<h:outputText styleClass="seperator" rendered="#{AlbumSession.current.latestVersion.objectId == null and Detail.item.type == 'face'}"/>
 
 			<!-- View all pictures of this person -->
-			<h:outputLink id="lnkShowAll" styleClass="free_area0" value="#{Navigation.applicationUrl}person/#{Detail.item.mdRecords.screen.mdMap['face.person.identifier'].simpleValue}/#{Navigation.defaultBrowsingKeepShow}" rendered="#{Detail.item.type == 'face' and SessionBean.currentUrl != 'detailsFromAlbum'}">
-				<h:outputText value="#{lbl.show_persons_images}"/>
-			</h:outputLink>		
 
-			<!--<h:outputText styleClass="seperator" rendered="#{Detail.item.type == 'face'}" />-->
 			
 			<!-- Add/Remove to current album -->	
-			<!--<h:outputLink id="add" styleClass="active" rendered="#{AlbumSession.active.version.objectId != null and !Detail.item.inAlbum}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}">
-				<h:outputText value="#{lbl.add}"/>
-			</h:outputLink>-->
+			<!--<h:outputLink id="add" styleClass="active" rendered="#{AlbumSession.active.version.objectId != null and !Detail.item.inAlbum}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}">-->
+			<!--	<h:outputText value="#{lbl.add}"/>-->
+			<!--</h:outputLink>-->
 
-			<!--<h:outputLink id="lnkRemoveFromAlbum" styleClass="free_area0" rendered="#{(AlbumSession.current.size != '0') and (AlbumSession.current.state == 'PENDING')}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.latestVersion.objectId}/REMOVEPICTURE/#{Detail.item.item.objid}/back">
-				<h:outputText value="Remove from Album"/>
-			</h:outputLink>-->
+			<!--<h:outputLink id="lnkRemoveFromAlbum" styleClass="free_area0" rendered="#{(AlbumSession.current.size != '0') and (AlbumSession.current.state == 'PENDING')}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.latestVersion.objectId}/REMOVEPICTURE/#{Detail.item.item.objid}/back">-->
+			<!--	<h:outputText value="Remove from Album"/>-->
+			<!--</h:outputLink>-->
 
 		</ui:define>
 		

@@ -43,10 +43,15 @@
 		<view-id>/jsf/SelectedView.xhtml</view-id>
 	</url-mapping>
 	
-	<url-mapping id="image">
+	<url-mapping id="viewImage">
 		<pattern value="/image/#{ImageBean.id}" />
-		<view-id>/jsf/Details.xhtml</view-id>
+		<view-id>/jsf/Image.xhtml</view-id>
 		<action>#{ImageBean.init}</action>
+	</url-mapping> 
+	
+	<url-mapping id="editImage">
+		<pattern value="/image/#{ImageBean.id}/#{ImageBean.tab}" />
+		<view-id>/jsf/ImageEdit.xhtml</view-id>
 	</url-mapping> 
 	
 	<!-- Collection Pages -->

@@ -56,4 +56,9 @@ public class ImageMetadata
     {
         this.type = type;
     }
+
+	public int compareTo(ImageMetadata imd) {
+		return this.compareTo((ImageMetadata)imd);
+	}
+
 }

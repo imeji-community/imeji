@@ -3,7 +3,6 @@ package de.mpg.imeji.search;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.model.SelectItem;
-import de.mpg.jena.controller.SearchCriterion;
 
 public abstract class Criterion {
 	
@@ -31,8 +30,7 @@ public abstract class Criterion {
 		
 		private String query;
 
-		LogicOperatorItems(String query)
-		{
+		LogicOperatorItems(String query){
 			this.query = query;
 		}
 

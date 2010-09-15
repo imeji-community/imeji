@@ -1,6 +1,7 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -82,10 +83,20 @@ public class AlbumController extends ImejiController{
 	 */
 	public Collection<Album> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
-		String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
+	    List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
+	    if(scList!=null && scList.size()>0) list.add(scList);
+	    String query = createQuery(list, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
 		//base.write(System.out);
 		return Sparql.exec(base, Album.class, query);
 	}
+	
+	public Collection<Album> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+    {
+        
+        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
+        //base.write(System.out);
+        return Sparql.exec(base, Album.class, query);
+    }
 
     @Override
     protected String getSpecificFilter() throws Exception

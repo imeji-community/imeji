@@ -2,6 +2,7 @@ package de.mpg.jena.controller;
 
 import java.net.URI;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -130,10 +131,21 @@ public class CollectionController extends ImejiController{
 	 */
 	public Collection<CollectionImeji> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
-		String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
+	    List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
+	    if(scList!=null && scList.size()>0) list.add(scList);
+		String query = createQuery(list, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
+		
 		Collection<CollectionImeji> res = Sparql.exec(getModel(), CollectionImeji.class, query);
 		return res;
 	}
+	
+	public Collection<CollectionImeji> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+    {
+       
+        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
+        Collection<CollectionImeji> res = Sparql.exec(getModel(), CollectionImeji.class, query);
+        return res;
+    }
 
 	
 	

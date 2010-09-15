@@ -1,5 +1,6 @@
 package de.mpg.jena.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchCriterion {
@@ -14,6 +15,8 @@ public class SearchCriterion {
 	{
 	    REGEX, URI, EQUALS;
 	}
+
+   
 	
 	public enum ImejiNamespaces {
 
@@ -60,7 +63,7 @@ public class SearchCriterion {
 
 		private String ns;
 		private ImejiNamespaces parent;
-		
+		private List<ImejiNamespaces> children = new ArrayList<ImejiNamespaces>();
 		
 		private ImejiNamespaces(String ns) {
 			this.ns = ns;
@@ -69,6 +72,10 @@ public class SearchCriterion {
 		private ImejiNamespaces(String ns, ImejiNamespaces parent) {
 			this.ns = ns;
 			this.parent = parent;
+			if(parent!=null && !parent.getChildren().contains(this))
+			{
+			    parent.getChildren().add(this);
+			}
 		}
 		
 		
@@ -89,15 +96,26 @@ public class SearchCriterion {
 			this.parent = parent;
 		}
 
+        public void setChildren(List<ImejiNamespaces> children)
+        {
+            this.children = children;
+        }
+
+        public List<ImejiNamespaces> getChildren()
+        {
+            return children;
+        }
+		
+		
+
        
 	}
 	
 	private ImejiNamespaces namespace;
 	private String value;
-	private Operator operator = Operator.AND;
-	private List<SearchCriterion> scList = null;		
+	private Operator operator = Operator.AND;	
 	private Filtertype filterType = Filtertype.REGEX;
-	
+	private List<SearchCriterion> children = new ArrayList<SearchCriterion>();
 	
 	
 	public SearchCriterion(ImejiNamespaces namespace, String value)
@@ -116,10 +134,10 @@ public class SearchCriterion {
 		
 	}
 	
-	public SearchCriterion(Operator op,  List<SearchCriterion> scList)
+	public SearchCriterion(Operator op,  List<SearchCriterion> children)
 	{
         this.operator = op;
-	    this.setScList(scList);
+	    this.children = children;
         
     }
 
@@ -147,15 +165,7 @@ public class SearchCriterion {
 		this.operator = operator;
 	}
 
-    public void setScList(List<SearchCriterion> scList)
-    {
-        this.scList = scList;
-    }
-
-    public List<SearchCriterion> getScList()
-    {
-        return scList;
-    }
+  
 
     public void setFilterType(Filtertype filterType)
     {
@@ -166,4 +176,16 @@ public class SearchCriterion {
     {
         return filterType;
     }
+
+    public void setChildren(List<SearchCriterion> children)
+    {
+        this.children = children;
+    }
+
+    public List<SearchCriterion> getChildren()
+    {
+        return children;
+    }
+    
+    
 }

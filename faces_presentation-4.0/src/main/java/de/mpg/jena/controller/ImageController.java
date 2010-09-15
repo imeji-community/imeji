@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +24,9 @@ import com.hp.hpl.jena.query.larq.IndexBuilderSubject;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.query.larq.LARQ;
 
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.exceptions.AuthenticationException;
 import de.mpg.jena.controller.exceptions.AuthorizationException;
 import de.mpg.jena.util.ObjectHelper;
@@ -132,14 +135,34 @@ public class ImageController extends ImejiController{
 	public Collection<Image> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
     {
 	    additionalQuery = "";
+	    List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
+	    if(scList!=null && scList.size()>0) list.add(scList);
+        String query = createQuery(list, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
+        return Sparql.exec(getModel(), Image.class, query);
+    }
+	
+	
+	public Collection<Image> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+    {
+        additionalQuery = "";
         String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
         return Sparql.exec(getModel(), Image.class, query);
     }
 	
+	/*
+	public Collection<Image> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+    {
+        additionalQuery = "";
+        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
+        return Sparql.exec(getModel(), Image.class, query);
+    }
+	*/
 	public Collection<Image> searchImageInContainer(URI containerUri, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
     {
         additionalQuery = " . <" + containerUri.toString() + "> <http://imeji.mpdl.mpg.de/images> ?s";
-        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
+        List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
+        if(scList!=null && scList.size()>0) list.add(scList);
+        String query = createQuery(list, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
         return Sparql.exec(getModel(), Image.class, query);
     }
 	
@@ -244,12 +267,34 @@ public class ImageController extends ImejiController{
 	    LARQ.setDefaultIndex(index) ;
 */
 	    
-	    Collection<Image> result = ic.searchImageInContainer(new URI("http://imeji.mpdl.mpg.de/collection/1"), null, null, -1, 0);
+	    SearchCriterion sc0 = new SearchCriterion(Operator.AND,ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT,"white",Filtertype.REGEX);
+	    SearchCriterion sc1 = new SearchCriterion(Operator.AND,ImejiNamespaces.IMAGE_METADATA_NAME,"colour",Filtertype.EQUALS);
+	   
+	    List<SearchCriterion> scList0 = new ArrayList<SearchCriterion>();
+	    scList0.add(sc0);
+	    scList0.add(sc1);
+	    
+	    SearchCriterion sc2 = new SearchCriterion(Operator.AND,ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME,"white",Filtertype.REGEX);
+        SearchCriterion sc3 = new SearchCriterion(Operator.AND,ImejiNamespaces.IMAGE_METADATA_NAME,"author",Filtertype.EQUALS);
+	    List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
+        scList1.add(sc2);
+        scList1.add(sc3);
+	    
+	    List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
+	    scList.add(scList0);
+	    scList.add(scList1);
+	    
+	    Collection<Image> result = ic.searchAdvanced(scList, null, -1, 0);
         System.out.println("Found: " +result.size() + "results ");
 	   
+        for (Image img : result)
+        {
+            System.out.println(img.getId());
+            
+        }
          
 	    
-	    String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v20 . ?v20 <http://purl.org/dc/terms/type> ?v10 . ?v10 <http://imeji.mpdl.mpg.de/metadata/text> ?v00  } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v21 . ?v21 <http://purl.org/dc/terms/type> ?v11 . ?v11 <http://imeji.mpdl.mpg.de/metadata/double> ?v01  } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v32 . ?v32 <http://purl.org/dc/terms/type> ?v22 . ?v22 <http://imeji.mpdl.mpg.de/metadata/person> ?v12 . ?v12 <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?v02  } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v33 . ?v33 <http://purl.org/dc/terms/type> ?v23 . ?v23 <http://imeji.mpdl.mpg.de/metadata/person> ?v13 . ?v13 <http://purl.org/escidoc/metadata/terms/0.1/given-name> ?v03  } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v44 . ?v44 <http://purl.org/dc/terms/type> ?v34 . ?v34 <http://imeji.mpdl.mpg.de/metadata/person> ?v24 . ?v24 <http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit> ?v14 . ?v14 <http://purl.org/dc/elements/1.1/title> ?v04  } . FILTER((regex(?v00, 'happy', 'i') || regex(?v01, 'meier', 'i') || regex(?v02, 'meier', 'i') || regex(?v03, 'meier', 'i') || regex(?v04, 'meier', 'i'))) }";
+	    String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus  . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . OPTIONAL { ?v0 <http://purl.org/dc/terms/type> ?v1 . OPTIONAL { ?v1 <http://imeji.mpdl.mpg.de/metadata/person> ?v2 . OPTIONAL { ?v2 <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?v3 } } } . OPTIONAL { ?v0 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v4 } } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v5 . OPTIONAL { ?v5 <http://purl.org/dc/terms/type> ?v6 . OPTIONAL { ?v6 <http://imeji.mpdl.mpg.de/metadata/text> ?v7 } } . OPTIONAL { ?v5 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v8 } }}";
 	    
 	  
 	    Query queryObject = QueryFactory.create(q);
@@ -257,6 +302,7 @@ public class ImageController extends ImejiController{
         ResultSet results = qe.execSelect();
         ResultSetFormatter.out(System.out, results);
         qe.close();
+        
        
 	}
 	

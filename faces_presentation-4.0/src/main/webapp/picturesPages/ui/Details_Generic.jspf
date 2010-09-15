@@ -78,8 +78,8 @@
 			</h:panelGroup>
 		
 		</tr:iterator>
-		<!-- 
-		<tr:iterator id="mdTreeList" var="treeList" value="#{Detail.item.mdRecords.descriptionTreeList}">
+		
+		<!-- <tr:iterator id="mdTreeList" var="treeList" value="#{Detail.item.mdRecords.descriptionTreeList}">
 			<h:panelGroup layout="block" styleClass="huge_area0">
 			<tr:tree id="mdTree" value="#{treeList}" var="mdTree" initiallyExpanded="true">
 				<f:facet name="nodeStamp">
@@ -109,7 +109,7 @@
 			<h:outputLink id="lnkTechMd" styleClass="xLarge_area0" value="#{Detail.item.technicalMetadata}" target="_blank" title="To Download Technical Metadata, Please Save with Right Click Mouse">
 				<h:outputText value="View Metadata"/>
 			</h:outputLink>
-		</h:panelGroup>-->
+		</h:panelGroup> -->
 
 
 
@@ -120,7 +120,7 @@
 				<tr:outputText value="Metadata" rendered="#{Detail.item.mdRecords.screen.resourceClass == null}"/>
 				<br/><br/>
 			</h:panelGroup>
-		</div>-->
+		</div> -->
 
 	</h:panelGroup>
 </f:subview>

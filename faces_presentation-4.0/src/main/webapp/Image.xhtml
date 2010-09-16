@@ -36,68 +36,26 @@
 </ui:remove>
 
 <body>
-	<ui:composition template="templates/template.xhtml">	
+	<ui:composition template="templates/template_image.xhtml">	
 	
 		<ui:param name="headline" value="#{lbl.details}"/>
-					
-		<!--<ui:define name="breadcrumb">
-			<ui:include src="headerPages/Breadcrumb.jspf"/>
-		</ui:define>	-->
-									
-		<ui:define name="contentMenu">
-			<h:outputText value="#{Detail.init}" styleClass="noDisplay" />
-			<h:outputText id="txtMenue" styleClass="free_area0" value="#{lbl.show}"/>
-		</ui:define>
-		
-		<ui:define name="actionsMenu">
-			<!-- Toggle between sets -->
-			<h:outputLink styleClass="free_area0" value="#{SessionBean.viewPictureForComparisonLink}" rendered="#{AlbumSession.current.version.objectId == null and Detail.item.type == 'face'}">
-				<h:outputText value="#{lbl.picture_for_comparison}"/>
-			</h:outputLink>
-			<h:outputText styleClass="seperator" rendered="#{AlbumSession.current.latestVersion.objectId == null and Detail.item.type == 'face'}"/>
-
-			<!-- View all pictures of this person -->
-
-			
-			<!-- Add/Remove to current album -->	
-			<!--<h:outputLink id="add" styleClass="active" rendered="#{AlbumSession.active.version.objectId != null and !Detail.item.inAlbum}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}">-->
-			<!--	<h:outputText value="#{lbl.add}"/>-->
-			<!--</h:outputLink>-->
-
-			<!--<h:outputLink id="lnkRemoveFromAlbum" styleClass="free_area0" rendered="#{(AlbumSession.current.size != '0') and (AlbumSession.current.state == 'PENDING')}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.latestVersion.objectId}/REMOVEPICTURE/#{Detail.item.item.objid}/back">-->
-			<!--	<h:outputText value="Remove from Album"/>-->
-			<!--</h:outputLink>-->
-
-		</ui:define>
-		
-		<ui:define name="mainContent">
-			<h:panelGroup layout="block" styleClass="full_area0">
-				<h:panelGroup layout="block" styleClass="large_area0 small_marginLIncl rangeSelector">&#160;</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="small_marginLExcl pageBrowser" rendered="true">
-					<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{Detail.previous}" disabled="#{Detail.previous == null}">
-						<h:outputText value="#{lbl.paginatorButton_prev_label}"></h:outputText>
-					</h:outputLink>
-	
-				<h:panelGroup styleClass="seperator" />
-					<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{Detail.next}" disabled="#{Detail.next == null}">
-						<h:outputText value="#{lbl.paginatorButton_next_label}"></h:outputText>
-					</h:outputLink>
-				</h:panelGroup>
-			</h:panelGroup>
-	
-			<ui:include src="picturesPages/ui/ActiveAlbumMenu.jspf" />
-			
+		<ui:define name="viewImage">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-				<div class="small_area0">&#160;</div>
+				<div class="medium_area0">&#160;</div>
 				<ui:include src="picturesPages/ui/Details_Generic.jspf"/>
-				<ui:include src="picturesPages/ui/DetailImage.jspf" />
+			</h:panelGroup>
+		</ui:define>
+		
+		<ui:define name="commangLine">	
+			<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+				<h:outputLink value="?reset" styleClass="free_area1_p8 cancelButton ">
+						<h:outputText value="#{lbl.back}" />
+				</h:outputLink>			
 				<h:outputLink id="edit" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit">
 					<h:outputText value="#{lbl.edit_image_metadata}"/>
-				</h:outputLink>						
+				</h:outputLink>		
 			</h:panelGroup>
-
-		</ui:define>
-
+		</ui:define>					
 	</ui:composition>
 </body>
 </html>

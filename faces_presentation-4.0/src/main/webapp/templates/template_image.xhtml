@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:tr="http://myfaces.apache.org/trinidad">
+	xmlns:tr="http://myfaces.apache.org/trinidad"
+	xmlns:pretty="http://ocpsoft.com/prettyfaces">
 <ui:remove>
 <!--
 
@@ -37,7 +38,6 @@
 
 <body>
 	<ui:composition template="template.xhtml">	
-
 		<!--<ui:define name="breadcrumb">
 			<ui:include src="headerPages/Breadcrumb.jspf"/>
 		</ui:define>	-->
@@ -68,34 +68,85 @@
 
 		</ui:define>
 							
-		<ui:define name="mainContent">
-		
+		<ui:define name="mainContent" >
+
+
 			<h:panelGroup layout="block" styleClass="full_area0">
 				<h:panelGroup layout="block" styleClass="large_area0 small_marginLIncl rangeSelector">&#160;</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="small_marginLExcl pageBrowser" rendered="true">
-					<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{Detail.previous}" disabled="#{Detail.previous == null}">
+					<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{ImageBean.previous}" disabled="#{ImageBean.previous == null}">
 						<h:outputText value="#{lbl.paginatorButton_prev_label}"></h:outputText>
 					</h:outputLink>
 	
 				<h:panelGroup styleClass="seperator" />
-					<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{Detail.next}" disabled="#{Detail.next == null}">
+					<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{ImageBean.next}" disabled="#{ImageBean.next == null}">
 						<h:outputText value="#{lbl.paginatorButton_next_label}"></h:outputText>
 					</h:outputLink>
 				</h:panelGroup>
 			</h:panelGroup>
-	
-			<ui:include src="/picturesPages/ui/ActiveAlbumMenu.jspf" />
-			
-			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-				<div class="small_area0">&#160;</div>
-				<ui:include src="/picturesPages/ui/DetailImage.jspf" />
-			</h:panelGroup>
-			
-			<ui:insert name="viewImage">&#160;</ui:insert>
-			<ui:insert name="editImage">&#160;</ui:insert>
-			<ui:insert name="facet">&#160;</ui:insert>
-			<ui:insert name="commangLine">&#160;</ui:insert>
 
+			<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
+				<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">
+					<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
+				</h:outputLink>
+				<h:outputLink value="#{Navigation.imagesUrl}" styleClass="free_area1_p6">
+					<h:outputText value="#{lbl.images_all}"/>
+				</h:outputLink>
+
+				<h:outputLink value="#{Navigation.imagesUrl}/" styleClass="free_area2_p6 xHuge_marginLIncl ">
+					<h:outputText value="#{lbl.selected_clear}"/>
+				</h:outputLink>
+				
+			</h:panelGroup>
+
+			<h:panelGroup styleClass="full_area0 fullItem">
+				<center>
+					<h:panelGrid>
+						<ui:include src="/picturesPages/ui/DetailImage.jspf"/>
+					</h:panelGrid>
+				</center>
+				
+				<div class="full_area0 fullItem">
+					<div class="fullItemControls">
+									
+						<h:panelGroup styleClass="seperator"/>
+									
+						<h:outputLink id="lnkViewItemFull_btnItemRevisions" styleClass="free_area0" value="" >
+							<h:outputText value="#{lbl.facet}"/>
+						</h:outputLink>
+									
+						<h:panelGroup styleClass="seperator" />
+									
+						<h:outputLink id="lnkViewItemFull_btnItemVersions" styleClass="free_area0 actual" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id == 'editImage'}">
+							<h:outputText value="#{lbl.assign_md}"/>
+						</h:outputLink>
+						
+						<h:outputLink id="lnkViewItemFull_btnItemVersions" styleClass="free_area0" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id != 'editImage'}">
+							<h:outputText value="#{lbl.assign_md}"/>
+						</h:outputLink>
+									
+						<h:panelGroup styleClass="seperator" />
+									
+						<h:outputLink id="lnkViewItemPage" styleClass="free_area0 actual" value="#{Navigation.applicationUri}/image/#{ImageBean.id}" rendered="#{prettyContext.currentMapping.id == 'viewImage'}">
+							<h:outputText value="#{lbl.view_md}"/>
+						</h:outputLink>
+						<h:outputLink id="lnkViewItemPage" styleClass="free_area0" value="#{Navigation.applicationUri}/image/#{ImageBean.id}" rendered="#{prettyContext.currentMapping.id != 'viewImage'}">
+							<h:outputText value="#{lbl.view_md}"/>
+						</h:outputLink>
+									
+						<h:panelGroup styleClass="seperator" />
+					
+					</div>
+				</div>
+				<ui:insert name="viewImage"></ui:insert>
+				<ui:insert name="editImage"></ui:insert>
+				<ui:insert name="facet"></ui:insert>
+				
+
+							
+				
+</h:panelGroup>
+<ui:insert name="commangLine">&#160;</ui:insert>
 		</ui:define>
 
 	</ui:composition>

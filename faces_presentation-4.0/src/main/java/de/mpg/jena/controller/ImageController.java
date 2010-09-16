@@ -15,6 +15,7 @@ import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.larq.IndexBuilderBase;
@@ -23,6 +24,9 @@ import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import com.hp.hpl.jena.query.larq.IndexBuilderSubject;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.query.larq.LARQ;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
@@ -67,6 +71,7 @@ public class ImageController extends ImejiController{
 		ic.getImages().add(img.getId());	
 		bean2RDF.saveDeep(img);
 		bean2RDF.saveDeep(ic);
+		cleanGraph();
 		base.commit();
 	}
 	
@@ -89,6 +94,7 @@ public class ImageController extends ImejiController{
 		}
 		//Workarround: activate lazylist
 		bean2RDF.saveDeep(ic);
+		cleanGraph();
 		base.commit();
 	}
 	
@@ -102,6 +108,7 @@ public class ImageController extends ImejiController{
 		//Workarround: activate lazylist
         img.getMetadata().size();
 		bean2RDF.saveDeep(img);
+		cleanGraph();
 		base.commit();
 	}
 	
@@ -118,6 +125,7 @@ public class ImageController extends ImejiController{
 	        img.getMetadata().size();
 			bean2RDF.saveDeep(img);
 		}
+		cleanGraph();
 		base.commit();
 	}
 	
@@ -250,7 +258,7 @@ public class ImageController extends ImejiController{
 		*/
 	    //base.write(System.out);
 	    User user = createUser();
-	    base.write(System.out);
+	    base.write(System.out, "RDF/XML-ABBREV");
 	    ImageController ic = new ImageController(user);
 	    
 	    //String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/image", 100, 0);
@@ -294,14 +302,24 @@ public class ImageController extends ImejiController{
         }
          
 	    
-	    String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus  . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . OPTIONAL { ?v0 <http://purl.org/dc/terms/type> ?v1 . OPTIONAL { ?v1 <http://imeji.mpdl.mpg.de/metadata/person> ?v2 . OPTIONAL { ?v2 <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?v3 } } } . OPTIONAL { ?v0 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v4 } } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v5 . OPTIONAL { ?v5 <http://purl.org/dc/terms/type> ?v6 . OPTIONAL { ?v6 <http://imeji.mpdl.mpg.de/metadata/text> ?v7 } } . OPTIONAL { ?v5 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v8 } }}";
-	    
-	  
-	    Query queryObject = QueryFactory.create(q);
+	    String q = "SELECT * WHERE { ?s ?p ?o . OPTIONAL {?s2 ?p2 ?s} . FILTER (isBlank(?s) && !bound(?s2))}";
+
+        Query queryObject = QueryFactory.create(q);
         QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
         ResultSet results = qe.execSelect();
-        ResultSetFormatter.out(System.out, results);
+        //ResultSetFormatter.out(System.out, results);
+          /* 
+        while(results.hasNext())
+           {
+               QuerySolution qs =  results.next();
+               Resource s = qs.getResource("?s");
+               s.removeProperties();
+               //base.remove(qs.getResource("?s"), qs.get("?p").as(Property.class), qs.get("?o"));
+           }
+       */
         qe.close();
+        
+ 
         
        
 	}

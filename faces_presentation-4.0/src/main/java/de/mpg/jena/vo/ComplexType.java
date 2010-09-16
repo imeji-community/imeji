@@ -16,7 +16,6 @@ import de.mpg.jena.vo.complextypes.License;
 import de.mpg.jena.vo.complextypes.Number;
 import de.mpg.jena.vo.complextypes.Text;
 
-@Embedded
 public abstract class ComplexType
 {
     @Namespace("http://imeji.mpdl.mpg.de/")

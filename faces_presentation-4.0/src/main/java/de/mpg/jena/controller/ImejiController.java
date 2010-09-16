@@ -13,7 +13,15 @@ import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.shared.Lock;
 import com.hp.hpl.jena.sparql.function.library.substring;
 
 import de.mpg.escidoc.faces.metastore_test.DataFactory;
@@ -633,6 +641,37 @@ public abstract class ImejiController {
     {
        base.close();
     }
+	
+	/**Removes lost, anonymous nodes from graph. They are produces during updates of lists/collections. Bug of JenaBean.
+	 * 
+	 */
+	protected void cleanGraph()
+	{
+	    try
+        {
+            base.enterCriticalSection(Lock.WRITE);
+            String q = "SELECT DISTINCT ?s WHERE { ?s ?p ?o . OPTIONAL {?s2 ?p2 ?s} . FILTER (isBlank(?s) && !bound(?s2))}";
+
+            Query queryObject = QueryFactory.create(q);
+            QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
+            ResultSet results = qe.execSelect();
+ 
+            while(results.hasNext())
+            {
+               QuerySolution qs =  results.next();
+               Resource s = qs.getResource("?s");
+               s.removeProperties();
+            }
+   
+            qe.close();
+        }
+        finally 
+        {
+           base.leaveCriticalSection();
+        }
+	    
+	}
+    
 	
 	protected abstract String getSpecificQuery() throws Exception;
 	protected abstract String getSpecificFilter() throws Exception;

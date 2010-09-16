@@ -50,6 +50,7 @@ public class CollectionController extends ImejiController{
 		base.begin();
 		bean2RDF.saveDeep(ic); 
 		CollectionImeji res = rdf2Bean.load(CollectionImeji.class, ic.getId());
+		cleanGraph();
 		base.commit();
 		return ic;
 	}
@@ -72,6 +73,7 @@ public class CollectionController extends ImejiController{
 		bean2RDF.saveDeep(ic);
 		ic = rdf2Bean.load(CollectionImeji.class, ic.getId());
 		System.out.println(ic.getImages().size());
+		cleanGraph();
 		base.commit();
 	}
 	

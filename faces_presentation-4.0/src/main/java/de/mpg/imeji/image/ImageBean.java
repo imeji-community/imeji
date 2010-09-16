@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
+
+import org.apache.xalan.xsltc.compiler.sym;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.EditMetadataBean;
 import de.mpg.imeji.metadata.MetadataBean;
@@ -23,11 +26,11 @@ import de.mpg.jena.vo.ImageMetadata;
 public class ImageBean
 {
 	public enum TabType{
-		view, edit;
+		VIEW, EDIT;
 
 	}
 	  
-	private String tab;
+	private String tab = null;
 	private SessionBean sessionBean = null;
     private Image image;
     private String id = null;
@@ -36,8 +39,12 @@ public class ImageBean
     private List<ImageMetadata> imgMetadata;
     private CollectionImeji  collection;
     private CollectionController collectionController;
+    private String previous = null;
+    private String next = null;
 
     
+
+
 	public ImageBean(Image img){
         this.image = img;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -56,7 +63,7 @@ public class ImageBean
     public void init() throws Exception{ 
     	image = imageController.retrieve(id);
     	collection = collectionController.retrieve(this.getImage().getCollection());
-    	this.tab = TabType.view.toString();
+    	setTab(TabType.VIEW.toString());
     }
        
     public String save(){
@@ -141,12 +148,11 @@ public class ImageBean
     
 
     public String getTab() {
-    	System.err.println(tab);
 		return tab;
 	}
     
 	public void setTab(String tab) {
-			this.tab = tab;
+		this.tab = tab.toUpperCase();
 	}
 	
     protected String getNavigationString(){
@@ -155,4 +161,20 @@ public class ImageBean
     	else
     		return "pretty:viewImage";
     }
+    
+	public String getPrevious() {
+		return previous;
+	}
+
+	public void setPrevious(String previous) {
+		this.previous = previous;
+	}
+
+	public String getNext() {
+		return next;
+	}
+
+	public void setNext(String next) {
+		this.next = next;
+	}
 }

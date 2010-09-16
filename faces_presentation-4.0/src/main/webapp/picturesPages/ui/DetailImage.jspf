@@ -33,8 +33,8 @@
              -->
 </ui:remove>
 <f:subview id="Image">
-	<h:panelGroup layout="block" styleClass="half_area0"> 
-		<h:panelGroup layout="block" styleClass="half_area1_p8 endline detailedItem" style="text-align: center;" >
+	<h:panelGroup layout="block" styleClass="half_area0 endline alignleft"> 
+		<h:panelGroup layout="block" styleClass="half_area1_p8 endline detailedItem" style="align: right;" >
 			<span>
 				<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{ImageBean.image.fullImageUrl}" target="_blank">
 					<h:graphicImage id="picWebResolution" title="ImageBean.image.id" alt="ImageBean.image.id" styleClass="vertical" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{ImageBean.image.webImageUrl}" />
@@ -43,6 +43,15 @@
 
 			</span>
 		</h:panelGroup>
+
+		<h:outputLink id="lnkPicFullResolution" value="" styleClass="xSmall_marginLIncl">
+			<h:outputText value="#{lbl.add_to_album}"/>
+		</h:outputLink>
+
+		<h:selectBooleanCheckbox styleClass="double_marginLIncl">
+		</h:selectBooleanCheckbox>
+		<h:outputText value="#{lbl.deselected}"/>
+
 		 
 		<!-- <h:panelGroup layout="block" styleClass="half_area0">
 			<h:outputText styleClass="free_area0 xSmall_marginRExcl" rendered="#{Detail.item.type == 'face'}" value="#{Detail.item.mdRecords.label['escidoc.face.picture-group']} #{Detail.item.mdRecords.value['escidoc.face.picture-group']}" />

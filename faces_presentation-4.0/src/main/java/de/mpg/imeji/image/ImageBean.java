@@ -23,11 +23,11 @@ import de.mpg.jena.vo.ImageMetadata;
 public class ImageBean
 {
 	public enum TabType{
-		VIEW, EDIT;
+		view, edit;
 
 	}
 	  
-	private String tab = TabType.VIEW.toString();
+	private String tab;
 	private SessionBean sessionBean = null;
     private Image image;
     private String id = null;
@@ -56,6 +56,7 @@ public class ImageBean
     public void init() throws Exception{ 
     	image = imageController.retrieve(id);
     	collection = collectionController.retrieve(this.getImage().getCollection());
+    	this.tab = TabType.view.toString();
     }
        
     public String save(){
@@ -140,11 +141,11 @@ public class ImageBean
     
 
     public String getTab() {
+    	System.err.println(tab);
 		return tab;
 	}
     
 	public void setTab(String tab) {
-		if(tab.equalsIgnoreCase(TabType.EDIT.toString()))
 			this.tab = tab;
 	}
 	

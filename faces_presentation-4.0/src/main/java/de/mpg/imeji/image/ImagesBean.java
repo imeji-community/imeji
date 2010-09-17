@@ -26,7 +26,7 @@ import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
-{
+{  
     private String objectClass;
     private int totalNumberOfRecords;
     private SessionBean sb;

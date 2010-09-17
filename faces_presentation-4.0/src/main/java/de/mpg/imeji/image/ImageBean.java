@@ -41,15 +41,16 @@ public class ImageBean
     private CollectionController collectionController;
     private String previous = null;
     private String next = null;
-
-    
-
+    private boolean deSelected;
 
 	public ImageBean(Image img){
         this.image = img;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         imageController = new ImageController(sessionBean.getUser());
         imgMetadata = new ArrayList<ImageMetadata>();
+        if(sessionBean.getSelected().contains(img.getId())){
+    		setSelected(true);
+    	}
     }
     
     public ImageBean(){
@@ -64,6 +65,9 @@ public class ImageBean
     	image = imageController.retrieve(id);
     	collection = collectionController.retrieve(this.getImage().getCollection());
     	setTab(TabType.VIEW.toString());
+    	if(sessionBean.getSelected().contains(image.getId())){
+    		setSelected(true);
+    	}
     }
        
     public String save(){
@@ -98,34 +102,45 @@ public class ImageBean
   
     public Image getImage(){
         return image;
-    }
-
+    }    
+  
     public void selectListener(ValueChangeEvent event){
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
-        {
+        {  
             selected = Boolean.parseBoolean(event.getNewValue().toString());
         }
         if (!selected)
-            sb.getSelected().remove(image.getId());
+            sessionBean.getSelected().remove(image.getId());
         else
-            sb.getSelected().add(this.image.getId());
+            sessionBean.getSelected().add(this.image.getId());
     }
 
     public void select(ActionEvent event){
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         if (!selected)
-            sb.getSelected().remove(image.getId());
+        	sessionBean.getSelected().remove(image.getId());
         else
-            sb.getSelected().add(this.image.getId());
+        	sessionBean.getSelected().add(this.image.getId());
     }
-
-    /**
-     * @return the selected
-     */
-    public boolean isSelected(){
-        return selected;
+    
+    public void deSelectedEvent(ValueChangeEvent event){
+    	if(event.getNewValue() != null && event.getNewValue() != event.getOldValue() && Boolean.parseBoolean(event.getNewValue().toString())){
+        	if(sessionBean.getSelected().contains(image.getId())){
+        		sessionBean.getSelected().remove(image.getId());
+        	}
+    	}
     }
+    
+	public boolean getDeSelected() {
+    	if(!(sessionBean.getSelected().contains(image.getId()))){
+    		deSelected= true;
+    	}else
+    		deSelected= false;
+		return deSelected;
+	}
+  
+	public void setDeSelected(boolean deSelected) {
+		this.deSelected= deSelected;
+	}
    
     /**
      * @param selected the selected to set
@@ -133,7 +148,12 @@ public class ImageBean
     public void setSelected(boolean selected){
         this.selected = selected;
     }
-
+        
+    public boolean getSelected(){
+    	return selected; 
+    	
+    }
+  
     public String getThumbnailImageUrlAsString(){
         return image.getThumbnailImageUrl().toString();
     }

@@ -53,8 +53,13 @@
 					
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<!-- import search here -->		
-						<ui:include src="searchPages/ui/AnyFieldCriterionSearch.xhtml"/>
-						<ui:include src="searchPages/ui/MDCriterionSearch.xhtml"/>
+						<h:panelGroup rendered="#{not empty AdvancedSearchController.collectionCriterionController.collections}">
+							<!-- <ui:include src="searchPages/ui/AnyFieldCriterionSearch.xhtml"/>-->
+							<ui:include src="searchPages/ui/MDCriterionSearch.xhtml"/>
+						</h:panelGroup>
+						<h:panelGroup rendered="#{empty AdvancedSearchController.collectionCriterionController.collections}">
+							<h:outputText value="#{msg.noCollectionsAvailable}"/>
+						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>			
 				

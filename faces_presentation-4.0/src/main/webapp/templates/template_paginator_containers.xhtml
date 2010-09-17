@@ -64,7 +64,7 @@
 				<!-- SORTING content menu lower line ends here -->
 				</h:panelGroup>
 				
-				<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.collectionUrl}?reset=1">
+				<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.collectionUrl}?reset=1" rendered="#{SessionBean.user != null}">
 							<h:outputText value="#{lbl.collection_create}"></h:outputText>
 					</h:outputLink>
 			

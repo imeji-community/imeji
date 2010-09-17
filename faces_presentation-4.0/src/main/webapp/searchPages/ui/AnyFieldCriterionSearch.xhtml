@@ -43,42 +43,43 @@
 			
 		<div class="free_area0 itemBlockContent hideBlockIfVoid endline">
  			<tr:iterator id="anyFieldCriterion" var="AnyFieldCriterionBean" value="#{AdvancedSearchController.anyFieldCriterionController.anyFieldCriterionBeanList}" varStatus="index"> 
-
-					<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder"  rendered = "#{index.index == 0}">
+					
+					
+			     	<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder" rendered="#{index.index > 0}">
+						<b class="xLarge_area0_p8 endline labelLine clear">
+							&#160;<span class="noDisplay"> </span>
+						</b>
+						<span class="xHuge_area0 xTiny_marginLExcl endline">
+							<h:selectOneMenu id="selMDCriterionLogicOption" styleClass="small_select replace" value="#{AnyFieldCriterionBean.anyFieldCriterionVO.logicOperator}">
+							<f:selectItems value="#{AnyFieldCriterionBean.anyFieldCriterionVO.logicOperatorItems}"/>
+							</h:selectOneMenu>	
+						</span>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 						<b class="xLarge_area0_p8 endline labelLine clear">&#160;
 							<span class="noDisplay"> </span>
 						</b>
+						
 						<span class="xHuge_area0 xTiny_marginLExcl endline">
 							<h:outputLabel id="lblSearchTermFirst" styleClass="quad_label" value="#{lbl.adv_search_lblSearchTerm}" />
 							<h:inputText id="anyFieldSearchStringFirst" styleClass="quad_txtInput" value="#{AnyFieldCriterionBean.anyFieldCriterionVO.searchTerm}" />
 						</span>
+						<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
+							<tr:commandButton id="btnAddFirst4" styleClass="min_imgBtn groupTool add" text=" " shortDesc="#{tip.search_btAdd}" action="#{AdvancedSearchController.anyFieldCriterionController.addObject}" />
+			                <tr:commandButton id="btnRemoveFirst4" styleClass="min_imgBtn groupTool remove" text=" " shortDesc="#{tip.search_btRemove}" disabled="#{AdvancedSearchController.anyFieldCriterionController.size == 1}" action="#{AdvancedSearchController.anyFieldCriterionController.removeObject}"/>
+						</h:panelGroup>
+						
 			     	</h:panelGroup>
-		     	
-			     	<h:panelGroup layout="block" styleClass="free_area0 endline itemLine" rendered="#{index.index > 0}">
-						<b class="xLarge_area0_p8 endline labelLine clear">&#160;
-							<span class="noDisplay"> </span>
-						</b>
-						<span class="xHuge_area0 xTiny_marginLExcl endline">
-							<h:outputLabel id="lblSearchTermFollowing" styleClass="quad_label" value="#{lbl.adv_search_lblSearchTerm}" />
-							<h:inputText id="anyFieldSearchStringFollowing" styleClass="quad_txtInput" value="#{AnyFieldCriterionBean.anyFieldCriterionVO.searchTerm}" />						</span>
-					</h:panelGroup>
+			     	
 
-		     	
-		     	<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder"></h:panelGroup>
-				<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
 				
-					<tr:commandButton id="btnAddFirst4" styleClass="min_imgBtn groupTool add" text=" " shortDesc="#{tip.search_btAdd}" action="#{AdvancedSearchController.anyFieldCriterionController.addObject}" />
-	                <tr:commandButton id="btnRemoveFirst4" styleClass="min_imgBtn groupTool remove" text=" " shortDesc="#{tip.search_btRemove}" disabled="#{AdvancedSearchController.anyFieldCriterionController.size == 1}" action="#{AdvancedSearchController.anyFieldCriterionController.removeObject}"/>
-			     		
-					<h:selectOneMenu id="selMDCriterionLogicOption" styleClass="small_select xSmall_marginLIncl endline replace" value="#{AnyFieldCriterionBean.anyFieldCriterionVO.logicOperator}">
-						<f:selectItems value="#{AnyFieldCriterionBean.anyFieldCriterionVO.logicOperatorItems}"/>
-					</h:selectOneMenu>		
-				</h:panelGroup>
         	
         	</tr:iterator>
-	     		 <a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide" /></a>  		     
+	        <a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide" /></a>  		     
 		</div>
-		   <a class="free_area0 expand"><h:outputText value="Show" /></a>
+		
+		<a class="free_area0 expand"><h:outputText value="Show" /></a>
 		     
 	</h:panelGroup>
 </f:subview>

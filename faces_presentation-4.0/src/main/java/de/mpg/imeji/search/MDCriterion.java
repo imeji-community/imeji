@@ -8,15 +8,17 @@ import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
 
 public class MDCriterion extends Criterion{
-	private String mdName;
+	private String selectedMdName;
+	private Statement selectedStatement;
 	private String mdText;
 	private List<SelectItem> mdList;
-    private Collection<CollectionImeji> collections;
-    private String collectionName;
+    private Collection<Statement> statements;
 
-	public MDCriterion(Collection<CollectionImeji> collections, String collectionName){
-		this.collectionName = collectionName;
-		this.collections = collections;
+	public MDCriterion(Collection<Statement> statements){
+		this.statements = statements;
+		setSelectedMdName("");
+        setMdList(newMdList());
+        setMdText("");
 
 	}
 	
@@ -24,15 +26,11 @@ public class MDCriterion extends Criterion{
     public List<SelectItem> newMdList(){
     	List<SelectItem> newMdList = new ArrayList<SelectItem>();
         try{
-        	for (CollectionImeji ci : collections){
-        		if (ci.getMetadata().getTitle().equalsIgnoreCase(collectionName)){
-        			Collection<Statement> s = ci.getProfile().getStatements();
-                    if (s.size() != 0){
-                        for (Statement statement : ci.getProfile().getStatements())
-                        	newMdList.add(new SelectItem(statement.getName(), statement.getName()));
-                    }
-                    }
-        		}
+        	for (Statement s : statements){
+                        newMdList.add(new SelectItem(s.getName(), s.getName()));
+        	}
+                   
+        		
         }catch (Exception e){
         }		
         return newMdList;
@@ -43,24 +41,12 @@ public class MDCriterion extends Criterion{
 		return mdList;
 	}
 
-	public Collection<CollectionImeji> getCollections() {
-		return collections;
-	}
-
-	public void setCollections(Collection<CollectionImeji> collections) {
-		this.collections = collections;
-	}
 
 	public void setMdList(List<SelectItem> mdList) {
 		this.mdList = mdList;
 	}
 	
-	public String getMdName() {
-		return mdName;
-	}
-	public void setMdName(String mdName) {
-		this.mdName = mdName;
-	}
+	
 	public String getMdText() {
 		return mdText;
 	}
@@ -69,8 +55,51 @@ public class MDCriterion extends Criterion{
 	}
 	public boolean clearCriterion() {
 		setSearchString("");
-		setMdName("");
+		setSelectedMdName("");
 		setMdText("");
 		return true;
 	}
+
+    public void setSelectedMdName(String selectedMdName)
+    {
+        if(selectedMdName!=null && !selectedMdName.equals(this.selectedMdName)){ 
+           
+            for(Statement s : statements)
+            {
+                if(s.getName().equals(selectedMdName))
+                {
+                    this.setSelectedStatement(s);
+                }
+            }
+           
+        }
+        this.selectedMdName = selectedMdName;
+       
+        
+    }
+
+    public String getSelectedMdName()
+    {
+        return selectedMdName;
+    }
+
+    public void setStatements(Collection<Statement> statements)
+    {
+        this.statements = statements;
+    }
+
+    public Collection<Statement> getStatements()
+    {
+        return statements;
+    }
+
+    public void setSelectedStatement(Statement selectedStatement)
+    {
+        this.selectedStatement = selectedStatement;
+    }
+
+    public Statement getSelectedStatement()
+    {
+        return selectedStatement;
+    }
 }

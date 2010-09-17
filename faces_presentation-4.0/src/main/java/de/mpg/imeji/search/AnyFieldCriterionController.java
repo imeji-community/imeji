@@ -43,15 +43,25 @@ public class AnyFieldCriterionController {
 		return "";
 	}
 		
-	public List<String> getSearchCriterion() {
-		List<String> criterions = new ArrayList<String>();
-		for(int i=0; i<anyFieldCriterionBeanList.size(); i++){
-			String criterion = new String();
-			if(!(anyFieldCriterionBeanList.get(i).getAnyFieldCriterionVO().getSearchTerm().equals("")))
-				criterion +="("+anyFieldCriterionBeanList.get(i).getAnyFieldCriterionVO().getLogicOperator()+ "(" + anyFieldCriterionBeanList.get(i).getAnyFieldCriterionVO().getSearchTerm() +")" +")";
-			criterions.add(criterion);			
+	public String getSearchCriterion() {
+	
+		String criterion = "";
+		
+		int i = 0;
+		for(AnyFieldCriterionBean afc : anyFieldCriterionBeanList){
+			
+			if(!(afc.getAnyFieldCriterionVO().getSearchTerm().trim().equals("")))
+			{
+			    if (i==0)
+			    {    
+			        criterion += " " + afc.getAnyFieldCriterionVO().getLogicOperator();
+			    }
+			    criterion +=" ( ANY_METADATA.REGEX=" + afc.getAnyFieldCriterionVO().getSearchTerm() +" )";
+			}
+
+			i++;
 		}
-		return criterions;
+		return criterion;
 	}
 	
 	public int getSize(){

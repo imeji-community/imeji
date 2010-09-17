@@ -2,7 +2,9 @@ package de.mpg.imeji.image;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
@@ -82,19 +84,19 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
             
             
-            List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-            if(query!=null && !query.equals(""))
+           
+            
+            List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
+            try
             {
-                scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, getQuery(), Filtertype.REGEX));
-                scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER, getQuery(), Filtertype.REGEX));
-                scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, getQuery(), Filtertype.REGEX));
-                scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME, getQuery(), Filtertype.REGEX));
-                scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME, getQuery(), Filtertype.REGEX));
+                scList = transformQuery(query);
             }
-            
-            
-            totalNumberOfRecords = controller.search(scList, null, -1, offset).size();
-            images = controller.search(scList, sortCriterion, limit, offset);
+            catch (Exception e)
+            {
+                BeanHelper.error("Invalid search query!");
+            }
+            totalNumberOfRecords = controller.searchAdvanced(scList, null, -1, offset).size();
+            images = controller.searchAdvanced(scList, sortCriterion, limit, offset);
         }
         catch (Exception e)
         {
@@ -175,5 +177,102 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public String getQuery()
     {
         return query;
+    }
+    
+    private List<List<SearchCriterion>> transformQuery(String query) throws Exception
+    {
+        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>(); 
+        
+        if(query!=null && !query.equals(""))
+        {
+            
+            //QUICK SEARCH
+            if(query.trim().startsWith("ANY_METADATA"))
+            {
+                String[] queryParts = query.split("=");
+                List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
+                scList1.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, queryParts[1] , Filtertype.REGEX));
+                scList1.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER, queryParts[1], Filtertype.REGEX));
+                scList1.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, queryParts[1], Filtertype.REGEX));
+                scList1.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME, queryParts[1], Filtertype.REGEX));
+                scList1.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME, queryParts[1], Filtertype.REGEX));
+                scList.add(scList1);
+            }
+            
+            //ADVANCED SEARCH
+            else
+            {
+                
+                
+                //remove first and last bracket
+                query = query.substring(3);
+                query = query.substring(0, query.length()-2);
+                
+                System.out.println(query);
+                String[] parts = query.split(" \\) AND \\(");
+                
+                List<String> andPartsList = new ArrayList<String>();
+                List<String> orPartsList = new ArrayList<String>();
+                
+                for(String andPart :parts)
+                {
+                    String[] orParts = andPart.split(" \\) OR \\(");
+                    if(orParts.length > 1)
+                    {
+                        orPartsList.addAll(Arrays.asList(orParts));
+                    }
+                    else
+                    {
+                        andPartsList.add(andPart);
+                    }
+                }
+                
+                for(String andPart: andPartsList)
+                {
+                    List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
+                    String[] subAndParts = andPart.split(" AND ");
+                    for(String subAndPart : subAndParts)
+                    {
+                        String[] keyValue= subAndPart.split("=");
+                        String[] nsAndFilter = keyValue[0].split("\\.");
+                        ImejiNamespaces ns = ImejiNamespaces.valueOf(nsAndFilter[0].trim());
+                        Filtertype filter = Filtertype.valueOf(nsAndFilter[1].trim());
+                        
+                        String value = keyValue[1].trim();
+                        scList1.add(new SearchCriterion(Operator.AND, ns, value, filter));
+                    }
+                    scList.add(scList1);
+        
+                }
+                
+                for(String orPart: orPartsList)
+                {
+                    List<SearchCriterion> scList2 = new ArrayList<SearchCriterion>();
+                    String[] subAndParts = orPart.split(" AND ");
+                    int i = 0;
+                    for(String subAndPart : subAndParts)
+                    {
+                        String[] keyValue= subAndPart.split("=");
+                        String[] nsAndFilter = keyValue[0].split("\\.");
+                        ImejiNamespaces ns = ImejiNamespaces.valueOf(nsAndFilter[0].trim());
+                        Filtertype filter = Filtertype.valueOf(nsAndFilter[1].trim());
+                        String value = keyValue[1].trim();
+                        if(i==0)
+                        {
+                            scList2.add(new SearchCriterion(Operator.OR, ns, value, filter));
+                        }
+                        else
+                        {
+                            scList2.add(new SearchCriterion(Operator.AND, ns, value, filter));
+                        }
+                       
+                    }
+                    scList.add(scList2);
+                    
+                    
+                }
+            }
+        }
+        return scList;
     }
 }

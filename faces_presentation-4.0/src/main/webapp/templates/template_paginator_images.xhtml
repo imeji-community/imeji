@@ -91,31 +91,37 @@
 								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea"  rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
 									<tr:selectBooleanCheckbox id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectListener}" autoSubmit="true" immediate="true"/>
 								</tr:panelGroupLayout>
-								<!-- View details -->
-								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-									<h:outputLink id="lnkActiveAlbum" value="#{Navigation.applicationUri}#{item.image.id.path}">
-										<h:outputText value="View"/>
-									</h:outputLink>
-								</tr:panelGroupLayout>
-								<!-- Add Active: Image not in Album AND Album is Private-->
-								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-									<h:outputLink id="lnkAddToActiveAlbumActive" value="" onclick="javascript:message('Adding...');">
-										<h:outputText value="#{lbl.add}"/>
-									</h:outputLink>
-								</tr:panelGroupLayout>
-								<!-- Add Inactive: Picture Already in Album -->
-								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-									<tr:commandLink id="lnkAddToActiveAlbumInactive1" disabled="true">
-										<h:outputText value="#{lbl.add}"/>
-									</tr:commandLink>
-								</tr:panelGroupLayout>
-							<!-- No album selected -->
-								<!-- add disabled to the current album : no album selected -->
-								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-									<tr:commandLink id="lnkAddToActiveAlbumInactive2" disabled="true">
-										<h:outputText value="#{lbl.add}"/>
-									</tr:commandLink>
-								</tr:panelGroupLayout>
+								
+								<!-- removed for now !!!!!!!!!!!!!!!!1-->
+								<ui:remove>
+									<!-- View details -->
+									<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+										<h:outputLink id="lnkActiveAlbum" value="#{Navigation.applicationUri}#{item.image.id.path}">
+											<h:outputText value="View"/>
+										</h:outputLink>
+									</tr:panelGroupLayout>
+									<!-- Add Active: Image not in Album AND Album is Private-->
+									<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+										<h:outputLink id="lnkAddToActiveAlbumActive" value="" onclick="javascript:message('Adding...');">
+											<h:outputText value="#{lbl.add}"/>
+										</h:outputLink>
+									</tr:panelGroupLayout>
+									<!-- Add Inactive: Picture Already in Album -->
+									<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+										<tr:commandLink id="lnkAddToActiveAlbumInactive1" disabled="true">
+											<h:outputText value="#{lbl.add}"/>
+										</tr:commandLink>
+									</tr:panelGroupLayout>
+									<!-- No album selected -->
+									<!-- add disabled to the current album : no album selected -->
+									<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+										<tr:commandLink id="lnkAddToActiveAlbumInactive2" disabled="true">
+											<h:outputText value="#{lbl.add}"/>
+										</tr:commandLink>
+									</tr:panelGroupLayout>
+								</ui:remove>
+								
+								
 							</h:panelGroup>
 							<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
 							<ui:remove>

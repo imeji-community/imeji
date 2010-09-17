@@ -8,17 +8,21 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
+import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.ComplexType;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class CollectionCriterionController {
 	
 	private List<CollectionCriterion> collectionCriterionList;
 	private int collectionPosition;
-	private int mdPosition;
     private SessionBean sb;
     private CollectionController controller;
 	private List<SelectItem> collectionList;
-	private Collection<CollectionImeji> collections;	
+	private List<CollectionImeji> collections;	
  
 	public CollectionCriterionController(){
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -28,23 +32,22 @@ public class CollectionCriterionController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-		collectionCriterionList = new ArrayList<CollectionCriterion>();
-		CollectionCriterion newCollection = new CollectionCriterion(collections);
-		newCollection .setCollectionList(collectionList);
-		newCollection .setCollectionName(collectionList.get(0).getValue().toString());
-		newCollection .setMdCriterionList(newCollection.newMdCriterionList());
+		collectionCriterionList = new ArrayList<CollectionCriterion>(); 
+		CollectionCriterion newCollection = new CollectionCriterion((collections));
 		collectionCriterionList.add(newCollection);
 		
 	}     
 	
 	public void getUserCollecitons() throws Exception{
         collections = new ArrayList<CollectionImeji>();
-		collections = controller.search(new ArrayList<SearchCriterion>(), null, -1, 0);
+		collections = (List<CollectionImeji>)controller.search(new ArrayList<SearchCriterion>(), null, -1, 0);
 		if(collectionCriterionList != null){
 			for(int i=0; i<collectionCriterionList.size(); i++){
 				collectionCriterionList.get(i).setCollections(collections);
+				/*
 				for(int j=0; j<collectionCriterionList.get(i).getMdCriterionList().size(); j++)
 					collectionCriterionList.get(i).getMdCriterionList().get(j).setCollections(collections);
+					*/
 			}
 		}
 	}
@@ -54,7 +57,7 @@ public class CollectionCriterionController {
         collectionList = new ArrayList<SelectItem>();
         for (CollectionImeji ci : collections)
         {
-            collectionList.add(new SelectItem(ci.getMetadata().getTitle(), ci.getMetadata().getTitle()));
+            collectionList.add(new SelectItem(ci.getId().toString(), ci.getMetadata().getTitle()));
         }
 		return collectionList;
 	}
@@ -65,9 +68,6 @@ public class CollectionCriterionController {
 	
 	public String addCollection() {
 		CollectionCriterion newCollection = new CollectionCriterion(collections);
-		newCollection .setCollectionList(collectionList);
-		newCollection .setCollectionName(collectionList.get(0).getValue().toString());
-		newCollection .setMdCriterionList(newCollection.newMdCriterionList());
 		collectionCriterionList.add(collectionPosition+1,newCollection);
 		return getNavigationString();
 	}
@@ -78,23 +78,8 @@ public class CollectionCriterionController {
 		return getNavigationString();
 	}
 	
-	public String addMd(){
-		ArrayList<MDCriterion> mds = (ArrayList<MDCriterion>)collectionCriterionList.get(collectionPosition).getMdCriterionList();
-    	MDCriterion newMd = new MDCriterion(collections, collectionCriterionList.get(collectionPosition).getCollectionName());
-    	newMd.setMdName("");
-    	newMd.setMdList(newMd.newMdList());
-    	newMd.setMdText("");	
-		mds.add(mdPosition +1, newMd);	
-		return getNavigationString();
-	}
 	
-	public String removeMd(){
-		if(mdPosition >0){
-			ArrayList<MDCriterion> mds = (ArrayList<MDCriterion>)collectionCriterionList.get(collectionPosition).getMdCriterionList();
-			mds.remove(mdPosition);			
-		}
-		return getNavigationString();
-	}
+	
 
 	public int getCollectionPosition() {
 		return collectionPosition;
@@ -104,13 +89,7 @@ public class CollectionCriterionController {
 		this.collectionPosition = collectionPosition;
 	}
 
-	public int getMdPosition() {
-		return mdPosition;
-	}
-
-	public void setMdPosition(int mdPosition) {
-		this.mdPosition = mdPosition;
-	}
+	
 
 	public CollectionCriterionController(List<CollectionCriterion> collectionCriterion){
 		setCollectionCriterionList(collectionCriterion);
@@ -129,25 +108,103 @@ public class CollectionCriterionController {
             vo.clearCriterion();
     }
 		
-	public List<String> getSearchCriterion() {
-		List<String> criterions = new ArrayList<String>();
+	public String getSearchCriterion() {
+		String criterion = "";
 
-		for(int i=0; i<collectionCriterionList.size(); i++){
-			String criterion = new String();
-			if(!(collectionCriterionList.get(i).getCollectionName().equals("")))
-				criterion += "("+collectionCriterionList.get(i).getLogicOperator()+"("+ "imeji.collection=" + collectionCriterionList.get(i).getCollectionName() ;
-			for(int j=0;j<collectionCriterionList.get(i).getMdCriterionList().size(); j++){
-				if(!(collectionCriterionList.get(i).getMdCriterionList().get(j).getMdText().equals("")))
-					criterion += "(" + collectionCriterionList.get(i).getMdCriterionList().get(j).getLogicOperator()+"(" +"imeji.mdName = " + collectionCriterionList.get(i).getMdCriterionList().get(j).getMdName()+")"+"("+"imeji.mdText = " + collectionCriterionList.get(i).getMdCriterionList().get(j).getMdText()+")"+")";
-			}
-			criterion +=")"+")";
-			criterions.add(criterion);			
+		int i = 0;
+		for(CollectionCriterion collectionCriterion : collectionCriterionList)
+		{
+		    String collectionLogicalOperator = "";
+		    String collectionQuery = "";
+			
+			if(!(collectionCriterion.getSelectedCollectionId().equals("")))
+			{
+			    if(i!=0)
+			    {
+			        //criterion += " " + collectionCriterion.getLogicOperator();
+			        //Always use OR here, doesnt make sense else
+			        collectionLogicalOperator += " OR";
+			    }
+			    collectionQuery += ImejiNamespaces.IMAGE_COLLECTION.name() + "." + Filtertype.URI + "=" + collectionCriterion.getSelectedCollectionId();
+			
+			    int j=0;
+    			String mdQuery = "";
+			    for(MDCriterion mdc : collectionCriterion.getMdCriterionList())
+    			{
+    				if(!mdc.getMdText().equals("") && mdc.getSelectedMdName()!=null && !mdc.getSelectedMdName().equals(""))
+    				{
+    				   
+    				    if(j!=0)
+    				    {
+    				        mdQuery += " " + mdc.getLogicOperator();
+    				    }
+    				    mdQuery+=" ( ";
+				        String ctCriterion = "";
+				        
+				    
+				        ComplexTypes ct = ComplexTypeHelper.getComplexTypesEnum(mdc.getSelectedStatement().getType()); 
+				        switch (ct)
+				        {
+				            case TEXT : 
+				            {
+				                ctCriterion = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+				                break;
+				            }
+				            case DATE : 
+                            {
+                                ctCriterion = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_DATE.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                break;
+                            }
+				            case  NUMBER : 
+                            {
+                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                break;
+                            }
+				            case  CONE_AUTHOR : 
+                            {
+                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME.name()+ "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                break;
+                            }
+				        }
+    				            
+    				        
+    				        
+				        mdQuery += collectionQuery + " AND " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS + "=" + mdc.getSelectedMdName() + " AND " + ctCriterion;
+				        mdQuery +=" )";
+    				    j++;
+    				}
+    			}
+    			if(!mdQuery.equals(""))
+    			{
+    			    criterion += (collectionLogicalOperator + mdQuery);
+    			}
+    			i++;	
+    			}
+			
 		}
-		return criterions;
+		
+		return criterion;
 	}
 	
     protected String getNavigationString(){
         return "pretty:";
+    }
+
+    public void setCollections(List<CollectionImeji> collections)
+    {
+        this.collections = collections;
+    }
+
+    public List<CollectionImeji> getCollections()
+    {
+        return collections;
+    }
+    
+    public int getSize()
+    {
+        return collectionCriterionList.size();
     }
 	
 }

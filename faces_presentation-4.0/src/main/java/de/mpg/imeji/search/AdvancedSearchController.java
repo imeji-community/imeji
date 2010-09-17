@@ -2,6 +2,7 @@ package de.mpg.imeji.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -11,9 +12,13 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 import org.apache.myfaces.trinidad.component.UIXIterator;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
+import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
 
@@ -36,16 +41,22 @@ public class AdvancedSearchController extends BeanHelper
     }
 
     public String startSearch() throws IOException{
-        String q = "q=";
+       
+        /*
         for(String s : anyFieldCriterionController.getSearchCriterion())
         	q += s + "";
-        for (String c : collectionCriterionController.getSearchCriterion())
-            q += c + " ";
-
-        System.err.println("q = " + q);
-        FacesContext.getCurrentInstance().getExternalContext().redirect("Images.xhtml?"+ q);
-        return q;
+        */
+        
+       
+        
+        ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class);
+        bean.setQuery(collectionCriterionController.getSearchCriterion());
+        return "pretty:images";
     }
+    
+
+        
+    
 
     private ArrayList<SearchCriterion> transformToSparqlSearchCriteria(Criterion predecessor, Criterion transformer){
         return null;

@@ -48,8 +48,8 @@
 			<h:outputText value="#{lbl.add_to_album}"/>
 		</h:outputLink>
 
-		<h:selectBooleanCheckbox styleClass="double_marginLIncl">
-		</h:selectBooleanCheckbox>
+		<h:selectBooleanCheckbox styleClass="double_marginLIncl" valueChangeListener="#{ImageBean.deSelectedEvent}" onchange="submit()" immediate="true" disabled="#{ImageBean.deSelected}">
+		</h:selectBooleanCheckbox>  
 		<h:outputText value="#{lbl.deselected}"/>
 
 		 

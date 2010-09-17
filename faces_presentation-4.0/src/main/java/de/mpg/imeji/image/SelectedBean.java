@@ -37,7 +37,7 @@ public class SelectedBean extends ImagesBean
     private Collection<Image> images;
     private EditMetadataBean editMetadataBean;
     private String mdEdited;
-
+  
     public SelectedBean()
     {
         super();
@@ -55,7 +55,7 @@ public class SelectedBean extends ImagesBean
     {
         return totalNumberOfRecords;
     }
-
+  
     @Override
     public List<ImageBean> retrieveList(int offset, int limit)
     {
@@ -67,18 +67,15 @@ public class SelectedBean extends ImagesBean
             uris.add(new SearchCriterion(SearchCriterion.Operator.OR, ImejiNamespaces.ID_URI, uri.toString(),
                     Filtertype.URI));
         }
-        try
-        {
-            totalNumberOfRecords = controller.search(uris, null, -1, offset).size();
-            images = controller.search(uris, null, limit, offset);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-        if (UrlHelper.getParameterBoolean("reset"))
-        {
-            editMetadataBean = new EditMetadataBean((List<Image>)images);
+        if(uris.size()!=0){
+	        try{
+	            totalNumberOfRecords = controller.search(uris, null, -1, offset).size();
+	            images = controller.search(uris, null, limit, offset);
+	        }catch (Exception e){
+	            throw new RuntimeException(e);
+	        }if (UrlHelper.getParameterBoolean("reset")){
+	            editMetadataBean = new EditMetadataBean((List<Image>)images);
+	        }
         }
         return ImejiFactory.imageListToBeanList(images);
     }

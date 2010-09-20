@@ -76,6 +76,20 @@
 								<h:outputLabel value="#{md.type.text}"/>
 						</h:panelGroup>						
 			</h:panelGroup>
+			
+			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'NUMBER'}">
+						<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.number != null }">
+								<h:outputLabel value="#{md.type.label}:" />
+								<h:outputLabel value="#{md.type.number}"/>
+						</h:panelGroup>						
+			</h:panelGroup>
+			
+			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'GEOLOCATION'}">
+						<h:panelGroup styleClass="free_area0 detailsLine">
+								<h:outputLabel value="#{md.type.label}:" />
+								<h:outputLabel value="#{md.type.latitude}/#{md.type.longitude}"/>
+						</h:panelGroup>						
+			</h:panelGroup>
 		
 		</tr:iterator>
 		

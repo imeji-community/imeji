@@ -79,7 +79,7 @@ public class ComplexTypeHelper
             if (isField(f, c) && (!hasFields(f) || includeComplexFields))
                 list.add(f);
             else if (isField(f, c) && hasFields(f))
-                list.addAll(getComplexTypeFields(f.getType(), includeComplexFields));
+                list.addAll(getComplexTypeFields(f.getType(), includeComplexFields)); 
         }
         return list;
     }

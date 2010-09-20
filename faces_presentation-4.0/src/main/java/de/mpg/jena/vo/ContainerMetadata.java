@@ -21,7 +21,7 @@ public class ContainerMetadata {
 	private String description;
 	
 	
-	protected Collection<Person> persons = new LinkedList<Person>();
+	protected List<Person> persons = new LinkedList<Person>();
 
 
 	@RdfProperty("http://purl.org/dc/elements/1.1/title")
@@ -43,11 +43,11 @@ public class ContainerMetadata {
 	}
 
 	@RdfProperty("http://purl.org/escidoc/metadata/terms/0.1/creator")
-	public Collection<Person> getPersons() {
+	public List<Person> getPersons() {
 		return persons;
 	}
 
-	public void setPersons(Collection<Person> person) {
+	public void setPersons(List<Person> person) {
 		this.persons = person;
 	}
 	

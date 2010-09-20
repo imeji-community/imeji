@@ -20,10 +20,17 @@ public class Number extends ComplexType
     public Number(double value)
     {
         super(ComplexTypes.NUMBER);
-        number = value;
+        setNumber(value);
     }
 
-    public double getDouble()
+   
+
+    public void setNumber(double number)
+    {
+        this.number = number;
+    }
+
+    public double getNumber()
     {
         return number;
     }

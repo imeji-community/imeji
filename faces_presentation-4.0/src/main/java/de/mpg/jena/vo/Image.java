@@ -33,7 +33,7 @@ public class Image
     private URI fullImageUrl;
     private Visibility visibility;
     private URI collection;
-    private Collection<ImageMetadata> metadata = new LinkedList<ImageMetadata>();
+    private List<ImageMetadata> metadata = new LinkedList<ImageMetadata>();
 
     public URI getWebImageUrl()
     {
@@ -79,13 +79,13 @@ public class Image
         return visibility;
     }
 
-    public void setMetadata(Collection<ImageMetadata> metadata)
+    public void setMetadata(List<ImageMetadata> metadata)
     {
         this.metadata = metadata;
     }
 
     @RdfProperty("http://imeji.mpdl.mpg.de/image/metadata")
-    public Collection<ImageMetadata> getMetadata()
+    public List<ImageMetadata> getMetadata()
     {
         return metadata;
     }

@@ -3,6 +3,7 @@ package de.mpg.jena.vo;
 import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
@@ -29,7 +30,7 @@ public class Person {
 	
 	private URI role;
 	
-	protected Collection<Organization> organizations = new LinkedList<Organization>();
+	protected List<Organization> organizations = new LinkedList<Organization>();
 
 	
 	@RdfProperty("http://purl.org/escidoc/metadata/terms/0.1/family-name")
@@ -78,11 +79,11 @@ public class Person {
 	}
 
 	@RdfProperty("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
-	public Collection<Organization> getOrganizations() {
+	public List<Organization> getOrganizations() {
 		return organizations;
 	}
 
-	public void setOrganizations(Collection<Organization> organizations) {
+	public void setOrganizations(List<Organization> organizations) {
 		this.organizations = organizations;
 	}
 	

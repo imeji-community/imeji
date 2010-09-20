@@ -64,7 +64,7 @@ public class SearchCriterion {
 		private String ns;
 		private ImejiNamespaces parent;
 		private List<ImejiNamespaces> children = new ArrayList<ImejiNamespaces>();
-		private boolean collectionType = false;;
+		private boolean listType = false;;
 		
 		private ImejiNamespaces(String ns) {
 			this.ns = ns;
@@ -79,10 +79,10 @@ public class SearchCriterion {
 			}
 		}
 		
-		private ImejiNamespaces(String ns, ImejiNamespaces parent, boolean collectionType) {
+		private ImejiNamespaces(String ns, ImejiNamespaces parent, boolean listType) {
             this.ns = ns;
             this.parent = parent;
-            this.collectionType = collectionType;
+            this.setListType(listType);
             if(parent!=null && !parent.getChildren().contains(this))
             {
                 parent.getChildren().add(this);
@@ -117,15 +117,17 @@ public class SearchCriterion {
             return children;
         }
 
-        public void setCollectionType(boolean collectionType)
+        public void setListType(boolean listType)
         {
-            this.collectionType = collectionType;
+            this.listType = listType;
         }
 
-        public boolean isCollectionType()
+        public boolean isListType()
         {
-            return collectionType;
+            return listType;
         }
+
+        
 		
 		
 

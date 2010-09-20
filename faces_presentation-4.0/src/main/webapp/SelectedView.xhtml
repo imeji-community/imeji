@@ -43,27 +43,49 @@
 			<ui:define name="subImagesContent">
 			<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
 				<h:panelGroup rendered="#{SelectedBean.editMetadataBean.numberOfProfiles == '1'}">
+					
 					<h:panelGroup layout="block" styleClass="full_area1_p8">
-						<tr:iterator var="metadata" value="#{SelectedBean.editMetadataBean.metadata}" varstatus="index">
+						<tr:iterator var="metadata" value="#{SelectedBean.editMetadataBean.metadata}" varStatus="index">
 							<h:panelGroup layout="block" styleClass="full_area0">
 							  	<h:panelGroup layout="block" styleClass="huge_area0">
 									<h:outputText value="#{lbl.metadata_select}" styleClass="large_label"/>
-									<h:selectOneMenu value="#{metadata.field.label}" styleClass="huge_select" onchange="submit(); window.location.href=window.location.pathname;" valueChangeListener="#{metadata.selectedFieldListener}" immediate="true">
-										<f:selectItems  value="#{SelectedBean.editMetadataBean.typesMenu}"/>
+									<h:selectOneMenu value="#{metadata.selectedStatementName}" styleClass="huge_select" onchange="submit(); window.location.href=window.location.pathname;" valueChangeListener="#{metadata.typeChanged}" immediate="true">
+										<f:selectItems  value="#{SelectedBean.editMetadataBean.statementMenu}"/>
 									</h:selectOneMenu>
 								</h:panelGroup>
-								<h:outputLabel value="  #{lbl.metadata_assign_value}" styleClass="xLarge_label"/>
-								<h:panelGroup layout="block" styleClass="xLarge_area0">
-									<h:outputText value="#{metadata.field.label}" styleClass="xHuge_label"/>
-									<tr:iterator var="fields" value="#{SelectedBean.editMetadataBean.mdFields}">
-										<h:inputText autocomplete="on" styleClass="large_txtInput" value="#{metadata.field.value}" rendered="#{metadata.field.label == fields.label}">
-											<f:selectItems  value="#{SelectedBean.editMetadataBean.typesMenu}"/>
-										</h:inputText>
-									</tr:iterator>
+								
+								<h:outputText value="#{metadata.metadata.type.label}" styleClass="xHuge_label"/>
+								
+								<h:panelGroup layout="block" styleClass="xLarge_area0" >
+									<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
+									<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.date}" rendered="#{metadata.metadata.type.enumType=='DATE'}"/>
+									<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}"/>
+									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='CONE_AUTHOR'}">
+										<h:outputLabel value="Family Name:" styleClass="xLarge_label"/>
+										<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.person.familyName}" />
+										<h:outputLabel value="Given Name:" styleClass="xLarge_label"/>
+										<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.person.givenName}" /> 
+										<h:outputLabel value="Organization:" styleClass="xLarge_label"/>
+										<h:inputText styleClass="large_txtInput" value="#{metadata.metadata.type.person.organizations[0].name}" />
+									</h:panelGroup>
+									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='GEOLOCATION'}">
+										<h:outputLabel value="Latitude:" styleClass="xLarge_label"/>
+										<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.latitude}" />
+										<h:outputLabel value="Longitude:" styleClass="xLarge_label"/>
+										<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.longitude}" />
+									</h:panelGroup>
 								</h:panelGroup>
+								<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{SelectedBean.editMetadataBean.addMetadata}">
+									<f:setPropertyActionListener value="#{index.index}" target="#{SelectedBean.editMetadataBean.mdPosition}"/>
+								</tr:commandButton>
+								<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}" action="#{SelectedBean.editMetadataBean.removeMetadata}">
+									<f:setPropertyActionListener value="#{index.index}" target="#{SelectedBean.editMetadataBean.mdPosition}"/>
+								</tr:commandButton>
+								
 							</h:panelGroup>
 						</tr:iterator>
 					</h:panelGroup>
+					
 					<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
 						<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton ">
 							<h:outputText value="#{lbl.reset}" />

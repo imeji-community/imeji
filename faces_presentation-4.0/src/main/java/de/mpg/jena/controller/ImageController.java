@@ -302,7 +302,7 @@ public class ImageController extends ImejiController{
         }
          
 	    
-	    String q = "SELECT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/image/metadata> ?md }";
+	    String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/collection> . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/container/metadata> ?v0 . OPTIONAL { ?v0 <http://purl.org/dc/elements/1.1/title> ?v1 } . OPTIONAL { ?v0 <http://purl.org/dc/elements/1.1/description> ?v2 } . OPTIONAL { ?v0 <http://purl.org/escidoc/metadata/terms/0.1/creator> ?v3 . ?v3 <http://www.w3.org/2000/01/rdf-schema#member> ?v4} } } ";
 
         Query queryObject = QueryFactory.create(q);
         QueryExecution qe = QueryExecutionFactory.create(queryObject, base);

@@ -21,7 +21,7 @@ public class EditMdProfileBean extends MdProfileBean
 
     public void init()
     {
-        if (init)
+        if (init) 
         {
             if (this.getId() != null)
             {

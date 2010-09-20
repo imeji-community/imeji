@@ -37,7 +37,7 @@ public class SelectedBean extends ImagesBean
     private Collection<Image> images;
     private EditMetadataBean editMetadataBean;
     private String mdEdited;
-  
+    private URI currentCollection;
     public SelectedBean()
     {
         super();
@@ -73,7 +73,9 @@ public class SelectedBean extends ImagesBean
 	            images = controller.search(uris, null, limit, offset);
 	        }catch (Exception e){
 	            throw new RuntimeException(e);
-	        }if (UrlHelper.getParameterBoolean("reset")){
+	        }
+	        
+	        if (UrlHelper.getParameterBoolean("reset")){
 	            editMetadataBean = new EditMetadataBean((List<Image>)images);
 	        }
         }
@@ -82,7 +84,7 @@ public class SelectedBean extends ImagesBean
 
     public String save()
     {
-        if (!editMetadataBean.edit())
+        if (!editMetadataBean.edit())  
         {
             BeanHelper.error("Error editing images");
         }
@@ -117,4 +119,15 @@ public class SelectedBean extends ImagesBean
     {
         this.mdEdited = mdEdited;
     }
+
+    public void setCurrentCollection(URI currentCollection)
+    {
+        this.currentCollection = currentCollection;
+    }
+
+    public URI getCurrentCollection()
+    {
+        return currentCollection;
+    }
+
 }

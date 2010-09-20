@@ -10,6 +10,29 @@ import de.mpg.jena.vo.ComplexType;
 @Embedded
 public class Geolocation extends ComplexType
 {
+    private double longitude;
+    private double latitude;
+    
+    public double getLongitude()
+    {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude)
+    {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude()
+    {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude)
+    {
+        this.latitude = latitude;
+    }
+
     public Geolocation()
     {
         super(ComplexTypes.GEOLOCATION);

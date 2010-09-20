@@ -36,6 +36,7 @@ public class ProfileHelper
         return pMap;
     }
 
+    /*
     public static List<MdField> getStatements(Map<URI, MetadataProfile> pMap)
     {
         List<MdField> mdfs = new ArrayList<MdField>();
@@ -47,7 +48,7 @@ public class ProfileHelper
         }
         return mdfs;
     }
-
+*/
     public static List<ComplexType> getComplextTypes(Map<URI, MetadataProfile> pMap)
     {
         List<ComplexType> cts = new ArrayList<ComplexType>();
@@ -63,6 +64,7 @@ public class ProfileHelper
         }
         return cts;
     }
+    /*
 
     public static List<MdField> getComplexTypes(MetadataProfile mdp)
     {
@@ -80,20 +82,15 @@ public class ProfileHelper
         }
         return mdfs;
     }
-
-    public static List<MdField> getFields(Map<URI, MetadataProfile> pMap)
-    {
-        List<MdField> mdfs = new ArrayList<MdField>();
-        for (MetadataProfile mdp : pMap.values())
-        {
-           mdfs.addAll(getComplexTypes(mdp));
-        }
-//        for (ComplexType ct : getComplextTypes(pMap))
+*/
+//    public static List<MdField> getFields(Map<URI, MetadataProfile> pMap)
+//    {
+//        List<MdField> mdfs = new ArrayList<MdField>();
+//        for (MetadataProfile mdp : pMap.values())
 //        {
-//            MetadataBean mb = new MetadataBean(new ImageMetadata(ct.getLabel(), ct));
-//            for (MdField mdf : mb.getMdFields())
-//                mdfs.add(mdf);
+//           mdfs.addAll(getComplexTypes(mdp));
 //        }
-        return mdfs;
-    }
+//
+//        return mdfs;
+//    }
 }

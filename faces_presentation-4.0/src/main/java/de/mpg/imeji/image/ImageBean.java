@@ -14,7 +14,6 @@ import org.apache.xalan.xsltc.compiler.sym;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.EditMetadataBean;
 import de.mpg.imeji.metadata.MetadataBean;
-import de.mpg.imeji.metadata.MetadataBean.MdField;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -104,22 +103,21 @@ public class ImageBean
         return image;
     }    
   
-    public void selectListener(ValueChangeEvent event){
-        if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
-        {  
-            selected = Boolean.parseBoolean(event.getNewValue().toString());
-        }
-        if (!selected)
-            sessionBean.getSelected().remove(image.getId());
-        else
-            sessionBean.getSelected().add(this.image.getId());
-    }
+   
 
-    public void select(ActionEvent event){
-        if (!selected)
-        	sessionBean.getSelected().remove(image.getId());
+    public String select(){
+        if (!selected )
+        {
+            
+            sessionBean.getSelected().remove(image.getId());
+        }
         else
+        {
         	sessionBean.getSelected().add(this.image.getId());
+        }
+        
+        
+        return "";
     }
     
     public void deSelectedEvent(ValueChangeEvent event){

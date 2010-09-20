@@ -1,21 +1,31 @@
 package de.mpg.imeji.metadata;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
-import de.mpg.jena.util.ComplexTypeHelper;
+import com.ocpsoft.pretty.PrettyContext;
+
+
+import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.ImageMetadata;
+import de.mpg.jena.vo.MetadataProfile;
+import de.mpg.jena.vo.Organization;
+import de.mpg.jena.vo.Person;
+import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.complextypes.ConePerson;
 
 public class MetadataBean
 {
     private ImageMetadata metadata;
-    private List<MdField> fields;
-    private MdField field;
+    private String selectedStatementName;
+    //private List<MdField> fields;
+    //private MdField field;
 
+    
     public class MdField
     {
         private String name;
@@ -83,15 +93,79 @@ public class MetadataBean
             this.literalOptions = literalOptions;
         }
     }
+    
 
-    public MetadataBean(ImageMetadata metadata)
+    private MetadataProfile profile;
+    
+    public MetadataBean(MetadataProfile profile, Statement s)
     {
-        this.metadata = metadata;
+        this.profile = profile;
+        changeStatement(s);
+        /*
         fields = getFields(metadata);
         if (fields.size() > 0)
             field = fields.get(0);
+            */
+    }
+    
+    public void typeChanged(ValueChangeEvent event)
+    {
+        if (event != null && event.getNewValue() != event.getOldValue())
+        {
+            String newStatementName = (String)event.getNewValue();
+            for(Statement s : profile.getStatements())
+            {
+                if(s.getName().equals(newStatementName))
+                {
+                    changeStatement(s);
+                    break;
+                }
+            }
+            
+            
+        }
+    }
+    
+    private void changeStatement(Statement s)
+    {
+       ComplexType ct = ImejiFactory.newComplexType(s.getType());
+       if(s.getLabels() != null && s.getLabels().size()>0){
+           ct.setLabel(s.getLabels().iterator().next().toString());
+       }
+      
+       if(ct.getEnumType().equals(ComplexType.ComplexTypes.CONE_AUTHOR))
+       {
+           Person p = new Person();
+           Organization o = new Organization();
+           p.getOrganizations().add(o);
+           ((ConePerson)ct).setPerson(p);
+       }
+       this.metadata = new ImageMetadata(s.getName(), ct);
+       this.selectedStatementName = s.getName();
+        
     }
 
+    public void setMetadata(ImageMetadata metadata)
+    {
+        this.metadata = metadata;
+    }
+
+    public ImageMetadata getMetadata()
+    {
+        return metadata;
+    }
+
+    public void setSelectedStatementName(String selectedStatementName)
+    {
+        this.selectedStatementName = selectedStatementName;
+    }
+
+    public String getSelectedStatementName()
+    {
+        return selectedStatementName;
+    }
+
+    /*
     public List<MdField> getFields(ImageMetadata md)
     {
         List<Field> l;
@@ -150,4 +224,5 @@ public class MetadataBean
     {
         this.field = field;
     }
+    */
 }

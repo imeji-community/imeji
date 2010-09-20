@@ -346,6 +346,16 @@ public abstract class ImejiController {
 	            y.increase();
 	            subquery = subquery + " . OPTIONAL { " + subject +" <" + qv.getNamespace().getNs()+  "> " + object;
 	            qv.setVariable(object);
+	            if(qv.getNamespace().isListType())
+	            { 
+	                String listObject = "?v" + y;
+	                y.increase();
+	                subquery = subquery + " . " + object +" <http://www.w3.org/2000/01/rdf-schema#member> " + listObject;
+	                qv.setVariable(listObject);
+	                object=listObject;
+	               
+	            }
+	           
 	            subquery = subquery + createSubQuery(qv.getChildren(), y, object);
 	            subquery = subquery + " }";
 	        }

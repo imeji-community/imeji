@@ -3,6 +3,7 @@ package de.mpg.jena.vo;
 import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -17,7 +18,7 @@ public class MetadataProfile
     private URI id;
     private String title;
     private String description;
-    private Collection<Statement> statements = new LinkedList<Statement>();
+    private List<Statement> statements = new LinkedList<Statement>();
 
     @Id
     public URI getId()
@@ -53,12 +54,12 @@ public class MetadataProfile
         this.description = description;
     }
 
-    public Collection<Statement> getStatements()
+    public List<Statement> getStatements()
     {
         return statements;
     }
 
-    public void setStatements(Collection<Statement> statements)
+    public void setStatements(List<Statement> statements)
     {
         this.statements = statements;
     }

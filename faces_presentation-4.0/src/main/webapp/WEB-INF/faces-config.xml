@@ -47,7 +47,9 @@
 			org.apache.myfaces.trinidad.core
 		</default-render-kit-id>
 	</application>
-
+	<lifecycle>
+		<phase-listener id="facesMessagesListener">de.mpg.imeji.util.FacesMessagesPhaseListener</phase-listener>
+	</lifecycle>
 	<!-- 
 		<lifecycle>
 		<phase-listener id="debugRenderResponse">de.mpg.escidoc.pubman.util.RenderResponsePhaseListener</phase-listener>

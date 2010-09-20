@@ -157,7 +157,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         previousPartList = new ArrayList<ListElementType>();
         previousPartList.addAll(currentPartList);
         currentPartList = retrieveList(getOffset(), elementsPerPage);
-        copySelectedListElementInCurrentList();
         totalNumberOfElements = getTotalNumberOfRecords();
         // reset current page and reload list if list is shorter than the given current page number allows
         if (getTotalNumberOfElements() <= getOffset())
@@ -173,18 +172,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         }
     }
 
-    public void copySelectedListElementInCurrentList()
-    {
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        for (ListElementType current : currentPartList)
-        {
-            String currentId = getListElementTypeId(current);
-            if (currentId != null)
-                for (URI uri : sb.getSelected())
-                    if (currentId.equals(uri.toString()))
-                        setListElementTypeIdSelected(current);
-        }
-    }
+   
 
     public String getListElementTypeId(ListElementType el)
     {

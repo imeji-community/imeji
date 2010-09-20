@@ -51,6 +51,21 @@ public class MdProfileBean
         if (this.getId() == null && this.getProfile().getId() != null)
             this.setId(this.getProfile().getId().getPath().split("/")[2]);
     }
+    
+    public MdProfileBean(MetadataProfile profile)
+    {
+        this.profile = profile;
+        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        pc = new ProfileController(sessionBean.getUser());
+        profilesMenu = new ArrayList<SelectItem>();
+        statements = new ArrayList<StatementWrapper>();
+        mdTypesMenu = new ArrayList<SelectItem>();
+        for (ComplexType mdt : collectionSession.getMetadataTypes())
+            mdTypesMenu.add(new SelectItem(mdt.getEnumType().name(), mdt.getEnumType().getLabel()));
+        if (this.getId() == null && this.getProfile().getId() != null)
+            this.setId(this.getProfile().getId().getPath().split("/")[2]);
+    }
 
     public void reset()
     {
@@ -61,7 +76,7 @@ public class MdProfileBean
 
     public void init()
     {
-        if (UrlHelper.getParameterBoolean("reset"))
+        if (UrlHelper.getParameterBoolean("reset")) 
             reset();
         loadtemplates();
         setStatementWrappers(profile);
@@ -193,7 +208,7 @@ public class MdProfileBean
 
     public List<StatementWrapper> getStatements()
     {
-        return statements;
+        return statements; 
     }
 
     public void setStatements(List<StatementWrapper> statements)

@@ -45,16 +45,17 @@
 				<h:panelGroup rendered="#{SelectedBean.editMetadataBean.numberOfProfiles == '1'}">
 					
 					<h:panelGroup layout="block" styleClass="full_area1_p8">
-						<tr:iterator var="metadata" value="#{SelectedBean.editMetadataBean.metadata}" varStatus="index">
+						<tr:iterator id="mdList" var="metadata" value="#{SelectedBean.editMetadataBean.metadata}" varStatus="index">
 							<h:panelGroup layout="block" styleClass="full_area0">
 							  	<h:panelGroup layout="block" styleClass="huge_area0">
 									<h:outputText value="#{lbl.metadata_select}" styleClass="large_label"/>
-									<h:selectOneMenu value="#{metadata.selectedStatementName}" styleClass="huge_select" onchange="submit(); window.location.href=window.location.pathname;" valueChangeListener="#{metadata.typeChanged}" immediate="true">
+									<h:selectOneMenu value="#{metadata.selectedStatementName}" styleClass="huge_select" onchange="getElementById('formular:mdList:#{index.index}:changeTypeBtn').click();">
 										<f:selectItems  value="#{SelectedBean.editMetadataBean.statementMenu}"/>
 									</h:selectOneMenu>
+									<tr:commandButton id="changeTypeBtn" simple="true" action="#{metadata.changeType}" inlineStyle="visibility:hidden;"/>
 								</h:panelGroup>
 								
-								<h:outputText value="#{metadata.metadata.type.label}" styleClass="xHuge_label"/>
+								
 								
 								<h:panelGroup layout="block" styleClass="xLarge_area0" >
 									<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>

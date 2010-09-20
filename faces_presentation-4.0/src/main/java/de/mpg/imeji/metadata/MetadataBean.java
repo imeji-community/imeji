@@ -108,22 +108,19 @@ public class MetadataBean
             */
     }
     
-    public void typeChanged(ValueChangeEvent event)
+    
+    public String changeType()
     {
-        if (event != null && event.getNewValue() != event.getOldValue())
+       
+        for(Statement s : profile.getStatements()) 
         {
-            String newStatementName = (String)event.getNewValue();
-            for(Statement s : profile.getStatements())
+            if(s.getName().equals(getSelectedStatementName()))
             {
-                if(s.getName().equals(newStatementName))
-                {
-                    changeStatement(s);
-                    break;
-                }
+                changeStatement(s);
+                break;
             }
-            
-            
         }
+        return "pretty:selected";
     }
     
     private void changeStatement(Statement s)

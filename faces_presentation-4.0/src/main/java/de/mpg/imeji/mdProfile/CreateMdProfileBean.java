@@ -20,9 +20,15 @@ public class CreateMdProfileBean extends MdProfileBean
     
     public String save()
     {
-        ProfileController controller = new ProfileController(session.getUser());
-        controller.update(this.getProfile());
-        BeanHelper.info(session.getMessage("profile_save_success"));
+        if(validateProfile())
+        {
+            ProfileController controller = new ProfileController(session.getUser());
+            
+            controller.update(this.getProfile());
+            BeanHelper.info(session.getMessage("profile_save_success"));
+        }
+        
+       
         return "pretty:";
     }
 

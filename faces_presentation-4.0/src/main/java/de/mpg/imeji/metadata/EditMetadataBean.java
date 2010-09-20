@@ -61,7 +61,7 @@ public class EditMetadataBean
     public boolean edit()
     {
         try
-        {
+        {  
             for (Image im : images) 
             {
                 im = setImageMetadata(im, metadata);

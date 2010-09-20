@@ -21,7 +21,7 @@ public class EditMdProfileBean extends MdProfileBean
 
     public void init()
     {
-        if (init) 
+        if (init)  
         {
             if (this.getId() != null)
             {
@@ -45,8 +45,13 @@ public class EditMdProfileBean extends MdProfileBean
 
     public String save()
     {
-        profileController.update(this.getProfile());
-        return "pretty:viewProfile";
+        if(validateProfile())
+        {
+            profileController.update(this.getProfile());
+            BeanHelper.info("Metadata Profile updates successfully!");
+        }
+        
+        return "pretty:";
     }
 
     @Override

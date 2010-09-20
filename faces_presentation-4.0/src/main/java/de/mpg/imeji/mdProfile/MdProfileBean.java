@@ -255,4 +255,29 @@ public class MdProfileBean
     {
         this.template = template;
     }
+    
+    public boolean validateProfile()
+    {
+        List<String> statementNames = new ArrayList<String>();
+        for (Statement s : profile.getStatements())
+        {
+            if(statementNames.contains(s.getName()))
+            {
+                BeanHelper.error("Names must be unique!");
+                return false;
+                
+            }
+            else if(s.getName()==null || s.getName().equals(""))
+            {
+                BeanHelper.error("Names are required!");
+                return false;
+            }
+            else
+            {
+                statementNames.add(s.getName());
+            }
+            
+        }
+        return true;
+    }
 }

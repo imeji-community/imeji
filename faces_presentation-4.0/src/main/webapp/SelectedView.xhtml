@@ -59,7 +59,12 @@
 								
 								<h:panelGroup layout="block" styleClass="xLarge_area0" >
 									<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
-									<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.date}" rendered="#{metadata.metadata.type.enumType=='DATE'}"/>
+									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='DATE'}">
+										<h:outputLabel value="(YYYY-MM-DD)" styleClass="xLarge_label"/>
+										<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.date}">
+											<tr:convertDateTime type="date" pattern="yyyy-MM-dd"/>
+										</tr:inputText>
+									</h:panelGroup>
 									<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}"/>
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='CONE_AUTHOR'}">
 										<h:outputLabel value="Family Name:" styleClass="xLarge_label"/>

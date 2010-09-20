@@ -1,5 +1,6 @@
 package de.mpg.imeji.metadata;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.complextypes.ConePerson;
+import de.mpg.jena.vo.complextypes.Date;
 
 public class MetadataBean
 {
@@ -161,6 +163,8 @@ public class MetadataBean
     {
         return selectedStatementName;
     }
+    
+   
 
     /*
     public List<MdField> getFields(ImageMetadata md)
@@ -222,4 +226,6 @@ public class MetadataBean
         this.field = field;
     }
     */
+    
+    
 }

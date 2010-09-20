@@ -84,6 +84,12 @@
 						</h:panelGroup>						
 			</h:panelGroup>
 			
+			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'DATE'}">
+						<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.date != null }">
+								<h:outputLabel value="#{md.type.date}:" />
+						</h:panelGroup>						
+			</h:panelGroup>
+			
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'GEOLOCATION'}">
 						<h:panelGroup styleClass="free_area0 detailsLine">
 								<h:outputLabel value="#{md.type.label}:" />

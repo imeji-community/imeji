@@ -10,19 +10,19 @@ import de.mpg.jena.vo.ComplexType;
 @Embedded
 public class Date extends ComplexType
 {
-    private Date date;
+    private java.util.Date date;
     
     public Date()
     {
         super(ComplexTypes.DATE);
     }
 
-    public void setDate(Date date)
+    public void setDate(java.util.Date date)
     {
         this.date = date;
     }
 
-    public Date getDate()
+    public java.util.Date getDate()
     {
         return date;
     }

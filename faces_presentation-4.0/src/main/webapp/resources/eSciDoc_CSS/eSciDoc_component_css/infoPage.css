@@ -97,7 +97,12 @@
 	border: 0px;
 }
 
-.infoPage .sideSection .gf-result{
+.gfc-result .gf-title {
+	height: auto !important;
+}
+
+
+.infoPage .sideSection .gf-result {
 	margin-top: 1.2em;
 } 
 

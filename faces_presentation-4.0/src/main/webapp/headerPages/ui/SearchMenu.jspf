@@ -40,9 +40,9 @@
 		<span class="std_imgArea quickSearchIcon">&#160;</span>
 		<span class="large_area0 quickSearchMenu">
 			<h:inputText id="quickSearchString" styleClass="large_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}"/>
-			<h:panelGroup styleClass="large_checkbox quickSearchCheckBoxMenu">
+			<h:panelGroup styleClass="xLarge_area0">
 				<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}">
-					<f:selectItem itemLabel="#{lbl.image}" itemValue="images"/>
+					<f:selectItem itemLabel="#{lbl.images}" itemValue="images"/>
 					<f:selectItem itemLabel="#{lbl.collections}" itemValue="collections"/>
 				</h:selectOneRadio>
 			</h:panelGroup>

@@ -302,12 +302,12 @@ public class ImageController extends ImejiController{
         }
          
 	    
-	    String q = "SELECT * WHERE { ?s ?p ?o . OPTIONAL {?s2 ?p2 ?s} . FILTER (isBlank(?s) && !bound(?s2))}";
+	    String q = "SELECT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/image/metadata> ?md }";
 
         Query queryObject = QueryFactory.create(q);
         QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
         ResultSet results = qe.execSelect();
-        //ResultSetFormatter.out(System.out, results);
+        ResultSetFormatter.out(System.out, results);
           /* 
         while(results.hasNext())
            {

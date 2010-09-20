@@ -354,8 +354,57 @@ public abstract class ImejiController {
 	   
 	}
 	
-	
-	
+	/*
+	private Map<SearchCriterion, ImejiQueryVariable> createOntology(List<SearchCriterion> scList, Map<SearchCriterion, ImejiQueryVariable> map, Map<ImejiNamespaces, ImejiQueryVariable> currentMap, List<ImejiQueryVariable> roots)
+	{
+	     
+	    if(scList!=null && scList.size()>0)
+        {
+
+                for(SearchCriterion sc : scList)
+                {
+                    if(!sc.getNamespace().equals(ImejiNamespaces.ID_URI))
+                    {
+                            if(sc.getNamespace()!=null)
+                            {
+                            ImejiNamespaces ns = sc.getNamespace();
+                            ImejiQueryVariable child = null;
+                            while (ns!= null)
+                            {
+                                ImejiQueryVariable qv;
+                                
+                                if(!currentMap.containsKey(ns) || (currentMap.containsKey(ns) && ns.isCollectionType()))
+                                {
+                                    List<ImejiQueryVariable> qvList = new ArrayList<ImejiQueryVariable>();
+                                    
+                                    if(child!=null) qvList.add(child);
+                                    
+                                    qv = new ImejiQueryVariable(ns, qvList);
+                                    map.put(sc, qv);
+                                    currentMap.put(ns, qv);
+                                }
+                                else
+                                {
+                                   qv = currentMap.get(ns);
+                                   if(child!=null && !qv.getChildren().contains(child)) qv.getChildren().add(child);
+                                }
+                                
+                                child = qv;
+                                ns = ns.getParent();
+                            }
+                           if(!roots.contains(child))
+                           {
+                               roots.add(child);
+                           }
+                           
+                        }
+                        createOntology(sc.getChildren(), map, currentMap, roots);
+                    }
+                }
+        }
+	    
+	}
+	*/
 	
 	
 	protected String createQuery(List<List<SearchCriterion>> scList, SortCriterion sortCriterion, String type, int limit, int offset) throws Exception

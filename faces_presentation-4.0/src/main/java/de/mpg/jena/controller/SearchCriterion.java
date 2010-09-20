@@ -34,7 +34,7 @@ public class SearchCriterion {
 		PROPERTIES_LAST_MODIFICATION_DATE("http://imeji.mpdl.mpg.de/lastModificationDate", PROPERTIES),
 		PROPERTIES_STATUS("http://imeji.mpdl.mpg.de/status", PROPERTIES),
 		
-		IMAGE_METADATA("http://imeji.mpdl.mpg.de/image/metadata"),
+		IMAGE_METADATA("http://imeji.mpdl.mpg.de/image/metadata", null, true),
 		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/image/metadata/elementNamespace", IMAGE_METADATA),
 		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/image/metadata/name", IMAGE_METADATA),
 		IMAGE_METADATA_COMPLEXTYPE("http://purl.org/dc/terms/type", IMAGE_METADATA),
@@ -54,16 +54,17 @@ public class SearchCriterion {
 		CONTAINER_METADATA("http://imeji.mpdl.mpg.de/container/metadata"),
 		CONTAINER_METADATA_TITLE("http://purl.org/dc/elements/1.1/title", CONTAINER_METADATA),
 		CONTAINER_METADATA_DESCRIPTION("http://purl.org/dc/elements/1.1/description", CONTAINER_METADATA),
-		CONTAINER_METADATA_PERSON("http://purl.org/escidoc/metadata/terms/0.1/creator", CONTAINER_METADATA),
+		CONTAINER_METADATA_PERSON("http://purl.org/escidoc/metadata/terms/0.1/creator", CONTAINER_METADATA, true),
 		CONTAINER_METADATA_PERSON_FAMILY_NAME("http://purl.org/escidoc/metadata/terms/0.1/family-name", CONTAINER_METADATA_PERSON),
 		CONTAINER_METADATA_PERSON_GIVEN_NAME("http://purl.org/escidoc/metadata/terms/0.1/given-name", CONTAINER_METADATA_PERSON),
-		CONTAINER_METADATA_PERSON_ORGANIZATION("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit", CONTAINER_METADATA_PERSON),
+		CONTAINER_METADATA_PERSON_ORGANIZATION("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit", CONTAINER_METADATA_PERSON, true),
 		CONTAINER_METADATA_PERSON_ORGANIZATION_NAME("http://purl.org/dc/elements/1.1/title", CONTAINER_METADATA_PERSON_ORGANIZATION);
 		
 
 		private String ns;
 		private ImejiNamespaces parent;
 		private List<ImejiNamespaces> children = new ArrayList<ImejiNamespaces>();
+		private boolean collectionType = false;;
 		
 		private ImejiNamespaces(String ns) {
 			this.ns = ns;
@@ -77,6 +78,16 @@ public class SearchCriterion {
 			    parent.getChildren().add(this);
 			}
 		}
+		
+		private ImejiNamespaces(String ns, ImejiNamespaces parent, boolean collectionType) {
+            this.ns = ns;
+            this.parent = parent;
+            this.collectionType = collectionType;
+            if(parent!=null && !parent.getChildren().contains(this))
+            {
+                parent.getChildren().add(this);
+            }
+        }
 		
 		
 
@@ -104,6 +115,16 @@ public class SearchCriterion {
         public List<ImejiNamespaces> getChildren()
         {
             return children;
+        }
+
+        public void setCollectionType(boolean collectionType)
+        {
+            this.collectionType = collectionType;
+        }
+
+        public boolean isCollectionType()
+        {
+            return collectionType;
         }
 		
 		

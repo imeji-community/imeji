@@ -59,8 +59,8 @@
 		
 			<div class="full_area0 LogoNSearch">
 				<h:outputLink id="lnkStartPage" title="Go to start page." value="#{Navigation.applicationUrl}">
-					<h:panelGroup styleClass="xTiny_marginLExcl half_area0 headerLogo" style="#{StaticContent.headerLogo}">
-						<h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
+					<h:panelGroup styleClass="xTiny_marginLExcl half_area0">
+						<h:panelGroup styleClass="half_area0 themePark"><h1 style="color:white; font-weight:bolder;">I M E J I</h1></h:panelGroup>
 					</h:panelGroup>
 				</h:outputLink>
 		

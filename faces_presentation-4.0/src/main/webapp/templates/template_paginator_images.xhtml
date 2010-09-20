@@ -149,41 +149,9 @@
 				</ul>
 				
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
-				<h:panelGroup rendered="#{SelectedBean.editMetadataBean.numberOfProfiles == '1'}">
-					<h:panelGroup layout="block" styleClass="full_area1_p8">
-						<tr:iterator var="metadata" value="#{SelectedBean.editMetadataBean.metadata}" varstatus="index">
-							<h:panelGroup layout="block" styleClass="full_area0">
-							  	<h:panelGroup layout="block" styleClass="huge_area0">
-									<h:outputText value="#{lbl.metadata_select}" styleClass="large_label"/>
-									<h:selectOneMenu value="#{metadata.field.label}" styleClass="huge_select" onchange="submit(); window.location.href=window.location.pathname;" valueChangeListener="#{metadata.selectedFieldListener}" immediate="true">
-										<f:selectItems  value="#{SelectedBean.editMetadataBean.typesMenu}"/>
-									</h:selectOneMenu>
-								</h:panelGroup>
-								<h:outputLabel value="  #{lbl.metadata_assign_value}" styleClass="xLarge_label"/>
-								<h:panelGroup layout="block" styleClass="xLarge_area0">
-									<h:outputText value="#{metadata.field.label}" styleClass="xHuge_label"/>
-									<tr:iterator var="fields" value="#{SelectedBean.editMetadataBean.mdFields}">
-										<h:inputText autocomplete="on" styleClass="large_txtInput" value="#{metadata.field.value}" rendered="#{metadata.field.label == fields.label}">
-											<f:selectItems  value="#{SelectedBean.editMetadataBean.typesMenu}"/>
-										</h:inputText>
-									</tr:iterator>
-								</h:panelGroup>
-							</h:panelGroup>
-						</tr:iterator>
-					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
-						<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton ">
-							<h:outputText value="#{lbl.reset}" />
-						</h:outputLink>			
-						<h:commandButton value="#{lbl.save}" action="#{SelectedBean.save}" styleClass="free_area1_p8 activeButton"/>	
-					</h:panelGroup>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="full_area1_p8" rendered="#{SelectedBean.editMetadataBean.numberOfProfiles != '1'}">
-					<h:outputText value="#{msg.metadata_edit_error_number_of_selected_profiles}" styleClass="full_label"/>
-					<h:outputText value="#{SelectedBean.editMetadataBean.numberOfProfiles} found!" styleClass="full_label"/>
-				</h:panelGroup>
-			</h:panelGroup>
+			
+			<ui:insert name="subImagesContent"></ui:insert>
+			
 
 			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">	
 				<h:panelGroup layout="block" styleClass="full_area1_p8">

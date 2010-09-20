@@ -37,7 +37,7 @@
 		<h:panelGroup layout="block" styleClass="half_area1_p8 endline detailedItem" style="align: right;" >
 			<span>
 				<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{ImageBean.image.fullImageUrl}" target="_blank">
-					<h:graphicImage id="picWebResolution" title="ImageBean.image.id" alt="ImageBean.image.id" styleClass="vertical" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{ImageBean.image.webImageUrl}" />
+					<h:graphicImage id="picWebResolution" title="ImageBean.image.id" alt="ImageBean.image.id" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{ImageBean.image.webImageUrl}" />
 				</h:outputLink>
 				<!-- Comparison -->
 

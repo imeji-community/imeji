@@ -42,7 +42,7 @@ public class SearchCriterion {
 		IMAGE_METADATA_COMPLEXTYPE_PERSON("http://imeji.mpdl.mpg.de/metadata/person", IMAGE_METADATA_COMPLEXTYPE),
 		IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME("http://purl.org/escidoc/metadata/terms/0.1/family-name", IMAGE_METADATA_COMPLEXTYPE_PERSON),
 		IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME("http://purl.org/escidoc/metadata/terms/0.1/given-name", IMAGE_METADATA_COMPLEXTYPE_PERSON),
-		IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit", IMAGE_METADATA_COMPLEXTYPE_PERSON),
+		IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit", IMAGE_METADATA_COMPLEXTYPE_PERSON, true),
 		IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME("http://purl.org/dc/elements/1.1/title", IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION),
 		
 		IMAGE_METADATA_COMPLEXTYPE_TEXT("http://imeji.mpdl.mpg.de/metadata/text", IMAGE_METADATA_COMPLEXTYPE),

@@ -47,13 +47,13 @@
 				<ui:include src="picturesPages/ui/DetailsEdit.xhtml"/>
 			</h:panelGroup>
 		</ui:define>
-		
+		  
 		<ui:define name="commangLine">	
 			<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 				<h:outputLink value="?reset" styleClass="free_area1_p8 cancelButton ">
 						<h:outputText value="#{lbl.reset}" />
 				</h:outputLink>			
-				<h:commandButton value="#{lbl.save}" action="#{ImageBean.save}" styleClass="free_area1_p8 activeButton"/>	
+				<h:commandButton value="#{lbl.save}" action="#{ImageBean.save}"  styleClass="free_area1_p8 activeButton"/>	
 			</h:panelGroup>
 		</ui:define>
 	</ui:composition>

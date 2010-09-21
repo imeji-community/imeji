@@ -42,61 +42,62 @@
 		
 		<tr:iterator id="mdList" var="md" value="#{ImageBean.imgMetadata}">
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
-						<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.person.familyName != null }">
-								<h:outputLabel value="#{md.type.label}-family name:" />
-								<h:outputLabel value="#{md.type.person.familyName}"/>
-						</h:panelGroup>
-						<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.person.givenName != null }">
-								<h:outputLabel value="#{md.type.label}-given name:" />
-								<h:outputLabel value="#{md.type.person.givenName}"/>
-						</h:panelGroup>
-						<h:panelGroup styleClass="free_area0 detailsLine"  rendered="#{md.type.person.alternativeName != null }">
-								<h:outputLabel value="#{md.type.label}-alternative name:"/>
-								<h:outputLabel value="#{md.type.person.alternativeName}"/>
-						</h:panelGroup>
-						<h:panelGroup styleClass="free_area0 detailsLine"  rendered="#{md.type.person.identifier != null }">
-								<h:outputLabel value="#{md.type.label}-identifier:"/>
-								<h:outputLabel value="#{md.type.person.identifier}"/>
-						</h:panelGroup>
-						<h:panelGroup styleClass="free_area0 detailsLine"  rendered="#{md.type.person.role != null }">
-								<h:outputLabel value="#{md.type.label}-role:"/>
-								<h:outputLabel value="#{md.type.person.role}"/>
-						</h:panelGroup>
-						<tr:iterator id="orgaList" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
-							<h:panelGroup styleClass="free_area0 detailsLine"  >
-									<h:outputLabel value="#{orga.name}-organizations:"/>
-									<h:outputLabel value="#{orga.description}"/>
-							</h:panelGroup>
-						</tr:iterator>
+				<h:panelGroup styleClass="huge_area0" rendered="#{md.type.person.familyName != null and md.type.person.familyName != ''}">
+					<h:outputLabel value="#{md.type.label}:" />
+				</h:panelGroup>			
+				<h:panelGroup styleClass="huge_area0" rendered="#{md.type.person.familyName != null and md.type.person.familyName != ''}">
+					<h:outputLabel value="Family Name:" />
+					<h:outputLabel value="#{md.type.person.familyName}"/>
+				</h:panelGroup>
+				<h:panelGroup styleClass="huge_area0" rendered="#{md.type.person.givenName != null and md.type.person.givenName != ''}">
+					<h:outputLabel value="Given Name:" />
+					<h:outputLabel value="#{md.type.person.givenName}"/>
+				</h:panelGroup>
+				<h:panelGroup styleClass="huge_area0"  rendered="#{md.type.person.alternativeName != null and md.type.person.alternativeName != ''}">
+					<h:outputLabel value="Alternative Name:"/>
+					<h:outputLabel value="#{md.type.person.alternativeName}"/>
+				</h:panelGroup>
+				<h:panelGroup styleClass="huge_area0"  rendered="#{md.type.person.identifier != null and md.type.person.identifier != ''}">
+					<h:outputLabel value="Identifier:"/>
+					<h:outputLabel value="#{md.type.person.identifier}"/>
+				</h:panelGroup>
+				<h:panelGroup styleClass="huge_area0"  rendered="#{md.type.person.role != null}">
+					<h:outputLabel value="Role:"/>
+					<h:outputLabel value="#{md.type.person.role}"/>
+				</h:panelGroup>
+				<tr:iterator id="orgaList" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
+					<h:panelGroup styleClass="huge_area0"  >
+						<h:outputLabel value="Organizations:"/>
+						<h:outputLabel value="#{orga.name}"/>
+					</h:panelGroup>
+				</tr:iterator>
 			</h:panelGroup>
 			
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'TEXT'}">
-						<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.text != null }">
-								<h:outputLabel value="#{md.type.label}:" />
-								<h:outputLabel value="#{md.type.text}"/>
-						</h:panelGroup>						
+				<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.text != null }">
+					<h:outputLabel value="&#160;" />
+				</h:panelGroup>						
+			</h:panelGroup>
+			
+			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'TEXT'}">
+				<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.text != null }">
+					<h:outputLabel value="#{md.type.label}:" />
+					<h:outputLabel value="#{md.type.text}"/>
+				</h:panelGroup>						
 			</h:panelGroup>
 			
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'NUMBER'}">
-						<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.number != null }">
-								<h:outputLabel value="#{md.type.label}:" />
-								<h:outputLabel value="#{md.type.number}"/>
-						</h:panelGroup>						
+				<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.number != null }">
+					<h:outputLabel value="&#160;" />
+				</h:panelGroup>						
 			</h:panelGroup>
 			
-			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'DATE'}">
-						<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.date != null }">
-								<h:outputLabel value="#{md.type.date}:" />
-						</h:panelGroup>						
+			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'NUMBER'}">
+				<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.number != null }">
+					<h:outputLabel value="#{md.type.label}:" />
+					<h:outputLabel value="#{md.type.number}"/>
+				</h:panelGroup>						
 			</h:panelGroup>
-			
-			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'GEOLOCATION'}">
-						<h:panelGroup styleClass="free_area0 detailsLine">
-								<h:outputLabel value="#{md.type.label}:" />
-								<h:outputLabel value="#{md.type.latitude}/#{md.type.longitude}"/>
-						</h:panelGroup>						
-			</h:panelGroup>
-		
 		</tr:iterator>
 		
 		<!-- <tr:iterator id="mdTreeList" var="treeList" value="#{Detail.item.mdRecords.descriptionTreeList}">
@@ -145,3 +146,5 @@
 	</h:panelGroup>
 </f:subview>
 </div>
+
+

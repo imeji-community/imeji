@@ -58,6 +58,7 @@
 								
 								
 								<h:panelGroup layout="block" styleClass="xLarge_area0" >
+									
 									<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='DATE'}">
 										<h:outputLabel value="(YYYY-MM-DD)" styleClass="xLarge_label"/>
@@ -99,6 +100,8 @@
 						<h:commandButton value="#{lbl.save}" action="#{SelectedBean.save}" styleClass="free_area1_p8 activeButton"/>	
 					</h:panelGroup>
 				</h:panelGroup>
+				
+				
 				<h:panelGroup layout="block" styleClass="full_area1_p8" rendered="#{SelectedBean.editMetadataBean.numberOfProfiles != '1'}">
 					<h:outputText value="#{msg.metadata_edit_error_number_of_selected_profiles}" styleClass="full_label"/>
 					<h:outputText value="#{SelectedBean.editMetadataBean.numberOfProfiles} found!" styleClass="full_label"/>

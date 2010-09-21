@@ -5,22 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import javax.faces.model.SelectItem;
-
-import thewebsemantic.LocalizedString;
-
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.mdProfile.MdProfileBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
-import de.mpg.imeji.vo.util.ImejiFactory;
-import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
-import de.mpg.jena.util.ComplexTypeHelper;
-import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
@@ -29,6 +18,7 @@ import de.mpg.jena.vo.Statement;
 public class EditMetadataBean
 {
     private List<Image> images;
+    private Image image;
 
     private Map<URI, MetadataProfile> profiles;
     private SessionBean sb;
@@ -38,12 +28,14 @@ public class EditMetadataBean
     private MetadataProfile profile;
     private List<MetadataBean> metadata;
     private int mdPosition;
+    private String 	prettyLink;
     
-
     public EditMetadataBean(List<Image> images)
     {
+    	this.prettyLink = "pretty:selected";
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.images = images;
+        this.image = null;
         profiles = ProfileHelper.loadProfiles(images);
         //mdFields = ProfileHelper.getFields(profiles);
         metadata = new ArrayList<MetadataBean>();
@@ -57,25 +49,61 @@ public class EditMetadataBean
         addMetadata();
         
     }
+                 
+    public EditMetadataBean(Image image){
+    	this.prettyLink = "pretty:editImage";
+    	this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    	this.image = image;
+    	profile = ProfileHelper.loadProfiles(image);
+    	metadata = new ArrayList<MetadataBean>();
+        statementMenu = new ArrayList<SelectItem>();
+        for (Statement s : profile.getStatements())
+        {
+            statementMenu.add(new SelectItem(s.getName(), s.getName()));
+        }
+    	addMetadata();
+    }
+                     
 
-    public boolean edit()
+
+	public boolean edit()
     {
         try
         {  
-            for (Image im : images) 
-            {
-                im = setImageMetadata(im, metadata);
-            }
             ImageController ic = new ImageController(sb.getUser());
-            ic.update(images);
-        }
+        	if(image == null){
+	            for (Image im : images) 
+	            {
+	                im = setImageMetadata(im, metadata);
+	            }
+	            ic.update(images);
+        	}else{
+        		image = addNewImageMetadata(image, metadata);
+        		ic.update(image);
+        	}
+        }    
         catch (Exception e)
         {
             return false;
         }
         return true;
     }
-
+	
+	
+    public Image addNewImageMetadata(Image im, List<MetadataBean> mdbs) throws Exception{
+        Map<String, List<ImageMetadata>> mdMap = new HashMap<String, List<ImageMetadata>>();
+        List<ImageMetadata> newMetadata = new ArrayList<ImageMetadata>();
+        for(ImageMetadata imd : im.getMetadata()){
+        	newMetadata.add(imd);
+        	mdMap.put(imd.getName(), newMetadata);
+        }
+        // add new mdvalues 
+        for(MetadataBean mdb : mdbs){
+            im.getMetadata().add(mdb.getMetadata());
+        }        
+        return im; 
+    }
+    
     
     public Image setImageMetadata(Image im, List<MetadataBean> mdbs) throws Exception
     {
@@ -151,7 +179,10 @@ public class EditMetadataBean
 
     public String addMetadata()
     {
-        MetadataBean mb = new MetadataBean(profile, profile.getStatements().get(0));
+
+    	MetadataBean mb = new MetadataBean(profile, profile.getStatements().get(0));
+    	mb.setPrettyLink(prettyLink);
+
         
         if(metadata.size()==0)
         {
@@ -160,11 +191,20 @@ public class EditMetadataBean
         else
         {
             metadata.add(getMdPosition() + 1, mb);
-        }
-        return "pretty:selected";
+        }  
+        System.err.println("prettyLink = " + prettyLink);
+        return prettyLink;
     }
 
-    public String removeMetadata()
+    public String getPrettyLink() {
+		return prettyLink;
+	}
+
+	public void setPrettyLink(String prettyLink) {
+		this.prettyLink = prettyLink;
+	}
+
+	public String removeMetadata()
     {
         if (metadata.size() > 0)
         {

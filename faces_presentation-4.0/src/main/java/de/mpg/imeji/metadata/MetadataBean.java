@@ -1,15 +1,9 @@
 package de.mpg.imeji.metadata;
 
-import java.text.SimpleDateFormat;
+
+
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-
-import com.ocpsoft.pretty.PrettyContext;
-
-
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.ImageMetadata;
@@ -18,16 +12,16 @@ import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.complextypes.ConePerson;
-import de.mpg.jena.vo.complextypes.Date;
+
 
 public class MetadataBean
 {
     private ImageMetadata metadata;
     private String selectedStatementName;
+    private String 	prettyLink;
     //private List<MdField> fields;
     //private MdField field;
 
-    
     public class MdField
     {
         private String name;
@@ -97,7 +91,15 @@ public class MetadataBean
     }
     
 
-    private MetadataProfile profile;
+    public String getPrettyLink() {
+		return prettyLink;
+	}
+
+	public void setPrettyLink(String prettyLink) {
+		this.prettyLink = prettyLink;
+	}
+
+	private MetadataProfile profile;
     
     public MetadataBean(MetadataProfile profile, Statement s)
     {
@@ -109,11 +111,9 @@ public class MetadataBean
             field = fields.get(0);
             */
     }
+        
     
-    
-    public String changeType()
-    {
-       
+    public String changeType(){
         for(Statement s : profile.getStatements()) 
         {
             if(s.getName().equals(getSelectedStatementName()))
@@ -122,8 +122,11 @@ public class MetadataBean
                 break;
             }
         }
-        return "pretty:selected";
+        System.err.println(prettyLink);
+       	return prettyLink;
     }
+    
+
     
     private void changeStatement(Statement s)
     {
@@ -163,8 +166,7 @@ public class MetadataBean
     {
         return selectedStatementName;
     }
-    
-   
+
 
     /*
     public List<MdField> getFields(ImageMetadata md)

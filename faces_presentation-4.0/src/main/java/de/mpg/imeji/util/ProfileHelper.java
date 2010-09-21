@@ -35,6 +35,15 @@ public class ProfileHelper
         }
         return pMap;
     }
+    
+    public static MetadataProfile loadProfiles(Image image){
+    	MetadataProfile profile = new MetadataProfile();
+    	SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    	CollectionController c = new CollectionController(sb.getUser());
+    	CollectionImeji coll = c.retrieve(image.getCollection());
+    	profile = coll.getProfile();
+    	return profile;
+    }
 
     /*
     public static List<MdField> getStatements(Map<URI, MetadataProfile> pMap)

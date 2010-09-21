@@ -1,12 +1,7 @@
 package de.mpg.imeji.collection;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
-
-import thewebsemantic.LocalizedString;
-
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;

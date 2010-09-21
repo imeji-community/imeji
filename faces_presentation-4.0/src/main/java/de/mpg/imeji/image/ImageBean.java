@@ -1,29 +1,24 @@
 package de.mpg.imeji.image;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-import javax.faces.event.ActionEvent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
-import org.apache.xalan.xsltc.compiler.sym;
+import com.ocpsoft.pretty.PrettyContext;
 
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.EditMetadataBean;
-import de.mpg.imeji.metadata.MetadataBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
-import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 
-public class ImageBean
-{
+public class ImageBean{
 	public enum TabType{
 		VIEW, EDIT;
 
@@ -36,11 +31,14 @@ public class ImageBean
     private boolean selected;
     private ImageController imageController= null;
     private List<ImageMetadata> imgMetadata;
-    private CollectionImeji  collection;
+    private EditMetadataBean editMetadataBean;
+
+	private CollectionImeji  collection;
     private CollectionController collectionController;
     private String previous = null;
     private String next = null;
     private boolean deSelected;
+
 
 	public ImageBean(Image img){
         this.image = img;
@@ -58,7 +56,7 @@ public class ImageBean
     	imageController = new ImageController(sessionBean.getUser());
     	collectionController = new CollectionController(sessionBean.getUser());
     	imgMetadata = new ArrayList<ImageMetadata>();
-    }
+    }  
       
     public void init() throws Exception{ 
     	image = imageController.retrieve(id);
@@ -66,57 +64,33 @@ public class ImageBean
     	setTab(TabType.VIEW.toString());
     	if(sessionBean.getSelected().contains(image.getId())){
     		setSelected(true);
-    	}
-    }
-       
+    	} 
+    	editMetadataBean = new EditMetadataBean(image);
+    }    
+            
     public String save(){
-        try{
+        try{      
             imageController.update(image);
+            
+            if (!editMetadataBean.edit())  
+            {
+                BeanHelper.error("Error editing images");
+            }
+            BeanHelper.info("Images edited");
         }
         catch (Exception e){
         	e.getMessage();
         }
         return getNavigationString();
     }
-  
-    public CollectionImeji getCollection() {
-		return collection;
-	}
-
-	public void setCollection(CollectionImeji collection) {
-		this.collection = collection;
-	}
- 
-	public List<ImageMetadata> getImgMetadata() {
-		return  new ArrayList<ImageMetadata>(image.getMetadata());
-	}
-
-	public void setImgMetadata(List<ImageMetadata> imgMetadata) {
-		this.imgMetadata = imgMetadata;
-	} 
-       
-	public void setImage(Image image){
-        this.image = image;
-    }
-  
-    public Image getImage(){
-        return image;
-    }    
-  
-   
-
+      
     public String select(){
-        if (!selected )
-        {
-            
+        if (!selected ){
             sessionBean.getSelected().remove(image.getId());
         }
-        else
-        {
+        else{
         	sessionBean.getSelected().add(this.image.getId());
         }
-        
-        
         return "";
     }
     
@@ -139,17 +113,47 @@ public class ImageBean
 	public void setDeSelected(boolean deSelected) {
 		this.deSelected= deSelected;
 	}
+	
+    public CollectionImeji getCollection() {
+		return collection;
+	}
+
+	public void setCollection(CollectionImeji collection) {
+		this.collection = collection;
+	}    
+        
+	public List<ImageMetadata> getImgMetadata() {
+		return  new ArrayList<ImageMetadata>(image.getMetadata());
+	}
+  
+	public void setImgMetadata(List<ImageMetadata> imgMetadata) {
+		this.imgMetadata = imgMetadata;
+	} 
+       
+	public void setImage(Image image){
+        this.image = image;
+    }
+  
+    public Image getImage(){
+        return image;
+    } 
+    public EditMetadataBean getEditMetadataBean() {
+		return editMetadataBean;
+	}
+
+	public void setEditMetadataBean(EditMetadataBean editMetadataBean) {
+		this.editMetadataBean = editMetadataBean;
+	}
    
     /**
      * @param selected the selected to set
      */    
     public void setSelected(boolean selected){
         this.selected = selected;
-    }
+    }  
         
     public boolean getSelected(){
     	return selected; 
-    	
     }
   
     public String getThumbnailImageUrlAsString(){
@@ -174,10 +178,7 @@ public class ImageBean
 	}
 	
     protected String getNavigationString(){
-    	if(getTab().equalsIgnoreCase("edit"))
-    		return "pretty:editImage";
-    	else
-    		return "pretty:viewImage";
+    	return "pretty:viewImage";
     }
     
 	public String getPrevious() {

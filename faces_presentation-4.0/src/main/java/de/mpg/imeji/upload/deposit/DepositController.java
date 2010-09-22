@@ -2,6 +2,7 @@ package de.mpg.imeji.upload.deposit;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -24,13 +25,13 @@ import de.mpg.jena.vo.Image.Visibility;
  */
 public class DepositController
 {
-    public static ItemVO createImejiItem(BufferedImage bufferedImage, String title, String description,
+    public static ItemVO createImejiItem(InputStream is, String title, String description,
             String mimetype, String format, String userHandle, String collection, String context) throws IOException, URISyntaxException
     {
         ItemVO imejiItem = new ItemVO(title, description, context);
         try
         {
-            imejiItem.attachFile(bufferedImage, title, mimetype, format, userHandle);
+            imejiItem.attachFile(is, title, mimetype, format, userHandle);
         }
         catch (Exception e)
         {
@@ -39,7 +40,7 @@ public class DepositController
         return imejiItem;
     }
 
-    public static String depositImejiItem(ItemVO item, String userHandle, CollectionImeji collection, User user) throws Exception
+    public static String depositImejiItem(ItemVO item, String userHandle, CollectionImeji collection, User user, String title) throws Exception
     {
         String itemXml = ServiceLocator.getItemHandler(userHandle).create(item.getItemDocument().xmlText());
         item.setItem(ItemDocument.Factory.parse(itemXml));
@@ -50,7 +51,8 @@ public class DepositController
         img.setFullImageUrl(URI.create(ImageHelper.getOriginalResolution(item)));
         img.setThumbnailImageUrl(URI.create(ImageHelper.getThumbnailUrl(item)));
         img.setWebImageUrl(URI.create(ImageHelper.getWebResolutionUrl(item)));
-        img.setVisibility(Visibility.PRIVATE);
+        img.setVisibility(Visibility.PUBLIC);
+        img.setFilename(title);
         imageController.create(img, collection.getId());
         
 //        String taskParam = "<param last-modification-date=\""

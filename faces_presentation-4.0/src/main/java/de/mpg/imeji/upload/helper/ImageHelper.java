@@ -29,7 +29,7 @@ import de.mpg.imeji.escidoc.ItemVO;
 
 public class ImageHelper
 {
-    public static Item setComponent(String contentCategory, Item item, BufferedImage bufferedImage, String fileName,
+    public static Item setComponent(String contentCategory, Item item, byte[] image, String fileName,
             String mimetype, String format, String userHandle) throws Exception
     {
         URL url = null;
@@ -48,21 +48,35 @@ public class ImageHelper
         propCursor.insertChars("private");
         component.getProperties().setFileName(fileName);
         component.getProperties().setMimeType(mimetype);
+       
+        BufferedImage bufferedImage = null;
         if (contentCategory.equals(getThumb()))
         {
+            bufferedImage = ImageIO.read(new ByteArrayInputStream(image));
             bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader
                     .getProperty("xsd.resolution.thumbnail")));
+            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, format, byteOutput);
+            url = ImageHelper.uploadFile(byteOutput.toByteArray(), mimetype, userHandle);
         }
         if (contentCategory.equals(getWeb()))
         {
-            bufferedImage = scaleImage(bufferedImage, Integer
+           bufferedImage = ImageIO.read(new ByteArrayInputStream(image));
+           bufferedImage = scaleImage(bufferedImage, Integer
                     .parseInt(PropertyReader.getProperty("xsd.resolution.web")));
+           ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+           ImageIO.write(bufferedImage, format, byteOutput);
+           url = ImageHelper.uploadFile(byteOutput.toByteArray(), mimetype, userHandle);
         }
         component.getProperties().setContentCategory(contentCategory);
         // use imageIO.write to encode the image back into a byte[]
-        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, format, byteOutput);
-        url = ImageHelper.uploadFile(new ByteArrayInputStream(byteOutput.toByteArray()), mimetype, userHandle);
+        
+        if(contentCategory.equals(getOrig()))
+        {
+            url = ImageHelper.uploadFile(image, mimetype, userHandle);
+        }
+        
+        
         component.getContent().setHref(url.toExternalForm());
         Enum enu = Enum.forString("internal-managed");
         component.getContent().setStorage(enu);
@@ -88,12 +102,12 @@ public class ImageHelper
      * @return The URL of the uploaded file.
      * @throws Exception If anything goes wrong...
      */
-    public static URL uploadFile(InputStream in, String mimetype, String userHandle) throws Exception
+    public static URL uploadFile(byte[] image, String mimetype, String userHandle) throws Exception
     {
         // Prepare the HttpMethod.
         String fwUrl = ServiceLocator.getFrameworkUrl();
         PutMethod method = new PutMethod(fwUrl + "/st/staging-file");
-        method.setRequestEntity(new InputStreamRequestEntity(in));
+        method.setRequestEntity(new InputStreamRequestEntity(new ByteArrayInputStream(image)));
         method.setRequestHeader("Content-Type", mimetype);
         method.setRequestHeader("Cookie", "escidocCookie=" + userHandle);
         // Execute the method with HttpClient.

@@ -44,7 +44,7 @@ public class UploadServlet extends HttpServlet
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
         ServletInputStream inputStream = req.getInputStream();
-        BufferedImage bufferedImage = ImageIO.read(inputStream);
+        //BufferedImage bufferedImage = ImageIO.read(inputStream);
         title = req.getParameter("name");
         StringTokenizer st = new StringTokenizer(title, ".");
         while (st.hasMoreTokens())
@@ -67,9 +67,9 @@ public class UploadServlet extends HttpServlet
             try
             {
                 coll = collectionController.retrieve(URI.create(collection));
-                ItemVO item = DepositController.createImejiItem(bufferedImage, title, description, mimetype, format,
+                ItemVO item = DepositController.createImejiItem(inputStream, title, description, mimetype, format,
                         userHandle, collection, context);
-               DepositController.depositImejiItem(item, userHandle, coll, user);
+               DepositController.depositImejiItem(item, userHandle, coll, user, title);
             }
             catch (Exception e)
             {

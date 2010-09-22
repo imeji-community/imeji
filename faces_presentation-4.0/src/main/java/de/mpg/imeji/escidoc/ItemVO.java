@@ -1,7 +1,10 @@
 package de.mpg.imeji.escidoc;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 
 import org.apache.xmlbeans.XmlCursor;
@@ -61,15 +64,25 @@ public class ItemVO
      * @param userHandle
      * @throws Exception
      */
-    public void attachFile(BufferedImage bufferedImage, String fileName, String mimetype, String format,
+    public void attachFile(InputStream is, String fileName, String mimetype, String format,
             String userHandle) throws Exception
     {
         itemDoc.getItem().addNewContentStreams();
-        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getOrig(), itemDoc.getItem(), bufferedImage,
+       ByteArrayOutputStream bos = new ByteArrayOutputStream();
+       int b;
+        while((b = is.read()) != -1)
+        {
+            bos.write(b);
+        }
+        byte[] image = bos.toByteArray();
+        bos.flush();
+        bos.close();
+        
+        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getOrig(), itemDoc.getItem(), image,
                 fileName, mimetype, format, userHandle));
-        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getWeb(), itemDoc.getItem(), bufferedImage, fileName,
+        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getWeb(), itemDoc.getItem(), image, fileName,
                 mimetype, format, userHandle));
-        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getThumb(), itemDoc.getItem(), bufferedImage,
+        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getThumb(), itemDoc.getItem(), image,
                 fileName, mimetype, format, userHandle));
     }
 

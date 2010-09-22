@@ -1,5 +1,7 @@
 package de.mpg.jena.vo.complextypes;
 
+import java.io.Serializable;
+
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfType;
@@ -8,7 +10,7 @@ import de.mpg.jena.vo.ComplexType;
 @Namespace("http://imeji.mpdl.mpg.de/metadata/")
 @RdfType("geolocation")
 @Embedded
-public class Geolocation extends ComplexType
+public class Geolocation extends ComplexType implements Serializable
 {
     private double longitude;
     private double latitude;

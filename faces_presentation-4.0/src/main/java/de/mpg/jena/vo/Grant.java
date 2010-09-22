@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import thewebsemantic.Embedded;
@@ -9,7 +10,7 @@ import thewebsemantic.RdfType;
 @Namespace("http://imeji.mpdl.mpg.de/")
 @RdfType("grant")
 @Embedded
-public class Grant {
+public class Grant implements Serializable {
 
     @Namespace("http://imeji.mpdl.mpg.de/")
     @RdfType("grantType")

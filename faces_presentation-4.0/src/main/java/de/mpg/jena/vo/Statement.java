@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -15,7 +16,7 @@ import thewebsemantic.RdfType;
 @Namespace("http://imeji.mpdl.mpg.de/mdprofile/")
 @RdfType("statement")
 @Embedded
-public class Statement
+public class Statement implements Serializable
 {
     private URI type = URI.create("http://imeji.mpdl.mpg.de/text");
     private String name;

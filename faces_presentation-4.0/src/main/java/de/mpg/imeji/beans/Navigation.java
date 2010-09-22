@@ -29,6 +29,7 @@
 package de.mpg.imeji.beans;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URISyntaxException;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -36,7 +37,7 @@ import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 
-public class Navigation
+public class Navigation implements Serializable
 {
     public final String LOGIN_URL = "/aa/login?target=$1";
     public final String LOGOUT_URL = "/aa/logout?target=$1";

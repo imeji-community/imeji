@@ -29,13 +29,24 @@ public class CollectionImagesBean extends ImagesBean
     private String objectClass;
     private URI uri;
     private SessionBean sb;
+    private CollectionImeji collection;
 
     public CollectionImagesBean()
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        
     }
 
+    public void init()
+    {
+        if ("collection".equals(objectClass))
+        {
+            CollectionController cc = new CollectionController(sb.getUser());
+            this.collection = cc.retrieve(id);
+        }
+    }
+    
     @Override
     public String getNavigationString()
     {
@@ -51,6 +62,7 @@ public class CollectionImagesBean extends ImagesBean
     @Override
     public List<ImageBean> retrieveList(int offset, int limit)
     {
+        
         ImageController controller = new ImageController(sb.getUser());
         if ("collection".equals(objectClass))
         {
@@ -92,6 +104,16 @@ public class CollectionImagesBean extends ImagesBean
     public void setObjectClass(String objectClass)
     {
         this.objectClass = objectClass;
+    }
+
+    public void setCollection(CollectionImeji collection)
+    {
+        this.collection = collection;
+    }
+
+    public CollectionImeji getCollection()
+    {
+        return collection;
     }
 
 

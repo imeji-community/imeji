@@ -1,10 +1,12 @@
 package de.mpg.imeji.search;
 
+import java.io.Serializable;
+
 import de.mpg.imeji.collection.CollectionsSearchResultBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.util.BeanHelper;
 
-public class QuickSearchBean
+public class QuickSearchBean implements Serializable
 {
     
     private String searchString;

@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -7,7 +8,7 @@ import java.util.LinkedList;
 import thewebsemantic.Id;
 import thewebsemantic.RdfProperty;
 
-public class Container
+public class Container implements Serializable
 {
     private URI id;
     private Properties properties = new Properties();

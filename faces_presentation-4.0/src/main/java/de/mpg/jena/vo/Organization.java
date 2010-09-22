@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import thewebsemantic.Embedded;
@@ -10,7 +11,7 @@ import thewebsemantic.RdfType;
 @Namespace("http://purl.org/escidoc/metadata/profiles/0.1/")
 @RdfType("organizationalunit")
 @Embedded
-public class Organization {
+public class Organization implements Serializable {
 
 
 	

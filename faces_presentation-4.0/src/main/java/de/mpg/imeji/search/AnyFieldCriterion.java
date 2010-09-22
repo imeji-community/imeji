@@ -1,8 +1,9 @@
 package de.mpg.imeji.search;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AnyFieldCriterion extends Criterion{
+public class AnyFieldCriterion extends Criterion implements Serializable{
 	private String searchTerm;
 	
 	public AnyFieldCriterion(){

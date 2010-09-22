@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,7 @@ import thewebsemantic.RdfType;
 @Namespace("http://imeji.mpdl.mpg.de/container/")
 @RdfType("metadata")
 @Embedded
-public class ContainerMetadata {
+public class ContainerMetadata implements Serializable {
 	
 
 	private String title;

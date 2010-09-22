@@ -1,10 +1,11 @@
 package de.mpg.imeji.search;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import de.mpg.imeji.search.beans.AnyFieldCriterionBean;
 
-public class AnyFieldCriterionController {
+public class AnyFieldCriterionController implements Serializable{
 	private List<AnyFieldCriterionBean> anyFieldCriterionBeanList = null;
 	
 	public AnyFieldCriterionController(){

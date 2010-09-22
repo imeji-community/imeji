@@ -1,27 +1,16 @@
 package de.mpg.imeji.search;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
-import de.mpg.imeji.beans.SessionBean;
+
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
-import de.mpg.jena.controller.SearchCriterion.Filtertype;
-import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
-import de.mpg.jena.controller.SearchCriterion.Operator;
-import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.Statement;
 
-public class AdvancedSearchController extends BeanHelper
+public class AdvancedSearchController extends BeanHelper implements Serializable
 {
     private static Logger logger = Logger.getLogger(AdvancedSearchController.class);
 

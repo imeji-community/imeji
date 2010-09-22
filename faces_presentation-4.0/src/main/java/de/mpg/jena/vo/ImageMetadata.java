@@ -1,5 +1,7 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
+
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
@@ -8,7 +10,7 @@ import thewebsemantic.RdfType;
 @Namespace("http://imeji.mpdl.mpg.de/image/")
 @RdfType("metadata")
 @Embedded
-public class ImageMetadata
+public class ImageMetadata implements Serializable
 {
     private String name;
     private ComplexType type;

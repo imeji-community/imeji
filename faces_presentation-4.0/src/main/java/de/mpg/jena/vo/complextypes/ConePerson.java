@@ -1,5 +1,6 @@
 package de.mpg.jena.vo.complextypes;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import thewebsemantic.Embedded;
@@ -12,7 +13,7 @@ import de.mpg.jena.vo.Person;
 @Namespace("http://imeji.mpdl.mpg.de/metadata/")
 @RdfType("cone-person")
 @Embedded
-public class ConePerson extends ComplexType
+public class ConePerson extends ComplexType implements Serializable
 {
     private Person person;
     private URI coneId;

@@ -1,5 +1,6 @@
 package de.mpg.jena.vo.complextypes;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
 import thewebsemantic.Embedded;
@@ -11,7 +12,7 @@ import de.mpg.jena.vo.ComplexType;
 @Namespace("http://imeji.mpdl.mpg.de/metadata/")
 @RdfType("license")
 @Embedded
-public class License extends ComplexType
+public class License extends ComplexType implements Serializable
 {
     private SimpleDateFormat date;
     private String dateFormat = "dd/mm/yyyy";

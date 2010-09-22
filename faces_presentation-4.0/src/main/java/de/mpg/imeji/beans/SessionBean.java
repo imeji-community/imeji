@@ -1,5 +1,6 @@
 package de.mpg.imeji.beans;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +14,9 @@ import javax.faces.event.ActionEvent;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.beans.Navigation.Page;
-import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.User;
 
-public class SessionBean
+public class SessionBean implements Serializable
 {
     private static Logger logger = Logger.getLogger(SessionBean.class);
     private User user = null;

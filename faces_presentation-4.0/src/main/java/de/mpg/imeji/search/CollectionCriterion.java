@@ -1,5 +1,6 @@
 package de.mpg.imeji.search;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,7 +9,7 @@ import javax.faces.model.SelectItem;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
 
-public class CollectionCriterion extends Criterion{
+public class CollectionCriterion extends Criterion implements Serializable{
 
 	private CollectionImeji selectedCollection;
 	private String selectedCollectionId;

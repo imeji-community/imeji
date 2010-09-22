@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +18,7 @@ import thewebsemantic.RdfType;
 
 @Namespace("http://imeji.mpdl.mpg.de/")
 @RdfType("image")
-public class Image
+public class Image implements Serializable
 {
     @Namespace("http://imeji.mpdl.mpg.de/image/")
     @RdfType("visibility")

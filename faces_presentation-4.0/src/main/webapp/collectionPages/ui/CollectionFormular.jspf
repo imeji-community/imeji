@@ -108,7 +108,7 @@
 							</b>
 							<span class="xHuge_area0 xTiny_marginLExcl endline">
 								<h:outputLabel value="#{lbl.first_name}"/>
-								<h:inputText id="inputCreator" styleClass="quad_txtInput" value="#{creator.person.givenName}"/>
+								<h:inputText id="inputCreator2" styleClass="quad_txtInput" value="#{creator.person.givenName}"/>
 							</span>
 							
 							<h:panelGroup styleClass="small_area0">
@@ -136,7 +136,7 @@
 											<span class="noDisplay">: </span>
 										</b>
 										<span class="huge_area0 xTiny_marginLExcl endline">
-											<h:inputText id="inputCreator" styleClass="huge_txtInput" value="#{organization.name.value}"/>
+											<h:inputText id="inputCreator3" styleClass="huge_txtInput" value="#{organization.name.value}"/>
 										</span>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="large_area0 sectionToolSection xLarge_marginRExcl">

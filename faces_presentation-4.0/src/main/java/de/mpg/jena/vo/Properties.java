@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import thewebsemantic.RdfProperty;
 @Namespace("http://imeji.mpdl.mpg.de/")
 @RdfType("properties")
 @Embedded
-public class Properties {
+public class Properties implements Serializable {
 	
 	private URI createdBy;
 	

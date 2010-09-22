@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -13,7 +14,7 @@ import thewebsemantic.RdfType;
 @Namespace("http://purl.org/escidoc/metadata/profiles/0.1/")
 @RdfType("person")
 @Embedded
-public class Person {
+public class Person implements Serializable {
 	
 	
 	private String familyName;

@@ -1,9 +1,11 @@
 package de.mpg.imeji.search;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+
 import javax.faces.model.SelectItem;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
@@ -12,21 +14,19 @@ import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
-public class CollectionCriterionController {
+public class CollectionCriterionController implements Serializable {
 	
 	private List<CollectionCriterion> collectionCriterionList;
 	private int collectionPosition;
     private SessionBean sb;
-    private CollectionController controller;
+
 	private List<SelectItem> collectionList;
 	private List<CollectionImeji> collections;	
  
 	public CollectionCriterionController(){
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        controller = new CollectionController(sb.getUser());
         try {
 			getCollectionList();
 		} catch (Exception e) {
@@ -40,7 +40,8 @@ public class CollectionCriterionController {
 	
 	public void getUserCollecitons() throws Exception{
         collections = new ArrayList<CollectionImeji>();
-		collections = (List<CollectionImeji>)controller.search(new ArrayList<SearchCriterion>(), null, -1, 0);
+        CollectionController cc = new CollectionController(sb.getUser());
+		collections = (List<CollectionImeji>)cc.search(new ArrayList<SearchCriterion>(), null, -1, 0);
 		if(collectionCriterionList != null){
 			for(int i=0; i<collectionCriterionList.size(); i++){
 				collectionCriterionList.get(i).setCollections(collections);

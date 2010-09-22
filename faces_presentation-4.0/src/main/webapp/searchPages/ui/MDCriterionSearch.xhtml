@@ -74,7 +74,7 @@
 								</h:selectOneMenu>
 							</span>
 							<h:panelGroup styleClass="huge_area0_p8 lineToolSection">
-								<h:commandButton styleClass="min_imgBtn add sectionTool" shortDesc="#{lbl.add_collection}" action="#{AdvancedSearchController.collectionCriterionController.addCollection}">
+								<h:commandButton value=" " styleClass="min_imgBtn sectionTool add" action="#{AdvancedSearchController.collectionCriterionController.addCollection}">
 									<f:setPropertyActionListener value="#{indexCollection}" target="#{AdvancedSearchController.collectionCriterionController.collectionPosition}"/>
 								</h:commandButton>
 								<h:commandButton styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}" disabled="#{AdvancedSearchController.collectionCriterionController.size == 0}" action="#{AdvancedSearchController.collectionCriterionController.removeCollection}">

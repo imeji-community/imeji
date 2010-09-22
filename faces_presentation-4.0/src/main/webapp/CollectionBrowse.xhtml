@@ -38,7 +38,7 @@
 <body>
 	<ui:composition template="templates/template_paginator_images.xhtml">	
 			<ui:param name="paginatorListSessionBean" value="#{CollectionImagesBean}" />
-			<ui:param name="headline" value="#{lbl.browsecollection_headline}"/>
+			<ui:param name="headline" value="#{CollectionImagesBean.collection.metadata.title}"/>
 	</ui:composition>
 
 

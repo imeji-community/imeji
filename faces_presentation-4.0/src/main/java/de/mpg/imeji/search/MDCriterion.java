@@ -1,5 +1,6 @@
 package de.mpg.imeji.search;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,7 +8,7 @@ import javax.faces.model.SelectItem;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
 
-public class MDCriterion extends Criterion{
+public class MDCriterion extends Criterion implements Serializable{
 	private String selectedMdName;
 	private Statement selectedStatement;
 	private String mdText;

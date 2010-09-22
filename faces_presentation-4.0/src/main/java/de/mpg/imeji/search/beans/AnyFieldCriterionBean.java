@@ -1,8 +1,10 @@
 package de.mpg.imeji.search.beans;
 
+import java.io.Serializable;
+
 import de.mpg.imeji.search.AnyFieldCriterion;
 
-public class AnyFieldCriterionBean extends CriterionBean{
+public class AnyFieldCriterionBean extends CriterionBean implements Serializable{
 	private AnyFieldCriterion anyFieldCriterionVO;
 	
 	public AnyFieldCriterionBean(){

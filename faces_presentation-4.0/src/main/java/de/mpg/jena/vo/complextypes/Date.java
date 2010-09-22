@@ -1,5 +1,7 @@
 package de.mpg.jena.vo.complextypes;
 
+import java.io.Serializable;
+
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfType;
@@ -8,7 +10,7 @@ import de.mpg.jena.vo.ComplexType;
 @Namespace("http://imeji.mpdl.mpg.de/metadata/")
 @RdfType("date")
 @Embedded
-public class Date extends ComplexType
+public class Date extends ComplexType implements Serializable
 {
     private java.util.Date date;
     

@@ -76,6 +76,7 @@
 		<url-mapping id="collectionImages">
 		<pattern value="/images/#{CollectionImagesBean.objectClass}/#{CollectionImagesBean.id}"/>
 		<view-id>/jsf/CollectionBrowse.xhtml</view-id>
+		<action>#{CollectionImagesBean.init}</action>
 	</url-mapping>
 
 	<url-mapping id="createCollection">

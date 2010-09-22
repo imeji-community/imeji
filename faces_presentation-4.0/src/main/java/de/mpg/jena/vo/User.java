@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -9,7 +10,7 @@ import thewebsemantic.RdfType;
 
 @Namespace("http://xmlns.com/foaf/0.1/")
 @RdfType("Person")
-public class User {
+public class User implements Serializable{
 	
 
 	private String name;

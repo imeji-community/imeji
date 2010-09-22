@@ -14,9 +14,9 @@ import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.cookie.CookieSpec;
 import org.apache.commons.httpclient.methods.PostMethod;
 
-import de.mpg.escidoc.faces.beans.SessionBean;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
+import de.mpg.imeji.beans.SessionBean;
 
 public class LoginHelper 
 {
@@ -37,7 +37,7 @@ public class LoginHelper
 		catch (Exception e) 
 		{
 			sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-			sessionBean.setMessage("Wrong administrator user. Check config file or FW");
+			BeanHelper.info("Wrong administrator user. Check config file or FW");
 		}
 		return handle;
 	}

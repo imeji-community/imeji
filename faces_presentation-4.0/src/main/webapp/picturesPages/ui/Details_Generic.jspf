@@ -2,7 +2,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad">
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 	  <!--  
             CDDL HEADER START
@@ -40,7 +40,7 @@
 			<h:outputText value="#{ImageBean.collection.metadata.title}"/>
 		</h2>
 		
-		<tr:iterator id="mdList" var="md" value="#{ImageBean.imgMetadata}">
+		<a4j:repeat id="mdList" var="md" value="#{ImageBean.imgMetadata}">
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
 				<h:panelGroup styleClass="huge_area0" rendered="#{md.type.person.familyName != null and md.type.person.familyName != ''}">
 					<h:outputLabel value="#{md.type.label}:" />
@@ -65,12 +65,12 @@
 					<h:outputLabel value="Role:"/>
 					<h:outputLabel value="#{md.type.person.role}"/>
 				</h:panelGroup>
-				<tr:iterator id="orgaList" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
+				<a4j:repeat id="orgaList" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
 					<h:panelGroup styleClass="huge_area0"  >
 						<h:outputLabel value="Organizations:"/>
 						<h:outputLabel value="#{orga.name}"/>
 					</h:panelGroup>
-				</tr:iterator>
+				</a4j:repeat>
 			</h:panelGroup>
 			
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'TEXT'}">
@@ -98,9 +98,9 @@
 					<h:outputLabel value="#{md.type.number}"/>
 				</h:panelGroup>						
 			</h:panelGroup>
-		</tr:iterator>
+		</a4j:repeat>
 		
-		<!-- <tr:iterator id="mdTreeList" var="treeList" value="#{Detail.item.mdRecords.descriptionTreeList}">
+		<!-- <a4j:repeat id="mdTreeList" var="treeList" value="#{Detail.item.mdRecords.descriptionTreeList}">
 			<h:panelGroup layout="block" styleClass="huge_area0">
 			<tr:tree id="mdTree" value="#{treeList}" var="mdTree" initiallyExpanded="true">
 				<f:facet name="nodeStamp">
@@ -112,18 +112,18 @@
 						</h:panelGroup>
 						<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{mdTree.simpleValue != null }" layout="block">
 							<span>
-								<tr:outputText inlineStyle="font:bold 12px sans-serif;" value="#{mdTree.label} : " rendered="#{mdTree.group == 'title'}"/>
-								<tr:outputText inlineStyle="font:normal 12px sans-serif;" value="#{mdTree.label} : " rendered="#{mdTree.group != 'title'}"/>
+								<h:outputText style="font:bold 12px sans-serif;" value="#{mdTree.label} : " rendered="#{mdTree.group == 'title'}"/>
+								<h:outputText style="font:normal 12px sans-serif;" value="#{mdTree.label} : " rendered="#{mdTree.group != 'title'}"/>
 							</span>
 							<h:panelGroup styleClass="singleItemValue" >
-								<tr:outputText id="txtMdValue" inlineStyle="font:normal 12px sans-serif;" value="#{mdTree.simpleValue}"/>
+								<h:outputText id="txtMdValue" style="font:normal 12px sans-serif;" value="#{mdTree.simpleValue}"/>
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>	 
 				 </f:facet>
 			</tr:tree>
 			</h:panelGroup>
-		</tr:iterator>
+		</a4j:repeat>
 
 		<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{Detail.item.type == 'face'}">
 			<b class="medium_area0 endline"><h:outputText value="Techn. Metadata" /></b>
@@ -137,8 +137,8 @@
 		<!-- Generic Metadata -->
 		<!-- <div class="half_area0 endline pictureDetails">
 			<h:panelGroup rendered="false">
-				<tr:outputText inlineStyle="font:bold 12px sans-serif;" value="#{Detail.item.mdRecords.screen.resourceClass}" rendered="#{Detail.item.mdRecords.screen.resourceClass != null}"/>
-				<tr:outputText value="Metadata" rendered="#{Detail.item.mdRecords.screen.resourceClass == null}"/>
+				<h:outputText style="font:bold 12px sans-serif;" value="#{Detail.item.mdRecords.screen.resourceClass}" rendered="#{Detail.item.mdRecords.screen.resourceClass != null}"/>
+				<h:outputText value="Metadata" rendered="#{Detail.item.mdRecords.screen.resourceClass == null}"/>
 				<br/><br/>
 			</h:panelGroup>
 		</div> -->

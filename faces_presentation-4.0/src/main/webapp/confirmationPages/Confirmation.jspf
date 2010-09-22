@@ -2,7 +2,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad">
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 <!-- 
 	CDDL HEADER START
@@ -82,10 +82,10 @@
 						</b>
 						<span class="xHuge_area0 xTiny_marginLExcl endline">
 							<h:panelGroup layout="block" styleClass="xHuge_checkbox">
-								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{!SessionBean.agreement and SessionBean.action == 'export'}" simple="true" id="agreement_false" value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
-								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{SessionBean.agreement and SessionBean.action == 'export'}" simple="true" id="agreement_true"  value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
-								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{!SessionBean.agreement and SessionBean.action == 'download'}" simple="true" value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
-								<tr:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{SessionBean.agreement and SessionBean.action == 'download'}" simple="true" value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
+								<h:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{!SessionBean.agreement and SessionBean.action == 'export'}"  id="agreement_false" value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
+								<h:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{SessionBean.agreement and SessionBean.action == 'export'}"  id="agreement_true"  value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
+								<h:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{!SessionBean.agreement and SessionBean.action == 'download'}"  value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
+								<h:selectBooleanCheckbox label="#{lbl.agree}" rendered="#{SessionBean.agreement and SessionBean.action == 'download'}"  value="#{SessionBean.agreement}" immediate="true" valueChangeListener="#{SessionBean.agree}"/>
 							</h:panelGroup>
 						</span>
 					</div>
@@ -211,11 +211,11 @@
 							&#160;<span class="noDisplay">: </span>
 						</b>					
 						<span class="xHuge_area0 xTiny_marginLExcl endline">
-							<tr:iterator var="albumsToDelete" value="#{AlbumSession.selectedAlbums}">
+							<a4j:repeat var="albumsToDelete" value="#{AlbumSession.selectedAlbums}">
 								<h:panelGroup styleClass="xHuge_area0 endline">
-									<tr:outputText value="-  #{albumsToDelete.mdRecord.title}"></tr:outputText>
+									<h:outputText value="-  #{albumsToDelete.mdRecord.title}"></h:outputText>
 								</h:panelGroup>
-							</tr:iterator>					
+							</a4j:repeat>					
 						</span>
 					</div>
 				</div>

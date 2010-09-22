@@ -32,7 +32,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:tr="http://myfaces.apache.org/trinidad">
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <body>
 
 <ui:composition template="template.xhtml">
@@ -57,13 +57,13 @@
 		 		<h:commandButton id="btPartListSize" styleClass="min_imgBtn skipToFirst" value=" " title="#{lbl.paginator_results} 1 - #{paginatorListSessionBean.partListSize}" disabled="#{paginatorListSessionBean.currentPageNumber == 1}" action="#{paginatorListSessionBean.goToFirstPage}"/>
 		 		<h:commandButton id="btList_lkPrevious" styleClass="backward" value="#{lbl.paginator_previous}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 - paginatorListSessionBean.elementsPerPage} - #{paginatorListSessionBean.offset}" disabled="#{paginatorListSessionBean.currentPageNumber == 1}" action="#{paginatorListSessionBean.goToPreviousPage}"/>
 		 		<h:panelGroup styleClass="seperator" />
-		 		<tr:iterator id="paginator" var="paginatorPage" value="#{paginatorListSessionBean.paginatorPages}" first="#{paginatorListSessionBean.firstPaginatorPageNumber - 1}" rows="7">
+		 		<a4j:repeat id="paginator" var="paginatorPage" value="#{paginatorListSessionBean.paginatorPages}" first="#{paginatorListSessionBean.firstPaginatorPageNumber - 1}" rows="7">
 		 	
 		 			<h:commandButton id="btPageNumber1" styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{!(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}"/>
 		 			<h:commandButton id="btPageNumber2" styleClass="xSmall_txtBtn actual" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" disabled="true" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}"/>
 		 			<h:panelGroup styleClass="seperator" />
 		 		
-		 		</tr:iterator>
+		 		</a4j:repeat>
 		 		<h:commandButton id="btList_lkNext" styleClass="forward" value="#{lbl.paginator_next}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 + paginatorListSessionBean.elementsPerPage} -  #{paginatorListSessionBean.offset + 1 + 2*paginatorListSessionBean.elementsPerPage}" disabled="#{paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}" action="#{paginatorListSessionBean.goToNextPage}"/>
 		 		<h:commandButton id="btLinkForLastPage" styleClass="min_imgBtn skipToLast" value=" " title="#{lbl.paginator_results} #{((paginatorListSessionBean.paginatorPageSize-1) * paginatorListSessionBean.elementsPerPage + 1)} - #{paginatorListSessionBean.totalNumberOfElements}" disabled="#{paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}" action="#{paginatorListSessionBean.goToLastPage}"/>
 		 	</div>
@@ -100,13 +100,13 @@
  		<h:commandButton id="btPartListSizeBottom" styleClass="min_imgBtn skipToFirst" value=" " title="#{lbl.paginator_results} 1 - #{paginatorListSessionBean.partListSize}" disabled="#{paginatorListSessionBean.currentPageNumber == 1}" action="#{paginatorListSessionBean.goToFirstPage}"/>
  		<h:commandButton id="btList_lkPreviousBottom" styleClass="backward" value="#{lbl.paginator_previous}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 -paginatorListSessionBean.elementsPerPage} - #{paginatorListSessionBean.offset}" disabled="#{paginatorListSessionBean.currentPageNumber == 1}" action="#{paginatorListSessionBean.goToPreviousPage}"/>
  		<h:panelGroup styleClass="seperator" />
- 		<tr:iterator id="paginator2" var="paginatorPage" value="#{paginatorListSessionBean.paginatorPages}" first="#{paginatorListSessionBean.firstPaginatorPageNumber - 1}" rows="7">
+ 		<a4j:repeat id="paginator2" var="paginatorPage" value="#{paginatorListSessionBean.paginatorPages}" first="#{paginatorListSessionBean.firstPaginatorPageNumber - 1}" rows="7">
  	
  			<h:commandButton id="btPageNumber1Bottom" styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{!(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}"/>
  			<h:commandButton id="btPageNumber2Bottom" styleClass="xSmall_txtBtn actual" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" disabled="true" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}"/>
  			<h:panelGroup styleClass="seperator" />
  		
- 		</tr:iterator>
+ 		</a4j:repeat>
  		<h:commandButton id="btList_lkNextBottom" styleClass="forward" value="#{lbl.paginator_next}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 +paginatorListSessionBean.elementsPerPage} -  #{paginatorListSessionBean.offset + 1 + 2*paginatorListSessionBean.elementsPerPage}" disabled="#{paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}" action="#{paginatorListSessionBean.goToNextPage}"/>
  		<h:commandButton id="btLinkForLastPageBottom" styleClass="min_imgBtn skipToLast" value=" " title="#{lbl.paginator_results} #{((paginatorListSessionBean.paginatorPageSize-1) * paginatorListSessionBean.elementsPerPage + 1)} - #{paginatorListSessionBean.totalNumberOfElements}" disabled="#{paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}" action="#{paginatorListSessionBean.goToLastPage}"/>
  	</div>

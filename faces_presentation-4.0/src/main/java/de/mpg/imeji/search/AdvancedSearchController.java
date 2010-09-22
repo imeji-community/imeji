@@ -10,7 +10,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
-import org.apache.myfaces.trinidad.component.UIXIterator;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.util.BeanHelper;

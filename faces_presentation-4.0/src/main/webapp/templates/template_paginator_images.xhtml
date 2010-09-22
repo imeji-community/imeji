@@ -3,7 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:tr="http://myfaces.apache.org/trinidad"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
 	xmlns:pretty="http://ocpsoft.com/prettyfaces">
 <ui:remove>
 <!--
@@ -55,7 +55,7 @@
 			
 			<ui:define name="list">				
 			
-				<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
+				<h:panelGroup layout="block" styleClass="full_area0 preListHeader" partialTriggers="formular:pictureList::selectBtn">
 					<h:outputLabel value=" sds " styleClass="small_area0" style="visibility: hidden"></h:outputLabel>
 					<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}" styleClass="large_area0">
 						<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
@@ -68,7 +68,7 @@
 				<h:panelGroup layout="block" styleClass="full_area0 tiledList">
 					<ul class="free_area0 fullBrowse">					
 					<!-- Images -->
-					<tr:iterator id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" varStatus="index">
+					<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 						<h:panelGroup id="itemBlock">
 						<li class="large_area0 itemTile">
 							<h:panelGroup styleClass="large_area1_p2 tileIconArea free_area1 matrixItem">
@@ -84,40 +84,40 @@
 							<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->
 							<h:panelGroup styleClass="large_area0">
 							<!-- Album Selected -->				
-								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-									<tr:selectBooleanCheckbox id="pictureCheckbox" partialTriggers="formular:pictureList:#{index.index}:selectBtn" value="#{item.selected}" onchange="getElementById('formular:pictureList:#{index.index}:selectBtn').click();"/>
-									<tr:commandButton id="selectBtn" partialSubmit="true" action="#{item.select}" inlineStyle="visibility:hidden;" />								
-								</tr:panelGroupLayout>
+								<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+									<h:selectBooleanCheckbox id="pictureCheckbox" value="#{item.selected}" onchange="getElementById('formular:pictureList:#{index}:selectBtn').click();"/>
+									<h:commandButton id="selectBtn" partialSubmit="true" action="#{item.select}" style="visibility:hidden;" />								
+								</h:panelGroup>
 								
 								
 								
 								<!-- removed for now !!!!!!!!!!!!!!!!1-->
 								<ui:remove>
 									<!-- View details -->
-									<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+									<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
 										<h:outputLink id="lnkActiveAlbum" value="#{Navigation.applicationUri}#{item.image.id.path}">
 											<h:outputText value="View"/>
 										</h:outputLink>
-									</tr:panelGroupLayout>
+									</h:panelGroup>
 									<!-- Add Active: Image not in Album AND Album is Private-->
-									<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+									<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
 										<h:outputLink id="lnkAddToActiveAlbumActive" value="" onclick="javascript:message('Adding...');">
 											<h:outputText value="#{lbl.add}"/>
 										</h:outputLink>
-									</tr:panelGroupLayout>
+									</h:panelGroup>
 									<!-- Add Inactive: Picture Already in Album -->
-									<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-										<tr:commandLink id="lnkAddToActiveAlbumInactive1" disabled="true">
+									<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+										<h:commandLink id="lnkAddToActiveAlbumInactive1" disabled="true">
 											<h:outputText value="#{lbl.add}"/>
-										</tr:commandLink>
-									</tr:panelGroupLayout>
+										</h:commandLink>
+									</h:panelGroup>
 									<!-- No album selected -->
 									<!-- add disabled to the current album : no album selected -->
-									<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-										<tr:commandLink id="lnkAddToActiveAlbumInactive2" disabled="true">
+									<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+										<h:commandLink id="lnkAddToActiveAlbumInactive2" disabled="true">
 											<h:outputText value="#{lbl.add}"/>
-										</tr:commandLink>
-									</tr:panelGroupLayout>
+										</h:commandLink>
+									</h:panelGroup>
 								</ui:remove>
 								
 								
@@ -133,17 +133,17 @@
 									</h:outputLink>
 								</h:panelGroup>-->
 								<!-- remove item from the view album -->
-								<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea" rendered="#{AlbumSession.current.state == 'PENDING'}">
+								<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea" rendered="#{AlbumSession.current.state == 'PENDING'}">
 									<h:outputLink id="lnkRemoveFromAlbum" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.version.objectId}/REMOVEPICTURE/#{item.item.objid}/back">
 										<h:outputText value="#{lbl.delete}"/>
 									</h:outputLink>
-								</tr:panelGroupLayout>
+								</h:panelGroup>
 							</h:panelGroup>
 							<!-- End View Album Page -->
 							</ui:remove>
 						</li>
 						</h:panelGroup>
-					</tr:iterator>
+					</a4j:repeat>
 				<!-- End images -->
 				</ul>
 				
@@ -154,20 +154,20 @@
 
 			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">	
 				<h:panelGroup layout="block" styleClass="full_area1_p8">
-					<tr:iterator var="group" value="#{paginatorListSessionBean.facets.groups}" varStatus="index">
+					<a4j:repeat var="group" value="#{paginatorListSessionBean.facets.groups}" rowKeyVar="index">
 						<h:panelGroup layout="block" styleClass="full_area0" rendered="#{!empty group.list}">
 							<h:outputText value="#{group.label}"/> 
 							<h:outputText value="No title" rendered="#{empty group.label}"/> 
 							<span style="padding-left:20px"/>
-							<tr:iterator var="facet" value="#{group.list}" varstatus="index">
+							<a4j:repeat var="facet" value="#{group.list}" rowKeyVar="index">
 								<h:outputLink value="#{facet.uri}">
 									<h:outputText value="#{facet.label}(#{facet.count})"/>
 								</h:outputLink>
 								<span style="padding-left:20px"/>
-							</tr:iterator>
+							</a4j:repeat>
 							<br/>
 						</h:panelGroup>
-					</tr:iterator>
+					</a4j:repeat>
 				</h:panelGroup>
 			</h:panelGroup>
 			

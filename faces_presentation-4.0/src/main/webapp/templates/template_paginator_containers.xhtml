@@ -3,7 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:tr="http://myfaces.apache.org/trinidad"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
 	xmlns:pretty="http://ocpsoft.com/prettyfaces">
 <ui:remove>
 <!--
@@ -70,7 +70,7 @@
 			
 				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'ORGANIZE'}">
 				<!-- ORGANIZE content menu lower line starts here -->
-					<h:outputLink  id="lnkCreate" styleClass="free_area0" value="#{Navigation.collectionUrl}?reset=1">
+					<h:outputLink  id="lnkCreate2" styleClass="free_area0" value="#{Navigation.collectionUrl}?reset=1">
 							<h:outputText value="#{lbl.collection_create}"></h:outputText>
 					</h:outputLink>
 					<h:outputText styleClass="seperator"/>
@@ -199,16 +199,16 @@
 			</h:panelGroup>
 			-->
 			
-			<tr:iterator var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0">
+			<a4j:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0">
 				<h:panelGroup>
 				   
 				    <tr class="full_0area0 listItem">
 				      	
 				      	<td class="free_area0 endline">
 				      		<span class="free_area0_p8 endline itemSelectArea">
-								<tr:selectBooleanCheckbox id="selAlbum" simple="true" styleClass="itemCheckBox" value="false">
+								<h:selectBooleanCheckbox id="selAlbum"  styleClass="itemCheckBox" value="false">
 									<f:attribute value="#{container}" name="album"/>
-								</tr:selectBooleanCheckbox>
+								</h:selectBooleanCheckbox>
 								&#160;
 				      		</span>
 				      	</td>
@@ -267,7 +267,7 @@
 				      	</td>
 				    </tr>
 				</h:panelGroup>
-			</tr:iterator>
+			</a4j:repeat>
 		</tbody>
 	</table>
 			

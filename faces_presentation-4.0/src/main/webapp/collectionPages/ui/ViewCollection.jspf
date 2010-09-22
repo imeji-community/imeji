@@ -2,7 +2,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad">
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 <!--
  CDDL HEADER START
@@ -58,15 +58,15 @@
 				<h:panelGroup layout="block" styleClass="full_area0">
 					<b><h:outputText id="txtAlbumDescription" styleClass="free_area0 endline" value="#{lbl.description}" /></b>
 					<h:panelGroup styleClass="double_area0">
-						<tr:iterator var="abstracts" value="#{CollectionBean.collection.mdRecord.abstracts}">
+						<a4j:repeat var="abstracts" value="#{CollectionBean.collection.mdRecord.abstracts}">
 							 <h:outputText id="description" value="#{abstracts.value}" styleClass="double_txtInput"/>
-						</tr:iterator>
+						</a4j:repeat>
 					</h:panelGroup>
 				</h:panelGroup>
 
 				<h:panelGroup layout="block" styleClass="full_area0">
 					<b><h:outputText id="txtAlbumAuthor" styleClass="full_area0 endline" value="#{lbl.authors}" /></b>					
-					<tr:iterator var="creators" varStatus="status" value="#{CollectionBean.collection.mdRecord.creators}">
+					<a4j:repeat var="creators" rowKeyVar="status" value="#{CollectionBean.collection.mdRecord.creators}">
 						<h:panelGroup layout="block" styleClass="suggestAnchor">
 							<h:panelGroup class="huge_area0">
 								<h:outputText styleClass="large_area0 endline" value="#{lbl.author}"/>
@@ -77,13 +77,13 @@
 									<h:outputText value="#{lbl.family_name}" />
 								</h:panelGroup>
 								
-								<tr:outputText id="familyname" value="#{creators.familyName}" styleClass="double_area0"/>
+								<h:outputText id="familyname" value="#{creators.familyName}" styleClass="double_area0"/>
 								
 								<h:panelGroup styleClass="double_area0">
 									<h:outputText value="#{lbl.first_name}" />
 								</h:panelGroup>
 								
-								<tr:outputText id="givenname" value="#{creators.givenName}" styleClass="double_area0"/>
+								<h:outputText id="givenname" value="#{creators.givenName}" styleClass="double_area0"/>
 								
 							</h:panelGroup>
 
@@ -93,11 +93,11 @@
 							</h:panelGroup>
 							
 							<h:panelGroup layout="block" styleClass="full_area0">
-								<tr:iterator var="affiliation" value="#{creators.organizations}" varStatus="statusAffiliation">
+								<a4j:repeat var="affiliation" value="#{creators.organizations}" rowKeyVar="statusAffiliation">
 									<h:panelGroup styleClass="quad_area0">
-										<tr:outputText id="affiliation" value="#{affiliation.name}" styleClass="double_area0 endline"/>
+										<h:outputText id="affiliation" value="#{affiliation.name}" styleClass="double_area0 endline"/>
 									</h:panelGroup>
-								</tr:iterator>
+								</a4j:repeat>
 							</h:panelGroup>
 							
 							<h:panelGroup layout="block" styleClass="huge_area0">
@@ -105,7 +105,7 @@
 							
 							</h:panelGroup>		
 						</h:panelGroup>		
-					</tr:iterator>
+					</a4j:repeat>
 				</h:panelGroup>
 				
 				<h:outputText styleClass="huge_area0" escape="false" value="&#160;" />

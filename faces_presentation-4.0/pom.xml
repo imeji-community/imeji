@@ -22,6 +22,9 @@
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
+          <excludes>
+          	<exclude>de/mpg/escidoc/faces/**</exclude>
+          </excludes>
         </configuration>
       </plugin>
     </plugins>
@@ -39,6 +42,7 @@
       <version>3.2.0</version>
       <scope>provided</scope>
     </dependency>
+    <!-- 
     <dependency>
       <groupId>trinidad</groupId>
       <artifactId>trinidad-api</artifactId>
@@ -51,6 +55,7 @@
       <version>1.2.11</version>
       <scope>provided</scope>
     </dependency>
+    -->
     <dependency>
     	<groupId>de.mpg.escidoc.services</groupId>
     	<artifactId>framework_access</artifactId>
@@ -166,13 +171,19 @@
    	<dependency>
 		<groupId>org.richfaces.framework</groupId>
 		<artifactId>richfaces-api</artifactId>
-		<version>3.3.0.GA</version>
+		<version>3.3.3.Final</version>
 		<scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.richfaces.framework</groupId>
 		<artifactId>richfaces-impl</artifactId>
-		<version>3.3.0.GA</version>
+		<version>3.3.3.Final</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.richfaces.ui</groupId>
+		<artifactId>richfaces-ui</artifactId>
+		<version>3.3.3.Final</version>
 		<scope>provided</scope>
 	</dependency>
 	<dependency> 

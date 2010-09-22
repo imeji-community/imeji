@@ -2,7 +2,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad">
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 	  <!--  
   CDDL HEADER START
@@ -85,7 +85,7 @@
 			<h:panelGroup layout="block" styleClass="huge_area0">
 				<sup>&#160;</sup><b><h:outputText styleClass="huge_area0" value="Author"></h:outputText></b>
 				<h:panelGroup styleClass="huge_area0">
-					<tr:iterator id="AuthorList1" var="author" varStatus="authorStatus" value="#{AlbumSession.creatorsForDisplay}" >
+					<a4j:repeat id="AuthorList1" var="author" rowKeyVar="authorStatus" value="#{AlbumSession.creatorsForDisplay}" >
 						<div>
 							<h:outputText id="txtAuthorName1" styleClass="huge_area0" value="#{author.person.familyName} , #{author.person.givenName} #{author.sup}" escape="false">
 								<f:attribute name="currentAuthor" value="#{authorStatus}"></f:attribute>
@@ -95,19 +95,19 @@
 								<h:outputLink id="lnkAuthorPortfolioLink1" styleClass="authorCard" value="#{ConeHelper.conePortfolioLink}#{author.person.identifier.id}?lang=en" target="_blank">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</h:outputLink>
 							</h:panelGroup>
 						</div>
-					</tr:iterator>
+					</a4j:repeat>
 				</h:panelGroup>
 			</h:panelGroup>
 			<!-- Affiliations -->
 			<h:panelGroup layout="block" styleClass="huge_area0">
 				<b class="huge_area0 endline"><h:outputText value="Affiliation"></h:outputText></b>
-				<tr:iterator id="AffiliationList1" var="affiliation" varStatus="aff" value="#{AlbumSession.allAffiliations}">
+				<a4j:repeat id="AffiliationList1" var="affiliation" rowKeyVar="aff" value="#{AlbumSession.allAffiliations}">
 					<div>
 						<h:panelGroup styleClass="huge_area0">
-							<h:outputText id="affiliationName1" value="#{aff.index + 1} #{affiliation.name.value}"></h:outputText>
+							<h:outputText id="affiliationName1" value="#{aff + 1} #{affiliation.name.value}"></h:outputText>
 						</h:panelGroup>
 					</div>
-				</tr:iterator>
+				</a4j:repeat>
 			</h:panelGroup>
 		<!-- For the view of an album : description of the album -->
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{AlbumSession.current.mdRecord.abstracts[0].value != ''}">
@@ -180,7 +180,7 @@
 			<h:panelGroup layout="block" styleClass="huge_area0">
 				<sup>&#160;</sup><b><h:outputText styleClass="huge_area0" value="Author"></h:outputText></b>
 				<h:panelGroup styleClass="huge_area0">
-					<tr:iterator id="AuthorList2" var="author" varStatus="authorStatus" value="#{AlbumSession.creatorsForDisplay}" >
+					<a4j:repeat id="AuthorList2" var="author" rowKeyVar="authorStatus" value="#{AlbumSession.creatorsForDisplay}" >
 						<div>
 							<h:outputText id="txtAuthorName2" styleClass="huge_area0" value="#{author.person.familyName} , #{author.person.givenName} #{author.sup}" escape="false">
 								<f:attribute name="currentAuthor" value="#{authorStatus}"></f:attribute>
@@ -190,19 +190,19 @@
 								<h:outputLink id="lnkAuthorPortfolioLink2" styleClass="authorCard" value="#{ConeHelper.conePortfolioLink}#{author.person.identifier.id}?lang=en" target="_blank">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</h:outputLink>
 							</h:panelGroup>
 						</div>
-					</tr:iterator>
+					</a4j:repeat>
 				</h:panelGroup>
 			</h:panelGroup>
 			<!-- Affiliations -->
 			<h:panelGroup layout="block" styleClass="huge_area0">
 				<b class="huge_area0 endline"><h:outputText value="Affiliation"></h:outputText></b>
-				<tr:iterator id="AffiliationList2" var="affiliation" varStatus="aff" value="#{AlbumSession.allAffiliations}">
+				<a4j:repeat id="AffiliationList2" var="affiliation" rowKeyVar="aff" value="#{AlbumSession.allAffiliations}">
 					<div>
 						<h:panelGroup styleClass="huge_area0">
-							<h:outputText id="affiliationName2" value="#{aff.index + 1} #{affiliation.name.value}"></h:outputText>
+							<h:outputText id="affiliationName2" value="#{aff + 1} #{affiliation.name.value}"></h:outputText>
 						</h:panelGroup>
 					</div>
-				</tr:iterator>
+				</a4j:repeat>
 			</h:panelGroup>
 			<!-- For the view of an album : description of the album -->
 			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{AlbumSession.current.mdRecord.abstracts[0].value != ''}">

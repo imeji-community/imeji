@@ -3,7 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:tr="http://myfaces.apache.org/trinidad">
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 <!--
 
@@ -45,52 +45,52 @@
 				<h:panelGroup rendered="#{SelectedBean.editMetadataBean.numberOfProfiles == '1'}">
 					
 					<h:panelGroup layout="block" styleClass="full_area1_p8">
-						<tr:iterator id="mdList" var="metadata" value="#{SelectedBean.editMetadataBean.metadata}" varStatus="index">
+						<a4j:repeat id="mdList" var="metadata" value="#{SelectedBean.editMetadataBean.metadata}" rowKeyVar="index">
 							<h:panelGroup layout="block" styleClass="full_area0">
 							  	<h:panelGroup layout="block" styleClass="huge_area0">
 									<h:outputText value="#{lbl.metadata_select}" styleClass="large_label"/>
-									<h:selectOneMenu value="#{metadata.selectedStatementName}" styleClass="huge_select" onchange="getElementById('formular:mdList:#{index.index}:changeTypeBtn').click();">
+									<h:selectOneMenu value="#{metadata.selectedStatementName}" styleClass="huge_select" onchange="getElementById('formular:mdList:#{index}:changeTypeBtn').click();">
 										<f:selectItems  value="#{SelectedBean.editMetadataBean.statementMenu}"/>
 									</h:selectOneMenu>
-									<tr:commandButton id="changeTypeBtn" simple="true" action="#{metadata.changeType}" inlineStyle="visibility:hidden;"/>
+									<h:commandButton id="changeTypeBtn"  action="#{metadata.changeType}" style="visibility:hidden;"/>
 								</h:panelGroup>
 								
 								
 								
 								<h:panelGroup layout="block" styleClass="xLarge_area0" >
 									
-									<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
+									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='DATE'}">
 										<h:outputLabel value="(YYYY-MM-DD)" styleClass="xLarge_label"/>
-										<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.date}">
-											<tr:convertDateTime type="date" pattern="yyyy-MM-dd"/>
-										</tr:inputText>
+										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.date}">
+											<f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
+										</h:inputText>
 									</h:panelGroup>
-									<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}"/>
+									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}"/>
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='CONE_AUTHOR'}">
 										<h:outputLabel value="Family Name:" styleClass="xLarge_label"/>
-										<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.person.familyName}" />
+										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.familyName}" />
 										<h:outputLabel value="Given Name:" styleClass="xLarge_label"/>
-										<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.person.givenName}" /> 
+										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.givenName}" /> 
 										<h:outputLabel value="Organization:" styleClass="xLarge_label"/>
 										<h:inputText styleClass="large_txtInput" value="#{metadata.metadata.type.person.organizations[0].name}" />
 									</h:panelGroup>
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='GEOLOCATION'}">
 										<h:outputLabel value="Latitude:" styleClass="xLarge_label"/>
-										<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.latitude}" />
+										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.latitude}" />
 										<h:outputLabel value="Longitude:" styleClass="xLarge_label"/>
-										<tr:inputText simple="true" styleClass="large_txtInput" value="#{metadata.metadata.type.longitude}" />
+										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.longitude}" />
 									</h:panelGroup>
 								</h:panelGroup>
-								<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{SelectedBean.editMetadataBean.addMetadata}">
-									<f:setPropertyActionListener value="#{index.index}" target="#{SelectedBean.editMetadataBean.mdPosition}"/>
-								</tr:commandButton>
-								<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}" action="#{SelectedBean.editMetadataBean.removeMetadata}">
-									<f:setPropertyActionListener value="#{index.index}" target="#{SelectedBean.editMetadataBean.mdPosition}"/>
-								</tr:commandButton>
+								<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{SelectedBean.editMetadataBean.addMetadata}">
+									<f:setPropertyActionListener value="#{index}" target="#{SelectedBean.editMetadataBean.mdPosition}"/>
+								</h:commandButton>
+								<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}" action="#{SelectedBean.editMetadataBean.removeMetadata}">
+									<f:setPropertyActionListener value="#{index}" target="#{SelectedBean.editMetadataBean.mdPosition}"/>
+								</h:commandButton>
 								
 							</h:panelGroup>
-						</tr:iterator>
+						</a4j:repeat>
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" styleClass="full_area0 preListHeader">

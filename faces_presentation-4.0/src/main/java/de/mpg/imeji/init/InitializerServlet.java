@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import thewebsemantic.NotFoundException;
 
 import de.escidoc.core.common.exceptions.application.notfound.ContentModelNotFoundException;
-import de.mpg.escidoc.faces.util.LoginHelper;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.jena.controller.UserController;

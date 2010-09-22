@@ -42,10 +42,8 @@
 			<supported-locale>de</supported-locale>
 		</locale-config>
 
-		<!-- Use the Trinidad RenderKit -->
-		<default-render-kit-id>
-			org.apache.myfaces.trinidad.core
-		</default-render-kit-id>
+		 <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>    
+
 	</application>
 	<lifecycle>
 		<phase-listener id="facesMessagesListener">de.mpg.imeji.util.FacesMessagesPhaseListener</phase-listener>

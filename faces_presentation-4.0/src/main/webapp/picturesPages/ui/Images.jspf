@@ -2,7 +2,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad">
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 	  <!--  
 	  CDDL HEADER START
@@ -34,7 +34,7 @@
 </ui:remove>
 <f:subview id="Images">
 <!-- Images -->
-	<tr:iterator id="pictureList" var="item" value="#{SessionBean.items}" rows="0">
+	<a4j:repeat id="pictureList" var="item" value="#{SessionBean.items}" rows="0">
 		<h:panelGroup>
 		<li class="large_area0 itemTile">
 			<h:panelGroup styleClass="large_area1_p2 tileIconArea #{item.itemStyleClass}">
@@ -55,34 +55,34 @@
 			<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->
 			<h:panelGroup styleClass="large_area0" rendered="#{(SessionBean.currentUrl == 'home' || SessionBean.currentUrl == 'searchResult' || SessionBean.currentUrl == 'person' || SessionBean.currentUrl == 'resource')}">
 			<!-- Album Selected -->
-				<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-					<tr:selectBooleanCheckbox id="pictureCheckbox" value="#{item.selected}"/>
-				</tr:panelGroupLayout>				
+				<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+					<h:selectBooleanCheckbox id="pictureCheckbox" value="#{item.selected}"/>
+				</h:panelGroup>				
 				<!-- View details -->
-				<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+				<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
 					<h:outputLink id="lnkActiveAlbum" value="#{Navigation.detailUrl}/#{item.item.objid}">
 						<h:outputText value="View"/>
 					</h:outputLink>
-				</tr:panelGroupLayout>
+				</h:panelGroup>
 				<!-- Add Active: Image not in Album AND Album is Private-->
-				<tr:panelGroupLayout rendered="#{!item.inAlbum and AlbumSession.active.latestVersion.objectId != null  and AlbumSession.active.state == 'PENDING'}" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+				<h:panelGroup rendered="#{!item.inAlbum and AlbumSession.active.latestVersion.objectId != null  and AlbumSession.active.state == 'PENDING'}" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
 					<h:outputLink id="lnkAddToActiveAlbumActive" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{item.item.objid}/back" onclick="javascript:message('Adding...');">
 						<h:outputText value="#{lbl.add}"/>
 					</h:outputLink>
-				</tr:panelGroupLayout>
+				</h:panelGroup>
 				<!-- Add Inactive: Picture Already in Album -->
-				<tr:panelGroupLayout rendered="#{item.inAlbum and (SessionBean.currentUrl == 'home' || SessionBean.currentUrl == 'searchResult' || SessionBean.currentUrl == 'person') and SessionBean.user != null}" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-					<tr:commandLink id="lnkAddToActiveAlbumInactive1" disabled="true">
+				<h:panelGroup rendered="#{item.inAlbum and (SessionBean.currentUrl == 'home' || SessionBean.currentUrl == 'searchResult' || SessionBean.currentUrl == 'person') and SessionBean.user != null}" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+					<h:commandLink id="lnkAddToActiveAlbumInactive1" disabled="true">
 						<h:outputText value="#{lbl.add}"/>
-					</tr:commandLink>
-				</tr:panelGroupLayout>
+					</h:commandLink>
+				</h:panelGroup>
 			<!-- No album selected -->
 				<!-- add disabled to the current album : no album selected -->
-				<tr:panelGroupLayout rendered="#{!item.inAlbum and AlbumSession.active.latestVersion.objectId == null  and SessionBean.user != null and  SessionBean.currentUrl != 'resource'}" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-					<tr:commandLink id="lnkAddToActiveAlbumInactive2" disabled="true">
+				<h:panelGroup rendered="#{!item.inAlbum and AlbumSession.active.latestVersion.objectId == null  and SessionBean.user != null and  SessionBean.currentUrl != 'resource'}" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+					<h:commandLink id="lnkAddToActiveAlbumInactive2" disabled="true">
 						<h:outputText value="#{lbl.add}"/>
-					</tr:commandLink>
-				</tr:panelGroupLayout>
+					</h:commandLink>
+				</h:panelGroup>
 			</h:panelGroup>
 			<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
 			<!-- View Album Page -->
@@ -94,16 +94,16 @@
 					</h:outputLink>
 				</h:panelGroup>
 				<!-- remove item from the view album -->
-				<tr:panelGroupLayout styleClass="free_area0 xTiny_marginLExcl facesControlIconArea" rendered="#{AlbumSession.current.state == 'PENDING'}">
+				<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea" rendered="#{AlbumSession.current.state == 'PENDING'}">
 					<h:outputLink id="lnkRemoveFromAlbum" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.version.objectId}/REMOVEPICTURE/#{item.item.objid}/back">
 						<h:outputText value="#{lbl.delete}"/>
 					</h:outputLink>
-				</tr:panelGroupLayout>
+				</h:panelGroup>
 			</h:panelGroup>
 			<!-- End View Album Page -->
 		</li>
 		</h:panelGroup>
-	</tr:iterator>
+	</a4j:repeat>
 <!-- End images -->
 
 </f:subview>

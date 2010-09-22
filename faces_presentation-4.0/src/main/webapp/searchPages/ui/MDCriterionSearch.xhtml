@@ -2,7 +2,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad"
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
       xmlns:pretty="http://ocpsoft.com/prettyfaces">
 <ui:remove>
 	  <!--  
@@ -42,11 +42,11 @@
 				
 		<div class="free_area0 itemBlockContent endline">	
 			<h:panelGroup layout="block" styleClass="free_area0 endline itemLine">
-				<tr:iterator var="collection" value="#{AdvancedSearchController.collectionCriterionController.collectionCriterionList}" varStatus="indexCollection">
+				<a4j:repeat var="collection" value="#{AdvancedSearchController.collectionCriterionController.collectionCriterionList}" rowKeyVar="indexCollection">
 					<h:panelGroup>
 					
 						<!-- Collection -->
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine" rendered="#{indexCollection.index > 0}">
+						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine" rendered="#{indexCollection > 0}">
 							<b class="xLarge_area0_p8 endline labelLine clear">&#160;
 								<span class="noDisplay"> </span>
 							</b>
@@ -74,12 +74,12 @@
 								</h:selectOneMenu>
 							</span>
 							<h:panelGroup styleClass="huge_area0_p8 lineToolSection">
-								<tr:commandButton styleClass="min_imgBtn add sectionTool" shortDesc="#{lbl.add_collection}" action="#{AdvancedSearchController.collectionCriterionController.addCollection}">
-									<f:setPropertyActionListener value="#{indexCollection.index}" target="#{AdvancedSearchController.collectionCriterionController.collectionPosition}"/>
-								</tr:commandButton>
-								<tr:commandButton styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}" disabled="#{AdvancedSearchController.collectionCriterionController.size == 0}" action="#{AdvancedSearchController.collectionCriterionController.removeCollection}">
-									<f:setPropertyActionListener value="#{indexCollection.index}" target="#{AdvancedSearchController.collectionCriterionController.collectionPosition}"/>
-								</tr:commandButton>
+								<h:commandButton styleClass="min_imgBtn add sectionTool" shortDesc="#{lbl.add_collection}" action="#{AdvancedSearchController.collectionCriterionController.addCollection}">
+									<f:setPropertyActionListener value="#{indexCollection}" target="#{AdvancedSearchController.collectionCriterionController.collectionPosition}"/>
+								</h:commandButton>
+								<h:commandButton styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}" disabled="#{AdvancedSearchController.collectionCriterionController.size == 0}" action="#{AdvancedSearchController.collectionCriterionController.removeCollection}">
+									<f:setPropertyActionListener value="#{indexCollection}" target="#{AdvancedSearchController.collectionCriterionController.collectionPosition}"/>
+								</h:commandButton>
 							</h:panelGroup>	
 						</h:panelGroup>
 									
@@ -88,8 +88,8 @@
 						<!-- MD -->
 						
 										
-							<tr:iterator var="md" value="#{collection.mdCriterionList}" varStatus="indexMD">
-									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder" rendered="#{indexMD.index > 0}">
+							<a4j:repeat var="md" value="#{collection.mdCriterionList}" rowKeyVar="indexMD">
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder" rendered="#{indexMD > 0}">
 										<b class="xLarge_area0_p8 endline labelLine clear">&#160;
 											<span class="noDisplay">: </span>
 										</b>
@@ -112,23 +112,23 @@
 											<h:inputText styleClass="xLarge_txtInput" id="md" value="#{md.mdText}" />
 										</span>
 										<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
-											<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_md}" action="#{collection.addMd}">
-												<f:setPropertyActionListener value="#{indexMD.index}" target="#{collection.mdPosition}"/>
-											</tr:commandButton>
-											<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_md}" disabled="#{collection.mdCriterionListSize == 1}" action="#{collection.removeMd}">
-												<f:setPropertyActionListener value="#{indexMD.index}" target="#{collection.mdPosition}"/>
-											</tr:commandButton>
+											<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_md}" action="#{collection.addMd}">
+												<f:setPropertyActionListener value="#{indexMD}" target="#{collection.mdPosition}"/>
+											</h:commandButton>
+											<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_md}" disabled="#{collection.mdCriterionListSize == 1}" action="#{collection.removeMd}">
+												<f:setPropertyActionListener value="#{indexMD}" target="#{collection.mdPosition}"/>
+											</h:commandButton>
 										</h:panelGroup>
 									</h:panelGroup>
 									
 									
 								
-							</tr:iterator>
+							</a4j:repeat>
 						
 
 						
 					</h:panelGroup>
-				</tr:iterator>
+				</a4j:repeat>
 				</h:panelGroup>
 				     		 <a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide: MD Profile" /></a>  		     
 		</div>

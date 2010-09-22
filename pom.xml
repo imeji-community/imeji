@@ -212,6 +212,11 @@
 		    <id>Jenabean</id> 
 		    <url>http://jenabean.googlecode.com/svn/repo</url> 
   		</repository>
+  		<repository> 
+		    <id>JBoss</id> 
+		    <url>http://repository.jboss.org/maven2/</url> 
+  		</repository>
+  		
 		<repository>
          <releases>
             <enabled>true</enabled>

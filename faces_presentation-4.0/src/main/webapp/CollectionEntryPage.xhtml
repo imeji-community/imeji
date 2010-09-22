@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:tr="http://myfaces.apache.org/trinidad">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 	<ui:remove>
 		<!--
 
@@ -73,11 +73,11 @@
 								<h1><h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> </h1>
 							</h:panelGroup>
 							<h:panelGroup styleClass="full_area1_p8">
-							<tr:iterator var="img" value="#{ViewCollectionBean.images}">
+							<a4j:repeat var="img" value="#{ViewCollectionBean.images}">
 								
 									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
 								
-							</tr:iterator>
+							</a4j:repeat>
 							<h2>
 								<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}">
 									<h:outputText value ="#{lbl.collection_view_all_images}"/>

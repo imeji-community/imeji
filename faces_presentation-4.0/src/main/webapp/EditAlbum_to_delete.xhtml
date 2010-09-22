@@ -28,7 +28,7 @@
  Gesellschaft zur Förderung der Wissenschaft e.V.
  All rights reserved. Use is subject to license terms.
 -->
-<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:tr="http://myfaces.apache.org/trinidad">
+<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 		<f:loadBundle var="lbl" basename="labels"/>
 		<f:loadBundle var="msg" basename="messages"/>
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -44,7 +44,7 @@
 				<meta http-equiv="expires" content="0"/>
 			</head>
 			<body>
-				<tr:form id="formEditAlbum">
+				<h:form id="formEditAlbum">
 					<h:panelGroup rendered="#{SessionBean.checkLogin}"/>
 					<h:outputText value="FACES HOME PAGE" style="height: 0px; width: 0px; visibility:hidden; position: absolute;" />
 					<div id="page_margins">
@@ -63,7 +63,7 @@
 							</div>
 						</div>
 					</div>
-				</tr:form>
+				</h:form>
 			</body>
 		</html>
 	</f:view>

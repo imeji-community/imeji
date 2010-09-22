@@ -3,7 +3,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:tr="http://myfaces.apache.org/trinidad">
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 
 <ui:composition template="template_collection.xhtml">
 	<h:messages/>
@@ -61,7 +61,7 @@
 								
 						<!-- Authors -->
 						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<tr:iterator var="creator" value="#{FormularBean.collection.metadata.persons}" varStatus="indexA">
+							<a4j:repeat var="creator" value="#{FormularBean.collection.metadata.persons}" rowKeyVar="indexA">
 								<h:panelGroup>
 									<b class="xLarge_area0_p8 endline labelLine clear">
 										<h:outputText value="#{lbl.author}*"/>
@@ -87,12 +87,12 @@
 									
 									<!-- Add/Remove Author buttons -->		
 									<h:panelGroup styleClass="small_area0">
-										<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_author}" action="#{FormularBean.addAuthor}">
-											<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
-										</tr:commandButton>
-										<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_author}" action="#{FormularBean.removeAuthor}">
-											<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
-										</tr:commandButton>
+										<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_author}" action="#{FormularBean.addAuthor}">
+											<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
+										</h:commandButton>
+										<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_author}" action="#{FormularBean.removeAuthor}">
+											<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
+										</h:commandButton>
 									</h:panelGroup>	
 											
 									<!-- Organizations -->
@@ -104,7 +104,7 @@
 										<h:outputText value="#{lbl.organization}*"/>
 									</span>
 									
-									<tr:iterator var="organization" value="#{creator.organizations}" varStatus="indexO">
+									<a4j:repeat var="organization" value="#{creator.organizations}" rowKeyVar="indexO">
 										<h:panelGroup styleClass="endline">
 											<h:panelGroup>
 												<b class="xLarge_area0_p8 endline labelLine clear">
@@ -116,19 +116,19 @@
 												</span>
 											</h:panelGroup>
 											<h:panelGroup layout="block" styleClass="large_area0 sectionToolSection xLarge_marginRExcl">
-												<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_organization}" action="#{FormularBean.addOrganization}">
-													<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
-													<f:setPropertyActionListener value="#{indexO.index}" target="#{FormularBean.organizationPosition}"/>
-												</tr:commandButton>
-												<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_organization}" action="#{FormularBean.removeOrganization}">
-													<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
-													<f:setPropertyActionListener value="#{indexO.index}" target="#{FormularBean.organizationPosition}"/>
-												</tr:commandButton>
+												<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_organization}" action="#{FormularBean.addOrganization}">
+													<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
+													<f:setPropertyActionListener value="#{indexO}" target="#{FormularBean.organizationPosition}"/>
+												</h:commandButton>
+												<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_organization}" action="#{FormularBean.removeOrganization}">
+													<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
+													<f:setPropertyActionListener value="#{indexO}" target="#{FormularBean.organizationPosition}"/>
+												</h:commandButton>
 											</h:panelGroup>
 										</h:panelGroup>
-									</tr:iterator>
+									</a4j:repeat>
 								</h:panelGroup>
-							</tr:iterator>
+							</a4j:repeat>
 						</h:panelGroup>
 					</div>
 				</h:panelGroup>
@@ -141,7 +141,7 @@
 					
 					<div class="free_area0 itemBlockContent endline">
 						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{empty FormularBean.mdProfileBean.statements}">
-							<tr:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.create_profile}" action="#{FormularBean.mdProfileBean.addStatement}"/>
+							<h:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.create_profile}" action="#{FormularBean.mdProfileBean.addStatement}"/>
 							<h:outputText value="#{lbl.create_profile}"></h:outputText>
 						</h:panelGroup>
 						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{empty CollectionBean.metadataBeanList}">
@@ -149,14 +149,14 @@
 						<!--  <h:selectOneMenu value="#{FormularBean.collectionMenuSelected}" valueChangeListener="">
 								<f:selectItems value="#{FormularBean.collectionsMenu}"/>
 							</h:selectOneMenu>-->
-							<tr:commandLink styleClass="" text="#{lbl.load_template}" shortDesc="#{lbl.load_template}" action="#{FormularBean.loadTemplate}"/>
+							<h:commandLink styleClass="" text="#{lbl.load_template}" shortDesc="#{lbl.load_template}" action="#{FormularBean.loadTemplate}"/>
 						</h:panelGroup>
 				
-						<tr:iterator id="profile" var="stBean" value="FormularBean.mdProfileBean.statements" varStatus="position">
+						<a4j:repeat id="profile" var="stBean" value="FormularBean.mdProfileBean.statements" rowKeyVar="position">
 							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
 								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="Elements" rendered="#{position.index == 0}"/>
-									<h:outputText value="&#160;" rendered="#{position.index != 0}"/>
+									<h:outputText value="Elements" rendered="#{position == 0}"/>
+									<h:outputText value="&#160;" rendered="#{position != 0}"/>
 									<span class="noDisplay">: </span>
 								</b>
 								
@@ -164,9 +164,9 @@
 										
 									<h:panelGroup styleClass="huge_area0 tiny_marginLExcl">
 										<h:outputLabel styleClass="large_label" value="#{lbl.select_metadata}" />
-										<tr:selectOneChoice simple="true" styleClass="large_select" value="#{stBean.statement}" >
+										<h:selectOneMenu  styleClass="large_select" value="#{stBean.statement}" >
 											<f:selectItems value="#{MdProfileBean.vocabulary}"/>
-										</tr:selectOneChoice>
+										</h:selectOneMenu>
 									</h:panelGroup>
 											
 									<h:panelGroup class="medium_area1 xmall_marginRIncl">
@@ -183,38 +183,38 @@
 											
 									<h:panelGroup styleClass="xHuge_area0 xSmall_marginLExcl" rendered="#{stBean.constraintsSize != 0}">
 										<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
-										<tr:iterator id="profile" var="constraint" value="#{stBean.statement.constraints}" varStatus="index">
+										<a4j:repeat id="profile" var="constraint" value="#{stBean.statement.constraints}" rowKeyVar="index">
 											<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
-												<tr:inputText simple="true" styleClass="large_txtInput endline" value="#{constraint}"/>
+												<h:inputText  styleClass="large_txtInput endline" value="#{constraint}"/>
 												<h:panelGroup styleClass="large_area0 endline">
-													<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{stBean.addConstraint}">
-														<f:setPropertyActionListener value="#{index.index}" target="#{stBean.constraintPosition}"/>
-													</tr:commandButton>
-													<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}" action="#{stBean.removeConstraint}">
-														<f:setPropertyActionListener value="#{index.index}" target="#{stBean.constraintPosition}"/>
-													</tr:commandButton>
+													<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{stBean.addConstraint}">
+														<f:setPropertyActionListener value="#{index}" target="#{stBean.constraintPosition}"/>
+													</h:commandButton>
+													<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}" action="#{stBean.removeConstraint}">
+														<f:setPropertyActionListener value="#{index}" target="#{stBean.constraintPosition}"/>
+													</h:commandButton>
 												</h:panelGroup>
 											</h:panelGroup>
-										</tr:iterator>
+										</a4j:repeat>
 									</h:panelGroup>
 											
 									<h:panelGroup styleClass="xLarge_area0 xSmall_marginLExcl endline" rendered="#{profile.constraintsSize == 0}">
-										<tr:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_constraint}" action="#{stBean.statement.addConstraint}"/>
+										<h:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_constraint}" action="#{stBean.statement.addConstraint}"/>
 										<h:outputLabel styleClass="" value="#{lbl.add_constraint}" />
 									</h:panelGroup>
 											
 								</h:panelGroup>
 										
 								<span class="large_area0_p8 lineToolSection">
-									<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" action="#{FormularBean.mdProfileBean.addStatement}">
-										<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.mdProfileBean.statementPosition}"/>
-									</tr:commandButton>
-									<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{remove_metadata}" action="#{FormularBean.mdProfileBean.removeStatement}">
-										<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.mdProfileBean.statementPosition}"/>
-									</tr:commandButton>
+									<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" action="#{FormularBean.mdProfileBean.addStatement}">
+										<f:setPropertyActionListener value="#{position}" target="#{FormularBean.mdProfileBean.statementPosition}"/>
+									</h:commandButton>
+									<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{remove_metadata}" action="#{FormularBean.mdProfileBean.removeStatement}">
+										<f:setPropertyActionListener value="#{position}" target="#{FormularBean.mdProfileBean.statementPosition}"/>
+									</h:commandButton>
 								</span>
 							</h:panelGroup>
-						</tr:iterator>
+						</a4j:repeat>
 					</div>
 				</h:panelGroup>
 					

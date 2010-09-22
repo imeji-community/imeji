@@ -24,7 +24,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.Lock;
 import com.hp.hpl.jena.sparql.function.library.substring;
 
-import de.mpg.escidoc.faces.metastore_test.DataFactory;
+
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;

@@ -3,7 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:tr="http://myfaces.apache.org/trinidad">
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 <!--
 
@@ -62,11 +62,11 @@
 		<!--  <ui:define name="actionsMenu">
 			<h:panelGroup  rendered="#{Session.selectedMenu == 'VIEW'}">-->
 			<!-- VIEW content menu lower line starts here 
-				<tr:iterator id="viewList" var="menu" varStatus="status" value="#{FacesContainerListBean.viewMenu}">
+				<a4j:repeat id="viewList" var="menu" rowKeyVar="status" value="#{FacesContainerListBean.viewMenu}">
 					<h:outputLink  id="lnkView" styleClass="free_area0" value="#{menu.value}" disabled="#{FacesContainerListBean.firstPage == menu.value}">
 						<h:outputText value="#{menu.label}"></h:outputText>
 					</h:outputLink>
-				</tr:iterator>
+				</a4j:repeat>
 			 VIEW content menu lower line ends here -->
 		<!--	</h:panelGroup>
 		</ui:define>

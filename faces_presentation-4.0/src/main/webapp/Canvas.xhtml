@@ -122,7 +122,7 @@
 			</head>
 			<body>
 				<h:graphicImage id="canvasBackground" style="position: absolute; top: -1000px; left: -1000px;" value="#{Navigation.applicationUrl}resources/eSciDoc_CSS/themes/skin_highContrast/images/canvasBG.jpg"/>
-				<tr:form id="form1">
+				<h:form id="form1">
 					<h:panelGroup rendered="#{SessionBean.checkLogin}"/>
 					<div class="wrapper">
 						<div class="full_area0 header clear">
@@ -231,9 +231,9 @@
 														
 								</div>
 								<h:panelGroup layout="block" styleClass="full_area0 itemBlock imageCarousel" style="overflow-x: auto; white-space: nowrap; padding: 0.28em;" rendered="#{!((Canvas.selected == Canvas.albums[0].value) || (Canvas.selected == 'null'))}">
-										<tr:iterator var="item" value="#{Canvas.items}" id="list" rows="0">
+										<a4j:repeat var="item" value="#{Canvas.items}" id="list" rows="0">
 											<h:graphicImage styleClass="xTiny_marginLIncl" height="127px" value="#{item.thumbnailUrl}"/>
-										</tr:iterator>
+										</a4j:repeat>
 								</h:panelGroup>
 
 								<h:panelGroup layout="block" styleClass="full_area0 itemBlock" style="height: 600px;" rendered="#{!(!((Canvas.selected == Canvas.albums[0].value) || (Canvas.selected == 'null')))}">
@@ -255,7 +255,7 @@
 						<!-- end: footer section -->
 						</div>
 					</div>
-				</tr:form>
+				</h:form>
 			</body>
 			<script type="text/javascript">
 			$('.imageCarousel').find('img').click(function(){

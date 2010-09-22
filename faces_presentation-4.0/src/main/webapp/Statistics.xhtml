@@ -3,7 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:tr="http://myfaces.apache.org/trinidad">
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 <!--
 
@@ -143,7 +143,7 @@
 									<b class="xLarge_area0">
 										&#160;<h:outputText value="#{lbl.visits} per #{lbl.month}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
 									</b>
-									<tr:iterator id="iteratorStatisticVisits" value="#{StatisticsBean.visitTable.list}" var="stat">
+									<a4j:repeat id="iteratorStatisticVisits" value="#{StatisticsBean.visitTable.list}" var="stat">
 										<h:panelGroup styleClass="xLarge_area0">
 											<h:panelGroup styleClass="medium_area0 labelLine endline">
 												<h:outputText id="lblStatisticVisitsRequest" value="#{stat.requests}"/>
@@ -152,7 +152,7 @@
 												<h:outputText value="&#160;(#{stat.date})"/>
 											</h:panelGroup>
 										</h:panelGroup>
-									</tr:iterator>
+									</a4j:repeat>
 								</h:panelGroup>
 								<h:panelGroup styleClass="free_area0 xTiny_marginLExcl endline">
 									<tr:chart type="verticalBar" YMajorGridLineCount="1" value="#{StatisticsBean.numberOfVisitCharts}" inlineStyle="width:540px; height:400px;" legendPosition="none" perspective="false" animationDuration="200"></tr:chart>
@@ -179,7 +179,7 @@
 									<b class="xLarge_area0">
 										&#160;<h:outputText value="#{lbl.login_statistics} per #{lbl.month}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
 									</b>
-									<tr:iterator id="iteratorStatisticLogins" value="#{StatisticsBean.loginTable.list}" var="stat">
+									<a4j:repeat id="iteratorStatisticLogins" value="#{StatisticsBean.loginTable.list}" var="stat">
 										<h:panelGroup styleClass="xLarge_area0">
 											<h:panelGroup styleClass="medium_area0 labelLine endline">
 												<h:outputText id="lblStatisticLoginsRequest" value="#{stat.requests}"/>
@@ -188,7 +188,7 @@
 												<h:outputText value="&#160;(#{stat.date})"/>
 											</h:panelGroup>
 										</h:panelGroup>
-									</tr:iterator>
+									</a4j:repeat>
 								</h:panelGroup>
 								<h:panelGroup styleClass="free_area0 xTiny_marginLExcl endline">
 									<tr:chart type="verticalBar" YMajorGridLineCount="1" value="#{StatisticsBean.numberOfLoginCharts}" inlineStyle="width:540px; height:400px;" legendPosition="none" perspective="false" animationDuration="200"></tr:chart>
@@ -215,7 +215,7 @@
 									<b class="xLarge_area0">
 										&#160;<h:outputText value="#{lbl.exports} per #{lbl.month}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
 									</b>
-									<tr:iterator id="iteratorStatisticDownloads" value="#{StatisticsBean.exportTable.list}" var="stat">
+									<a4j:repeat id="iteratorStatisticDownloads" value="#{StatisticsBean.exportTable.list}" var="stat">
 										<h:panelGroup styleClass="xLarge_area0">
 											<h:panelGroup styleClass="medium_area0 labelLine endline">
 												<h:outputText id="lblStatisticLoginsRequest" value="#{stat.requests}"/>
@@ -224,7 +224,7 @@
 												<h:outputText value="&#160;(#{stat.date})"/>
 											</h:panelGroup>
 										</h:panelGroup>
-									</tr:iterator>
+									</a4j:repeat>
 								</h:panelGroup>
 								<h:panelGroup styleClass="free_area0 xTiny_marginLExcl endline">
 									<tr:chart type="verticalBar" YMajorGridLineCount="1" value="#{StatisticsBean.numberOfExportCharts}" inlineStyle="width:540px; height:400px;" legendPosition="none" perspective="false" animationDuration="200"></tr:chart>
@@ -251,7 +251,7 @@
 									<b class="xLarge_area0">
 										&#160;<h:outputText value="#{lbl.exported_pictures} per #{lbl.month}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
 									</b>
-									<tr:iterator id="iteratorStatisticImages" value="#{StatisticsBean.imagesTable.list}" var="stat">
+									<a4j:repeat id="iteratorStatisticImages" value="#{StatisticsBean.imagesTable.list}" var="stat">
 										<h:panelGroup styleClass="xLarge_area0">
 											<h:panelGroup styleClass="medium_area0 labelLine endline">
 												<h:outputText id="lblStatisticLoginsRequest" value="#{stat.requests}"/>
@@ -260,7 +260,7 @@
 												<h:outputText value="&#160;(#{stat.date})"/>
 											</h:panelGroup>
 										</h:panelGroup>
-									</tr:iterator>
+									</a4j:repeat>
 								</h:panelGroup>
 								<h:panelGroup styleClass="free_area0 xTiny_marginLExcl endline">
 									<tr:chart type="verticalBar" YMajorGridLineCount="1" value="#{StatisticsBean.numberOfImagesExportedCharts}" inlineStyle="width:540px; height:400px;" legendPosition="none" perspective="false" animationDuration="200"></tr:chart>

@@ -2,7 +2,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad">
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 <!--
  CDDL HEADER START
@@ -64,28 +64,28 @@
 				<h:panelGroup layout="block" styleClass="huge_area0">
 					<b><h:outputText id="txtAlbumDescription" styleClass="double_area0 endline" value="#{lbl.description}" /></b>
 					<h:panelGroup styleClass="double_area0">
-						<tr:iterator var="abstracts" value="#{AlbumFormular.album.mdRecord.abstracts}">
+						<a4j:repeat var="abstracts" value="#{AlbumFormular.album.mdRecord.abstracts}">
 							<h:inputTextarea id="descriptionField" rows="4" value="#{abstracts.value}" styleClass="double_txtInput" immediate="true" valueChangeListener="#{AlbumFormular.abstractsListener}"></h:inputTextarea>
-						</tr:iterator>
+						</a4j:repeat>
 					</h:panelGroup>
 				</h:panelGroup>
 
 				<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{AlbumFormular.type == 'CREATE'}">
-					<tr:selectBooleanCheckbox styleClass="pushCheckbox" id="make_active" value="#{SessionBean.active}" immediate="true" valueChangeListener="#{SessionBean.makeActive}"/>
+					<h:selectBooleanCheckbox styleClass="pushCheckbox" id="make_active" value="#{SessionBean.active}" immediate="true" valueChangeListener="#{SessionBean.makeActive}"/>
 					<h:outputLabel for="make_active" value="Make this my active album"></h:outputLabel>
 				</h:panelGroup>
 				
 				<h:panelGroup layout="block" styleClass="huge_area0">
 					<b><h:outputText id="txtAlbumAuthor" styleClass="huge_area0 endline" value="#{lbl.authors}" /></b>					
-					<tr:iterator var="creators" varStatus="status" value="#{AlbumFormular.album.mdRecord.creators}">
+					<a4j:repeat var="creators" rowKeyVar="status" value="#{AlbumFormular.album.mdRecord.creators}">
 						<div class="suggestAnchor">
 							<span class="huge_area0">
 								<h:outputText styleClass="large_area0 endline" value="#{lbl.author}"/>
 								<h:panelGroup styleClass="small_area0 sectionToolSection small_marginRIncl">
-									<tr:commandButton styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_author}" actionListener="#{AlbumFormular.removeAuthor}" disabled="#{AlbumFormular.numberOfCreators == '1'}" immediate="true">
+									<h:commandButton styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_author}" actionListener="#{AlbumFormular.removeAuthor}" disabled="#{AlbumFormular.numberOfCreators == '1'}" immediate="true">
 										<f:attribute name="creator" value="#{creators}"></f:attribute>
-									</tr:commandButton>
-									<tr:commandButton styleClass="min_imgBtn add sectionTool" shortDesc="#{lbl.add_author}" action="#{AlbumFormular.addAuthor}" immediate="true"/>
+									</h:commandButton>
+									<h:commandButton styleClass="min_imgBtn add sectionTool" shortDesc="#{lbl.add_author}" action="#{AlbumFormular.addAuthor}" immediate="true"/>
 								</h:panelGroup>
 							</span>
 
@@ -95,13 +95,13 @@
 									<h:outputText value="*" />
 								</h:panelGroup>
 								<h:inputText id="familyname" value="#{creators.person.familyName}" styleClass="double_txtInput" immediate="true" valueChangeListener="#{AlbumFormular.familyNameListener}" >
-									<f:attribute name="index" value="#{status.index}"/>
+									<f:attribute name="index" value="#{status}"/>
 								</h:inputText>
 								<h:panelGroup styleClass="double_area0">
 									<h:outputText value="#{lbl.first_name}" />
 								</h:panelGroup>
 								<h:inputText id="givenname" value="#{creators.person.givenName}" styleClass="double_txtInput" valueChangeListener="#{AlbumFormular.givenNameListener}" immediate="true">
-									<f:attribute name="index" value="#{status.index}"/>
+									<f:attribute name="index" value="#{status}"/>
 								</h:inputText>
 							</h:panelGroup>
 
@@ -110,29 +110,29 @@
 								<h:outputText value="*" />
 							</span>
 							<h:panelGroup layout="block" styleClass="huge_area0">
-								<tr:iterator var="affiliations" value="#{creators.person.organizations}" varStatus="statusAffiliation">
+								<a4j:repeat var="affiliations" value="#{creators.person.organizations}" rowKeyVar="statusAffiliation">
 									<h:panelGroup styleClass="quad_area0">
 										<h:inputText id="affiliation" value="#{affiliations.name.value}" styleClass="double_txtInput endline" immediate="true" valueChangeListener="#{AlbumFormular.affiliationListener}">
-											<f:attribute name="indexCreator" value="#{status.index}" />
-											<f:attribute name="indexAffiliation" value="#{statusAffiliation.index}"/>
+											<f:attribute name="indexCreator" value="#{status}" />
+											<f:attribute name="indexAffiliation" value="#{statusAffiliation}"/>
 										</h:inputText>
 										<h:panelGroup styleClass="small_area0 sectionToolSection xLarge_marginRExcl">
-											<tr:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add an affiliation" actionListener="#{AlbumFormular.addAffiliation}" immediate="true">
+											<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="Add an affiliation" actionListener="#{AlbumFormular.addAffiliation}" immediate="true">
 												<f:attribute name="creator" value="#{creators}"></f:attribute>
-											</tr:commandButton>
-											<tr:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove this affiliation" actionListener="#{AlbumFormular.removeAffiliation}" disabled="#{creators.person.organizationsSize == '1'}" immediate="true">
+											</h:commandButton>
+											<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="Remove this affiliation" actionListener="#{AlbumFormular.removeAffiliation}" disabled="#{creators.person.organizationsSize == '1'}" immediate="true">
 												<f:attribute name="creator" value="#{creators}"></f:attribute>
 												<f:attribute name="affiliation" value="#{affiliations}"></f:attribute>
-											</tr:commandButton>
+											</h:commandButton>
 										</h:panelGroup>
 									</h:panelGroup>
-								</tr:iterator>
+								</a4j:repeat>
 							</h:panelGroup>
 							<h:panelGroup layout="block" styleClass="huge_area0">
 								&#160;
 							</h:panelGroup>		
 						</div>			
-					</tr:iterator>
+					</a4j:repeat>
 				</h:panelGroup>
 				<h:outputText styleClass="huge_area0" escape="false" value="&#160;" />
 				<h:panelGroup layout="block" styleClass="huge_area0">

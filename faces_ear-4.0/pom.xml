@@ -101,6 +101,7 @@
 							<artifactId>saxon</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
+						<!-- 
 						<jarModule>
 							<groupId>trinidad</groupId>
 							<artifactId>trinidad-api</artifactId>
@@ -109,6 +110,27 @@
 						<jarModule>
 							<groupId>trinidad</groupId>
 							<artifactId>trinidad-impl</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						-->
+						<jarModule>
+							<groupId>org.richfaces.framework</groupId>
+							<artifactId>richfaces-api</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							<groupId>org.richfaces.framework</groupId>
+							<artifactId>richfaces-impl</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							<groupId>org.richfaces.ui</groupId>
+							<artifactId>richfaces-ui</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							<groupId>commons-digester</groupId>
+							<artifactId>commons-digester</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
 						<jarModule>
@@ -363,6 +385,7 @@
 			<version>8.7</version>
 			<scope>compile</scope>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>trinidad</groupId>
 			<artifactId>trinidad-api</artifactId>
@@ -375,10 +398,35 @@
 			<version>1.2.11</version>
 			<scope>provided</scope>
 		</dependency>
+		-->
+		<dependency>
+			<groupId>org.richfaces.framework</groupId>
+			<artifactId>richfaces-api</artifactId>
+			<version>3.3.3.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.framework</groupId>
+			<artifactId>richfaces-impl</artifactId>
+			<version>3.3.3.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.ui</groupId>
+			<artifactId>richfaces-ui</artifactId>
+			<version>3.3.3.Final</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.7.0</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+			<version>1.8</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

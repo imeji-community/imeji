@@ -11,7 +11,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
-import org.apache.myfaces.trinidad.component.core.nav.CoreCommandButton;
 
 import de.mpg.imeji.beans.Navigation.Page;
 import de.mpg.imeji.util.BeanHelper;

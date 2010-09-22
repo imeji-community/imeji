@@ -2,7 +2,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad">
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 <!-- 
  CDDL HEADER START
@@ -57,7 +57,7 @@
 			
 			<h:panelGroup styleClass="seperator" />
 
-			<tr:iterator id="PaginatorPageList" var="page" value="#{AlbumListBean.pages}">
+			<a4j:repeat id="PaginatorPageList" var="page" value="#{AlbumListBean.pages}">
 				<h:panelGroup>
 					<h:outputLink id="lnkPaginatorPageActive" value="#{page.value}" rendered="#{(AlbumListBean.url != page.value)}" styleClass="xSmall_txtBtn">
 						<h:outputText value="#{page.label}"></h:outputText>
@@ -67,7 +67,7 @@
 					</h:outputLink>
 					<h:panelGroup styleClass="seperator" rendered="true"></h:panelGroup>
 				</h:panelGroup>
-			</tr:iterator>
+			</a4j:repeat>
 			
 			<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{AlbumListBean.nextPage}" disabled="#{AlbumListBean.url == AlbumListBean.nextPage}">
 				<h:outputText value="#{lbl.paginatorButton_next_label}"></h:outputText>

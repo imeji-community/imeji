@@ -2,7 +2,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:tr="http://myfaces.apache.org/trinidad"
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
       xmlns:pretty="http://ocpsoft.com/prettyfaces">
 <ui:remove>
 	  <!--  
@@ -63,10 +63,10 @@
 		<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 			
 			<!-- List of first level metadata for the search formular -->
-			<tr:iterator id="mdTreeList" var="treeList" value="#{Search.formular}" varStatus="status">
+			<a4j:repeat id="mdTreeList" var="treeList" value="#{Search.formular}" rowKeyVar="status">
 				
 				<!-- each first metadata is represented as a tree, with all metadata child in it  -->
-				<tr:tree value="#{treeList}" id="mdTree" var="mdTree" styleClass="" immediate="false" initiallyExpanded="true" varStatus="treePos">
+				<tr:tree value="#{treeList}" id="mdTree" var="mdTree" styleClass="" immediate="false" initiallyExpanded="true" rowKeyVar="treePos">
 					
 					<f:facet name="nodeStamp">
 						<h:panelGroup>
@@ -140,22 +140,22 @@
 											&#160;<h:outputText value="  #{mdTree.label}" rendered="#{mdTree.group != 'title'}" /><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
 										</b>
 										<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline">
-											<tr:iterator id="constraintsList" var="constraints" value="#{mdTree.node.constraintArray}">
-												<tr:iterator id="optionsList" var="options" value="#{constraints.literalOptionArray}" varStatus="optionPosition ">
+											<a4j:repeat id="constraintsList" var="constraints" value="#{mdTree.node.constraintArray}">
+												<a4j:repeat id="optionsList" var="options" value="#{constraints.literalOptionArray}" rowKeyVar="optionPosition ">
 													<h:panelGroup styleClass="large_checkbox tiny_marginRIncl">
-														<tr:selectBooleanCheckbox simple="true" id="checkSearch" value="#{Search.session.checkBox[mdTree.index][options.domNode.firstChild.nodeValue]}" immediate="false" valueChangeListener="#{Search.session.checkBoxListener}">
+														<h:selectBooleanCheckbox  id="checkSearch" value="#{Search.session.checkBox[mdTree.index][options.domNode.firstChild.nodeValue]}" immediate="false" valueChangeListener="#{Search.session.checkBoxListener}">
 															<f:attribute name="index" value="#{mdTree.index}"/>
 															<f:attribute name="constraint" value="#{options.domNode.firstChild.nodeValue}"/>
-														</tr:selectBooleanCheckbox>
+														</h:selectBooleanCheckbox>
 														<tr:inputHidden value="#{mdTree.index}.#{options.domNode.firstChild.nodeValue}"></tr:inputHidden>
 														<h:outputLabel>
-															<tr:outputText value="#{options.domNode.firstChild.nodeValue}"/> 
-															<tr:outputText rendered="#{!SessionBean.allowed}" value="   (#{ApplicationBean.statisticsMapPublic[mdTree.index][options.domNode.firstChild.nodeValue]})   "></tr:outputText>
-															<tr:outputText rendered="#{SessionBean.allowed}" value="   (#{ApplicationBean.statisticsMapPrivate[mdTree.index][options.domNode.firstChild.nodeValue]})   "></tr:outputText>
+															<h:outputText value="#{options.domNode.firstChild.nodeValue}"/> 
+															<h:outputText rendered="#{!SessionBean.allowed}" value="   (#{ApplicationBean.statisticsMapPublic[mdTree.index][options.domNode.firstChild.nodeValue]})   "></h:outputText>
+															<h:outputText rendered="#{SessionBean.allowed}" value="   (#{ApplicationBean.statisticsMapPrivate[mdTree.index][options.domNode.firstChild.nodeValue]})   "></h:outputText>
 														</h:outputLabel>
 													</h:panelGroup>
-												</tr:iterator>
-											</tr:iterator>
+												</a4j:repeat>
+											</a4j:repeat>
 										</h:panelGroup>
 									</h:panelGroup>
 								</h:panelGroup> 
@@ -168,7 +168,7 @@
 								</h3>
 								<h:panelGroup styleClass="seperator" rendered="#{mdTree.group == 'title'}"></h:panelGroup>
 								<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
-									<tr:iterator var="values" value="#{Search.session.textfield[mdTree.index]}" varStatus="position">
+									<a4j:repeat var="values" value="#{Search.session.textfield[mdTree.index]}" rowKeyVar="position">
 										<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 											<b class="xLarge_area0_p8 endline labelLine clear">
 												&#160;<h:outputText value="#{mdTree.label}" rendered="#{mdTree.group != 'title'}"/><h:panelGroup styleClass="noDisplay"> </h:panelGroup>
@@ -184,16 +184,16 @@
 												<tr:inputHidden value="#{mdTree.index}"></tr:inputHidden>
 											</h:panelGroup>
 											<span class="large_area0_p8 lineToolSection">
-												<tr:commandButton  id="cmdAdd" styleClass="min_imgBtn groupTool add" shortDesc="Add Field" actionListener="#{Search.session.addTextField}" immediate="true">
+												<h:commandButton  id="cmdAdd" styleClass="min_imgBtn groupTool add" shortDesc="Add Field" actionListener="#{Search.session.addTextField}" immediate="true">
 													<f:attribute name="index" value="#{mdTree.index}"></f:attribute>
-												</tr:commandButton>
-												<tr:commandButton id="cmdRemove" styleClass="min_imgBtn groupTool remove" rendered="#{Search.textFieldSize != 0}" shortDesc="Remove Field" actionListener="#{Search.session.removeTextField}" immediate="true">
+												</h:commandButton>
+												<h:commandButton id="cmdRemove" styleClass="min_imgBtn groupTool remove" rendered="#{Search.textFieldSize != 0}" shortDesc="Remove Field" actionListener="#{Search.session.removeTextField}" immediate="true">
 													<f:attribute name="index" value="#{mdTree.index}"></f:attribute>
 													<f:attribute name="value" value="#{values}"></f:attribute>
-												</tr:commandButton>
+												</h:commandButton>
 											</span>													
 										</h:panelGroup>
-									</tr:iterator>
+									</a4j:repeat>
 								</h:panelGroup>
 							</h:panelGroup>
 								
@@ -238,7 +238,7 @@
 						</h:panelGroup>
 					 </f:facet>
 				 </tr:tree>
-			</tr:iterator>
+			</a4j:repeat>
 		</h:panelGroup>
 	</h:panelGroup>
 

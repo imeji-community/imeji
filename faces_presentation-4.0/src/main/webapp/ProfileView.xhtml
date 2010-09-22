@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:tr="http://myfaces.apache.org/trinidad">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 	<ui:remove>
 		<!--
 
@@ -98,7 +98,7 @@
 									</h:panelGroup>
 									
 									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-										<tr:iterator var="creator" varStatus="status" value="#{ViewMdPofileBean.profile.persons}">
+										<a4j:repeat var="creator" rowKeyVar="status" value="#{ViewMdPofileBean.profile.persons}">
 											<b class="xLarge_area0_p8 endline labelLine clear">
 												<h:outputText value="#{lbl.authors}"/>
 												<span class="noDisplay">: </span>
@@ -125,15 +125,15 @@
 											<span class="xTiny_marginLExcl endline">
 												<h:outputText value="#{lbl.organization} : "/>
 											</span>
-											<tr:iterator var="organization" value="#{creator.organizations}" varStatus="indexO">
+											<a4j:repeat var="organization" value="#{creator.organizations}" rowKeyVar="indexO">
 												<h:panelGroup styleClass="endline">
 													<span class="endline">
 														<h:outputText value="#{organization.name}"/>
-														<h:outputText value=", " rendered="#{indexO.index > 0}"/>
+														<h:outputText value=", " rendered="#{indexO > 0}"/>
 													</span>
 												</h:panelGroup>
-											</tr:iterator>
-										</tr:iterator>
+											</a4j:repeat>
+										</a4j:repeat>
 									</h:panelGroup>
 								</div>
 							</h:panelGroup>
@@ -148,7 +148,7 @@
 								<!-- Picture status of the Collection -->
 								<div class="free_area0 itemBlockContent endline">	
 									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-										<tr:iterator var="statement" varStatus="status" value="#{ViewMdProfileBean.profile.statements}">
+										<a4j:repeat var="statement" rowKeyVar="status" value="#{ViewMdProfileBean.profile.statements}">
 											<b class="xLarge_area0_p8 endline labelLine clear">
 												<h:outputText value="#{lbl.metadata}"/>
 												<span class="noDisplay">: </span>
@@ -175,16 +175,16 @@
 											<span class="xHuge_area0 xTiny_marginLExcl endline">
 												<h:outputText value="#{lbl.labels} : "/>
 											
-												<tr:iterator var="label" value="#{statement.labels}" varStatus="indexO">
+												<a4j:repeat var="label" value="#{statement.labels}" rowKeyVar="indexO">
 													<h:panelGroup styleClass="endline">
 														<span class="endline">
 															<h:outputText value="#{label} (#{label.lang})"/>
-															<h:outputText value=", " rendered="#{indexO.index > 0}"/>
+															<h:outputText value=", " rendered="#{indexO > 0}"/>
 														</span>
 													</h:panelGroup>
-												</tr:iterator>
+												</a4j:repeat>
 											</span>
-										</tr:iterator>
+										</a4j:repeat>
 									</h:panelGroup>
 								</div>
 							</h:panelGroup>

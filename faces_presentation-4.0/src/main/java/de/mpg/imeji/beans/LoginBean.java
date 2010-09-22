@@ -10,7 +10,6 @@ import javax.xml.rpc.ServiceException;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.log4j.Logger;
 
-import de.mpg.escidoc.faces.statistics.StatisticsBean;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.ImageController;
@@ -95,19 +94,21 @@ public class LoginBean
     private void createLoginStatisticData(User user) throws HttpException, ServiceException, IOException,
             URISyntaxException
     {
-        // Create a statistic data "visit" for statistics "number of visits"
-        String statisticDataXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-                + "<statistic-record><scope objid=\"1\"/>" + "<parameter name=\"handler\"><stringvalue>"
-                + StatisticsBean.INSTANCE_ID + "</stringvalue></parameter>"
-                + "<parameter name=\"request\"><stringvalue>login</stringvalue></parameter>"
-                + "<parameter name=\"interface\"><stringvalue>SOAP</stringvalue></parameter>"
-                + "<parameter name=\"successful\"><stringvalue>1</stringvalue></parameter>"
-                + "<parameter name=\"internal\"><stringvalue>0</stringvalue></parameter>"
-                + "<parameter name=\"user_id\"><stringvalue>" + user.getEmail() + "</stringvalue></parameter>"
-                + "</statistic-record>";
-        // StatisticsBean statisticsBean = (StatisticsBean) BeanHelper.getRequestBean(StatisticsBean.class);
-        // ServiceLocator.getStatisticDataHandler(statisticsBean.getStatisitcsEditorHandle()).create(statisticDataXml);
-        StatisticsBean statisticsBean = (StatisticsBean)BeanHelper.getApplicationBean(StatisticsBean.class);
-        ServiceLocator.getStatisticDataHandler(statisticsBean.getAdminUserHandle()).create(statisticDataXml);
+        
+//        // Create a statistic data "visit" for statistics "number of visits"
+//        String statisticDataXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+//                + "<statistic-record><scope objid=\"1\"/>" + "<parameter name=\"handler\"><stringvalue>"
+//                + StatisticsBean.INSTANCE_ID + "</stringvalue></parameter>"
+//                + "<parameter name=\"request\"><stringvalue>login</stringvalue></parameter>"
+//                + "<parameter name=\"interface\"><stringvalue>SOAP</stringvalue></parameter>"
+//                + "<parameter name=\"successful\"><stringvalue>1</stringvalue></parameter>"
+//                + "<parameter name=\"internal\"><stringvalue>0</stringvalue></parameter>"
+//                + "<parameter name=\"user_id\"><stringvalue>" + user.getEmail() + "</stringvalue></parameter>"
+//                + "</statistic-record>";
+//        // StatisticsBean statisticsBean = (StatisticsBean) BeanHelper.getRequestBean(StatisticsBean.class);
+//        // ServiceLocator.getStatisticDataHandler(statisticsBean.getStatisitcsEditorHandle()).create(statisticDataXml);
+//        StatisticsBean statisticsBean = (StatisticsBean)BeanHelper.getApplicationBean(StatisticsBean.class);
+//        ServiceLocator.getStatisticDataHandler(statisticsBean.getAdminUserHandle()).create(statisticDataXml);
+        
     }
 }

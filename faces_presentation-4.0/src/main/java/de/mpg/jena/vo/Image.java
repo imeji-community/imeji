@@ -35,6 +35,7 @@ public class Image implements Serializable
     private Visibility visibility;
     private URI collection;
     private List<ImageMetadata> metadata = new LinkedList<ImageMetadata>();
+    private String filename;
 
     public URI getWebImageUrl()
     {
@@ -121,5 +122,15 @@ public class Image implements Serializable
     public URI getCollection()
     {
         return collection;
+    }
+
+    public void setFilename(String filename)
+    {
+        this.filename = filename;
+    }
+
+    public String getFilename()
+    {
+        return filename;
     }
 }

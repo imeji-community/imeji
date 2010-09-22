@@ -142,7 +142,7 @@ public class CollectionCriterionController {
 				        String ctCriterion = "";
 				        
 				    
-				        ComplexTypes ct = ComplexTypeHelper.getComplexTypesEnum(mdc.getSelectedStatement().getType()); 
+				        ComplexTypes ct = ComplexTypeHelper.getComplexTypesEnum(mdc.getSelectedStatement().getType());  
 				        switch (ct)
 				        {
 				            case TEXT : 
@@ -165,6 +165,12 @@ public class CollectionCriterionController {
                                 ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME.name()+ "." + Filtertype.REGEX + "=" + mdc.getMdText();
                                 ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
                                 ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                break;
+                            }
+				            case  GEOLOCATION : 
+                            {
+                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LONGITUDE.name()+ "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LATITUDE.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
                                 break;
                             }
 				        }

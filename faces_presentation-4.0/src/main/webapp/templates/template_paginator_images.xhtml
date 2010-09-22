@@ -154,7 +154,7 @@
 
 			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">	
 				<h:panelGroup layout="block" styleClass="full_area1_p8">
-					<tr:iterator var="group" value="#{paginatorListSessionBean.facets.groups}" varstatus="index">
+					<tr:iterator var="group" value="#{paginatorListSessionBean.facets.groups}" varStatus="index">
 						<h:panelGroup layout="block" styleClass="full_area0" rendered="#{!empty group.list}">
 							<h:outputText value="#{group.label}"/> 
 							<h:outputText value="No title" rendered="#{empty group.label}"/> 

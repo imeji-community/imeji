@@ -59,8 +59,19 @@ public class LoginBean
             if (user.getEncryptedPassword().equals(UserController.convertToMD5(getPasswd())))
             {
                 sb.setUser(user);
-                createLoginStatisticData(user);
                 BeanHelper.info(sb.getMessage("success_log_in"));
+                try
+                {
+                    createLoginStatisticData(user);
+                }
+                catch (Exception e)
+                {
+                    logger.error("Error creating statistical data", e);
+                }
+            }
+            else
+            {
+                BeanHelper.error(sb.getMessage("error_log_in"));
             }
         }
         catch (Exception e)

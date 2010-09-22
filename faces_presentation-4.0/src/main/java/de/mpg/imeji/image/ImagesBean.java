@@ -1,10 +1,17 @@
 package de.mpg.imeji.image;
 
+import java.io.StringReader;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
 import javax.faces.model.SelectItem;
+
+import org.apache.commons.collections.KeyValue;
+
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
@@ -17,7 +24,11 @@ import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.Album;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.ImageMetadata;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {  
@@ -74,6 +85,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
             SortCriterion sortCriterion = new SortCriterion();
             sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+            
+            
+           
+            
             List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
             try
             {
@@ -167,8 +182,110 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         return query;
     }
     
-    private List<List<SearchCriterion>> transformQuery(String query) throws Exception
+    public static List<List<SearchCriterion>> transformQuery(String query) throws Exception
     {
+        boolean inverse=false;
+        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>(); 
+        
+        if(query!=null && !query.trim().equals(""))
+        {
+            
+        
+            StringReader reader = new StringReader(query);
+            
+            int bracketsOpened = 0;
+            int bracketsClosed = 0;
+            String substring = "";
+            String lastOperator="";
+            List<SearchCriterion> currentSubList = new ArrayList<SearchCriterion>();
+            
+            int c = 0;
+            
+            while((c=reader.read())!=-1)
+            {
+                substring += (char)c;   
+                
+                if(c=='(')
+                {
+                    bracketsOpened++;
+                    if(bracketsOpened-bracketsClosed == 1)
+                    {
+                        currentSubList = new ArrayList<SearchCriterion>();
+                        substring = "";
+                    }
+                }
+                else if(c==')')
+                {
+                    bracketsClosed++; 
+                    if(bracketsOpened - bracketsClosed == 0)
+                    {
+                        scList.add(currentSubList);
+                        substring="";
+                    }
+                }
+                
+                if(substring.equals("AND ") || substring.equals("OR "))
+                {
+                    lastOperator = substring.trim();
+                    substring = "";
+                }
+                else if(substring.trim().equals("INVERSE"))
+                {
+                    inverse=true;
+                    substring ="";
+                }
+                else if (substring.matches("\\s*[^\\s]+=[^\\s]+\\s+"))
+                {
+                    String[] keyValue = substring.split("=");
+                    
+                    String[] nsFilter = keyValue[0].split("\\.");
+                    String value = keyValue[1].trim(); 
+                    
+                    if(nsFilter[0].trim().equals("ANY_METADATA"))
+                    {
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, value , Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER, value, Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, value, Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME, value, Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME, value, Filtertype.REGEX));
+                    }
+                    else
+                    {
+                        ImejiNamespaces ns = ImejiNamespaces.valueOf(nsFilter[0].trim());
+                        Filtertype filter = Filtertype.valueOf(nsFilter[1].trim());
+                       
+                        Operator op = Operator.AND;
+    
+                        if(!lastOperator.equals(""))
+                        {
+                            op = Operator.valueOf(lastOperator.trim());
+                        }
+                       
+                        //Operator op = Operator.valueOf(lastOperator.trim());
+                        SearchCriterion sc = new SearchCriterion(op,ns, value, filter);
+                        sc.setInverse(inverse);
+                        currentSubList.add(sc);
+                    }
+                   
+                    substring = "";
+                    
+                    
+                }
+                
+                
+    
+            }
+            if(bracketsClosed == 0)
+            {
+                scList.add(currentSubList);
+            }
+            if(bracketsOpened!= bracketsClosed)
+            {
+                throw new Exception("Invalid query!");
+            }
+        }
+        
+        /*
         List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>(); 
         
         if(query!=null && !query.equals(""))
@@ -193,7 +310,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
                 
                 
                 //remove first and last bracket
-                query = query.substring(3);
+                query = query.substring(3); 
                 query = query.substring(0, query.length()-2);
                 
                 System.out.println(query);
@@ -261,6 +378,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
                 }
             }
         }
+        */
         return scList;
     }
 }

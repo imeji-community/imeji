@@ -328,7 +328,7 @@ public abstract class ImejiController {
 	
 	
 	
-	private static String createSubQuery(List<ImejiQueryVariable> qvList, VarCounter y, String oldSubjectVar)
+	private static String createSubQuery(List<ImejiQueryVariable> qvList, VarCounter y, String oldSubjectVar, boolean inverse)
 	{
 	    String subquery = "";
 	    if(qvList!=null)
@@ -336,15 +336,19 @@ public abstract class ImejiController {
 	        
 	        for(ImejiQueryVariable qv : qvList)
 	        {
-	            String subject = "?s";
-	            if(oldSubjectVar != null)
-	            {
-	                subject = oldSubjectVar;
-	            }
+	            String subject = oldSubjectVar;
+	            
 	            
 	            String object = "?v" + y;
 	            y.increase();
-	            subquery = subquery + " . OPTIONAL { " + subject +" <" + qv.getNamespace().getNs()+  "> " + object;
+	            if (subject.equals("?s") && inverse)
+	            {
+	                subquery = subquery + " . MINUS { " + subject +" <" + qv.getNamespace().getNs()+  "> " + object;
+	            }
+	            else
+	            {
+	                subquery = subquery + " . OPTIONAL { " + subject +" <" + qv.getNamespace().getNs()+  "> " + object;
+	            }
 	            qv.setVariable(object);
 	            if(qv.getNamespace().isListType())
 	            { 
@@ -356,7 +360,7 @@ public abstract class ImejiController {
 	               
 	            }
 	           
-	            subquery = subquery + createSubQuery(qv.getChildren(), y, object);
+	            subquery = subquery + createSubQuery(qv.getChildren(), y, object, inverse);
 	            subquery = subquery + " }";
 	        }
 	    }
@@ -419,8 +423,14 @@ public abstract class ImejiController {
 	
 	protected String createQuery(List<List<SearchCriterion>> scList, SortCriterion sortCriterion, String type, int limit, int offset) throws Exception
     {
+	    boolean inverse = false;
+	    if(scList!=null && scList.size()>0 && scList.get(0)!=null && scList.get(0).size()>0)
+	    {
+	        inverse = scList.get(0).get(0).isInverse();
+	    }
+	    
 	    //contains a list of root ImejiQueryVariables for each submlist
-	    Map<List<SearchCriterion>, List<ImejiQueryVariable>> roots = new HashMap<List<SearchCriterion>, List<ImejiQueryVariable>>();
+	    Map<List<SearchCriterion>, List<ImejiQueryVariable>> roots = new HashMap<List<SearchCriterion>, List<ImejiQueryVariable>>(); 
 	    
 	    //contains a list of root ImejiQueryVariables for each sublist
 	    Map<List<SearchCriterion>, Map<ImejiNamespaces, ImejiQueryVariable>> map = new HashMap<List<SearchCriterion>, Map<ImejiNamespaces,ImejiQueryVariable>>();
@@ -487,24 +497,22 @@ public abstract class ImejiController {
     	    {
     	        allRoots.addAll(list);
     	    }
-    	   String subquery = createSubQuery(allRoots, new VarCounter(), null);
+    	  
+    	   String subquery = createSubQuery(allRoots, new VarCounter(), "?s", inverse);
     	   query += subquery;
         }
 	    
         
             
             
-        filter = " . FILTER(";
+       
         
-        filter+=getSpecificFilter();
+        
         
         if(scList!=null && scList.size()>0)
         {
-            //Add regex filters
-            if(getSpecificFilter() != null || !getSpecificFilter().isEmpty()) 
-            {
-                filter += " && (";
-            }
+            filter = " . FILTER(";
+            
             
             int j=0;
             boolean operatorWritten = false;
@@ -541,7 +549,7 @@ public abstract class ImejiController {
                         }
                         else if(sc.getFilterType().equals(Filtertype.URI) && sc.getNamespace().equals(ImejiNamespaces.ID_URI))
                         {
-                            filter += "?s=<" + sc.getValue() + ">";
+                            filter += "?s" + "=<" + sc.getValue() + ">";
                         }
                         else if(sc.getFilterType().equals(Filtertype.REGEX))
                         {
@@ -551,6 +559,11 @@ public abstract class ImejiController {
                         {
                             filter += map.get(subList).get(sc.getNamespace()).getVariable() + "='" + sc.getValue() + "'";
                         }
+                        else if(sc.getFilterType().equals(Filtertype.BOUND))
+                        {
+                            filter += "bound(" +  map.get(subList).get(sc.getNamespace()).getVariable() + ")=" + sc.getValue() + "";
+                        }
+                        
                     }
        
                     j++;
@@ -561,7 +574,13 @@ public abstract class ImejiController {
             filter+=")";
         
         }
-        filter+=")";
+        
+        
+       
+        
+        
+        String specificFilter= ". FILTER(" + getSpecificFilter() + ")";
+        
         
         //Add sort criterion
         String sortQuery = "";
@@ -605,13 +624,27 @@ public abstract class ImejiController {
         }
         
 
+        
         //offset++;
         String limitString = "";
         if (limit > -1)
         {
          limitString = " LIMIT " + limit;   
         }
-        String completeQuery = "SELECT DISTINCT ?s WHERE { ?s a <" + type + "> " + query + filter + " } " + sortQuery + limitString + " OFFSET " + offset;
+        
+        //If inverse search add filter to MINUS part
+        if(inverse)
+        {
+            query = query.substring(0, query.lastIndexOf("}"));
+            query += filter + "}";
+        }
+        else
+        {
+            query += filter;
+        }
+        
+        
+        String completeQuery = "SELECT DISTINCT ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } " + sortQuery + limitString + " OFFSET " + offset;
             
         System.out.println("Created Query:\n"+completeQuery);
         return completeQuery;

@@ -10,54 +10,63 @@ import java.util.Map;
 
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.beans.Navigation;
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
+import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
+import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
+import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class FacetsBean
 {
     private List<FacetGroupBean> groups = new ArrayList<FacetGroupBean>();
     private Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+    private SessionBean sb;
 
     public FacetsBean(List<Image> images)
     {
+        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         Map<URI, MetadataProfile> profiles = ProfileHelper.loadProfiles(images);
         try
         {
             for (MetadataProfile mdp : profiles.values())
                 groups.add(new FacetGroupBean(generateFacets(mdp), mdp.getTitle()));
         }
-        catch (UnsupportedEncodingException e)
+        catch (Exception e)
         {
             throw new RuntimeException(e);
         }
     }
 
-    public List<FacetBean> generateFacets(MetadataProfile profile) throws UnsupportedEncodingException
+    public List<FacetBean> generateFacets(MetadataProfile profile) throws Exception
     {
-        Map<String, FacetBean> map = new HashMap<String, FacetBean>();
+        List<FacetBean> facetbeans = new ArrayList<FacetBean>();
         for (Statement st : profile.getStatements())
         {
             if (st.getLiteralConstraints().size() > 0)
             {
                 for (LocalizedString ls : st.getLiteralConstraints())
-                    map.put(ls.toString(), generateFacet(profile.getId(), st, true, ls.toString()));
+                  facetbeans.add(generateFacet(profile.getId(), st, true, ls.toString()));
             }
             else
             {
-                map.put(st.getName(), generateFacet(profile.getId(), st, true, null));
-                map.put("no -" + st.getName(), generateFacet(profile.getId(), st, false, null));
+                facetbeans.add(generateFacet(profile.getId(), st, true, null));
+                facetbeans.add(generateFacet(profile.getId(), st, false, null));
             }
         }
-        return new ArrayList<FacetBean>(map.values());
+        return facetbeans;
     }
 
     public FacetBean generateFacet(URI id, Statement st, boolean hasValue, String value)
-            throws UnsupportedEncodingException
+            throws Exception
     {
         URI uri = generateUri(id, st, hasValue, value);
         String label = st.getName();
@@ -80,7 +89,7 @@ public class FacetsBean
 
     public URI generateUri(URI id, Statement st, boolean hasValue, String value) throws UnsupportedEncodingException
     {
-        return URI.create(nav.getImagesUrl() + generateQuery(id, st, hasValue, value));
+        return URI.create(nav.getImagesUrl() + "?q=" + URLEncoder.encode(generateQuery(id, st, hasValue, value), "UTF-8"));
     }
 
     public String generateQuery(URI id, Statement st, boolean hasValue, String value)
@@ -88,14 +97,30 @@ public class FacetsBean
     {
         if (value == null)
             value = "";
+        
+        
+        ComplexTypes ct = ComplexTypeHelper.getComplexTypesEnum(st.getType());  
+        ImejiNamespaces ns = null;
+
+        
         String index = id.getPath().replaceAll("/", ".").substring(1) + "." + st.getName();
-        return "?q=" + URLEncoder.encode(index + "='" + value + "'", "UTF-8");
+        
+        String query = "";
+        if(!hasValue)
+        {
+            query += "INVERSE ";
+        }
+        query += "( " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS.name() + "=" + st.getName() + " ) ";
+        return  query;
+        //return "?q=" + URLEncoder.encode(index + "='" + value + "'", "UTF-8");
     }
 
-    public int getCount(URI id, Statement st, boolean hasValue, String value) throws UnsupportedEncodingException
+    public int getCount(URI id, Statement st, boolean hasValue, String value) throws Exception
     {
         String query = generateQuery(id, st, hasValue, value);
-        return 0;
+        List<List<SearchCriterion>> scList = ImagesBean.transformQuery(query);
+        ImageController ic = new ImageController(sb.getUser());
+        return ic.searchAdvanced(scList, null, -1, 0).size();
     }
 
     public List<FacetGroupBean> getGroups()

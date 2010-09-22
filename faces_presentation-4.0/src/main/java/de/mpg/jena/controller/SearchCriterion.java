@@ -13,7 +13,7 @@ public class SearchCriterion {
 
 	public enum Filtertype
 	{
-	    REGEX, URI, EQUALS;
+	    REGEX, URI, EQUALS, BOUND;
 	}
 
    
@@ -44,6 +44,8 @@ public class SearchCriterion {
 		IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME("http://purl.org/escidoc/metadata/terms/0.1/given-name", IMAGE_METADATA_COMPLEXTYPE_PERSON),
 		IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit", IMAGE_METADATA_COMPLEXTYPE_PERSON, true),
 		IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME("http://purl.org/dc/elements/1.1/title", IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION),
+		IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LONGITUDE("http://imeji.mpdl.mpg.de/metadata/longitude", IMAGE_METADATA_COMPLEXTYPE),
+		IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LATITUDE("http://imeji.mpdl.mpg.de/metadata/latitude", IMAGE_METADATA_COMPLEXTYPE),
 		
 		IMAGE_METADATA_COMPLEXTYPE_TEXT("http://imeji.mpdl.mpg.de/metadata/text", IMAGE_METADATA_COMPLEXTYPE),
 		IMAGE_METADATA_COMPLEXTYPE_DATE("http://imeji.mpdl.mpg.de/metadata/date", IMAGE_METADATA_COMPLEXTYPE),
@@ -139,6 +141,7 @@ public class SearchCriterion {
 	private Operator operator = Operator.AND;	
 	private Filtertype filterType = Filtertype.REGEX;
 	private List<SearchCriterion> children = new ArrayList<SearchCriterion>();
+	private boolean inverse = false;
 	
 	
 	public SearchCriterion(ImejiNamespaces namespace, String value)
@@ -208,6 +211,16 @@ public class SearchCriterion {
     public List<SearchCriterion> getChildren()
     {
         return children;
+    }
+
+    public void setInverse(boolean inverse)
+    {
+        this.inverse = inverse;
+    }
+
+    public boolean isInverse()
+    {
+        return inverse;
     }
     
     

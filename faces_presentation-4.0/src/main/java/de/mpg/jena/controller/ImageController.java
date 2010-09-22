@@ -18,6 +18,7 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.query.larq.IndexBuilderBase;
 import com.hp.hpl.jena.query.larq.IndexBuilderModel;
 import com.hp.hpl.jena.query.larq.IndexBuilderString;
@@ -154,7 +155,7 @@ public class ImageController extends ImejiController{
     {
         additionalQuery = "";
         String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
-        return Sparql.exec(getModel(), Image.class, query);
+        return Sparql.exec(getModel(), Image.class, query, Syntax.syntaxARQ);
     }
 	
 	/*
@@ -171,7 +172,7 @@ public class ImageController extends ImejiController{
         List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
         if(scList!=null && scList.size()>0) list.add(scList);
         String query = createQuery(list, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
-        return Sparql.exec(getModel(), Image.class, query);
+        return Sparql.exec(getModel(), Image.class, query, Syntax.syntaxARQ);
     }
 	
 	
@@ -302,9 +303,11 @@ public class ImageController extends ImejiController{
         }
          
 	    
-	    String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/collection> . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/container/metadata> ?v0 . OPTIONAL { ?v0 <http://purl.org/dc/elements/1.1/title> ?v1 } . OPTIONAL { ?v0 <http://purl.org/dc/elements/1.1/description> ?v2 } . OPTIONAL { ?v0 <http://purl.org/escidoc/metadata/terms/0.1/creator> ?v3 . ?v3 <http://www.w3.org/2000/01/rdf-schema#member> ?v4} } } ";
+	    String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . MINUS { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . OPTIONAL { ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v2 }} . FILTER( IF(bound(?v2), ?v2='test', '')) . FILTER(?s='efe')} ";
+        //String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  .  OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v10 . ?v1 <http://purl.org/dc/terms/type> ?v2 . ?v2 <http://imeji.mpdl.mpg.de/metadata/enumType> ?v4 .  OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/metadata/date> ?v3 }}}";
 
-        Query queryObject = QueryFactory.create(q);
+	    //Syntax.
+        Query queryObject = QueryFactory.create(q, Syntax.syntaxARQ);
         QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
         ResultSet results = qe.execSelect();
         ResultSetFormatter.out(System.out, results);
@@ -318,6 +321,8 @@ public class ImageController extends ImejiController{
            }
        */
         qe.close();
+        
+        System.out.println("IMAGE_COLLECTION.URI=http://imeji.mpdl.mpg.de/collection/1 ".matches("[^\\s]+=[^\\s]+\\s+"));
         
  
         

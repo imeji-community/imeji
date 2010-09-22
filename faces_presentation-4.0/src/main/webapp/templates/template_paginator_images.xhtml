@@ -55,7 +55,7 @@
 			
 			<ui:define name="list">				
 			
-				<h:panelGroup layout="block" styleClass="full_area0 preListHeader" partialTriggers="formular:pictureList::selectBtn">
+				<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
 					<h:outputLabel value=" sds " styleClass="small_area0" style="visibility: hidden"></h:outputLabel>
 					<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}" styleClass="large_area0">
 						<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
@@ -86,7 +86,7 @@
 							<!-- Album Selected -->				
 								<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
 									<h:selectBooleanCheckbox id="pictureCheckbox" value="#{item.selected}" onchange="getElementById('formular:pictureList:#{index}:selectBtn').click();"/>
-									<h:commandButton id="selectBtn" partialSubmit="true" action="#{item.select}" style="visibility:hidden;" />								
+									<a4j:commandButton id="selectBtn" partialSubmit="true" action="#{item.select}" style="visibility:hidden;" reRender="preListHeader"/>								
 								</h:panelGroup>
 								
 								

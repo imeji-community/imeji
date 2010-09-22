@@ -44,7 +44,7 @@
 			</span>
 		</h:panelGroup>
 
-		<h:outputLink id="lnkPicFullResolution" value="" styleClass="xSmall_marginLIncl">
+		<h:outputLink id="lnkPicFullResolution2" value="" styleClass="xSmall_marginLIncl">
 			<h:outputText value="#{lbl.add_to_album}"/>
 		</h:outputLink>
 

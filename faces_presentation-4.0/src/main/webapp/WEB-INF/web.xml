@@ -100,7 +100,7 @@
 	
 	<context-param>
 	      <param-name>org.richfaces.CONTROL_SKINNING</param-name>
-	      <param-value>enable</param-value>
+	      <param-value>disable</param-value>
 	</context-param>
 
 	<!-- Defining and mapping the RichFaces filter -->

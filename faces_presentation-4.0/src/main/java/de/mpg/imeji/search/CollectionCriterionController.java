@@ -70,13 +70,13 @@ public class CollectionCriterionController implements Serializable {
 	public String addCollection() {
 		CollectionCriterion newCollection = new CollectionCriterion(collections);
 		collectionCriterionList.add(collectionPosition+1,newCollection);
-		return getNavigationString();
+		return "";
 	}
 	
 	public String removeCollection(){
 		if(collectionPosition > 0)
 			collectionCriterionList.remove(collectionPosition);
-		return getNavigationString();
+		return "";
 	}
 	
 	

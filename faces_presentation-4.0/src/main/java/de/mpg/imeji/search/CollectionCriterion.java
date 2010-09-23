@@ -122,7 +122,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
         List<MDCriterion> mds = getMdCriterionList();
         MDCriterion newMd = new MDCriterion(getSelectedCollection().getProfile().getStatements());
         mds.add(mdPosition +1, newMd);  
-        return "pretty";
+        return "";
     }
     
     public int getMdPosition() {
@@ -138,7 +138,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
             List<MDCriterion> mds = getMdCriterionList();
             mds.remove(mdPosition);         
         }
-        return "pretty:";
+        return "";
     }
 
     public void setSelectedCollectionId(String selectedCollectionId)

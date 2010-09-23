@@ -7,10 +7,12 @@ import java.util.Collection;
 import java.util.List;
 
 import thewebsemantic.LocalizedString;
+import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.ContainerMetadata;
@@ -199,6 +201,17 @@ public class ImejiFactory
         for (CollectionImeji coll : collList)
         {
             beanList.add(new ViewCollectionBean(coll));
+        }
+        return beanList;
+    }
+    
+
+    public static List<AlbumBean> albumListToBeanList(Collection<Album> albumList)
+    {
+        List<AlbumBean> beanList = new ArrayList<AlbumBean>();
+        for (Album album : albumList)
+        {
+            beanList.add(new AlbumBean(album));
         }
         return beanList;
     }

@@ -125,7 +125,7 @@ public abstract class ImejiController {
 
 	protected static void writeCreateProperties(Properties properties, User user) {
 		Date now = new Date();
-		properties.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail()));
+		properties.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail())); 
 		properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
 		properties.setCreationDate(now);
 		properties.setLastModificationDate(now);

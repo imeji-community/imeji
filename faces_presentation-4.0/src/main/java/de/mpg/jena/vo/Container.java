@@ -14,7 +14,7 @@ public class Container implements Serializable
     private Properties properties = new Properties();
     private Collection<URI> images = new LinkedList<URI>();
     private ContainerMetadata metadata = new ContainerMetadata();
-    private MetadataProfile profile = new MetadataProfile();
+
 
     public void setId(URI id)
     {
@@ -59,13 +59,5 @@ public class Container implements Serializable
         return images;
     }
 
-    public MetadataProfile getProfile()
-    {
-        return profile;
-    }
-
-    public void setProfile(MetadataProfile profile)
-    {
-        this.profile = profile;
-    }
+   
 }

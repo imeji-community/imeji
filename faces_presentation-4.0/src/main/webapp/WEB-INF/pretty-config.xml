@@ -87,6 +87,7 @@
 	<url-mapping id="createAlbum">
 		<pattern value="/album"/>
 		<view-id>/jsf/AlbumCreate.xhtml</view-id>
+		<action onPostback="false">#{AlbumBean.initCreate}</action>
 	</url-mapping>
 	
 	<url-mapping id="editCollection">

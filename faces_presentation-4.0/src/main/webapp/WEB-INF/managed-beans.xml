@@ -171,6 +171,13 @@
 	</managed-bean>
 
 
+	<!-- Album Beans -->
+	<managed-bean>
+		<managed-bean-name>AlbumBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.album.AlbumBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
 	<!-- Collections Bean -->
 	<managed-bean>
 		<managed-bean-name>CollectionSession</managed-bean-name>

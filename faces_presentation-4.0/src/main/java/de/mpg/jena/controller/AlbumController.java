@@ -1,6 +1,7 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,14 +11,14 @@ import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Properties.Status;
 
 
 public class AlbumController extends ImejiController{
 
-	private User user;
-	
+
 	public AlbumController(User user)
 	{
 		super(user);
@@ -113,16 +114,47 @@ public class AlbumController extends ImejiController{
         return Sparql.exec(base, Album.class, query);
     }
 
+	@Override
+    protected String getSpecificQuery() throws Exception
+    {
+      return " . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status";
+    }
+    
     @Override
     protected String getSpecificFilter() throws Exception
     {
-       return "";
-    }
-
-    @Override
-    protected String getSpecificQuery() throws Exception
-    {
-        return "";
+        //Add filters for user management
+        String filter ="(";
+      
+          
+         
+         if(user==null)
+         {
+             
+             filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED>";
+         }
+         else
+         {
+            
+             String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
+             filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<" +  userUri + ">";
+             
+            
+                 for(Grant grant : user.getGrants())
+                 {
+                     switch(grant.getGrantType())
+                     {
+                         case CONTAINER_ADMIN : //Add specifics here
+                             
+                         default : filter += " || ?s=<" + grant.getGrantFor().toString() + ">";
+                     }
+                     
+                 }
+             }
+         
+     
+          filter += ")";
+         return filter;
     }
 	
 }

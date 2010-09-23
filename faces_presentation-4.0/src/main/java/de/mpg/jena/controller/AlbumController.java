@@ -39,6 +39,7 @@ public class AlbumController extends ImejiController{
 		base.begin();
 		Bean2RDF writer = new Bean2RDF(base);
 		writer.saveDeep(ic);
+		cleanGraph();
 		base.commit();
 	}
 	
@@ -56,8 +57,22 @@ public class AlbumController extends ImejiController{
 		base.begin();
 		Bean2RDF writer = new Bean2RDF(base);
 		writer.saveDeep(ic);
+		cleanGraph();
 		base.commit();
 	}
+	
+	/**
+     * Updates a collection
+     * -Logged in users:
+     * --User is collection owner
+     * --OR user is collection editor
+     * @param ic
+     * @param user
+     */
+    public Album retrieve(String id)
+    {
+        return rdf2Bean.load(Album.class, id);
+    }
 	
 	public Collection<Album> retrieveAll()
 	{

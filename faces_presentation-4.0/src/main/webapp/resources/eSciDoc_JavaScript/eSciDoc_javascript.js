@@ -154,6 +154,7 @@ function addEvent(obj, evType, fn){
 
 /*START ALL EXTERNAL JAVASCRIPTS*/
 function install_javascripts() {
+	
 	installExtPaginator();
 	installItemList();
 	installFullItem();
@@ -161,18 +162,21 @@ function install_javascripts() {
 	installDateTextbox();
 	installSameHeight();
 	bindSuggests();
+	
 }
 
 /*INCLUDES EXTERNAL JAVASCRIPTS*/
 function include_javascripts() {
 	if(!included){
-		include_dom(jsURL + 'jquery/jquery.min.js');
+		
+		//include_dom(jsURL + 'jquery/jquery.min.js');
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_ext_paginator.js');
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_item_list.js');
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_full_item.js');
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_single_elements.js');
 		include_dom(coneURL + 'js/jquery.suggest.js')
 		include_dom(jsURL + 'autoSuggestFunctions.js');
+		
 		/*REITERATION NEEDED TO START ALL INCLUDED JAVASCRIPTS*/
 		included = true;
 		include_javascripts();

@@ -48,9 +48,9 @@
 			<h:outputText value="#{lbl.add_to_album}"/>
 		</h:outputLink>
 
-		<h:selectBooleanCheckbox styleClass="double_marginLIncl" valueChangeListener="#{ImageBean.deSelectedEvent}" onchange="submit()" immediate="true" disabled="#{ImageBean.deSelected}">
-		</h:selectBooleanCheckbox>  
-		<h:outputText value="#{lbl.deselected}"/>
+		<h:selectBooleanCheckbox id="pictureCheckbox" styleClass="double_marginLIncl" value="#{ImageBean.selected}" onchange="getElementById('formular:Image:selectBtn').click();"/>
+		<a4j:commandButton id="selectBtn" partialSubmit="true" action="#{ImageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
+		<h:outputText value="#{lbl.selected}"/>
 
 		 
 		<!-- <h:panelGroup layout="block" styleClass="half_area0">

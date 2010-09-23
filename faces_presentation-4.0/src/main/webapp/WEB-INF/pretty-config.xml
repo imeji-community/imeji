@@ -84,6 +84,11 @@
 		<view-id>/jsf/CollectionCreate.xhtml</view-id>
 	</url-mapping>
 	
+	<url-mapping id="createAlbum">
+		<pattern value="/album"/>
+		<view-id>/jsf/AlbumCreate.xhtml</view-id>
+	</url-mapping>
+	
 	<url-mapping id="editCollection">
 		<pattern value="/edit/collection/#{EditCollectionBean.id}"/>
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>

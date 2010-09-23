@@ -180,19 +180,23 @@ public class EditMetadataBean
     public String addMetadata()
     {
 
-    	MetadataBean mb = new MetadataBean(profile, profile.getStatements().get(0));
-    	mb.setPrettyLink(prettyLink);
+        if(profile.getStatements()!= null && profile.getStatements().size()>0)
+        {
+            MetadataBean mb = new MetadataBean(profile, profile.getStatements().get(0));
+            mb.setPrettyLink(prettyLink);
 
-        
-        if(metadata.size()==0)
-        {
-            metadata.add(mb); 
+            
+            if(metadata.size()==0)
+            {
+                metadata.add(mb); 
+            }
+            else
+            {
+                metadata.add(getMdPosition() + 1, mb);
+            }  
+            System.err.println("prettyLink = " + prettyLink);
         }
-        else
-        {
-            metadata.add(getMdPosition() + 1, mb);
-        }  
-        System.err.println("prettyLink = " + prettyLink);
+    	
         return prettyLink;
     }
 

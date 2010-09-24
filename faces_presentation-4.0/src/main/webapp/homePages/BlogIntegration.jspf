@@ -50,7 +50,7 @@
     </script>
 
 	<h2>
-		<h:outputText id="rssFeedName" value="#{lbl.blog_title}" escape="false"/>
+		<h:outputText id="rssFeedName" style="font-size: 1.1em;" value="#{lbl.blog_title}" escape="false"/>
 	</h2>
 	<div id="feedControl" style="font-size: 0.4em;" class="gf_title"></div>
 

@@ -58,27 +58,41 @@
 								
 								
 								<h:panelGroup layout="block" styleClass="xLarge_area0" >
-									
+									<h:outputText value="&#160;" styleClass="large_label" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
 									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
+									
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='DATE'}">
-										<h:outputLabel value="(YYYY-MM-DD)" styleClass="xLarge_label"/>
+										<h:outputText value="#{lbl.date}" styleClass="large_label" />
 										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.date}">
 											<f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
 										</h:inputText>
 									</h:panelGroup>
+									<h:outputText value="&#160;" styleClass="large_label" rendered="#{metadata.metadata.type.enumType=='NUMBER'}"/>
 									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}"/>
+									
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='CONE_AUTHOR'}">
-										<h:outputLabel value="Family Name:" styleClass="xLarge_label"/>
+									
+										<h:outputLabel value="#{lbl.family_name}" styleClass="xLarge_label"/>
 										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.familyName}" />
-										<h:outputLabel value="Given Name:" styleClass="xLarge_label"/>
+										
+										
+										<h:outputLabel value="#{lbl.first_name}" styleClass="xLarge_label"/>
 										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.givenName}" /> 
-										<h:outputLabel value="Organization:" styleClass="xLarge_label"/>
+										
+										<h:outputLabel value="#{lbl.alternative_name}" styleClass="xLarge_label"/>
+										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.alternativeName}" /> 
+										
+										<h:outputLabel value="#{lbl.identifier}" styleClass="xLarge_label"/>  
+										<h:inputText  styleClass="large_txtInput"  value="#{metadata.metadata.type.person.identifier}"/>
+
+										<h:outputLabel value="#{lbl.organization}" styleClass="xLarge_label"/>
 										<h:inputText styleClass="large_txtInput" value="#{metadata.metadata.type.person.organizations[0].name}" />
 									</h:panelGroup>
+									
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='GEOLOCATION'}">
-										<h:outputLabel value="Latitude:" styleClass="xLarge_label"/>
+										<h:outputLabel value="#{lbl.geoloaction_latitude}" styleClass="xLarge_label"/>
 										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.latitude}" />
-										<h:outputLabel value="Longitude:" styleClass="xLarge_label"/>
+										<h:outputLabel value="#{lbl.geoloaction_longitude}" styleClass="xLarge_label"/>
 										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.longitude}" />
 									</h:panelGroup>
 								</h:panelGroup>

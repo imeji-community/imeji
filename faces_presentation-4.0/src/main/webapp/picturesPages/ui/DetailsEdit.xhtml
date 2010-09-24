@@ -41,7 +41,7 @@
 		<span class="seperator"></span>
 		
 		<div class="free_area0 itemBlockContent endline">
-			<div class="free_area0 itemBlockContent endline">	
+			<!-- <div class="free_area0 itemBlockContent endline">	
 				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine">
 					<a4j:repeat id="mdList" var="md" value="#{ImageBean.imgMetadata}">
 						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder" rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
@@ -49,29 +49,29 @@
 								<h:outputLabel value="#{md.type.label}:" />
 							</h:panelGroup>	
 							<h:panelGroup styleClass="xLarge_area0_p8 endline labelLine clear" >
-								<h:outputLabel value="Family Name:" />
+								<h:outputLabel value="#{lbl.family_name}" />
 							</h:panelGroup>
 							<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline" >
 								<h:inputText id="coneAuthorFaName" value="#{md.type.person.familyName}" />
 							</h:panelGroup>
 							<h:panelGroup styleClass="xLarge_area0_p8 endline labelLine clear" >
-								<h:outputLabel value="Given Name:" />
+								<h:outputLabel value="#{lbl.first_name}" />
 							</h:panelGroup>
 							<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline" >
 								<h:inputText id="coneAuthorGiName" value="#{md.type.person.givenName}"/>
 							</h:panelGroup>
 							<h:panelGroup styleClass="xLarge_area0_p8 endline labelLine clear" >
-								<h:outputLabel value="Alternative Name:"/>
+								<h:outputLabel value="#{lbl.md_person_alternative_name}"/>
 							</h:panelGroup>
 							<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline" >
 								<h:inputText id="coneAuthorAlName" value="#{md.type.person.alternativeName}"/>
 							</h:panelGroup>
 							<h:panelGroup styleClass="xLarge_area0_p8 endline labelLine clear" >
-								<h:outputLabel value="Identifier:"/>
+								<h:outputLabel value="#{lbl.md_person_identifier}"/>
 							</h:panelGroup>
 							<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline" >
 								<h:inputText id="coneAuthorIden" value="#{md.type.person.identifier}"/>
-							</h:panelGroup>
+							</h:panelGroup>  -->
 							
 							<!-- TODO: role URI -->
 							<!-- <h:panelGroup styleClass="xLarge_area0_p8 endline labelLine clear" >
@@ -83,9 +83,9 @@
 								</h:inputText>
 							</h:panelGroup> -->
 							
-							<a4j:repeat id="orgaList" var="orga" value="#{md.type.person.organizations}">
+						<!-- <a4j:repeat id="orgaList" var="orga" value="#{md.type.person.organizations}">
 								<h:panelGroup styleClass="xLarge_area0_p8 endline labelLine clear" >
-									<h:outputLabel value="Organizations:"/>
+									<h:outputLabel value="#{lbl.organization}"/>
 								</h:panelGroup>
 								<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl endline" >
 									<h:inputText id="coneAuthorOrga" value="#{orga.name}"/>
@@ -110,10 +110,13 @@
 								<h:inputText id="number" value="#{md.type.number}"/>
 							</h:panelGroup>						
 						</h:panelGroup>
+						
+						
+						
 					
 					</a4j:repeat>
 					</h:panelGroup>
-				</div>
+				</div> -->
 			
 			<div class="free_area0 itemBlockContent endline">	
 				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine">
@@ -130,30 +133,33 @@
 							<h:panelGroup layout="block" styleClass="xLarge_area0" >
 								<h:outputText value="&#160;" styleClass="large_label" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
 								<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
+								
 								<h:panelGroup rendered="#{metadata.metadata.type.enumType=='DATE'}">
-									<h:outputLabel value="(YYYY-MM-DD)" styleClass="xLarge_label"/>
+									<h:outputText value="#{lbl.md_date}" styleClass="large_label" />
 									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.date}">
 										<f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
 									</h:inputText>
 								</h:panelGroup>
+								
 								<h:outputText value="&#160;" styleClass="large_label" rendered="#{metadata.metadata.type.enumType=='NUMBER'}"/>
 								<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}"/>
 								<h:panelGroup rendered="#{metadata.metadata.type.enumType=='CONE_AUTHOR'}">
-									<h:outputLabel value="Family Name:" styleClass="xLarge_label"/>
+									<h:outputLabel value="#{lbl.family_name}" styleClass="xLarge_label"/>
 									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.familyName}" />
-									<h:outputLabel value="Given Name:" styleClass="xLarge_label"/>
+									<h:outputLabel value="#{lbl.first_name}" styleClass="xLarge_label"/>
 									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.givenName}" /> 
-									<h:outputLabel value="Alternative Name:" styleClass="xLarge_label"/>
+									<h:outputLabel value="#{lbl.md_person_alternative_name}" styleClass="xLarge_label"/>
 									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.alternativeName}" /> 
-									<h:outputLabel value="Identifier:" styleClass="xLarge_label"/>
+									<h:outputLabel value="#{lbl.md_person_identifier}" styleClass="xLarge_label"/>
 									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.identifier}" /> 
-									<h:outputLabel value="Organization:" styleClass="xLarge_label"/>
+									<h:outputLabel value="#{lbl.organization}" styleClass="xLarge_label"/>
 									<h:inputText styleClass="large_txtInput" value="#{metadata.metadata.type.person.organizations[0].name}" />
 								</h:panelGroup>
+								
 								<h:panelGroup rendered="#{metadata.metadata.type.enumType=='GEOLOCATION'}">
-									<h:outputLabel value="Latitude:" styleClass="xLarge_label"/>
+									<h:outputLabel value="#{lbl.geoloaction_latitude}" styleClass="xLarge_label"/>
 									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.latitude}" />
-									<h:outputLabel value="Longitude:" styleClass="xLarge_label"/>
+									<h:outputLabel value="#{lbl.geoloaction_longitude}" styleClass="xLarge_label"/>
 									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.longitude}" />
 								</h:panelGroup>
 							</h:panelGroup>
@@ -168,9 +174,7 @@
 					</a4j:repeat>
 					 
 					</h:panelGroup>
-				<a class="free_area0 collapse"><h:outputText value="Hide: other MD" /></a>  			     
 			</div>
-		 <a class="free_area0 expand"><h:outputText value="Show: other MD" /></a>	
 	</div>
 				
 	

@@ -40,7 +40,7 @@
 			</ui:define>
 			
 			<ui:define name="contentMenu">
-				<h:outputText styleClass="free_area0" value="ORGANIZE" rendered="true" />
+				<h:outputText styleClass="free_area0" value="#{lbl.organize}" rendered="true" />
 				<h:outputText styleClass="seperator void" />
 				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}/details?init=1" rendered="true">
 					<h:outputText value="#{lbl.collection_metadata}"/>

@@ -40,7 +40,7 @@
 			</ui:define>
 			
 			<ui:define name="contentMenu">
-				<h:outputText styleClass="free_area0" value="ORGANIZE" rendered="true" />
+				<h:outputText styleClass="free_area0" value="#{lbl.organize}" rendered="true" />
 				<h:outputText styleClass="seperator void" />
 				<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="">
 					<h:outputText value="#{lbl.profile_related_collection}"></h:outputText>
@@ -64,7 +64,7 @@
 						
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
-								<h:outputText value="Metadata"/>
+								<h:outputText value="#{lbl.metadata}"/>
 							</h3>
 							<span class="seperator"/>
 							<h:panelGroup>
@@ -110,7 +110,7 @@
 											</span>
 											
 											<b class="xLarge_area0_p8 endline labelLine clear">
-												<h:outputText value=" Given Name " style="visibility:hidden;"/>
+												<h:outputText value=" #{lbl.first_name}" style="visibility:hidden;"/>
 												<span class="noDisplay">: </span>
 											</b>
 											<span class="xHuge_area0 xTiny_marginLExcl endline">
@@ -119,7 +119,7 @@
 											</span>
 												
 											<b class="xLarge_area0_p8 endline labelLine clear">
-												<h:outputText value=" Organization " style="visibility:hidden;"/>
+												<h:outputText value=" #{lbl.organization} " style="visibility:hidden;"/>
 												<span class="noDisplay">: </span>
 											</b>
 											<span class="xTiny_marginLExcl endline">
@@ -141,7 +141,7 @@
 						
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
-								<h:outputText value="Profile"/>
+								<h:outputText value="#{lbl.profile}"/>
 							</h3>
 							<span class="seperator"/>
 							<h:panelGroup>
@@ -160,7 +160,7 @@
 											</span>
 											
 											<b class="xLarge_area0_p8 endline labelLine clear">
-												<h:outputText value=" type " style="visibility:hidden;"/>
+												<h:outputText value=" #{lbl.type} " style="visibility:hidden;"/>
 												<span class="noDisplay">: </span>
 											</b>
 											<span class="xHuge_area0 xTiny_marginLExcl endline">
@@ -169,7 +169,7 @@
 											</span>
 												
 											<b class="xLarge_area0_p8 endline labelLine clear">
-												<h:outputText value=" labels " style="visibility:hidden;"/>
+												<h:outputText value=" #{lbl.labels} " style="visibility:hidden;"/>
 												<span class="noDisplay">: </span>
 											</b>
 											<span class="xHuge_area0 xTiny_marginLExcl endline">

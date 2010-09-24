@@ -1,19 +1,13 @@
 package de.mpg.imeji.upload.deposit;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import de.escidoc.schemas.item.x09.ItemDocument;
-import de.escidoc.schemas.result.x01.ResultDocument;
-
 import de.mpg.escidoc.services.framework.ServiceLocator;
-import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.escidoc.ItemVO;
 import de.mpg.imeji.upload.helper.ImageHelper;
-import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
@@ -25,13 +19,13 @@ import de.mpg.jena.vo.Image.Visibility;
  */
 public class DepositController
 {
-    public static ItemVO createImejiItem(InputStream is, String title, String description,
+    public static ItemVO createImejiItem(InputStream inputStream, String title, String description,
             String mimetype, String format, String userHandle, String collection, String context) throws IOException, URISyntaxException
     {
         ItemVO imejiItem = new ItemVO(title, description, context);
         try
         {
-            imejiItem.attachFile(is, title, mimetype, format, userHandle);
+            imejiItem.attachFile(inputStream, title, mimetype, format, userHandle);
         }
         catch (Exception e)
         {

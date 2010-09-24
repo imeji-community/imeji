@@ -1,21 +1,16 @@
 package de.mpg.imeji.upload;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 import java.util.StringTokenizer;
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-
-import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.escidoc.ItemVO;
 import de.mpg.imeji.upload.deposit.DepositController;
-import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.vo.CollectionImeji;
@@ -44,7 +39,6 @@ public class UploadServlet extends HttpServlet
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
         ServletInputStream inputStream = req.getInputStream();
-        //BufferedImage bufferedImage = ImageIO.read(inputStream);
         title = req.getParameter("name");
         StringTokenizer st = new StringTokenizer(title, ".");
         while (st.hasMoreTokens())

@@ -6,13 +6,16 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 import javax.naming.InitialContext;
 
+import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PutMethod;
@@ -26,12 +29,11 @@ import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.escidoc.ItemVO;
-
+ 
 public class ImageHelper
 {
-    public static Item setComponent(String contentCategory, Item item, byte[] image, String fileName,
-            String mimetype, String format, String userHandle) throws Exception
-    {
+    public static Item setComponent(String contentCategory, Item item, byte[] imageStream, String fileName,
+            String mimetype, String format, String userHandle) throws Exception{
         URL url = null;
         if (item.getComponents() == null)
         {
@@ -48,43 +50,54 @@ public class ImageHelper
         propCursor.insertChars("private");
         component.getProperties().setFileName(fileName);
         component.getProperties().setMimeType(mimetype);
-       
-        BufferedImage bufferedImage = null;
-        if (contentCategory.equals(getThumb()))
-        {
-            bufferedImage = ImageIO.read(new ByteArrayInputStream(image));
-            bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader
-                    .getProperty("xsd.resolution.thumbnail")));
-            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, format, byteOutput);
-            url = ImageHelper.uploadFile(byteOutput.toByteArray(), mimetype, userHandle);
+        
+        byte[] rescaledImageStream = null;
+        if (contentCategory.equals(getThumb())){        
+	        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
+	        bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")));
+	        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+	        // use imageIO.write to encode the image back into a byte[]
+	        ImageIO.write(bufferedImage, format, byteOutput);
+	        rescaledImageStream = byteOutput.toByteArray();
+            url = ImageHelper.uploadFile(rescaledImageStream, mimetype, userHandle);
         }
-        if (contentCategory.equals(getWeb()))
-        {
-           bufferedImage = ImageIO.read(new ByteArrayInputStream(image));
-           bufferedImage = scaleImage(bufferedImage, Integer
-                    .parseInt(PropertyReader.getProperty("xsd.resolution.web")));
-           ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-           ImageIO.write(bufferedImage, format, byteOutput);
-           url = ImageHelper.uploadFile(byteOutput.toByteArray(), mimetype, userHandle);
+        if (contentCategory.equals(getWeb())){
+        	if(format.equalsIgnoreCase("gif")){
+        		GifDecoder gifDecoder = checkAnimation(imageStream);
+        		if(gifDecoder.getFrameCount()>1)
+        			rescaledImageStream = scaleAnimation(imageStream, gifDecoder, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
+        		else{
+            		BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
+    	            bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader
+    	                    .getProperty("xsd.resolution.web")));
+    	            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+    	            // use imageIO.write to encode the image back into a byte[]
+    	            ImageIO.write(bufferedImage, format, byteOutput);
+    	            rescaledImageStream = byteOutput.toByteArray();
+            	}        
+        	}else{
+        		BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
+	            bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader
+	                    .getProperty("xsd.resolution.web")));
+	            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+	            // use imageIO.write to encode the image back into a byte[]
+	            ImageIO.write(bufferedImage, format, byteOutput);
+	            rescaledImageStream = byteOutput.toByteArray();
+        	}        
+        	url = ImageHelper.uploadFile(rescaledImageStream, mimetype, userHandle);
         }
         component.getProperties().setContentCategory(contentCategory);
-        // use imageIO.write to encode the image back into a byte[]
-        
         if(contentCategory.equals(getOrig()))
         {
-            url = ImageHelper.uploadFile(image, mimetype, userHandle);
+            url = ImageHelper.uploadFile(imageStream, mimetype, userHandle);
         }
-        
-        
         component.getContent().setHref(url.toExternalForm());
         Enum enu = Enum.forString("internal-managed");
         component.getContent().setStorage(enu);
         return item;
-    }
-
-    public static BufferedImage scaleImage(BufferedImage image, int width) throws Exception
-    {
+    }  
+    
+    public static BufferedImage scaleImage(BufferedImage image, int width) throws Exception{
         Image rescaledImage = image.getScaledInstance(width, -1, Image.SCALE_SMOOTH);
         BufferedImage rescaledBufferedImage = new BufferedImage(rescaledImage.getWidth(null), rescaledImage
                 .getHeight(null), BufferedImage.TYPE_INT_RGB);
@@ -92,6 +105,32 @@ public class ImageHelper
         g.drawImage(rescaledImage, 0, 0, null);
         return rescaledBufferedImage;
     }
+    
+    public static GifDecoder checkAnimation(byte[] image) throws Exception{
+        GifDecoder gifDecoder = new GifDecoder(); 
+        gifDecoder.read(new ByteArrayInputStream(image));
+        return gifDecoder;
+    }    
+        
+    public static byte[] scaleAnimation(byte[] image, GifDecoder gifDecoder, int width) throws Exception{
+    	ByteArrayOutputStream outputStream =new ByteArrayOutputStream();
+    	outputStream.write("".getBytes());
+    	AnimatedGifEncoder animatedGifEncoder = new AnimatedGifEncoder();
+        int frameCount = gifDecoder.getFrameCount();
+        int loopCount = gifDecoder.getLoopCount();
+        animatedGifEncoder.setRepeat(loopCount);
+        animatedGifEncoder.start(outputStream);
+        for (int frameNumber = 0; frameNumber < frameCount; frameNumber++) {
+
+           BufferedImage frame = gifDecoder.getFrame(frameNumber);  // frame i
+           int delay = gifDecoder.getDelay(frameNumber);  // display duration of frame in milliseconds
+           animatedGifEncoder.setDelay(delay);   // frame delay per sec
+           BufferedImage scaleImage = scaleImage(frame, width);
+           animatedGifEncoder.addFrame( scaleImage );
+        }    
+        animatedGifEncoder.finish();
+		return outputStream.toByteArray();
+       }
 
     /**
      * Uploads a file to the staging servlet and returns the corresponding URL.

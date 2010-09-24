@@ -105,10 +105,22 @@
 		<action onPostback="false">#{AlbumBean.initCreate}</action>
 	</url-mapping>
 	
+	<url-mapping id="editAlbum">
+		<pattern value="edit/album/#{AlbumBean.id}"/>
+		<view-id>/jsf/AlbumCreate.xhtml</view-id>
+		<action onPostback="false">#{AlbumBean.initEdit}</action>
+	</url-mapping>
+	
 	<url-mapping id="viewAlbum">
 		<pattern value="/album/#{AlbumBean.id}"/>
+		<view-id>/jsf/AlbumEntryPage.xhtml</view-id>
+		<action>#{AlbumBean.initView}</action>
+	</url-mapping>
+	
+	<url-mapping id="viewAlbumDetails">
+		<pattern value="/album/#{AlbumBean.id}/details"/>
 		<view-id>/jsf/AlbumView.xhtml</view-id>
-		<action onPostback="false">#{AlbumBean.initView}</action>
+		<action>#{AlbumBean.initView}</action>
 	</url-mapping>
 	
 	<url-mapping id="albumImages">

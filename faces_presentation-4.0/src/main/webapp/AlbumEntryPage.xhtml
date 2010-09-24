@@ -1,11 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
-<ui:remove>
-<!--
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:pretty="http://ocpsoft.com/prettyfaces">
+	<ui:remove>
+		<!--
 
  CDDL HEADER START
 
@@ -33,70 +29,62 @@
  Gesellschaft zur Förderung der Wissenschaft e.V.
  All rights reserved. Use is subject to license terms.
 -->
-</ui:remove>
-
-<body>
-
-	<ui:composition template="templates/template_picture_list.xhtml">
-	
-		<ui:define name="headline">
-		<h1>
-			<h:outputText value="#{AlbumSession.current.mdRecord.title.value}" rendered="#{SessionBean.currentUrl == 'viewAlbum' || SessionBean.currentUrl == 'resource'}"/>
-		</h1>
-		</ui:define>
-
-		<ui:define name="breadcrumb">
-			<ui:include src="headerPages/Breadcrumb.jspf"/>
-		</ui:define>	
+	</ui:remove>
+	<body>
+		<ui:composition template="templates/template_album.xhtml">
+			
+			<ui:define name="headline">
+				<h1>
+					<h:outputText value="#{AlbumBean.album.metadata.title}"/> 
+				</h1>
+			</ui:define>
+			
+			
+			
+			
+			<ui:define name="mainContent">
+				<h:panelGroup layout="block" styleClass="full_area0">
+					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
+						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+							<h:panelGroup styleClass="full_area1_p8">
+								<h1><h:outputText value="#{AlbumBean.album.metadata.title}"/> </h1>
+							</h:panelGroup>
+							<h:panelGroup styleClass="full_area1_p8">
+							<a4j:repeat var="img" value="#{AlbumBean.images}">
 								
-		<ui:define name="mainContent">
-
-			<ui:include src="picturesPages/ui/PaginationTop.jspf"/>		
+									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
+								
+							</a4j:repeat>
+							<h2>
+							<pretty:link mappingId="albumImages">
+								<f:param value="#{AlbumBean.id}"/>
+								<h:outputText value ="#{lbl.album_view_all_images}"/>
+							</pretty:link>
+								
+							</h2>
+							</h:panelGroup>
+							<h:panelGroup styleClass="full_area1_p8">
+								<h:panelGroup styleClass="half_area0">
+									<h:outputText value="#{AlbumBean.album.metadata.description}"/>
+								</h:panelGroup>
+								
+								
+							</h:panelGroup>
 			
+							<h:panelGroup styleClass="full_area1_p8">
+								<h:outputText value="Second paragraph"/>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			</ui:define>
+			<script>
+					function message(message)
+					{
+						document.getElementById('Start:message_javascript').innerHTML  = message;
+					}
+			</script>
 			
-			
-			<h:panelGroup layout="block" styleClass="full_area0 tiledList" rendered="#{(AlbumSession.current != null) and (AlbumSession.current.version.objectId != null)}">
-				<ui:include src="picturesPages/Album.jspf" />
-			</h:panelGroup>
-			<ui:include src="picturesPages/ui/PaginationBottom.jspf"/>
-			
-			<script type="text/javascript">
-				function changeDisabledToTrue()
-				{
-					document.getElementById('formular:selWeb').disabled = true;
-					document.getElementById('formular:selThumbnails').disabled = true;
-				}
-				function changeDisabledToFalse()
-				{
-					document.getElementById('formular:selWeb').disabled = false;
-					document.getElementById('formular:selThumbnails').disabled = false;
-				}
-				function setRendering()
-				{
-					if ('XML' == '<h:outputText value="#{AlbumSession.exportManager.parameters.exportFormatAsString}"/>' 
-						|| 'CSV' == '<h:outputText value="#{AlbumSession.exportManager.parameters.exportFormatAsString}"/>')
-					{
-						changeDisabledToTrue();
-					}
-					else
-					{
-						changeDisabledToFalse();
-					}
-				}
-				function changeDisabled(value)
-				{
-					if ('XML' == value || 'CSV' == value) 
-					{
-						changeDisabledToTrue();
-					}
-					else
-					{
-						changeDisabledToFalse();
-					}
-				}
-				</script>	
-		
-		</ui:define>
-</ui:composition>
-</body>
+		</ui:composition>
+	</body>
 </html>

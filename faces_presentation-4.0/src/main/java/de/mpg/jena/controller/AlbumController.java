@@ -90,6 +90,13 @@ public class AlbumController extends ImejiController{
 		return reader.load(Album.class);
 	}
 	
+	public void release(Album album) throws Exception
+    {
+        //first check user credentials
+        album.getProperties().setStatus(Status.RELEASED);
+        update(album);
+    }
+	
 	
 	
 	/**

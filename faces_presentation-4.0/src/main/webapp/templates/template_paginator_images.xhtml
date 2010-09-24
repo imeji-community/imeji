@@ -102,6 +102,9 @@
 								</span>
 						      <rich:toolTip id="imgToolTip" for="imgFrame">
 					           		<div class="xHuge_area0 fullItem">
+					           		<ui:param name="ImageBean" value="#{item}"/>
+					           		<ui:include src="../picturesPages/ui/Details_Generic.jspf"/>
+					           		<!-- 
 					           		<div class="free_area0 itemBlock noTopBorder">
 					           				<b class="medium_area0_p8 endline blockHeader">	Meta Data</b>
 					           				<span class="seperator"></span>
@@ -115,7 +118,9 @@
 					           			<a4j:repeat value="#{item.imgMetadata}" var="md">
 					           				<h:outputText value="#{md.type.label}"/>
 					           			</a4j:repeat>
-									</div></div></div>
+									</div></div>
+									</div>
+									-->
 					           		</div>
 					           		<!-- 
 					                <h:panelGroup styleClass="half_area0 fullItem">

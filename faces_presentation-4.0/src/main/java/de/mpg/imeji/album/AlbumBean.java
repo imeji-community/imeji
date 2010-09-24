@@ -15,6 +15,7 @@ import de.mpg.imeji.util.BeanHelper;
 
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
+import de.mpg.jena.controller.CollectionController;
 
 import de.mpg.jena.controller.ImageController;
 
@@ -36,6 +37,7 @@ public class AlbumBean implements Serializable
         private int organizationPosition;
         private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
         private boolean active;
+        private boolean save;
 
         public AlbumBean(Album album)
         {
@@ -63,10 +65,11 @@ public class AlbumBean implements Serializable
             }
         }
         
-        public void initUpdate()
+        public void initEdit()
         {
             AlbumController ac = new AlbumController(sessionBean.getUser());
             setAlbum(ac.retrieve(id));
+            save=false;
             if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
             {
                 active = true;
@@ -80,6 +83,7 @@ public class AlbumBean implements Serializable
             getAlbum().getMetadata().setDescription("");
             getAlbum().getMetadata().getPersons().clear();
             getAlbum().getMetadata().getPersons().add(ImejiFactory.newPerson());
+            save=true;
         }
 
         public boolean valid()
@@ -126,7 +130,7 @@ public class AlbumBean implements Serializable
 
         public String addAuthor()
         {
-            LinkedList<Person> list = (LinkedList<Person>)getAlbum().getMetadata().getPersons(); 
+            List<Person> list = getAlbum().getMetadata().getPersons(); 
             list.add(authorPosition + 1, ImejiFactory.newPerson());
             return "pretty:";
         }
@@ -135,7 +139,7 @@ public class AlbumBean implements Serializable
         {
             if (authorPosition > 0)
             {
-                LinkedList<Person> list = (LinkedList<Person>)getAlbum().getMetadata().getPersons();
+                List<Person> list = getAlbum().getMetadata().getPersons();
                 list.remove(authorPosition);
             }
             return "pretty:";
@@ -143,8 +147,8 @@ public class AlbumBean implements Serializable
 
         public String addOrganization()
         {
-            LinkedList<Person> persons = (LinkedList<Person>)getAlbum().getMetadata().getPersons();
-            LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
+            List<Person> persons = getAlbum().getMetadata().getPersons();
+            List<Organization> orgs = persons.get(authorPosition).getOrganizations();
             orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
             return "";
         }
@@ -153,8 +157,8 @@ public class AlbumBean implements Serializable
         {
             if (organizationPosition > 0)
             {
-                LinkedList<Person> persons = (LinkedList<Person>)getAlbum().getMetadata().getPersons();
-                LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
+                List<Person> persons = getAlbum().getMetadata().getPersons();
+                List<Organization> orgs = persons.get(authorPosition).getOrganizations();
                 orgs.remove(organizationPosition);
             }
             return "";
@@ -250,13 +254,22 @@ public class AlbumBean implements Serializable
         
         public String save() throws Exception
         {
-            AlbumController ac = new AlbumController(sessionBean.getUser());
-            if (valid())
-            {
-                ac.create(getAlbum());
-                BeanHelper.info("Album created successfully");
+            if(save)
+            { 
+                AlbumController ac = new AlbumController(sessionBean.getUser());
+                if (valid())
+                {
+                    ac.create(getAlbum());
+                    BeanHelper.info("Album created successfully");
+                }
             }
+            else
+            {
+                update();
+            }
+            
             return "pretty:albums";
+           
         }
         
         public String update() throws Exception
@@ -265,7 +278,7 @@ public class AlbumBean implements Serializable
             if (valid())
             {
                 ac.update(getAlbum());
-                BeanHelper.info("Album created successfully");
+                BeanHelper.info("Album updated successfully");
             }
             return "pretty:albums";
         }
@@ -277,7 +290,7 @@ public class AlbumBean implements Serializable
 
         public Album getAlbum()
         {
-            return album;
+            return album; 
         }
         
         public String getPersonString()
@@ -311,6 +324,13 @@ public class AlbumBean implements Serializable
         {
             sessionBean.setActiveAlbum(null);
             this.setActive(false);
+            return "pretty:";
+        }
+        
+        public String release() throws Exception
+        {
+            AlbumController ac = new AlbumController(sessionBean.getUser());
+            ac.release(album);
             return "pretty:";
         }
         

@@ -64,25 +64,25 @@ public class ItemVO
      * @param userHandle
      * @throws Exception
      */
-    public void attachFile(InputStream is, String fileName, String mimetype, String format,
+    public void attachFile(InputStream inputStream, String fileName, String mimetype, String format,
             String userHandle) throws Exception
     {
         itemDoc.getItem().addNewContentStreams();
        ByteArrayOutputStream bos = new ByteArrayOutputStream();
        int b;
-        while((b = is.read()) != -1)
+        while((b = inputStream.read()) != -1)
         {
             bos.write(b);
         }
-        byte[] image = bos.toByteArray();
+        byte[] imageStream = bos.toByteArray();
         bos.flush();
         bos.close();
         
-        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getOrig(), itemDoc.getItem(), image,
+        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getOrig(), itemDoc.getItem(), imageStream,
                 fileName, mimetype, format, userHandle));
-        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getWeb(), itemDoc.getItem(), image, fileName,
+        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getWeb(), itemDoc.getItem(), imageStream, fileName,
                 mimetype, format, userHandle));
-        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getThumb(), itemDoc.getItem(), image,
+        this.itemDoc.setItem(ImageHelper.setComponent(ImageHelper.getThumb(), itemDoc.getItem(), imageStream,
                 fileName, mimetype, format, userHandle));
     }
 

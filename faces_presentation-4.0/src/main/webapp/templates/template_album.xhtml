@@ -29,7 +29,7 @@
 					</h:commandLink>
 
 					<!-- ORGANIZE content menu lower line starts here -->
-					<pretty:link styleClass="free_area0" mappingId="editAlbum" rendered="#{AlbumBean.isOwner and AlbumBean.album.properties.status=='PENDING' and SessionBean.user!=null}">
+					<pretty:link styleClass="free_area0" mappingId="editAlbum" rendered="#{AlbumBean.isOwner and SessionBean.user!=null}">
 						<h:outputText value="#{lbl.edit_album}"/>
 						<f:param value="#{AlbumBean.id}"/>
 					</pretty:link>

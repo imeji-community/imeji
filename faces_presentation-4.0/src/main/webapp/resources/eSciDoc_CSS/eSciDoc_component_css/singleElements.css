@@ -51,3 +51,21 @@
 .sameHeightSlave {
 	overflow-y: auto;
 }
+
+/*Dialog*/
+
+.messageArea {
+	margin-bottom: 1em;
+	padding: 2.83em 0.92em 1.37em 0.92em  !important;
+}
+
+/*Richfaces Overwrite*/
+
+.rich-tool-tip {
+		padding: 1.73em 0.92em 0.92em 0.92em;
+        line-height: 2em;
+        background-color: #303030;
+		float:left;
+		position:absolute;
+		display:none;
+}

@@ -571,10 +571,9 @@ FORM BG			#FFFFFF
 
 /*MESSAGE AREAS*/
 	.messageArea {
+		border-width: 1px !important;
 		border-style: solid;
-		border-color: #6CAD2F;
 		background-color: #FFFFFF;
-		margin-bottom: 1em;
 	}
 	
 	.infoMessageArea {

@@ -9,6 +9,7 @@ import javax.faces.event.ValueChangeEvent;
 
 import com.ocpsoft.pretty.PrettyContext;
 
+import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.EditMetadataBean;
@@ -202,17 +203,16 @@ public class ImageBean{
 	
 	public String addToActiveAlbum()
 	{
-	    URI selectedAlbumId = sessionBean.getActiveAlbum();
+	    AlbumBean activeAlbum = sessionBean.getActiveAlbum();
 	    AlbumController ac = new AlbumController(sessionBean.getUser());
-	    Album activeAlbum = ac.retrieve(selectedAlbumId);
-	    if(activeAlbum.getImages().contains(image.getId()))
+	    if(activeAlbum.getAlbum().getImages().contains(image.getId()))
 	    {
 	        BeanHelper.info("Image " + image.getFilename() + "already in active album!");   
 	    }
 	    else
 	    {
-	        activeAlbum.getImages().add(image.getId());
-	        ac.update(activeAlbum);
+	        activeAlbum.getAlbum().getImages().add(image.getId());
+	        ac.update(activeAlbum.getAlbum());
 	        BeanHelper.info("Image " + image.getFilename() + "added to active album");
 	    }
 	    return "pretty:";
@@ -223,10 +223,7 @@ public class ImageBean{
     {
 	    if(sessionBean.getActiveAlbum()!=null)
 	    {
-	        URI selectedAlbumId = sessionBean.getActiveAlbum();
-	        AlbumController ac = new AlbumController(sessionBean.getUser());
-	        Album activeAlbum = ac.retrieve(selectedAlbumId);
-	        return activeAlbum.getImages().contains(image.getId());
+	        return sessionBean.getActiveAlbum().getAlbum().getImages().contains(image.getId());
 	    }
 	    return false;
        

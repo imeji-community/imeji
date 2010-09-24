@@ -13,6 +13,7 @@ import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.Navigation.Page;
 import de.mpg.jena.vo.User;
 
@@ -29,7 +30,7 @@ public class SessionBean implements Serializable
     private Page currentPage = null;
     private boolean admin = false;
     private List<URI> selected;
-    private URI activeAlbum;
+    private AlbumBean activeAlbum;
 
     public SessionBean()
     {
@@ -165,13 +166,14 @@ public class SessionBean implements Serializable
         return this.selected.size();
     }
 
-    public void setActiveAlbum(URI activeAlbum)
+    public void setActiveAlbum(AlbumBean activeAlbum)
     {
         this.activeAlbum = activeAlbum;
     }
 
-    public URI getActiveAlbum()
+    public AlbumBean getActiveAlbum()
     {
         return activeAlbum;
     }
+
 }

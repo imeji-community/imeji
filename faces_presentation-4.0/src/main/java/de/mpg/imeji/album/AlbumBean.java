@@ -41,7 +41,8 @@ public class AlbumBean implements Serializable
         {
             this.setAlbum(album);
             sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class); 
-            if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
+            this.id = ObjectHelper.getId(album.getId());
+            if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().getAlbum().getId().equals(album.getId()))
             {
                 active = true;
             }
@@ -301,7 +302,7 @@ public class AlbumBean implements Serializable
         
         public String makeActive()
         {
-            sessionBean.setActiveAlbum(album.getId()); 
+            sessionBean.setActiveAlbum(this); 
             this.setActive(true);
             return "pretty:";
         }

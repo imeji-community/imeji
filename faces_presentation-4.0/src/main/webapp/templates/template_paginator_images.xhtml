@@ -63,6 +63,17 @@
 			<ui:define name="list">				
 			
 			
+			<h:panelGroup id="preListHeaderActiveAlbum" layout="block" styleClass="full_area0 preListHeader" rendered="#{SessionBean.activeAlbum != null}">
+					<h:panelGroup styleClass="large_area0 small_marginLExcl">
+						<h:outputText value="#{lbl.active_album}: "/>
+						<pretty:link  mappingId="albumImages">
+							<h:outputText value="#{SessionBean.activeAlbum.album.metadata.title}"/>
+							<f:param value="#{SessionBean.activeAlbum.id}"/>
+						</pretty:link>
+					</h:panelGroup>
+					
+					
+				</h:panelGroup>
 			
 				<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
 					<h:outputLabel value=" sds " styleClass="small_area0" style="visibility: hidden"></h:outputLabel>

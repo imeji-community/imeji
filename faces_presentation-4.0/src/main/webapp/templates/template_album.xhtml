@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pretty="http://ocpsoft.com/prettyfaces">
+
+<ui:composition template="template.xhtml">
+		<ui:define name="contentMenu">
+			
+			<pretty:link styleClass="free_area0" mappingId="viewAlbum">
+				<h:outputText value="ORGANIZE"/>
+				<f:param value="#{AlbumBean.id}"/>
+			</pretty:link>
+			<h:outputText styleClass="seperator void" />
+			<pretty:link styleClass="free_area0" mappingId="viewAlbumDetails">
+				<h:outputText value="#{lbl.collection_metadata}"/>
+				<f:param value="#{AlbumBean.id}"/>
+			</pretty:link>
+			
+			
+		</ui:define>
+					
+			<ui:define name="actionsMenu">
+				<h:panelGroup styleClass="free_area0 sub action">
+					<!-- ORGANIZE content menu lower line starts here -->
+					<h:commandLink id="lnkReleaseAlbum" styleClass="free_area0" action="#{AlbumBean.release}" rendered="#{AlbumBean.isOwner and AlbumBean.album.properties.status=='PENDING' and SessionBean.user!=null}">
+						<h:outputText value="#{lbl.collection_release}"></h:outputText>
+					</h:commandLink>
+
+					<!-- ORGANIZE content menu lower line starts here -->
+					<pretty:link styleClass="free_area0" mappingId="editAlbum" rendered="#{AlbumBean.isOwner and AlbumBean.album.properties.status=='PENDING' and SessionBean.user!=null}">
+						<h:outputText value="#{lbl.edit_album}"/>
+						<f:param value="#{AlbumBean.id}"/>
+					</pretty:link>
+				</h:panelGroup>
+			</ui:define>
+
+</ui:composition>
+</html>

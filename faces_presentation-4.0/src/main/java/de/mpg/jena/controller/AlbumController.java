@@ -9,6 +9,7 @@ import java.util.List;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
@@ -72,7 +73,15 @@ public class AlbumController extends ImejiController{
      */
     public Album retrieve(String id)
     {
-        return rdf2Bean.load(Album.class, id);
+        
+        return rdf2Bean.load(Album.class, ObjectHelper.getURI(Album.class, id).toString());
+    }
+    
+
+    public Album retrieve(URI selectedAlbumId)
+    {
+        return rdf2Bean.load(Album.class, selectedAlbumId);
+        
     }
 	
 	public Collection<Album> retrieveAll()
@@ -156,5 +165,6 @@ public class AlbumController extends ImejiController{
           filter += ")";
          return filter;
     }
+
 	
 }

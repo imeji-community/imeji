@@ -35,12 +35,16 @@ public class AlbumBean implements Serializable
         private int authorPosition;
         private int organizationPosition;
         private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
-        private boolean selected;
+        private boolean active;
 
         public AlbumBean(Album album)
         {
             this.setAlbum(album);
-            sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+            sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class); 
+            if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
+            {
+                active = true;
+            }
         }
 
         public AlbumBean()
@@ -50,14 +54,22 @@ public class AlbumBean implements Serializable
         
         public void initView()
         {
-            AlbumController ac = new AlbumController(sessionBean.getUser());
+            AlbumController ac = new AlbumController(sessionBean.getUser()); 
             setAlbum(ac.retrieve(id));
+            if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
+            {
+                active = true;
+            }
         }
         
         public void initUpdate()
         {
             AlbumController ac = new AlbumController(sessionBean.getUser());
             setAlbum(ac.retrieve(id));
+            if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
+            {
+                active = true;
+            }
         }
         
         public void initCreate()
@@ -204,22 +216,6 @@ public class AlbumBean implements Serializable
             this.profilesMenu = profilesMenu;
         }
 
-        /**
-         * @return the selected
-         */
-        public boolean isSelected()
-        {
-            return selected;
-        }
-
-        /**
-         * @param selected the selected to set
-         */
-        public void setSelected(boolean selected)
-        {
-            this.selected = selected;
-        }
-
         public int getSize()
         {
             return getAlbum().getImages().size();
@@ -231,7 +227,7 @@ public class AlbumBean implements Serializable
             {
                 return getAlbum().getProperties().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
             }
-            else
+            else 
                 return false;
         }
 
@@ -292,6 +288,32 @@ public class AlbumBean implements Serializable
             }
             return personString;
         }
+
+        public void setActive(boolean active)
+        {
+            this.active = active;
+        }
+
+        public boolean getActive()
+        {
+            return active;
+        }
+        
+        public String makeActive()
+        {
+            sessionBean.setActiveAlbum(album.getId()); 
+            this.setActive(true);
+            return "pretty:";
+        }
+        
+        public String makeInactive()
+        {
+            sessionBean.setActiveAlbum(null);
+            this.setActive(false);
+            return "pretty:";
+        }
+        
+       
     
 
 }

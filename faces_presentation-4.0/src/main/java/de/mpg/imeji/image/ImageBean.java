@@ -1,5 +1,6 @@
 package de.mpg.imeji.image;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,10 @@ import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.EditMetadataBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
@@ -196,4 +199,38 @@ public class ImageBean{
 	public void setNext(String next) {
 		this.next = next;
 	}
+	
+	public String addToActiveAlbum()
+	{
+	    URI selectedAlbumId = sessionBean.getActiveAlbum();
+	    AlbumController ac = new AlbumController(sessionBean.getUser());
+	    Album activeAlbum = ac.retrieve(selectedAlbumId);
+	    if(activeAlbum.getImages().contains(image.getId()))
+	    {
+	        BeanHelper.info("Image " + image.getFilename() + "already in active album!");   
+	    }
+	    else
+	    {
+	        activeAlbum.getImages().add(image.getId());
+	        ac.update(activeAlbum);
+	        BeanHelper.info("Image " + image.getFilename() + "added to active album");
+	    }
+	    return "pretty:";
+	    
+	}
+	
+	public boolean getIsInActiveAlbum()
+    {
+	    if(sessionBean.getActiveAlbum()!=null)
+	    {
+	        URI selectedAlbumId = sessionBean.getActiveAlbum();
+	        AlbumController ac = new AlbumController(sessionBean.getUser());
+	        Album activeAlbum = ac.retrieve(selectedAlbumId);
+	        return activeAlbum.getImages().contains(image.getId());
+	    }
+	    return false;
+       
+        
+        
+    }
 }

@@ -25,10 +25,11 @@ public class SessionBean implements Serializable
     public static final String MESSAGES_BUNDLE = "messages";
     public static final String METADATA_BUNDLE = "metadata";
     // His locale
-    private Locale locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+    private Locale locale = new Locale("en");//.getCurrentInstance().getExternalContext().getRequestLocale();
     private Page currentPage = null;
     private boolean admin = false;
     private List<URI> selected;
+    private URI activeAlbum;
 
     public SessionBean()
     {
@@ -162,5 +163,15 @@ public class SessionBean implements Serializable
     public int getSelectedSize()
     {
         return this.selected.size();
+    }
+
+    public void setActiveAlbum(URI activeAlbum)
+    {
+        this.activeAlbum = activeAlbum;
+    }
+
+    public URI getActiveAlbum()
+    {
+        return activeAlbum;
     }
 }

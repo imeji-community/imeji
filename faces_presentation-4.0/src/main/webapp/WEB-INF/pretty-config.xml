@@ -73,7 +73,7 @@
 		<action>#{ViewCollectionBean.init}</action>
 	</url-mapping>
 	
-		<url-mapping id="collectionImages">
+	<url-mapping id="collectionImages">
 		<pattern value="/images/#{CollectionImagesBean.objectClass}/#{CollectionImagesBean.id}"/>
 		<view-id>/jsf/CollectionBrowse.xhtml</view-id>
 		<action>#{CollectionImagesBean.init}</action>
@@ -84,11 +84,7 @@
 		<view-id>/jsf/CollectionCreate.xhtml</view-id>
 	</url-mapping>
 	
-	<url-mapping id="createAlbum">
-		<pattern value="/album"/>
-		<view-id>/jsf/AlbumCreate.xhtml</view-id>
-		<action onPostback="false">#{AlbumBean.initCreate}</action>
-	</url-mapping>
+	
 	
 	<url-mapping id="editCollection">
 		<pattern value="/edit/collection/#{EditCollectionBean.id}"/>
@@ -101,6 +97,24 @@
 		<pattern value="/mdprofile/#{ViewMdProfileBean.id}"/>
 		<view-id>/jsf/ProfileView.xhtml</view-id>
 		<action>#{ViewMdProfileBean.init}</action>
+	</url-mapping>
+	
+	<url-mapping id="createAlbum">
+		<pattern value="/album"/>
+		<view-id>/jsf/AlbumCreate.xhtml</view-id>
+		<action onPostback="false">#{AlbumBean.initCreate}</action>
+	</url-mapping>
+	
+	<url-mapping id="viewAlbum">
+		<pattern value="/album/#{AlbumBean.id}"/>
+		<view-id>/jsf/AlbumView.xhtml</view-id>
+		<action onPostback="false">#{AlbumBean.initView}</action>
+	</url-mapping>
+	
+	<url-mapping id="albumImages">
+		<pattern value="/images/album/#{AlbumImagesBean.id}"/>
+		<view-id>/jsf/AlbumBrowse.xhtml</view-id>
+		<action>#{AlbumImagesBean.init}</action>
 	</url-mapping>
 	
 	<url-mapping id="createProfile">

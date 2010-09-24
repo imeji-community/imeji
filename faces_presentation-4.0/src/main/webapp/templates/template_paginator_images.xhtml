@@ -129,33 +129,15 @@
 								
 								
 								<!-- removed for now !!!!!!!!!!!!!!!!1-->
-								<ui:remove>
-									<!-- View details -->
-									<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-										<h:outputLink id="lnkActiveAlbum" value="#{Navigation.applicationUri}#{item.image.id.path}">
-											<h:outputText value="View"/>
-										</h:outputLink>
-									</h:panelGroup>
-									<!-- Add Active: Image not in Album AND Album is Private-->
-									<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-										<h:outputLink id="lnkAddToActiveAlbumActive" value="" onclick="javascript:message('Adding...');">
-											<h:outputText value="#{lbl.add}"/>
-										</h:outputLink>
-									</h:panelGroup>
+								<!-- Add Active: Image not in Album AND Album is Private-->
 									<!-- Add Inactive: Picture Already in Album -->
-									<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-										<h:commandLink id="lnkAddToActiveAlbumInactive1" disabled="true">
+									<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea" >
+										<h:commandLink id="lnkAddToActiveAlbumInactive1" action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}">
 											<h:outputText value="#{lbl.add}"/>
 										</h:commandLink>
 									</h:panelGroup>
-									<!-- No album selected -->
-									<!-- add disabled to the current album : no album selected -->
-									<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-										<h:commandLink id="lnkAddToActiveAlbumInactive2" disabled="true">
-											<h:outputText value="#{lbl.add}"/>
-										</h:commandLink>
-									</h:panelGroup>
-								</ui:remove>
+
+
 								
 								
 							</h:panelGroup>

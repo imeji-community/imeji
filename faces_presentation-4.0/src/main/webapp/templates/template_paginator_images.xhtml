@@ -80,7 +80,7 @@
 					<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 						<h:panelGroup id="itemBlock">
 						<li class="large_area0 itemTile">
-							<h:panelGroup id="imgFrame" styleClass="large_area1_p2 tileIconArea free_area1 matrixItem">
+							<h:panelGroup id="imgFrame" styleClass="large_area1_p2 tileIconArea free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
 								<span> 
 								<!-- Image with link to the details view -->
 									<h:outputLink id="lnkPicDetailBrowse" value="#{Navigation.applicationUri}#{item.image.id.path}">

@@ -45,7 +45,7 @@
 
 		
 		<ui:define name="contentMenu">
-			<h:outputText id="txtOrganizeLink" styleClass="free_area0" value="ADVANCED SEARCH"/>
+			<h:outputText id="txtOrganizeLink" styleClass="free_area0" value="#{lbl.advanced_search}"/>
 		</ui:define>
 		
 		<ui:define name="actionsMenu">
@@ -69,7 +69,7 @@
 		
 		<div class="full_area0 formButtonArea">
 			<!-- <h:commandLink id="lnkAdvancedSearchClearAll" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" value="#{lbl.adv_search_btClearAll}" action="#{AdvancedSearchEdit.clearAllForms}"/>-->						
-			<h:commandLink id="lnkAdvancedSearchStartSearch" styleClass="free_area1_p8 activeButton" value="Search" action="#{advancedSearchBeanParam.search}"/>
+			<h:commandLink id="lnkAdvancedSearchStartSearch" styleClass="free_area1_p8 activeButton" value="#{lbl.search}" action="#{advancedSearchBeanParam.search}"/>
 		</div>
 
 

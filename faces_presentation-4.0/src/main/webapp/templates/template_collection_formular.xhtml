@@ -33,7 +33,7 @@
 				-->
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{FormularBean.tab == 'COLLECTION'}">
 					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="Collection Information"/>
+						<h:outputText value="#{lbl.collection_info}"/>
 					</h3>
 					<span class="seperator"></span>
 					<div class="free_area0 itemBlockContent endline">	
@@ -77,7 +77,7 @@
 									
 									<!-- Given Name -->
 									<b class="xLarge_area0_p8 endline labelLine clear">
-											<h:outputText value=" Given Name " style="visibility:hidden;"/>
+											<h:outputText value=" #{lbl.first_name} " style="visibility:hidden;"/>
 											<span class="noDisplay">: </span>
 									</b>
 									<span class="xHuge_area0 xTiny_marginLExcl endline">
@@ -97,7 +97,7 @@
 											
 									<!-- Organizations -->
 									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value=" Organization " style="visibility:hidden;"/>
+										<h:outputText value=" #{lbl.organization} " style="visibility:hidden;"/>
 										<span class="noDisplay">: </span>
 									</b>
 									<span class="xHuge_area0 xTiny_marginLExcl endline">
@@ -108,7 +108,7 @@
 										<h:panelGroup styleClass="endline">
 											<h:panelGroup>
 												<b class="xLarge_area0_p8 endline labelLine clear">
-													<h:outputText value=" Organization" style="visibility:hidden;"/>
+													<h:outputText value="  #{lbl.organization}" style="visibility:hidden;"/>
 													<span class="noDisplay">: </span>
 												</b>
 												<span class="huge_area0 xTiny_marginLExcl endline">
@@ -135,7 +135,7 @@
 						
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{FormularBean.tab == 'PROFILE'}">
 					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="Metadata Profile"/>
+						<h:outputText value="#{lbl.metadata_profile}"/>
 					</h3>
 					<span class="seperator"></span>
 					
@@ -155,7 +155,7 @@
 						<a4j:repeat id="profile" var="stBean" value="FormularBean.mdProfileBean.statements" rowKeyVar="position">
 							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
 								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="Elements" rendered="#{position == 0}"/>
+									<h:outputText value="#{lbl.elements}" rendered="#{position == 0}"/>
 									<h:outputText value="&#160;" rendered="#{position != 0}"/>
 									<span class="noDisplay">: </span>
 								</b>

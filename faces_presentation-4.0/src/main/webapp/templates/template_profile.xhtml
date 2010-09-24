@@ -12,7 +12,7 @@
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">					
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="Metadata Profile"/>
+						<h:outputText value="#{lbl.metadata_profile}"/>
 					</h3>
 					<span class="seperator"></span>
 					
@@ -36,7 +36,7 @@
 						<a4j:repeat id="profile" var="statement" value="#{FormularBean.statements}" rowKeyVar="position">
 							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
 								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="Elements" rendered="#{position == 0}"/>
+									<h:outputText value="#{lbl.elements}" rendered="#{position == 0}"/>
 									<h:outputText value="&#160;" rendered="#{position != 0}"/>
 									<span class="noDisplay">: </span>
 								</b>

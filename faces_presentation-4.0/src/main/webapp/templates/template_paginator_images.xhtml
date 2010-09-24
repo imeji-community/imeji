@@ -49,7 +49,7 @@
 			
 				<h:panelGroup>
 					<!-- SORTING content menu lower line starts here -->
-					<h:outputText id="txtSort" value="Sorted by " styleClass="free_area0"/>
+					<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0"/>
 					<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
 						<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}"/>
 					</h:selectOneMenu>
@@ -76,7 +76,7 @@
 				</h:panelGroup>
 			
 				<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-					<h:outputLabel value=" sds " styleClass="small_area0" style="visibility: hidden"></h:outputLabel>
+					<h:outputLabel value="&#160;" styleClass="small_area0" style="visibility: hidden"></h:outputLabel>
 					<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}" styleClass="large_area0">
 						<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
 					</h:outputLink>

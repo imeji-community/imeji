@@ -208,7 +208,7 @@
 			<a4j:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0">
 				<h:panelGroup>
 				   
-				    <tr class="full_0area0 listItem">
+				    <tr class="full_0area0 listItem #{container.active ? 'activeAlbum' : ''}">
 				      	
 				      	<td class="free_area0 endline">
 				      		<span class="free_area0_p8 endline itemSelectArea">

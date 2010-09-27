@@ -522,7 +522,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public String goToNextPage()
     {
-        currentPageNumber = +1;
+        currentPageNumber += 1; 
         return getNavigationString();
     }
 
@@ -533,7 +533,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public String goToPreviousPage()
     {
-        currentPageNumber = -1;
+        currentPageNumber -= 1;
         return getNavigationString();
     }
 

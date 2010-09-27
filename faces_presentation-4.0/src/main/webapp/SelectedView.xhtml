@@ -41,7 +41,7 @@
 			<ui:param name="headline" value="#{lbl.selected_headline}"/>
 			
 			<ui:define name="subImagesContent">
-			<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
+			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{SelectedBean.sb.user != null}">
 				<h:panelGroup rendered="#{SelectedBean.editMetadataBean.numberOfProfiles == '1'}">
 					
 					<h:panelGroup layout="block" styleClass="full_area1_p8">

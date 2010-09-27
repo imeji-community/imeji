@@ -27,7 +27,6 @@
             All rights reserved. Use is subject to license terms.
              */
 </jsp:scriptlet>
-<%@ taglib uri="http://myfaces.apache.org/trinidad" prefix="tr"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <f:subview id="messages">

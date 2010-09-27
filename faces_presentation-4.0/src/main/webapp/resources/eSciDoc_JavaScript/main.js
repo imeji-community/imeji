@@ -26,63 +26,53 @@
 	All rights reserved. Use is subject to license terms.
 */
 	
+function autoSuggestWrite(suggestionBox, index) 
+ { 
+    var items = suggestionBox.getSelectedItems();
+    var familyName;
+    var firstName;
+    var alternative;
+    var id;
+    var org;
+    if (items && items.length > 0) 
+	{
+     	for (var i = 0; i < items.length; i++) 
+		{
+     		familyName = items[i].http_xmlns_com_foaf_0_1_family_name;
+     		try{firstName = items[i].http_xmlns_com_foaf_0_1_givenname;}
+     		catch (e){firstName =' ';}
+     		try{id = items[i].http_purl_org_dc_elements_1_1_identifier.http_www_w3_org_1999_02_22_rdf_syntax_ns_value;}
+     		catch (e){id =' ';}
+     		try{alternative = items[i].http_purl_org_dc_terms_alternative;}
+     		catch (e){alternative =' ';}
+     		try{org = items[i].http_purl_org_escidoc_metadata_terms_0_1_position.http_purl_org_eprint_terms_affiliatedInstitution;}
+     		catch (e){org =' ';}
+
+		}
+     	setInputTextValue('formular:mdList:' + index + ':inputFamilyName', familyName);
+     	setInputTextValue('formular:mdList:' + index + ':inputFirstName', firstName);
+     	setInputTextValue('formular:mdList:' + index + ':inputAlternative', alternative);
+     	setInputTextValue('formular:mdList:' + index + ':inputIdentifier', id);
+     	setInputTextValue('formular:mdList:' + index + ':inputOrganization', org);
+	}
+}
+
+function setInputTextValue(id, value)
+{
+	if (value && value != 'undefined')
+	{
+		document.getElementById(id).value  = value;
+	}
+	else
+	{
+		document.getElementById(id).value  = '';
+	}
+}
 
 function collapse(firstPart, secondPart)
 {
 	return firstPart + '.' + secondPart;
 }
-
-function redirectToSearchPageOld()
-{
-var query = '';
-	
-	for (var i=0;i<document.formular.elements.length; i++) 
-	{
-		var size = document.formular.elements[i].id.length - 15;
-		var doc = document.formular.elements[i];
-		var value = document.formular.elements[i].value;
-		
-		if(document.formular.elements[i].type == 'select-one' && document.formular.elements[i].value != 'Whole collection')
-		{
-			query += document.formular.elements[i].id.substr(15, size) + ':' + document.formular.elements[i].value;
-		}
-		
-		if (document.formular.elements[i].checked) 
-		{
-			if (query == '') 
-			{
-				query += document.formular.elements[i].id.substr(15, size) ;
-			}
-			else
-			{
-				query += '_' + document.formular.elements[i].id.substr(15, size) ;
-			}
-		}
-		if (document.formular.elements[i].type == 'text' && document.formular.elements[i].value != '') 
-		{
-			if (query == '') 
-			{
-				query += document.formular.elements[i].id.substr(15, size) + ':' +  document.formular.elements[i].value;
-			}
-			else
-			{
-				query += '_' + document.formular.elements[i].id.substr(15, size) + ':' + document.formular.elements[i].value ;
-			}
-		}
-	}
-	
-	if (query == '') 
-	{
-		query += 'error';
-	}
-	
-	if (document.getElementById('SearchFormular:currentalbum').value != '' && query != 'error') 
-	{
-		query = 'currentalbum/'+ document.getElementById('SearchFormular:currentalbum').value + '/' + query;
-	}
-	
-	window.location.href= './search/result/' + query.toLowerCase();
-}	
 
 function albumSearchOnEnter(event)
 {

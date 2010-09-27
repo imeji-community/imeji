@@ -59,7 +59,13 @@
 								
 								<h:panelGroup layout="block" styleClass="xLarge_area0" >
 									<h:outputText value="&#160;" styleClass="large_label" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
-									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}"/>
+									<h:inputText id="input"  styleClass="large_txtInput" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}">
+										<rich:suggestionbox for="input" var="results" suggestionAction="#{metadata.autoComplete}">
+											<h:column>
+							               		<h:outputText value="#{results.value}" />
+							                </h:column>
+										</rich:suggestionbox>
+									</h:inputText>
 									
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='DATE'}">
 										<h:outputText value="#{lbl.date}" styleClass="large_label" />
@@ -71,22 +77,28 @@
 									<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}"/>
 									
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='CONE_AUTHOR'}">
-									
 										<h:outputLabel value="#{lbl.family_name}" styleClass="xLarge_label"/>
-										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.familyName}" />
+										<h:inputText id="inputFamilyName" styleClass="large_txtInput" value="#{metadata.metadata.type.person.familyName}">
+											<rich:suggestionbox for="inputFamilyName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})" suggestionAction="#{metadata.autoComplete}"  nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+												<h:column>
+								               		<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />, 
+								               		<h:outputText value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
+								                </h:column>
+											</rich:suggestionbox>
+										</h:inputText>
 										
 										
-										<h:outputLabel value="#{lbl.first_name}" styleClass="xLarge_label"/>
-										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.givenName}" /> 
+										<h:outputLabel  value="#{lbl.first_name}" styleClass="xLarge_label"/>
+										<h:inputText id="inputFirstName" styleClass="large_txtInput" value="#{metadata.metadata.type.person.givenName}" /> 
 										
 										<h:outputLabel value="#{lbl.alternative_name}" styleClass="xLarge_label"/>
-										<h:inputText  styleClass="large_txtInput" value="#{metadata.metadata.type.person.alternativeName}" /> 
+										<h:inputText id="inputAlternative" styleClass="large_txtInput" value="#{metadata.metadata.type.person.alternativeName}" /> 
 										
 										<h:outputLabel value="#{lbl.identifier}" styleClass="xLarge_label"/>  
-										<h:inputText  styleClass="large_txtInput"  value="#{metadata.metadata.type.person.identifier}"/>
+										<h:inputText id="inputIdentifier" styleClass="large_txtInput"  value="#{metadata.metadata.type.person.identifier}"/>
 
 										<h:outputLabel value="#{lbl.organization}" styleClass="xLarge_label"/>
-										<h:inputText styleClass="large_txtInput" value="#{metadata.metadata.type.person.organizations[0].name}" />
+										<h:inputText id="inputOrganization" styleClass="large_txtInput" value="#{metadata.metadata.type.person.organizations[0].name}" />
 									</h:panelGroup>
 									
 									<h:panelGroup rendered="#{metadata.metadata.type.enumType=='GEOLOCATION'}">
@@ -121,10 +133,11 @@
 					<h:outputText value="#{SelectedBean.editMetadataBean.numberOfProfiles} found!" styleClass="full_label"/>
 				</h:panelGroup>
 			</h:panelGroup>
-			
 			</ui:define>
+
 	</ui:composition>
 </body>
+
 </html>
 		
 				

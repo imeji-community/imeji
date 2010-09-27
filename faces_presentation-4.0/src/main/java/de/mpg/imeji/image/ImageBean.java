@@ -160,8 +160,7 @@ public class ImageBean
         this.selected = selected;
     }
 
-    public boolean getSelected()
-    {
+    public boolean getSelected(){
         if (sessionBean.getSelected().contains(image.getId()))
             selected = true;
         else

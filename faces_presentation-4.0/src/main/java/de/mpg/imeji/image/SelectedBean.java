@@ -36,7 +36,7 @@ public class SelectedBean extends ImagesBean
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
-    private Collection<Image> images;
+	private Collection<Image> images;
     private EditMetadataBean editMetadataBean;
     private String mdEdited;
     private URI currentCollection;
@@ -136,5 +136,13 @@ public class SelectedBean extends ImagesBean
     {
         return currentCollection;
     }
+    
+    public SessionBean getSb() {
+		return sb;
+	}
+
+	public void setSb(SessionBean sb) {
+		this.sb = sb;
+	}
 
 }

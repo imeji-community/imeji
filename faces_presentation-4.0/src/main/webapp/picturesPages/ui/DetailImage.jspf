@@ -33,8 +33,8 @@
              -->
 </ui:remove>
 <f:subview id="Image">
-	<h:panelGroup layout="block" styleClass="half_area0 endline alignleft"> 
-		<h:panelGroup layout="block" styleClass="half_area1_p8 endline detailedItem" style="align: right;" >
+	<h:panelGroup layout="block" styleClass="full_area2"> 
+		<h:panelGroup layout="block" styleClass="full_area detailedItem">
 			<span>
 				<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{ImageBean.image.fullImageUrl}" target="_blank">
 					<h:graphicImage id="picWebResolution" title="ImageBean.image.id" alt="ImageBean.image.id" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{ImageBean.image.webImageUrl}" />
@@ -44,15 +44,13 @@
 			</span>
 		</h:panelGroup>
 
-		<h:outputLink id="lnkPicFullResolution2" value="" styleClass="xSmall_marginLIncl">
-			<h:outputText value="#{lbl.add_to_album}"/>
-		</h:outputLink>
+			<h:outputLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" value="">
+				<h:outputText value="#{lbl.add_to_album}"/>
+			</h:outputLink>
+				<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{ImageBean.selected}" onchange="getElementById('formular:Image:selectBtn').click();"/>
+				<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{ImageBean.selected}" action="#{ImageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
+				<h:outputText styleClass="small_label" value="#{lbl.selected}"/>
 
-		<h:selectBooleanCheckbox id="pictureCheckbox" styleClass="double_marginLIncl" value="#{ImageBean.selected}" onchange="getElementById('formular:Image:selectBtn').click();"/>
-		<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{ImageBean.selected}" action="#{ImageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
-		<h:outputText value="#{lbl.selected}"/>
-
-		 
 		<!-- <h:panelGroup layout="block" styleClass="half_area0">
 			<h:outputText styleClass="free_area0 xSmall_marginRExcl" rendered="#{Detail.item.type == 'face'}" value="#{Detail.item.mdRecords.label['escidoc.face.picture-group']} #{Detail.item.mdRecords.value['escidoc.face.picture-group']}" />
 			<h:outputLink id="lnkAddToAlbum" styleClass="free_area0 xSmall_marginRExcl" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}"  rendered="#{(!Detail.item.inAlbum) and (AlbumSession.active.latestVersion.objectId != null) and (AlbumSession.active.state == 'PENDING')}">

@@ -11,7 +11,12 @@ import de.mpg.jena.vo.Statement;
 
 public class CollectionCriterion extends Criterion implements Serializable{
 
-	private CollectionImeji selectedCollection;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    
+    private CollectionImeji selectedCollection;
 	private String selectedCollectionId;
 	private List<MDCriterion> mdCriterionList;
     private Collection<CollectionImeji> collections;
@@ -26,7 +31,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
 	}
 
 	public CollectionCriterion(List<CollectionImeji> collections){
-		this.collections = collections;
+		this.collections = collections; 
 		if(collections!=null && collections.size()>0)
 		{
 		    setSelectedCollection(collections.get(0));
@@ -59,7 +64,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
     {
         try{
             
-            setMdCriterionList(newMdCriterionList());
+            //setMdCriterionList(newMdCriterionList());
                 
             List<SelectItem> newMdList = new ArrayList<SelectItem>();
             Collection<Statement> s = selectedCollection.getProfile().getStatements();

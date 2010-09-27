@@ -26,7 +26,7 @@ public class CollectionImagesBean extends ImagesBean
 {
     private int totalNumberOfRecords;
     private String id = null;
-    private String objectClass;
+
     private URI uri;
     private SessionBean sb;
     private CollectionImeji collection;
@@ -40,11 +40,10 @@ public class CollectionImagesBean extends ImagesBean
 
     public void init()
     {
-        if ("collection".equals(objectClass))
-        {
+       
             CollectionController cc = new CollectionController(sb.getUser());
             this.collection = cc.retrieve(id);
-        }
+       
     }
     
     @Override
@@ -64,14 +63,10 @@ public class CollectionImagesBean extends ImagesBean
     {
         
         ImageController controller = new ImageController(sb.getUser());
-        if ("collection".equals(objectClass))
-        {
-            uri = ObjectHelper.getURI(CollectionImeji.class, id);
-        }
-        if ("album".equals(objectClass))
-        {
-            uri = ObjectHelper.getURI(Album.class, id);
-        }
+       
+           uri = ObjectHelper.getURI(CollectionImeji.class, id);
+        
+       
         Collection<Image> images = new ArrayList<Image>();
         try
         {
@@ -94,16 +89,6 @@ public class CollectionImagesBean extends ImagesBean
     public void setId(String id)
     {
         this.id = id;
-    }
-
-    public String getObjectClass()
-    {
-        return objectClass;
-    }
-
-    public void setObjectClass(String objectClass)
-    {
-        this.objectClass = objectClass;
     }
 
     public void setCollection(CollectionImeji collection)

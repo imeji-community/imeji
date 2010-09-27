@@ -285,6 +285,12 @@
 		<managed-bean-class>de.mpg.imeji.album.AlbumsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>AlbumImagesBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.album.AlbumImagesBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 	<!-- Other Beans -->
 	<managed-bean>

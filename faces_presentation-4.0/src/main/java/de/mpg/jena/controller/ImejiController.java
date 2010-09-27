@@ -737,7 +737,7 @@ public abstract class ImejiController {
 	/**Removes lost, anonymous nodes from graph. They are produces during updates of lists/collections. Bug of JenaBean.
 	 * 
 	 */
-	protected void cleanGraph()
+	protected synchronized void cleanGraph()
 	{
 	    try
         {

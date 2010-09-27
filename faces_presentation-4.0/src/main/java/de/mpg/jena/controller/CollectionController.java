@@ -37,7 +37,7 @@ public class CollectionController extends ImejiController{
 	 * @param ic
 	 * @param user
 	 */
-	public CollectionImeji create(CollectionImeji ic) throws Exception
+	public synchronized CollectionImeji create(CollectionImeji ic) throws Exception
 	{
 	    //first write properties
 	    writeCreateProperties(ic.getProperties(), user);
@@ -64,7 +64,7 @@ public class CollectionController extends ImejiController{
 	 * @param ic
 	 * @param user
 	 */
-	public void update(CollectionImeji ic) throws Exception
+	public synchronized void update(CollectionImeji ic) throws Exception
 	{
 	    //first check user credentials
 	    checkUserCredentials(ic);
@@ -77,7 +77,7 @@ public class CollectionController extends ImejiController{
 		base.commit();
 	}
 	
-	public void release(CollectionImeji ic) throws Exception
+	public synchronized void release(CollectionImeji ic) throws Exception
     {
         //first check user credentials
 	    ic.getProperties().setStatus(Status.RELEASED);

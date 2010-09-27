@@ -32,7 +32,7 @@ public class AlbumController extends ImejiController{
 	 * @param ic
 	 * @param user
 	 */
-	public void create(Album ic) throws Exception
+	public synchronized void create(Album ic) throws Exception
 	{
 		
 		writeCreateProperties(ic.getProperties(), user);
@@ -53,7 +53,7 @@ public class AlbumController extends ImejiController{
 	 * @param ic
 	 * @param user
 	 */
-	public void update(Album ic)
+	public synchronized void update(Album ic)
 	{
 		writeUpdateProperties(ic.getProperties(), user);
 		base.begin();
@@ -90,7 +90,7 @@ public class AlbumController extends ImejiController{
 		return reader.load(Album.class);
 	}
 	
-	public void release(Album album) throws Exception
+	public synchronized void release(Album album) throws Exception
     {
         //first check user credentials
         album.getProperties().setStatus(Status.RELEASED);

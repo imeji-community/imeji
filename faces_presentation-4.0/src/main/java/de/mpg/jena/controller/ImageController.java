@@ -249,6 +249,7 @@ public class ImageController extends ImejiController{
 	
 	public static void main(String[] arg) throws Exception
 	{
+	    
 	    /*
 	    File f = new File("/home/haarlaender/basic_imeji_data.rdf");
 	    f.createNewFile();
@@ -293,24 +294,36 @@ public class ImageController extends ImejiController{
 	    scList.add(scList0);
 	    scList.add(scList1);
 	    
-	    Collection<Image> result = ic.searchAdvanced(scList, null, -1, 0);
-        System.out.println("Found: " +result.size() + "results ");
+	    //Collection<Image> result = ic.searchAdvanced(scList, null, -1, 0);
 	   
+	    /*
+	    Resource r = base.getResource("http://imeji.mpdl.mpg.de/collection/1");
+	    r.removeProperties();
+	    ic.cleanGraph();
+	    */
+	    
+	    Collection<CollectionImeji> result = rdf2Bean.load(CollectionImeji.class);
+        CollectionImeji res = rdf2Bean.load(CollectionImeji.class, "http://imeji.mpdl.mpg.de/collection/1");
+	    
+        //System.out.println("Found: " +result.size() + "results ");
+	   /*
         for (Image img : result)
         {
             System.out.println(img.getId());
             
         }
-         
+         */
 	    
-	    String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . MINUS { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . OPTIONAL { ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v2 }} . FILTER( IF(bound(?v2), ?v2='test', '')) . FILTER(?s='efe')} ";
+	    //String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . MINUS { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . OPTIONAL { ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v2 }} . FILTER( IF(bound(?v2), ?v2='test', '')) . FILTER(?s='efe')} ";
         //String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  .  OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v10 . ?v1 <http://purl.org/dc/terms/type> ?v2 . ?v2 <http://imeji.mpdl.mpg.de/metadata/enumType> ?v4 .  OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/metadata/date> ?v3 }}}";
 
 	    //Syntax.
+        /*
         Query queryObject = QueryFactory.create(q, Syntax.syntaxARQ);
         QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
         ResultSet results = qe.execSelect();
         ResultSetFormatter.out(System.out, results);
+          */
           /* 
         while(results.hasNext())
            {
@@ -320,7 +333,7 @@ public class ImageController extends ImejiController{
                //base.remove(qs.getResource("?s"), qs.get("?p").as(Property.class), qs.get("?o"));
            }
        */
-        qe.close();
+        
         
         System.out.println("IMAGE_COLLECTION.URI=http://imeji.mpdl.mpg.de/collection/1 ".matches("[^\\s]+=[^\\s]+\\s+"));
         

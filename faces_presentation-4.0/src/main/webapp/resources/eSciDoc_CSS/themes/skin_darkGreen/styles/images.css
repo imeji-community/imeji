@@ -46,6 +46,11 @@
 |[ Message ]                        	      |
 -----------------------------------------------
 */
+
+	body {
+		background-image: url('../images/schief.jpg');
+	}
+
 	/*HEADER LOGO*/
 
 	.headerLogo {

@@ -112,11 +112,11 @@
 									
 						<h:panelGroup styleClass="seperator" />
 									
-						<h:outputLink id="lnkViewItemFull_btnItemVersions" styleClass="free_area0 actual" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id == 'editImage'}">
+						<h:outputLink id="lnkViewItemFull_btnItemVersions" styleClass="free_area0 actual" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id == 'editImage' and ImageBean.sessionBean != null}">
 							<h:outputText value="#{lbl.assign_md}"/>
 						</h:outputLink>
 						
-						<h:outputLink id="lnkViewItemFull_btnItemVersions2" styleClass="free_area0" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id != 'editImage'}">
+						<h:outputLink id="lnkViewItemFull_btnItemVersions2" styleClass="free_area0" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id != 'editImage' and ImageBean.sessionBean != null}">
 							<h:outputText value="#{lbl.assign_md}"/>
 						</h:outputLink>
 									

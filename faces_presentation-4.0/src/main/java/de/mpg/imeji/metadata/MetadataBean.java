@@ -101,7 +101,7 @@ public class MetadataBean
 
 	private MetadataProfile profile;
     
-    public MetadataBean(MetadataProfile profile, Statement s)
+    public MetadataBean(MetadataProfile profile,  Statement s)
     {
         this.profile = profile;
         changeStatement(s);
@@ -111,10 +111,12 @@ public class MetadataBean
             field = fields.get(0);
             */
     }
-    
-    public MetadataBean(ImageMetadata metadata){
+    public MetadataBean(MetadataProfile profile,  Statement s,ImageMetadata metadata)
+    {
+        this.profile = profile;
+        changeStatement(s);
     	this.metadata = metadata;
-    	
+
     }
         
     

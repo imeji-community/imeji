@@ -70,58 +70,42 @@ public class EditMetadataBean
     	for(Statement s: profile.getStatements()){
     		for(ImageMetadata im : image.getMetadata()){
     			if(im.getName()== s.getName()){
-		    		MetadataBean mb = new MetadataBean(profile, profile.getStatements().get(0));
+		    		MetadataBean mb = new MetadataBean(profile, s, im);
 		    		mb.setPrettyLink(prettyLink);
-		    	    if(metadata.size()==0)
-		    	    {
-		    	        metadata.add(mb); 
-		    	    }else{
-		    	        metadata.add(getMdPosition() + 1, mb);
-		    	    }  
+	    	        metadata.add(mb); 
     			}
 	    	}
     	}
 	    return prettyLink;
     }
-  	public boolean edit()
-    {
-        try
-        {  
+    
+  	public boolean edit(){
+        try{  
             ImageController ic = new ImageController(sb.getUser());
-        	if(image == null){
-	            for (Image im : images) 
-	            {
+        	if(images!= null && images.size()>0){
+	            for (Image im : images) {
 	                im = setImageMetadata(im, metadata);
 	            }
 	            ic.update(images);
         	}else{
-        		image = addNewImageMetadata(image, metadata);
+        		image = updateImageMetadata(image, metadata);
         		ic.update(image);
         	}
-        }    
-        catch (Exception e)
-        {
+        }catch (Exception e){
             return false;
         }
         return true;
     }
-	
-	
-    public Image addNewImageMetadata(Image im, List<MetadataBean> mdbs) throws Exception{
-        Map<String, List<ImageMetadata>> mdMap = new HashMap<String, List<ImageMetadata>>();
-        List<ImageMetadata> newMetadata = new ArrayList<ImageMetadata>();
-        for(ImageMetadata imd : im.getMetadata()){
-        	newMetadata.add(imd);
-        	mdMap.put(imd.getName(), newMetadata);
-        }
-        // add new mdvalues 
-        for(MetadataBean mdb : mdbs){
+    
+    public Image updateImageMetadata(Image im, List<MetadataBean> mdbs) throws Exception{
+        im.getMetadata().clear();
+        // add new mdvalues (overwrite old)
+        for(MetadataBean mdb : metadata){
             im.getMetadata().add(mdb.getMetadata());
-        }        
+        }
         return im; 
-    }
-    
-    
+    }    
+        
     public Image setImageMetadata(Image im, List<MetadataBean> mdbs) throws Exception
     {
         Map<String, List<ImageMetadata>> mdMap = new HashMap<String, List<ImageMetadata>>();
@@ -165,25 +149,7 @@ public class EditMetadataBean
         
         return im; 
     }
-/*
-    public Image setMetadataValue(Image im, MdField f) throws Exception
-    {
-        if (!hasMetadata(im, f.getParent().getName()))
-            im.getMetadata().add(
-                    new ImageMetadata(f.getParent().getName(), ComplexTypeHelper.setComplexTypeValue(f.getParent()
-                            .getType(), f.getName(), f.getValue())));
-        else
-        {
-            for (ImageMetadata md : im.getMetadata())
-            {
-                if (md.getName().equals(f.getParent().getName()))
-                    md.setType(ComplexTypeHelper
-                            .setComplexTypeValue(f.getParent().getType(), f.getName(), f.getValue()));
-            }
-        }
-        return im;
-    }
-*/
+
     public boolean hasMetadata(Image im, String name)
     {
         for (ImageMetadata md : im.getMetadata())
@@ -230,7 +196,7 @@ public class EditMetadataBean
         if (metadata.size() > 0)
         {
             metadata.remove(getMdPosition());
-        }
+        }    
         return "pretty:";
     }
 
@@ -285,8 +251,7 @@ public class EditMetadataBean
         this.mdPosition = mdPosition;
     }
 
-    public int getMdPosition()
-    {
+    public int getMdPosition(){
         return mdPosition;
     }
     

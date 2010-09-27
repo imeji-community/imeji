@@ -49,14 +49,14 @@
 	/*HEADER LOGO*/
 
 	.headerLogo {
-		background-image: url('../images/logo_faces.gif');
+		background-image: url('../images/logo_imeji.gif');
 		background-repeat: no-repeat;
 		background-position: top left;
 	}
 		/*PUT IN HEADER LOGO FOR PRINT DISPLAY HERE*/
 		@media print {
 			.contentMenu {
-				list-style-image: url('../images/logo_faces.gif');
+				list-style-image: url('../images/logo_imeji.gif');
 			}
 		}
 	

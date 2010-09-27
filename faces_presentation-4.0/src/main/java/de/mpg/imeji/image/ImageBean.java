@@ -36,7 +36,6 @@ public class ImageBean{
     private ImageController imageController= null;
     private List<ImageMetadata> imgMetadata;
     private EditMetadataBean editMetadataBean;
-
 	private CollectionImeji  collection;
     private CollectionController collectionController;
     private String previous = null;
@@ -199,6 +198,14 @@ public class ImageBean{
 
 	public void setNext(String next) {
 		this.next = next;
+	}
+	
+	public SessionBean getSessionBean() {
+		return sessionBean;
+	}
+
+	public void setSessionBean(SessionBean sessionBean) {
+		this.sessionBean = sessionBean;
 	}
 	
 	public String addToActiveAlbum()

@@ -47,9 +47,8 @@ public class EditMetadataBean
             statementMenu.add(new SelectItem(s.getName(), s.getName()));
         }
         addMetadata();
-        
     }
-                 
+                  
     public EditMetadataBean(Image image){
     	this.prettyLink = "pretty:editImage";
     	this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -61,12 +60,30 @@ public class EditMetadataBean
         {
             statementMenu.add(new SelectItem(s.getName(), s.getName()));
         }
-    	addMetadata();
+        if(image.getMetadata().size() != 0){
+        	addImageMetadataForEdit(image);
+        }else 
+        	addMetadata();
     }
-                     
-
-
-	public boolean edit()
+    
+    public String addImageMetadataForEdit(Image image){
+    	for(Statement s: profile.getStatements()){
+    		for(ImageMetadata im : image.getMetadata()){
+    			if(im.getName()== s.getName()){
+		    		MetadataBean mb = new MetadataBean(profile, profile.getStatements().get(0));
+		    		mb.setPrettyLink(prettyLink);
+		    	    if(metadata.size()==0)
+		    	    {
+		    	        metadata.add(mb); 
+		    	    }else{
+		    	        metadata.add(getMdPosition() + 1, mb);
+		    	    }  
+    			}
+	    	}
+    	}
+	    return prettyLink;
+    }
+  	public boolean edit()
     {
         try
         {  

@@ -111,6 +111,11 @@ public class MetadataBean
             field = fields.get(0);
             */
     }
+    
+    public MetadataBean(ImageMetadata metadata){
+    	this.metadata = metadata;
+    	
+    }
         
     
     public String changeType(){

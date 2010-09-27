@@ -40,7 +40,6 @@ public class ImageBean{
     private CollectionController collectionController;
     private String previous = null;
     private String next = null;
-    private boolean deSelected;
 
 
 	public ImageBean(Image img){
@@ -86,7 +85,7 @@ public class ImageBean{
         }
         return getNavigationString();
     }
-      
+          
     public String select(){
         if (!selected ){
             sessionBean.getSelected().remove(image.getId());
@@ -97,25 +96,11 @@ public class ImageBean{
         return "";
     }
     
-    public void deSelectedEvent(ValueChangeEvent event){
-    	if(event.getNewValue() != null && event.getNewValue() != event.getOldValue() && Boolean.parseBoolean(event.getNewValue().toString())){
-        	if(sessionBean.getSelected().contains(image.getId())){
-        		sessionBean.getSelected().remove(image.getId());
-        	}
-    	}
+    public String clearAll(){
+    	sessionBean.getSelected().clear();
+    	return "pretty:";
     }
     
-	public boolean getDeSelected() {
-    	if(!(sessionBean.getSelected().contains(image.getId()))){
-    		deSelected= true;
-    	}else
-    		deSelected= false;
-		return deSelected;
-	}
-  
-	public void setDeSelected(boolean deSelected) {
-		this.deSelected= deSelected;
-	}
 	
     public CollectionImeji getCollection() {
 		return collection;
@@ -124,7 +109,7 @@ public class ImageBean{
 	public void setCollection(CollectionImeji collection) {
 		this.collection = collection;
 	}    
-        
+           
 	public List<ImageMetadata> getImgMetadata() {
 		return  new ArrayList<ImageMetadata>(image.getMetadata());
 	}
@@ -153,9 +138,12 @@ public class ImageBean{
      */    
     public void setSelected(boolean selected){
         this.selected = selected;
-    }  
+    }      
         
     public boolean getSelected(){
+    	if(sessionBean.getSelected().contains(image))
+    		selected = true;
+    	else selected = false;
     	return selected; 
     }
   
@@ -203,7 +191,7 @@ public class ImageBean{
 	public SessionBean getSessionBean() {
 		return sessionBean;
 	}
-
+ 
 	public void setSessionBean(SessionBean sessionBean) {
 		this.sessionBean = sessionBean;
 	}

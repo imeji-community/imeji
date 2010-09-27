@@ -93,9 +93,9 @@
 					<h:outputText value="#{lbl.images_all}"/>
 				</h:outputLink>
 
-				<h:outputLink value="#{Navigation.imagesUrl}/" styleClass="free_area2_p6 xHuge_marginLIncl ">
-					<h:outputText value="#{lbl.selected_clear}"/>
-				</h:outputLink>
+				<a4j:commandLink value="#{lbl.selected_clear}" action="#{ImageBean.clearAll}" styleClass="free_area2_p6 xHuge_marginLIncl " />
+
+
 				
 			</h:panelGroup>
 
@@ -112,11 +112,11 @@
 									
 						<h:panelGroup styleClass="seperator" />
 									
-						<h:outputLink id="lnkViewItemFull_btnItemVersions" styleClass="free_area0 actual" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id == 'editImage' and ImageBean.sessionBean != null}">
+						<h:outputLink id="lnkViewItemFull_btnItemVersions" styleClass="free_area0 actual" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id == 'editImage' and ImageBean.sessionBean.user != null}">
 							<h:outputText value="#{lbl.assign_md}"/>
 						</h:outputLink>
 						
-						<h:outputLink id="lnkViewItemFull_btnItemVersions2" styleClass="free_area0" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id != 'editImage' and ImageBean.sessionBean != null}">
+						<h:outputLink id="lnkViewItemFull_btnItemVersions2" styleClass="free_area0" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id != 'editImage' and ImageBean.sessionBean.user != null}">
 							<h:outputText value="#{lbl.assign_md}"/>
 						</h:outputLink>
 									
@@ -135,10 +135,7 @@
 				</div>
 				<ui:insert name="viewImage"></ui:insert>
 				<ui:insert name="editImage"></ui:insert>
-				<ui:insert name="facet"></ui:insert>
-				
-
-							
+						
 				
 </h:panelGroup>
 <ui:insert name="commangLine">&#160;</ui:insert>

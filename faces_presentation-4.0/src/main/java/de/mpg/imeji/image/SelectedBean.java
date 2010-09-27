@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import com.ocpsoft.pretty.PrettyContext;
+
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.EditMetadataBean;
@@ -90,6 +92,11 @@ public class SelectedBean extends ImagesBean
         }
         BeanHelper.info("Images edited");
         return getNavigationString();
+    }   
+    
+    public String clearAll(){
+    	sb.getSelected().clear();
+    	return "pretty:images";
     }
 
     public EditMetadataBean getEditMetadataBean()

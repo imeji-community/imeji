@@ -83,6 +83,9 @@
 					<h:outputLink value="#{Navigation.imagesUrl}" styleClass="large_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
 						<h:outputText value="#{lbl.images_all}"/>
 					</h:outputLink>
+					
+					<a4j:commandLink value="#{lbl.selected_clear}" action="#{SelectedBean.clearAll}" styleClass="large_area0 xHuge_marginLIncl" />
+
 				</h:panelGroup>
 				
 				<h:panelGroup layout="block" styleClass="full_area0 tiledList">

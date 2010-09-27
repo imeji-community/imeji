@@ -49,7 +49,7 @@
 		</h:outputLink>
 
 		<h:selectBooleanCheckbox id="pictureCheckbox" styleClass="double_marginLIncl" value="#{ImageBean.selected}" onchange="getElementById('formular:Image:selectBtn').click();"/>
-		<a4j:commandButton id="selectBtn" partialSubmit="true" action="#{ImageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
+		<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{ImageBean.selected}" action="#{ImageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
 		<h:outputText value="#{lbl.selected}"/>
 
 		 

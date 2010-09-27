@@ -21,7 +21,7 @@ public abstract class ComplexType
     @Namespace("http://imeji.mpdl.mpg.de/")
     @RdfType("complexTypes")
     public enum ComplexTypes
-    {
+    {    
         CONE_AUTHOR(ConePerson.class, "Cone Author"), TEXT(Text.class, "Text"), NUMBER(Number.class, "Number"), DATE(
                 Date.class, "Date"), LICENCE(License.class, "Licence"), GEOLOCATION(Geolocation.class,
                 "Geolocation");

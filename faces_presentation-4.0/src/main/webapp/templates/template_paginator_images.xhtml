@@ -103,6 +103,7 @@
 									
 								<!-- End : Image with link to the details view -->									
 								</span>
+								
 						      <rich:toolTip id="imgToolTip" for="imgFrame">
 					           		<div class="xHuge_area0 fullItem">
 					           		
@@ -112,30 +113,24 @@
 					           				<span class="seperator"></span>
 					           					<div class="xHuge_area0 itemBlockContent endline">		
 													<div class="free_area0_p0 small_marginLIncl endline">
-					           							<h:outputText class="xLarge_area0_p8 endline labelLine" value="#{item.image.filename}"/>
+					           							<h:outputText class="xLarge_area0_p8 endline labelLine" value="Filename: "/>
+								           			
 								           			<a4j:repeat value="#{item.imgMetadata}" var="md">
 								           				<h:outputText value="#{md.type.label}"/>
 								           			</a4j:repeat>
+								           			
 										<h:outputText class="huge_area0 endline" value="#{item.image.filename}"/>
+					           			 
 					           			<a4j:repeat value="#{item.imgMetadata}" var="md">
 					           				<h:outputText value="#{md.type.label}"/>
 					           			</a4j:repeat>
+					           			
 									</div></div>
 									</div>
 					           		</div>
-					           		<!-- 
-					                <h:panelGroup styleClass="half_area0 fullItem">
-					                	<h:panelGroup styleClass="half_area0">
-											<center>
-											<h:panelGrid>
-							                <ui:param name="ImageBean" value="#{item}"/>
-							                <ui:include src="../picturesPages/ui/Details_Generic.jspf"/>
-					                		</h:panelGrid>
-					                		</center>
-					                		</h:panelGroup>
-					                </h:panelGroup>
-					            	-->
+					           		
 					        </rich:toolTip>
+					      
 							</h:panelGroup>
 							
 							<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->

@@ -213,40 +213,39 @@ public class ImageBean
         return next;
     }
 
-    public void setNext(String next)
-    {
-        this.next = next;
-    }
 
-    public SessionBean getSessionBean()
-    {
-        return sessionBean;
-    }
-
-    public void setSessionBean(SessionBean sessionBean)
-    {
-        this.sessionBean = sessionBean;
-    }
-
-    public String addToActiveAlbum()
-    {
-        AlbumBean activeAlbum = sessionBean.getActiveAlbum();
-        AlbumController ac = new AlbumController(sessionBean.getUser());
-        if (activeAlbum.getAlbum().getImages().contains(image.getId()))
-        {
-            BeanHelper.info("Image " + image.getFilename() + "already in active album!");
-        }
-        else
-        {
-            activeAlbum.getAlbum().getImages().add(image.getId());
-            ac.update(activeAlbum.getAlbum());
-            BeanHelper.info("Image " + image.getFilename() + "added to active album");
-        }
-        return "pretty:";
-    }
-
-    public boolean getIsInActiveAlbum()
-    {
+	public void setNext(String next) {
+		this.next = next;
+	}
+	
+	public SessionBean getSessionBean() {
+		return sessionBean;
+	}
+ 
+	public void setSessionBean(SessionBean sessionBean) {
+		this.sessionBean = sessionBean;
+	}
+	
+	public String addToActiveAlbum()
+	{
+	    AlbumBean activeAlbum = sessionBean.getActiveAlbum();
+	    AlbumController ac = new AlbumController(sessionBean.getUser());
+	    if(activeAlbum.getAlbum().getImages().contains(image.getId()))
+	    {
+	        BeanHelper.error("Image " + image.getFilename() + " already in active album!");   
+	    }
+	    else
+	    {
+	        activeAlbum.getAlbum().getImages().add(image.getId());
+	        ac.update(activeAlbum.getAlbum());
+	        BeanHelper.info("Image " + image.getFilename() + " added to active album");
+	    }
+	    return "pretty:";
+	    
+	}
+	
+	public boolean getIsInActiveAlbum()
+	{
         if (sessionBean.getActiveAlbum() != null)
         {
             return sessionBean.getActiveAlbum().getAlbum().getImages().contains(image.getId());

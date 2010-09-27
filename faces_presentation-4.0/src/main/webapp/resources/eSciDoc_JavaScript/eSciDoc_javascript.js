@@ -168,8 +168,7 @@ function install_javascripts() {
 /*INCLUDES EXTERNAL JAVASCRIPTS*/
 function include_javascripts() {
 	if(!included){
-		
-		//include_dom(jsURL + 'jquery/jquery.min.js');
+		include_dom(jsURL + 'jquery/jquery.min.js');
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_ext_paginator.js');
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_item_list.js');
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_full_item.js');

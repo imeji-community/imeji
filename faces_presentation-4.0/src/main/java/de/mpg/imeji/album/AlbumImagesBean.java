@@ -70,8 +70,8 @@ public class AlbumImagesBean extends ImagesBean
         Collection<Image> images = new ArrayList<Image>();
         try
         {
-            totalNumberOfRecords = controller.searchImageInContainer(uri, null, null, -1, offset).size();
-            images = controller.searchImageInContainer(uri, null, null, -1, offset);
+            totalNumberOfRecords = controller.searchImageInContainer(uri, null, null, -1, 0).size();
+            images = controller.searchImageInContainer(uri, null, null, limit, offset);
         }
         catch (Exception e)
         {

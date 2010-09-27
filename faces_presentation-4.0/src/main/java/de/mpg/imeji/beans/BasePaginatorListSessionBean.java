@@ -510,7 +510,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
          */
         public String goToPage()
         {
-            setCurrentPageNumber(getNumber());
+            setCurrentPageNumber(getNumber()); 
             return getNavigationString();
         }
     }
@@ -566,7 +566,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public void setCurrentPageNumber(int currentPageNumber)
     {
-        this.currentPageNumber = currentPageNumber;
+        this.currentPageNumber = currentPageNumber; 
     }
 
     /**

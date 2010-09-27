@@ -57,7 +57,7 @@
 				</script>
 				
 				<script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_javascript.js" language="JavaScript" type="text/javascript">;</script>
-
+				<script>jQuery.noConflict();</script>
 
 				
 
@@ -160,12 +160,12 @@
 				
 			    </h:form>
 				<script type="text/javascript">
-				$("input[id$='offset']").submit(function() {
-					$(this).val($(window).scrollTop());
+				jQuery("input[id$='offset']").submit(function() {
+					jQuery(this).val($(window).scrollTop());
 				});
-				$(document).ready(function () {
-					$(window).scrollTop($("input[id$='offset']").val());
-					$(window).scroll(function(){$("input[id$='offset']").val($(window).scrollTop())});
+				jQuery(document).ready(function () {
+					jQuery(window).scrollTop(jQuery("input[id$='offset']").val());
+					jQuery(window).scroll(function(){jQuery("input[id$='offset']").val(jQuery(window).scrollTop())});
 				});
 				</script>				
 			</body>

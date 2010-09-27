@@ -41,7 +41,7 @@
 		<div class="full_area0 paginator">
 			<h:outputText value="#{paginatorListSessionBean.init}" style="visibility:hidden;"/>
 		 	<div class="large_area0 small_marginLIncl rangeSelector">
-		 		<h:selectOneMenu id="extSelectTop" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageTop}" onchange="$(this).parents('div').find('.hiddenElementsNumberChangedButton').click();">
+		 		<h:selectOneMenu id="extSelectTop" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageTop}" onchange="jQuery(this).parents('div').find('.hiddenElementsNumberChangedButton').click();">
 		 			<f:selectItem itemValue="10" itemLabel="10"></f:selectItem>
 		 			<f:selectItem itemValue="25" itemLabel="25"></f:selectItem>
 		 			<f:selectItem itemValue="50" itemLabel="50"></f:selectItem>
@@ -84,7 +84,7 @@
 
  
  	<div class="large_area0 small_marginLIncl rangeSelector">
-		<h:selectOneMenu id="extSelectBottom" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageBottom}" onchange="$(this).parents('div').find('.hiddenElementsNumberChangedButton').click();">
+		<h:selectOneMenu id="extSelectBottom" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageBottom}" onchange="jQuery(this).parents('div').find('.hiddenElementsNumberChangedButton').click();">
  			<f:selectItem itemValue="10" itemLabel="10"></f:selectItem>
  			<f:selectItem itemValue="25" itemLabel="25"></f:selectItem>
  			<f:selectItem itemValue="50" itemLabel="50"></f:selectItem>

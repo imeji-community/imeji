@@ -42,7 +42,7 @@
 				
 		<div class="free_area0 itemBlockContent endline">	
 			<h:panelGroup layout="block" styleClass="free_area0 endline itemLine">
-				<a4j:repeat var="collection" value="#{AdvancedSearchController.collectionCriterionController.collectionCriterionList}" rowKeyVar="indexCollection">
+				<a4j:repeat id="collRepeat" var="collection" value="#{AdvancedSearchController.collectionCriterionController.collectionCriterionList}" rowKeyVar="indexCollection">
 					<h:panelGroup>
 					
 						<!-- Collection -->
@@ -88,7 +88,7 @@
 						<!-- MD -->
 						
 										
-							<a4j:repeat var="md" value="#{collection.mdCriterionList}" rowKeyVar="indexMD">
+							<a4j:repeat id="mdRepeat" var="md" value="#{collection.mdCriterionList}" rowKeyVar="indexMD">
 									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder" rendered="#{indexMD > 0}">
 										<b class="xLarge_area0_p8 endline labelLine clear">&#160;
 											<span class="noDisplay">: </span>
@@ -109,7 +109,7 @@
 										 	<h:selectOneMenu styleClass="xLarge_select replace" id="selectMd" value="#{md.selectedMdName}">
 												<f:selectItems value="#{md.mdList}"/>
 											</h:selectOneMenu>
-											<h:inputText styleClass="xLarge_txtInput" id="md" value="#{md.mdText}" />
+											<h:inputText styleClass="xLarge_txtInput" id="mdContent" value="#{md.mdText}" />
 										</span>
 										<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
 											<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_md}" action="#{collection.addMd}">

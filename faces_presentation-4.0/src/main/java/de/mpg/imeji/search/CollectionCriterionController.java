@@ -28,7 +28,7 @@ public class CollectionCriterionController implements Serializable {
 	public CollectionCriterionController(){
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         try {
-			getCollectionList();
+			getCollectionList(); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -70,13 +70,13 @@ public class CollectionCriterionController implements Serializable {
 	public String addCollection() {
 		CollectionCriterion newCollection = new CollectionCriterion(collections);
 		collectionCriterionList.add(collectionPosition+1,newCollection);
-		return "";
+		return "pretty:";
 	}
 	
 	public String removeCollection(){
 		if(collectionPosition > 0)
 			collectionCriterionList.remove(collectionPosition);
-		return "";
+		return "pretty:";
 	}
 	
 	
@@ -113,8 +113,8 @@ public class CollectionCriterionController implements Serializable {
 		String criterion = "";
 
 		int i = 0;
-		for(CollectionCriterion collectionCriterion : collectionCriterionList)
-		{
+		for(CollectionCriterion collectionCriterion : collectionCriterionList) 
+		{ 
 		    String collectionLogicalOperator = "";
 		    String collectionQuery = "";
 			
@@ -132,7 +132,7 @@ public class CollectionCriterionController implements Serializable {
     			String mdQuery = "";
 			    for(MDCriterion mdc : collectionCriterion.getMdCriterionList())
     			{
-    				if(!mdc.getMdText().equals("") && mdc.getSelectedMdName()!=null && !mdc.getSelectedMdName().equals(""))
+    				if(!mdc.getMdText().equals("") && mdc.getSelectedMdName()!=null && !mdc.getSelectedMdName().equals("")) 
     				{
     				   
     				    if(j!=0)

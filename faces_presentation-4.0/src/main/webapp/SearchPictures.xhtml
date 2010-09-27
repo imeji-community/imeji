@@ -39,8 +39,11 @@
 	<body>
 
 	<ui:composition template="templates/template_advancedsearch.xhtml">
+		<ui:define name="init">
+				<a4j:keepAlive beanName="AdvancedSearchController"/>
+		</ui:define>
 		<ui:define name="mainContent">
-			<a4j:keepAlive beanName="AdvancedSearchController"/>
+		
 			<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
 				<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 				

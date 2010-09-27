@@ -65,8 +65,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     @Override
     public String getNavigationString()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return "pretty:images";
     }
 
     @Override
@@ -98,7 +97,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
             {
                 BeanHelper.error("Invalid search query!");
             }
-            totalNumberOfRecords = controller.searchAdvanced(scList, null, -1, offset).size();
+            totalNumberOfRecords = controller.searchAdvanced(scList, null, -1, 0).size(); 
             images = controller.searchAdvanced(scList, sortCriterion, limit, offset);
         }
         catch (Exception e)

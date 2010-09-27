@@ -9,7 +9,11 @@ import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
 
 public class MDCriterion extends Criterion implements Serializable{
-	private String selectedMdName;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private String selectedMdName;
 	private Statement selectedStatement;
 	private String mdText;
 	private List<SelectItem> mdList;
@@ -52,7 +56,7 @@ public class MDCriterion extends Criterion implements Serializable{
 		return mdText;
 	}
 	public void setMdText(String mdText) {
-		this.mdText = mdText;
+		this.mdText = mdText; 
 	}
 	public boolean clearCriterion() {
 		setSearchString("");

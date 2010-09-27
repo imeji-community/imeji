@@ -58,7 +58,7 @@
 			<ui:include src="ui/MetaMenu.jspf"/>
 		
 			<div class="full_area0 LogoNSearch">
-				<h:outputLink id="lnkStartPage" title="Go to start page." value="#{Navigation.applicationUrl}">
+				<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage }" value="#{Navigation.applicationUrl}">
 					<h:panelGroup styleClass="xTiny_marginLExcl half_area0 headerLogo">
 						<h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
 					</h:panelGroup>

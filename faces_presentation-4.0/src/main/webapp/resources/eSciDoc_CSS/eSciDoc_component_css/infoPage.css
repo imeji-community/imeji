@@ -49,10 +49,14 @@
 
 .infoPage .sideSection {
 	float: right;
+	padding: 0px;
+	width: 31.28em;
+	border-width: 0px 0px 0px 0.10em !important;
 }
 
 .infoPage .sideSection * {
-	font-size: 117%;
+	font-size: 114%;
+	margin-bottom: 6px;
 }
 
 .infoPage .mainSection ul {
@@ -87,20 +91,16 @@
 	width: 34em;
 }
 
-.infoPage .sideSection {
-	padding: 0px;
-	width: 31.28em;
-	border-width: 0px 0px 0px 0.10em !important;
-}
-
 .infoPage .sideSection .gfc-resultsHeader {
 	border: 0px;
 }
 
 .gfc-result .gf-title {
 	height: auto !important;
+	line-height: 112% !important;
+	font-weight: normal !important;
+	font-size: 120%;
 }
-
 
 .infoPage .sideSection .gf-result {
 	margin-top: 1.2em;

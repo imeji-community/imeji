@@ -202,7 +202,7 @@
 	<managed-bean>
 		<managed-bean-name>UploadBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.upload.UploadBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope> 
+		<managed-bean-scope>session</managed-bean-scope> 
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>CollectionImagesBean</managed-bean-name>

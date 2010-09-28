@@ -1,15 +1,33 @@
 package de.mpg.imeji.upload;
 
+import java.io.IOException;
+
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.xalan.xsltc.compiler.sym;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
+import de.mpg.imeji.escidoc.ItemVO;
+
+import de.mpg.imeji.upload.deposit.DepositController;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.util.UrlHelper;
+
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.UserController;
+
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.User;
 
@@ -23,25 +41,139 @@ public class UploadBean
     private String escidocContext = "escidoc:108013";
     private String escidocUserHandle;
     private User user;
-
-    public UploadBean()
-    {
-        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    private String title;
+    private String format;
+    private String mimetype;
+    private String description;
+    
+    private String totalNum = "";
+    private int sNum = 0;
+    private int fNum = 0;
+    private List<String> sFiles = new ArrayList<String>();
+    private List<String> fFiles= new ArrayList<String>();
+    
+    public UploadBean(){
+    	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         collectionController = new CollectionController(sessionBean.getUser());
+        try {
+			logInEscidoc();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
-
-    public void init() throws Exception
-    {
-        if (UrlHelper.getParameterBoolean("init"))
-        {
-            logInEscidoc();
-            loadCollection();
+      
+    public void status(){
+    	if (UrlHelper.getParameterBoolean("start")){
+    		try {
+    			loadCollection();
+				upload();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}else if(UrlHelper.getParameterBoolean("done")){
+    		try {
+    			totalNum = UrlHelper.getParameterValue("totalNum");
+				report();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+    	}
+	}
+    
+	public void upload() throws IOException{
+    	HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+    	title = req.getParameter("name");
+        ServletInputStream inputStream = req.getInputStream();
+        StringTokenizer st = new StringTokenizer(title, ".");
+        while (st.hasMoreTokens())
+            format = st.nextToken();
+        mimetype = "image/" + format;
+     
+        // TODO remove static image description
+        description = "";
+        try{
+            UserController uc = new UserController(null);
+            User user = uc.retrieve(getUser().getEmail());
+            try{
+                ItemVO item = DepositController.createImejiItem(inputStream, title, description, mimetype, format,
+                        escidocUserHandle, collection.getId().toString(), escidocContext);
+               DepositController.depositImejiItem(item, escidocUserHandle, collection, user, title);
+               sNum += 1;
+               sFiles.add(title);
+            } catch (Exception e){
+            	fNum += 1;
+            	fFiles.add(title);
+                throw new RuntimeException(e);
+            }
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
+    
+    public String report() throws Exception{
+    	System.err.println(totalNum + " files uploaded.");
+    	setTotalNum(totalNum);
+    	System.err.println(sNum + " files uploaded successfully:");
+    	setsNum(sNum);
+    	for(int i = 0; i<sFiles.size(); i++)
+    		System.err.println(sFiles.get(i));
+    	setsFiles(sFiles);
+    	System.err.println(fNum + " files failed:");
+    	setfNum(fNum);
+    	for (int j=0; j<fFiles.size(); j++)
+    		System.err.println(fFiles.get(j));
+    	setfFiles(fFiles);
+    	HttpServletResponse resp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+    	Navigation navi = new Navigation();
+    	navi.getApplicationUri();
+    	resp.sendRedirect(navi.getApplicationUri()+"/upload/collection/" + id);
+    	return "";
+    }
+      
+    public String getTotalNum() {
+    	System.err.println("totalNum = " +totalNum);
+		return totalNum;
+	}
 
-    public void loadCollection()
+	public void setTotalNum(String totalNum) {
+		this.totalNum = totalNum;
+	}
+
+	public int getsNum() {
+		return sNum;
+	}
+
+	public void setsNum(int sNum) {
+		this.sNum = sNum;
+	}
+
+	public int getfNum() {
+		return fNum;
+	}
+
+	public void setfNum(int fNum) {
+		this.fNum = fNum;
+	}
+
+	public List<String> getsFiles() {
+		return sFiles;
+	}
+
+	public void setsFiles(List<String> sFiles) {
+		this.sFiles = sFiles;
+	}
+
+	public List<String> getfFiles() {
+		return fFiles;
+	}
+
+	public void setfFiles(List<String> fFiles) {
+		this.fFiles = fFiles;
+	}
+
+	public void loadCollection()
     {
         if (id != null)
         {

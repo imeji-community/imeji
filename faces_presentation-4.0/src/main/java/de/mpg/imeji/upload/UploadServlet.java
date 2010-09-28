@@ -32,12 +32,13 @@ public class UploadServlet extends HttpServlet
     private static String userEmail;
     private static String userPwd;
 
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-    {
+
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+    	doPost(req, resp);
     }
 
-    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
-    {
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException{
+
         ServletInputStream inputStream = req.getInputStream();
         title = req.getParameter("name");
         StringTokenizer st = new StringTokenizer(title, ".");
@@ -70,8 +71,7 @@ public class UploadServlet extends HttpServlet
                 throw new RuntimeException(e);
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e){
             throw new RuntimeException(e);
         }
     }

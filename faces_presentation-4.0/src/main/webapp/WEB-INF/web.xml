@@ -61,10 +61,10 @@
 		<load-on-startup>2</load-on-startup>
 	</servlet>
 	
-	<servlet>
+	<!--<servlet>
 		<servlet-name>Upload Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.upload.UploadServlet</servlet-class>
-	</servlet>
+	</servlet>-->
 	
 	<!-- Image Servlet -->
 	<servlet>
@@ -118,12 +118,6 @@
 	   <dispatcher>FORWARD</dispatcher>
 	   <dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
-	
-	
-	
-
-
-
 
 	<!-- Use documents saved as *.xhtml for Facelets -->
 	  <context-param>
@@ -135,10 +129,10 @@
 		<session-timeout>180</session-timeout>
 	</session-config>
 	
-	<servlet-mapping>
+	<!--<servlet-mapping>
 		<servlet-name>Upload Servlet</servlet-name>
 		<url-pattern>/upload</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>

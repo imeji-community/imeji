@@ -1,11 +1,20 @@
 package de.mpg.imeji.mdProfile;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.richfaces.json.JSONCollection;
+import org.richfaces.json.JSONException;
 
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.beans.SessionBean;
@@ -51,7 +60,7 @@ public class MdProfileBean
         if (this.getId() == null && this.getProfile().getId() != null)
             this.setId(this.getProfile().getId().getPath().split("/")[2]);
     }
-    
+
     public MdProfileBean(MetadataProfile profile)
     {
         this.profile = profile;
@@ -76,7 +85,7 @@ public class MdProfileBean
 
     public void init()
     {
-        if (UrlHelper.getParameterBoolean("reset")) 
+        if (UrlHelper.getParameterBoolean("reset"))
             reset();
         loadtemplates();
         setStatementWrappers(profile);
@@ -117,6 +126,49 @@ public class MdProfileBean
         return "pretty:";
     }
 
+    public boolean isVocabulary(String uri) 
+    {
+        try
+        {
+            HttpClient client = new HttpClient();
+            GetMethod method = new GetMethod(uri + "?format=json&n=2&m=full&q=e");
+            client.executeMethod(method);
+            if (HttpServletResponse.SC_OK != method.getStatusCode())
+                throw new HttpException();
+            new JSONCollection(method.getResponseBodyAsString());
+            return true;
+        }
+        catch (JSONException e)
+        {
+            BeanHelper.error(uri + " is not a valid JSON source");
+        }
+        catch (HttpException e)
+        {
+            BeanHelper.error(uri + " is not a valid URL");
+        }
+        catch (IOException e)
+        {
+            BeanHelper.error(uri + " is not a valid URL");
+        }
+        return false;
+    }
+
+    public String checkVocabulary()
+    {
+        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+        if (isVocabulary(st.getVocabulary().toString()))
+            BeanHelper.info(st.getVocabulary().toString() + " is valid");
+        return "pretty:";
+    }
+
+    public String addVocabulary() throws URISyntaxException
+    {
+        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+        st.setVocabulary(new URI("http://example.com"));
+        collectionSession.setProfile(profile);
+        return getNavigationString();
+    }
+
     public String addStatement()
     {
         Statement st = ImejiFactory.newStatement();
@@ -139,14 +191,10 @@ public class MdProfileBean
     {
         Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
         if (getConstraintPosition() == 0)
-        {
             ((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", "eng"));
-        }
         else
-        {
             ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition(), new LocalizedString("",
                     "eng"));
-        }
         collectionSession.setProfile(profile);
         return getNavigationString();
     }
@@ -208,7 +256,7 @@ public class MdProfileBean
 
     public List<StatementWrapper> getStatements()
     {
-        return statements; 
+        return statements;
     }
 
     public void setStatements(List<StatementWrapper> statements)
@@ -255,28 +303,30 @@ public class MdProfileBean
     {
         this.template = template;
     }
-    
+
     public boolean validateProfile()
     {
         List<String> statementNames = new ArrayList<String>();
         for (Statement s : profile.getStatements())
         {
-            if(statementNames.contains(s.getName()))
+            if (statementNames.contains(s.getName()))
             {
                 BeanHelper.error("Names must be unique!");
                 return false;
-                
             }
-            else if(s.getName()==null || s.getName().equals(""))
+            else if (s.getName() == null || s.getName().equals(""))
             {
                 BeanHelper.error("Names are required!");
+                return false;
+            }
+            else if (s.getVocabulary() != null && !isVocabulary(s.getVocabulary().toString()))
+            {
                 return false;
             }
             else
             {
                 statementNames.add(s.getName());
             }
-            
         }
         return true;
     }

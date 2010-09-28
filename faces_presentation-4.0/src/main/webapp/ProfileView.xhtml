@@ -178,12 +178,40 @@
 												<a4j:repeat var="label" value="#{statement.labels}" rowKeyVar="indexO">
 													<h:panelGroup styleClass="endline">
 														<span class="endline">
-															<h:outputText value="#{label} (#{label.lang})"/>
 															<h:outputText value=", " rendered="#{indexO > 0}"/>
+															<h:outputText value="#{label} (#{label.lang})"/>
 														</span>
 													</h:panelGroup>
 												</a4j:repeat>
 											</span>
+											<h:panelGroup rendered="#{!(empty statement.literalConstraints)}">
+												<b class="xLarge_area0_p8 endline labelLine clear">
+													<h:outputText value=" #{lbl.values} " style="visibility:hidden;"/>
+													<span class="noDisplay">: </span>
+												</b>
+												<span class="xHuge_area0 xTiny_marginLExcl endline">
+													<h:outputText value="#{lbl.values} : "/>
+												
+													<a4j:repeat var="value" value="#{statement.literalConstraints}" rowKeyVar="indexO">
+														<h:panelGroup styleClass="endline">
+															<span class="endline">
+																<h:outputText value=", " rendered="#{indexO > 0}"/>
+																<h:outputText value="#{value}"/>
+															</span>
+														</h:panelGroup>
+													</a4j:repeat>
+												</span>
+											</h:panelGroup>
+											<h:panelGroup rendered="#{statement.vocabulary != null}">
+												<b class="xLarge_area0_p8 endline labelLine clear">
+													<h:outputText value=" #{lbl.vocabulary} " style="visibility:hidden;"/>
+													<span class="noDisplay">: </span>
+												</b>
+												<span class="xHuge_area0 xTiny_marginLExcl endline">
+													<h:outputLabel value="#{lbl.vocabulary} :   "/>
+													<h:outputText styleClass="quad_txtOutput" value="   #{statement.vocabulary}"/>
+												</span>
+											</h:panelGroup>
 										</a4j:repeat>
 									</h:panelGroup>
 								</div>

@@ -97,34 +97,41 @@ public class MetadataBean
 
     public List<Object> autoComplete(Object suggest)
     {
-        /*
-         * List<String> suggestions = new ArrayList<String>(); List<String> literals = new ArrayList<String>();
-         * Statement statement = null; for (Statement s : profile.getStatements()) if
-         * (s.getName().equals(getSelectedStatementName())) statement = s; if (statement.getLiteralConstraints().size()
-         * > 0) for (LocalizedString str : statement.getLiteralConstraints()) literals.add(str.toString()); for (String
-         * str : literals) if (str.contains(suggest.toString())) suggestions.add(str); if (literals.size() > 0 &&
-         * suggestions.size() == 0) suggestions.add("No suggestions");
-         */
-        if (suggest.toString().isEmpty())
+        Statement statement = null;
+        for (Statement s : profile.getStatements())
+            if (s.getName().equals(getSelectedStatementName()))
+                statement = s;
+        if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
         {
-            return null;
+            List<Object> suggestions = new ArrayList<Object>();
+            List<String> literals = new ArrayList<String>();
+            for (LocalizedString str : statement.getLiteralConstraints())
+                literals.add(str.toString());
+            for (String str : literals)
+                if (str.contains(suggest.toString()))
+                    suggestions.add(str);
+            return suggestions;
         }
-        else
+        else if (statement.getVocabulary() != null)
         {
-            try
+            if (!suggest.toString().isEmpty())
             {
-                HttpClient client = new HttpClient();
-                GetMethod getMethod = new GetMethod("http://dev-pubman.mpdl.mpg.de/cone/persons/query?format=json&n=10&m=full&q=" + suggest);
-                client.executeMethod(getMethod);
-                JSONCollection jsc = new JSONCollection(getMethod.getResponseBodyAsString());
-                return Arrays.asList(jsc.toArray());
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e);
+                try
+                {
+                    HttpClient client = new HttpClient();
+                    GetMethod getMethod = new GetMethod(statement.getVocabulary().toString()
+                            + "?format=json&n=10&m=full&q=" + suggest);
+                    client.executeMethod(getMethod);
+                    JSONCollection jsc = new JSONCollection(getMethod.getResponseBodyAsString());
+                    return Arrays.asList(jsc.toArray());
+                }
+                catch (Exception e)
+                {
+                    throw new RuntimeException(e);
+                }
             }
         }
-        // return suggestions;
+        return null;
     }
 
     public String getPrettyLink()

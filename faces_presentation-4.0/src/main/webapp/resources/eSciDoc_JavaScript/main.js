@@ -47,7 +47,6 @@ function autoSuggestWrite(suggestionBox, index)
      		catch (e){alternative =' ';}
      		try{org = items[i].http_purl_org_escidoc_metadata_terms_0_1_position.http_purl_org_eprint_terms_affiliatedInstitution;}
      		catch (e){org =' ';}
-
 		}
      	setInputTextValue('formular:mdList:' + index + ':inputFamilyName', familyName);
      	setInputTextValue('formular:mdList:' + index + ':inputFirstName', firstName);

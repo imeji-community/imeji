@@ -1,11 +1,20 @@
 package de.mpg.imeji.mdProfile.wrapper;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.richfaces.json.JSONCollection;
+import org.richfaces.json.JSONException;
 
 import thewebsemantic.LocalizedString;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
@@ -16,6 +25,7 @@ public class StatementWrapper
     private Statement statement;
     private ComplexTypes mdType;
     private String defaultLabel;
+    private String vocabularyString = null;
 
     public StatementWrapper(Statement st)
     {
@@ -26,21 +36,16 @@ public class StatementWrapper
         statement.setLabels(st.getLabels());
         statement.setType(st.getType());
         statement.setName(st.getName());
+        statement.setVocabulary(st.getVocabulary());
         // Wrapper variable initialization
         if (Integer.parseInt(st.getMinOccurs()) > 0)
-        {
             required = true;
-        }
         if ("unbounded".equals(st.getMaxOccurs()) || Integer.parseInt(st.getMaxOccurs()) > 1)
-        {
             multiple = true;
-        }
         if (st.getLabels().size() > 0)
         {
-            for (LocalizedString lstr: st.getLabels())
-            {
+            for (LocalizedString lstr : st.getLabels())
                 this.defaultLabel = lstr.toString();
-            }
         }
         if (st.getType() != null)
         {
@@ -48,11 +53,16 @@ public class StatementWrapper
             {
                 URI uri = URI.create(type.getNamespace() + type.getRdfType());
                 if (st.getType().equals(uri))
-                {
                     this.setMdType(type);
-                }
             }
         }
+    }
+
+    public void vocabularyListener(ValueChangeEvent event)
+    {
+        if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
+            this.statement.setVocabulary(URI.create(event.getNewValue().toString()));
+        vocabularyString = statement.getVocabulary().toString();
     }
 
     public void constraintListener(ValueChangeEvent event)
@@ -160,5 +170,15 @@ public class StatementWrapper
     public void setDefaultLabel(String defaultLabel)
     {
         this.defaultLabel = defaultLabel;
+    }
+
+    public String getVocabularyString()
+    {
+        return statement.getVocabulary().toString();
+    }
+
+    public void setVocabularyString(String vocabularyString)
+    {
+        this.vocabularyString = vocabularyString;
     }
 }

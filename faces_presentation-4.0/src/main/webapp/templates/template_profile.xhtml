@@ -58,13 +58,31 @@
 										<h:outputLabel styleClass="large_label" value="#{lbl.multiple}"/>
 										<h:selectBooleanCheckbox value="#{statement.multiple}" valueChangeListener="#{statement.multipleListener}"/>
 									</h:panelGroup>	
-											
-									<h:panelGroup styleClass="medium_area1 small_marginRIncl">
-										<h:outputLabel styleClass="large_label" value="#{lbl.required}" />
-										<h:selectBooleanCheckbox value="#{statement.required}" valueChangeListener="#{statement.requiredListener}"/>
-									</h:panelGroup>	
-									
+																			
 									<br/><br/><br/>
+									
+									<h:panelGroup styleClass="xHuge_area0 xSmall_marginLExcl endline" rendered="#{statement.constraintsSize == 0 and statement.statement.vocabulary == null}">
+										<h:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_vocabulary}" action="#{FormularBean.addVocabulary}">
+											<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
+										</h:commandButton>
+										<h:outputLabel styleClass="" value="#{lbl.add_vocabulary}  " />
+										<span style="padding-left:20px"></span>
+										<h:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_constraint}" action="#{FormularBean.addConstraint}">
+											<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
+										</h:commandButton>
+										<h:outputLabel styleClass="" value="#{lbl.add_constraint}" />
+									</h:panelGroup>
+									
+									<h:panelGroup styleClass="full_area1_p4 xSmall_marginLExcl" rendered="#{statement.statement.vocabulary != null}">
+										<h:outputLabel styleClass="huge_label" value="#{lbl.vocabulary}" />
+										<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
+											<h:inputText styleClass="huge_txtInput endline" value="#{statement.vocabularyString}" valueChangeListener="#{statement.vocabularyListener}" onfocus="this.select();"/>
+											<h:commandLink styleClass="" value="#{lbl.check_validity}" shortDesc="#{lbl.add_constraint}" action="#{FormularBean.checkVocabulary}">
+												<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
+											</h:commandLink>
+											<h:outputText styleClass="full_label" value="#{statement.vocabularyString}" rendered="#{statement.statement.vocabulary != ''}"/>
+										</h:panelGroup>
+									</h:panelGroup>			
 									
 									<h:panelGroup styleClass="huge_area0 xSmall_marginLExcl" rendered="#{statement.constraintsSize > 0}">
 										<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
@@ -85,13 +103,6 @@
 												</h:panelGroup>
 											</h:panelGroup>
 										</a4j:repeat>
-									</h:panelGroup>
-											
-									<h:panelGroup styleClass="xLarge_area0 xSmall_marginLExcl endline" rendered="#{statement.constraintsSize == 0}">
-										<h:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_constraint}" action="#{FormularBean.addConstraint}">
-											<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-										</h:commandButton>
-										<h:outputLabel styleClass="" value="#{lbl.add_constraint}" />
 									</h:panelGroup>
 											
 								</h:panelGroup>

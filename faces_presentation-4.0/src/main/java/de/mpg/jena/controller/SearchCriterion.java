@@ -34,6 +34,7 @@ public class SearchCriterion {
 		PROPERTIES_LAST_MODIFICATION_DATE("http://imeji.mpdl.mpg.de/lastModificationDate", PROPERTIES),
 		PROPERTIES_STATUS("http://imeji.mpdl.mpg.de/status", PROPERTIES),
 		
+		IMAGE_FILENAME("http://imeji.mpdl.mpg.de/filename"),
 		IMAGE_METADATA("http://imeji.mpdl.mpg.de/image/metadata", null, true),
 		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/image/metadata/elementNamespace", IMAGE_METADATA),
 		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/image/metadata/name", IMAGE_METADATA),

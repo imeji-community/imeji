@@ -15,7 +15,8 @@
 			<h:inputText id="jenaPasswdHidden" styleClass="noDisplay" value="#{UploadBean.user.encryptedPassword}"/>
 			<h:inputText id="collectionIDHidden" styleClass="noDisplay" value="#{UploadBean.collection.id}"/>
 			<h:inputText id="contextIDHidden" styleClass="noDisplay" value="#{UploadBean.escidocContext}"/>
-			
+
+
 		
 			<!-- Load Queue widget CSS and jQuery -->
 			<style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style>
@@ -40,7 +41,7 @@
 				$("#uploader").pluploadQueue({
 					// General settings
 					runtimes : 'gears,html5,flash,silverlight,browserplus,html4',
-					url : '/faces/upload' + "?userHandle=" +document.getElementById("formular:userHandleHidden").value + "&amp;collection=" + document.getElementById("formular:collectionIDHidden").value+"&amp;context=" + document.getElementById("formular:contextIDHidden").value +"&amp;userEmail=" + document.getElementById("formular:jenaUserHidden").value + "&amp;userPwd=" + document.getElementById("formular:jenaPasswdHidden").value,
+					url : document.URL + "?start=1",
 					max_file_size : '10mb',
 					chunk_size : '1mb',
 					unique_names : true,
@@ -60,9 +61,19 @@
 							<div id="uploader" style="width: 450px; height: 330px;">You browser doesn't support native upload. Try Firefox 3 or Safari 4.</div>
 						</div>
 						<br style="clear: both"/>
-					<h:outputLink method="get" styleClass="activeButton" value="/faces/jsf/Upload.xhtml?collection=#{UploadBean.collection.id}">
-						<h:outputText value="Send more photos"/>
-					</h:outputLink>
+						
+						<br />
+					<h:outputText value="#{UploadBean.sNum} files uploaded successfully:" /><br />
+					<a4j:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}" rowKeyVar="indexs">
+						<h:outputText value="#{sFile}" />
+						<br />
+						
+					</a4j:repeat>
+					<br />
+					<h:outputText value ="#{UploadBean.fNum} files failed:" /><br />
+					<a4j:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}" rowKeyVar="indexf">
+						<h:outputText value="#{fFile}" /><br />
+					</a4j:repeat>					
 				</div>
 		</ui:define>
 		

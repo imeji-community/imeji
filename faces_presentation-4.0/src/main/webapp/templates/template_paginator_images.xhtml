@@ -148,7 +148,7 @@
 									<span class="free_area0_p3 tileControlIconArea">
 										<h:outputLabel value="#{item.image.filename}" style="white-space:nowrap;"/><br/>
 										<h:commandLink id="lnkAddToActiveAlbumInactive1" action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
-											<h:outputText value="#{lbl.add}"/>
+											<h:outputText value="#{lbl.add_to_album}"/>
 										</h:commandLink>
 									</span>
 								</span>

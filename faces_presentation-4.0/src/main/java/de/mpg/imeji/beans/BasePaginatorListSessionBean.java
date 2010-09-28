@@ -113,12 +113,12 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public BasePaginatorListSessionBean()
     {
-        elementsPerPageSelectItems = new ArrayList<SelectItem>();
-        elementsPerPageSelectItems.add(new SelectItem("10", "10"));
-        elementsPerPageSelectItems.add(new SelectItem("25", "25")); // --default: 25
-        elementsPerPageSelectItems.add(new SelectItem("50", "50"));
-        elementsPerPageSelectItems.add(new SelectItem("100", "100"));
-        elementsPerPageSelectItems.add(new SelectItem("250", "250"));
+//        elementsPerPageSelectItems = new ArrayList<SelectItem>();
+//        elementsPerPageSelectItems.add(new SelectItem("10", "10"));
+//        elementsPerPageSelectItems.add(new SelectItem("25", "25")); // --default: 25
+//        elementsPerPageSelectItems.add(new SelectItem("50", "50"));
+//        elementsPerPageSelectItems.add(new SelectItem("100", "100"));
+//        elementsPerPageSelectItems.add(new SelectItem("250", "250"));
         paginatorPageList = new ArrayList<PaginatorPage>();
         currentPartList = new ArrayList<ListElementType>();
     }
@@ -127,7 +127,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     public void reset()
     {
         setCurrentPageNumber(1);
-        setElementsPerPage(25);
+        setElementsPerPage(24);
     }
 
     // Must be called by PrettyFaces action method
@@ -147,7 +147,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     {
         if (elementsPerPage == 0)
         {
-            setElementsPerPage(25);
+            setElementsPerPage(24);
         }
         if (currentPageNumber == 0)
         {

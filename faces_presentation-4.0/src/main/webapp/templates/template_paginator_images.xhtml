@@ -61,6 +61,15 @@
 			</ui:define>
 			
 			<ui:define name="list">				
+	
+	<!-- Script for Shiftcheckboxes -->
+	 <script>
+      jQuery(document).ready (
+              function () {
+                     jQuery('.shiftCheckbox').shiftcheckbox();
+              }
+      );
+      </script>
 			
 			
 			<h:panelGroup id="preListHeaderActiveAlbum" layout="block" styleClass="full_area0 preListHeader" rendered="#{SessionBean.activeAlbum != null}">
@@ -139,7 +148,7 @@
 							<!-- Album Selected -->				
 								<h:panelGroup styleClass="tiny_area1">
 									<span class="free_area0">
-									<h:selectBooleanCheckbox id="pictureCheckbox" value="#{item.selected}" onchange="getElementById('formular:pictureList:#{index}:selectBtn').click();"/>
+									<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" onchange="getElementById('formular:pictureList:#{index}:selectBtn').click();"></h:selectBooleanCheckbox>
 									<a4j:commandButton id="selectBtn" action="#{item.select}" style="visibility:hidden;" reRender="preListHeader"/>								
 									</span>
 								</h:panelGroup>

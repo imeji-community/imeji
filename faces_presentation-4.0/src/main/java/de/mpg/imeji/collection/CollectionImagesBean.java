@@ -71,7 +71,7 @@ public class CollectionImagesBean extends ImagesBean
         try
         {
             totalNumberOfRecords = controller.searchImageInContainer(uri, null, null, -1, 0).size();
-            images = controller.searchImageInContainer(uri, null, null, -1, offset);
+            images = controller.searchImageInContainer(uri, null, null, limit, offset);
         }
         catch (Exception e)
         {

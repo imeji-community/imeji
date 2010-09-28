@@ -70,21 +70,22 @@
 							
 		<ui:define name="mainContent" >
 
-
+<!-- 
 			<h:panelGroup layout="block" styleClass="full_area0">
-				<h:panelGroup layout="block" styleClass="large_area0 small_marginLIncl rangeSelector">&#160;</h:panelGroup>
+			
+			<h:panelGroup layout="block" styleClass="large_area0 small_marginLIncl rangeSelector">&#160;</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="small_marginLExcl pageBrowser" rendered="true">
 					<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{ImageBean.previous}" disabled="#{ImageBean.previous == null}">
 						<h:outputText value="#{lbl.paginatorButton_prev_label}"></h:outputText>
 					</h:outputLink>
 	
-				<h:panelGroup styleClass="seperator" />
+				    <h:panelGroup styleClass="seperator" />
 					<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{ImageBean.next}" disabled="#{ImageBean.next == null}">
 						<h:outputText value="#{lbl.paginatorButton_next_label}"></h:outputText>
 					</h:outputLink>
 				</h:panelGroup>
-			</h:panelGroup>
-
+			   </h:panelGroup>
+			-->
 			<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
 				<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">
 					<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>

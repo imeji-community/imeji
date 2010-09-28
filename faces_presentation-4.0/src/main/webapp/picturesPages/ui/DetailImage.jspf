@@ -33,7 +33,7 @@
              -->
 </ui:remove>
 <f:subview id="Image">
-	<h:panelGroup layout="block" styleClass="full_area2"> 
+	<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl"> 
 		<h:panelGroup layout="block" styleClass="full_area detailedItem">
 			<span>
 				<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{ImageBean.image.fullImageUrl}" target="_blank">

@@ -46,11 +46,11 @@ public class UploadBean
     private String mimetype;
     private String description;
     
-    private String totalNum = "";
-    private int sNum = 0;
-    private int fNum = 0;
-    private List<String> sFiles = new ArrayList<String>();
-    private List<String> fFiles= new ArrayList<String>();
+    private String totalNum ;
+    private int sNum;
+    private int fNum;
+    private List<String> sFiles;
+    private List<String> fFiles;
     
     public UploadBean(){
     	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -61,15 +61,21 @@ public class UploadBean
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
+    }    
       
     public void status(){
-    	if (UrlHelper.getParameterBoolean("start")){
+    	if(UrlHelper.getParameterBoolean("init")){
+    	    totalNum = "";
+    	    sNum = 0;
+    	    fNum = 0;
+    	    sFiles = new ArrayList<String>();
+    	    fFiles= new ArrayList<String>();
+    		
+    	}else if (UrlHelper.getParameterBoolean("start")){
     		try {
     			loadCollection();
 				upload();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     	}else if(UrlHelper.getParameterBoolean("done")){
@@ -125,10 +131,10 @@ public class UploadBean
     	for (int j=0; j<fFiles.size(); j++)
     		System.err.println(fFiles.get(j));
     	setfFiles(fFiles);
-    	HttpServletResponse resp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-    	Navigation navi = new Navigation();
-    	navi.getApplicationUri();
-    	resp.sendRedirect(navi.getApplicationUri()+"/upload/collection/" + id);
+//    	HttpServletResponse resp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//    	Navigation navi = new Navigation();
+//    	navi.getApplicationUri();
+//    	resp.sendRedirect(navi.getApplicationUri()+"/upload/collection/" + id);
     	return "";
     }
       
@@ -173,27 +179,19 @@ public class UploadBean
 		this.fFiles = fFiles;
 	}
 
-	public void loadCollection()
-    {
-        if (id != null)
-        {
-            try
-            {
+	public void loadCollection(){
+        if (id != null){
+            try{
                 collection = collectionController.retrieve(id);
-            }
-            catch (Exception e)
-            {
+            }catch (Exception e){
                 BeanHelper.error("Collection " + id + " not found.");
             }
-        }
-        else
-        {
+        }else{
             BeanHelper.error("No Collection information found. Please check your URL.");
         }
     }
 
-    public void logInEscidoc() throws Exception
-    {
+    public void logInEscidoc() throws Exception{
         String userName = PropertyReader.getProperty("imeji.escidoc.user");
         String password = PropertyReader.getProperty("imeji.escidoc.password");
         escidocUserHandle = LoginHelper.login(userName, password);

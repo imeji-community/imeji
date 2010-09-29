@@ -10,14 +10,6 @@
 		<ui:param name="headline" value="#{UploadBean.collection.metadata.title}"/>
 		
 		<ui:define name="mainContent">
-			<h:inputText id="userHandleHidden" styleClass="noDisplay" value="#{UploadBean.escidocUserHandle}"/>
-			<h:inputText id="jenaUserHidden" styleClass="noDisplay" value="#{UploadBean.user.email}"/>
-			<h:inputText id="jenaPasswdHidden" styleClass="noDisplay" value="#{UploadBean.user.encryptedPassword}"/>
-			<h:inputText id="collectionIDHidden" styleClass="noDisplay" value="#{UploadBean.collection.id}"/>
-			<h:inputText id="contextIDHidden" styleClass="noDisplay" value="#{UploadBean.escidocContext}"/>
-
-
-		
 			<!-- Load Queue widget CSS and jQuery -->
 			<style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style>
 			<script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -41,7 +33,7 @@
 				$("#uploader").pluploadQueue({
 					// General settings
 					runtimes : 'gears,html5,flash,silverlight,browserplus,html4',
-					url : document.URL + "?start=1",
+					url : location.pathname  + "?start=1",
 					max_file_size : '10mb',
 					chunk_size : '1mb',
 					unique_names : true,

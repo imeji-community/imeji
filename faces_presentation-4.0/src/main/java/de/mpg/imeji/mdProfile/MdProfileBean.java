@@ -126,7 +126,7 @@ public class MdProfileBean
         return "pretty:";
     }
 
-    public boolean isVocabulary(String uri) 
+    public boolean isVocabulary(String uri)
     {
         try
         {
@@ -168,14 +168,23 @@ public class MdProfileBean
         collectionSession.setProfile(profile);
         return getNavigationString();
     }
+    
+    public String removeVocabulary() throws URISyntaxException
+    {
+        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+        st.setVocabulary(null);
+        collectionSession.setProfile(profile);
+        return getNavigationString();
+    }
 
     public String addStatement()
     {
         Statement st = ImejiFactory.newStatement();
-        if (getStatementPosition() == 0)
-            profile.getStatements().add(st);
-        else
-            ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
+        ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
+//        if (getStatementPosition() == 0)
+//            profile.getStatements().add(st);
+//        else
+//            ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
         collectionSession.setProfile(profile);
         return getNavigationString();
     }
@@ -202,8 +211,7 @@ public class MdProfileBean
     public String removeConstraint()
     {
         Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
-        if (getConstraintPosition() != 0)
-            ((List<LocalizedString>)st.getLiteralConstraints()).remove(getConstraintPosition());
+        ((List<LocalizedString>)st.getLiteralConstraints()).remove(getConstraintPosition());
         collectionSession.setProfile(profile);
         return getNavigationString();
     }

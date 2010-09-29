@@ -39,6 +39,29 @@
 	<ui:composition template="templates/template_paginator_images.xhtml">	
 			<ui:param name="paginatorListSessionBean" value="#{CollectionImagesBean}" />
 			<ui:param name="headline" value="#{CollectionImagesBean.collection.metadata.title}"/>
+			<ui:define name="contentMenu">
+				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.id.path}" rendered="true">
+					<h:outputText value="#{lbl.collection_home}"/>
+				</h:outputLink>			
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.id.path}/details?init=1" rendered="true">
+					<h:outputText value="#{lbl.collection_metadata}"/>
+				</h:outputLink>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.profile.id.path}?init=1" rendered="true">
+					<h:outputText value="#{lbl.collection_profile}"></h:outputText>
+				</h:outputLink>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{CollectionImagesBean.collection.id.path}?init=1" rendered="true">
+					<h:outputText value="#{lbl.upload_images}"></h:outputText>
+				</h:outputLink>
+			</ui:define>
 	</ui:composition>
 
 

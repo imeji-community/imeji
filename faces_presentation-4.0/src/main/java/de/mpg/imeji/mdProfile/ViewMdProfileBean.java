@@ -17,6 +17,7 @@ public class ViewMdProfileBean extends MdProfileBean
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         profileController = new ProfileController(session.getUser());
         init = UrlHelper.getParameterBoolean("init");
+
     }
 
     public void init()

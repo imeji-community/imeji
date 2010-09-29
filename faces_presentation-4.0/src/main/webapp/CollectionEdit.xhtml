@@ -37,6 +37,45 @@
 	<body>
 		<ui:composition template="templates/template_collection_formular.xhtml">
 			<ui:param name="FormularBean" value="#{EditCollectionBean}" />
+			
+	<ui:define name="contentMenu">
+		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}" rendered="true">
+			<h:outputText value="#{lbl.collection_home}"/>
+		</h:outputLink>			
+		
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}/details?init=1" rendered="#{prettyContext.currentMapping.id != 'editCollection'}">
+			<h:outputText value="#{lbl.collection_metadata}"/>
+		</h:outputLink>
+		<h:outputText styleClass="free_area0" value="#{lbl.collection_metadata}" rendered="#{prettyContext.currentMapping.id == 'editCollection'}"/>
+		
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.profile.id.path}?init=1" rendered="true">
+			<h:outputText value="#{lbl.collection_profile}"></h:outputText>
+		</h:outputLink>
+		
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="true">
+			<h:outputText value="#{lbl.upload_images}"></h:outputText>
+		</h:outputLink>
+	</ui:define>
+	
+				<ui:define name="actionsMenu">
+				<h:panelGroup>
+					<!-- ORGANIZE content menu lower line starts here -->
+					<h:commandLink id="lnkReleaseCollection" styleClass="free_area0" action="#{ViewCollectionBean.release}" rendered="#{EditCollectionBean.isOwner and EditCollectionBean.collection.properties.status=='PENDING'}">
+						<h:outputText value="#{lbl.collection_release}"></h:outputText>
+					</h:commandLink>
+					<h:outputText styleClass="seperator" />
+						<h:outputText styleClass="free_area0" value="#{lbl.collection_edit_metadata}"/>
+					<!-- ORGANIZE content menu lower line ends here -->
+				</h:panelGroup>
+			</ui:define>
+					
+					
 		</ui:composition>
 	</body>
 </html>

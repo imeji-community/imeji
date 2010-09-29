@@ -32,21 +32,14 @@
 	</ui:remove>
 	<body>
 		<ui:composition template="templates/template_collection.xhtml">
-			
 			<ui:define name="headline">
 				<h1>
 					<h:outputText value="#{ViewMdProfileBean.profile.title}"/> 
 				</h1>
 			</ui:define>
 			
-			<ui:define name="contentMenu">
-				<h:outputText styleClass="free_area0" value="#{lbl.organize}" rendered="true" />
-				<h:outputText styleClass="seperator void" />
-				<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="">
-					<h:outputText value="#{lbl.profile_related_collection}"></h:outputText>
-				</h:outputLink>
-			</ui:define>
-			
+		
+	
 			<ui:define name="actionsMenu">
 				<h:panelGroup>
 					<!-- ORGANIZE content menu lower line starts here -->
@@ -54,6 +47,10 @@
 						<h:outputText value="#{lbl.profile_edit}"></h:outputText>
 					</h:outputLink>
 					<!-- ORGANIZE content menu lower line ends here -->
+					<h:outputText styleClass="seperator void" />
+				<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="">
+					<h:outputText value="#{lbl.profile_related_collection}"></h:outputText>
+				</h:outputLink>
 				</h:panelGroup>
 			</ui:define>
 			
@@ -64,7 +61,7 @@
 						
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
-								<h:outputText value="#{lbl.metadata}"/>
+								<h:outputText value="#{lbl.profile_basics}"/>
 							</h3>
 							<span class="seperator"/>
 							<h:panelGroup>

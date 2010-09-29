@@ -40,17 +40,26 @@
 			</ui:define>
 			
 			<ui:define name="contentMenu">
-				<h:outputText styleClass="free_area0" value="#{lbl.organize}" rendered="true" />
+				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}" rendered="#{prettyContext.currentMapping.id != 'homeCollection'}">
+					<h:outputText value="#{lbl.collection_home}"/>
+				</h:outputLink>			
+				<h:outputText styleClass="free_area0" value="#{lbl.collection_home}" rendered="#{prettyContext.currentMapping.id == 'homeCollection'}" />
+				
 				<h:outputText styleClass="seperator void" />
+				
 				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}/details?init=1" rendered="true">
 					<h:outputText value="#{lbl.collection_metadata}"/>
 				</h:outputLink>
+				
 				<h:outputText styleClass="seperator void" />
-				<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.profile.id.path}?init=1">
+				
+				<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.profile.id.path}?init=1" rendered="true">
 					<h:outputText value="#{lbl.collection_profile}"></h:outputText>
 				</h:outputLink>
+				
 				<h:outputText styleClass="seperator void" />
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1">
+				
+				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="true">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
 			</ui:define>
@@ -61,6 +70,7 @@
 					<h:commandLink id="lnkReleaseCollection" styleClass="free_area0" action="#{ViewCollectionBean.release}" rendered="#{ViewCollectionBean.isOwner and ViewCollectionBean.collection.properties.status=='PENDING'}">
 						<h:outputText value="#{lbl.collection_release}"></h:outputText>
 					</h:commandLink>
+					<h:outputText styleClass="seperator void" />
 				</h:panelGroup>
 			</ui:define>
 			

@@ -38,23 +38,32 @@
 					<h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> 
 				</h1>
 			</ui:define>
-			
-			<ui:define name="contentMenu">
-				<h:outputText styleClass="free_area0" value="#{lbl.organize}" rendered="true" />
-				<h:outputText styleClass="seperator void" />
-				<h:outputLink id="lnkEditCollection" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}?init=1">
-					<h:outputText value="#{lbl.collection_home}"></h:outputText>
-				</h:outputLink>
-				<h:outputText styleClass="seperator void" />
-				<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.profile.id.path}?init=1">
-					<h:outputText value="#{lbl.collection_profile}"></h:outputText>
-				</h:outputLink>
-				<h:outputText styleClass="seperator void" />
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="true">
-					<h:outputText value="#{lbl.upload_images}"></h:outputText>
-				</h:outputLink>
-			</ui:define>
-			
+	<ui:define name="contentMenu">
+		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}" rendered="true">
+			<h:outputText value="#{lbl.collection_home}"/>
+		</h:outputLink>			
+		
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}/details?init=1" rendered="#{prettyContext.currentMapping.id != 'viewCollection'}">
+			<h:outputText value="#{lbl.collection_metadata}"/>
+		</h:outputLink>
+		<h:outputText styleClass="free_area0" value="#{lbl.collection_metadata}" rendered="#{prettyContext.currentMapping.id == 'viewCollection'}"/>
+		
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.profile.id.path}?init=1" rendered="true">
+			<h:outputText value="#{lbl.collection_profile}"></h:outputText>
+		</h:outputLink>
+		
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="true">
+			<h:outputText value="#{lbl.upload_images}"></h:outputText>
+		</h:outputLink>
+	</ui:define>
+					
+		
 			<ui:define name="actionsMenu">
 				<h:panelGroup>
 					<!-- ORGANIZE content menu lower line starts here -->
@@ -76,7 +85,7 @@
 						
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
-								<h:outputText value="#{lbl.metadata}"/>
+								<h:outputText value="#{lbl.collection_basics}"/>
 							</h3>
 							<span class="seperator"/>
 							<h:panelGroup>

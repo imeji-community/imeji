@@ -62,9 +62,10 @@ public class UploadBean
 			e.printStackTrace();
 		}
     }    
-      
+          
     public void status(){
     	if(UrlHelper.getParameterBoolean("init")){
+			loadCollection();
     	    totalNum = "";
     	    sNum = 0;
     	    fNum = 0;
@@ -73,7 +74,6 @@ public class UploadBean
     		
     	}else if (UrlHelper.getParameterBoolean("start")){
     		try {
-    			loadCollection();
 				upload();
 			} catch (IOException e) {
 				e.printStackTrace();

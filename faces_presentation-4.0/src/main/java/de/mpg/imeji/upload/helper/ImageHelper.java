@@ -35,8 +35,7 @@ public class ImageHelper
     public static Item setComponent(String contentCategory, Item item, byte[] imageStream, String fileName,
             String mimetype, String format, String userHandle) throws Exception{
         URL url = null;
-        if (item.getComponents() == null)
-        {
+        if (item.getComponents() == null){
             item.addNewComponents();
         }
         Component component = item.getComponents().addNewComponent();
@@ -110,7 +109,7 @@ public class ImageHelper
         GifDecoder gifDecoder = new GifDecoder(); 
         gifDecoder.read(new ByteArrayInputStream(image));
         return gifDecoder;
-    }    
+    }        
         
     public static byte[] scaleAnimation(byte[] image, GifDecoder gifDecoder, int width) throws Exception{
     	ByteArrayOutputStream outputStream =new ByteArrayOutputStream();
@@ -141,8 +140,7 @@ public class ImageHelper
      * @return The URL of the uploaded file.
      * @throws Exception If anything goes wrong...
      */
-    public static URL uploadFile(byte[] image, String mimetype, String userHandle) throws Exception
-    {
+    public static URL uploadFile(byte[] image, String mimetype, String userHandle) throws Exception{
         // Prepare the HttpMethod.
         String fwUrl = ServiceLocator.getFrameworkUrl();
         PutMethod method = new PutMethod(fwUrl + "/st/staging-file");

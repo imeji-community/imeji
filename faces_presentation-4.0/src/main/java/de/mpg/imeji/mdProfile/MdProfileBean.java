@@ -35,7 +35,7 @@ public class MdProfileBean
     private int statementPosition = 0;
     private TabType tab = TabType.PROFILE;
     private CollectionSessionBean collectionSession = null;
-    private int constraintPosition;
+	private int constraintPosition;
     private List<StatementWrapper> statements = null;
     private List<SelectItem> mdTypesMenu = null;
     private String id = null;

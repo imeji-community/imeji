@@ -113,34 +113,9 @@
 									
 								<!-- End : Image with link to the details view -->									
 								</span>
-								<!-- 
-						      <rich:toolTip id="imgToolTip" for="imgFrame">
-					           		<div class="xHuge_area0 fullItem">
-					           		
-	
-					           		<div class="free_area0 itemBlock noTopBorder">
-					           				<b class="medium_area0_p8 endline blockHeader">	Meta Data</b>
-					           				<span class="seperator"></span>
-					           					<div class="xHuge_area0 itemBlockContent endline">		
-													<div class="free_area0_p0 small_marginLIncl endline">
-					           							<h:outputText class="xLarge_area0_p8 endline labelLine" value="Filename: "/>
-								           			
-								           			<a4j:repeat value="#{item.imgMetadata}" var="md">
-								           				<h:outputText value="#{md.type.label}"/>
-								           			</a4j:repeat>
-								           			
-										<h:outputText class="huge_area0 endline" value="#{item.image.filename}"/>
-					           			 
-					           			<a4j:repeat value="#{item.imgMetadata}" var="md">
-					           				<h:outputText value="#{md.type.label}"/>
-					           			</a4j:repeat>
-					           			
-									</div></div>
-									</div>
-					           		</div>
-					           		
-					        </rich:toolTip>
-					      -->
+						      <rich:toolTip id="imgToolTip" for="imgFrame" mode="ajax">
+					           		<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"/>
+					        	</rich:toolTip>
 							</h:panelGroup>
 							
 							<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->

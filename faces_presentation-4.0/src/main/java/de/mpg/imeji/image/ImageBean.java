@@ -252,4 +252,19 @@ public class ImageBean
         }
         return false;
     }
+	
+	public void selectedChanged(ValueChangeEvent event)
+	{
+	    if(event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(image.getId())) 
+	    {
+	        setSelected(true);
+	        select();
+	        
+	    }
+	    else if(event.getNewValue().toString().equals("false") && sessionBean.getSelected().contains(image.getId()))
+	    {
+	        setSelected(false);
+	        select();
+	    }
+	}
 }

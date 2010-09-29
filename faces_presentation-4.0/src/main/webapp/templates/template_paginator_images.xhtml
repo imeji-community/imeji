@@ -70,7 +70,7 @@
               }
       );
       </script>
-			
+      
 			
 			<h:panelGroup id="preListHeaderActiveAlbum" layout="block" styleClass="full_area0 preListHeader" rendered="#{SessionBean.activeAlbum != null}">
 					<h:panelGroup styleClass="huge_area0 small_marginLExcl">
@@ -148,8 +148,10 @@
 							<!-- Album Selected -->				
 								<h:panelGroup styleClass="tiny_area1">
 									<span class="free_area0">
-									<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" onchange="getElementById('formular:pictureList:#{index}:selectBtn').click();"></h:selectBooleanCheckbox>
-									<a4j:commandButton id="selectBtn" action="#{item.select}" style="visibility:hidden;" reRender="preListHeader"/>								
+									<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectedChanged}">
+										<a4j:support event="onchange" reRender="preListHeader"/>
+									</h:selectBooleanCheckbox>
+																
 									</span>
 								</h:panelGroup>
 							

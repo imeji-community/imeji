@@ -44,22 +44,22 @@
                 if (currentChecked < prevChecked) {
                     jQuery(selectorStr).each(function(i) {
                         if (ind >= currentChecked && ind <= prevChecked) {
-                            if(this.checked !=checkStatus)
-                            {
-                            	this.click();
-                            }
-                        	//this.checked = checkStatus;
+//                            if(this.checked !=checkStatus)
+//                            {
+//                            	this.click();
+//                            }
+                        	this.checked = checkStatus;
                         }
                         ind++;
                     });
                 } else {
                     jQuery(selectorStr).each(function(i) {
                         if (ind >= prevChecked && ind <= currentChecked) {
-                        	 if(this.checked !=checkStatus)
-                             {
-                             	this.click();
-                             }
-                        	//this.checked = checkStatus;
+//                        	 if(this.checked !=checkStatus)
+//                             {
+//                             	this.click();
+//                             }
+                        	this.checked = checkStatus;
                         }
                         ind++;
                     });

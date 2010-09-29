@@ -48,24 +48,27 @@
 
 			});
 			</script>
-				<div class="full_area0 infoPage">
-						<div style="float: left; margin-right: 20px">
+				<div class="full_area0 small_marginLExcl infoPage">
+						<div>
 							<div id="uploader" style="width: 450px; height: 330px;">You browser doesn't support native upload. Try Firefox 3 or Safari 4.</div>
 						</div>
 						<br style="clear: both"/>
 						
 						<br />
+				<div >
 					<h:outputText value="#{UploadBean.sNum} files uploaded successfully:" /><br />
 					<a4j:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}" rowKeyVar="indexs">
 						<h:outputText value="#{sFile}" />
 						<br />
-						
 					</a4j:repeat>
+					</div>
+					<div class="messageError">	
 					<br />
 					<h:outputText value ="#{UploadBean.fNum} files failed:" /><br />
 					<a4j:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}" rowKeyVar="indexf">
 						<h:outputText value="#{fFile}" /><br />
 					</a4j:repeat>					
+				</div>
 				</div>
 		</ui:define>
 		

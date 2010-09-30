@@ -29,42 +29,50 @@
 function autoSuggestWrite(suggestionBox, index) 
  { 
     var items = suggestionBox.getSelectedItems();
-    var familyName;
-    var firstName;
-    var alternative;
-    var id;
-    var org;
+    var familyName, firstName, alternative, id, org, title, complete;
     if (items && items.length > 0) 
 	{
      	for (var i = 0; i < items.length; i++) 
 		{
-     		familyName = items[i].http_xmlns_com_foaf_0_1_family_name;
+     		complete = items[i];
+     		try{familyName = items[i].http_xmlns_com_foaf_0_1_family_name;}
+     		catch (e){familyName = ' ';}
      		try{firstName = items[i].http_xmlns_com_foaf_0_1_givenname;}
      		catch (e){firstName =' ';}
-     		try{id = items[i].http_purl_org_dc_elements_1_1_identifier.http_www_w3_org_1999_02_22_rdf_syntax_ns_value;}
+     		try{id = items[i].id;}
      		catch (e){id =' ';}
      		try{alternative = items[i].http_purl_org_dc_terms_alternative;}
      		catch (e){alternative =' ';}
      		try{org = items[i].http_purl_org_escidoc_metadata_terms_0_1_position.http_purl_org_eprint_terms_affiliatedInstitution;}
      		catch (e){org =' ';}
+     		try{org = items[i].http_purl_org_escidoc_metadata_terms_0_1_position.http_purl_org_eprint_terms_affiliatedInstitution;}
+     		catch (e){org =' ';}
+     		try{title = items[i].http_purl_org_dc_elements_1_1_title;}
+     		catch (e){title =' ';}
+     		
 		}
      	setInputTextValue('formular:mdList:' + index + ':inputFamilyName', familyName);
      	setInputTextValue('formular:mdList:' + index + ':inputFirstName', firstName);
      	setInputTextValue('formular:mdList:' + index + ':inputAlternative', alternative);
      	setInputTextValue('formular:mdList:' + index + ':inputIdentifier', id);
      	setInputTextValue('formular:mdList:' + index + ':inputOrganization', org);
+     	if (title != null) {setInputTextValue('formular:mdList:' + index + ':inputText', title);}
+     	else{setInputTextValue('formular:mdList:' + index + ':inputText', complete);}
 	}
 }
 
 function setInputTextValue(id, value)
 {
-	if (value && value != 'undefined')
+	if (document.getElementById(id)) 
 	{
-		document.getElementById(id).value  = value;
-	}
-	else
-	{
-		document.getElementById(id).value  = '';
+		if (value && value != 'undefined')
+		{
+			document.getElementById(id).value  = value;
+		}
+		else
+		{
+			document.getElementById(id).value  = '';
+		}
 	}
 }
 

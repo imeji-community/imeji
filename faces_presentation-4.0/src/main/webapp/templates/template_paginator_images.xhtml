@@ -39,13 +39,7 @@
 	<body>
 		<ui:composition template="template_paginator.xhtml">		
 			
-		
-			
 			<ui:define name="actionsMenu">
-			
-				    
-			
-			
 			
 				<h:panelGroup>
 					<!-- SORTING content menu lower line starts here -->
@@ -140,11 +134,6 @@
 									</span>
 								</span>
 
-								
-								
-								
-							
-
 							<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
 							<ui:remove>
 							<!-- View Album Page -->
@@ -168,12 +157,12 @@
 					</a4j:repeat>
 				<!-- End images -->
 				</ul>
-				
+				<h:panelGroup styleClass="fullItem ">
+					<ui:insert name="subImagesContent"></ui:insert>
+				</h:panelGroup>
 			</h:panelGroup>
 			
-			<ui:insert name="subImagesContent"></ui:insert>
 			
-
 			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">	
 				<h:panelGroup layout="block" styleClass="full_area1_p8">
 					<a4j:repeat var="group" value="#{paginatorListSessionBean.facets.groups}" rowKeyVar="index">

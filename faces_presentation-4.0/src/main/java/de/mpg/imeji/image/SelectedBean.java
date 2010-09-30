@@ -22,10 +22,11 @@ public class SelectedBean extends ImagesBean
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
-	private Collection<Image> images;
+    private Collection<Image> images;
     private EditMetadataBean editMetadataBean;
     private String mdEdited;
     private URI currentCollection;
+
     public SelectedBean()
     {
         super();
@@ -43,7 +44,7 @@ public class SelectedBean extends ImagesBean
     {
         return totalNumberOfRecords;
     }
-  
+
     @Override
     public List<ImageBean> retrieveList(int offset, int limit)
     {
@@ -55,34 +56,39 @@ public class SelectedBean extends ImagesBean
             uris.add(new SearchCriterion(SearchCriterion.Operator.OR, ImejiNamespaces.ID_URI, uri.toString(),
                     Filtertype.URI));
         }
-        if(uris.size()!=0){
-	        try{
-	            totalNumberOfRecords = controller.search(uris, null, -1, offset).size();
-	            images = controller.search(uris, null, limit, offset);
-	        }catch (Exception e){
-	            throw new RuntimeException(e);
-	        }
-	        
-	        if (UrlHelper.getParameterBoolean("reset")){
-	            editMetadataBean = new EditMetadataBean((List<Image>)images);
-	        }
+        if (uris.size() != 0)
+        {
+            try
+            {
+                totalNumberOfRecords = controller.search(uris, null, -1, offset).size();
+                images = controller.search(uris, null, limit, offset);
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+            if (UrlHelper.getParameterBoolean("reset"))
+            {
+                editMetadataBean = new EditMetadataBean((List<Image>)images);
+            }
         }
         return ImejiFactory.imageListToBeanList(images);
     }
 
     public String save()
     {
-        if (!editMetadataBean.edit())  
+        if (!editMetadataBean.edit())
         {
             BeanHelper.error("Error editing images");
         }
         BeanHelper.info("Images edited");
         return getNavigationString();
-    }   
-    
-    public String clearAll(){
-    	sb.getSelected().clear();
-    	return "pretty:images";
+    }
+
+    public String clearAll()
+    {
+        sb.getSelected().clear();
+        return "pretty:images";
     }
 
     public EditMetadataBean getEditMetadataBean()
@@ -122,13 +128,14 @@ public class SelectedBean extends ImagesBean
     {
         return currentCollection;
     }
-    
-    public SessionBean getSb() {
-		return sb;
-	}
 
-	public void setSb(SessionBean sb) {
-		this.sb = sb;
-	}
+    public SessionBean getSb()
+    {
+        return sb;
+    }
 
+    public void setSb(SessionBean sb)
+    {
+        this.sb = sb;
+    }
 }

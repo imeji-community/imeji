@@ -34,7 +34,6 @@
 -->
 </ui:remove>
 <f:subview id="SearchFormular">
-	
 	<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 		<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 			<!-- Album Search block starts here -->

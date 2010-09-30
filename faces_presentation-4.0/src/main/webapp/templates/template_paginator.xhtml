@@ -35,8 +35,8 @@
 	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <body>
 
-<ui:composition template="template.xhtml">
-
+<ui:composition template="template_edit_metadata.xhtml">
+	<ui:param name="editMetadataBean" value="#{paginatorListSessionBean.editMetadataBean}" />
 	<ui:define name="mainContent">
 		<div class="full_area0 paginator">
 			<h:outputText value="#{paginatorListSessionBean.init}" style="visibility:hidden;"/>

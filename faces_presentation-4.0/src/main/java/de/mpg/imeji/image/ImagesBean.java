@@ -15,6 +15,7 @@ import org.apache.commons.collections.KeyValue;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
+import de.mpg.imeji.metadata.EditMetadataBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.ImageController;
@@ -39,6 +40,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private String selectedSortCriterion;
     private String selectedSortOrder;
     private FacetsBean facets;
+    private EditMetadataBean editMetadataBean;
     
     private String query;
 
@@ -105,7 +107,18 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
             e.printStackTrace();
         }
         this.setFacets(new FacetsBean((List<Image>)images));
+        editMetadataBean = new EditMetadataBean((List<Image>)images);
         return ImejiFactory.imageListToBeanList(images);
+    }
+
+    public EditMetadataBean getEditMetadataBean()
+    {
+        return editMetadataBean;
+    }
+
+    public void setEditMetadataBean(EditMetadataBean editMetadataBean)
+    {
+        this.editMetadataBean = editMetadataBean;
     }
 
     public List<SelectItem> getSortMenu()

@@ -78,13 +78,24 @@
 						<h:outputText value="#{md.type.number}" rendered="#{md.type.enumType == 'NUMBER'}"/>
 						<h:outputText value="#{md.type.date}" rendered="#{md.type.enumType == 'DATE'}"/>
 						<h:panelGroup rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
-							<h:outputText value="#{md.type.person.familyName}, "/>
-							<h:outputText value="#{md.type.person.givenName} ("/>
-							<a4j:repeat id="orgaList" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
-								<h:outputText value="#{orga.name}"/>
-							</a4j:repeat>
-							<h:outputText value=")" />
-							
+							<h:panelGroup rendered="#{md.type.person.identifier == null}">
+								<h:outputText value="#{md.type.person.familyName}, "/>
+								<h:outputText value="#{md.type.person.givenName} ("/>
+								<a4j:repeat id="orgaList0" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
+									<h:outputText value="#{orga.name}"/>
+								</a4j:repeat>
+								<h:outputText value=")" />
+							</h:panelGroup>
+							<h:panelGroup rendered="#{md.type.person.identifier != null}">
+								<h:outputLink value="#{md.type.person.identifier}" target="_blank">
+									<h:outputText value="#{md.type.person.familyName}, "/>
+									<h:outputText value="#{md.type.person.givenName} ("/>
+									<a4j:repeat id="orgaList1" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
+										<h:outputText value="#{orga.name}"/>
+									</a4j:repeat>
+									<h:outputText value=")" />
+								</h:outputLink>
+							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup rendered="#{md.type.enumType == 'GEOLOCATION'}">
 							<h:outputText value="#{md.type.longitude}/"/>
@@ -170,49 +181,6 @@
 			</h:panelGroup>			
 			<br/><br/>
 		</a4j:repeat>
-		
-		<!-- <a4j:repeat id="mdTreeList" var="treeList" value="#{Detail.item.mdRecords.descriptionTreeList}">
-			<h:panelGroup layout="block" styleClass="huge_area0">
-			<tr:tree id="mdTree" value="#{treeList}" var="mdTree" initiallyExpanded="true">
-				<f:facet name="nodeStamp">
-					<h:panelGroup>
-						<h:panelGroup rendered="#{mdTree.guiComponent == 'group'}">
-							<h:panelGroup layout="block">
-								<h:outputText id="txtMdName" style="font:bold 12px sans-serif;" value="#{mdTree.label}"></h:outputText>
-							</h:panelGroup>
-						</h:panelGroup>
-						<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{mdTree.simpleValue != null }" layout="block">
-							<span>
-								<h:outputText style="font:bold 12px sans-serif;" value="#{mdTree.label} : " rendered="#{mdTree.group == 'title'}"/>
-								<h:outputText style="font:normal 12px sans-serif;" value="#{mdTree.label} : " rendered="#{mdTree.group != 'title'}"/>
-							</span>
-							<h:panelGroup styleClass="singleItemValue" >
-								<h:outputText id="txtMdValue" style="font:normal 12px sans-serif;" value="#{mdTree.simpleValue}"/>
-							</h:panelGroup>
-						</h:panelGroup>
-					</h:panelGroup>	 
-				 </f:facet>
-			</tr:tree>
-			</h:panelGroup>
-		</a4j:repeat>
-
-		<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{Detail.item.type == 'face'}">
-			<b class="medium_area0 endline"><h:outputText value="Techn. Metadata" /></b>
-			<h:outputLink id="lnkTechMd" styleClass="xLarge_area0" value="#{Detail.item.technicalMetadata}" target="_blank" title="To Download Technical Metadata, Please Save with Right Click Mouse">
-				<h:outputText value="View Metadata"/>
-			</h:outputLink>
-		</h:panelGroup> -->
-
-
-
-		<!-- Generic Metadata -->
-		<!-- <div class="half_area0 endline pictureDetails">
-			<h:panelGroup rendered="false">
-				<h:outputText style="font:bold 12px sans-serif;" value="#{Detail.item.mdRecords.screen.resourceClass}" rendered="#{Detail.item.mdRecords.screen.resourceClass != null}"/>
-				<h:outputText value="Metadata" rendered="#{Detail.item.mdRecords.screen.resourceClass == null}"/>
-				<br/><br/>
-			</h:panelGroup>
-		</div> -->
 
 	</h:panelGroup>
 	</ui:remove>

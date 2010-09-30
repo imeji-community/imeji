@@ -3,9 +3,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
-<!--
+	<!--
 
  CDDL HEADER START
 
@@ -36,29 +37,96 @@
 </ui:remove>
 
 <body>
-	<ui:composition template="templates/template_image.xhtml">	
-	
-		<ui:param name="headline" value="#{lbl.details}"/>
+<ui:composition template="templates/template_image.xhtml">
 
-		<ui:define name="viewImage">
-			<h:panelGroup styleClass="full_area0">
-				
+	<ui:param name="headline" value="#{lbl.details}" />
 
-						<ui:include src="picturesPages/ui/Details_Generic.jspf"/>
-
-			</h:panelGroup>
-		</ui:define>
-		
-		<ui:define name="commangLine">	
+	<ui:define name="viewImage">
+		<h:panelGroup styleClass="full_area0">
 			<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-				<h:outputLink value="?reset" styleClass="free_area1_p8 cancelButton ">
-						<h:outputText value="#{lbl.back}" />
-				</h:outputLink>			
-				<h:outputLink id="edit" styleClass="free_area1_p8 activeButton xLarge_marginLIncl" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit">
-					<h:outputText value="#{lbl.assign_md}"/>
-				</h:outputLink>		
+				<h3 class="xLarge_area0_p8 endline blockHeader">
+					<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} " />
+				</h3>
+				<span class="seperator"></span>
+
+				<h:panelGroup styleClass="free_area0 itemBlockContent endline">
+					<!-- URL -->
+					<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+						<b class="xLarge_area0_p8 endline labelLine clear"> <h:outputText
+							value="#{lbl.name }" /> <span class="noDisplay">: </span> </b>
+						<span class="xHuge_area0 xTiny_marginLExcl endline"> <h:outputText
+							id="txtUrl" value="#{ImageBean.image.filename}" /> </span>
+					</h:panelGroup>
+
+					<!-- URL -->
+					<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+						<b class="xLarge_area0_p8 endline labelLine clear"> 
+							<h:outputText value="#{lbl.collection }" /> 
+							<span class="noDisplay">: </span>
+						</b>
+						<span class="xHuge_area0 xTiny_marginLExcl endline"> <h:outputText
+							value="#{ImageBean.collection.metadata.title}" /> </span>
+					</h:panelGroup>
+
+					<a4j:repeat var="md" value="#{ImageBean.imgMetadata}">
+						<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+							<b class="xLarge_area0_p8 endline labelLine clear"> <h:outputText
+								value="#{md.type.label}" /> <span class="noDisplay">: </span> </b>
+							<span class="xHuge_area0 xTiny_marginLExcl endline"> <h:outputText
+								value="#{md.type.text}" rendered="#{md.type.enumType == 'TEXT'}" />
+							<h:outputText value="#{md.type.number}"
+								rendered="#{md.type.enumType == 'NUMBER'}" /> <h:outputText
+								value="#{md.type.date}" rendered="#{md.type.enumType == 'DATE'}" />
+							<h:panelGroup rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
+								<h:panelGroup rendered="#{md.type.person.identifier == null}">
+									<h:outputText value="#{md.type.person.familyName}, " />
+									<h:outputText value="#{md.type.person.givenName} (" />
+									<a4j:repeat id="orgaList0" var="orga"
+										value="#{md.type.person.organizations}"
+										rendered="#{not empty md.type.person.organizations}">
+										<h:outputText value="#{orga.name}" />
+									</a4j:repeat>
+									<h:outputText value=")" />
+								</h:panelGroup>
+								<h:panelGroup rendered="#{md.type.person.identifier != null}">
+									<h:outputLink value="#{md.type.person.identifier}"
+										target="_blank">
+										<h:outputText value="#{md.type.person.familyName}, " />
+										<h:outputText value="#{md.type.person.givenName} (" />
+										<a4j:repeat id="orgaList1" var="orga"
+											value="#{md.type.person.organizations}"
+											rendered="#{not empty md.type.person.organizations}">
+											<h:outputText value="#{orga.name}" />
+										</a4j:repeat>
+										<h:outputText value=")" />
+									</h:outputLink>
+								</h:panelGroup>
+							</h:panelGroup> <h:panelGroup rendered="#{md.type.enumType == 'GEOLOCATION'}">
+								<h:outputText value="#{md.type.longitude}/" />
+								<h:outputText value="#{md.type.latitude}" />
+							</h:panelGroup> </span>
+						</h:panelGroup>
+
+					</a4j:repeat>
+
+				</h:panelGroup>
+
 			</h:panelGroup>
-		</ui:define>					
-	</ui:composition>
+		</h:panelGroup>
+	</ui:define>
+
+	<ui:define name="commandLine">
+		<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+			<h:outputLink value="?reset" styleClass="free_area1_p8 cancelButton ">
+				<h:outputText value="#{lbl.back}" />
+			</h:outputLink>
+			<h:outputLink id="edit"
+				styleClass="free_area1_p8 activeButton xLarge_marginLIncl"
+				value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit">
+				<h:outputText value="#{lbl.assign_md}" />
+			</h:outputLink>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>
 </body>
 </html>

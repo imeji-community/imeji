@@ -55,13 +55,9 @@ public class EditMetadataBean
         metadata = new ArrayList<MetadataBean>();
         statementMenu = new ArrayList<SelectItem>();
         for (Statement s : profile.getStatements())
-        {
             statementMenu.add(new SelectItem(s.getName(), s.getName()));
-        }
         if (image.getMetadata().size() != 0)
-        {
             addImageMetadataForEdit(image);
-        }
         else
             addMetadata();
     }
@@ -83,12 +79,22 @@ public class EditMetadataBean
         return prettyLink;
     }
 
+    public String save()
+    {
+        if (!edit())
+        {
+            BeanHelper.error("Error editing images");
+        }
+        BeanHelper.info("Images edited");
+        return prettyLink;
+    }
+    
     public boolean edit()
     {
         try
         {
             ImageController ic = new ImageController(sb.getUser());
-            if (images != null && images.size() > 0)
+            if (images != null && images.size() > 0 && "pretty:selected".equals(prettyLink))
             {
                 for (Image im : images)
                 {
@@ -96,7 +102,7 @@ public class EditMetadataBean
                 }
                 ic.update(images);
             }
-            else
+            else if ("pretty:editImage".equals(prettyLink ) && image != null)
             {
                 image = updateImageMetadata(image, metadata);
                 ic.update(image);
@@ -218,6 +224,8 @@ public class EditMetadataBean
      */
     public int getNumberOfProfiles()
     {
+        if (profiles == null && profile != null)
+            return 1;
         return this.profiles.size();
     }
 

@@ -37,7 +37,8 @@
 </ui:remove>
 
 <body>
-	<ui:composition template="template.xhtml">	
+	<ui:composition template="template_edit_metadata.xhtml">	
+		<ui:param name="editMetadataBean" value="#{ImageBean.editMetadataBean}" />
 		<!--<ui:define name="breadcrumb">
 			<ui:include src="headerPages/Breadcrumb.jspf"/>
 		</ui:define>	-->

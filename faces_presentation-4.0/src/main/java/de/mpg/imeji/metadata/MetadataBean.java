@@ -8,6 +8,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.richfaces.json.JSONArray;
 import org.richfaces.json.JSONCollection;
+import org.richfaces.json.JSONException;
 
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.vo.util.ImejiFactory;
@@ -103,17 +104,32 @@ public class MetadataBean
                 statement = s;
         if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
         {
-            List<Object> suggestions = new ArrayList<Object>();
+            List<String> suggestions = new ArrayList<String>();
             List<String> literals = new ArrayList<String>();
             for (LocalizedString str : statement.getLiteralConstraints())
                 literals.add(str.toString());
             for (String str : literals)
                 if (str.contains(suggest.toString()))
                     suggestions.add(str);
-            return suggestions;
+            String json = "[";
+            for (String str : suggestions)
+                json += "{\"http_purl_org_dc_elements_1_1_title\" : \"" + str + "\"},";
+            json = json.substring(0, json.length() - 1) + "]";
+            JSONCollection jsc;
+            try
+            {
+                jsc = new JSONCollection(json);
+            }
+            catch (JSONException e)
+            {
+                return  null;
+            }
+            return Arrays.asList(jsc.toArray());
         }
         else if (statement.getVocabulary() != null)
         {
+            if (suggest.toString().isEmpty())
+                suggest = "a";
             if (!suggest.toString().isEmpty())
             {
                 try

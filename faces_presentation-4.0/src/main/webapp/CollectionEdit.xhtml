@@ -67,7 +67,7 @@
 					<h:commandLink id="lnkReleaseCollection" styleClass="free_area0" action="#{ViewCollectionBean.release}" rendered="#{EditCollectionBean.isOwner and EditCollectionBean.collection.properties.status=='PENDING'}">
 						<h:outputText value="#{lbl.collection_release}"></h:outputText>
 					</h:commandLink>
-					<h:outputText styleClass="seperator" />
+					<h:outputText styleClass="seperator" rendered="#{EditCollectionBean.isOwner and EditCollectionBean.collection.properties.status =='PENDING'}"/>
 					<h:outputText styleClass="free_area0" value="#{lbl.collection_edit_metadata}"/>
 				</h:panelGroup>
 			</ui:define>

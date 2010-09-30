@@ -177,7 +177,10 @@ public class MdProfileBean
     public String addStatement()
     {
         Statement st = ImejiFactory.newStatement();
-        ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
+        if (profile.getStatements() .size() == 0)
+            profile.getStatements().add(st);
+        else
+            ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
 //        if (getStatementPosition() == 0)
 //            profile.getStatements().add(st);
 //        else

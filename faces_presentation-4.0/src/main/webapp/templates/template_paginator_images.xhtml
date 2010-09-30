@@ -157,7 +157,7 @@
 					</a4j:repeat>
 				<!-- End images -->
 				</ul>
-				<h:panelGroup styleClass="fullItem ">
+				<h:panelGroup styleClass="fullItem" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
 					<ui:insert name="subImagesContent"></ui:insert>
 				</h:panelGroup>
 			</h:panelGroup>

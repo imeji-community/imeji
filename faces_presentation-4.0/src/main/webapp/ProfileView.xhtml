@@ -38,19 +38,38 @@
 				</h1>
 			</ui:define>
 			
+			<ui:define name="contentMenu">
+				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewMdProfileBean.collection.id.path}" rendered="true">
+					<h:outputText value="#{lbl.collection_home}"/>
+				</h:outputLink>			
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewMdProfileBean.collection.id.path}/details?init=1" rendered="true">
+					<h:outputText value="#{lbl.collection_metadata}"/>
+				</h:outputLink>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputText styleClass="free_area0" value="#{lbl.collection_profile}"></h:outputText>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewMdProfileBean.collection.id.path}?init=1" rendered="true">
+					<h:outputText value="#{lbl.upload_images}"></h:outputText>
+				</h:outputLink>
+			</ui:define>			
 		
 	
 			<ui:define name="actionsMenu">
 				<h:panelGroup>
-					<!-- ORGANIZE content menu lower line starts here -->
-					<h:outputLink id="lnkEditProfile" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewMdProfileBean.profile.id.path}?init=1" rendered="true">
+					<h:outputLink id="lnkEditProfile" styleClass="free_area0" value="#{Navigation.applicationUrl}collection/#{ViewMdProfileBean.collectionId}/edit#{ViewMdProfileBean.profile.id.path}?init=1" rendered="true">
 						<h:outputText value="#{lbl.profile_edit}"></h:outputText>
 					</h:outputLink>
-					<!-- ORGANIZE content menu lower line ends here -->
 					<h:outputText styleClass="seperator void" />
-				<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="">
-					<h:outputText value="#{lbl.profile_related_collection}"></h:outputText>
-				</h:outputLink>
+					<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="">
+						<h:outputText value="#{lbl.profile_related_collection}"></h:outputText>
+					</h:outputLink>
 				</h:panelGroup>
 			</ui:define>
 			

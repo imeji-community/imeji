@@ -24,14 +24,25 @@ import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
+import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ProfileController;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
 public class MdProfileBean
 {
-    private MetadataProfile profile = null;
+    public CollectionImeji getCollection() {
+    	loadCollection();
+		return collection;
+	}
+
+	public void setCollection(CollectionImeji collection) {
+		this.collection = collection;
+	}
+
+	private MetadataProfile profile = null;
     private int statementPosition = 0;
     private TabType tab = TabType.PROFILE;
     private CollectionSessionBean collectionSession = null;
@@ -43,8 +54,31 @@ public class MdProfileBean
     private SessionBean sessionBean;
     private String template;
     private ProfileController pc;
+    private String collectionId = null;
+    private CollectionImeji collection= null;
+    private CollectionController collectionController;
 
-    public MdProfileBean()
+    public String getCollectionId() {
+		return collectionId;
+	}
+
+	public void setCollectionId(String collectionId) {
+		this.collectionId = collectionId;
+	}   
+	
+	public void loadCollection(){
+        if (collectionId != null){
+            try{
+                collection = collectionController.retrieve(collectionId);
+            }catch (Exception e){
+                BeanHelper.error("Collection " + id + " not found.");
+            }
+        }else{
+            BeanHelper.error("No Collection information found. Please check your URL.");
+        }
+    }
+
+	public MdProfileBean()
     {
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -59,6 +93,7 @@ public class MdProfileBean
             mdTypesMenu.add(new SelectItem(mdt.getEnumType().name(), mdt.getEnumType().getLabel()));
         if (this.getId() == null && this.getProfile().getId() != null)
             this.setId(this.getProfile().getId().getPath().split("/")[2]);
+        collectionController = new CollectionController(sessionBean.getUser());
     }
 
     public MdProfileBean(MetadataProfile profile)

@@ -34,8 +34,7 @@ public class CollectionImagesBean extends ImagesBean
     public CollectionImagesBean()
     {
         super();
-        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        
+        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);        
     }
 
     public void init()

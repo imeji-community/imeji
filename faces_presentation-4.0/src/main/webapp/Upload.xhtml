@@ -12,7 +12,6 @@
 			<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{UploadBean.collection.id.path}" rendered="true">
 				<h:outputText value="#{lbl.collection_home}"/>
 			</h:outputLink>			
-
 			
 			<h:outputText styleClass="seperator void" />
 			
@@ -22,18 +21,16 @@
 			
 			<h:outputText styleClass="seperator void" />
 			
-			<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.profile.id.path}?init=1" rendered="true">
+			<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{UploadBean.collection.id.path}#{UploadBean.collection.profile.id.path}?init=1" rendered="true">
 				<h:outputText value="#{lbl.collection_profile}"></h:outputText>
 			</h:outputLink>
 			
 			<h:outputText styleClass="seperator void" />
 			
-			<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{prettyContext.currentMapping.id != 'uploadCollection'}">
-				<h:outputText value="#{lbl.upload_images}"></h:outputText>
-			</h:outputLink>
+			<h:outputText styleClass="free_area0" value="#{lbl.upload_images}"></h:outputText>
 			
-			<h:outputText styleClass="free_area0" value="#{lbl.upload_images}" rendered="#{prettyContext.currentMapping.id == 'uploadCollection'}" />
 		</ui:define>		
+		
 		<ui:define name="mainContent">
 			<!-- Load Queue widget CSS and jQuery -->
 			<style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style>

@@ -233,12 +233,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
                     inverse=true;
                     substring ="";
                 }
-                else if (substring.matches("\\s*[^\\s]+=[^\\s]+\\s+"))
+                else if (substring.matches("\\s*[^\\s]+=\".*\"\\s+"))
                 {
                     String[] keyValue = substring.split("=");
                     
                     String[] nsFilter = keyValue[0].split("\\.");
-                    String value = keyValue[1].trim(); 
+                    
+                    String value = keyValue[1].trim();
+                    value = value.substring(1, value.length()-1); 
                     
                     if(nsFilter[0].trim().equals("ANY_METADATA"))
                     {

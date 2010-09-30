@@ -260,7 +260,7 @@ public class ImageController extends ImejiController{
 		*/
 	    //base.write(System.out);
 	    User user = createUser();
-	    base.write(System.out, "RDF/XML-ABBREV");
+	    //base.write(System.out, "RDF/XML-ABBREV");
 	    ImageController ic = new ImageController(user);
 	    
 	    //String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/image", 100, 0);
@@ -305,6 +305,9 @@ public class ImageController extends ImejiController{
 	    Collection<CollectionImeji> result = rdf2Bean.load(CollectionImeji.class);
         CollectionImeji res = rdf2Bean.load(CollectionImeji.class, "http://imeji.mpdl.mpg.de/collection/1");
 	    
+        
+        System.out.println("IMAGE_MD_NAME.REGEX=\"bla va\" ".matches("\\s*[^\\s]+=\".*\"\\s+"));
+        
         //System.out.println("Found: " +result.size() + "results ");
 	   /*
         for (Image img : result)

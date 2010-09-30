@@ -43,7 +43,7 @@ public class QuickSearchBean implements Serializable
         else if (getSelectedSearchType().equals("images"))
         {
             ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class);
-            bean.setQuery("( ANY_METADATA=" + searchString +" )");
+            bean.setQuery("( ANY_METADATA=\"" + searchString +"\" )");
             return "pretty:images";
         }
         return "pretty:";

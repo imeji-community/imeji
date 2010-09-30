@@ -126,7 +126,7 @@ public class CollectionCriterionController implements Serializable {
 			        //Always use OR here, doesnt make sense else
 			        collectionLogicalOperator += " OR";
 			    }
-			    collectionQuery += ImejiNamespaces.IMAGE_COLLECTION.name() + "." + Filtertype.URI + "=" + collectionCriterion.getSelectedCollectionId();
+			    collectionQuery += ImejiNamespaces.IMAGE_COLLECTION.name() + "." + Filtertype.URI + "=\"" + collectionCriterion.getSelectedCollectionId() +"\"";
 			
 			    int j=0;
     			String mdQuery = "";
@@ -148,37 +148,37 @@ public class CollectionCriterionController implements Serializable {
 				        {
 				            case TEXT : 
 				            {
-				                ctCriterion = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+				                ctCriterion = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText() + "\"";
 				                break;
 				            }
 				            case DATE : 
                             {
-                                ctCriterion = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_DATE.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                ctCriterion = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_DATE.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText() + "\"";
                                 break;
                             }
 				            case  NUMBER : 
                             {
-                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText() + "\"";
                                 break;
                             }
 				            case  CONE_AUTHOR : 
                             {
-                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME.name()+ "." + Filtertype.REGEX + "=" + mdc.getMdText();
-                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
-                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME.name()+ "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
+                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
+                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
                                 break;
                             }
 				            case  GEOLOCATION : 
                             {
-                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LONGITUDE.name()+ "." + Filtertype.REGEX + "=" + mdc.getMdText();
-                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LATITUDE.name() + "." + Filtertype.REGEX + "=" + mdc.getMdText();
+                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LONGITUDE.name()+ "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
+                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LATITUDE.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
                                 break;
                             }
 				        }
     				            
     				        
     				        
-				        mdQuery += collectionQuery + " AND " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS + "=" + mdc.getSelectedMdName() + " AND " + ctCriterion;
+				        mdQuery += collectionQuery + " AND " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS + "=\"" + mdc.getSelectedMdName() + "\" AND " + ctCriterion;
 				        mdQuery +=" )";
     				    j++;
     				}

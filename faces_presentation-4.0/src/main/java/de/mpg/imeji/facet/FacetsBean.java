@@ -110,7 +110,7 @@ public class FacetsBean
         {
             query += "INVERSE ";
         }
-        query += "( " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS.name() + "=" + st.getName() + " ) ";
+        query += "( " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS.name() + "=\"" + st.getName() + "\" ) ";
         return  query;
         //return "?q=" + URLEncoder.encode(index + "='" + value + "'", "UTF-8");
     }

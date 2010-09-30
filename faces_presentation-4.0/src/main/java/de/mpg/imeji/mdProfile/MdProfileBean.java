@@ -5,17 +5,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.richfaces.json.JSONCollection;
 import org.richfaces.json.JSONException;
-
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
@@ -24,24 +21,13 @@ import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
-import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ProfileController;
-import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
 public class MdProfileBean
 {
-    public CollectionImeji getCollection() {
-    	loadCollection();
-		return collection;
-	}
-
-	public void setCollection(CollectionImeji collection) {
-		this.collection = collection;
-	}
-
 	private MetadataProfile profile = null;
     private int statementPosition = 0;
     private TabType tab = TabType.PROFILE;
@@ -54,29 +40,6 @@ public class MdProfileBean
     private SessionBean sessionBean;
     private String template;
     private ProfileController pc;
-    private String collectionId = null;
-    private CollectionImeji collection= null;
-    private CollectionController collectionController;
-
-    public String getCollectionId() {
-		return collectionId;
-	}
-
-	public void setCollectionId(String collectionId) {
-		this.collectionId = collectionId;
-	}   
-	
-	public void loadCollection(){
-        if (collectionId != null){
-            try{
-                collection = collectionController.retrieve(collectionId);
-            }catch (Exception e){
-                BeanHelper.error("Collection " + id + " not found.");
-            }
-        }else{
-            BeanHelper.error("No Collection information found. Please check your URL.");
-        }
-    }
 
 	public MdProfileBean()
     {
@@ -93,7 +56,6 @@ public class MdProfileBean
             mdTypesMenu.add(new SelectItem(mdt.getEnumType().name(), mdt.getEnumType().getLabel()));
         if (this.getId() == null && this.getProfile().getId() != null)
             this.setId(this.getProfile().getId().getPath().split("/")[2]);
-        collectionController = new CollectionController(sessionBean.getUser());
     }
 
     public MdProfileBean(MetadataProfile profile)

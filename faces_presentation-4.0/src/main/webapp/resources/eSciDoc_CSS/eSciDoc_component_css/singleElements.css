@@ -65,8 +65,7 @@
 		padding: 1.73em 0.92em 0.92em 0.92em;
         line-height: 2em;
         background-color: #303030;
-		float:left;
-		position:absolute;
-		display:none;
-		width: 6em;
+		float: left;
+		position: absolute;
+		display: none;
 }

@@ -74,6 +74,8 @@ public class ImejiFactory
                 new License();
             case NUMBER:
                 return new Number(0);
+            case URI:
+                return new de.mpg.jena.vo.complextypes.URI();
             default:
             {
                 Text t = new Text();

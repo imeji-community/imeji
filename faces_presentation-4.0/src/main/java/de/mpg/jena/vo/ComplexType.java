@@ -1,20 +1,16 @@
 package de.mpg.jena.vo;
 
 import java.lang.annotation.Annotation;
-import java.net.URI;
 
-import org.apache.tools.ant.types.selectors.ExtendSelector;
-
-import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfType;
-
 import de.mpg.jena.vo.complextypes.ConePerson;
 import de.mpg.jena.vo.complextypes.Date;
 import de.mpg.jena.vo.complextypes.Geolocation;
 import de.mpg.jena.vo.complextypes.License;
 import de.mpg.jena.vo.complextypes.Number;
 import de.mpg.jena.vo.complextypes.Text;
+import de.mpg.jena.vo.complextypes.URI;
 
 public abstract class ComplexType
 {
@@ -24,7 +20,7 @@ public abstract class ComplexType
     {    
         CONE_AUTHOR(ConePerson.class, "Cone Author"), TEXT(Text.class, "Text"), NUMBER(Number.class, "Number"), DATE(
                 Date.class, "Date"), LICENCE(License.class, "Licence"), GEOLOCATION(Geolocation.class,
-                "Geolocation");
+                "Geolocation"), URI(URI.class, "URI");
         private Class<? extends ComplexType> type;
         private String label;
 

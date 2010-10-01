@@ -48,6 +48,12 @@
 	<lifecycle>
 		<phase-listener id="facesMessagesListener">de.mpg.imeji.util.FacesMessagesPhaseListener</phase-listener>
 	</lifecycle>
+	
+	<converter>
+		<converter-id>URIConverter</converter-id>
+		<converter-class>de.mpg.imeji.converter.URIConverter</converter-class>
+	</converter>
+	
 	<!-- 
 		<lifecycle>
 		<phase-listener id="debugRenderResponse">de.mpg.escidoc.pubman.util.RenderResponsePhaseListener</phase-listener>

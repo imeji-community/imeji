@@ -33,14 +33,24 @@
 												<h:selectOneMenu value="#{metadata.selectedStatementName}"	styleClass="huge_select" onchange="getElementById('formular:mdList:#{index}:changeTypeBtn').click();">
 													<f:selectItems value="#{editMetadataBean.statementMenu}" />
 												</h:selectOneMenu>
-												<h:commandButton id="changeTypeBtn"
-													action="#{metadata.changeType}" style="visibility:hidden;" />
+												<h:commandButton id="changeTypeBtn"	action="#{metadata.changeType}" style="visibility:hidden;" />
 											</h:panelGroup>
 				
 											<h:panelGroup layout="block" styleClass="xLarge_area0">
 												<h:outputText value="&#160;" styleClass="large_label" rendered="#{metadata.metadata.type.enumType=='TEXT'}" />
 												<h:inputText id="inputText" styleClass="large_txtInput"	value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}">
-													<rich:suggestionbox for="inputText" var="results" suggestionAction="#{metadata.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{index})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+													<rich:suggestionbox rendered="#{metadata.hasAutoComplete}" for="inputText" var="results" suggestionAction="#{metadata.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{index})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+														<h:column>
+															<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
+														</h:column>
+													</rich:suggestionbox>
+												</h:inputText>
+												
+												<h:outputText value="&#160;" styleClass="large_label" rendered="#{metadata.metadata.type.enumType=='URI'}" />
+												
+												<h:inputText id="inputURI" styleClass="large_txtInput"	value="#{metadata.metadata.type.uri}" rendered="#{metadata.metadata.type.enumType=='URI'}">
+													<f:converter converterId="URIConverter" />
+													<rich:suggestionbox rendered="#{metadata.hasAutoComplete}" for="inputURI" var="results" suggestionAction="#{metadata.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{index})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 														<h:column>
 															<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
 														</h:column>
@@ -53,12 +63,13 @@
 														<f:convertDateTime type="date" pattern="yyyy-MM-dd" />
 													</h:inputText>
 												</h:panelGroup>
+												
 												<h:outputText value="&#160;" styleClass="large_label" rendered="#{metadata.metadata.type.enumType=='NUMBER'}" />
 												<h:inputText styleClass="large_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}" />
 												<h:panelGroup rendered="#{metadata.metadata.type.enumType=='CONE_AUTHOR'}">
 													<h:outputLabel value="#{lbl.family_name}" styleClass="xLarge_label" />
 													<h:inputText id="inputFamilyName" styleClass="large_txtInput" value="#{metadata.metadata.type.person.familyName}">
-														<rich:suggestionbox for="inputFamilyName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})"	suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+														<rich:suggestionbox rendered="#{metadata.hasAutoComplete}" for="inputFamilyName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})"	suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 															<h:column>
 																<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
 																, 
@@ -69,7 +80,7 @@
 				
 													<h:outputLabel value="#{lbl.first_name}" styleClass="xLarge_label" />
 													<h:inputText id="inputFirstName" styleClass="large_txtInput" value="#{metadata.metadata.type.person.givenName}">
-														<rich:suggestionbox for="inputFirstName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})" suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+														<rich:suggestionbox rendered="#{metadata.hasAutoComplete}" for="inputFirstName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})" suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 															<h:column>
 																<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
 																, 
@@ -82,16 +93,11 @@
 														styleClass="xLarge_label" />
 													<h:inputText id="inputAlternative" styleClass="large_txtInput"
 														value="#{metadata.metadata.type.person.alternativeName}">
-														<rich:suggestionbox for="inputAlternative" var="result"
-															onobjectchange="autoSuggestWrite(suggestion, #{index})"
-															suggestionAction="#{metadata.autoComplete}"
-															nothingLabel="#{lbl.suggest_not_found}"
-															usingSuggestObjects="true">
+														<rich:suggestionbox rendered="#{metadata.hasAutoComplete}" for="inputAlternative" var="result"	onobjectchange="autoSuggestWrite(suggestion, #{index})" suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 															<h:column>
-																<h:outputText
-																	value="#{result.http_xmlns_com_foaf_0_1_family_name}" />, 
-													               		<h:outputText
-																	value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
+																<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
+																	, 
+													               	<h:outputText value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
 															</h:column>
 														</rich:suggestionbox>
 													</h:inputText>
@@ -100,16 +106,11 @@
 														styleClass="xLarge_label" />
 													<h:inputText id="inputIdentifier" styleClass="large_txtInput"
 														value="#{metadata.metadata.type.person.identifier}">
-														<rich:suggestionbox for="inputIdentifier" var="result"
-															onobjectchange="autoSuggestWrite(suggestion, #{index})"
-															suggestionAction="#{metadata.autoComplete}"
-															nothingLabel="#{lbl.suggest_not_found}"
-															usingSuggestObjects="true">
+														<rich:suggestionbox rendered="#{metadata.hasAutoComplete}" for="inputIdentifier" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})" suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 															<h:column>
-																<h:outputText
-																	value="#{result.http_xmlns_com_foaf_0_1_family_name}" />, 
-													               		<h:outputText
-																	value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
+																<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
+																, 
+													            <h:outputText value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
 															</h:column>
 														</rich:suggestionbox>
 													</h:inputText>
@@ -118,31 +119,21 @@
 														styleClass="xLarge_label" />
 													<h:inputText id="inputOrganization" styleClass="large_txtInput"
 														value="#{metadata.metadata.type.person.organizations[0].name}">
-														<rich:suggestionbox for="inputOrganization" var="result"
-															onobjectchange="autoSuggestWrite(suggestion, #{index})"
-															suggestionAction="#{metadata.autoComplete}"
-															nothingLabel="#{lbl.suggest_not_found}"
-															usingSuggestObjects="true">
+														<rich:suggestionbox rendered="#{metadata.hasAutoComplete}" for="inputOrganization" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})" suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 															<h:column>
-																<h:outputText
-																	value="#{result.http_xmlns_com_foaf_0_1_family_name}" />, 
-													               		<h:outputText
-																	value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
+																<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
+																, 
+													            <h:outputText value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
 															</h:column>
 														</rich:suggestionbox>
 													</h:inputText>
 												</h:panelGroup>
 				
-												<h:panelGroup
-													rendered="#{metadata.metadata.type.enumType=='GEOLOCATION'}">
-													<h:outputLabel value="#{lbl.geoloaction_latitude}"
-														styleClass="xLarge_label" />
-													<h:inputText styleClass="large_txtInput"
-														value="#{metadata.metadata.type.latitude}" />
-													<h:outputLabel value="#{lbl.geoloaction_longitude}"
-														styleClass="xLarge_label" />
-													<h:inputText styleClass="large_txtInput"
-														value="#{metadata.metadata.type.longitude}" />
+												<h:panelGroup rendered="#{metadata.metadata.type.enumType=='GEOLOCATION'}">
+													<h:outputLabel value="#{lbl.geoloaction_latitude}" styleClass="xLarge_label" />
+													<h:inputText styleClass="large_txtInput" value="#{metadata.metadata.type.latitude}" />
+													<h:outputLabel value="#{lbl.geoloaction_longitude}" styleClass="xLarge_label" />
+													<h:inputText styleClass="large_txtInput" value="#{metadata.metadata.type.longitude}" />
 												</h:panelGroup>
 											</h:panelGroup>
 											<h:commandButton styleClass="min_imgBtn add groupTool"

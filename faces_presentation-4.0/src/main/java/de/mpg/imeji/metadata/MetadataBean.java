@@ -96,6 +96,19 @@ public class MetadataBean
         }
     }
 
+    public boolean getHasAutoComplete()
+    {
+        Statement statement = null;
+        for (Statement s : profile.getStatements())
+            if (s.getName().equals(getSelectedStatementName()))
+                statement = s;
+        if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
+            return true;
+        if (statement.getVocabulary() != null)
+            return true;
+        return false;
+    }
+
     public List<Object> autoComplete(Object suggest)
     {
         Statement statement = null;
@@ -122,7 +135,7 @@ public class MetadataBean
             }
             catch (JSONException e)
             {
-                return  null;
+                return null;
             }
             return Arrays.asList(jsc.toArray());
         }

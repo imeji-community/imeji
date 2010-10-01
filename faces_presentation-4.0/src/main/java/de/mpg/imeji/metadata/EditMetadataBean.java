@@ -37,13 +37,16 @@ public class EditMetadataBean
         profiles = ProfileHelper.loadProfiles(images);
         // mdFields = ProfileHelper.getFields(profiles);
         metadata = new ArrayList<MetadataBean>();
-        profile = profiles.values().iterator().next();
-        statementMenu = new ArrayList<SelectItem>();
-        for (Statement s : profile.getStatements())
+        if (!profiles.isEmpty())
         {
-            statementMenu.add(new SelectItem(s.getName(), s.getName()));
+            profile = profiles.values().iterator().next();
+            statementMenu = new ArrayList<SelectItem>();
+            for (Statement s : profile.getStatements())
+            {
+                statementMenu.add(new SelectItem(s.getName(), s.getName()));
+            }
+            addMetadata();
         }
-        addMetadata();
     }
 
     public EditMetadataBean(Image image)

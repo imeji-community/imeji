@@ -404,8 +404,8 @@ FORM BG			#FFFFFF
 	}
 	
 	.tiledList .inAlbum, .fullItem .inAlbum, .activeAlbum, .activeAlbum .seperator {
-		background-color: #DAE160;
-		border-color: #FF7F00 !important;
+		background-color: #484848;
+		color: #FFFFFF;
 	}
 
 		/*ITEM HEADER*/

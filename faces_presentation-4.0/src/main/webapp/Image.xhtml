@@ -92,19 +92,25 @@
 										<h:outputText value=")" />
 									</h:panelGroup>
 									<h:panelGroup rendered="#{md.type.person.identifier != null}">
-									<h:outputLink value="#{md.type.person.identifier}" target="_blank">
-										<h:outputText value="#{md.type.person.familyName}, " />
-										<h:outputText value="#{md.type.person.givenName} (" />
-										<a4j:repeat id="orgaList1" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
-											<h:outputText value="#{orga.name}" />
-										</a4j:repeat>
-										<h:outputText value=")" />
+										<h:outputLink value="#{md.type.person.identifier}" target="_blank">
+											<h:outputText value="#{md.type.person.familyName}, " />
+											<h:outputText value="#{md.type.person.givenName} (" />
+											<a4j:repeat id="orgaList1" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
+												<h:outputText value="#{orga.name}" />
+											</a4j:repeat>
+											<h:outputText value=")" />
+										</h:outputLink>
+									</h:panelGroup>
+								</h:panelGroup> 
+								<h:panelGroup rendered="#{md.type.enumType == 'GEOLOCATION'}">
+									<h:outputText value="#{md.type.longitude}/" />
+									<h:outputText value="#{md.type.latitude}" />
+									<br/>
+									<h:outputLink value="http://maps.google.de/?ie=UTF8&amp;q=#{md.type.latitude},+#{md.type.longitude}&amp;iwloc=A&amp;hl=en" target="_blank">
+										<h:outputText value="View in Google Map"/>
 									</h:outputLink>
-								</h:panelGroup>
-							</h:panelGroup> <h:panelGroup rendered="#{md.type.enumType == 'GEOLOCATION'}">
-								<h:outputText value="#{md.type.longitude}/" />
-								<h:outputText value="#{md.type.latitude}" />
-							</h:panelGroup> </span>
+								</h:panelGroup> 
+							</span>
 						</h:panelGroup>
 
 					</a4j:repeat>

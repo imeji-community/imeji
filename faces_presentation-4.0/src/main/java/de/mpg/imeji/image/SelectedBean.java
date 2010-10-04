@@ -1,15 +1,29 @@
 package de.mpg.imeji.image;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
+import javax.xml.rpc.ServiceException;
 
+import de.escidoc.core.common.exceptions.application.missing.MissingMethodParameterException;
+import de.escidoc.core.common.exceptions.application.notfound.ItemNotFoundException;
+import de.escidoc.core.common.exceptions.application.security.AuthenticationException;
+import de.escidoc.core.common.exceptions.application.security.AuthorizationException;
+import de.escidoc.core.common.exceptions.application.violated.AlreadyPublishedException;
+import de.escidoc.core.common.exceptions.application.violated.LockingException;
+import de.escidoc.core.common.exceptions.system.SystemException;
+import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.EditMetadataBean;
+import de.mpg.imeji.upload.deposit.DepositController;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.ImageController;
@@ -22,11 +36,22 @@ public class SelectedBean extends ImagesBean
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
-    private Collection<Image> images;
+    public String getEscidocUserHandle() throws Exception {
+        String userName = PropertyReader.getProperty("imeji.escidoc.user");
+        String password = PropertyReader.getProperty("imeji.escidoc.password");
+        escidocUserHandle = LoginHelper.login(userName, password);
+		return escidocUserHandle;
+	}
+
+	public void setEscidocUserHandle(String escidocUserHandle) {
+		this.escidocUserHandle = escidocUserHandle;
+	}
+
+	private Collection<Image> images;
     private EditMetadataBean editMetadataBean;
     private String mdEdited;
     private URI currentCollection;
-
+    private String escidocUserHandle;
     public SelectedBean()
     {
         super();
@@ -89,6 +114,23 @@ public class SelectedBean extends ImagesBean
     {
         sb.getSelected().clear();
         return "pretty:images";
+    }
+        
+    public String deleteAll() throws Exception{
+    	ImageController imageController = new ImageController(sb.getUser());
+    	for(int i= 0; i<sb.getSelectedSize(); i++){
+    		Image img = imageController.retrieve(sb.getSelected().get(i));
+    		DepositController.deleteImejiItem(img, getEscidocUserHandle(), sb.getUser());
+    	}
+    	sb.getSelected().clear();
+    	return "pretty:images";
+    }
+        
+    public void logInEscidoc() throws Exception{
+        String userName = PropertyReader.getProperty("imeji.escidoc.user");
+        String password = PropertyReader.getProperty("imeji.escidoc.password");
+        escidocUserHandle = LoginHelper.login(userName, password);
+
     }
 
     public EditMetadataBean getEditMetadataBean()

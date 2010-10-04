@@ -1,7 +1,6 @@
 package de.mpg.imeji.image;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
@@ -47,6 +46,10 @@ public class ImageBean {
 	private String previous = null;
 	private String next = null;
 	private List<String> techMd;
+	
+	public void delete(Image img){
+		
+	}
 
 	public ImageBean(Image img) {
 		this.image = img;

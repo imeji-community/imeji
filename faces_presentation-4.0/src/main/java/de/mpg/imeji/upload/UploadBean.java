@@ -119,25 +119,14 @@ public class UploadBean
     }
     
     public String report() throws Exception{
-    	System.err.println(totalNum + " files uploaded.");
     	setTotalNum(totalNum);
-    	System.err.println(sNum + " files uploaded successfully:");
     	setsNum(sNum);
-    	for(int i = 0; i<sFiles.size(); i++)
-    		System.err.println(sFiles.get(i));
     	setsFiles(sFiles);
-    	System.err.println(fNum + " files failed:");
     	setfNum(fNum);
-    	for (int j=0; j<fFiles.size(); j++)
-    		System.err.println(fFiles.get(j));
     	setfFiles(fFiles);
-//    	HttpServletResponse resp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-//    	Navigation navi = new Navigation();
-//    	navi.getApplicationUri();
-//    	resp.sendRedirect(navi.getApplicationUri()+"/upload/collection/" + id);
     	return "";
     }
-      
+    
     public String getTotalNum() {
     	System.err.println("totalNum = " +totalNum);
 		return totalNum;

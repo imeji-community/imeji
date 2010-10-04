@@ -1,0 +1,42 @@
+package de.mpg.jena.vo.complextypes;
+
+import java.io.Serializable;
+
+import thewebsemantic.Embedded;
+import thewebsemantic.Namespace;
+import thewebsemantic.RdfType;
+
+import de.mpg.jena.vo.ComplexType;
+
+@Namespace("http://imeji.mpdl.mpg.de/metadata/")
+@RdfType("uri")
+@Embedded
+public class URI extends ComplexType implements Serializable
+{
+    private java.net.URI uri;
+
+    public URI()
+    {
+        super(ComplexTypes.URI);
+    }
+
+    public java.net.URI getUri()
+    {
+        return uri;
+    }
+
+    public void setUri(java.net.URI uri)
+    {
+        this.uri = uri;
+    }
+
+    /*
+     * Do not use constructors with one string parameter, Jenabean has problems with it.
+    public Text(String value)
+    {
+        super(ComplexTypes.TEXT);
+        text = value;
+    }
+*/
+
+}

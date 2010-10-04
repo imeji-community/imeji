@@ -193,7 +193,7 @@ public class ImageController extends ImejiController{
 	
 	public void delete(Image img, User user)
 	{
-		
+		bean2RDF.delete(img);
 	}
 	
 	public void release()

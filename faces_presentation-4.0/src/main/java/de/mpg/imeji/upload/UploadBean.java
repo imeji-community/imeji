@@ -103,8 +103,7 @@ public class UploadBean
             UserController uc = new UserController(null);
             User user = uc.retrieve(getUser().getEmail());
             try{
-                ItemVO item = DepositController.createImejiItem(inputStream, title, description, mimetype, format,
-                        escidocUserHandle, collection.getId().toString(), escidocContext);
+                ItemVO item = DepositController.createImejiItem(inputStream, title, description, mimetype, format, escidocUserHandle, collection.getId().toString(), escidocContext);
                DepositController.depositImejiItem(item, escidocUserHandle, collection, user, title);
                sNum += 1;
                sFiles.add(title);

@@ -103,11 +103,19 @@
 
 			<h:panelGroup styleClass="full_area0 fullItem">
 
-						<ui:include src="/picturesPages/ui/DetailImage.jspf"/>
-
+				<ui:include src="/picturesPages/ui/DetailImage.jspf"/>
 				
 				<div class="full_area0 fullItem">
 					<div class="fullItemControls">
+						<h:panelGroup styleClass="seperator" />
+									
+						<h:outputLink id="lnkViewItemMdPage" styleClass="free_area0 actual" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/view/techMd" rendered="#{prettyContext.currentMapping.id == 'viewImageMD'}">
+							<h:outputText value="#{lbl.view_tech_md}"/>
+						</h:outputLink>
+						
+						<h:outputLink id="lnkViewItemMdPage2" styleClass="free_area0" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/view/techMd" rendered="#{prettyContext.currentMapping.id != 'viewImageMD'}">
+							<h:outputText value="#{lbl.view_tech_md}"/>
+						</h:outputLink>
 
 									
 						<h:panelGroup styleClass="seperator" />
@@ -135,10 +143,9 @@
 				</div>
 				<ui:insert name="viewImage"></ui:insert>
 				<ui:insert name="editImage"></ui:insert>
-						
-				
-</h:panelGroup>
-<ui:insert name="commangLine">&#160;</ui:insert>
+				<ui:insert name="viewTechMD"></ui:insert>
+			</h:panelGroup>
+			<ui:insert name="commandLine">&#160;</ui:insert>
 		</ui:define>
 
 	</ui:composition>

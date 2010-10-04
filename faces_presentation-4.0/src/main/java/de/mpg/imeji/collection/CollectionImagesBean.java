@@ -76,7 +76,6 @@ public class CollectionImagesBean extends ImagesBean
         {
             e.printStackTrace();
         }
-        super.setFacets(new FacetsBean((List<Image>)images));
         return ImejiFactory.imageListToBeanList(images);
     }
 

@@ -40,7 +40,6 @@
 		<ui:composition template="template_paginator.xhtml">		
 			
 			<ui:define name="actionsMenu">
-			
 				<h:panelGroup>
 					<!-- SORTING content menu lower line starts here -->
 					<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0"/>
@@ -65,7 +64,14 @@
       );
       </script>
       
-			
+      <script>
+      jQuery(document).ready (
+              function () {
+                 	document.getElementById('formular:facetInitialized').click();
+              }
+      );
+      </script>
+	  
 			<h:panelGroup id="preListHeaderActiveAlbum" layout="block" styleClass="full_area0 preListHeader" rendered="#{SessionBean.activeAlbum != null}">
 					<h:panelGroup styleClass="huge_area0 small_marginLExcl">
 						<h:outputText value="#{lbl.active_album}: "/>
@@ -164,10 +170,10 @@
 			
 			
 			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">	
-				<h:panelGroup layout="block" styleClass="full_area1_p8">
+				<h:panelGroup id="facetGroup" layout="block" styleClass="full_area1_p8">
 					<a4j:repeat var="group" value="#{paginatorListSessionBean.facets.groups}" rowKeyVar="index">
 						<h:panelGroup layout="block" styleClass="full_area0" rendered="#{!empty group.list}">
-							<h:outputText value="#{group.label}"/> 
+							<h:outputText value="#{group.label}"/>
 							<h:outputText value="No title" rendered="#{empty group.label}"/> 
 							<span style="padding-left:20px"/>
 							<a4j:repeat var="facet" value="#{group.list}" rowKeyVar="index">
@@ -179,9 +185,14 @@
 							<br/>
 						</h:panelGroup>
 					</a4j:repeat>
+					<h:panelGroup layout="block" styleClass="full_area0" rendered="#{empty paginatorListSessionBean.facets.groups}">
+						<a4j:status id="loadFacets" startText="#{lbl.facets_loading}..." />
+					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
-			
+			<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
+				<a4j:support event="onchange" reRender="facetGroup" action="#{paginatorListSessionBean.initFacets}" status="loadFacets"/>
+			</h:selectBooleanCheckbox>
 			</ui:define>
 		</ui:composition>
 	</body>

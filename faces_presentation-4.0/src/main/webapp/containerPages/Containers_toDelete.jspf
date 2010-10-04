@@ -34,5 +34,6 @@
 
 </ui:remove>
 <f:subview id="Containers">
+<h:inputTextarea rows=""></h:inputTextarea>
 </f:subview>
 </div>

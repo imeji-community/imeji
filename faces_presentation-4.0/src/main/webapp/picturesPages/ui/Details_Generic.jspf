@@ -36,7 +36,7 @@
 <f:subview id="Details">
 
 
-
+<h:panelGroup>
 
 	<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 		<h3 class="xLarge_area0_p8 endline blockHeader">
@@ -110,80 +110,11 @@
 		</h:panelGroup>
 	
 	</h:panelGroup>
-	
-	
-	<ui:remove>
-	<h:panelGroup layout="block" styleClass="huge_area1_p4 metaDataSection">
-	
-		<h2 class="xLarge_area0" style="text-align: center;">
-			<h:outputText value="#{ImageBean.image.filename}"/>
-		</h2>
-		
-		
-		<h:panelGroup styleClass="huge_area0">
-				<h:outputLabel value="#{lbl.collection }" />
-				<h:outputLabel value="#{ImageBean.collection.metadata.title}"/>
-		</h:panelGroup>			
-		
-		<a4j:repeat id="mdList" var="md" value="#{ImageBean.imgMetadata}">
-			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
-				<h:panelGroup styleClass="huge_area0" rendered="#{md.type.person.familyName != null and md.type.person.familyName != ''}">
-					<h:outputLabel value="#{md.type.label}:" />
-				</h:panelGroup>			
-				<h:panelGroup styleClass="huge_area0" rendered="#{md.type.person.familyName != null and md.type.person.familyName != ''}">
-					<h:outputLabel value="#{lbl.family_name}" />
-					<h:outputLabel value="#{md.type.person.familyName}"/>
-				</h:panelGroup>
-				<h:panelGroup styleClass="huge_area0" rendered="#{md.type.person.givenName != null and md.type.person.givenName != ''}">
-					<h:outputLabel value="#{lbl.first_name}" />
-					<h:outputLabel value="#{md.type.person.givenName}"/>
-				</h:panelGroup>
-				<h:panelGroup styleClass="huge_area0"  rendered="#{md.type.person.alternativeName != null and md.type.person.alternativeName != ''}">
-					<h:outputLabel value="#{lbl.alternative_name}"/>
-					<h:outputLabel value="#{md.type.person.alternativeName}"/>
-				</h:panelGroup>
-				<h:panelGroup styleClass="huge_area0"  rendered="#{md.type.person.identifier != null and md.type.person.identifier != ''}">
-					<h:outputLabel value="#{lbl.identifier}"/>
-					<h:outputLabel value="#{md.type.person.identifier}"/>
-				</h:panelGroup>
-				<h:panelGroup styleClass="huge_area0"  rendered="#{md.type.person.role != null}">
-					<h:outputLabel value="#{lbl.role}"/>
-					<h:outputLabel value="#{md.type.person.role}"/>
-				</h:panelGroup>
-				<a4j:repeat id="orgaList" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
-					<h:panelGroup styleClass="huge_area0"  >
-						<h:outputLabel value="#{lbl.organization}"/>
-						<h:outputLabel value="#{orga.name}"/>
-					</h:panelGroup>
-				</a4j:repeat>
-			</h:panelGroup>
-			
-			
-			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'TEXT'}">
-				<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.text != null }">
-					<h:outputLabel value="#{md.type.label}:" />
-					<h:outputLabel value="#{md.type.text}"/>
-				</h:panelGroup>						
-			</h:panelGroup>
-			
-			
-			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType == 'NUMBER'}">
-				<h:panelGroup styleClass="free_area0 detailsLine" rendered="#{md.type.number != null }">
-					<h:outputLabel value="#{md.type.label}:" />
-					<h:outputLabel value="#{md.type.number}"/>
-				</h:panelGroup>						
-			</h:panelGroup>
-			
-			<h:panelGroup layout="block" styleClass="huge_area0" rendered="#{md.type.enumType =='GEOLOCATION'}">
-				<h:outputLabel value="#{md.type.label}:" />
-				<h:outputLabel value="#{md.type.latitude }"></h:outputLabel>
-				<h:outputLabel value="#{md.type.longitude }"></h:outputLabel>
-			</h:panelGroup>			
-			<br/><br/>
-		</a4j:repeat>
 
-	</h:panelGroup>
-	</ui:remove>
+
+
+	
+
 </f:subview>
 </div>
 

@@ -26,11 +26,14 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
+import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.Properties.Status;
 
 public class SelectedBean extends ImagesBean
 {
@@ -118,12 +121,23 @@ public class SelectedBean extends ImagesBean
         
     public String deleteAll() throws Exception{
     	ImageController imageController = new ImageController(sb.getUser());
-    	for(int i= 0; i<sb.getSelectedSize(); i++){
+    	for(int i= 0;  i<sb.getSelectedSize(); i++){
     		Image img = imageController.retrieve(sb.getSelected().get(i));
-    		DepositController.deleteImejiItem(img, getEscidocUserHandle(), sb.getUser());
+        	CollectionController collectionController = new CollectionController(sb.getUser());
+        	CollectionImeji coll = collectionController.retrieve(img.getCollection());
+        	if(coll.getProperties().getStatus() != Status.RELEASED){
+        		DepositController.deleteImejiItem(img, getEscidocUserHandle(), sb.getUser());
+        		sb.getSelected().remove(img.getId());
+        	}
     	}
-    	sb.getSelected().clear();
-    	return "pretty:images";
+    	if(sb.getSelected().size()==0){
+    		BeanHelper.info(sb.getMessage("success_delete"));
+    		return "pretty:images";
+    	}
+    	else{    
+            BeanHelper.info(sb.getMessage("released_item_delete_error"));
+    		return "pretty:";
+    	}
     }
         
     public void logInEscidoc() throws Exception{

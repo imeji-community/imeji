@@ -1,5 +1,6 @@
 package de.mpg.jena.controller;
 
+import java.awt.Image;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;

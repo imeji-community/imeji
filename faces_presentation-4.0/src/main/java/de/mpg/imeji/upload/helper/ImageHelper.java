@@ -8,19 +8,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 import javax.naming.InitialContext;
-
 import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.xmlbeans.XmlCursor;
-
 import de.escidoc.schemas.components.x09.ComponentDocument.Component;
 import de.escidoc.schemas.components.x09.ComponentDocument.Component.Content.Storage.Enum;
 import de.escidoc.schemas.components.x09.PropertiesDocument.Properties;
@@ -29,9 +23,15 @@ import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.escidoc.ItemVO;
- 
-public class ImageHelper
-{
+import javax.imageio.*;
+import javax.imageio.metadata.*;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.MemoryCacheImageInputStream;
+import org.w3c.dom.NodeList;
+
+
+public class ImageHelper{
+	
     public static Item setComponent(String contentCategory, Item item, byte[] imageStream, String fileName,
             String mimetype, String format, String userHandle) throws Exception{
         URL url = null;
@@ -50,51 +50,55 @@ public class ImageHelper
         component.getProperties().setFileName(fileName);
         component.getProperties().setMimeType(mimetype);
         
-        byte[] rescaledImageStream = null;
+        byte[] scaledImageStream = null;
         if (contentCategory.equals(getThumb())){        
 	        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
-	        bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")));
-	        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-	        // use imageIO.write to encode the image back into a byte[]
-	        ImageIO.write(bufferedImage, format, byteOutput);
-	        rescaledImageStream = byteOutput.toByteArray();
-            url = ImageHelper.uploadFile(rescaledImageStream, mimetype, userHandle);
+	        if(bufferedImage.getWidth() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))){
+	        	scaledImageStream = imageStream;
+	        }else{
+	        	bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")));
+		        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+		        // use imageIO.write to encode the image back into a byte[]
+		        ImageIO.write(bufferedImage, format, byteOutput);
+		        scaledImageStream = byteOutput.toByteArray();
+	        }
+            url = ImageHelper.uploadFile(scaledImageStream, mimetype, userHandle);
         }
         if (contentCategory.equals(getWeb())){
-        	if(format.equalsIgnoreCase("gif")){
-        		GifDecoder gifDecoder = checkAnimation(imageStream);
-        		if(gifDecoder.getFrameCount()>1)
-        			rescaledImageStream = scaleAnimation(imageStream, gifDecoder, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
-        		else{
-            		BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
-    	            bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader
-    	                    .getProperty("xsd.resolution.web")));
-    	            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-    	            // use imageIO.write to encode the image back into a byte[]
-    	            ImageIO.write(bufferedImage, format, byteOutput);
-    	            rescaledImageStream = byteOutput.toByteArray();
-            	}        
-        	}else{
-        		BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
-	            bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader
-	                    .getProperty("xsd.resolution.web")));
+    		BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
+			if(bufferedImage.getWidth() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")))
+				scaledImageStream = imageStream;
+			else{
+				if(format.equalsIgnoreCase("gif")){
+    				GifDecoder gifDecoder = checkAnimation(imageStream);
+            		if(gifDecoder.getFrameCount()>1)
+        				scaledImageStream = scaleAnimation(imageStream, gifDecoder, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
+            		else{
+            			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
+        	            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+        	            // use imageIO.write to encode the image back into a byte[]
+        	            ImageIO.write(bufferedImage, format, byteOutput);
+        	            scaledImageStream = byteOutput.toByteArray();
+                	} 
+    			}else{
+       			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
 	            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
 	            // use imageIO.write to encode the image back into a byte[]
 	            ImageIO.write(bufferedImage, format, byteOutput);
-	            rescaledImageStream = byteOutput.toByteArray();
-        	}        
-        	url = ImageHelper.uploadFile(rescaledImageStream, mimetype, userHandle);
+	            scaledImageStream = byteOutput.toByteArray();
+	            } 
+			}
+        	url = ImageHelper.uploadFile(scaledImageStream, mimetype, userHandle);
         }
         component.getProperties().setContentCategory(contentCategory);
-        if(contentCategory.equals(getOrig()))
-        {
+        if(contentCategory.equals(getOrig())){
             url = ImageHelper.uploadFile(imageStream, mimetype, userHandle);
         }
         component.getContent().setHref(url.toExternalForm());
         Enum enu = Enum.forString("internal-managed");
         component.getContent().setStorage(enu);
         return item;
-    }  
+    } 
     
     public static BufferedImage scaleImage(BufferedImage image, int width) throws Exception{
         Image rescaledImage = image.getScaledInstance(width, -1, Image.SCALE_SMOOTH);
@@ -156,23 +160,19 @@ public class ImageHelper
         return ctransforming.transformUploadResponseToFileURL(response);
     }
 
-    public static String getThumbnailUrl(ItemVO item) throws Exception
-    {
+    public static String getThumbnailUrl(ItemVO item) throws Exception{
         return getContentUrl(item, getThumb());
     }
 
-    public static String getWebResolutionUrl(ItemVO item) throws Exception
-    {
+    public static String getWebResolutionUrl(ItemVO item) throws Exception{
         return getContentUrl(item, getWeb());
     }
 
-    public static String getOriginalResolution(ItemVO item) throws Exception
-    {
+    public static String getOriginalResolution(ItemVO item) throws Exception{
         return getContentUrl(item, getOrig());
     }
 
-    public static String getContentUrl(ItemVO item, String contentCategory) throws Exception
-    {
+    public static String getContentUrl(ItemVO item, String contentCategory) throws Exception{
         for (Component c : item.getItemDocument().getItem().getComponents().getComponentArray())
         {
             if (c.getProperties().getContentCategory().equals(contentCategory))
@@ -184,18 +184,15 @@ public class ImageHelper
         return null;
     }
 
-    public static String getThumb() throws IOException, URISyntaxException
-    {
+    public static String getThumb() throws IOException, URISyntaxException{
         return PropertyReader.getProperty("xsd.metadata.content-category.thumbnail");
     }
 
-    public static String getWeb() throws IOException, URISyntaxException
-    {
+    public static String getWeb() throws IOException, URISyntaxException{
         return PropertyReader.getProperty("xsd.metadata.content-category.web-resolution");
     }
 
-    public static String getOrig() throws IOException, URISyntaxException
-    {
+    public static String getOrig() throws IOException, URISyntaxException{
         return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
     }
 }

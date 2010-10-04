@@ -11,7 +11,7 @@
 	<body>
 	<ui:define name="subImagesContent">
 		<h:panelGroup styleClass="full_area0" rendered="true">
-			<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{editMetadataBean.numberOfProfiles == '1'}">
+			<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{editMetadataBean.numberOfProfiles == '1'}">
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 					<h3 class="xLarge_area0 endline" style="text-align: center;">
 						<h:outputText value="#{ImageBean.collection.metadata.title}"/>
@@ -143,13 +143,14 @@
 
 
 				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
-					<h:outputLink value="?reset=1"
-						styleClass="free_area1_p8 cancelButton ">
+				<ui:remove>
+				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton ">
 						<h:outputText value="#{lbl.reset}" />
 					</h:outputLink>
 					<h:commandButton value="#{lbl.save}" action="#{editMetadataBean.save}" styleClass="free_area1_p8 activeButton" />
 				</h:panelGroup>
+				</ui:remove>
 			</h:panelGroup>
 			
 			<h:panelGroup layout="block" styleClass="full_area1_p8"	rendered="#{editMetadataBean.numberOfProfiles != '1'}">

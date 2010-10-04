@@ -47,12 +47,19 @@
 		<pattern value="/image/#{ImageBean.id}" />
 		<view-id>/jsf/Image.xhtml</view-id>
 		<action>#{ImageBean.init}</action>
+	</url-mapping>
+	
+	<url-mapping id="viewImageMD">
+		<pattern value="/image/#{ImageBean.id}/view/#{ImageBean.tab}" />
+		<view-id>/jsf/ImageTechMD.xhtml</view-id>
 	</url-mapping> 
 	
 	<url-mapping id="editImage">
 		<pattern value="/image/#{ImageBean.id}/#{ImageBean.tab}" />
 		<view-id>/jsf/ImageEdit.xhtml</view-id>
-	</url-mapping> 
+	</url-mapping>
+	
+
 	
 	<!-- Collection Pages -->
 	<url-mapping id="uploadCollection">

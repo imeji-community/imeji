@@ -43,6 +43,15 @@
 		<ui:define name="editImage">
 			<ui:insert name="subImagesContent"></ui:insert>
 		</ui:define>
+		
+	<ui:define name="commandLine">
+				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton ">
+						<h:outputText value="#{lbl.reset}" />
+					</h:outputLink>
+					<h:commandButton value="#{lbl.save}" action="#{editMetadataBean.save}" styleClass="free_area1_p8 activeButton" />
+				</h:panelGroup>
+	</ui:define>
 	</ui:composition>
 </body>
 </html>

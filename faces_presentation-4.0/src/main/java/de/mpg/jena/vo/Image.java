@@ -36,8 +36,18 @@ public class Image implements Serializable
     private URI collection;
     private List<ImageMetadata> metadata = new LinkedList<ImageMetadata>();
     private String filename;
+    private String escidocId;
 
-    public URI getWebImageUrl()
+
+    public String getEscidocId() {
+		return escidocId;
+	}
+
+	public void setEscidocId(String escidocId) {
+		this.escidocId = escidocId;
+	}
+
+	public URI getWebImageUrl()
     {
         return webImageUrl;
     }
@@ -114,7 +124,7 @@ public class Image implements Serializable
         return properties;
     }
 
-    public void setCollection(URI collection)
+	public void setCollection(URI collection)
     {
         this.collection = collection;
     }

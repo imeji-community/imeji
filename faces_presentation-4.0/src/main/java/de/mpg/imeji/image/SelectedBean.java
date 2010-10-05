@@ -116,20 +116,23 @@ public class SelectedBean extends ImagesBean
     public String clearAll()
     {
         sb.getSelected().clear();
-        return "pretty:images";
+        return "pretty:";
     }
-        
+                
     public String deleteAll() throws Exception{
-    	ImageController imageController = new ImageController(sb.getUser());
-    	for(int i= 0;  i<sb.getSelectedSize(); i++){
-    		Image img = imageController.retrieve(sb.getSelected().get(i));
-        	CollectionController collectionController = new CollectionController(sb.getUser());
-        	CollectionImeji coll = collectionController.retrieve(img.getCollection());
-        	if(coll.getProperties().getStatus() != Status.RELEASED){
+    	List<URI> selectedList = new ArrayList<URI>();
+    	for(URI uri : sb.getSelected()){
+    		selectedList.add(uri);
+    	}
+    	for(URI uri : selectedList){
+        	ImageController imageController = new ImageController(sb.getUser());
+    		Image img = imageController.retrieve(uri);
+    		if(img.getProperties().getStatus()!= Status.RELEASED){
         		DepositController.deleteImejiItem(img, getEscidocUserHandle(), sb.getUser());
-        		sb.getSelected().remove(img.getId());
+        		sb.getSelected().remove(uri);
         	}
     	}
+
     	if(sb.getSelected().size()==0){
     		BeanHelper.info(sb.getMessage("success_delete"));
     		return "pretty:images";

@@ -25,6 +25,7 @@ import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Image.Visibility;
+import de.mpg.jena.vo.Properties.Status;
 
 /**
  * @author yu
@@ -60,7 +61,10 @@ public class DepositController
         img.setVisibility(Visibility.PUBLIC);
         img.setFilename(title);
         img.setEscidocId(item.getItemDocument().getItem().getObjid());
+        if(collection.getProperties().getStatus() == Status.RELEASED)
+        	img.getProperties().setStatus(Status.RELEASED);
         imageController.create(img, collection.getId());
+
         
 //        String taskParam = "<param last-modification-date=\""
 //                + item.getItemDocument().getItem().getLastModificationDate()

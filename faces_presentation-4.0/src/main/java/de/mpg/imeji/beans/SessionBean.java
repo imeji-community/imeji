@@ -165,7 +165,7 @@ public class SessionBean implements Serializable
     {
         return this.selected.size();
     }
-
+    
     public void setActiveAlbum(AlbumBean activeAlbum)
     {
         this.activeAlbum = activeAlbum;

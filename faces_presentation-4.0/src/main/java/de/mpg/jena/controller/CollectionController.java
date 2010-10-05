@@ -82,6 +82,12 @@ public class CollectionController extends ImejiController{
     {
         //first check user credentials
 	    ic.getProperties().setStatus(Status.RELEASED);
+	    for(URI uri: ic.getImages()){
+	    	ImageController imageController = new ImageController(user);
+	    	de.mpg.jena.vo.Image img = imageController.retrieve(uri);
+	    	img.getProperties().setStatus(Status.RELEASED);
+	    	imageController.update(img);
+	    }
         update(ic);
     }
 	

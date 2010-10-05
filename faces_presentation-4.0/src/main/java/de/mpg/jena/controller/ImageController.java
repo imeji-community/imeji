@@ -29,6 +29,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
+import de.mpg.imeji.image.ImagesBean;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
@@ -158,6 +159,13 @@ public class ImageController extends ImejiController{
         return Sparql.exec(getModel(), Image.class, query, Syntax.syntaxARQ);
     }
 	
+	public Collection<Image> searchAdvancedInContainer(URI containerUri, List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+    {
+	    additionalQuery = " . <" + containerUri.toString() + "> <http://imeji.mpdl.mpg.de/images> ?s";
+        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
+        return Sparql.exec(getModel(), Image.class, query, Syntax.syntaxARQ);
+    }
+	
 	/*
 	public Collection<Image> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
     {
@@ -249,33 +257,19 @@ public class ImageController extends ImejiController{
 	
 	public static void main(String[] arg) throws Exception
 	{
-	    
-	    /*
-	    File f = new File("/home/haarlaender/basic_imeji_data.rdf");
-	    f.createNewFile();
-		FileOutputStream fos = new FileOutputStream(f);
-		base.write(fos, "RDF/XML");
-		fos.flush();
-		fos.close();
-		*/
-	    //base.write(System.out);
 	    User user = createUser();
-	    //base.write(System.out, "RDF/XML-ABBREV");
 	    ImageController ic = new ImageController(user);
+	    base.write(System.out);
 	    
-	    //String query = ic.createQuery(null, null, "http://imeji.mpdl.mpg.de/image", 100, 0);
-        //Collection<Image> result = Sparql.exec(base, Image.class, query);
+	    List<SearchCriterion> scList2 = ImagesBean.transformQuery2("IMAGE_COLLECTION_PROFILE.URI=\"http://imeji.mpdl.mpg.de/mdprofile/0\" AND ( ( IMAGE_METADATA_NAME.EQUALS=\"author\" AND IMAGE_METADATA_COMPLEXTYPE_TEXT.REGEX=\"test\" ) OR ( IMAGE_METADATA_NAME.EQUALS=\"mdname2\" AND IMAGE_METADATA_COMPLEXTYPE_TEXT.REGEX=\"test2\" ) )");
+	    System.out.println("test");
+	    System.out.println(ic.createQuery2(scList2, null, "type", -1, 0));
 	    
-	    /*
-	    IndexBuilderTest larqBuilder = new IndexBuilderTest() ;
-	    base.register(larqBuilder) ;
-	    larqBuilder.indexStatements(base.listStatements()) ;
-	    // -- Finish indexing
-	    larqBuilder.closeWriter() ;
-	    // -- Create the access index  
-	    IndexLARQ index = larqBuilder.getIndex() ;
-	    LARQ.setDefaultIndex(index) ;
-*/
+	    
+	    
+	    
+	   
+	    
 	    
 	    SearchCriterion sc0 = new SearchCriterion(Operator.AND,ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT,"white",Filtertype.REGEX);
 	    SearchCriterion sc1 = new SearchCriterion(Operator.AND,ImejiNamespaces.IMAGE_METADATA_NAME,"colour",Filtertype.EQUALS);
@@ -299,7 +293,7 @@ public class ImageController extends ImejiController{
 	    /*
 	    Resource r = base.getResource("http://imeji.mpdl.mpg.de/collection/1");
 	    r.removeProperties();
-	    ic.cleanGraph();
+	    
 	    */
 	    
 	    Collection<CollectionImeji> result = rdf2Bean.load(CollectionImeji.class);
@@ -317,16 +311,16 @@ public class ImageController extends ImejiController{
         }
          */
 	    
-	    //String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . MINUS { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . OPTIONAL { ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v2 }} . FILTER( IF(bound(?v2), ?v2='test', '')) . FILTER(?s='efe')} ";
+	   String q = "SELECT DISTINCT ?s WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/properties> ?sort1 . ?sort1 <http://imeji.mpdl.mpg.de/creationDate> ?sort0  . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus  . MINUS { ?s <http://imeji.mpdl.mpg.de/collection> ?v0 } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v1 . ?v1 <http://www.w3.org/2000/01/rdf-schema#member> ?v2 . OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v3 }  . FILTER((?v0=<http://imeji.mpdl.mpg.de/collection/1> && ?v3='author'))}. FILTER((?collStatus = <http://imeji.mpdl.mpg.de/status/RELEASED> && ?visibility = <http://imeji.mpdl.mpg.de/image/visibility/PUBLIC>)) } ORDER BY DESC(?sort0) LIMIT 24 OFFSET 0";
         //String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  .  OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v10 . ?v1 <http://purl.org/dc/terms/type> ?v2 . ?v2 <http://imeji.mpdl.mpg.de/metadata/enumType> ?v4 .  OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/metadata/date> ?v3 }}}";
 
 	    //Syntax.
-        /*
+        
         Query queryObject = QueryFactory.create(q, Syntax.syntaxARQ);
         QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
         ResultSet results = qe.execSelect();
         ResultSetFormatter.out(System.out, results);
-          */
+          
           /* 
         while(results.hasNext())
            {
@@ -336,11 +330,6 @@ public class ImageController extends ImejiController{
                //base.remove(qs.getResource("?s"), qs.get("?p").as(Property.class), qs.get("?o"));
            }
        */
-        
-        
-        System.out.println("IMAGE_COLLECTION.URI=http://imeji.mpdl.mpg.de/collection/1 ".matches("[^\\s]+=[^\\s]+\\s+"));
-        
- 
         
        
 	}

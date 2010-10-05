@@ -252,9 +252,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
                     lastOperator = substring.trim();
                     substring = "";
                 }
-                else if(substring.trim().equals("MINUS"))
+                else if(substring.trim().equals("INVERSE"))
                 {
-                    lastOperator = substring.trim();
+                    //lastOperator = substring.trim();
                     inverse=true;
                     substring ="";
                 }

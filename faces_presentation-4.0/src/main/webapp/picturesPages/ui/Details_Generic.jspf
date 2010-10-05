@@ -32,11 +32,8 @@
             All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
-
+<div>
 <f:subview id="Details">
-
-
-<h:panelGroup>
 
 	<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 		<h3 class="xLarge_area0_p8 endline blockHeader">

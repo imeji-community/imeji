@@ -207,129 +207,343 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 
     public static List<List<SearchCriterion>> transformQuery(String query) throws Exception
     {
-        boolean inverse = false;
-        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
-        if (query != null && !query.trim().equals(""))
+        boolean inverse=false; 
+        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>(); 
+        
+        if(query!=null && !query.trim().equals(""))
         {
+            
+        
             StringReader reader = new StringReader(query);
+            
             int bracketsOpened = 0;
             int bracketsClosed = 0;
             String substring = "";
-            String lastOperator = "";
+            String lastOperator="";
             List<SearchCriterion> currentSubList = new ArrayList<SearchCriterion>();
+            
             int c = 0;
-            while ((c = reader.read()) != -1)
+            
+            while((c=reader.read())!=-1)
             {
-                substring += (char)c;
-                if (c == '(')
+                substring += (char)c;    
+                
+                if(c=='(')
                 {
                     bracketsOpened++;
-                    if (bracketsOpened - bracketsClosed == 1)
+                    if(bracketsOpened-bracketsClosed == 1)
                     {
                         currentSubList = new ArrayList<SearchCriterion>();
                         substring = "";
                     }
                 }
-                else if (c == ')')
+                else if(c==')')
                 {
-                    bracketsClosed++;
-                    if (bracketsOpened - bracketsClosed == 0)
+                    bracketsClosed++; 
+                    if(bracketsOpened - bracketsClosed == 0)
                     {
                         scList.add(currentSubList);
-                        substring = "";
+                        substring="";
                     }
                 }
-                if (substring.equals("AND ") || substring.equals("OR "))
+                
+                if(substring.equals("AND ") || substring.equals("OR "))
                 {
                     lastOperator = substring.trim();
                     substring = "";
                 }
-                else if (substring.trim().equals("INVERSE"))
+                else if(substring.trim().equals("MINUS"))
                 {
-                    inverse = true;
-                    substring = "";
+                    lastOperator = substring.trim();
+                    inverse=true;
+                    substring ="";
                 }
                 else if (substring.matches("\\s*[^\\s]+=\".*\"\\s+"))
                 {
                     String[] keyValue = substring.split("=");
+                    
                     String[] nsFilter = keyValue[0].split("\\.");
+                    
                     String value = keyValue[1].trim();
-                    value = value.substring(1, value.length() - 1);
-                    if (nsFilter[0].trim().equals("ANY_METADATA"))
+                    value = value.substring(1, value.length()-1); 
+                    
+                    if(nsFilter[0].trim().equals("ANY_METADATA"))
                     {
-                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_FILENAME, value,
-                                Filtertype.REGEX));
-                        currentSubList.add(new SearchCriterion(Operator.OR,
-                                ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, value, Filtertype.REGEX));
-                        currentSubList.add(new SearchCriterion(Operator.OR,
-                                ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER, value, Filtertype.REGEX));
-                        currentSubList
-                                .add(new SearchCriterion(Operator.OR,
-                                        ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, value,
-                                        Filtertype.REGEX));
-                        currentSubList.add(new SearchCriterion(Operator.OR,
-                                ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME, value, Filtertype.REGEX));
-                        currentSubList.add(new SearchCriterion(Operator.OR,
-                                ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME, value,
-                                Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_FILENAME, value , Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, value , Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER, value, Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, value, Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME, value, Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME, value, Filtertype.REGEX));
                     }
                     else
                     {
                         ImejiNamespaces ns = ImejiNamespaces.valueOf(nsFilter[0].trim());
                         Filtertype filter = Filtertype.valueOf(nsFilter[1].trim());
+                       
                         Operator op = Operator.AND;
-                        if (!lastOperator.equals(""))
+    
+                        if(!lastOperator.equals(""))
                         {
                             op = Operator.valueOf(lastOperator.trim());
                         }
-                        // Operator op = Operator.valueOf(lastOperator.trim());
-                        SearchCriterion sc = new SearchCriterion(op, ns, value, filter);
+                       
+                        //Operator op = Operator.valueOf(lastOperator.trim());
+                        SearchCriterion sc = new SearchCriterion(op,ns, value, filter);
                         sc.setInverse(inverse);
                         currentSubList.add(sc);
                     }
+                   
                     substring = "";
+                    
+                    
                 }
+                
+                
+    
             }
-            if (bracketsClosed == 0)
+            if(bracketsClosed == 0)
             {
                 scList.add(currentSubList);
             }
-            if (bracketsOpened != bracketsClosed)
+            if(bracketsOpened!= bracketsClosed)
             {
                 throw new Exception("Invalid query!");
             }
         }
+        
         /*
-         * List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>(); if(query!=null &&
-         * !query.equals("")) { //QUICK SEARCH if(query.trim().startsWith("ANY_METADATA")) { String[] queryParts =
-         * query.split("="); List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>(); scList1.add(new
-         * SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, queryParts[1] ,
-         * Filtertype.REGEX)); scList1.add(new SearchCriterion(Operator.OR,
-         * ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER, queryParts[1], Filtertype.REGEX)); scList1.add(new
-         * SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, queryParts[1],
-         * Filtertype.REGEX)); scList1.add(new SearchCriterion(Operator.OR,
-         * ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME, queryParts[1], Filtertype.REGEX));
-         * scList1.add(new SearchCriterion(Operator.OR,
-         * ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME, queryParts[1], Filtertype.REGEX));
-         * scList.add(scList1); } //ADVANCED SEARCH else { //remove first and last bracket query = query.substring(3);
-         * query = query.substring(0, query.length()-2); System.out.println(query); String[] parts =
-         * query.split(" \\) AND \\("); List<String> andPartsList = new ArrayList<String>(); List<String> orPartsList =
-         * new ArrayList<String>(); for(String andPart :parts) { String[] orParts = andPart.split(" \\) OR \\(");
-         * if(orParts.length > 1) { orPartsList.addAll(Arrays.asList(orParts)); } else { andPartsList.add(andPart); } }
-         * for(String andPart: andPartsList) { List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
-         * String[] subAndParts = andPart.split(" AND "); for(String subAndPart : subAndParts) { String[] keyValue=
-         * subAndPart.split("="); String[] nsAndFilter = keyValue[0].split("\\."); ImejiNamespaces ns =
-         * ImejiNamespaces.valueOf(nsAndFilter[0].trim()); Filtertype filter =
-         * Filtertype.valueOf(nsAndFilter[1].trim()); String value = keyValue[1].trim(); scList1.add(new
-         * SearchCriterion(Operator.AND, ns, value, filter)); } scList.add(scList1); } for(String orPart: orPartsList) {
-         * List<SearchCriterion> scList2 = new ArrayList<SearchCriterion>(); String[] subAndParts =
-         * orPart.split(" AND "); int i = 0; for(String subAndPart : subAndParts) { String[] keyValue=
-         * subAndPart.split("="); String[] nsAndFilter = keyValue[0].split("\\."); ImejiNamespaces ns =
-         * ImejiNamespaces.valueOf(nsAndFilter[0].trim()); Filtertype filter =
-         * Filtertype.valueOf(nsAndFilter[1].trim()); String value = keyValue[1].trim(); if(i==0) { scList2.add(new
-         * SearchCriterion(Operator.OR, ns, value, filter)); } else { scList2.add(new SearchCriterion(Operator.AND, ns,
-         * value, filter)); } } scList.add(scList2); } } }
-         */
-        return scList;
+        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>(); 
+        
+        if(query!=null && !query.equals(""))
+        {
+            
+            //QUICK SEARCH
+            if(query.trim().startsWith("ANY_METADATA"))
+            {
+                String[] queryParts = query.split("=");
+                List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
+                scList1.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, queryParts[1] , Filtertype.REGEX));
+                scList1.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER, queryParts[1], Filtertype.REGEX));
+                scList1.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, queryParts[1], Filtertype.REGEX));
+                scList1.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME, queryParts[1], Filtertype.REGEX));
+                scList1.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME, queryParts[1], Filtertype.REGEX));
+                scList.add(scList1);
+            }
+            
+            //ADVANCED SEARCH
+            else
+            {
+                
+                
+                //remove first and last bracket
+                query = query.substring(3); 
+                query = query.substring(0, query.length()-2);
+                
+                System.out.println(query);
+                String[] parts = query.split(" \\) AND \\(");
+                
+                List<String> andPartsList = new ArrayList<String>();
+                List<String> orPartsList = new ArrayList<String>();
+                
+                for(String andPart :parts)
+                {
+                    String[] orParts = andPart.split(" \\) OR \\(");
+                    if(orParts.length > 1)
+                    {
+                        orPartsList.addAll(Arrays.asList(orParts));
+                    }
+                    else
+                    {
+                        andPartsList.add(andPart);
+                    }
+                }
+                
+                for(String andPart: andPartsList)
+                {
+                    List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
+                    String[] subAndParts = andPart.split(" AND ");
+                    for(String subAndPart : subAndParts)
+                    {
+                        String[] keyValue= subAndPart.split("=");
+                        String[] nsAndFilter = keyValue[0].split("\\.");
+                        ImejiNamespaces ns = ImejiNamespaces.valueOf(nsAndFilter[0].trim());
+                        Filtertype filter = Filtertype.valueOf(nsAndFilter[1].trim());
+                        
+                        String value = keyValue[1].trim();
+                        scList1.add(new SearchCriterion(Operator.AND, ns, value, filter));
+                    }
+                    scList.add(scList1);
+        
+                }
+                
+                for(String orPart: orPartsList)
+                {
+                    List<SearchCriterion> scList2 = new ArrayList<SearchCriterion>();
+                    String[] subAndParts = orPart.split(" AND ");
+                    int i = 0;
+                    for(String subAndPart : subAndParts)
+                    {
+                        String[] keyValue= subAndPart.split("=");
+                        String[] nsAndFilter = keyValue[0].split("\\.");
+                        ImejiNamespaces ns = ImejiNamespaces.valueOf(nsAndFilter[0].trim());
+                        Filtertype filter = Filtertype.valueOf(nsAndFilter[1].trim());
+                        String value = keyValue[1].trim();
+                        if(i==0)
+                        {
+                            scList2.add(new SearchCriterion(Operator.OR, ns, value, filter));
+                        }
+                        else
+                        {
+                            scList2.add(new SearchCriterion(Operator.AND, ns, value, filter));
+                        }
+                       
+                    }
+                    scList.add(scList2);
+                    
+                    
+                }
+            }
+        }
+        */
+        return scList; 
+    }
+    
+    
+    
+    
+    public static List<SearchCriterion> transformQuery2(String query) throws Exception
+    {
+        boolean inverse=false;
+        List<SearchCriterion> scList = new ArrayList<SearchCriterion>(); 
+        
+        if(query!=null && !query.trim().equals(""))
+        {
+            StringReader reader = new StringReader(query);
+            
+            int bracketsOpened = 0;
+            int bracketsClosed = 0;
+            String substring = "";
+            String lastOperator=null;
+            //List<SearchCriterion> currentSubList = new ArrayList<SearchCriterion>();
+            
+            SearchCriterion currentSC = null;
+            SearchCriterion currentParentSC = null;
+            
+            int c = 0;
+            
+            while((c=reader.read())!=-1)
+            {
+                substring += (char)c;    
+                
+                if(c=='(')
+                {
+                    bracketsOpened++;
+                   
+                    if(bracketsOpened-bracketsClosed > 1)
+                    {
+                        currentSC = new SearchCriterion();
+                        if(lastOperator!=null)
+                        {
+                            currentSC.setOperator(Operator.valueOf(lastOperator.trim()));
+                        }
+                        else
+                        {
+                            currentSC.setOperator(null);
+                        }
+                        lastOperator = null;
+                        currentParentSC.getChildren().add(currentSC);
+                        currentSC.setParent(currentParentSC);
+                    }
+                    currentParentSC = currentSC;
+                    currentSC = null;
+                    substring="";
+
+                }
+                else if(c==')')
+                {
+                    bracketsClosed++; 
+                    currentSC = currentParentSC;
+                    currentParentSC = currentSC.getParent();
+                    substring="";
+                }
+                
+                if(substring.equals(" AND ") || substring.equals(" OR "))
+                {
+                    lastOperator = substring.trim();
+                    substring = "";
+                }
+                else if(substring.equals(" MINUS "))
+                {
+                    lastOperator = substring.trim();
+                    inverse=true;
+                    substring ="";
+                }
+                else if (substring.matches("\\s*[^\\s]+=\".*\""))
+                {
+                    String[] keyValue = substring.split("=");
+                    
+                    String[] nsFilter = keyValue[0].split("\\.");
+                    
+                    String value = keyValue[1].trim();
+                    value = value.substring(1, value.length()-1); 
+                    /*
+                    if(nsFilter[0].trim().equals("ANY_METADATA"))
+                    {
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_FILENAME, value , Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, value , Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER, value, Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, value, Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME, value, Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME, value, Filtertype.REGEX));
+                    }
+                    else
+                    {
+                    */
+                        ImejiNamespaces ns = ImejiNamespaces.valueOf(nsFilter[0].trim());
+                        Filtertype filter = Filtertype.valueOf(nsFilter[1].trim());
+                       
+                        Operator op = Operator.AND;
+    
+                        if(lastOperator!=null)
+                        {
+                            op = Operator.valueOf(lastOperator.trim());
+                        }
+                        else
+                        {
+                            op = null;
+                        }
+                        lastOperator = null;
+                        
+                        currentSC = new SearchCriterion(op,ns,value,filter);
+                        if(currentParentSC!=null)
+                        {
+                            
+                            currentParentSC.getChildren().add(currentSC);
+                            currentSC.setParent(currentParentSC);
+                        }
+                        else
+                        {
+                            scList.add(currentSC);
+                        }
+                        
+                       
+                       
+
+                    //}
+                   
+                    substring = "";
+                    
+                    
+                }
+                
+                
+    
+            }
+           
+        }
+        
+      
+        return scList; 
     }
 }

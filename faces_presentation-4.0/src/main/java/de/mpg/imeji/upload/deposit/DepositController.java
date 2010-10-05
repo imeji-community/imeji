@@ -59,6 +59,7 @@ public class DepositController
         img.setWebImageUrl(URI.create(ImageHelper.getWebResolutionUrl(item)));
         img.setVisibility(Visibility.PUBLIC);
         img.setFilename(title);
+        img.setEscidocId(item.getItemDocument().getItem().getObjid());
         imageController.create(img, collection.getId());
         
 //        String taskParam = "<param last-modification-date=\""
@@ -87,9 +88,7 @@ public class DepositController
     }
             
     public static void deleteImejiItem(Image image, String userHandle, User user) throws Exception{
-    	URI uri = image.getFullImageUrl();
-//    	String itemXML = ServiceLocator.getItemHandler(userHandle).retrieve("escidoc:230540");
-    	String itemId = uri.toString().substring(46, 60);
+    	String itemId = image.getEscidocId();
     	ServiceLocator.getItemHandler(userHandle).delete(itemId);
         ImageController imageController = new ImageController(user);
         imageController.delete(image, user);

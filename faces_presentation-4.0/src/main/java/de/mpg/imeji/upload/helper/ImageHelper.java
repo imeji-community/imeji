@@ -53,15 +53,13 @@ public class ImageHelper{
         byte[] scaledImageStream = null;
         if (contentCategory.equals(getThumb())){        
 	        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
-	        if(bufferedImage.getWidth() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))){
-	        	scaledImageStream = imageStream;
-	        }else{
+	        if(bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))){
 	        	bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")));
-		        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-		        // use imageIO.write to encode the image back into a byte[]
-		        ImageIO.write(bufferedImage, format, byteOutput);
-		        scaledImageStream = byteOutput.toByteArray();
 	        }
+	        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+	        // use imageIO.write to encode the image back into a byte[]
+	        ImageIO.write(bufferedImage, format, byteOutput);
+	        scaledImageStream = byteOutput.toByteArray();
             url = ImageHelper.uploadFile(scaledImageStream, mimetype, userHandle);
         }
         if (contentCategory.equals(getWeb())){

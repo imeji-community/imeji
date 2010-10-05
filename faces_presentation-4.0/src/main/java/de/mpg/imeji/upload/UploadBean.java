@@ -104,7 +104,7 @@ public class UploadBean
             User user = uc.retrieve(getUser().getEmail());
             try{
                 ItemVO item = DepositController.createImejiItem(inputStream, title, description, mimetype, format, escidocUserHandle, collection.getId().toString(), escidocContext);
-               DepositController.depositImejiItem(item, escidocUserHandle, collection, user, title);
+                DepositController.depositImejiItem(item, escidocUserHandle, collection, user, title);
                sNum += 1;
                sFiles.add(title);
             } catch (Exception e){

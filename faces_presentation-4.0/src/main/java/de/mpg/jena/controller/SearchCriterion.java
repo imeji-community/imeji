@@ -13,7 +13,7 @@ public class SearchCriterion {
 
 	public enum Filtertype
 	{
-	    REGEX, URI, EQUALS, BOUND;
+	    REGEX, URI, EQUALS, BOUND, EQUALS_NUMBER, GREATER_NUMBER, LESSER_NUMBER;
 	}
 
    

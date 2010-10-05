@@ -162,7 +162,7 @@ public class ImageController extends ImejiController{
 	public Collection<Image> searchAdvancedInContainer(URI containerUri, List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
     {
 	    additionalQuery = " . <" + containerUri.toString() + "> <http://imeji.mpdl.mpg.de/images> ?s";
-        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
+        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset); 
         return Sparql.exec(getModel(), Image.class, query, Syntax.syntaxARQ);
     }
 	
@@ -311,7 +311,7 @@ public class ImageController extends ImejiController{
         }
          */
 	    
-	   String q = "SELECT DISTINCT ?s WHERE { ?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/properties> ?sort1 . ?sort1 <http://imeji.mpdl.mpg.de/creationDate> ?sort0  . ?s <http://imeji.mpdl.mpg.de/collection> ?collection . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?collection <http://imeji.mpdl.mpg.de/properties> ?collprops . ?collprops <http://imeji.mpdl.mpg.de/createdBy> ?collCreatedBy . ?collprops <http://imeji.mpdl.mpg.de/status> ?collStatus  . MINUS { ?s <http://imeji.mpdl.mpg.de/collection> ?v0 } . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v1 . ?v1 <http://www.w3.org/2000/01/rdf-schema#member> ?v2 . OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v3 }  . FILTER((?v0=<http://imeji.mpdl.mpg.de/collection/1> && ?v3='author'))}. FILTER((?collStatus = <http://imeji.mpdl.mpg.de/status/RELEASED> && ?visibility = <http://imeji.mpdl.mpg.de/image/visibility/PUBLIC>)) } ORDER BY DESC(?sort0) LIMIT 24 OFFSET 0";
+	   String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/collection>  . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status .  OPTIONAL {?s <http://imeji.mpdl.mpg.de/profile> ?v0} . FILTER((?status = <http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<http://xmlns.com/foaf/0.1/Person/imeji%40mpdl.mpg.de> || ?s=<http://test.de>) && str(?v0)='http://imeji.mpdl.mpg.de/mdprofile/17') } OFFSET 0";
         //String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  .  OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v10 . ?v1 <http://purl.org/dc/terms/type> ?v2 . ?v2 <http://imeji.mpdl.mpg.de/metadata/enumType> ?v4 .  OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/metadata/date> ?v3 }}}";
 
 	    //Syntax.

@@ -49,8 +49,8 @@ public class FacetsBean
                 SearchCriterion sc = new SearchCriterion(Operator.AND, ImejiNamespaces.COLLECTION_PROFILE, mdp.getId().toString(), Filtertype.URI);
                 List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
                 scList.add(sc);
-                Collection<CollectionImeji> coll = cc.search(scList, null, 1, 0);
-                groups.add(new FacetGroupBean(generateFacets(mdp, coll.iterator().next()), mdp.getTitle()));
+                Collection<CollectionImeji> coll = cc.search(scList, null, 1, 0); 
+                groups.add(new FacetGroupBean(generateFacets(mdp, coll.iterator().next()), mdp.getTitle())); 
             }
                 
         }

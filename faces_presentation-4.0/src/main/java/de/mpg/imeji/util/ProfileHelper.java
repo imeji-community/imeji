@@ -36,6 +36,24 @@ public class ProfileHelper
         return pMap;
     }
     
+    public static Map<URI, CollectionImeji> loadCollections(List<Image> imgs)
+    {
+        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        CollectionController c = new CollectionController(sb.getUser());
+        Map<URI, CollectionImeji> pMap = new HashMap<URI, CollectionImeji>();
+        for (Image im : imgs)
+        {
+            if(!pMap.containsKey(im.getCollection()))
+            {
+                CollectionImeji coll = c.retrieve(im.getCollection());
+                pMap.put(coll.getId(), coll);
+            }
+            
+               
+        }
+        return pMap;
+    }
+    
     public static MetadataProfile loadProfiles(Image image){
     	MetadataProfile profile = new MetadataProfile();
     	SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);

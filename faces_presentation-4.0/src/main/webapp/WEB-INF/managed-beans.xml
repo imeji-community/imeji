@@ -329,6 +329,12 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
+	<managed-bean>
+		<managed-bean-name>AdminInterfaceBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.beans.AdminInterfaceBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
 	<!-- <managed-bean>
 		<managed-bean-name>ApplicationBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.beans.ApplicationBean</managed-bean-class>

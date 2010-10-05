@@ -90,13 +90,6 @@ public class DepositController
 //                item.getItemDocument().getItem().getObjid(), taskParam);
         return itemXml;
     }
-            
-    public static void deleteImejiItem(Image image, String userHandle, User user) throws Exception{
-    	String itemId = image.getEscidocId();
-    	ServiceLocator.getItemHandler(userHandle).delete(itemId);
-        ImageController imageController = new ImageController(user);
-        imageController.delete(image, user);
-    }
     
     public static void main(String[] args) throws Exception {
 		URI uri = new URI("");

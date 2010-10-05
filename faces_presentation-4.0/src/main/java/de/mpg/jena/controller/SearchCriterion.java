@@ -7,7 +7,7 @@ public class SearchCriterion {
 
 	public enum Operator
 	{
-		AND,OR
+		AND,OR, MINUS
 	}
 
 
@@ -53,6 +53,7 @@ public class SearchCriterion {
 		IMAGE_METADATA_COMPLEXTYPE_NUMBER("http://imeji.mpdl.mpg.de/metadata/double", IMAGE_METADATA_COMPLEXTYPE),
 	    
 		IMAGE_COLLECTION("http://imeji.mpdl.mpg.de/collection"),
+		IMAGE_COLLECTION_PROFILE("http://imeji.mpdl.mpg.de/profile", IMAGE_COLLECTION),
 
 		CONTAINER_METADATA("http://imeji.mpdl.mpg.de/container/metadata"),
 		CONTAINER_METADATA_TITLE("http://purl.org/dc/elements/1.1/title", CONTAINER_METADATA),
@@ -142,7 +143,13 @@ public class SearchCriterion {
 	private Operator operator = Operator.AND;	
 	private Filtertype filterType = Filtertype.REGEX;
 	private List<SearchCriterion> children = new ArrayList<SearchCriterion>();
+	private SearchCriterion parent;
 	private boolean inverse = false;
+	
+	public SearchCriterion()
+	{
+	    
+	}
 	
 	
 	public SearchCriterion(ImejiNamespaces namespace, String value)
@@ -222,6 +229,18 @@ public class SearchCriterion {
     public boolean isInverse()
     {
         return inverse;
+    }
+
+
+    public void setParent(SearchCriterion parent)
+    {
+        this.parent = parent;
+    }
+
+
+    public SearchCriterion getParent()
+    {
+        return parent;
     }
     
     

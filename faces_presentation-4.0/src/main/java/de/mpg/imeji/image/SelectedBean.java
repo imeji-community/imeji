@@ -26,11 +26,12 @@ public class SelectedBean extends ImagesBean
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
-	private Collection<Image> images;
+    private Collection<Image> images;
     private EditMetadataBean editMetadataBean;
     private String mdEdited;
     private URI currentCollection;
     private String escidocUserHandle;
+
     public SelectedBean()
     {
         super();
@@ -71,10 +72,10 @@ public class SelectedBean extends ImagesBean
             {
                 throw new RuntimeException(e);
             }
-            if (UrlHelper.getParameterBoolean("reset"))
-            {
-                editMetadataBean = new EditMetadataBean((List<Image>)images);
-            }
+        }
+        if (UrlHelper.getParameterBoolean("reset"))
+        {
+            editMetadataBean = new EditMetadataBean((List<Image>)images);
         }
         return ImejiFactory.imageListToBeanList(images);
     }
@@ -91,46 +92,51 @@ public class SelectedBean extends ImagesBean
 
     public String clearAll()
     {
-    	String prettyLink = PrettyContext.getCurrentInstance().getCurrentMapping().getId();
+        String prettyLink = PrettyContext.getCurrentInstance().getCurrentMapping().getId();
         sb.getSelected().clear();
-        if(prettyLink.equalsIgnoreCase("selected"))
-        	return "pretty:images";
+        if (prettyLink.equalsIgnoreCase("selected"))
+            return "pretty:images";
         else
-        	return "pretty:";
+            return "pretty:";
     }
-                
-    public String deleteAll() throws Exception{
-    	List<URI> selectedList = new ArrayList<URI>();
-    	for(URI uri : sb.getSelected()){
-    		selectedList.add(uri);
-    	}
-    	for(URI uri : selectedList){
-        	ImageController imageController = new ImageController(sb.getUser());
-    		Image img = imageController.retrieve(uri);
-    		if(img.getProperties().getStatus()!= Status.RELEASED){
-//        		DepositController.deleteImejiItem(img, getEscidocUserHandle(), sb.getUser());
-    	    	String itemId = img.getEscidocId();
-    	    	ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(itemId);
-    			imageController.delete(img, sb.getUser());
-        		sb.getSelected().remove(uri);
-        	}
-    	}
 
-    	if(sb.getSelected().size()==0){
-    		BeanHelper.info(sb.getMessage("success_delete"));
-    		return "pretty:images";
-    	}
-    	else{    
+    public String deleteAll() throws Exception
+    {
+        List<URI> selectedList = new ArrayList<URI>();
+        for (URI uri : sb.getSelected())
+        {
+            selectedList.add(uri);
+        }
+        for (URI uri : selectedList)
+        {
+            ImageController imageController = new ImageController(sb.getUser());
+            Image img = imageController.retrieve(uri);
+            if (img.getProperties().getStatus() != Status.RELEASED)
+            {
+                // DepositController.deleteImejiItem(img, getEscidocUserHandle(), sb.getUser());
+                String itemId = img.getEscidocId();
+                ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(itemId);
+                imageController.delete(img, sb.getUser());
+                sb.getSelected().remove(uri);
+            }
+        }
+        if (sb.getSelected().size() == 0)
+        {
+            BeanHelper.info(sb.getMessage("success_delete"));
+            return "pretty:images";
+        }
+        else
+        {
             BeanHelper.info(sb.getMessage("released_item_delete_error"));
-    		return "pretty:";
-    	}
+            return "pretty:";
+        }
     }
-        
-    public void logInEscidoc() throws Exception{
+
+    public void logInEscidoc() throws Exception
+    {
         String userName = PropertyReader.getProperty("imeji.escidoc.user");
         String password = PropertyReader.getProperty("imeji.escidoc.password");
         escidocUserHandle = LoginHelper.login(userName, password);
-
     }
 
     public EditMetadataBean getEditMetadataBean()
@@ -180,15 +186,17 @@ public class SelectedBean extends ImagesBean
     {
         this.sb = sb;
     }
-    
-    public String getEscidocUserHandle() throws Exception {
+
+    public String getEscidocUserHandle() throws Exception
+    {
         String userName = PropertyReader.getProperty("imeji.escidoc.user");
         String password = PropertyReader.getProperty("imeji.escidoc.password");
         escidocUserHandle = LoginHelper.login(userName, password);
-		return escidocUserHandle;
-	}
+        return escidocUserHandle;
+    }
 
-	public void setEscidocUserHandle(String escidocUserHandle) {
-		this.escidocUserHandle = escidocUserHandle;
-	}
+    public void setEscidocUserHandle(String escidocUserHandle)
+    {
+        this.escidocUserHandle = escidocUserHandle;
+    }
 }

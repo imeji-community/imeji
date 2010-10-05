@@ -8,6 +8,7 @@ import java.util.List;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.image.ImageBean;
@@ -31,22 +32,21 @@ public class AlbumImagesBean extends ImagesBean
     private URI uri;
     private SessionBean sb;
     private CollectionImeji collection;
+    private Navigation navigation;
 
     public AlbumImagesBean()
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        
+        this.navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
     public void init()
     {
-        
-            AlbumController ac = new AlbumController(sb.getUser());
-            this.setAlbum(new AlbumBean(ac.retrieve(id)));
-        
+        AlbumController ac = new AlbumController(sb.getUser());
+        this.setAlbum(new AlbumBean(ac.retrieve(id)));
     }
-    
+
     @Override
     public String getNavigationString()
     {
@@ -62,11 +62,8 @@ public class AlbumImagesBean extends ImagesBean
     @Override
     public List<ImageBean> retrieveList(int offset, int limit)
     {
-        
         ImageController controller = new ImageController(sb.getUser());
-        
         uri = ObjectHelper.getURI(Album.class, id);
-        
         Collection<Image> images = new ArrayList<Image>();
         try
         {
@@ -80,6 +77,11 @@ public class AlbumImagesBean extends ImagesBean
         return ImejiFactory.imageListToBeanList(images);
     }
 
+    public String getImageBaseUrl()
+    {
+        return navigation.getAlbumUrl() + "/" + this.id;
+    }
+
     public String getId()
     {
         return id;
@@ -89,8 +91,6 @@ public class AlbumImagesBean extends ImagesBean
     {
         this.id = id;
     }
-
-  
 
     public void setCollection(CollectionImeji collection)
     {
@@ -111,6 +111,4 @@ public class AlbumImagesBean extends ImagesBean
     {
         return album;
     }
-
-
 }

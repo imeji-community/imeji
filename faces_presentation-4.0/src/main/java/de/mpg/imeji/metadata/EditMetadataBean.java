@@ -10,6 +10,7 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
@@ -65,6 +66,35 @@ public class EditMetadataBean
             addMetadata();
     }
 
+    public String expandAllMetadata()
+    {
+        metadata.clear();
+        for (Statement s : profile.getStatements())
+        {
+            Map<String, String> mdAlreadyDisplayed = new HashMap<String, String>();
+            if (image != null)
+            {
+                for (ImageMetadata im : image.getMetadata())
+                {
+                    if (im.getName() == s.getName())
+                    {
+                        MetadataBean mb = new MetadataBean(profile, s, im);
+                        mb.setPrettyLink(prettyLink);
+                        metadata.add(mb);
+                        mdAlreadyDisplayed.put(s.getName(), s.getName());
+                    }
+                }
+            }
+            if (!mdAlreadyDisplayed.containsKey(s.getName()))
+            {
+                MetadataBean mb = new MetadataBean(profile, s);
+                mb.setPrettyLink(prettyLink);
+                metadata.add(mb);
+            }
+        }
+        return prettyLink;
+    }
+
     public String addImageMetadataForEdit(Image image)
     {
         for (Statement s : profile.getStatements())
@@ -91,7 +121,7 @@ public class EditMetadataBean
         BeanHelper.info("Images edited");
         return prettyLink;
     }
-    
+
     public boolean edit()
     {
         try
@@ -105,7 +135,7 @@ public class EditMetadataBean
                 }
                 ic.update(images);
             }
-            else if ("pretty:editImage".equals(prettyLink ) && image != null)
+            else if ("pretty:editImage".equals(prettyLink) && image != null)
             {
                 image = updateImageMetadata(image, metadata);
                 ic.update(image);

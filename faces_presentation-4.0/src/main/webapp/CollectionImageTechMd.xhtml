@@ -38,32 +38,54 @@
 
 <body>
 <ui:composition template="templates/template_image.xhtml">
-	<ui:param name="imageBean" value="#{ImageBean}" />
-	
+	<ui:param name="imageBean" value="#{CollectionImageBean}" />
 	<ui:param name="headline" value="#{lbl.technical_metadata}" />
+	
+	<ui:define name="contentMenu">
+		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.id.path}" rendered="true">
+			<h:outputText value="#{lbl.collection_home}"/>
+		</h:outputLink>			
+		
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.id.path}/details?init=1" rendered="true">
+			<h:outputText value="#{lbl.collection_metadata}"/>
+		</h:outputLink>
+		
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.profile.id.path}?init=1" rendered="true">
+			<h:outputText value="#{lbl.collection_profile}"></h:outputText>
+		</h:outputLink>
+		
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{CollectionImagesBean.collection.id.path}?init=1" rendered="true">
+			<h:outputText value="#{lbl.upload_images}"></h:outputText>
+		</h:outputLink>
+	</ui:define>
 
 	<ui:define name="viewTechMD">
-		<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-			<a4j:repeat id="techMd" var="techMd" value="#{ImageBean.techMd}" rowKeyVar="index">
-				<h:panelGroup styleClass="half_area0_p1 endline itemLine noTopBorder" style="line-height: 7px">
-					<h:outputText value="#{techMd}" style="white-space: pre;"/>
-				</h:panelGroup>
-			</a4j:repeat>
-		</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+				<a4j:repeat id="techMd" var="techMd" value="#{CollectionImageBean.techMd}" rowKeyVar="index">
+					<h:panelGroup styleClass="half_area0_p1 endline itemLine noTopBorder" style="line-height: 7px">
+						<h:outputText value="#{techMd}" style="white-space: pre;"/>
+					</h:panelGroup>
+				</a4j:repeat>
+			</h:panelGroup>
 	</ui:define>
 	
 	<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
+			<h:outputLink value="#{Navigation.applicationUrl}images/collection/#{CollectionImageBean.collectionId}" styleClass="free_area1_p6">
+				<h:outputText value="#{lbl.collection_view_all_images}"/>
+			</h:outputLink>
 			<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">
 				<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
 			</h:outputLink>
-			<h:outputLink value="#{Navigation.imagesUrl}" styleClass="free_area1_p6">
-				<h:outputText value="#{lbl.images_all}"/>
-			</h:outputLink>
-			<a4j:commandLink value="#{lbl.selected_clear}" action="#{ImageBean.clearAll}" styleClass="free_area2_p6 xHuge_marginLIncl " />	
+			<a4j:commandLink value="#{lbl.selected_clear}" action="#{CollectionImageBean.clearAll}" styleClass="free_area2_p6 xHuge_marginLIncl " />	
 		</h:panelGroup>
 	</ui:define>
-	
 </ui:composition>
 </body>
 </html>

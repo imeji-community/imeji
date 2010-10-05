@@ -14,6 +14,7 @@ import javax.faces.model.SelectItem;
 import org.apache.commons.collections.KeyValue;
 
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.metadata.EditMetadataBean;
@@ -43,11 +44,13 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private FacetsBean facets;
     private EditMetadataBean editMetadataBean;
     private String query;
+    private Navigation navigation;
 
     public ImagesBean()
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        this.navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         initMenus();
     }
 
@@ -110,6 +113,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         return ImejiFactory.imageListToBeanList(images);
     }
 
+    public String getImageBaseUrl()
+    {
+        return navigation.getApplicationUri();
+    }
+    
     public String initFacets()
     {
         if (!"pretty:selected".equals(this.getNavigationString()))

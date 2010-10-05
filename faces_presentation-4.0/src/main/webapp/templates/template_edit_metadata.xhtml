@@ -15,9 +15,14 @@
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 					<h3 class="xLarge_area0 endline" style="text-align: center;">
 						<h:outputText value="#{ImageBean.collection.metadata.title}"/>
+					
 					</h3>
 					<span class="seperator"></span>
-
+					<h:panelGroup layout="block" styleClass="free_area0 xSmall_marginLIncl">
+						<h:outputLabel value="Expand all" styleClass="small_label"/>
+						<a4j:commandButton styleClass="min_imgBtn add groupTool" action="#{editMetadataBean.expandAllMetadata}"/>
+					</h:panelGroup>	
+					
 					<h:panelGroup layout="block" styleClass="free_area0 endline">
 						<a4j:repeat id="mdList" var="metadata"	value="#{editMetadataBean.metadata}" rowKeyVar="index">
 							<h:panelGroup layout="block" styleClass="full_area0_p8">
@@ -137,14 +142,12 @@
 							</a4j:repeat>
 						</h:panelGroup>
 					</h:panelGroup>
-				<ui:remove>
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton ">
 						<h:outputText value="#{lbl.reset}" />
 					</h:outputLink>
 					<h:commandButton value="#{lbl.save}" action="#{editMetadataBean.save}" styleClass="free_area1_p8 activeButton" />
 				</h:panelGroup>
-				</ui:remove>
 			</h:panelGroup>
 			
 			<h:panelGroup layout="block" styleClass="full_area1_p8"	rendered="#{editMetadataBean.numberOfProfiles != '1'}">

@@ -209,6 +209,11 @@
 		<managed-bean-class>de.mpg.imeji.collection.CollectionImagesBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope> 
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>CollectionImageBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.collection.CollectionImageBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope> 
+	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>CollectionsSearchResultBean</managed-bean-name>
@@ -289,6 +294,12 @@
 	<managed-bean>
 		<managed-bean-name>AlbumImagesBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.album.AlbumImagesBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>AlbumImageBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.album.AlbumImageBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

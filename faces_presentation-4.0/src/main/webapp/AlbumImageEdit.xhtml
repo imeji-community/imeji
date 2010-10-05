@@ -3,10 +3,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich">
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
-	<!--
+<!--
 
  CDDL HEADER START
 
@@ -37,33 +36,26 @@
 </ui:remove>
 
 <body>
-<ui:composition template="templates/template_image.xhtml">
-	<ui:param name="imageBean" value="#{ImageBean}" />
-	
-	<ui:param name="headline" value="#{lbl.technical_metadata}" />
-
-	<ui:define name="viewTechMD">
-		<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-			<a4j:repeat id="techMd" var="techMd" value="#{ImageBean.techMd}" rowKeyVar="index">
-				<h:panelGroup styleClass="half_area0_p1 endline itemLine noTopBorder" style="line-height: 7px">
-					<h:outputText value="#{techMd}" style="white-space: pre;"/>
-				</h:panelGroup>
-			</a4j:repeat>
-		</h:panelGroup>
-	</ui:define>
-	
-	<ui:define name="preListHeader">
-		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-			<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">
-				<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
-			</h:outputLink>
-			<h:outputLink value="#{Navigation.imagesUrl}" styleClass="free_area1_p6">
-				<h:outputText value="#{lbl.images_all}"/>
-			</h:outputLink>
-			<a4j:commandLink value="#{lbl.selected_clear}" action="#{ImageBean.clearAll}" styleClass="free_area2_p6 xHuge_marginLIncl " />	
-		</h:panelGroup>
-	</ui:define>
-	
-</ui:composition>
+	<ui:composition template="templates/template_image.xhtml">	
+		<ui:param name="imageBean" value="#{AlbumImageBean}" />
+		<ui:param name="headline" value="#{lbl.edit} #{ImageBean.image.filename}"/>			
+		
+		<ui:define name="editImage">
+			<ui:insert name="subImagesContent"></ui:insert>
+		</ui:define>
+		
+		<ui:define name="preListHeader">
+			<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
+			<h:outputLink value="#{Navigation.applicationUrl}images/album/#{AlbumImageBean.albumId}" styleClass="free_area1_p6">
+					<h:outputText value="#{lbl.album_view_all_images}"/>
+				</h:outputLink>
+				<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">
+					<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
+				</h:outputLink>
+				<a4j:commandLink value="#{lbl.selected_clear}" action="#{ImageBean.clearAll}" styleClass="free_area2_p6 xHuge_marginLIncl " />	
+			</h:panelGroup>
+		</ui:define>
+		
+	</ui:composition>
 </body>
 </html>

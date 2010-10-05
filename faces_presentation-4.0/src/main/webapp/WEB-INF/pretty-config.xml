@@ -44,22 +44,22 @@
 	</url-mapping>
 	
 	<url-mapping id="viewImage">
-		<pattern value="/image/#{ImageBean.id}" />
+		<pattern value="/image/#{ImageBean.id}/view" />
 		<view-id>/jsf/Image.xhtml</view-id>
-		<action>#{ImageBean.init}</action>
+		<action>#{ImageBean.initView}</action>
 	</url-mapping>
 	
 	<url-mapping id="viewImageMD">
-		<pattern value="/image/#{ImageBean.id}/view/#{ImageBean.tab}" />
+		<pattern value="/image/#{ImageBean.id}/techmd" />
 		<view-id>/jsf/ImageTechMD.xhtml</view-id>
+		<action>#{ImageBean.initTechMd}</action>
 	</url-mapping> 
 	
 	<url-mapping id="editImage">
-		<pattern value="/image/#{ImageBean.id}/#{ImageBean.tab}" />
+		<pattern value="/image/#{ImageBean.id}/edit" />
 		<view-id>/jsf/ImageEdit.xhtml</view-id>
+		<action>#{ImageBean.initEdit}</action>
 	</url-mapping>
-	
-
 	
 	<!-- Collection Pages -->
 	<url-mapping id="uploadCollection">
@@ -85,13 +85,29 @@
 		<view-id>/jsf/CollectionBrowse.xhtml</view-id>
 		<action>#{CollectionImagesBean.init}</action>
 	</url-mapping>
+	
+	<url-mapping id="viewImageOfCollection">
+		<pattern value="/collection/#{CollectionImageBean.collectionId}/image/#{CollectionImageBean.id}/view" />
+		<view-id>/jsf/CollectionImage.xhtml</view-id>
+		<action>#{CollectionImageBean.initView}</action>
+	</url-mapping>
+	
+	<url-mapping id="EditImageOfCollection">
+		<pattern value="/collection/#{CollectionImageBean.collectionId}/image/#{CollectionImageBean.id}/edit" />
+		<view-id>/jsf/CollectionImageEdit.xhtml</view-id>
+		<action>#{CollectionImageBean.initEdit}</action>
+	</url-mapping>
+	
+	<url-mapping id="TechMdImageOfCollection">
+		<pattern value="/collection/#{CollectionImageBean.collectionId}/image/#{CollectionImageBean.id}/techmd" />
+		<view-id>/jsf/CollectionImageTechMd.xhtml</view-id>
+		<action>#{CollectionImageBean.initTechMd}</action>
+	</url-mapping>
 
 	<url-mapping id="createCollection">
 		<pattern value="/collection"/>
 		<view-id>/jsf/CollectionCreate.xhtml</view-id>
 	</url-mapping>
-	
-	
 	
 	<url-mapping id="editCollection">
 		<pattern value="/edit/collection/#{EditCollectionBean.id}"/>
@@ -134,6 +150,24 @@
 		<pattern value="/images/album/#{AlbumImagesBean.id}"/>
 		<view-id>/jsf/AlbumBrowse.xhtml</view-id>
 		<action>#{AlbumImagesBean.init}</action>
+	</url-mapping>
+	
+	<url-mapping id="viewImageOfAlbum">
+		<pattern value="/album/#{AlbumImageBean.albumId}/image/#{AlbumImageBean.id}/view" />
+		<view-id>/jsf/AlbumImage.xhtml</view-id>
+		<action>#{AlbumImageBean.initView}</action>
+	</url-mapping>
+	
+	<url-mapping id="editImageOfAlbum">
+		<pattern value="/album/#{AlbumImageBean.albumId}/image/#{AlbumImageBean.id}/edit" />
+		<view-id>/jsf/AlbumImageEdit.xhtml</view-id>
+		<action>#{AlbumImageBean.initEdit}</action>
+	</url-mapping>
+	
+	<url-mapping id="techMdImageOfAlbum">
+		<pattern value="/album/#{AlbumImageBean.albumId}/image/#{AlbumImageBean.id}/techmd" />
+		<view-id>/jsf/AlbumImageTechMD.xhtml</view-id>
+		<action>#{AlbumImageBean.initTechMd}</action>
 	</url-mapping>
 	
 	<url-mapping id="createProfile">

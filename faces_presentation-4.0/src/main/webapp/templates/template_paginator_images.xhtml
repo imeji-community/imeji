@@ -86,15 +86,15 @@
 			
 				<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
 					<h:outputLabel value="&#160;" styleClass="small_area0" style="visibility: hidden"></h:outputLabel>
-					<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}" styleClass="large_area0">
+					<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}" styleClass="free_area0">
 						<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
 					</h:outputLink>
-					<h:outputLink value="#{Navigation.imagesUrl}" styleClass="large_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
+					<h:outputLink value="#{Navigation.imagesUrl}" styleClass="free_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
 						<h:outputText value="#{lbl.images_all}"/>
 					</h:outputLink>
+					<a4j:commandLink value="#{lbl.delete_selectedImages}" action="#{SelectedBean.deleteAll}" styleClass="free_area0 xSmall_marginLIncl" rendered="#{SelectedBean.sb.user != null}"/>
 					
-					<a4j:commandLink value="#{lbl.selected_clear}" action="#{SelectedBean.clearAll}" styleClass="large_area0 xHuge_marginLIncl" />
-					<a4j:commandLink value="#{lbl.delete_selectedImages}" action="#{SelectedBean.deleteAll}" styleClass="large_area0" rendered="#{SelectedBean.sb.user != null}"/>
+					<a4j:commandLink value="#{lbl.selected_clear}" action="#{SelectedBean.clearAll}" styleClass="free_area0 xHuge_marginLIncl" />
 				</h:panelGroup>
 				
 				<h:panelGroup layout="block" styleClass="full_area0 tiledList">
@@ -107,7 +107,7 @@
 							<h:panelGroup id="imgFrame" styleClass="large_area1_p2 tileIconArea free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
 								<span> 
 								<!-- Image with link to the details view -->
-									<h:outputLink id="lnkPicDetailBrowse" value="#{Navigation.applicationUri}#{item.image.id.path}">
+									<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
 										<h:graphicImage id="picThumbResolutionBrowse"  value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}" />
 									</h:outputLink>
 									
@@ -129,7 +129,6 @@
 																
 									</span>
 								</h:panelGroup>
-							
 										
 								<span class="medium_area0">
 									<span class="free_area0_p3 tileControlIconArea">

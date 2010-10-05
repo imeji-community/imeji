@@ -38,114 +38,191 @@
 
 <body>
 	<ui:composition template="template_edit_metadata.xhtml">	
-		<ui:param name="editMetadataBean" value="#{ImageBean.editMetadataBean}" />
+		<ui:param name="editMetadataBean" value="#{imageBean.editMetadataBean}" />
 		<!--<ui:define name="breadcrumb">
 			<ui:include src="headerPages/Breadcrumb.jspf"/>
 		</ui:define>	-->
 		
 		<ui:define name="contentMenu">
-			<h:outputText value="#{Detail.init}" styleClass="noDisplay" />
-			<h:outputText id="txtMenue" styleClass="free_area0" value="#{lbl.show}"/>
+			<h:outputText id="txtMenue" styleClass="free_area0" value=""/>
 		</ui:define>
 		
 		<ui:define name="actionsMenu">
-			<!-- Toggle between sets -->
-			<h:outputLink styleClass="free_area0" value="#{SessionBean.viewPictureForComparisonLink}" rendered="#{AlbumSession.current.version.objectId == null and Detail.item.type == 'face'}">
-				<h:outputText value="#{lbl.picture_for_comparison}"/>
-			</h:outputLink>
-			<h:outputText styleClass="seperator" rendered="#{AlbumSession.current.latestVersion.objectId == null and Detail.item.type == 'face'}"/>
-
-			<!-- View all pictures of this person -->
-
-			
-			<!-- Add/Remove to current album -->	
-			<!--<h:outputLink id="add" styleClass="active" rendered="#{AlbumSession.active.version.objectId != null and !Detail.item.inAlbum}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}">-->
-			<!--	<h:outputText value="#{lbl.add}"/>-->
-			<!--</h:outputLink>-->
-
-			<!--<h:outputLink id="lnkRemoveFromAlbum" styleClass="free_area0" rendered="#{(AlbumSession.current.size != '0') and (AlbumSession.current.state == 'PENDING')}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.latestVersion.objectId}/REMOVEPICTURE/#{Detail.item.item.objid}/back">-->
-			<!--	<h:outputText value="Remove from Album"/>-->
-			<!--</h:outputLink>-->
-
 		</ui:define>
 							
 		<ui:define name="mainContent" >
-
 <!-- 
 			<h:panelGroup layout="block" styleClass="full_area0">
 			
 			<h:panelGroup layout="block" styleClass="large_area0 small_marginLIncl rangeSelector">&#160;</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="small_marginLExcl pageBrowser" rendered="true">
-					<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{ImageBean.previous}" disabled="#{ImageBean.previous == null}">
+					<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{imageBean.previous}" disabled="#{imageBean.previous == null}">
 						<h:outputText value="#{lbl.paginatorButton_prev_label}"></h:outputText>
 					</h:outputLink>
 	
 				    <h:panelGroup styleClass="seperator" />
-					<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{ImageBean.next}" disabled="#{ImageBean.next == null}">
+					<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{imageBean.next}" disabled="#{imageBean.next == null}">
 						<h:outputText value="#{lbl.paginatorButton_next_label}"></h:outputText>
 					</h:outputLink>
 				</h:panelGroup>
 			   </h:panelGroup>
 			-->
-			<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-				<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">
-					<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
-				</h:outputLink>
-				<h:outputLink value="#{Navigation.imagesUrl}" styleClass="free_area1_p6">
-					<h:outputText value="#{lbl.images_all}"/>
-				</h:outputLink>
-
-				<a4j:commandLink value="#{lbl.selected_clear}" action="#{ImageBean.clearAll}" styleClass="free_area2_p6 xHuge_marginLIncl " />
-
-
-				
-			</h:panelGroup>
-
+			
+			<ui:insert name="preListHeader"/>
+			
 			<h:panelGroup styleClass="full_area0 fullItem">
 
-				<ui:include src="/picturesPages/ui/DetailImage.jspf"/>
+				<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl"> 
+					<h:panelGroup layout="block" styleClass="full_area detailedItem">
+						<span>
+							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{imageBean.image.fullImageUrl}" target="_blank">
+								<h:graphicImage id="picWebResolution" title="imageBean.image.id" alt="imageBean.image.id" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{imageBean.image.webImageUrl}" />
+							</h:outputLink>			
+						</span>
+					</h:panelGroup>
+					<h:panelGroup id="image" layout="block">
+						<h:outputLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" value="">
+							<h:outputText value="#{lbl.add_to_album}"/>
+						</h:outputLink>
+						<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" onchange="getElementById('formular:selectBtn').click();"/>
+						<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{imageBean.selected}" action="#{imageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
+						<h:outputText styleClass="small_label" value="#{lbl.selected}"/>
+					</h:panelGroup>
+					<!-- <h:panelGroup layout="block" styleClass="half_area0">
+						<h:outputText styleClass="free_area0 xSmall_marginRExcl" rendered="#{Detail.item.type == 'face'}" value="#{Detail.item.mdRecords.label['escidoc.face.picture-group']} #{Detail.item.mdRecords.value['escidoc.face.picture-group']}" />
+						<h:outputLink id="lnkAddToAlbum" styleClass="free_area0 xSmall_marginRExcl" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}"  rendered="#{(!Detail.item.inAlbum) and (AlbumSession.active.latestVersion.objectId != null) and (AlbumSession.active.state == 'PENDING')}">
+							<h:outputText value="#{lbl.add_to_active}"/>
+						</h:outputLink>
+						 
+						<h:outputLink id="lnkRemoveFromAlbum" styleClass="free_area0" rendered="#{(AlbumSession.current.size != '0') and (AlbumSession.current.state == 'PENDING')}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.latestVersion.objectId}/REMOVEPICTURE/#{Detail.item.item.objid}/back">
+							<h:outputText  value="#{lbl.remove_from_album}"/>
+						</h:outputLink>
+						<h:outputLink id="lnkLicense" styleClass="free_area0 sectionToolSection" target="_blank" value="#{ApplicationBean.licenseUrl}" rendered="#{ApplicationBean.licenseUrl != ''}">
+							<h:graphicImage id="imageLicense" styleClass="free_area0" url="#{ApplicationBean.licenseImage}" rendered="#{ApplicationBean.licenseImage != ''}" />
+						</h:outputLink>
+					</h:panelGroup> -->
+				</h:panelGroup>
 				
 				<div class="full_area0 fullItem">
 					<div class="fullItemControls">
 						<h:panelGroup styleClass="seperator" />
 									
-						<h:outputLink id="lnkViewItemMdPage" styleClass="free_area0 actual" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/view/techMd" rendered="#{prettyContext.currentMapping.id == 'viewImageMD'}">
+						<h:outputLink id="lnkViewItemMdPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}/techmd" rendered="#{imageBean.tab == 'TECHMD'}">
 							<h:outputText value="#{lbl.view_tech_md}"/>
 						</h:outputLink>
 						
-						<h:outputLink id="lnkViewItemMdPage2" styleClass="free_area0" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/view/techMd" rendered="#{prettyContext.currentMapping.id != 'viewImageMD'}">
+						<h:outputLink id="lnkViewItemMdPage2" styleClass="free_area0" value="#{imageBean.pageUrl}/techmd" rendered="#{imageBean.tab != 'TECHMD'}">
 							<h:outputText value="#{lbl.view_tech_md}"/>
 						</h:outputLink>
 
 									
 						<h:panelGroup styleClass="seperator" />
 									
-						<h:outputLink id="lnkViewItemFull_btnItemVersions" styleClass="free_area0 actual" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id == 'editImage' and ImageBean.sessionBean.user != null}">
+						
+						<h:outputLink id="lnkViewItemFull_btnItemVersions" styleClass="free_area0 actual" value="#{imageBean.pageUrl}/edit?reset=1" rendered="#{imageBean.tab == 'EDIT' and imageBean.sessionBean.user != null}">
 							<h:outputText value="#{lbl.assign_md}"/>
 						</h:outputLink>
 						
-						<h:outputLink id="lnkViewItemFull_btnItemVersions2" styleClass="free_area0" value="#{Navigation.applicationUri}/image/#{ImageBean.id}/edit" rendered="#{prettyContext.currentMapping.id != 'editImage' and ImageBean.sessionBean.user != null}">
+						<h:outputLink id="lnkViewItemFull_btnItemVersions2" styleClass="free_area0" value="#{imageBean.pageUrl}/edit?reset=1" rendered="#{imageBean.tab != 'EDIT'and imageBean.sessionBean.user != null}">
 							<h:outputText value="#{lbl.assign_md}"/>
 						</h:outputLink>
 									
 						<h:panelGroup styleClass="seperator" />
 									
-						<h:outputLink id="lnkViewItemPage" styleClass="free_area0 actual" value="#{Navigation.applicationUri}/image/#{ImageBean.id}" rendered="#{prettyContext.currentMapping.id == 'viewImage'}">
+						<h:outputLink id="lnkViewItemPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}/view" rendered="#{imageBean.tab == 'VIEW'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
-						<h:outputLink id="lnkViewItemPage2" styleClass="free_area0" value="#{Navigation.applicationUri}/image/#{ImageBean.id}" rendered="#{prettyContext.currentMapping.id != 'viewImage'}">
+						<h:outputLink id="lnkViewItemPage2" styleClass="free_area0" value="#{imageBean.pageUrl}/view" rendered="#{imageBean.tab != 'VIEW'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
 									
 						<h:panelGroup styleClass="seperator" />
-					
 					</div>
 				</div>
-				<ui:insert name="viewImage"></ui:insert>
+				
+				<h:panelGroup styleClass="full_area0" rendered="#{imageBean.tab == 'VIEW'}">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+						<h3 class="xLarge_area0_p8 endline blockHeader">
+							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} " />
+						</h3>
+						<span class="seperator"></span>
+		
+						<h:panelGroup styleClass="free_area0 itemBlockContent endline">
+							<!-- URL -->
+							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									 <h:outputText value="#{lbl.name }" /> 
+									 <span class="noDisplay">: </span> 
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+									<h:outputText id="txtUrl" value="#{imageBean.image.filename}" /> 
+								</span>
+							</h:panelGroup>
+		
+							<!-- URL -->
+							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear"> 
+									<h:outputText value="#{lbl.collection }" /> 
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+									<h:outputText value="#{imageBean.collection.metadata.title}" /> 
+								</span>
+							</h:panelGroup>
+							
+							<a4j:repeat var="md" value="#{imageBean.imgMetadata}">
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+									 	<h:outputText value="#{md.type.label}" /> 
+									 	<span class="noDisplay">: </span> 
+									 </b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline">
+										<h:outputText value="#{md.type.text}" rendered="#{md.type.enumType == 'TEXT'}" />
+										<h:outputText value="#{md.type.number}" rendered="#{md.type.enumType == 'NUMBER'}" /> 
+										<h:outputText value="#{md.type.date}" rendered="#{md.type.enumType == 'DATE'}" />
+										<h:outputLink  value="#{md.type.uri}" rendered="#{md.type.enumType == 'URI'}" target="_blank">
+											<h:outputText value="#{md.type.uri}" rendered="#{md.type.enumType == 'URI'}" />
+										</h:outputLink>
+									  	<h:panelGroup rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
+											<h:panelGroup rendered="#{md.type.person.identifier == null}">
+												<h:outputText value="#{md.type.person.familyName}, " />
+												<h:outputText value="#{md.type.person.givenName} (" />
+												<a4j:repeat id="orgaList0" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
+													<h:outputText value="#{orga.name}" />
+												</a4j:repeat>
+												<h:outputText value=")" />
+											</h:panelGroup>
+											<h:panelGroup rendered="#{md.type.person.identifier != null}">
+												<h:outputLink value="#{md.type.person.identifier}" target="_blank">
+													<h:outputText value="#{md.type.person.familyName}, " />
+													<h:outputText value="#{md.type.person.givenName} (" />
+													<a4j:repeat id="orgaList1" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
+														<h:outputText value="#{orga.name}" />
+													</a4j:repeat>
+													<h:outputText value=")" />
+												</h:outputLink>
+											</h:panelGroup>
+										</h:panelGroup> 
+										<h:panelGroup rendered="#{md.type.enumType == 'GEOLOCATION'}">
+											<h:outputText value="#{md.type.longitude}/" />
+											<h:outputText value="#{md.type.latitude}" />
+											<br/>
+											<h:outputLink value="http://maps.google.de/?ie=UTF8&amp;q=#{md.type.latitude},+#{md.type.longitude}&amp;iwloc=A&amp;hl=en" target="_blank">
+												<h:outputText value="View in Google Map"/>
+											</h:outputLink>
+										</h:panelGroup> 
+									</span>
+								</h:panelGroup>
+							</a4j:repeat>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+								
 				<ui:insert name="editImage"></ui:insert>
 				<ui:insert name="viewTechMD"></ui:insert>
+				
 			</h:panelGroup>
-			<ui:insert name="commandLine">&#160;</ui:insert>
+			
 		</ui:define>
 
 	</ui:composition>

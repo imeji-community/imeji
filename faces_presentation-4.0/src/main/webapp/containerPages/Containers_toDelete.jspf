@@ -34,6 +34,6 @@
 
 </ui:remove>
 <f:subview id="Containers">
-<h:inputTextarea rows=""></h:inputTextarea>
+<a4j:commandButton action="" ajaxSingle="true"></a4j:commandButton>
 </f:subview>
 </div>

@@ -42,7 +42,7 @@
 			<ui:define name="actionsMenu">	
 				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}">
 				<!-- FILTER content menu lower line starts here -->
-					<h:outputText id="txtFilter" value="Filtered by " styleClass="free_area0"/>
+					<h:outputText id="txtFilter" value="#{lbl.filter_by}" styleClass="free_area0"/>
 					<!--  
 					<h:selectOneMenu id="selFilter" value="#{FacesContainerListBean.url}?filter=#{Session.filter}" styleClass="free_select"  onchange="location.href=this.value">
 						<f:selectItems id="filterItem" value="#{FacesContainerListBean.filterMenu}"/>

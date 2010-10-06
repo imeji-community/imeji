@@ -30,11 +30,13 @@ public class SessionBean implements Serializable
     private Page currentPage = null;
     private boolean admin = false;
     private List<URI> selected;
+	private List<URI> selectedCollection;
     private AlbumBean activeAlbum;
 
     public SessionBean()
     {
         selected = new ArrayList<URI>();
+        selectedCollection = new ArrayList<URI>();
     }
 
     /**
@@ -165,6 +167,18 @@ public class SessionBean implements Serializable
     {
         return this.selected.size();
     }
+    
+    public List<URI> getSelectedCollection() {
+		return selectedCollection;
+	}
+
+	public void setSelectedCollection(List<URI> selectedCollection) {
+		this.selectedCollection = selectedCollection;
+	}
+	
+	public int getSelectCollectionSize(){
+		return this.selectedCollection.size();
+	}
     
     public void setActiveAlbum(AlbumBean activeAlbum)
     {

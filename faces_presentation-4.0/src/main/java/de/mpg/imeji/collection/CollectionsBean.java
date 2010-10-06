@@ -1,8 +1,13 @@
 package de.mpg.imeji.collection;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.faces.event.ValueChangeEvent;
+
+import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.beans.SuperContainerBean;
@@ -14,21 +19,19 @@ import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Properties.Status;
 
 public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 {
   
-    private int totalNumberOfRecords;
+	private int totalNumberOfRecords;
     private SessionBean sb;
-  
-    
 
-    public CollectionsBean()
+	public CollectionsBean()
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-       
-        
+
     }
 
     @Override
@@ -71,7 +74,41 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         
         return ImejiFactory.collectionListToBeanList(collections);
     }
+    
+    public SessionBean getSb() {
+		return sb;
+	}
 
+	public void setSb(SessionBean sb) {
+		this.sb = sb;
+	}
+	    
+	public String selectAll() {
+		for(CollectionBean bean: getCurrentPartList()){
+			if(bean.getCollection().getProperties().getStatus() != Status.RELEASED){
+				bean.setSelected(true);
+				if(!(sb.getSelectedCollection().contains(bean.getCollection().getId())))
+					sb.getSelectedCollection().add(bean.getCollection().getId());
+			}
+		}
+		return "";
+	}
+	
+	public String selectNone(){
+		sb.getSelectedCollection().clear();
+		return "";
+	}
+	
+	public String deleteAll() throws Exception{
+		for(URI uri : sb.getSelectedCollection()){
+			CollectionController collectionController = new CollectionController(sb.getUser());
+			CollectionImeji collection = collectionController.retrieve(uri);
+			collectionController.delete(collection, sb.getUser());
+		}
+		sb.getSelectedCollection().clear();
+		return "pretty:collections";
+	}
+  	
 
    
 }

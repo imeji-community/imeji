@@ -50,12 +50,11 @@ public class ImageBean
     private String next = null;
     private List<String> techMd;
     private Navigation navigation;
+    private String pageUrl;
 
-    public void delete(Image img)
-    {
-    }
 
-    public ImageBean(Image img)
+
+	public ImageBean(Image img)
     {
         this.image = img;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -220,6 +219,11 @@ public class ImageBean
         }
         return getNavigationString();
     }
+    
+    public void setPageUrl(String pageUrl) 
+    {
+		this.pageUrl = pageUrl;
+	}
 
     public String getPageUrl()
     {

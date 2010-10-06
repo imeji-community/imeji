@@ -100,6 +100,8 @@ public class SelectedBean extends ImagesBean
             return "pretty:";
     }
 
+
+
     public String deleteAll() throws Exception
     {
         List<URI> selectedList = new ArrayList<URI>();
@@ -113,9 +115,6 @@ public class SelectedBean extends ImagesBean
             Image img = imageController.retrieve(uri);
             if (img.getProperties().getStatus() != Status.RELEASED)
             {
-                // DepositController.deleteImejiItem(img, getEscidocUserHandle(), sb.getUser());
-                String itemId = img.getEscidocId();
-                ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(itemId);
                 imageController.delete(img, sb.getUser());
                 sb.getSelected().remove(uri);
             }
@@ -187,13 +186,8 @@ public class SelectedBean extends ImagesBean
         this.sb = sb;
     }
 
-    public String getEscidocUserHandle() throws Exception
-    {
-        String userName = PropertyReader.getProperty("imeji.escidoc.user");
-        String password = PropertyReader.getProperty("imeji.escidoc.password");
-        escidocUserHandle = LoginHelper.login(userName, password);
-        return escidocUserHandle;
-    }
+
+
 
     public void setEscidocUserHandle(String escidocUserHandle)
     {

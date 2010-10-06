@@ -47,7 +47,7 @@
 			<h:outputLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" value="">
 				<h:outputText value="#{lbl.add_to_album}"/>
 			</h:outputLink>
-				<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{ImageBean.selected}" onchange="getElementById('formular:Image:selectBtn').click();"/>
+				<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{ImageBean.selected}" onchange="getElementById('formular:Image:selectBtn').click();" />
 				<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{ImageBean.selected}" action="#{ImageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
 				<h:outputText styleClass="small_label" value="#{lbl.selected}"/>
 

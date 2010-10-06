@@ -1,34 +1,24 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
 import thewebsemantic.Sparql;
-
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.Syntax;
-import com.hp.hpl.jena.query.larq.IndexBuilderBase;
-import com.hp.hpl.jena.query.larq.IndexBuilderModel;
-import com.hp.hpl.jena.query.larq.IndexBuilderString;
-import com.hp.hpl.jena.query.larq.IndexBuilderSubject;
-import com.hp.hpl.jena.query.larq.IndexLARQ;
-import com.hp.hpl.jena.query.larq.LARQ;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-
+import de.mpg.escidoc.services.framework.PropertyReader;
+import de.mpg.escidoc.services.framework.ServiceLocator;
+import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
@@ -39,7 +29,6 @@ import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
@@ -47,7 +36,6 @@ import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image.Visibility;
 import de.mpg.jena.vo.Properties.Status;
-import de.mpg.jena.vo.complextypes.Text;
 
 public class ImageController extends ImejiController{
 	
@@ -199,8 +187,10 @@ public class ImageController extends ImejiController{
 	}
 	*/
 	
-	public void delete(Image img, User user)
-	{
+	public void delete(Image img, User user) throws Exception
+	{    	    	
+		String itemId = img.getEscidocId();
+		ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(itemId);
 		bean2RDF.delete(img);
 	}
 	
@@ -212,6 +202,12 @@ public class ImageController extends ImejiController{
 	public void withdraw()
 	{
 		
+	}
+	
+    public String getEscidocUserHandle() throws Exception {
+        String userName = PropertyReader.getProperty("imeji.escidoc.user");
+        String password = PropertyReader.getProperty("imeji.escidoc.password");
+        return LoginHelper.login(userName, password);
 	}
 	
 	

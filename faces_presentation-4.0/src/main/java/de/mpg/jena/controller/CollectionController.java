@@ -122,6 +122,15 @@ public class CollectionController extends ImejiController{
         return (CollectionImeji)rdf2Bean.load(CollectionImeji.class, uri);
     }
 	
+	public void delete(CollectionImeji collection, User user) throws Exception{
+		for(URI uri : collection.getImages()){
+			ImageController imageController = new ImageController(user);
+			de.mpg.jena.vo.Image img = imageController.retrieve(uri);
+			imageController.delete(img, user);
+			
+		}
+		bean2RDF.delete(collection);
+	}
 	
 	
 	/**

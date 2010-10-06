@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import thewebsemantic.JenaHelper;
@@ -39,16 +40,19 @@ public abstract class CollectionBean
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
     private boolean selected;
 
+
     public CollectionBean(CollectionImeji coll)
     {
         this.collection = coll;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+
     }
 
     public CollectionBean()
     {
         collection = new CollectionImeji();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+
     }
 
     public boolean valid()
@@ -222,19 +226,30 @@ public abstract class CollectionBean
     /**
      * @return the selected
      */
-    public boolean isSelected()
+    public boolean getSelected()
     {
+    	if(sessionBean.getSelectedCollection().contains(collection.getId()))
+    		selected = true;
+    	else
+    		selected = false;
         return selected;
-    }
-
+    }    
+    
     /**
      * @param selected the selected to set
      */
     public void setSelected(boolean selected)
     {
+    	if(selected)
+    	{	
+    		if(!(sessionBean.getSelectedCollection().contains(collection.getId())))
+    			sessionBean.getSelectedCollection().add(collection.getId());
+    	}
+    	else
+    		sessionBean.getSelectedCollection().remove(collection.getId());
         this.selected = selected;
     }
-
+    
     public int getSize()
     {
         return collection.getImages().size();
@@ -264,4 +279,28 @@ public abstract class CollectionBean
         Collection<Image> imgList = ic.searchImageInContainer(collection.getId(), null, null, 5, 0);
         return ImejiFactory.imageListToBeanList(imgList); 
     }
+    
+    /*
+	public String select() {
+		if (!selected) {
+			selectedBean.getSelected().remove(collection.getId());
+		} else {
+			selectedBean.getSelected().add(this.collection.getId());
+		}
+		return "";
+	}
+    */
+    
+    /*
+	public void selectedChanged(ValueChangeEvent event) {
+		if (event.getNewValue().toString().equals("true") && !selectedBean.getSelected().contains(collection.getId())) {
+			setSelected(true);
+			select();
+
+		} else if (event.getNewValue().toString().equals("false")&& selectedBean.getSelected().contains(collection.getId())) {
+			setSelected(false);
+			select();
+		}
+	}
+    */
 }

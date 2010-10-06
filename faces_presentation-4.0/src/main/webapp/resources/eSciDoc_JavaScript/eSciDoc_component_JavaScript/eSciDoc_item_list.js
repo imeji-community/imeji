@@ -23,90 +23,90 @@
 
 /*
 * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
-* für wissenschaftlich-technische Information mbH and Max-Planck-
-* Gesellschaft zur Förderung der Wissenschaft e.V.
+* fï¿½r wissenschaftlich-technische Information mbH and Max-Planck-
+* Gesellschaft zur Fï¿½rderung der Wissenschaft e.V.
 * All rights reserved. Use is subject to license terms.
 */
 
 function addItemListFunctions() {
-	$('.itemList').each(
+	jQuery('.itemList').each(
 			function(i,ele){
-				$(ele).find('.mediumView').each(
+				jQuery(ele).find('.mediumView').each(
 						function(j,elem){
-							$(elem).hide();
+							jQuery(elem).hide();
 						});
-				$(ele).find('.collapse').each(
+				jQuery(ele).find('.collapse').each(
 						function(j,elem){
-							$(elem).hide();
+							jQuery(elem).hide();
 						});
-				$(ele).find('.expand').each(
+				jQuery(ele).find('.expand').each(
 						function(j,elem){
-							$(elem).show();
+							jQuery(elem).show();
 						});
-				$(ele).find('.listItem').hover(
+				jQuery(ele).find('.listItem').hover(
 						function () {
-							$(this).addClass('listBackground');
+							jQuery(this).addClass('listBackground');
 					    }, 
 					    function () {
-					    	$(this).removeClass('listBackground');
+					    	jQuery(this).removeClass('listBackground');
 					    }
 					);
 			});
 
-	$('.checkboxSelectButton').click(function(){$(this).siblings('.selectMenu').show();});
-	$('.checkBoxCloseSelectButton').click(function(){$(this).parent().hide();});
-		$('.selectMenu').find('.selectTotal').click(function(){$(this).parents('.itemList').find('.itemCheckBox').each(function(i, elem){elem.checked=true;}); $(this).parents('.selectMenu').hide();});
-		$('.selectMenu').find('.selectAll').click(function(){$(this).parents('.itemList').find('.itemCheckBox').each(function(i, elem){elem.checked=true;}); $(this).parents('.selectMenu').hide();});
-		$('.selectMenu').find('.selectNone').click(function(){$(this).parents('.itemList').find('.itemCheckBox').each(function(i, elem){elem.checked=false;});});
-		$('.selectMenu').find('a').each(function(i,elem){$(elem).click(function(){$(this).parents('.selectMenu').hide()});});
+	jQuery('.checkboxSelectButton').click(function(){jQuery(this).siblings('.selectMenu').show();});
+	jQuery('.checkBoxCloseSelectButton').click(function(){jQuery(this).parent().hide();});
+		jQuery('.selectMenu').find('.selectTotal').click(function(){jQuery(this).parents('.itemList').find('.itemCheckBox').each(function(i, elem){elem.checked=true;}); jQuery(this).parents('.selectMenu').hide();});
+		jQuery('.selectMenu').find('.selectAll').click(function(){jQuery(this).parents('.itemList').find('.itemCheckBox').each(function(i, elem){elem.checked=true;}); jQuery(this).parents('.selectMenu').hide();});
+		jQuery('.selectMenu').find('.selectNone').click(function(){jQuery(this).parents('.itemList').find('.itemCheckBox').each(function(i, elem){elem.checked=false;});});
+		jQuery('.selectMenu').find('a').each(function(i,elem){jQuery(elem).click(function(){jQuery(this).parents('.selectMenu').hide()});});
 		
-	$('.headerSwitchView').find('.expand').click(
+	jQuery('.headerSwitchView').find('.expand').click(
 			function(){
-				$(this).hide();
-				$(this).siblings('.collapse').show();
-				$(this).parents('.itemList').find('.listItem').find('.expand:visible').each(
+				jQuery(this).hide();
+				jQuery(this).siblings('.collapse').show();
+				jQuery(this).parents('.itemList').find('.listItem').find('.expand:visible').each(
 						function(i, elem){
-							$(elem).trigger('click');
+							jQuery(elem).trigger('click');
 						});
 			});
-	$('.headerSwitchView').find('.collapse').click(
+	jQuery('.headerSwitchView').find('.collapse').click(
 			function(){
-				$(this).hide();
-				$(this).siblings('.expand').show();
-				$(this).parents('.itemList').find('.listItem').find('.collapse:visible').each(
+				jQuery(this).hide();
+				jQuery(this).siblings('.expand').show();
+				jQuery(this).parents('.itemList').find('.listItem').find('.collapse:visible').each(
 						function(i, elem){
-							$(elem).trigger('click');
+							jQuery(elem).trigger('click');
 						});
 			});
 	
-	$('.shortView').find('.expand').each(
+	jQuery('.shortView').find('.expand').each(
 			function(i,ele){
-				$(ele).click(
+				jQuery(ele).click(
 						function(){
-							$(this).hide();
-							$(this).siblings('.collapse').show();
-							var parentElement = $(this).parents('.listItem');
-							$(parentElement).children('.mediumView').slideToggle('normal', function(){
-								if(($(parentElement).find('.shortView').find('.expand:visible').length)==0){
-									$(parentElement).find('.headerSwitchView').find('.expand').hide();
-									$(parentElement).find('.headerSwitchView').find('.collapse').show();
+							jQuery(this).hide();
+							jQuery(this).siblings('.collapse').show();
+							var parentElement = jQuery(this).parents('.listItem');
+							jQuery(parentElement).children('.mediumView').slideToggle('normal', function(){
+								if((jQuery(parentElement).find('.shortView').find('.expand:visible').length)==0){
+									jQuery(parentElement).find('.headerSwitchView').find('.expand').hide();
+									jQuery(parentElement).find('.headerSwitchView').find('.collapse').show();
 								}
 							}
 							);
 						}
 				)
 			});
-	$('.shortView').find('.collapse').each(
+	jQuery('.shortView').find('.collapse').each(
 			function(i,ele){
-				$(ele).click(
+				jQuery(ele).click(
 						function(){
-							$(this).hide();
-							$(this).siblings('.expand').show();
-							var parentElement = $(this).parents('.listItem');
-							$(parentElement).children('.mediumView').slideToggle('normal', function(){
-								if(($(parentElement).find('.shortView').find('.collapse:visible').length)==0){
-									$(parentElement).find('.headerSwitchView').find('.expand').show();
-									$(parentElement).find('.headerSwitchView').find('.collapse').hide();
+							jQuery(this).hide();
+							jQuery(this).siblings('.expand').show();
+							var parentElement = jQuery(this).parents('.listItem');
+							jQuery(parentElement).children('.mediumView').slideToggle('normal', function(){
+								if((jQuery(parentElement).find('.shortView').find('.collapse:visible').length)==0){
+									jQuery(parentElement).find('.headerSwitchView').find('.expand').show();
+									jQuery(parentElement).find('.headerSwitchView').find('.collapse').hide();
 								}
 							});
 						}

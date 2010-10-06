@@ -30,16 +30,18 @@ public class SessionBean implements Serializable
     private Page currentPage = null;
     private boolean admin = false;
     private List<URI> selected;
-	private List<URI> selectedCollection;
+	private List<URI> selectedCollections;
+	private List<URI> selectedAlbums;
     private AlbumBean activeAlbum;
 
     public SessionBean()
     {
         selected = new ArrayList<URI>();
-        selectedCollection = new ArrayList<URI>();
+        selectedCollections = new ArrayList<URI>();
+        selectedAlbums = new ArrayList<URI>();
     }
 
-    /**
+	/**
      * Returns the label according to the current user locale.
      * 
      * @param placeholder A string containing the name of a label.
@@ -168,18 +170,30 @@ public class SessionBean implements Serializable
         return this.selected.size();
     }
     
-    public List<URI> getSelectedCollection() {
-		return selectedCollection;
+    public List<URI> getSelectedCollections() {
+		return selectedCollections;
 	}
 
-	public void setSelectedCollection(List<URI> selectedCollection) {
-		this.selectedCollection = selectedCollection;
+	public void setSelectedCollections(List<URI> selectedCollections) {
+		this.selectedCollections = selectedCollections;
 	}
 	
-	public int getSelectCollectionSize(){
-		return this.selectedCollection.size();
+	public int getSelectCollectionsSize(){
+		return this.selectedCollections.size();
 	}
     
+    public List<URI> getSelectedAlbums() {
+		return selectedAlbums;
+	}
+
+	public void setSelectedAlbums(List<URI> selectedAlbums) {
+		this.selectedAlbums = selectedAlbums;
+	}
+	
+	public int getSelectedAlbumsSize(){
+		return this.selectedAlbums.size();
+	}
+	
     public void setActiveAlbum(AlbumBean activeAlbum)
     {
         this.activeAlbum = activeAlbum;

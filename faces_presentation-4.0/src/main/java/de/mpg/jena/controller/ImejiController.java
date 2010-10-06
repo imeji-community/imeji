@@ -563,15 +563,15 @@ public abstract class ImejiController {
                         }
                         else if(sc.getFilterType().equals(Filtertype.EQUALS_NUMBER))
                         {
-                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "=" + sc.getValue();
+                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "=" + sc.getValue()+"";
                         }
                         else if(sc.getFilterType().equals(Filtertype.GREATER_NUMBER))
                         {
-                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + ">" + sc.getValue();
+                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + ">=" + sc.getValue();
                         }
                         else if(sc.getFilterType().equals(Filtertype.LESSER_NUMBER))
                         {
-                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "<" + sc.getValue();
+                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "<=" + sc.getValue();
                         }
                         
                     }

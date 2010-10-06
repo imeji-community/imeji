@@ -104,8 +104,11 @@
 										</b>
 										<span class="xHuge_area0 xTiny_marginLExcl endline">
 											<h:outputLabel value="#{lbl.adv_search_lblMetaData}" styleClass="quad_label"/>
-										 	<h:selectOneMenu styleClass="xLarge_select replace" id="selectMd" value="#{md.selectedMdName}">
+										 	<h:selectOneMenu styleClass="xLarge_select replace" id="selectMd" value="#{md.selectedMdName}" onchange="submit();" valueChangeListener="#{md.mdTypeChanged}">
 												<f:selectItems value="#{md.mdList}"/>
+											</h:selectOneMenu>
+											<h:selectOneMenu styleClass="small_select replace" id="selectNumberOp" value="#{md.numberOperator}" rendered="#{md.type=='NUMBER'}">
+												<f:selectItems value="#{md.numberOpList}"/>
 											</h:selectOneMenu>
 											<h:inputText styleClass="xLarge_txtInput" id="mdContent" value="#{md.mdText}" />
 										</span>

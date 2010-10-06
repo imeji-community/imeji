@@ -293,7 +293,7 @@ public class ImageController extends ImejiController{
 	    */
 	    
 	    Collection<CollectionImeji> result = rdf2Bean.load(CollectionImeji.class);
-        CollectionImeji res = rdf2Bean.load(CollectionImeji.class, "http://imeji.mpdl.mpg.de/collection/1");
+        //CollectionImeji res = rdf2Bean.load(CollectionImeji.class, "http://imeji.mpdl.mpg.de/collection/1");
 	    
         
         System.out.println("IMAGE_MD_NAME.REGEX=\"bla va\" ".matches("\\s*[^\\s]+=\".*\"\\s+"));
@@ -307,7 +307,7 @@ public class ImageController extends ImejiController{
         }
          */
 	    
-	   String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/collection>  . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status .  OPTIONAL {?s <http://imeji.mpdl.mpg.de/profile> ?v0} . FILTER((?status = <http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<http://xmlns.com/foaf/0.1/Person/imeji%40mpdl.mpg.de> || ?s=<http://test.de>) && str(?v0)='http://imeji.mpdl.mpg.de/mdprofile/17') } OFFSET 0";
+	   String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/collection> }";
         //String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  .  OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v10 . ?v1 <http://purl.org/dc/terms/type> ?v2 . ?v2 <http://imeji.mpdl.mpg.de/metadata/enumType> ?v4 .  OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/metadata/date> ?v3 }}}";
 
 	    //Syntax.

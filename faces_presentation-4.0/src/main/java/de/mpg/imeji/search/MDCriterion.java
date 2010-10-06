@@ -4,9 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
+import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class MDCriterion extends Criterion implements Serializable{
 	/**
@@ -18,6 +24,8 @@ public class MDCriterion extends Criterion implements Serializable{
 	private String mdText;
 	private List<SelectItem> mdList;
     private Collection<Statement> statements;
+    private String numberOperator;
+    private List<SelectItem> numberOpList;
 
 	public MDCriterion(Collection<Statement> statements)
 	{
@@ -25,6 +33,13 @@ public class MDCriterion extends Criterion implements Serializable{
         setMdList(newMdList());
 		setSelectedMdName(getMdList().get(0).getValue().toString());
         setMdText("");
+        
+        numberOpList = new ArrayList<SelectItem>();
+        numberOpList.add(new SelectItem(Filtertype.EQUALS_NUMBER, "="));
+        numberOpList.add(new SelectItem(Filtertype.GREATER_NUMBER, ">="));
+        numberOpList.add(new SelectItem(Filtertype.LESSER_NUMBER, "<="));
+        numberOperator = Filtertype.EQUALS_NUMBER.name();
+        
 	}
 	
 
@@ -67,7 +82,7 @@ public class MDCriterion extends Criterion implements Serializable{
 		return true;
 	}
 
-    public void setSelectedMdName(String selectedMdName)
+    public void setSelectedMdName(String selectedMdName) 
     {
         if(selectedMdName!=null && !selectedMdName.equals(this.selectedMdName)){ 
            
@@ -107,4 +122,45 @@ public class MDCriterion extends Criterion implements Serializable{
     {
         return selectedStatement;
     }
+    
+    public ComplexTypes getType()
+    {
+        if(getSelectedStatement()!=null) 
+        {
+            return ComplexTypeHelper.getComplexTypesEnum(getSelectedStatement().getType());    
+        }
+        return null;
+       
+    }
+    
+    public void mdTypeChanged(ValueChangeEvent ev)
+    {
+        if(ev.getNewValue()!=null)
+        {
+            setSelectedMdName((String)ev.getNewValue());
+        }
+        
+    }
+
+    public void setNumberOperator(String numberOperator)
+    {
+        this.numberOperator = numberOperator;
+    }
+
+    public String getNumberOperator()
+    {
+        return numberOperator;
+    }
+
+    public void setNumberOpList(List<SelectItem> numberOpList)
+    {
+        this.numberOpList = numberOpList;
+    }
+
+    public List<SelectItem> getNumberOpList()
+    {
+        return numberOpList;
+    }
+    
+   
 }

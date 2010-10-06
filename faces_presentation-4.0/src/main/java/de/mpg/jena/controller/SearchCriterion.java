@@ -50,7 +50,7 @@ public class SearchCriterion {
 		
 		IMAGE_METADATA_COMPLEXTYPE_TEXT("http://imeji.mpdl.mpg.de/metadata/text", IMAGE_METADATA_COMPLEXTYPE),
 		IMAGE_METADATA_COMPLEXTYPE_DATE("http://imeji.mpdl.mpg.de/metadata/date", IMAGE_METADATA_COMPLEXTYPE),
-		IMAGE_METADATA_COMPLEXTYPE_NUMBER("http://imeji.mpdl.mpg.de/metadata/double", IMAGE_METADATA_COMPLEXTYPE),
+		IMAGE_METADATA_COMPLEXTYPE_NUMBER("http://imeji.mpdl.mpg.de/metadata/number", IMAGE_METADATA_COMPLEXTYPE),
 	    
 		IMAGE_COLLECTION("http://imeji.mpdl.mpg.de/collection"),
 		IMAGE_COLLECTION_PROFILE("http://imeji.mpdl.mpg.de/profile", IMAGE_COLLECTION),

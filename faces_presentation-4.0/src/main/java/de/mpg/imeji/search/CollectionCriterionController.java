@@ -153,7 +153,7 @@ public class CollectionCriterionController implements Serializable {
                             }
 				            case  NUMBER : 
                             {
-                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText() + "\"";
+                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER.name() + "." + mdc.getNumberOperator() + "=\"" + mdc.getMdText() + "\"";
                                 break;
                             }
 				            case  CONE_AUTHOR : 

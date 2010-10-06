@@ -38,8 +38,9 @@ public class AlbumBean implements Serializable
         private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
         private boolean active;
         private boolean save;
+        private boolean selected;
 
-        public AlbumBean(Album album)
+		public AlbumBean(Album album)
         {
             this.setAlbum(album);
             sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class); 
@@ -334,6 +335,26 @@ public class AlbumBean implements Serializable
             return "pretty:";
         }
         
+        public boolean getSelected() 
+        {
+        	if(sessionBean.getSelectedAlbums().contains(album.getId()))
+        		selected = true;
+        	else
+        		selected = false;
+            return selected;
+		}
+
+		public void setSelected(boolean selected) 
+		{
+	    	if(selected)
+	    	{	
+	    		if(!(sessionBean.getSelectedAlbums().contains(album.getId())))
+	    			sessionBean.getSelectedAlbums().add(album.getId());
+	    	}
+	    	else
+	    		sessionBean.getSelectedAlbums().remove(album.getId());
+	        this.selected = selected;
+		}
        
     
 

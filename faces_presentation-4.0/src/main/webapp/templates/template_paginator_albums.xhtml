@@ -212,8 +212,8 @@
 				      	
 				      	<td class="free_area0 endline">
 				      		<span class="free_area0_p8 endline itemSelectArea">
-								<h:selectBooleanCheckbox id="selAlbum"  styleClass="itemCheckBox" value="false">
-									<f:attribute value="#{container}" name="album"/>
+								<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" value="#{container.selected}" disabled="#{container.album.properties.status=='RELEASED'}">
+									<a4j:support event="onchange"/>
 								</h:selectBooleanCheckbox>
 								&#160;
 				      		</span>
@@ -283,8 +283,11 @@
 			</a4j:repeat>
 		</tbody>
 	</table>
+	<h:panelGroup layout="block" style="border-bottom-width: 0.10em; border-bottom-style: solid;" rendered="#{AlbumsBean.sb.user != null and AlbumsBean.totalNumberOfRecords != 0}">
+		<a4j:commandLink value="#{lbl.delete_selected_albums}" styleClass="xTiny_marginLIncl" action="#{AlbumsBean.deleteAll}" />
+	</h:panelGroup>
 			
-			</ui:define>
+</ui:define>
 
 
 

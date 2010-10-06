@@ -90,6 +90,11 @@ public class AlbumController extends ImejiController{
 		return reader.load(Album.class);
 	}
 	
+	public void delete(Album album, User user) throws Exception{
+		bean2RDF.delete(album);
+	}
+	
+	
 	public synchronized void release(Album album) throws Exception
     {
         //first check user credentials

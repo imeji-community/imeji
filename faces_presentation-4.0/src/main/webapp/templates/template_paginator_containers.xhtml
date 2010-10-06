@@ -89,9 +89,9 @@
 					    <tr class="full_area0">
 					      	<th class="free_area0_p8 endline itemSelectArea">
 					      		<input type="button" class="min_imgBtn checkboxSelectButton"/>
-								<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none;">
+								<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none; width:150px;">
 									<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
-									<span class="medium_area0_p8">
+									<span class="large_area0_p8">
 										<h:outputText value="#{lbl.select_collections}"/>
 									</span>
 									<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
@@ -278,9 +278,7 @@
 				</table>
 				
 				<h:panelGroup layout="block" style="border-bottom-width: 0.10em; border-bottom-style: solid;" rendered="#{CollectionsBean.sb.user != null and CollectionsBean.totalNumberOfRecords != 0}">
-
 					<a4j:commandLink value="#{lbl.delete_selected_collections}" styleClass="xTiny_marginLIncl" action="#{CollectionsBean.deleteAll}" />
-
 				</h:panelGroup>
 
 			</ui:define>

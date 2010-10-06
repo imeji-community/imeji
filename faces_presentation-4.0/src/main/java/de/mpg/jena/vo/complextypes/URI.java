@@ -29,14 +29,4 @@ public class URI extends ComplexType implements Serializable
     {
         this.uri = uri;
     }
-
-    /*
-     * Do not use constructors with one string parameter, Jenabean has problems with it.
-    public Text(String value)
-    {
-        super(ComplexTypes.TEXT);
-        text = value;
-    }
-*/
-
 }

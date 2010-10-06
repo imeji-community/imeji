@@ -59,8 +59,8 @@ public class ImageMetadata implements Serializable
         this.type = type;
     }
 
-	public int compareTo(ImageMetadata imd) {
-		return this.compareTo((ImageMetadata)imd);
-	}
-
+    public int compareTo(ImageMetadata imd)
+    {
+        return this.compareTo((ImageMetadata)imd);
+    }
 }

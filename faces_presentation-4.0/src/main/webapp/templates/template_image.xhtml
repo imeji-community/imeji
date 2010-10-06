@@ -177,12 +177,21 @@
 									 	<span class="noDisplay">: </span> 
 									 </b>
 									<span class="xHuge_area0 xTiny_marginLExcl endline">
+										
 										<h:outputText value="#{md.type.text}" rendered="#{md.type.enumType == 'TEXT'}" />
+										
 										<h:outputText value="#{md.type.number}" rendered="#{md.type.enumType == 'NUMBER'}" /> 
+										
 										<h:outputText value="#{md.type.date}" rendered="#{md.type.enumType == 'DATE'}" />
+										
 										<h:outputLink  value="#{md.type.uri}" rendered="#{md.type.enumType == 'URI'}" target="_blank">
 											<h:outputText value="#{md.type.uri}" rendered="#{md.type.enumType == 'URI'}" />
 										</h:outputLink>
+										
+										<h:outputLink  value="#{md.type.uri}" rendered="#{md.type.enumType == 'PUBLICATION'}" target="_blank">
+											<h:outputText value="#{md.type.citation}" rendered="#{md.type.enumType == 'PUBLICATION'}" />
+										</h:outputLink>
+									  	
 									  	<h:panelGroup rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
 											<h:panelGroup rendered="#{md.type.person.identifier == null}">
 												<h:outputText value="#{md.type.person.familyName}, " />
@@ -203,6 +212,7 @@
 												</h:outputLink>
 											</h:panelGroup>
 										</h:panelGroup> 
+										
 										<h:panelGroup rendered="#{md.type.enumType == 'GEOLOCATION'}">
 											<h:outputText value="#{md.type.longitude}/" />
 											<h:outputText value="#{md.type.latitude}" />
@@ -211,6 +221,7 @@
 												<h:outputText value="View in Google Map"/>
 											</h:outputLink>
 										</h:panelGroup> 
+									
 									</span>
 								</h:panelGroup>
 							</a4j:repeat>

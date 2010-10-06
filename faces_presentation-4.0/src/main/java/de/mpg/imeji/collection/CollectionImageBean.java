@@ -12,6 +12,7 @@ public class CollectionImageBean extends ImageBean
     public CollectionImageBean()
     {
         super();
+        this.prettyLink = "pretty:EditImageOfCollection";
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 

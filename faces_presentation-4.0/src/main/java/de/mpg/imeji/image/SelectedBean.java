@@ -73,7 +73,7 @@ public class SelectedBean extends ImagesBean
                 throw new RuntimeException(e);
             }
         }
-        if (UrlHelper.getParameterBoolean("reset"))
+        if (UrlHelper.getParameterBoolean("reset") || editMetadataBean.getImages().size() == 0)
         {
             editMetadataBean = new EditMetadataBean((List<Image>)images);
         }

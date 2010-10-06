@@ -50,17 +50,16 @@ public class ImageBean
     private String next = null;
     private List<String> techMd;
     private Navigation navigation;
-    private String pageUrl;
+    protected String prettyLink;
 
-
-
-	public ImageBean(Image img)
+    public ImageBean(Image img)
     {
         this.image = img;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         imageController = new ImageController(sessionBean.getUser());
         imgMetadata = new ArrayList<ImageMetadata>();
+        prettyLink = "pretty:editImage";
         if (sessionBean.getSelected().contains(img.getId()))
         {
             setSelected(true);
@@ -75,6 +74,7 @@ public class ImageBean
         imageController = new ImageController(sessionBean.getUser());
         collectionController = new CollectionController(sessionBean.getUser());
         imgMetadata = new ArrayList<ImageMetadata>();
+        prettyLink = "pretty:editImage";
     }
 
     public void init() throws Exception
@@ -86,7 +86,7 @@ public class ImageBean
             setSelected(true);
         }
         if (UrlHelper.getParameterBoolean("reset"))
-            editMetadataBean = new EditMetadataBean(image);
+            editMetadataBean = new EditMetadataBean(image, prettyLink);
     }
 
     public void initView() throws Exception
@@ -219,11 +219,6 @@ public class ImageBean
         }
         return getNavigationString();
     }
-    
-    public void setPageUrl(String pageUrl) 
-    {
-		this.pageUrl = pageUrl;
-	}
 
     public String getPageUrl()
     {

@@ -68,7 +68,7 @@
 				<h:form id="formular">
 					<div class="full wrapper">
 						<ui:insert name="init"/>
-						<h:inputHidden id="offset"></h:inputHidden>
+						<h:inputHidden id="offset" styleClass="offset"></h:inputHidden>
 						<h:inputHidden id="rssFeedUrl" value="#{BlogBean.rssFeedUrl}"></h:inputHidden>
 						
 		
@@ -160,15 +160,16 @@
 					<ui:include src="/footerPages/Footer.jspf" />
 				
 			    </h:form>
+			    
 				<script type="text/javascript">
-				jQuery("input[id$='offset']").submit(function() {
-					jQuery(this).val($(window).scrollTop());
+				jQuery("#formular:offset").submit(function() {
+					jQuery(this).val(jQuery(window).scrollTop());
 				});
 				jQuery(document).ready(function () {
-					jQuery(window).scrollTop(jQuery("input[id$='offset']").val());
-					jQuery(window).scroll(function(){jQuery("input[id$='offset']").val(jQuery(window).scrollTop())});
+					jQuery(window).scrollTop(jQuery(".offset").val());
+					jQuery(window).scroll(function(){jQuery(".offset").val(jQuery(window).scrollTop())});
 				});
-				</script>				
+				</script>			
 			</body>
 		</html>
 </f:view>

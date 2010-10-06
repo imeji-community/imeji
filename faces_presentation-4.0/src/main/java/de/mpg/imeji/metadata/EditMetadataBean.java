@@ -1,5 +1,6 @@
 package de.mpg.imeji.metadata;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +12,16 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.util.ComplexTypeHelper;
+import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
+import de.mpg.jena.vo.complextypes.ConePerson;
+import de.mpg.jena.vo.complextypes.Publication;
+import de.mpg.jena.vo.complextypes.Text;
 
 public class EditMetadataBean
 {
@@ -24,40 +31,47 @@ public class EditMetadataBean
     private SessionBean sb;
     // private List<MdField> mdFields;
     private List<SelectItem> statementMenu;
+    private List<SelectItem> exportFormatMenu;
     private MetadataProfile profile;
     private List<MetadataBean> metadata;
     private int mdPosition;
     private String prettyLink;
+    private boolean overwrite;
+
+    public EditMetadataBean()
+    {
+        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        metadata = new ArrayList<MetadataBean>();
+        statementMenu = new ArrayList<SelectItem>();
+        exportFormatMenu = new ArrayList<SelectItem>();
+        exportFormatMenu.add(new SelectItem("APA", "APA"));
+        exportFormatMenu.add(new SelectItem("AJP", "AJP"));
+        exportFormatMenu.add(new SelectItem("JUS", "JUS"));
+    }
 
     public EditMetadataBean(List<Image> images)
     {
+        this();
         this.prettyLink = "pretty:selected";
-        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.images = images;
         this.image = null;
         profiles = ProfileHelper.loadProfiles(images);
-        // mdFields = ProfileHelper.getFields(profiles);
-        metadata = new ArrayList<MetadataBean>();
         if (!profiles.isEmpty())
         {
             profile = profiles.values().iterator().next();
-            statementMenu = new ArrayList<SelectItem>();
+            // statementMenu = new ArrayList<SelectItem>();
             for (Statement s : profile.getStatements())
-            {
                 statementMenu.add(new SelectItem(s.getName(), s.getName()));
-            }
             addMetadata();
         }
     }
 
-    public EditMetadataBean(Image image)
+    public EditMetadataBean(Image image, String prettyLink)
     {
-        this.prettyLink = "pretty:editImage";
-        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        this();
+        this.prettyLink = prettyLink;
         this.image = image;
         profile = ProfileHelper.loadProfiles(image);
-        metadata = new ArrayList<MetadataBean>();
-        statementMenu = new ArrayList<SelectItem>();
         for (Statement s : profile.getStatements())
             statementMenu.add(new SelectItem(s.getName(), s.getName()));
         if (image.getMetadata().size() != 0)
@@ -127,16 +141,20 @@ public class EditMetadataBean
         try
         {
             ImageController ic = new ImageController(sb.getUser());
+            cleanMetadata();
             if (images != null && images.size() > 0 && "pretty:selected".equals(prettyLink))
             {
                 for (Image im : images)
                 {
-                    im = setImageMetadata(im, metadata);
+                    formatPublication(im);
+                    im = addNewImageMetadata(im, metadata, overwrite);
                 }
                 ic.update(images);
+                this.images.clear();
             }
             else if ("pretty:editImage".equals(prettyLink) && image != null)
             {
+                formatPublication(image);
                 image = updateImageMetadata(image, metadata);
                 ic.update(image);
             }
@@ -148,6 +166,50 @@ public class EditMetadataBean
         return true;
     }
 
+    public Image formatPublication(Image image)
+    {
+        for (ImageMetadata md : image.getMetadata())
+        {
+            if (md.getType().getEnumType().equals(ComplexTypes.PUBLICATION))
+            {
+                ((Publication)md.getType()).setCitation("Here comes soon citation citation");
+            }
+        }
+        return image;
+    }
+
+    public void cleanMetadata()
+    {
+        for (int i = 0; i < metadata.size(); i++)
+        {
+            Object ct = metadata.get(i).getMetadata().getType();
+            switch (metadata.get(i).getMetadata().getType().getEnumType())
+            {
+                case CONE_AUTHOR:
+                    if ("".equals(((ConePerson)ct).getPerson().getFamilyName()))
+                    {
+                        BeanHelper.error(metadata.get(i).getMetadata().getName()
+                                + " was not saved: it needs a Family Name");
+                        metadata.remove(i);
+                    }
+                    break;
+                case TEXT:
+                    if ("".equals(((Text)ct).getText()))
+                    {
+                        metadata.remove(i);
+                    }
+                    break;
+                case PUBLICATION:
+                    if ("".equals(((Publication)ct).getUri().toString()))
+                    {
+                        metadata.remove(i);
+                    }
+                default:
+                    break;
+            }
+        }
+    }
+
     public Image updateImageMetadata(Image im, List<MetadataBean> mdbs) throws Exception
     {
         im.getMetadata().clear();
@@ -157,40 +219,62 @@ public class EditMetadataBean
         return im;
     }
 
-    public Image setImageMetadata(Image im, List<MetadataBean> mdbs) throws Exception
+    public Image addNewImageMetadata(Image im, List<MetadataBean> mdbs, boolean overwrite) throws Exception
     {
-        Map<String, List<ImageMetadata>> mdMap = new HashMap<String, List<ImageMetadata>>();
-        List<ImageMetadata> newMetadata = new ArrayList<ImageMetadata>();
-        for (ImageMetadata imd : im.getMetadata())
+        Map<String, List<ImageMetadata>> oldMdOfImageMappedByType = copy(im.getMetadata());
+        List<ImageMetadata> mdFromMdbs = new ArrayList<ImageMetadata>();
+        for (MetadataBean mdb : mdbs)
+            mdFromMdbs.add(mdb.getMetadata());
+        Map<String, List<ImageMetadata>> newMdOfImageMappedByType = copy(mdFromMdbs);
+        Map<String, Boolean> statementsMultiplicity = new HashMap<String, Boolean>();
+        for (Statement st : profile.getStatements())
         {
-            if (mdMap.containsKey(imd.getName()))
-            {
-                List<ImageMetadata> imList = mdMap.get(imd.getName());
-                imList.add(imd);
-            }
+            if ("unbounded".equals(st.getMaxOccurs()))
+                statementsMultiplicity.put(st.getName(), true);
             else
+                statementsMultiplicity.put(st.getName(), false);
+        }
+        for (List<ImageMetadata> mds : newMdOfImageMappedByType.values())
+        {
+            if (mds.size() > 0)
             {
-                List<ImageMetadata> imList = new ArrayList<ImageMetadata>();
-                imList.add(imd);
-                mdMap.put(imd.getName(), imList);
+                String mdType = mds.get(0).getName();
+                boolean multiple = statementsMultiplicity.get(mdType);
+                if (multiple && oldMdOfImageMappedByType.containsKey(mdType))
+                {
+                    mds.addAll(oldMdOfImageMappedByType.get(mdType));
+                }
+                else
+                {
+                    if (oldMdOfImageMappedByType.containsKey(mdType) && !overwrite)
+                    {
+                        mds.clear();
+                        mds.addAll(oldMdOfImageMappedByType.get(mdType));
+                    }
+                }
             }
         }
-        im.getMetadata().clear();
-        // add new mdvalues (overwrite old)
-        for (MetadataBean mdb : metadata)
+        if (!newMdOfImageMappedByType.isEmpty())
+            im.getMetadata().clear();
+        for (List<ImageMetadata> mds : newMdOfImageMappedByType.values())
         {
-            if (mdMap.containsKey(mdb.getMetadata().getName()))
-            {
-                List<ImageMetadata> imList = mdMap.get(mdb.getMetadata().getName());
-                imList.clear();
-            }
-            im.getMetadata().add(mdb.getMetadata());
-        }
-        for (List<ImageMetadata> imList : mdMap.values())
-        {
-            im.getMetadata().addAll(imList);
+            im.getMetadata().addAll(mds);
         }
         return im;
+    }
+
+    private Map<String, List<ImageMetadata>> copy(List<ImageMetadata> listToCopy)
+    {
+        Map<String, List<ImageMetadata>> copy = new HashMap<String, List<ImageMetadata>>();
+        for (ImageMetadata md : listToCopy)
+        {
+            List<ImageMetadata> mdOfOneType = new ArrayList<ImageMetadata>();
+            if (copy.containsKey(md.getName()))
+                mdOfOneType = copy.get(md.getName());
+            mdOfOneType.add(md);
+            copy.put(md.getName(), mdOfOneType);
+        }
+        return copy;
     }
 
     public boolean hasMetadata(Image im, String name)
@@ -238,7 +322,7 @@ public class EditMetadataBean
         {
             metadata.remove(getMdPosition());
         }
-        return "pretty:";
+        return this.prettyLink;
     }
 
     public List<MetadataBean> getMetadata()
@@ -284,5 +368,35 @@ public class EditMetadataBean
     public int getMdPosition()
     {
         return mdPosition;
+    }
+
+    public List<SelectItem> getExportFormatMenu()
+    {
+        return exportFormatMenu;
+    }
+
+    public void setExportFormatMenu(List<SelectItem> exportFormatMenu)
+    {
+        this.exportFormatMenu = exportFormatMenu;
+    }
+
+    public boolean isOverwrite()
+    {
+        return overwrite;
+    }
+
+    public void setOverwrite(boolean overwrite)
+    {
+        this.overwrite = overwrite;
+    }
+
+    public List<Image> getImages()
+    {
+        return images;
+    }
+
+    public void setImages(List<Image> images)
+    {
+        this.images = images;
     }
 }

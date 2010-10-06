@@ -12,6 +12,7 @@ public class AlbumImageBean extends ImageBean
     public AlbumImageBean()
     {
         super();
+        this.prettyLink = "pretty:editImageOfAlbum";
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 

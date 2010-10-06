@@ -9,6 +9,7 @@ import de.mpg.jena.vo.complextypes.Date;
 import de.mpg.jena.vo.complextypes.Geolocation;
 import de.mpg.jena.vo.complextypes.License;
 import de.mpg.jena.vo.complextypes.Number;
+import de.mpg.jena.vo.complextypes.Publication;
 import de.mpg.jena.vo.complextypes.Text;
 import de.mpg.jena.vo.complextypes.URI;
 
@@ -17,10 +18,10 @@ public abstract class ComplexType
     @Namespace("http://imeji.mpdl.mpg.de/")
     @RdfType("complexTypes")
     public enum ComplexTypes
-    {    
-        CONE_AUTHOR(ConePerson.class, "Cone Author"), TEXT(Text.class, "Text"), NUMBER(Number.class, "Number"), DATE(
-                Date.class, "Date"), LICENCE(License.class, "Licence"), GEOLOCATION(Geolocation.class,
-                "Geolocation"), URI(URI.class, "URI");
+    {
+        CONE_AUTHOR(ConePerson.class, "Person"), TEXT(Text.class, "Text"), NUMBER(Number.class, "Number"), DATE(
+                Date.class, "Date"), LICENCE(License.class, "Licence"), GEOLOCATION(Geolocation.class, "Geolocation"), URI(
+                URI.class, "URI"), PUBLICATION(Publication.class, "PubMan Publication");
         private Class<? extends ComplexType> type;
         private String label;
 

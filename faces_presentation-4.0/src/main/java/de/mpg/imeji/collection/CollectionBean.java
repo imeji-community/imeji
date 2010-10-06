@@ -228,7 +228,7 @@ public abstract class CollectionBean
      */
     public boolean getSelected()
     {
-    	if(sessionBean.getSelectedCollection().contains(collection.getId()))
+    	if(sessionBean.getSelectedCollections().contains(collection.getId()))
     		selected = true;
     	else
     		selected = false;
@@ -242,11 +242,11 @@ public abstract class CollectionBean
     {
     	if(selected)
     	{	
-    		if(!(sessionBean.getSelectedCollection().contains(collection.getId())))
-    			sessionBean.getSelectedCollection().add(collection.getId());
+    		if(!(sessionBean.getSelectedCollections().contains(collection.getId())))
+    			sessionBean.getSelectedCollections().add(collection.getId());
     	}
     	else
-    		sessionBean.getSelectedCollection().remove(collection.getId());
+    		sessionBean.getSelectedCollections().remove(collection.getId());
         this.selected = selected;
     }
     

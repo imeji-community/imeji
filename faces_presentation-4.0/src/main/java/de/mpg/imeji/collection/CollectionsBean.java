@@ -87,25 +87,25 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 		for(CollectionBean bean: getCurrentPartList()){
 			if(bean.getCollection().getProperties().getStatus() != Status.RELEASED){
 				bean.setSelected(true);
-				if(!(sb.getSelectedCollection().contains(bean.getCollection().getId())))
-					sb.getSelectedCollection().add(bean.getCollection().getId());
+				if(!(sb.getSelectedCollections().contains(bean.getCollection().getId())))
+					sb.getSelectedCollections().add(bean.getCollection().getId());
 			}
 		}
 		return "";
 	}
 	
 	public String selectNone(){
-		sb.getSelectedCollection().clear();
+		sb.getSelectedCollections().clear();
 		return "";
 	}
 	
 	public String deleteAll() throws Exception{
-		for(URI uri : sb.getSelectedCollection()){
+		for(URI uri : sb.getSelectedCollections()){
 			CollectionController collectionController = new CollectionController(sb.getUser());
 			CollectionImeji collection = collectionController.retrieve(uri);
 			collectionController.delete(collection, sb.getUser());
 		}
-		sb.getSelectedCollection().clear();
+		sb.getSelectedCollections().clear();
 		return "pretty:collections";
 	}
   	

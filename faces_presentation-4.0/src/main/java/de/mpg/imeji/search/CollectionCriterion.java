@@ -38,56 +38,62 @@ public class CollectionCriterion extends Criterion implements Serializable{
 		{
 		    setSelectedCollection(collections.get(0));
 		    setMdCriterionList(newMdCriterionList());
+		    setSelectedCollectionId(collections.get(0).getId().toString());
 	        updateMDList();
 		}
-		
-       
-
 	}
 	
     public void collectionChanged(ValueChangeEvent event){
-
-       
-        String collId = (String)event.getNewValue();
-        for(CollectionImeji coll : collections)
-        {
-            if(coll.getId().toString().equals(collId))
-            {
-                setSelectedCollectionId(collId);
-                setSelectedCollection(coll);
-            }
-        }
-
-        updateMDList();
-           
+    	
+       if(!event.getNewValue().toString().equals(getSelectedCollectionId()))
+       {
+    	   String collId = (String)event.getNewValue();
+           for(CollectionImeji coll : collections)
+           {
+               if(coll.getId().toString().equals(collId))
+               {
+                   setSelectedCollectionId(collId);
+                   setSelectedCollection(coll);
+               }
+           }
+           updateMDList();
+       }
     }
     
     public void updateMDList()
     {
-        try{
-            setMdCriterionList(newMdCriterionList());
-//            List<SelectItem> newMdList = new ArrayList<SelectItem>();
-//            Collection<Statement> s = selectedCollection.getProfile().getStatements();
-//            if (s.size() != 0){
-//                for (Statement statement : selectedCollection.getProfile().getStatements())
-//                    newMdList.add(new SelectItem(statement.getName(), statement.getName()));
-//            }else
-//            	BeanHelper.info("error: Selected Collection has no metadata profile");
-//
+    	setMdCriterionList(newMdCriterionList());
+//        try{
+//          List<SelectItem> newMdList = new ArrayList<SelectItem>();
+//          Collection<Statement> s = selectedCollection.getProfile().getStatements();
+//          if (s.size() == 0){
 //            for(int j=0; j< getMdCriterionList().size(); j++)
 //            {
 //            	getMdCriterionList().get(j).setMdList(newMdList);
-//            	getMdCriterionList().get(j).setSelectedMdName(newMdList.get(0).getValue().toString());
+////            	getMdCriterionList().get(j).setSelectedMdName(newMdList.get(0).getValue().toString());
 //            }
-    }catch (Exception e){
-        e.getMessage();
-    }
+//        	  BeanHelper.info("error: Selected Collection has no metadata profile");
+//          }else
+//        	  setMdCriterionList(newMdCriterionList());
+//          
+//           
+//    }catch (Exception e){
+//        e.getMessage();
+//    }
     }
     
+    
     public List<MDCriterion> newMdCriterionList(){
-    	MDCriterion newMd = new MDCriterion(getSelectedCollection().getProfile().getStatements());
     	List<MDCriterion> mdCriterionList = new ArrayList<MDCriterion>();
-    	mdCriterionList.add(newMd);
+    	if(getSelectedCollection().getProfile().getStatements().size()>0)
+    	{
+    		MDCriterion newMd = new MDCriterion(getSelectedCollection().getProfile().getStatements());
+        	mdCriterionList.add(newMd);
+    	}
+    	else
+    	{
+    		 BeanHelper.info("error: Selected Collection has no metadata profile");
+    	}
     	return mdCriterionList;
     }
     
@@ -124,7 +130,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
     }    
     
     public String addMd(){
-        List<MDCriterion> mds = getMdCriterionList();
+        List<MDCriterion> mds = getMdCriterionList(); 
         MDCriterion newMd = new MDCriterion(getSelectedCollection().getProfile().getStatements());
         mds.add(mdPosition +1, newMd);  
         return "";
@@ -139,10 +145,10 @@ public class CollectionCriterion extends Criterion implements Serializable{
     }
     
     public String removeMd(){
-        if(mdPosition >0){
+
             List<MDCriterion> mds = getMdCriterionList();
             mds.remove(mdPosition);         
-        }
+
         return "";
     }
 

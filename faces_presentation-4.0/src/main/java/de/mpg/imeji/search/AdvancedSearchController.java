@@ -18,7 +18,7 @@ public class AdvancedSearchController extends BeanHelper implements Serializable
     private AnyFieldCriterionController anyFieldCriterionController = null;
     
     public AdvancedSearchController(){
-        collectionCriterionController = new CollectionCriterionController();
+        collectionCriterionController = new CollectionCriterionController(); 
         anyFieldCriterionController = new AnyFieldCriterionController();
     }
 
@@ -37,14 +37,10 @@ public class AdvancedSearchController extends BeanHelper implements Serializable
         
        
         
-        ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class);
+        ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class); 
         bean.setQuery(collectionCriterionController.getSearchCriterion());
         return "pretty:images";
     }
-    
-
-        
-    
 
     private ArrayList<SearchCriterion> transformToSparqlSearchCriteria(Criterion predecessor, Criterion transformer){
         return null;

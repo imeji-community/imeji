@@ -27,7 +27,7 @@ public class MDCriterion extends Criterion implements Serializable{
         setMdText("");
 	}
 	
-    // TODO use default mdList ?
+
     public List<SelectItem> newMdList()
     {
     	List<SelectItem> newMdList = new ArrayList<SelectItem>();
@@ -58,7 +58,7 @@ public class MDCriterion extends Criterion implements Serializable{
 		return mdText;
 	}
 	public void setMdText(String mdText) {
-		this.mdText = mdText; 
+		this.mdText = mdText;  
 	}
 	public boolean clearCriterion() {
 		setSearchString("");

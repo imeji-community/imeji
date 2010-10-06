@@ -74,7 +74,7 @@ public class CollectionCriterionController implements Serializable {
 	}
 	
 	public String removeCollection(){
-		if(collectionPosition > 0)
+
 			collectionCriterionList.remove(collectionPosition);
 		return "";
 	}

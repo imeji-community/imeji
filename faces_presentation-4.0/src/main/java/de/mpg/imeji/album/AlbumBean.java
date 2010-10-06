@@ -133,17 +133,15 @@ public class AlbumBean implements Serializable
         {
             List<Person> list = getAlbum().getMetadata().getPersons(); 
             list.add(authorPosition + 1, ImejiFactory.newPerson());
-            return "pretty:";
+            return "";
         }
 
         public String removeAuthor()
         {
-            if (authorPosition > 0)
-            {
+           
                 List<Person> list = getAlbum().getMetadata().getPersons();
                 list.remove(authorPosition);
-            }
-            return "pretty:";
+            return "";
         }
 
         public String addOrganization()
@@ -156,12 +154,10 @@ public class AlbumBean implements Serializable
 
         public String removeOrganization()
         {
-            if (organizationPosition > 0)
-            {
+            
                 List<Person> persons = getAlbum().getMetadata().getPersons();
                 List<Organization> orgs = persons.get(authorPosition).getOrganizations();
                 orgs.remove(organizationPosition);
-            }
             return "";
         }
 

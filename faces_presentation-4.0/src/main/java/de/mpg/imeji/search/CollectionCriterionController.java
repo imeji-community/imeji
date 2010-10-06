@@ -70,7 +70,7 @@ public class CollectionCriterionController implements Serializable {
 	public String addCollection() {
 		CollectionCriterion newCollection = new CollectionCriterion(collections);
 		collectionCriterionList.add(collectionPosition+1,newCollection);
-		return "pretty:";
+		return "";
 	}
 	
 	public String removeCollection(){
@@ -78,9 +78,6 @@ public class CollectionCriterionController implements Serializable {
 			collectionCriterionList.remove(collectionPosition);
 		return "pretty:";
 	}
-	
-	
-	
 
 	public int getCollectionPosition() {
 		return collectionPosition;
@@ -89,8 +86,6 @@ public class CollectionCriterionController implements Serializable {
 	public void setCollectionPosition(int collectionPosition) {
 		this.collectionPosition = collectionPosition;
 	}
-
-	
 
 	public CollectionCriterionController(List<CollectionCriterion> collectionCriterion){
 		setCollectionCriterionList(collectionCriterion);

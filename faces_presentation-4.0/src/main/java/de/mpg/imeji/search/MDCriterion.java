@@ -19,20 +19,22 @@ public class MDCriterion extends Criterion implements Serializable{
 	private List<SelectItem> mdList;
     private Collection<Statement> statements;
 
-	public MDCriterion(Collection<Statement> statements){
+	public MDCriterion(Collection<Statement> statements)
+	{
 		this.statements = statements;
-		setSelectedMdName("");
         setMdList(newMdList());
+		setSelectedMdName(getMdList().get(0).getValue().toString());
         setMdText("");
-
 	}
 	
     // TODO use default mdList ?
-    public List<SelectItem> newMdList(){
+    public List<SelectItem> newMdList()
+    {
     	List<SelectItem> newMdList = new ArrayList<SelectItem>();
         try{
-        	for (Statement s : statements){
-                        newMdList.add(new SelectItem(s.getName(), s.getName()));
+        	for (Statement s : statements)
+        	{
+        		newMdList.add(new SelectItem(s.getName(), s.getName()));
         	}
                    
         		
@@ -79,8 +81,6 @@ public class MDCriterion extends Criterion implements Serializable{
            
         }
         this.selectedMdName = selectedMdName;
-       
-        
     }
 
     public String getSelectedMdName()

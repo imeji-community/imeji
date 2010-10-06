@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
 
@@ -63,22 +65,20 @@ public class CollectionCriterion extends Criterion implements Serializable{
     public void updateMDList()
     {
         try{
-            
-            //setMdCriterionList(newMdCriterionList());
-                
-            List<SelectItem> newMdList = new ArrayList<SelectItem>();
-            Collection<Statement> s = selectedCollection.getProfile().getStatements();
-            if (s.size() != 0){
-                for (Statement statement : selectedCollection.getProfile().getStatements())
-                    newMdList.add(new SelectItem(statement.getName(), statement.getName()));
-            }   
-         // TODO use default mdList ?
-//                else
-////                    newMdList.add(new SelectItem("title", "title"));
-            for(int j=0; j< getMdCriterionList().size(); j++)
-                getMdCriterionList().get(j).setMdList(newMdList);
-                    
-                
+            setMdCriterionList(newMdCriterionList());
+//            List<SelectItem> newMdList = new ArrayList<SelectItem>();
+//            Collection<Statement> s = selectedCollection.getProfile().getStatements();
+//            if (s.size() != 0){
+//                for (Statement statement : selectedCollection.getProfile().getStatements())
+//                    newMdList.add(new SelectItem(statement.getName(), statement.getName()));
+//            }else
+//            	BeanHelper.info("error: Selected Collection has no metadata profile");
+//
+//            for(int j=0; j< getMdCriterionList().size(); j++)
+//            {
+//            	getMdCriterionList().get(j).setMdList(newMdList);
+//            	getMdCriterionList().get(j).setSelectedMdName(newMdList.get(0).getValue().toString());
+//            }
     }catch (Exception e){
         e.getMessage();
     }
@@ -121,7 +121,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
     public CollectionImeji getSelectedCollection()
     {
         return selectedCollection;
-    }
+    }    
     
     public String addMd(){
         List<MDCriterion> mds = getMdCriterionList();

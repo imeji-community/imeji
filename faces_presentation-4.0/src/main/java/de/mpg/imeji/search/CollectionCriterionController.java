@@ -1,7 +1,10 @@
 package de.mpg.imeji.search;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
@@ -148,7 +151,19 @@ public class CollectionCriterionController implements Serializable {
 				            }
 				            case DATE : 
                             {
-                                ctCriterion = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_DATE.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText() + "\"";
+                                try
+                                {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+                                    Date date = sdf.parse(mdc.getMdText());
+                                    sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");  
+                                    StringBuffer sb = new StringBuffer(sdf.format(date)); 
+                                    System.out.println("MYDATE:" + sb.toString());
+                                    ctCriterion = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_DATE.name() + "." + mdc.getDateOperator() + "=\"" + sb.toString() + "\"";
+                                }
+                                catch (ParseException e)
+                                {
+                                    BeanHelper.error("Wrong date format");
+                                }
                                 break;
                             }
 				            case  NUMBER : 

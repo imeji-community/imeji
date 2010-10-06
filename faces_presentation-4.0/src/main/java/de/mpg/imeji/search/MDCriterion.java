@@ -26,6 +26,8 @@ public class MDCriterion extends Criterion implements Serializable{
     private Collection<Statement> statements;
     private String numberOperator;
     private List<SelectItem> numberOpList;
+    private List<SelectItem> dateOpList;
+    private String dateOperator;
 
 	public MDCriterion(Collection<Statement> statements)
 	{
@@ -39,6 +41,12 @@ public class MDCriterion extends Criterion implements Serializable{
         numberOpList.add(new SelectItem(Filtertype.GREATER_NUMBER, ">="));
         numberOpList.add(new SelectItem(Filtertype.LESSER_NUMBER, "<="));
         numberOperator = Filtertype.EQUALS_NUMBER.name();
+        
+        dateOpList = new ArrayList<SelectItem>();
+        dateOpList.add(new SelectItem(Filtertype.EQUALS_DATE, "="));
+        dateOpList.add(new SelectItem(Filtertype.GREATER_DATE, ">="));
+        dateOpList.add(new SelectItem(Filtertype.LESSER_DATE, "<="));
+        dateOperator = Filtertype.EQUALS_DATE.name();
         
 	}
 	
@@ -160,6 +168,30 @@ public class MDCriterion extends Criterion implements Serializable{
     public List<SelectItem> getNumberOpList()
     {
         return numberOpList;
+    }
+
+
+    public void setDateOperator(String dateOperator)
+    {
+        this.dateOperator = dateOperator;
+    }
+
+
+    public String getDateOperator()
+    {
+        return dateOperator;
+    }
+
+
+    public void setDateOpList(List<SelectItem> dateOpList)
+    {
+        this.dateOpList = dateOpList;
+    }
+
+
+    public List<SelectItem> getDateOpList()
+    {
+        return dateOpList;
     }
     
    

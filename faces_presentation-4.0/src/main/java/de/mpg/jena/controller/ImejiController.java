@@ -573,6 +573,18 @@ public abstract class ImejiController {
                         {
                             filter += map.get(subList).get(sc.getNamespace()).getVariable() + "<=" + sc.getValue();
                         }
+                        else if(sc.getFilterType().equals(Filtertype.EQUALS_DATE))
+                        {
+                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "='" + sc.getValue()+"'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+                        }
+                        else if(sc.getFilterType().equals(Filtertype.GREATER_DATE))
+                        {
+                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + ">='" + sc.getValue()+"'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+                        }
+                        else if(sc.getFilterType().equals(Filtertype.LESSER_DATE))
+                        {
+                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "<='" + sc.getValue()+"'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+                        }
                         
                     }
        

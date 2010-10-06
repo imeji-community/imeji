@@ -64,6 +64,10 @@ public class ProfileController extends ImejiController
         base.commit();
     }
     
+    public void delete(MetadataProfile mdp, User user){
+    	bean2RDF.delete(mdp);
+    }
+    
     public List<MetadataProfile> retrieveAll()
     {
         RDF2Bean reader = new RDF2Bean(base);

@@ -129,6 +129,8 @@ public class CollectionController extends ImejiController{
 			imageController.delete(img, user);
 			
 		}
+		ProfileController profileController = new ProfileController(user);
+		profileController.delete(collection.getProfile(),user);
 		bean2RDF.delete(collection);
 	}
 	

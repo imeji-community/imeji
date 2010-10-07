@@ -62,10 +62,10 @@
 /*Richfaces Overwrite*/
 
 .rich-tool-tip {
-		padding: 1.73em 0.92em 0.92em 0.92em;
-        line-height: 2em;
+		padding: 0.92em 0.92em 0.92em 0.92em;
+		text-align: left;
+        line-height: 1.6em;
         background-color: #303030;
-		float: left;
 		position: absolute;
 		display: none;
 }

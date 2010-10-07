@@ -124,7 +124,12 @@ public class FacetsBean
         {
             query += "INVERSE ";
         }
-        query += "( " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS.name() + "=\"" + st.getName() + "\" ) ";
+        query += "( " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS.name() + "=\"" + st.getName() + "\"";
+        if(value!=null)
+        {
+            query += " AND " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT.name() + "." + Filtertype.EQUALS.name() + "=\"" + value + "\"";
+        }
+        query += " ) ";
         return  query;
         //return "?q=" + URLEncoder.encode(index + "='" + value + "'", "UTF-8");
     }

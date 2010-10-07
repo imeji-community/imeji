@@ -197,10 +197,13 @@ public class EditMetadataBean
                     }
                     break;
                 case PUBLICATION:
-                    ((Publication)ct).setCitation(SearchAndExportHelper.getCitation((Publication)ct));
-                    if (((Publication)ct).getCitation() == null)
+                    if ("".equals(((Publication)ct).getUri().toString()))
                     {
                         metadata.remove(i);
+                    }
+                    else
+                    {
+                        ((Publication)ct).setCitation(SearchAndExportHelper.getCitation((Publication)ct));
                     }
                     break;
                 case DATE:

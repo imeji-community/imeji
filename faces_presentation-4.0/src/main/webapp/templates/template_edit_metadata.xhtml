@@ -49,7 +49,7 @@
 										</h:inputTextarea>
 												
 										<h:outputText value="&#160;" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='URI'}" />
-										<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.uri}" rendered="#{metadata.metadata.type.enumType=='URI'}">
+										<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.uri}" rendered="#{metadata.metadata.type.enumType=='URI'}" onfocus="this.select();">
 											<f:converter converterId="URIConverter" />
 											<rich:suggestionbox frequency="0.001" rendered="#{metadata.hasAutoComplete}" for="inputURI" var="results" suggestionAction="#{metadata.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{index})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 												<h:column>
@@ -58,20 +58,23 @@
 											</rich:suggestionbox>
 										</h:inputText>
 										
-										<h:outputText value="&#160;" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}" />
-										<h:outputLabel value="#{lbl.publication_uri}" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}"/>
-										<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.uri}" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}">
-											<f:converter converterId="URIConverter" />
-											<rich:suggestionbox frequency="0.001" rendered="#{metadata.hasAutoComplete}" for="inputPublicationURI" var="results" suggestionAction="#{metadata.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{index})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
-												<h:column>
-													<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
-												</h:column>
-											</rich:suggestionbox>
-										</h:inputText>
-										<h:outputLabel value="#{lbl.exportFormat}" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}"/>
-										<h:selectOneMenu value="#{metadata.metadata.type.exportFormat}"	styleClass="huge_select" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}">
-											<f:selectItems value="#{editMetadataBean.exportFormatMenu}" />
-										</h:selectOneMenu>
+										
+										
+										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}">
+											<h:outputText value="#{lbl.publication_url}" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}" />
+											<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.uri}" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}" onfocus="this.select();">
+												<f:converter converterId="URIConverter" />
+												<rich:suggestionbox frequency="0.001" rendered="#{metadata.hasAutoComplete}" for="inputPublicationURI" var="results" suggestionAction="#{metadata.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{index})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+													<h:column>
+														<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
+													</h:column>
+												</rich:suggestionbox>
+											</h:inputText>
+											<h:outputLabel value="#{lbl.export_formats}" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}"/>
+											<h:selectOneMenu value="#{metadata.metadata.type.exportFormat}"	styleClass="huge_select" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}">
+												<f:selectItems value="#{editMetadataBean.exportFormatMenu}" />
+											</h:selectOneMenu>
+										</h:panelGroup>
 								
 										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='DATE'}">
 											<h:outputText value="#{lbl.date}" styleClass="huge_label" />
@@ -79,9 +82,11 @@
 												<f:convertDateTime type="date" pattern="yyyy-MM-dd" />
 											</h:inputText>
 										</h:panelGroup>
-												
-										<h:outputText value="&#160;" styleClass="large_label" rendered="#{metadata.metadata.type.enumType=='NUMBER'}" />		
-										<h:inputText styleClass="large_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}" />
+										
+										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='NUMBER'}">
+											<h:outputText value="&#160;" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='NUMBER'}" />		
+											<h:inputText styleClass="huge_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}" />
+										</h:panelGroup>
 												
 										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='CONE_AUTHOR'}">
 											<h:outputLabel value="#{lbl.family_name}" styleClass="huge_label" />

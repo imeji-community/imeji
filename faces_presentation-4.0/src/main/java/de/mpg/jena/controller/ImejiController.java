@@ -669,7 +669,7 @@ public abstract class ImejiController {
         
         
         String completeQuery = "SELECT DISTINCT ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } " + sortQuery + limitString + " OFFSET " + offset;
-            
+           System.out.println(completeQuery);
         return completeQuery;
     }
 	

@@ -1,8 +1,10 @@
 package de.mpg.imeji.mdProfile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.event.ValueChangeEvent;
@@ -28,11 +30,11 @@ import de.mpg.jena.vo.Statement;
 
 public class MdProfileBean
 {
-	private MetadataProfile profile = null;
+    private MetadataProfile profile = null;
     private int statementPosition = 0;
     private TabType tab = TabType.PROFILE;
     private CollectionSessionBean collectionSession = null;
-	private int constraintPosition;
+    private int constraintPosition;
     private List<StatementWrapper> statements = null;
     private List<SelectItem> mdTypesMenu = null;
     private String id = null;
@@ -41,7 +43,7 @@ public class MdProfileBean
     private String template;
     private ProfileController pc;
 
-	public MdProfileBean()
+    public MdProfileBean()
     {
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -118,6 +120,11 @@ public class MdProfileBean
         }
     }
 
+    public String getEncodedId() throws UnsupportedEncodingException
+    {
+        return URLEncoder.encode(this.getProfile().getId().toString(), "UTF-8");
+    }
+
     protected String getNavigationString()
     {
         return "pretty:";
@@ -165,7 +172,7 @@ public class MdProfileBean
         collectionSession.setProfile(profile);
         return getNavigationString();
     }
-    
+
     public String removeVocabulary() throws URISyntaxException
     {
         Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
@@ -177,14 +184,14 @@ public class MdProfileBean
     public String addStatement()
     {
         Statement st = ImejiFactory.newStatement();
-        if (profile.getStatements() .size() == 0)
+        if (profile.getStatements().size() == 0)
             profile.getStatements().add(st);
         else
             ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
-//        if (getStatementPosition() == 0)
-//            profile.getStatements().add(st);
-//        else
-//            ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
+        // if (getStatementPosition() == 0)
+        // profile.getStatements().add(st);
+        // else
+        // ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
         collectionSession.setProfile(profile);
         return getNavigationString();
     }

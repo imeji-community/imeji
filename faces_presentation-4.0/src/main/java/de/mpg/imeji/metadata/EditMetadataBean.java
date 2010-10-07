@@ -301,7 +301,6 @@ public class EditMetadataBean
             {
                 metadata.add(getMdPosition() + 1, mb);
             }
-            System.err.println("prettyLink = " + prettyLink);
         }
         return prettyLink;
     }
@@ -322,7 +321,7 @@ public class EditMetadataBean
         {
             metadata.remove(getMdPosition());
         }
-        return this.prettyLink;
+        return prettyLink;
     }
 
     public List<MetadataBean> getMetadata()

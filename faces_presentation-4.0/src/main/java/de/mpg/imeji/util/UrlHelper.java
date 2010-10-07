@@ -1,6 +1,14 @@
 package de.mpg.imeji.util;
 
+import java.io.IOException;
+import java.net.URI;
+
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.GetMethod;
 
 public class UrlHelper
 {
@@ -15,6 +23,26 @@ public class UrlHelper
         if ("1".equals(str))
         {
             return true;
+        }
+        return false;
+    }
+
+    public static boolean isValidURI(URI uri)
+    {
+        try
+        {
+            HttpClient client = new HttpClient();
+            GetMethod method = new GetMethod(uri.toString());
+            client.executeMethod(method);
+            return true;
+        }
+        catch (HttpException e)
+        {
+            BeanHelper.error(uri + " is not a valid URL");
+        }
+        catch (IOException e)
+        {
+            BeanHelper.error(uri + " is not a valid URL");
         }
         return false;
     }

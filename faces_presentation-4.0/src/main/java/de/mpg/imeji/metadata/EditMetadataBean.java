@@ -1,5 +1,6 @@
 package de.mpg.imeji.metadata;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.ArrayList;
@@ -7,9 +8,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.richfaces.json.JSONCollection;
+import org.richfaces.json.JSONException;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
+import de.mpg.imeji.util.SearchAndExportHelper;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.util.ObjectHelper;
@@ -20,6 +30,7 @@ import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.complextypes.ConePerson;
+import de.mpg.jena.vo.complextypes.Date;
 import de.mpg.jena.vo.complextypes.Publication;
 import de.mpg.jena.vo.complextypes.Text;
 
@@ -36,7 +47,7 @@ public class EditMetadataBean
     private List<MetadataBean> metadata;
     private int mdPosition;
     private String prettyLink;
-    private boolean overwrite;
+    private boolean overwrite = true;
 
     public EditMetadataBean()
     {
@@ -146,7 +157,6 @@ public class EditMetadataBean
             {
                 for (Image im : images)
                 {
-                    formatPublication(im);
                     im = addNewImageMetadata(im, metadata, overwrite);
                 }
                 ic.update(images);
@@ -154,7 +164,6 @@ public class EditMetadataBean
             }
             else if ("pretty:editImage".equals(prettyLink) && image != null)
             {
-                formatPublication(image);
                 image = updateImageMetadata(image, metadata);
                 ic.update(image);
             }
@@ -164,18 +173,6 @@ public class EditMetadataBean
             return false;
         }
         return true;
-    }
-
-    public Image formatPublication(Image image)
-    {
-        for (ImageMetadata md : image.getMetadata())
-        {
-            if (md.getType().getEnumType().equals(ComplexTypes.PUBLICATION))
-            {
-                ((Publication)md.getType()).setCitation("Here comes soon citation citation");
-            }
-        }
-        return image;
     }
 
     public void cleanMetadata()
@@ -200,10 +197,18 @@ public class EditMetadataBean
                     }
                     break;
                 case PUBLICATION:
-                    if ("".equals(((Publication)ct).getUri().toString()))
+                    ((Publication)ct).setCitation(SearchAndExportHelper.getCitation((Publication)ct));
+                    if (((Publication)ct).getCitation() == null)
                     {
                         metadata.remove(i);
                     }
+                    break;
+                case DATE:
+                    if ("".equals(((Date)ct).getDate().toString()))
+                    {
+                        metadata.remove(i);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -213,7 +218,6 @@ public class EditMetadataBean
     public Image updateImageMetadata(Image im, List<MetadataBean> mdbs) throws Exception
     {
         im.getMetadata().clear();
-        // add new mdvalues (overwrite old)
         for (MetadataBean mdb : metadata)
             im.getMetadata().add(mdb.getMetadata());
         return im;
@@ -234,23 +238,30 @@ public class EditMetadataBean
             else
                 statementsMultiplicity.put(st.getName(), false);
         }
-        for (List<ImageMetadata> mds : newMdOfImageMappedByType.values())
+        for (List<ImageMetadata> mds : oldMdOfImageMappedByType.values())
         {
             if (mds.size() > 0)
             {
                 String mdType = mds.get(0).getName();
                 boolean multiple = statementsMultiplicity.get(mdType);
-                if (multiple && oldMdOfImageMappedByType.containsKey(mdType))
+                if (newMdOfImageMappedByType.containsKey(mdType))
                 {
-                    mds.addAll(oldMdOfImageMappedByType.get(mdType));
+                    if (multiple)
+                    {
+                        mds.addAll(oldMdOfImageMappedByType.get(mdType));
+                        newMdOfImageMappedByType.get(mdType).addAll(mds);
+                    }
+                    else
+                    {
+                        if (!overwrite)
+                        {
+                            newMdOfImageMappedByType.put(mdType, mds);
+                        }
+                    }
                 }
                 else
                 {
-                    if (oldMdOfImageMappedByType.containsKey(mdType) && !overwrite)
-                    {
-                        mds.clear();
-                        mds.addAll(oldMdOfImageMappedByType.get(mdType));
-                    }
+                    newMdOfImageMappedByType.put(mdType, mds);
                 }
             }
         }

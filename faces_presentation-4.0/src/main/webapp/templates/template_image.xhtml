@@ -188,9 +188,7 @@
 											<h:outputText value="#{md.type.uri}" rendered="#{md.type.enumType == 'URI'}" />
 										</h:outputLink>
 										
-										<h:outputLink  value="#{md.type.uri}" rendered="#{md.type.enumType == 'PUBLICATION'}" target="_blank">
-											<h:outputText value="#{md.type.citation}" rendered="#{md.type.enumType == 'PUBLICATION'}" />
-										</h:outputLink>
+										<h:outputText escape="false" value="#{md.type.citation}" rendered="#{md.type.enumType == 'PUBLICATION'}" />									  	
 									  	
 									  	<h:panelGroup rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
 											<h:panelGroup rendered="#{md.type.person.identifier == null}">

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
@@ -37,7 +39,7 @@ import de.mpg.jena.vo.User;
 public abstract class ImejiController {
 	
 	
-	
+	private static Logger logger = Logger.getLogger(ImejiController.class);
 	
 	protected User user;
 	
@@ -668,7 +670,6 @@ public abstract class ImejiController {
         
         String completeQuery = "SELECT DISTINCT ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } " + sortQuery + limitString + " OFFSET " + offset;
             
-        System.out.println("Created Query:\n"+completeQuery);
         return completeQuery;
     }
 	
@@ -1031,8 +1032,10 @@ public abstract class ImejiController {
 			c = new RDF2Bean(base).load(Counter.class, 0);
 		} catch (NotFoundException e) {
 			bean2RDF.save(c);
+			logger.warn("New Counter created", e);
 		}
 		int id = c.getCounter();
+		logger.info("Counter : Requested id : " + id);
 		c.setCounter(c.getCounter()+1);
 		bean2RDF.save(c);
 		base.commit();

@@ -162,14 +162,27 @@
 			    </h:form>
 			    
 				<script type="text/javascript">
-				jQuery("#formular:offset").submit(function() {
-					jQuery(this).val(jQuery(window).scrollTop());
-				});
-				jQuery(document).ready(function () {
-					jQuery(window).scrollTop(jQuery(".offset").val());
-					jQuery(window).scroll(function(){jQuery(".offset").val(jQuery(window).scrollTop())});
-				});
-				</script>			
+				    jQuery(document).ready(function (){
+				    	
+				        var strCook = document.cookie;
+				        
+				        if(strCook.indexOf("2!~")!=0){
+				            var intS = strCook.indexOf("2!~");
+				            var intE = strCook.indexOf("~!2");
+				            var strPos = strCook.substring(intS+3,intE);
+				            window.scrollTo(0,strPos);
+				         }
+				      }
+				      );
+				      
+				    window.onscroll = function (){
+				        var intYTocTree = window.pageYOffset;
+				        var cookieText = "yPos2=2!~" + intYTocTree + "~!2\n"
+				 	    document.cookie = cookieText;
+				      }	
+				      
+				     
+			    </script>			
 			</body>
 		</html>
 </f:view>

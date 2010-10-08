@@ -44,9 +44,10 @@
 		</ui:define>
 		<ui:define name="mainContent">
 		
-			<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
-				<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-				
+		<div id="advancedSearch">
+			<h:panelGroup layout="block" styleClass="full_area0" rendered="true" >
+
+				<h:panelGroup layout="block" styleClass="full_area0 fullItem"  >
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<h:panelGroup styleClass="full_area0 fullItemControls">
 							<h:outputLink value="">
@@ -67,11 +68,23 @@
 					</h:panelGroup>
 				</h:panelGroup>			
 				
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+				
 					<h:commandLink id="lnkAdvancedSearchClearAll" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" value="#{lbl.search_bt_ClearAll}" action="#{AdvancedSearchController.clearAllForms}"/>						
-					<h:commandLink id="lnkAdvancedSearchStartSearch" styleClass="free_area1_p8 activeButton" value="#{lbl.search_bt_Start}" action="#{AdvancedSearchController.startSearch}"/>
-				</h:panelGroup>
+					<h:commandButton id="lnkAdvancedSearchStartSearch" styleClass="free_area1_p8 activeButton advancedSearchButton" value="#{lbl.search_bt_Start}" action="#{AdvancedSearchController.startSearch}"/>
+		
 			</h:panelGroup>
+		</div>
+			<script type="text/javascript">
+			window.onkeypress = function advancedSearchOnEnter(event)
+			{
+				if (event.keyCode == 13)
+				{
+					if(jQuery('.advancedSearch'))
+						document.getElementById('formular:lnkAdvancedSearchStartSearch').click();
+				}
+			}
+			</script>
+			
 		</ui:define>
 
 	</ui:composition>

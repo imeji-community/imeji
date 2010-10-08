@@ -121,7 +121,7 @@
 											</h:panelGroup>
 											
 											
-											<h:inputText styleClass="xLarge_txtInput" id="mdContent" value="#{md.mdText}" />
+											<h:inputText styleClass="xLarge_txtInput" id="mdContent" value="#{md.mdText}" onkeypress="return quickSearchOnEnter(event)"/>
 										</span>
 										<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
 											<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_md}" action="#{collection.addMd}">

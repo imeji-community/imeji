@@ -75,12 +75,12 @@
 			</h:panelGroup>
 		</div>
 			<script type="text/javascript">
-			window.onkeypress = function advancedSearchOnEnter(event)
+			function quickSearchOnEnter(event)
 			{
 				if (event.keyCode == 13)
 				{
-					if(jQuery('.advancedSearch'))
-						document.getElementById('formular:lnkAdvancedSearchStartSearch').click();
+					document.getElementById('formular:lnkAdvancedSearchStartSearch').click();
+
 				}
 			}
 			</script>

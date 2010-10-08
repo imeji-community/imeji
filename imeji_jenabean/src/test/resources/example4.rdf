@@ -1,0 +1,18 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+<foaf:Person>
+  <foaf:name>Leigh Dodds</foaf:name>
+  <foaf:firstName>Leigh</foaf:firstName>
+  <foaf:surname>Dodds</foaf:surname>
+  <foaf:mbox_sha1sum>71b88e951cb5f07518d69e5bb49a45100fbc3ca5</foaf:mbox_sha1sum>
+  <foaf:knows rdf:resource="#dan"/>
+</foaf:Person>
+
+<foaf:Person rdf:ID="dan">
+  <foaf:name>Dan Brickley</foaf:name>
+  <foaf:mbox_sha1sum>241021fb0e6289f92815fc210f9e9137262c252e</foaf:mbox_sha1sum>
+  <rdfs:seeAlso 
+        rdf:resource="http://rdfweb.org/people/danbri/foaf.rdf"/>
+</foaf:Person>
+</rdf:RDF>

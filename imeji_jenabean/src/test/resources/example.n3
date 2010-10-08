@@ -1,0 +1,35 @@
+@prefix :         <http://thewebsemantic.com/> .
+@prefix gc:       <http://gc.com/> .
+
+:me a :thing ;
+	:name "hi there, I'm a thing" ;
+    :knows [
+      a :thing;
+      :name "anonymous thing1"    
+    ] ;
+    :knows [
+      a :thing;
+      :name "anonymous thing2"    
+    ] ;
+    :knows [
+      a :thing;
+      :name "anonymous thing3"    
+    ] 
+    .
+    
+    
+:FredBirth 
+        a gc:Birth ; 
+    gc:date "1 Jan 2000" ; 
+    gc:place "Timbuktoo" ; 
+    gc:hasRole 
+        [ a gc:Child ; 
+          gc:playedBy :Fred ] , 
+        [ a gc:BirthFather ; 
+                gc:playedBy :Dad ] , 
+        [ a gc:BirthMother ; 
+                gc:playedBy :Mum ] . 
+
+
+
+	

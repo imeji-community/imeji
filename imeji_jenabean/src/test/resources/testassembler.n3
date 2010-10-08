@@ -1,0 +1,31 @@
+@prefix rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:        <http://www.w3.org/2002/07/owl#> .
+
+@prefix ja:         <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix jr:         <http://jena.hpl.hp.com/2003/08/Assembler.ReificationMode#> .
+
+@prefix dc:         <http://purl.org/dc/elements/1.1/> .
+@prefix tws:        <http://www.thewebsemantic.com/> .
+
+
+tws:root a ja:MemoryModel ;
+    ja:content [ja:externalContent <file:NTNames.owl>,
+        <file:NTN-individuals.owl>]
+    .
+
+tws:test 
+   tws:package "test.jpa"; 
+   ja:ontModelSpec ja:OWL_MEM_MICRO_RULE_INF; 
+   ja:baseModel tws:root
+.
+
+
+tws:test2 
+   ja:ontModelSpec ja:OWL_MEM_MICRO_RULE_INF; 
+   ja:baseModel tws:root
+.
+
+
+
+

@@ -1,0 +1,263 @@
+<rdf:RDF xmlns="http://www.geonames.org/ontology#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"> 
+<Feature rdf:about="http://sws.geonames.org/2643743/"> 
+<name>London</name> 
+<alternateName xml:lang="es">Londres</alternateName> 
+<alternateName xml:lang="kw">Loundres</alternateName> 
+<alternateName xml:lang="ku">London</alternateName> 
+<alternateName xml:lang="eo">Londono</alternateName> 
+<alternateName xml:lang="en">London</alternateName> 
+<alternateName xml:lang="el">Λονδίνο</alternateName> 
+<alternateName xml:lang="qu">London</alternateName> 
+<alternateName xml:lang="ko">런던</alternateName> 
+<alternateName xml:lang="link">http://en.wikipedia.org/wiki/London</alternateName> 
+<alternateName xml:lang="ka">ლონდონი</alternateName> 
+<alternateName xml:lang="pms">Londra</alternateName> 
+<alternateName xml:lang="pt">Londres</alternateName> 
+<alternateName xml:lang="de">London</alternateName> 
+<alternateName xml:lang="pl">Londyn</alternateName> 
+<alternateName xml:lang="da">London</alternateName> 
+<alternateName xml:lang="vo">London</alternateName> 
+<alternateName xml:lang="ja">ロンドン</alternateName> 
+<alternateName xml:lang="cy">Llundain</alternateName> 
+<alternateName xml:lang="vi">Luân Đôn</alternateName> 
+<alternateName xml:lang="cs">Londýn</alternateName> 
+<alternateName xml:lang="it">Londra</alternateName> 
+<alternateName xml:lang="co">Londra</alternateName> 
+<alternateName xml:lang="is">Lundúnir</alternateName> 
+<alternateName xml:lang="iata">LON</alternateName> 
+<alternateName xml:lang="io">London</alternateName> 
+<alternateName xml:lang="os">Лондон</alternateName> 
+<alternateName xml:lang="ur">لندن</alternateName> 
+<alternateName xml:lang="ca">Londres</alternateName> 
+<alternateName xml:lang="id">London</alternateName> 
+<alternateName xml:lang="ia">London</alternateName> 
+<alternateName xml:lang="uk">Лондон</alternateName> 
+<alternateName xml:lang="oc">Londres</alternateName> 
+<alternateName xml:lang="nrm">Londres</alternateName> 
+<alternateName xml:lang="ug">لوندون</alternateName> 
+<alternateName xml:lang="hy">Լոնդոն</alternateName> 
+<alternateName xml:lang="bs">London</alternateName> 
+<alternateName xml:lang="br">Londrez</alternateName> 
+<alternateName xml:lang="hu">London</alternateName> 
+<alternateName xml:lang="bn">লন্ডন</alternateName> 
+<alternateName xml:lang="hr">London</alternateName> 
+<alternateName xml:lang="bg">Лондон</alternateName> 
+<alternateName xml:lang="ang">Lunden</alternateName> 
+<alternateName xml:lang="be">Лондан</alternateName> 
+<alternateName xml:lang="no">London</alternateName> 
+<alternateName xml:lang="tt">London</alternateName> 
+<alternateName xml:lang="hi">लंदन</alternateName> 
+<alternateName xml:lang="nn">London</alternateName> 
+<alternateName xml:lang="tr">Londra</alternateName> 
+<alternateName xml:lang="nl">Londen</alternateName> 
+<alternateName xml:lang="he">לונדון</alternateName> 
+<alternateName xml:lang="az">London</alternateName> 
+<alternateName xml:lang="th">ลอนดอน</alternateName> 
+<alternateName xml:lang="tg">Лондон</alternateName> 
+<alternateName xml:lang="zh">伦敦</alternateName> 
+<alternateName xml:lang="ar">لندن</alternateName> 
+<alternateName xml:lang="ta">இலண்டன்</alternateName> 
+<alternateName xml:lang="gu">લંડન</alternateName> 
+<alternateName xml:lang="an">Londres</alternateName> 
+<alternateName xml:lang="ast">Londres</alternateName> 
+<alternateName xml:lang="am">ለንደን</alternateName> 
+<alternateName xml:lang="ms">London</alternateName> 
+<alternateName xml:lang="frp">Londres</alternateName> 
+<alternateName xml:lang="nds">London</alternateName> 
+<alternateName xml:lang="mr">लंडन</alternateName> 
+<alternateName xml:lang="gl">Londres - London</alternateName> 
+<alternateName xml:lang="sv">London</alternateName> 
+<alternateName xml:lang="af">Londen</alternateName> 
+<alternateName xml:lang="sr">Лондон</alternateName> 
+<alternateName xml:lang="sco">Lunnon</alternateName> 
+<alternateName xml:lang="scn">Londra</alternateName> 
+<alternateName xml:lang="sq">Londra</alternateName> 
+<alternateName xml:lang="mk">Лондон</alternateName> 
+<alternateName xml:lang="gd">Lunnainn</alternateName> 
+<alternateName xml:lang="sl">London</alternateName> 
+<alternateName xml:lang="ga">Londain</alternateName> 
+<alternateName xml:lang="sk">Londýn</alternateName> 
+<alternateName xml:lang="sh">London</alternateName> 
+<alternateName xml:lang="fy">Londen</alternateName> 
+<alternateName xml:lang="yi">לאנדאן</alternateName> 
+<alternateName xml:lang="als">London</alternateName> 
+<alternateName xml:lang="fr">Londres</alternateName> 
+<alternateName xml:lang="lv">Londona</alternateName> 
+<alternateName xml:lang="lt">Londonas</alternateName> 
+<alternateName xml:lang="ru">Лондон</alternateName> 
+<alternateName xml:lang="ln">Londoni</alternateName> 
+<alternateName xml:lang="fi">Lontoo</alternateName> 
+<alternateName xml:lang="ro">Londra</alternateName> 
+<alternateName xml:lang="li">Londe</alternateName> 
+<alternateName xml:lang="rm">Londra</alternateName> 
+<alternateName xml:lang="arc">ܠܘܢܕܘܢ</alternateName> 
+<alternateName xml:lang="fa">لندن</alternateName> 
+<alternateName xml:lang="lb">London</alternateName> 
+<alternateName xml:lang="la">Londinium</alternateName> 
+<alternateName xml:lang="eu">Londres</alternateName> 
+<alternateName xml:lang="et">London</alternateName> 
+<featureClass rdf:resource="http://www.geonames.org/ontology#P"/> 
+<featureCode rdf:resource="http://www.geonames.org/ontology#P.PPLC"/> 
+<inCountry rdf:resource="http://www.geonames.org/countries/#GB"/> 
+<population>7421209</population> 
+<wgs84_pos:lat>51.5084152563931</wgs84_pos:lat> 
+<wgs84_pos:long>-0.125532746315002</wgs84_pos:long> 
+<nearbyFeatures rdf:resource="http://sws.geonames.org/2643743/nearby.rdf"/> 
+<locationMap rdf:resource="http://www.geonames.org/2643743/london.html"/> 
+</Feature> 
+<Feature rdf:about="http://sws.geonames.org/6058560/"> 
+<name>London</name> 
+<alternateName xml:lang="eo">Londono</alternateName> 
+<alternateName xml:lang="sr">Лондон</alternateName> 
+<alternateName xml:lang="zh">伦敦</alternateName> 
+<alternateName xml:lang="nl">London</alternateName> 
+<alternateName xml:lang="en">London</alternateName> 
+<alternateName xml:lang="fa">لندن</alternateName> 
+<alternateName xml:lang="pl">London</alternateName> 
+<alternateName xml:lang="he">לונדון</alternateName> 
+<alternateName xml:lang="fr">London</alternateName> 
+<alternateName xml:lang="link">http://en.wikipedia.org/wiki/London%2C_Ontario</alternateName> 
+<alternateName xml:lang="de">London</alternateName> 
+<alternateName xml:lang="et">London</alternateName> 
+<alternateName xml:lang="es">London</alternateName> 
+<alternateName xml:lang="ja">ロンドン</alternateName> 
+<alternateName xml:lang="fi">London</alternateName> 
+<alternateName xml:lang="pt">London</alternateName> 
+<featureClass rdf:resource="http://www.geonames.org/ontology#P"/> 
+<featureCode rdf:resource="http://www.geonames.org/ontology#P.PPL"/> 
+<inCountry rdf:resource="http://www.geonames.org/countries/#CA"/> 
+<population>346765</population> 
+<wgs84_pos:lat>42.983389283</wgs84_pos:lat> 
+<wgs84_pos:long>-81.233042387</wgs84_pos:long> 
+<nearbyFeatures rdf:resource="http://sws.geonames.org/6058560/nearby.rdf"/> 
+<locationMap rdf:resource="http://www.geonames.org/6058560/london.html"/> 
+</Feature> 
+<Feature rdf:about="http://sws.geonames.org/1006984/"> 
+<name>East London</name> 
+<alternateName xml:lang="nl">Oost-Londen</alternateName> 
+<alternateName xml:lang="en">East London</alternateName> 
+<alternateName xml:lang="id">East London</alternateName> 
+<alternateName xml:lang="pl">East London</alternateName> 
+<alternateName xml:lang="lt">Yst Londonas</alternateName> 
+<alternateName xml:lang="fr">East London</alternateName> 
+<alternateName xml:lang="link">http://en.wikipedia.org/wiki/East_London%2C_South_Africa</alternateName> 
+<alternateName xml:lang="af">Oos Londen</alternateName> 
+<alternateName xml:lang="fi">East London</alternateName> 
+<alternateName xml:lang="da">East London</alternateName> 
+<featureClass rdf:resource="http://www.geonames.org/ontology#P"/> 
+<featureCode rdf:resource="http://www.geonames.org/ontology#P.PPL"/> 
+<inCountry rdf:resource="http://www.geonames.org/countries/#ZA"/> 
+<wgs84_pos:lat>-33.0152850934643</wgs84_pos:lat> 
+<wgs84_pos:long>27.9116249084473</wgs84_pos:long> 
+<nearbyFeatures rdf:resource="http://sws.geonames.org/1006984/nearby.rdf"/> 
+<locationMap rdf:resource="http://www.geonames.org/1006984/east-london.html"/> 
+</Feature> 
+<Feature rdf:about="http://sws.geonames.org/2643744/"> 
+<name>City</name> 
+<alternateName xml:lang="nb">London</alternateName> 
+<alternateName xml:lang="en">City</alternateName> 
+<alternateName xml:lang="nn">London</alternateName> 
+<featureClass rdf:resource="http://www.geonames.org/ontology#A"/> 
+<featureCode rdf:resource="http://www.geonames.org/ontology#A.ADM2"/> 
+<inCountry rdf:resource="http://www.geonames.org/countries/#GB"/> 
+<wgs84_pos:lat>51.5133363996235</wgs84_pos:lat> 
+<wgs84_pos:long>-0.0890064239501953</wgs84_pos:long> 
+<childrenFeatures rdf:resource="http://sws.geonames.org/2643744/contains.rdf"/> 
+<locationMap rdf:resource="http://www.geonames.org/2643744/city-of-london.html"/> 
+</Feature> 
+<Feature rdf:about="http://sws.geonames.org/4298960/"> 
+<name>London</name> 
+<alternateName xml:lang="post">40747</alternateName> 
+<alternateName xml:lang="link">http://en.wikipedia.org/wiki/London%2C_Kentucky</alternateName> 
+<featureClass rdf:resource="http://www.geonames.org/ontology#P"/> 
+<featureCode rdf:resource="http://www.geonames.org/ontology#P.PPL"/> 
+<inCountry rdf:resource="http://www.geonames.org/countries/#US"/> 
+<population>7844</population> 
+<postalCode>40747</postalCode> 
+<wgs84_pos:lat>37.1289771</wgs84_pos:lat> 
+<wgs84_pos:long>-84.0832646</wgs84_pos:long> 
+<nearbyFeatures rdf:resource="http://sws.geonames.org/4298960/nearby.rdf"/> 
+<locationMap rdf:resource="http://www.geonames.org/4298960/london.html"/> 
+</Feature> 
+<Feature rdf:about="http://sws.geonames.org/6286786/"> 
+<name>The Tower of London</name> 
+<alternateName xml:lang="ja">ロンドン塔</alternateName> 
+<alternateName xml:lang="en">The Tower of London</alternateName> 
+<alternateName xml:lang="no">Tower of London</alternateName> 
+<alternateName xml:lang="nl">Tower of London</alternateName> 
+<alternateName xml:lang="cs">Tower</alternateName> 
+<alternateName xml:lang="he">מצודת לונדון</alternateName> 
+<alternateName xml:lang="fr">Tour de Londres</alternateName> 
+<alternateName xml:lang="ru">Тауэр</alternateName> 
+<alternateName xml:lang="zh">伦敦塔</alternateName> 
+<alternateName xml:lang="link">http://en.wikipedia.org/wiki/Tower_of_London</alternateName> 
+<alternateName xml:lang="fi">Lontoon Tower</alternateName> 
+<alternateName xml:lang="sv">Towern</alternateName> 
+<alternateName xml:lang="pt">Torre de Londres</alternateName> 
+<alternateName xml:lang="sr">Лондон тауер</alternateName> 
+<alternateName xml:lang="pl">Tower of London</alternateName> 
+<alternateName xml:lang="sl">Tower of London</alternateName> 
+<alternateName xml:lang="sk">Tower of London</alternateName> 
+<alternateName xml:lang="de">Tower of London</alternateName> 
+<alternateName xml:lang="hu">Londoni Tower</alternateName> 
+<alternateName xml:lang="es">Torre de Londres</alternateName> 
+<alternateName xml:lang="hr">London Tower</alternateName> 
+<alternateName xml:lang="da">Tower of London</alternateName> 
+<featureClass rdf:resource="http://www.geonames.org/ontology#S"/> 
+<featureCode rdf:resource="http://www.geonames.org/ontology#S.CSTL"/> 
+<inCountry rdf:resource="http://www.geonames.org/countries/#GB"/> 
+<wgs84_pos:lat>51.5082349601834</wgs84_pos:lat> 
+<wgs84_pos:long>-0.0763034820556641</wgs84_pos:long> 
+<nearbyFeatures rdf:resource="http://sws.geonames.org/6286786/nearby.rdf"/> 
+<locationMap rdf:resource="http://www.geonames.org/6286786/tower-of-london.html"/> 
+</Feature> 
+<Feature rdf:about="http://sws.geonames.org/1879967/"> 
+<name>London Reefs</name> 
+<featureClass rdf:resource="http://www.geonames.org/ontology#U"/> 
+<featureCode rdf:resource="http://www.geonames.org/ontology#U.RFSU"/> 
+<inCountry rdf:resource="http://www.geonames.org/countries/#  "/> 
+<wgs84_pos:lat>8.85</wgs84_pos:lat> 
+<wgs84_pos:long>112.5333333</wgs84_pos:long> 
+<nearbyFeatures rdf:resource="http://sws.geonames.org/1879967/nearby.rdf"/> 
+<locationMap rdf:resource="http://www.geonames.org/1879967/london-reefs.html"/> 
+</Feature> 
+<Feature rdf:about="http://sws.geonames.org/2648110/"> 
+<name>Greater London</name> 
+<featureClass rdf:resource="http://www.geonames.org/ontology#A"/> 
+<featureCode rdf:resource="http://www.geonames.org/ontology#A.ADM2"/> 
+<inCountry rdf:resource="http://www.geonames.org/countries/#GB"/> 
+<population>7504800</population> 
+<wgs84_pos:lat>51.5</wgs84_pos:lat> 
+<wgs84_pos:long>-0.1666667</wgs84_pos:long> 
+<childrenFeatures rdf:resource="http://sws.geonames.org/2648110/contains.rdf"/> 
+<locationMap rdf:resource="http://www.geonames.org/2648110/greater-london.html"/> 
+</Feature> 
+<Feature rdf:about="http://sws.geonames.org/2661811/"> 
+<name>London</name> 
+<featureClass rdf:resource="http://www.geonames.org/ontology#H"/> 
+<featureCode rdf:resource="http://www.geonames.org/ontology#H.STM"/> 
+<inCountry rdf:resource="http://www.geonames.org/countries/#CH"/> 
+<wgs84_pos:lat>46.1666667</wgs84_pos:lat> 
+<wgs84_pos:long>6.0166667</wgs84_pos:long> 
+<nearbyFeatures rdf:resource="http://sws.geonames.org/2661811/nearby.rdf"/> 
+<locationMap rdf:resource="http://www.geonames.org/2661811/london.html"/> 
+</Feature> 
+<Feature rdf:about="http://sws.geonames.org/3333156/"> 
+<name>London Borough of Islington</name> 
+<alternateName xml:lang="fr">Islington</alternateName> 
+<alternateName xml:lang="nl">Islington</alternateName> 
+<alternateName xml:lang="en">London Borough of Islington</alternateName> 
+<alternateName xml:lang="cs">Islington</alternateName> 
+<alternateName xml:lang="ro">Islington</alternateName> 
+<alternateName xml:lang="no">Islington</alternateName> 
+<alternateName xml:lang="de">London Borough of Islington</alternateName> 
+<featureClass rdf:resource="http://www.geonames.org/ontology#A"/> 
+<featureCode rdf:resource="http://www.geonames.org/ontology#A.ADM2"/> 
+<inCountry rdf:resource="http://www.geonames.org/countries/#GB"/> 
+<population>185500</population> 
+<wgs84_pos:lat>51.5333333</wgs84_pos:lat> 
+<wgs84_pos:long>-0.1333333</wgs84_pos:long> 
+<childrenFeatures rdf:resource="http://sws.geonames.org/3333156/contains.rdf"/> 
+<locationMap rdf:resource="http://www.geonames.org/3333156/london-borough-of-islington.html"/> 
+</Feature> 
+</rdf:RDF> 

@@ -1,0 +1,7 @@
+@prefix dc:      <http://purl.org/dc/elements/1.1/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix jr:      <http://jena.hpl.hp.com/2003/08/Assembler.ReificationMode#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix tws:     <http://www.thewebsemantic.com/> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .

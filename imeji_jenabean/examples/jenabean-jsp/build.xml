@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Nov 5, 2007 3:09:18 PM                                                        
+
+     jenabean    
+     library for saving and retrieving java beans from RDF.
+                   
+     Taylor Cowan                                                               
+     ====================================================================== -->
+<project name="blog example" default="war">
+
+	<property name="src" location="src" />
+	<property name="build" location="web/WEB-INF/classes" />
+	<property name="lib" location="web/WEB-INF/lib" />
+
+
+	<description>
+    	an example app that uses jenabean
+    </description>
+
+	<target name="compile" depends="init" description="example app">
+		<javac srcdir="${src}" destdir="${build}">
+			<classpath>
+				<fileset dir="web/WEB-INF/lib">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="lib">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}" />
+		<mkdir dir="${lib}" />
+		<copy  todir="${lib}">
+			<fileset dir="stripeslib"/>
+			<fileset dir="../jenalib"/>
+			<fileset dir="../dist"/>
+		</copy>
+		<copy todir="${build}" file="${src}/StripesResources.properties"/>
+	</target>
+
+	<target name="war" depends="compile">
+		<jar destfile="jenabean.war" basedir="web" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${lib}" />
+		<delete file="jenabean.war"/>
+	</target>	
+
+</project>

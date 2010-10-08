@@ -1,0 +1,17 @@
+@prefix :         <http://thewebsemantic.com/> .
+
+
+
+:FredBirth 
+        a :Birth ; 
+    :date "1 Jan 2000" ; 
+    :place "Timbuktoo" ; 
+    :hasRole 
+        [ a :Child ; 
+          :playedBy :Fred ] , 
+        [ a :BirthFather ; 
+                :playedBy :Dad ] , 
+        [ a :BirthMother ; 
+                :playedBy :Mum ] . 
+
+

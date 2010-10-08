@@ -41,7 +41,7 @@
 
 
 		<span class="xLarge_area0 quickSearchMenu">
-			<h:inputText id="quickSearchString" class="xLarge_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}"/>
+			<h:inputText id="quickSearchString" class="xLarge_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}" onkeypress="return quickSearchOnEnter(event)"/>
 			<h:panelGroup class="xLarge_area0">
 				<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}">
 					<f:selectItem itemLabel="#{lbl.images}" itemValue="images"/>
@@ -63,11 +63,10 @@
 		<!-- search Menu ends here -->
 	</div>
 				<script type="text/javascript">
-			window.onkeypress = function advancedSearchOnEnter(event)
+			function quickSearchOnEnter(event)
 			{
 				if (event.keyCode == 13)
 				{
-					if(jQuery('formular:Header:quickSearchString'))
 						document.getElementById('formular:Header:btnQuickSearchStart').click();
 					//search();
 				}

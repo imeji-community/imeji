@@ -122,7 +122,7 @@ public class MetadataBean
             for (LocalizedString str : statement.getLiteralConstraints())
                 literals.add(str.toString());
             for (String str : literals)
-                if (str.contains(suggest.toString()))
+                if (str.toLowerCase().contains(suggest.toString().toLowerCase()))
                     suggestions.add(str);
             String json = "[";
             for (String str : suggestions)

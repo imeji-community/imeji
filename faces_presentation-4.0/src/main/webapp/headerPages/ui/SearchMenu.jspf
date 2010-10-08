@@ -38,6 +38,8 @@
 		<!-- search Menu starts here -->
 	
 		<span class="std_imgArea quickSearchIcon">&#160;</span>
+
+
 		<span class="xLarge_area0 quickSearchMenu">
 			<h:inputText id="quickSearchString" class="xLarge_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}"/>
 			<h:panelGroup class="xLarge_area0">
@@ -48,7 +50,7 @@
 			</h:panelGroup>
 		</span>
 		<h:commandButton id="btnQuickSearchStart" styleClass="xSmall_txtBtn activeButton quickSearchBtn" value="Go" action="#{QuickSearchBean.search}"/>
-		
+
 		<h:outputLink id="lnkAdvancedSearch" styleClass="medium_area0_p3 advancedSearchMenu" value="#{Navigation.searchUrl}">
 	   		<h:outputText value="#{lbl.advanced_search}"/>
 	   	</h:outputLink>
@@ -60,4 +62,16 @@
 	
 		<!-- search Menu ends here -->
 	</div>
+				<script type="text/javascript">
+			window.onkeypress = function advancedSearchOnEnter(event)
+			{
+				if (event.keyCode == 13)
+				{
+					if(jQuery('formular:Header:quickSearchString'))
+						document.getElementById('formular:Header:btnQuickSearchStart').click();
+					//search();
+				}
+			}
+			</script>
+	
 </div>

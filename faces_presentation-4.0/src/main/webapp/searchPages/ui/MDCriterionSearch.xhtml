@@ -102,25 +102,26 @@
 										<b class="xLarge_area0_p8 endline labelLine clear">&#160;
 											<span class="noDisplay">: </span>
 										</b>
-										<span class="xHuge_area0 xTiny_marginLExcl endline">
-											<h:outputLabel value="#{lbl.adv_search_lblMetaData}" styleClass="quad_label"/>
-										 	<h:selectOneMenu styleClass="xLarge_select replace" id="selectMd" value="#{md.selectedMdName}" onchange="submit();" valueChangeListener="#{md.mdTypeChanged}">
-												<f:selectItems value="#{md.mdList}"/>
-											</h:selectOneMenu>
-											<h:panelGroup rendered="#{md.type=='NUMBER'}">
-												<h:selectOneMenu styleClass="small_select replace" id="selectNumberOp" value="#{md.numberOperator}">
-													<f:selectItems value="#{md.numberOpList}"/>
+										<span class="xHuge_area0 xTiny_marginLExcl ">
+											<h:panelGroup styleClass="huge_area0">
+												<h:outputLabel value="#{lbl.adv_search_lblMetaData}" styleClass="xLarge_label"/>
+											 	<h:selectOneMenu styleClass="xLarge_select replace" id="selectMd" value="#{md.selectedMdName}" onchange="submit();" valueChangeListener="#{md.mdTypeChanged}">
+													<f:selectItems value="#{md.mdList}"/>
 												</h:selectOneMenu>
-												<h:outputText value="Example: 3.14" rendered="#{md.type=='NUMBER'}"/>
+												<h:panelGroup rendered="#{md.type=='NUMBER'}">
+													<h:selectOneMenu styleClass="small_select replace" id="selectNumberOp" value="#{md.numberOperator}">
+														<f:selectItems value="#{md.numberOpList}"/>
+													</h:selectOneMenu>
+												</h:panelGroup>
+												<h:panelGroup rendered="#{md.type=='DATE'}">
+													<h:selectOneMenu styleClass="small_select replace" id="selectDateOp" value="#{md.dateOperator}">
+														<f:selectItems value="#{md.dateOpList}"/>
+													</h:selectOneMenu>
+												</h:panelGroup>
 											</h:panelGroup>
-											<h:panelGroup rendered="#{md.type=='DATE'}">
-												<h:selectOneMenu styleClass="small_select replace" id="selectDateOp" value="#{md.dateOperator}">
-													<f:selectItems value="#{md.dateOpList}"/>
-												</h:selectOneMenu>
-												<h:outputText value="Example: YYYY-MM-DD" rendered="#{md.type=='DATE'}"/>
-											</h:panelGroup>
-											
-											
+											<h:outputLabel value="Value " styleClass="xLarge_label" rendered="#{md.type!='NUMBER' and md.type !='DATE'}"/>
+											<h:outputLabel value="Example: 3.14" styleClass="xLarge_label" rendered="#{md.type=='NUMBER'}"/>
+											<h:outputLabel value="Example: YYYY-MM-DD" rendered="#{md.type=='DATE'}" styleClass="xLarge_label"/>
 											<h:inputText styleClass="xLarge_txtInput" id="mdContent" value="#{md.mdText}" onkeypress="return quickSearchOnEnter(event)"/>
 										</span>
 										<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">

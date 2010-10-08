@@ -7,14 +7,17 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.richfaces.json.JSONCollection;
 import org.richfaces.json.JSONException;
+
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
@@ -107,6 +110,16 @@ public class MdProfileBean
         }
     }
 
+    public String changeTemplate() throws Exception
+    {
+        MetadataProfile tp = pc.retrieve(URI.create(this.template));
+        profile.getStatements().clear();
+        profile.setStatements(tp.getStatements());
+        collectionSession.setProfile(profile);
+        setStatementWrappers(profile);
+        return getNavigationString();
+    }
+    
     public void templateListener(ValueChangeEvent event) throws Exception
     {
         if (event != null && event.getNewValue() != event.getOldValue())
@@ -122,7 +135,10 @@ public class MdProfileBean
 
     public String getEncodedId() throws UnsupportedEncodingException
     {
-        return URLEncoder.encode(this.getProfile().getId().toString(), "UTF-8");
+        MetadataProfile p = this.getProfile();
+        if(this.getProfile().getId() != null)
+            return URLEncoder.encode(this.getProfile().getId().toString(), "UTF-8");
+        else return "";
     }
 
     protected String getNavigationString()

@@ -42,10 +42,10 @@
 		<ui:define name="mainContent">
 			<div class="full_area0_p8">
 				<h:panelGroup rendered="#{SessionBean.locale.language == 'en'}">
-					<h:outputText  escape="false" value="#{StaticContentBean.helpContent}"></h:outputText>
+					<h:outputText  escape="false" value="#{StaticContent.helpContent}"></h:outputText>
 				</h:panelGroup>
 				<h:panelGroup rendered="#{SessionBean.locale.language == 'de'}">
-					<h:outputText escape="false" value="#{StaticContentBean.helpContent}"></h:outputText>
+					<h:outputText escape="false" value="#{StaticContent.helpContent}"></h:outputText>
 				</h:panelGroup>				
 			</div>
 		</ui:define>

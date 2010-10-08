@@ -37,7 +37,7 @@ public class ViewCollectionBean extends CollectionBean
         {
             User user = sessionBean.getUser();
             collectionController = new CollectionController(user);
-            String id = super.getId(); 
+            String id = super.getId();
             super.setCollection(collectionController.retrieve(id));
             super.setTab(TabType.COLLECTION);
             persons = new ArrayList<Person>();
@@ -52,13 +52,12 @@ public class ViewCollectionBean extends CollectionBean
                 persons.add(p);
             }
             this.getCollection().getMetadata().setPersons(persons);
-            
             ProfileController profileController = new ProfileController(sessionBean.getUser());
             this.getCollection().setProfile(profileController.retrieve(this.getCollection().getProfile().getId()));
         }
         catch (Exception e)
         {
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -92,7 +91,21 @@ public class ViewCollectionBean extends CollectionBean
         }
         return personString;
     }
+
+    public String getSmallDescription()
+    {
+        if (this.getCollection().getMetadata().getDescription().length() > 100)
+        {
+            return this.getCollection().getMetadata().getDescription().substring(0, 100) + "...";
+        }
+        else
+        {
+            return this.getCollection().getMetadata().getDescription();
+        }
+    }
     
-    
-    
+    public String getFormattedDescription()
+    {
+        return this.getCollection().getMetadata().getDescription().replaceAll("\n", "<br/>");
+    }
 }

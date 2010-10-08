@@ -122,7 +122,7 @@ public class SelectedBean extends ImagesBean
         if (sb.getSelected().size() == 0)
         {
             BeanHelper.info(sb.getMessage("success_delete"));
-            return "pretty:images";
+            return "pretty:";
         }
         else
         {

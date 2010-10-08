@@ -20,6 +20,7 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.SearchAndExportHelper;
+import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.util.ObjectHelper;
@@ -142,6 +143,7 @@ public class EditMetadataBean
         if (!edit())
         {
             BeanHelper.error("Error editing images");
+            return prettyLink;
         }
         BeanHelper.info("Images edited");
         return prettyLink;
@@ -155,17 +157,35 @@ public class EditMetadataBean
             cleanMetadata();
             if (images != null && images.size() > 0 && "pretty:selected".equals(prettyLink))
             {
-                for (Image im : images)
+                if (metadata.size() > 0)
                 {
-                    im = addNewImageMetadata(im, metadata, overwrite);
+                    for (Image im : images)
+                    {
+                        im = addNewImageMetadata(im, metadata, overwrite);
+                    }
+                    ic.update(images);
                 }
-                ic.update(images);
+                else
+                {
+                    this.addMetadata();
+                    BeanHelper.error("No Metadata to edit");
+                    return false;
+                }
                 this.images.clear();
             }
             else if ("pretty:editImage".equals(prettyLink) && image != null)
             {
-                image = updateImageMetadata(image, metadata);
-                ic.update(image);
+                if (metadata.size() > 0)
+                {
+                    image = updateImageMetadata(image, metadata);
+                    ic.update(image);
+                }
+                else
+                {
+                    this.addMetadata();
+                    BeanHelper.error("No Metadata to edit");
+                    return false;
+                }
             }
         }
         catch (Exception e)
@@ -208,6 +228,22 @@ public class EditMetadataBean
                     break;
                 case DATE:
                     if ("".equals(((Date)ct).getDate().toString()))
+                    {
+                        metadata.remove(i);
+                    }
+                    break;
+                case URI:
+                    URI uri = ((de.mpg.jena.vo.complextypes.URI)ct).getUri();
+                    if ("".equals(uri))
+                    {
+                        metadata.remove(i);
+                    }
+                    else if (uri.getScheme() == null)
+                    {
+                        uri = URI.create("http://" + uri);
+                        ((de.mpg.jena.vo.complextypes.URI)ct).setUri(uri);
+                    }
+                    else if (!UrlHelper.isValidURI(uri))
                     {
                         metadata.remove(i);
                     }

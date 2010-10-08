@@ -45,7 +45,7 @@
 	</ui:define>
 	
 	<ui:define name="contentMenu">
-		<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="">
+		<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="#{Navigation.applicationUrl}search/collections/result?q=#{ViewMdProfileBean.encodedId}">
 			<h:outputText value="#{lbl.profile_related_collection}"></h:outputText>
 		</h:outputLink>
 	</ui:define>			

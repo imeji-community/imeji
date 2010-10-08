@@ -36,13 +36,9 @@ public class UrlHelper
             client.executeMethod(method);
             return true;
         }
-        catch (HttpException e)
+        catch (Exception e)
         {
-            BeanHelper.error(uri + " is not a valid URL");
-        }
-        catch (IOException e)
-        {
-            BeanHelper.error(uri + " is not a valid URL");
+            BeanHelper.error("'" + uri + "' is not a valid URL");
         }
         return false;
     }

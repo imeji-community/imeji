@@ -17,7 +17,7 @@
 					<span class="seperator"></span>
 					
 					<div class="free_area0 itemBlockContent endline">
-						<h:panelGroup styleClass="full_area0_p8" rendered="#{empty FormularBean.profile.statements}">
+						<h:panelGroup styleClass="full_area0_p8" rendered="#{empty FormularBean.statements}">
 							<h:panelGroup styleClass="xLargr_area0">
 								<h:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.create_profile}" action="#{FormularBean.addStatement}"/>
 								<h:outputText value="#{lbl.profile_start_new}"></h:outputText>
@@ -26,13 +26,14 @@
 							<h:panelGroup styleClass="xLargr_area0">
 								<h:outputText value=" #{lbl.profile_use_template} "/>
 								<span class="xTiny_marginLExcl">
-									<h:selectOneMenu value="#{FormularBean.template}" styleClass="" onchange="submit(); window.location.href=window.location.pathname;" valueChangeListener="#{FormularBean.templateListener}">
+									<h:selectOneMenu value="#{FormularBean.template}" onchange="getElementById('formular:changeTemplate').click();" valueChangeListener="#{FormularBean.templateListener}">
 										<f:selectItems value="#{FormularBean.profilesMenu}"/>
 									</h:selectOneMenu>
+									<h:commandButton id="changeTemplate" action="#{FormularBean.changeTemplate}" style="visibility:hidden"/>
 								</span>
 							</h:panelGroup>
 						</h:panelGroup>
-									
+						
 						<a4j:repeat id="profile" var="statement" value="#{FormularBean.statements}" rowKeyVar="position">
 							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
 								<b class="xLarge_area0_p8 endline labelLine clear">

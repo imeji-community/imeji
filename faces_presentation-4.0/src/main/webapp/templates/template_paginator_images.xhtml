@@ -92,7 +92,6 @@
 					<h:outputLink value="#{Navigation.imagesUrl}" styleClass="free_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
 						<h:outputText value="#{lbl.images_all}"/>
 					</h:outputLink>
-					
 					<a4j:commandLink value="#{lbl.selected_clear}" action="#{SelectedBean.clearAll}" styleClass="free_area0 xSmall_marginLIncl" />
 					
 					<a4j:commandLink value="#{lbl.delete_selectedImages}" action="#{SelectedBean.deleteAll}" styleClass="free_area0 xHuge_marginLIncl" rendered="#{SelectedBean.sb.user != null}"/>

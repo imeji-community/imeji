@@ -17,6 +17,10 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SortCriterion;
+import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
@@ -63,10 +67,23 @@ public class CollectionImagesBean extends ImagesBean
         ImageController controller = new ImageController(sb.getUser());
         uri = ObjectHelper.getURI(CollectionImeji.class, id);
         Collection<Image> images = new ArrayList<Image>();
+        
         try
         {
-            totalNumberOfRecords = controller.searchImageInContainer(uri, null, null, -1, 0).size();
-            images = controller.searchImageInContainer(uri, null, null, limit, offset);
+            SortCriterion sortCriterion = new SortCriterion();
+            sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+            sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+            List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
+            try
+            {
+                scList = transformQuery(getQuery()); 
+            }
+            catch (Exception e)
+            {
+                BeanHelper.error("Invalid search query!");
+            }
+            totalNumberOfRecords = controller.searchAdvancedInContainer(uri, scList, null, -1, 0).size();
+            images = controller.searchAdvancedInContainer(uri, scList, null, limit, offset);
         }
         catch (Exception e)
         {

@@ -82,6 +82,7 @@
 	
 	<url-mapping id="collectionImages">
 		<pattern value="/images/collection/#{CollectionImagesBean.id}"/>
+		<query-param name="q">#{CollectionImagesBean.query}</query-param>
 		<view-id>/jsf/CollectionBrowse.xhtml</view-id>
 		<action>#{CollectionImagesBean.init}</action>
 	</url-mapping>

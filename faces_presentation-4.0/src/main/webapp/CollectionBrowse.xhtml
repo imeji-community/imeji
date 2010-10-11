@@ -42,7 +42,13 @@
 			<ui:define name="contentMenu">
 				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.id.path}" rendered="true">
 					<h:outputText value="#{lbl.collection_home}"/>
-				</h:outputLink>			
+				</h:outputLink>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{CollectionImagesBean.collection.id.path}?q=" rendered="true">
+					<h:outputText value="View images"/>
+				</h:outputLink>
 				
 				<h:outputText styleClass="seperator void" />
 				

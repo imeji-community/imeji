@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.log4j.Logger;
 import org.richfaces.json.JSONCollection;
 import org.richfaces.json.JSONException;
 
@@ -49,7 +50,8 @@ public class EditMetadataBean
     private int mdPosition;
     private String prettyLink;
     private boolean overwrite = true;
-
+    private static Logger logger = Logger.getLogger(EditMetadataBean.class);
+    
     public EditMetadataBean()
     {
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -190,6 +192,7 @@ public class EditMetadataBean
         }
         catch (Exception e)
         {
+            logger.error("Error Edit: " + e);
             return false;
         }
         return true;

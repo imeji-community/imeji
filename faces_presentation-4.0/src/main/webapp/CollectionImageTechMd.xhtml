@@ -77,7 +77,7 @@
 	
 	<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-			<h:outputLink value="#{Navigation.applicationUrl}images/collection/#{CollectionImageBean.collectionId}" styleClass="free_area1_p6">
+			<h:outputLink value="#{Navigation.applicationUrl}images/collection/#{CollectionImageBean.collectionId}?q=" styleClass="free_area1_p6">
 				<h:outputText value="#{lbl.collection_view_all_images}"/>
 			</h:outputLink>
 			<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">

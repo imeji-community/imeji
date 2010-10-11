@@ -172,6 +172,7 @@ public class ImageController extends ImejiController
         return Sparql.exec(getModel(), Image.class, query, Syntax.syntaxARQ);
     }
 
+    
     /*
      * public ImejiImage retrieve(Collection<URI> imgUris, ImejiUser user) { return RDF2Bean.load(ImejiImage.class,
      * imgUri); }

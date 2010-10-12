@@ -4,8 +4,8 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.UrlHelper;
-import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;

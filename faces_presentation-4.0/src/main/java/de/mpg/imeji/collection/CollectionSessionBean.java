@@ -7,7 +7,6 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.vo.list.CollectionListVO;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.MetadataProfile;
@@ -18,11 +17,11 @@ public class CollectionSessionBean
     // Collection active (image browsed are in that collection)
     private CollectionImeji active = null;
     private MetadataProfile profile = null;
-    private CollectionListVO collectionList = null;
+    //private CollectionListVO collectionList = null;
     private SessionBean sessionBean = null;
     private String selectedMenu = "SORTING";
     private String filter = "all";
-    private CollectionListVO collections = null;
+    //private CollectionListVO collections = null;
     private List<ComplexType> metadataTypes = null;
 
     public CollectionSessionBean()
@@ -49,15 +48,15 @@ public class CollectionSessionBean
         }
     }
     
-    public CollectionListVO getCollectionList()
-    {
-        return collectionList;
-    }
-
-    public void setCollectionList(CollectionListVO collectionList)
-    {
-        this.collectionList = collectionList;
-    }
+//    public CollectionListVO getCollectionList()
+//    {
+//        return collectionList;
+//    }
+//
+//    public void setCollectionList(CollectionListVO collectionList)
+//    {
+//        this.collectionList = collectionList;
+//    }
 
     /**
      * @return the active
@@ -101,21 +100,21 @@ public class CollectionSessionBean
         this.filter = filter;
     }
 
-    /**
-     * @return the collections
-     */
-    public CollectionListVO getCollections()
-    {
-        return collections;
-    }
-
-    /**
-     * @param collections the collections to set
-     */
-    public void setCollections(CollectionListVO collections)
-    {
-        this.collections = collections;
-    }
+//    /**
+//     * @return the collections
+//     */
+//    public CollectionListVO getCollections()
+//    {
+//        return collections;
+//    }
+//
+//    /**
+//     * @param collections the collections to set
+//     */
+//    public void setCollections(CollectionListVO collections)
+//    {
+//        this.collections = collections;
+//    }
 
     public void setMetadataTypes(List<ComplexType> metadataTypes)
     {

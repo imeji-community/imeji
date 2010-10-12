@@ -11,7 +11,7 @@ import org.richfaces.json.JSONCollection;
 import org.richfaces.json.JSONException;
 
 import thewebsemantic.LocalizedString;
-import de.mpg.imeji.vo.util.ImejiFactory;
+import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
@@ -19,6 +19,7 @@ import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.complextypes.ConePerson;
+import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class MetadataBean
 {
@@ -207,7 +208,7 @@ public class MetadataBean
 
     private void changeStatement(Statement s)
     {
-        ComplexType ct = ImejiFactory.newComplexType(s.getType());
+        ComplexType ct = ComplexTypeHelper.newComplexType(s.getType());
         if (s.getLabels() != null && s.getLabels().size() > 0)
         {
             ct.setLabel(s.getLabels().iterator().next().toString());

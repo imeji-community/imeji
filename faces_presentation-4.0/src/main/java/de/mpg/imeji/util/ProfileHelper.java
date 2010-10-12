@@ -11,7 +11,6 @@ import thewebsemantic.LocalizedString;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.MetadataBean;
 import de.mpg.imeji.metadata.MetadataBean.MdField;
-import de.mpg.imeji.vo.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType;
@@ -19,6 +18,7 @@ import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class ProfileHelper
 {
@@ -83,7 +83,7 @@ public class ProfileHelper
         {
             for (Statement s : mdp.getStatements())
             {
-                ComplexType ct = ImejiFactory.newComplexType(s.getType());
+                ComplexType ct = ComplexTypeHelper.newComplexType(s.getType());
                 if (s.getLabels().size() > 0)
                     ct.setLabel(s.getLabels().toArray()[0].toString());
                 cts.add(ct);

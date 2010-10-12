@@ -23,7 +23,6 @@ import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.SearchAndExportHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ImageController;
-import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.Image;
@@ -35,6 +34,7 @@ import de.mpg.jena.vo.complextypes.ConePerson;
 import de.mpg.jena.vo.complextypes.Date;
 import de.mpg.jena.vo.complextypes.Publication;
 import de.mpg.jena.vo.complextypes.Text;
+import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class EditMetadataBean
 {

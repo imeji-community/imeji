@@ -7,7 +7,7 @@ import java.util.List;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.beans.SuperContainerBean;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.vo.util.ImejiFactory;
+import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SortCriterion;

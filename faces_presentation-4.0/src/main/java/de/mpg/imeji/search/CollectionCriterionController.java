@@ -15,9 +15,9 @@ import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
-import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
+import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class CollectionCriterionController implements Serializable {
 	

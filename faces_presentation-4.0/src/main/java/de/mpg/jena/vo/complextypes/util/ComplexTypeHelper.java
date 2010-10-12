@@ -1,4 +1,4 @@
-package de.mpg.jena.util;
+package de.mpg.jena.vo.complextypes.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -9,6 +9,13 @@ import java.util.List;
 import de.mpg.imeji.metadata.MetadataBean.MdField;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
+import de.mpg.jena.vo.complextypes.ConePerson;
+import de.mpg.jena.vo.complextypes.Date;
+import de.mpg.jena.vo.complextypes.Geolocation;
+import de.mpg.jena.vo.complextypes.License;
+import de.mpg.jena.vo.complextypes.Number;
+import de.mpg.jena.vo.complextypes.Publication;
+import de.mpg.jena.vo.complextypes.Text;
 
 public class ComplexTypeHelper
 {
@@ -25,8 +32,36 @@ public class ComplexTypeHelper
         return null;
     }
 
+    public static ComplexType newComplexType(URI uri)
+    {
+        switch (ComplexTypeHelper.getComplexTypesEnum(uri))
+        {
+            case CONE_AUTHOR:
+                return new ConePerson();
+            case DATE:
+                return new Date();
+            case GEOLOCATION:
+                return new Geolocation();
+            case LICENCE:
+                new License();
+            case NUMBER:
+                return new Number(0);
+            case URI:
+                return new de.mpg.jena.vo.complextypes.URI();
+            case PUBLICATION:
+                return new Publication();
+            default:
+            {
+                Text t = new Text();
+                t.setText("");
+                return t;
+            }
+        }
+    }
+
     /**
      * Set a value of a field of a {@link ComplexType}
+     * 
      * @param md
      * @param field
      * @param value
@@ -40,6 +75,7 @@ public class ComplexTypeHelper
 
     /**
      * Set a value of a field of an object.
+     * 
      * @param o
      * @param field
      * @param value
@@ -79,7 +115,7 @@ public class ComplexTypeHelper
             if (isField(f, c) && (!hasFields(f) || includeComplexFields))
                 list.add(f);
             else if (isField(f, c) && hasFields(f))
-                list.addAll(getComplexTypeFields(f.getType(), includeComplexFields)); 
+                list.addAll(getComplexTypeFields(f.getType(), includeComplexFields));
         }
         return list;
     }

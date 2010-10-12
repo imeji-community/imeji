@@ -9,10 +9,10 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
-import de.mpg.jena.util.ComplexTypeHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
+import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class MDCriterion extends Criterion implements Serializable{
 	/**

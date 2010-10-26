@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.persistence.metamodel.PluralAttribute.CollectionType;
 
 import thewebsemantic.LocalizedString;
+import thewebsemantic.NotBoundException;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
@@ -144,7 +145,14 @@ public class FacetsBean
         String query = generateQuery(id, st, hasValue, value, coll);
         List<List<SearchCriterion>> scList = ImagesBean.transformQuery(query);
         ImageController ic = new ImageController(sb.getUser());
-        return ic.searchAdvancedInContainer(coll.getId(), scList, null, -1, 0).size();
+        try
+        {
+            return ic.searchAdvancedInContainer(coll.getId(), scList, null, -1, 0).size();
+        }
+        catch (NotBoundException e)
+        {
+            return 0;
+        }
     }
 
     public List<FacetGroupBean> getGroups()

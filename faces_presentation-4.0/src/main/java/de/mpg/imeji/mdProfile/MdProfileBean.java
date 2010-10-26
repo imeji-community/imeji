@@ -25,6 +25,7 @@ import de.mpg.imeji.collection.CollectionBean.TabType;
 import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.ComplexType;
@@ -184,7 +185,7 @@ public class MdProfileBean
     public String addVocabulary() throws URISyntaxException
     {
         Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
-        st.setVocabulary(new URI("http://example.com"));
+        st.setVocabulary(new URI(ProfileHelper.getDefaultVocabulary(st.getType())));
         collectionSession.setProfile(profile);
         return getNavigationString();
     }

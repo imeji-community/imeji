@@ -26,6 +26,7 @@ public class MetadataBean
     private ImageMetadata metadata;
     private String selectedStatementName;
     private String prettyLink;
+    private boolean multiple = false;
 
     // private List<MdField> fields;
     // private MdField field;
@@ -222,6 +223,10 @@ public class MetadataBean
         }
         this.metadata = new ImageMetadata(s.getName(), ct);
         this.selectedStatementName = s.getName();
+        if (!s.getMaxOccurs().equals("1"))
+            multiple = true;
+        else
+            multiple = false;
     }
 
     public void setMetadata(ImageMetadata metadata)
@@ -242,6 +247,16 @@ public class MetadataBean
     public String getSelectedStatementName()
     {
         return selectedStatementName;
+    }
+
+    public boolean isMultiple()
+    {
+        return multiple;
+    }
+
+    public void setMultiple(boolean multiple)
+    {
+        this.multiple = multiple;
     }
     /*
      * public List<MdField> getFields(ImageMetadata md) { List<Field> l; try { l =

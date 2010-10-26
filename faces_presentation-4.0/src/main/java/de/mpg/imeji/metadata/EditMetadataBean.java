@@ -51,7 +51,7 @@ public class EditMetadataBean
     private String prettyLink;
     private boolean overwrite = true;
     private static Logger logger = Logger.getLogger(EditMetadataBean.class);
-    
+
     public EditMetadataBean()
     {
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -175,7 +175,7 @@ public class EditMetadataBean
                 }
                 this.images.clear();
             }
-            else if ("pretty:editImage".equals(prettyLink) && image != null)
+            else if (images == null && image != null)
             {
                 if (metadata.size() > 0)
                 {
@@ -280,35 +280,36 @@ public class EditMetadataBean
             else
                 statementsMultiplicity.put(st.getName(), false);
         }
-        for (List<ImageMetadata> mds : oldMdOfImageMappedByType.values())
+        for (List<ImageMetadata> oldMds : oldMdOfImageMappedByType.values())
         {
-            if (mds.size() > 0)
+            if (oldMds.size() > 0)
             {
-                String mdType = mds.get(0).getName();
+                String mdType = oldMds.get(0).getName();
                 boolean multiple = statementsMultiplicity.get(mdType);
                 if (newMdOfImageMappedByType.containsKey(mdType))
                 {
                     if (multiple)
                     {
-                        mds.addAll(oldMdOfImageMappedByType.get(mdType));
-                        newMdOfImageMappedByType.get(mdType).addAll(mds);
+                        newMdOfImageMappedByType.get(mdType).addAll(oldMds);
                     }
                     else
                     {
                         if (!overwrite)
                         {
-                            newMdOfImageMappedByType.put(mdType, mds);
+                            newMdOfImageMappedByType.put(mdType, oldMds);
                         }
                     }
                 }
                 else
                 {
-                    newMdOfImageMappedByType.put(mdType, mds);
+                    newMdOfImageMappedByType.put(mdType, oldMds);
                 }
             }
         }
         if (!newMdOfImageMappedByType.isEmpty())
+        {
             im.getMetadata().clear();
+        }
         for (List<ImageMetadata> mds : newMdOfImageMappedByType.values())
         {
             im.getMetadata().addAll(mds);
@@ -352,6 +353,13 @@ public class EditMetadataBean
             }
             else
             {
+                for (Statement st : profile.getStatements())
+                {
+                    if (st.getName().equals(metadata.get(getMdPosition()).getSelectedStatementName()))
+                    {
+                        mb = new MetadataBean(profile, st);
+                    }
+                }
                 metadata.add(getMdPosition() + 1, mb);
             }
         }

@@ -42,8 +42,8 @@ public class ComplexTypeHelper
                 return new Date();
             case GEOLOCATION:
                 return new Geolocation();
-            case LICENCE:
-                new License();
+            case LICENSE:
+                return new License();
             case NUMBER:
                 return new Number(0);
             case URI:

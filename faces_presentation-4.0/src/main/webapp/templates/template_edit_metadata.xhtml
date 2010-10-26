@@ -59,7 +59,6 @@
 										</h:inputText>
 										
 										
-										
 										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}">
 											<h:outputText value="#{lbl.publication_url}" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}" />
 											<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.uri}" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}" onfocus="this.select();">
@@ -80,6 +79,12 @@
 											<h:outputText value="#{lbl.date}" styleClass="huge_label" />
 											<h:inputText styleClass="huge_txtInput" value="#{metadata.metadata.type.date}">
 												<f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+											</h:inputText>
+										</h:panelGroup>
+										
+										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='LICENSE'}">
+											<h:outputText value="#{lbl.license}" styleClass="huge_label" />
+											<h:inputText styleClass="huge_txtInput" value="#{metadata.metadata.type.license}">
 											</h:inputText>
 										</h:panelGroup>
 										

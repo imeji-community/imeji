@@ -16,15 +16,16 @@ public class License extends ComplexType implements Serializable
 {
     private SimpleDateFormat date;
     private String dateFormat = "dd/mm/yyyy";
+    private String license = null;
 
     public License()
     {
-        super(ComplexTypes.LICENCE);
+        super(ComplexTypes.LICENSE);
     }
 
     public License(SimpleDateFormat date)
     {
-        super(ComplexTypes.LICENCE);
+        super(ComplexTypes.LICENSE);
         this.date = date;
         date.applyPattern(dateFormat);
     }
@@ -32,5 +33,15 @@ public class License extends ComplexType implements Serializable
     public String getDateString()
     {
         return date.format(date);
+    }
+    
+    public String getLicense()
+    {
+        return license;
+    }
+
+    public void setLicense(String str)
+    {
+        license = str;
     }
 }

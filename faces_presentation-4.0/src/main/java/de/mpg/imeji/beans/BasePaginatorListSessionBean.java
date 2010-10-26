@@ -32,15 +32,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.faces.model.SelectItem;
 import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import org.apache.log4j.Logger;
 
+import thewebsemantic.NotBoundException;
+
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.ImejiController;
 import de.mpg.jena.vo.Image;
 
 /**
@@ -107,18 +113,19 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      * BaseListRetrieverRequestBean.
      */
     private int totalNumberOfElements = 0;
+    private boolean corruptedList = false;
 
     /**
      * Initializes a new BasePaginatorListSessionBean
      */
     public BasePaginatorListSessionBean()
     {
-//        elementsPerPageSelectItems = new ArrayList<SelectItem>();
-//        elementsPerPageSelectItems.add(new SelectItem("10", "10"));
-//        elementsPerPageSelectItems.add(new SelectItem("25", "25")); // --default: 25
-//        elementsPerPageSelectItems.add(new SelectItem("50", "50"));
-//        elementsPerPageSelectItems.add(new SelectItem("100", "100"));
-//        elementsPerPageSelectItems.add(new SelectItem("250", "250"));
+        // elementsPerPageSelectItems = new ArrayList<SelectItem>();
+        // elementsPerPageSelectItems.add(new SelectItem("10", "10"));
+        // elementsPerPageSelectItems.add(new SelectItem("25", "25")); // --default: 25
+        // elementsPerPageSelectItems.add(new SelectItem("50", "50"));
+        // elementsPerPageSelectItems.add(new SelectItem("100", "100"));
+        // elementsPerPageSelectItems.add(new SelectItem("250", "250"));
         paginatorPageList = new ArrayList<PaginatorPage>();
         currentPartList = new ArrayList<ListElementType>();
     }
@@ -145,34 +152,82 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public void update()
     {
-        if (elementsPerPage == 0)
+        try
         {
-            setElementsPerPage(24);
-        }
-        if (currentPageNumber == 0)
-        {
-            setCurrentPageNumber(1);
-        }
-        // logger.info("No List update: "+noListUpdate);
-        previousPartList = new ArrayList<ListElementType>();
-        previousPartList.addAll(currentPartList);
-        currentPartList = retrieveList(getOffset(), elementsPerPage);
-        totalNumberOfElements = getTotalNumberOfRecords();
-        // reset current page and reload list if list is shorter than the given current page number allows
-        if (getTotalNumberOfElements() <= getOffset())
-        {
-            setCurrentPageNumber(((getTotalNumberOfElements() - 1) / getElementsPerPage()) + 1);
+            if (elementsPerPage == 0)
+            {
+                setElementsPerPage(24);
+            }
+            if (currentPageNumber == 0)
+            {
+                setCurrentPageNumber(1);
+            }
+            // logger.info("No List update: "+noListUpdate);
+            previousPartList = new ArrayList<ListElementType>();
+            previousPartList.addAll(currentPartList);
             currentPartList = retrieveList(getOffset(), elementsPerPage);
             totalNumberOfElements = getTotalNumberOfRecords();
+            // reset current page and reload list if list is shorter than the given current page number allows
+            if (getTotalNumberOfElements() <= getOffset())
+            {
+                setCurrentPageNumber(((getTotalNumberOfElements() - 1) / getElementsPerPage()) + 1);
+                currentPartList = retrieveList(getOffset(), elementsPerPage);
+                totalNumberOfElements = getTotalNumberOfRecords();
+            }
+            paginatorPageList.clear();
+            for (int i = 0; i < ((getTotalNumberOfElements() - 1) / elementsPerPage) + 1; i++)
+            {
+                paginatorPageList.add(new PaginatorPage(i + 1));
+            }
+            corruptedList = false;
         }
-        paginatorPageList.clear();
-        for (int i = 0; i < ((getTotalNumberOfElements() - 1) / elementsPerPage) + 1; i++)
+        catch (NotBoundException e)
         {
-            paginatorPageList.add(new PaginatorPage(i + 1));
+            corruptedList = true;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
         }
     }
 
-   
+    public String initCorruptData()
+    {
+        boolean clean = false;
+        while (!clean)
+        {
+            try
+            {
+                retrieveList(getOffset(), elementsPerPage);
+                clean = true;
+            }
+            catch (NotBoundException e)
+            {
+                Pattern pattern = Pattern.compile("http://imeji.mpdl.mpg.de/image/metadata/[0-9]+");
+                Matcher matcher = pattern.matcher(e.getMessage());
+                while (matcher.find())
+                {
+                    SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+                    ImejiController.deleteObjects(matcher.group());
+                }
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        return getNavigationString();
+    }
+
+    public boolean isCorruptedList()
+    {
+        return corruptedList;
+    }
+
+    public void setCorruptedList(boolean corruptedList)
+    {
+        this.corruptedList = corruptedList;
+    }
 
     public String getListElementTypeId(ListElementType el)
     {
@@ -510,7 +565,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
          */
         public String goToPage()
         {
-            setCurrentPageNumber(getNumber()); 
+            setCurrentPageNumber(getNumber());
             return getNavigationString();
         }
     }
@@ -522,7 +577,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public String goToNextPage()
     {
-        currentPageNumber += 1; 
+        currentPageNumber += 1;
         return getNavigationString();
     }
 
@@ -566,7 +621,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public void setCurrentPageNumber(int currentPageNumber)
     {
-        this.currentPageNumber = currentPageNumber; 
+        this.currentPageNumber = currentPageNumber;
     }
 
     /**
@@ -647,8 +702,9 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      *            paramter allows, a smaller list can be returned.
      * @param additionalFilters Additional filters that have to be included when retrieving the list.
      * @return
+     * @throws Exception
      */
-    public abstract List<ListElementType> retrieveList(int offset, int limit);
+    public abstract List<ListElementType> retrieveList(int offset, int limit) throws Exception;
 
     /**
      * Must return the total size of the retrieved list without limit and offset parameters. E.g. for a search the whole

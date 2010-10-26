@@ -9,6 +9,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import thewebsemantic.JenaHelper;
+import thewebsemantic.NotBoundException;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
@@ -39,20 +40,18 @@ public abstract class CollectionBean
     private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
     private boolean selected;
-
+    boolean corruptedList = false;
 
     public CollectionBean(CollectionImeji coll)
     {
         this.collection = coll;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-
     }
 
     public CollectionBean()
     {
         collection = new CollectionImeji();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-
     }
 
     public boolean valid()
@@ -186,7 +185,7 @@ public abstract class CollectionBean
      */
     public CollectionImeji getCollection()
     {
-        return collection; 
+        return collection;
     }
 
     /**
@@ -228,28 +227,28 @@ public abstract class CollectionBean
      */
     public boolean getSelected()
     {
-    	if(sessionBean.getSelectedCollections().contains(collection.getId()))
-    		selected = true;
-    	else
-    		selected = false;
+        if (sessionBean.getSelectedCollections().contains(collection.getId()))
+            selected = true;
+        else
+            selected = false;
         return selected;
-    }    
-    
+    }
+
     /**
      * @param selected the selected to set
      */
     public void setSelected(boolean selected)
     {
-    	if(selected)
-    	{	
-    		if(!(sessionBean.getSelectedCollections().contains(collection.getId())))
-    			sessionBean.getSelectedCollections().add(collection.getId());
-    	}
-    	else
-    		sessionBean.getSelectedCollections().remove(collection.getId());
+        if (selected)
+        {
+            if (!(sessionBean.getSelectedCollections().contains(collection.getId())))
+                sessionBean.getSelectedCollections().add(collection.getId());
+        }
+        else
+            sessionBean.getSelectedCollections().remove(collection.getId());
         this.selected = selected;
     }
-    
+
     public int getSize()
     {
         return collection.getImages().size();
@@ -259,7 +258,8 @@ public abstract class CollectionBean
     {
         if (sessionBean.getUser() != null)
         {
-            return collection.getProperties().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
+            return collection.getProperties().getCreatedBy().equals(
+                    ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
         }
         else
             return false;
@@ -271,36 +271,43 @@ public abstract class CollectionBean
         cc.release(collection);
         return "pretty:";
     }
-    
+
     public List<ImageBean> getImages() throws Exception
     {
-        ImageController ic = new ImageController(sessionBean.getUser()); 
-        
-        Collection<Image> imgList = ic.searchImageInContainer(collection.getId(), null, null, 5, 0);
-        return ImejiFactory.imageListToBeanList(imgList); 
+        ImageController ic = new ImageController(sessionBean.getUser());
+        try
+        {
+            Collection<Image> imgList = ic.searchImageInContainer(collection.getId(), null, null, 5, 0);
+            return ImejiFactory.imageListToBeanList(imgList);
+        }
+        catch (NotBoundException e)
+        {
+            corruptedList = true;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
-    
-    /*
-	public String select() {
-		if (!selected) {
-			selectedBean.getSelected().remove(collection.getId());
-		} else {
-			selectedBean.getSelected().add(this.collection.getId());
-		}
-		return "";
-	}
-    */
-    
-    /*
-	public void selectedChanged(ValueChangeEvent event) {
-		if (event.getNewValue().toString().equals("true") && !selectedBean.getSelected().contains(collection.getId())) {
-			setSelected(true);
-			select();
 
-		} else if (event.getNewValue().toString().equals("false")&& selectedBean.getSelected().contains(collection.getId())) {
-			setSelected(false);
-			select();
-		}
-	}
-    */
+    public boolean isCorruptedList()
+    {
+        return corruptedList;
+    }
+
+    public void setCorruptedList(boolean corruptedList)
+    {
+        this.corruptedList = corruptedList;
+    }
+    /*
+     * public String select() { if (!selected) { selectedBean.getSelected().remove(collection.getId()); } else {
+     * selectedBean.getSelected().add(this.collection.getId()); } return ""; }
+     */
+    /*
+     * public void selectedChanged(ValueChangeEvent event) { if (event.getNewValue().toString().equals("true") &&
+     * !selectedBean.getSelected().contains(collection.getId())) { setSelected(true); select(); } else if
+     * (event.getNewValue().toString().equals("false")&& selectedBean.getSelected().contains(collection.getId())) {
+     * setSelected(false); select(); } }
+     */
 }

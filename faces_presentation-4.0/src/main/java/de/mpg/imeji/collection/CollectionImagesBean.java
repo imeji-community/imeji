@@ -62,33 +62,25 @@ public class CollectionImagesBean extends ImagesBean
     }
 
     @Override
-    public List<ImageBean> retrieveList(int offset, int limit)
+    public List<ImageBean> retrieveList(int offset, int limit) throws Exception
     {
         ImageController controller = new ImageController(sb.getUser());
         uri = ObjectHelper.getURI(CollectionImeji.class, id);
         Collection<Image> images = new ArrayList<Image>();
-        
+        SortCriterion sortCriterion = new SortCriterion();
+        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
         try
         {
-            SortCriterion sortCriterion = new SortCriterion();
-            sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
-            sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-            List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
-            try
-            {
-                scList = transformQuery(getQuery()); 
-            }
-            catch (Exception e)
-            {
-                BeanHelper.error("Invalid search query!");
-            }
-            totalNumberOfRecords = controller.searchAdvancedInContainer(uri, scList, null, -1, 0).size();
-            images = controller.searchAdvancedInContainer(uri, scList, null, limit, offset);
+            scList = transformQuery(getQuery());
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            BeanHelper.error("Invalid search query!");
         }
+        totalNumberOfRecords = controller.searchAdvancedInContainer(uri, scList, null, -1, 0).size();
+        images = controller.searchAdvancedInContainer(uri, scList, null, limit, offset);
         return ImejiFactory.imageListToBeanList(images);
     }
 

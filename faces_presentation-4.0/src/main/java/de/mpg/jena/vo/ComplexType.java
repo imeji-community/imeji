@@ -20,7 +20,7 @@ public abstract class ComplexType
     public enum ComplexTypes
     {
         CONE_AUTHOR(ConePerson.class, "Person"), TEXT(Text.class, "Text"), NUMBER(Number.class, "Number"), DATE(
-                Date.class, "Date"), LICENCE(License.class, "Licence"), GEOLOCATION(Geolocation.class, "Geolocation"), URI(
+                Date.class, "Date"), LICENSE(License.class, "Licence"), GEOLOCATION(Geolocation.class, "Geolocation"), URI(
                 URI.class, "URI"), PUBLICATION(Publication.class, "PubMan Publication");
         private Class<? extends ComplexType> type;
         private String label;

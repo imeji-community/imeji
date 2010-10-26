@@ -37,11 +37,10 @@ public class ObjectHelper
         }
         catch (UnsupportedEncodingException e)
         {
-           
         }
         return URI.create(namespace + objectType + "/" + encodedId);
     }
-    
+
     public static String getId(URI uri)
     {
         return uri.toString().substring(uri.toString().lastIndexOf("/"), uri.toString().length());

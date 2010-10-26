@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.faces.event.ValueChangeEvent;
+
+import thewebsemantic.NotBoundException;
+
 import com.ocpsoft.pretty.PrettyContext;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
@@ -51,7 +54,7 @@ public class SelectedBean extends ImagesBean
     }
 
     @Override
-    public List<ImageBean> retrieveList(int offset, int limit)
+    public List<ImageBean> retrieveList(int offset, int limit) throws Exception
     {
         ImageController controller = new ImageController(sb.getUser());
         images = new ArrayList<Image>();
@@ -63,15 +66,8 @@ public class SelectedBean extends ImagesBean
         }
         if (uris.size() != 0)
         {
-            try
-            {
-                totalNumberOfRecords = controller.search(uris, null, -1, offset).size();
-                images = controller.search(uris, null, limit, offset);
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e);
-            }
+            totalNumberOfRecords = controller.search(uris, null, -1, offset).size();
+            images = controller.search(uris, null, limit, offset);
         }
         if (UrlHelper.getParameterBoolean("reset") || editMetadataBean.getImages().size() == 0)
         {
@@ -99,8 +95,6 @@ public class SelectedBean extends ImagesBean
         else
             return "pretty:";
     }
-
-
 
     public String deleteAll() throws Exception
     {
@@ -185,9 +179,6 @@ public class SelectedBean extends ImagesBean
     {
         this.sb = sb;
     }
-
-
-
 
     public void setEscidocUserHandle(String escidocUserHandle)
     {

@@ -60,10 +60,6 @@
 							<groupId>de.mpg.escidoc.services</groupId>
 							<artifactId>citationmanager</artifactId>
 						</ejbModule>
-						<ejbModule>
-							<groupId>de.mpg.escidoc.services</groupId>
-							<artifactId>search</artifactId>
-						</ejbModule>
 						<jarModule>
                             <groupId>org.dspace</groupId>
                             <artifactId>cql-java</artifactId>
@@ -315,13 +311,6 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-	    	<groupId>de.mpg.escidoc.services</groupId>
-	    	<artifactId>search</artifactId>
-	    	<version>1.0.41-SNAPSHOT</version>
-	    	<scope>compile</scope>
-	    	<type>ejb</type>
-	    </dependency>
 	    <dependency>
             <groupId>org.dspace</groupId>
             <artifactId>cql-java</artifactId>
@@ -351,7 +340,7 @@
 	    <dependency>
 	    	<groupId>de.mpg.escidoc.services</groupId>
 	    	<artifactId>exportmanager</artifactId>
-	    	<version>1.0.41-SNAPSHOT</version>
+	    	<version>1.0.49-SNAPSHOT</version>
 	    	<scope>compile</scope>
 	    	<type>ejb</type>
 	    </dependency>
@@ -449,14 +438,14 @@
 		<dependency>
 			<groupId>de.mpg.escidoc.services</groupId>
 			<artifactId>structuredexportmanager</artifactId>
-			<version>1.0.44-SNAPSHOT</version>
+			<version>1.0.52-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>de.mpg.escidoc.services</groupId>
 			<artifactId>citationmanager</artifactId>
-			<version>1.0.47-SNAPSHOT</version>
+			<version>1.0.54-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>ejb</type>
 		</dependency>

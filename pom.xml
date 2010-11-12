@@ -417,17 +417,17 @@
 					-Dcom.sun.xml.namespace.QName.useCompatibleSerialVersionUID=1.0 -Dpubman.properties.file=./pubman.properties
 				</cargo.jvmargs>
 				<!-- this path is used as root for all jboss installations -->
-				<cargo.install.dir>${user.home}/jboss</cargo.install.dir>
+				<!--  <cargo.install.dir>${user.home}/jboss</cargo.install.dir>-->
 				<!-- fetch the jboss from this url -->
 				<cargo.jboss.url>http://heanet.dl.sourceforge.net/sourceforge/jboss/jboss-4.2.2.GA.zip</cargo.jboss.url>
 				<!-- local intallation of the jboss for integration-tests -->
-				<cargo.jboss.install.dir>//${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir>
+				<!-- <cargo.jboss.install.dir>//${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir>-->
 
 				<!-- deploy the pubman ear to this server and port via jmx /goal: jboss:deploy -->
 				<jboss.deploy.host>localhost</jboss.deploy.host>
 				<jboss.deploy.port>8080</jboss.deploy.port>
 				<!-- the ears are deployed to this server using jboss:harddeploy -->
-				<jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir>
+				<!-- <jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir>-->
 
 				<!-- Flag to disable the GUI-entry points for UC_PM_SR_03 do advanced search -->
 				<escidoc.pubman_presentation.disable.advanced_search>false</escidoc.pubman_presentation.disable.advanced_search>

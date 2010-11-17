@@ -146,32 +146,35 @@
 								<h:outputText styleClass="large_area0_p8" value="#{lbl.album_owner}" />
 					      	</th>
 					      	<th class="small_area0">
-								<!-- Currently disabled bacause not possible to sort by this criterium at the moment -->
+								<!-- Currently disabled because not possible to sort by this criterium at the moment -->
 					     		<span class="seperator"></span>
 								<h:outputText styleClass="small_area0_p8" value="#{lbl.number_pictures}" />
 					      	</th>
 					      	<th class="large_area0">
-								<!-- Currently disabled bacause not possible to sort by this criterium at the moment -->
+								<!-- Currently disabled because not possible to sort by this criterium at the moment -->
 								<span class="seperator"></span>
 								<h:outputText styleClass="large_area0_p8" value="#{lbl.description}" />
 						  	</th>
 					      	<th class="medium_area0">
 								<span class="seperator"></span>
-								<h:commandLink id="lnkLmdSort" styleClass="free_area0_p8" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'PROPERTIES_LAST_MODIFICATION_DATE'}">
+								<h:commandLink id="lnkLmdSort" styleClass="medium_area0_p8" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'PROPERTIES_LAST_MODIFICATION_DATE'}">
 									<f:setPropertyActionListener value="PROPERTIES_LAST_MODIFICATION_DATE" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
 									<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 									<h:outputText value="#{lbl.last_modified}" />
 								</h:commandLink>
-								<h:commandLink id="lnkLmdSortAsc" styleClass="free_area0_p8 ascSort"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_LAST_MODIFICATION_DATE'}">
+								<h:commandLink id="lnkLmdSortAsc" styleClass="medium_area0_p8 ascSort"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_LAST_MODIFICATION_DATE'}">
 									<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 									<h:outputText value="#{lbl.last_modified}" />
 								</h:commandLink>
-								<h:commandLink id="lnkLmdSortDesc" styleClass="free_area0_p8 desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_LAST_MODIFICATION_DATE'}">
+								<h:commandLink id="lnkLmdSortDesc" styleClass="medium_area0_p8 desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_LAST_MODIFICATION_DATE'}">
 									<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 									<h:outputText value="#{lbl.last_modified}" />
 								</h:commandLink>
-								
 						  	</th>
+						  	<th class="medium_area0">
+								<span class="seperator"></span>
+								<h:outputText styleClass="medium_area0_p8" value="#{lbl.link_to_images}" />
+			  				</th>
 						</tr>
 					</thead>
 					<tbody style="text-align: left; vertical-align:top;">
@@ -266,6 +269,14 @@
 							      		<span class="medium_area0_p8">
 							      			<h:outputText value="#{container.collection.properties.lastModificationDate}"/>&#160;
 							      		</span>
+							      	</td>
+							      	<td class="free_area0 endline">
+							      		<span class="seperator"></span>
+							      		<span class="medium_area0_p8">
+							      			<h:outputLink value="#{Navigation.applicationUrl}images#{container.collection.id.path}">
+							      				<h:outputText value="#{lbl.to_images}"/>
+							      			</h:outputLink>
+							       		</span>
 							      	</td>
 							    </tr>
 							</h:panelGroup>

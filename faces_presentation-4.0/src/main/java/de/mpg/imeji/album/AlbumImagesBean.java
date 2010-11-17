@@ -77,11 +77,11 @@ public class AlbumImagesBean extends ImagesBean
         return ImejiFactory.imageListToBeanList(images);
     }
 
-    public String getImageBaseUrl()
+    
+    public String getBackUrl() 
     {
-        return navigation.getAlbumUrl() + "/" + this.id;
-    }
-
+		return navigation.getImagesUrl() + "/album" + "/" + this.id;
+	}
     public String getId()
     {
         return id;

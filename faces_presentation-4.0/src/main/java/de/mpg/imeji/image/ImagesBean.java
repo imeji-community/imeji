@@ -100,6 +100,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     {
         return navigation.getApplicationUri();
     }
+    
+    public String getBackUrl() 
+    {
+		return navigation.getImagesUrl();
+	}
 
     public String initFacets()
     {

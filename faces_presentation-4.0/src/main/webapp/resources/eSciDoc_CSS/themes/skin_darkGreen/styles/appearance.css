@@ -99,13 +99,13 @@ FORM BG			#FFFFFF
 */
 /*GENERAL*/
 	body {
-		background-color: #303030;
+		background-color: #434343;
 		color: #BBBBBB;
 		line-height: 145%;
 	}
 	
 	body .wrapper, body .footer {
-		background-color: #303030;
+		background-color: #393939;
 		border-right: 1px dotted #6CAD2F;
 		border-left: 1px dotted #6CAD2F;
 	}
@@ -162,7 +162,7 @@ FORM BG			#FFFFFF
 	}
 	
 	.itemList .seperator {
-		background-color: #303030;
+		background-color: #393939;
 	}
 	
 	.fullItem .seperator, .tiledList .seperator {
@@ -170,7 +170,7 @@ FORM BG			#FFFFFF
 	}
 	
 	.metaMenu .seperator, .contentMenu .seperator, .pageBrowser .seperator {
-		border-color: #303030;
+		border-color: #393939;
 	}
 	
 	.fullItem .fullItemControls .seperator {
@@ -188,8 +188,8 @@ FORM BG			#FFFFFF
 	}
 	
 	.contentMenu .void {
-		border-color: #303030;
-		background-color: #303030;
+		border-color: #393939;
+		background-color: #393939;
 	}
 
 /*HEADER
@@ -213,7 +213,7 @@ FORM BG			#FFFFFF
 */
 	/*COLORING FOR ALL MENU INPUTS AND LABELS*/
 	.metaMenu input, .metaMenu button, .metaMenu a, .quickSearchMenu a, .advancedSearchMenu input, .advancedSearchMenu a, .organisationSearchMenu input, .organisationSearchMenu a, .mainMenu input, .mainMenu a, .contentMenu input, .contentMenu a {
-		background-color: #303030;
+		background-color: #393939;
 		color: #6CAD2F;
 	}
 
@@ -276,13 +276,13 @@ FORM BG			#FFFFFF
 /*EXT. PAGINATOR*/
 
 	.paginatorFallbackGoBtn {
-		background-color: #303030;
+		background-color: #393939;
 		color: #6CAD2F;
 	}
 
 	/*PAGE BROWSER*/
 	.pageBrowser input, .pageBrowser button, .pageBrowser a {
-		background-color: #303030;
+		background-color: #393939;
 		color: #6CAD2F;
 	}
 	
@@ -349,7 +349,7 @@ FORM BG			#FFFFFF
 		/*SELECT MENU*/
 	
 	.itemList .checkboxSelectButton {
-		background-color: #303030;
+		background-color: #393939;
 		cursor: pointer;
 	}
 	
@@ -362,7 +362,7 @@ FORM BG			#FFFFFF
 	}
 
 	.selectMenu, .selectMenu input {
-		background-color: #303030;
+		background-color: #393939;
 	}
 
 	.selectMenu span {
@@ -375,11 +375,11 @@ FORM BG			#FFFFFF
 	}
 	
 	.statusArea .ascSort, .statusArea .desSort, th .ascSort, th .desSort {
-		background-color: #303030;
+		background-color: #393939;
 	}
 	
 	.listBackground .ascSort, .listBackground .descSort {
-		background-color: #303030;
+		background-color: #393939;
 	}
 	
 	/*LIST ITEM*/
@@ -395,7 +395,7 @@ FORM BG			#FFFFFF
 	}
 	
 	.preListHeader, .fullItem, .tiledList, .listBackground, .listBackground .seperator {
-		background-color: #303030;
+		background-color: #393939;
 	}
 
 	.tiledList .metaDataSection, .itemTile .tileIconArea {
@@ -469,7 +469,7 @@ FORM BG			#FFFFFF
 	}
 	
 	.affHover {
-		background-color: #303030;
+		background-color: #393939;
 	}
 	
 	.add, .remove {
@@ -514,16 +514,16 @@ FORM BG			#FFFFFF
 	.cancelButton {
 		float: left;
 		color: #6CAD2F;
-		background-color: #303030;
-		border-top-color: #303030;
+		background-color: #393939;
+		border-top-color: #393939;
 		border-right-color: #6CAD2F;
 		border-bottom-color: #6CAD2F;
-		border-left-color: #303030;
+		border-left-color: #393939;
 	}
 	
 	.cancelButton:hover {
 		color: #FFFFFF;
-		background-color: #303030;
+		background-color: #393939;
 		border-color: #FFFFFF;
 	}
 	
@@ -536,7 +536,7 @@ FORM BG			#FFFFFF
 	
 	.activeButton:hover {
 		color: #FFFFFF !important;
-		background-color: #303030 !important;
+		background-color: #393939 !important;
 		border-color: #FFFFFF;
 	}
 	
@@ -545,7 +545,7 @@ FORM BG			#FFFFFF
 	.ac_results {
 		border-style: solid;
 		border-color: #6CAD2F;
-		background-color: #303030;
+		background-color: #393939;
 	}
 	
 	.ac_results li {
@@ -574,7 +574,7 @@ FORM BG			#FFFFFF
 	.messageArea {
 		border-width: 1px !important;
 		border-style: solid;
-		background-color: #303030;
+		background-color: #393939;
 	}
 	
 	.infoMessageArea {

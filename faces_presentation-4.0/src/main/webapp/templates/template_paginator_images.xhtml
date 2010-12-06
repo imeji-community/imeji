@@ -115,73 +115,115 @@
 			<ul class="free_area0 fullBrowse">
 				<!-- Images -->
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
-
 					<li class="large_area0 itemTile">
 						<h:panelGroup id="imgFrame" styleClass="large_area1_p2 tileIconArea free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
 							<span> 
 								<!-- Image with link to the details view --> 
 								<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
-									<h:graphicImage alt="#{item.image.filename}" id="picThumbResolutionBrowse" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}" />
-								</h:outputLink> 
-								<!-- End : Image with link to the details view --> 
+									<h:graphicImage ismap="true" usemap="#map" alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}">
+									</h:graphicImage>
+								</h:outputLink>
+								<h:outputLink id="cmdPicEdit" value="#">
+									<rich:componentControl event="onclick" for="menuEdit" operation="show">
+                 					</rich:componentControl>								
+									<h:graphicImage alt="Edit" id="picEdit" url="http://docs.gimp.org/en/images/dialogs/stock-edit-16.png"/>
+								</h:outputLink>
+							<!-- End : Image with link to the details view --> 
 							</span>
-							<rich:toolTip id="imgToolTip" for="imgFrame" showDelay="500">
+							 <rich:toolTip id="imgToolTip" for="imgFrame" showDelay="500">
 								<ui:include src="../picturesPages/ui/MetadataPopup.xhtml" />
 							</rich:toolTip>
 						</h:panelGroup> 
-						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->
-
-					<!-- Album Selected --> 
-					<h:panelGroup styleClass="tiny_area1">
-						<span class="free_area0"> 
-						<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectedChanged}">
-							<a4j:support event="onchange" reRender="preListHeader" />
-						</h:selectBooleanCheckbox> </span>
-					</h:panelGroup> 
-					<span class="medium_area0"> 
-						<span class="free_area0_p3 tileControlIconArea"> <h:outputLabel value="#{item.image.filename}" style="white-space:nowrap;" /><br />
-					<h:commandLink id="lnkAddToActiveAlbumInactive1"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
-						<h:outputText value="#{lbl.add_to_album}" />
-					</h:commandLink> </span> </span> <!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
-					<ui:remove>
-						<!-- View Album Page -->
-						<h:panelGroup styleClass="large_area0"
-							rendered="#{AlbumSession.current.size != '0' and SessionBean.currentPage == 'ALBUM'}">
-							<!-- view details -->
-							<!--  <h:panelGroup rendered="true" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
-									<h:outputLink id="lnkAlbumDetails" value="#{Navigation.albumUrl}/#{AlbumSession.current.latestVersion.objectId}/details/#{item.item.objid}">
-										<h:outputText value="View"/>
-									</h:outputLink>
-								</h:panelGroup>-->
-							<!-- remove item from the view album -->
-							<h:panelGroup
-								styleClass="free_area0 xTiny_marginLExcl facesControlIconArea"
-								rendered="#{AlbumSession.current.state == 'PENDING'}">
-								<h:outputLink id="lnkRemoveFromAlbum"
-									value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.version.objectId}/REMOVEPICTURE/#{item.item.objid}/back">
-									<h:outputText value="#{lbl.delete}" />
+							
+						<rich:contextMenu attached="true" id="menuEdit" submitMode="ajax" styleClass="free_area0 itemList listBackground">
+							<rich:menuItem ajaxSingle="true">
+								<h:outputText value="#{lbl.edit_metadata}"/>
+							</rich:menuItem>
+							<rich:menuGroup value="#{lbl.edit_only_this_image}">
+								<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
+									<h:outputText value="#{lbl.choose_metadata}"/>
+									<a4j:repeat id="imageMetadata" var="metadata" value="#{item.editMetadataBean.statementMenu}">
+										<rich:menuItem ajaxSingle="true" styleclass="">
+											<h:outputLink value="#" onclick="Richfaces.showModalPanel('pnlEdit');">
+												<h:outputText value="#{metadata.label}"/>
+											</h:outputLink>
+										</rich:menuItem>
+									</a4j:repeat>
+								</rich:menuItem>
+							</rich:menuGroup>
+						</rich:contextMenu>
+						
+						<rich:modalPanel id="pnlEdit" autosized="true" keepVisualState="true" overlapEmbedObjects="true">
+							<f:facet name="header">
+           						 <h:outputText value="Edit #{item.image.filename}"/>
+      						</f:facet>
+      						<f:facet name="controls">
+           		 				<h:outputLink onclick="Richfaces.hideModalPanel('pnlEdit');" href="#">
+				           			<h:outputText value="close"/>
 								</h:outputLink>
-							</h:panelGroup>
+     						</f:facet>
+				            <ui:include src="../picturesPages/ui/EditMetadataPanel.xhtml" />
+					    </rich:modalPanel>
+						
+						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
+				
+						<!-- Album Selected --> 
+						<h:panelGroup styleClass="tiny_area1">
+							<span class="free_area0"> 
+							<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectedChanged}">
+								<a4j:support event="onchange" reRender="preListHeader" />
+							</h:selectBooleanCheckbox> </span>
+						</h:panelGroup> 
+						
+						<span class="medium_area0"> 
+							<span class="free_area0_p3 tileControlIconArea"> 
+								<h:outputLabel value="#{item.image.filename}" style="white-space:nowrap;" /><br />
+								<h:commandLink id="lnkAddToActiveAlbumInactive1"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
+									<h:outputText value="#{lbl.add_to_album}" />
+								</h:commandLink> 
+							</span> 
+						</span> 
+						
+						<!-- Edit Input Images -->
+						<h:panelGroup styleClass="large_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
+							<h:outputText value="test"/>
+							<h:inputText value=""/>
 						</h:panelGroup>
-						<!-- End View Album Page -->
-					</ui:remove></li>
+											
+						<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
+						<ui:remove>
+							<!-- View Album Page -->
+							<h:panelGroup styleClass="large_area0"
+								rendered="#{AlbumSession.current.size != '0' and SessionBean.currentPage == 'ALBUM'}">
+								<!-- view details -->
+								<!--  <h:panelGroup rendered="true" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
+										<h:outputLink id="lnkAlbumDetails" value="#{Navigation.albumUrl}/#{AlbumSession.current.latestVersion.objectId}/details/#{item.item.objid}">
+											<h:outputText value="View"/>
+										</h:outputLink>
+									</h:panelGroup>-->
+								<!-- remove item from the view album -->
+								<h:panelGroup styleClass="free_area0 xTiny_marginLExcl facesControlIconArea" rendered="#{AlbumSession.current.state == 'PENDING'}">
+									<h:outputLink id="lnkRemoveFromAlbum" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.version.objectId}/REMOVEPICTURE/#{item.item.objid}/back">
+										<h:outputText value="#{lbl.delete}" />
+									</h:outputLink>
+								</h:panelGroup>
+							</h:panelGroup>
+							<!-- End View Album Page -->
+						</ui:remove>
+					</li>
 				</a4j:repeat>
 				<!-- End images -->
 				
 			</ul>
-			<h:panelGroup styleClass="fullItem"
-				rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
+			<h:panelGroup styleClass="fullItem"	rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
 				<ui:insert name="subImagesContent"></ui:insert>
 			</h:panelGroup>
 		</h:panelGroup>
 
 
-		<h:panelGroup layout="block" styleClass="full_area0 preListHeader"
-			rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">
-			<h:panelGroup id="facetGroup" layout="block"
-				styleClass="full_area1_p8">
-				<a4j:repeat var="group"
-					value="#{paginatorListSessionBean.facets.groups}" rowKeyVar="index">
+		<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">
+			<h:panelGroup id="facetGroup" layout="block" styleClass="full_area1_p8">
+				<a4j:repeat var="group" value="#{paginatorListSessionBean.facets.groups}" rowKeyVar="index">
 					<h:panelGroup layout="block" styleClass="full_area0"
 						rendered="#{!empty group.list}">
 						<h:outputText value="#{group.label}" />
@@ -196,16 +238,13 @@
 						<br />
 					</h:panelGroup>
 				</a4j:repeat>
-				<h:panelGroup layout="block" styleClass="full_area0"
-					rendered="#{empty paginatorListSessionBean.facets.groups}">
+				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{empty paginatorListSessionBean.facets.groups}">
 					<a4j:status id="loadFacets" startText="#{lbl.facets_loading}..." />
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
-		<h:selectBooleanCheckbox id="facetInitialized" value="false"
-			style="visibility:hidden">
-			<a4j:support event="onchange" reRender="facetGroup"
-				action="#{paginatorListSessionBean.initFacets}" status="loadFacets" />
+		<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
+			<a4j:support event="onchange" reRender="facetGroup" action="#{paginatorListSessionBean.initFacets}" status="loadFacets" />
 		</h:selectBooleanCheckbox>
 	</ui:define>
 </ui:composition>

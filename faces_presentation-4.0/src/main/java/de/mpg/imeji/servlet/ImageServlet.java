@@ -86,18 +86,14 @@ public class ImageServlet extends HttpServlet
         String imageUrl = req.getParameter("imageUrl");
         try
         {
-        if (imageUrl==null || !imageUrl.startsWith(ServiceLocator.getFrameworkUrl()))
+        if (imageUrl==null)
         {
-           
-                resp.sendError(404, "File not found");
+                resp.sendError(404, "URL null");
         }
         else
         {
-           
-            
-                String frameworkUrl = ServiceLocator.getFrameworkUrl(); 
-                
-               
+        		String frameworkUrl = ServiceLocator.getFrameworkUrl(); 
+        		
                 byte[] buffer = null;
                 GetMethod method = new GetMethod(imageUrl);
                 method.setFollowRedirects(false);
@@ -108,6 +104,8 @@ public class ImageServlet extends HttpServlet
                    
                 }
                 method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
+                method.addRequestHeader("Cache-Control", "public");
+                method.setRequestHeader("Connection", "close"); 
                 // Execute the method with HttpClient.
                 HttpClient client = new HttpClient();
                 ProxyHelper.setProxy(client, frameworkUrl);

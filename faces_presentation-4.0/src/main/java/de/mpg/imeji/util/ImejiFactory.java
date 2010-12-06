@@ -101,7 +101,7 @@ public class ImejiFactory
         List<ImageBean> beanList = new ArrayList<ImageBean>();
         for (Image img : imgList)
         {
-            beanList.add(new ImageBean(img));
+        	beanList.add(new ImageBean(img));
         }
         return beanList;
     }

@@ -93,7 +93,13 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         {
             editMetadataBean = new EditMetadataBean((List<Image>)images);
         }
-        return ImejiFactory.imageListToBeanList(images);
+        editMetadataBean = new EditMetadataBean((List<Image>)images);
+        List<ImageBean> imbList = ImejiFactory.imageListToBeanList(images);
+        for (ImageBean imb :imbList) 
+        {
+			imb.initEditMetadataBean();
+		}
+        return imbList;
     }
 
     public String getImageBaseUrl()

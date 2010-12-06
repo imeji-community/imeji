@@ -80,6 +80,18 @@ public class LoginBean
         }
         return "pretty:";
     }
+    
+    public boolean loginWithEscidocAccount()
+    {
+    	return false;
+    }
+    
+    public boolean loginWithImejiAccount()
+    {
+    	return false;
+    }
+    
+    
 
     public String logout()
     {

@@ -73,9 +73,10 @@ public class EditMetadataBean
         if (!profiles.isEmpty())
         {
             profile = profiles.values().iterator().next();
-            // statementMenu = new ArrayList<SelectItem>();
             for (Statement s : profile.getStatements())
+            {
                 statementMenu.add(new SelectItem(s.getName(), s.getName()));
+            }
             addMetadata();
         }
     }

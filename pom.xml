@@ -438,7 +438,7 @@
 				<escidoc.pubman_presentation.disable.view_revisions>false</escidoc.pubman_presentation.disable.view_revisions>
 
 				<!-- URL of this Faces instance -->
-				<escidoc.faces.instance.url>http://localhost:8080/faces/</escidoc.faces.instance.url>
+				<escidoc.faces.instance.url>http://localhost/faces/</escidoc.faces.instance.url>
 				<escidoc.faces.item.pattern>viewItemFullPage.jsp?itemId=$1</escidoc.faces.item.pattern>
 				<escidoc.faces.component.pattern>/viewComponentPage.jsp?componentId=$1</escidoc.faces.component.pattern>
 				
@@ -446,7 +446,7 @@
 				
 				<!-- URL of the FIZ framework instance -->
 				<!--<escidoc.framework_access.framework.url>http://134.76.28.244:8080</escidoc.framework_access.framework.url>-->
-				<escidoc.framework_access.framework.url>http://dev-coreservice.mpdl.mpg.de:80</escidoc.framework_access.framework.url>
+				<escidoc.framework_access.framework.url>http://dev-coreservice.mpdl.mpg.de:8080</escidoc.framework_access.framework.url>
                 
                          				
 				

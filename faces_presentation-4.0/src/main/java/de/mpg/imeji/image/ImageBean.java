@@ -79,14 +79,34 @@ public class ImageBean
 
     public void init() throws Exception
     {
-        image = imageController.retrieve(id);
+        try 
+        {
+        	image = imageController.retrieve(id);
+		} 
+        catch (Exception e) 
+		{
+			BeanHelper.error(id + " not found");
+		}
         collection = collectionController.retrieve(this.getImage().getCollection());
         if (sessionBean.getSelected().contains(image.getId()))
         {
             setSelected(true);
         }
         if (UrlHelper.getParameterBoolean("reset"))
-            editMetadataBean = new EditMetadataBean(image, prettyLink);
+        {
+            this.initEditMetadataBean();
+        }
+    }
+    
+    public void initEditMetadataBean()
+    {
+    	editMetadataBean = new EditMetadataBean(image, prettyLink);
+    }
+    
+    public String getExpandAll()
+    {
+    	editMetadataBean.expandAllMetadata();
+    	return "pretty:";
     }
 
     public void initView() throws Exception

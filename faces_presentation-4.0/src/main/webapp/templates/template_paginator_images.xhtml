@@ -43,20 +43,12 @@
 	<ui:define name="actionsMenu">
 		<h:panelGroup>
 			<!-- SORTING content menu lower line starts here -->
-			<h:outputText id="txtSort" value="#{lbl.sort_by}"
-				styleClass="free_area0" />
-			<h:selectOneMenu id="selSort"
-				value="#{paginatorListSessionBean.selectedSortCriterion}"
-				styleClass="free_select" onchange="submit();">
-				<f:selectItems id="sortItem"
-					value="#{paginatorListSessionBean.sortMenu}" />
+			<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" />
+			<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
+				<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}" />
 			</h:selectOneMenu>
-			<h:commandLink id="lnkSortAsc" styleClass="ascSort"
-				action="#{paginatorListSessionBean.toggleSortOrder}"
-				rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-			<h:commandLink id="lnkSortDesc" styleClass="desSort"
-				action="#{paginatorListSessionBean.toggleSortOrder}"
-				rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
+			<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
+			<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
 			<h:outputText styleClass="seperator void" />
 			<!-- SORTING content menu lower line ends here -->
 		</h:panelGroup>
@@ -120,12 +112,10 @@
 							<span> 
 								<!-- Image with link to the details view --> 
 								<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
-									<h:graphicImage ismap="true" usemap="#map" alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}">
-									</h:graphicImage>
+									<h:graphicImage ismap="true" usemap="#map" alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
 								</h:outputLink>
 								<h:outputLink id="cmdPicEdit" value="#">
-									<rich:componentControl event="onclick" for="menuEdit" operation="show">
-                 					</rich:componentControl>								
+									<rich:componentControl event="onclick" for="menuEdit" operation="show"/>
 									<h:graphicImage alt="Edit" id="picEdit" url="http://docs.gimp.org/en/images/dialogs/stock-edit-16.png"/>
 								</h:outputLink>
 							<!-- End : Image with link to the details view --> 
@@ -141,29 +131,31 @@
 							</rich:menuItem>
 							<rich:menuGroup value="#{lbl.edit_only_this_image}">
 								<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
-									<h:outputText value="#{lbl.choose_metadata}"/>
-									<a4j:repeat id="imageMetadata" var="metadata" value="#{item.editMetadataBean.statementMenu}">
+									<h:outputText value="#{lbl.choose_metadata}#{item.image.id}"/>
+									<a4j:repeat var="statement" value="#{item.editMetadataBean.statementMenu}" rowKeyVar="index">
 										<rich:menuItem ajaxSingle="true" styleclass="">
-											<h:outputLink value="#" onclick="Richfaces.showModalPanel('pnlEdit');">
-												<h:outputText value="#{metadata.label}"/>
-											</h:outputLink>
+											<a4j:commandLink immediate="true" value="#{statement.label}" actionListener="#{EditWorkspaceBean.init}" reRender="modalContent" oncomplete="Richfaces.showModalPanel('pnlEdit')">
+												<f:attribute name="statementName" value="#{statement.label}"/>
+												<f:attribute name="idOfImageToEdit" value="#{item.image.id}"/>
+							               </a4j:commandLink>
+										</rich:menuItem>
+									</a4j:repeat>
+								</rich:menuItem>
+							</rich:menuGroup>
+							<rich:menuGroup value="#{lbl.edit_all_selected_images}">
+								<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
+									<h:outputText value="#{lbl.choose_metadata}"/>
+									<a4j:repeat id="imageMetadata2" var="statement" value="#{item.editMetadataBean.statementMenu}" rowKeyVar="index">
+										<rich:menuItem ajaxSingle="true" styleclass="">
+											<a4j:commandLink immediate="true" value="#{statement.label}" actionListener="#{EditWorkspaceBean.init}" reRender="modalContent" oncomplete="Richfaces.showModalPanel('pnlEdit')">
+												<f:attribute name="statementName" value="#{statement.label}"/>
+												<f:attribute name="idOfImageToEdit" value="selected"/>
+							               </a4j:commandLink>
 										</rich:menuItem>
 									</a4j:repeat>
 								</rich:menuItem>
 							</rich:menuGroup>
 						</rich:contextMenu>
-						
-						<rich:modalPanel id="pnlEdit" autosized="true" keepVisualState="true" overlapEmbedObjects="true">
-							<f:facet name="header">
-           						 <h:outputText value="Edit #{item.image.filename}"/>
-      						</f:facet>
-      						<f:facet name="controls">
-           		 				<h:outputLink onclick="Richfaces.hideModalPanel('pnlEdit');" href="#">
-				           			<h:outputText value="close"/>
-								</h:outputLink>
-     						</f:facet>
-				            <ui:include src="../picturesPages/ui/EditMetadataPanel.xhtml" />
-					    </rich:modalPanel>
 						
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
 				
@@ -178,7 +170,7 @@
 						<span class="medium_area0"> 
 							<span class="free_area0_p3 tileControlIconArea"> 
 								<h:outputLabel value="#{item.image.filename}" style="white-space:nowrap;" /><br />
-								<h:commandLink id="lnkAddToActiveAlbumInactive1"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
+								<h:commandLink id="lnkAddToActiveAlbumInactive"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
 									<h:outputText value="#{lbl.add_to_album}" />
 								</h:commandLink> 
 							</span> 

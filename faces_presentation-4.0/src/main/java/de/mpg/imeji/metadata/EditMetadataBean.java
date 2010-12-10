@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletResponse;
 
@@ -95,6 +98,24 @@ public class EditMetadataBean
             addMetadata();
     }
 
+	public String addImageMetadataForEdit(Image image)
+    {
+        for (Statement s : profile.getStatements())
+        {
+            for (ImageMetadata im : image.getMetadata())
+            {
+                if (im.getName() == s.getName())
+                {
+                    MetadataBean mb = new MetadataBean(profile, s, im);
+                    mb.setPrettyLink(prettyLink);
+                    metadata.add(mb);
+                }
+            }
+        }
+        return prettyLink;
+    }
+    
+
     public String expandAllMetadata()
     {
         metadata.clear();
@@ -119,23 +140,6 @@ public class EditMetadataBean
                 MetadataBean mb = new MetadataBean(profile, s);
                 mb.setPrettyLink(prettyLink);
                 metadata.add(mb);
-            }
-        }
-        return prettyLink;
-    }
-
-    public String addImageMetadataForEdit(Image image)
-    {
-        for (Statement s : profile.getStatements())
-        {
-            for (ImageMetadata im : image.getMetadata())
-            {
-                if (im.getName() == s.getName())
-                {
-                    MetadataBean mb = new MetadataBean(profile, s, im);
-                    mb.setPrettyLink(prettyLink);
-                    metadata.add(mb);
-                }
             }
         }
         return prettyLink;
@@ -354,17 +358,36 @@ public class EditMetadataBean
             }
             else
             {
-                for (Statement st : profile.getStatements())
-                {
-                    if (st.getName().equals(metadata.get(getMdPosition()).getSelectedStatementName()))
-                    {
-                        mb = new MetadataBean(profile, st);
-                    }
-                }
-                metadata.add(getMdPosition() + 1, mb);
+//                for (Statement st : profile.getStatements())
+//                {
+//                    if (st.getName().equals(metadata.get(getMdPosition()).getSelectedStatementName()))
+//                    {
+//                        mb = new MetadataBean(profile, st);
+//                    }
+//                }
+                metadata.add(getMdPosition() + 1,  addMetadata(getMdPosition() + 1, metadata.get(getMdPosition()).getSelectedStatementName()));
             }
         }
         return prettyLink;
+    }
+    
+    /**
+     * Add a metadata of a predefined statement.
+     * @param st
+     * @return
+     */
+    public MetadataBean addMetadata(int pos, String statementName)
+    {
+    	MetadataBean mb = null;
+    	for (Statement s : profile.getStatements())
+         {
+             if (statementName.equals(s.getName()))
+             {
+                 mb = new MetadataBean(profile, s);
+             }
+         }
+         metadata.add(pos, mb);
+         return mb;
     }
 
     public String getPrettyLink()
@@ -460,4 +483,6 @@ public class EditMetadataBean
     {
         this.images = images;
     }
+    
+	
 }

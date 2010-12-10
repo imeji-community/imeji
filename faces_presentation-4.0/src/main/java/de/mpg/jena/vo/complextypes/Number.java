@@ -25,8 +25,6 @@ public class Number extends ComplexType implements Serializable
         setNumber(value);
     }
 
-   
-
     public void setNumber(double number)
     {
         this.number = number;

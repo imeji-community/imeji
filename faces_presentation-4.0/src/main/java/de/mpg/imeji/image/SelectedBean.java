@@ -44,8 +44,7 @@ public class SelectedBean extends ImagesBean {
 	public SelectedBean() {
 		super();
 		this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		Navigation navigation = (Navigation) BeanHelper
-		.getApplicationBean(Navigation.class);
+		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 		backUrl = navigation.getImagesUrl();
 	}
 
@@ -73,7 +72,8 @@ public class SelectedBean extends ImagesBean {
 					.size();
 			images = controller.search(uris, null, limit, offset);
 		}
-		if (UrlHelper.getParameterBoolean("reset")
+		if (UrlHelper.getParameterBoolean("reset") 
+				|| editMetadataBean == null
 				|| editMetadataBean.getImages().size() == 0) {
 			editMetadataBean = new EditMetadataBean((List<Image>) images);
 		}

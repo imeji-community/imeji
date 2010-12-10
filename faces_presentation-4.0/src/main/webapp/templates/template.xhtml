@@ -28,7 +28,7 @@
             All rights reserved. Use is subject to license terms.
              */
 -->
-<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
 		<f:loadBundle var="lbl" basename="labels"/>
 		<f:loadBundle var="msg" basename="messages"/>
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -157,8 +157,30 @@
 					</div>
 					
 					<ui:include src="/footerPages/Footer.jspf" />
+					
+					  
+			  
 				
 			    </h:form>
+			  
+			     <h:form id="panelFormular">
+			     <div class="full wrapper">
+					 <rich:modalPanel id="pnlEdit" styleClass="free_area0" autosized="true" keepVisualState="false" overlapEmbedObjects="true">
+					     <f:facet name="header">
+					         <h:outputText value="Edit"/>
+					     </f:facet>
+					     <f:facet name="controls">
+					          <a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')">X</a>
+					     </f:facet>
+					     <a4j:outputPanel id="modalContent" layout="inline">
+					          <h:panelGrid columns="2">
+					          	<ui:include src="../picturesPages/ui/EditMetadataPanel.xhtml" />
+					          </h:panelGrid>
+					          <a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')"><h:outputText value="close"/></a>
+					     </a4j:outputPanel>
+					</rich:modalPanel>
+				</div>
+				</h:form>
 			    
 				<script type="text/javascript">
 				    jQuery(document).ready(function (){

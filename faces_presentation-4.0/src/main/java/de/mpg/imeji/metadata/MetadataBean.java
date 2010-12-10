@@ -102,12 +102,23 @@ public class MetadataBean
     {
         Statement statement = null;
         for (Statement s : profile.getStatements())
-            if (s.getName().equals(getSelectedStatementName()))
-                statement = s;
-        if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
-            return true;
-        if (statement.getVocabulary() != null)
-            return true;
+        {
+        	 if (s.getName().equals(getSelectedStatementName()))
+        	 {
+        		 statement = s;
+        	 } 
+        }
+        if (statement != null) 
+        {
+        	 if ( statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
+        	 {
+        		 return true;
+        	 }
+             if (statement.getVocabulary() != null)
+             {
+            	 return true;
+             }
+        }
         return false;
     }
 

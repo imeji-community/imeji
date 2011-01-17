@@ -92,4 +92,5 @@ public abstract class ComplexType
     {
         this.label = label;
     }
+
 }

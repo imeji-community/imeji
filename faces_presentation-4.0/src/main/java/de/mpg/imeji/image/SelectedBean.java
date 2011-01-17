@@ -59,11 +59,13 @@ public class SelectedBean extends ImagesBean {
 	}
 
 	@Override
-	public List<ImageBean> retrieveList(int offset, int limit) throws Exception {
+	public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
+	{
 		ImageController controller = new ImageController(sb.getUser());
 		images = new ArrayList<Image>();
 		List<SearchCriterion> uris = new ArrayList<SearchCriterion>();
-		for (URI uri : sb.getSelected()) {
+		for (URI uri : sb.getSelected()) 
+		{
 			uris.add(new SearchCriterion(SearchCriterion.Operator.OR,
 					ImejiNamespaces.ID_URI, uri.toString(), Filtertype.URI));
 		}
@@ -77,7 +79,12 @@ public class SelectedBean extends ImagesBean {
 				|| editMetadataBean.getImages().size() == 0) {
 			editMetadataBean = new EditMetadataBean((List<Image>) images);
 		}
-		return ImejiFactory.imageListToBeanList(images);
+		List<ImageBean> imbList = ImejiFactory.imageListToBeanList(images);
+		for (ImageBean imb :imbList) 
+        {
+			imb.initEditMetadataBean();
+		}
+		return imbList;
 	}
 
 	public String save() {

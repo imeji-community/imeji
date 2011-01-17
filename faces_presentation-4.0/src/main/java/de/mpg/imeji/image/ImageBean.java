@@ -96,11 +96,16 @@ public class ImageBean
         {
             this.initEditMetadataBean();
         }
-    }
+    } 
     
     public void initEditMetadataBean()
     {
     	editMetadataBean = new EditMetadataBean(image, prettyLink);
+    }
+    
+    public void initEditMetadataBean(List<ImageMetadata> mdList)
+    {
+    	editMetadataBean = new EditMetadataBean(image, prettyLink, mdList);
     }
     
     public String getExpandAll()

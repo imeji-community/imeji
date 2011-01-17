@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -93,9 +95,26 @@ public class EditMetadataBean
         for (Statement s : profile.getStatements())
             statementMenu.add(new SelectItem(s.getName(), s.getName()));
         if (image.getMetadata().size() != 0)
-            addImageMetadataForEdit(image);
+        {
+        	addImageMetadataForEdit(image);
+        }
         else
-            addMetadata();
+        {
+        	 addMetadata();
+        }
+    }
+    
+    public EditMetadataBean(Image image, String prettyLink, List<ImageMetadata> metadata)
+    {
+    	this();
+    	this.prettyLink = prettyLink;
+        this.image = image;
+        profile = ProfileHelper.loadProfiles(image);
+        for (Statement s : profile.getStatements())
+            statementMenu.add(new SelectItem(s.getName(), s.getName()));
+    	this.image.getMetadata().clear();
+    	this.image.getMetadata().addAll(metadata);
+        addImageMetadataForEdit(image);
     }
 
 	public String addImageMetadataForEdit(Image image)
@@ -322,9 +341,9 @@ public class EditMetadataBean
         return im;
     }
 
-    private Map<String, List<ImageMetadata>> copy(List<ImageMetadata> listToCopy)
+    public SortedMap<String, List<ImageMetadata>> copy(List<ImageMetadata> listToCopy)
     {
-        Map<String, List<ImageMetadata>> copy = new HashMap<String, List<ImageMetadata>>();
+    	SortedMap<String, List<ImageMetadata>> copy = new TreeMap<String, List<ImageMetadata>>();
         for (ImageMetadata md : listToCopy)
         {
             List<ImageMetadata> mdOfOneType = new ArrayList<ImageMetadata>();
@@ -358,14 +377,11 @@ public class EditMetadataBean
             }
             else
             {
-//                for (Statement st : profile.getStatements())
-//                {
-//                    if (st.getName().equals(metadata.get(getMdPosition()).getSelectedStatementName()))
-//                    {
-//                        mb = new MetadataBean(profile, st);
-//                    }
-//                }
-                metadata.add(getMdPosition() + 1,  addMetadata(getMdPosition() + 1, metadata.get(getMdPosition()).getSelectedStatementName()));
+            	if (getMdPosition() >= getNumberOfMetadata())
+            	{
+            		setMdPosition(getNumberOfMetadata() -1);
+            		addMetadata(getMdPosition() + 1, metadata.get(getMdPosition()).getSelectedStatementName());
+            	}
             }
         }
         return prettyLink;
@@ -386,8 +402,8 @@ public class EditMetadataBean
                  mb = new MetadataBean(profile, s);
              }
          }
-         metadata.add(pos, mb);
-         return mb;
+        metadata.add(pos, mb);
+        return mb;
     }
 
     public String getPrettyLink()
@@ -417,6 +433,11 @@ public class EditMetadataBean
     public void setMetadata(List<MetadataBean> metadata)
     {
         this.metadata = metadata;
+    }
+    
+    public int getNumberOfMetadata()
+    {
+    	return this.getMetadata().size();
     }
 
     /*

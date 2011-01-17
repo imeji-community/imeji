@@ -75,6 +75,19 @@ public class ProfileHelper
         profile = coll.getProfile();
         return profile;
     }
+    
+    public static Statement loadStatement(Image image, String statementName)
+    {
+    	MetadataProfile profile = loadProfiles(image);
+    	for (Statement st : profile.getStatements()) 
+    	{
+    		if (statementName.equals(st.getName())) 
+    		{
+    			return st;
+			}
+		}
+    	return null;
+    }
 
     /*
      * public static List<MdField> getStatements(Map<URI, MetadataProfile> pMap) { List<MdField> mdfs = new
@@ -96,6 +109,7 @@ public class ProfileHelper
         }
         return cts;
     }
+   
     /*
      * public static List<MdField> getComplexTypes(MetadataProfile mdp) { List<MdField> mdfs = new ArrayList<MdField>();
      * for (Statement s : mdp.getStatements()) { ComplexType ct = ImejiFactory.newComplexType(s.getType()); if

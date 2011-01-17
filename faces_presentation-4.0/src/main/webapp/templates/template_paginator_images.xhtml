@@ -108,41 +108,50 @@
 				<!-- Images -->
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 					<li class="large_area0 itemTile">
-						<h:panelGroup id="imgFrame" styleClass="large_area1_p2 tileIconArea free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
-							<span> 
+						<h:panelGroup layout="block"  id="imgFrame" styleClass="large_area1_p2 tileIconArea free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
+							<span>
 								<!-- Image with link to the details view --> 
-								<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
-									<h:graphicImage ismap="true" usemap="#map" alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
-								</h:outputLink>
-								<h:outputLink id="cmdPicEdit" value="#">
-									<rich:componentControl event="onclick" for="menuEdit" operation="show"/>
-									<h:graphicImage alt="Edit" id="picEdit" url="http://docs.gimp.org/en/images/dialogs/stock-edit-16.png"/>
+								<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
+									<h:graphicImage ismap="false" usemap="#map" alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
 								</h:outputLink>
 							<!-- End : Image with link to the details view --> 
 							</span>
-							 <rich:toolTip id="imgToolTip" for="imgFrame" showDelay="500">
+									
+							<rich:toolTip id="imgToolTip" for="imgFrame" showDelay="500">
 								<ui:include src="../picturesPages/ui/MetadataPopup.xhtml" />
 							</rich:toolTip>
-						</h:panelGroup> 
 							
+							<!-- <h:outputLink id="cmdPicEdit" value="#">
+								<rich:componentControl event="onclick" for="menuEdit" operation="show"/>
+								<h:outputText value="Edit Metadata"/>
+							</h:outputLink>
+							 -->
+						</h:panelGroup> 
+						<h:outputLink style="opacity:0.6" id="cmdPicEdit" value="#">
+							<rich:componentControl event="onclick" for="menuEdit" operation="show"/>
+							<h:outputText value="Edit Metadata"/>
+						</h:outputLink>
+						
+						<!-- <h:graphicImage style="position:relative; right:-40px;" alt="Edit" id="picEdit" url="/resources/icon/badge_edit_32.png"/>  -->
 						<rich:contextMenu attached="true" id="menuEdit" submitMode="ajax" styleClass="free_area0 itemList listBackground">
-							<rich:menuItem ajaxSingle="true">
+							<!--  <rich:menuItem ajaxSingle="true">
 								<h:outputText value="#{lbl.edit_metadata}"/>
-							</rich:menuItem>
-							<rich:menuGroup value="#{lbl.edit_only_this_image}">
+							</rich:menuItem>-->
+							<!--  <rich:menuGroup value="#{lbl.edit_only_this_image}">-->
 								<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
-									<h:outputText value="#{lbl.choose_metadata}#{item.image.id}"/>
+									<h:outputText value="Choose: "/>
 									<a4j:repeat var="statement" value="#{item.editMetadataBean.statementMenu}" rowKeyVar="index">
 										<rich:menuItem ajaxSingle="true" styleclass="">
-											<a4j:commandLink immediate="true" value="#{statement.label}" actionListener="#{EditWorkspaceBean.init}" reRender="modalContent" oncomplete="Richfaces.showModalPanel('pnlEdit')">
+											<a4j:commandLink immediate="true" value="* #{statement.label}" actionListener="#{EditWorkspaceBean.init}" reRender="modalContent" oncomplete="Richfaces.showModalPanel('pnlEdit')">
 												<f:attribute name="statementName" value="#{statement.label}"/>
 												<f:attribute name="idOfImageToEdit" value="#{item.image.id}"/>
+												<f:attribute name="type" value="SINGLE"/>
 							               </a4j:commandLink>
 										</rich:menuItem>
 									</a4j:repeat>
 								</rich:menuItem>
-							</rich:menuGroup>
-							<rich:menuGroup value="#{lbl.edit_all_selected_images}">
+							<!-- </rich:menuGroup>-->
+							<!-- <rich:menuGroup value="#{lbl.edit_all_selected_images}">
 								<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
 									<h:outputText value="#{lbl.choose_metadata}"/>
 									<a4j:repeat id="imageMetadata2" var="statement" value="#{item.editMetadataBean.statementMenu}" rowKeyVar="index">
@@ -154,17 +163,18 @@
 										</rich:menuItem>
 									</a4j:repeat>
 								</rich:menuItem>
-							</rich:menuGroup>
+							</rich:menuGroup> -->
 						</rich:contextMenu>
 						
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
-				
+						
 						<!-- Album Selected --> 
 						<h:panelGroup styleClass="tiny_area1">
 							<span class="free_area0"> 
-							<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectedChanged}">
-								<a4j:support event="onchange" reRender="preListHeader" />
-							</h:selectBooleanCheckbox> </span>
+								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectedChanged}">
+									<a4j:support event="onchange" reRender="preListHeader" />
+								</h:selectBooleanCheckbox> 
+							</span>
 						</h:panelGroup> 
 						
 						<span class="medium_area0"> 
@@ -176,17 +186,11 @@
 							</span> 
 						</span> 
 						
-						<!-- Edit Input Images -->
-						<h:panelGroup styleClass="large_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
-							<h:outputText value="test"/>
-							<h:inputText value=""/>
-						</h:panelGroup>
 											
 						<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
 						<ui:remove>
 							<!-- View Album Page -->
-							<h:panelGroup styleClass="large_area0"
-								rendered="#{AlbumSession.current.size != '0' and SessionBean.currentPage == 'ALBUM'}">
+							<h:panelGroup styleClass="large_area0" rendered="#{AlbumSession.current.size != '0' and SessionBean.currentPage == 'ALBUM'}">
 								<!-- view details -->
 								<!--  <h:panelGroup rendered="true" styleClass="free_area0 xTiny_marginLExcl facesControlIconArea">
 										<h:outputLink id="lnkAlbumDetails" value="#{Navigation.albumUrl}/#{AlbumSession.current.latestVersion.objectId}/details/#{item.item.objid}">

@@ -51,7 +51,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
                 .getLabel(ImejiNamespaces.PROPERTIES_CREATION_DATE.name())));
         sortMenu.add(new SelectItem(ImejiNamespaces.IMAGE_COLLECTION, sb.getLabel(ImejiNamespaces.IMAGE_COLLECTION
                 .name())));
-        //
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE, sb
                 .getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
         selectedSortCriterion = ImejiNamespaces.PROPERTIES_CREATION_DATE.name();

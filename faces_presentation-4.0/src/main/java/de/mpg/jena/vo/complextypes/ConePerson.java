@@ -8,6 +8,7 @@ import thewebsemantic.Namespace;
 import thewebsemantic.RdfType;
 
 import de.mpg.jena.vo.ComplexType;
+import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 
 @Namespace("http://imeji.mpdl.mpg.de/metadata/")
@@ -21,6 +22,9 @@ public class ConePerson extends ComplexType implements Serializable
     public ConePerson()
     {
         super(ComplexTypes.CONE_AUTHOR);
+        person = new Person();
+        Organization o = new Organization();
+        person.getOrganizations().add(o);
     }
 
     public ConePerson(Person pers)

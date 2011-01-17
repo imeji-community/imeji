@@ -10,8 +10,58 @@
 <ui:composition template="template.xhtml">
 	<body>
 	<ui:define name="subImagesContent">
-		<h:panelGroup styleClass="full_area0" rendered="true">
-			<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{editMetadataBean.numberOfProfiles == '1'}">
+	<h:panelGroup styleClass="full_area0 itemBlock">
+		<h:panelGroup  styleClass="full_area0 small_marginLExcl" rendered="true">
+		
+			<h:panelGroup>
+                <h2><h:outputText style="text-align: center;" value="Advanced Metadata Editor"/></h2>
+            </h:panelGroup>
+            
+            <h:outputText value="Choose Metadata to Edit: #{EditWorkspaceBean.defaultInit}"/><br/>
+            
+            <a4j:repeat id="statementList" var="statement" value="#{editMetadataBean.statementMenu}" rowKeyVar="index">
+            	<a4j:commandLink immediate="true" value="#{statement.label}" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="Editor">
+					<f:attribute name="statementName" value="#{statement.label}"/>
+					<f:attribute name="idOfImageToEdit" value="selected"/>
+					<f:attribute name="type" value="BATCH"/>
+               </a4j:commandLink>
+               <h:outputText value="  "/>
+            </a4j:repeat>
+	            
+            <h:panelGroup >
+	            
+	            <h:panelGroup>
+	             	
+	             	<h3>
+		             	<h:outputText styleClass="huge_label" value="Assign one value to all selected images"/>
+		        
+		             	<h:outputText styleClass="small_label" value="OR"/> 
+		             	<h:panelGroup layout="block" styleClass="free_area0">
+							<a4j:commandLink value="Edit each images" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="Editor">
+								<f:attribute name="statementName" value="#{EditWorkspaceBean.statementToEdit}"/>
+								<f:attribute name="idOfImageToEdit" value="selected"/>
+								<f:attribute name="type" value="MULTIPLE"/>
+								<h:outputText value="  "/>
+			               </a4j:commandLink>
+						</h:panelGroup>
+					</h3>
+	             	
+	             	<h:panelGroup styleClass="full_area0" id="Editor">	
+	             		<h:panelGroup layout="block" styleClass="free_area0 endline">
+	             			<ui:include src="../picturesPages/ui/EditMetadataPanelContent.xhtml" />
+						</h:panelGroup>
+	             	</h:panelGroup>
+	             	
+	             	<h:panelGroup layout="block" styleClass="large_area0">
+		             	<a4j:commandLink styleClass="free_area1_p8 cancelButton " action="#{EditWorkspaceBean.cancel}" value="#{lbl.cancel}"/>
+		             	<a4j:commandLink styleClass="free_area1_p8 activeButton" action="#{EditWorkspaceBean.save}" value="#{lbl.save}"/>
+	             	</h:panelGroup>
+	    
+	             </h:panelGroup>
+             </h:panelGroup>
+             
+			
+			<h:panelGroup id="old" layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{false and editMetadataBean.numberOfProfiles == '1'}">
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 					<h3 class="xLarge_area0 endline" style="text-align: center;">
 						<h:outputText value="#{ImageBean.collection.metadata.title}"/>
@@ -25,9 +75,7 @@
 						<h:selectBooleanCheckbox styleClass="tiny_checkbox" value="#{editMetadataBean.overwrite}"/>
 						<h:outputText styleClass="small_label" value="Overwrite"/>
 					</h:panelGroup>
-					
-					<h:panelGroup layout="block" styleClass="free_area0 endline">
-						<a4j:repeat id="mdList" var="metadata"	value="#{editMetadataBean.metadata}" rowKeyVar="index">
+					<a4j:repeat id="mdList" var="metadata"	value="#{EditWorkspaceBean.editMetadataBean.metadata}" rowKeyVar="index">
 							<h:panelGroup layout="block" styleClass="full_area0_p8">
 								<h:panelGroup layout="block" styleClass="huge_area0">
 									<h:outputText value="#{lbl.metadata_select}" styleClass="large_label" />
@@ -159,7 +207,7 @@
 									</h:panelGroup>
 									<h:panelGroup styleClass="medium_area0">
 										<h:outputLabel value="&#160;" styleClass="huge_label"/>
-										<a4j:commandButton styleClass="min_imgBtn add groupTool"  reRender="formular" action="#{editMetadataBean.addMetadata}">
+										<a4j:commandButton styleClass="min_imgBtn add groupTool" reRender="formular" action="#{editMetadataBean.addMetadata}">
 											<f:setPropertyActionListener value="#{index}" target="#{editMetadataBean.mdPosition}" />
 										</a4j:commandButton>
 										<a4j:commandButton styleClass="min_imgBtn remove groupTool" action="#{editMetadataBean.removeMetadata}">
@@ -168,7 +216,7 @@
 									</h:panelGroup>
 								</h:panelGroup>
 							</a4j:repeat>
-						</h:panelGroup>
+					
 					</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton ">
@@ -182,6 +230,7 @@
 				<h:outputText value="#{msg.metadata_edit_error_number_of_selected_profiles}" styleClass="full_label" />
 				<h:outputText value="#{SelectedBean.editMetadataBean.numberOfProfiles} found!" styleClass="full_label" />
 			</h:panelGroup>
+		</h:panelGroup>
 		</h:panelGroup>
 	</ui:define>
 	</body>

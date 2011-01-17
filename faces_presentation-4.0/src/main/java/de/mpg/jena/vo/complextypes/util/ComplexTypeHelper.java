@@ -58,6 +58,20 @@ public class ComplexTypeHelper
             }
         }
     }
+    
+    
+    public static String getSimpleValueAsString(ComplexType ct)
+    {
+    	if(ct instanceof ConePerson)
+    	{
+    		return ((ConePerson)ct).getPerson().getFamilyName() + ((ConePerson)ct).getPerson().getGivenName();
+    	}
+    	else if (ct instanceof Text)
+    	{
+    		return ((Text)ct).getText();
+    	}
+    	return "";
+    }
 
     /**
      * Set a value of a field of a {@link ComplexType}

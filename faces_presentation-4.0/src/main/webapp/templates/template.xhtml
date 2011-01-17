@@ -158,30 +158,17 @@
 					
 					<ui:include src="/footerPages/Footer.jspf" />
 					
-					  
-			  
-				
 			    </h:form>
-			  
-			     <h:form id="panelFormular">
-			     <div class="full wrapper">
-					 <rich:modalPanel id="pnlEdit" styleClass="free_area0" autosized="true" keepVisualState="false" overlapEmbedObjects="true">
-					     <f:facet name="header">
-					         <h:outputText value="Edit"/>
-					     </f:facet>
-					     <f:facet name="controls">
-					          <a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')">X</a>
-					     </f:facet>
-					     <a4j:outputPanel id="modalContent" layout="inline">
-					          <h:panelGrid columns="2">
-					          	<ui:include src="../picturesPages/ui/EditMetadataPanel.xhtml" />
-					          </h:panelGrid>
-					          <a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')"><h:outputText value="close"/></a>
-					     </a4j:outputPanel>
-					</rich:modalPanel>
-				</div>
-				</h:form>
+				<ui:include src="../picturesPages/ui/EditMetadataModalPanel.xhtml" />
 			    
+			    <script type="text/javascript">
+					window.onkeyup = function (event) {
+						if (event.keyCode == 27) {
+							Richfaces.hideModalPanel('pnlEdit');
+						}
+					}
+				</script>
+							    
 				<script type="text/javascript">
 				    jQuery(document).ready(function (){
 				    	
@@ -220,8 +207,6 @@
 				              return true;
 				    }
 
-
-				     
 			    </script>			
 			</body>
 		</html>

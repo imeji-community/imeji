@@ -227,7 +227,7 @@ public class MetadataBean
         }
         if (ct.getEnumType().equals(ComplexType.ComplexTypes.CONE_AUTHOR))
         {
-            Person p = new Person();
+        	Person p = new Person();
             Organization o = new Organization();
             p.getOrganizations().add(o);
             ((ConePerson)ct).setPerson(p);

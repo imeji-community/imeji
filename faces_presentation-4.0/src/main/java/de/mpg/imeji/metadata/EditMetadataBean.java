@@ -91,7 +91,7 @@ public class EditMetadataBean
         this();
         this.prettyLink = prettyLink;
         this.image = image;
-        profile = ProfileHelper.loadProfiles(image);
+        profile = ProfileHelper.loadProfile(image);
         for (Statement s : profile.getStatements())
             statementMenu.add(new SelectItem(s.getName(), s.getName()));
         if (image.getMetadata().size() != 0)
@@ -109,7 +109,7 @@ public class EditMetadataBean
     	this();
     	this.prettyLink = prettyLink;
         this.image = image;
-        profile = ProfileHelper.loadProfiles(image);
+        profile = ProfileHelper.loadProfile(image);
         for (Statement s : profile.getStatements())
             statementMenu.add(new SelectItem(s.getName(), s.getName()));
     	this.image.getMetadata().clear();

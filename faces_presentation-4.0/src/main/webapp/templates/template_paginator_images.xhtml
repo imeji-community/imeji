@@ -134,36 +134,18 @@
 						
 						<!-- <h:graphicImage style="position:relative; right:-40px;" alt="Edit" id="picEdit" url="/resources/icon/badge_edit_32.png"/>  -->
 						<rich:contextMenu attached="true" id="menuEdit" submitMode="ajax" styleClass="free_area0 itemList listBackground">
-							<!--  <rich:menuItem ajaxSingle="true">
-								<h:outputText value="#{lbl.edit_metadata}"/>
-							</rich:menuItem>-->
-							<!--  <rich:menuGroup value="#{lbl.edit_only_this_image}">-->
-								<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
-									<h:outputText value="Choose: "/>
-									<a4j:repeat var="statement" value="#{item.editMetadataBean.statementMenu}" rowKeyVar="index">
-										<rich:menuItem ajaxSingle="true" styleclass="">
-											<a4j:commandLink immediate="true" value="* #{statement.label}" actionListener="#{EditWorkspaceBean.init}" reRender="modalContent" oncomplete="Richfaces.showModalPanel('pnlEdit')">
-												<f:attribute name="statementName" value="#{statement.label}"/>
-												<f:attribute name="idOfImageToEdit" value="#{item.image.id}"/>
-												<f:attribute name="type" value="SINGLE"/>
-							               </a4j:commandLink>
-										</rich:menuItem>
-									</a4j:repeat>
-								</rich:menuItem>
-							<!-- </rich:menuGroup>-->
-							<!-- <rich:menuGroup value="#{lbl.edit_all_selected_images}">
-								<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
-									<h:outputText value="#{lbl.choose_metadata}"/>
-									<a4j:repeat id="imageMetadata2" var="statement" value="#{item.editMetadataBean.statementMenu}" rowKeyVar="index">
-										<rich:menuItem ajaxSingle="true" styleclass="">
-											<a4j:commandLink immediate="true" value="#{statement.label}" actionListener="#{EditWorkspaceBean.init}" reRender="modalContent" oncomplete="Richfaces.showModalPanel('pnlEdit')">
-												<f:attribute name="statementName" value="#{statement.label}"/>
-												<f:attribute name="idOfImageToEdit" value="selected"/>
-							               </a4j:commandLink>
-										</rich:menuItem>
-									</a4j:repeat>
-								</rich:menuItem>
-							</rich:menuGroup> -->
+							<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
+								<h:outputText value="Choose: "/>
+								<a4j:repeat var="statement" value="#{item.statementMenu}" rowKeyVar="index">
+									<rich:menuItem ajaxSingle="true" styleclass="">
+										<a4j:commandLink value="* #{statement.label}" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="modalContent" onclick="Richfaces.showModalPanel('pnlLoading')" oncomplete="Richfaces.hideModalPanel('pnlLoading'); Richfaces.showModalPanel('pnlEdit');">
+											<f:attribute name="statementName" value="#{statement.label}"/>
+											<f:attribute name="idOfImageToEdit" value="#{item.image.id}"/>
+											<f:attribute name="type" value="SINGLE"/>
+						               </a4j:commandLink>
+									</rich:menuItem>
+								</a4j:repeat>
+							</rich:menuItem>
 						</rich:contextMenu>
 						
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
@@ -212,7 +194,7 @@
 				
 			</ul>
 			<h:panelGroup styleClass="fullItem"	rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
-				<ui:insert name="subImagesContent"></ui:insert>
+				<ui:insert name="subImagesContent"/>
 			</h:panelGroup>
 		</h:panelGroup>
 
@@ -235,7 +217,7 @@
 					</h:panelGroup>
 				</a4j:repeat>
 				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{empty paginatorListSessionBean.facets.groups}">
-					<a4j:status id="loadFacets" startText="#{lbl.facets_loading}..." />
+					<a4j:status id="loadFacets" forceId="true" startText="#{lbl.facets_loading}..." />
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>

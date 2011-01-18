@@ -80,10 +80,10 @@ public class SelectedBean extends ImagesBean {
 			editMetadataBean = new EditMetadataBean((List<Image>) images);
 		}
 		List<ImageBean> imbList = ImejiFactory.imageListToBeanList(images);
-		for (ImageBean imb :imbList) 
-        {
-			imb.initEditMetadataBean();
-		}
+//		for (ImageBean imb :imbList) 
+//        {
+//			imb.initEditMetadataBean();
+//		}
 		return imbList;
 	}
 

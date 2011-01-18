@@ -37,8 +37,21 @@
 <f:subview id="EditMetadataModalPanel">
 <h:form name="panelFormular">
 <div>
+	<style>
+	    .bodyPanel {
+	    	background-color: #434343;
+	        height:200px; 
+	        overflow:auto; !important
+	    }
+   	 </style>
+
+	<rich:modalPanel style="background-color:#434343" id="pnlLoading" domElementAttachment="form">
+		 <h:outputText value="Simple Editor: Initializing..."/>
+	</rich:modalPanel>
+	
+	
 	<!-- MODAL PANEL -->
-	<rich:modalPanel style="background-color:#434343" id="pnlEdit" autosized="true" moveable="true" keepVisualState="true" domElementAttachment="form" overlapEmbedObjects="true" >
+	<rich:modalPanel style="background-color:#434343" id="pnlEdit" autosized="true" moveable="false" keepVisualState="true" domElementAttachment="form" overlapEmbedObjects="true" >
 
 	     <!-- PANEL HEADER -->
 	     <f:facet name="header">
@@ -47,21 +60,11 @@
 	     <f:facet name="controls">
 	          <a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')">X</a>
 	     </f:facet>
-	     
-	     <style>
-		    .bodyPanel {
-		    	background-color: #434343;
-		        height:500px; 
-		        width:600px;
-		        overflow:auto; !important
-		    }
-    	 </style>
     	 
 	     <!-- PANEL CONTENT -->
 	     <rich:panel id="modalContent" bodyClass="bodyPanel">
 	    	<ui:include src="EditMetadataPanelContent.xhtml" />
 	 	</rich:panel>
-	 	<br/><br/>
 	 	
 	 	<!-- PANEL FOOTER -->
 	 	<a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')">

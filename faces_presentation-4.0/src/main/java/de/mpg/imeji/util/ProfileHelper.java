@@ -66,7 +66,7 @@ public class ProfileHelper
         return pMap;
     }
 
-    public static MetadataProfile loadProfiles(Image image)
+    public static MetadataProfile loadProfile(Image image)
     {
         MetadataProfile profile = new MetadataProfile();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -78,7 +78,7 @@ public class ProfileHelper
     
     public static Statement loadStatement(Image image, String statementName)
     {
-    	MetadataProfile profile = loadProfiles(image);
+    	MetadataProfile profile = loadProfile(image);
     	for (Statement st : profile.getStatements()) 
     	{
     		if (statementName.equals(st.getName())) 

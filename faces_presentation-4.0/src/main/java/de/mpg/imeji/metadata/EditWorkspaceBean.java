@@ -1,40 +1,32 @@
 package de.mpg.imeji.metadata;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
-import org.apache.xml.security.utils.HelperNodeList;
-
-import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
-import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.SelectedBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
-import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class EditWorkspaceBean
 {
 	enum EditorType{
-		SINGLE, MULTIPLE, BATCH, DEFAULT;
+		SINGLE, MULTIPLE, BATCH;
 	}
 	
 	private String statementToEdit = null;
 	private String idOfImageToEdit = null;
-	private List<ImageBean> images = null;
+	private List<Image> images = null;
 	private int mdPosition = 0;
 	private int imagePosition = 0;
-	private EditorType type = EditorType.DEFAULT;
-	private EditMetadataBean editMetadataBean = null;
+	private EditorType type = EditorType.BATCH;
+	private MetadataEditor editor = null;
 	
 	public EditWorkspaceBean() 
 	{
@@ -43,16 +35,16 @@ public class EditWorkspaceBean
 	
 	public void init()
 	{
-		images = new ArrayList<ImageBean>();
+		images = new ArrayList<Image>();
 		idOfImageToEdit = null;
-		type = EditorType.DEFAULT;
+		type = EditorType.BATCH;
 	}
 	
 	public String getDefaultInit()
 	{
 		this.init();
 		initialize();
-		return "";
+		return "pretty:";
 	}
 	
 	public String initTrigger(ActionEvent event)
@@ -61,102 +53,77 @@ public class EditWorkspaceBean
 		statementToEdit = event.getComponent().getAttributes().get("statementName").toString();
 		type = EditorType.valueOf(event.getComponent().getAttributes().get("type").toString());
 		if (event.getComponent().getAttributes().get("idOfImageToEdit") != null) 
+		{
 			idOfImageToEdit = event.getComponent().getAttributes().get("idOfImageToEdit").toString();
+		}
 		this.initialize();
 		return "pretty:";
 	}
 	
 	public void initialize()
 	{
+		System.out.println("Initializing");
 		switch (type) 
 		{
-			case BATCH:
-				initWorkspaceForAllSelectedImages();
-				prepareBatchEdit();
-				break;
 			case MULTIPLE:
-				initWorkspaceForAllSelectedImages();
-				prepareClassicalEdit(false);
+				retrieveAllSelectedImages();
+				editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
 				break;				
 			case SINGLE:
-				initWorkspaceForOneImage();
-				prepareClassicalEdit(true);
+				retrieveSingleImage();
+				editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
 				break;
-			case DEFAULT:
-				initWorkspaceForAllSelectedImages();
-				if (images.size() == 0) break;
-				List<SelectItem> stList = images.get(0).getEditMetadataBean().getStatementMenu();
-				if (stList.size() == 0) break;
-				statementToEdit = stList.get(0).getLabel();
-				prepareBatchEdit();
-				break;
-		}
-	}
-	
-	/**
-	 * Prepare Edit Formular for a Batch edit
-	 */
-	private void prepareBatchEdit()
-	{
-		List<Image> imageList = new ArrayList<Image>();
-		ImageBean imBean = null;
-		for (ImageBean imb: images) 
-		{
-			imageList.add(imb.getImage());
-			if(imBean == null) imBean = imb;
-		}
-		images.clear();
-		if(imBean != null)
-		{
-			images.add(imBean);
-			images.get(0).setEditMetadataBean(new EditMetadataBean(imageList));
-			images.get(0).getEditMetadataBean().getMetadata().clear();
-			images.get(0).getEditMetadataBean().addMetadata(0, statementToEdit);
-		}
-		System.out.println("batch");
-	}
-	
-	/**
-	 * Prepare Edit formular for a one to one edit.
-	 */
-	private void prepareClassicalEdit(boolean overwrite)
-	{
-		for (ImageBean imb: images) 
-		{
-			List<ImageMetadata> mdToEditList = new ArrayList<ImageMetadata>();
-			for (ImageMetadata immd :imb.getImgMetadata()) 
-			{
-				if (statementToEdit.equals(immd.getName())) 
+			case BATCH:
+				retrieveAllSelectedImages();
+				if (statementToEdit == null) 
 				{
-					mdToEditList.add(immd);
+					statementToEdit = getDefaultStatement();
 				}
-			}
-			if (mdToEditList.size() == 0) 
-			{
-				Statement st = ProfileHelper.loadStatement(imb.getImage(), statementToEdit);
-				mdToEditList.add(new ImageMetadata(st.getName(),  ComplexTypeHelper.newComplexType(st.getType())));
-			}
-			
-			imb.initEditMetadataBean(mdToEditList);
-			imb.getEditMetadataBean().setPrettyLink("");
-			imb.getEditMetadataBean().setOverwrite(overwrite);
+				editor = new MetadataBatchEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
+				break;
 		}
 	}
 	
-	private void initWorkspaceForAllSelectedImages()
+	/**
+	 * Find the first statement of the first images
+	 * @return
+	 */
+	private String getDefaultStatement()
+	{
+		if (images.size() > 0)
+		{
+			MetadataProfile p = ProfileHelper.loadProfile(images.get(0));
+			if (p.getStatements().size() > 0)
+			{
+				return p.getStatements().get(0).getName();
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Retrieve all the selected images.
+	 */
+	private void retrieveAllSelectedImages()
 	{
 		SelectedBean selectedBean = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
 		try 
 		{
-			this.images = selectedBean.retrieveList(0, 10000);
+			for (ImageBean bean : selectedBean.retrieveList(0, 10000))
+			{
+				images.add(bean.getImage());
+			}
 		} 
 		catch (Exception e) 
 		{
-			throw new RuntimeException("Error initializing Edit Workspace", e);
+			throw new RuntimeException("Error retrieving selected images", e);
 		}
 	}
 	
-	private void initWorkspaceForOneImage()
+	/**
+	 * Retrieve only the image according to requested id.
+	 */
+	private void retrieveSingleImage()
 	{
 		ImageBean imageBean = (ImageBean) BeanHelper.getSessionBean(ImageBean.class);
 		String id = idOfImageToEdit.split("image/")[1];
@@ -169,7 +136,7 @@ public class EditWorkspaceBean
 		{
 			throw new RuntimeException("Error initializing Edit Workspace for image " + idOfImageToEdit + " :", e);
 		}
-		images.add(imageBean);
+		images.add(imageBean.getImage());
 	}
 	
 	public String cancel()
@@ -182,30 +149,35 @@ public class EditWorkspaceBean
 	
 	public String save()
 	{
-		if (EditorType.BATCH.equals(type))
-		{
-			images.get(0).getEditMetadataBean().save();
-		}
-		else
-		{
-			for(ImageBean imb : images)
-			{
-				if (hasBeenModified(imb)) 
-				{
-					imb.getEditMetadataBean().save();
-				}
-			}
-		}
+		editor.save();
 		this.cancel();
 		return "pretty:selected";
 	}
 	
-	public boolean hasBeenModified(ImageBean modified)
+	public String addMetadata()
+    {
+		editor.addMetadata(getImagePosition(), getMdPosition());
+		return "";
+    }
+	
+	public String removeMetadata()
 	{
-		// Could be used later on for faster update:
-		// Images which haven't been modified don't have to be saved
-		return true;
+		editor.removeMetadata(getImagePosition(), getMdPosition());
+		return "";
 	}
+	
+    public List<SelectItem> getStatementMenu()
+    {
+    	List<SelectItem> statementMenu = new ArrayList<SelectItem>();
+    	for (MetadataProfile p : ProfileHelper.loadProfiles(images).values())
+    	{
+    		 for (Statement s : p.getStatements())
+    	     {
+    	       	 statementMenu.add(new SelectItem(s.getName(), s.getName()));
+    	     }
+    	}
+    	return statementMenu;
+    }
 
 	public String getStatementToEdit() 
 	{
@@ -215,14 +187,6 @@ public class EditWorkspaceBean
 	public void setStatementToEdit(String statementToEdit) 
 	{
 		this.statementToEdit = statementToEdit;
-	}
-
-	public List<ImageBean> getImages() {
-		return images;
-	}
-
-	public void setImages(List<ImageBean> images) {
-		this.images = images;
 	}
 	
 	public int getMdPosition() {
@@ -248,7 +212,13 @@ public class EditWorkspaceBean
 	public void setType(EditorType type) {
 		this.type = type;
 	}
-	
-	
+
+	public MetadataEditor getEditor() {
+		return editor;
+	}
+
+	public void setEditor(MetadataEditor editor) {
+		this.editor = editor;
+	}
 	
 }

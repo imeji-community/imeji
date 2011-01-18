@@ -8,9 +8,10 @@
 	xmlns:pretty="http://ocpsoft.com/prettyfaces">
 
 <ui:composition template="template.xhtml">
-	<body>
-	<ui:define name="subImagesContent">
+<body>
+<ui:define name="subImagesContent">
 	<h:panelGroup styleClass="full_area0 itemBlock">
+		
 		<h:panelGroup  styleClass="full_area0 small_marginLExcl" rendered="true">
 		
 			<h:panelGroup>
@@ -19,7 +20,7 @@
             
             <h:outputText value="Choose Metadata to Edit: #{EditWorkspaceBean.defaultInit}"/><br/>
             
-            <a4j:repeat id="statementList" var="statement" value="#{editMetadataBean.statementMenu}" rowKeyVar="index">
+            <a4j:repeat id="statementList" var="statement" value="#{EditWorkspaceBean.statementMenu}" rowKeyVar="index">
             	<a4j:commandLink immediate="true" value="#{statement.label}" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="Editor">
 					<f:attribute name="statementName" value="#{statement.label}"/>
 					<f:attribute name="idOfImageToEdit" value="selected"/>
@@ -28,211 +29,37 @@
                <h:outputText value="  "/>
             </a4j:repeat>
 	            
-            <h:panelGroup >
-	            
-	            <h:panelGroup>
-	             	
-	             	<h3>
-		             	<h:outputText styleClass="huge_label" value="Assign one value to all selected images"/>
-		        
-		             	<h:outputText styleClass="small_label" value="OR"/> 
-		             	<h:panelGroup layout="block" styleClass="free_area0">
-							<a4j:commandLink value="Edit each images" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="Editor">
-								<f:attribute name="statementName" value="#{EditWorkspaceBean.statementToEdit}"/>
-								<f:attribute name="idOfImageToEdit" value="selected"/>
-								<f:attribute name="type" value="MULTIPLE"/>
-								<h:outputText value="  "/>
-			               </a4j:commandLink>
-						</h:panelGroup>
-					</h3>
-	             	
-	             	<h:panelGroup styleClass="full_area0" id="Editor">	
-	             		<h:panelGroup layout="block" styleClass="free_area0 endline">
-	             			<ui:include src="../picturesPages/ui/EditMetadataPanelContent.xhtml" />
-						</h:panelGroup>
-	             	</h:panelGroup>
-	             	
-	             	<h:panelGroup layout="block" styleClass="large_area0">
-		             	<a4j:commandLink styleClass="free_area1_p8 cancelButton " action="#{EditWorkspaceBean.cancel}" value="#{lbl.cancel}"/>
-		             	<a4j:commandLink styleClass="free_area1_p8 activeButton" action="#{EditWorkspaceBean.save}" value="#{lbl.save}"/>
-	             	</h:panelGroup>
-	    
-	             </h:panelGroup>
-             </h:panelGroup>
-             
-			
-			<h:panelGroup id="old" layout="block" styleClass="full_area0 itemBlock noTopBorder" rendered="#{false and editMetadataBean.numberOfProfiles == '1'}">
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-					<h3 class="xLarge_area0 endline" style="text-align: center;">
-						<h:outputText value="#{ImageBean.collection.metadata.title}"/>
-					</h3>
-					<span class="seperator"></span>
-					<h:panelGroup layout="block" styleClass="free_area0 xSmall_marginLIncl">
-						<h:outputLabel value="Expand all" styleClass="small_label"/>
-						<a4j:commandButton styleClass="min_imgBtn add groupTool" action="#{editMetadataBean.expandAllMetadata}"/>
-					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="free_area2_p4 xHuge_marginLIncl" rendered="#{editMetadataBean.prettyLink == 'pretty:selected'}">	
-						<h:selectBooleanCheckbox styleClass="tiny_checkbox" value="#{editMetadataBean.overwrite}"/>
-						<h:outputText styleClass="small_label" value="Overwrite"/>
-					</h:panelGroup>
-					<a4j:repeat id="mdList" var="metadata"	value="#{EditWorkspaceBean.editMetadataBean.metadata}" rowKeyVar="index">
-							<h:panelGroup layout="block" styleClass="full_area0_p8">
-								<h:panelGroup layout="block" styleClass="huge_area0">
-									<h:outputText value="#{lbl.metadata_select}" styleClass="large_label" />
-									<h:selectOneMenu value="#{metadata.selectedStatementName}"	styleClass="huge_select" onchange="getElementById('formular:mdList:#{index}:changeTypeBtn').click();">
-										<f:selectItems value="#{editMetadataBean.statementMenu}" />
-									</h:selectOneMenu>
-									<h:commandButton id="changeTypeBtn"	action="#{metadata.changeType}" style="visibility:hidden;" />
-								</h:panelGroup>
-				
-								<h:panelGroup layout="block" styleClass="xHuge_area0">
-									<h:outputText value="&#160;" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='TEXT'}" />
-										<h:inputTextarea  id="inputText" styleClass="quad_txtArea inputTxtArea" value="#{metadata.metadata.type.text}" rendered="#{metadata.metadata.type.enumType=='TEXT'}">
-											<rich:suggestionbox frequency="0.001" rendered="#{metadata.hasAutoComplete}" for="inputText" var="results" suggestionAction="#{metadata.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{index})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
-												<h:column>
-													<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
-												</h:column>
-											</rich:suggestionbox>
-										</h:inputTextarea>
-												
-										<h:outputText value="&#160;" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='URI'}" />
-										<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.uri}" rendered="#{metadata.metadata.type.enumType=='URI'}" onfocus="this.select();">
-											<f:converter converterId="URIConverter" />
-											<rich:suggestionbox frequency="0.001" rendered="#{metadata.hasAutoComplete}" for="inputURI" var="results" suggestionAction="#{metadata.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{index})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
-												<h:column>
-													<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
-												</h:column>
-											</rich:suggestionbox>
-										</h:inputText>
-										
-										
-										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}">
-											<h:outputText value="#{lbl.publication_url}" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}" />
-											<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.uri}" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}" onfocus="this.select();">
-												<f:converter converterId="URIConverter" />
-												<rich:suggestionbox frequency="0.001" rendered="#{metadata.hasAutoComplete}" for="inputPublicationURI" var="results" suggestionAction="#{metadata.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{index})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
-													<h:column>
-														<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
-													</h:column>
-												</rich:suggestionbox>
-											</h:inputText>
-											<h:outputLabel value="#{lbl.export_formats}" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}"/>
-											<h:selectOneMenu value="#{metadata.metadata.type.exportFormat}"	styleClass="huge_select" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}">
-												<f:selectItems value="#{editMetadataBean.exportFormatMenu}" />
-											</h:selectOneMenu>
-										</h:panelGroup>
-								
-										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='DATE'}">
-											<h:outputText value="#{lbl.date}" styleClass="huge_label" />
-											<h:inputText styleClass="huge_txtInput" value="#{metadata.metadata.type.date}">
-												<f:convertDateTime type="date" pattern="yyyy-MM-dd" />
-											</h:inputText>
-										</h:panelGroup>
-										
-										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='LICENSE'}">
-											<h:outputText value="#{lbl.license}" styleClass="huge_label" />
-											<h:inputText styleClass="huge_txtInput" value="#{metadata.metadata.type.license}">
-											</h:inputText>
-										</h:panelGroup>
-										
-										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='NUMBER'}">
-											<h:outputText value="&#160;" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='NUMBER'}" />		
-											<h:inputText styleClass="huge_txtInput" value="#{metadata.metadata.type.number}" rendered="#{metadata.metadata.type.enumType=='NUMBER'}" />
-										</h:panelGroup>
-												
-										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='CONE_AUTHOR'}">
-											<h:outputLabel value="#{lbl.family_name}" styleClass="huge_label" />
-											<h:inputText id="inputFamilyName" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.person.familyName}">
-												<rich:suggestionbox frequency="0.001" rendered="#{metadata.hasAutoComplete}" for="inputFamilyName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})"	suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
-													<h:column>
-														<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
-															, 
-														<h:outputText value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
-													</h:column>
-												</rich:suggestionbox>
-											</h:inputText>
-				
-											<h:outputLabel value="#{lbl.first_name}" styleClass="huge_label" />
-											<h:inputText id="inputFirstName" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.person.givenName}">
-												<rich:suggestionbox rendered="#{metadata.hasAutoComplete}" for="inputFirstName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})" suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
-													<h:column>
-														<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
-															, 
-													    <h:outputText value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
-													</h:column>
-												</rich:suggestionbox>
-											</h:inputText>
-				
-											<h:outputLabel value="#{lbl.alternative_name}" styleClass="huge_label" />
-											<h:inputText id="inputAlternative" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.person.alternativeName}">
-												<rich:suggestionbox frequency="0.001" rendered="#{metadata.hasAutoComplete}" for="inputAlternative" var="result"	onobjectchange="autoSuggestWrite(suggestion, #{index})" suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
-													<h:column>
-														<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
-															, 
-													    <h:outputText value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
-													</h:column>
-												</rich:suggestionbox>
-											</h:inputText>
-				
-											<h:outputLabel value="#{lbl.identifier}" styleClass="huge_label" />
-											<h:inputText id="inputIdentifier" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.person.identifier}">
-												<rich:suggestionbox frequency="0.001" rendered="#{metadata.hasAutoComplete}" for="inputIdentifier" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})" suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
-													<h:column>
-														<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
-															, 
-													    <h:outputText value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
-													</h:column>
-												</rich:suggestionbox>
-											</h:inputText>
-				
-											<h:outputLabel value="#{lbl.organization}" styleClass="huge_label" />
-											<h:inputText id="inputOrganization" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.person.organizations[0].name}">
-												<rich:suggestionbox frequency="0.001" rendered="#{metadata.hasAutoComplete}" for="inputOrganization" var="result" onobjectchange="autoSuggestWrite(suggestion, #{index})" suggestionAction="#{metadata.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
-													<h:column>
-														<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
-															, 
-													    <h:outputText value="#{result.http_xmlns_com_foaf_0_1_givenname}" />
-													</h:column>
-												</rich:suggestionbox>
-											</h:inputText>
-										</h:panelGroup>
-				
-										<h:panelGroup rendered="#{metadata.metadata.type.enumType=='GEOLOCATION'}">
-											<h:outputLabel value="#{lbl.geolocation_latitude}" styleClass="huge_label" />
-											<h:inputText styleClass="xHuge_txtInput" value="#{metadata.metadata.type.latitude}" />
-											<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="huge_label" />
-											<h:inputText styleClass="xHuge_txtInput" value="#{metadata.metadata.type.longitude}" />
-										</h:panelGroup>
-					
-									</h:panelGroup>
-									<h:panelGroup styleClass="medium_area0">
-										<h:outputLabel value="&#160;" styleClass="huge_label"/>
-										<a4j:commandButton styleClass="min_imgBtn add groupTool" reRender="formular" action="#{editMetadataBean.addMetadata}">
-											<f:setPropertyActionListener value="#{index}" target="#{editMetadataBean.mdPosition}" />
-										</a4j:commandButton>
-										<a4j:commandButton styleClass="min_imgBtn remove groupTool" action="#{editMetadataBean.removeMetadata}">
-											<f:setPropertyActionListener value="#{index}" target="#{editMetadataBean.mdPosition}" />
-										</a4j:commandButton>
-									</h:panelGroup>
-								</h:panelGroup>
-							</a4j:repeat>
-					
-					</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton ">
-						<h:outputText value="#{lbl.reset}" />
-					</h:outputLink>
-					<h:commandButton value="#{lbl.save}" action="#{editMetadataBean.save}" styleClass="free_area1_p8 activeButton" />
+           	<h3>
+             	<h:outputText styleClass="huge_label" value="Assign one value to all selected images"/>
+        
+             	<h:outputText styleClass="small_label" value="OR"/> 
+             	<h:panelGroup layout="block" styleClass="free_area0">
+					<a4j:commandLink value="Edit each images" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="Editor">
+						<f:attribute name="statementName" value="#{EditWorkspaceBean.statementToEdit}"/>
+						<f:attribute name="idOfImageToEdit" value="selected"/>
+						<f:attribute name="type" value="MULTIPLE"/>
+						<h:outputText value="  "/>
+	               </a4j:commandLink>
 				</h:panelGroup>
-			</h:panelGroup>
+			</h3>
+             	
+           	<h:panelGroup styleClass="full_area0" id="Editor">	
+           		<h:panelGroup layout="block" styleClass="free_area0 endline">
+           			<ui:include src="../picturesPages/ui/EditMetadataPanelContent.xhtml" />
+				</h:panelGroup>
+           	</h:panelGroup>
+           	
+           	<h:panelGroup layout="block" styleClass="large_area0">
+            	<a4j:commandLink styleClass="free_area1_p8 cancelButton " action="#{EditWorkspaceBean.cancel}" value="#{lbl.cancel}"/>
+            	<a4j:commandLink styleClass="free_area1_p8 activeButton" action="#{EditWorkspaceBean.save}" value="#{lbl.save}" status="EditorStatus"/>
+           	</h:panelGroup>
+           	<h:panelGroup layout="block" styleClass="full_area0">
+    			<a4j:status id="EditorStatus" forceId="true" startText="Editing..." />
+    		</h:panelGroup>
 			
-			<h:panelGroup layout="block" styleClass="full_area1_p8"	rendered="#{editMetadataBean.numberOfProfiles != '1'}">
-				<h:outputText value="#{msg.metadata_edit_error_number_of_selected_profiles}" styleClass="full_label" />
-				<h:outputText value="#{SelectedBean.editMetadataBean.numberOfProfiles} found!" styleClass="full_label" />
-			</h:panelGroup>
 		</h:panelGroup>
-		</h:panelGroup>
-	</ui:define>
-	</body>
+	</h:panelGroup>
+</ui:define>
+</body>
 </ui:composition>
 </html>

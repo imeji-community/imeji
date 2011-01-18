@@ -36,7 +36,6 @@
 <body>
 
 <ui:composition template="template_edit_metadata.xhtml">
-	<ui:param name="editMetadataBean" value="#{paginatorListSessionBean.editMetadataBean}" />
 	<ui:define name="mainContent">
 		<div class="full_area0 paginator">
 			<h:outputText value="#{paginatorListSessionBean.init}" style="visibility:hidden;"/>
@@ -75,7 +74,6 @@
 		 		<h:commandButton id="btList_btGo" styleClass="xTiny_txtBtn paginatorFallbackGoBtn" value="#{lbl.paginator_go}" title="#{tip.List_btGo}" action="#{paginatorListSessionBean.goToPageTop}"/>
 		 	</div>
 		 </div>
-		 
 		 
 		 <ui:insert name="list"/>
 		 

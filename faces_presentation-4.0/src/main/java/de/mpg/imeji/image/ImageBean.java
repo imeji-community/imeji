@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.metadata.IIOMetadata;
@@ -21,6 +22,7 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.EditMetadataBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.LoginHelper;
+import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
@@ -28,6 +30,7 @@ import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
+import de.mpg.jena.vo.Statement;
 
 public class ImageBean
 {
@@ -43,7 +46,7 @@ public class ImageBean
     private boolean selected;
     private ImageController imageController = null;
     private List<ImageMetadata> imgMetadata;
-    private EditMetadataBean editMetadataBean;
+    //private EditMetadataBean editMetadataBean;
     private CollectionImeji collection;
     private CollectionController collectionController;
     private String previous = null;
@@ -92,27 +95,27 @@ public class ImageBean
         {
             setSelected(true);
         }
-        if (UrlHelper.getParameterBoolean("reset"))
-        {
-            this.initEditMetadataBean();
-        }
+//        if (UrlHelper.getParameterBoolean("reset"))
+//        {
+//            this.initEditMetadataBean();
+//        }
     } 
     
-    public void initEditMetadataBean()
-    {
-    	editMetadataBean = new EditMetadataBean(image, prettyLink);
-    }
-    
-    public void initEditMetadataBean(List<ImageMetadata> mdList)
-    {
-    	editMetadataBean = new EditMetadataBean(image, prettyLink, mdList);
-    }
-    
-    public String getExpandAll()
-    {
-    	editMetadataBean.expandAllMetadata();
-    	return "pretty:";
-    }
+//    public void initEditMetadataBean()
+//    {
+//    	editMetadataBean = new EditMetadataBean(image, prettyLink);
+//    }
+//    
+//    public void initEditMetadataBean(List<ImageMetadata> mdList)
+//    {
+//    	editMetadataBean = new EditMetadataBean(image, prettyLink, mdList);
+//    }
+//    
+//    public String getExpandAll()
+//    {
+//    	editMetadataBean.expandAllMetadata();
+//    	return "pretty:";
+//    }
 
     public void initView() throws Exception
     {
@@ -227,23 +230,23 @@ public class ImageBean
         this.techMd = md;
     }
 
-    public String save()
-    {
-        try
-        {
-            imageController.update(image);
-            if (!editMetadataBean.edit())
-            {
-                BeanHelper.error("Error editing images");
-            }
-            BeanHelper.info("Images edited");
-        }
-        catch (Exception e)
-        {
-            e.getMessage();
-        }
-        return getNavigationString();
-    }
+//    public String save()
+//    {
+//        try
+//        {
+//            imageController.update(image);
+//            if (!editMetadataBean.edit())
+//            {
+//                BeanHelper.error("Error editing images");
+//            }
+//            BeanHelper.info("Images edited");
+//        }
+//        catch (Exception e)
+//        {
+//            e.getMessage();
+//        }
+//        return getNavigationString();
+//    }
 
     public String getPageUrl()
     {
@@ -299,15 +302,15 @@ public class ImageBean
         return image;
     }
 
-    public EditMetadataBean getEditMetadataBean()
-    {
-        return editMetadataBean;
-    }
-
-    public void setEditMetadataBean(EditMetadataBean editMetadataBean)
-    {
-        this.editMetadataBean = editMetadataBean;
-    }
+//    public EditMetadataBean getEditMetadataBean()
+//    {
+//        return editMetadataBean;
+//    }
+//
+//    public void setEditMetadataBean(EditMetadataBean editMetadataBean)
+//    {
+//        this.editMetadataBean = editMetadataBean;
+//    }
 
     /**
      * @param selected the selected to set
@@ -424,5 +427,15 @@ public class ImageBean
             setSelected(false);
             select();
         }
+    }
+    
+    public List<SelectItem> getStatementMenu()
+    {
+    	List<SelectItem> statementMenu = new ArrayList<SelectItem>();
+        for (Statement s : ProfileHelper.loadProfile(image).getStatements())
+        {
+        	 statementMenu.add(new SelectItem(s.getName(), s.getName()));
+        }
+    	return statementMenu;
     }
 }

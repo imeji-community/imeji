@@ -39,31 +39,16 @@
 				<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{ImageBean.image.fullImageUrl}" target="_blank">
 					<h:graphicImage id="picWebResolution" title="ImageBean.image.id" alt="ImageBean.image.id" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{ImageBean.image.webImageUrl}" />
 				</h:outputLink>
-				<!-- Comparison -->
-
 			</span>
 		</h:panelGroup>
 
-			<h:outputLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" value="">
-				<h:outputText value="#{lbl.add_to_album}"/>
-			</h:outputLink>
-				<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{ImageBean.selected}" onchange="getElementById('formular:Image:selectBtn').click();" />
-				<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{ImageBean.selected}" action="#{ImageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
-				<h:outputText styleClass="small_label" value="#{lbl.selected}"/>
-
-		<!-- <h:panelGroup layout="block" styleClass="half_area0">
-			<h:outputText styleClass="free_area0 xSmall_marginRExcl" rendered="#{Detail.item.type == 'face'}" value="#{Detail.item.mdRecords.label['escidoc.face.picture-group']} #{Detail.item.mdRecords.value['escidoc.face.picture-group']}" />
-			<h:outputLink id="lnkAddToAlbum" styleClass="free_area0 xSmall_marginRExcl" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}"  rendered="#{(!Detail.item.inAlbum) and (AlbumSession.active.latestVersion.objectId != null) and (AlbumSession.active.state == 'PENDING')}">
-				<h:outputText value="#{lbl.add_to_active}"/>
-			</h:outputLink>
-			 
-			<h:outputLink id="lnkRemoveFromAlbum" styleClass="free_area0" rendered="#{(AlbumSession.current.size != '0') and (AlbumSession.current.state == 'PENDING')}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.latestVersion.objectId}/REMOVEPICTURE/#{Detail.item.item.objid}/back">
-				<h:outputText  value="#{lbl.remove_from_album}"/>
-			</h:outputLink>
-			<h:outputLink id="lnkLicense" styleClass="free_area0 sectionToolSection" target="_blank" value="#{ApplicationBean.licenseUrl}" rendered="#{ApplicationBean.licenseUrl != ''}">
-				<h:graphicImage id="imageLicense" styleClass="free_area0" url="#{ApplicationBean.licenseImage}" rendered="#{ApplicationBean.licenseImage != ''}" />
-			</h:outputLink>
-		</h:panelGroup> -->
+		<h:outputLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" value="">
+			<h:outputText value="#{lbl.add_to_album}"/>
+		</h:outputLink>
+		
+		<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{ImageBean.selected}" onchange="getElementById('formular:Image:selectBtn').click();" />
+		<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{ImageBean.selected}" action="#{ImageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
+		<h:outputText styleClass="small_label" value="#{lbl.selected}"/>
 	</h:panelGroup>
 </f:subview>
 </div>

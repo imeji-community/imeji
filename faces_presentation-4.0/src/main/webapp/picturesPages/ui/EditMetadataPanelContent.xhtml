@@ -58,7 +58,7 @@
 							<a4j:repeat id="imageMetadata" var="metadata" value="#{image.metadata}" rowKeyVar="indexMetadata">
 								
 								<!-- Show only metadata of correct statement -->
-								<h:panelGroup layout="block" styleClass="xHuge_area0" rendered="#{metadata.name == EditWorkspaceBean.editor.statement.name}">
+								<h:panelGroup layout="block" styleClass="xHuge_area0" rendered="#{(metadata.name == EditWorkspaceBean.editor.statement.name) || EditWorkspaceBean.editor.statement == null}">
 									
 									
 									<!-- METADATA TYPE TEXT -->

@@ -139,14 +139,34 @@
 					</div>
 				</div>
 				
-				<h:panelGroup styleClass="full_area0" rendered="#{imageBean.tab == 'VIEW'}">
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab == 'VIEW'}">
+					
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{EditWorkspaceBean.type == 'SINGLE'}">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
-							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} " />
+							<h:outputText value="Edit Metadata" /><br/>
 						</h3>
+						<ui:include src="../picturesPages/ui/EditMetadataPanelContent.xhtml" />
+						<h:panelGroup layout="block" styleClass="full_area0">
+			            	<a4j:commandLink styleClass="free_area1_p8 cancelButton " action="#{EditWorkspaceBean.cancel}" value="#{lbl.cancel}"/>
+			            	<a4j:commandLink styleClass="free_area1_p8 activeButton" action="#{EditWorkspaceBean.save}" value="#{lbl.save}" status="DetailImageEditorStatus"/>
+			           	</h:panelGroup>
+			           	<h:panelGroup layout="block" styleClass="full_area0">
+			    			<a4j:status id="DetailImageEditorStatus" forceId="true" startText="Editing..." />
+			    		</h:panelGroup>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{EditWorkspaceBean.type != 'SINGLE'}">
+						<h3 class="xLarge_area0_p8 endline blockHeader">
+							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} " /><br/>
+							<a4j:commandLink value="Edit" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="metadata">
+								<f:attribute name="idOfImageToEdit" value="#{imageBean.image.id}"/>
+								<f:attribute name="type" value="SINGLE"/>
+			               </a4j:commandLink>
+						</h3>
+						
 						<span class="seperator"></span>
 		
-						<h:panelGroup styleClass="free_area0 itemBlockContent endline">
+						<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
 							<!-- URL -->
 							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 								<b class="xLarge_area0_p8 endline labelLine clear">

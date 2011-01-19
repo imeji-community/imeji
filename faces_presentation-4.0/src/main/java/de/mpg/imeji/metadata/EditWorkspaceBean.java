@@ -50,38 +50,45 @@ public class EditWorkspaceBean
 	public String initTrigger(ActionEvent event)
 	{
 		this.init();
-		statementToEdit = event.getComponent().getAttributes().get("statementName").toString();
-		type = EditorType.valueOf(event.getComponent().getAttributes().get("type").toString());
+		if(event.getComponent().getAttributes().get("statementName") != null)
+			statementToEdit = event.getComponent().getAttributes().get("statementName").toString();
+		else
+			statementToEdit = null;
 		if (event.getComponent().getAttributes().get("idOfImageToEdit") != null) 
-		{
 			idOfImageToEdit = event.getComponent().getAttributes().get("idOfImageToEdit").toString();
-		}
+		if (event.getComponent().getAttributes().get("type")!= null)
+			type = EditorType.valueOf(event.getComponent().getAttributes().get("type").toString());
 		this.initialize();
 		return "pretty:";
 	}
 	
 	public void initialize()
-	{
-		System.out.println("Initializing");
+	{	
 		switch (type) 
-		{
-			case MULTIPLE:
-				retrieveAllSelectedImages();
-				editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
-				break;				
-			case SINGLE:
-				retrieveSingleImage();
-				editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
-				break;
-			case BATCH:
-				retrieveAllSelectedImages();
-				if (statementToEdit == null) 
-				{
-					statementToEdit = getDefaultStatement();
-				}
-				editor = new MetadataBatchEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
-				break;
-		}
+			{
+				case MULTIPLE:
+					retrieveAllSelectedImages();
+					if (images.size() > 0) 
+						editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
+					break;				
+				case SINGLE:
+					retrieveSingleImage();
+					Statement st = null;
+					if (statementToEdit != null)
+						st = ProfileHelper.loadStatement(images.get(0), statementToEdit);
+					if (images.size() > 0) 
+						editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), st);
+					break;
+				case BATCH:
+					retrieveAllSelectedImages();
+					if (statementToEdit == null) 
+					{
+						statementToEdit = getDefaultStatement();
+					}
+					if (images.size() > 0) 
+						editor = new MetadataBatchEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
+					break;
+			}
 	}
 	
 	/**
@@ -151,7 +158,7 @@ public class EditWorkspaceBean
 	{
 		editor.save();
 		this.cancel();
-		return "pretty:selected";
+		return "pretty:";
 	}
 	
 	public String addMetadata()

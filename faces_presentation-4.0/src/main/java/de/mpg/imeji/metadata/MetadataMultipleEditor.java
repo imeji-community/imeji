@@ -2,6 +2,7 @@ package de.mpg.imeji.metadata;
 
 import java.util.List;
 
+import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
@@ -16,20 +17,22 @@ public class MetadataMultipleEditor extends MetadataEditor
 	@Override
 	public void initialize(List<Image> images) 
 	{
+		boolean hasStatement = (statement != null);
 		for (Image im : images) 
 		{
 			if (hasProfile(im)) 
 			{
 				//this.before.add(im);
 				boolean empty = true;
+				
 				for (int i = 0; i < im.getMetadata().size(); i++) 
 				{
-					if (im.getMetadata().get(i).getName().equals(statement.getName()))
+					if (hasStatement && im.getMetadata().get(i).getName().equals(statement.getName()))
 					{
 						empty = false;
 					}
 				}
-				if (empty) addMetadata(im, 0);
+				if (empty && hasStatement) addMetadata(im, 0);
 				this.images.add(im);
 			}
 		}

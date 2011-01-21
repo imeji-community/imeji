@@ -59,6 +59,33 @@
 	padding: 2.83em 0.92em 1.37em 0.92em  !important;
 }
 
+.captionWrapper{
+    position:relative;  
+    margin:auto;  
+    overflow:hidden;  
+	}
+
+.editCaption:hover {
+	opacity: 0.9;
+	text-decoration:underline;
+	}
+	
+.editCaption {
+   	position:absolute;
+   	left:0px;
+   	color:#FFFFFF !important;
+   	letter-spacing:-0.0px;  
+   	color:white !important;
+   	opacity: 0.4;
+   	width: 67%;
+   	word-spacing:-0.5px;
+   	font-size:11px;
+   	font-weight:bold;
+   	line-height: 1.7em;
+   	background: #434343; 
+	}
+	
+
 /*Richfaces Overwrite*/
 
 .rich-tool-tip {

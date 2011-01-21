@@ -208,11 +208,13 @@
 }
 
 .itemTile .tileIconArea {
-	border: 0.10em;
+	/*border: 0.10em;*/
+	border: 0px !important ;
 	height: 11.56em;
 	line-height: 11.56em;
 	text-align: center;
 }
+
 
 .itemTile .tileIconArea img {
 	border: 0px;

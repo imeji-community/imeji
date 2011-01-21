@@ -50,22 +50,6 @@
 		</ui:define>
 							
 		<ui:define name="mainContent" >
-<!-- 
-			<h:panelGroup layout="block" styleClass="full_area0">
-			
-			<h:panelGroup layout="block" styleClass="large_area0 small_marginLIncl rangeSelector">&#160;</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="small_marginLExcl pageBrowser" rendered="true">
-					<h:outputLink id="lnkPaginatorPrevious" type="submit" styleClass="backward" value="#{imageBean.previous}" disabled="#{imageBean.previous == null}">
-						<h:outputText value="#{lbl.paginatorButton_prev_label}"></h:outputText>
-					</h:outputLink>
-	
-				    <h:panelGroup styleClass="seperator" />
-					<h:outputLink id="lnkPaginatorNext" type="submit" styleClass="forward" value="#{imageBean.next}" disabled="#{imageBean.next == null}">
-						<h:outputText value="#{lbl.paginatorButton_next_label}"></h:outputText>
-					</h:outputLink>
-				</h:panelGroup>
-			   </h:panelGroup>
-			-->
 			
 			<ui:insert name="preListHeader"/>
 			
@@ -80,26 +64,13 @@
 						</span>
 					</h:panelGroup>
 					<h:panelGroup id="image" layout="block">
-						<h:outputLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" value="">
+						<h:outputLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" value="" disabled="#{imageBean.isInActiveAlbum || SessionBean.activeAlbum==null}">
 							<h:outputText value="#{lbl.add_to_album}"/>
 						</h:outputLink>
 						<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" onchange="getElementById('formular:selectBtn').click();"/>
 						<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{imageBean.selected}" action="#{imageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
 						<h:outputText styleClass="small_label" value="#{lbl.selected}"/>
 					</h:panelGroup>
-					<!-- <h:panelGroup layout="block" styleClass="half_area0">
-						<h:outputText styleClass="free_area0 xSmall_marginRExcl" rendered="#{Detail.item.type == 'face'}" value="#{Detail.item.mdRecords.label['escidoc.face.picture-group']} #{Detail.item.mdRecords.value['escidoc.face.picture-group']}" />
-						<h:outputLink id="lnkAddToAlbum" styleClass="free_area0 xSmall_marginRExcl" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.active.version.objectId}/ADDPICTURE/#{Detail.item.item.objid}"  rendered="#{(!Detail.item.inAlbum) and (AlbumSession.active.latestVersion.objectId != null) and (AlbumSession.active.state == 'PENDING')}">
-							<h:outputText value="#{lbl.add_to_active}"/>
-						</h:outputLink>
-						 
-						<h:outputLink id="lnkRemoveFromAlbum" styleClass="free_area0" rendered="#{(AlbumSession.current.size != '0') and (AlbumSession.current.state == 'PENDING')}" value="#{Navigation.albumInterfaceUrl}/#{AlbumSession.current.latestVersion.objectId}/REMOVEPICTURE/#{Detail.item.item.objid}/back">
-							<h:outputText  value="#{lbl.remove_from_album}"/>
-						</h:outputLink>
-						<h:outputLink id="lnkLicense" styleClass="free_area0 sectionToolSection" target="_blank" value="#{ApplicationBean.licenseUrl}" rendered="#{ApplicationBean.licenseUrl != ''}">
-							<h:graphicImage id="imageLicense" styleClass="free_area0" url="#{ApplicationBean.licenseImage}" rendered="#{ApplicationBean.licenseImage != ''}" />
-						</h:outputLink>
-					</h:panelGroup> -->
 				</h:panelGroup>
 				
 				<div class="full_area0 fullItem">
@@ -141,7 +112,7 @@
 				
 				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab == 'VIEW'}">
 					
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{EditWorkspaceBean.type == 'SINGLE'}">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{SessionBean.user != null and EditWorkspaceBean.type == 'SINGLE'}">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
 							<h:outputText value="Edit Metadata" /><br/>
 						</h3>

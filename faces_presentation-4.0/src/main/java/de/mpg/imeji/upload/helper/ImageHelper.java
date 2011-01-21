@@ -2,19 +2,48 @@ package de.mpg.imeji.upload.helper;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Transparency;
+import java.awt.color.ColorSpace;
+import java.awt.color.ICC_ColorSpace;
+import java.awt.color.ICC_Profile;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
+import java.awt.image.ColorModel;
+import java.awt.image.ComponentColorModel;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Iterator;
+
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.naming.InitialContext;
+
 import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.xmlbeans.XmlCursor;
+
+import sun.awt.image.JPEGImageDecoder;
+
+import com.hp.hpl.jena.ontology.Profile;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGDecodeParam;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
 import de.escidoc.schemas.components.x09.ComponentDocument.Component;
 import de.escidoc.schemas.components.x09.ComponentDocument.Component.Content.Storage.Enum;
 import de.escidoc.schemas.components.x09.PropertiesDocument.Properties;
@@ -23,17 +52,13 @@ import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.escidoc.ItemVO;
-import javax.imageio.*;
-import javax.imageio.metadata.*;
-import javax.imageio.stream.ImageInputStream;
-import javax.imageio.stream.MemoryCacheImageInputStream;
-import org.w3c.dom.NodeList;
 
 
 public class ImageHelper{
 	
     public static Item setComponent(String contentCategory, Item item, byte[] imageStream, String fileName,
             String mimetype, String format, String userHandle) throws Exception{
+
         URL url = null;
         if (item.getComponents() == null){
             item.addNewComponents();
@@ -52,7 +77,15 @@ public class ImageHelper{
         
         byte[] scaledImageStream = null;
         if (contentCategory.equals(getThumb())){        
-	        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
+	        BufferedImage bufferedImage;
+        	try
+        	{
+        		bufferedImage= ImageIO.read( new ByteArrayInputStream(imageStream));
+        	}
+        	catch(Exception e){
+        		bufferedImage = cmykRasterToSRGB(imageStream, format);
+        	}
+
 	        if(bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))){
 	        	bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")));
 	        }
@@ -62,9 +95,16 @@ public class ImageHelper{
 	        scaledImageStream = byteOutput.toByteArray();
             url = ImageHelper.uploadFile(scaledImageStream, mimetype, userHandle);
         }
-        if (contentCategory.equals(getWeb())){
-    		BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
-			if(bufferedImage.getWidth() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")))
+        if (contentCategory.equals(getWeb())){   
+    		BufferedImage bufferedImage;
+        	try
+        	{
+        		bufferedImage= ImageIO.read( new ByteArrayInputStream(imageStream));
+        	}
+        	catch(Exception e){
+       	        bufferedImage = cmykRasterToSRGB(imageStream, format);
+        	}
+    		if(bufferedImage.getWidth() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")))
 				scaledImageStream = imageStream;
 			else{
 				if(format.equalsIgnoreCase("gif")){
@@ -192,5 +232,43 @@ public class ImageHelper{
 
     public static String getOrig() throws IOException, URISyntaxException{
         return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
+    }
+    
+    public static BufferedImage cmykRasterToSRGB(byte[] inputStream, String format)throws Exception{
+  	  //Find a suitable ImageReader
+        Iterator readers = ImageIO.getImageReadersByFormatName(format);
+        ImageReader reader = null;
+        while(readers.hasNext()) {
+            reader = (ImageReader)readers.next();
+            if(reader.canReadRaster()) {
+                break;
+            }
+        }
+        //Stream the image file (the original CMYK image)
+        ImageInputStream input = ImageIO.createImageInputStream(new ByteArrayInputStream(inputStream));
+        reader.setInput(input); 
+        // Create the image.
+        BufferedImage image;
+        Raster raster = reader.readRaster(0, null); 
+	        // Arbitrarily select a BufferedImage type.
+            int imageType;
+            switch(raster.getNumBands()) {
+            case 1:
+                imageType = BufferedImage.TYPE_BYTE_GRAY;
+                break;
+            case 3:
+                imageType = BufferedImage.TYPE_3BYTE_BGR;
+                break;
+            case 4:
+                imageType = BufferedImage.TYPE_4BYTE_ABGR;
+                break;
+            default:
+                throw new UnsupportedOperationException();
+            }
+            // Create a BufferedImage.
+          image = new BufferedImage(raster.getWidth(),raster.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+            // Set the image data.
+            image.getRaster().setRect(raster);
+            return image;
     }
 }

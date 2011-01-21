@@ -266,7 +266,7 @@ public class ImageHelper{
                 throw new UnsupportedOperationException();
             }
             // Create a BufferedImage.
-          image = new BufferedImage(raster.getWidth(),raster.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+          image = new BufferedImage(raster.getWidth(),raster.getHeight(), imageType);
             // Set the image data.
             image.getRaster().setRect(raster);
             return image;

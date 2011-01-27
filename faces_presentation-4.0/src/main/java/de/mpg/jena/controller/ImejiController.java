@@ -1,48 +1,32 @@
 package de.mpg.jena.controller;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
 import thewebsemantic.Bean2RDF;
-import thewebsemantic.JenaHelper;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
-import thewebsemantic.TypeWrapper;
-import thewebsemantic.UriMethodTypeWrapper;
 
-import com.hp.hpl.jena.Jena;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.RDFWriter;
-import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Selector;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.Lock;
-import com.hp.hpl.jena.sparql.function.library.substring;
-import com.hp.hpl.jena.vocabulary.VCARD;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
@@ -50,7 +34,6 @@ import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.Counter;
 import de.mpg.jena.util.ObjectHelper;
-import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.User;
 

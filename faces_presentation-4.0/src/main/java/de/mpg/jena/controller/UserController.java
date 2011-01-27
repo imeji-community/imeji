@@ -3,28 +3,44 @@ package de.mpg.jena.controller;
 import java.net.URI;
 import java.security.MessageDigest;
 
-import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.User;
-import de.mpg.jena.vo.Grant.GrantType;
 
-public class UserController extends ImejiController{
+public class UserController extends ImejiController
+{
 	
 	public UserController(User user)
 	{
 		super(user);
 	}
 	
-	public void create (User user)
+	public void create(User user)
 	{
 		base.begin();
 		bean2RDF.saveDeep(user);
 		base.commit();
 	}
 	
-
 	public User retrieve(String email)
 	{
 		return rdf2Bean.load(User.class, email);
+	}
+	
+	public User retrieve(URI id)
+	{
+		String email = id.getPath().split("/Person/")[1];
+		if(email != null)
+		{
+			return retrieve(email);
+		}
+		return null;
+	}
+	
+	public void update(User user)
+	{
+		base.begin();
+		bean2RDF.saveDeep(user);
+		cleanGraph();
+		base.commit();
 	}
 	
 	public static String convertToMD5(String pass) throws Exception
@@ -38,22 +54,20 @@ public class UserController extends ImejiController{
 		    hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
 		}
 		return hexString.toString();
-
 	}
 	
 	
-	
-	  @Override
-	    protected String getSpecificFilter() throws Exception
-	    {
-	       return "";
-	    }
+	@Override
+    protected String getSpecificFilter() throws Exception
+    {
+       return "";
+    }
 
-	    @Override
-	    protected String getSpecificQuery() throws Exception
-	    {
-	        return "";
-	    }
+    @Override
+    protected String getSpecificQuery() throws Exception
+    {
+        return "";
+    }
 	    
 	    
 

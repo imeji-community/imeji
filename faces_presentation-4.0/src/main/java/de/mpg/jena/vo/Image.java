@@ -2,14 +2,8 @@ package de.mpg.jena.vo;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.eclipse.jdt.internal.compiler.IErrorHandlingPolicy;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;

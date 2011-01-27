@@ -28,7 +28,9 @@ public class CreateCollectionBean extends CollectionBean
         super.setCollection(collectionSession.getActive());
         super.getProfilesMenu().add(new SelectItem("sdsdss", "sdsad"));
         if (UrlHelper.getParameterBoolean("reset"))
+        {
             this.reset();
+        }
     }
 
     public String loadProfile()

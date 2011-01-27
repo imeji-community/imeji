@@ -71,10 +71,9 @@
 		<h:panelGroup id="preListHeaderActiveAlbum" layout="block" styleClass="full_area0 preListHeader" rendered="#{SessionBean.activeAlbum != null}">
 			<h:panelGroup styleClass="huge_area0 small_marginLExcl">
 				<h:outputText value="#{lbl.active_album}: " />
-				<pretty:link mappingId="albumImages">
-					<h:outputText value="#{SessionBean.activeAlbum.album.metadata.title}" />
-					<f:param value="#{SessionBean.activeAlbum.id}" />
-				</pretty:link>
+				<h:outputLink value="#{Navigation.imagesUrl}/album#{SessionBean.activeAlbum.id}">
+					<h:outputText value="#{SessionBean.activeAlbum.album.metadata.title} (#{SessionBean.activeAlbum.size})" />
+				</h:outputLink>
 			</h:panelGroup>
 		</h:panelGroup>
 			
@@ -109,17 +108,18 @@
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 					<li class="large_area0 itemTile">
 						<h:panelGroup layout="block"  id="imgFrame" styleClass="large_area1_p2 tileIconArea free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
+							<!-- Image with link to the details view --> 
+							<h:outputText value="#{item.editable}"/>
 							<span class="captionWrapper">
-									<!-- Image with link to the details view --> 
-									<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
-										<h:graphicImage ismap="false" usemap="#map" alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
+								<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
+									<h:graphicImage ismap="false" usemap="#map" alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
+								</h:outputLink>
+								<span class="editCaption"> 
+									<h:outputLink id="cmdPicEditCaption" value="#" rendered="#{SessionBean.user != null}">
+										<rich:componentControl event="onclick" for="menuEdit" operation="show"/>
+										<h:outputText style="color:white" value="Edit Metadata"/>
 									</h:outputLink>
-									<span class="editCaption"> 
-										<h:outputLink id="cmdPicEditCaption" value="#" rendered="#{SessionBean.user != null}">
-											<rich:componentControl event="onclick" for="menuEdit" operation="show"/>
-											<h:outputText style="color:white" value="Edit Metadata"/>
-										</h:outputLink>
-									</span>  
+								</span>  
 							<!-- End : Image with link to the details view --> 
 							</span>
 							

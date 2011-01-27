@@ -1,10 +1,11 @@
-package de.mpg.imeji.metadata;
+package de.mpg.imeji.metadata.editors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -15,8 +16,10 @@ import thewebsemantic.LocalizedString;
 
 import com.hp.hpl.jena.rdf.arp.StatementHandler;
 
+import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
+import de.mpg.imeji.metadata.validators.Validator;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.controller.ImageController;
@@ -28,13 +31,13 @@ import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public abstract class  MetadataEditor 
 {	
-	// Images before Edit
-	private List<Image> before = new ArrayList<Image>();
-	// Images used by Editor
 	protected List<Image> images = new ArrayList<Image>();
 	protected Statement statement;
 	protected MetadataProfile profile;
-	protected boolean overwrite = false;
+	protected boolean erase = false;
+	protected Validator validator;
+	
+	private static Logger logger = Logger.getLogger(MetadataEditor.class);
 	
 	/**
 	 * Editor: Edit a list of images for one statement.
@@ -54,8 +57,39 @@ public abstract class  MetadataEditor
 		ImageController ic = new ImageController(sb.getUser());
         try 
         {
-			prepareUpdate();
-        	ic.update(images);
+			if (prepareUpdate())
+			{
+				if (validateMetadataofImages()) 
+				{
+					long before = System.currentTimeMillis();
+					try 
+					{
+						ic.update(images);
+					} 
+					catch (Exception e) 
+					{
+						logger.error(e);
+						BeanHelper.warn("Edit problem");
+					}
+					long after = System.currentTimeMillis();
+					BeanHelper.info("Edit done!");
+					String str = images.size() +" images edited";
+					if (images.size() == 1) str = "One image edited";
+					BeanHelper.info(str + " in " + (after - before) + "ms.");
+				}
+				else
+				{
+					BeanHelper.error("Validation error!");
+					for (String str : validator.getMessages()) 
+					{
+						BeanHelper.error(str);
+					}
+				}
+			}
+			else
+			{
+				BeanHelper.error("No Images to edit!");
+			}
 		} 
         catch (Exception e) 
 		{
@@ -65,7 +99,9 @@ public abstract class  MetadataEditor
 
 	public abstract void initialize(List<Image> images);
 	
-	public abstract void prepareUpdate();
+	public abstract boolean prepareUpdate();
+	
+	public abstract boolean validateMetadataofImages();
 	
 	public abstract void addMetadata(int imagePos, int metadataPos);   
 	
@@ -174,6 +210,14 @@ public abstract class  MetadataEditor
 
 	public void setStatement(Statement statement) {
 		this.statement = statement;
+	}
+
+	public boolean isErase() {
+		return erase;
+	}
+
+	public void setErase(boolean erase) {
+		this.erase = erase;
 	}
 	
 }

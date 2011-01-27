@@ -73,7 +73,7 @@
 											
 									<!-- METADATA TYPE URI -->
 									<h:outputText value="#{metadata.type.label}" styleClass="huge_label" rendered="#{metadata.type.enumType=='URI'}" />
-									<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.metadata.type.uri}" rendered="#{metadata.type.enumType=='URI'}" onfocus="this.select();">
+									<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.type.uri}" rendered="#{metadata.type.enumType=='URI'}" onfocus="this.select();">
 										<f:converter converterId="URIConverter" />
 										<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputURI" var="results" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 											<h:column>
@@ -93,9 +93,9 @@
 												</h:column>
 											</rich:suggestionbox>
 										</h:inputText>
-										<h:outputLabel value="#{lbl.export_formats}" styleClass="huge_label" rendered="#{metadata.metadata.type.enumType=='PUBLICATION'}"/>
+										<h:outputLabel value="#{lbl.export_formats}" styleClass="huge_label" rendered="#{metadata.type.enumType=='PUBLICATION'}"/>
 										<h:selectOneMenu value="#{metadata.type.exportFormat}"	styleClass="huge_select" rendered="#{metadata.type.enumType=='PUBLICATION'}">
-										<!-- <f:selectItems value="#{editMetadataBean.exportFormatMenu}" /> -->
+											<f:selectItems value="#{EditWorkspaceBean.citationStyles}" /> 
 										</h:selectOneMenu>
 									</h:panelGroup>
 							

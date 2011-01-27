@@ -421,7 +421,7 @@ public class ImageController extends ImejiController
                 {
                     case CONTAINER_ADMIN: // Add specifics here
                     default:
-                        filter += " || ?collection=<" + grant.getGrantFor().toString() + ">";
+                    	if (grant.getGrantFor() != null) filter += " || ?collection=<" + grant.getGrantFor().toString() + ">";
                 }
             }
         }

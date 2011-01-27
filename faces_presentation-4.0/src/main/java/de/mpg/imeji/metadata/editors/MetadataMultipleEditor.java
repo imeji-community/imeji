@@ -1,8 +1,9 @@
-package de.mpg.imeji.metadata;
+package de.mpg.imeji.metadata.editors;
 
 import java.util.List;
 
-import de.mpg.imeji.util.ProfileHelper;
+import de.mpg.imeji.metadata.validators.MetadataValidator;
+import de.mpg.imeji.metadata.validators.Validator;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
@@ -22,9 +23,7 @@ public class MetadataMultipleEditor extends MetadataEditor
 		{
 			if (hasProfile(im)) 
 			{
-				//this.before.add(im);
 				boolean empty = true;
-				
 				for (int i = 0; i < im.getMetadata().size(); i++) 
 				{
 					if (hasStatement && im.getMetadata().get(i).getName().equals(statement.getName()))
@@ -39,11 +38,23 @@ public class MetadataMultipleEditor extends MetadataEditor
 	}
 	
 	@Override
-	public void prepareUpdate() {
-		// TODO Auto-generated method stub
-		
+	public boolean prepareUpdate() 
+	{
+		if (images.size() == 0)
+		{
+			return false;
+		}
+		return true;
 	}
 
+	@Override
+	public boolean validateMetadataofImages() 
+	{
+		// Validate only first image since all images get the same metadata
+		validator = new Validator(images.get(0).getMetadata(), profile);
+		return validator.valid();
+	}
+	
 	public void addMetadata(int imagePos, int metadataPos)
     {
         if (imagePos < images.size()) 
@@ -75,5 +86,7 @@ public class MetadataMultipleEditor extends MetadataEditor
 			image.getMetadata().remove(metadataPos);
 		}
 	}
+
+
 
 }

@@ -8,6 +8,9 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.SelectedBean;
+import de.mpg.imeji.metadata.editors.MetadataBatchEditor;
+import de.mpg.imeji.metadata.editors.MetadataEditor;
+import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.vo.Image;
@@ -20,6 +23,10 @@ public class EditWorkspaceBean
 		SINGLE, MULTIPLE, BATCH;
 	}
 	
+	enum CitationStyle{
+		APA, AJP, JUS;
+	}
+	
 	private String statementToEdit = null;
 	private String idOfImageToEdit = null;
 	private List<Image> images = null;
@@ -27,6 +34,8 @@ public class EditWorkspaceBean
 	private int imagePosition = 0;
 	private EditorType type = EditorType.BATCH;
 	private MetadataEditor editor = null;
+	private List<SelectItem> citationStyles;
+	private boolean eraseOldMetadata = false;
 	
 	public EditWorkspaceBean() 
 	{
@@ -38,26 +47,40 @@ public class EditWorkspaceBean
 		images = new ArrayList<Image>();
 		idOfImageToEdit = null;
 		type = EditorType.BATCH;
+		citationStyles = new ArrayList<SelectItem>();
+		eraseOldMetadata = false;
+		for (CitationStyle str : CitationStyle.values()) 
+		{
+			citationStyles.add(new SelectItem(str.name(), str.name()));
+		}
 	}
 	
 	public String getDefaultInit()
 	{
 		this.init();
 		initialize();
-		return "pretty:";
+		return "";
 	}
 	
 	public String initTrigger(ActionEvent event)
 	{
 		this.init();
 		if(event.getComponent().getAttributes().get("statementName") != null)
+		{
 			statementToEdit = event.getComponent().getAttributes().get("statementName").toString();
+		}
 		else
+		{
 			statementToEdit = null;
+		}
 		if (event.getComponent().getAttributes().get("idOfImageToEdit") != null) 
+		{
 			idOfImageToEdit = event.getComponent().getAttributes().get("idOfImageToEdit").toString();
+		}
 		if (event.getComponent().getAttributes().get("type")!= null)
+		{
 			type = EditorType.valueOf(event.getComponent().getAttributes().get("type").toString());
+		}
 		this.initialize();
 		return "pretty:";
 	}
@@ -69,15 +92,21 @@ public class EditWorkspaceBean
 				case MULTIPLE:
 					retrieveAllSelectedImages();
 					if (images.size() > 0) 
+					{
 						editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
-					break;				
+					}
+					break;			
 				case SINGLE:
 					retrieveSingleImage();
 					Statement st = null;
 					if (statementToEdit != null)
+					{
 						st = ProfileHelper.loadStatement(images.get(0), statementToEdit);
+					}
 					if (images.size() > 0) 
+					{
 						editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), st);
+					}
 					break;
 				case BATCH:
 					retrieveAllSelectedImages();
@@ -85,8 +114,10 @@ public class EditWorkspaceBean
 					{
 						statementToEdit = getDefaultStatement();
 					}
-					if (images.size() > 0) 
+					if (images.size() > 0)
+					{
 						editor = new MetadataBatchEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
+					}
 					break;
 			}
 	}
@@ -151,11 +182,13 @@ public class EditWorkspaceBean
 		this.statementToEdit = null;
 		this.type = EditorType.BATCH;
 		this.images.clear();
+		editor = null;
 		return "pretty:";
 	}
 	
 	public String save()
 	{
+		editor.setErase(eraseOldMetadata);
 		editor.save();
 		this.cancel();
 		return "pretty:";
@@ -226,6 +259,22 @@ public class EditWorkspaceBean
 
 	public void setEditor(MetadataEditor editor) {
 		this.editor = editor;
+	}
+
+	public List<SelectItem> getCitationStyles() {
+		return citationStyles;
+	}
+
+	public void setCitationStyles(List<SelectItem> citationStyles) {
+		this.citationStyles = citationStyles;
+	}
+
+	public boolean isEraseOldMetadata() {
+		return eraseOldMetadata;
+	}
+
+	public void setEraseOldMetadata(boolean eraseOldMetadata) {
+		this.eraseOldMetadata = eraseOldMetadata;
 	}
 	
 }

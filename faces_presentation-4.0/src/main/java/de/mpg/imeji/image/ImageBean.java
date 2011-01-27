@@ -1,36 +1,35 @@
 package de.mpg.imeji.image;
 
-import java.io.InputStream;
-import java.net.URI;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.List;
+
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.stream.ImageInputStream;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.metadata.EditMetadataBean;
+import de.mpg.imeji.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.util.ProfileHelper;
-import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.UserController;
+import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Grant;
+import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.User;
 
 public class ImageBean
 {
@@ -45,12 +44,8 @@ public class ImageBean
     private String id = null;
     private boolean selected;
     private ImageController imageController = null;
-    private List<ImageMetadata> imgMetadata;
-    //private EditMetadataBean editMetadataBean;
     private CollectionImeji collection;
     private CollectionController collectionController;
-    private String previous = null;
-    private String next = null;
     private List<String> techMd;
     private Navigation navigation;
     protected String prettyLink;
@@ -61,7 +56,7 @@ public class ImageBean
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         imageController = new ImageController(sessionBean.getUser());
-        imgMetadata = new ArrayList<ImageMetadata>();
+        collectionController = new CollectionController(sessionBean.getUser());
         prettyLink = "pretty:editImage";
         if (sessionBean.getSelected().contains(img.getId()))
         {
@@ -76,7 +71,6 @@ public class ImageBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         imageController = new ImageController(sessionBean.getUser());
         collectionController = new CollectionController(sessionBean.getUser());
-        imgMetadata = new ArrayList<ImageMetadata>();
         prettyLink = "pretty:editImage";
     }
 
@@ -95,38 +89,12 @@ public class ImageBean
         {
             setSelected(true);
         }
-//        if (UrlHelper.getParameterBoolean("reset"))
-//        {
-//            this.initEditMetadataBean();
-//        }
     } 
-    
-//    public void initEditMetadataBean()
-//    {
-//    	editMetadataBean = new EditMetadataBean(image, prettyLink);
-//    }
-//    
-//    public void initEditMetadataBean(List<ImageMetadata> mdList)
-//    {
-//    	editMetadataBean = new EditMetadataBean(image, prettyLink, mdList);
-//    }
-//    
-//    public String getExpandAll()
-//    {
-//    	editMetadataBean.expandAllMetadata();
-//    	return "pretty:";
-//    }
 
     public void initView() throws Exception
     {
         this.init();
         setTab(TabType.VIEW.toString());
-    }
-
-    public void initEdit() throws Exception
-    {
-        this.init();
-        setTab(TabType.EDIT.toString());
     }
 
     public void initTechMd() throws Exception
@@ -137,116 +105,14 @@ public class ImageBean
 
     public List<String> getTechMd() throws Exception
     {
-        techMd = new ArrayList<String>();
-        URI uri = image.getFullImageUrl();
-        String imageUrl = uri.toURL().toString();
-        GetMethod method = new GetMethod(imageUrl);
-        method.setFollowRedirects(false);
-        String userHandle = null;
-        userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader
-                .getProperty("imeji.escidoc.password"));
-        method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
-        HttpClient client = new HttpClient();
-        client.executeMethod(method);
-        InputStream input = method.getResponseBodyAsStream();
-        ImageInputStream iis = ImageIO.createImageInputStream(input);
-        Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
-        if (readers.hasNext())
-        {
-            // pick the first available ImageReader
-            ImageReader reader = readers.next();
-            // attach source to the reader
-            reader.setInput(iis, true);
-            // read metadata of first image
-            IIOMetadata metadata = reader.getImageMetadata(0);
-            String[] names = metadata.getMetadataFormatNames();
-            int length = names.length;
-            for (int i = 0; i < length; i++)
-            {
-                displayMetadata(this.techMd, metadata.getAsTree(names[i]));
-            }
-        }
-        return techMd;
-    }
-
-    static void displayMetadata(List<String> techMd, Node root)
-    {
-        displayMetadata(techMd, root, 0);
-    }
-
-    static void indent(List<String> techMd, StringBuffer sb, int level)
-    {
-        for (int i = 0; i < level; i++)
-        {
-            sb.append("    ");
-        }
-    }
-
-    static void displayMetadata(List<String> techMd, Node node, int level)
-    {
-        StringBuffer sb = new StringBuffer();
-        // print open tag of element
-        indent(techMd, sb, level);
-        sb.append("<" + node.getNodeName());
-        NamedNodeMap map = node.getAttributes();
-        if (map != null)
-        {
-            // print attribute values
-            int length = map.getLength();
-            for (int i = 0; i < length; i++)
-            {
-                Node attr = map.item(i);
-                sb.append(" " + attr.getNodeName() + "=\"" + attr.getNodeValue() + "\"");
-            }
-        }
-        Node child = node.getFirstChild();
-        if (child == null)
-        {
-            // no children, so close element and return
-            sb.append("/>");
-            techMd.add(sb.toString());
-            sb.delete(0, sb.length());
-            return;
-        }
-        // children, so close current tag
-        sb.append(">");
-        techMd.add(sb.toString());
-        sb.delete(0, sb.length());
-        while (child != null)
-        {
-            // print children recursively
-            displayMetadata(techMd, child, level + 1);
-            child = child.getNextSibling();
-        }
-        // print close tag of element
-        indent(techMd, sb, level);
-        sb.append("</" + node.getNodeName() + ">");
-        techMd.add(sb.toString());
-        sb.delete(0, sb.length());
+    	techMd = BasicExtractor.extractTechMd(image);
+    	return techMd;
     }
 
     public void setTechMd(List<String> md)
     {
         this.techMd = md;
     }
-
-//    public String save()
-//    {
-//        try
-//        {
-//            imageController.update(image);
-//            if (!editMetadataBean.edit())
-//            {
-//                BeanHelper.error("Error editing images");
-//            }
-//            BeanHelper.info("Images edited");
-//        }
-//        catch (Exception e)
-//        {
-//            e.getMessage();
-//        }
-//        return getNavigationString();
-//    }
 
     public String getPageUrl()
     {
@@ -282,16 +148,6 @@ public class ImageBean
         this.collection = collection;
     }
 
-    public List<ImageMetadata> getImgMetadata()
-    {
-        return new ArrayList<ImageMetadata>(image.getMetadata());
-    }
-
-    public void setImgMetadata(List<ImageMetadata> imgMetadata)
-    {
-        this.imgMetadata = imgMetadata;
-    }
-
     public void setImage(Image image)
     {
         this.image = image;
@@ -301,16 +157,6 @@ public class ImageBean
     {
         return image;
     }
-
-//    public EditMetadataBean getEditMetadataBean()
-//    {
-//        return editMetadataBean;
-//    }
-//
-//    public void setEditMetadataBean(EditMetadataBean editMetadataBean)
-//    {
-//        this.editMetadataBean = editMetadataBean;
-//    }
 
     /**
      * @param selected the selected to set
@@ -357,26 +203,6 @@ public class ImageBean
     protected String getNavigationString()
     {
         return "pretty:viewImage";
-    }
-
-    public String getPrevious()
-    {
-        return previous;
-    }
-
-    public void setPrevious(String previous)
-    {
-        this.previous = previous;
-    }
-
-    public String getNext()
-    {
-        return next;
-    }
-
-    public void setNext(String next)
-    {
-        this.next = next;
     }
 
     public SessionBean getSessionBean()
@@ -438,4 +264,55 @@ public class ImageBean
         }
     	return statementMenu;
     }
+
+	public boolean isEditable() 
+	{
+		Security security = new Security();
+		// 	WORKAROUND TO REMOVE
+		//if (sessionBean.getUser() != null)
+			//addMissingGrants(collection);
+		//	END WORKAROUND
+		return security.check(OperationsType.UPDATE, sessionBean.getUser(), image);
+	}
+	
+	/*
+	 * WORKAROUND: Add grants to user (wasn't manage so far). 
+	 */
+	private void addMissingGrants(CollectionImeji collection)
+	{
+		if (collection == null) 
+		{
+			collection = collectionController.retrieve(image.getCollection());
+		}
+	 	
+	 	User creator = sessionBean.getUser();
+	 	if (creator != null && creator.getEmail().equals(sessionBean.getUser().getEmail()))
+	 	{
+	 		Grant grant = new Grant(GrantType.CONTAINER_ADMIN, image.getCollection());
+	 		System.out.println("Adding grants: " + grant.getGrantType() + " for " + grant.getGrantFor());
+	 		GrantController gc = new GrantController(creator);
+	 		gc.addGrant(sessionBean.getUser(), grant);
+	 	}
+	 	Collection<Grant> grants = new ArrayList<Grant>();
+	 	boolean hasCorruptedGrants = false;
+	 	for (Grant grant1 : creator.getGrants())
+		{
+			if (grant1.getGrantFor() != null && grant1.getGrantType() != null) 
+			{
+				grants.add(grant1);
+			}
+			else
+			{
+				hasCorruptedGrants = true;
+			}
+		}
+	 	creator.setGrants(grants);
+	 	if (hasCorruptedGrants) {
+	 		UserController uc = new UserController(sessionBean.getUser());
+	 		uc.update(creator);
+		}
+	}
+
+    
+    
 }

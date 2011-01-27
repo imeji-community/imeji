@@ -84,18 +84,6 @@
 						<h:outputLink id="lnkViewItemMdPage2" styleClass="free_area0" value="#{imageBean.pageUrl}/techmd" rendered="#{imageBean.tab != 'TECHMD'}">
 							<h:outputText value="#{lbl.view_tech_md}"/>
 						</h:outputLink>
-
-									
-						<h:panelGroup styleClass="seperator" />
-									
-						
-						<h:outputLink id="lnkViewItemFull_btnItemVersions" styleClass="free_area0 actual" value="#{imageBean.pageUrl}/edit?reset=1" rendered="#{imageBean.tab == 'EDIT' and imageBean.sessionBean.user != null}">
-							<h:outputText value="#{lbl.assign_md}"/>
-						</h:outputLink>
-						
-						<h:outputLink id="lnkViewItemFull_btnItemVersions2" styleClass="free_area0" value="#{imageBean.pageUrl}/edit?reset=1" rendered="#{imageBean.tab != 'EDIT'and imageBean.sessionBean.user != null}">
-							<h:outputText value="#{lbl.assign_md}"/>
-						</h:outputLink>
 									
 						<h:panelGroup styleClass="seperator" />
 									
@@ -160,10 +148,10 @@
 								</span>
 							</h:panelGroup>
 							
-							<a4j:repeat var="md" value="#{imageBean.imgMetadata}">
+							<a4j:repeat var="md" value="#{imageBean.image.metadata}">
 								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 									<b class="xLarge_area0_p8 endline labelLine clear">
-									 	<h:outputText value="#{md.type.label}" /> 
+									 	<h:outputText value="#{md.name}" /> 
 									 	<span class="noDisplay">: </span> 
 									 </b>
 									<span class="xHuge_area0 xTiny_marginLExcl endline">
@@ -180,7 +168,8 @@
 											<h:outputText value="#{md.type.uri}" rendered="#{md.type.enumType == 'URI'}" />
 										</h:outputLink>
 										
-										<h:outputText escape="false" value="#{md.type.citation}" rendered="#{md.type.enumType == 'PUBLICATION'}" />									  	
+										<h:outputText escape="false" value="#{md.type.citation}" rendered="#{md.type.enumType == 'PUBLICATION'}" />
+										<h:outputText escape="false" value="#{md.type.exportFormat}" rendered="#{md.type.enumType == 'PUBLICATION'}" />									  	
 									  	
 									  	<h:panelGroup rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
 											<h:panelGroup rendered="#{md.type.person.identifier == null}">

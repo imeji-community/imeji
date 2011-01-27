@@ -1,12 +1,15 @@
-package de.mpg.imeji.metadata;
+package de.mpg.imeji.metadata.editors;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.metadata.validators.Validator;
+import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class MetadataBatchEditor extends MetadataEditor 
 {
@@ -28,26 +31,51 @@ public class MetadataBatchEditor extends MetadataEditor
 	
 
 	@Override
-	public void prepareUpdate() 
+	public boolean prepareUpdate() 
 	{
+		if (images.size() == 0)
+		{
+			return false;
+		}
 		ImageMetadata md = this.images.get(0).getMetadata().get(0);
 		for (Image im: originalImages)
 		{
-			if (overwrite) 
+			if (erase) 
 			{
-				 eraseOldMetadata(im);
+				 im = eraseOldMetadata(im);
 			}
-			else
-			{
-				im.getMetadata().add(md);
-			}
+			im.getMetadata().add(md);
 		}
 		images = originalImages;
+		return true;
 	}
 	
-	private void eraseOldMetadata(Image im)
+
+	@Override
+	public boolean validateMetadataofImages() 
 	{
-		//TODO
+		for (Image im : images)
+		{
+			validator = new Validator(im.getMetadata(), profile);
+			if (!(validator.valid()))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private Image eraseOldMetadata(Image im)
+	{
+		for (int i=0; i<im.getMetadata().size(); i++)
+		{
+			if (im.getMetadata().get(i).getName().equals(statement.getName()))
+			{
+				im.getMetadata().remove(i);
+				i = 0;
+			}
+		}
+		return im;
 	}
 
 	@Override
@@ -73,7 +101,5 @@ public class MetadataBatchEditor extends MetadataEditor
 	public void removeMetadata(Image image, int metadataPos) {
 		// TODO Auto-generated method stub
 	}
-	
-	
 
 }

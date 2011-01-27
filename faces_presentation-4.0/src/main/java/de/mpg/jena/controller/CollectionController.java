@@ -1,27 +1,22 @@
 package de.mpg.jena.controller;
 
-import java.awt.Image;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.hp.hpl.jena.tdb.TDB;
-
-import thewebsemantic.Bean2RDF;
-import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
 import de.mpg.jena.controller.exceptions.AuthenticationException;
 import de.mpg.jena.controller.exceptions.AuthorizationException;
+import de.mpg.jena.security.Security;
+import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
-import de.mpg.jena.vo.Person;
-import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Properties.Status;
+import de.mpg.jena.vo.User;
 
 
 public class CollectionController extends ImejiController{
@@ -42,18 +37,17 @@ public class CollectionController extends ImejiController{
 	{
 	    //first write properties
 	    writeCreateProperties(ic.getProperties(), user);
-	    
 	    //then check user credentials
-	    checkUserCredentials(ic);
-
+	    checkUserCredentials(ic, user);
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
 		base.begin();
 		bean2RDF.saveDeep(ic); 
 		CollectionImeji res = rdf2Bean.load(CollectionImeji.class, ic.getId());
+		user = addCreatorGrantToUser(res, user);
 		cleanGraph();
 		base.commit();
-		return ic;
+		return res;
 	}
 	
 	
@@ -68,7 +62,9 @@ public class CollectionController extends ImejiController{
 	public synchronized void update(CollectionImeji ic) throws Exception
 	{
 	    //first check user credentials
-	    checkUserCredentials(ic);
+	    //checkUserCredentials(ic, user);
+	    Security security  = new Security();
+	    security.check(OperationsType.UPDATE, user, ic);
 		writeUpdateProperties(ic.getProperties(), user);
 		base.begin();
 		bean2RDF.saveDeep(ic);
@@ -91,11 +87,16 @@ public class CollectionController extends ImejiController{
         update(ic);
     }
 	
-	private void checkUserCredentials(CollectionImeji c) throws Exception
+	private void checkUserCredentials(CollectionImeji c, User user) throws Exception
     {
-        if(user==null)
+        if(user == null)
         {
             throw new AuthenticationException("User is null!");
+        }
+        else if(c.getId() == null)
+        {
+        	//Collection doesn't exist
+        	return;
         }
         else if (!ObjectHelper.getURI(User.class, user.getEmail()).equals(c.getProperties().getCreatedBy()))
         {
@@ -103,14 +104,21 @@ public class CollectionController extends ImejiController{
             {
                 if(g.getGrantFor().equals(c.getId()) && (g.getGrantType().equals(GrantType.CONTAINER_ADMIN) || g.getGrantType().equals(GrantType.CONTAINER_EDITOR)))
                 {
-                    return;
+                	return;
                 }
             }
-            throw new AuthorizationException("User not authorized to create/update Collection " + c.getId());
         }
-            
-        
+        throw new AuthorizationException("User not authorized to create/update Collection " + c.getId());
     }
+	
+	private User addCreatorGrantToUser(CollectionImeji c, User user)
+	{
+		GrantController gc = new GrantController(user);
+		Grant grant = new Grant(GrantType.CONTAINER_ADMIN, c.getId());
+		gc.addGrant(user, grant);
+		UserController uc = new UserController(user);
+		return uc.retrieve(user.getEmail());
+	}
 
 	public CollectionImeji retrieve(String id)
 	{
@@ -190,25 +198,22 @@ public class CollectionController extends ImejiController{
          }
          else
          {
-            
              String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
              filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<" +  userUri + ">";
-             
-            
-                 for(Grant grant : user.getGrants())
+             for(Grant grant : user.getGrants())
+             {
+                 switch(grant.getGrantType())
                  {
-                     switch(grant.getGrantType())
-                     {
-                         case CONTAINER_ADMIN : //Add specifics here
-                             
-                         default : filter += " || ?s=<" + grant.getGrantFor().toString() + ">";
-                     }
-                     
+                     case CONTAINER_ADMIN : //Add specifics here
+                         break;
+                     default: 
+                    	 filter += " || ?s=<" + grant.getGrantFor().toString() + ">";
+                    	 break;
                  }
-             }
-         
+             }   
+         }
      
-          filter += ")";
+         filter += ")";
          return filter;
     }
 

@@ -28,6 +28,8 @@ import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.exceptions.AuthenticationException;
 import de.mpg.jena.controller.exceptions.AuthorizationException;
+import de.mpg.jena.security.Security;
+import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
@@ -53,59 +55,74 @@ public class ImageController extends ImejiController
 
     public void create(Image img, URI coll) throws Exception
     {
-        CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, coll);
         writeCreateProperties(img.getProperties(), user);
-        checkUserCredentials(img, ic);
-        // img.getProperties().setStatus(Status.RELEASED);
         img.setVisibility(Visibility.PUBLIC);
         img.setCollection(coll);
         img.setId(ObjectHelper.getURI(Image.class, Integer.toString(getUniqueId())));
-        base.begin();
-        ic.getImages().add(img.getId());
-        bean2RDF.saveDeep(img);
-        bean2RDF.saveDeep(ic);
-        cleanGraph();
-        base.commit();
+       
+        Security security = new Security();
+        
+        if (security.check(OperationsType.CREATE, user, img)) 
+        {
+        	CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, coll);
+        	base.begin();
+            ic.getImages().add(img.getId());
+            bean2RDF.saveDeep(img);
+            bean2RDF.saveDeep(ic);
+            cleanGraph();
+            base.commit();
+		}
+        else
+        {
+        	throw new AuthorizationException("Upload not authorized for " + user.getName());
+        }
     }
 
     public void create(Collection<Image> images, URI coll) throws Exception
     {
-        // store.getLoader().startBulkUpdate();
-        base.begin();
-        CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, coll);
+    	Security security = new Security();
+    	CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, coll);
+    	base.begin();
         for (Image img : images)
         {
-            writeCreateProperties(img.getProperties(), user);
-            checkUserCredentials(img, ic);
-            // img.getProperties().setStatus(Status.RELEASED);
-            img.setVisibility(Visibility.PUBLIC);
+        	writeCreateProperties(img.getProperties(), user);
+        	img.setVisibility(Visibility.PUBLIC);
             img.setCollection(coll);
             ic.getImages().add(img.getId());
-            bean2RDF.saveDeep(img);
-            // System.out.println("Img created!");
+        	if (security.check(OperationsType.CREATE, user, img)) 
+        	{
+                bean2RDF.saveDeep(img);
+			}
         }
         // Workarround: activate lazylist
         bean2RDF.saveDeep(ic);
         cleanGraph();
         base.commit();
     }
+    
 
     public void update(Image img) throws Exception
     {
-        CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, img.getCollection());
-        checkUserCredentials(img, ic);
-        writeUpdateProperties(img.getProperties(), user);
-        base.begin();
-        // Workarround: activate lazylist
-        img.getMetadata().size();
-        bean2RDF.saveDeep(img);
-        cleanGraph();
-        base.commit();
+    	Security security = new Security();
+         
+        if (security.check(OperationsType.UPDATE, user, img)) 
+        {
+        	CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, img.getCollection());
+            writeUpdateProperties(img.getProperties(), user);
+            base.begin();
+            // Workarround: activate lazylist
+            img.getMetadata().size();
+            bean2RDF.saveDeep(img);
+            cleanGraph();
+            base.commit();
+        }
     }
 
     public void update(Collection<Image> images) throws Exception
     {
-        base.begin();
+    	Security security = new Security();
+    	
+    	base.begin();
         for (Image img : images)
         {
             CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, img.getCollection());
@@ -113,7 +130,10 @@ public class ImageController extends ImejiController
             writeUpdateProperties(img.getProperties(), user);
             // Workarround: activate lazylist
             img.getMetadata().size();
-            bean2RDF.saveDeep(img);
+            if (security.check(OperationsType.UPDATE, user, img)) 
+            {
+            	bean2RDF.saveDeep(img);
+            }
         }
         cleanGraph();
         base.commit();
@@ -181,16 +201,21 @@ public class ImageController extends ImejiController
      */
     public void delete(Image img, User user)
     {
-        String itemId = img.getEscidocId();
-        try
-        {
-            ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(itemId);
-        }
-        catch (Exception e)
-        {
-            logger.warn("Error deleting image in escidoc: ", e);
-        }
-        bean2RDF.delete(img);
+    	Security security = new Security();
+    	
+    	if (security.check(OperationsType.DELETE, user, img))
+    	{
+    		String itemId = img.getEscidocId();
+            try
+            {
+                ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(itemId);
+            }
+            catch (Exception e)
+            {
+                logger.warn("Error deleting image in escidoc: ", e);
+            }
+            bean2RDF.delete(img);
+    	}
     }
 
     public void release()

@@ -268,51 +268,6 @@ public class ImageBean
 	public boolean isEditable() 
 	{
 		Security security = new Security();
-		// 	WORKAROUND TO REMOVE
-		//if (sessionBean.getUser() != null)
-			//addMissingGrants(collection);
-		//	END WORKAROUND
 		return security.check(OperationsType.UPDATE, sessionBean.getUser(), image);
 	}
-	
-	/*
-	 * WORKAROUND: Add grants to user (wasn't manage so far). 
-	 */
-	private void addMissingGrants(CollectionImeji collection)
-	{
-		if (collection == null) 
-		{
-			collection = collectionController.retrieve(image.getCollection());
-		}
-	 	
-	 	User creator = sessionBean.getUser();
-	 	if (creator != null && creator.getEmail().equals(sessionBean.getUser().getEmail()))
-	 	{
-	 		Grant grant = new Grant(GrantType.CONTAINER_ADMIN, image.getCollection());
-	 		System.out.println("Adding grants: " + grant.getGrantType() + " for " + grant.getGrantFor());
-	 		GrantController gc = new GrantController(creator);
-	 		gc.addGrant(sessionBean.getUser(), grant);
-	 	}
-	 	Collection<Grant> grants = new ArrayList<Grant>();
-	 	boolean hasCorruptedGrants = false;
-	 	for (Grant grant1 : creator.getGrants())
-		{
-			if (grant1.getGrantFor() != null && grant1.getGrantType() != null) 
-			{
-				grants.add(grant1);
-			}
-			else
-			{
-				hasCorruptedGrants = true;
-			}
-		}
-	 	creator.setGrants(grants);
-	 	if (hasCorruptedGrants) {
-	 		UserController uc = new UserController(sessionBean.getUser());
-	 		uc.update(creator);
-		}
-	}
-
-    
-    
 }

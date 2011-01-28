@@ -2,6 +2,7 @@ package de.mpg.jena.controller;
 
 import java.net.URI;
 import java.security.MessageDigest;
+import java.util.Collection;
 
 import de.mpg.jena.vo.User;
 
@@ -24,6 +25,12 @@ public class UserController extends ImejiController
 	{
 		return rdf2Bean.load(User.class, email);
 	}
+	
+	public Collection<User> retrieveAll()
+	{
+		return rdf2Bean.load(User.class);
+	}
+	
 	
 	public User retrieve(URI id)
 	{

@@ -2,6 +2,7 @@ package de.mpg.jena.security.operations;
 
 import de.mpg.jena.security.Authorization;
 import de.mpg.jena.security.Operations;
+import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Image.Visibility;
 import de.mpg.jena.vo.User;

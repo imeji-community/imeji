@@ -130,6 +130,11 @@ public class CollectionController extends ImejiController{
         return (CollectionImeji)rdf2Bean.load(CollectionImeji.class, uri);
     }
 	
+	public Collection<CollectionImeji> retrieveAll()
+	{
+		return rdf2Bean.load(CollectionImeji.class);
+	}
+	
 	public void delete(CollectionImeji collection, User user) throws Exception{
 		for(URI uri : collection.getImages()){
 			ImageController imageController = new ImageController(user);

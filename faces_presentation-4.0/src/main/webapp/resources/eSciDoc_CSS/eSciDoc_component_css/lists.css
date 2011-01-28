@@ -210,7 +210,7 @@
 .itemTile .tileIconArea {
 	border: 0.10em;
 	height: 11.56em;
-	/*line-height: 11.56em;*/
+	line-height: 11.56em;
 	text-align: center;
 }
 

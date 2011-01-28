@@ -6,6 +6,7 @@ import java.util.List;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.SelectedBean;
 import de.mpg.imeji.metadata.editors.MetadataBatchEditor;
@@ -13,6 +14,8 @@ import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
+import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
@@ -49,6 +52,8 @@ public class EditWorkspaceBean
 		type = EditorType.BATCH;
 		citationStyles = new ArrayList<SelectItem>();
 		eraseOldMetadata = false;
+		editor= null;
+		statementToEdit = null;
 		for (CitationStyle str : CitationStyle.values()) 
 		{
 			citationStyles.add(new SelectItem(str.name(), str.name()));
@@ -87,39 +92,64 @@ public class EditWorkspaceBean
 	
 	public void initialize()
 	{	
+		initImages();
+		Statement st = getStatement();
+		if (st != null && isAllowedToEdit())
+		{
+			initEditor(st);
+		}
+	}
+	
+	public void initEditor(Statement statement)
+	{
+	  	Statement st = ProfileHelper.loadStatement(images.get(0), statementToEdit);
+		if (images.size() > 0) 
 		switch (type) 
-			{
-				case MULTIPLE:
-					retrieveAllSelectedImages();
-					if (images.size() > 0) 
-					{
-						editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
-					}
-					break;			
-				case SINGLE:
-					retrieveSingleImage();
-					Statement st = null;
-					if (statementToEdit != null)
-					{
-						st = ProfileHelper.loadStatement(images.get(0), statementToEdit);
-					}
-					if (images.size() > 0) 
-					{
-						editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), st);
-					}
-					break;
-				case BATCH:
-					retrieveAllSelectedImages();
-					if (statementToEdit == null) 
-					{
-						statementToEdit = getDefaultStatement();
-					}
-					if (images.size() > 0)
-					{
-						editor = new MetadataBatchEditor(images, ProfileHelper.loadProfile(images.get(0)), ProfileHelper.loadStatement(images.get(0), statementToEdit));
-					}
-					break;
-			}
+		{
+			case MULTIPLE:
+				editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), st);
+				break;			
+			case SINGLE:
+				editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), st);
+				break;
+			case BATCH:
+				editor = new MetadataBatchEditor(images, ProfileHelper.loadProfile(images.get(0)), st);
+				break;
+		}
+	}
+	
+	public Statement getStatement()
+	{
+		if (statementToEdit == null) 
+		{
+			statementToEdit = getDefaultStatement();
+		}
+		return ProfileHelper.loadStatement(images.get(0), statementToEdit);
+	}
+	
+	public void initImages()
+	{
+		images = new ArrayList<Image>();
+		switch (type) 
+		{
+			case MULTIPLE: retrieveAllSelectedImages(); 
+				break;	
+			case SINGLE: retrieveSingleImage(); 
+				break;
+			case BATCH: retrieveAllSelectedImages();
+				break;
+		}
+	}
+	
+	public boolean isAllowedToEdit()
+	{
+		Security security = new Security();
+		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		for (Image im :images) 
+		{
+			if (security.check(OperationsType.UPDATE, sb.getUser(), im)) return true;
+		}
+		return false;
 	}
 	
 	/**

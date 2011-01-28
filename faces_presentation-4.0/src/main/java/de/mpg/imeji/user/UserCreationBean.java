@@ -1,22 +1,35 @@
 package de.mpg.imeji.user;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import thewebsemantic.NotFoundException;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.UserController;
+import de.mpg.jena.security.Authorization;
+import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Grant;
+import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.User;
 
 public class UserCreationBean
 {
     private User user;
-    
     private String password;
     private String repeatedPassword;
+    
+    private Logger logger = Logger.getLogger(UserCreationBean.class);
     
     public UserCreationBean()
     {
         this.setUser(new User());
     }
-    
     
     public String create() throws Exception
     {
@@ -49,6 +62,68 @@ public class UserCreationBean
         }
         return "pretty:";
     }
+    
+    public List<User> getAllUsers() throws IllegalArgumentException, IllegalAccessException
+    {
+    	List<User> users = new ArrayList<User>();
+    	UserController uc = new UserController(user);
+    	users.addAll(uc.retrieveAll());
+    	for(User u : users)
+    	{
+    		u = (User) ObjectHelper.castAllHashSetToList(u);
+    	}
+    	return users;
+    }
+    
+    public List<CollectionImeji> getAllcollections()
+    {
+    	CollectionController cc = new CollectionController(user);
+    	return (List<CollectionImeji>) cc.retrieveAll();
+    }
+    
+    public int getAllCollectionsSize()
+    {
+    	return getAllcollections().size();
+    }
+    
+    public int getAllUsersSize() 
+    {
+    	try { return this.getAllUsers().size(); }
+		catch (Exception e) { return 0; }
+    }
+    
+    public String reInitializeUserRights() throws IllegalArgumentException, IllegalAccessException
+    {
+    	List<CollectionImeji> allColls = new ArrayList<CollectionImeji>();    	
+    	allColls.addAll(this.getAllcollections());
+    	UserController uc = new UserController(user);
+    	Authorization authorization = new Authorization();
+    	GrantController gc = new GrantController(user);
+    	List<User> allUsers = getAllUsers();
+    	for (User u : allUsers)
+    	{
+    		if (!authorization.isSysAdmin(u))
+    		{
+	    		List<Grant> grants = new ArrayList<Grant>();
+	    		grants.addAll(u.getGrants());
+    			for (Grant g: grants)
+	    		{
+	    			gc.removeGrant(u, g);
+	    		}
+	    		for (CollectionImeji c : allColls)
+	    		{
+	    			String creatorEMail= uc.retrieve(c.getProperties().getCreatedBy()).getEmail();
+	    			if (u.getEmail().equals(creatorEMail))
+	    			{
+	    				gc.addGrant(u, new Grant(GrantType.CONTAINER_ADMIN, c.getId()));
+	    			}
+	    		}
+    		}
+    	}
+    	logger.info("All Users grants reniitialized");
+    	return "pretty:";
+    }
+    
 
     public void setPassword(String password)
     {

@@ -62,7 +62,7 @@
 .captionWrapper{
     position:relative;  
     margin:auto;  
-    overflow:hidden;  
+    overflow:hidden;
 	}
 
 .editCaption:hover {
@@ -74,15 +74,13 @@
    	position:absolute;
    	left:0px;
    	color:#FFFFFF !important;
-   	letter-spacing:-0.0px;  
-   	color:white !important;
    	opacity: 0.4;
-   	width: 67%;
+   	width: 7em;
    	word-spacing:-0.5px;
    	font-size:11px;
    	font-weight:bold;
-   	line-height: 1.7em;
    	background: #434343; 
+   	line-height: 1.56em;
 	}
 	
 

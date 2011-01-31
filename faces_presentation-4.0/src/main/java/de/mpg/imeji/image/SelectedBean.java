@@ -7,19 +7,14 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import thewebsemantic.NotBoundException;
 
 import com.ocpsoft.pretty.PrettyContext;
+
 import de.mpg.escidoc.services.framework.PropertyReader;
-import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.EditMetadataBean;
-import de.mpg.imeji.upload.deposit.DepositController;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.LoginHelper;
@@ -35,7 +30,6 @@ public class SelectedBean extends ImagesBean {
 	private int totalNumberOfRecords;
 	private SessionBean sb;
 	private Collection<Image> images;
-	private EditMetadataBean editMetadataBean;
 	private String mdEdited;
 	private URI currentCollection;
 	private String escidocUserHandle;
@@ -74,25 +68,9 @@ public class SelectedBean extends ImagesBean {
 					.size();
 			images = controller.search(uris, null, limit, offset);
 		}
-		if (UrlHelper.getParameterBoolean("reset") 
-				|| editMetadataBean == null
-				|| editMetadataBean.getImages().size() == 0) {
-			editMetadataBean = new EditMetadataBean((List<Image>) images);
-		}
 		List<ImageBean> imbList = ImejiFactory.imageListToBeanList(images);
-//		for (ImageBean imb :imbList) 
-//        {
-//			imb.initEditMetadataBean();
-//		}
-		return imbList;
-	}
 
-	public String save() {
-		if (!editMetadataBean.edit()) {
-			BeanHelper.error("Error editing images");
-		}
-		BeanHelper.info("Images edited");
-		return getNavigationString();
+		return imbList;
 	}
 
 	public String clearAll() {
@@ -143,13 +121,6 @@ public class SelectedBean extends ImagesBean {
 		return backUrl;
 	}
 
-	public EditMetadataBean getEditMetadataBean() {
-		return editMetadataBean;
-	}
-
-	public void setEditMetadataBean(EditMetadataBean editMetadataBean) {
-		this.editMetadataBean = editMetadataBean;
-	}
 
 	public void mdEditedListener(ValueChangeEvent event) {
 		if (event != null && event.getNewValue() != event.getOldValue()) {

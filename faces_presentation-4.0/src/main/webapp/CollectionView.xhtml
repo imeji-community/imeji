@@ -72,7 +72,7 @@
 						<h:outputText value="#{lbl.collection_release}"></h:outputText>
 					</h:commandLink>
 					<h:outputText styleClass="seperator" rendered="#{ViewCollectionBean.isOwner and ViewCollectionBean.collection.properties.status =='PENDING'}"/>
-					<h:outputLink id="lnkEditMetadata" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}?init=1" rendered="true">
+					<h:outputLink id="lnkEditMetadata" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable}">
 						<h:outputText value="#{lbl.collection_edit_metadata}"/>
 					</h:outputLink>
 					<!-- ORGANIZE content menu lower line ends here -->

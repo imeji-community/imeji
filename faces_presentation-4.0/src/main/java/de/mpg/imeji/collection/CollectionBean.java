@@ -18,6 +18,8 @@ import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
@@ -290,6 +292,12 @@ public abstract class CollectionBean
         }
         return null;
     }
+    
+    public boolean isEditable()
+    {
+    	Security security = new Security();
+    	return security.check(OperationsType.UPDATE, sessionBean.getUser(), collection);
+    }
 
     public boolean isCorruptedList()
     {
@@ -300,14 +308,4 @@ public abstract class CollectionBean
     {
         this.corruptedList = corruptedList;
     }
-    /*
-     * public String select() { if (!selected) { selectedBean.getSelected().remove(collection.getId()); } else {
-     * selectedBean.getSelected().add(this.collection.getId()); } return ""; }
-     */
-    /*
-     * public void selectedChanged(ValueChangeEvent event) { if (event.getNewValue().toString().equals("true") &&
-     * !selectedBean.getSelected().contains(collection.getId())) { setSelected(true); select(); } else if
-     * (event.getNewValue().toString().equals("false")&& selectedBean.getSelected().contains(collection.getId())) {
-     * setSelected(false); select(); } }
-     */
 }

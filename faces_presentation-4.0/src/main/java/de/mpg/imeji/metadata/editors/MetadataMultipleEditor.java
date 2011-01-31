@@ -2,7 +2,6 @@ package de.mpg.imeji.metadata.editors;
 
 import java.util.List;
 
-import de.mpg.imeji.metadata.validators.MetadataValidator;
 import de.mpg.imeji.metadata.validators.Validator;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;

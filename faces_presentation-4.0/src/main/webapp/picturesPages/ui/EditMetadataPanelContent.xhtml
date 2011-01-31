@@ -39,8 +39,9 @@
 	 <a4j:outputPanel id="ajaxContent">
          
          <h:panelGroup layout="block">
-
+			
 			<h:panelGroup layout="block" rendered="#{SessionBean.user != null}">
+			
 			
 				<a4j:repeat id="images" var="image" value="#{EditWorkspaceBean.editor.images}" rowKeyVar="indexImage">
 					

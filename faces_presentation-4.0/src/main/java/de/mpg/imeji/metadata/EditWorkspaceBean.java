@@ -1,7 +1,9 @@
 package de.mpg.imeji.metadata;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -13,12 +15,15 @@ import de.mpg.imeji.metadata.editors.MetadataBatchEditor;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.util.ProfileHelper;
+import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.User;
 
 public class EditWorkspaceBean
 {
@@ -30,198 +35,227 @@ public class EditWorkspaceBean
 		APA, AJP, JUS;
 	}
 	
-	private String statementToEdit = null;
-	private String idOfImageToEdit = null;
-	private List<Image> images = null;
+	private User user = null;
+	private MetadataEditor editor = null;
+	private List<MetadataProfile> profiles = null;
+
+	private String selectedStatementName = null;
+	private String selectedProfileId = null;
+	private URI idOfImageToEdit = null;
+	private EditorType type = EditorType.BATCH;
+	private boolean eraseOldMetadata = false;
+	private boolean editAllStatements = false;
+	
 	private int mdPosition = 0;
 	private int imagePosition = 0;
-	private EditorType type = EditorType.BATCH;
-	private MetadataEditor editor = null;
-	private List<SelectItem> citationStyles;
-	private boolean eraseOldMetadata = false;
+	
 	
 	public EditWorkspaceBean() 
 	{
-		this.init();
+		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		user = sb.getUser();
+		reset();
+	}
+	
+	public void reset()
+	{
+		profiles = new ArrayList<MetadataProfile>();
+		type = EditorType.BATCH;
+		eraseOldMetadata = false;
+		editor = null;
+		selectedProfileId = null;
+		selectedStatementName = null;
+		editAllStatements = false;
 	}
 	
 	public void init()
 	{
-		images = new ArrayList<Image>();
-		idOfImageToEdit = null;
-		type = EditorType.BATCH;
-		citationStyles = new ArrayList<SelectItem>();
-		eraseOldMetadata = false;
-		editor= null;
-		statementToEdit = null;
-		for (CitationStyle str : CitationStyle.values()) 
-		{
-			citationStyles.add(new SelectItem(str.name(), str.name()));
-		}
+		List<Image> images = retrieveImages();
+		images = removeNonEditableImages(images);
+		profiles = extractProfiles(images);
+		MetadataProfile p = getSelectedProfile();
+		Statement s = null;
+		if (!editAllStatements) s = getSelectedStatement(p);
+		editor = initEditor(images, p, s);
 	}
 	
-	public String getDefaultInit()
+	public String getDefaultWorkspace()
 	{
-		this.init();
-		initialize();
+		reset();
+		init();
 		return "";
-	}
-	
-	public String initTrigger(ActionEvent event)
-	{
-		this.init();
-		if(event.getComponent().getAttributes().get("statementName") != null)
-		{
-			statementToEdit = event.getComponent().getAttributes().get("statementName").toString();
-		}
-		else
-		{
-			statementToEdit = null;
-		}
-		if (event.getComponent().getAttributes().get("idOfImageToEdit") != null) 
-		{
-			idOfImageToEdit = event.getComponent().getAttributes().get("idOfImageToEdit").toString();
-		}
-		if (event.getComponent().getAttributes().get("type")!= null)
-		{
-			type = EditorType.valueOf(event.getComponent().getAttributes().get("type").toString());
-		}
-		this.initialize();
-		return "pretty:";
-	}
-	
-	public void initialize()
-	{	
-		initImages();
-		Statement st = getStatement();
-		if (st != null && isAllowedToEdit())
-		{
-			initEditor(st);
-		}
-	}
-	
-	public void initEditor(Statement statement)
-	{
-	  	Statement st = ProfileHelper.loadStatement(images.get(0), statementToEdit);
-		if (images.size() > 0) 
-		switch (type) 
-		{
-			case MULTIPLE:
-				editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), st);
-				break;			
-			case SINGLE:
-				editor = new MetadataMultipleEditor(images, ProfileHelper.loadProfile(images.get(0)), st);
-				break;
-			case BATCH:
-				editor = new MetadataBatchEditor(images, ProfileHelper.loadProfile(images.get(0)), st);
-				break;
-		}
-	}
-	
-	public Statement getStatement()
-	{
-		if (statementToEdit == null) 
-		{
-			statementToEdit = getDefaultStatement();
-		}
-		return ProfileHelper.loadStatement(images.get(0), statementToEdit);
-	}
-	
-	public void initImages()
-	{
-		images = new ArrayList<Image>();
-		switch (type) 
-		{
-			case MULTIPLE: retrieveAllSelectedImages(); 
-				break;	
-			case SINGLE: retrieveSingleImage(); 
-				break;
-			case BATCH: retrieveAllSelectedImages();
-				break;
-		}
-	}
-	
-	public boolean isAllowedToEdit()
-	{
-		Security security = new Security();
-		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		for (Image im :images) 
-		{
-			if (security.check(OperationsType.UPDATE, sb.getUser(), im)) return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * Find the first statement of the first images
-	 * @return
-	 */
-	private String getDefaultStatement()
-	{
-		if (images.size() > 0)
-		{
-			MetadataProfile p = ProfileHelper.loadProfile(images.get(0));
-			if (p.getStatements().size() > 0)
-			{
-				return p.getStatements().get(0).getName();
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Retrieve all the selected images.
-	 */
-	private void retrieveAllSelectedImages()
-	{
-		SelectedBean selectedBean = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
-		try 
-		{
-			for (ImageBean bean : selectedBean.retrieveList(0, 10000))
-			{
-				images.add(bean.getImage());
-			}
-		} 
-		catch (Exception e) 
-		{
-			throw new RuntimeException("Error retrieving selected images", e);
-		}
-	}
-	
-	/**
-	 * Retrieve only the image according to requested id.
-	 */
-	private void retrieveSingleImage()
-	{
-		ImageBean imageBean = (ImageBean) BeanHelper.getSessionBean(ImageBean.class);
-		String id = idOfImageToEdit.split("image/")[1];
-		imageBean.setId(id);
-		try 
-		{
-			imageBean.init();
-		} 
-		catch (Exception e) 
-		{
-			throw new RuntimeException("Error initializing Edit Workspace for image " + idOfImageToEdit + " :", e);
-		}
-		images.add(imageBean.getImage());
-	}
-	
-	public String cancel()
-	{
-		this.statementToEdit = null;
-		this.type = EditorType.BATCH;
-		this.images.clear();
-		editor = null;
-		return "pretty:";
 	}
 	
 	public String save()
 	{
 		editor.setErase(eraseOldMetadata);
 		editor.save();
-		this.cancel();
+		reset();
 		return "pretty:";
+	}
+	
+	public String cancel()
+	{
+		reset();
+		return "pretty:";
+	}
+	
+	public String requestEditor(ActionEvent event)
+	{
+		try
+		{
+			Map<String, Object> attrs = event.getComponent().getAttributes();
+			selectedStatementName = readAttribute(attrs,"statementName");
+			selectedProfileId = readAttribute(attrs,"profileId");
+			idOfImageToEdit = URI.create(readAttribute(attrs,"idOfImageToEdit"));
+			editAllStatements = Boolean.parseBoolean(readAttribute(attrs,"editAllStatements"));
+			type = EditorType.valueOf(readAttribute(attrs,"type"));
+		}
+		catch (Exception e) 
+		{
+			BeanHelper.error("Error setting request value of Metadta Editor:" + e.getMessage());
+		}
+		init();
+		return "";
+	}
+	
+	public MetadataEditor initEditor(List<Image> images, MetadataProfile profile, Statement statement)
+	{
+		if (profile != null)
+		{
+			switch (type) 
+			{
+				case MULTIPLE:
+					return new MetadataMultipleEditor(images, profile, statement);
+				case SINGLE:
+					return new MetadataMultipleEditor(images, profile, statement);
+				case BATCH:
+					return  new MetadataBatchEditor(images, profile, statement);
+				default:
+					return null;
+			}
+		}
+		return null;
+	}
+	
+	public Statement getSelectedStatement(MetadataProfile p)
+	{
+		if (p != null)
+		{
+			for (Statement s : p.getStatements())
+			{
+				if (s.getName().equals(selectedStatementName))
+				{
+					return s;
+				}
+			}
+		}
+		return getDefaultStatement();
+	}
+	
+	public Statement getDefaultStatement()
+	{
+		if (profiles.size() > 0 &&   profiles.get(0).getStatements().size() > 0) 
+			return profiles.get(0).getStatements().get(0);
+		return null;
+	}
+	
+	public MetadataProfile getSelectedProfile()
+	{
+		for (MetadataProfile p : profiles)
+		{
+			if (p.getId().toString().equals(selectedProfileId))
+			{
+				return p;
+			}
+		}
+		return getDefaultProfile();
+	}
+	
+	public MetadataProfile getDefaultProfile()
+	{
+		if (profiles.size() > 0) return profiles.get(0);
+		return null;
+	}
+	
+	public List<Image> retrieveImages()
+	{
+		List<Image> images = new ArrayList<Image>();
+		switch (type) 
+		{
+			case MULTIPLE: return retrieveAllSelectedImages(); 
+			case SINGLE: return retrieveSingleImage(idOfImageToEdit); 
+			case BATCH: return retrieveAllSelectedImages();
+			default: return images;
+		}
+	}
+	
+	public List<Image> removeNonEditableImages(List<Image> l)
+	{
+		Security security = new Security();
+		for (int i=0; i < l.size(); i++)			
+		{
+			if (!security.check(OperationsType.UPDATE, user, l.get(i)))
+			{
+				l.remove(i);
+				i--;
+			}
+		}
+		return l;
+	}
+	
+	public List<MetadataProfile> extractProfiles(List<Image> l)
+	{
+		List<MetadataProfile> list = new ArrayList<MetadataProfile>();
+		List<String> cl = new ArrayList<String>();
+		List<String> pl = new ArrayList<String>();
+		for (Image im :l)
+		{
+			if (!cl.contains(im.getCollection().toString()))
+			{
+				cl.add(im.getCollection().toString());
+				CollectionController cc = new CollectionController(user);
+				CollectionImeji c = cc.retrieve(im.getCollection());
+				if (!cl.contains(c.getProfile().getId().toString()))
+				{
+					pl.add(c.getProfile().getId().toString());
+					list.add(c.getProfile());
+				}
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * Retrieve all the selected images.
+	 */
+	private List<Image> retrieveAllSelectedImages()
+	{
+		SelectedBean selectedBean = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
+		List<Image> l = new ArrayList<Image>();
+		try 
+		{
+			for (ImageBean bean : selectedBean.retrieveList(0, 10000))
+			{
+				l.add(bean.getImage());
+			}
+		} 
+		catch (Exception e) 
+		{
+			throw new RuntimeException("Error retrieving selected images", e);
+		}
+		return l;
+	}
+	
+	/**
+	 * Retrieve only the image according to requested id.
+	 */
+	private List<Image> retrieveSingleImage(URI idOfImageToEdit2)
+	{
+		ImageController ic = new ImageController(user);
+		List<Image> l = new ArrayList<Image>();
+		l.add(ic.retrieve(idOfImageToEdit2));
+		return l;
 	}
 	
 	public String addMetadata()
@@ -235,30 +269,14 @@ public class EditWorkspaceBean
 		editor.removeMetadata(getImagePosition(), getMdPosition());
 		return "";
 	}
-	
-    public List<SelectItem> getStatementMenu()
-    {
-    	List<SelectItem> statementMenu = new ArrayList<SelectItem>();
-    	for (MetadataProfile p : ProfileHelper.loadProfiles(images).values())
-    	{
-    		 for (Statement s : p.getStatements())
-    	     {
-    	       	 statementMenu.add(new SelectItem(s.getName(), s.getName()));
-    	     }
-    	}
-    	return statementMenu;
-    }
-
-	public String getStatementToEdit() 
+    
+    public String readAttribute(Map<String, Object> attrs, String name)
 	{
-		return statementToEdit;
+		Object o = attrs.get(name);
+		if (o != null) return o.toString();
+		return "";
 	}
 
-	public void setStatementToEdit(String statementToEdit) 
-	{
-		this.statementToEdit = statementToEdit;
-	}
-	
 	public int getMdPosition() {
 		return mdPosition;
 	}
@@ -292,11 +310,12 @@ public class EditWorkspaceBean
 	}
 
 	public List<SelectItem> getCitationStyles() {
-		return citationStyles;
-	}
-
-	public void setCitationStyles(List<SelectItem> citationStyles) {
-		this.citationStyles = citationStyles;
+		List<SelectItem> l = new ArrayList<SelectItem>();
+		for (CitationStyle str : CitationStyle.values()) 
+		{
+			l.add(new SelectItem(str.name(), str.name()));
+		}
+		return l;
 	}
 
 	public boolean isEraseOldMetadata() {
@@ -305,6 +324,38 @@ public class EditWorkspaceBean
 
 	public void setEraseOldMetadata(boolean eraseOldMetadata) {
 		this.eraseOldMetadata = eraseOldMetadata;
+	}
+	
+	public List<MetadataProfile> getProfiles() {
+		return profiles;
+	}
+
+	public void setProfiles(List<MetadataProfile> profiles) {
+		this.profiles = profiles;
+	}
+
+	public String getSelectedStatementName() {
+		return selectedStatementName;
+	}
+
+	public void setSelectedStatementName(String selectedStatementName) {
+		this.selectedStatementName = selectedStatementName;
+	}
+
+	public String getSelectedProfileId() {
+		return selectedProfileId;
+	}
+
+	public void setSelectedProfileId(String selectedProfileId) {
+		this.selectedProfileId = selectedProfileId;
+	}
+
+	public boolean isEditAllStatements() {
+		return editAllStatements;
+	}
+
+	public void setEditAllStatements(boolean editAllStatements) {
+		this.editAllStatements = editAllStatements;
 	}
 	
 }

@@ -8,66 +8,76 @@
 	xmlns:pretty="http://ocpsoft.com/prettyfaces">
 
 <ui:composition template="template.xhtml">
+	
 <body>
 <ui:define name="subImagesContent">
-	<h:panelGroup styleClass="full_area0 itemBlock">
-		
-		<h:panelGroup  styleClass="full_area0 small_marginLExcl" rendered="#{SessionBean.user != null}">
-		
-			<h:panelGroup>
-                <h2><h:outputText style="text-align: center;" value="Advanced Metadata Editor"/></h2>
-            </h:panelGroup>
-            
-            <h:outputText value="Choose Metadata to Edit: #{EditWorkspaceBean.defaultInit}"/><br/>
-            
-            <h:panelGroup layout="block" styleClass="full_area0">
-	            <a4j:repeat id="statementList" var="statement" value="#{EditWorkspaceBean.statementMenu}" rowKeyVar="index">
-	            	<a4j:commandLink immediate="true" value="#{statement.label}" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="Editor">
-						<f:attribute name="statementName" value="#{statement.label}"/>
-						<f:attribute name="idOfImageToEdit" value="selected"/>
-						<f:attribute name="type" value="BATCH"/>
-	               </a4j:commandLink>
-	               <h:outputText value="  "/>
-	            </a4j:repeat>
-            </h:panelGroup>
-	               
-           	<h3>
-             	<h:outputText styleClass="huge_label" value="Assign one value to all selected images"/>
-        
-             	<h:outputText styleClass="small_label" value="OR"/> 
-             	<h:panelGroup layout="block" styleClass="large_area0">
-					<a4j:commandLink value="Edit each images" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="Editor">
-						<f:attribute name="statementName" value="#{EditWorkspaceBean.statementToEdit}"/>
-						<f:attribute name="idOfImageToEdit" value="selected"/>
-						<f:attribute name="type" value="MULTIPLE"/>
-						<h:outputText value="  "/>
-	               </a4j:commandLink>
-				</h:panelGroup>
-				
 
-			</h3>
-            
-            
-           	<h:panelGroup styleClass="full_area0" id="Editor">	
-           		<h:panelGroup layout="block" styleClass="free_area0 endline">
-           			<ui:include src="../picturesPages/ui/EditMetadataPanelContent.xhtml" />
-				</h:panelGroup>
-           	</h:panelGroup>
-           	
-           	<h:panelGroup layout="block" styleClass="large_area0">
-            	<a4j:commandLink styleClass="free_area1_p8 cancelButton " action="#{EditWorkspaceBean.cancel}" value="#{lbl.cancel}"/>
-            	<a4j:commandLink styleClass="free_area1_p8 activeButton" action="#{EditWorkspaceBean.save}" value="#{lbl.save}" status="EditorStatus"/>
-           	</h:panelGroup>
-           	
-           	<h:panelGroup layout="block" styleClass="tiny_area0">
-					<h:selectBooleanCheckbox id="erase_old_metadata" styleClass="pushCheckbox" value="#{EditWorkspaceBean.eraseOldMetadata}" immediate="true"/>
-				</h:panelGroup>
-			<h:outputText styleClass="free_label" value="Erase old values with new value."/>
-           	
-           	<h:panelGroup layout="block" styleClass="full_area0">
-    			<a4j:status id="EditorStatus" forceId="true" startText="Editing..." />
-    		</h:panelGroup>
+	<h:panelGroup styleClass="full_area0 itemBlock">
+	
+		<h:panelGroup  styleClass="full_area0 small_marginLExcl" rendered="#{SessionBean.user != null}">
 			
+			<h:panelGroup>
+                <h2><h:outputText style="text-align: center;" value="Advanced Metadata Editor #{EditWorkspaceBean.defaultWorkspace}"/></h2>
+            </h:panelGroup>
+           	
+           <h:outputText value="No images! Select images to use editor" rendered="#{empty SelectedBean.currentPartList and empty EditWorkspaceBean.profiles}"/>
+           <h:outputText value="You don't have persmission to edit this images!" rendered="#{!empty SelectedBean.currentPartList and empty EditWorkspaceBean.profiles}"/>
+           	
+            <h:panelGroup id="mdEditor" rendered="#{!empty EditWorkspaceBean.profiles}" layout="block" styleClass="full_area0">
+			
+            	<h:outputText  value="Choose Metadata to Edit:"/><br/>
+            
+	            <h:panelGroup layout="block" styleClass="full_area0">
+		            <a4j:repeat id="profileList" var="profile" value="#{EditWorkspaceBean.profiles}" rowKeyVar="index">
+		            	
+		            	<h:outputText value="#{profile.title} : "/>
+		            	<h:outputText value="No metadata for that profile!" rendered="#{empty profile.statements}"/>
+		            	<a4j:repeat rendered="#{!empty profile.statements}" id="statementList" var="statement" value="#{profile.statements}" rowKeyVar="index">
+		            		<a4j:commandLink immediate="true" value="#{statement.name}" actionListener="#{EditWorkspaceBean.requestEditor}" reRender="Editor">
+								<f:attribute name="statementName" value="#{statement.name}"/>
+								<f:attribute name="profileId" value="#{profile.id}"/>
+								<f:attribute name="idOfImageToEdit" value="selected"/>
+								<f:attribute name="type" value="BATCH"/>
+			               	</a4j:commandLink>
+			                <h:outputText value="  "/>
+		            	</a4j:repeat>
+		              	<br/>
+		            </a4j:repeat>
+	            </h:panelGroup>
+	               
+	           	<h3>
+	             	<h:outputText styleClass="huge_label" value="Assign one value to all selected images"/>
+	        
+	             	<h:outputText styleClass="small_label" value="OR"/> 
+	             	<h:panelGroup layout="block" styleClass="large_area0">
+						<a4j:commandLink value="Edit each images" actionListener="#{EditWorkspaceBean.requestEditor}" reRender="Editor">
+							<f:attribute name="statementName" value="#{EditWorkspaceBean.selectedStatementName}"/>
+							<f:attribute name="profileId" value="#{EditWorkspaceBean.selectedProfileId}"/>
+							<f:attribute name="idOfImageToEdit" value="selected"/>
+							<f:attribute name="type" value="MULTIPLE"/>
+							<h:outputText value="  "/>
+		               </a4j:commandLink>
+					</h:panelGroup>
+				</h3>
+
+	           	<h:panelGroup styleClass="full_area0" id="Editor">	
+	           		<h:panelGroup layout="block" styleClass="free_area0 endline">
+	           			<ui:include src="../picturesPages/ui/EditMetadataPanelContent.xhtml" />
+					</h:panelGroup>
+	           	</h:panelGroup>
+	           	
+	           	<h:panelGroup layout="block" styleClass="large_area0">
+	            	<a4j:commandLink styleClass="free_area1_p8 cancelButton " action="#{EditWorkspaceBean.cancel}" value="#{lbl.cancel}"/>
+	            	<a4j:commandLink styleClass="free_area1_p8 activeButton" action="#{EditWorkspaceBean.save}" value="#{lbl.save}" status="EditorStatus"/>
+	           	</h:panelGroup>
+	           	
+	           	<h:panelGroup layout="block" styleClass="tiny_area0">
+						<h:selectBooleanCheckbox id="erase_old_metadata" styleClass="pushCheckbox" value="#{EditWorkspaceBean.eraseOldMetadata}" immediate="true"/>
+					</h:panelGroup>
+				<h:outputText styleClass="free_label" value="Erase old values with new value."/>
+           	
+           	</h:panelGroup>
+    		
 		</h:panelGroup>
 	</h:panelGroup>
 </ui:define>

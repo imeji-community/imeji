@@ -100,7 +100,7 @@
 				
 				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab == 'VIEW'}">
 					
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{SessionBean.user != null and EditWorkspaceBean.type == 'SINGLE'}">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{imageBean.editable and EditWorkspaceBean.type == 'SINGLE' and EditWorkspaceBean.editAllStatements}">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
 							<h:outputText value="Edit Metadata" /><br/>
 						</h3>
@@ -114,13 +114,15 @@
 			    		</h:panelGroup>
 					</h:panelGroup>
 					
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{EditWorkspaceBean.type != 'SINGLE'}">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{EditWorkspaceBean.type != 'SINGLE' or !EditWorkspaceBean.editAllStatements}">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} " /><br/>
-							<a4j:commandLink value="Edit" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="metadata">
+							<a4j:commandLink rendered="#{imageBean.editable}" value="Edit" actionListener="#{EditWorkspaceBean.requestEditor}" reRender="metadata">
 								<f:attribute name="idOfImageToEdit" value="#{imageBean.image.id}"/>
+								<f:attribute name="editAllStatements" value="true"/>
+								<f:attribute name="profileId" value="#{imageBean.collection.profile.id}"/>
 								<f:attribute name="type" value="SINGLE"/>
-			               </a4j:commandLink>
+							</a4j:commandLink>
 						</h3>
 						
 						<span class="seperator"></span>

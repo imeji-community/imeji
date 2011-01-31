@@ -32,7 +32,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private String selectedSortCriterion;
     private String selectedSortOrder;
     private FacetsBean facets;
-    private EditMetadataBean editMetadataBean;
     private String query;
     private Navigation navigation;
 
@@ -88,16 +87,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         }
         totalNumberOfRecords = controller.searchAdvanced(scList, null, -1, 0).size();
         images = controller.searchAdvanced(scList, sortCriterion, limit, offset);
-        if ("pretty:selected".equals(this.getNavigationString()))
-        {
-            editMetadataBean = new EditMetadataBean((List<Image>)images);
-        }
-        editMetadataBean = new EditMetadataBean((List<Image>)images);
         List<ImageBean> imbList = ImejiFactory.imageListToBeanList(images);
-//        for (ImageBean imb :imbList) 
-//        {
-//			imb.initEditMetadataBean();
-//		}
         return imbList;
     }
 
@@ -121,16 +111,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
             this.setFacets(new FacetsBean(images));
         }
         return "pretty";
-    }
-
-    public EditMetadataBean getEditMetadataBean()
-    {
-        return editMetadataBean;
-    }
-
-    public void setEditMetadataBean(EditMetadataBean editMetadataBean)
-    {
-        this.editMetadataBean = editMetadataBean;
     }
 
     public List<SelectItem> getSortMenu()

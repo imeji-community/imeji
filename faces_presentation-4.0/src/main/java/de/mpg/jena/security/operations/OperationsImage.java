@@ -52,7 +52,7 @@ public class OperationsImage implements Operations
 	 * <br/> 	-	Collection Administrator
 	 */
 	public boolean update(User user, Object object) 
-	{		
+	{	
 		return (auth.isPictureEditor(user, (Image) object)
 				|| auth.isContainerEditor(user, ((Image)object))
 				|| auth.isContainerAdmin(user, ((Image)object)));

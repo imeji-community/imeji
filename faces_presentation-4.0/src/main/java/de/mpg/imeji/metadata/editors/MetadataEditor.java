@@ -183,8 +183,12 @@ public abstract class  MetadataEditor
 	  */
 	protected ImageMetadata newMetadata()
 	{
-		ImageMetadata md = new ImageMetadata(statement.getName(), ComplexTypeHelper.newComplexType(statement.getType()));
-		return md;
+		if (statement != null)
+		{
+			ImageMetadata md = new ImageMetadata(statement.getName(), ComplexTypeHelper.newComplexType(statement.getType()));
+			return md;
+		}
+		return null;
 	}
 	
 	protected boolean hasProfile(Image image)

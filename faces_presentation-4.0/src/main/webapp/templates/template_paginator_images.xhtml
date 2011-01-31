@@ -108,44 +108,45 @@
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 					<li class="large_area0 itemTile">
 						
-							<h:panelGroup layout="block"  id="imgFrame" styleClass="large_area1_p2 tileIconArea free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
+							<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 tileIconArea free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
 								<span class="captionWrapper">
-								<!-- Image with link to the details view --> 
 								
+									<!-- Image with link to the details view --> 
 									<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
 										<h:graphicImage ismap="false" usemap="#map" alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
 									</h:outputLink>
 									
-								<!-- End : Image with link to the details view --> 
-								<span class="editCaption"> 
-									<h:outputLink id="cmdPicEditCaption" value="#" rendered="#{item.editable}">
-										<rich:componentControl event="onclick" for="menuEdit" operation="show"/>
-										<h:outputText style="color:white" value="Edit Metadata"/>
-									</h:outputLink>
-								</span>  
-						</span>
+									<!-- Edit Caption -->
+									<span class="editCaption"> 
+										<h:outputLink id="cmdPicEditCaption" value="#lnkPicDetailBrowse:#{index}" rendered="#{item.editable}">
+											<rich:componentControl event="onclick" for="menuEdit" operation="show"/>
+											<h:outputText style="color:white" value="Edit Metadata"/>
+										</h:outputLink>
+									</span>  
+								</span>
 								
 								<rich:toolTip id="imgToolTip" for="imgFrame" showDelay="500">
 									<ui:include src="../picturesPages/ui/MetadataPopup.xhtml" />
 								</rich:toolTip>
 								
+								
 							</h:panelGroup> 
 						
-						<!-- <h:graphicImage style="position:relative; right:-40px;" alt="Edit" id="picEdit" url="/resources/icon/badge_edit_32.png"/>  -->
-						<rich:contextMenu attached="true" id="menuEdit" submitMode="ajax" styleClass="free_area0 itemList listBackground">
-							<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
-								<h:outputText value="Choose: "/>
-								<a4j:repeat var="statement" value="#{item.statementMenu}" rowKeyVar="index">
-									<rich:menuItem ajaxSingle="true" styleclass="">
-										<a4j:commandLink value="* #{statement.label}" actionListener="#{EditWorkspaceBean.initTrigger}" reRender="modalContent" onclick="Richfaces.showModalPanel('pnlLoading')" oncomplete="Richfaces.hideModalPanel('pnlLoading'); Richfaces.showModalPanel('pnlEdit');">
-											<f:attribute name="statementName" value="#{statement.label}"/>
-											<f:attribute name="idOfImageToEdit" value="#{item.image.id}"/>
-											<f:attribute name="type" value="SINGLE"/>
-						               </a4j:commandLink>
-									</rich:menuItem>
-								</a4j:repeat>
-							</rich:menuItem>
-						</rich:contextMenu>
+							<rich:contextMenu attached="false" attachTo="cmdPicEditCaption" id="menuEdit" submitMode="ajax" styleClass="free_area0 itemList listBackground">
+								<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
+									<h:outputText value="Choose: "/>
+									<a4j:repeat var="statement" value="#{item.statementMenu}" rowKeyVar="index">
+										<rich:menuItem ajaxSingle="true" styleclass="">
+											<a4j:commandLink value="* #{statement.label}" actionListener="#{EditWorkspaceBean.requestEditor}" reRender="modalContent" onclick="Richfaces.showModalPanel('pnlLoading')" oncomplete="Richfaces.hideModalPanel('pnlLoading'); Richfaces.showModalPanel('pnlEdit');">
+												<f:attribute name="statementName" value="#{statement.label}"/>
+												<f:attribute name="profileId" value="#{item.collection.profile.id}"/>
+												<f:attribute name="idOfImageToEdit" value="#{item.image.id}"/>
+												<f:attribute name="type" value="SINGLE"/>
+							               </a4j:commandLink>
+										</rich:menuItem>
+									</a4j:repeat>
+								</rich:menuItem>
+							</rich:contextMenu>
 						
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
 						

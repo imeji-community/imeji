@@ -6,19 +6,14 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ocpsoft.pretty.PrettyContext;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.metadata.EditMetadataBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
-import de.mpg.imeji.util.LoginHelper;
-import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
@@ -30,9 +25,8 @@ public class SelectedBean extends ImagesBean {
 	private int totalNumberOfRecords;
 	private SessionBean sb;
 	private Collection<Image> images;
-	private String mdEdited;
+//	private String mdEdited;
 	private URI currentCollection;
-	private String escidocUserHandle;
 	private String backUrl = null;
 
 	public SelectedBean() {
@@ -64,18 +58,14 @@ public class SelectedBean extends ImagesBean {
 					ImejiNamespaces.ID_URI, uri.toString(), Filtertype.URI));
 		}
 		if (uris.size() != 0) {
-			totalNumberOfRecords = controller.search(uris, null, -1, offset)
-					.size();
+			totalNumberOfRecords = controller.search(uris, null, -1, offset).size();
 			images = controller.search(uris, null, limit, offset);
 		}
-		List<ImageBean> imbList = ImejiFactory.imageListToBeanList(images);
-
-		return imbList;
+		return ImejiFactory.imageListToBeanList(images);
 	}
 
 	public String clearAll() {
-		String prettyLink = PrettyContext.getCurrentInstance()
-				.getCurrentMapping().getId();
+		String prettyLink = PrettyContext.getCurrentInstance().getCurrentMapping().getId();
 		sb.getSelected().clear();
 		if (prettyLink.equalsIgnoreCase("selected"))
 			return "pretty:images";
@@ -105,12 +95,9 @@ public class SelectedBean extends ImagesBean {
 		}
 	}
 
-	public void logInEscidoc() throws Exception {
-		String userName = PropertyReader.getProperty("imeji.escidoc.user");
-		String password = PropertyReader.getProperty("imeji.escidoc.password");
-		escidocUserHandle = LoginHelper.login(userName, password);
-	}
-
+	/**
+	 * WORKAROUND!
+	 */
 	public String getBackUrl() {
 		HttpServletRequest req = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
@@ -121,20 +108,6 @@ public class SelectedBean extends ImagesBean {
 		return backUrl;
 	}
 
-
-	public void mdEditedListener(ValueChangeEvent event) {
-		if (event != null && event.getNewValue() != event.getOldValue()) {
-			this.mdEdited = event.getNewValue().toString();
-		}
-	}
-
-	public String getMdEdited() {
-		return mdEdited;
-	}
-
-	public void setMdEdited(String mdEdited) {
-		this.mdEdited = mdEdited;
-	}
 
 	public void setCurrentCollection(URI currentCollection) {
 		this.currentCollection = currentCollection;
@@ -152,7 +125,11 @@ public class SelectedBean extends ImagesBean {
 		this.sb = sb;
 	}
 
-	public void setEscidocUserHandle(String escidocUserHandle) {
-		this.escidocUserHandle = escidocUserHandle;
+	public Collection<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(Collection<Image> images) {
+		this.images = images;
 	}
 }

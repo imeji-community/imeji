@@ -47,7 +47,7 @@
 	
 			<ui:define name="actionsMenu">
 				<h:panelGroup>
-					<h:outputLink id="lnkEditProfile" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewMdProfileBean.profile.id.path}?init=1" rendered="true">
+					<h:outputLink id="lnkEditProfile" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewMdProfileBean.profile.id.path}?init=1" rendered="#{ViewMdProfileBean.editable}">
 						<h:outputText value="#{lbl.profile_edit}"></h:outputText>
 					</h:outputLink>
 				</h:panelGroup>
@@ -55,8 +55,13 @@
 			
 			
 			<ui:define name="mainContent">
-				<h:panelGroup layout="block" styleClass="full_area0">
-					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
+				<h:panelGroup layout="block" styleClass="full_area0" >
+				
+					<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!ViewMdProfileBean.visible}">
+						<h2><h:outputText value="You are not allow to see this profile"/></h2>
+					</h:panelGroup>
+									
+					<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{ViewMdProfileBean.visible}">
 						
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">

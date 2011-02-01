@@ -132,7 +132,10 @@ public class CollectionController extends ImejiController{
 	
 	public Collection<CollectionImeji> retrieveAll()
 	{
-		return rdf2Bean.load(CollectionImeji.class);
+		Security security = new Security();
+		if (security.isSysAdmin(user))
+			return rdf2Bean.load(CollectionImeji.class);
+		return new ArrayList<CollectionImeji>();
 	}
 	
 	public void delete(CollectionImeji collection, User user) throws Exception{
@@ -193,33 +196,35 @@ public class CollectionController extends ImejiController{
     {
         //Add filters for user management
         String filter ="(";
-      
-          
+        
+        Security security = new Security();
          
-         if(user==null)
-         {
-             
-             filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED>";
+        if(user==null)
+	    {
+	       filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED>";
+	    }
+        else if (security.isSysAdmin(user))
+        {
+        	filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED> || ?status = <http://imeji.mpdl.mpg.de/status/PENDING>";
+        }
+	    else
+	    {
+	    	String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
+	        filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<" +  userUri + ">";
+	        for(Grant grant : user.getGrants())
+	        {
+	        	switch(grant.getGrantType())
+	        	{
+	        		case CONTAINER_ADMIN : //Add specifics here
+	        			break;
+	        		default: 
+	        			filter += " || ?s=<" + grant.getGrantFor().toString() + ">";
+	        			break;
+	             }
+	         }   
          }
-         else
-         {
-             String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
-             filter += "?status = <http://imeji.mpdl.mpg.de/status/RELEASED> || ?createdBy=<" +  userUri + ">";
-             for(Grant grant : user.getGrants())
-             {
-                 switch(grant.getGrantType())
-                 {
-                     case CONTAINER_ADMIN : //Add specifics here
-                         break;
-                     default: 
-                    	 filter += " || ?s=<" + grant.getGrantFor().toString() + ">";
-                    	 break;
-                 }
-             }   
-         }
-     
-         filter += ")";
-         return filter;
+        filter += ")";
+        return filter;
     }
 
   

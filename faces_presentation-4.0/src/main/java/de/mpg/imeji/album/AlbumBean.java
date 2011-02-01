@@ -2,27 +2,21 @@ package de.mpg.imeji.album;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
-
-import thewebsemantic.JenaHelper;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
-
 import de.mpg.jena.controller.AlbumController;
-import de.mpg.jena.controller.CollectionController;
-
 import de.mpg.jena.controller.ImageController;
-
+import de.mpg.jena.security.Security;
+import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.Image;
-
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.User;
@@ -352,6 +346,22 @@ public class AlbumBean implements Serializable
 	        this.selected = selected;
 		}
        
-    
+		public boolean isEditable() 
+		{
+			Security security = new Security();
+			return security.check(OperationsType.UPDATE, sessionBean.getUser(), album);
+		}
+		
+		public boolean isVisible() 
+		{
+			Security security = new Security();
+			return security.check(OperationsType.READ, sessionBean.getUser(), album);
+		}
+		
+		public boolean isDeletable() 
+		{
+			Security security = new Security();
+			return security.check(OperationsType.DELETE, sessionBean.getUser(), album);
+		}
 
 }

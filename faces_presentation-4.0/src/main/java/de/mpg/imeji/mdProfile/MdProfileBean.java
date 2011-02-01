@@ -28,6 +28,8 @@ import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
+import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
@@ -362,4 +364,22 @@ public class MdProfileBean
         }
         return true;
     }
+    
+    public boolean isEditable() 
+	{
+		Security security = new Security();
+		return security.check(OperationsType.UPDATE, sessionBean.getUser(), profile);
+	}
+	
+	public boolean isVisible() 
+	{
+		Security security = new Security();
+		return security.check(OperationsType.READ, sessionBean.getUser(), profile);
+	}
+	
+	public boolean isDeletable() 
+	{
+		Security security = new Security();
+		return security.check(OperationsType.DELETE, sessionBean.getUser(), profile);
+	}
 }

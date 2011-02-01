@@ -7,12 +7,17 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import thewebsemantic.NotFoundException;
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.GrantController;
+import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Authorization;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
@@ -23,12 +28,14 @@ public class UserCreationBean
     private User user;
     private String password;
     private String repeatedPassword;
+    private SessionBean sb;
     
     private Logger logger = Logger.getLogger(UserCreationBean.class);
     
     public UserCreationBean()
     {
-        this.setUser(new User());
+    	sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    	this.setUser(new User());
     }
     
     public String create() throws Exception
@@ -77,13 +84,30 @@ public class UserCreationBean
     
     public List<CollectionImeji> getAllcollections()
     {
-    	CollectionController cc = new CollectionController(user);
+    	CollectionController cc = new CollectionController(sb.getUser());
     	return (List<CollectionImeji>) cc.retrieveAll();
+    }
+    
+    public List<Album> getAllAlbums()
+    {
+    	AlbumController ac = new AlbumController(sb.getUser());
+    	return (List<Album>) ac.retrieveAll();
+    }
+    
+    public int getAllAlbumsSize()
+    {
+    	return this.getAllAlbums().size();
     }
     
     public int getAllCollectionsSize()
     {
     	return getAllcollections().size();
+    }
+    
+    public int getAllImagesSize()
+    {
+    	ImageController ic = new ImageController(sb.getUser());
+    	return ic.retrieveAll().size();
     }
     
     public int getAllUsersSize() 
@@ -94,11 +118,11 @@ public class UserCreationBean
     
     public String reInitializeUserRights() throws IllegalArgumentException, IllegalAccessException
     {
-    	List<CollectionImeji> allColls = new ArrayList<CollectionImeji>();    	
-    	allColls.addAll(this.getAllcollections());
-    	UserController uc = new UserController(user);
+    	List<CollectionImeji> allColls = getAllcollections();
+    	List<Album> allAlbs = getAllAlbums();
+    	UserController uc = new UserController(sb.getUser());
     	Authorization authorization = new Authorization();
-    	GrantController gc = new GrantController(user);
+    	GrantController gc = new GrantController(sb.getUser());
     	List<User> allUsers = getAllUsers();
     	for (User u : allUsers)
     	{
@@ -116,6 +140,15 @@ public class UserCreationBean
 	    			if (u.getEmail().equals(creatorEMail))
 	    			{
 	    				gc.addGrant(u, new Grant(GrantType.CONTAINER_ADMIN, c.getId()));
+	    				gc.addGrant(u, new Grant(GrantType.PROFILE_ADMIN, c.getProfile().getId()));
+	    			}
+	    		}
+	    		for (Album a : allAlbs)
+	    		{
+	    			String creatorEMail= uc.retrieve(a.getProperties().getCreatedBy()).getEmail();
+	    			if (u.getEmail().equals(creatorEMail))
+	    			{
+	    				gc.addGrant(u, new Grant(GrantType.CONTAINER_ADMIN, a.getId()));
 	    			}
 	    		}
     		}
@@ -155,7 +188,8 @@ public class UserCreationBean
         return user;
     }
     
-    
-    
-    
+    public boolean isSysAdmin()
+    {
+    	return sb.isAdmin();
+    }
 }

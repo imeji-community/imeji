@@ -20,6 +20,22 @@ import de.mpg.jena.vo.Grant.GrantType;
  */
 public class Authorization
 {	
+	/**
+	 * Generic Authorization
+	 * @param gt
+	 * @param user
+	 * @param uri
+	 * @return
+	 */
+	public boolean is(GrantType gt, User user, URI uri)
+	{
+		for (Grant g :  getGrantsForURI(user, uri))
+		{
+			if (gt.equals(g.getGrantType())) return true;
+		}
+		return false;
+	}
+	
 	
 	public boolean isSysAdmin(User user)
 	{

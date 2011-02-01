@@ -13,8 +13,10 @@ public class Security
 {
 	public boolean check(OperationsType op, User user, Object object)
 	{
-		Operations operation = instantiateOperation(object);
+		if (isSysAdmin(user)) return true;
 		
+		Operations operation = instantiateOperation(object);
+
 		switch (op) 
 		{
 			case CREATE: return operation.create(user, object);
@@ -23,6 +25,13 @@ public class Security
 			case DELETE: return operation.delete(user, object);
 		}
 		
+		return false;
+	}
+	
+	public boolean isSysAdmin(User user)
+	{
+		Authorization auth = new Authorization();
+		if (user != null) return auth.isSysAdmin(user);
 		return false;
 	}
 	

@@ -9,6 +9,7 @@ import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
+import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
@@ -62,7 +63,8 @@ public class CollectionImagesBean extends ImagesBean {
 		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
 		List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
 		try {
-			scList = transformQuery(getQuery());
+			URLQueryTransformer queryTransformer = new URLQueryTransformer();
+			scList = queryTransformer.transform(getQuery());
 		} catch (Exception e) {
 			BeanHelper.error("Invalid search query!");
 		}

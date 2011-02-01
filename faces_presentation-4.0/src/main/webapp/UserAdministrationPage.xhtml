@@ -38,14 +38,17 @@
 		<ui:composition template="templates/template.xhtml">
 		
 		<ui:define name="mainContent">
-			<h1><h:outputText value="All Imeji Users"/></h1>
-			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder">
+			<h1><h:outputText value="Imeji Users administration"/></h1>
+			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!UserCreationBean.sysAdmin}">
+				<h2><h:outputText value="No sufficient privileges!"/></h2>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{UserCreationBean.sysAdmin}">
 				
 				<h:panelGroup layout="block" styleClass="full_area0 endline">
 					<h:commandButton action="#{UserCreationBean.reInitializeUserRights}" value="Init Users rights" styleClass="free_area1_p8 activeButton"/>					
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="full_area0 endline">
-					<h2><h:outputText value="#{UserCreationBean.allUsersSize} Users, for #{UserCreationBean.allCollectionsSize} collections."/></h2>
+					<h2><h:outputText value="System has: #{UserCreationBean.allImagesSize} Images, #{UserCreationBean.allUsersSize} Users, #{UserCreationBean.allCollectionsSize} collections, #{UserCreationBean.allAlbumsSize} Albums"/></h2>
 				</h:panelGroup>
 				<a4j:repeat id="userList" var="user" value="#{UserCreationBean.allUsers}" rows="0" rowKeyVar="index">
 					<h:panelGroup layout="block" styleClass="huge_area0">

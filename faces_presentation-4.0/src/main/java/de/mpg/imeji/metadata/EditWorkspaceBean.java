@@ -9,7 +9,6 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.SelectedBean;
 import de.mpg.imeji.metadata.editors.MetadataBatchEditor;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
@@ -68,9 +67,8 @@ public class EditWorkspaceBean
 		editAllStatements = false;
 	}
 	
-	public void init()
+	public void init(List<Image> images)
 	{
-		List<Image> images = retrieveImages();
 		images = removeNonEditableImages(images);
 		profiles = extractProfiles(images);
 		MetadataProfile p = getSelectedProfile();
@@ -82,7 +80,7 @@ public class EditWorkspaceBean
 	public String getDefaultWorkspace()
 	{
 		reset();
-		init();
+		init(retrieveImages());
 		return "";
 	}
 	
@@ -115,7 +113,7 @@ public class EditWorkspaceBean
 		{
 			BeanHelper.error("Error setting request value of Metadta Editor:" + e.getMessage());
 		}
-		init();
+		init(retrieveImages());
 		return "";
 	}
 	
@@ -232,19 +230,7 @@ public class EditWorkspaceBean
 	private List<Image> retrieveAllSelectedImages()
 	{
 		SelectedBean selectedBean = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
-		List<Image> l = new ArrayList<Image>();
-		try 
-		{
-			for (ImageBean bean : selectedBean.retrieveList(0, 10000))
-			{
-				l.add(bean.getImage());
-			}
-		} 
-		catch (Exception e) 
-		{
-			throw new RuntimeException("Error retrieving selected images", e);
-		}
-		return l;
+		return (List<Image>) selectedBean.getImages();
 	}
 	
 	/**

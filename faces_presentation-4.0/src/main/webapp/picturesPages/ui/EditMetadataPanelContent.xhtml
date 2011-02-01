@@ -63,7 +63,7 @@
 									
 									
 									<!-- METADATA TYPE TEXT -->
-									<h:outputLabel value="#{metadata.type.label}" styleClass="huge_label" rendered="#{metadata.type.enumType == 'TEXT'}"/>
+									<h:outputLabel value="#{metadata.name}" styleClass="huge_label" rendered="#{metadata.type.enumType == 'TEXT'}"/>
 									<h:inputTextarea  id="inputText" styleClass="quad_txtArea inputTxtArea" value="#{metadata.type.text}" rendered="#{metadata.type.enumType=='TEXT'}">
 										<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputText" var="results" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 											<h:column>
@@ -73,7 +73,7 @@
 									</h:inputTextarea>
 											
 									<!-- METADATA TYPE URI -->
-									<h:outputText value="#{metadata.type.label}" styleClass="huge_label" rendered="#{metadata.type.enumType=='URI'}" />
+									<h:outputText value="#{metadata.name}" styleClass="huge_label" rendered="#{metadata.type.enumType=='URI'}" />
 									<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.type.uri}" rendered="#{metadata.type.enumType=='URI'}" onfocus="this.select();">
 										<f:converter converterId="URIConverter" />
 										<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputURI" var="results" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
@@ -85,7 +85,7 @@
 									
 									<!-- METADATA TYPE PUBLICATION -->
 									<h:panelGroup rendered="#{metadata.type.enumType=='PUBLICATION'}">
-										<h:outputText value="#{lbl.publication_url}" styleClass="huge_label" rendered="#{metadata.type.enumType=='PUBLICATION'}" />
+										<h:outputText value="URL of #{metadata.name}" styleClass="huge_label" rendered="#{metadata.type.enumType=='PUBLICATION'}" />
 										<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.type.uri}" rendered="#{metadata.type.enumType=='PUBLICATION'}" onfocus="this.select();">
 											<f:converter converterId="URIConverter" />
 											<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputPublicationURI" var="results" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
@@ -102,7 +102,7 @@
 							
 									<!-- METADATA TYPE DATE -->
 									<h:panelGroup rendered="#{metadata.type.enumType=='DATE'}">
-										<h:outputText value="#{metadata.type.label}" styleClass="huge_label" />
+										<h:outputText value="#{metadata.name}" styleClass="huge_label" />
 										<h:inputText styleClass="huge_txtInput" value="#{metadata.type.date}">
 											<f:convertDateTime type="date" pattern="yyyy-MM-dd" />
 										</h:inputText>
@@ -110,19 +110,20 @@
 									
 									<!-- METADATA TYPE LICENSE -->
 									<h:panelGroup rendered="#{metadata.type.enumType=='LICENSE'}">
-										<h:outputText value="#{metadata.type.label}" styleClass="huge_label" />
+										<h:outputText value="#{metadata.name}" styleClass="huge_label" />
 										<h:inputText styleClass="huge_txtInput" value="#{metadata.type.license}">
 										</h:inputText>
 									</h:panelGroup>
 									
 									<!-- METADATA TYPE NUMBER -->
 									<h:panelGroup rendered="#{metadata.type.enumType=='NUMBER'}">
-										<h:outputText value="#{metadata.type.label}" styleClass="huge_label" rendered="#{metadata.type.enumType=='NUMBER'}" />		
+										<h:outputText value="#{metadata.name}" styleClass="huge_label" rendered="#{metadata.type.enumType=='NUMBER'}" />		
 										<h:inputText styleClass="huge_txtInput" value="#{metadata.type.number}" rendered="#{metadata.type.enumType=='NUMBER'}" />
 									</h:panelGroup>
 											
 									<!-- METADATA TYPE CONE AUTHOR -->
 									<h:panelGroup rendered="#{metadata.type.enumType=='CONE_AUTHOR'}">
+										<h:outputLabel value="#{metadata.name}" styleClass="huge_label" />
 										<h:outputLabel value="#{lbl.family_name}" styleClass="huge_label" />
 										<h:inputText id="inputFamilyName" styleClass="xHuge_txtInput" value="#{metadata.type.person.familyName}">
 											<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputFamilyName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})"	suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
@@ -181,6 +182,7 @@
 			
 									<!-- METADATA TYPE GEOLOCATION -->
 									<h:panelGroup rendered="#{metadata.type.enumType=='GEOLOCATION'}">
+										<h:outputLabel value="#{metadata.name}" styleClass="huge_label" />
 										<h:outputLabel value="#{lbl.geolocation_latitude}" styleClass="huge_label" />
 										<h:inputText styleClass="xHuge_txtInput" value="#{metadata.type.latitude}" />
 										<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="huge_label" />

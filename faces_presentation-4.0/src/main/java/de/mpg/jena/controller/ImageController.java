@@ -148,6 +148,14 @@ public class ImageController extends ImejiController
     {
         return (Image)rdf2Bean.load(ObjectHelper.getURI(Image.class, id).toString());
     }
+    
+    public Collection<Image> retrieveAll()
+    {
+    	Security security = new Security();
+		if (security.isSysAdmin(user))
+			return rdf2Bean.load(Image.class);
+		return new ArrayList<Image>();
+    }
 
     public Collection<Image> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
             throws Exception
@@ -271,49 +279,49 @@ public class ImageController extends ImejiController
 
     public static void main(String[] arg) throws Exception
     {
-        User user = createUser();
-        ImageController ic = new ImageController(user);
-        base.write(System.out);
-        List<SearchCriterion> scList2 = ImagesBean
-                .transformQuery2("IMAGE_COLLECTION_PROFILE.URI=\"http://imeji.mpdl.mpg.de/mdprofile/0\" AND ( ( IMAGE_METADATA_NAME.EQUALS=\"author\" AND IMAGE_METADATA_COMPLEXTYPE_TEXT.REGEX=\"test\" ) OR ( IMAGE_METADATA_NAME.EQUALS=\"mdname2\" AND IMAGE_METADATA_COMPLEXTYPE_TEXT.REGEX=\"test2\" ) )");
-        System.out.println("test");
-        System.out.println(ic.createQuery2(scList2, null, "type", -1, 0));
-        SearchCriterion sc0 = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT,
-                "white", Filtertype.REGEX);
-        SearchCriterion sc1 = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAME, "colour",
-                Filtertype.EQUALS);
-        List<SearchCriterion> scList0 = new ArrayList<SearchCriterion>();
-        scList0.add(sc0);
-        scList0.add(sc1);
-        SearchCriterion sc2 = new SearchCriterion(Operator.AND,
-                ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, "white", Filtertype.REGEX);
-        SearchCriterion sc3 = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAME, "author",
-                Filtertype.EQUALS);
-        List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
-        scList1.add(sc2);
-        scList1.add(sc3);
-        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
-        scList.add(scList0);
-        scList.add(scList1);
-        // Collection<Image> result = ic.searchAdvanced(scList, null, -1, 0);
-        /*
-         * Resource r = base.getResource("http://imeji.mpdl.mpg.de/collection/1"); r.removeProperties();
-         */
-        Collection<CollectionImeji> result = rdf2Bean.load(CollectionImeji.class);
-        // CollectionImeji res = rdf2Bean.load(CollectionImeji.class, "http://imeji.mpdl.mpg.de/collection/1");
-        System.out.println("IMAGE_MD_NAME.REGEX=\"bla va\" ".matches("\\s*[^\\s]+=\".*\"\\s+"));
-        // System.out.println("Found: " +result.size() + "results ");
-        /*
-         * for (Image img : result) { System.out.println(img.getId()); }
-         */
-        String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/collection> }";
-        // String q =
-        // "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  .  OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v10 . ?v1 <http://purl.org/dc/terms/type> ?v2 . ?v2 <http://imeji.mpdl.mpg.de/metadata/enumType> ?v4 .  OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/metadata/date> ?v3 }}}";
-        // Syntax.
-        Query queryObject = QueryFactory.create(q, Syntax.syntaxARQ);
-        QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
-        ResultSet results = qe.execSelect();
-        ResultSetFormatter.out(System.out, results);
+//        User user = createUser();
+//        ImageController ic = new ImageController(user);
+//        base.write(System.out);
+//        List<SearchCriterion> scList2 = ImagesBean
+//                .transformQuery2("IMAGE_COLLECTION_PROFILE.URI=\"http://imeji.mpdl.mpg.de/mdprofile/0\" AND ( ( IMAGE_METADATA_NAME.EQUALS=\"author\" AND IMAGE_METADATA_COMPLEXTYPE_TEXT.REGEX=\"test\" ) OR ( IMAGE_METADATA_NAME.EQUALS=\"mdname2\" AND IMAGE_METADATA_COMPLEXTYPE_TEXT.REGEX=\"test2\" ) )");
+//        System.out.println("test");
+//        System.out.println(ic.createQuery2(scList2, null, "type", -1, 0));
+//        SearchCriterion sc0 = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT,
+//                "white", Filtertype.REGEX);
+//        SearchCriterion sc1 = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAME, "colour",
+//                Filtertype.EQUALS);
+//        List<SearchCriterion> scList0 = new ArrayList<SearchCriterion>();
+//        scList0.add(sc0);
+//        scList0.add(sc1);
+//        SearchCriterion sc2 = new SearchCriterion(Operator.AND,
+//                ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, "white", Filtertype.REGEX);
+//        SearchCriterion sc3 = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAME, "author",
+//                Filtertype.EQUALS);
+//        List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
+//        scList1.add(sc2);
+//        scList1.add(sc3);
+//        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
+//        scList.add(scList0);
+//        scList.add(scList1);
+//        // Collection<Image> result = ic.searchAdvanced(scList, null, -1, 0);
+//        /*
+//         * Resource r = base.getResource("http://imeji.mpdl.mpg.de/collection/1"); r.removeProperties();
+//         */
+//        Collection<CollectionImeji> result = rdf2Bean.load(CollectionImeji.class);
+//        // CollectionImeji res = rdf2Bean.load(CollectionImeji.class, "http://imeji.mpdl.mpg.de/collection/1");
+//        System.out.println("IMAGE_MD_NAME.REGEX=\"bla va\" ".matches("\\s*[^\\s]+=\".*\"\\s+"));
+//        // System.out.println("Found: " +result.size() + "results ");
+//        /*
+//         * for (Image img : result) { System.out.println(img.getId()); }
+//         */
+//        String q = "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/collection> }";
+//        // String q =
+//        // "SELECT DISTINCT * WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  .  OPTIONAL { ?s <http://imeji.mpdl.mpg.de/image/metadata> ?v0 . ?v0 <http://www.w3.org/2000/01/rdf-schema#member> ?v1 . ?v1 <http://imeji.mpdl.mpg.de/image/metadata/name> ?v10 . ?v1 <http://purl.org/dc/terms/type> ?v2 . ?v2 <http://imeji.mpdl.mpg.de/metadata/enumType> ?v4 .  OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/metadata/date> ?v3 }}}";
+//        // Syntax.
+//        Query queryObject = QueryFactory.create(q, Syntax.syntaxARQ);
+//        QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
+//        ResultSet results = qe.execSelect();
+//        ResultSetFormatter.out(System.out, results);
         /*
          * while(results.hasNext()) { QuerySolution qs = results.next(); Resource s = qs.getResource("?s");
          * s.removeProperties(); //base.remove(qs.getResource("?s"), qs.get("?p").as(Property.class), qs.get("?o")); }

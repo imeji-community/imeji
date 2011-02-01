@@ -13,7 +13,7 @@ import thewebsemantic.LocalizedString;
 import thewebsemantic.NotBoundException;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.image.ImagesBean;
+import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.controller.CollectionController;
@@ -140,7 +140,8 @@ public class FacetsBean
     public int getCount(URI id, Statement st, boolean hasValue, String value, CollectionImeji coll) throws Exception
     {
         String query = generateQuery(id, st, hasValue, value, coll);
-        List<List<SearchCriterion>> scList = ImagesBean.transformQuery(query);
+        URLQueryTransformer queryTransformer = new URLQueryTransformer();
+        List<List<SearchCriterion>> scList = queryTransformer.transform(query);
         ImageController ic = new ImageController(sb.getUser());
         try
         {

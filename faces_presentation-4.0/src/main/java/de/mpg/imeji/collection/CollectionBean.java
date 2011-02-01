@@ -5,12 +5,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import thewebsemantic.JenaHelper;
 import thewebsemantic.NotBoundException;
-
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
@@ -298,6 +295,18 @@ public abstract class CollectionBean
     	Security security = new Security();
     	return security.check(OperationsType.UPDATE, sessionBean.getUser(), collection);
     }
+
+	public boolean isVisible() 
+	{
+		Security security = new Security();
+		return security.check(OperationsType.READ, sessionBean.getUser(), collection);
+	}
+	
+	public boolean isDeletable() 
+	{
+		Security security = new Security();
+		return security.check(OperationsType.DELETE, sessionBean.getUser(), collection);
+	}
 
     public boolean isCorruptedList()
     {

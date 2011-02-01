@@ -15,6 +15,8 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.Navigation.Page;
+import de.mpg.jena.security.Authorization;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.User;
 
 public class SessionBean implements Serializable
@@ -28,7 +30,6 @@ public class SessionBean implements Serializable
     // His locale
     private Locale locale = new Locale("en");//.getCurrentInstance().getExternalContext().getRequestLocale();
     private Page currentPage = null;
-    private boolean admin = false;
     private List<URI> selected;
 	private List<URI> selectedCollections;
 	private List<URI> selectedAlbums;
@@ -147,12 +148,8 @@ public class SessionBean implements Serializable
 
     public boolean isAdmin()
     {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin)
-    {
-        this.admin = admin;
+        Security security = new Security();
+    	return security.isSysAdmin(user);
     }
 
     public List<URI> getSelected()

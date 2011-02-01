@@ -1,16 +1,11 @@
 package de.mpg.imeji.image;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
@@ -19,17 +14,12 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
-import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.ImageController;
-import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.Grant;
-import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.User;
 
 public class ImageBean
 {
@@ -269,5 +259,17 @@ public class ImageBean
 	{
 		Security security = new Security();
 		return security.check(OperationsType.UPDATE, sessionBean.getUser(), image);
+	}
+	
+	public boolean isVisible() 
+	{
+		Security security = new Security();
+		return security.check(OperationsType.READ, sessionBean.getUser(), image);
+	}
+	
+	public boolean isDeletable() 
+	{
+		Security security = new Security();
+		return security.check(OperationsType.DELETE, sessionBean.getUser(), image);
 	}
 }

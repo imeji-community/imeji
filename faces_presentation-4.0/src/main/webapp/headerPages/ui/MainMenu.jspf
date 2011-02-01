@@ -55,9 +55,12 @@
 		<h:outputLink id="lnkAlbums" value="#{Navigation.albumsUrl}">
 			<h:outputText value="#{lbl.header_albums}"></h:outputText>
 		</h:outputLink>
-		<h:outputText id="txtMyAlbumsInactive" styleClass="free_area0" value="My Albums" rendered="false" />
-	
-		<h:outputLink id="lnkStatistics" value="#{Navigation.statisticsUrl}/visit" rendered="#{SessionBean.admin and SessionBean.user != null}">
+		
+		<h:outputLink id="lnkAdmin" value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" rendered="#{SessionBean.admin}">
+			<h:outputText value="ADMIN"></h:outputText>
+		</h:outputLink>
+		
+		<h:outputLink id="lnkStatistics" value="#{Navigation.statisticsUrl}/visit" rendered="false">
 			<h:outputText value="#{lbl.header_statistics}"></h:outputText>
 		</h:outputLink>
 		<h:outputText id="txtStatisticsInactive" styleClass="free_area0" value="Statistics" rendered="false" />

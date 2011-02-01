@@ -45,8 +45,9 @@ public class OperationsContainer implements Operations
 	 */
 	public boolean update(User user, Object object) 
 	{
-		return (auth.isPictureEditor(user, (Container) object)
-				|| auth.isContainerAdmin(user, (Container) object));
+		return (user != null &&
+				(auth.isPictureEditor(user, (Container) object)
+				|| auth.isContainerAdmin(user, (Container) object)));
 	}
 
 	/**

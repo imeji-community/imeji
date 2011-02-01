@@ -32,50 +32,45 @@
             All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
-
-
 <f:subview id="EditMetadataModalPanel">
-<h:form name="panelFormular">
-<div>
-	<style>
-	    .bodyPanel {
-	    	background-color: #434343;
-	        height:200px; 
-	        overflow:auto; !important
-	    }
-   	 </style>
-
-	<rich:modalPanel style="background-color:#434343" id="pnlLoading" domElementAttachment="form">
-		 <h:outputText value="Simple Editor: Initializing..."/>
-	</rich:modalPanel>
-	
-	
-	<!-- MODAL PANEL -->
-	<rich:modalPanel style="background-color:#434343" id="pnlEdit" autosized="true" moveable="false" keepVisualState="true" domElementAttachment="form" overlapEmbedObjects="true" >
-
-	     <!-- PANEL HEADER -->
-	     <f:facet name="header">
-	       <h:outputText value="Simple Editor"/>
-	     </f:facet>
-	     <f:facet name="controls">
-	          <a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')">X</a>
-	     </f:facet>
-    	 
-	     <!-- PANEL CONTENT -->
-	     <rich:panel id="modalContent" bodyClass="bodyPanel">
-	    	<ui:include src="EditMetadataPanelContent.xhtml" />
-	 	</rich:panel>
-	 	
-	 	<!-- PANEL FOOTER -->
-	 	<a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')">
-        	<h:outputText value="close"/>
-        </a>
-       <a4j:commandLink styleClass="large_label" action="#{EditWorkspaceBean.save}" value="#{lbl.save}"/>
-	</rich:modalPanel>	
-</div>
-</h:form>
+	<h:form name="panelFormular">
+		<div>
+			<style>
+			    .bodyPanel {
+			    	background-color: #434343;
+			        height:200px; 
+			       	padding:20px;
+			        overflow:auto; !important
+			    }
+		   	 </style>
+		
+			<rich:modalPanel style="background-color:#434343" id="pnlLoading" domElementAttachment="form">
+				 <h:outputText value="Simple Editor: Initializing..."/>
+			</rich:modalPanel>
+			
+			<!-- MODAL PANEL -->
+			<rich:modalPanel style="background-color:#434343" id="pnlEdit" autosized="true" moveable="false" keepVisualState="true" domElementAttachment="form" overlapEmbedObjects="true" >
+		
+			     <!-- PANEL HEADER -->
+			     <f:facet name="header">
+			       <h:outputText value="Simple Editor"/>
+			     </f:facet>
+			     <f:facet name="controls">
+			          <a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')">X</a>
+			     </f:facet>
+		    	 
+			     <!-- PANEL CONTENT -->
+			     <rich:panel id="modalContent" bodyClass="bodyPanel">
+			    	<ui:include src="EditMetadataPanelContent.xhtml" />
+			 	</rich:panel>
+			 	
+			 	<!-- PANEL FOOTER -->
+			 	<a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')">
+		        	<h:outputText value="close"/>
+		        </a>
+		       <a4j:commandLink styleClass="large_label" action="#{EditWorkspaceBean.save}" value="#{lbl.save}"/>
+			</rich:modalPanel>	
+		</div>
+	</h:form>
 </f:subview>
-
 </div>
-
-

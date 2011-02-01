@@ -9,6 +9,7 @@ import java.util.List;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
@@ -87,7 +88,10 @@ public class AlbumController extends ImejiController{
 	public Collection<Album> retrieveAll()
 	{
 		RDF2Bean reader = new RDF2Bean(base);
-		return reader.load(Album.class);
+		Security security = new Security();
+		if (security.isSysAdmin(user))
+			return reader.load(Album.class);
+		return new ArrayList<Album>();
 	}
 	
 	public void delete(Album album, User user) throws Exception{

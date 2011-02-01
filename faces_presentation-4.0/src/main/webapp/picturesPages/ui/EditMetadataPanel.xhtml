@@ -34,11 +34,18 @@
 </ui:remove>
 
 
+<!-- 
+
+
+		IMPORTANT : DISCARDED. REPLACED BY EDITMETADATAMODALPANEL
+
+ -->
+
 <f:subview id="EditMetadataPanel">
 <h:form name="panelFormular">
 <div>
 	<!-- MODAL PANEL -->
-	<rich:modalPanel style="background-color:#434343" id="pnlEdit" autosized="true" moveable="true" keepVisualState="true" domElementAttachment="form" overlapEmbedObjects="false" >
+	<rich:modalPanel style="background-color:#434343" id="pnlEdit" autosized="false" moveable="true" keepVisualState="true" domElementAttachment="form" overlapEmbedObjects="false" >
 
 	     <!-- PANEL HEADER -->
 	     <f:facet name="header">
@@ -52,13 +59,13 @@
 		    .bodyPanel {
 		    	background-color: #434343;
 		        height:500px; 
-		        width:600px;
+		        width:700px;
 		        overflow:auto; !important
 		    }
     	 </style>
     	 
 	     <!-- PANEL CONTENT -->
-	     <rich:panel rendered="false" id="modalContent" bodyClass="bodyPanel">
+	     <rich:panel rendered="true" id="modalContent" bodyClass="bodyPanel">
 	     <a4j:outputPanel id="ajaxContent">
 	         
 	         <h:panelGroup layout="block">
@@ -234,7 +241,7 @@
 	 	<br/><br/>
 	 	<!-- PANEL FOOTER -->
 	 	<a href="#" onclick="Richfaces.hideModalPanel('pnlEdit')">
-        	<h:outputText value="close"/>
+        	<h:outputText value="close"/>fff
         </a>
        <a4j:commandLink styleClass="large_label" action="#{EditWorkspaceBean.save}" value="#{lbl.save}"/>
 	</rich:modalPanel>	

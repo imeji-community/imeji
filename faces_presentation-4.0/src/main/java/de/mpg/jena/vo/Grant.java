@@ -15,8 +15,8 @@ public class Grant implements Serializable {
     @Namespace("http://imeji.mpdl.mpg.de/")
     @RdfType("grantType")
 	public enum GrantType {
-        SYSADMIN,
-		CONTAINER_ADMIN, CONTAINER_EDITOR, IMAGE_UPLOADER, IMAGE_EDITOR, PRIVILEGED_VIEWER
+        SYSADMIN, CONTAINER_ADMIN, CONTAINER_EDITOR, IMAGE_UPLOADER
+        , IMAGE_EDITOR, PRIVILEGED_VIEWER, PROFILE_ADMIN, PROFILE_EDITOR;
 	}
 	
 	private GrantType grantType;
@@ -34,7 +34,6 @@ public class Grant implements Serializable {
 	    this.grantFor = gf;
 	}
 	
-	
 	public void setGrantType(GrantType grantType) {
 		this.grantType = grantType;
 	}
@@ -47,6 +46,5 @@ public class Grant implements Serializable {
 	public URI getGrantFor() {
 		return grantFor;
 	}
-	
 	
 }

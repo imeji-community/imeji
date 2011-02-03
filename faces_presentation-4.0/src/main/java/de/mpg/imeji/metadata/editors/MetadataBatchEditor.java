@@ -3,7 +3,6 @@ package de.mpg.imeji.metadata.editors;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.metadata.validators.Validator;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
@@ -54,14 +53,14 @@ public class MetadataBatchEditor extends MetadataEditor
 	@Override
 	public boolean validateMetadataofImages() 
 	{
-		for (Image im : images)
-		{
-			validator = new Validator(im.getMetadata(), profile);
-			if (!(validator.valid()))
-			{
-				return false;
-			}
-		}
+//		for (Image im : images)
+//		{
+//			validator = new Validator(im.getMetadata(), profile);
+//			if (!(validator.valid()))
+//			{
+//				return false;
+//			}
+//		}
 		return true;
 	}
 	

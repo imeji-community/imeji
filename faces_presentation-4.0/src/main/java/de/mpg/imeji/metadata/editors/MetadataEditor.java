@@ -19,7 +19,6 @@ import com.hp.hpl.jena.rdf.arp.StatementHandler;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
-import de.mpg.imeji.metadata.validators.Validator;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.controller.ImageController;
@@ -35,7 +34,7 @@ public abstract class  MetadataEditor
 	protected Statement statement;
 	protected MetadataProfile profile;
 	protected boolean erase = false;
-	protected Validator validator;
+	//protected Validator validator;
 	
 	private static Logger logger = Logger.getLogger(MetadataEditor.class);
 	
@@ -80,10 +79,10 @@ public abstract class  MetadataEditor
 				else
 				{
 					BeanHelper.error("Validation error!");
-					for (String str : validator.getMessages()) 
-					{
-						BeanHelper.error(str);
-					}
+//					for (String str : validator.getMessages()) 
+//					{
+//						BeanHelper.error(str);
+//					}
 				}
 			}
 			else

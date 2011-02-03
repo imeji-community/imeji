@@ -2,7 +2,6 @@ package de.mpg.imeji.metadata.editors;
 
 import java.util.List;
 
-import de.mpg.imeji.metadata.validators.Validator;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
@@ -50,8 +49,9 @@ public class MetadataMultipleEditor extends MetadataEditor
 	public boolean validateMetadataofImages() 
 	{
 		// Validate only first image since all images get the same metadata
-		validator = new Validator(images.get(0).getMetadata(), profile);
-		return validator.valid();
+//		validator = new Validator(images.get(0).getMetadata(), profile);
+//		return validator.valid();
+		return true;
 	}
 	
 	public void addMetadata(int imagePos, int metadataPos)

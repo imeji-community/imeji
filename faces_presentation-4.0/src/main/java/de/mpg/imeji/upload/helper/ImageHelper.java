@@ -1,25 +1,15 @@
 package de.mpg.imeji.upload.helper;
-
 import java.awt.Graphics;
+
 import java.awt.Image;
-import java.awt.color.ColorSpace;
-import java.awt.color.ICC_ColorSpace;
-import java.awt.color.ICC_Profile;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Iterator;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import javax.naming.InitialContext;
 import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
 import org.apache.commons.httpclient.HttpClient;
@@ -33,7 +23,9 @@ import de.escidoc.schemas.item.x09.ItemDocument.Item;
 import de.mpg.escidoc.services.common.XmlTransforming;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.escidoc.ItemVO;
+import de.mpg.imeji.util.BeanHelper;
 
 
 public class ImageHelper{
@@ -56,59 +48,68 @@ public class ImageHelper{
         propCursor.insertChars("private");
         component.getProperties().setFileName(fileName);
         component.getProperties().setMimeType(mimetype);
-        
+
         byte[] scaledImageStream = null;
         if (contentCategory.equals(getThumb())){        
 	        BufferedImage bufferedImage;
         	try
         	{
         		bufferedImage= ImageIO.read( new ByteArrayInputStream(imageStream));
+		        if(bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))|| bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))){
+		        	bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")));
+		        }
+		        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+		        // use imageIO.write to encode the image back into a byte[]
+		        ImageIO.write(bufferedImage, format, byteOutput);
+		        scaledImageStream = byteOutput.toByteArray();
+	            url = ImageHelper.uploadFile(scaledImageStream, mimetype, userHandle);
         	}
         	catch(Exception e){
-        		bufferedImage = cmykRasterToSRGB(imageStream, format);
-        	}
+        		Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        		String test = navigation.getApplicationUrl() + "resources/icon/noThumb.jpg";
+        		URL noThumbUrl = new URL(test);
+        		int contentLength = noThumbUrl.openConnection().getContentLength();
+        		InputStream openStream =noThumbUrl.openStream();
+        		byte[] data = new byte[contentLength];
+        		openStream.read(data);
+        		openStream.close();
 
-	        if(bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))|| bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))){
-	        	bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")));
-	        }
-	        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-	        // use imageIO.write to encode the image back into a byte[]
-	        ImageIO.write(bufferedImage, format, byteOutput);
-	        scaledImageStream = byteOutput.toByteArray();
-            url = ImageHelper.uploadFile(scaledImageStream, mimetype, userHandle);
+        		url = ImageHelper.uploadFile(data, mimetype, userHandle);
+        	}
         }
         if (contentCategory.equals(getWeb())){   
     		BufferedImage bufferedImage;
         	try
         	{
         		bufferedImage= ImageIO.read( new ByteArrayInputStream(imageStream));
+
+	    		if(bufferedImage.getWidth() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")))
+					scaledImageStream = imageStream;
+				else{
+					if(format.equalsIgnoreCase("gif")){
+	    				GifDecoder gifDecoder = checkAnimation(imageStream);
+	            		if(gifDecoder.getFrameCount()>1)
+	        				scaledImageStream = scaleAnimation(imageStream, gifDecoder, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
+	            		else{
+	            			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
+	        	            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+	        	            // use imageIO.write to encode the image back into a byte[]
+	        	            ImageIO.write(bufferedImage, format, byteOutput);
+	        	            scaledImageStream = byteOutput.toByteArray();
+	                	} 
+	    			}else{
+	       			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
+		            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+		            // use imageIO.write to encode the image back into a byte[]
+		            ImageIO.write(bufferedImage, format, byteOutput);
+		            scaledImageStream = byteOutput.toByteArray();
+		            } 
+				}
+	    		url = ImageHelper.uploadFile(scaledImageStream, mimetype, userHandle);
         	}
         	catch(Exception e){
-        	    bufferedImage = cmykRasterToSRGB(imageStream, format);
+        	    url = ImageHelper.uploadFile(imageStream, mimetype, userHandle);
         	}
-    		if(bufferedImage.getWidth() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")))
-				scaledImageStream = imageStream;
-			else{
-				if(format.equalsIgnoreCase("gif")){
-    				GifDecoder gifDecoder = checkAnimation(imageStream);
-            		if(gifDecoder.getFrameCount()>1)
-        				scaledImageStream = scaleAnimation(imageStream, gifDecoder, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
-            		else{
-            			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
-        	            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-        	            // use imageIO.write to encode the image back into a byte[]
-        	            ImageIO.write(bufferedImage, format, byteOutput);
-        	            scaledImageStream = byteOutput.toByteArray();
-                	} 
-    			}else{
-       			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
-	            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-	            // use imageIO.write to encode the image back into a byte[]
-	            ImageIO.write(bufferedImage, format, byteOutput);
-	            scaledImageStream = byteOutput.toByteArray();
-	            } 
-			}
-        	url = ImageHelper.uploadFile(scaledImageStream, mimetype, userHandle);
         }
         component.getProperties().setContentCategory(contentCategory);
         if(contentCategory.equals(getOrig())){
@@ -160,7 +161,7 @@ public class ImageHelper{
 		return outputStream.toByteArray();
        }
 
-    /**
+    /**  
      * Uploads a file to the staging servlet and returns the corresponding URL.
      * 
      * @param InputStream to upload
@@ -221,95 +222,68 @@ public class ImageHelper{
         return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
     }
     
-    public static BufferedImage cmykRasterToSRGB(byte[] inputStream, String format)throws Exception{
-  	  //Find a suitable ImageReader
-        Iterator readers = ImageIO.getImageReadersByFormatName(format);
-        ImageReader reader = null;
-        while(readers.hasNext()) {
-            reader = (ImageReader)readers.next();
-            if(reader.canReadRaster()) {
-                break;
-            }
-        }
-        //Stream the image file (the original CMYK image)
-        ImageInputStream input = ImageIO.createImageInputStream(new ByteArrayInputStream(inputStream));
-        reader.setInput(input); 
-        // Create the image.
-        BufferedImage image;
-        Raster raster = reader.readRaster(0, null); 
-	        // Arbitrarily select a BufferedImage type.
-            int imageType;
-            switch(raster.getNumBands()) {
-            case 1:
-                imageType = BufferedImage.TYPE_BYTE_GRAY;
-                break;
-            case 3:
-                imageType = BufferedImage.TYPE_3BYTE_BGR;
-                break;
-            case 4:
-                imageType = BufferedImage.TYPE_4BYTE_ABGR;
-                break;
-            default:
-                throw new UnsupportedOperationException();
-            }
-
-            // Create a BufferedImage.
-          image = new BufferedImage(raster.getWidth(),raster.getHeight(),imageType);
-
-           // Set the image data.
-          image.getRaster().setRect(raster);
-          return image;
-
-    }
-    
-    /**
-     * If 'filename' is a CMYK file, then convert the image into RGB,
-     * store it into a JPEG file, and return the new filename.
-     *
-     * @param filename
-     */
-    private static String cmyk2rgb(String filename) throws IOException
-    {
-        // Change this format into any ImageIO supported format.
-        String format = "jpg";
-        File imageFile = new File(filename);
-        String rgbFilename = filename;
-        BufferedImage image = ImageIO.read(imageFile);
-        if (image != null)
-        {
-            int colorSpaceType = image.getColorModel().getColorSpace().getType();
-            if (colorSpaceType == ColorSpace.TYPE_CMYK)
-            {
-                BufferedImage rgbImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-                ColorConvertOp op = new ColorConvertOp(null);
-                op.filter(image, rgbImage);
-
-                rgbFilename = changeExtension(imageFile.getName(), format);
-                rgbFilename = new File(imageFile.getParent(), format + "_" + rgbFilename).getPath();
-                ImageIO.write(rgbImage, format, new File(rgbFilename));
-            }
-        }
-        return rgbFilename;
-    }
 
     /**
-     * Change the extension of 'filename' to 'newExtension'.
-     *
-     * @param filename
-     * @param newExtension
-     * @return filename with new extension
+     * for reading CMYK images
+     * Creates new RGB images from all the CMYK images passed
+     * in on the command line.
+     * 
      */
-    private static String changeExtension(String filename, String newExtension)
-    {
-        String result = filename;
-        if (filename != null && newExtension != null && newExtension.length() != 0);
-        {
-            int dot = filename.lastIndexOf('.');
-            if (dot != -1)
-            {
-                result = filename.substring(0, dot) + '.' + newExtension;
-            }
-        }
-        return result;
-    }
+//    public static BufferedImage cmykRasterToSRGB(byte[] inputStream, String format)throws Exception{
+//  	  //Find a suitable ImageReader
+//        Iterator readers = ImageIO.getImageReadersByFormatName(format);
+//        ImageReader reader = null;
+//        while(readers.hasNext()) {
+//            reader = (ImageReader)readers.next();
+//            if(reader.canReadRaster()) {
+//                break;
+//            }
+//        }
+//        //Stream the image file (the original CMYK image)
+//        ImageInputStream input = ImageIO.createImageInputStream(new ByteArrayInputStream(inputStream));
+//        reader.setInput(input); 
+//        // Create the image.
+//        BufferedImage image;
+//        Raster raster = reader.readRaster(0, null); 
+//	    // Arbitrarily select a BufferedImage type.
+//        int imageType;
+//        switch(raster.getNumBands()) 
+//        {
+//        case 1:
+//        	imageType = BufferedImage.TYPE_BYTE_GRAY;
+//            break;
+//            case 3:
+//            	imageType = BufferedImage.TYPE_3BYTE_BGR;
+//                break;
+//                case 4:
+//                	imageType = BufferedImage.TYPE_4BYTE_ABGR;
+//                	break;
+//                	default:
+//                		throw new UnsupportedOperationException();
+//            }
+//        // Create a BufferedImage.
+//        image = new BufferedImage(raster.getWidth(),raster.getHeight(),imageType);
+//        // Set the image data.
+//        image.getRaster().setRect(raster);
+//    	return image;
+//    }
+//    
+//    public static BufferedImage readCMYKwithJAI(byte[] inputStream, String format)throws Exception
+//    {
+//    	ByteArrayInputStream bais = new ByteArrayInputStream(inputStream);
+//    	SeekableStream seekableStream = SeekableStream.wrapInputStream(bais,false);
+//    	PlanarImage src = JAI.create("Stream", seekableStream);
+//    	BufferedImage image = src.getAsBufferedImage();    	
+//    	return image;
+//    }
+//    
+//    public static BufferedImage readCMYKwithjm4java(byte[] inputStream, String format)throws Exception
+//    {
+//    	ByteArrayInputStream bais = new ByteArrayInputStream(inputStream);
+//    	Stream2BufferedImage stream4Image= new Stream2BufferedImage();
+//    	stream4Image.consumeOutput(bais);
+//    	BufferedImage image = stream4Image.getImage();
+//    	return image;
+//    }
+
 }

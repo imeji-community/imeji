@@ -1,6 +1,6 @@
 package de.mpg.imeji.upload.helper;
-import java.awt.Graphics;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -55,7 +55,7 @@ public class ImageHelper{
         	try
         	{
         		bufferedImage= ImageIO.read( new ByteArrayInputStream(imageStream));
-		        if(bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))|| bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))){
+		        if(bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))|| bufferedImage.getHeight() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))){
 		        	bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")));
 		        }
 		        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();

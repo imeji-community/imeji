@@ -1,16 +1,19 @@
 package de.mpg.jena.controller;
 
+import java.lang.reflect.Method;
 import java.net.URI;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
+import thewebsemantic.JenaHelper;
 import thewebsemantic.Sparql;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -19,8 +22,11 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.Syntax;
+
+import de.mpg.escidoc.services.common.valueobjects.intelligent.IntelligentVO;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
+import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
@@ -34,6 +40,7 @@ import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
@@ -103,42 +110,17 @@ public class ImageController extends ImejiController
 
     public void update(Image img) throws Exception
     {
-    	Security security = new Security();
-         
-        if (security.check(OperationsType.UPDATE, user, img)) 
-        {
-        	CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, img.getCollection());
-            writeUpdateProperties(img.getProperties(), user);
-            base.begin();
-            // Workarround: activate lazylist
-            img.getMetadata().size();
-            bean2RDF.saveDeep(img);
-            cleanGraph();
-            base.commit();
-        }
+    	 imejiBean2RDF.saveDeep(img, user);
     }
 
     public void update(Collection<Image> images) throws Exception
     {
-    	Security security = new Security();
-    	
-    	base.begin();
-        for (Image img : images)
+    	for (Image img : images)
         {
-            CollectionImeji ic = rdf2Bean.load(CollectionImeji.class, img.getCollection());
-            checkUserCredentials(img, ic);
-            writeUpdateProperties(img.getProperties(), user);
-            // Workarround: activate lazylist
-            img.getMetadata().size();
-            if (security.check(OperationsType.UPDATE, user, img)) 
-            {
-            	bean2RDF.saveDeep(img);
-            }
+    		imejiBean2RDF.saveDeep(img, user);
         }
-        cleanGraph();
-        base.commit();
     }
-
+    
     public Image retrieve(URI imgUri)
     {
         return rdf2Bean.load(Image.class, imgUri);

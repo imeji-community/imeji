@@ -1,5 +1,6 @@
 package de.mpg.jena.controller;
 
+import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.User;
 
@@ -10,7 +11,7 @@ public class GrantController extends ImejiController
 		super(user);
 	}
 	
-	public void addGrant(User user, Grant grant)
+	public void addGrant(User user, Grant grant) throws Exception
 	{
 		if (!isValid(grant)) 
 		{
@@ -21,9 +22,10 @@ public class GrantController extends ImejiController
 			user.getGrants().add(grant);
 			saveUser(user);
 		}
+		else throw new RuntimeException("User " + user.getEmail() + " is already " + grant.getGrantType() + " for " + grant.getGrantFor());
 	}
 	
-	public void removeGrant(User user, Grant grant)
+	public void removeGrant(User user, Grant grant) throws Exception
 	{
 		if (hasGrant(user, grant))
 		{
@@ -60,7 +62,7 @@ public class GrantController extends ImejiController
 		
 	}
 	
-	private void saveUser(User user)
+	private void saveUser(User user) throws Exception
 	{
 		UserController uc = new UserController(user);
 		uc.update(user);

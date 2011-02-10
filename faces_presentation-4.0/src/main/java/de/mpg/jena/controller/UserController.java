@@ -42,10 +42,10 @@ public class UserController extends ImejiController
 		return null;
 	}
 	
-	public void update(User user)
+	public void update(User user) throws Exception
 	{
 		base.begin();
-		bean2RDF.saveDeep(user);
+		imejiBean2RDF.saveDeep(user, this.user);
 		cleanGraph();
 		base.commit();
 	}

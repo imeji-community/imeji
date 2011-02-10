@@ -64,25 +64,21 @@ public abstract class  MetadataEditor
 					try 
 					{
 						ic.update(images);
+						long after = System.currentTimeMillis();
+						BeanHelper.info("Edit done!");
+						String str = images.size() +" images edited";
+						if (images.size() == 1) str = "One image edited";
+						BeanHelper.info(str + " in " + (after - before) + "ms.");
 					} 
 					catch (Exception e) 
 					{
 						logger.error(e);
-						BeanHelper.warn("Edit problem");
+						BeanHelper.warn("Edit error: " + e.getMessage());
 					}
-					long after = System.currentTimeMillis();
-					BeanHelper.info("Edit done!");
-					String str = images.size() +" images edited";
-					if (images.size() == 1) str = "One image edited";
-					BeanHelper.info(str + " in " + (after - before) + "ms.");
 				}
 				else
 				{
 					BeanHelper.error("Validation error!");
-//					for (String str : validator.getMessages()) 
-//					{
-//						BeanHelper.error(str);
-//					}
 				}
 			}
 			else

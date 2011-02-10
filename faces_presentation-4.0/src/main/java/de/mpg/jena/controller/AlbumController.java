@@ -15,6 +15,7 @@ import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.User;
+import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Properties.Status;
 
 
@@ -40,10 +41,20 @@ public class AlbumController extends ImejiController{
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(new URI("http://imeji.mpdl.mpg.de/album/" + getUniqueId()));
 		base.begin();
-		Bean2RDF writer = new Bean2RDF(base);
-		writer.saveDeep(ic);
+		bean2RDF.saveDeep(ic);
+		ic = rdf2Bean.load(Album.class, ic.getId());
+		user = addCreatorGrant(ic, user);
 		cleanGraph();
 		base.commit();
+	}
+	
+	public User addCreatorGrant(Album alb, User user) throws Exception
+	{
+		GrantController gc = new GrantController(user);
+		Grant grant = new Grant(GrantType.CONTAINER_ADMIN,alb.getId());
+		gc.addGrant(user, grant);
+		UserController uc = new UserController(user);
+		return uc.retrieve(user.getEmail());
 	}
 	
 	/**

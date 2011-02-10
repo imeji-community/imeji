@@ -28,7 +28,6 @@
  */
 package de.mpg.imeji.beans;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,18 +35,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.faces.model.SelectItem;
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import org.apache.log4j.Logger;
 
+import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotBoundException;
-
-import de.mpg.imeji.facet.FacetsBean;
-import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.ImejiController;
-import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.CollectionImeji;
 
 /**
  * This abstract bean class is used to manage lists with one or two paginators. It can work together with different
@@ -120,12 +117,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public BasePaginatorListSessionBean()
     {
-        // elementsPerPageSelectItems = new ArrayList<SelectItem>();
-        // elementsPerPageSelectItems.add(new SelectItem("10", "10"));
-        // elementsPerPageSelectItems.add(new SelectItem("25", "25")); // --default: 25
-        // elementsPerPageSelectItems.add(new SelectItem("50", "50"));
-        // elementsPerPageSelectItems.add(new SelectItem("100", "100"));
-        // elementsPerPageSelectItems.add(new SelectItem("250", "250"));
         paginatorPageList = new ArrayList<PaginatorPage>();
         currentPartList = new ArrayList<ListElementType>();
     }
@@ -194,22 +185,23 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     public String initCorruptData()
     {
         boolean clean = false;
+        
         while (!clean)
         {
-            try
+        	try
             {
-                retrieveList(getOffset(), elementsPerPage);
+                retrieveList(getOffset(), this.elementsPerPage);
                 clean = true;
             }
             catch (NotBoundException e)
             {
-                Pattern pattern = Pattern.compile("http://imeji.mpdl.mpg.de/image/metadata/[0-9]+");
+            	Pattern pattern = Pattern.compile("http://imeji.mpdl.mpg.de/image/metadata/[0-9]+");
                 Matcher matcher = pattern.matcher(e.getMessage());
                 while (matcher.find())
                 {
-                    SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
                     ImejiController.deleteObjects(matcher.group());
                 }
+                if (e.getMessage().contains("null")) ImejiController.deleteObjects("null"); clean =true;
             }
             catch (Exception e)
             {

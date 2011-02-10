@@ -15,6 +15,12 @@
 			
 			<h:outputText styleClass="seperator void" />
 			
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{UploadBean.collection.id.path}?q=" rendered="true">
+				<h:outputText value="View images"/>
+			</h:outputLink>
+			
+			<h:outputText styleClass="seperator void" />
+			
 			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{UploadBean.collection.id.path}/details?init=1" rendered="true">
 				<h:outputText value="#{lbl.collection_metadata}"/>
 			</h:outputLink>

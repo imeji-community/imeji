@@ -1,7 +1,6 @@
 package de.mpg.imeji.user;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -15,7 +14,6 @@ import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Authorization;
-import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
@@ -116,7 +114,7 @@ public class UserCreationBean
 		catch (Exception e) { return 0; }
     }
     
-    public String reInitializeUserRights() throws IllegalArgumentException, IllegalAccessException
+    public String reInitializeUserRights() throws Exception
     {
     	List<CollectionImeji> allColls = getAllcollections();
     	List<Album> allAlbs = getAllAlbums();

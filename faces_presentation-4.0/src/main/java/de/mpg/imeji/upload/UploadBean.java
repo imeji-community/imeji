@@ -1,33 +1,24 @@
 package de.mpg.imeji.upload;
 
 import java.io.IOException;
-
-
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.xalan.xsltc.compiler.sym;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
-import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.escidoc.ItemVO;
-
 import de.mpg.imeji.upload.deposit.DepositController;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.util.UrlHelper;
-
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.UserController;
-
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.User;
 
@@ -105,8 +96,8 @@ public class UploadBean
             try{
                 ItemVO item = DepositController.createImejiItem(inputStream, title, description, mimetype, format, escidocUserHandle, collection.getId().toString(), escidocContext);
                 DepositController.depositImejiItem(item, escidocUserHandle, collection, user, title);
-               sNum += 1;
-               sFiles.add(title);
+                sNum += 1;
+                sFiles.add(title);
             } catch (Exception e){
             	fNum += 1;
             	fFiles.add(title);

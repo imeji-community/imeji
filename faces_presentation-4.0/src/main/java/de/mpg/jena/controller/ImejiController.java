@@ -1,12 +1,14 @@
 package de.mpg.jena.controller;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
@@ -27,13 +29,17 @@ import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.Lock;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
+import de.mpg.jena.concurrency.ImejiBean2RDF;
+import de.mpg.jena.concurrency.queue.QueuedBean2RDF;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.Counter;
 import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.User;
 
@@ -78,22 +84,24 @@ public abstract class ImejiController
      */
     protected static Bean2RDF bean2RDF = new Bean2RDF(base);
     protected static RDF2Bean rdf2Bean = new RDF2Bean(base);
+    protected static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(base);
 
     public ImejiController(User user2)
     {
         this.user = user2;
+        Bean2RDF.logger.setLevel(Level.OFF);
     }
 
     protected static void writeCreateProperties(Properties properties, User user)
-    {
+    { 
         Date now = new Date();
         properties.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail()));
         properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
         properties.setCreationDate(now);
         properties.setLastModificationDate(now);
     }
-
-    protected static void writeUpdateProperties(Properties properties, User user)
+    
+    public static void writeUpdateProperties(Properties properties, User user)
     {
         Date now = new Date();
         properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
@@ -103,34 +111,59 @@ public abstract class ImejiController
     public static void deleteObjects(String uri)
     {
         Resource r = base.getResource(uri);
+        StmtIterator it = r.listProperties(RDF.type);
+        while (it.hasNext()) {
+			Resource r1 = it.nextStatement().getResource();
+			System.out.println(r1);
+        }
+
         if (base.containsResource(r))
         {
             logger.info("Forced Delete of " + uri);
-            Selector selector = new SimpleSelector(null, null, r);
-            StmtIterator iter = base.listStatements(selector);
-            while (iter.hasNext())
-            {
-                Statement mdToDelete = iter.nextStatement();
-                Resource sub = mdToDelete.getSubject();
-                Selector selector2 = new SimpleSelector(null, null, sub);
-                StmtIterator iter2 = base.listStatements(selector2);
-                while (iter2.hasNext())
-                {
-                    Statement imageWithMd = iter2.nextStatement();
-                    Selector selector3 = new SimpleSelector(null, imageWithMd.getPredicate(), (Resource)null);
-                    StmtIterator iter3 = base.listStatements(selector3);
-                    while (iter3.hasNext())
-                    {
-                        Statement statementToDelete = iter3.nextStatement();
-                        if (mdToDelete.getSubject().getId().equals(statementToDelete.getResource().getId()))
-                        {
-                            base.remove(statementToDelete);
-                            iter3 = base.listStatements(selector3);
-                        }
-                    }
-                }
-                base.remove(mdToDelete);
+            try{
+	            Selector selector = new SimpleSelector(null, null, r);
+	            StmtIterator iter = base.listStatements(selector);
+	            while (iter.hasNext())
+	            {
+	                Statement mdToDelete = iter.nextStatement();
+	                Resource sub = mdToDelete.getSubject();
+	                Selector selector2 = new SimpleSelector(null, null, sub);
+	                StmtIterator iter2 = base.listStatements(selector2);
+	                while (iter2.hasNext())
+	                {
+	                    Statement imageWithMd = iter2.nextStatement();
+	                    Selector selector3 = new SimpleSelector(null, imageWithMd.getPredicate(), (Resource)null);
+	                    StmtIterator iter3 = base.listStatements(selector3);
+	                    while (iter3.hasNext())
+	                    {
+	                        Statement statementToDelete = iter3.nextStatement();
+	                        if (mdToDelete.getSubject().getId().equals(statementToDelete.getResource().getId()))
+	                        {
+	                            try
+	                            {
+	                            	base.remove(statementToDelete);
+	                            }
+	                            catch (Exception e) 
+	                            {	
+	                            	logger.warn("Error deleting object" + statementToDelete.getResource().getId());
+	                            }
+	                            iter3 = base.listStatements(selector3);
+	                        }
+	                    }
+	                }
+	                try
+	                {
+	                	base.remove(mdToDelete);
+	                }
+	                catch (Exception e) 
+	                {	
+	                	logger.warn("Error deleting object" + mdToDelete.getResource().getId());
+	                }
+	            }
             }
+            catch (Exception e) {
+				logger.error("PROBLEM by Forced delete!" + e.getMessage());
+			}
         }
         else
         {
@@ -844,7 +877,7 @@ public abstract class ImejiController
     /**
      * Removes lost, anonymous nodes from graph. They are produces during updates of lists/collections. Bug of JenaBean.
      */
-    protected synchronized void cleanGraph()
+    public synchronized void cleanGraph()
     {
         try
         {

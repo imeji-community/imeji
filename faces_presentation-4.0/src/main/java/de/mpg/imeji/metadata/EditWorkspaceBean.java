@@ -14,6 +14,8 @@ import de.mpg.imeji.metadata.editors.MetadataBatchEditor;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.concurrency.locks.Lock;
+import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.security.Operations.OperationsType;
@@ -48,7 +50,6 @@ public class EditWorkspaceBean
 	private int mdPosition = 0;
 	private int imagePosition = 0;
 	
-	
 	public EditWorkspaceBean() 
 	{
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
@@ -58,6 +59,8 @@ public class EditWorkspaceBean
 	
 	public void reset()
 	{
+		if (editor != null && editor.getImages() != null)
+			unLockImages(editor.getImages());
 		profiles = new ArrayList<MetadataProfile>();
 		type = EditorType.BATCH;
 		eraseOldMetadata = false;
@@ -70,6 +73,7 @@ public class EditWorkspaceBean
 	public void init(List<Image> images)
 	{
 		images = removeNonEditableImages(images);
+		lockImages(images);
 		profiles = extractProfiles(images);
 		MetadataProfile p = getSelectedProfile();
 		Statement s = null;
@@ -174,6 +178,23 @@ public class EditWorkspaceBean
 	{
 		if (profiles.size() > 0) return profiles.get(0);
 		return null;
+	}
+	
+	public void lockImages(List<Image> images)
+	{
+		for (Image im : images)
+		{
+			Locks.lock(new Lock(im.getId().toString(), user.getEmail()));
+		}
+	}
+	
+	public void unLockImages(List<Image> images)
+	{
+		for (Image im : images)
+		{
+			if (im != null && im.getId() != null && user != null)
+			Locks.unLock(new Lock(im.getId().toString(), user.getEmail()));
+		}
 	}
 	
 	public List<Image> retrieveImages()

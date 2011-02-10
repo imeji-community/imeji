@@ -1,21 +1,25 @@
 package de.mpg.imeji.init;
 
 import java.net.URI;
+import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
 
-import thewebsemantic.NotFoundException;
+import com.hp.hpl.jena.rdf.model.Model;
 
-import de.escidoc.core.common.exceptions.application.notfound.ContentModelNotFoundException;
+import thewebsemantic.Bean2RDF;
+import thewebsemantic.NotFoundException;
 import de.mpg.escidoc.services.framework.PropertyReader;
-import de.mpg.escidoc.services.framework.ServiceLocator;
+import de.mpg.jena.concurrency.locks.LocksSurveyor;
+import de.mpg.jena.concurrency.queue.QueueManager;
+import de.mpg.jena.controller.DataFactory;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.vo.Grant;
-import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Grant.GrantType;
+import de.mpg.jena.vo.User;
 
 /**
  * Initialize application on server start
@@ -25,22 +29,37 @@ import de.mpg.jena.vo.Grant.GrantType;
 public class InitializerServlet extends HttpServlet
 {
 	private static Logger logger = Logger.getLogger(InitializerServlet.class);
+	
     
 	@Override
     public void init() throws ServletException
     {
         super.init();
-        try
+        initModel();
+        startLocksSurveyor();
+        createSysadminUser();    
+    }
+	
+	public void initModel()
+	{
+		try
         {
-            createSysadminUser();
-            createTestUser();
+            String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
+            Model base = DataFactory.model(tdbPath);
+            Bean2RDF.logger.setLevel(Level.OFF);
+            System.out.println("Jena Logging level:" + Bean2RDF.logger.getLevel().getName());
         }
         catch (Exception e)
         {
-            logger.error("Could not create sysadmin user", e);
+           throw new RuntimeException("Error Initializing model: " +e);
         }
-       
-    }
+	}
+	
+	public void startLocksSurveyor()
+	{
+		LocksSurveyor locksSurveyor = new LocksSurveyor();
+		locksSurveyor.start();
+	}
 	
 	public void createTestUser() throws Exception
     {
@@ -66,19 +85,26 @@ public class InitializerServlet extends HttpServlet
         
     }
     
-	public void createSysadminUser() throws Exception
+	public void createSysadminUser()
     {
-	    if(PropertyReader.getProperty("imeji.sysadmin.email")!=null)
+	    try
 	    {
-	        UserController uc = new UserController(null);
-	        User user = new User();
-	        user.setEmail(PropertyReader.getProperty("imeji.sysadmin.email"));
-	        user.setName("Imeji Sysadmin");
-	        user.setNick("sysadmin");
-	        user.setEncryptedPassword(UserController.convertToMD5(PropertyReader.getProperty("imeji.sysadmin.password")));
-	        user.getGrants().add(new Grant(GrantType.SYSADMIN, null));
-	        uc.create(user);
-	        logger.info("Created sysadmin successfully");
+			if(PropertyReader.getProperty("imeji.sysadmin.email") != null)
+		    {
+		        UserController uc = new UserController(null);
+		        User user = new User();
+		        user.setEmail(PropertyReader.getProperty("imeji.sysadmin.email"));
+		        user.setName("Imeji Sysadmin");
+		        user.setNick("sysadmin");
+		        user.setEncryptedPassword(UserController.convertToMD5(PropertyReader.getProperty("imeji.sysadmin.password")));
+		        user.getGrants().add(new Grant(GrantType.SYSADMIN, null));
+		        uc.create(user);
+		        logger.info("Created sysadmin successfully");
+		    }
+	    }
+	    catch (Exception e)
+	    {
+	    	throw new RuntimeException("Erroor initializing Admin user!" + e);
 	    }
 	   
     }

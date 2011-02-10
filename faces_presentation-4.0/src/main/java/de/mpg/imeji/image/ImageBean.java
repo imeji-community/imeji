@@ -248,10 +248,13 @@ public class ImageBean
     public List<SelectItem> getStatementMenu()
     {
     	List<SelectItem> statementMenu = new ArrayList<SelectItem>();
-        for (Statement s : ProfileHelper.loadProfile(image).getStatements())
-        {
-        	 statementMenu.add(new SelectItem(s.getName(), s.getName()));
-        }
+    	try {
+	        for (Statement s : ProfileHelper.loadProfile(image).getStatements())
+	        {
+	        	 statementMenu.add(new SelectItem(s.getName(), s.getName()));
+	        }
+    	}
+    	catch (Exception e) {BeanHelper.error("An error occured reading Profile : " + e.getCause());}
     	return statementMenu;
     }
 

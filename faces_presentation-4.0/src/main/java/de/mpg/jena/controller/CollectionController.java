@@ -44,11 +44,21 @@ public class CollectionController extends ImejiController{
 		base.begin();
 		bean2RDF.saveDeep(ic); 
 		CollectionImeji res = rdf2Bean.load(CollectionImeji.class, ic.getId());
-		user = addCreatorGrantToUser(res, user);
+		user = addCreatorGrant(res, user);
 		cleanGraph();
 		base.commit();
 		return res;
 	}
+	
+	private User addCreatorGrant(CollectionImeji c, User user) throws Exception
+	{
+		GrantController gc = new GrantController(user);
+		Grant grant = new Grant(GrantType.CONTAINER_ADMIN, c.getId());
+		gc.addGrant(user, grant);
+		UserController uc = new UserController(user);
+		return uc.retrieve(user.getEmail());
+	}
+
 	
 	
     /**
@@ -111,15 +121,6 @@ public class CollectionController extends ImejiController{
         throw new AuthorizationException("User not authorized to create/update Collection " + c.getId());
     }
 	
-	private User addCreatorGrantToUser(CollectionImeji c, User user)
-	{
-		GrantController gc = new GrantController(user);
-		Grant grant = new Grant(GrantType.CONTAINER_ADMIN, c.getId());
-		gc.addGrant(user, grant);
-		UserController uc = new UserController(user);
-		return uc.retrieve(user.getEmail());
-	}
-
 	public CollectionImeji retrieve(String id)
 	{
         return (CollectionImeji)rdf2Bean.load(ObjectHelper.getURI(CollectionImeji.class, id).toString());

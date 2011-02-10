@@ -1,9 +1,12 @@
 package de.mpg.jena.vo;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.mpg.escidoc.services.common.valueobjects.intelligent.IntelligentVO;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -32,7 +35,17 @@ public class Image implements Serializable
     private String filename;
     private String escidocId;
 
-
+    
+    public Image()
+    {
+    	
+    }
+    
+    public Image(Image im)
+    {
+    	copyInFields(im);
+    }
+    
     public String getEscidocId() {
 		return escidocId;
 	}
@@ -137,4 +150,45 @@ public class Image implements Serializable
     {
         return filename;
     }
+    
+    
+    protected void copyInFields(Image copyFrom)
+    {
+        Class copyFromClass = copyFrom.getClass();
+        Class copyToClass = this.getClass();
+        for (Method methodFrom : copyFromClass.getDeclaredMethods())
+        {
+            String setMethodName = null;
+            if (methodFrom.getName().startsWith("get"))
+            {
+                setMethodName = "set" + methodFrom.getName().substring(3, methodFrom.getName().length());
+            }
+            else if (methodFrom.getName().startsWith("is"))
+            {
+                setMethodName = "set" + methodFrom.getName().substring(2, methodFrom.getName().length());
+            }
+            if (setMethodName != null)
+            {
+                try
+                {
+                    Method methodTo = copyToClass.getMethod(setMethodName, methodFrom.getReturnType());
+                    try
+                    {
+                    	methodTo.invoke(this, methodFrom.invoke(copyFrom, null));
+                    }
+                    catch (Exception e)
+                    {
+                        //logger.error("Could not copy field from method: " + methodFrom.getName(), e);
+                    }
+                }
+                // No setter, do nothing.
+                catch (NoSuchMethodException e)
+                {
+                    
+                }
+            }
+        }
+    }
+    
+    
 }

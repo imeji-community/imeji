@@ -68,11 +68,15 @@ public class MetadataBatchEditor extends MetadataEditor
 	{
 		for (int i=0; i<im.getMetadata().size(); i++)
 		{
-			if (im.getMetadata().get(i).getName().equals(statement.getName()))
+			if (im.getMetadata().get(i).getName() != null)
 			{
-				im.getMetadata().remove(i);
-				i = 0;
+				if (im.getMetadata().get(i).getName().equals(statement.getName()))
+				{
+					im.getMetadata().remove(i);
+					i = 0;
+				}
 			}
+			else {im.getMetadata().remove(i); i--;}
 		}
 		return im;
 	}

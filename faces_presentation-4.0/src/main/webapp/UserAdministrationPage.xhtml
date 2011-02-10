@@ -43,9 +43,13 @@
 				<h2><h:outputText value="No sufficient privileges!"/></h2>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{UserCreationBean.sysAdmin}">
+			
 				
 				<h:panelGroup layout="block" styleClass="full_area0 endline">
-					<h:commandButton action="#{UserCreationBean.reInitializeUserRights}" value="Init Users rights" styleClass="free_area1_p8 activeButton"/>					
+					<h2>
+					<h:outputLink styleClass="large_area0" value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml"><h:outputText value="Create new User "/></h:outputLink>
+					<h:commandLink action="#{UserCreationBean.reInitializeUserRights}" value=" Init Users rights" styleClass=""/>		
+					</h2>			
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="full_area0 endline">
 					<h2><h:outputText value="System has: #{UserCreationBean.allImagesSize} Images, #{UserCreationBean.allUsersSize} Users, #{UserCreationBean.allCollectionsSize} collections, #{UserCreationBean.allAlbumsSize} Albums"/></h2>

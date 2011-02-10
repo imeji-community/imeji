@@ -77,6 +77,25 @@
 						<h:outputText value="#{lbl.collection_release}"></h:outputText>
 					</h:commandLink>
 					<h:outputText styleClass="seperator void" />
+					<rich:togglePanel value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open">
+						 <f:facet name="closed">
+					            <rich:toggleControl value="Share" switchToState="open"/>
+					     </f:facet>
+					      <f:facet name="open">
+						         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
+       									<h:outputText value="Share with" />
+            							<rich:inplaceInput styleClass="large_area0" value="#{SharingBean.email}" defaultLabel="click to enter your email"/>
+            							<h:outputText value=" as" />
+            							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
+  											<f:selectItems value="#{SharingBean.grantsMenu}"/>
+										</h:selectOneMenu>
+							        	<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}">
+											<f:attribute name="collectionId" value="#{ViewCollectionBean.collection.id}"/>
+							            </h:commandLink>
+							           	<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}"><h:outputText value="Cancel"/></h:outputLink>
+   									</h:panelGrid>
+						   </f:facet>   
+					</rich:togglePanel>
 				</h:panelGroup>
 			</ui:define>
 			

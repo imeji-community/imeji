@@ -3,7 +3,6 @@ package de.mpg.jena.controller;
 import java.net.URI;
 import java.util.List;
 
-import thewebsemantic.Bean2RDF;
 import thewebsemantic.LocalizedString;
 import thewebsemantic.RDF2Bean;
 
@@ -11,11 +10,13 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Grant;
+import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Person;
+import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.User;
-import de.mpg.jena.vo.Properties.Status;
 
 public class ProfileController extends ImejiController
 {
@@ -34,18 +35,25 @@ public class ProfileController extends ImejiController
      */
     public MetadataProfile create(MetadataProfile mdp) throws Exception
     {
-        
         writeCreateProperties(mdp.getProperties(), user);
         mdp.getProperties().setStatus(Status.PENDING); 
         mdp.setId(ObjectHelper.getURI(MetadataProfile.class, Integer.toString(getUniqueId())));
         base.begin();
-        Bean2RDF writer = new Bean2RDF(base);
-        Resource r = writer.saveDeep(mdp);
-        RDF2Bean reader = new RDF2Bean(base);
-        mdp = (MetadataProfile)reader.load(r.getURI());
+        bean2RDF.saveDeep(mdp);
+        MetadataProfile res = rdf2Bean.load(MetadataProfile.class, mdp.getId());
+        user = addCreatorGrant(res, user);
         base.commit();
         return (MetadataProfile)ObjectHelper.castAllHashSetToList(mdp);
     }
+    
+	private User addCreatorGrant(MetadataProfile p, User user) throws Exception
+	{
+		GrantController gc = new GrantController(user);
+		Grant grant = new Grant(GrantType.PROFILE_ADMIN, p.getId());
+		gc.addGrant(user, grant);
+		UserController uc = new UserController(user);
+		return uc.retrieve(user.getEmail());
+	}
     
     /**
      * Updates a collection
@@ -59,8 +67,7 @@ public class ProfileController extends ImejiController
     {
         writeUpdateProperties(mdp.getProperties(), user);
         base.begin();
-        Bean2RDF writer = new Bean2RDF(base);
-        Resource r = writer.saveDeep(mdp);
+        Resource r = bean2RDF.saveDeep(mdp);
         base.commit();
     }
     
@@ -70,8 +77,7 @@ public class ProfileController extends ImejiController
     
     public List<MetadataProfile> retrieveAll()
     {
-        RDF2Bean reader = new RDF2Bean(base);
-        return (List<MetadataProfile>)reader.load(MetadataProfile.class);
+        return (List<MetadataProfile>)rdf2Bean.load(MetadataProfile.class);
     }
     
     public MetadataProfile retrieve(String id) throws Exception
@@ -115,8 +121,6 @@ public class ProfileController extends ImejiController
         mdp = pc.retrieve(mdp.getId());
         
         base.write(System.out, "RDF/XML");
-        
-        
     }
     
     @Override

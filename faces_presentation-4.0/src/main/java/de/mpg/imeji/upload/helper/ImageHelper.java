@@ -64,7 +64,7 @@ public class ImageHelper{
         	{
         		bufferedImage= ImageIO.read( new ByteArrayInputStream(imageStream));
 		        if(bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))|| bufferedImage.getHeight() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))){
-		        	bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")));
+		        	bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")), getThumb());
 		        }
 		        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
 		        // use imageIO.write to encode the image back into a byte[]
@@ -91,7 +91,7 @@ public class ImageHelper{
         	{
         		bufferedImage= ImageIO.read( new ByteArrayInputStream(imageStream));
 
-	    		if(bufferedImage.getWidth() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")))
+	    		if(bufferedImage.getWidth() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web"))&& bufferedImage.getHeight() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")))
 					scaledImageStream = imageStream;
 				else{
 					if(format.equalsIgnoreCase("gif")){
@@ -99,14 +99,14 @@ public class ImageHelper{
 	            		if(gifDecoder.getFrameCount()>1)
 	        				scaledImageStream = scaleAnimation(imageStream, gifDecoder, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
 	            		else{
-	            			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
+	            			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")),getWeb());
 	        	            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
 	        	            // use imageIO.write to encode the image back into a byte[]
 	        	            ImageIO.write(bufferedImage, format, byteOutput);
 	        	            scaledImageStream = byteOutput.toByteArray();
 	                	} 
 	    			}else{
-	       			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
+	       			bufferedImage = scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")), getWeb());
 		            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
 		            // use imageIO.write to encode the image back into a byte[]
 		            ImageIO.write(bufferedImage, format, byteOutput);
@@ -143,28 +143,42 @@ public class ImageHelper{
 //        return rescaledBufferedImage;
 //    }
     
-    public static BufferedImage scaleImage(BufferedImage image, int size) throws Exception{
+    public static BufferedImage scaleImage(BufferedImage image, int size, String resolution) throws Exception{
     	int width = image.getWidth(null);
     	int height = image.getHeight(null);
     	BufferedImage newImg = null;
+    	Image rescaledImage;
     	if(width > height)
     	{
-    		newImg= new BufferedImage(height, height,image.getType());
-        	Graphics g1 = newImg.createGraphics();
-        	g1.drawImage(image, (height-width)/2, 0, null);
+    		if(resolution.equals(getThumb()))
+    		{
+	    		newImg= new BufferedImage(height, height,image.getType());
+	        	Graphics g1 = newImg.createGraphics();
+	        	g1.drawImage(image, (height-width)/2, 0, null);
+	        	rescaledImage = newImg.getScaledInstance(size, -1, Image.SCALE_SMOOTH);
+    		}
+    		else
+    			rescaledImage = image.getScaledInstance(size, -1, Image.SCALE_SMOOTH);
     	}
-    	else
+    	else  
     	{
-    		newImg= new BufferedImage(width, width,image.getType());
-        	Graphics g1 = newImg.createGraphics();
-        	g1.drawImage(image, 0, (width-height)/2, null);
+    		if(resolution.equals(getThumb()))
+    		{
+	    		newImg= new BufferedImage(width, width,image.getType());
+	        	Graphics g1 = newImg.createGraphics();
+	        	g1.drawImage(image, 0, (width-height)/2, null);
+	        	rescaledImage = newImg.getScaledInstance(-1, size, Image.SCALE_SMOOTH);
+    		}
+    		else
+            	rescaledImage = image.getScaledInstance(-1, size, Image.SCALE_SMOOTH);
+
     	}
-    	Image rescaledImage;
-    	rescaledImage = newImg.getScaledInstance(size, -1, Image.SCALE_SMOOTH);
-        BufferedImage rescaledBufferedImage = new BufferedImage(rescaledImage.getWidth(null), rescaledImage.getHeight(null), newImg.getType());
+
+
+        BufferedImage rescaledBufferedImage = new BufferedImage(rescaledImage.getWidth(null), rescaledImage.getHeight(null), image.getType());
         Graphics g2 = rescaledBufferedImage.getGraphics();
         g2.drawImage(rescaledImage, 0, 0, null);
-        return newImg;
+        return rescaledBufferedImage;
     }
     
     public static GifDecoder checkAnimation(byte[] image) throws Exception{
@@ -186,7 +200,7 @@ public class ImageHelper{
            BufferedImage frame = gifDecoder.getFrame(frameNumber);  // frame i
            int delay = gifDecoder.getDelay(frameNumber);  // display duration of frame in milliseconds
            animatedGifEncoder.setDelay(delay);   // frame delay per sec
-           BufferedImage scaleImage = scaleImage(frame, width);
+           BufferedImage scaleImage = scaleImage(frame, width, getWeb());
            animatedGifEncoder.addFrame( scaleImage );
         }    
         animatedGifEncoder.finish();

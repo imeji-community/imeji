@@ -25,8 +25,8 @@ public abstract class Criterion {
 	
 	enum LogicOperatorItems{
 		AND ("and"),
-		OR ("or");
-		//NOT ("not");
+		OR ("or"),
+		NOT ("not");
 		
 		private String query;
 

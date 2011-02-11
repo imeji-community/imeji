@@ -185,8 +185,6 @@ public class CollectionCriterionController implements Serializable {
                                 break;
                             }
 				        }
-    				            
-    				        
     				        
 				        mdQuery += collectionQuery + " AND " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS + "=\"" + mdc.getSelectedMdName() + "\" AND " + ctCriterion;
 				        mdQuery +=" )";

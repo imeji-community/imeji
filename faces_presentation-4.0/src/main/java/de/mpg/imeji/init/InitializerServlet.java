@@ -14,7 +14,7 @@ import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.jena.concurrency.locks.LocksSurveyor;
-import de.mpg.jena.concurrency.queue.QueueManager;
+//import de.mpg.jena.concurrency.queue.QueueManager;
 import de.mpg.jena.controller.DataFactory;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.vo.Grant;

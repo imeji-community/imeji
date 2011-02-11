@@ -74,7 +74,7 @@ public class ImageHelper{
         	}
         	catch(Exception e){
         		Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        		String test = navigation.getApplicationUrl() + "resources/icon/noThumb.jpg";
+        		String test = navigation.getApplicationUrl() + "resources/icon/defaultThumb.gif";
         		URL noThumbUrl = new URL(test);
         		int contentLength = noThumbUrl.openConnection().getContentLength();
         		InputStream openStream =noThumbUrl.openStream();
@@ -268,5 +268,69 @@ public class ImageHelper{
         return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
     }
     
+
+    /**
+     * for reading CMYK images
+     * Creates new RGB images from all the CMYK images passed
+     * in on the command line.
+     * 
+     */
+//    public static BufferedImage cmykRasterToSRGB(byte[] inputStream, String format)throws Exception{
+//  	  //Find a suitable ImageReader
+//        Iterator readers = ImageIO.getImageReadersByFormatName(format);
+//        ImageReader reader = null;
+//        while(readers.hasNext()) {
+//            reader = (ImageReader)readers.next();
+//            if(reader.canReadRaster()) {
+//                break;
+//            }
+//        }
+//        //Stream the image file (the original CMYK image)
+//        ImageInputStream input = ImageIO.createImageInputStream(new ByteArrayInputStream(inputStream));
+//        reader.setInput(input); 
+//        // Create the image.
+//        BufferedImage image;
+//        Raster raster = reader.readRaster(0, null); 
+//	    // Arbitrarily select a BufferedImage type.
+//        int imageType;
+//        switch(raster.getNumBands()) 
+//        {
+//        case 1:
+//        	imageType = BufferedImage.TYPE_BYTE_GRAY;
+//            break;
+//            case 3:
+//            	imageType = BufferedImage.TYPE_3BYTE_BGR;
+//                break;
+//                case 4:
+//                	imageType = BufferedImage.TYPE_4BYTE_ABGR;
+//                	break;
+//                	default:
+//                		throw new UnsupportedOperationException();
+//            }
+//        // Create a BufferedImage.
+//        image = new BufferedImage(raster.getWidth(),raster.getHeight(),imageType);
+//        // Set the image data.
+//        image.getRaster().setRect(raster);
+//    	return image;
+//    }
+//    
+//    public static BufferedImage readCMYKwithJAI(byte[] inputStream, String format)throws Exception
+//    {
+//    	ByteArrayInputStream bais = new ByteArrayInputStream(inputStream);
+//    	SeekableStream seekableStream = SeekableStream.wrapInputStream(bais,false);
+//    	PlanarImage src = JAI.create("Stream", seekableStream);
+//    	BufferedImage image = src.getAsBufferedImage();    	
+//    	return image;
+//    }
+//    
+//    public static BufferedImage readCMYKwithjm4java(byte[] inputStream, String format)throws Exception
+//    {
+//    	ByteArrayInputStream bais = new ByteArrayInputStream(inputStream);
+//    	Stream2BufferedImage stream4Image= new Stream2BufferedImage();
+//    	stream4Image.consumeOutput(bais);
+//    	BufferedImage image = stream4Image.getImage();
+//    	return image;
+//    }
+
 
 }

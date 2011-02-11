@@ -1,6 +1,7 @@
 package de.mpg.jena.controller;
 
 import java.io.IOException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.jena.concurrency.ImejiBean2RDF;
-import de.mpg.jena.concurrency.queue.QueuedBean2RDF;
+//import de.mpg.jena.concurrency.queue.QueuedBean2RDF;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;

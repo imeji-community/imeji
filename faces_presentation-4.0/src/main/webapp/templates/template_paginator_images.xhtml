@@ -57,16 +57,22 @@
 	<ui:define name="list">
 
 		<!-- Script for Shiftcheckboxes -->
-		<script>
+<script>
 	jQuery(document).ready(function() {
 		jQuery('.shiftCheckbox').shiftcheckbox();
 	});
 </script>
 
-		<script>
+<script>
 	jQuery(document).ready(function() {
 		document.getElementById('formular:facetInitialized').click();
 	});
+</script>
+<script>
+	changeBg()
+	{
+		theSelected = document.getElementById();
+	}
 </script>
 		<h:panelGroup id="preListHeaderActiveAlbum" layout="block" styleClass="full_area0 preListHeader" rendered="#{SessionBean.activeAlbum != null}">
 			<h:panelGroup styleClass="huge_area0 small_marginLExcl">
@@ -108,7 +114,7 @@
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 					<li class="large_area0 itemTile">
 						
-							<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 tileIconArea free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
+							<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'} free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
 								<span class="captionWrapper">
 								
 									<!-- Image with link to the details view --> 
@@ -154,7 +160,7 @@
 						<h:panelGroup styleClass="tiny_area1">
 							<span class="free_area0"> 
 								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectedChanged}">
-									<a4j:support event="onchange" reRender="preListHeader" />
+									<a4j:support event="onchange" reRender="preListHeader,imgFrame" />
 								</h:selectBooleanCheckbox> 
 							</span>
 						</h:panelGroup> 

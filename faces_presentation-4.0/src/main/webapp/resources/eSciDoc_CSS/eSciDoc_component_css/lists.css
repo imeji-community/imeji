@@ -208,11 +208,27 @@
 }
 
 .itemTile .tileIconArea {
-	border: 0.10em;
+	border: 0.10em !important;
 	height: 11.56em;
 	line-height: 11.56em;
-	text-align: center;
+	text-align:center;
+	
+	background: #282828;
+	padding: 18px 11px 0px 0px; 
+
 }
+
+.tileIconAreaSelected {
+	border: 0.10em !important;
+	height: 11.56em;
+	line-height: 11.56em;
+	text-align:center;
+	
+	background: #757575;
+	padding: 18px 11px 0px 0px; 
+
+}
+
 
 
 .itemTile .tileIconArea img {

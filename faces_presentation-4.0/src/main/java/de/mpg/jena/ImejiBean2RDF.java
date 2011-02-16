@@ -1,4 +1,4 @@
-package de.mpg.jena.concurrency;
+package de.mpg.jena;
 
 import java.net.URI;
 import java.util.Date;
@@ -24,6 +24,7 @@ import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.Container;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.User;
 
 /**
@@ -48,25 +49,24 @@ public class ImejiBean2RDF
 		rdf2Bean = new RDF2Bean(model);
 		security = new Security();
 	}
+	
+	public void create(Object bean, User user) throws Exception
+	{
+		beginTransaction(bean, user, OperationsType.CREATE);
+		bean2rdf.saveDeep(bean);
+		commitTransaction(bean, user);
+	}
 
 	public void delete(Object bean, User user) throws Exception 
 	{
-		beginTransaction(bean, user);
+		beginTransaction(bean, user, OperationsType.DELETE);
 		bean2rdf.delete(bean);
 		commitTransaction(bean, user);
 	}
 
-	public Resource save(Object bean, User user) throws Exception 
-	{
-		beginTransaction(bean, user);
-		bean2rdf.save(bean);
-		commitTransaction(bean, user);
-		return null;
-	}
-
 	public Resource saveDeep(Object bean, User user) throws Exception
 	{
-		beginTransaction(bean, user);
+		beginTransaction(bean, user, OperationsType.UPDATE);
 		bean2rdf.saveDeep(bean);
 		commitTransaction(bean, user);
 		return null;
@@ -82,11 +82,11 @@ public class ImejiBean2RDF
 	 * @param user
 	 * @throws Exception 
 	 */
-	private void beginTransaction(Object bean, User user) throws Exception
+	private void beginTransaction(Object bean, User user, OperationsType opType) throws Exception
 	{
 		try
 		{
-			checkSecurity(bean, user);
+			checkSecurity(bean, user, opType);
 			if (optimisticLocking) checkOptimisticLocks(bean);
 			if (pessimisticLocking) checkPessimisticLock(bean, user);
 			Locks.lock(new Lock(extractID(bean).toString()));
@@ -106,9 +106,9 @@ public class ImejiBean2RDF
 		bean2rdf.getModel().commit();
 	}
 	
-	private void checkSecurity(Object bean, User user)
+	private void checkSecurity(Object bean, User user, OperationsType opType)
 	{
-		if (!security.check(OperationsType.UPDATE, user, bean) )
+		if (!security.check(opType, user, bean) )
 		{
 			throw new RuntimeException("Imeji Security exception: " +  user.getEmail() +" not allowed to update " + extractID(bean));
 		}
@@ -200,6 +200,14 @@ public class ImejiBean2RDF
 		else if (o instanceof Container)
 		{
 			return ((Container) o).getId();
+		}
+		else if (o instanceof MetadataProfile)
+		{
+			return ((MetadataProfile) o).getId();
+		}
+		else if (o instanceof User)
+		{
+			return URI.create(((User) o).getEmail());
 		}
 		return null;
 	}

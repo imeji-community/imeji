@@ -6,8 +6,6 @@ import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.mpg.escidoc.services.common.valueobjects.intelligent.IntelligentVO;
-
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;

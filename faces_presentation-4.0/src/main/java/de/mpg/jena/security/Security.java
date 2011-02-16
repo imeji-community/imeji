@@ -15,6 +15,11 @@ public class Security
 	{
 		if (isSysAdmin(user)) return true;
 		
+		if (object == null) return true;
+		
+		// TODO no rules for users defined so far
+		if(object instanceof User) return true;
+		
 		Operations operation = instantiateOperation(object);
 
 		switch (op) 

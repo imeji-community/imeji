@@ -6,24 +6,32 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
-import de.mpg.jena.controller.exceptions.AuthenticationException;
-import de.mpg.jena.controller.exceptions.AuthorizationException;
+import de.mpg.jena.ImejiBean2RDF;
+import de.mpg.jena.ImejiJena;
+import de.mpg.jena.ImejiRDF2Bean;
+import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.security.Security;
-import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
+import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
 
 
-public class CollectionController extends ImejiController{
+public class CollectionController extends ImejiController
+{
+	private static ImejiRDF2Bean imejiRDF2Bean = null;
+	private static ImejiBean2RDF imejiBean2RDF = null;
 	
 	public CollectionController(User user)
 	{
 		super(user);
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
 	}
 	
 	/**
@@ -33,21 +41,15 @@ public class CollectionController extends ImejiController{
 	 * @param ic
 	 * @param user
 	 */
-	public synchronized CollectionImeji create(CollectionImeji ic) throws Exception
-	{
-	    //first write properties
-	    writeCreateProperties(ic.getProperties(), user);
-	    //then check user credentials
-	    checkUserCredentials(ic, user);
+	public void create(CollectionImeji ic) throws Exception
+	{		
+		writeCreateProperties(ic.getProperties(), user);
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
-		base.begin();
-		bean2RDF.saveDeep(ic); 
-		CollectionImeji res = rdf2Bean.load(CollectionImeji.class, ic.getId());
-		user = addCreatorGrant(res, user);
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
+		imejiBean2RDF.create(ic, user);
+		user = addCreatorGrant(ic, user);
 		cleanGraph();
-		base.commit();
-		return res;
 	}
 	
 	private User addCreatorGrant(CollectionImeji c, User user) throws Exception
@@ -59,96 +61,81 @@ public class CollectionController extends ImejiController{
 		return uc.retrieve(user.getEmail());
 	}
 
-	
-	
     /**
 	 * Updates a collection
-	 * -Logged in users:
-	 * --User is collection owner
-	 * --OR user is collection editor
 	 * @param ic
 	 * @param user
 	 */
-	public synchronized void update(CollectionImeji ic) throws Exception
+	public void update(CollectionImeji ic) throws Exception
 	{
-	    //first check user credentials
-	    //checkUserCredentials(ic, user);
-	    Security security  = new Security();
-	    security.check(OperationsType.UPDATE, user, ic);
 		writeUpdateProperties(ic.getProperties(), user);
-		base.begin();
-		bean2RDF.saveDeep(ic);
-		ic = rdf2Bean.load(CollectionImeji.class, ic.getId());
-		System.out.println(ic.getImages().size());
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
+		imejiBean2RDF.saveDeep(ic, user);
 		cleanGraph();
-		base.commit();
 	}
 	
-	public synchronized void release(CollectionImeji ic) throws Exception
+	public void release(CollectionImeji ic) throws Exception
     {
-        //first check user credentials
-	    ic.getProperties().setStatus(Status.RELEASED);
-	    for(URI uri: ic.getImages()){
+		ic.getProperties().setStatus(Status.RELEASED);
+	    for(URI uri: ic.getImages())
+	    {
 	    	ImageController imageController = new ImageController(user);
-	    	de.mpg.jena.vo.Image img = imageController.retrieve(uri);
+	    	Image img = imageController.retrieve(uri);
 	    	img.getProperties().setStatus(Status.RELEASED);
 	    	imageController.update(img);
 	    }
         update(ic);
     }
 	
-	private void checkUserCredentials(CollectionImeji c, User user) throws Exception
-    {
-        if(user == null)
-        {
-            throw new AuthenticationException("User is null!");
-        }
-        else if(c.getId() == null)
-        {
-        	//Collection doesn't exist
-        	return;
-        }
-        else if (!ObjectHelper.getURI(User.class, user.getEmail()).equals(c.getProperties().getCreatedBy()))
-        {
-            for (Grant g : user.getGrants())
-            {
-                if(g.getGrantFor().equals(c.getId()) && (g.getGrantType().equals(GrantType.CONTAINER_ADMIN) || g.getGrantType().equals(GrantType.CONTAINER_EDITOR)))
-                {
-                	return;
-                }
-            }
-        }
-        throw new AuthorizationException("User not authorized to create/update Collection " + c.getId());
-    }
-	
 	public CollectionImeji retrieve(String id)
 	{
-        return (CollectionImeji)rdf2Bean.load(ObjectHelper.getURI(CollectionImeji.class, id).toString());
+		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+		return (CollectionImeji)imejiRDF2Bean.load(ObjectHelper.getURI(CollectionImeji.class, id).toString(), user);
 	}
 	
 	public CollectionImeji retrieve(URI uri)
     {
-        return (CollectionImeji)rdf2Bean.load(CollectionImeji.class, uri);
+		 imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+		return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user);
     }
 	
+	public int countAllCollections()
+	{
+		return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/collection>}", ImejiJena.collectionModel);
+	}
+	
+	public int getCollectionSize(String uri)
+	{
+		String query = "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/image> .<" + uri + "> <http://imeji.mpdl.mpg.de/images> ?s }";
+		return ImejiSPARQL.execCount(query, ImejiJena.collectionModel);
+	}
+	
+	/**
+	 * 
+	 * @deprecated
+	 * @return
+	 */
 	public Collection<CollectionImeji> retrieveAll()
 	{
 		Security security = new Security();
+		rdf2Bean = new RDF2Bean(ImejiJena.collectionModel);
 		if (security.isSysAdmin(user))
 			return rdf2Bean.load(CollectionImeji.class);
 		return new ArrayList<CollectionImeji>();
 	}
 	
-	public void delete(CollectionImeji collection, User user) throws Exception{
-		for(URI uri : collection.getImages()){
+	public void delete(CollectionImeji collection, User user) throws Exception
+	{	
+		for(URI uri : collection.getImages())
+		{
 			ImageController imageController = new ImageController(user);
-			de.mpg.jena.vo.Image img = imageController.retrieve(uri);
+			Image img = imageController.retrieve(uri);
 			imageController.delete(img, user);
-			
 		}
 		ProfileController profileController = new ProfileController(user);
 		profileController.delete(collection.getProfile(),user);
-		bean2RDF.delete(collection);
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
+		imejiBean2RDF.delete(collection, user);
 	}
 	
 	
@@ -170,16 +157,16 @@ public class CollectionController extends ImejiController{
 	{
 	    List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
 	    if(scList!=null && scList.size()>0) list.add(scList);
-		String query = createQuery(list, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
-		
-		Collection<CollectionImeji> res = Sparql.exec(getModel(), CollectionImeji.class, query);
+		String query = createQuery("SELECT", list, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
+		query =	"SELECT ?s where {?s a <http://imeji.mpdl.mpg.de/collection>}";
+		Collection<CollectionImeji> res = Sparql.exec(ImejiJena.collectionModel, CollectionImeji.class, query);
 		return res;
 	}
 	
 	public Collection<CollectionImeji> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
     {
        
-        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
+        String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
         Collection<CollectionImeji> res = Sparql.exec(getModel(), CollectionImeji.class, query);
         return res;
     }
@@ -227,7 +214,5 @@ public class CollectionController extends ImejiController{
         filter += ")";
         return filter;
     }
-
-  
 	
 }

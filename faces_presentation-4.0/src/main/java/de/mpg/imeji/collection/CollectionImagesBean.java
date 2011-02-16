@@ -53,8 +53,8 @@ public class CollectionImagesBean extends ImagesBean {
 	}
 
 	@Override
-	public List<ImageBean> retrieveList(int offset, int limit) throws Exception {
-		ImageController controller = new ImageController(sb.getUser());
+	public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
+	{	
 		uri = ObjectHelper.getURI(CollectionImeji.class, id);
 		Collection<Image> images = new ArrayList<Image>();
 		SortCriterion sortCriterion = new SortCriterion();
@@ -68,8 +68,9 @@ public class CollectionImagesBean extends ImagesBean {
 		} catch (Exception e) {
 			BeanHelper.error("Invalid search query!");
 		}
-		totalNumberOfRecords = controller.searchAdvancedInContainer(uri,
-				scList, null, -1, 0).size();
+		CollectionController cc = new CollectionController(sb.getUser());
+		totalNumberOfRecords = cc.getCollectionSize(uri.toString());
+		ImageController controller = new ImageController(sb.getUser());
 		images = controller.searchAdvancedInContainer(uri, scList, null, limit,
 				offset);
 		return ImejiFactory.imageListToBeanList(images);

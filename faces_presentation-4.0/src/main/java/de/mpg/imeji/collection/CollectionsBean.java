@@ -61,8 +61,6 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
             sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         
-        
-      
             collections = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
         }
         catch (Exception e)

@@ -71,12 +71,12 @@ public class Locks
 		{
 			if (lock.getEmail() == null)
 			{
-				logger.debug(lock.getUri()+ " locked by system");
+				logger.info(lock.getUri()+ " locked by system");
 				getSystemLocks().put(lock.getUri(), lock);
 			}
 			else 
 			{
-				logger.debug(lock.getUri()+ " locked by " + lock.getEmail());
+				logger.info(lock.getUri()+ " locked by " + lock.getEmail());
 				getUserLocks().put(lock.getUri(), lock);
 			}
 		}
@@ -90,14 +90,31 @@ public class Locks
 	{
 		if (lock.getEmail() == null && getSystemLocks().get(lock.getUri()) != null)
 		{
-			logger.debug(lock.getUri()+ " unlocked by system");
+			logger.info(lock.getUri()+ " unlocked by system");
 			getSystemLocks().remove(lock.getUri());
 		}
 		else if(lock.getEmail() != null && getUserLocks().get(lock.getUri()) != null)
 		{
-			logger.debug(lock.getUri()+ " unlocked by " + lock.getEmail());
+			logger.info(lock.getUri()+ " unlocked by " + lock.getEmail());
 			getUserLocks().remove(lock.getUri());
 		}
+	}
+	
+	/**
+	 * Unlock all locks for one User
+	 * @param email
+	 */
+	public static void unlockAll(String email)
+	{
+		List<Lock> toUnlock = new ArrayList<Lock>();
+		if (!getUserLocks().isEmpty() && email != null)
+		{
+			for (Lock l :getUserLocks().values())
+			{
+				if (email.equals(l.getEmail())) toUnlock.add(l);
+			}
+		}
+		for (Lock l : toUnlock) {unLock(l);}
 	}
 	
 	/**

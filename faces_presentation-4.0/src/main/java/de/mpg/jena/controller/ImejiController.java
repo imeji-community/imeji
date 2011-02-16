@@ -1,8 +1,6 @@
 package de.mpg.jena.controller;
 
 import java.io.IOException;
-
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,14 +31,14 @@ import com.hp.hpl.jena.shared.Lock;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
-import de.mpg.jena.concurrency.ImejiBean2RDF;
-//import de.mpg.jena.concurrency.queue.QueuedBean2RDF;
+import de.mpg.jena.ImejiBean2RDF;
+import de.mpg.jena.ImejiJena;
+import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.Counter;
 import de.mpg.jena.util.ObjectHelper;
-import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.User;
 
@@ -48,13 +46,15 @@ public abstract class ImejiController
 {
     private static Logger logger = Logger.getLogger(ImejiController.class);
     protected User user;
-    protected static Model base = null;
+    private static Model base = null;
     static
     {
         try
         {
-            String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-            base = DataFactory.model(tdbPath);
+        	//ImejiJena.init();
+        	
+            //String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
+            //base = DataFactory.model(tdbPath);
             /*
              * IndexBuilderString larqBuilder = new IndexBuilderString() ;
              * larqBuilder.indexStatements(base.listStatements()) ; base.register(larqBuilder);
@@ -83,14 +83,16 @@ public abstract class ImejiController
      * static { try { String path = PropertyReader.getProperty("imeji.tdb.path"); System.out.println("TDB at: " + path);
      * base = DataFactory.model(path); } catch (Exception e) { } }
      */
-    protected static Bean2RDF bean2RDF = new Bean2RDF(base);
-    protected static RDF2Bean rdf2Bean = new RDF2Bean(base);
-    protected static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(base);
+    protected static Bean2RDF bean2RDF;// = new Bean2RDF(base);
+    protected static RDF2Bean rdf2Bean ;//= new RDF2Bean(base);
+    private static ImejiBean2RDF imejiBean2RDF;// = new ImejiBean2RDF(base);
+    private static ImejiRDF2Bean imejiRDF2Bean;
 
     public ImejiController(User user2)
     {
         this.user = user2;
-        Bean2RDF.logger.setLevel(Level.OFF);
+        bean2RDF = new Bean2RDF(ImejiJena.imejiDataSet.getDefaultModel());
+        base = getModel();
     }
 
     protected static void writeCreateProperties(Properties properties, User user)
@@ -404,7 +406,7 @@ public abstract class ImejiController
      * ns.getParent(); } if(!roots.contains(child)) { roots.add(child); } } createOntology(sc.getChildren(), map,
      * currentMap, roots); } } } }
      */
-    protected String createQuery(List<List<SearchCriterion>> scList, SortCriterion sortCriterion, String type,
+    protected String createQuery(String mode, List<List<SearchCriterion>> scList, SortCriterion sortCriterion, String type,
             int limit, int offset) throws Exception
     {
         boolean inverse = false;
@@ -605,7 +607,8 @@ public abstract class ImejiController
         {
             query += filter;
         }
-        String completeQuery = "SELECT DISTINCT ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } "
+        if ("SELECT".equals(mode)) mode += " DISTINCT ";
+        String completeQuery = mode + " ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } "
                 + sortQuery + limitString + " OFFSET " + offset;
         System.out.println(completeQuery);
         return completeQuery;
@@ -830,22 +833,21 @@ public abstract class ImejiController
      */
     protected static int getUniqueId()
     {
-        base.begin();
         Counter c = new Counter();
         try
         {
-            c = new RDF2Bean(base).load(Counter.class, 0);
+            c = new RDF2Bean(ImejiJena.imejiDataSet.getDefaultModel()).load(Counter.class, 0);
         }
         catch (NotFoundException e)
         {
-            bean2RDF.save(c);
+            
+        	bean2RDF.save(c);
             logger.warn("New Counter created", e);
         }
         int id = c.getCounter();
         logger.info("Counter : Requested id : " + id);
         c.setCounter(c.getCounter() + 1);
         bean2RDF.save(c);
-        base.commit();
         return id;
     }
 

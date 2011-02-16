@@ -4,28 +4,44 @@ import java.net.URI;
 import java.security.MessageDigest;
 import java.util.Collection;
 
+import thewebsemantic.RDF2Bean;
+import de.mpg.jena.ImejiBean2RDF;
+import de.mpg.jena.ImejiJena;
+import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.vo.User;
 
 public class UserController extends ImejiController
 {
+	private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
+	private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
 	
 	public UserController(User user)
 	{
 		super(user);
 	}
 	
-	public void create(User user)
+	public void create(User newUser) throws Exception
 	{
-		base.begin();
-		bean2RDF.saveDeep(user);
-		base.commit();
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
+		imejiBean2RDF.create(newUser, user);
+	}
+	
+	public void delete(User user) throws Exception
+	{
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
+		imejiBean2RDF.delete(user, this.user);
 	}
 	
 	public User retrieve(String email)
 	{
-		return rdf2Bean.load(User.class, email);
+		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
+		return (User) imejiRDF2Bean.load(User.class, email);
 	}
 	
+	/**
+	 * @deprecated
+	 * @return
+	 */
 	public Collection<User> retrieveAll()
 	{
 		return rdf2Bean.load(User.class);
@@ -44,10 +60,9 @@ public class UserController extends ImejiController
 	
 	public void update(User user) throws Exception
 	{
-		base.begin();
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
 		imejiBean2RDF.saveDeep(user, this.user);
 		cleanGraph();
-		base.commit();
 	}
 	
 	public static String convertToMD5(String pass) throws Exception
@@ -75,10 +90,5 @@ public class UserController extends ImejiController
     {
         return "";
     }
-	    
-	    
-
-	
-	
 
 }

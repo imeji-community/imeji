@@ -82,7 +82,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         {
             BeanHelper.error("Invalid search query!");
         }
-        totalNumberOfRecords = controller.searchAdvanced(scList, null, -1, 0).size();
+        totalNumberOfRecords = controller.allImagesSize();
         images = controller.searchAdvanced(scList, sortCriterion, limit, offset);
         return ImejiFactory.imageListToBeanList(images);
     }

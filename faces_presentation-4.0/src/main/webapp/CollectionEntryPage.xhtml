@@ -77,7 +77,7 @@
 						<h:outputText value="#{lbl.collection_release}"></h:outputText>
 					</h:commandLink>
 					<h:outputText styleClass="seperator void" />
-					<rich:togglePanel value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open">
+					<rich:togglePanel value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{ViewCollectionBean.deletable}">
 						 <f:facet name="closed">
 					            <rich:toggleControl value="Share" switchToState="open"/>
 					     </f:facet>

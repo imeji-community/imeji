@@ -4,18 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.rmi.RemoteException;
 
-import javax.xml.rpc.ServiceException;
-
-import de.escidoc.core.common.exceptions.application.invalid.InvalidStatusException;
-import de.escidoc.core.common.exceptions.application.missing.MissingMethodParameterException;
-import de.escidoc.core.common.exceptions.application.notfound.ItemNotFoundException;
-import de.escidoc.core.common.exceptions.application.security.AuthenticationException;
-import de.escidoc.core.common.exceptions.application.security.AuthorizationException;
-import de.escidoc.core.common.exceptions.application.violated.AlreadyPublishedException;
-import de.escidoc.core.common.exceptions.application.violated.LockingException;
-import de.escidoc.core.common.exceptions.system.SystemException;
 import de.escidoc.schemas.item.x09.ItemDocument;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.escidoc.ItemVO;
@@ -23,9 +12,9 @@ import de.mpg.imeji.upload.helper.ImageHelper;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Image.Visibility;
 import de.mpg.jena.vo.Properties.Status;
+import de.mpg.jena.vo.User;
 
 /**
  * @author yu

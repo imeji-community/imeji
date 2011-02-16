@@ -20,20 +20,24 @@ public class LocksSurveyor extends Thread
 			try
 			{
 				List<Lock> list = new ArrayList<Lock>(Locks.getExpiredLocks());
-				if (!list.isEmpty())
+				if (!Locks.getExpiredLocks().isEmpty())
 				{
 					logger.info("Unlocking dead locks...");
-					for (int i=0; i < list.size(); i++)
+					for (Lock l :Locks.getExpiredLocks())
 					{
-						logger.info("on " + list.get(i).getUri() + " by " +list.get(i).getEmail());
-						Locks.unLock(list.get(i));
-						list = new ArrayList<Lock>(Locks.getExpiredLocks());
+						list.add(l);
+					}
+					for(Lock l : list)
+					{
+						logger.info("on " + l.getUri() + " by " + l.getEmail());
+						Locks.unLock(l);
 					}
 				}
 			}
 			catch (Exception e) 
 			{
-				logger.warn("Locks Surveyor encounterd a problem: " + e.getMessage());
+				logger.warn("Locks Surveyor encounterd a problem: " + e.getMessage() + " " + e.getCause());
+				e.printStackTrace();
 			}
 		}
 		logger.warn("Lock Surveyor stopped. It should not occurs if application still runnung!");

@@ -31,7 +31,8 @@ public class DataFactory
     public static Model model(String path2db)
     {
         TDB.setExecutionLogging(InfoLevel.INFO);
-        TDB.getContext().set(TDB.symLogExec, true) ;
+        TDB.getContext().set(TDB.symLogExec, false) ;
+        TDB.getContext().set(TDB.symUnionDefaultGraph, true) ;
         rdf_model = TDBFactory.createModel(path2db);
         return rdf_model;
     }

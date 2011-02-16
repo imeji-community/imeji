@@ -18,6 +18,7 @@ import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Properties.Status;
 
@@ -57,8 +58,10 @@ public class SelectedBean extends ImagesBean {
 			uris.add(new SearchCriterion(SearchCriterion.Operator.OR,
 					ImejiNamespaces.ID_URI, uri.toString(), Filtertype.URI));
 		}
-		if (uris.size() != 0) {
-			totalNumberOfRecords = controller.search(uris, null, -1, offset).size();
+		if (uris.size() != 0) 
+		{
+			totalNumberOfRecords = controller.getNumberOfResults(uris, null);
+			System.out.println(totalNumberOfRecords);
 			images = controller.search(uris, null, limit, offset);
 		}
 		return ImejiFactory.imageListToBeanList(images);

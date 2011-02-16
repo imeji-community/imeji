@@ -59,8 +59,7 @@ public class EditWorkspaceBean
 	
 	public void reset()
 	{
-		if (editor != null && editor.getImages() != null)
-			unLockImages(editor.getImages());
+		if (user != null) Locks.unlockAll(user.getEmail());
 		profiles = new ArrayList<MetadataProfile>();
 		type = EditorType.BATCH;
 		eraseOldMetadata = false;
@@ -187,16 +186,7 @@ public class EditWorkspaceBean
 			Locks.lock(new Lock(im.getId().toString(), user.getEmail()));
 		}
 	}
-	
-	public void unLockImages(List<Image> images)
-	{
-		for (Image im : images)
-		{
-			if (im != null && im.getId() != null && user != null)
-			Locks.unLock(new Lock(im.getId().toString(), user.getEmail()));
-		}
-	}
-	
+
 	public List<Image> retrieveImages()
 	{
 		List<Image> images = new ArrayList<Image>();

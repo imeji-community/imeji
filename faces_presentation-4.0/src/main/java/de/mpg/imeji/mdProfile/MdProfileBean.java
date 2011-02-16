@@ -138,9 +138,8 @@ public class MdProfileBean
 
     public String getEncodedId() throws UnsupportedEncodingException
     {
-        MetadataProfile p = this.getProfile();
-        if(this.getProfile().getId() != null)
-            return URLEncoder.encode(this.getProfile().getId().toString(), "UTF-8");
+        if(profile != null && profile.getId() != null)
+            return URLEncoder.encode(profile.getId().toString(), "UTF-8");
         else return "";
     }
 

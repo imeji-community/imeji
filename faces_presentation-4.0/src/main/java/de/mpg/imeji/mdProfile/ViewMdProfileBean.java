@@ -46,7 +46,15 @@ public class ViewMdProfileBean extends MdProfileBean
 
     public String save()
     {
-        profileController.update(this.getProfile());
+    	try 
+        {	
+    		 profileController.update(this.getProfile());
+		} 
+        catch (Exception e) 
+		{
+			 BeanHelper.error("Error saving profile");
+		}
+        BeanHelper.info("Metadata Profile updates successfully!");
         return "pretty:";
     }
 

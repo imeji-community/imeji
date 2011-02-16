@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.hp.hpl.jena.rdf.model.Model;
+
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
@@ -40,12 +42,10 @@ public class AlbumController extends ImejiController{
 		writeCreateProperties(ic.getProperties(), user);
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(new URI("http://imeji.mpdl.mpg.de/album/" + getUniqueId()));
-		base.begin();
 		bean2RDF.saveDeep(ic);
 		ic = rdf2Bean.load(Album.class, ic.getId());
 		user = addCreatorGrant(ic, user);
 		cleanGraph();
-		base.commit();
 	}
 	
 	public User addCreatorGrant(Album alb, User user) throws Exception
@@ -68,11 +68,9 @@ public class AlbumController extends ImejiController{
 	public synchronized void update(Album ic)
 	{
 		writeUpdateProperties(ic.getProperties(), user);
-		base.begin();
-		Bean2RDF writer = new Bean2RDF(base);
-		writer.saveDeep(ic);
+//		Bean2RDF writer = new Bean2RDF(base);
+//		writer.saveDeep(ic);
 		cleanGraph();
-		base.commit();
 	}
 	
 	/**
@@ -98,10 +96,10 @@ public class AlbumController extends ImejiController{
 	
 	public Collection<Album> retrieveAll()
 	{
-		RDF2Bean reader = new RDF2Bean(base);
-		Security security = new Security();
-		if (security.isSysAdmin(user))
-			return reader.load(Album.class);
+//		RDF2Bean reader = new RDF2Bean(base);
+//		Security security = new Security();
+//		if (security.isSysAdmin(user))
+//			return reader.load(Album.class);
 		return new ArrayList<Album>();
 	}
 	
@@ -137,16 +135,18 @@ public class AlbumController extends ImejiController{
 	{
 	    List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
 	    if(scList!=null && scList.size()>0) list.add(scList);
-	    String query = createQuery(list, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
+	    String query = createQuery("SELECT", list, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
 		//base.write(System.out);
+	    Model base = null;
 		return Sparql.exec(base, Album.class, query);
 	}
 	
 	public Collection<Album> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
     {
         
-        String query = createQuery(scList, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
+        String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
         //base.write(System.out);
+        Model base = null;
         return Sparql.exec(base, Album.class, query);
     }
 

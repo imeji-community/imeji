@@ -38,7 +38,7 @@ public class UserCreationBean
     
     public String create() throws Exception
     {
-        UserController uc = new UserController(null);
+        UserController uc = new UserController(sb.getUser());
         String regexEmailMatch ="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
         
        
@@ -105,7 +105,7 @@ public class UserCreationBean
     public int getAllImagesSize()
     {
     	ImageController ic = new ImageController(sb.getUser());
-    	return ic.retrieveAll().size();
+    	return ic.allImagesSize();
     }
     
     public int getAllUsersSize() 

@@ -1,6 +1,5 @@
 package de.mpg.imeji.util;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +10,6 @@ import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.ContainerMetadata;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
@@ -19,14 +17,6 @@ import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.complextypes.ConePerson;
-import de.mpg.jena.vo.complextypes.Date;
-import de.mpg.jena.vo.complextypes.Geolocation;
-import de.mpg.jena.vo.complextypes.License;
-import de.mpg.jena.vo.complextypes.Number;
-import de.mpg.jena.vo.complextypes.Publication;
-import de.mpg.jena.vo.complextypes.Text;
-import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class ImejiFactory
 {

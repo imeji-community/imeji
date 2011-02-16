@@ -111,12 +111,12 @@
 		<artifactId>tdb</artifactId>
 		<version>0.8.7</version>
 		<scope>provided</scope>
-		<exclusions>
-        		<exclusion>  <!-- declare the exclusion here -->
+		 <!--   <exclusions>
+        		<exclusion>  
           			<groupId>xerces</groupId>
          			<artifactId>xercesImpl</artifactId>
         	</exclusion>
-        </exclusions>
+        </exclusions>-->
 	</dependency>
 	<dependency>
 		<groupId>com.hp.hpl.jena</groupId>
@@ -147,12 +147,12 @@
 		<artifactId>jena</artifactId>
 		<version>2.6.3</version>
 		<scope>provided</scope>
-		<exclusions>
-        		<exclusion>  <!-- declare the exclusion here -->
+		<!--  <exclusions>
+        		  <exclusion>  
           			<groupId>xerces</groupId>
          			<artifactId>xercesImpl</artifactId>
         	</exclusion>
-        </exclusions>
+        </exclusions>-->
 	</dependency>
 	
 	<!-- XercesImpl has to be removed, otherwise this library collides with jboss-internal libraries -->

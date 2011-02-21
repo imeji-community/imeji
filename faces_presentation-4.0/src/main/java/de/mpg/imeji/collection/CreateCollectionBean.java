@@ -1,5 +1,7 @@
 package de.mpg.imeji.collection;
 
+import java.net.URI;
+
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
@@ -44,11 +46,10 @@ public class CreateCollectionBean extends CollectionBean
         {
             ProfileController profileController = new ProfileController(sessionBean.getUser());
             MetadataProfile mdp = new MetadataProfile();
-            mdp.setDescription(super.getCollection().getMetadata().getDescription());
-            mdp.setTitle(super.getCollection().getMetadata().getTitle());
-            MetadataProfile profile = profileController.create(mdp);
-            super.getCollection().setProfile(profile);
-            collectionController.create(super.getCollection());
+            mdp.setDescription(getCollection().getMetadata().getDescription());
+            mdp.setTitle(getCollection().getMetadata().getTitle());
+            URI profile = profileController.create(mdp);
+            collectionController.create(getCollection(), profile);
             BeanHelper.info("collection_success_create");
         }
         return "pretty:collections";

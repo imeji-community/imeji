@@ -7,8 +7,11 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
 public class CollectionCriterion extends Criterion implements Serializable{
@@ -18,7 +21,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
      */
     private static final long serialVersionUID = 1L;
     
-    private CollectionImeji selectedCollection;
+    private MetadataProfile selectedProfile;
 	private String selectedCollectionId;
 	private List<MDCriterion> mdCriterionList;
     private Collection<CollectionImeji> collections;
@@ -36,7 +39,13 @@ public class CollectionCriterion extends Criterion implements Serializable{
 		this.collections = collections; 
 		if(collections!=null && collections.size()>0)
 		{
-		    setSelectedCollection(collections.get(0));
+			SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+			ProfileController pc = new ProfileController(sb.getUser());
+			try {
+				setSelectedProfile(pc.retrieve(collections.get(0).getProfile()));
+			} catch (Exception e) {
+				BeanHelper.error("Error reading profile: " + collections.get(0).getProfile());
+			}
 		    setMdCriterionList(newMdCriterionList());
 		    setSelectedCollectionId(collections.get(0).getId().toString());
 	        updateMDList();
@@ -52,8 +61,14 @@ public class CollectionCriterion extends Criterion implements Serializable{
            {
                if(coll.getId().toString().equals(collId))
                {
-                   setSelectedCollectionId(collId);
-                   setSelectedCollection(coll);
+                   	setSelectedCollectionId(collId);
+                   	SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+	       			ProfileController pc = new ProfileController(sb.getUser());
+	       			try {
+	       				setSelectedProfile(pc.retrieve(coll.getProfile()));
+	       			} catch (Exception e) {
+	       				BeanHelper.error("Error reading profile: " + coll.getProfile());
+	       			}
                }
            }
            updateMDList();
@@ -83,11 +98,12 @@ public class CollectionCriterion extends Criterion implements Serializable{
     }
     
     
-    public List<MDCriterion> newMdCriterionList(){
+    public List<MDCriterion> newMdCriterionList()
+    {
     	List<MDCriterion> mdCriterionList = new ArrayList<MDCriterion>();
-    	if(getSelectedCollection().getProfile().getStatements().size()>0)
+    	if(getSelectedProfile().getStatements().size()>0)
     	{
-    		MDCriterion newMd = new MDCriterion(getSelectedCollection().getProfile().getStatements());
+    		MDCriterion newMd = new MDCriterion(getSelectedProfile().getStatements());
         	mdCriterionList.add(newMd);
     	}
     	else
@@ -113,25 +129,25 @@ public class CollectionCriterion extends Criterion implements Serializable{
 	
 	public boolean clearCriterion() {
 		setSearchString("");
-		setSelectedCollection(null);
+		setSelectedProfile(null);
 		for(int i=0; i<mdCriterionList.size(); i++)
 			mdCriterionList.get(i).clearCriterion();
 		return true;
 	}
 
-    public void setSelectedCollection(CollectionImeji selectedCollection)
+    public void setSelectedProfile(MetadataProfile selectedProfile)
     {
-        this.selectedCollection = selectedCollection;
+        this.selectedProfile = selectedProfile;
     }
 
-    public CollectionImeji getSelectedCollection()
+    public MetadataProfile getSelectedProfile()
     {
-        return selectedCollection;
+        return selectedProfile;
     }    
     
     public String addMd(){
         List<MDCriterion> mds = getMdCriterionList(); 
-        MDCriterion newMd = new MDCriterion(getSelectedCollection().getProfile().getStatements());
+        MDCriterion newMd = new MDCriterion(getSelectedProfile().getStatements());
         mds.add(mdPosition +1, newMd);  
         return "";
     }

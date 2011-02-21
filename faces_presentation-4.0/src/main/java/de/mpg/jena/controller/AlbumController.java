@@ -11,7 +11,9 @@ import com.hp.hpl.jena.rdf.model.Model;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
+import de.mpg.jena.ImejiJena;
 import de.mpg.jena.security.Security;
+import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
@@ -138,7 +140,7 @@ public class AlbumController extends ImejiController{
 	    String query = createQuery("SELECT", list, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
 		//base.write(System.out);
 	    Model base = null;
-		return Sparql.exec(base, Album.class, query);
+	    return ImejiSPARQL.execAndLoad(query,  Album.class);
 	}
 	
 	public Collection<Album> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
@@ -147,7 +149,7 @@ public class AlbumController extends ImejiController{
         String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
         //base.write(System.out);
         Model base = null;
-        return Sparql.exec(base, Album.class, query);
+        return ImejiSPARQL.execAndLoad(query,  Album.class);
     }
 
 	@Override

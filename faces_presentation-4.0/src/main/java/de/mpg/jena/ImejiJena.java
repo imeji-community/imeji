@@ -25,7 +25,6 @@ public class ImejiJena
 	public static Model albumModel;
 	public static Model imageModel;
 	public static Model userModel;
-	public static Model metadataModel;
 	public static Model profileModel;
 	public static Dataset imejiDataSet;
 	
@@ -49,7 +48,6 @@ public class ImejiJena
 		albumModel = ImejiJena.initModel(getModelName(Album.class));
 		imageModel =ImejiJena.initModel(getModelName(Image.class));
 		userModel = ImejiJena.initModel(getModelName(User.class));
-		metadataModel = ImejiJena.initModel(getModelName(ImageMetadata.class));
 		profileModel = ImejiJena.initModel(getModelName(MetadataProfile.class));
 		logger.info("... done!");
 	}

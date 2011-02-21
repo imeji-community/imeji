@@ -53,7 +53,7 @@ public class ViewCollectionBean extends CollectionBean
             }
             this.getCollection().getMetadata().setPersons(persons);
             ProfileController profileController = new ProfileController(sessionBean.getUser());
-            this.getCollection().setProfile(profileController.retrieve(this.getCollection().getProfile().getId()));
+            this.getCollection().setProfile(this.getCollection().getProfile());
         }
         catch (Exception e)
         {
@@ -94,7 +94,8 @@ public class ViewCollectionBean extends CollectionBean
 
     public String getSmallDescription()
     {
-        if (this.getCollection().getMetadata().getDescription().length() > 100)
+        if(this.getCollection().getMetadata().getDescription() == null) return "No Description";
+    	if (this.getCollection().getMetadata().getDescription().length() > 100)
         {
             return this.getCollection().getMetadata().getDescription().substring(0, 100) + "...";
         }
@@ -106,6 +107,7 @@ public class ViewCollectionBean extends CollectionBean
     
     public String getFormattedDescription()
     {
-        return this.getCollection().getMetadata().getDescription().replaceAll("\n", "<br/>");
+        if (this.getCollection().getMetadata().getDescription() == null) return "";
+    	return this.getCollection().getMetadata().getDescription().replaceAll("\n", "<br/>");
     }
 }

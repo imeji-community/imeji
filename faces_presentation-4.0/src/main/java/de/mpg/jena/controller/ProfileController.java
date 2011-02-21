@@ -33,15 +33,16 @@ public class ProfileController extends ImejiController
      * @param ic
      * @param user
      */
-    public MetadataProfile create(MetadataProfile mdp) throws Exception
+    public URI create(MetadataProfile mdp) throws Exception
     {
     	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
     	writeCreateProperties(mdp.getProperties(), user);
-        mdp.getProperties().setStatus(Status.PENDING); 
-        mdp.setId(ObjectHelper.getURI(MetadataProfile.class, Integer.toString(getUniqueId())));
+        mdp.getProperties().setStatus(Status.PENDING);
+        URI uri = ObjectHelper.getURI(MetadataProfile.class, Integer.toString(getUniqueId()));
+        mdp.setId(uri);
         imejiBean2RDF.create(mdp, user);
         addCreatorGrant(mdp, user);
-        return (MetadataProfile)ObjectHelper.castAllHashSetToList(mdp);
+        return uri;
     }
     
 	private User addCreatorGrant(MetadataProfile p, User user) throws Exception
@@ -77,7 +78,7 @@ public class ProfileController extends ImejiController
     
     public int countAllProfiles()
     {
-		return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/profile>}", ImejiJena.profileModel);
+		return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/profile>}");
     }
     
     /**

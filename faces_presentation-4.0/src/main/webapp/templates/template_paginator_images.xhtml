@@ -119,7 +119,7 @@
 								
 									<!-- Image with link to the details view --> 
 									<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
-										<h:graphicImage ismap="false" usemap="#map" alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
+										<h:graphicImage alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
 									</h:outputLink>
 									
 									<!-- Edit Caption -->
@@ -145,7 +145,7 @@
 										<rich:menuItem ajaxSingle="true" styleclass="">
 											<a4j:commandLink value="* #{statement.label}" actionListener="#{EditWorkspaceBean.requestEditor}" reRender="modalContent" onclick="Richfaces.showModalPanel('pnlLoading')" oncomplete="Richfaces.hideModalPanel('pnlLoading'); Richfaces.showModalPanel('pnlEdit');">
 												<f:attribute name="statementName" value="#{statement.label}"/>
-												<f:attribute name="profileId" value="#{item.collection.profile.id}"/>
+												<f:attribute name="profileId" value="#{item.collection.profile}"/>
 												<f:attribute name="idOfImageToEdit" value="#{item.image.id}"/>
 												<f:attribute name="type" value="SINGLE"/>
 							               </a4j:commandLink>

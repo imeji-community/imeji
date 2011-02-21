@@ -62,7 +62,7 @@ public class UserController extends ImejiController
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
 		imejiBean2RDF.saveDeep(user, this.user);
-		cleanGraph();
+		cleanGraph(ImejiJena.userModel);
 	}
 	
 	public static String convertToMD5(String pass) throws Exception

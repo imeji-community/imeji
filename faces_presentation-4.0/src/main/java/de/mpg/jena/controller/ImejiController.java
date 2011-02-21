@@ -92,7 +92,7 @@ public abstract class ImejiController
     {
         this.user = user2;
         bean2RDF = new Bean2RDF(ImejiJena.imejiDataSet.getDefaultModel());
-        base = getModel();
+        //base = getModel();
     }
 
     protected static void writeCreateProperties(Properties properties, User user)
@@ -882,12 +882,38 @@ public abstract class ImejiController
      */
     public synchronized void cleanGraph()
     {
+        if (base != null)
+        {
+	    	try
+	        {
+	            base.enterCriticalSection(Lock.WRITE);
+	            String q = "SELECT DISTINCT ?s WHERE { ?s ?p ?o . OPTIONAL {?s2 ?p2 ?s} . FILTER (isBlank(?s) && !bound(?s2))}";
+	            Query queryObject = QueryFactory.create(q);
+	            QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
+	            ResultSet results = qe.execSelect();
+	            while (results.hasNext())
+	            {
+	                QuerySolution qs = results.next();
+	                Resource s = qs.getResource("?s");
+	                s.removeProperties();
+	            }
+	            qe.close();
+	        }
+	        finally
+	        {
+	            base.leaveCriticalSection();
+	        }
+        }
+    }
+
+    public synchronized void cleanGraph(Model graph)
+    {
         try
         {
-            base.enterCriticalSection(Lock.WRITE);
+        	graph.enterCriticalSection(Lock.WRITE);
             String q = "SELECT DISTINCT ?s WHERE { ?s ?p ?o . OPTIONAL {?s2 ?p2 ?s} . FILTER (isBlank(?s) && !bound(?s2))}";
             Query queryObject = QueryFactory.create(q);
-            QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
+            QueryExecution qe = QueryExecutionFactory.create(queryObject, graph);
             ResultSet results = qe.execSelect();
             while (results.hasNext())
             {
@@ -899,10 +925,11 @@ public abstract class ImejiController
         }
         finally
         {
-            base.leaveCriticalSection();
+        	graph.leaveCriticalSection();
         }
     }
 
+    
     protected abstract String getSpecificQuery() throws Exception;
 
     protected abstract String getSpecificFilter() throws Exception;

@@ -1,6 +1,7 @@
 package de.mpg.jena.vo;
 
 import java.io.Serializable;
+import java.net.URI;
 
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfType;
@@ -9,17 +10,19 @@ import thewebsemantic.RdfType;
 @RdfType("collection")
 public class CollectionImeji extends Container implements Serializable{
 
-    private MetadataProfile profile = new MetadataProfile();
     
-    public MetadataProfile getProfile()
-    {
-        return profile;
-    }
+    private URI profile = null;
 
-    public void setProfile(MetadataProfile profile)
-    {
-        this.profile = profile;
-    }
+	public URI getProfile() {
+		return profile;
+	}
+
+	public void setProfile(URI profile) {
+		this.profile = profile;
+	}
+    
+    
+
     
    
 }

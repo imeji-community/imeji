@@ -12,6 +12,7 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.MetadataBean;
 import de.mpg.imeji.metadata.MetadataBean.MdField;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.Image;
@@ -40,12 +41,18 @@ public class ProfileHelper
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         CollectionController c = new CollectionController(sb.getUser());
+        ProfileController pc = new ProfileController(sb.getUser());
         Map<URI, MetadataProfile> pMap = new HashMap<URI, MetadataProfile>();
         for (Image im : imgs)
         {
             CollectionImeji coll = c.retrieve(im.getCollection());
-            if (pMap.get(coll.getProfile().getId()) == null)
-                pMap.put(coll.getProfile().getId(), coll.getProfile());
+            if (pMap.get(coll.getProfile()) == null)
+				try {
+					pMap.put(coll.getProfile(), pc.retrieve(coll.getProfile()));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
         }
         return pMap;
     }
@@ -72,7 +79,13 @@ public class ProfileHelper
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         CollectionController c = new CollectionController(sb.getUser());
         CollectionImeji coll = c.retrieve(image.getCollection());
-        profile = coll.getProfile();
+        ProfileController pc = new ProfileController(sb.getUser());
+        try {
+			profile = pc.retrieve(coll.getProfile());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return profile;
     }
     

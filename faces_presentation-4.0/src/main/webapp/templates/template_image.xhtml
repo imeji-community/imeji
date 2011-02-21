@@ -120,7 +120,7 @@
 							<a4j:commandLink rendered="#{imageBean.editable}" value="Edit" actionListener="#{EditWorkspaceBean.requestEditor}" reRender="metadata">
 								<f:attribute name="idOfImageToEdit" value="#{imageBean.image.id}"/>
 								<f:attribute name="editAllStatements" value="true"/>
-								<f:attribute name="profileId" value="#{imageBean.collection.profile.id}"/>
+								<f:attribute name="profileId" value="#{imageBean.collection.profile}"/>
 								<f:attribute name="type" value="SINGLE"/>
 							</a4j:commandLink>
 						</h3>

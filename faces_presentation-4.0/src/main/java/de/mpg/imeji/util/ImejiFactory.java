@@ -25,7 +25,6 @@ public class ImejiFactory
         CollectionImeji coll = new CollectionImeji();
         coll.setMetadata(newContainerMetadata());
         coll.setProperties(newProperties());
-        coll.setProfile(new MetadataProfile());
         return coll;
     }
 

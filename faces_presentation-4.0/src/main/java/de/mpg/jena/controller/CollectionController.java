@@ -41,15 +41,17 @@ public class CollectionController extends ImejiController
 	 * @param ic
 	 * @param user
 	 */
-	public void create(CollectionImeji ic) throws Exception
-	{		
+	public URI create(CollectionImeji ic, URI profile) throws Exception
+	{			
 		writeCreateProperties(ic.getProperties(), user);
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
+		ic.setProfile(profile);
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
 		imejiBean2RDF.create(ic, user);
 		user = addCreatorGrant(ic, user);
-		cleanGraph();
+		cleanGraph(ImejiJena.collectionModel);
+		return ic.getId();
 	}
 	
 	private User addCreatorGrant(CollectionImeji c, User user) throws Exception
@@ -95,19 +97,20 @@ public class CollectionController extends ImejiController
 	
 	public CollectionImeji retrieve(URI uri)
     {
-		 imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
 		return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user);
     }
 	
 	public int countAllCollections()
 	{
-		return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/collection>}", ImejiJena.collectionModel);
+		return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/collection>}");
 	}
 	
 	public int getCollectionSize(String uri)
 	{
+		cleanGraph();
 		String query = "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/image> .<" + uri + "> <http://imeji.mpdl.mpg.de/images> ?s }";
-		return ImejiSPARQL.execCount(query, ImejiJena.collectionModel);
+		return ImejiSPARQL.execCount(query);
 	}
 	
 	/**
@@ -133,7 +136,6 @@ public class CollectionController extends ImejiController
 			imageController.delete(img, user);
 		}
 		ProfileController profileController = new ProfileController(user);
-		profileController.delete(collection.getProfile(),user);
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
 		imejiBean2RDF.delete(collection, user);
 	}
@@ -159,7 +161,7 @@ public class CollectionController extends ImejiController
 	    if(scList!=null && scList.size()>0) list.add(scList);
 		String query = createQuery("SELECT", list, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
 		query =	"SELECT ?s where {?s a <http://imeji.mpdl.mpg.de/collection>}";
-		Collection<CollectionImeji> res = Sparql.exec(ImejiJena.collectionModel, CollectionImeji.class, query);
+		Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(ImejiJena.collectionModel, query, CollectionImeji.class);
 		return res;
 	}
 	
@@ -167,7 +169,7 @@ public class CollectionController extends ImejiController
     {
        
         String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
-        Collection<CollectionImeji> res = Sparql.exec(getModel(), CollectionImeji.class, query);
+        Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(ImejiJena.collectionModel,query, CollectionImeji.class);
         return res;
     }
 

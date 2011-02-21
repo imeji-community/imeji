@@ -18,6 +18,7 @@ import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
@@ -218,19 +219,27 @@ public class EditWorkspaceBean
 		List<MetadataProfile> list = new ArrayList<MetadataProfile>();
 		List<String> cl = new ArrayList<String>();
 		List<String> pl = new ArrayList<String>();
-		for (Image im :l)
+		try 
 		{
-			if (!cl.contains(im.getCollection().toString()))
+			for (Image im :l)
 			{
-				cl.add(im.getCollection().toString());
-				CollectionController cc = new CollectionController(user);
-				CollectionImeji c = cc.retrieve(im.getCollection());
-				if (!cl.contains(c.getProfile().getId().toString()))
+				if (!cl.contains(im.getCollection().toString()))
 				{
-					pl.add(c.getProfile().getId().toString());
-					list.add(c.getProfile());
+					cl.add(im.getCollection().toString());
+					CollectionController cc = new CollectionController(user);
+					CollectionImeji c = cc.retrieve(im.getCollection());
+					if (!cl.contains(c.getProfile().toString()))
+					{
+						pl.add(c.getProfile().toString());
+						ProfileController pc = new ProfileController(user);
+						list.add(pc.retrieve(c.getProfile()));
+					}
 				}
 			}
+		}
+		catch (Exception e) 
+		{
+			BeanHelper.error("Error reading images profile!");
 		}
 		return list;
 	}

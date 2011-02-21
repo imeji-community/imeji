@@ -10,9 +10,6 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import thewebsemantic.Sparql;
-
-import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -74,8 +71,9 @@ public class ImageController extends ImejiController
 
     public void create(Collection<Image> images, URI coll) throws Exception
     {
-    	CollectionController cc = new CollectionController(user);
-        CollectionImeji ic = cc.retrieve(coll);
+        CollectionController cc = new CollectionController(user);
+    	CollectionImeji ic = cc.retrieve(coll);
+        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
         for (Image img : images)
         {
         	 writeCreateProperties(img.getProperties(), user);
@@ -119,7 +117,7 @@ public class ImageController extends ImejiController
      */
     public int allImagesSize()
     {
-    	return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/image>}", ImejiJena.imageModel);
+    	return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/image>}");
     }
     
     public int getNumberOfResults(List<SearchCriterion> scList, SortCriterion sortCri) throws Exception
@@ -128,8 +126,8 @@ public class ImageController extends ImejiController
         List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
         if (scList != null && scList.size() > 0)
              list.add(scList);
-        String query = createQuery("SELECT ?s count(DISTINCT ?s)",list, sortCri, "http://imeji.mpdl.mpg.de/image", -1, 0);
-    	return ImejiSPARQL.execCount(query, ImejiJena.imageModel);
+        String query = createQuery("SELECT ?s count(DISTINCT ?s)",null, null, "http://imeji.mpdl.mpg.de/image", -1, 0);
+    	return ImejiSPARQL.execCount(query);
     }
 
     public Collection<Image> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
@@ -156,7 +154,7 @@ public class ImageController extends ImejiController
     {
         additionalQuery = "";
         String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
-        return Sparql.exec(model, Image.class, query, Syntax.syntaxARQ);
+        return  ImejiSPARQL.execAndLoad(query, Image.class);
     }
 
     public Collection<Image> searchAdvancedInContainer(URI containerUri, List<List<SearchCriterion>> scList,
@@ -172,7 +170,7 @@ public class ImageController extends ImejiController
     {
         additionalQuery = " . <" + containerUri.toString() + "> <http://imeji.mpdl.mpg.de/images> ?s";
         String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
-        return Sparql.exec(model, Image.class, query, Syntax.syntaxARQ);
+        return ImejiSPARQL.execAndLoad(model, query, Image.class);
     }
     
 
@@ -189,7 +187,7 @@ public class ImageController extends ImejiController
         if (scList != null && scList.size() > 0)
             list.add(scList);
         String query = createQuery("SELECT",list, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
-        return Sparql.exec(ImejiJena.imageModel, Image.class, query, Syntax.syntaxARQ);
+        return ImejiSPARQL.execAndLoad(query, Image.class);
     }
     
     public Collection<Image> searchImageInContainer(Model model, URI containerUri, List<SearchCriterion> scList,
@@ -200,7 +198,8 @@ public class ImageController extends ImejiController
         if (scList != null && scList.size() > 0)
             list.add(scList);
         String query = createQuery("SELECT",list, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
-        return Sparql.exec(model, Image.class, query, Syntax.syntaxARQ);
+        System.out.println("eeee");
+        return  ImejiSPARQL.execAndLoad(model, query, Image.class);
     }
 
     /*
@@ -283,10 +282,10 @@ public class ImageController extends ImejiController
             person.getOrganizations().add(org);
             MetadataProfile mdp = new MetadataProfile();
             mdp.setDescription("blaaaa");
-            pc.create(mdp);
-            coll.setProfile(mdp);
+           // mdp = pc.create(mdp);
+            coll.setProfile(mdp.getId());
             System.out.println("Create collection");
-            icc.create(coll);
+            //icc.create(coll);
             System.out.println("End create coll");
             // base.write(System.out);
             List<Image> imgList = new LinkedList<Image>();

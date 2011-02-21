@@ -1,5 +1,6 @@
 package de.mpg.jena.sparql;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.hp.hpl.jena.query.Query;
@@ -11,6 +12,7 @@ import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.Lock;
+import com.hp.hpl.jena.tdb.TDB;
 
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
@@ -29,6 +31,7 @@ public class ImejiSPARQL
 	{
 		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
 		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
+		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;
 		Model m = ImejiJena.imejiDataSet.getNamedModel(ImejiJena.getModelName(c));
 		ImejiRDF2Bean reader = new ImejiRDF2Bean(m);
 		LinkedList<T> beans = new LinkedList<T>();
@@ -83,6 +86,7 @@ public class ImejiSPARQL
 	{
 		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
 		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
+		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;
 		LinkedList<String> resultList = new LinkedList<String>();
         try 
         {
@@ -101,10 +105,11 @@ public class ImejiSPARQL
 	 * @param model
 	 * @return
 	 */
-	public static int execCount(String query, Model model)
+	public static int execCount(String query)
 	{
 		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
 		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
+		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;
 		ResultSet rs = qexec.execSelect();
 		if (rs.hasNext())
 		{

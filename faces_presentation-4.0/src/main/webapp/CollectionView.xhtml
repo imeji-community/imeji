@@ -59,7 +59,7 @@
 				
 				<h:outputText styleClass="seperator void" />
 				
-				<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.profile.id.path}?init=1" rendered="true">
+				<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.profile.path}?init=1" rendered="true">
 					<h:outputText value="#{lbl.collection_profile}"></h:outputText>
 				</h:outputLink>
 				
@@ -177,43 +177,11 @@
 								<!-- Picture status of the Collection -->
 								<div class="free_area0 itemBlockContent endline">	
 									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-										<a4j:repeat var="statement" rowKeyVar="status" value="#{ViewCollectionBean.collection.profile.statements}">
-											<b class="xLarge_area0_p8 endline labelLine clear">
-												<h:outputText value="#{lbl.metadata} : "/>
+										<b class="xLarge_area0_p8 endline labelLine clear">
+												<h:outputText value="URI "/>
 												<span class="noDisplay">: </span>
 											</b>
-											
-											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputLabel value="#{lbl.name} :   "/>
-												<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{statement.name}"/>
-											</span>
-											
-											<b class="xLarge_area0_p8 endline labelLine clear">
-												<h:outputText value=" #{lbl.type} " style="visibility:hidden;"/>
-												<span class="noDisplay">: </span>
-											</b>
-											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputLabel value="#{lbl.type} :   "/>
-												<h:outputText id="inputCreator4" styleClass="quad_txtOutput" value="   #{statement.type}"/>
-											</span>
-												
-											<b class="xLarge_area0_p8 endline labelLine clear">
-												<h:outputText value=" #{lbl.labels} " style="visibility:hidden;"/>
-												<span class="noDisplay">: </span>
-											</b>
-											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputText value="#{lbl.labels} : "/>
-											
-												<a4j:repeat var="label" value="#{statement.labels}" rowKeyVar="indexO">
-													<h:panelGroup styleClass="endline">
-														<span class="endline">
-															<h:outputText value="#{label} (#{label.lang})"/>
-															<h:outputText value=", " rendered="#{indexO > 0}"/>
-														</span>
-													</h:panelGroup>
-												</a4j:repeat>
-											</span>
-										</a4j:repeat>
+										<h:outputText value="#{ViewCollectionBean.collection.profile}"/>"
 									</h:panelGroup>
 								</div>
 							</h:panelGroup>

@@ -167,7 +167,8 @@ public class ImageBean
 
     public String getThumbnailImageUrlAsString()
     {
-        return image.getThumbnailImageUrl().toString();
+        if (image.getThumbnailImageUrl() == null) return "/no_thumb";
+    	return image.getThumbnailImageUrl().toString();
     }
 
     public String getId()

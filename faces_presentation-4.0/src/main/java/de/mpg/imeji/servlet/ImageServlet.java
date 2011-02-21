@@ -33,10 +33,7 @@ package de.mpg.imeji.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
 
-import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +47,6 @@ import org.apache.log4j.Logger;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ProxyHelper;
 import de.mpg.escidoc.services.framework.ServiceLocator;
-import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.LoginHelper;
 
 /**
@@ -128,7 +124,19 @@ public class ImageServlet extends HttpServlet
                 }
                 if (method.getStatusCode() != 200)
                 {
-                    throw new RuntimeException("error code " + method.getStatusCode());
+                	 ProxyHelper.setProxy(client, PropertyReader.getProperty("escidoc.faces.instance.url"));
+                     method = new GetMethod(PropertyReader.getProperty("escidoc.faces.instance.url") + "/resources/icon/defaultThumb.gif");
+                     client.executeMethod(method);
+                     
+                     out = resp.getOutputStream();
+                     
+                     if (method.getStatusCode() == 302)
+                     {
+
+                         method.releaseConnection();
+                    	 throw new RuntimeException("error code " + method.getStatusCode());
+                     }
+                     input =  method.getResponseBodyAsStream();
                 }
                 else
                 {
@@ -139,7 +147,7 @@ public class ImageServlet extends HttpServlet
                     input = method.getResponseBodyAsStream();
                    
                 }
-               
+              
                 
                 buffer = new byte[2048];
                 int numRead;
@@ -151,7 +159,6 @@ public class ImageServlet extends HttpServlet
                     numWritten += numRead;
                 }
                 input.close();
-                
                 
                 method.releaseConnection();
                 //out.write(input);

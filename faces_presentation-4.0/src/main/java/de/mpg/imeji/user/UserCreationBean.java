@@ -138,7 +138,7 @@ public class UserCreationBean
 	    			if (u.getEmail().equals(creatorEMail))
 	    			{
 	    				gc.addGrant(u, new Grant(GrantType.CONTAINER_ADMIN, c.getId()));
-	    				gc.addGrant(u, new Grant(GrantType.PROFILE_ADMIN, c.getProfile().getId()));
+	    				gc.addGrant(u, new Grant(GrantType.PROFILE_ADMIN, c.getProfile()));
 	    			}
 	    		}
 	    		for (Album a : allAlbs)

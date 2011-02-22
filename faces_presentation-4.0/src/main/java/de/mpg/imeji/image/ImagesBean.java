@@ -10,6 +10,7 @@ import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
+import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
@@ -28,6 +29,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private String selectedSortCriterion;
     private String selectedSortOrder;
     private FacetsBean facets;
+    protected FiltersBean filters;
     private String query;
     private Navigation navigation;
 
@@ -76,7 +78,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         try
         {
             URLQueryTransformer queryTransformer = new URLQueryTransformer();
-            scList = queryTransformer.transform(query);
+            scList = queryTransformer.transform2SCList(query);
         }
         catch (Exception e)
         {
@@ -84,6 +86,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         }
         totalNumberOfRecords = controller.allImagesSize();
         images = controller.searchAdvanced(scList, sortCriterion, limit, offset);
+        filters = new FiltersBean(query);
         return ImejiFactory.imageListToBeanList(images);
     }
 
@@ -171,4 +174,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     {
         return query;
     }
+
+	public FiltersBean getFilters() {
+		return filters;
+	}
+
+	public void setFilters(FiltersBean filters) {
+		this.filters = filters;
+	}
+    
+    
 }

@@ -115,7 +115,7 @@ public class EditWorkspaceBean
 		}
 		catch (Exception e) 
 		{
-			BeanHelper.error("Error setting request value of Metadta Editor:" + e.getMessage());
+			BeanHelper.error("Error setting request value of Metadata Editor:" + e.getMessage());
 		}
 		init(retrieveImages());
 		return "";

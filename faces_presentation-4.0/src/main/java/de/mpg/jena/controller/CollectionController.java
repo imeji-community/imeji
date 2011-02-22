@@ -160,8 +160,7 @@ public class CollectionController extends ImejiController
 	    List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
 	    if(scList!=null && scList.size()>0) list.add(scList);
 		String query = createQuery("SELECT", list, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
-		query =	"SELECT ?s where {?s a <http://imeji.mpdl.mpg.de/collection>}";
-		Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(ImejiJena.collectionModel, query, CollectionImeji.class);
+		Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(query, CollectionImeji.class);
 		return res;
 	}
 	

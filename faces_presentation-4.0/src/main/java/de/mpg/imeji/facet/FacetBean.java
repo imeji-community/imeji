@@ -2,13 +2,15 @@ package de.mpg.imeji.facet;
 
 import java.net.URI;
 
+import de.mpg.imeji.filter.Filter;
+
 public class FacetBean
 {
     private URI uri;
     private String label;
     private int count;
 
-    public FacetBean(URI uri, String label, int count)
+    public FacetBean(URI uri,String label, int count)
     {
         this.count = count;
         this.label = label;

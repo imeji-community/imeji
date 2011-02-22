@@ -20,6 +20,7 @@ import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.sparql.ImejiSPARQL;
+import de.mpg.jena.sparql.QueryFactory;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
@@ -146,6 +147,14 @@ public class ImageController extends ImejiController
     {
         additionalQuery = "";
         String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
+        List<SearchCriterion> l = new ArrayList<SearchCriterion>();
+        for (List<SearchCriterion> sl : scList)
+        {
+        	l.addAll(sl);
+        }
+        QueryFactory factory = new QueryFactory();
+        query = factory.createQuery("SELECT",l, sortCri,
+        		"http://imeji.mpdl.mpg.de/image", additionalQuery, "", limit, offset, user);
         return ImejiSPARQL.execAndLoad(query, Image.class);
     }
     
@@ -171,6 +180,13 @@ public class ImageController extends ImejiController
         additionalQuery = " . <" + containerUri.toString() + "> <http://imeji.mpdl.mpg.de/images> ?s";
         String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/image", limit, offset);
         return ImejiSPARQL.execAndLoad(model, query, Image.class);
+    }
+    
+    public int getNumberOfResultsInContainer(URI containerUri, List<List<SearchCriterion>> scList, SortCriterion sortCri) throws Exception
+    {
+    	additionalQuery = " . <" + containerUri.toString() + "> <http://imeji.mpdl.mpg.de/images> ?s";
+        String query = createQuery("SELECT ?s count(DISTINCT ?s)",scList, null, "http://imeji.mpdl.mpg.de/image", -1, 0);
+    	return ImejiSPARQL.execCount(query);
     }
     
 

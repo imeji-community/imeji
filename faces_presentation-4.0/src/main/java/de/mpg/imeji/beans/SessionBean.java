@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.Navigation.Page;
+import de.mpg.imeji.filter.Filter;
 import de.mpg.jena.security.Authorization;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.User;
@@ -34,12 +35,14 @@ public class SessionBean implements Serializable
 	private List<URI> selectedCollections;
 	private List<URI> selectedAlbums;
     private AlbumBean activeAlbum;
+    private List<Filter> filters;
 
     public SessionBean()
     {
         selected = new ArrayList<URI>();
         selectedCollections = new ArrayList<URI>();
         selectedAlbums = new ArrayList<URI>();
+        filters = new ArrayList<Filter>();
     }
 
 	/**
@@ -201,4 +204,13 @@ public class SessionBean implements Serializable
         return activeAlbum;
     }
 
+	public List<Filter> getFilters() {
+		return filters;
+	}
+
+	public void setFilters(List<Filter> filters) {
+		this.filters = filters;
+	}
+
+    
 }

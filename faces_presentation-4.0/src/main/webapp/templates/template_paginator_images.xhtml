@@ -82,6 +82,19 @@
 				</h:outputLink>
 			</h:panelGroup>
 		</h:panelGroup>
+		
+		<h:panelGroup id="preListHeaderFilters" layout="block" styleClass="full_area0 preListHeader" rendered="true">
+			<h:panelGroup styleClass="huge_area0 small_marginLExcl">
+				<h:outputText value="#{lbl.Filters}: " />
+				<a4j:repeat id="filterList" var="filter" value="#{paginatorListSessionBean.filters.list}" rows="0" rowKeyVar="index">
+					<h:outputText value="#{filter.label} "/>
+					<a4j:commandLink value="[x]" actionListener="#{paginatorListSessionBean.filters.removeFilter}">
+						<f:attribute name="filter" value="#{filter}"/>
+					</a4j:commandLink>
+					<span style="padding-left: 20px" />
+				</a4j:repeat>
+			</h:panelGroup>
+		</h:panelGroup>
 			
 
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
@@ -208,7 +221,7 @@
 						<span style="padding-left: 20px" />
 						<a4j:repeat var="facet" value="#{group.list}" rowKeyVar="index">
 							<h:outputLink value="#{facet.uri}">
-								<h:outputText value="#{facet.label}(#{facet.count})" />
+								<h:outputText value="#{facet.label}(#{facet.count})"/>
 							</h:outputLink>
 							<span style="padding-left: 20px" />
 						</a4j:repeat>

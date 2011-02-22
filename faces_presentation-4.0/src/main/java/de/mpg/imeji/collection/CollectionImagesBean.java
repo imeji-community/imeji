@@ -7,6 +7,7 @@ import java.util.List;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.search.URLQueryTransformer;
@@ -64,7 +65,7 @@ public class CollectionImagesBean extends ImagesBean {
 		List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
 		try {
 			URLQueryTransformer queryTransformer = new URLQueryTransformer();
-			scList = queryTransformer.transform(getQuery());
+			scList = queryTransformer.transform2SCList(getQuery());
 		} catch (Exception e) {
 			BeanHelper.error("Invalid search query!");
 		}
@@ -73,6 +74,7 @@ public class CollectionImagesBean extends ImagesBean {
 		ImageController controller = new ImageController(sb.getUser());
 		images = controller.searchAdvancedInContainer(uri, scList, null, limit,
 				offset);
+		filters = new FiltersBean(getQuery());
 		return ImejiFactory.imageListToBeanList(images);
 	}
 

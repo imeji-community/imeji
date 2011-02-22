@@ -330,6 +330,16 @@
 		<managed-bean-class>de.mpg.imeji.user.SharingBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>FiltersBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.filter.FiltersBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>Filter</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.filter.Filter</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
 
 
 	<managed-bean>

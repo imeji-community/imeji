@@ -169,11 +169,8 @@ public class ImageServlet extends HttpServlet
         }
         catch(Exception e)
         {
-            throw new ServletException(e);
+        	//throw new ServletException(e);
         }
-               
-            
-        
         
     }
     

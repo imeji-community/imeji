@@ -13,6 +13,7 @@ import thewebsemantic.LocalizedString;
 import thewebsemantic.NotBoundException;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.filter.Filter;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
@@ -35,12 +36,17 @@ public class FacetsBean
     private List<FacetGroupBean> groups = new ArrayList<FacetGroupBean>();
     private Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     private SessionBean sb;
+    private List<SearchCriterion> filters = new ArrayList<SearchCriterion>();
 
     public FacetsBean(List<Image> images)
     {
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         Map<URI, MetadataProfile> profiles = ProfileHelper.loadProfiles(images);
         CollectionController cc = new CollectionController(sb.getUser());
+        for (Filter f : sb.getFilters())
+        {
+        	filters.add(f.getFilter());
+        }
         try
         {
             for (MetadataProfile mdp : profiles.values())
@@ -63,7 +69,7 @@ public class FacetsBean
     {
         List<FacetBean> facetbeans = new ArrayList<FacetBean>();
         facetbeans.add(new FacetBean(URI.create(nav.getImagesUrl() + "/collection" + ObjectHelper.getId(coll.getId())
-                + "?q="), "all", coll.getImages().size()));
+                + "?q="), coll.getMetadata().getTitle(), coll.getImages().size()));
         for (Statement st : profile.getStatements())
         {
             if (st.getLiteralConstraints().size() > 0)
@@ -115,37 +121,43 @@ public class FacetsBean
     public String generateQuery(URI id, Statement st, boolean hasValue, String value, CollectionImeji coll)
             throws UnsupportedEncodingException
     {
-        if (value == null)
-            value = "";
-        ComplexTypes ct = ComplexTypeHelper.getComplexTypesEnum(st.getType());
-        ImejiNamespaces ns = null;
-        String index = id.getPath().replaceAll("/", ".").substring(1) + "." + st.getName();
-        String query = "";
-        if (!hasValue)
-        {
-            query += "INVERSE ";
-        }
-        query += "( " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS.name() + "=\""
-                + st.getName() + "\"";
-        if (value != null && !"".equals(value))
-        {
-            query += " AND " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT.name() + "." + Filtertype.EQUALS.name()
-                    + "=\"" + value + "\"";
-        }
-        query += " )";
-        return query;
-        // return "?q=" + URLEncoder.encode(index + "='" + value + "'", "UTF-8");
+        return URLQueryTransformer.transform2URL(getFacetSCList(id, st, hasValue, value, coll));
+    }
+    
+    public List<SearchCriterion> getFacetSCList(URI id, Statement st, boolean hasValue, String value, CollectionImeji coll)
+    {
+    	 if (value == null) value = "";
+         ComplexTypes ct = ComplexTypeHelper.getComplexTypesEnum(st.getType());
+         List<SearchCriterion> scList = new ArrayList<SearchCriterion>(filters);
+         
+         SearchCriterion facetMetadataSC = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_NAME, st.getName());
+         facetMetadataSC.setFilterType(Filtertype.EQUALS);
+         facetMetadataSC.setInverse(!hasValue);
+         scList.add(facetMetadataSC);
+         
+         if (!"".equalsIgnoreCase(value))
+         {
+         	 SearchCriterion facetValueSC = new  SearchCriterion();
+              facetValueSC.setValue(value);
+              facetValueSC.setFilterType(Filtertype.EQUALS);
+              String ns = ct.getNamespace() + ct.getRdfType();
+              for (ImejiNamespaces ims :ImejiNamespaces.values())
+              {
+              	if (ims.getNs().equals(ns)) facetValueSC.setNamespace(ims);
+              }
+              scList.add(facetValueSC);
+         }
+         return scList;
     }
 
     public int getCount(URI id, Statement st, boolean hasValue, String value, CollectionImeji coll) throws Exception
     {
-        String query = generateQuery(id, st, hasValue, value, coll);
-        URLQueryTransformer queryTransformer = new URLQueryTransformer();
-        List<List<SearchCriterion>> scList = queryTransformer.transform(query);
+        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
+        scList.add(getFacetSCList(coll.getId(), st, hasValue, value, coll));
         ImageController ic = new ImageController(sb.getUser());
         try
         {
-            return ic.searchAdvancedInContainer(coll.getId(), scList, null, -1, 0).size();
+            return ic.getNumberOfResultsInContainer(coll.getId(), scList, null);
         }
         catch (NotBoundException e)
         {

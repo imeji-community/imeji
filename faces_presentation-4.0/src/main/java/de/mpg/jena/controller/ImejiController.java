@@ -610,7 +610,7 @@ public abstract class ImejiController
         if ("SELECT".equals(mode)) mode += " DISTINCT ";
         String completeQuery = mode + " ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } "
                 + sortQuery + limitString + " OFFSET " + offset;
-        System.out.println(completeQuery);
+        System.out.println("OLD QUERY: " +completeQuery);
         return completeQuery;
     }
 

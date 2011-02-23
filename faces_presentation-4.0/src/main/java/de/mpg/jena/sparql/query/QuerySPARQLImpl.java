@@ -23,37 +23,36 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	private  Map<String, QueryElement> els = new HashMap<String, QueryElement>();
 	private QueryElementFactory qeFact = new QueryElementFactory();
 	
-	private String root = "http://imeji.mpdl.mpg.de/image";
 	private String variables = "";
 	private String filters = "";
 	private String limit = "";
 	private String offset = "";
 
-	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String type, String specificQuery, String specificFilter, int limit, int offset, User user)
+	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
     {
-		init(scList,sortCriterion, type, specificQuery, specificFilter, limit, offset, user); 
-		System.out.println("NEW QUERY: " + " SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + this.offset);
+		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
+		//System.out.println("QUERY: " + " SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + this.offset);
 	    return  "SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
     }
 	
-	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String type, String specificQuery, String specificFilter, int limit, int offset, User user) 
+	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user) 
 	{
-		init(scList,sortCriterion, type, specificQuery, specificFilter, limit, offset, user);
-		
+		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
+		//System.out.println("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset);
 		return  "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
 	}
 	
-	private void init(List<SearchCriterion> scList, SortCriterion sortCriterion, String type, String specificQuery, String specificFilter, int limit, int offset, User user)
+	private void init(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
 	{
 		if (offset > 0) this.offset = "OFFSET " + Integer.toString(offset);
 		if (limit > 0) this.limit = "LIMIT " +  Integer.toString(limit);
 		
 		els = qeFact.createElements(scList, root);
-		variables = printVariables();
+		variables = printVariables(root) + specificQuery;
 		filters = FilterFactory.getFilter(scList, els, user, specificFilter);
 	}
 	
-	private String printVariables()
+	private String printVariables(String root)
 	{
 		String mandatory ="";
 		String optionals ="";
@@ -106,15 +105,6 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		}
 		return str;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	 public static String createQueryOld(String mode, List<List<SearchCriterion>> scList, SortCriterion sortCriterion, String type, String specificQuery, String specificFilter,

@@ -1,9 +1,11 @@
 package de.mpg.imeji.search;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.filter.Filter;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
@@ -11,10 +13,10 @@ import de.mpg.jena.controller.SearchCriterion.Operator;
 
 public class URLQueryTransformer 
 {
-	public List<List<SearchCriterion>> transform2SCList(String query) throws Exception
+	public List<SearchCriterion> transform2SCList(String query) throws Exception
 	{
 		boolean inverse = false;
-        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
+        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
         if (query != null && !query.trim().equals(""))
         {
             StringReader reader = new StringReader(query);
@@ -41,7 +43,9 @@ public class URLQueryTransformer
                     bracketsClosed++;
                     if (bracketsOpened - bracketsClosed == 0)
                     {
-                        scList.add(currentSubList);
+                        SearchCriterion sc = new SearchCriterion();
+                        sc.setChildren(currentSubList);
+                    	scList.add(sc);
                         substring = "";
                     }
                 }
@@ -99,7 +103,9 @@ public class URLQueryTransformer
             }
             if (bracketsClosed == 0)
             {
-                scList.add(currentSubList);
+            	 SearchCriterion sc = new SearchCriterion();
+            	 sc.setChildren(currentSubList);
+            	 scList.add(sc);
             }
             if (bracketsOpened != bracketsClosed)
             {

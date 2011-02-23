@@ -53,8 +53,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         try
         {
-            collections = controller.search(new ArrayList<SearchCriterion>(), null, -1, offset);
-            totalNumberOfRecords = collections.size();
+            totalNumberOfRecords = controller.countAllCollections();
             logger.info("Found " + totalNumberOfRecords + "collections");
             
             SortCriterion sortCriterion = new SortCriterion();
@@ -62,6 +61,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         
             collections = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
+            System.out.println("search done");
         }
         catch (Exception e)
         {

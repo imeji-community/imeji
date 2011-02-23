@@ -12,6 +12,8 @@ import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.sparql.ImejiSPARQL;
+import de.mpg.jena.sparql.QuerySPARQL;
+import de.mpg.jena.sparql.query.QuerySPARQLImpl;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
@@ -157,20 +159,19 @@ public class CollectionController extends ImejiController
 	 */
 	public Collection<CollectionImeji> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
-	    List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
-	    if(scList!=null && scList.size()>0) list.add(scList);
-		String query = createQuery("SELECT", list, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
-		Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(query, CollectionImeji.class);
+		QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+	    String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/collection", "", "", limit, offset, user);
+	    Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(query, CollectionImeji.class);
 		return res;
 	}
 	
-	public Collection<CollectionImeji> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
-    {
-       
-        String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
-        Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(ImejiJena.collectionModel,query, CollectionImeji.class);
-        return res;
-    }
+//	public Collection<CollectionImeji> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+//    {
+//       
+//        String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
+//        Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(ImejiJena.collectionModel,query, CollectionImeji.class);
+//        return res;
+//    }
 
 	
 	

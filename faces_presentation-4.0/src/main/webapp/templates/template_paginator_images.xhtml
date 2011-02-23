@@ -84,14 +84,16 @@
 		</h:panelGroup>
 		
 		<h:panelGroup id="preListHeaderFilters" layout="block" styleClass="full_area0 preListHeader" rendered="true">
-			<h:panelGroup styleClass="huge_area0 small_marginLExcl">
+			<h:panelGroup styleClass="small_area0">
 				<h:outputText value="#{lbl.Filters}: " />
+			</h:panelGroup>
+			<h:panelGroup styleClass="xHuge_area0">
 				<a4j:repeat id="filterList" var="filter" value="#{paginatorListSessionBean.filters.list}" rows="0" rowKeyVar="index">
-					<h:outputText value="#{filter.label} "/>
+					<h:outputText value="#{filter.label}(#{filter.count}) "/>
 					<a4j:commandLink value="[x]" actionListener="#{paginatorListSessionBean.filters.removeFilter}">
 						<f:attribute name="filter" value="#{filter}"/>
 					</a4j:commandLink>
-					<span style="padding-left: 20px" />
+					<span style="padding-left: 1px" />
 				</a4j:repeat>
 			</h:panelGroup>
 		</h:panelGroup>
@@ -227,6 +229,12 @@
 						</a4j:repeat>
 						<br />
 					</h:panelGroup>
+				</a4j:repeat>
+				COLLECTION FACETS
+				<a4j:repeat var="colFacets" value="#{paginatorListSessionBean.facets.collectionFacets}" rowKeyVar="index">
+					<h:outputLink value="#{colFacets.uri}">
+						<h:outputText value="#{colFacets.label}(#{colFacets.count}) "/>
+					</h:outputLink>
 				</a4j:repeat>
 				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{empty paginatorListSessionBean.facets.groups}">
 					<a4j:status id="loadFacets" forceId="true" startText="#{lbl.facets_loading}..." />

@@ -74,7 +74,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        List<List<SearchCriterion>> scList = new ArrayList<List<SearchCriterion>>();
+        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
         try
         {
             URLQueryTransformer queryTransformer = new URLQueryTransformer();
@@ -84,9 +84,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         {
             BeanHelper.error("Invalid search query!");
         }
-        totalNumberOfRecords = controller.allImagesSize();
-        images = controller.searchAdvanced(scList, sortCriterion, limit, offset);
-        filters = new FiltersBean(query);
+        totalNumberOfRecords = controller.getNumberOfResults(scList);
+        images = controller.search(scList, sortCriterion, limit, offset);
+        filters = new FiltersBean(query, totalNumberOfRecords);
         return ImejiFactory.imageListToBeanList(images);
     }
 

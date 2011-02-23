@@ -4,13 +4,13 @@ import java.net.URI;
 
 import de.mpg.imeji.filter.Filter;
 
-public class FacetBean
+public class Facet
 {
     private URI uri;
     private String label;
     private int count;
 
-    public FacetBean(URI uri,String label, int count)
+    public Facet(URI uri,String label, int count)
     {
         this.count = count;
         this.label = label;

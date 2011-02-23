@@ -44,7 +44,8 @@ public class UserController extends ImejiController
 	 */
 	public Collection<User> retrieveAll()
 	{
-		return rdf2Bean.load(User.class);
+		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
+		return (Collection<User>) imejiRDF2Bean.load(User.class);
 	}
 	
 	

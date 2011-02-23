@@ -14,6 +14,8 @@ import thewebsemantic.Sparql;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.sparql.ImejiSPARQL;
+import de.mpg.jena.sparql.QuerySPARQL;
+import de.mpg.jena.sparql.query.QuerySPARQLImpl;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
@@ -135,22 +137,18 @@ public class AlbumController extends ImejiController{
 	 */
 	public Collection<Album> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
-	    List<List<SearchCriterion>> list = new ArrayList<List<SearchCriterion>>();
-	    if(scList!=null && scList.size()>0) list.add(scList);
-	    String query = createQuery("SELECT", list, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
-		//base.write(System.out);
-	    Model base = null;
+	    QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+	    String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/album", "", "", limit, offset, user);
 	    return ImejiSPARQL.execAndLoad(query,  Album.class);
 	}
 	
-	public Collection<Album> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
-    {
-        
-        String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
-        //base.write(System.out);
-        Model base = null;
-        return ImejiSPARQL.execAndLoad(query,  Album.class);
-    }
+//	public Collection<Album> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+//    {
+//        String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
+//        //base.write(System.out);
+//        Model base = null;
+//        return ImejiSPARQL.execAndLoad(query,  Album.class);
+//    }
 
 	@Override
     protected String getSpecificQuery() throws Exception

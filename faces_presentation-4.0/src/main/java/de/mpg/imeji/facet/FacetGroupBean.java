@@ -4,21 +4,21 @@ import java.util.List;
 
 public class FacetGroupBean
 {
-    private List<FacetBean> list;
+    private List<Facet> list;
     private String label;
 
-    public FacetGroupBean(List<FacetBean> list, String label)
+    public FacetGroupBean(List<Facet> list, String label)
     {
         this.label = label;
         this.list = list;
     }
 
-    public List<FacetBean> getList()
+    public List<Facet> getList()
     {
         return list;
     }
 
-    public void setList(List<FacetBean> list)
+    public void setList(List<Facet> list)
     {
         this.list = list;
     }

@@ -406,213 +406,213 @@ public abstract class ImejiController
      * ns.getParent(); } if(!roots.contains(child)) { roots.add(child); } } createOntology(sc.getChildren(), map,
      * currentMap, roots); } } } }
      */
-    protected String createQuery(String mode, List<List<SearchCriterion>> scList, SortCriterion sortCriterion, String type,
-            int limit, int offset) throws Exception
-    {
-        boolean inverse = false;
-        if (scList != null && scList.size() > 0 && scList.get(0) != null && scList.get(0).size() > 0)
-        {
-            inverse = scList.get(0).get(0).isInverse();
-        }
-        // contains a list of root ImejiQueryVariables for each submlist
-        Map<List<SearchCriterion>, List<ImejiQueryVariable>> roots = new HashMap<List<SearchCriterion>, List<ImejiQueryVariable>>();
-        // contains a list of root ImejiQueryVariables for each sublist
-        Map<List<SearchCriterion>, Map<ImejiNamespaces, ImejiQueryVariable>> map = new HashMap<List<SearchCriterion>, Map<ImejiNamespaces, ImejiQueryVariable>>();
-        // Map<SearchCriterion, ImejiQueryVariable> treeMap = new HashMap<SearchCriterion, ImejiQueryVariable>();
-        // Add variables for user management
-        String query = "";
-        query += getSpecificQuery();
-        String filter = "";
-        if (scList != null && scList.size() > 0)
-        {
-            for (List<SearchCriterion> scSubList : scList)
-            {
-                Map<ImejiNamespaces, ImejiQueryVariable> currentMap = new HashMap<ImejiNamespaces, ImejiQueryVariable>();
-                map.put(scSubList, currentMap);
-                List<ImejiQueryVariable> currentRoots = new ArrayList<ImejiQueryVariable>();
-                roots.put(scSubList, currentRoots);
-                for (SearchCriterion sc : scSubList)
-                {
-                    if (!sc.getNamespace().equals(ImejiNamespaces.ID_URI))
-                    {
-                        ImejiNamespaces ns = sc.getNamespace();
-                        ImejiQueryVariable child = null;
-                        while (ns != null)
-                        {
-                            ImejiQueryVariable qv;
-                            if (!currentMap.containsKey(ns))
-                            {
-                                List<ImejiQueryVariable> qvList = new ArrayList<ImejiQueryVariable>();
-                                if (child != null)
-                                    qvList.add(child);
-                                qv = new ImejiQueryVariable(ns, qvList);
-                                currentMap.put(ns, qv);
-                            }
-                            else
-                            {
-                                qv = currentMap.get(ns);
-                                if (child != null && !qv.getChildren().contains(child))
-                                    qv.getChildren().add(child);
-                            }
-                            child = qv;
-                            ns = ns.getParent();
-                        }
-                        if (!currentRoots.contains(child))
-                        {
-                            currentRoots.add(child);
-                        }
-                    }
-                }
-            }
-            List<ImejiQueryVariable> allRoots = new ArrayList<ImejiQueryVariable>();
-            for (List<ImejiQueryVariable> list : roots.values())
-            {
-                allRoots.addAll(list);
-            }
-            String subquery = createSubQuery(allRoots, new VarCounter(), "?s", inverse);
-            query += subquery;
-        }
-        if (scList != null && scList.size() > 0)
-        {
-            filter = " . FILTER(";
-            int j = 0;
-            boolean operatorWritten = false;
-            for (List<SearchCriterion> subList : scList)
-            {
-                if (scList.indexOf(subList) > 0 && subList.size() > 0)
-                {
-                    if (subList.get(0).getOperator().equals(SearchCriterion.Operator.AND))
-                        filter += " && ";
-                    else if (subList.get(0).getOperator().equals(SearchCriterion.Operator.OR))
-                        filter += " || ";
-                }
-                filter += "(";
-                for (SearchCriterion sc : subList)
-                {
-                    if (subList.indexOf(sc) > 0)
-                    {
-                        if (sc.getOperator().equals(SearchCriterion.Operator.AND))
-                            filter += " && ";
-                        else if (sc.getOperator().equals(SearchCriterion.Operator.OR))
-                            filter += " || ";
-                    }
-                    if (sc.getValue() != null)
-                    {
-                        if (sc.getFilterType().equals(Filtertype.URI)
-                                && !sc.getNamespace().equals(ImejiNamespaces.ID_URI))
-                        {
-                            filter += "str(" + map.get(subList).get(sc.getNamespace()).getVariable() + ")='"
-                                    + sc.getValue() + "'";
-                        }
-                        else if (sc.getFilterType().equals(Filtertype.URI)
-                                && sc.getNamespace().equals(ImejiNamespaces.ID_URI))
-                        {
-                            filter += "?s" + "=<" + sc.getValue() + ">";
-                        }
-                        else if (sc.getFilterType().equals(Filtertype.REGEX))
-                        {
-                            filter += "regex(" + map.get(subList).get(sc.getNamespace()).getVariable() + ", '"
-                                    + sc.getValue() + "', 'i')";
-                        }
-                        else if (sc.getFilterType().equals(Filtertype.EQUALS))
-                        {
-                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "='" + sc.getValue()
-                                    + "'";
-                        }
-                        else if (sc.getFilterType().equals(Filtertype.BOUND))
-                        {
-                            filter += "bound(" + map.get(subList).get(sc.getNamespace()).getVariable() + ")="
-                                    + sc.getValue() + "";
-                        }
-                        else if (sc.getFilterType().equals(Filtertype.EQUALS_NUMBER))
-                        {
-                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "='" + sc.getValue()
-                                    + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                        }
-                        else if (sc.getFilterType().equals(Filtertype.GREATER_NUMBER))
-                        {
-                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + ">='" + sc.getValue()
-                                    + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                        }
-                        else if (sc.getFilterType().equals(Filtertype.LESSER_NUMBER))
-                        {
-                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "<='" + sc.getValue()
-                                    + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                        }
-                        else if (sc.getFilterType().equals(Filtertype.EQUALS_DATE))
-                        {
-                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "='" + sc.getValue()
-                                    + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
-                        }
-                        else if (sc.getFilterType().equals(Filtertype.GREATER_DATE))
-                        {
-                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + ">='" + sc.getValue()
-                                    + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
-                        }
-                        else if (sc.getFilterType().equals(Filtertype.LESSER_DATE))
-                        {
-                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "<='" + sc.getValue()
-                                    + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
-                        }
-                    }
-                    j++;
-                }
-                filter += ")";
-            }
-            filter += ")";
-        }
-        String specificFilter = ". FILTER(" + getSpecificFilter() + ")";
-        // Add sort criterion
-        String sortQuery = "";
-        String sortVariable = "?sort0";
-        if (sortCriterion != null)
-        {
-            /*
-             * if(treeMap.containsKey(sortCriterion.getSortingCriterion())) { sortVariable =
-             * treeMap.get(sortCriterion).getVariable(); } else {
-             */
-            ImejiNamespaces ns = sortCriterion.getSortingCriterion();
-            int i = 0;
-            String variablename = "";
-            while (ns != null)
-            {
-                variablename = "?sort" + String.valueOf(i + 1);
-                String lastVariablename = "?sort" + String.valueOf(i);
-                query = ". " + variablename + " <" + ns.getNs() + "> " + lastVariablename + " " + query;
-                ns = ns.getParent();
-                i++;
-            }
-            query = query.replaceAll(java.util.regex.Pattern.quote(variablename), "?s");
-            // }
-            if (sortCriterion.getSortOrder().equals(SortOrder.DESCENDING))
-                sortQuery = "ORDER BY DESC(" + sortVariable + ")";
-            else
-            {
-                sortQuery = "ORDER BY " + sortVariable;
-            }
-        }
-        // offset++;
-        String limitString = "";
-        if (limit > -1)
-        {
-            limitString = " LIMIT " + limit;
-        }
-        // If inverse search add filter to MINUS part
-        if (inverse)
-        {
-            query = query.substring(0, query.lastIndexOf("}"));
-            query += filter + "}";
-        }
-        else
-        {
-            query += filter;
-        }
-        if ("SELECT".equals(mode)) mode += " DISTINCT ";
-        String completeQuery = mode + " ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } "
-                + sortQuery + limitString + " OFFSET " + offset;
-        System.out.println("OLD QUERY: " +completeQuery);
-        return completeQuery;
-    }
+//    protected String createQuery(String mode, List<List<SearchCriterion>> scList, SortCriterion sortCriterion, String type,
+//            int limit, int offset) throws Exception
+//    {
+//        boolean inverse = false;
+//        if (scList != null && scList.size() > 0 && scList.get(0) != null && scList.get(0).size() > 0)
+//        {
+//            inverse = scList.get(0).get(0).isInverse();
+//        }
+//        // contains a list of root ImejiQueryVariables for each submlist
+//        Map<List<SearchCriterion>, List<ImejiQueryVariable>> roots = new HashMap<List<SearchCriterion>, List<ImejiQueryVariable>>();
+//        // contains a list of root ImejiQueryVariables for each sublist
+//        Map<List<SearchCriterion>, Map<ImejiNamespaces, ImejiQueryVariable>> map = new HashMap<List<SearchCriterion>, Map<ImejiNamespaces, ImejiQueryVariable>>();
+//        // Map<SearchCriterion, ImejiQueryVariable> treeMap = new HashMap<SearchCriterion, ImejiQueryVariable>();
+//        // Add variables for user management
+//        String query = "";
+//        query += getSpecificQuery();
+//        String filter = "";
+//        if (scList != null && scList.size() > 0)
+//        {
+//            for (List<SearchCriterion> scSubList : scList)
+//            {
+//                Map<ImejiNamespaces, ImejiQueryVariable> currentMap = new HashMap<ImejiNamespaces, ImejiQueryVariable>();
+//                map.put(scSubList, currentMap);
+//                List<ImejiQueryVariable> currentRoots = new ArrayList<ImejiQueryVariable>();
+//                roots.put(scSubList, currentRoots);
+//                for (SearchCriterion sc : scSubList)
+//                {
+//                    if (!sc.getNamespace().equals(ImejiNamespaces.ID_URI))
+//                    {
+//                        ImejiNamespaces ns = sc.getNamespace();
+//                        ImejiQueryVariable child = null;
+//                        while (ns != null)
+//                        {
+//                            ImejiQueryVariable qv;
+//                            if (!currentMap.containsKey(ns))
+//                            {
+//                                List<ImejiQueryVariable> qvList = new ArrayList<ImejiQueryVariable>();
+//                                if (child != null)
+//                                    qvList.add(child);
+//                                qv = new ImejiQueryVariable(ns, qvList);
+//                                currentMap.put(ns, qv);
+//                            }
+//                            else
+//                            {
+//                                qv = currentMap.get(ns);
+//                                if (child != null && !qv.getChildren().contains(child))
+//                                    qv.getChildren().add(child);
+//                            }
+//                            child = qv;
+//                            ns = ns.getParent();
+//                        }
+//                        if (!currentRoots.contains(child))
+//                        {
+//                            currentRoots.add(child);
+//                        }
+//                    }
+//                }
+//            }
+//            List<ImejiQueryVariable> allRoots = new ArrayList<ImejiQueryVariable>();
+//            for (List<ImejiQueryVariable> list : roots.values())
+//            {
+//                allRoots.addAll(list);
+//            }
+//            String subquery = createSubQuery(allRoots, new VarCounter(), "?s", inverse);
+//            query += subquery;
+//        }
+//        if (scList != null && scList.size() > 0)
+//        {
+//            filter = " . FILTER(";
+//            int j = 0;
+//            boolean operatorWritten = false;
+//            for (List<SearchCriterion> subList : scList)
+//            {
+//                if (scList.indexOf(subList) > 0 && subList.size() > 0)
+//                {
+//                    if (subList.get(0).getOperator().equals(SearchCriterion.Operator.AND))
+//                        filter += " && ";
+//                    else if (subList.get(0).getOperator().equals(SearchCriterion.Operator.OR))
+//                        filter += " || ";
+//                }
+//                filter += "(";
+//                for (SearchCriterion sc : subList)
+//                {
+//                    if (subList.indexOf(sc) > 0)
+//                    {
+//                        if (sc.getOperator().equals(SearchCriterion.Operator.AND))
+//                            filter += " && ";
+//                        else if (sc.getOperator().equals(SearchCriterion.Operator.OR))
+//                            filter += " || ";
+//                    }
+//                    if (sc.getValue() != null)
+//                    {
+//                        if (sc.getFilterType().equals(Filtertype.URI)
+//                                && !sc.getNamespace().equals(ImejiNamespaces.ID_URI))
+//                        {
+//                            filter += "str(" + map.get(subList).get(sc.getNamespace()).getVariable() + ")='"
+//                                    + sc.getValue() + "'";
+//                        }
+//                        else if (sc.getFilterType().equals(Filtertype.URI)
+//                                && sc.getNamespace().equals(ImejiNamespaces.ID_URI))
+//                        {
+//                            filter += "?s" + "=<" + sc.getValue() + ">";
+//                        }
+//                        else if (sc.getFilterType().equals(Filtertype.REGEX))
+//                        {
+//                            filter += "regex(" + map.get(subList).get(sc.getNamespace()).getVariable() + ", '"
+//                                    + sc.getValue() + "', 'i')";
+//                        }
+//                        else if (sc.getFilterType().equals(Filtertype.EQUALS))
+//                        {
+//                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "='" + sc.getValue()
+//                                    + "'";
+//                        }
+//                        else if (sc.getFilterType().equals(Filtertype.BOUND))
+//                        {
+//                            filter += "bound(" + map.get(subList).get(sc.getNamespace()).getVariable() + ")="
+//                                    + sc.getValue() + "";
+//                        }
+//                        else if (sc.getFilterType().equals(Filtertype.EQUALS_NUMBER))
+//                        {
+//                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "='" + sc.getValue()
+//                                    + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+//                        }
+//                        else if (sc.getFilterType().equals(Filtertype.GREATER_NUMBER))
+//                        {
+//                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + ">='" + sc.getValue()
+//                                    + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+//                        }
+//                        else if (sc.getFilterType().equals(Filtertype.LESSER_NUMBER))
+//                        {
+//                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "<='" + sc.getValue()
+//                                    + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+//                        }
+//                        else if (sc.getFilterType().equals(Filtertype.EQUALS_DATE))
+//                        {
+//                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "='" + sc.getValue()
+//                                    + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+//                        }
+//                        else if (sc.getFilterType().equals(Filtertype.GREATER_DATE))
+//                        {
+//                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + ">='" + sc.getValue()
+//                                    + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+//                        }
+//                        else if (sc.getFilterType().equals(Filtertype.LESSER_DATE))
+//                        {
+//                            filter += map.get(subList).get(sc.getNamespace()).getVariable() + "<='" + sc.getValue()
+//                                    + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+//                        }
+//                    }
+//                    j++;
+//                }
+//                filter += ")";
+//            }
+//            filter += ")";
+//        }
+//        String specificFilter = ". FILTER(" + getSpecificFilter() + ")";
+//        // Add sort criterion
+//        String sortQuery = "";
+//        String sortVariable = "?sort0";
+//        if (sortCriterion != null)
+//        {
+//            /*
+//             * if(treeMap.containsKey(sortCriterion.getSortingCriterion())) { sortVariable =
+//             * treeMap.get(sortCriterion).getVariable(); } else {
+//             */
+//            ImejiNamespaces ns = sortCriterion.getSortingCriterion();
+//            int i = 0;
+//            String variablename = "";
+//            while (ns != null)
+//            {
+//                variablename = "?sort" + String.valueOf(i + 1);
+//                String lastVariablename = "?sort" + String.valueOf(i);
+//                query = ". " + variablename + " <" + ns.getNs() + "> " + lastVariablename + " " + query;
+//                ns = ns.getParent();
+//                i++;
+//            }
+//            query = query.replaceAll(java.util.regex.Pattern.quote(variablename), "?s");
+//            // }
+//            if (sortCriterion.getSortOrder().equals(SortOrder.DESCENDING))
+//                sortQuery = "ORDER BY DESC(" + sortVariable + ")";
+//            else
+//            {
+//                sortQuery = "ORDER BY " + sortVariable;
+//            }
+//        }
+//        // offset++;
+//        String limitString = "";
+//        if (limit > -1)
+//        {
+//            limitString = " LIMIT " + limit;
+//        }
+//        // If inverse search add filter to MINUS part
+//        if (inverse)
+//        {
+//            query = query.substring(0, query.lastIndexOf("}"));
+//            query += filter + "}";
+//        }
+//        else
+//        {
+//            query += filter;
+//        }
+//        if ("SELECT".equals(mode)) mode += " DISTINCT ";
+//        String completeQuery = mode + " ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } "
+//                + sortQuery + limitString + " OFFSET " + offset;
+//        System.out.println("OLD QUERY: " +completeQuery);
+//        return completeQuery;
+//    }
 
     private static void createOntology(Map<ImejiNamespaces, ImejiQueryVariable> variableMap,
             List<SearchCriterion> scList, List<ImejiQueryVariable> currentRoots)

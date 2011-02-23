@@ -60,7 +60,7 @@ public class SelectedBean extends ImagesBean {
 		}
 		if (uris.size() != 0) 
 		{
-			totalNumberOfRecords = controller.getNumberOfResults(uris, null);
+			totalNumberOfRecords = controller.getNumberOfResults(uris);
 			System.out.println(totalNumberOfRecords);
 			images = controller.search(uris, null, limit, offset);
 		}

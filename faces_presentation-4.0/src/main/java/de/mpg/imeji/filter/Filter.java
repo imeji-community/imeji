@@ -7,14 +7,38 @@ import de.mpg.jena.controller.SearchCriterion;
 public class Filter 
 {
 	private SearchCriterion filter;
+	private String query ="";
 	private URI collectionID;
-	private String label;
+	private String label = "No name";
+	private int count = 0;
 	
 	public Filter(String label, SearchCriterion filter, URI collectionId) 
 	{
 		this.filter = filter;
-		this.label = label;
+		if (label != null) this.label = label;
 		this.collectionID = collectionId;
+	}
+	
+	public Filter(String label, URI collectionId, int count) 
+	{
+		this.count = count;
+		if (label != null) this.label = label;
+		this.collectionID = collectionId;
+		init();
+	}
+	
+	public Filter(String label, String query, int count) 
+	{
+		this.label = label; 
+		this.query = query;
+		this.count = count;
+		init();
+	}
+	
+	public void init()
+	{
+		if("".equals(query))label = "All";
+		else if (label == null) label = "No name";
 	}
 
 	public SearchCriterion getFilter() {
@@ -40,6 +64,21 @@ public class Filter
 	public void setCollectionID(URI collectionID) {
 		this.collectionID = collectionID;
 	}
-	
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
 	
 }

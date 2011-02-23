@@ -49,6 +49,11 @@ public class ImejiRDF2Bean
 		return rdf2Bean.loadDeep(c, id);
 	}
 	
+	public <T> T load(Class<T> c)
+	{
+		return (T) rdf2Bean.loadDeep(c);
+	}
+	
 	public void removePrivateImages(Image im)
 	{
 		im.setThumbnailImageUrl(URI.create("private"));

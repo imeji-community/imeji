@@ -15,7 +15,7 @@ public class FilterFactory
 	public static String getFilter(List<SearchCriterion> scList, Map<String, QueryElement> els, User user, String specificFilter)
 	{
 		String sf = generateSearchFilters(scList, els);
-		String uf = generateUserFilters(user);
+		String uf = generateUserFilters(user, els);
 		
 		String filter = " .FILTER( " + uf + " ) ";
 		if (!" ( ) ".equals(sf))
@@ -40,7 +40,11 @@ public class FilterFactory
 			{
 				filter += generateSearchFilters(sc.getChildren(), els);
 			}
-			String newFilter = getFilterString(sc, els.get(sc.getNamespace().getNs()).getName());
+			String newFilter = "";
+			if (sc.getNamespace() != null)
+			{
+				 newFilter= getFilterString(sc, els.get(sc.getNamespace().getNs()).getName());
+			}
 			if (!" (".equals(filter) && !"".equals(newFilter))
 			{
 				filter += getOperatorString(sc);
@@ -53,9 +57,19 @@ public class FilterFactory
 		return filter;
 	}
 	
-	private static String generateUserFilters(User user)
+	private static String generateUserFilters(User user, Map<String, QueryElement> els)
 	{
-		String f = "?visibility = <http://imeji.mpdl.mpg.de/image/visibility/PUBLIC>";
+		String f = "";
+		
+		if(els.get("http://imeji.mpdl.mpg.de/visibility") != null)
+		{
+			f +=  "?" + els.get("http://imeji.mpdl.mpg.de/visibility").getName() + "=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC>";
+		}
+		if(els.get("http://imeji.mpdl.mpg.de/status") != null)
+		{
+			if (!"".equals(f)) f += " || ";
+			f +=  "?" + els.get("http://imeji.mpdl.mpg.de/status").getName() + "=<http://imeji.mpdl.mpg.de/status/RELEASED>";
+		}
 		
 		if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
 		{
@@ -64,7 +78,10 @@ public class FilterFactory
 				if (	GrantType.CONTAINER_ADMIN.equals(g.getGrantType())
 					|| 	GrantType.CONTAINER_EDITOR.equals(g.getGrantType())
 					||	GrantType.PRIVILEGED_VIEWER.equals(g.getGrantType()))
-				f += " || ?coll=<" + g.getGrantFor() + ">";
+				{
+					if (!"".equals(f)) f += " || ";
+					f += "?" + els.get("http://imeji.mpdl.mpg.de/collection").getName() + "=<" + g.getGrantFor() + ">";
+				}
 			}
 		}
 		

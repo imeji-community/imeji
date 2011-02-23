@@ -7,6 +7,7 @@ import java.util.Map;
 
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.vo.CollectionImeji;
 
 public class QueryElementFactory 
 {
@@ -21,16 +22,24 @@ public class QueryElementFactory
 		
 		findMandatoryElements();
 		findOptionalElements(scList);
-		System.out.println(root);
+		
 		return els;
 	}
 	
 	private void findMandatoryElements()
 	{
-		addElement(new QueryElement("s", root, null, true, false));
-		addElement(new QueryElement("coll", "http://imeji.mpdl.mpg.de/collection", els.get(root), false, false));
-		addElement(new QueryElement("visibility", "http://imeji.mpdl.mpg.de/visibility", els.get(root), false, false));
-		//addElement(new QueryElement("props", "http://imeji.mpdl.mpg.de/properties", els.get(root), false));
+		addElement(new QueryElement("s", root, null, false, false));
+		
+		if ("http://imeji.mpdl.mpg.de/image".equals(root))
+		{
+			addElement(new QueryElement("coll", "http://imeji.mpdl.mpg.de/collection", els.get(root), false, false));
+			addElement(new QueryElement("visibility", "http://imeji.mpdl.mpg.de/visibility", els.get(root), false, false));
+		}
+		else if ("http://imeji.mpdl.mpg.de/collection".equals(root) || "http://imeji.mpdl.mpg.de/album".equals(root))
+		{
+			addElement(new QueryElement("props", "http://imeji.mpdl.mpg.de/properties", els.get(root), false, false));
+			addElement(new QueryElement("status", "http://imeji.mpdl.mpg.de/status", els.get( "http://imeji.mpdl.mpg.de/properties"), false, false));
+		}
 	}
 	
 	private void findOptionalElements(List<SearchCriterion> scList)

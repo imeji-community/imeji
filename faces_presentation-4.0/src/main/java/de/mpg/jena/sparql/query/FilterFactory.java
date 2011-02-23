@@ -1,4 +1,4 @@
-package de.mpg.jena.sparql;
+package de.mpg.jena.sparql.query;
 
 import java.util.List;
 import java.util.Map;

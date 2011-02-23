@@ -1,4 +1,4 @@
-package de.mpg.jena.sparql;
+package de.mpg.jena.sparql.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,56 +12,46 @@ import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.sparql.QuerySPARQL;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Grant.GrantType;
 
-public class QueryFactory 
+public class QuerySPARQLImpl implements QuerySPARQL
 {
 	private  Map<String, QueryElement> els = new HashMap<String, QueryElement>();
+	private QueryElementFactory qeFact = new QueryElementFactory();
+	
 	private String root = "http://imeji.mpdl.mpg.de/image";
-	private List<String> names= new ArrayList<String>();
-	private String optionals = "";
+	private String variables = "";
+	private String filters = "";
+	private String limit = "";
+	private String offset = "";
 
-	public String createQuery(String mode, List<SearchCriterion> scList, SortCriterion sortCriterion, String type, String specificQuery, String specificFilter,
-            int limit, int offset, User user) throws Exception
+	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String type, String specificQuery, String specificFilter, int limit, int offset, User user)
     {
-		 String queryMode = "SELECT";
-		 String querySpecific = "";
-		 String queryVariables = "";
-		 String queryFilter = "";
-		 String queryOffSet = "";
-		 String queryLimit = "";
-		 root = type;
-		
-		 initElements(scList);
-	     
-		 // QUERY MODE
-		 if ("SELECT".equals(mode)) mode += " DISTINCT ";
-		 queryMode = mode;
-		 
-		 // QUERY SPECIFIC
-		 querySpecific = specificQuery;
-		 
-		 // QUERY VARIABLE
-		 queryVariables = printVariables();
-		
-		 // FILTERS
-		 queryFilter = FilterFactory.getFilter(scList, els, user, specificFilter);
-		 
-		 // OFFSET
-		 if (offset > 0) queryOffSet = "OFFSET " + Integer.toString(offset);
-		 
-		 // LIMIT 
-		 if (limit > 0) queryLimit = "LIMIT " +  Integer.toString(limit);
-		 
-		 // CREATE COMPLETE QUERY
-	     String query = queryMode + " ?s WHERE { ?s a <" + root + "> " + querySpecific + queryVariables + queryFilter + "} " + queryLimit + queryOffSet;
-	       
-	     System.out.println("NEW QUERY: " + query);
-	     return query;
+		init(scList,sortCriterion, type, specificQuery, specificFilter, limit, offset, user); 
+		System.out.println("NEW QUERY: " + " SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + this.offset);
+	    return  "SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
     }
+	
+	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String type, String specificQuery, String specificFilter, int limit, int offset, User user) 
+	{
+		init(scList,sortCriterion, type, specificQuery, specificFilter, limit, offset, user);
+		
+		return  "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
+	}
+	
+	private void init(List<SearchCriterion> scList, SortCriterion sortCriterion, String type, String specificQuery, String specificFilter, int limit, int offset, User user)
+	{
+		if (offset > 0) this.offset = "OFFSET " + Integer.toString(offset);
+		if (limit > 0) this.limit = "LIMIT " +  Integer.toString(limit);
+		
+		els = qeFact.createElements(scList, root);
+		variables = printVariables();
+		filters = FilterFactory.getFilter(scList, els, user, specificFilter);
+	}
 	
 	private String printVariables()
 	{
@@ -111,88 +101,13 @@ public class QueryFactory
 		String str = "?" + el.getParent().getName() +" <" + el.getNameSpace() + "> ?" + el.getName();
 		if (el.isList())
 		{
-			str = "?" + el.getParent().getName() +" <" + el.getNameSpace() + "> ?" + getElementName("http://www.w3.org/2000/01/rdf-schema#member");
-			str += " . ?" +  getElementName("http://www.w3.org/2000/01/rdf-schema#member") + " <http://www.w3.org/2000/01/rdf-schema#member> ?" + el.getName() ;
+			str = "?" + el.getParent().getName() +" <" + el.getNameSpace() + "> ?" + qeFact.getElementName("http://www.w3.org/2000/01/rdf-schema#member");
+			str += " . ?" +  qeFact.getElementName("http://www.w3.org/2000/01/rdf-schema#member") + " <http://www.w3.org/2000/01/rdf-schema#member> ?" + el.getName() ;
 		}
 		return str;
 	}
 	
-	private void initElements(List<SearchCriterion> scList)
-	{
-		findMandatoryElements();
-		findOptionalElements(scList);
-	}
 	
-	private void findMandatoryElements()
-	{
-		addElement(new QueryElement("s", root, null, true, false));
-		addElement(new QueryElement("coll", "http://imeji.mpdl.mpg.de/collection", els.get(root), false, false));
-		addElement(new QueryElement("visibility", "http://imeji.mpdl.mpg.de/visibility", els.get(root), false, false));
-		//addElement(new QueryElement("props", "http://imeji.mpdl.mpg.de/properties", els.get(root), false));
-	}
-	
-	private void findOptionalElements(List<SearchCriterion> scList)
-	{
-		for (SearchCriterion sc :scList)
-		{
-			if (sc.getChildren().isEmpty())
-			{
-				addElements(sc.getNamespace());
-			}
-			else
-			{
-				findOptionalElements(sc.getChildren());
-			}
-		}
-	}
-	
-	private void addElements(ImejiNamespaces ns)
-	{
-		QueryElement parent = els.get(root);
-		
-		if (ns.getParent() != null)
-		{
-			// Add all parent namespaces
-			addElements(ns.getParent());
-			parent =  els.get(ns.getParent().getNs());
-		}
-
-		addElement( new QueryElement(null, ns.getNs(), parent, true, ns.isListType()));
-	}
-	
-	private void addElement(QueryElement el)
-	{
-		if (el.getName() == null)
-		{
-			// Create a variable name if it does have one.
-			el.setName(getElementName(el.getNameSpace()));
-		}
-		if (!els.containsKey(el.getNameSpace()))
-		{
-			// add to elements
-			els.put(el.getNameSpace(),el);
-			// Save Name
-			names.add(el.getName());
-			// Add as child to it's parent
-			if (el.getParent() != null)
-			{
-				el.getParent().getChilds().add(el);
-			}
-		}
-	}
-	
-	private String getElementName(String namespace)
-	{
-		if (els.get(namespace) != null)
-		{
-			return els.get(namespace).getName();
-		}
-		else
-		{
-			int lastIndex = Integer.valueOf(names.get(names.size() -1).replaceAll("[a-z]", "0"));
-	 		return "v" + String.valueOf(lastIndex + 1);
-		}
-	}
 	
 	
 	
@@ -446,5 +361,8 @@ public class QueryFactory
 	        }
 	        return subquery;
 	    }
+
+
+		
 	 
 }

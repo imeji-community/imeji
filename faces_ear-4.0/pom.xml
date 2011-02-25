@@ -34,11 +34,11 @@
 							<artifactId>faces_presentation4</artifactId>
 							<contextRoot>/faces</contextRoot>
 						</webModule>
-						<webModule>
+						<!--  <webModule>
                             <groupId>de.mpg.escidoc.services</groupId>
                             <artifactId>cone_presentation</artifactId>
                             <contextRoot>/cone</contextRoot>
-                        </webModule>
+                        </webModule>-->
 						<jarModule>
 							<groupId>de.mpg.escidoc.services</groupId>
 							<artifactId>framework_access</artifactId>
@@ -48,7 +48,7 @@
 							<groupId>de.mpg.escidoc.services</groupId>
 							<artifactId>common_logic</artifactId>
 						</ejbModule>
-						<ejbModule>
+						<!--  <ejbModule>
 							<groupId>de.mpg.escidoc.services</groupId>
 							<artifactId>exportmanager</artifactId>
 						</ejbModule>
@@ -59,13 +59,11 @@
 						<ejbModule>
 							<groupId>de.mpg.escidoc.services</groupId>
 							<artifactId>citationmanager</artifactId>
-						</ejbModule>
+						</ejbModule>-->
 						<jarModule>
                             <groupId>org.dspace</groupId>
                             <artifactId>cql-java</artifactId>
-                            <includeInApplicationXml>
-                                true
-                            </includeInApplicationXml>
+                            <includeInApplicationXml>true</includeInApplicationXml>
                         </jarModule>
 						<jarModule>
 							<groupId>org.jibx</groupId>
@@ -139,16 +137,16 @@
 							<artifactId>javabib</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
-						<jarModule>
+					<!--	<jarModule>
 							<groupId>urlrewrite</groupId>
 							<artifactId>urlrewrite</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
-						<jarModule>
+						  <jarModule>
 							<groupId>jasperreports</groupId>
 							<artifactId>jasperreports</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
-						</jarModule>
+						</jarModule>-->
 						<jarModule>  
 							<groupId>org.apache.ant</groupId>
 							<artifactId>ant</artifactId>
@@ -170,7 +168,7 @@
 								true
 							</includeInApplicationXml>
 						</jarModule>
-						<jarModule>
+						 <jarModule>
 							<groupId>xmlbeans</groupId>
 							<artifactId>xbean</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
@@ -185,7 +183,7 @@
 							<artifactId>escidoc-core</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
-						<jarModule>
+						<!--  <jarModule>
 					      <groupId>xmlbeans</groupId>
 					      <artifactId>faces_metadata</artifactId>
 						  <includeInApplicationXml>true</includeInApplicationXml>
@@ -194,7 +192,7 @@
 					      <groupId>xmlbeans</groupId>
 					      <artifactId>escidoc-generic</artifactId>
 						  <includeInApplicationXml>true</includeInApplicationXml>
-					    </jarModule>
+					    </jarModule>-->
 					    <jarModule>
                             <groupId>com.maxmind.geoip</groupId>
                             <artifactId>geoip</artifactId>
@@ -337,13 +335,13 @@
 			<scope>compile</scope>
 			<type>war</type>
 		</dependency>
-	    <dependency>
+	   <!--  <dependency>
 	    	<groupId>de.mpg.escidoc.services</groupId>
 	    	<artifactId>exportmanager</artifactId>
 	    	<version>1.0.54-SNAPSHOT</version>
 	    	<scope>compile</scope>
 	    	<type>ejb</type>
-	    </dependency>
+	    </dependency> -->
    		<dependency>
 			<groupId>axis</groupId>
 			<artifactId>axis</artifactId>
@@ -424,7 +422,7 @@
 			<version>20040801</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
+		<!--  <dependency>
 	      <groupId>urlrewrite</groupId>
 	      <artifactId>urlrewrite</artifactId>     
 	      <version>3.2.0</version>
@@ -448,7 +446,7 @@
 			<version>1.0.58-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>ejb</type>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.apache.ant</groupId>
 			<artifactId>ant</artifactId>
@@ -478,19 +476,19 @@
 			<version>2.4.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- For old FW -->
-	    <dependency>
-	      <groupId>xmlbeans</groupId>
-	      <artifactId>escidoc-1.1</artifactId>
-	      <version>1.1.0</version>
-	      <scope>provided</scope>
-	    </dependency>
-	    <dependency>
+		 <dependency>
 	       <groupId>xmlbeans</groupId>
 	       <artifactId>escidoc-core</artifactId>
 	       <version>1.2rc1</version>
 	       <scope>provided</scope>
 	    </dependency> 
+		<!-- For old FW -->
+	  <!--    <dependency>
+	      <groupId>xmlbeans</groupId>
+	      <artifactId>escidoc-1.1</artifactId>
+	      <version>1.1.0</version>
+	      <scope>provided</scope>
+	    </dependency>
 		<dependency>
 	    <groupId>xmlbeans</groupId>
 	     	<artifactId>faces_metadata</artifactId>
@@ -502,14 +500,14 @@
 	      <artifactId>escidoc-generic</artifactId>
 	      <version>1.0.0</version>
 	      <scope>provided</scope>
-	    </dependency>
-     	<dependency>
+	    </dependency>-->
+     	<!--  <dependency>
      		<groupId>de.mpg.escidoc.services</groupId>
      		<artifactId>cone_presentation</artifactId>
      		<version>1.1.1</version>
      		<scope>compile</scope>
      		<type>war</type>
-     	</dependency>
+     	</dependency>-->
      	<dependency>
 	      	<groupId>com.maxmind.geoip</groupId>
 	      	<artifactId>geoip</artifactId>

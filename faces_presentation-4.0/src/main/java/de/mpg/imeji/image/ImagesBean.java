@@ -2,9 +2,12 @@ package de.mpg.imeji.image;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
+
+import thewebsemantic.RDF2Bean;
 
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
@@ -14,12 +17,15 @@ import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.complextypes.Text;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
@@ -87,6 +93,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         totalNumberOfRecords = controller.getNumberOfResults(scList);
         images = controller.search(scList, sortCriterion, limit, offset);
         filters = new FiltersBean(query, totalNumberOfRecords);
+  
         return ImejiFactory.imageListToBeanList(images);
     }
 
@@ -107,7 +114,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
             List<Image> images = new ArrayList<Image>();
             for (ImageBean imb : this.getCurrentPartList())
                 images.add(imb.getImage());
-            this.setFacets(new FacetsBean(images));
+           // this.setFacets(new FacetsBean(images));
         }
         return "pretty";
     }

@@ -25,7 +25,7 @@ public class MetadataBatchEditor extends MetadataEditor
 		originalImages = images;
 		this.images = new ArrayList<Image>();
 		this.images.add(new Image());
-		this.images.get(0).getMetadata().add(newMetadata());
+		this.images.get(0).getMetadataSet().getMetadata().add(newMetadata());
 	}
 	
 
@@ -36,14 +36,16 @@ public class MetadataBatchEditor extends MetadataEditor
 		{
 			return false;
 		}
-		ImageMetadata md = this.images.get(0).getMetadata().get(0);
+//		if (images.get(0).getMetadata().iterator().hasNext())
+//		{
+		ImageMetadata md = images.get(0).getMetadataSet().getMetadata().iterator().next();
 		for (Image im: originalImages)
 		{
 			if (erase) 
 			{
 				 im = eraseOldMetadata(im);
 			}
-			im.getMetadata().add(md);
+			im.getMetadataSet().getMetadata().add(md);
 		}
 		images = originalImages;
 		return true;
@@ -66,18 +68,19 @@ public class MetadataBatchEditor extends MetadataEditor
 	
 	private Image eraseOldMetadata(Image im)
 	{
-		for (int i=0; i<im.getMetadata().size(); i++)
+		List<ImageMetadata> newList = new ArrayList<ImageMetadata>(im.getMetadataSet().getMetadata());
+		for (int i=0; i<im.getMetadataSet().getMetadata().size(); i++)
 		{
-			if (im.getMetadata().get(i).getName() != null)
+			if (newList.get(i).getName() != null)
 			{
-				if (im.getMetadata().get(i).getName().equals(statement.getName()))
 				{
-					im.getMetadata().remove(i);
+					im.getMetadataSet().getMetadata().remove(i);
 					i = 0;
 				}
 			}
-			else {im.getMetadata().remove(i); i--;}
+			else {newList.remove(i); i--;}
 		}
+		im.getMetadataSet().getMetadata().addAll(newList);
 		return im;
 	}
 
@@ -89,9 +92,12 @@ public class MetadataBatchEditor extends MetadataEditor
 	@Override
 	public void addMetadata(Image image, int metadataPos)
 	{
-		if (metadataPos <= image.getMetadata().size()) 
+		if (metadataPos <= image.getMetadataSet().getMetadata().size()) 
 		{
-			image.getMetadata().add(metadataPos, newMetadata());
+			List<ImageMetadata> newList = new ArrayList<ImageMetadata>();
+			newList.add(metadataPos, newMetadata());
+			image.getMetadataSet().getMetadata().addAll(newList);
+			//image.getMetadata().add(metadataPos, newMetadata());
 		}
 	}
 

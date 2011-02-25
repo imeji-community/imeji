@@ -26,6 +26,7 @@ public class FacetURIFactory
 	{
 		if(sc != null) scList.add(sc);
 		String uri = baseURI + getCommonURI();
+		scList.remove(sc);
 		return URI.create(uri);
 	}
 	

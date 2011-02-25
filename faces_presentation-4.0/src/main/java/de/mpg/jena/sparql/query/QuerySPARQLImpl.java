@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.ImejiQueryVariable;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SortCriterion;
@@ -31,8 +32,11 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
     {
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
-		//System.out.println("QUERY: " + " SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + this.offset);
-	    return  "SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
+		String query = "SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
+		
+		ImejiJena.userModel.write(System.out, "RDF/XML-ABBREV");
+		System.out.println(query);
+		return query;
     }
 	
 	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user) 
@@ -40,6 +44,16 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
 		//System.out.println("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset);
 		return  "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
+	}
+	
+	/**
+	 * TODO not working
+	 */
+	public String createConstructQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user) 
+	{
+		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
+		//System.out.println("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset);
+		return  "CONSTRUCT { ?s a <" + root + "> . ?md a <http://imeji.mpdl.mpg.de/image/metadata> .?type a <http://purl.org/dc/terms/type> } WHERE { " + variables.substring(2) +   filters + "} " + this.limit + " " + this.offset;
 	}
 	
 	private void init(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
@@ -100,8 +114,10 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		String str = "?" + el.getParent().getName() +" <" + el.getNameSpace() + "> ?" + el.getName();
 		if (el.isList())
 		{
-			str = "?" + el.getParent().getName() +" <" + el.getNameSpace() + "> ?" + qeFact.getElementName("http://www.w3.org/2000/01/rdf-schema#member");
-			str += " . ?" +  qeFact.getElementName("http://www.w3.org/2000/01/rdf-schema#member") + " <http://www.w3.org/2000/01/rdf-schema#member> ?" + el.getName() ;
+//			str = "?" + el.getParent().getName() +" <" + el.getNameSpace() + "> ?" + qeFact.getElementName("http://www.w3.org/2000/01/rdf-schema#member");
+//			str += " . ?" +  qeFact.getElementName("http://www.w3.org/2000/01/rdf-schema#member") + " <http://www.w3.org/2000/01/rdf-schema#member> ?" + el.getName() ;
+			str = "?" + el.getParent().getName() +" <" + el.getNameSpace() + "> ?" + qeFact.getElementName("<http://www.jena.hpl.hp.com/ARQ/list#member>");
+			str += " . ?" +  qeFact.getElementName("<http://www.jena.hpl.hp.com/ARQ/list#member>") + " <http://www.jena.hpl.hp.com/ARQ/list#member> ?" + el.getName() ;
 		}
 		return str;
 	}

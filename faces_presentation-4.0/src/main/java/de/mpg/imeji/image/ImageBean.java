@@ -19,6 +19,7 @@ import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.Statement;
 
 public class ImageBean
@@ -171,7 +172,7 @@ public class ImageBean
     	return image.getThumbnailImageUrl().toString();
     }
 
-    public String getId()
+	public String getId()
     {
         return id;
     }

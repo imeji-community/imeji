@@ -7,6 +7,7 @@ import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -82,7 +83,7 @@ public class ImejiSPARQL
 	 * @param c
 	 * @return
 	 */
-	public static LinkedList<String> exec(String query, Class<?> c)
+	public static LinkedList<String> exec(String query)
 	{
 		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
 		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
@@ -91,7 +92,12 @@ public class ImejiSPARQL
         try 
         {
                 ResultSet results = qexec.execSelect();
-                for (;results.hasNext();) resultList.add(resource(results).toString());
+                for (;results.hasNext();) 
+                {
+                	QuerySolution qs = results.nextSolution();
+                	Resource r = qs.getResource("v2");
+                	if (r != null) resultList.add(r.toString());
+                }
                 return resultList;
         } finally 
         {
@@ -116,6 +122,16 @@ public class ImejiSPARQL
 			return rs.next().getLiteral("?.1").getInt();
 		}
 		return 0;
+	}
+	
+	public static Model execConstruct(String query)
+	{
+		System.out.println("Construct:" + query);
+		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
+		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
+		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;
+		Model mod = qexec.execConstruct();
+		return mod;
 	}
 	
 	private static Resource resource(ResultSet results) 

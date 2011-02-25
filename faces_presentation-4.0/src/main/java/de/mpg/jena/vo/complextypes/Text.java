@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
+import thewebsemantic.RdfProperty;
 import thewebsemantic.RdfType;
 import de.mpg.jena.vo.ComplexType;
 

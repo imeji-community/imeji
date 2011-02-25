@@ -35,10 +35,11 @@ public class SearchCriterion {
 		PROPERTIES_STATUS("http://imeji.mpdl.mpg.de/status", PROPERTIES),
 		
 		IMAGE_FILENAME("http://imeji.mpdl.mpg.de/filename"),
-		IMAGE_METADATA("http://imeji.mpdl.mpg.de/image/metadata", null, true),
-		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/image/metadata/elementNamespace", IMAGE_METADATA),
-		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/image/metadata/name", IMAGE_METADATA),
-		IMAGE_METADATA_COMPLEXTYPE("http://purl.org/dc/terms/type", IMAGE_METADATA),
+		IMAGE_METADATA_SET("http://imeji.mpdl.mpg.de/metadataSet"),
+		IMAGE_METADATA("http://imeji.mpdl.mpg.de/metadata", IMAGE_METADATA_SET),
+		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/metadata/elementNamespace", IMAGE_METADATA),
+		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/metadata/name", IMAGE_METADATA),
+		IMAGE_METADATA_COMPLEXTYPE("http://imeji.mpdl.mpg.de/complexTypes", IMAGE_METADATA),
 		IMAGE_METADATA_COMPLEXTYPE_ENUMTYPE("http://purl.org/dc/terms/type", IMAGE_METADATA),
 		IMAGE_METADATA_COMPLEXTYPE_PERSON("http://imeji.mpdl.mpg.de/metadata/person", IMAGE_METADATA_COMPLEXTYPE),
 		IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME("http://purl.org/escidoc/metadata/terms/0.1/family-name", IMAGE_METADATA_COMPLEXTYPE_PERSON),
@@ -47,7 +48,6 @@ public class SearchCriterion {
 		IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME("http://purl.org/dc/elements/1.1/title", IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION),
 		IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LONGITUDE("http://imeji.mpdl.mpg.de/metadata/longitude", IMAGE_METADATA_COMPLEXTYPE),
 		IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LATITUDE("http://imeji.mpdl.mpg.de/metadata/latitude", IMAGE_METADATA_COMPLEXTYPE),
-		
 		IMAGE_METADATA_COMPLEXTYPE_TEXT("http://imeji.mpdl.mpg.de/metadata/text", IMAGE_METADATA_COMPLEXTYPE),
 		IMAGE_METADATA_COMPLEXTYPE_DATE("http://imeji.mpdl.mpg.de/metadata/date", IMAGE_METADATA_COMPLEXTYPE),
 		IMAGE_METADATA_COMPLEXTYPE_NUMBER("http://imeji.mpdl.mpg.de/metadata/number", IMAGE_METADATA_COMPLEXTYPE),

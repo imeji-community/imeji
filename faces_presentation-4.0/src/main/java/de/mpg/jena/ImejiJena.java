@@ -54,9 +54,9 @@ public class ImejiJena
 	
 	private static Model initModel(String name)
 	{
-		String filename = tdbPath + "/" + name;
-		(new File(filename)).mkdirs();
-		TDBFactory.createNamedModel(name, filename);
+		//String filename = tdbPath + "/" + name;
+		//(new File(filename)).mkdirs();
+		TDBFactory.createNamedModel(name, tdbPath);
 		return imejiDataSet.getNamedModel(name);
 	}
 	

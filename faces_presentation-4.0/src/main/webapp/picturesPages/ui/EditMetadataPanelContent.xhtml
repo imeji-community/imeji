@@ -56,7 +56,7 @@
 						<!-- METADATA -->
 				 		<h:panelGroup id="metadataPnl" layout="block" styleClass="xHuge_area0">
 							
-							<a4j:repeat id="imageMetadata" var="metadata" value="#{image.metadata}" rowKeyVar="indexMetadata">
+							<a4j:repeat id="imageMetadata" var="metadata" value="#{image.metadataSet.metadata}" rowKeyVar="indexMetadata">
 								
 								<!-- Show only metadata of correct statement -->
 								<h:panelGroup layout="block" styleClass="xHuge_area0" rendered="#{(metadata.name == EditWorkspaceBean.editor.statement.name) || EditWorkspaceBean.editor.statement == null}">

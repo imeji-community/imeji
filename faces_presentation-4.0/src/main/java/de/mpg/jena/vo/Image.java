@@ -3,6 +3,7 @@ package de.mpg.jena.vo;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,7 +30,8 @@ public class Image implements Serializable
     private URI fullImageUrl;
     private Visibility visibility;
     private URI collection;
-    private List<ImageMetadata> metadata = new LinkedList<ImageMetadata>();
+    private MetadataSet metadataSet = new MetadataSet();
+    //private Collection<ImageMetadata> metadata = new LinkedList<ImageMetadata>();
     private String filename;
     private String escidocId;
 
@@ -96,23 +98,35 @@ public class Image implements Serializable
         return visibility;
     }
 
-    public void setMetadata(List<ImageMetadata> metadata)
-    {
-        this.metadata = metadata;
-    }
+//    public void setMetadata(Collection<ImageMetadata> metadata)
+//    {
+//        this.metadata = metadata;
+//    }
+//
+//    //@RdfProperty("http://www.jena.hpl.hp.com/ARQ/list#member")
+//    @RdfProperty("http://imeji.mpdl.mpg.de/metadata")
+//    public Collection<ImageMetadata> getMetadata()
+//    {
+//        return metadata;
+//    }
 
-    @RdfProperty("http://imeji.mpdl.mpg.de/image/metadata")
-    public List<ImageMetadata> getMetadata()
+    //@RdfProperty("http://imeji.mpdl.mpg.de/metadataSet")
+    public MetadataSet getMetadataSet() 
     {
-        return metadata;
-    }
+		return metadataSet;
+	}
 
+	public void setMetadataSet(MetadataSet metadataSet) 
+	{
+		this.metadataSet = metadataSet;
+	}
+    
     public void setId(URI id)
     {
         this.id = id;
     }
 
-    @Id
+	@Id
     public URI getId()
     {
         return id;

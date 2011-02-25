@@ -2,6 +2,8 @@ package de.mpg.jena.vo;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.UUID;
 
 import thewebsemantic.Embedded;
@@ -10,14 +12,17 @@ import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
 import thewebsemantic.RdfType;
 
-@Namespace("http://imeji.mpdl.mpg.de/image/")
+@Namespace("http://imeji.mpdl.mpg.de/")
 @RdfType("metadata")
+@Embedded
 public class ImageMetadata implements Serializable
 {
     private String name;
     private ComplexType type;
     private String namespace;
     private String id = UUID.randomUUID().toString();
+    private Collection<ImageMetadata> childs = new LinkedList<ImageMetadata>();
+    private int pos = 0;
     
     public ImageMetadata(String name, ComplexType type)
     {
@@ -34,7 +39,7 @@ public class ImageMetadata implements Serializable
         this.name = name;
     }
 
-    @RdfProperty("http://imeji.mpdl.mpg.de/image/metadata/name")
+    @RdfProperty("http://imeji.mpdl.mpg.de/metadata/name")
     public String getName()
     {
         return name;
@@ -45,13 +50,13 @@ public class ImageMetadata implements Serializable
         this.namespace = namespace;
     }
 
-    @RdfProperty("http://imeji.mpdl.mpg.de/image/metadata/elementNamespace")
+    @RdfProperty("http://imeji.mpdl.mpg.de/metadata/elementNamespace")
     public String getNamespace()
     {
         return namespace;
     }
 
-    @RdfProperty("http://purl.org/dc/terms/type")
+    @RdfProperty("http://imeji.mpdl.mpg.de/complexTypes")
     public ComplexType getType()
     {
         return type;
@@ -77,4 +82,21 @@ public class ImageMetadata implements Serializable
     {
         return this.compareTo((ImageMetadata)imd);
     }
+
+	public Collection<ImageMetadata> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(Collection<ImageMetadata> childs) {
+		this.childs = childs;
+	}
+
+	public int getPos() {
+		return pos;
+	}
+
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
+	    
 }

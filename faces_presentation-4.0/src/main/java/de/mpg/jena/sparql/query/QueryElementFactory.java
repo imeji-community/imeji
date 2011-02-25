@@ -44,6 +44,7 @@ public class QueryElementFactory
 	
 	private void findOptionalElements(List<SearchCriterion> scList)
 	{
+		if (scList == null) scList = new ArrayList<SearchCriterion>();
 		for (SearchCriterion sc :scList)
 		{
 			if (sc.getChildren().isEmpty())

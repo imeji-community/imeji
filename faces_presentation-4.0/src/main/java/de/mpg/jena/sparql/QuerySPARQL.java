@@ -13,4 +13,7 @@ public interface QuerySPARQL
 	
 	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String type, String specificQuery, String specificFilter,
             int limit, int offset, User user);
+	
+	public String createConstructQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String type, String specificQuery, String specificFilter,
+            int limit, int offset, User user);
 }

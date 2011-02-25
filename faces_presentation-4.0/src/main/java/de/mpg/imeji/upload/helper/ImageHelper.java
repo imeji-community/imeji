@@ -22,7 +22,7 @@ import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.xmlbeans.XmlCursor;
 
-import com.sun.mail.handlers.image_gif;
+//import com.sun.mail.handlers.image_gif;
 
 import de.escidoc.schemas.components.x09.ComponentDocument.Component;
 import de.escidoc.schemas.components.x09.ComponentDocument.Component.Content.Storage.Enum;

@@ -36,13 +36,13 @@
       <version>1.1.46</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
+   <!--   <dependency>
       <groupId>urlrewrite</groupId>
       <artifactId>urlrewrite</artifactId>
       <version>3.2.0</version>
       <scope>provided</scope>
     </dependency>
-    <!-- 
+   
     <dependency>
       <groupId>trinidad</groupId>
       <artifactId>trinidad-api</artifactId>
@@ -62,13 +62,13 @@
     	<version>1.0.47</version>
     	<scope>provided</scope>
     </dependency>
-    <dependency>
+   <!--   <dependency>
     	<groupId>de.mpg.escidoc.services</groupId>
     	<artifactId>exportmanager</artifactId>
     	<version>1.0.54-SNAPSHOT</version>
     	<scope>provided</scope>
-    </dependency>
-    <dependency>
+    </dependency>-->
+   <dependency>
       <groupId>xmlbeans</groupId>
       <artifactId>xbean</artifactId>
       <version>2.4.0</version>
@@ -80,25 +80,24 @@
       <version>2.4.0</version>
       <scope>provided</scope>
     </dependency>
-    <!-- For old FW -->
-    <dependency>
+   <!--   <dependency>
       <groupId>xmlbeans</groupId>
       <artifactId>escidoc-1.1</artifactId>
       <version>1.1.0</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency>-->
     <dependency>
        <groupId>xmlbeans</groupId>
        <artifactId>escidoc-core</artifactId>
        <version>1.2rc1</version>
        <scope>provided</scope>
     </dependency> 
-    <dependency>
+    <!--  <dependency>
       <groupId>xmlbeans</groupId>
       <artifactId>escidoc-generic</artifactId>
       <version>1.0.0</version>
        <scope>provided</scope>
-    </dependency>
+    </dependency>-->
     <dependency>
    		<groupId>jsf-facelets</groupId>
    		<artifactId>jsf-facelets</artifactId>

@@ -158,7 +158,7 @@ public class ImejiBean2RDF
 	{
 		if (o instanceof Image)
 		{
-			((Image) o).getMetadata().size();
+			((Image) o).getMetadataSet().getMetadata().size();
 		}
 		else if (o instanceof Container)
 		{

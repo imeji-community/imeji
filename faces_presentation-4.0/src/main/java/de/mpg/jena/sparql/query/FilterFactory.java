@@ -33,25 +33,26 @@ public class FilterFactory
 	private static String generateSearchFilters(List<SearchCriterion> scList, Map<String, QueryElement> els)
 	{
 		String filter =" (";
-		
-		for(SearchCriterion sc : scList)
+		if (scList != null)
 		{
-			if (!sc.getChildren().isEmpty())
+			for(SearchCriterion sc : scList)
 			{
-				filter += generateSearchFilters(sc.getChildren(), els);
+				if (!sc.getChildren().isEmpty())
+				{
+					filter += generateSearchFilters(sc.getChildren(), els);
+				}
+				String newFilter = "";
+				if (sc.getNamespace() != null)
+				{
+					 newFilter= getFilterString(sc, els.get(sc.getNamespace().getNs()).getName());
+				}
+				if (!" (".equals(filter) && !"".equals(newFilter))
+				{
+					filter += getOperatorString(sc);
+				}
+				filter += newFilter;
 			}
-			String newFilter = "";
-			if (sc.getNamespace() != null)
-			{
-				 newFilter= getFilterString(sc, els.get(sc.getNamespace().getNs()).getName());
-			}
-			if (!" (".equals(filter) && !"".equals(newFilter))
-			{
-				filter += getOperatorString(sc);
-			}
-			filter += newFilter;
 		}
-		
 		filter += " ) ";
 		
 		return filter;

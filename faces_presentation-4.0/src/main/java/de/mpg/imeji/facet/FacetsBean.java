@@ -40,6 +40,7 @@ public class FacetsBean
     
     
     private List<Facet> collectionFacets = new ArrayList<Facet>();
+    private List<Facet> technicalFacets = new ArrayList<Facet>();
 
     public FacetsBean() {
 		// TODO Auto-generated constructor stub
@@ -74,6 +75,7 @@ public class FacetsBean
         try 
         {
 			collectionFacets = new CollectionFacets(images, new ArrayList<SearchCriterion>()).getFacets();
+			technicalFacets = new TechnicalFacets(new ArrayList<SearchCriterion>()).getFacets();
 		} 
         catch (Exception e) 
         {
@@ -83,11 +85,10 @@ public class FacetsBean
     }
    
 
-
-
 	public List<Facet> generateFacets(MetadataProfile profile, CollectionImeji coll) throws Exception
     {
         List<Facet> facetbeans = new ArrayList<Facet>();
+        if (coll == null) return facetbeans;
         facetbeans.add(
         		new Facet(URI.create(nav.getImagesUrl() + "/collection" + ObjectHelper.getId(coll.getId())
                 + "?q="), coll.getMetadata().getTitle(), coll.getImages().size()));
@@ -202,6 +203,16 @@ public class FacetsBean
         }
     }
     
+	public List<FacetGroupBean> getGroups()
+    {
+        return groups;
+    }
+
+    public void setGroups(List<FacetGroupBean> groups)
+    {
+        this.groups = groups;
+    }
+    
     // NEW
 
     public List<Facet> getCollectionFacets()
@@ -213,14 +224,16 @@ public class FacetsBean
     public void setCollectionFacets(List<Facet> collectionFacets) {
 		this.collectionFacets = collectionFacets;
 	}
+    
+    
 
-	public List<FacetGroupBean> getGroups()
-    {
-        return groups;
-    }
+	public List<Facet> getTechnicalFacets() {
+		return technicalFacets;
+	}
 
-    public void setGroups(List<FacetGroupBean> groups)
-    {
-        this.groups = groups;
-    }
+	public void setTechnicalFacets(List<Facet> technicalFacets) {
+		this.technicalFacets = technicalFacets;
+	}
+
+
 }

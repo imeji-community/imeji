@@ -8,11 +8,13 @@ import thewebsemantic.LocalizedString;
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.image.ImageBean;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ContainerMetadata;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
+import de.mpg.jena.vo.MetadataSet;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.Properties;
@@ -90,7 +92,14 @@ public class ImejiFactory
         List<ImageBean> beanList = new ArrayList<ImageBean>();
         for (Image img : imgList)
         {
-        	beanList.add(new ImageBean(img));
+        	try 
+        	{
+        		beanList.add(new ImageBean(img));
+			} 
+        	catch (Exception e) 
+			{
+				e.printStackTrace();
+			} 
         }
         return beanList;
     }

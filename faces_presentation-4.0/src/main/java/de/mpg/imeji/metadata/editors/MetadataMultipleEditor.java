@@ -1,8 +1,10 @@
 package de.mpg.imeji.metadata.editors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
@@ -22,13 +24,20 @@ public class MetadataMultipleEditor extends MetadataEditor
 			if (hasProfile(im)) 
 			{
 				boolean empty = true;
-				for (int i = 0; i < im.getMetadata().size(); i++) 
+				for(ImageMetadata md : im.getMetadataSet().getMetadata())
 				{
-					if (hasStatement && im.getMetadata().get(i).getName().equals(statement.getName()))
+					if (hasStatement && md.getName().equals(statement.getName()))
 					{
 						empty = false;
 					}
 				}
+//				for (int i = 0; i < im.getMetadata().size(); i++) 
+//				{
+//					if (hasStatement && im.getMetadata().get(i).getName().equals(statement.getName()))
+//					{
+//						empty = false;
+//					}
+//				}
 				if (empty && hasStatement) addMetadata(im, 0);
 				this.images.add(im);
 			}
@@ -64,9 +73,13 @@ public class MetadataMultipleEditor extends MetadataEditor
 	
 	public void addMetadata(Image image, int metadataPos)
 	{
-		if (metadataPos <= image.getMetadata().size()) 
+		if (metadataPos <= image.getMetadataSet().getMetadata().size()) 
 		{
-			image.getMetadata().add(metadataPos, newMetadata());
+			List<ImageMetadata> newList = new ArrayList<ImageMetadata>();
+			newList.add(metadataPos, newMetadata());
+			image.getMetadataSet().getMetadata().addAll(newList);
+			
+			//image.getMetadata().add(metadataPos, newMetadata());
 		}
 	}
 	 
@@ -80,9 +93,9 @@ public class MetadataMultipleEditor extends MetadataEditor
 	
 	public void removeMetadata(Image image, int metadataPos)
 	{
-		if (metadataPos <image.getMetadata().size()) 
+		if (metadataPos <image.getMetadataSet().getMetadata().size()) 
 		{
-			image.getMetadata().remove(metadataPos);
+			image.getMetadataSet().getMetadata().remove(metadataPos);
 		}
 	}
 

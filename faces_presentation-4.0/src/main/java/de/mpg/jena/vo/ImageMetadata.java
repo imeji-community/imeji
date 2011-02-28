@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.UUID;
 
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
+
 import thewebsemantic.Embedded;
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -17,56 +19,41 @@ import thewebsemantic.RdfType;
 @Embedded
 public class ImageMetadata implements Serializable
 {
-    private String name;
-    private ComplexType type;
-    private String namespace;
-    private String id = UUID.randomUUID().toString();
+    private URI namespace;
+    private ComplexTypes type;
     private Collection<ImageMetadata> childs = new LinkedList<ImageMetadata>();
     private int pos = 0;
     
-    public ImageMetadata(String name, ComplexType type)
-    {
-        this.type = type;
-        this.name = name;
-    }
-
+    private String id = UUID.randomUUID().toString();
+    
     public ImageMetadata()
     {
     }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    @RdfProperty("http://imeji.mpdl.mpg.de/metadata/name")
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setNamespace(String namespace)
+    
+    public ImageMetadata(URI namespace)
     {
         this.namespace = namespace;
     }
 
-    @RdfProperty("http://imeji.mpdl.mpg.de/metadata/elementNamespace")
-    public String getNamespace()
+    public void setNamespace(URI namespace)
     {
-        return namespace;
-    }
-
-    @RdfProperty("http://imeji.mpdl.mpg.de/complexTypes")
-    public ComplexType getType()
-    {
-        return type;
-    }
-
-    public void setType(ComplexType type)
-    {
-        this.type = type;
+        this.namespace = namespace;
     }
     
+    @RdfProperty("http://purl.org/dc/terms/type")
+    public ComplexTypes getType() 
+    {
+		return type;
+	}
+
+	public void setType(ComplexTypes type) {
+		this.type = type;
+	}
+
+	public URI getNamespace() {
+		return namespace;
+	}
+	
     public void setId(String id)
     {
         this.id = id;

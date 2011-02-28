@@ -14,6 +14,7 @@ import thewebsemantic.NotBoundException;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.filter.Filter;
+import de.mpg.imeji.lang.labelHelper;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
@@ -114,7 +115,7 @@ public class FacetsBean
             throws Exception
     {
         URI uri = generateUri(id, st, hasValue, value, coll);
-        String label = st.getName();
+        String label = labelHelper.getDefaultLabel(st.getLabels().iterator());
         if (st.getLabels().size() > 0)
             label = st.getLabels().toArray()[0].toString();
         if (value != null)
@@ -168,7 +169,7 @@ public class FacetsBean
          ComplexTypes ct = ComplexTypeHelper.getComplexTypesEnum(st.getType());
          List<SearchCriterion> scList = new ArrayList<SearchCriterion>(filters);
          
-         SearchCriterion facetMetadataSC = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_NAME, st.getName());
+         SearchCriterion facetMetadataSC = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_NAME, st.getName().toString());
          facetMetadataSC.setFilterType(Filtertype.EQUALS);
          facetMetadataSC.setInverse(!hasValue);
          scList.add(facetMetadataSC);

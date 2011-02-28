@@ -21,12 +21,12 @@ public class CreateMdProfileBean extends MdProfileBean
 
     public String save()
     {
-        if (validateProfile())
+        if (validateProfile(getProfile()))
         {
             ProfileController controller = new ProfileController(session.getUser());
             try 
             {	
-				controller.update(this.getProfile());
+				controller.update(getProfile());
 			} 
             catch (Exception e) 
 			{

@@ -19,7 +19,7 @@ public class MetadataProfile implements Serializable
     private URI id;
     private String title;
     private String description;
-    private List<Statement> statements = new LinkedList<Statement>();
+    private Collection<Statement> statements = new LinkedList<Statement>();
 
     @Id
     public URI getId()
@@ -32,7 +32,7 @@ public class MetadataProfile implements Serializable
         this.id = id;
     }
 
-    @RdfProperty("")
+    @RdfProperty("http://purl.org/dc/elements/1.1/title")
     public String getTitle()
     {
         return title;
@@ -49,18 +49,18 @@ public class MetadataProfile implements Serializable
         return description;
     }
 
-    @RdfProperty("http://purl.org/dc/elements/1.1/title")
     public void setDescription(String description)
     {
         this.description = description;
     }
 
-    public List<Statement> getStatements()
+    public Collection<Statement> getStatements()
     {
         return statements;
     }
 
-    public void setStatements(List<Statement> statements)
+    @RdfProperty("http://imeji.mpdl.mpg.de/mdprofile/statement")
+    public void setStatements(Collection<Statement> statements)
     {
         this.statements = statements;
     }

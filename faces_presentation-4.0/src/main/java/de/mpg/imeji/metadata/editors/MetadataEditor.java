@@ -1,5 +1,6 @@
 package de.mpg.imeji.metadata.editors;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -180,7 +181,8 @@ public abstract class  MetadataEditor
 	{
 		if (statement != null)
 		{
-			ImageMetadata md = new ImageMetadata(statement.getName(), ComplexTypeHelper.newComplexType(statement.getType()));
+			//ImageMetadata md = new ImageMetadata(statement.getName(), ComplexTypeHelper.newComplexType(statement.getType()));
+			ImageMetadata md = new ImageMetadata(URI.create(profile.getId() + "/" + statement.getName()));
 			return md;
 		}
 		return null;

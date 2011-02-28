@@ -12,7 +12,7 @@ import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 
 @Namespace("http://imeji.mpdl.mpg.de/metadata/")
-@RdfType("cone-person")
+@RdfType("person")
 @Embedded
 public class ConePerson extends ComplexType implements Serializable
 {
@@ -21,7 +21,7 @@ public class ConePerson extends ComplexType implements Serializable
 
     public ConePerson()
     {
-        super(ComplexTypes.CONE_AUTHOR);
+        super(ComplexTypes.PERSON);
         person = new Person();
         Organization o = new Organization();
         person.getOrganizations().add(o);
@@ -29,7 +29,7 @@ public class ConePerson extends ComplexType implements Serializable
 
     public ConePerson(Person pers)
     {
-        super(ComplexTypes.CONE_AUTHOR);
+        super(ComplexTypes.PERSON);
         this.person = pers;
     }
 

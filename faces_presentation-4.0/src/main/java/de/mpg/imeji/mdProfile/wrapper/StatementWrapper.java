@@ -14,6 +14,7 @@ import org.richfaces.json.JSONCollection;
 import org.richfaces.json.JSONException;
 
 import thewebsemantic.LocalizedString;
+import de.mpg.imeji.lang.labelHelper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
@@ -23,13 +24,15 @@ public class StatementWrapper
     private boolean required = false;
     private boolean multiple = false;
     private Statement statement;
-    private ComplexTypes mdType;
     private String defaultLabel;
     private String vocabularyString = null;
+    private String typeString;
+    private URI profile;
 
-    public StatementWrapper(Statement st)
+    public StatementWrapper(Statement st, URI profile)
     {
         statement = st;
+        this.profile = profile;
         statement.setLiteralConstraints(st.getLiteralConstraints());
         statement.setMinOccurs(st.getMinOccurs());
         statement.setMaxOccurs(st.getMaxOccurs());
@@ -38,24 +41,9 @@ public class StatementWrapper
         statement.setName(st.getName());
         statement.setVocabulary(st.getVocabulary());
         // Wrapper variable initialization
-        if (Integer.parseInt(st.getMinOccurs()) > 0)
-            required = true;
-        if ("unbounded".equals(st.getMaxOccurs()) || Integer.parseInt(st.getMaxOccurs()) > 1)
-            multiple = true;
-        if (st.getLabels().size() > 0)
-        {
-            for (LocalizedString lstr : st.getLabels())
-                this.defaultLabel = lstr.toString();
-        }
-        if (st.getType() != null)
-        {
-            for (ComplexTypes type : ComplexTypes.values())
-            {
-                URI uri = URI.create(type.getNamespace() + type.getRdfType());
-                if (st.getType().equals(uri))
-                    this.setMdType(type);
-            }
-        }
+        if (Integer.parseInt(st.getMinOccurs()) > 0) required = true;
+        if ("unbounded".equals(st.getMaxOccurs()) || Integer.parseInt(st.getMaxOccurs()) > 1) multiple = true;
+        defaultLabel = labelHelper.getDefaultLabel(st.getLabels().iterator());
     }
 
     public void vocabularyListener(ValueChangeEvent event)
@@ -79,8 +67,8 @@ public class StatementWrapper
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
-            this.defaultLabel = event.getNewValue().toString();
-            this.getStatement().setName(defaultLabel);
+            defaultLabel = event.getNewValue().toString();
+            statement.setName(URI.create(profile + "/"+ defaultLabel));
             statement.getLabels().clear();
             statement.getLabels().add(new LocalizedString(defaultLabel, "eng"));
         }
@@ -90,8 +78,7 @@ public class StatementWrapper
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
-            this.mdType = ComplexTypes.valueOf(event.getNewValue().toString());
-            statement.setType(URI.create(mdType.getNamespace() + mdType.getRdfType()));
+            statement.setType(URI.create(event.getNewValue().toString()));
         }
     }
 
@@ -132,19 +119,9 @@ public class StatementWrapper
         return statement.getLiteralConstraints().size();
     }
 
-    public ComplexTypes getMdType()
+    public URI getType()
     {
-        return mdType;
-    }
-
-    public void setMdType(ComplexTypes mdType)
-    {
-        this.mdType = mdType;
-    }
-
-    public boolean isRequired()
-    {
-        return required;
+        return statement.getType();
     }
 
     public void setRequired(boolean required)
@@ -181,4 +158,13 @@ public class StatementWrapper
     {
         this.vocabularyString = vocabularyString;
     }
+
+	public String getTypeString() {
+		return statement.getType().toString();
+	}
+
+	public void setTypeString(String typeString) {
+		this.typeString = typeString;
+	}
+    
 }

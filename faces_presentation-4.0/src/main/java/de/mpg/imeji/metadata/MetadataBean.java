@@ -1,5 +1,6 @@
 package de.mpg.imeji.metadata;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -225,15 +226,15 @@ public class MetadataBean
         {
             ct.setLabel(s.getLabels().iterator().next().toString());
         }
-        if (ct.getEnumType().equals(ComplexType.ComplexTypes.CONE_AUTHOR))
+        if (ct.getType().equals(ComplexType.ComplexTypes.PERSON))
         {
         	Person p = new Person();
             Organization o = new Organization();
             p.getOrganizations().add(o);
             ((ConePerson)ct).setPerson(p);
         }
-        this.metadata = new ImageMetadata(s.getName(), ct);
-        this.selectedStatementName = s.getName();
+        this.metadata = new ImageMetadata(s.getName());
+        this.selectedStatementName = s.getName().toString();
         if (!s.getMaxOccurs().equals("1"))
             multiple = true;
         else

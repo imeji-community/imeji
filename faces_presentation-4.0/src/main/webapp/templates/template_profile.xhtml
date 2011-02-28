@@ -44,8 +44,8 @@
 								
 								<h:panelGroup class="full_area0 xLarge_marginLExcl endline">
 									<h:panelGroup styleClass="xLarge_area1 tiny_marginLExcl clear">
-										<h:outputLabel styleClass="large_label" value="#{lbl.type}"/>
-										<h:selectOneMenu styleClass="medium_select" value="#{statement.mdType}" valueChangeListener="#{statement.typeListener}" onchange="">
+										<h:outputLabel styleClass="large_label" value="#{lbl.type}"/>										
+										<h:selectOneMenu id="selStatementType" styleClass="medium_select" value="#{statement.typeString}" valueChangeListener="#{statement.typeListener}">
 											<f:selectItems value="#{FormularBean.mdTypesMenu}"/>
 										</h:selectOneMenu>
 									</h:panelGroup>

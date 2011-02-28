@@ -253,7 +253,7 @@ public class ImageBean
     	try {
 	        for (Statement s : ProfileHelper.loadProfile(image).getStatements())
 	        {
-	        	 statementMenu.add(new SelectItem(s.getName(), s.getName()));
+	        	 statementMenu.add(new SelectItem(s.getName(), s.getLabels().iterator().next().toString()));
 	        }
     	}
     	catch (Exception e) {BeanHelper.error("An error occured reading Profile : " + e.getCause());}

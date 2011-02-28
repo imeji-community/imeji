@@ -1,5 +1,6 @@
 package de.mpg.imeji.metadata.editors;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,8 @@ public class MetadataMultipleEditor extends MetadataEditor
 				boolean empty = true;
 				for(ImageMetadata md : im.getMetadataSet().getMetadata())
 				{
-					if (hasStatement && md.getName().equals(statement.getName()))
+					URI stURI = URI.create(profile.getId() + "/" + statement.getName());
+					if (hasStatement && md.getNamespace().equals(stURI))
 					{
 						empty = false;
 					}

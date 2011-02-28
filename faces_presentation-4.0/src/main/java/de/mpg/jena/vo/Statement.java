@@ -15,17 +15,32 @@ import thewebsemantic.RdfType;
 
 @Namespace("http://imeji.mpdl.mpg.de/mdprofile/")
 @RdfType("statement")
-@Embedded
 public class Statement implements Serializable
 {
     private URI type = URI.create("http://imeji.mpdl.mpg.de/text");
-    private String name;
+    private URI name;
     private Collection<LocalizedString> labels = new LinkedList<LocalizedString>();
     private URI vocabulary;
     private Collection<LocalizedString> literalConstraints = new LinkedList<LocalizedString>();
     private String minOccurs = "0";
     private String maxOccurs = "1";
+    private int pos = 0;
 
+    public Statement() {
+		// TODO Auto-generated constructor stub
+	}
+    
+    @Id
+    public URI getName()
+    {
+        return name;
+    }
+
+    public void setName(URI name)
+    {
+        this.name = name;
+    }
+    
     @RdfProperty("http://purl.org/dc/terms/type")
     public URI getType()
     {
@@ -88,14 +103,13 @@ public class Statement implements Serializable
         this.maxOccurs = maxOccurs;
     }
 
-    @RdfProperty("http://purl.org/dc/elements/1.1/title")
-    public String getName()
-    {
-        return name;
-    }
+	public int getPos() {
+		return pos;
+	}
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
+
+
 }

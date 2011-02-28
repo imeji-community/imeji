@@ -36,6 +36,10 @@ public class Properties implements Serializable {
 	{
 		PENDING, RELEASED, WITHDRAWN;
 	}
+	
+	public Properties() {
+		// TODO Auto-generated constructor stub
+	}
 
 	
 	public void setLastModificationDate(Date lastModificationDate) {

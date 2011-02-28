@@ -1,10 +1,20 @@
 package de.mpg.imeji.mdProfile;
 
+import java.net.URI;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import thewebsemantic.LocalizedString;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
+import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
+import de.mpg.jena.vo.MetadataProfile;
+import de.mpg.jena.vo.Statement;
 
 public class EditMdProfileBean extends MdProfileBean
 {
@@ -49,11 +59,11 @@ public class EditMdProfileBean extends MdProfileBean
 
     public String save()
     {
-        if(validateProfile())
+        if(validateProfile(this.getProfile()))
         {
         	try 
             {	
-        		  profileController.update(this.getProfile());
+        		profileController.update(this.getProfile());
   			} 
             catch (Exception e) 
   			{

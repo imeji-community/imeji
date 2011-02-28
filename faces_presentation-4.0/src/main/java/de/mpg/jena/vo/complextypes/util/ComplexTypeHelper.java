@@ -36,7 +36,7 @@ public class ComplexTypeHelper
     {
         switch (ComplexTypeHelper.getComplexTypesEnum(uri))
         {
-            case CONE_AUTHOR:
+            case PERSON:
                 return new ConePerson();
             case DATE:
                 return new Date();

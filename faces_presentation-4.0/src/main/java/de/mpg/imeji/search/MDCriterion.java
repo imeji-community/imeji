@@ -8,6 +8,7 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.lang.labelHelper;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Statement;
@@ -54,17 +55,18 @@ public class MDCriterion extends Criterion implements Serializable{
     public List<SelectItem> newMdList()
     {
     	List<SelectItem> newMdList = new ArrayList<SelectItem>();
-        try{
+        try
+        {
         	for (Statement s : statements)
         	{
-        		newMdList.add(new SelectItem(s.getName(), s.getName()));
+        		newMdList.add(new SelectItem(s.getName(), labelHelper.getDefaultLabel(s.getLabels().iterator())));
         	}
-                   
-        		
-        }catch (Exception e){
+        }
+        catch (Exception e)
+        {
+        	e.printStackTrace();
         }		
         return newMdList;
-    	
     }
 	
 	public List<SelectItem> getMdList() {

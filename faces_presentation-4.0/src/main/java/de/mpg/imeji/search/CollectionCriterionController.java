@@ -171,7 +171,7 @@ public class CollectionCriterionController implements Serializable {
                                 ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER.name() + "." + mdc.getNumberOperator() + "=\"" + mdc.getMdText() + "\"";
                                 break;
                             }
-				            case  CONE_AUTHOR : 
+				            case  PERSON : 
                             {
                                 ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME.name()+ "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
                                 ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";

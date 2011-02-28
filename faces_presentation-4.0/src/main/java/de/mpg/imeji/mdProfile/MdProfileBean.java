@@ -27,12 +27,15 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.UrlHelper;
+import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.ComplexType;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class MdProfileBean
 {
@@ -51,7 +54,8 @@ public class MdProfileBean
 
     public MdProfileBean()
     {
-        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
+    	ImejiJena.profileModel.write(System.out, "RDF/XML-ABBREV");
+    	collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         pc = new ProfileController(sessionBean.getUser());
         if (collectionSession.getProfile() == null)
@@ -60,25 +64,13 @@ public class MdProfileBean
         profilesMenu = new ArrayList<SelectItem>();
         statements = new ArrayList<StatementWrapper>();
         mdTypesMenu = new ArrayList<SelectItem>();
-        for (ComplexType mdt : collectionSession.getMetadataTypes())
-            mdTypesMenu.add(new SelectItem(mdt.getEnumType().name(), mdt.getEnumType().getLabel()));
-        if (this.getId() == null && this.getProfile().getId() != null)
-            this.setId(this.getProfile().getId().getPath().split("/")[2]);
     }
+       
 
     public MdProfileBean(MetadataProfile profile)
     {
-        this.profile = profile;
-        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        pc = new ProfileController(sessionBean.getUser());
-        profilesMenu = new ArrayList<SelectItem>();
-        statements = new ArrayList<StatementWrapper>();
-        mdTypesMenu = new ArrayList<SelectItem>();
-        for (ComplexType mdt : collectionSession.getMetadataTypes())
-            mdTypesMenu.add(new SelectItem(mdt.getEnumType().name(), mdt.getEnumType().getLabel()));
-        if (this.getId() == null && this.getProfile().getId() != null)
-            this.setId(this.getProfile().getId().getPath().split("/")[2]);
+        this();
+    	this.profile = profile;
     }
 
     public void reset()
@@ -87,11 +79,18 @@ public class MdProfileBean
         statements.clear();
         collectionSession.setProfile(profile);
     }
-
+    
     public void init()
     {
-        if (UrlHelper.getParameterBoolean("reset"))
-            reset();
+    	for (ComplexTypes t : ComplexTypes.values())
+    	{
+    		mdTypesMenu.add(new SelectItem(t.getNamespace() + t.getRdfType(), t.getLabel()));
+    	}     
+        if (this.getId() == null && this.getProfile().getId() != null)
+        {
+        	this.setId(this.getProfile().getId().getPath().split("/")[2]);
+        }
+    	if (UrlHelper.getParameterBoolean("reset")) reset();
         loadtemplates();
         setStatementWrappers(profile);
     }
@@ -100,17 +99,21 @@ public class MdProfileBean
     {
         statements.clear();
         for (Statement st : mdp.getStatements())
-            statements.add(new StatementWrapper(st));
+        {
+        	statements.add(new StatementWrapper(st, mdp.getId()));
+        }
     }
 
     public void loadtemplates()
     {
         profilesMenu.add(new SelectItem(null, "Select Template"));
-        for (MetadataProfile mdp : pc.retrieveAll())
-        {
-            if (mdp.getId().toString() != profile.getId().toString())
-                profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
-        }
+//        for (MetadataProfile mdp : pc.retrieveAll())
+//        {
+//            if (mdp.getId().toString() != profile.getId().toString())
+//            {
+//                profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
+//            }
+//        }
     }
 
     public String changeTemplate() throws Exception
@@ -203,13 +206,14 @@ public class MdProfileBean
     {
         Statement st = ImejiFactory.newStatement();
         if (profile.getStatements().size() == 0)
+        {
             profile.getStatements().add(st);
+        }
         else
+        {
+            st.setPos(getStatementPosition() + 1);
             ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
-        // if (getStatementPosition() == 0)
-        // profile.getStatements().add(st);
-        // else
-        // ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
+        }
         collectionSession.setProfile(profile);
         return getNavigationString();
     }
@@ -227,8 +231,7 @@ public class MdProfileBean
         if (getConstraintPosition() == 0)
             ((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", "eng"));
         else
-            ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition(), new LocalizedString("",
-                    "eng"));
+            ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition(), new LocalizedString("","eng"));
         collectionSession.setProfile(profile);
         return getNavigationString();
     }
@@ -337,12 +340,22 @@ public class MdProfileBean
         this.template = template;
     }
 
-    public boolean validateProfile()
+    public boolean validateProfile(MetadataProfile profile)
     {
         List<String> statementNames = new ArrayList<String>();
+        if (profile.getStatements() == null)
+        {
+        	BeanHelper.error("Empty profile");
+        	return false;
+        }
         for (Statement s : profile.getStatements())
         {
-            if (statementNames.contains(s.getName()))
+        	if(s.getName() == null || !s.getName().isAbsolute())
+            {
+            	BeanHelper.error(s.getName()+" is not a valid name!");
+            	return false;
+            }
+            else if (statementNames.contains(s.getName()))
             {
                 BeanHelper.error("Names must be unique!");
                 return false;
@@ -358,7 +371,7 @@ public class MdProfileBean
             }
             else
             {
-                statementNames.add(s.getName());
+                statementNames.add(s.getName().toString());
             }
         }
         return true;

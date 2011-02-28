@@ -13,15 +13,15 @@ import de.mpg.jena.vo.complextypes.Publication;
 import de.mpg.jena.vo.complextypes.Text;
 import de.mpg.jena.vo.complextypes.URI;
 
-public abstract class ComplexType
+public abstract class ComplexType extends ImageMetadata
 {
     @Namespace("http://imeji.mpdl.mpg.de/")
     @RdfType("complexTypes")
     public enum ComplexTypes
     {
-        CONE_AUTHOR(ConePerson.class, "Person"), TEXT(Text.class, "Text"), NUMBER(Number.class, "Number"), DATE(
+        PERSON(ConePerson.class, "Person"), TEXT(Text.class, "Text"), NUMBER(Number.class, "Number"), DATE(
                 Date.class, "Date"), LICENSE(License.class, "Licence"), GEOLOCATION(Geolocation.class, "Geolocation"), URI(
-                URI.class, "URI"), PUBLICATION(Publication.class, "PubMan Publication");
+                URI.class, "URI"), PUBLICATION(Publication.class, "Publication");
         private Class<? extends ComplexType> type;
         private String label;
 
@@ -43,7 +43,7 @@ public abstract class ComplexType
 
         /**
          * Read namespace annotation of java class of this type
-         * 
+         *
          * @return
          */
         public String getNamespace()
@@ -64,24 +64,14 @@ public abstract class ComplexType
         }
     }
 
-    private ComplexTypes type;
     private String label;
 
     public ComplexType(ComplexTypes type)
     {
-        this.type = type;
+        this.setType(type);
         label = type.getLabel();
     }
 
-    public ComplexTypes getEnumType()
-    {
-        return type;
-    }
-
-    public void setEnumType(ComplexTypes type)
-    {
-        this.type = type;
-    }
 
     public String getLabel()
     {

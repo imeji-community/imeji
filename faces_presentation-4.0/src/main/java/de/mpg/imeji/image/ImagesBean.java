@@ -114,7 +114,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
             List<Image> images = new ArrayList<Image>();
             for (ImageBean imb : this.getCurrentPartList())
                 images.add(imb.getImage());
-           // this.setFacets(new FacetsBean(images));
+            this.setFacets(new FacetsBean(images));
         }
         return "pretty";
     }

@@ -35,7 +35,7 @@ public class ProfileController extends ImejiController
      */
     public URI create(MetadataProfile mdp) throws Exception
     {
-    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
+     	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
     	writeCreateProperties(mdp.getProperties(), user);
         mdp.getProperties().setStatus(Status.PENDING);
         URI uri = ObjectHelper.getURI(MetadataProfile.class, Integer.toString(getUniqueId()));

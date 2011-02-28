@@ -71,7 +71,7 @@ public class MetadataBatchEditor extends MetadataEditor
 		List<ImageMetadata> newList = new ArrayList<ImageMetadata>(im.getMetadataSet().getMetadata());
 		for (int i=0; i<im.getMetadataSet().getMetadata().size(); i++)
 		{
-			if (newList.get(i).getName() != null)
+			if (newList.get(i).getNamespace() != null)
 			{
 				{
 					im.getMetadataSet().getMetadata().remove(i);

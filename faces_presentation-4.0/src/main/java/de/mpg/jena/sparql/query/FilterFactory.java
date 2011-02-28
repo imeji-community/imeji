@@ -83,6 +83,11 @@ public class FilterFactory
 					if (!"".equals(f)) f += " || ";
 					f += "?" + els.get("http://imeji.mpdl.mpg.de/collection").getName() + "=<" + g.getGrantFor() + ">";
 				}
+				else if(GrantType.SYSADMIN.equals(g.getGrantType()))
+				{
+					if (!"".equals(f)) f += " || ";
+					f += " true";
+				}
 			}
 		}
 		

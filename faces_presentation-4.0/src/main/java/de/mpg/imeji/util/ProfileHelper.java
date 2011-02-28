@@ -26,7 +26,7 @@ public class ProfileHelper
 {
     public static String getDefaultVocabulary(URI uri)
     {
-        if (ComplexTypes.CONE_AUTHOR.equals(ComplexTypeHelper.getComplexTypesEnum(uri)))
+        if (ComplexTypes.PERSON.equals(ComplexTypeHelper.getComplexTypesEnum(uri)))
         {
             return "http://dev-pubman.mpdl.mpg.de/cone/persons/query";
         }

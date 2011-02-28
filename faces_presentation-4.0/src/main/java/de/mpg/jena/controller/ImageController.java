@@ -152,9 +152,6 @@ public class ImageController extends ImejiController
         additionalQuery = "";
         QuerySPARQL querySPARQL = new QuerySPARQLImpl();
         String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/image", additionalQuery, "", limit, offset, user);
-        LinkedList<String> l = ImejiSPARQL.exec(query);
-        if (!l.isEmpty()) System.out.println("FOUND!!!!!!!!!!!");
-        else {System.out.println("Not found");};
         return  ImejiSPARQL.execAndLoad(query, Image.class);
     }
     

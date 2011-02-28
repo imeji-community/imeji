@@ -157,8 +157,10 @@ public class EditWorkspaceBean
 	
 	public Statement getDefaultStatement()
 	{
-		if (profiles.size() > 0 &&   profiles.get(0).getStatements().size() > 0) 
-			return profiles.get(0).getStatements().get(0);
+		if (profiles.size() > 0 && profiles.get(0).getStatements().iterator().hasNext())
+		{
+			return profiles.get(0).getStatements().iterator().next();
+		}
 		return null;
 	}
 	

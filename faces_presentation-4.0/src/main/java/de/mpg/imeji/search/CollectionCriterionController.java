@@ -141,12 +141,12 @@ public class CollectionCriterionController implements Serializable {
 				        String ctCriterion = "";
 				        
 				    
-				        ComplexTypes ct = ComplexTypeHelper.getComplexTypesEnum(mdc.getSelectedStatement().getType());  
+				        ComplexTypes ct = ComplexTypeHelper.getComplexType(mdc.getSelectedStatement().getType());  
 				        switch (ct)
 				        {
 				            case TEXT : 
 				            {
-				                ctCriterion = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText() + "\"";
+				                ctCriterion = ImejiNamespaces.IMAGE_METADATA_TEXT.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText() + "\"";
 				                break;
 				            }
 				            case DATE : 
@@ -158,7 +158,7 @@ public class CollectionCriterionController implements Serializable {
                                     sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");  
                                     StringBuffer sb = new StringBuffer(sdf.format(date)); 
                                     System.out.println("MYDATE:" + sb.toString());
-                                    ctCriterion = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_DATE.name() + "." + mdc.getDateOperator() + "=\"" + sb.toString() + "\"";
+                                    ctCriterion = ImejiNamespaces.IMAGE_METADATA_DATE.name() + "." + mdc.getDateOperator() + "=\"" + sb.toString() + "\"";
                                 }
                                 catch (ParseException e)
                                 {
@@ -168,20 +168,20 @@ public class CollectionCriterionController implements Serializable {
                             }
 				            case  NUMBER : 
                             {
-                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER.name() + "." + mdc.getNumberOperator() + "=\"" + mdc.getMdText() + "\"";
+                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_NUMBER.name() + "." + mdc.getNumberOperator() + "=\"" + mdc.getMdText() + "\"";
                                 break;
                             }
 				            case  PERSON : 
                             {
-                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME.name()+ "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
-                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
-                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
+                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME.name()+ "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
+                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_PERSON_GIVEN_NAME.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
+                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
                                 break;
                             }
 				            case  GEOLOCATION : 
                             {
-                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LONGITUDE.name()+ "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
-                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_GEOLOCATION_LATITUDE.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
+                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_GEOLOCATION_LONGITUDE.name()+ "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
+                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_GEOLOCATION_LATITUDE.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
                                 break;
                             }
 				        }

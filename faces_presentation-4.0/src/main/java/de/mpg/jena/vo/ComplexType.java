@@ -35,10 +35,20 @@ public abstract class ComplexType extends ImageMetadata
         {
             return type;
         }
-
+        
         public String getLabel()
         {
             return label;
+        }
+        
+        public java.net.URI getURI()
+        {
+        	  Annotation namespaceAnn = this.getClassType().getAnnotation(thewebsemantic.Namespace.class);
+        	  Annotation rdfTypeAnn = this.getClassType().getAnnotation(thewebsemantic.RdfType.class);
+        	  java.net.URI uri = java.net.URI.create(
+        			  namespaceAnn.toString().split("@thewebsemantic.Namespace\\(value=")[1].split("\\)")[0]
+                      + rdfTypeAnn.toString().split("@thewebsemantic.RdfType\\(value=")[1].split("\\)")[0]);
+        	  return uri;
         }
 
         /**
@@ -46,22 +56,22 @@ public abstract class ComplexType extends ImageMetadata
          *
          * @return
          */
-        public String getNamespace()
-        {
-            Annotation namespaceAnn = this.getClassType().getAnnotation(thewebsemantic.Namespace.class);
-            return namespaceAnn.toString().split("@thewebsemantic.Namespace\\(value=")[1].split("\\)")[0];
-        }
-
-        /**
-         * Read rdfType annotation of java class of this type
-         * 
-         * @return
-         */
-        public String getRdfType()
-        {
-            Annotation rdfTypeAnn = this.getClassType().getAnnotation(thewebsemantic.RdfType.class);
-            return rdfTypeAnn.toString().split("@thewebsemantic.RdfType\\(value=")[1].split("\\)")[0];
-        }
+//        public String getNamespace()
+//        {
+//            Annotation namespaceAnn = this.getClassType().getAnnotation(thewebsemantic.Namespace.class);
+//            return namespaceAnn.toString().split("@thewebsemantic.Namespace\\(value=")[1].split("\\)")[0];
+//        }
+//
+//        /**
+//         * Read rdfType annotation of java class of this type
+//         * 
+//         * @return
+//         */
+//        public String getRdfType()
+//        {
+//            Annotation rdfTypeAnn = this.getClassType().getAnnotation(thewebsemantic.RdfType.class);
+//            return rdfTypeAnn.toString().split("@thewebsemantic.RdfType\\(value=")[1].split("\\)")[0];
+//        }
     }
 
     private String label;

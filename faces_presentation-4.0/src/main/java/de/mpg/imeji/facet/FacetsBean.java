@@ -166,7 +166,7 @@ public class FacetsBean
     public List<SearchCriterion> getFacetSCList(URI id, Statement st, boolean hasValue, String value, CollectionImeji coll)
     {
     	 if (value == null) value = "";
-         ComplexTypes ct = ComplexTypeHelper.getComplexTypesEnum(st.getType());
+         ComplexTypes ct = ComplexTypeHelper.getComplexType(st.getType());
          List<SearchCriterion> scList = new ArrayList<SearchCriterion>(filters);
          
          SearchCriterion facetMetadataSC = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_NAME, st.getName().toString());
@@ -179,10 +179,9 @@ public class FacetsBean
          	 SearchCriterion facetValueSC = new  SearchCriterion();
               facetValueSC.setValue(value);
               facetValueSC.setFilterType(Filtertype.EQUALS);
-              String ns = ct.getNamespace() + ct.getRdfType();
               for (ImejiNamespaces ims :ImejiNamespaces.values())
               {
-              	if (ims.getNs().equals(ns)) facetValueSC.setNamespace(ims);
+              	if (ims.getNs().equals(ct.getURI().toString())) facetValueSC.setNamespace(ims);
               }
               scList.add(facetValueSC);
          }

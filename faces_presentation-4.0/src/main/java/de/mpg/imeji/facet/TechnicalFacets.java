@@ -21,8 +21,8 @@ public class TechnicalFacets
 		FacetURIFactory uriFactory = new FacetURIFactory(scList);
 		Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
 		String baseURI = nav.getImagesUrl() + "?q=";
-		SearchCriterion scText = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, "[^a-z0-9]+");
-		SearchCriterion scNumber = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE, "NUMBER");
+		SearchCriterion scText = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_TEXT, "[^a-z0-9]+");
+		SearchCriterion scNumber = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_TYPE_LABEL, "NUMBER");
 		
 		try {
 			facets.add(new Facet(uriFactory.createFacetURI(baseURI, scText), "Text", getCount(scList)));
@@ -35,7 +35,7 @@ public class TechnicalFacets
 	
 	public int getCount(List<SearchCriterion> scList)
 	{
-		ImejiNamespaces mdType = ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_ENUMTYPE;
+		ImejiNamespaces mdType = ImejiNamespaces.IMAGE_METADATA_TYPE;
 		
 		ImageController ic = new ImageController(sb.getUser());
 		scList.add(new SearchCriterion(mdType, "http://imeji.mpdl.mpg.de/complexTypes/TEXT"));

@@ -2,18 +2,16 @@ package de.mpg.imeji.image;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
-
-import thewebsemantic.RDF2Bean;
 
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
+import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
@@ -23,9 +21,7 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
-import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.complextypes.Text;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
@@ -38,12 +34,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     protected FiltersBean filters;
     private String query;
     private Navigation navigation;
-
+    protected MetadataLabels labels;
+    
     public ImagesBean()
     {
         super();
-        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        this.navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
         initMenus();
     }
 
@@ -92,8 +90,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         }
         totalNumberOfRecords = controller.getNumberOfResults(scList);
         images = controller.search(scList, sortCriterion, limit, offset);
+        
         filters = new FiltersBean(query, totalNumberOfRecords);
-  
+        
+        labels.init((List<Image>) images);
+        
         return ImejiFactory.imageListToBeanList(images);
     }
 
@@ -113,7 +114,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         {
             List<Image> images = new ArrayList<Image>();
             for (ImageBean imb : this.getCurrentPartList())
+            {
                 images.add(imb.getImage());
+            }
             this.setFacets(new FacetsBean(images));
         }
         return "pretty";

@@ -58,13 +58,14 @@
 							
 							<a4j:repeat id="imageMetadata" var="metadata" value="#{image.metadataSet.metadata}" rowKeyVar="indexMetadata">
 								
-								<!-- Show only metadata of correct statement -->
-								<h:panelGroup layout="block" styleClass="xHuge_area0" rendered="#{(metadata.name == EditWorkspaceBean.editor.statement.name) || EditWorkspaceBean.editor.statement == null}">
+								<!-- Show only metadata of correct statement -->								
+								<h:panelGroup layout="block" styleClass="xHuge_area0" rendered="#{(metadata.namespace == EditWorkspaceBean.editor.statement.name) || EditWorkspaceBean.editor.statement == null}">
 									
+									<h:outputLabel value="#{MetadataLabels.labels[metadata.namespace]} (#{MetadataLabels.lang})" styleClass="huge_label"/>
 									
 									<!-- METADATA TYPE TEXT -->
-									<h:outputLabel value="#{metadata.name}" styleClass="huge_label" rendered="#{metadata.type.enumType == 'TEXT'}"/>
-									<h:inputTextarea  id="inputText" styleClass="quad_txtArea inputTxtArea" value="#{metadata.type.text}" rendered="#{metadata.type.enumType=='TEXT'}">
+									
+									<h:inputTextarea  id="inputText" styleClass="quad_txtArea inputTxtArea" value="#{metadata.text}" rendered="#{metadata.type =='TEXT'}">
 										<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputText" var="results" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 											<h:column>
 												<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
@@ -73,8 +74,7 @@
 									</h:inputTextarea>
 											
 									<!-- METADATA TYPE URI -->
-									<h:outputText value="#{metadata.name}" styleClass="huge_label" rendered="#{metadata.type.enumType=='URI'}" />
-									<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.type.uri}" rendered="#{metadata.type.enumType=='URI'}" onfocus="this.select();">
+									<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" rendered="#{metadata.type =='URI'}" onfocus="this.select();">
 										<f:converter converterId="URIConverter" />
 										<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputURI" var="results" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 											<h:column>
@@ -84,9 +84,8 @@
 									</h:inputText>
 									
 									<!-- METADATA TYPE PUBLICATION -->
-									<h:panelGroup rendered="#{metadata.type.enumType=='PUBLICATION'}">
-										<h:outputText value="URL of #{metadata.name}" styleClass="huge_label" rendered="#{metadata.type.enumType=='PUBLICATION'}" />
-										<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.type.uri}" rendered="#{metadata.type.enumType=='PUBLICATION'}" onfocus="this.select();">
+									<h:panelGroup rendered="#{metadata.type=='PUBLICATION'}">
+										<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" rendered="#{metadata.type=='PUBLICATION'}" onfocus="this.select();">
 											<f:converter converterId="URIConverter" />
 											<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputPublicationURI" var="results" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 												<h:column>
@@ -94,38 +93,34 @@
 												</h:column>
 											</rich:suggestionbox>
 										</h:inputText>
-										<h:outputLabel value="#{lbl.export_formats}" styleClass="huge_label" rendered="#{metadata.type.enumType=='PUBLICATION'}"/>
-										<h:selectOneMenu value="#{metadata.type.exportFormat}"	styleClass="huge_select" rendered="#{metadata.type.enumType=='PUBLICATION'}">
+										<h:outputLabel value="#{lbl.export_formats}" styleClass="huge_label" rendered="#{metadata.type =='PUBLICATION'}"/>
+										<h:selectOneMenu value="#{metadata.type.exportFormat}"	styleClass="huge_select" rendered="#{metadata.type=='PUBLICATION'}">
 											<f:selectItems value="#{EditWorkspaceBean.citationStyles}" /> 
 										</h:selectOneMenu>
 									</h:panelGroup>
 							
 									<!-- METADATA TYPE DATE -->
-									<h:panelGroup rendered="#{metadata.type.enumType=='DATE'}">
-										<h:outputText value="#{metadata.name}" styleClass="huge_label" />
-										<h:inputText styleClass="huge_txtInput" value="#{metadata.type.date}">
+									<h:panelGroup rendered="#{metadata.type =='DATE'}">
+										<h:inputText styleClass="huge_txtInput" value="#{metadata.date}">
 											<f:convertDateTime type="date" pattern="yyyy-MM-dd" />
 										</h:inputText>
 									</h:panelGroup>
 									
 									<!-- METADATA TYPE LICENSE -->
-									<h:panelGroup rendered="#{metadata.type.enumType=='LICENSE'}">
-										<h:outputText value="#{metadata.name}" styleClass="huge_label" />
-										<h:inputText styleClass="huge_txtInput" value="#{metadata.type.license}">
+									<h:panelGroup rendered="#{metadata.type =='LICENSE'}">
+										<h:inputText styleClass="huge_txtInput" value="#{metadata.license}">
 										</h:inputText>
 									</h:panelGroup>
 									
 									<!-- METADATA TYPE NUMBER -->
-									<h:panelGroup rendered="#{metadata.type.enumType=='NUMBER'}">
-										<h:outputText value="#{metadata.name}" styleClass="huge_label" rendered="#{metadata.type.enumType=='NUMBER'}" />		
-										<h:inputText styleClass="huge_txtInput" value="#{metadata.type.number}" rendered="#{metadata.type.enumType=='NUMBER'}" />
+									<h:panelGroup rendered="#{metadata.type =='NUMBER'}">
+										<h:inputText styleClass="huge_txtInput" value="#{metadata.number}" rendered="#{metadata.type=='NUMBER'}" />
 									</h:panelGroup>
 											
 									<!-- METADATA TYPE CONE AUTHOR -->
-									<h:panelGroup rendered="#{metadata.type.enumType=='CONE_AUTHOR'}">
-										<h:outputLabel value="#{metadata.name}" styleClass="huge_label" />
+									<h:panelGroup rendered="#{metadata.type =='PERSON'}">
 										<h:outputLabel value="#{lbl.family_name}" styleClass="huge_label" />
-										<h:inputText id="inputFamilyName" styleClass="xHuge_txtInput" value="#{metadata.type.person.familyName}">
+										<h:inputText id="inputFamilyName" styleClass="xHuge_txtInput" value="#{metadata.person.familyName}">
 											<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputFamilyName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})"	suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 												<h:column>
 													<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
@@ -136,7 +131,7 @@
 										</h:inputText>
 			
 										<h:outputLabel value="#{lbl.first_name}" styleClass="huge_label" />
-										<h:inputText id="inputFirstName" styleClass="xHuge_txtInput" value="#{metadata.type.person.givenName}">
+										<h:inputText id="inputFirstName" styleClass="xHuge_txtInput" value="#{metadata.person.givenName}">
 											<rich:suggestionbox rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputFirstName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 												<h:column>
 													<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
@@ -147,7 +142,7 @@
 										</h:inputText>
 			
 										<h:outputLabel value="#{lbl.alternative_name}" styleClass="huge_label" />
-										<h:inputText id="inputAlternative" styleClass="xHuge_txtInput" value="#{metadata.type.person.alternativeName}">
+										<h:inputText id="inputAlternative" styleClass="xHuge_txtInput" value="#{metadata.person.alternativeName}">
 											<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputAlternative" var="result"	onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 												<h:column>
 													<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
@@ -158,7 +153,7 @@
 										</h:inputText>
 			
 										<h:outputLabel value="#{lbl.identifier}" styleClass="huge_label" />
-										<h:inputText id="inputIdentifier" styleClass="xHuge_txtInput" value="#{metadata.type.person.identifier}">
+										<h:inputText id="inputIdentifier" styleClass="xHuge_txtInput" value="#{metadata.person.identifier}">
 											<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputIdentifier" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 												<h:column>
 													<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
@@ -169,7 +164,7 @@
 										</h:inputText>
 			
 										<h:outputLabel value="#{lbl.organization}" styleClass="huge_label" />
-										<h:inputText id="inputOrganization" styleClass="xHuge_txtInput" value="#{metadata.type.person.organizations[0].name}">
+										<h:inputText id="inputOrganization" styleClass="xHuge_txtInput" value="#{metadata.person.organizations[0].name}">
 											<rich:suggestionbox frequency="0.001" rendered="#{EditWorkspaceBean.editor.doAutoComplete}" for="inputOrganization" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" suggestionAction="#{EditWorkspaceBean.editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 												<h:column>
 													<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
@@ -181,23 +176,22 @@
 									</h:panelGroup>	
 			
 									<!-- METADATA TYPE GEOLOCATION -->
-									<h:panelGroup rendered="#{metadata.type.enumType=='GEOLOCATION'}">
-										<h:outputLabel value="#{metadata.name}" styleClass="huge_label" />
+									<h:panelGroup rendered="#{metadata.type =='GEOLOCATION'}">
 										<h:outputLabel value="#{lbl.geolocation_latitude}" styleClass="huge_label" />
-										<h:inputText styleClass="xHuge_txtInput" value="#{metadata.type.latitude}" />
+										<h:inputText styleClass="xHuge_txtInput" value="#{metadata.latitude}" />
 										<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="huge_label" />
-										<h:inputText styleClass="xHuge_txtInput" value="#{metadata.type.longitude}" />
+										<h:inputText styleClass="xHuge_txtInput" value="#{metadata.longitude}" />
 									</h:panelGroup>
 				
 								</h:panelGroup>
 								
 								<!-- REMOVE METADATA BUTTON -->
 								<h:panelGroup layout="block">
-									<a4j:commandLink styleClass="small_label" rendered="#{metadata.name == EditWorkspaceBean.editor.statement.name and EditWorkspaceBean.type != 'BATCH'}" reRender="metadataPnl" action="#{EditWorkspaceBean.addMetadata}" value="#{lbl.add}">
+									<a4j:commandLink styleClass="small_label" rendered="#{metadata.namespace == EditWorkspaceBean.editor.statement.name and EditWorkspaceBean.type != 'BATCH'}" reRender="metadataPnl" action="#{EditWorkspaceBean.addMetadata}" value="#{lbl.add}">
 										<f:setPropertyActionListener value="#{indexMetadata}" target="#{EditWorkspaceBean.mdPosition}" />
 										<f:setPropertyActionListener value="#{indexImage}" target="#{EditWorkspaceBean.imagePosition}" />
 									</a4j:commandLink>
-									<a4j:commandLink rendered="#{metadata.name == EditWorkspaceBean.editor.statement.name and EditWorkspaceBean.type != 'BATCH'}" styleClass="small_label"  reRender="metadataPnl" action="#{EditWorkspaceBean.removeMetadata}" value="#{lbl.remove}">
+									<a4j:commandLink rendered="#{metadata.namespace == EditWorkspaceBean.editor.statement.name and EditWorkspaceBean.type != 'BATCH'}" styleClass="small_label"  reRender="metadataPnl" action="#{EditWorkspaceBean.removeMetadata}" value="#{lbl.remove}">
 										<f:setPropertyActionListener value="#{indexMetadata}" target="#{EditWorkspaceBean.mdPosition}" />
 										<f:setPropertyActionListener value="#{indexImage}" target="#{EditWorkspaceBean.imagePosition}" />
 									</a4j:commandLink>

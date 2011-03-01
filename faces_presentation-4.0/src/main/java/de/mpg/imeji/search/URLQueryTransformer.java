@@ -71,17 +71,17 @@ public class URLQueryTransformer
                         currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_FILENAME, value,
                                 Filtertype.REGEX));
                         currentSubList.add(new SearchCriterion(Operator.OR,
-                                ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_TEXT, value, Filtertype.REGEX));
+                                ImejiNamespaces.IMAGE_METADATA_TEXT, value, Filtertype.REGEX));
                         currentSubList.add(new SearchCriterion(Operator.OR,
-                                ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_NUMBER, value, Filtertype.EQUALS_NUMBER));
+                                ImejiNamespaces.IMAGE_METADATA_NUMBER, value, Filtertype.EQUALS_NUMBER));
                         currentSubList
                                 .add(new SearchCriterion(Operator.OR,
-                                        ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_FAMILY_NAME, value,
+                                        ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME, value,
                                         Filtertype.REGEX));
                         currentSubList.add(new SearchCriterion(Operator.OR,
-                                ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_GIVEN_NAME, value, Filtertype.REGEX));
+                                ImejiNamespaces.IMAGE_METADATA_PERSON_GIVEN_NAME, value, Filtertype.REGEX));
                         currentSubList.add(new SearchCriterion(Operator.OR,
-                                ImejiNamespaces.IMAGE_METADATA_COMPLEXTYPE_PERSON_ORGANIZATION_NAME, value,
+                                ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME, value,
                                 Filtertype.REGEX));
                     }
                     else

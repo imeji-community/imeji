@@ -19,12 +19,11 @@ import de.mpg.jena.vo.complextypes.Text;
 
 public class ComplexTypeHelper
 {
-    public static ComplexTypes getComplexTypesEnum(URI uri)
+    public static ComplexTypes getComplexType(URI uri)
     {
         for (ComplexTypes type : ComplexTypes.values())
         {
-            URI uri1 = URI.create(type.getNamespace() + type.getRdfType());
-            if (uri.equals(uri1))
+            if (uri.equals(type.getURI()))
             {
                 return type;
             }
@@ -34,7 +33,7 @@ public class ComplexTypeHelper
 
     public static ComplexType newComplexType(URI uri)
     {
-        switch (ComplexTypeHelper.getComplexTypesEnum(uri))
+        switch (ComplexTypeHelper.getComplexType(uri))
         {
             case PERSON:
                 return new ConePerson();

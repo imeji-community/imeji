@@ -22,131 +22,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
 	version="1.2">
-	<!-- Request Beans -->
-	<!-- <managed-bean>
-		<managed-bean-name>HomePage</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.HomePage</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>Search</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.search.Search</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>Pagination</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.Pagination</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>SortingBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.SortingBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>StaticContent</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.StaticContent</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>Detail</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.pictures.Detail</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>AlbumFormBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.AlbumFormBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>CleanerBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.CleanerBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>UrlHelper</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.util.UrlHelper</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>StatisticsBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.StatisticsBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>BlogBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.BlogBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>Canvas</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.Canvas</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>AlbumFormular</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.album.beans.AlbumFormularBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>AlbumListBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.album.list.beans.AlbumListBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>AlbumInterfaceBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.album.beans.AlbumInterfaceBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>ExportBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.album.beans.ExportBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>ConeHelper</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.util.ConeHelper</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>AffiliationBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.affiliation.AffiliationBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>FacesContainerListBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.container.beans.FacesContainerListBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>SearchSession</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.search.SearchSession</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>ScreenConfigurationSession</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.metadata.ScreenConfigurationSession</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>AlbumSession</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.container.album.AlbumSession</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-
-	<managed-bean>
-		<managed-bean-name>ApplicationBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.ApplicationBean</managed-bean-class>
-		<managed-bean-scope>application</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>Navigation</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.Navigation</managed-bean-class>
-		<managed-bean-scope>application</managed-bean-scope>
-	</managed-bean>-->
-
-
-	<!-- New Imeji Beans -->
 	
 	<!-- new form old -->
 	<managed-bean>
@@ -339,6 +214,11 @@
 		<managed-bean-name>Filter</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.filter.Filter</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>MetadataLabels</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.lang.MetadataLabels</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
 

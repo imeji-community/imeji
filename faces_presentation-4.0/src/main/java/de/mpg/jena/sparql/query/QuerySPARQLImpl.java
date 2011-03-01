@@ -33,7 +33,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
     {
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query = "SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
-		
+		System.out.println(query);
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
 		
 		return query;
@@ -43,7 +43,6 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	{
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
 		//System.out.println("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset);
-		System.out.println("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset);
 		return  "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
 	}
 	

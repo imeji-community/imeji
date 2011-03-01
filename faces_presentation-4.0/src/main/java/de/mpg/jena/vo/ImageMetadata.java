@@ -10,6 +10,7 @@ import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 import thewebsemantic.Embedded;
 import thewebsemantic.Id;
+import thewebsemantic.LocalizedString;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
 import thewebsemantic.RdfType;
@@ -34,36 +35,40 @@ public class ImageMetadata implements Serializable
     {
         this.namespace = namespace;
     }
-
-    public void setNamespace(URI namespace)
-    {
-        this.namespace = namespace;
-    }
     
-    @RdfProperty("http://purl.org/dc/terms/type")
+    @RdfProperty("http://imeji.mpdl.mpg.de/complexTypes")
     public ComplexTypes getType() 
     {
 		return type;
 	}
 
-	public void setType(ComplexTypes type) {
+	public void setType(ComplexTypes type) 
+	{
 		this.type = type;
 	}
-
-	public URI getNamespace() {
+	
+	@RdfProperty("http://imeji.mpdl.mpg.de/metadata/ns")
+	public URI getNamespace() 
+	{
 		return namespace;
 	}
 	
-    public void setId(String id)
-    {
-        this.id = id;
-    }
-
-    @Id
+	public void setNamespace(URI namespace)
+	{
+		this.namespace = namespace;
+	}
+	
+	 @Id
     public String getId()
     {
         return id;
     }
+	 
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+   
 
     public int compareTo(ImageMetadata imd)
     {
@@ -85,5 +90,6 @@ public class ImageMetadata implements Serializable
 	public void setPos(int pos) {
 		this.pos = pos;
 	}
-	    
+	 
+	
 }

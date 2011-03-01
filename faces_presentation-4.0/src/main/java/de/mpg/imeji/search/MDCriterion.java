@@ -137,7 +137,7 @@ public class MDCriterion extends Criterion implements Serializable{
     {
         if(getSelectedStatement()!=null) 
         {
-            return ComplexTypeHelper.getComplexTypesEnum(getSelectedStatement().getType());    
+            return ComplexTypeHelper.getComplexType(getSelectedStatement().getType());    
         }
         return null;
        

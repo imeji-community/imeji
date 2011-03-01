@@ -26,11 +26,11 @@ public class ProfileHelper
 {
     public static String getDefaultVocabulary(URI uri)
     {
-        if (ComplexTypes.PERSON.equals(ComplexTypeHelper.getComplexTypesEnum(uri)))
+        if (ComplexTypes.PERSON.equals(ComplexTypeHelper.getComplexType(uri)))
         {
             return "http://dev-pubman.mpdl.mpg.de/cone/persons/query";
         }
-        else if (ComplexTypes.LICENSE.equals(ComplexTypeHelper.getComplexTypesEnum(uri)))
+        else if (ComplexTypes.LICENSE.equals(ComplexTypeHelper.getComplexType(uri)))
         {
             return "http://dev-pubman.mpdl.mpg.de/cone/cclicenses/query";
         }

@@ -59,23 +59,23 @@
 			<a4j:repeat var="md" value="#{item.image.metadataSet.metadata}" rows="0">
 				<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
 					<h:panelGroup layout="block" class="huge_area0_p0 endline">
-						<h:outputText class="medium_area0 xTiny_marginRExcl labelLine" value="#{md.name}"/>
-						<h:outputText class="large_area0 endline" value="#{md.type.text}" rendered="#{md.type.enumType == 'TEXT'}"/>
-						<h:outputText class="large_area0 endline" value="#{md.type.number}" rendered="#{md.type.enumType == 'NUMBER'}"/>
-						<h:outputText class="large_area0 endline" value="#{md.type.date}" rendered="#{md.type.enumType == 'DATE'}"/>
-						<h:outputLink value="#{md.type.uri}" target="_blank" rendered="#{md.type.enumType == 'PUBLICATION' or md.type.enumType == 'URI'}">
+						<h:outputText class="medium_area0 xTiny_marginRExcl labelLine" value="#{MetadataLabels.labels[md.namespace]}"/>
+						<h:outputText class="large_area0 endline" value="#{md.text}" rendered="#{md.type == 'TEXT'}"/>
+						<h:outputText class="large_area0 endline" value="#{md.number}" rendered="#{md.type == 'NUMBER'}"/>
+						<h:outputText class="large_area0 endline" value="#{md.date}" rendered="#{md.type == 'DATE'}"/>
+						<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.type == 'PUBLICATION' or md.type == 'URI'}">
 							<h:outputText class="large_area0 endline" value="Link" />
 						</h:outputLink>
-						<h:outputText class="large_area0 endline" value="#{md.type.license}" rendered="#{md.type.enumType == 'LICENSE'}"/>
-						<h:panelGroup class="large_area0 endline" rendered="#{md.type.enumType == 'CONE_AUTHOR'}">
-							<h:outputText value="#{md.type.person.familyName}, #{md.type.person.givenName} ("/>
-							<a4j:repeat id="orgaList" var="orga" value="#{md.type.person.organizations}" rendered="#{not empty md.type.person.organizations}">
+						<h:outputText class="large_area0 endline" value="#{md.type.license}" rendered="#{md.type == 'LICENSE'}"/>
+						<h:panelGroup class="large_area0 endline" rendered="#{md.type == 'PERSON'}">
+							<h:outputText value="#{md.type.person.familyName}, #{md.person.givenName} ("/>
+							<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty mdperson.organizations}">
 								<h:outputText value="#{orga.name}"/>
 							</a4j:repeat>
 							<h:outputText value=")" />
 						</h:panelGroup>
 						
-						<h:outputText class="large_area0 endline" value="#{md.type.longitude}/#{md.type.latitude}" rendered="#{md.type.enumType == 'GEOLOCATION'}"/>
+						<h:outputText class="large_area0 endline" value="#{md.longitude}/#{md.latitude}" rendered="#{md.type == 'GEOLOCATION'}"/>
 					</h:panelGroup>
 				</h:panelGroup>
 				

@@ -23,6 +23,7 @@ import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
@@ -182,7 +183,8 @@ public abstract class  MetadataEditor
 		if (statement != null)
 		{
 			//ImageMetadata md = new ImageMetadata(statement.getName(), ComplexTypeHelper.newComplexType(statement.getType()));
-			ImageMetadata md = new ImageMetadata(URI.create(profile.getId() + "/" + statement.getName()));
+			//ImageMetadata md = new ImageMetadata(statement.getName());
+			ImageMetadata md = MetadataFactory.newMetadata(statement);
 			return md;
 		}
 		return null;

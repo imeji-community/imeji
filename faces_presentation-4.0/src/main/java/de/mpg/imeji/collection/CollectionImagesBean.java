@@ -62,16 +62,20 @@ public class CollectionImagesBean extends ImagesBean {
 		sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
 		List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-		try {
+		try 
+		{
 			URLQueryTransformer queryTransformer = new URLQueryTransformer();
 			scList = queryTransformer.transform2SCList(getQuery());
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			BeanHelper.error("Invalid search query!");
 		}		
 		ImageController controller = new ImageController(sb.getUser());
 		totalNumberOfRecords = controller.getNumberOfResultsInContainer(uri, scList);
 		images = controller.searchImageInContainer(uri, scList, null, limit, offset);
 		filters = new FiltersBean(getQuery(), totalNumberOfRecords);
+		labels.init((List<Image>) images);
 		return ImejiFactory.imageListToBeanList(images);
 	}
 

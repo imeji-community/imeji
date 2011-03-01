@@ -37,54 +37,37 @@ public class FacetsBean
     private List<FacetGroupBean> groups = new ArrayList<FacetGroupBean>();
     private Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     private SessionBean sb;
+   
     private List<SearchCriterion> filters = new ArrayList<SearchCriterion>();
     
+    private List<Facet> facets = new ArrayList<Facet>();
     
     private List<Facet> collectionFacets = new ArrayList<Facet>();
     private List<Facet> technicalFacets = new ArrayList<Facet>();
-
-    public FacetsBean() {
-		// TODO Auto-generated constructor stub
-	}
     
-    public FacetsBean(List<Image> images)
+    public FacetsBean() 
     {
-        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        Map<URI, MetadataProfile> profiles = ProfileHelper.loadProfiles(images);
-        CollectionController cc = new CollectionController(sb.getUser());
-        try
+    	try 
         {
-            for (MetadataProfile mdp : profiles.values())
-            {
-                SearchCriterion sc = new SearchCriterion(Operator.AND, ImejiNamespaces.COLLECTION_PROFILE, mdp.getId().toString(), Filtertype.URI);
-                List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-                scList.add(sc);
-                Collection<CollectionImeji> coll = cc.search(scList, null, 1, 0);
-                if (coll.iterator().hasNext())
-                {
-                	groups.add(new FacetGroupBean(generateFacets(mdp, coll.iterator().next()), mdp.getTitle()));
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-        
-        // NEW
-        
-        try 
-        {
-			collectionFacets = new CollectionFacets(images, new ArrayList<SearchCriterion>()).getFacets();
-			technicalFacets = new TechnicalFacets(new ArrayList<SearchCriterion>()).getFacets();
-		} 
+    		facets = new TechnicalFacets(new ArrayList<SearchCriterion>()).getFacets();
+ 		} 
         catch (Exception e) 
         {
-			e.printStackTrace();
+        	BeanHelper.error("Error initializing facets! " + e.getMessage());
+ 		}
+	}
+    
+    public FacetsBean(CollectionImeji col)
+    {
+    	try 
+    	{
+    		facets = new CollectionFacets(col, new ArrayList<SearchCriterion>()).getFacets();
+		} 
+    	catch (Exception e) 
+    	{
+			BeanHelper.error("Error initializing facets! " + e.getMessage());
 		}
-        
     }
-   
 
 	public List<Facet> generateFacets(MetadataProfile profile, CollectionImeji coll) throws Exception
     {
@@ -233,6 +216,14 @@ public class FacetsBean
 
 	public void setTechnicalFacets(List<Facet> technicalFacets) {
 		this.technicalFacets = technicalFacets;
+	}
+
+	public List<Facet> getFacets() {
+		return facets;
+	}
+
+	public void setFacets(List<Facet> facets) {
+		this.facets = facets;
 	}
 
 

@@ -213,41 +213,21 @@
 			</h:panelGroup>
 		</h:panelGroup>
 
-
+	<!-- FACETS -->
 		<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">
 			<h:panelGroup id="facetGroup" layout="block" styleClass="full_area1_p8">
-				<a4j:repeat var="group" value="#{paginatorListSessionBean.facets.groups}" rowKeyVar="index">
-					<h:panelGroup layout="block" styleClass="full_area0" rendered="#{!empty group.list}">
-						<h:outputText value="#{group.label}" />
-						<h:outputText value="No title" rendered="#{empty group.label}" />
-						<span style="padding-left: 20px" />
-						<a4j:repeat var="facet" value="#{group.list}" rowKeyVar="index">
-							<h:outputLink value="#{facet.uri}">
-								<h:outputText value="#{facet.label}(#{facet.count})"/>
-							</h:outputLink>
-							<span style="padding-left: 20px" />
-						</a4j:repeat>
-						<br />
-					</h:panelGroup>
-				</a4j:repeat>
-				COLLECTION FACETS
-				<a4j:repeat var="colFacets" value="#{paginatorListSessionBean.facets.collectionFacets}" rowKeyVar="index">
-					<h:outputLink value="#{colFacets.uri}">
-						<h:outputText value="#{colFacets.label}(#{colFacets.count}) "/>
+				<a4j:repeat var="facets" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
+					<h:outputLink value="#{facets.uri}">
+						<h:outputText value="#{facets.label}(#{facets.count}) "/>
 					</h:outputLink>
-				</a4j:repeat>
-				<br/><br/>
-				TECHNICAL FACETS
-				<a4j:repeat var="techFacets" value="#{paginatorListSessionBean.facets.technicalFacets}" rowKeyVar="index">
-					<h:outputLink value="#{techFacets.uri}">
-						<h:outputText value="#{techFacets.label}(#{techFacets.count}) "/>
-					</h:outputLink>
+					<span style="padding-left: 10px" />
 				</a4j:repeat>
 				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{empty paginatorListSessionBean.facets.groups}">
 					<a4j:status id="loadFacets" forceId="true" startText="#{lbl.facets_loading}..." />
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
+		
 		<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
 			<a4j:support event="onchange" reRender="facetGroup" action="#{paginatorListSessionBean.initFacets}" status="loadFacets" />
 		</h:selectBooleanCheckbox>

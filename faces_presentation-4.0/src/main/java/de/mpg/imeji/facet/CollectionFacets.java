@@ -8,38 +8,66 @@ import java.util.Map;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
+import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.MetadataProfile;
+import de.mpg.jena.vo.Statement;
 
 public class CollectionFacets
 {
 	private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 	private List<Facet> facets = new ArrayList<Facet>();
-	private Map<String, URI> cols = new HashMap<String, URI>();
 	
-	public CollectionFacets(List<Image> images, List<SearchCriterion> scList) throws Exception 
+	
+	public CollectionFacets(CollectionImeji col, List<SearchCriterion> scList) throws Exception 
 	{
-		for(Image im : images)
-		{
-			cols.put(im.getCollection().toString(), im.getCollection());
-		}
+		ProfileController pc = new ProfileController(sb.getUser());
+		MetadataProfile profile = pc.retrieve(col.getProfile());
 		
-		FacetURIFactory fact = new FacetURIFactory(scList);
 		Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+		String baseURI = nav.getImagesUrl() + col.getId().getPath() + "?q=";
 		
-		for(URI col : cols.values())
+		FacetURIFactory uriFactory = new FacetURIFactory(scList);
+		
+		for (Statement st : profile.getStatements()) 
 		{
-            String baseURI = nav.getImagesUrl()  + "/collection" + ObjectHelper.getId(col);
-			facets.add(new Facet(fact.createFacetURI(baseURI, null), getCollectionName(col), 0));
+			SearchCriterion sc = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
+			facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc), getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
+			sc =  new SearchCriterion(Operator.NOT, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
+			facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc), "No " + getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
 		}
 	}
+
 	
-	
-	public String getCollectionName(URI uri)
+	public String getName(URI uri)
 	{
-		return "no name";
+		MetadataLabels metadataLabels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
+		String name = metadataLabels.getLabels().get(uri);
+		return name;
+	}
+	public int getCount(List<SearchCriterion> scList, SearchCriterion sc)
+	{
+		ImageController ic = new ImageController(sb.getUser());
+		if (sc != null) scList.add(sc);
+		try 
+		{
+			return ic.getNumberOfResults(scList);
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return 0;
 	}
 	
 	public List<Facet> getFacets() {

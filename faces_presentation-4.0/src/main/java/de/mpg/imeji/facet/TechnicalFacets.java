@@ -25,14 +25,7 @@ public class TechnicalFacets
 		Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
 		
 		String baseURI = nav.getImagesUrl() + "?q=";
-		
-		SearchCriterion scText = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE, "http://imeji.mpdl.mpg.de/complexTypes/TEXT", Filtertype.URI);
-		SearchCriterion scNumber = new SearchCriterion(Operator.AND,ImejiNamespaces.IMAGE_METADATA_TYPE, "http://imeji.mpdl.mpg.de/complexTypes/NUMBER", Filtertype.URI);
-		SearchCriterion scURI = new SearchCriterion(Operator.AND,ImejiNamespaces.IMAGE_METADATA_TYPE, "http://imeji.mpdl.mpg.de/complexTypes/URI", Filtertype.URI);
-		
-		
-		
-		
+	
 		try 
 		{
 			for (ComplexTypes ct : ComplexTypes.values())
@@ -40,12 +33,6 @@ public class TechnicalFacets
 				SearchCriterion sc = new  SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE, ct.getURI().toString(), Filtertype.URI);
 				facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc), ct.name().toLowerCase(), getCount(new ArrayList<SearchCriterion>(scList), sc)));
 			}
-			
-			
-//			facets.add(new Facet(uriFactory.createFacetURI(baseURI, scText), "Text", getCount(new ArrayList<SearchCriterion>(scList), scText)));
-//			facets.add(new Facet(uriFactory.createFacetURI(baseURI, scNumber), "Number", getCount(new ArrayList<SearchCriterion>(scList), scNumber)));
-//			facets.add(new Facet(uriFactory.createFacetURI(baseURI, scURI), "URI", getCount(new ArrayList<SearchCriterion>(scList), scURI)));
-			
 		} 
 		catch (UnsupportedEncodingException e) 
 		{

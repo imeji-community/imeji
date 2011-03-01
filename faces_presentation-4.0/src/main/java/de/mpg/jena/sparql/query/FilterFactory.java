@@ -6,6 +6,7 @@ import java.util.Map;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.User;
@@ -18,11 +19,12 @@ public class FilterFactory
 		String uf = generateUserFilters(user, els);
 		
 		String filter = " .FILTER( " + uf + " ) ";
-		if (!" ( ) ".equals(sf))
+		if (!"( )".equals(sf.trim()))
 		{
 			filter += "  .FILTER( " + sf + " )";
 		}
-		if (!"".equals(specificFilter))
+		
+		if (!"".equals(specificFilter.trim()))
 		{
 			filter += " .FILTER( " + specificFilter + " )";
 		}
@@ -39,22 +41,26 @@ public class FilterFactory
 			{
 				if (!sc.getChildren().isEmpty())
 				{
-					filter += generateSearchFilters(sc.getChildren(), els);
+					String sub = generateSearchFilters(sc.getChildren(), els);
+					if (!"( )".equals(sub.trim())) filter += sub;
 				}
 				String newFilter = "";
 				if (sc.getNamespace() != null)
 				{
 					 newFilter= getFilterString(sc, els.get(sc.getNamespace().getNs()).getName());
 				}
-				if (!" (".equals(filter) && !"".equals(newFilter))
+				if (!"(".equals(filter.trim()) && !"".equals(newFilter))
 				{
-					filter += getOperatorString(sc);
+					filter += getOperatorString(sc) + newFilter;
 				}
-				filter += newFilter;
+				else if (sc.getOperator().equals(Operator.NOT))
+				{
+					//filter += getOperatorString(sc) + "{ " + newFilter + " }";
+				}
+				else filter += newFilter;
 			}
 		}
 		filter += " ) ";
-		
 		return filter;
 	}
 	
@@ -104,7 +110,7 @@ public class FilterFactory
         {
         	return " || ";
         }
-        else if (sc.getOperator().equals(SearchCriterion.Operator.MINUS))
+        else if (sc.getOperator().equals(SearchCriterion.Operator.NOT))
         {
         	return " NOT EXISTS ";
         }

@@ -33,7 +33,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
     {
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query = "SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
-		//System.out.println(query);
+		System.out.println(query);
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
 		
 		//query ="SELECT DISTINCT ?s WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?s <http://imeji.mpdl.mpg.de/collection> ?coll  . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/metadataSet> ?v1 . OPTIONAL { ?v1 <http://imeji.mpdl.mpg.de/metadata> ?v2 . OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/complexTypes> ?v3 } } } .FILTER( ?visibility=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC> ||  true )   .FILTER(  ( (str(?v3)='http://imeji.mpdl.mpg.de/complexTypes/TEXT' )  )  )} LIMIT 24 ";
@@ -45,7 +45,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	{
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
 		String query= "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
-		//System.out.println(query);
+		System.out.println("COUNT:" + query);
 		return  query;
 	}
 	

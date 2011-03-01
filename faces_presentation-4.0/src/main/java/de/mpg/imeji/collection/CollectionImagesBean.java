@@ -7,6 +7,7 @@ import java.util.List;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
@@ -78,7 +79,14 @@ public class CollectionImagesBean extends ImagesBean {
 		labels.init((List<Image>) images);
 		return ImejiFactory.imageListToBeanList(images);
 	}
-
+	
+	@Override
+	public String initFacets()
+    {
+		setFacets(new FacetsBean(collection));
+        return "pretty";
+    }
+	
 	public String getBackUrl() {
 		return navigation.getImagesUrl() + "/collection" + "/" + this.id;
 	}

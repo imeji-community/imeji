@@ -24,13 +24,13 @@ public class FacetURIFactory
 	
 	public URI createFacetURI(String baseURI, SearchCriterion sc) throws UnsupportedEncodingException
 	{
-		if(sc != null) scList.add(sc);
-		String uri = baseURI + getCommonURI();
-		scList.remove(sc);
+		List<SearchCriterion> scl = new ArrayList<SearchCriterion>(scList);
+		if(sc != null) scl.add(sc);
+		String uri = baseURI + getCommonURI(scl);
 		return URI.create(uri);
 	}
 	
-	private String getCommonURI() throws UnsupportedEncodingException
+	private String getCommonURI(List<SearchCriterion> scl) throws UnsupportedEncodingException
 	{
 		List<Filter> filters = sb.getFilters();
         String commonURI ="";
@@ -43,7 +43,7 @@ public class FacetURIFactory
         		i++;
         	}
         }
-        commonURI +=  URLEncoder.encode(URLQueryTransformer.transform2URL(scList), "UTF-8");
+        commonURI +=  URLEncoder.encode(URLQueryTransformer.transform2URL(scl), "UTF-8");
         return commonURI;
 	}
 	

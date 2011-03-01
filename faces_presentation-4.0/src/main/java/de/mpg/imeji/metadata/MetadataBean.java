@@ -44,7 +44,7 @@ public class MetadataBean
             this.name = name;
             this.value = value;
             this.parent = parent;
-            label = parent.getType().getLabel() + " - " + name;
+            label = "blbl";//parent.getType().getLabel() + " - " + name;
             literalOptions = new ArrayList<String>();
         }
 
@@ -221,24 +221,21 @@ public class MetadataBean
 
     private void changeStatement(Statement s)
     {
-        ComplexType ct = ComplexTypeHelper.newComplexType(s.getType());
-        if (s.getLabels() != null && s.getLabels().size() > 0)
-        {
-            ct.setLabel(s.getLabels().iterator().next().toString());
-        }
-        if (ct.getType().equals(ComplexType.ComplexTypes.PERSON))
-        {
-        	Person p = new Person();
-            Organization o = new Organization();
-            p.getOrganizations().add(o);
-            ((ConePerson)ct).setPerson(p);
-        }
-        this.metadata = new ImageMetadata(s.getName());
-        this.selectedStatementName = s.getName().toString();
-        if (!s.getMaxOccurs().equals("1"))
-            multiple = true;
-        else
-            multiple = false;
+//        ComplexType ct = ComplexTypeHelper.newComplexType(s.getType());
+//        if (ct.getType().equals(ComplexType.ComplexTypes.PERSON))
+//        {
+//        	Person p = new Person();
+//            Organization o = new Organization();
+//            p.getOrganizations().add(o);
+//            ((ConePerson)ct).setPerson(p);
+//        }
+        
+    	metadata = new ImageMetadata(s.getName());
+        
+    	selectedStatementName = s.getName().toString();
+        
+        if (!s.getMaxOccurs().equals("1")) multiple = true;
+        else multiple = false;
     }
 
     public void setMetadata(ImageMetadata metadata)

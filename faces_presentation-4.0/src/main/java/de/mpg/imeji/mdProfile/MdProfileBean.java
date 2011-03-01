@@ -84,7 +84,7 @@ public class MdProfileBean
     {
     	for (ComplexTypes t : ComplexTypes.values())
     	{
-    		mdTypesMenu.add(new SelectItem(t.getURI(), t.getLabel()));
+    		mdTypesMenu.add(new SelectItem(t.getURI(), t.getURI().toString()));
     	}    
         if (this.getId() == null && this.getProfile().getId() != null)
         {

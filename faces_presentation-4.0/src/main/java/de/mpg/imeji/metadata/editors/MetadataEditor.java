@@ -182,10 +182,7 @@ public abstract class  MetadataEditor
 	{
 		if (statement != null)
 		{
-			//ImageMetadata md = new ImageMetadata(statement.getName(), ComplexTypeHelper.newComplexType(statement.getType()));
-			//ImageMetadata md = new ImageMetadata(statement.getName());
-			ImageMetadata md = MetadataFactory.newMetadata(statement);
-			return md;
+			return MetadataFactory.newMetadata(statement);
 		}
 		return null;
 	}

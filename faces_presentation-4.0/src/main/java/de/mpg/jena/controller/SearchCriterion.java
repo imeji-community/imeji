@@ -41,7 +41,6 @@ public class SearchCriterion {
 		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/metadata/name", IMAGE_METADATA),
 		IMAGE_METADATA_TYPE("http://imeji.mpdl.mpg.de/complexTypes", IMAGE_METADATA),
 		IMAGE_METADATA_TYPE_URI("http://imeji.mpdl.mpg.de/complexTypes/URI", IMAGE_METADATA_TYPE),
-		IMAGE_METADATA_TYPE_LABEL("http://imeji.mpdl.mpg.de/complexTypes/label", IMAGE_METADATA_TYPE),
 		IMAGE_METADATA_PERSON("http://imeji.mpdl.mpg.de/metadata/person", IMAGE_METADATA),
 		IMAGE_METADATA_PERSON_FAMILY_NAME("http://purl.org/escidoc/metadata/terms/0.1/family-name", IMAGE_METADATA_PERSON),
 		IMAGE_METADATA_PERSON_GIVEN_NAME("http://purl.org/escidoc/metadata/terms/0.1/given-name", IMAGE_METADATA_PERSON),

@@ -20,6 +20,7 @@ import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
 public class ImageBean
@@ -39,6 +40,7 @@ public class ImageBean
     private CollectionController collectionController;
     private List<String> techMd;
     private Navigation navigation;
+    private MetadataProfile profile;
     protected String prettyLink;
 
     public ImageBean(Image img)
@@ -53,6 +55,7 @@ public class ImageBean
         {
             setSelected(true);
         }
+        profile = ProfileHelper.loadProfile(image);
     }
 
     public ImageBean()
@@ -63,6 +66,7 @@ public class ImageBean
         imageController = new ImageController(sessionBean.getUser());
         collectionController = new CollectionController(sessionBean.getUser());
         prettyLink = "pretty:editImage";
+        profile = ProfileHelper.loadProfile(image);
     }
 
     public void init() throws Exception
@@ -247,10 +251,19 @@ public class ImageBean
         }
     }
     
-    public List<SelectItem> getStatementMenu()
+    public MetadataProfile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(MetadataProfile profile) {
+		this.profile = profile;
+	}
+
+	public List<SelectItem> getStatementMenu()
     {
     	List<SelectItem> statementMenu = new ArrayList<SelectItem>();
-    	try {
+    	try 
+    	{
 	        for (Statement s : ProfileHelper.loadProfile(image).getStatements())
 	        {
 	        	 statementMenu.add(new SelectItem(s.getName(), s.getLabels().iterator().next().toString()));

@@ -61,7 +61,7 @@
 								<!-- Show only metadata of correct statement -->								
 								<h:panelGroup layout="block" styleClass="xHuge_area0" rendered="#{(metadata.namespace == EditWorkspaceBean.editor.statement.name) || EditWorkspaceBean.editor.statement == null}">
 									
-									<h:outputLabel value="#{MetadataLabels.labels[metadata.namespace]} (#{MetadataLabels.lang})" styleClass="huge_label"/>
+									<h:outputLabel value="#{MetadataLabels.labels[metadata.namespace]} (#{MetadataLabels.lang}) #{metadata.type}" styleClass="huge_label"/>
 									
 									<!-- METADATA TYPE TEXT -->
 									
@@ -93,7 +93,7 @@
 												</h:column>
 											</rich:suggestionbox>
 										</h:inputText>
-										<h:outputLabel value="#{lbl.export_formats}" styleClass="huge_label" rendered="#{metadata.type =='PUBLICATION'}"/>
+										<h:outputLabel value="#{lbl.export_formats}" styleClass="huge_label"/>
 										<h:selectOneMenu value="#{metadata.type.exportFormat}"	styleClass="huge_select" rendered="#{metadata.type=='PUBLICATION'}">
 											<f:selectItems value="#{EditWorkspaceBean.citationStyles}" /> 
 										</h:selectOneMenu>

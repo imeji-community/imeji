@@ -156,11 +156,11 @@
 							<rich:contextMenu attached="false" attachTo="cmdPicEditCaption" id="menuEdit" submitMode="ajax" styleClass="free_area0 itemList listBackground">
 								<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
 									<h:outputText value="Choose: "/>
-									<a4j:repeat var="statement" value="#{item.statementMenu}" rowKeyVar="index">
+									<a4j:repeat var="statement" value="#{item.profile.statements}" rowKeyVar="index">
 										<rich:menuItem ajaxSingle="true" styleclass="">
-											<a4j:commandLink value="* #{statement.label}" actionListener="#{EditWorkspaceBean.requestEditor}" reRender="modalContent" onclick="Richfaces.showModalPanel('pnlLoading')" oncomplete="Richfaces.hideModalPanel('pnlLoading'); Richfaces.showModalPanel('pnlEdit');">
-												<f:attribute name="statementName" value="#{statement.label}"/>
-												<f:attribute name="profileId" value="#{item.collection.profile}"/>
+											<a4j:commandLink value="* #{MetadataLabels.labels[statement.name]} (#{statement.name})" actionListener="#{EditWorkspaceBean.requestEditor}" reRender="modalContent" onclick="Richfaces.showModalPanel('pnlLoading')" oncomplete="Richfaces.hideModalPanel('pnlLoading'); Richfaces.showModalPanel('pnlEdit');">
+												<f:attribute name="statementName" value="#{statement.name}"/>
+												<f:attribute name="profileId" value="#{item.profile.id}"/>
 												<f:attribute name="idOfImageToEdit" value="#{item.image.id}"/>
 												<f:attribute name="type" value="SINGLE"/>
 							               </a4j:commandLink>

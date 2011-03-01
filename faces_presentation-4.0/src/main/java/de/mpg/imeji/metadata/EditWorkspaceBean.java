@@ -104,6 +104,7 @@ public class EditWorkspaceBean
 	
 	public String requestEditor(ActionEvent event)
 	{
+		reset();
 		try
 		{
 			Map<String, Object> attrs = event.getComponent().getAttributes();
@@ -146,7 +147,7 @@ public class EditWorkspaceBean
 		{
 			for (Statement s : p.getStatements())
 			{
-				if (s.getName().equals(selectedStatementName))
+				if (s.getName().toString().equals(selectedStatementName))
 				{
 					return s;
 				}

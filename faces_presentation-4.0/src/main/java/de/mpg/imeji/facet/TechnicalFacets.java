@@ -9,7 +9,10 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class TechnicalFacets 
 {
@@ -20,30 +23,46 @@ public class TechnicalFacets
 	{
 		FacetURIFactory uriFactory = new FacetURIFactory(scList);
 		Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-		String baseURI = nav.getImagesUrl() + "?q=";
-		SearchCriterion scText = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_TEXT, "[^a-z0-9]+");
-		SearchCriterion scNumber = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_TYPE_LABEL, "NUMBER");
 		
-		try {
-			facets.add(new Facet(uriFactory.createFacetURI(baseURI, scText), "Text", getCount(scList)));
-			facets.add(new Facet(uriFactory.createFacetURI(baseURI, scNumber), "Number", 0));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+		String baseURI = nav.getImagesUrl() + "?q=";
+		
+		SearchCriterion scText = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE, "http://imeji.mpdl.mpg.de/complexTypes/TEXT", Filtertype.URI);
+		SearchCriterion scNumber = new SearchCriterion(Operator.AND,ImejiNamespaces.IMAGE_METADATA_TYPE, "http://imeji.mpdl.mpg.de/complexTypes/NUMBER", Filtertype.URI);
+		SearchCriterion scURI = new SearchCriterion(Operator.AND,ImejiNamespaces.IMAGE_METADATA_TYPE, "http://imeji.mpdl.mpg.de/complexTypes/URI", Filtertype.URI);
+		
+		
+		
+		
+		try 
+		{
+			for (ComplexTypes ct : ComplexTypes.values())
+			{
+				SearchCriterion sc = new  SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE, ct.getURI().toString(), Filtertype.URI);
+				facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc), ct.name().toLowerCase(), getCount(new ArrayList<SearchCriterion>(scList), sc)));
+			}
+			
+			
+//			facets.add(new Facet(uriFactory.createFacetURI(baseURI, scText), "Text", getCount(new ArrayList<SearchCriterion>(scList), scText)));
+//			facets.add(new Facet(uriFactory.createFacetURI(baseURI, scNumber), "Number", getCount(new ArrayList<SearchCriterion>(scList), scNumber)));
+//			facets.add(new Facet(uriFactory.createFacetURI(baseURI, scURI), "URI", getCount(new ArrayList<SearchCriterion>(scList), scURI)));
+			
+		} 
+		catch (UnsupportedEncodingException e) 
+		{
 			e.printStackTrace();
 		}
 	}
 	
-	public int getCount(List<SearchCriterion> scList)
+	public int getCount(List<SearchCriterion> scList, SearchCriterion sc)
 	{
-		ImejiNamespaces mdType = ImejiNamespaces.IMAGE_METADATA_TYPE;
-		
 		ImageController ic = new ImageController(sb.getUser());
-		scList.add(new SearchCriterion(mdType, "http://imeji.mpdl.mpg.de/complexTypes/TEXT"));
-		
-		try {
+		scList.add(sc);
+		try 
+		{
 			return ic.getNumberOfResults(scList);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
 		

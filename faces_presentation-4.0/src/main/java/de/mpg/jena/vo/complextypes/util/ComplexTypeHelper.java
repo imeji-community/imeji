@@ -31,32 +31,32 @@ public class ComplexTypeHelper
         return null;
     }
 
-    public static ComplexType newComplexType(URI uri)
-    {
-        switch (ComplexTypeHelper.getComplexType(uri))
-        {
-            case PERSON:
-                return new ConePerson();
-            case DATE:
-                return new Date();
-            case GEOLOCATION:
-                return new Geolocation();
-            case LICENSE:
-                return new License();
-            case NUMBER:
-                return new Number(0);
-            case URI:
-                return new de.mpg.jena.vo.complextypes.URI();
-            case PUBLICATION:
-                return new Publication();
-            default:
-            {
-                Text t = new Text();
-                t.setText("");
-                return t;
-            }
-        }
-    }
+//    public static ComplexType newComplexType(URI uri)
+//    {
+//        switch (ComplexTypeHelper.getComplexType(uri))
+//        {
+//            case PERSON:
+//                return new ConePerson();
+//            case DATE:
+//                return new Date();
+//            case GEOLOCATION:
+//                return new Geolocation();
+//            case LICENSE:
+//                return new License();
+//            case NUMBER:
+//                return new Number(0);
+//            case URI:
+//                return new de.mpg.jena.vo.complextypes.URI();
+//            case PUBLICATION:
+//                return new Publication();
+//            default:
+//            {
+//                Text t = new Text();
+//                t.setText("");
+//                return t;
+//            }
+//        }
+//    }
     
     
     public static String getSimpleValueAsString(ComplexType ct)

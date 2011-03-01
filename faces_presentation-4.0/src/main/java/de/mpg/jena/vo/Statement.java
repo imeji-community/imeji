@@ -17,7 +17,7 @@ import thewebsemantic.RdfType;
 @RdfType("statement")
 public class Statement implements Serializable
 {
-    private URI type = URI.create("http://imeji.mpdl.mpg.de/text");
+    private URI type = URI.create("http://imeji.mpdl.mpg.de/ComplexTypes/text");
     private URI name;
     private Collection<LocalizedString> labels = new LinkedList<LocalizedString>();
     private URI vocabulary;

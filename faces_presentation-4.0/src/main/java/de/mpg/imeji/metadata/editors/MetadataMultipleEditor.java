@@ -11,7 +11,7 @@ import de.mpg.jena.vo.Statement;
 
 public class MetadataMultipleEditor extends MetadataEditor
 {
-	public MetadataMultipleEditor(List<Image> images, MetadataProfile profile,Statement statement) 
+	public MetadataMultipleEditor(List<Image> images, MetadataProfile profile, Statement statement) 
 	{
 		super(images, profile, statement);
 	}
@@ -27,19 +27,11 @@ public class MetadataMultipleEditor extends MetadataEditor
 				boolean empty = true;
 				for(ImageMetadata md : im.getMetadataSet().getMetadata())
 				{
-					URI stURI = URI.create(profile.getId() + "/" + statement.getName());
-					if (hasStatement && md.getNamespace().equals(stURI))
+					if (hasStatement && md.getNamespace().equals(statement.getName()))
 					{
 						empty = false;
 					}
 				}
-//				for (int i = 0; i < im.getMetadata().size(); i++) 
-//				{
-//					if (hasStatement && im.getMetadata().get(i).getName().equals(statement.getName()))
-//					{
-//						empty = false;
-//					}
-//				}
 				if (empty && hasStatement) addMetadata(im, 0);
 				this.images.add(im);
 			}
@@ -78,10 +70,10 @@ public class MetadataMultipleEditor extends MetadataEditor
 		if (metadataPos <= image.getMetadataSet().getMetadata().size()) 
 		{
 			List<ImageMetadata> newList = new ArrayList<ImageMetadata>();
-			newList.add(metadataPos, newMetadata());
+			ImageMetadata md = newMetadata();
+			md.setPos(metadataPos);
+			newList.add(metadataPos, md);
 			image.getMetadataSet().getMetadata().addAll(newList);
-			
-			//image.getMetadata().add(metadataPos, newMetadata());
 		}
 	}
 	 

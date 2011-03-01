@@ -94,6 +94,7 @@ public class ImageController extends ImejiController
     {
     	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel); 
     	imejiBean2RDF.saveDeep(img, user);
+    	cleanGraph(ImejiJena.imageModel);
     }
 
     public void update(Collection<Image> images) throws Exception
@@ -103,6 +104,7 @@ public class ImageController extends ImejiController
         {
     		imejiBean2RDF.saveDeep(img, user);
         }
+    	cleanGraph(ImejiJena.imageModel);
     }
     
     public Image retrieve(URI imgUri)

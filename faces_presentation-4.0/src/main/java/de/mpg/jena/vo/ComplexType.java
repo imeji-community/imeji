@@ -19,78 +19,37 @@ public abstract class ComplexType extends ImageMetadata
     @RdfType("complexTypes")
     public enum ComplexTypes
     {
-        PERSON(ConePerson.class, "Person"), TEXT(Text.class, "Text"), NUMBER(Number.class, "Number"), DATE(
-                Date.class, "Date"), LICENSE(License.class, "Licence"), GEOLOCATION(Geolocation.class, "Geolocation"), URI(
-                URI.class, "URI"), PUBLICATION(Publication.class, "Publication");
+        PERSON(ConePerson.class), TEXT(Text.class), NUMBER(Number.class), DATE(Date.class), LICENSE(License.class), 
+        GEOLOCATION(Geolocation.class), URI(URI.class), PUBLICATION(Publication.class);
+        
         private Class<? extends ComplexType> type;
         private String label;
 
-        private ComplexTypes(Class<? extends ComplexType> type, String label)
+        private ComplexTypes(Class<? extends ComplexType> type)
         {
             this.type = type;
-            this.label = label;
         }
 
         public Class<? extends ComplexType> getClassType()
         {
             return type;
         }
-        
-        public String getLabel()
-        {
-            return label;
-        }
-        
+
         public java.net.URI getURI()
         {
         	  Annotation namespaceAnn = this.getClassType().getAnnotation(thewebsemantic.Namespace.class);
         	  Annotation rdfTypeAnn = this.getClassType().getAnnotation(thewebsemantic.RdfType.class);
-        	  java.net.URI uri = java.net.URI.create(
-        			  namespaceAnn.toString().split("@thewebsemantic.Namespace\\(value=")[1].split("\\)")[0]
-                      + rdfTypeAnn.toString().split("@thewebsemantic.RdfType\\(value=")[1].split("\\)")[0]);
+        	  java.net.URI uri = java.net.URI.create("http://imeji.mpdl.mpg.de/complexTypes/"
+        			  //namespaceAnn.toString().split("@thewebsemantic.Namespace\\(value=")[1].split("\\)")[0]
+                      + rdfTypeAnn.toString().split("@thewebsemantic.RdfType\\(value=")[1].split("\\)")[0].toUpperCase());
         	  return uri;
         }
-
-        /**
-         * Read namespace annotation of java class of this type
-         *
-         * @return
-         */
-//        public String getNamespace()
-//        {
-//            Annotation namespaceAnn = this.getClassType().getAnnotation(thewebsemantic.Namespace.class);
-//            return namespaceAnn.toString().split("@thewebsemantic.Namespace\\(value=")[1].split("\\)")[0];
-//        }
-//
-//        /**
-//         * Read rdfType annotation of java class of this type
-//         * 
-//         * @return
-//         */
-//        public String getRdfType()
-//        {
-//            Annotation rdfTypeAnn = this.getClassType().getAnnotation(thewebsemantic.RdfType.class);
-//            return rdfTypeAnn.toString().split("@thewebsemantic.RdfType\\(value=")[1].split("\\)")[0];
-//        }
     }
 
-    private String label;
 
     public ComplexType(ComplexTypes type)
     {
         this.setType(type);
-        label = type.getLabel();
-    }
-
-
-    public String getLabel()
-    {
-        return label;
-    }
-
-    public void setLabel(String label)
-    {
-        this.label = label;
     }
 
 }

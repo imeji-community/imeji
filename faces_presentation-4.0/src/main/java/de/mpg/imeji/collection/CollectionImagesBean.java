@@ -31,6 +31,7 @@ public class CollectionImagesBean extends ImagesBean {
 	private SessionBean sb;
 	private CollectionImeji collection;
 	private Navigation navigation;
+	private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
 
 	public CollectionImagesBean() {
 		super();
@@ -62,18 +63,16 @@ public class CollectionImagesBean extends ImagesBean {
 		SortCriterion sortCriterion = new SortCriterion();
 		sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-		List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+		
 		try 
 		{
-			URLQueryTransformer queryTransformer = new URLQueryTransformer();
-			scList = queryTransformer.transform2SCList(getQuery());
+			scList = URLQueryTransformer.transform2SCList(getQuery());
 		} 
 		catch (Exception e) 
 		{
 			BeanHelper.error("Invalid search query!");
 		}		
 		ImageController controller = new ImageController(sb.getUser());
-		totalNumberOfRecords = controller.getNumberOfResultsInContainer(uri, scList);
 		images = controller.searchImageInContainer(uri, scList, null, limit, offset);
 		filters = new FiltersBean(getQuery(), totalNumberOfRecords);
 		labels.init((List<Image>) images);
@@ -83,7 +82,7 @@ public class CollectionImagesBean extends ImagesBean {
 	@Override
 	public String initFacets()
     {
-		setFacets(new FacetsBean(collection));
+		setFacets(new FacetsBean(collection, scList));
         return "pretty";
     }
 	

@@ -1,5 +1,6 @@
 package de.mpg.jena.sparql.query;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class FilterFactory
 {
 	public static String getFilter(List<SearchCriterion> scList, Map<String, QueryElement> els, User user, String specificFilter)
 	{
-		String sf = generateSearchFilters(scList, els);
+		String sf = getSearchFilters(scList, els);
 		String uf = generateUserFilters(user, els);
 		
 		String filter = " .FILTER( " + uf + " ) ";
@@ -32,7 +33,7 @@ public class FilterFactory
 		return filter;
 	}
 	
-	private static String generateSearchFilters(List<SearchCriterion> scList, Map<String, QueryElement> els)
+	public static String getSearchFilters(List<SearchCriterion> scList, Map<String, QueryElement> els)
 	{
 		String filter =" (";
 		if (scList != null)
@@ -41,21 +42,17 @@ public class FilterFactory
 			{
 				if (!sc.getChildren().isEmpty())
 				{
-					String sub = generateSearchFilters(sc.getChildren(), els);
+					String sub = getSearchFilters(sc.getChildren(), els);
 					if (!"( )".equals(sub.trim())) filter += sub;
 				}
 				String newFilter = "";
 				if (sc.getNamespace() != null)
 				{
-					 newFilter= getFilterString(sc, els.get(sc.getNamespace().getNs()).getName());
+					 newFilter= getSimpleFilter(sc, els.get(sc.getNamespace().getNs()).getName());
 				}
 				if (!"(".equals(filter.trim()) && !"".equals(newFilter))
 				{
 					filter += getOperatorString(sc) + newFilter;
-				}
-				else if (sc.getOperator().equals(Operator.NOT))
-				{
-					//filter += getOperatorString(sc) + "{ " + newFilter + " }";
 				}
 				else filter += newFilter;
 			}
@@ -64,7 +61,44 @@ public class FilterFactory
 		return filter;
 	}
 	
-	private static String generateUserFilters(User user, Map<String, QueryElement> els)
+	public static String getAdvancedFilter(List<SearchCriterion> scList, Map<String, SubQuery> subQueries, Map<String, QueryElement> els)
+	{
+		String f = "";
+		
+		List<SearchCriterion> firstParents = new ArrayList<SearchCriterion>();
+		
+		for (SearchCriterion sc: scList)
+		{
+			SearchCriterion lpsc = findLastParent(sc);
+			if (lpsc != null) firstParents.add(lpsc);
+		}
+		
+		for (SearchCriterion sc: firstParents)
+		{
+			if (!"".equals(f)) f+= getOperatorString(sc);
+			if(sc.getNamespace() != null)
+			{
+				//if (isNot(sc)) f+= "!(";
+				f += "?s" + "=?" + subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()).getName();
+				//if (isNot(sc)) f+= ")";
+			}
+			else if (!sc.getChildren().isEmpty())
+			{
+				f += "("  + getAdvancedFilter(sc.getChildren(), subQueries, els) + ")";
+			}
+		}
+		
+		return f;
+	}
+	
+	private static SearchCriterion findLastParent(SearchCriterion sc)
+	{
+		if (sc.getParent() != null) findLastParent(sc.getParent());
+		return sc;
+	}
+	
+	
+	public static String generateUserFilters(User user, Map<String, QueryElement> els)
 	{
 		String f = "";
 		
@@ -96,29 +130,34 @@ public class FilterFactory
 				}
 			}
 		}
-		
+		f = " .FILTER(" + f + ")";
 		return f;
 	}
 	
 	private static String getOperatorString(SearchCriterion sc)
 	{
-		if (sc.getOperator().equals(SearchCriterion.Operator.AND))
+		if (sc.getOperator().equals(Operator.AND) || sc.getOperator().equals(Operator.ANDNOT))
 		{
 			return " && ";
 		}
-        else if (sc.getOperator().equals(SearchCriterion.Operator.OR))
+        else if (sc.getOperator().equals(Operator.OR) || sc.getOperator().equals(Operator.ORNOT))
         {
         	return " || ";
-        }
-        else if (sc.getOperator().equals(SearchCriterion.Operator.NOT))
-        {
-        	return " NOT EXISTS ";
         }
 		return " && ";
 	}
 	
+	private static boolean isNot(SearchCriterion sc)
+	{
+		if (sc.getOperator().equals(Operator.ORNOT) || sc.getOperator().equals(Operator.ANDNOT))
+		{
+			return true;
+		}
+		return false;
+	}
 	
-	private static String getFilterString(SearchCriterion sc, String variable)
+	
+	public static String getSimpleFilter(SearchCriterion sc, String variable)
 	{
 		String filter ="";
 		variable = "?" + variable;
@@ -140,6 +179,10 @@ public class FilterFactory
             else if (sc.getFilterType().equals(Filtertype.EQUALS))
             {
                 filter += variable + "='" + sc.getValue()+ "'";
+            }
+            else if (sc.getFilterType().equals(Filtertype.NOT))
+            {
+                filter +=  variable + "!='" + sc.getValue() + "'";
             }
             else if (sc.getFilterType().equals(Filtertype.BOUND))
             {

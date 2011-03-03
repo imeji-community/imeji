@@ -3,12 +3,16 @@ package de.mpg.jena.sparql;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javax.faces.model.ResultSetDataModel;
+
+import com.hp.hpl.jena.db.impl.ResultSetReifIterator;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -40,6 +44,8 @@ public class ImejiSPARQL
         {
                 m.enterCriticalSection(Lock.READ);
                 ResultSet results = qexec.execSelect();
+                //ResultSetFormatter.out(System.out, results) ;
+               
                 for (;results.hasNext();) beans.add(reader.load(c, resource(results).toString()));
                 return beans;
         } finally 

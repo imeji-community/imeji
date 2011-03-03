@@ -31,7 +31,7 @@ public class TechnicalFacets
 			for (ComplexTypes ct : ComplexTypes.values())
 			{
 				SearchCriterion sc = new  SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE, ct.getURI().toString(), Filtertype.URI);
-				facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc), ct.name().toLowerCase(), getCount(new ArrayList<SearchCriterion>(scList), sc)));
+				facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, ct.name()), ct.name().toLowerCase(), getCount(new ArrayList<SearchCriterion>(scList), sc)));
 			}
 		} 
 		catch (UnsupportedEncodingException e) 

@@ -11,6 +11,7 @@ public class Filter
 	private URI collectionID;
 	private String label = "No name";
 	private int count = 0;
+	private String removeQuery = "";
 	
 	public Filter(String label, SearchCriterion filter, URI collectionId) 
 	{
@@ -32,6 +33,7 @@ public class Filter
 		this.label = label; 
 		this.query = query;
 		this.count = count;
+		this.removeQuery = removeQuery;
 		init();
 	}
 	
@@ -79,6 +81,14 @@ public class Filter
 
 	public void setQuery(String query) {
 		this.query = query;
+	}
+
+	public String getRemoveQuery() {
+		return removeQuery;
+	}
+
+	public void setRemoveQuery(String removeQuery) {
+		this.removeQuery = removeQuery;
 	}
 	
 }

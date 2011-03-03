@@ -35,6 +35,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private String query;
     private Navigation navigation;
     protected MetadataLabels labels;
+    private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
     
     public ImagesBean()
     {
@@ -78,11 +79,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+       
         try
         {
-            URLQueryTransformer queryTransformer = new URLQueryTransformer();
-            scList = queryTransformer.transform2SCList(query);
+            scList = URLQueryTransformer.transform2SCList(query);
         }
         catch (Exception e)
         {
@@ -110,7 +110,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 
     public String initFacets()
     {
-    	this.setFacets(new FacetsBean());
+    	this.setFacets(new FacetsBean(scList));
     	return "pretty";
     }
 

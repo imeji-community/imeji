@@ -41,9 +41,9 @@ public class CollectionFacets
 		for (Statement st : profile.getStatements()) 
 		{
 			SearchCriterion sc = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
-			facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc), getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
-			sc =  new SearchCriterion(Operator.NOT, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
-			facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc), "No " + getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
+			facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, getName(st.getName())), getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
+			sc =  new SearchCriterion(Operator.ANDNOT, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
+			facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, "No+" + getName(st.getName())), "No " + getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
 		}
 	}
 

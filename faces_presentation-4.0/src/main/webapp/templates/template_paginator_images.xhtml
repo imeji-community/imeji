@@ -88,11 +88,14 @@
 				<h:outputText value="#{lbl.Filters}: " />
 			</h:panelGroup>
 			<h:panelGroup styleClass="xHuge_area0">
-				<a4j:repeat id="filterList" var="filter" value="#{paginatorListSessionBean.filters.list}" rows="0" rowKeyVar="index">
+				<a4j:repeat id="filterList" var="filter" value="#{FiltersSession.filters}" rows="0" rowKeyVar="index">
 					<h:outputText value="#{filter.label}(#{filter.count}) "/>
-					<a4j:commandLink value="[x]" actionListener="#{paginatorListSessionBean.filters.removeFilter}">
-						<f:attribute name="filter" value="#{filter}"/>
-					</a4j:commandLink>
+					<h:outputLink value="#{Navigation.imagesUrl}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images'}">
+						<h:outputText value="[X]"/>
+					</h:outputLink>
+					<h:outputLink value="#{Navigation.imagesUrl}/collection/#{paginatorListSessionBean.id}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}">
+						<h:outputText value="[X]"/>
+					</h:outputLink>
 					<span style="padding-left: 1px" />
 				</a4j:repeat>
 			</h:panelGroup>
@@ -213,7 +216,7 @@
 			</h:panelGroup>
 		</h:panelGroup>
 
-	<!-- FACETS -->
+		<!-- FACETS -->
 		<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">
 			<h:panelGroup id="facetGroup" layout="block" styleClass="full_area1_p8">
 				<a4j:repeat var="facets" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">

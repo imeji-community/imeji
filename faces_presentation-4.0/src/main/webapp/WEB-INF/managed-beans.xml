@@ -220,6 +220,11 @@
 		<managed-bean-class>de.mpg.imeji.lang.MetadataLabels</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>FiltersSession</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.filter.FiltersSession</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 
 	<managed-bean>

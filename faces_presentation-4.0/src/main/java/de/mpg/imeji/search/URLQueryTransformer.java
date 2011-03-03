@@ -1,11 +1,9 @@
 package de.mpg.imeji.search;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.filter.Filter;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
@@ -13,7 +11,7 @@ import de.mpg.jena.controller.SearchCriterion.Operator;
 
 public class URLQueryTransformer 
 {
-	public List<SearchCriterion> transform2SCList(String query) throws Exception
+	public static List<SearchCriterion> transform2SCList(String query) throws Exception
 	{
 		boolean inverse = false;
         List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
@@ -49,7 +47,7 @@ public class URLQueryTransformer
                         substring = "";
                     }
                 }
-                if (substring.equals("AND ") || substring.equals("OR ") || substring.equals("NOT "))
+                if (substring.equals("AND ") || substring.equals("OR ") || substring.equals("ANDNOT ") || substring.equals("ORNOT "))
                 {
                     lastOperator = substring.trim();
                     substring = "";
@@ -86,7 +84,7 @@ public class URLQueryTransformer
                         }
                         else if (inverse)
                         {
-                        	op = Operator.NOT;
+                        	op = Operator.ANDNOT;
                         }
                         // Operator op = Operator.valueOf(lastOperator.trim());
                         SearchCriterion sc = new SearchCriterion(op, ns, value, filter);
@@ -131,14 +129,11 @@ public class URLQueryTransformer
 			}
     		else
     		{
+    			query += "" + sc.getOperator().name();
     			if (!"".equals(query))
         		{
-        			query += "" + sc.getOperator().name();
+        			
         		}
-    			else if (sc.getOperator().equals(Operator.NOT))
-    			{
-    				query += " NOT";
-    			}
         		if (sc.isInverse())
         		{
         			query += " INVERSE ";

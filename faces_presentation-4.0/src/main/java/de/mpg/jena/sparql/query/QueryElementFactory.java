@@ -7,6 +7,7 @@ import java.util.Map;
 
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.vo.CollectionImeji;
 
 public class QueryElementFactory 
@@ -22,23 +23,24 @@ public class QueryElementFactory
 		
 		findMandatoryElements();
 		findOptionalElements(scList);
-		
+		setOperatorNot();
 		return els;
 	}
 	
+	
 	private void findMandatoryElements()
 	{
-		addElement(new QueryElement("s", root, null, false, false));
+		addElement(new QueryElement("s", root, null, false));
 		
 		if ("http://imeji.mpdl.mpg.de/image".equals(root))
 		{
-			addElement(new QueryElement("coll", "http://imeji.mpdl.mpg.de/collection", els.get(root), false, false));
-			addElement(new QueryElement("visibility", "http://imeji.mpdl.mpg.de/visibility", els.get(root), false, false));
+			addElement(new QueryElement("coll", "http://imeji.mpdl.mpg.de/collection", els.get(root), false));
+			addElement(new QueryElement("visibility", "http://imeji.mpdl.mpg.de/visibility", els.get(root), false));
 		}
 		else if ("http://imeji.mpdl.mpg.de/collection".equals(root) || "http://imeji.mpdl.mpg.de/album".equals(root))
 		{
-			addElement(new QueryElement("props", "http://imeji.mpdl.mpg.de/properties", els.get(root), false, false));
-			addElement(new QueryElement("status", "http://imeji.mpdl.mpg.de/status", els.get( "http://imeji.mpdl.mpg.de/properties"), false, false));
+			addElement(new QueryElement("props", "http://imeji.mpdl.mpg.de/properties", els.get(root), false));
+			addElement(new QueryElement("status", "http://imeji.mpdl.mpg.de/status", els.get( "http://imeji.mpdl.mpg.de/properties"), false));
 		}
 	}
 	
@@ -49,7 +51,7 @@ public class QueryElementFactory
 		{
 			if (sc.getChildren().isEmpty())
 			{
-				addElements(sc.getNamespace());
+				addElements(sc.getNamespace(), sc.getOperator());
 			}
 			else
 			{
@@ -58,18 +60,39 @@ public class QueryElementFactory
 		}
 	}
 	
-	private void addElements(ImejiNamespaces ns)
+	public List<QueryElement> getAllParents(QueryElement el)
+	{
+		List<QueryElement> els = new ArrayList<QueryElement>();
+		
+		if(el.getParent() != null && !"s".equals(el.getParent().getName()))
+		{
+			els.add(el.getParent());
+			for (QueryElement e : getAllParents(el.getParent()))
+			{
+				els.add(e);
+			}
+		}
+		
+		return els;
+	}
+	
+	private QueryElement findLastParent(QueryElement qe)
+	{
+		if (qe.getParent() != null && !"s".equals(qe.getParent().getName())) findLastParent(qe.getParent());
+		return qe.getParent();
+	}
+	
+	private void addElements(ImejiNamespaces ns, Operator op)
 	{
 		QueryElement parent = els.get(root);
 		
 		if (ns.getParent() != null)
 		{
 			// Add all parent namespaces
-			addElements(ns.getParent());
+			addElements(ns.getParent(), op);
 			parent =  els.get(ns.getParent().getNs());
 		}
-
-		addElement( new QueryElement(null, ns.getNs(), parent, true, ns.isListType()));
+		addElement( new QueryElement(null, ns.getNs(), parent, true));
 	}
 	
 	private void addElement(QueryElement el)
@@ -90,8 +113,27 @@ public class QueryElementFactory
 			{
 				el.getParent().getChilds().add(el);
 			}
+			
 		}
 	}
+	
+	private void setOperatorNot()
+	{
+//		for(QueryElement qe :els.values())
+//		{
+//			if (qe.isNot())
+//			{
+//				QueryElement lastParent = findLastParent(qe);
+//				if (lastParent != null) 
+//				{
+//					lastParent.setNot(true);
+//					qe.setNot(false);
+//				}
+//			}
+//		}
+	}
+	
+	
 	
 	public String getElementName(String namespace)
 	{

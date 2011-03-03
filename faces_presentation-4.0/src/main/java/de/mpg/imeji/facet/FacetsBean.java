@@ -45,11 +45,11 @@ public class FacetsBean
     private List<Facet> collectionFacets = new ArrayList<Facet>();
     private List<Facet> technicalFacets = new ArrayList<Facet>();
     
-    public FacetsBean() 
+    public FacetsBean(List<SearchCriterion> scList) 
     {
     	try 
         {
-    		facets = new TechnicalFacets(new ArrayList<SearchCriterion>()).getFacets();
+    		facets = new TechnicalFacets(scList).getFacets();
  		} 
         catch (Exception e) 
         {
@@ -57,133 +57,16 @@ public class FacetsBean
  		}
 	}
     
-    public FacetsBean(CollectionImeji col)
+    public FacetsBean(CollectionImeji col, List<SearchCriterion> scList)
     {
     	try 
     	{
-    		facets = new CollectionFacets(col, new ArrayList<SearchCriterion>()).getFacets();
+    		facets = new CollectionFacets(col, scList).getFacets();
 		} 
     	catch (Exception e) 
     	{
 			BeanHelper.error("Error initializing facets! " + e.getMessage());
 		}
-    }
-
-	public List<Facet> generateFacets(MetadataProfile profile, CollectionImeji coll) throws Exception
-    {
-        List<Facet> facetbeans = new ArrayList<Facet>();
-        if (coll == null) return facetbeans;
-        facetbeans.add(
-        		new Facet(URI.create(nav.getImagesUrl() + "/collection" + ObjectHelper.getId(coll.getId())
-                + "?q="), coll.getMetadata().getTitle(), coll.getImages().size()));
-        for (Statement st : profile.getStatements())
-        {
-            if (st.getLiteralConstraints().size() > 0)
-            {
-                for (LocalizedString ls : st.getLiteralConstraints())
-                    facetbeans.add(generateFacet(profile.getId(), st, true, ls.toString(), coll));
-            }
-            else
-            {
-                facetbeans.add(generateFacet(profile.getId(), st, true, null, coll));
-                facetbeans.add(generateFacet(profile.getId(), st, false, null, coll));
-            }
-        }
-        return facetbeans;
-    }
-    
-  
-
-    public Facet generateFacet(URI id, Statement st, boolean hasValue, String value, CollectionImeji coll)
-            throws Exception
-    {
-        URI uri = generateUri(id, st, hasValue, value, coll);
-        String label = labelHelper.getDefaultLabel(st.getLabels().iterator());
-        if (st.getLabels().size() > 0)
-            label = st.getLabels().toArray()[0].toString();
-        if (value != null)
-            label = value;
-        if (!hasValue)
-            label = "No " + label;
-        return new Facet(uri, label, getCount(id, st, hasValue, value, coll));
-    }
-
-    public List<Facet> clearDuplicate(List<Facet> list)
-    {
-        Map<String, Facet> fMap = new HashMap<String, Facet>();
-        for (Facet f : list)
-            fMap.put(f.getLabel(), f);
-        return new ArrayList<Facet>(fMap.values());
-    }
-
-    public URI generateUri(URI id, Statement st, boolean hasValue, String value, CollectionImeji coll)
-            throws UnsupportedEncodingException
-    {
-        List<Filter> filters = sb.getFilters();
-        String filtersURI ="";
-        int i=0;
-        for (Filter f : filters)
-        {
-        	if (!"".equals(f.getQuery()))
-        	{
-        		filtersURI += "&f" + i + "=" + f.getQuery();
-        		i++;
-        	}
-        
-        }
-    	filtersURI = URLEncoder.encode(filtersURI, "UTF-8");
-    	filtersURI = "?q=" + URLEncoder.encode(generateQuery(id, st, hasValue, value, coll), "UTF-8") + filtersURI;
-    	if (coll != null && coll.getId() != null)
-        {
-            return URI.create(nav.getImagesUrl() + "/collection" + ObjectHelper.getId(coll.getId()) + filtersURI);
-        }
-        return URI.create(nav.getImagesUrl() +  filtersURI);
-    }
-
-    public String generateQuery(URI id, Statement st, boolean hasValue, String value, CollectionImeji coll)
-            throws UnsupportedEncodingException
-    {
-        return URLQueryTransformer.transform2URL(getFacetSCList(id, st, hasValue, value, coll));
-    }
-    
-    public List<SearchCriterion> getFacetSCList(URI id, Statement st, boolean hasValue, String value, CollectionImeji coll)
-    {
-    	 if (value == null) value = "";
-         ComplexTypes ct = ComplexTypeHelper.getComplexType(st.getType());
-         List<SearchCriterion> scList = new ArrayList<SearchCriterion>(filters);
-         
-         SearchCriterion facetMetadataSC = new SearchCriterion(ImejiNamespaces.IMAGE_METADATA_NAME, st.getName().toString());
-         facetMetadataSC.setFilterType(Filtertype.EQUALS);
-         facetMetadataSC.setInverse(!hasValue);
-         scList.add(facetMetadataSC);
-         
-         if (!"".equalsIgnoreCase(value))
-         {
-         	 SearchCriterion facetValueSC = new  SearchCriterion();
-              facetValueSC.setValue(value);
-              facetValueSC.setFilterType(Filtertype.EQUALS);
-              for (ImejiNamespaces ims :ImejiNamespaces.values())
-              {
-              	if (ims.getNs().equals(ct.getURI().toString())) facetValueSC.setNamespace(ims);
-              }
-              scList.add(facetValueSC);
-         }
-         return scList;
-    }
-
-    public int getCount(URI id, Statement st, boolean hasValue, String value, CollectionImeji coll) throws Exception
-    {
-        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-        scList = getFacetSCList(coll.getId(), st, hasValue, value, coll);
-        ImageController ic = new ImageController(sb.getUser());
-        try
-        {
-        	return ic.getNumberOfResultsInContainer(coll.getId(), scList);
-        }
-        catch (NotBoundException e)
-        {
-            return 0;
-        }
     }
     
 	public List<FacetGroupBean> getGroups()
@@ -195,20 +78,15 @@ public class FacetsBean
     {
         this.groups = groups;
     }
-    
-    // NEW
-
+   
     public List<Facet> getCollectionFacets()
     {
     	return collectionFacets;
     }
-    
 
     public void setCollectionFacets(List<Facet> collectionFacets) {
 		this.collectionFacets = collectionFacets;
 	}
-    
-    
 
 	public List<Facet> getTechnicalFacets() {
 		return technicalFacets;

@@ -11,16 +11,14 @@ public class QueryElement
 	private boolean optional = true;
 	private QueryElement parent;
 	private List<QueryElement>  childs = null;
-	private boolean isList = false;
 	
-	public QueryElement(String name, String nameSpace, QueryElement parent, boolean optional, boolean isList)
+	public QueryElement(String name, String nameSpace, QueryElement parent, boolean optional)
 	{
 		this.name = name;
 		this.nameSpace = nameSpace;
 		this.parent = parent;
 		this.optional = optional;
 		this.childs = new ArrayList<QueryElement>();
-		this.isList = isList;
 	}
 	
 	public String getName() {
@@ -64,12 +62,6 @@ public class QueryElement
 		this.childs = childs;
 	}
 
-	public boolean isList() {
-		return isList;
-	}
-
-	public void setList(boolean isList) {
-		this.isList = isList;
-	}
+	
 	
 }

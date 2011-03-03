@@ -8,13 +8,13 @@ import java.util.List;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.filter.Filter;
+import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.SearchCriterion;
 
 public class FacetURIFactory
 {
-	private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 	private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
 	
 	public FacetURIFactory(List<SearchCriterion> scList) 
@@ -22,28 +22,18 @@ public class FacetURIFactory
 		this.scList = scList;
 	}
 	
-	public URI createFacetURI(String baseURI, SearchCriterion sc) throws UnsupportedEncodingException
+	public URI createFacetURI(String baseURI, SearchCriterion sc, String facetName) throws UnsupportedEncodingException
 	{
 		List<SearchCriterion> scl = new ArrayList<SearchCriterion>(scList);
 		if(sc != null) scl.add(sc);
-		String uri = baseURI + getCommonURI(scl);
+		String uri = baseURI + getCommonURI(scl, facetName);
 		return URI.create(uri);
 	}
 	
-	private String getCommonURI(List<SearchCriterion> scl) throws UnsupportedEncodingException
+	private String getCommonURI(List<SearchCriterion> scl, String facetName) throws UnsupportedEncodingException
 	{
-		List<Filter> filters = sb.getFilters();
         String commonURI ="";
-        int i=0;
-        for (Filter f : filters)
-        {
-        	if (!"".equals(f.getQuery()))
-        	{
-        		commonURI += "&f" + i + "=" + URLEncoder.encode(f.getQuery(), "UTF-8");
-        		i++;
-        	}
-        }
-        commonURI +=  URLEncoder.encode(URLQueryTransformer.transform2URL(scl), "UTF-8");
+        commonURI +=  URLEncoder.encode(URLQueryTransformer.transform2URL(scl), "UTF-8") + "&f=" + facetName;
         return commonURI;
 	}
 	

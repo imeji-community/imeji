@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.mpg.imeji.search.QuickSearchBean;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.ImejiQueryVariable;
 import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
@@ -21,31 +23,31 @@ import de.mpg.jena.vo.Grant.GrantType;
 
 public class QuerySPARQLImpl implements QuerySPARQL
 {
-	private  Map<String, QueryElement> els = new HashMap<String, QueryElement>();
+	private Map<String, QueryElement> els = new HashMap<String, QueryElement>();
 	private QueryElementFactory qeFact = new QueryElementFactory();
 	
 	private String variables = "";
-	private String filters = "";
+	private String securityFilter = "";
 	private String limit = "";
 	private String offset = "";
+	
+	private String type = "http://imeji.mpdl.mpg.de/image";
+	private Map<String, SearchCriterion> subqueries = new HashMap<String, SearchCriterion>();
 
 	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
     {
-		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
-		String query = "SELECT DISTINCT ?s WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
-		System.out.println(query);
+		String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
+		String query = "SELECT DISTINCT ?s WHERE {" + select + "} " + this.limit + " " + this.offset;
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
-		
-		//query ="SELECT DISTINCT ?s WHERE { ?s a <http://imeji.mpdl.mpg.de/image>  . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?s <http://imeji.mpdl.mpg.de/collection> ?coll  . OPTIONAL { ?s <http://imeji.mpdl.mpg.de/metadataSet> ?v1 . OPTIONAL { ?v1 <http://imeji.mpdl.mpg.de/metadata> ?v2 . OPTIONAL { ?v2 <http://imeji.mpdl.mpg.de/complexTypes> ?v3 } } } .FILTER( ?visibility=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC> ||  true )   .FILTER(  ( (str(?v3)='http://imeji.mpdl.mpg.de/complexTypes/TEXT' )  )  )} LIMIT 24 ";
-		
+		//System.out.println("WHOLE QUERY: " +query);
 		return query;
     }
 	
 	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user) 
 	{
-		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
-		String query= "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset;
-		System.out.println("COUNT:" + query);
+		String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
+		String query= "SELECT ?s count(DISTINCT ?s) WHERE {" + select + "} " + this.limit + " " + this.offset;
+		//System.out.println("COUNT:" + query);
 		return  query;
 	}
 	
@@ -54,74 +56,82 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	 */
 	public String createConstructQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user) 
 	{
-		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
+		String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
 		//System.out.println("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset);
-		return  "CONSTRUCT { ?s a <" + root + "> . ?md a <http://imeji.mpdl.mpg.de/image/metadata> .?type a <http://purl.org/dc/terms/type> } WHERE { " + variables.substring(2) +   filters + "} " + this.limit + " " + this.offset;
+		return "CONSTRUCT { ?s a <" + root + "> . ?md a <http://imeji.mpdl.mpg.de/image/metadata> . ?type a <http://purl.org/dc/terms/type> } WHERE { " + variables.substring(2) +   securityFilter + "} " + this.limit + " " + this.offset;
 	}
 	
-	private void init(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
+	private String printSelect(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
 	{
 		if (offset > 0) this.offset = "OFFSET " + Integer.toString(offset);
 		if (limit > 0) this.limit = "LIMIT " +  Integer.toString(limit);
 		
 		els = qeFact.createElements(scList, root);
-		variables = printVariables(root) + specificQuery;
-		filters = FilterFactory.getFilter(scList, els, user, specificFilter);
+		
+		securityFilter = FilterFactory.generateUserFilters(user, els);
+		
+		Map<String, SubQuery> subQueries = new HashMap<String, SubQuery>();
+		
+		if (scList == null) scList = new ArrayList<SearchCriterion>();
+		
+		int i=0;
+		for (SearchCriterion sc: getAllSearchCriterion(scList))
+		{
+			if (sc.getNamespace() != null)
+			{
+				subQueries.put(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue(), new SubQuery(sc, els, root, "s" + i));
+				i++;
+			}
+		}
+				
+		String query = "";
+		for (SubQuery sq : subQueries.values())
+		{
+			query += " .{ " + sq.print() +  " }";
+		}
+		
+		String filter = FilterFactory.getAdvancedFilter(scList, subQueries, els);
+		if (!"".equals(filter)) filter = ".FILTER( " + filter + " )";
+		
+		String s =  "?s a <" + root + ">" + printMandatoryVariables(root) + specificQuery + securityFilter + query + filter;
+		return s;
 	}
 	
-	private String printVariables(String root)
+	private List<SearchCriterion> getAllSearchCriterion(List<SearchCriterion> scList)
+	{
+		List<SearchCriterion> all = new ArrayList<SearchCriterion>();
+		for (SearchCriterion sc : scList)
+		{
+			all.add(sc);
+			if (!sc.getChildren().isEmpty())
+			{
+				all.addAll(all.size() -1, getAllSearchCriterion(sc.getChildren()));
+			}
+		}
+		return all;
+	}
+	
+	private String printMandatoryVariables(String root)
 	{
 		String mandatory ="";
-		String optionals ="";
 		for (QueryElement el : els.values())
 		{
 			if (el.getParent() != null)
 			{
 				if (!el.isOptional())
 				{
-					mandatory += " . " + printSingleVariable(el);
+					mandatory += " . "+ printSingleVariable(el);
 				}
 			}
 		}
-		optionals += printOptionals(new ArrayList<QueryElement>(els.values()), els.get(root));
-		return mandatory + " " + optionals;
+		return mandatory;
 	}
 	
-	private String printOptionals(List<QueryElement> els, QueryElement root)
-	{
-		String optional = "";
-		
-		for (QueryElement el : els)
-		{
-			if (el.isOptional() && root.equals(el.getParent()))
-			{
-				List<QueryElement> childs = el.getChilds();
-				if (childs.isEmpty())
-				{
-					optional += " . OPTIONAL { " + printSingleVariable(el) + "}";
-				}
-				else
-				{
-					optional += " . OPTIONAL { " +  printSingleVariable(el);
-					optional += printOptionals(childs, el);
-					optional += " }";
-				}
-			}
-		}
-		
-		return optional;
-	}
 	
+
 	private String printSingleVariable(QueryElement el)
 	{
 		String str = "?" + el.getParent().getName() +" <" + el.getNameSpace() + "> ?" + el.getName();
-		if (el.isList())
-		{
-//			str = "?" + el.getParent().getName() +" <" + el.getNameSpace() + "> ?" + qeFact.getElementName("http://www.w3.org/2000/01/rdf-schema#member");
-//			str += " . ?" +  qeFact.getElementName("http://www.w3.org/2000/01/rdf-schema#member") + " <http://www.w3.org/2000/01/rdf-schema#member> ?" + el.getName() ;
-			str = "?" + el.getParent().getName() +" <" + el.getNameSpace() + "> ?" + qeFact.getElementName("<http://www.jena.hpl.hp.com/ARQ/list#member>");
-			str += " . ?" +  qeFact.getElementName("<http://www.jena.hpl.hp.com/ARQ/list#member>") + " <http://www.jena.hpl.hp.com/ARQ/list#member> ?" + el.getName() ;
-		}
 		return str;
 	}
 	

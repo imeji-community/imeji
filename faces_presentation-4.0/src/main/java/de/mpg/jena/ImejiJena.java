@@ -35,9 +35,9 @@ public class ImejiJena
 		logger.info("Initializing Jena models...");
 		try 
 		{
-			//tdbPath = PropertyReader.getProperty("imeji.tdb.path");
+			tdbPath = PropertyReader.getProperty("imeji.tdb.path");
 			//FOR TESTING: SHOULD BE OUTCOMMENTED FOR DEPLOYMENT
-			tdbPath = "R://imeji_tdb//imeji_data";
+			//tdbPath = "R://imeji_tdb//imeji_data";
 		} 
 		catch (Exception e) 
 		{

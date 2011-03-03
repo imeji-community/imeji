@@ -1,8 +1,6 @@
 package de.mpg.imeji.filter;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,97 +17,62 @@ import de.mpg.jena.controller.SearchCriterion;
 public class FiltersBean
 {
 	private List<Filter> list = null;
-	private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-	private CollectionSessionBean csb = (CollectionSessionBean) BeanHelper.getSessionBean(CollectionSessionBean.class);
+	//private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+	private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
 	private int count = 0;
+	private String query = "";
+	
 	public FiltersBean()
 	{
-		list = sb.getFilters();
+		//list = sb.getFilters();
 	}
 	
 	public FiltersBean(String query, int count) 
 	{	
 		this.count = count;
-		List<Filter> filters = parse(query);
-		//filters = setLabels(filters);
-		sb.setFilters(filters);
-	}
-	
-	public List<Filter> parse(String query)
-	{
-		try 
-		{	
-			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-			Iterator<String> params = ec.getRequestParameterNames();
-			List<Filter> fList = new ArrayList<Filter>();
-			while (params.hasNext()) 
-			{
-				String name = (String) params.next();
-				if(name.matches("f[0-9]+"))
-				{
-					fList.add(new Filter(null, ec.getRequestParameterMap().get(name), count));
-				}
-				if("q".equals(name))
-				{
-					fList.add(new Filter("Search", ec.getRequestParameterMap().get(name), count));
-				}
-			}
-			return fList;
-		} 
-		catch (Exception e) 
-		{
-			throw new RuntimeException("Error parsing query", e);
-		}
+		this.query = query;
 		
+		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+		
+		String q = ec.getRequestParameterMap().get("q");
+		String n = ec.getRequestParameterMap().get("f");
+		
+		if (n != null) n = n.toLowerCase();
+		
+		List<Filter> filters =  parseQuery(q, n);
+		
+		filters = setRemoveQueries(filters, q);
+		
+		fs.setFilters(filters);
 	}
 	
-	private List<Filter> setLabels(List<Filter> filters)
+	private List<Filter> parseQuery(String q, String n)
 	{
-		for (Filter f : filters) 
+		List<Filter> filters = new ArrayList<Filter>();
+		
+		for (Filter f: fs.getFilters())
 		{
-			Filter f1 = getFilter(f.getQuery());
-			if (f1 != null)
+			if (q != null && q.contains(f.getQuery()))
 			{
-				f.setLabel(f1.getLabel());
+				filters.add(f);
+				q = q.replace(f.getQuery(), "");
 			}
+		}
+		if (q != null && !"".equals(q.trim()))
+		{
+			Filter nf = new Filter(n, q, count);
+			filters.add(nf);
+		}
+		return filters;
+	}	
+	
+	private List<Filter> setRemoveQueries(List<Filter> filters, String q)
+	{
+		for (Filter f: filters)
+		{
+			f.setRemoveQuery(q.replace(f.getQuery(), ""));
 		}
 		return filters;
 	}
-	
-	
-	public Filter getFilter(String query)
-	{
-		for (Filter f : sb.getFilters())
-		{
-			if (query != null && query.equals(f.getQuery()))
-			{
-				return f;
-			}
-		}
-		return null;
-	}
-	
-	
-	public String addFilter(Filter filter)
-	{
-		list.add(filter);
-		return "";
-	}
-	
-	public String removeFilter(ActionEvent event)
-	{
-		Filter toRemove = (Filter) event.getComponent().getAttributes().get("filter"); 
-		list.remove(toRemove);
-		return "";	
-	}
-
-	public List<Filter> getList() {
-		return sb.getFilters();
-	}
-
-	public void setList(List<Filter> filters) {
-		this.list = filters;
-	}
-	
 	
 }

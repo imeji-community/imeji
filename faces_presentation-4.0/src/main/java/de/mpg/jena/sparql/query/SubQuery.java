@@ -32,44 +32,49 @@ public class SubQuery
 	
 	private String getQuery(Map<String, QueryElement> els, String name)
 	{
-		String sq ="SELECT DISTINCT ?" + name + " WHERE { ?" + name + " a <" + type + ">";
-		QueryElementFactory elFactory = new QueryElementFactory();
-		
-		String ssq = "";
-		// WRITE QUERY ELEMENTS
-		QueryElement el = els.get(sc.getNamespace().getNs());
-		List<QueryElement> parents = elFactory.getAllParents(el);
-		
-		
-		if(sc.getOperator().equals(Operator.ANDNOT) || sc.getOperator().equals(Operator.ORNOT)) sq += " .MINUS {";
-		
-		for(QueryElement e : parents)
+		String filter = FilterFactory.getSimpleFilter(sc, els.get(sc.getNamespace().getNs()).getName());
+		String sq = "";
+		if (!"".equals(filter.trim()))
 		{
+			sq ="SELECT DISTINCT ?" + name + " WHERE { ?" + name + " a <" + type + ">";
+			QueryElementFactory elFactory = new QueryElementFactory();
+			
+			String ssq = "";
+			// WRITE QUERY ELEMENTS
+			QueryElement el = els.get(sc.getNamespace().getNs());
+			List<QueryElement> parents = elFactory.getAllParents(el);
+			
+			if(sc.getOperator().equals(Operator.ANDNOT) || sc.getOperator().equals(Operator.ORNOT)) ssq += " .MINUS {";
+			
+			for(QueryElement e : parents)
+			{
+				if ("".equals(ssq)) ssq += ".";
+				ssq += " OPTIONAL {";
+				ssq +=  printSingleVariable(e, name);
+			}
+			
+			// If no parents, print only this variable
 			if (!"".equals(ssq)) ssq += ".";
 			ssq += " OPTIONAL {";
-			ssq +=  printSingleVariable(e, name);
-		}
-		if (!"".equals(ssq)) ssq += ".";
-		ssq += " OPTIONAL {";
-		ssq += printSingleVariable(el, name);
-		
-		sq+= ssq;
-		
-		// CLOSE OPTIONALS
-		sq += "}";
-		for(QueryElement e : parents)
-		{
+			ssq += printSingleVariable(el, name);
+			
+			sq+= ssq;
+			
+			// CLOSE OPTIONALS
+			sq += "}";
+			for(QueryElement e : parents)
+			{
+				sq += "}";
+			}
+			
+			// WRITE FILTERS SUBQUERY
+			List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+			scList.add(sc);		
+			sq += " .FILTER(" + filter  + ")";
+			
+			if(sc.getOperator().equals(Operator.ANDNOT) || sc.getOperator().equals(Operator.ORNOT)) sq += " }";
 			sq += "}";
 		}
-		
-		// WRITE FILTERS SUBQUERY
-		List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-		scList.add(sc);
-		//sq += ".FILTER" +  FilterFactory.getSearchFilters(scList, els);
-		sq += " .FILTER(" + FilterFactory.getSimpleFilter(sc, els.get(sc.getNamespace().getNs()).getName()) + ")";
-		
-		if(sc.getOperator().equals(Operator.ANDNOT) || sc.getOperator().equals(Operator.ORNOT)) sq += " }";
-		sq += "}";
 		return sq;
 	}
 	

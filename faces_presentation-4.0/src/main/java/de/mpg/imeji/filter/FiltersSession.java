@@ -13,8 +13,16 @@ public class FiltersSession
 		
 	}
 	
+	public boolean isFilter(String name)
+	{
+		for (Filter f : filters)
+		{
+			if (f.getLabel().equalsIgnoreCase(name)) return true;
+			if (f.getLabel().equalsIgnoreCase("no " + name)) return true;
+		}
+		return false;
+	}
 	
-
 	public List<Filter> getFilters() {
 		return filters;
 	}

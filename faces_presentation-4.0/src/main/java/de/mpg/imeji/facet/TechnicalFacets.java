@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
@@ -16,8 +17,10 @@ import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class TechnicalFacets 
 {
-	private List<Facet> facets = new ArrayList<Facet>();
 	private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+	private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
+	
+	private List<Facet> facets = new ArrayList<Facet>();
 	
 	public TechnicalFacets(List<SearchCriterion> scList) 
 	{
@@ -30,8 +33,11 @@ public class TechnicalFacets
 		{
 			for (ComplexTypes ct : ComplexTypes.values())
 			{
-				SearchCriterion sc = new  SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE, ct.getURI().toString(), Filtertype.URI);
-				facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, ct.name()), ct.name().toLowerCase(), getCount(new ArrayList<SearchCriterion>(scList), sc)));
+				if (!fs.isFilter(ct.name()))
+				{
+					SearchCriterion sc = new  SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE, ct.getURI().toString(), Filtertype.URI);
+					facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, ct.name()), ct.name().toLowerCase(), getCount(new ArrayList<SearchCriterion>(scList), sc)));
+				}
 			}
 		} 
 		catch (UnsupportedEncodingException e) 

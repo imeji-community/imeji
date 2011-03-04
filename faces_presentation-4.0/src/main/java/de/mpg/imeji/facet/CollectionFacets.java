@@ -8,6 +8,7 @@ import java.util.Map;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.ImageController;
@@ -25,6 +26,8 @@ import de.mpg.jena.vo.Statement;
 public class CollectionFacets
 {
 	private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+	private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
+	
 	private List<Facet> facets = new ArrayList<Facet>();
 	
 	
@@ -40,10 +43,13 @@ public class CollectionFacets
 		
 		for (Statement st : profile.getStatements()) 
 		{
-			SearchCriterion sc = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
-			facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, getName(st.getName())), getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
-			sc =  new SearchCriterion(Operator.ANDNOT, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
-			facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, "No+" + getName(st.getName())), "No " + getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
+			if (!fs.isFilter(getName(st.getName())))
+			{
+				SearchCriterion sc = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
+				facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, getName(st.getName())), getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
+				sc =  new SearchCriterion(Operator.ANDNOT, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
+				facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, "No+" + getName(st.getName())), "No " + getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
+			}
 		}
 	}
 

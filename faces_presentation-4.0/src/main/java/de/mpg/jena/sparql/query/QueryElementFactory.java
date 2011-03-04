@@ -76,11 +76,11 @@ public class QueryElementFactory
 		return els;
 	}
 	
-	private QueryElement findLastParent(QueryElement qe)
-	{
-		if (qe.getParent() != null && !"s".equals(qe.getParent().getName())) findLastParent(qe.getParent());
-		return qe.getParent();
-	}
+//	private QueryElement findLastParent(QueryElement qe)
+//	{
+//		if (qe.getParent() != null && !"s".equals(qe.getParent().getName())) findLastParent(qe.getParent());
+//		return qe.getParent();
+//	}
 	
 	private void addElements(ImejiNamespaces ns, Operator op)
 	{

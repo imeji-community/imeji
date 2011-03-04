@@ -75,15 +75,14 @@ public class FilterFactory
 		
 		for (SearchCriterion sc: firstParents)
 		{
-			if (!"".equals(f)) f+= getOperatorString(sc);
-			if(sc.getNamespace() != null)
+			if(sc.getNamespace() != null && !"".equals(subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()).print()))
 			{
-				//if (isNot(sc)) f+= "!(";
+				if (!"".equals(f)) f+= getOperatorString(sc);
 				f += "?s" + "=?" + subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()).getName();
-				//if (isNot(sc)) f+= ")";
 			}
 			else if (!sc.getChildren().isEmpty())
 			{
+				if (!"".equals(f)) f+= getOperatorString(sc);
 				f += "("  + getAdvancedFilter(sc.getChildren(), subQueries, els) + ")";
 			}
 		}

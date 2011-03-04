@@ -31,7 +31,9 @@ public class Person implements Serializable {
 	
 	private URI role;
 	
-	protected List<Organization> organizations = new LinkedList<Organization>();
+	private int pos = 0;
+	
+	protected Collection<Organization> organizations = new LinkedList<Organization>();
 
 	
 	@RdfProperty("http://purl.org/escidoc/metadata/terms/0.1/family-name")
@@ -80,12 +82,20 @@ public class Person implements Serializable {
 	}
 
 	@RdfProperty("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
-	public List<Organization> getOrganizations() {
+	public Collection<Organization> getOrganizations() {
 		return organizations;
 	}
 
-	public void setOrganizations(List<Organization> organizations) {
+	public void setOrganizations(Collection<Organization> organizations) {
 		this.organizations = organizations;
+	}
+
+	public int getPos() {
+		return pos;
+	}
+
+	public void setPos(int pos) {
+		this.pos = pos;
 	}
 	
 

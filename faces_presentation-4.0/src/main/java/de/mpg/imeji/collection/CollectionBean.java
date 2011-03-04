@@ -11,6 +11,7 @@ import thewebsemantic.NotBoundException;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.CollectionHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.CollectionController;
@@ -97,8 +98,10 @@ public abstract class CollectionBean
 
     public String addAuthor()
     {
-        LinkedList<Person> list = (LinkedList<Person>)collection.getMetadata().getPersons();
-        list.add(authorPosition + 1, ImejiFactory.newPerson());
+    	LinkedList<Person> c = (LinkedList<Person>)collection.getMetadata().getPersons();
+    	Person p = ImejiFactory.newPerson();
+    	p.setPos(authorPosition +1);
+        c.add(authorPosition +1, p);
         return getNavigationString();
     }
 
@@ -106,8 +109,8 @@ public abstract class CollectionBean
     {
         if (authorPosition > 0)
         {
-            LinkedList<Person> list = (LinkedList<Person>)collection.getMetadata().getPersons();
-            list.remove(authorPosition);
+        	LinkedList<Person> c = (LinkedList<Person>)collection.getMetadata().getPersons();
+            c.remove(authorPosition);
         }
         return getNavigationString();
     }
@@ -116,7 +119,9 @@ public abstract class CollectionBean
     {
         LinkedList<Person> persons = (LinkedList<Person>)collection.getMetadata().getPersons();
         LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
-        orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
+        Organization o =  ImejiFactory.newOrganization();
+        o.setPos(organizationPosition +1);
+        orgs.add(organizationPosition + 1, o);
         return getNavigationString();
     }
 

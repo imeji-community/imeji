@@ -16,21 +16,17 @@ import de.mpg.jena.controller.SearchCriterion;
 
 public class FiltersBean
 {
-	private List<Filter> list = null;
-	//private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 	private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
+	
 	private int count = 0;
-	private String query = "";
 	
 	public FiltersBean()
 	{
-		//list = sb.getFilters();
 	}
 	
 	public FiltersBean(String query, int count) 
 	{	
 		this.count = count;
-		this.query = query;
 		
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 		

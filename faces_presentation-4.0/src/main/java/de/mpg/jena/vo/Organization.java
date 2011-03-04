@@ -12,8 +12,6 @@ import thewebsemantic.RdfType;
 @RdfType("organizationalunit")
 @Embedded
 public class Organization implements Serializable {
-
-
 	
 	private String name;
 	
@@ -29,6 +27,7 @@ public class Organization implements Serializable {
 	
 	private String country;
 	
+	private int pos = 0;
 	
 	
 	@RdfProperty("http://purl.org/dc/elements/1.1/title")
@@ -77,5 +76,15 @@ public class Organization implements Serializable {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+
+	public int getPos() {
+		return pos;
+	}
+
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
+	
+	
 
 }

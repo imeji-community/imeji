@@ -123,37 +123,38 @@ public class AlbumBean implements Serializable
             return valid;
         }
 
-        public String addAuthor()
-        {
-            List<Person> list = getAlbum().getMetadata().getPersons(); 
-            list.add(authorPosition + 1, ImejiFactory.newPerson());
-            return "";
-        }
-
-        public String removeAuthor()
-        {
-           
-                List<Person> list = getAlbum().getMetadata().getPersons();
-                list.remove(authorPosition);
-            return "";
-        }
-
-        public String addOrganization()
-        {
-            List<Person> persons = getAlbum().getMetadata().getPersons();
-            List<Organization> orgs = persons.get(authorPosition).getOrganizations();
-            orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
-            return "";
-        }
-
-        public String removeOrganization()
-        {
-            
-                List<Person> persons = getAlbum().getMetadata().getPersons();
-                List<Organization> orgs = persons.get(authorPosition).getOrganizations();
-                orgs.remove(organizationPosition);
-            return "";
-        }
+//        public String addAuthor()
+//        {
+//            List<Person> list = getAlbum().getMetadata().getPersons(); 
+//            list.add(authorPosition + 1, ImejiFactory.newPerson());
+//            return "";
+//        }
+//
+//        public String removeAuthor()
+//        {
+//           
+//                List<Person> list = getAlbum().getMetadata().getPersons();
+//                list.remove(authorPosition);
+//            return "";
+//        }
+//
+//        public String addOrganization()
+//        {
+//            Collection<Person> persons = getAlbum().getMetadata().getPersons();
+//            
+//            Collection<Organization> orgs = persons.get(authorPosition).getOrganizations();
+//            orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
+//            return "";
+//        }
+//
+//        public String removeOrganization()
+//        {
+//            
+//                List<Person> persons = getAlbum().getMetadata().getPersons();
+//                List<Organization> orgs = persons.get(authorPosition).getOrganizations();
+//                orgs.remove(organizationPosition);
+//            return "";
+//        }
 
         protected String getNavigationString()
         {

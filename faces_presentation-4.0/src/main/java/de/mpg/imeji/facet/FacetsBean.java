@@ -1,44 +1,15 @@
 package de.mpg.imeji.facet;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import thewebsemantic.LocalizedString;
-import thewebsemantic.NotBoundException;
-import de.mpg.imeji.beans.Navigation;
-import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.filter.Filter;
-import de.mpg.imeji.lang.labelHelper;
-import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.util.ProfileHelper;
-import de.mpg.jena.controller.CollectionController;
-import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
-import de.mpg.jena.controller.SearchCriterion.Filtertype;
-import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
-import de.mpg.jena.controller.SearchCriterion.Operator;
-import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.ComplexType.ComplexTypes;
-import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.MetadataProfile;
-import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class FacetsBean
 {
     private List<FacetGroupBean> groups = new ArrayList<FacetGroupBean>();
-    private Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-    private SessionBean sb;
-   
-    private List<SearchCriterion> filters = new ArrayList<SearchCriterion>();
     
     private List<Facet> facets = new ArrayList<Facet>();
     

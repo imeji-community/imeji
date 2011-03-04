@@ -22,7 +22,7 @@ public class ContainerMetadata implements Serializable {
 	private String description;
 	
 	
-	protected List<Person> persons = new LinkedList<Person>();
+	protected Collection<Person> persons = new LinkedList<Person>();
 
 
 	@RdfProperty("http://purl.org/dc/elements/1.1/title")
@@ -44,17 +44,12 @@ public class ContainerMetadata implements Serializable {
 	}
 
 	@RdfProperty("http://purl.org/escidoc/metadata/terms/0.1/creator")
-	public List<Person> getPersons() {
+	public Collection<Person> getPersons() {
 		return persons;
 	}
 
-	public void setPersons(List<Person> person) {
+	public void setPersons(Collection<Person> person) {
 		this.persons = person;
 	}
 	
-	
-	
-	
-
-
 }

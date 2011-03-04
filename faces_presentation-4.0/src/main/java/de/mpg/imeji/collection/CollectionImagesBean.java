@@ -73,6 +73,7 @@ public class CollectionImagesBean extends ImagesBean {
 			BeanHelper.error("Invalid search query!");
 		}		
 		ImageController controller = new ImageController(sb.getUser());
+		totalNumberOfRecords = controller.getNumberOfResultsInContainer(uri, scList);
 		images = controller.searchImageInContainer(uri, scList, null, limit, offset);
 		filters = new FiltersBean(getQuery(), totalNumberOfRecords);
 		labels.init((List<Image>) images);

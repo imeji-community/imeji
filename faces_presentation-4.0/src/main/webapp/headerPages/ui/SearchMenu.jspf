@@ -62,15 +62,13 @@
 	
 		<!-- search Menu ends here -->
 	</div>
-				<script type="text/javascript">
-			function quickSearchOnEnter(event)
-			{
-				if (event.keyCode == 13)
-				{
-						document.getElementById('formular:Header:btnQuickSearchStart').click();
-					//search();
-				}
-			}
-			</script>
-	
+	<script type="text/javascript">
+	function quickSearchOnEnter(event)
+	{
+		if (event.keyCode == 13)
+		{
+			document.getElementById('formular:Header:btnQuickSearchStart').click();
+		}
+	}
+	</script>
 </div>

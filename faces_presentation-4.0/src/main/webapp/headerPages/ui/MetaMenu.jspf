@@ -72,7 +72,7 @@
 	<!-- LogIn, LogOut -->
 	<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="huge_area0_p4">
 		<h:inputText styleClass="medium_txtInput" value="#{LoginBean.login}"/>
-		<h:inputSecret styleClass="medium_txtInput" value="#{LoginBean.passwd}"/>
+		<h:inputSecret styleClass="medium_txtInput" value="#{LoginBean.passwd}" onkeypress="return loginOnEnter(event)"/>
 		<h:commandButton id="lnkLogin" styleClass="xSmall_txtBtn activeButton" value="#{lbl.login}" action ="#{LoginBean.login}"/>
 	</h:panelGroup>
 	
@@ -88,4 +88,13 @@
 
 	<!-- meta Menu ends here -->
 </span>
+	<script type="text/javascript">
+		function loginOnEnter(event)
+		{
+			if (event.keyCode == 13)
+			{
+				document.getElementById('formular:Header:lnkLogin').click();
+			}
+		}
+			</script>
 </div>

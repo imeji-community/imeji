@@ -39,7 +39,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query = "SELECT DISTINCT ?s WHERE {" + select + "} " + this.limit + " " + this.offset;
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
-		System.out.println(query);
+		//System.out.println(query);
 		return query;
     }
 	
@@ -91,7 +91,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 			if (!"".equals(subquery.trim()))
 			{
 				query += " .";
-				if(!(sq.getSc().getOperator().equals(Operator.ANDNOT) && sq.getSc().getOperator().equals(Operator.ORNOT))) query += " OPTIONAL";
+				if(!(sq.getSc().getOperator().equals(Operator.NOTAND) && sq.getSc().getOperator().equals(Operator.NOTOR))) query += " OPTIONAL";
 				query += "{ " +  subquery +  " }";
 			}
 		}

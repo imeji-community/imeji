@@ -15,6 +15,7 @@ import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
@@ -107,100 +108,83 @@ public class CollectionCriterionController implements Serializable {
             vo.clearCriterion();
     }
 		
-	public String getSearchCriterion() {
-		String criterion = "";
+	public String getSearchCriterion() 
+	{
+		List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
 
-		int i = 0;
 		for(CollectionCriterion collectionCriterion : collectionCriterionList) 
 		{ 
-		    String collectionLogicalOperator = "";
-		    String collectionQuery = "";
-			
+		    SearchCriterion subSC = new SearchCriterion(Operator.AND, new ArrayList<SearchCriterion>());
+		    
 			if(!(collectionCriterion.getSelectedCollectionId().equals("")))
-			{
-			    if(i!=0)
-			    {
-			        //criterion += " " + collectionCriterion.getLogicOperator();
-			        //Always use OR here, doesnt make sense else
-			        collectionLogicalOperator += " OR";
-			    }
-			    collectionQuery += ImejiNamespaces.IMAGE_COLLECTION.name() + "." + Filtertype.URI + "=\"" + collectionCriterion.getSelectedCollectionId() +"\"";
-			
-			    int j=0;
-    			String mdQuery = "";
+			{    
+			    SearchCriterion collSC = new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_COLLECTION, collectionCriterion.getSelectedCollectionId(), Filtertype.URI);
+			    scList.add(collSC);
+
 			    for(MDCriterion mdc : collectionCriterion.getMdCriterionList())
     			{
     				if(!mdc.getMdText().equals("") && mdc.getSelectedMdName()!=null && !mdc.getSelectedMdName().equals("")) 
-    				{
-    				   
-    				    if(j!=0)
-    				    {
-    				        mdQuery += " " + mdc.getLogicOperator();
-    				    }
-    				    mdQuery+=" ( ";
-				        String ctCriterion = "";
-				        
-				    
-				        ComplexTypes ct = ComplexTypeHelper.getComplexType(mdc.getSelectedStatement().getType());  
-				        switch (ct)
-				        {
-				            case TEXT : 
-				            {
-				                ctCriterion = ImejiNamespaces.IMAGE_METADATA_TEXT.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText() + "\"";
-				                break;
-				            }
-				            case DATE : 
-                            {
-                                try
-                                {
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-                                    Date date = sdf.parse(mdc.getMdText());
-                                    sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");  
-                                    StringBuffer sb = new StringBuffer(sdf.format(date)); 
-                                    System.out.println("MYDATE:" + sb.toString());
-                                    ctCriterion = ImejiNamespaces.IMAGE_METADATA_DATE.name() + "." + mdc.getDateOperator() + "=\"" + sb.toString() + "\"";
-                                }
-                                catch (ParseException e)
-                                {
-                                    BeanHelper.error("Wrong date format");
-                                }
-                                break;
-                            }
-				            case  NUMBER : 
-                            {
-                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_NUMBER.name() + "." + mdc.getNumberOperator() + "=\"" + mdc.getMdText() + "\"";
-                                break;
-                            }
-				            case  PERSON : 
-                            {
-                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME.name()+ "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
-                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_PERSON_GIVEN_NAME.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
-                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
-                                break;
-                            }
-				            case  GEOLOCATION : 
-                            {
-                                ctCriterion =  ImejiNamespaces.IMAGE_METADATA_GEOLOCATION_LONGITUDE.name()+ "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
-                                ctCriterion += " OR " + ImejiNamespaces.IMAGE_METADATA_GEOLOCATION_LATITUDE.name() + "." + Filtertype.REGEX + "=\"" + mdc.getMdText()+ "\"";
-                                break;
-                            }
-				        }
-    				        
-				        mdQuery += collectionQuery + " AND " + ImejiNamespaces.IMAGE_METADATA_NAME.name() + "." + Filtertype.EQUALS + "=\"" + mdc.getSelectedMdName() + "\" AND " + ctCriterion;
-				        mdQuery +=" )";
-    				    j++;
+    				{ 
+    					Operator op  = Operator.AND;
+    					if (mdc.getLogicOperator() != null)
+    					{
+    						 op  = Operator.valueOf(mdc.getLogicOperator());
+    					}
+    					
+    					//Create Search criterion
+    					SearchCriterion mdSC = new SearchCriterion(op, new ArrayList<SearchCriterion>());
+    					
+    					// Add metadata type
+    					mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, mdc.getSelectedStatement().getName().toString(), Filtertype.URI));
+    					
+    					// Add metadata value
+    					switch (ComplexTypeHelper.getComplexType(mdc.getSelectedStatement().getType()))
+ 				        {
+ 				        	case DATE:
+ 				        		String dop = mdc.getDateOperator();
+ 				        		Filtertype f = Filtertype.EQUALS_DATE;
+ 				        		if ("<".equals(dop)) f = Filtertype.LESSER_DATE;
+ 				        		else if (">".equals(dop)) f = Filtertype.GREATER_DATE;
+ 				        		mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_DATE, mdc.getMdText(), f));
+ 				        		break;
+ 				        	case GEOLOCATION:
+ 				        		//TODO to create a new searchcriterion with the 2 values as childs
+ 				        		mdSC.getChildren().add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_GEOLOCATION_LONGITUDE, mdc.getMdText(), Filtertype.REGEX));
+ 				        		mdSC.getChildren().add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_GEOLOCATION_LATITUDE, mdc.getMdText(), Filtertype.REGEX));
+ 				        		break;
+ 				        	case TEXT:
+ 				        		mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TEXT, mdc.getMdText(), Filtertype.REGEX));
+ 				        		break;
+ 				        	case LICENSE:
+ 				        		//TODO
+ 				        		break;
+ 				        	case NUMBER:
+ 				        		String nop = mdc.getNumberOperator();
+ 				        		Filtertype f1 = Filtertype.EQUALS_NUMBER;
+ 				        		if ("<".equals(nop)) f1 = Filtertype.LESSER_NUMBER;
+ 				        		else if (">".equals(nop)) f1 = Filtertype.GREATER_NUMBER;
+ 				        		mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NUMBER, mdc.getMdText(), f1));
+ 				        		break;
+ 				        	case PERSON:
+ 				        		mdSC.getChildren().add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME, mdc.getMdText(),  Filtertype.REGEX));
+ 				        		mdSC.getChildren().add(new SearchCriterion(Operator.OR,  ImejiNamespaces.IMAGE_METADATA_PERSON_GIVEN_NAME, mdc.getMdText(), Filtertype.REGEX));
+ 				        		mdSC.getChildren().add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME, mdc.getMdText(),  Filtertype.REGEX));
+ 				        		break;
+ 				        	case PUBLICATION:
+ 				        		//TODO
+ 				        		break;
+ 				        	case URI:
+ 				        		//TODO
+ 				        		break;
+ 				        }
+    				    subSC.getChildren().add(mdSC);
     				}
     			}
-    			if(!mdQuery.equals(""))
-    			{
-    			    criterion += (collectionLogicalOperator + mdQuery);
-    			}
-    			i++;	
-    			}
-			
+    		}
+		    scList.add(subSC);
 		}
-		
-		return criterion;
+		String query = URLQueryTransformer.transform2URL(scList);
+		return query;
 	}
 	
     protected String getNavigationString(){

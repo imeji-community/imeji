@@ -9,7 +9,7 @@ public class Filter
 	private SearchCriterion filter;
 	private String query ="";
 	private URI collectionID;
-	private String label = "No name";
+	private String label = "Search";
 	private int count = 0;
 	private String removeQuery = "";
 	
@@ -39,8 +39,9 @@ public class Filter
 	
 	public void init()
 	{
-		if("".equals(query))label = "All";
-		else if (label == null) label = "No name";
+//		if("".equals(query))label = "All";
+//		else if (label == null) label = "No name";
+		 if (label == null) label = "Search";
 	}
 
 	public SearchCriterion getFilter() {

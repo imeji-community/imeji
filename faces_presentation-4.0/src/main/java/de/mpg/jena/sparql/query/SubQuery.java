@@ -44,7 +44,7 @@ public class SubQuery
 			QueryElement el = els.get(sc.getNamespace().getNs());
 			List<QueryElement> parents = elFactory.getAllParents(el);
 			
-			if(sc.getOperator().equals(Operator.ANDNOT) || sc.getOperator().equals(Operator.ORNOT)) ssq += " .MINUS {";
+			if(sc.getOperator().equals(Operator.NOTAND) || sc.getOperator().equals(Operator.NOTOR)) ssq += " .MINUS {";
 			
 			for(QueryElement e : parents)
 			{
@@ -72,7 +72,7 @@ public class SubQuery
 			scList.add(sc);		
 			sq += " .FILTER(" + filter  + ")";
 			
-			if(sc.getOperator().equals(Operator.ANDNOT) || sc.getOperator().equals(Operator.ORNOT)) sq += " }";
+			if(sc.getOperator().equals(Operator.NOTAND) || sc.getOperator().equals(Operator.NOTOR)) sq += " }";
 			sq += "}";
 		}
 		return sq;

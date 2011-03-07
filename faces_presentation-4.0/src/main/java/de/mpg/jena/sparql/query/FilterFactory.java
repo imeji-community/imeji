@@ -135,11 +135,11 @@ public class FilterFactory
 	
 	private static String getOperatorString(SearchCriterion sc)
 	{
-		if (sc.getOperator().equals(Operator.AND) || sc.getOperator().equals(Operator.ANDNOT))
+		if (sc.getOperator().equals(Operator.AND) || sc.getOperator().equals(Operator.NOTAND))
 		{
 			return " && ";
 		}
-        else if (sc.getOperator().equals(Operator.OR) || sc.getOperator().equals(Operator.ORNOT))
+        else if (sc.getOperator().equals(Operator.OR) || sc.getOperator().equals(Operator.NOTOR))
         {
         	return " || ";
         }
@@ -148,7 +148,7 @@ public class FilterFactory
 	
 	private static boolean isNot(SearchCriterion sc)
 	{
-		if (sc.getOperator().equals(Operator.ORNOT) || sc.getOperator().equals(Operator.ANDNOT))
+		if (sc.getOperator().equals(Operator.NOTOR) || sc.getOperator().equals(Operator.NOTAND))
 		{
 			return true;
 		}

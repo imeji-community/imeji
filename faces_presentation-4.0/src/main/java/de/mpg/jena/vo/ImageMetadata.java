@@ -68,7 +68,6 @@ public class ImageMetadata implements Serializable
     {
         this.id = id;
     }
-   
 
     public int compareTo(ImageMetadata imd)
     {

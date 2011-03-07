@@ -83,6 +83,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         try
         {
             scList = URLQueryTransformer.transform2SCList(query);
+//            System.out.println("url:" + query);
+//            System.out.println("parsed:" + URLQueryTransformer.transform2URL(scList));
         }
         catch (Exception e)
         {

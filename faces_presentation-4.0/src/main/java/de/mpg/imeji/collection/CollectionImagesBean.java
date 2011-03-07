@@ -66,7 +66,9 @@ public class CollectionImagesBean extends ImagesBean {
 		
 		try 
 		{
-			scList = URLQueryTransformer.transform2SCList(getQuery());
+//			scList = URLQueryTransformer.transform2SCList(getQuery());
+//			System.out.println("url:" + getQuery());
+//	        System.out.println("parsed:" + URLQueryTransformer.transform2URL(scList));
 		} 
 		catch (Exception e) 
 		{

@@ -98,7 +98,7 @@ public class MDCriterion extends Criterion implements Serializable{
            
             for(Statement s : statements)
             {
-                if(s.getName().equals(selectedMdName))
+                if(s.getName().toString().equals(selectedMdName))
                 {
                     this.setSelectedStatement(s);
                 }

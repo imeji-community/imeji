@@ -47,7 +47,7 @@ public class CollectionFacets
 			{
 				SearchCriterion sc = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
 				facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, getName(st.getName())), getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
-				sc =  new SearchCriterion(Operator.ANDNOT, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
+				sc =  new SearchCriterion(Operator.NOTAND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
 				facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, "No+" + getName(st.getName())), "No " + getName(st.getName()),  getCount(new ArrayList<SearchCriterion>(scList), sc)));
 			}
 		}

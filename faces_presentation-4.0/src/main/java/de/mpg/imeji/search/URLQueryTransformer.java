@@ -1,5 +1,6 @@
 package de.mpg.imeji.search;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import de.mpg.jena.controller.SearchCriterion.Operator;
 
 public class URLQueryTransformer 
 {
-	public static List<SearchCriterion> transform2SCList(String query) throws Exception
+	public static List<SearchCriterion> transform2SCList2(String query) throws Exception
 	{
 		boolean inverse = false;
         List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
@@ -66,12 +67,12 @@ public class URLQueryTransformer
                     value = value.substring(1, value.length() - 1);
                     if (nsFilter[0].trim().equals("ANY_METADATA"))
                     {
-                       currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_FILENAME, value, Filtertype.REGEX));
+                    	currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_FILENAME, value, Filtertype.REGEX));
                         currentSubList.add(new SearchCriterion(Operator.OR,  ImejiNamespaces.IMAGE_METADATA_TEXT, value, Filtertype.REGEX));
-                       currentSubList.add(new SearchCriterion(Operator.OR,   ImejiNamespaces.IMAGE_METADATA_NUMBER, value, Filtertype.EQUALS_NUMBER));
+                        currentSubList.add(new SearchCriterion(Operator.OR,   ImejiNamespaces.IMAGE_METADATA_NUMBER, value, Filtertype.EQUALS_NUMBER));
                         currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME, value,  Filtertype.REGEX));
                         currentSubList.add(new SearchCriterion(Operator.OR,  ImejiNamespaces.IMAGE_METADATA_PERSON_GIVEN_NAME, value, Filtertype.REGEX));
-                       currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME, value,  Filtertype.REGEX));
+                        currentSubList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME, value,  Filtertype.REGEX));
                     }
                     else
                     {
@@ -84,7 +85,7 @@ public class URLQueryTransformer
                         }
                         else if (inverse)
                         {
-                        	op = Operator.ANDNOT;
+                        	op = Operator.NOTAND;
                         }
                         // Operator op = Operator.valueOf(lastOperator.trim());
                         SearchCriterion sc = new SearchCriterion(op, ns, value, filter);
@@ -108,6 +109,89 @@ public class URLQueryTransformer
         return scList;
 	}
 	
+	public static List<SearchCriterion> transform2SCList(String query) throws Exception
+	{
+		List<SearchCriterion> scList = parseQuery(query, Operator.AND);
+        return scList;
+	}
+	
+	private static List<SearchCriterion> parseQuery(String query, Operator op) throws IOException
+	{
+		List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+		
+		String subQuery ="";
+		String scString ="";
+		
+		int bracketsOpened = 0;
+        int bracketsClosed = 0;
+        
+		StringReader reader = new StringReader(query);
+		int c = 0;
+        while ((c = reader.read()) != -1)
+        {
+        	if (bracketsOpened - bracketsClosed != 0) subQuery+= (char)c;
+        	else scString += (char)c;
+        	
+            if (c == '(')
+            {
+                bracketsOpened++;
+            }
+            if (c == ')')
+            {
+                bracketsClosed++;
+                scString = "";
+            }
+            if (scString.trim().equals("AND") || scString.trim().equals("OR") || scString.trim().equals("NOTAND") || scString.trim().equals("NOTOR"))
+            {
+                op = Operator.valueOf(scString.trim());
+                scString = "";
+            }
+            if (bracketsOpened - bracketsClosed == 0)
+            {
+            	
+            	List<SearchCriterion> children = parseQuery(subQuery, op);
+            	if (children.size() > 0)
+            	{
+            		scList.add(new SearchCriterion(op, children));
+            		subQuery ="";
+            	}
+            }
+            if (scString.matches("\\s*[^\\s]+=\".*\"\\s+"))
+        	{
+            	String[] keyValue = scString.split("=");
+                String[] nsFilter = keyValue[0].split("\\.");
+                String value = keyValue[1].trim();
+                value = value.substring(1, value.length() - 1);
+                
+                if (nsFilter[0].trim().equals("ANY_METADATA"))
+                {
+                	scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_FILENAME, value, Filtertype.REGEX));
+               	 	scList.add(new SearchCriterion(Operator.OR,  ImejiNamespaces.IMAGE_METADATA_TEXT, value, Filtertype.REGEX));
+               	 	scList.add(new SearchCriterion(Operator.OR,   ImejiNamespaces.IMAGE_METADATA_NUMBER, value, Filtertype.EQUALS_NUMBER));
+                    scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME, value,  Filtertype.REGEX));
+                    scList.add(new SearchCriterion(Operator.OR,  ImejiNamespaces.IMAGE_METADATA_PERSON_GIVEN_NAME, value, Filtertype.REGEX));
+                    scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME, value,  Filtertype.REGEX));
+                }
+                else
+                {
+                    ImejiNamespaces ns = ImejiNamespaces.valueOf(nsFilter[0].trim());
+                    Filtertype filter = Filtertype.valueOf(nsFilter[1].trim());
+                    SearchCriterion sc = new SearchCriterion(op, ns, value, filter);
+                    scList.add(sc);
+                }
+                scString ="";
+        	}
+        }
+		
+		return scList;
+	}
+		
+	/**
+	 * Use transform2URL
+	 * @param scList
+	 * @return
+	 */
+	@Deprecated
 	public static String transform2URLAdvanced(List<List<SearchCriterion>> scList)
 	{
 		String query ="";
@@ -123,22 +207,22 @@ public class URLQueryTransformer
 		String query ="";
 		for (SearchCriterion sc : scList) 
 		{
-    		if (sc.getChildren().size() > 0) 
+			if (!"".equals(query) 
+					|| Operator.NOTAND.equals(sc.getOperator())
+					|| Operator.NOTOR.equals(sc.getOperator()))
     		{
-    			query += transform2URL(sc.getChildren());
+				query += " " + sc.getOperator().name() + " ";
+    		}
+			if (sc.getChildren().size() > 0) 
+    		{
+				query += " ( ";
+    			query +=  transform2URL(sc.getChildren());
+    			query += " ) ";
 			}
     		else
     		{
-    			query += "" + sc.getOperator().name();
-    			if (!"".equals(query))
-        		{
-        			
-        		}
-        		if (sc.isInverse())
-        		{
-        			query += " INVERSE ";
-        		}
-        		query += " ( " + sc.getNamespace().name() + "." + sc.getFilterType().name() +  "=\"" + sc.getValue() + "\" ) ";
+    			//query += "( " + sc.getNamespace().name() + "." + sc.getFilterType().name() +  "=\"" + sc.getValue() + "\" )";
+    			query += " " +sc.getNamespace().name() + "." + sc.getFilterType().name() +  "=\"" + sc.getValue() + "\" ";
     		}
 		}
 		return query;

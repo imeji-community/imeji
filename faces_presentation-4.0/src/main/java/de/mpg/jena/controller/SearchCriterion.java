@@ -7,7 +7,7 @@ public class SearchCriterion {
 
 	public enum Operator
 	{
-		AND, OR, ANDNOT, ORNOT;
+		AND, OR, NOTAND, NOTOR;
 	}
 
 
@@ -16,8 +16,6 @@ public class SearchCriterion {
 	    REGEX, URI, EQUALS, BOUND, EQUALS_NUMBER, GREATER_NUMBER, LESSER_NUMBER, EQUALS_DATE, GREATER_DATE, LESSER_DATE, NOT;
 	}
 
-   
-	
 	public enum ImejiNamespaces {
 
 	    ID_URI(""),

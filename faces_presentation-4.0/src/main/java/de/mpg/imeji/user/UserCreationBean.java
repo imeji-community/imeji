@@ -41,7 +41,6 @@ public class UserCreationBean
         UserController uc = new UserController(sb.getUser());
         String regexEmailMatch ="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
         
-       
         if (!user.getEmail().matches(regexEmailMatch))
         {
             BeanHelper.error("The email is not valid!");
@@ -61,6 +60,7 @@ public class UserCreationBean
                 else
                 {
                 	 user.setEncryptedPassword(UserController.convertToMD5(getPassword()));
+                	 System.out.println("USER email created: " + user.getEmail());
                      uc.create(user);
                      BeanHelper.error("User created successfully");
                 }

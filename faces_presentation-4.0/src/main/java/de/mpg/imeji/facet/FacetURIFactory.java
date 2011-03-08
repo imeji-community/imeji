@@ -33,7 +33,7 @@ public class FacetURIFactory
 	private String getCommonURI(List<SearchCriterion> scl, String facetName) throws UnsupportedEncodingException
 	{
         String commonURI ="";
-        commonURI +=  URLEncoder.encode(URLQueryTransformer.transform2URL(scl), "UTF-8") + "&f=" + facetName;
+        commonURI +=  URLEncoder.encode(URLQueryTransformer.transform2URL(scl), "UTF-8") + "&f=" +  URLEncoder.encode(facetName,  "UTF-8");
         return commonURI;
 	}
 	

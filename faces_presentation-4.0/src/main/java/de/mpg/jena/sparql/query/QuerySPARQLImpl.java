@@ -38,8 +38,9 @@ public class QuerySPARQLImpl implements QuerySPARQL
     {
 		String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query = "SELECT DISTINCT ?s WHERE {" + select + "} " + this.limit + " " + this.offset;
-		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
+		//ImejiJena.userModel.write(System.out, "RDF/XML-ABBREV");
 		//System.out.println(query);
+		//query="SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?s <http://imeji.mpdl.mpg.de/collection> ?coll .FILTER(?visibility=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC> ||  true) . OPTIONAL{ SELECT DISTINCT ?s0 WHERE { ?s0 a <http://imeji.mpdl.mpg.de/image>. OPTIONAL {?s0 <http://imeji.mpdl.mpg.de/properties> ?v1. OPTIONAL {?v1 <http://imeji.mpdl.mpg.de/createdBy> ?v2}} .FILTER(str(?v2)='http://xmlns.com/foaf/0.1/Person/sysadmin%40imeji.mpdl.mpg.de')} }.FILTER( ?s=?s0 )} LIMIT 24 ";
 		return query;
     }
 	

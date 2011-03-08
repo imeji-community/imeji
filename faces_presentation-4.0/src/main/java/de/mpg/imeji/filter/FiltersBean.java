@@ -1,28 +1,18 @@
 package de.mpg.imeji.filter;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 
-import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.collection.CollectionSessionBean;
-import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.jena.controller.SearchCriterion;
 
 public class FiltersBean
 {
 	private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
 	
 	private int count = 0;
-	
-	public FiltersBean()
-	{
-	}
 	
 	public FiltersBean(String query, int count) 
 	{	

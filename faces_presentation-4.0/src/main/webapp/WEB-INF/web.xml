@@ -125,9 +125,24 @@
 	    <param-value>*.xhtml</param-value>
 	  </context-param>     
 
+	
 	<session-config>
 		<session-timeout>180</session-timeout>
 	</session-config>
+	
+	<!-- History filters -->
+	<filter>
+	   <filter-name>History Filter</filter-name>
+	   <filter-class>de.mpg.imeji.history.HistoryFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+	   <filter-name>History Filter</filter-name>
+	   <servlet-name>Faces Servlet</servlet-name>
+	   <dispatcher>REQUEST</dispatcher>
+	   <dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	
 	
 	<!--<servlet-mapping>
 		<servlet-name>Upload Servlet</servlet-name>

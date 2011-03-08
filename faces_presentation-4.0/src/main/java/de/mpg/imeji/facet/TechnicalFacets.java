@@ -13,6 +13,8 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
+import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class TechnicalFacets 
@@ -31,6 +33,9 @@ public class TechnicalFacets
 	
 		try 
 		{
+			SearchCriterion myImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_CREATED_BY , ObjectHelper.getURI(User.class, sb.getUser().getEmail()).toString(), Filtertype.URI);
+			facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "My images"), "My images", getCount(new ArrayList<SearchCriterion>(scList), myImagesSC)));
+			
 			for (ComplexTypes ct : ComplexTypes.values())
 			{
 				if (!fs.isFilter(ct.name()))

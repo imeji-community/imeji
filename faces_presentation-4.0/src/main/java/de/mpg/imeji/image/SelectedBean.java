@@ -53,6 +53,7 @@ public class SelectedBean extends ImagesBean {
 		ImageController controller = new ImageController(sb.getUser());
 		images = new ArrayList<Image>();
 		List<SearchCriterion> uris = new ArrayList<SearchCriterion>();
+		//List<String> uris = new ArrayList<String>();
 		for (URI uri : sb.getSelected()) 
 		{
 			uris.add(new SearchCriterion(SearchCriterion.Operator.OR,
@@ -61,7 +62,6 @@ public class SelectedBean extends ImagesBean {
 		if (uris.size() != 0) 
 		{
 			totalNumberOfRecords = controller.getNumberOfResults(uris);
-			System.out.println(totalNumberOfRecords);
 			images = controller.search(uris, null, limit, offset);
 		}
 		return ImejiFactory.imageListToBeanList(images);

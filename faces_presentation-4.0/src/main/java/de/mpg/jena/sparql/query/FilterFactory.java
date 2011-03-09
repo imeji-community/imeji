@@ -75,15 +75,23 @@ public class FilterFactory
 		
 		for (SearchCriterion sc: firstParents)
 		{
-			if(sc.getNamespace() != null && !"".equals(subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()).print()))
+			if (sc.getNamespace() != null && sc.getNamespace().equals(ImejiNamespaces.ID_URI))
 			{
 				if (!"".equals(f)) f+= getOperatorString(sc);
-				f += "?s" + "=?" + subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()).getName();
+				f += "?s" + "=<" + sc.getValue() + ">";
 			}
-			else if (!sc.getChildren().isEmpty())
+			else
 			{
-				if (!"".equals(f)) f+= getOperatorString(sc);
-				f += "("  + getAdvancedFilter(sc.getChildren(), subQueries, els) + ")";
+				if(sc.getNamespace() != null && !"".equals(subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()).print()))
+				{
+					if (!"".equals(f)) f+= getOperatorString(sc);
+					f += "?s" + "=?" + subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()).getName();
+				}
+				else if (!sc.getChildren().isEmpty())
+				{
+					if (!"".equals(f)) f+= getOperatorString(sc);
+					f += "("  + getAdvancedFilter(sc.getChildren(), subQueries, els) + ")";
+				}
 			}
 		}
 		
@@ -146,15 +154,6 @@ public class FilterFactory
 		return " && ";
 	}
 	
-	private static boolean isNot(SearchCriterion sc)
-	{
-		if (sc.getOperator().equals(Operator.NOTOR) || sc.getOperator().equals(Operator.NOTAND))
-		{
-			return true;
-		}
-		return false;
-	}
-	
 	
 	public static String getSimpleFilter(SearchCriterion sc, String variable)
 	{
@@ -169,7 +168,7 @@ public class FilterFactory
             }
             else if (sc.getFilterType().equals(Filtertype.URI) && sc.getNamespace().equals(ImejiNamespaces.ID_URI))
             {
-                filter += "?s" + "=<" + sc.getValue() + ">";
+                filter +=  variable + "=<" + sc.getValue() + ">";
             }
             else if (sc.getFilterType().equals(Filtertype.REGEX))
             {

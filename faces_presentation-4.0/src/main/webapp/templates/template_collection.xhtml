@@ -8,10 +8,8 @@
 
 <ui:composition template="template.xhtml">
 	<ui:define name="additionalSubheaders">
-		<h:panelGroup layout="block" styleClass="subHeader"
-			rendered="#{(SessionBean.user == null) and (SessionBean.currentPage == 'HOME')}">
-			<h:outputText
-				value="#{HomePage.totalNumberOfItems} #{msg.browse_not_logged_in}" />
+		<h:panelGroup layout="block" styleClass="subHeader"	rendered="#{(SessionBean.user == null) and (SessionBean.currentPage == 'HOME')}">
+			<h:outputText value="#{HomePage.totalNumberOfItems} #{msg.browse_not_logged_in}" />
 		</h:panelGroup>
 	</ui:define>
 </ui:composition>

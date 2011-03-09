@@ -156,6 +156,18 @@ public class ImageController extends ImejiController
         String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/image", additionalQuery, "", limit, offset, user);
         return  ImejiSPARQL.execAndLoad(query, Image.class);
     }
+    public Collection<Image> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset, List<String> uris) throws Exception
+	{
+		additionalQuery = "";
+		String additionalFilter ="";
+		for (String uri : uris)
+		{
+			additionalFilter += " || ?s=<" + uri + ">";
+		}
+		QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+		String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/image", additionalQuery, additionalFilter, limit, offset, user);
+		return  ImejiSPARQL.execAndLoad(query, Image.class);
+	}
     
     /**
      * @param scList

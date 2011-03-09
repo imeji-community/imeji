@@ -18,7 +18,7 @@ public class SearchCriterion {
 
 	public enum ImejiNamespaces {
 
-	    ID_URI(""),
+	    ID_URI("http://imeji.mpdl.mpg.de/id"),
 
 		PROPERTIES("http://imeji.mpdl.mpg.de/properties"),
 		

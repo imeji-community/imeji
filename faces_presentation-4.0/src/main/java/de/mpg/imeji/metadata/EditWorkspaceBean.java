@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.SelectedBean;
@@ -30,8 +32,9 @@ import de.mpg.jena.vo.User;
 public class EditWorkspaceBean
 {
 	enum EditorType{
-		SINGLE, MULTIPLE, BATCH;
+		SINGLE, MULTIPLE, BATCH, SELECTED, ALL;
 	}
+	
 	
 	enum CitationStyle{
 		APA, AJP, JUS;
@@ -72,6 +75,7 @@ public class EditWorkspaceBean
 	
 	public void init(List<Image> images)
 	{
+		if (images == null) images = new ArrayList<Image>();
 		images = removeNonEditableImages(images);
 		lockImages(images);
 		profiles = extractProfiles(images);
@@ -79,6 +83,16 @@ public class EditWorkspaceBean
 		Statement s = null;
 		if (!editAllStatements) s = getSelectedStatement(p);
 		editor = initEditor(images, p, s);
+	}
+	
+	public String getInitPage()
+	{
+		reset();
+		String typeString = (String) ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("type");
+		
+		if ("selected".equals(typeString)) init (retrieveAllSelectedImages());
+		else if ("all".equals(typeString)) init(retrieveAllSelectedImages());
+		return "";
 	}
 	
 	public String getDefaultWorkspace()

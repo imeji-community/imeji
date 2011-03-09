@@ -14,8 +14,9 @@ import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.util.ObjectHelper;
-import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
+import de.mpg.jena.vo.Image.Visibility;
+import de.mpg.jena.vo.User;
 
 public class TechnicalFacets 
 {
@@ -36,6 +37,13 @@ public class TechnicalFacets
 			SearchCriterion myImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_CREATED_BY , ObjectHelper.getURI(User.class, sb.getUser().getEmail()).toString(), Filtertype.URI);
 			facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "My images"), "My images", getCount(new ArrayList<SearchCriterion>(scList), myImagesSC)));
 			
+			SearchCriterion privateImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_VISIBILITY, Visibility.PRIVATE.toString(), Filtertype.REGEX);
+			facets.add(new Facet(uriFactory.createFacetURI(baseURI, privateImagesSC, "Private images"), "Private images", getCount(new ArrayList<SearchCriterion>(scList), privateImagesSC)));
+			
+			SearchCriterion publicImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_VISIBILITY, Visibility.PUBLIC.toString(), Filtertype.REGEX);
+			facets.add(new Facet(uriFactory.createFacetURI(baseURI, publicImagesSC, "Public images"), "Public images", getCount(new ArrayList<SearchCriterion>(scList), publicImagesSC)));
+			
+				
 			for (ComplexTypes ct : ComplexTypes.values())
 			{
 				if (!fs.isFilter(ct.name()))

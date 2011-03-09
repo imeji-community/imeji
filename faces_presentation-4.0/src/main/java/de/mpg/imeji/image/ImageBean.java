@@ -66,7 +66,7 @@ public class ImageBean
         imageController = new ImageController(sessionBean.getUser());
         collectionController = new CollectionController(sessionBean.getUser());
         prettyLink = "pretty:editImage";
-        profile = ProfileHelper.loadProfile(image);
+        //profile = ProfileHelper.loadProfile(image);
     }
 
     public void init() throws Exception

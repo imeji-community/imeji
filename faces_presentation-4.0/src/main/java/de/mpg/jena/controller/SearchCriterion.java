@@ -33,6 +33,7 @@ public class SearchCriterion {
 		PROPERTIES_STATUS("http://imeji.mpdl.mpg.de/status", PROPERTIES),
 		
 		IMAGE_FILENAME("http://imeji.mpdl.mpg.de/filename"),
+		IMAGE_VISIBILITY("http://imeji.mpdl.mpg.de/visibility"),
 		IMAGE_METADATA_SET("http://imeji.mpdl.mpg.de/metadataSet"),
 		IMAGE_METADATA("http://imeji.mpdl.mpg.de/metadata", IMAGE_METADATA_SET),
 		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/metadata/ns", IMAGE_METADATA),

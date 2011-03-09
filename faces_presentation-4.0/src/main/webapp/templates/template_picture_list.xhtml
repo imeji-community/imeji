@@ -137,7 +137,7 @@
 				<a class="free_area0 xTiny_marginRExcl" href="#" onclick="$(this).parents('.subHeaderSection').find('.searchQuery').slideToggle('slow'); $(this).hide();"><h:outputText id="lblShowQuery" value="Show Query"/></a>								
 				<h:outputLink id="lnkReviseSearcg" title="Revise the last Search"  value="#{Navigation.searchUrl}?action=revise">Revise Search</h:outputLink>
 			</h:panelGroup>
-	
+			
 			<h:panelGroup layout="block" styleClass="subHeader" rendered="#{(SessionBean.query != '') and (SessionBean.query != null) and (SessionBean.currentPage == 'SEARCHRESULT')}">
 				<!-- Search Query -->
 				<h:panelGroup layout="block" styleClass="full_area0 searchQuery" style="display: none;">

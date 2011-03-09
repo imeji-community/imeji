@@ -3,9 +3,6 @@ package de.mpg.jena.vo;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -97,18 +94,6 @@ public class Image implements Serializable
     {
         return visibility;
     }
-
-//    public void setMetadata(Collection<ImageMetadata> metadata)
-//    {
-//        this.metadata = metadata;
-//    }
-//
-//    //@RdfProperty("http://www.jena.hpl.hp.com/ARQ/list#member")
-//    @RdfProperty("http://imeji.mpdl.mpg.de/metadata")
-//    public Collection<ImageMetadata> getMetadata()
-//    {
-//        return metadata;
-//    }
 
     //@RdfProperty("http://imeji.mpdl.mpg.de/metadataSet")
     public MetadataSet getMetadataSet() 

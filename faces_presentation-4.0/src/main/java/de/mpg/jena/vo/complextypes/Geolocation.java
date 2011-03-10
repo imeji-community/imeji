@@ -14,6 +14,7 @@ public class Geolocation extends ComplexType implements Serializable
 {
     private double longitude;
     private double latitude;
+    private String name;
     
     public double getLongitude()
     {
@@ -35,7 +36,15 @@ public class Geolocation extends ComplexType implements Serializable
         this.latitude = latitude;
     }
 
-    public Geolocation()
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Geolocation()
     {
         super(ComplexTypes.GEOLOCATION);
     }

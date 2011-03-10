@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import thewebsemantic.RdfType;
 public class MetadataSet 
 {
 	private Collection<ImageMetadata> metadata =  new LinkedList<ImageMetadata>();
+	private URI profile;
 	
 	@Id
 	private String id = UUID.randomUUID().toString();
@@ -33,5 +35,13 @@ public class MetadataSet
 	public void setMetadata(Collection<ImageMetadata> metadata) {
 		this.metadata = metadata;
 	}
+	
+	@RdfProperty("http://imeji.mpdl.mpg.de/mdprofile")
+	public URI getProfile() {
+		return profile;
+	}
 
+	public void setProfile(URI profile) {
+		this.profile = profile;
+	}
 }

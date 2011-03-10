@@ -16,12 +16,16 @@ import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.ImejiJena;
+import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.MetadataProfile;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
@@ -36,6 +40,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private Navigation navigation;
     protected MetadataLabels labels;
     private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+    private Collection<Image> images = new ArrayList<Image>();
     
     public ImagesBean()
     {
@@ -75,7 +80,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public List<ImageBean> retrieveList(int offset, int limit) throws Exception
     {
         ImageController controller = new ImageController(sb.getUser());
-        Collection<Image> images = new ArrayList<Image>();
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
@@ -187,5 +191,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 		this.filters = filters;
 	}
     
+	public Collection<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(Collection<Image> images) {
+		this.images = images;
+	}
     
 }

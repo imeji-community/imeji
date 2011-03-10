@@ -28,7 +28,6 @@
  */
 package de.mpg.imeji.beans;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -38,13 +37,8 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
-import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotBoundException;
-import de.mpg.imeji.util.BeanHelper;
-import de.mpg.jena.controller.CollectionController;
-import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.ImejiController;
-import de.mpg.jena.vo.CollectionImeji;
 
 /**
  * This abstract bean class is used to manage lists with one or two paginators. It can work together with different

@@ -3,12 +3,10 @@ package de.mpg.imeji.metadata.editors;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class MetadataBatchEditor extends MetadataEditor 
 {

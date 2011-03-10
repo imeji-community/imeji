@@ -40,17 +40,17 @@ public class ProfileHelper
     public static Map<URI, MetadataProfile> loadProfiles(List<Image> imgs)
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        CollectionController c = new CollectionController(sb.getUser());
         ProfileController pc = new ProfileController(sb.getUser());
         Map<URI, MetadataProfile> pMap = new HashMap<URI, MetadataProfile>();
         for (Image im : imgs)
         {
-            CollectionImeji coll = c.retrieve(im.getCollection());
-            if (pMap.get(coll.getProfile()) == null)
-				try {
-					pMap.put(coll.getProfile(), pc.retrieve(coll.getProfile()));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
+            if (pMap.get(im.getMetadataSet().getProfile()) == null)
+				try 
+            	{
+					pMap.put(im.getMetadataSet().getProfile(), pc.retrieve(im.getMetadataSet().getProfile()));
+				} 
+            	catch (Exception e) 
+            	{
 					e.printStackTrace();
 				}
         }
@@ -77,11 +77,9 @@ public class ProfileHelper
     {
         MetadataProfile profile = new MetadataProfile();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        CollectionController c = new CollectionController(sb.getUser());
-        CollectionImeji coll = c.retrieve(image.getCollection());
         ProfileController pc = new ProfileController(sb.getUser());
         try {
-			profile = pc.retrieve(coll.getProfile());
+			profile = pc.retrieve(image.getMetadataSet().getProfile());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

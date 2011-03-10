@@ -20,8 +20,8 @@ import org.richfaces.json.JSONException;
 
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.collection.CollectionBean.TabType;
+import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
@@ -31,11 +31,9 @@ import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
-import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class MdProfileBean
 {

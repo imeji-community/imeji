@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.SelectedBean;
+import de.mpg.imeji.lang.labelHelper;
 import de.mpg.imeji.metadata.editors.MetadataBatchEditor;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
@@ -35,7 +36,6 @@ public class EditWorkspaceBean
 		SINGLE, MULTIPLE, BATCH, SELECTED, ALL;
 	}
 	
-	
 	enum CitationStyle{
 		APA, AJP, JUS;
 	}
@@ -54,6 +54,9 @@ public class EditWorkspaceBean
 	private int mdPosition = 0;
 	private int imagePosition = 0;
 	
+	// Menus
+	private List<SelectItem> statementMenu = new ArrayList<SelectItem>();
+ 	
 	public EditWorkspaceBean() 
 	{
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
@@ -87,10 +90,12 @@ public class EditWorkspaceBean
 	
 	public String getInitPage()
 	{
+		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		user = sb.getUser();
 		reset();
 		String typeString = (String) ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("type");
 		
-		if ("selected".equals(typeString)) init (retrieveAllSelectedImages());
+		if ("selected".equals(typeString)) init(retrieveAllSelectedImages());
 		else if ("all".equals(typeString)) init(retrieveAllSelectedImages());
 		return "";
 	}
@@ -267,6 +272,15 @@ public class EditWorkspaceBean
 	private List<Image> retrieveAllSelectedImages()
 	{
 		SelectedBean selectedBean = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
+		try 
+		{
+			selectedBean.retrieveList(0, 100);
+		} 
+		catch (Exception e) 
+		{
+			BeanHelper.error("Error retrieving selected images");
+			e.printStackTrace();
+		}
 		return (List<Image>) selectedBean.getImages();
 	}
 	
@@ -380,5 +394,26 @@ public class EditWorkspaceBean
 	public void setEditAllStatements(boolean editAllStatements) {
 		this.editAllStatements = editAllStatements;
 	}
+	
+	public void statementListener(ActionEvent event)
+	{
+		
+	}
+
+	public List<SelectItem> getStatementMenu() {
+		for (MetadataProfile p : profiles)
+		{
+			for (Statement s : p.getStatements())
+			{
+				statementMenu.add(new SelectItem(s.getName(), labelHelper.getDefaultLabel(s.getLabels().iterator())));
+			}
+		}
+		return statementMenu;
+	}
+
+	public void setStatementMenu(List<SelectItem> statementMenu) {
+		this.statementMenu = statementMenu;
+	}
+	
 	
 }

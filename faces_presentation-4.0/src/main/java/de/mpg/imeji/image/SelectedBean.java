@@ -25,7 +25,6 @@ import de.mpg.jena.vo.Properties.Status;
 public class SelectedBean extends ImagesBean {
 	private int totalNumberOfRecords;
 	private SessionBean sb;
-	private Collection<Image> images;
 //	private String mdEdited;
 	private URI currentCollection;
 	private String backUrl = null;
@@ -51,7 +50,7 @@ public class SelectedBean extends ImagesBean {
 	public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
 	{
 		ImageController controller = new ImageController(sb.getUser());
-		images = new ArrayList<Image>();
+		super.setImages(new ArrayList<Image>());
 		List<SearchCriterion> uris = new ArrayList<SearchCriterion>();
 		//List<String> uris = new ArrayList<String>();
 		for (URI uri : sb.getSelected()) 
@@ -62,9 +61,9 @@ public class SelectedBean extends ImagesBean {
 		if (uris.size() != 0) 
 		{
 			totalNumberOfRecords = controller.getNumberOfResults(uris);
-			images = controller.search(uris, null, limit, offset);
+			super.setImages(controller.search(uris, null, limit, offset));
 		}
-		return ImejiFactory.imageListToBeanList(images);
+		return ImejiFactory.imageListToBeanList(super.getImages());
 	}
 
 	public String clearAll() {
@@ -128,11 +127,5 @@ public class SelectedBean extends ImagesBean {
 		this.sb = sb;
 	}
 
-	public Collection<Image> getImages() {
-		return images;
-	}
-
-	public void setImages(Collection<Image> images) {
-		this.images = images;
-	}
+	
 }

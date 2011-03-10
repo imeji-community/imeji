@@ -1,25 +1,19 @@
 package de.mpg.jena.sparql.query;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.mpg.imeji.search.QuickSearchBean;
-import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.ImejiQueryVariable;
 import de.mpg.jena.controller.SearchCriterion;
-import de.mpg.jena.controller.SearchCriterion.Operator;
-import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
+import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.sparql.QuerySPARQL;
-import de.mpg.jena.util.ObjectHelper;
-import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.User;
-import de.mpg.jena.vo.Grant.GrantType;
 
 public class QuerySPARQLImpl implements QuerySPARQL
 {
@@ -31,15 +25,15 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	private String limit = "";
 	private String offset = "";
 	
-	private String type = "http://imeji.mpdl.mpg.de/image";
-	private Map<String, SearchCriterion> subqueries = new HashMap<String, SearchCriterion>();
+//	private String type = "http://imeji.mpdl.mpg.de/image";
+//	private Map<String, SearchCriterion> subqueries = new HashMap<String, SearchCriterion>();
 
 	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
     {
 		String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query = "SELECT DISTINCT ?s WHERE {" + select + "} " + this.limit + " " + this.offset;
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
-		System.out.println(query);
+		//System.out.println(query);
 		//query="SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?s <http://imeji.mpdl.mpg.de/collection> ?coll .FILTER(?visibility=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC> ||  true) . OPTIONAL{ SELECT DISTINCT ?s0 WHERE { ?s0 a <http://imeji.mpdl.mpg.de/image> OPTIONAL {?s0 <http://imeji.mpdl.mpg.de/about> ?v1} .FILTER(?v1=<http://imeji.mpdl.mpg.de/image/2>)} }.FILTER( ?s=?s0 )} LIMIT 24 ";
 		return query;
     }

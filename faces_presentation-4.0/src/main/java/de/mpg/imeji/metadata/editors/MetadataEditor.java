@@ -1,25 +1,17 @@
 package de.mpg.imeji.metadata.editors;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import org.apache.log4j.Logger;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.log4j.Logger;
 import org.richfaces.json.JSONCollection;
 import org.richfaces.json.JSONException;
 
 import thewebsemantic.LocalizedString;
-
-import com.hp.hpl.jena.rdf.arp.StatementHandler;
-
-import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.controller.ImageController;
@@ -28,7 +20,6 @@ import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public abstract class  MetadataEditor 
 {	
@@ -218,6 +209,14 @@ public abstract class  MetadataEditor
 
 	public void setErase(boolean erase) {
 		this.erase = erase;
+	}
+
+	public MetadataProfile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(MetadataProfile profile) {
+		this.profile = profile;
 	}
 	
 }

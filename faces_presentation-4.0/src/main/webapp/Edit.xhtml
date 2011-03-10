@@ -26,47 +26,48 @@
 					
 					<!-- Selectors -->
 					<h:panelGroup styleClass="huge_area0">
-						<h:outputLabel value="Select profile"/>
-						<h:selectOneMenu value="#{EditImageMetadataBean.selectedProfileName}" valueChangeListener="#{EditImageMetadataBean.profileListener}">
-							<f:selectItems value="#{EditImageMetadataBean.profileMenu}"/>
-							<a4j:support event="onchange" reRender="ajaxContent" />
-						</h:selectOneMenu>
+						<h:panelGroup styleClass="huge_area0">
+							<h:outputLabel styleClass="huge_area0" value="Select profile"/>
+							<h:selectOneMenu styleClass="xLarge_area0" value="#{EditImageMetadataBean.selectedProfileName}" valueChangeListener="#{EditImageMetadataBean.profileListener}">
+								<f:selectItems value="#{EditImageMetadataBean.profileMenu}"/>
+								<a4j:support event="onchange" reRender="ajaxContent" />
+							</h:selectOneMenu>
+							<br/><br/><br/>
+							<br/>
+						</h:panelGroup>
+						<h:panelGroup styleClass="huge_area0">
+							<h:outputLabel styleClass="huge_area0"  value="Select metadata type"/>
+							<h:selectOneMenu styleClass="xLarge_area0"  id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" valueChangeListener="#{EditImageMetadataBean.statementListener}">
+								<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
+								<a4j:support event="onchange" reRender="ajaxContent" />
+							</h:selectOneMenu>
+						</h:panelGroup>
 					</h:panelGroup>
 					
-					<h:panelGroup styleClass="huge_area0">
-						<h:outputLabel value="Select metadat type"/>
-						<h:selectOneMenu id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" valueChangeListener="#{EditImageMetadataBean.statementListener}">
-							<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
-							<a4j:support event="onchange" reRender="ajaxContent" />
-						</h:selectOneMenu>
-					</h:panelGroup>
-					
-					<!-- Inputs -->
+					<!-- COMMON METADATA -->
 					<h:panelGroup id="commonMetadata" styleClass="half_area0">
 						<ui:include src="./picturesPages/ui/MetadataInput.xhtml">
 							<ui:param name="metadata" value="#{EditImageMetadataBean.metadata}"/>
 						</ui:include>
+						<h:panelGroup id="modeRadioMenu" styleClass="full_area0">
+							<h:selectOneRadio styleClass="huge_are0" value="#{EditImageMetadataBean.selectedMode}">
+		  						<f:selectItems value="#{EditImageMetadataBean.modeRadio}" />
+							</h:selectOneRadio>
+						</h:panelGroup>
+						<div class="half_area0 formButtonArea">
+							<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="clear all"/>
+							<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 activeButton"  action="#{EditImageMetadataBean.addToAll}" value="Add to all"/>
+						</div>
 					</h:panelGroup>
 					
-					<h:panelGroup id="modeRadioMenu" styleClass="full_area0">
-						<h:selectOneRadio styleClass="huge_are0" value="#{EditImageMetadataBean.selectedMode}">
-	  						<f:selectItems value="#{EditImageMetadataBean.modeRadio}" />
-						</h:selectOneRadio>
-					</h:panelGroup>
-
-					
-					<!-- BUTTONS -->
-					<div class="half_area0 formButtonArea">
-						<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="clear all"/>
-						<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 activeButton"  action="#{EditImageMetadataBean.addToAll}" value="Add to all"/>
-					</div>
 					<br/>
+					<!-- SAVE BUTTON -->
 					<h:panelGroup styleClass="full_area0 preListHeader formButtonArea">
-						<h:panelGroup styleClass="half_area0 formButtonArea">
+						<h:panelGroup styleClass="full_area0 formButtonArea ">
 							<h:outputLink value="" styleClass="free_area1_p8 cancelButton">
 									<h:outputText value="#{lbl.reset}" />
 							</h:outputLink>	
-							<h:commandButton styleClass="free_area1_p8 activeButton"  action="#{EditImageMetadataBean.editor.save}" value="#{lbl.save}"/>
+							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.editor.save}" value="#{lbl.save}"/>
 						</h:panelGroup>
 					</h:panelGroup>	
 					

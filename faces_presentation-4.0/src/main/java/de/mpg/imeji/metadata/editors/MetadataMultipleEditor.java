@@ -32,7 +32,6 @@ public class MetadataMultipleEditor extends MetadataEditor
 					}
 				}
 				if (empty && hasStatement) addMetadata(im, 0);
-				if(empty) System.out.println(hasStatement);
 				this.images.add(im);
 			}
 		}

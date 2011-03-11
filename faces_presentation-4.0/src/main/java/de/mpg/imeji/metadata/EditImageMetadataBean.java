@@ -10,6 +10,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import de.mpg.imeji.collection.CollectionImagesBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.SelectedBean;
 import de.mpg.imeji.lang.labelHelper;
@@ -90,7 +91,7 @@ public class EditImageMetadataBean
 		}
 		else if ("all".equals(typeString))
 		{
-			imagesBean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class);
+			imagesBean = (CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class);
 		}
 		imagesBean.update();
 		profiles =  ProfileHelper.loadProfiles((List<Image>) imagesBean.getImages()).values();

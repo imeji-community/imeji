@@ -79,6 +79,7 @@ public class CollectionImagesBean extends ImagesBean {
 		ImageController controller = new ImageController(sb.getUser());
 		totalNumberOfRecords = controller.getNumberOfResultsInContainer(uri, scList);
 		images = controller.searchImageInContainer(uri, scList, null, limit, offset);
+		super.setImages(images);
 		filters = new FiltersBean(getQuery(), totalNumberOfRecords);
 		labels.init((List<Image>) images);
 		return ImejiFactory.imageListToBeanList(images);

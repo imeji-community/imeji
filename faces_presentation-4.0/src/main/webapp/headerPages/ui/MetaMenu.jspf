@@ -96,5 +96,5 @@
 				document.getElementById('formular:Header:lnkLogin').click();
 			}
 		}
-			</script>
+	</script>
 </div>

@@ -28,17 +28,16 @@ public class CollectionImagesBean extends ImagesBean {
 	private int totalNumberOfRecords;
 	private String id = null;
 	private URI uri;
-	private SessionBean sb;
+	private SessionBean sb = null;
 	private CollectionImeji collection;
 	private Navigation navigation;
 	private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
 
 	public CollectionImagesBean() {
 		super();
-		this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		this.navigation = (Navigation) BeanHelper
-				.getApplicationBean(Navigation.class);
-	}
+		sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+		this.navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+	} 
 
 	public void init() {
 		CollectionController cc = new CollectionController(sb.getUser());
@@ -47,7 +46,10 @@ public class CollectionImagesBean extends ImagesBean {
 
 	@Override
 	public String getNavigationString() {
-		return "pretty:";
+		if(sb.getSelectedImagesContext()!=null &&!(sb.getSelectedImagesContext().equals("pretty:collectionImages" + collection.getId().toString())))
+			sb.getSelected().clear();
+		sb.setSelectedImagesContext("pretty:collectionImages" + collection.getId().toString());
+		return "pretty:collectionImages";
 	}
 
 	@Override

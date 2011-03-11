@@ -24,6 +24,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
     public SuperContainerBean()
     {
+    	selectedMenu = "SORTING";
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         initMenus();
     }

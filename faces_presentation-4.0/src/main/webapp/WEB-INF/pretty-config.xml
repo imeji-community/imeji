@@ -29,6 +29,7 @@
 		<query-param name="page">#{CollectionsBean.currentPageNumber}</query-param>
 		<query-param name="sortBy">#{CollectionsBean.selectedSortCriterion}</query-param>
 		<query-param name="sortOrder">#{CollectionsBean.selectedSortOrder}</query-param>
+		<query-param name="tab">#{CollectionsBean.selectedMenu}</query-param>
 		<view-id>/jsf/Collections.xhtml</view-id>
 	</url-mapping>
 	

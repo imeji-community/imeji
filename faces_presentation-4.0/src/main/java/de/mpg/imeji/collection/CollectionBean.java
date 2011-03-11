@@ -11,7 +11,6 @@ import thewebsemantic.NotBoundException;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.util.CollectionHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.CollectionController;

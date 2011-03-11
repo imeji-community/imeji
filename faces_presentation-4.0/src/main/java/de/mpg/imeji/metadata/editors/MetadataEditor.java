@@ -15,7 +15,7 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.controller.ImageController;
-import de.mpg.jena.util.MetadataFactory;
+//import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
@@ -173,7 +173,7 @@ public abstract class  MetadataEditor
 	{
 		if (statement != null)
 		{
-			return MetadataFactory.newMetadata(statement);
+//			return MetadataFactory.newMetadata(statement);
 		}
 		return null;
 	}

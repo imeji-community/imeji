@@ -7,6 +7,23 @@
 
 <ui:composition template="template_collection.xhtml">
 	<h:messages/>
+				<ui:define name="contentMenu">
+				<h:outputLink id="lnkFilter" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=VIEW" rendered="#{paginatorListSessionBean.selectedMenu != 'VIEW' and SessionBean.user != null}">
+					<h:outputText value="#{lbl.view}"/>
+				</h:outputLink>
+				<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.view}" rendered="#{paginatorListSessionBean.selectedMenu == 'VIEW' and SessionBean.user != null}" />
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkSort" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=SORTING" rendered="#{paginatorListSessionBean.selectedMenu != 'SORTING'}">
+					<h:outputText value="#{lbl.sorting}"/>
+				</h:outputLink>
+				<h:outputText id="txtSortLink" styleClass="free_area0" value="#{lbl.sorting}" rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"/>
+				<h:outputText styleClass="seperator void" />
+				
+
+				<h:outputText id="textCreateCollection" styleClass="free_area0" value="#{lbl.collection_create}" rendered="#{SessionBean.user != null}" />
+				<h:outputText styleClass="seperator void" />
+			</ui:define>
 	<ui:define name="mainContent">
 		<h:panelGroup layout="block" styleClass="full_area0">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">

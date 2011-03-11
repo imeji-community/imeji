@@ -9,6 +9,7 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.collection.CollectionBean;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.lang.MetadataLabels;
@@ -25,6 +26,7 @@ import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.MetadataProfile;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
@@ -67,6 +69,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     @Override
     public String getNavigationString()
     {
+		if(sb.getSelectedImagesContext()!=null && !(sb.getSelectedImagesContext().equals("pretty:images")))
+			sb.getSelected().clear();
         return "pretty:images";
     }
 
@@ -80,6 +84,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public List<ImageBean> retrieveList(int offset, int limit) throws Exception
     {
         ImageController controller = new ImageController(sb.getUser());
+        Collection<Image> images = new ArrayList<Image>();
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
@@ -189,6 +194,20 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 
 	public void setFilters(FiltersBean filters) {
 		this.filters = filters;
+	}
+	
+	public String selectAll() {
+		for(ImageBean bean: getCurrentPartList()){
+			bean.setSelected(true);
+			if(!(sb.getSelected().contains(bean.getImage().getId())))
+				sb.getSelected().add(bean.getImage().getId());
+		}
+		return sb.getSelectedImagesContext();
+	}
+	
+	public String selectNone(){
+		sb.getSelected().clear();
+		return sb.getSelectedImagesContext();
 	}
     
 	public Collection<Image> getImages() {

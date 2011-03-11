@@ -160,13 +160,8 @@
 		<managed-bean-class>de.mpg.imeji.metadata.EditWorkspaceBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	
-	<managed-bean>
-		<managed-bean-name>EditImageMetadataBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.metadata.EditImageMetadataBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
 
+	
 
 
 	<!-- Album Beans -->

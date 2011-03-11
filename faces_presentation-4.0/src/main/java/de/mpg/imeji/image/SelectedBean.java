@@ -12,6 +12,7 @@ import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.ImageController;
@@ -28,12 +29,35 @@ public class SelectedBean extends ImagesBean {
 //	private String mdEdited;
 	private URI currentCollection;
 	private String backUrl = null;
+	private HistorySession historySession;
+	
+	private String selectedImagesContext=null;
+	
+
+	public String getSelectedImagesContext() {
+		return selectedImagesContext;
+	}
+
+	public void setSelectedImagesContext(String selectedImagesContext) {
+		if(selectedImagesContext.equals(sb.getSelectedImagesContext()))
+		{
+			this.selectedImagesContext = selectedImagesContext;
+		}
+		else
+		{
+			clearAll();
+			this.selectedImagesContext = selectedImagesContext;
+			sb.setSelectedImagesContext(selectedImagesContext);
+		}
+	}
 
 	public SelectedBean() {
 		super();
 		this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		this.historySession = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
 		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 		backUrl = navigation.getImagesUrl();
+		
 	}
 
 	@Override
@@ -70,9 +94,10 @@ public class SelectedBean extends ImagesBean {
 		String prettyLink = PrettyContext.getCurrentInstance().getCurrentMapping().getId();
 		sb.getSelected().clear();
 		if (prettyLink.equalsIgnoreCase("selected"))
-			return "pretty:images";
+			return "pretty:collectionImages";
 		else
 			return "pretty:";
+
 	}
 
 	public String deleteAll() throws Exception {

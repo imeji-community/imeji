@@ -263,6 +263,7 @@ public class ImageController extends ImejiController
     public void delete(Image img, User user) throws Exception
     {
     	String itemId = img.getEscidocId();
+    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
     	imejiBean2RDF.delete(img, user);
     	 try
          {

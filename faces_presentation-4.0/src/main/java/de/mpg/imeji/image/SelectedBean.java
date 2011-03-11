@@ -89,8 +89,16 @@ public class SelectedBean extends ImagesBean {
 		}
 		return ImejiFactory.imageListToBeanList(super.getImages());
 	}
+	
+	public String addToActiveAlbum() throws Exception
+	{
+		this.update();
+		super.addToActiveAlbum();
+		return "pretty:";
+	}
 
-	public String clearAll() {
+	public String clearAll() 
+	{
 		String prettyLink = PrettyContext.getCurrentInstance().getCurrentMapping().getId();
 		sb.getSelected().clear();
 		if (prettyLink.equalsIgnoreCase("selected"))
@@ -100,26 +108,11 @@ public class SelectedBean extends ImagesBean {
 
 	}
 
-	public String deleteAll() throws Exception {
-		List<URI> selectedList = new ArrayList<URI>();
-		for (URI uri : sb.getSelected()) {
-			selectedList.add(uri);
-		}
-		for (URI uri : selectedList) {
-			ImageController imageController = new ImageController(sb.getUser());
-			Image img = imageController.retrieve(uri);
-			if (img.getProperties().getStatus() != Status.RELEASED) {
-				imageController.delete(img, sb.getUser());
-				sb.getSelected().remove(uri);
-			}
-		}
-		if (sb.getSelected().size() == 0) {
-			BeanHelper.info(sb.getMessage("success_delete"));
-			return "pretty:";
-		} else {
-			BeanHelper.info(sb.getMessage("released_item_delete_error"));
-			return "pretty:";
-		}
+	public String deleteAll()
+	{
+		update();
+		super.deleteAll();
+		return "pretty:";
 	}
 
 	/**

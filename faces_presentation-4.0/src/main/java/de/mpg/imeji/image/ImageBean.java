@@ -211,7 +211,7 @@ public class ImageBean
         this.sessionBean = sessionBean;
     }
 
-    public String addToActiveAlbum()
+    public String addToActiveAlbum() throws Exception
     {
         AlbumBean activeAlbum = sessionBean.getActiveAlbum();
         AlbumController ac = new AlbumController(sessionBean.getUser());

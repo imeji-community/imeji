@@ -15,13 +15,13 @@ public class PageURIHelper
 		String baseURL = PropertyReader.getProperty("escidoc.faces.instance.url");
 		switch (pageType) 
 		{
-			case IMAGES: return URI.create(baseURL + "images?q=");
-			case COLLECTIONS: return URI.create(baseURL + "collections?q=");
-			case COLLECTION_IMAGES: return URI.create(baseURL + "images/collection/" + id + "?q=");
+			case IMAGES: return URI.create(baseURL + "images?");
+			case COLLECTIONS: return URI.create(baseURL + "collections?");
+			case COLLECTION_IMAGES: return URI.create(baseURL + "images/collection/" + id + "?");
 			case HOME : return URI.create(baseURL + "?");
 			case SEARCH : return URI.create(baseURL + "search" + "?");
 			case IMAGE : return URI.create(baseURL + "image/" + id + "/view?");
-			case ALBUMS : return URI.create(baseURL + "albums" + "?q=");
+			case ALBUMS : return URI.create(baseURL + "albums" + "?");
 			case COLLECTION_HOME : return URI.create(baseURL + "collection/" + id + "?");
 			case SEARCH_RESULTS_IMAGES : return URI.create(baseURL + "images" + "?q=" + URLEncoder.encode(q, "UTF-8"));
 			default: return URI.create(baseURL);

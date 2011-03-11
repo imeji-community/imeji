@@ -138,12 +138,6 @@
 	</managed-bean>
 	
 	<managed-bean>
-		<managed-bean-name>EditImageBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.image.EditImageBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	
-	<managed-bean>
 		<managed-bean-name>ImagesBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.image.ImagesBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -161,7 +155,11 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
-	
+	<managed-bean>
+		<managed-bean-name>EditImageMetadataBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.metadata.EditImageMetadataBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 
 	<!-- Album Beans -->

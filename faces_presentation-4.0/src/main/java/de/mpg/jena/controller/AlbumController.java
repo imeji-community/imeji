@@ -6,28 +6,25 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.hp.hpl.jena.rdf.model.Model;
-
-import thewebsemantic.Bean2RDF;
-import thewebsemantic.RDF2Bean;
-import thewebsemantic.Sparql;
+import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
-import de.mpg.jena.security.Security;
+import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
 import de.mpg.jena.sparql.query.QuerySPARQLImpl;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
-import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
-import de.mpg.jena.vo.User;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Properties.Status;
+import de.mpg.jena.vo.User;
 
 
-public class AlbumController extends ImejiController{
-
-
+public class AlbumController extends ImejiController
+{
+	private static ImejiRDF2Bean imejiRDF2Bean = null;
+	private static ImejiBean2RDF imejiBean2RDF = null;
+	
 	public AlbumController(User user)
 	{
 		super(user);
@@ -42,12 +39,13 @@ public class AlbumController extends ImejiController{
 	 */
 	public synchronized void create(Album ic) throws Exception
 	{
-		
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
 		writeCreateProperties(ic.getProperties(), user);
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(new URI("http://imeji.mpdl.mpg.de/album/" + getUniqueId()));
-		bean2RDF.saveDeep(ic);
-		ic = rdf2Bean.load(Album.class, ic.getId());
+		imejiBean2RDF.saveDeep(ic, user);
+		ic = imejiRDF2Bean.load(Album.class, ic.getId().toString());
 		user = addCreatorGrant(ic, user);
 		cleanGraph();
 	}
@@ -68,12 +66,13 @@ public class AlbumController extends ImejiController{
 	 * --OR user is collection editor
 	 * @param ic
 	 * @param user
+	 * @throws Exception 
 	 */
-	public synchronized void update(Album ic)
+	public synchronized void update(Album ic) throws Exception
 	{
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
 		writeUpdateProperties(ic.getProperties(), user);
-//		Bean2RDF writer = new Bean2RDF(base);
-//		writer.saveDeep(ic);
+		imejiBean2RDF.saveDeep(ic, user);
 		cleanGraph();
 	}
 	
@@ -87,15 +86,12 @@ public class AlbumController extends ImejiController{
      */
     public Album retrieve(String id)
     {
-        
         return rdf2Bean.load(Album.class, ObjectHelper.getURI(Album.class, id).toString());
     }
-    
 
     public Album retrieve(URI selectedAlbumId)
     {
         return rdf2Bean.load(Album.class, selectedAlbumId);
-        
     }
 	
 	public Collection<Album> retrieveAll()
@@ -107,8 +103,10 @@ public class AlbumController extends ImejiController{
 		return new ArrayList<Album>();
 	}
 	
-	public void delete(Album album, User user) throws Exception{
-		bean2RDF.delete(album);
+	public void delete(Album album, User user) throws Exception
+	{
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+		imejiBean2RDF.delete(album, user);
 	}
 	
 	
@@ -118,9 +116,7 @@ public class AlbumController extends ImejiController{
         album.getProperties().setStatus(Status.RELEASED);
         update(album);
     }
-	
-	
-	
+
 	/**
 	 * Search for collections
 	 * - Logged-out user:

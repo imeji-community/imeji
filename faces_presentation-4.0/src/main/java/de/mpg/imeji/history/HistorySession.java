@@ -18,7 +18,6 @@ public class HistorySession
 	{
 		Page newPage = null;
 		//pages.clear();
-		//System.out.println(filename);
 		for (ImejiPages type : ImejiPages.values())
 		{
 			if (type.getFileName().endsWith(filename))
@@ -33,7 +32,6 @@ public class HistorySession
 					{
 						type = ImejiPages.IMAGES;
 					}
-					
 					newPage = new Page(type, PageURIHelper.getPageURI(type, query, id));
 				}
 				catch (Exception e)
@@ -75,6 +73,15 @@ public class HistorySession
 			return pages.get(pages.size() -1).getName();
 		}
 		return "";
+	}
+	
+	public Page getPreviousPage()
+	{
+		if (!pages.isEmpty())
+		{
+			return pages.get(pages.size() - 2);
+		}
+		return null;
 	}
 		
 	public int getHistorySize()

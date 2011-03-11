@@ -68,6 +68,35 @@
 		document.getElementById('formular:facetInitialized').click();
 	});
 </script>
+			
+		 <rich:modalPanel id="panelConfirmDeleteAll" width="350" height="100" style="background-color:#434343" domElementAttachment="form">
+	        <f:facet name="header">
+	            <h:panelGroup>
+	                <h:outputText value="Confirm Delete"></h:outputText>
+	            </h:panelGroup>
+	        </f:facet>
+	        <h:outputText value="Delete images?"></h:outputText>
+	        <br/>
+	        <a href="#" onclick="#{rich:component('panelConfirmDeleteAll')}.hide()">Cancel</a>
+	        <a4j:commandLink action="#{paginatorListSessionBean.deleteAll}" id="lnkSelectDeleteSel">
+				<span class="large_area0_p8"><h:outputText value="#{lbl.delete_all}"/></span>
+			</a4j:commandLink>
+	    </rich:modalPanel>
+	    
+	     <rich:modalPanel id="panelConfirmDeleteSelected" width="350" height="100" style="background-color:#434343" domElementAttachment="form">
+	        <f:facet name="header">
+	            <h:panelGroup>
+	                <h:outputText value="Confirm Delete"></h:outputText>
+	            </h:panelGroup>
+	        </f:facet>
+	        <h:outputText value="Delete images?"></h:outputText>
+	        <br/>
+	        <a href="#" onclick="#{rich:component('panelConfirmDeleteSelected')}.hide()">Cancel</a>
+	        <a4j:commandLink action="#{SelectedBean.deleteAll}" id="lnkSelectDeleteAll">
+				<span class="large_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
+			</a4j:commandLink>
+	    </rich:modalPanel>
+
 
 
 		<h:panelGroup id="preListHeaderActiveAlbum" layout="block" styleClass="full_area0 preListHeader" rendered="#{SessionBean.activeAlbum != null}">
@@ -79,66 +108,77 @@
 			</h:panelGroup>
 		</h:panelGroup>
 		
-		<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
-			<a4j:repeat id="history" var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
-				<h:panelGroup rendered="#{index + 6 &gt; HistorySession.historySize}">
-					<h:outputLink value="#{page.uri}">
-						<h:outputText value="#{page.name}"/>
-					</h:outputLink>
-					<span style="padding-left: 1px" />
-					<h:outputText value=" / "/>
-					<span style="padding-left: 1px" />
-				</h:panelGroup>
-			</a4j:repeat>
-		</h:panelGroup>
 		
-
-		
-		<h:panelGroup id="preListHeaderFilters" layout="block" styleClass="full_area0 preListHeader" rendered="true">
-			<h:panelGroup styleClass="small_area0">
-				<h:outputText value="#{lbl.Filters}: " />
+	
+		<div id="preListHeader" class="full_area0 itemList noBorder" style="border-bottom-width: 0px !important; background: #484848;">
+			
+			<h:panelGroup id="preListHeaderHistory"  styleClass="half_area0_p4 small_marginLIncl">
+				<a4j:repeat id="history" var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
+					<h:panelGroup rendered="#{index + 6 &gt; HistorySession.historySize}">
+						<h:outputLink value="#{page.uri}">
+							<h:outputText value="#{page.name}"/>
+						</h:outputLink>
+						<span style="padding-left: 1px" />
+						<h:outputText value=" / "/>
+						<span style="padding-left: 1px" />
+					</h:panelGroup>
+				</a4j:repeat>
 			</h:panelGroup>
-			<h:panelGroup styleClass="xHuge_area0">
+			<h:panelGroup styleClass="half_area0_p4 small_marginLIncl">
+				<h:outputText value="All " /><span style="padding-left: 1px" />
 				<a4j:repeat id="filterList" var="filter" value="#{FiltersSession.filters}" rows="0" rowKeyVar="index">
-					<h:outputText value="#{filter.label}(#{filter.count}) "/>
+					<h:outputText value=" / " />
+					<h:outputText value="#{filter.label} "/>
 					<h:outputLink value="#{Navigation.imagesUrl}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images'}">
-						<h:outputText value="[X]"/>
+						<h:outputText value="[x]"/>
 					</h:outputLink>
 					<h:outputLink value="#{Navigation.imagesUrl}/collection/#{paginatorListSessionBean.id}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}">
-						<h:outputText value="[X]"/>
+						<h:outputText value="[x]"/>
 					</h:outputLink>
 					<span style="padding-left: 1px" />
 				</a4j:repeat>
+				
+				<h:outputText value=" (#{paginatorListSessionBean.totalNumberOfElements})" /><span style="padding-left: 1px" />
+				
+				<input type="button" class="min_imgBtn checkboxSelectButton"/>
+				
+				<div class="selectMenu" style="display: none; width:150px;">
+					<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
+					<a4j:commandLink styleClass="large_area0" action="#{paginatorListSessionBean.addToActiveAlbum}">
+						<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
+					</a4j:commandLink>
+					<h:outputLink styleClass="large_area0" value="#{Navigation.applicationUrl}edit?type=all" id="lnkSelectEdit2">
+						<span class="large_area0_p8"><h:outputText value="#{lbl.edit_all}"/></span>
+					</h:outputLink>
+					<h:outputLink styleClass="large_area0" value="#">
+						<span class="large_area0_p8"><h:outputText value="Delete all"/></span>
+						<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
+					</h:outputLink>
+				</div>
+				
 			</h:panelGroup>
-		</h:panelGroup>		
 			
-		<h:panelGroup id="preListHeader" layout="block">
-			<h:outputLabel value="&#160;" styleClass="small_area0" style="visibility: hidden"></h:outputLabel>		
-			<h:outputLink value="#{paginatorListSessionBean.backUrl}" styleClass="free_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
-				<h:outputText value="#{lbl.images_all}" />
-			</h:outputLink>	
-			<h:outputText value="#{SessionBean.selectedSize} #{lbl.selected}: "  styleClass="free_area0 xHuge_marginLIncl"/>
-			<h:outputLink id="lnkAddToAlbum" value="" styleClass="free_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images'}">
-				<h:outputText value="#{lbl.add_to_album}" />
-			</h:outputLink>
-		</h:panelGroup>
-			
-		<div class="itemList" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionImages'}">
-			<input type="button" class="min_imgBtn checkboxSelectButton"/>
-			<div class="selectMenu" style="display: none; width:150px;">
-				<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
-				<h:outputLink id="lnkAddToAlbum2" immediate="true" >
-					<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
-				</h:outputLink>
-				<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1&amp;back=#{paginatorListSessionBean.backUrl}" id="lnkSelectEdit" immediate="true">
-					<span class="large_area0_p8"><h:outputText value="#{lbl.selected_edit}"/></span>
-				</h:outputLink>
-			 	<a4j:commandLink action="#{SelectedBean.deleteAll}" id="lnkSelectDelete">
-					<span class="large_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
-				</a4j:commandLink>
-			</div>
+		
+			<h:panelGroup styleClass="free_area0_p4 huge_marginLIncl">
+				<h:outputText value="#{SessionBean.selectedSize} #{lbl.selected} "  styleClass="free_area0 "/>
+				<input type="button" class="min_imgBtn checkboxSelectButton"/>
+				
+				<div class="selectMenu" style="display: none; width:150px;">
+					<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
+					<a4j:commandLink styleClass="large_area0" action="#{SelectedBean.addToActiveAlbum}">
+						<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
+					</a4j:commandLink>
+					<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit">
+						<span class="large_area0_p8"><h:outputText value="#{lbl.selected_edit}"/></span>
+					</h:outputLink>
+					<h:outputLink styleClass="large_area0" value="#">
+						<span class="large_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
+						<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+					</h:outputLink>
+				</div>
+			</h:panelGroup>	
 		</div>
-
+		
 		<h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{paginatorListSessionBean.corruptedList}">
 			<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2>
 			<h:outputText styleClass="messageFatal" value="A fatal error occured! There are images with corrupted data."/>
@@ -147,15 +187,11 @@
 			<a4j:commandLink value="Reinitialize corrupted data" action="#{paginatorListSessionBean.initCorruptData}" styleClass="free_area0 xTiny_marginLIncl" />
 		</h:panelGroup>
 
-		<h:panelGroup layout="block" styleClass="full_area0" rendered="#{!paginatorListSessionBean.corruptedList}">
+		<h:panelGroup layout="block" styleClass="full_area0 noTopBorder"  rendered="#{!paginatorListSessionBean.corruptedList}">
 			<table class="itemList">
 			    <tr class="full_area0">
-					<th class="free_area0_p8 endline itemSelectArea">
-						&#160;
-			      	</th>				      	
-			      	<th class="free_area0 endline status statusArea">
-			      		<span class="seperator"></span>
-							<h:outputText value="#{lbl.select}" />
+			      	<th class="free_area0 endline status statusArea small_marginLIncl">
+						<h:outputText value="#{lbl.select}" />
 					</th>
 					<th class="free_area0_p8 endline itemSelectArea">
 			      		<input type="button" class="min_imgBtn checkboxSelectButton"/>
@@ -176,7 +212,7 @@
 
 			<div class="small_area0">&#160;</div>
 
-			<ul class="free_area0 fullBrowse">
+			<ul class="free_area0 fullBrowse small_marginLIncl noTopBorder">
 				<!-- Images -->
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 					<li class="large_area0 itemTile">

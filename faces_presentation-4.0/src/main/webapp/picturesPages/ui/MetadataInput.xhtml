@@ -70,7 +70,7 @@
 				</rich:suggestionbox>
 			</h:inputText>
 			<h:outputLabel value="#{lbl.export_formats}" styleClass="huge_label"/>
-			<h:selectOneMenu value="#{metadata.type.exportFormat}"	styleClass="huge_select" rendered="#{metadata.type=='PUBLICATION'}">
+			<h:selectOneMenu value="#{metadata.exportFormat}" styleClass="huge_select" rendered="#{metadata.type=='PUBLICATION'}">
 				<f:selectItems value="#{EditWorkspaceBean.citationStyles}" /> 
 			</h:selectOneMenu>
 		</h:panelGroup>
@@ -84,8 +84,7 @@
 		
 		<!-- METADATA TYPE LICENSE -->
 		<h:panelGroup rendered="#{metadata.type =='LICENSE'}">
-			<h:inputText styleClass="huge_txtInput" value="#{metadata.license}">
-			</h:inputText>
+			<h:inputText styleClass="huge_txtInput" value="#{metadata.license}"/>
 		</h:panelGroup>
 		
 		<!-- METADATA TYPE NUMBER -->

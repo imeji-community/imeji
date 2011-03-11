@@ -44,6 +44,7 @@ public class MetadataFactory
 				break;
 			case PUBLICATION:
 				md = new Publication();
+				break;
 			case URI:
 				md= new URI();
 				break;
@@ -57,45 +58,6 @@ public class MetadataFactory
 		
 		return md;
 		
-	}
-	
-	public static boolean isEmpty(ImageMetadata md)
-	{
-		if (md instanceof Text)
-		{
-			if ("".equals(((Text) md).getText())) return true;
-		}
-		else if (md instanceof Date)
-		{
-			if (((Date) md).getDate() == null) return true;
-		}
-		else if (md instanceof Geolocation)
-		{
-			if (((Geolocation) md).getLatitude() == 0 &&
-					((Geolocation) md).getLongitude() == 0)
-				return true;
-		}
-		else if (md instanceof License)
-		{
-			if ("".equals(((License) md).getLicense())) return true;
-		}
-		else if (md instanceof Publication)
-		{
-			if ("".equals(((Publication) md).getUri().toString())) return true;
-		}
-		else if (md instanceof Number)
-		{
-			if (((Number) md).getNumber() == 0) return true;
-		}
-		else if (md instanceof ConePerson)
-		{
-			if ("".equals(((ConePerson) md).getPerson().getFamilyName())) return true;
-		}
-		else if (md instanceof URI)
-		{
-			if ("".equals(((URI) md).getUri().toString())) return true;
-		}	
-		return false;
 	}
 	
 	public static ImageMetadata newMetadataWithNonNullValues(Statement st)
@@ -147,6 +109,7 @@ public class MetadataFactory
 			case PUBLICATION:
 				Publication pub = new Publication();
 				pub.setUri(java.net.URI.create(""));
+				pub.setExportFormat("");
 				md = pub;
 			case URI:
 				URI u= new URI();

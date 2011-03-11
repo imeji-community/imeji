@@ -2,6 +2,7 @@ package de.mpg.imeji.metadata.editors;
 
 import java.util.List;
 
+import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
@@ -40,6 +41,16 @@ public class MetadataMultipleEditor extends MetadataEditor
 	@Override
 	public boolean prepareUpdate() 
 	{
+		for (Image im : images)
+		{
+			for(int i=0; i< im.getMetadataSet().getMetadata().size(); i++)
+			{
+				if (MetadataHelper.isEmpty(((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i)))
+				{
+					((List<ImageMetadata>)im.getMetadataSet().getMetadata()).remove(i);
+				}
+			}
+		}
 		if (images.size() == 0)
 		{
 			return false;

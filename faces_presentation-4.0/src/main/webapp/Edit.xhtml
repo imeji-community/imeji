@@ -12,11 +12,12 @@
 	
 <body>
 	<ui:define name="contentMenu">
+		
 	</ui:define>
 	
 	<ui:define name="mainContent">
-		<h:outputLabel value="#{EditImageMetadataBean.init}"/>
-		<h:panelGroup styleClass="full_area0 itemBlock">	
+		<h:outputText value="#{EditImageMetadataBean.init}"/>
+		<h:panelGroup styleClass="full_area0 itemBlock" >	
 				
 			<h:panelGroup  styleClass="full_area0 small_marginLExcl" rendered="#{SessionBean.user != null}">
 				<a4j:outputPanel id="ajaxContent">
@@ -27,16 +28,7 @@
 					<!-- Selectors -->
 					<h:panelGroup styleClass="huge_area0">
 						<h:panelGroup styleClass="huge_area0">
-							<h:outputLabel styleClass="huge_area0" value="Select profile"/>
-							<h:selectOneMenu styleClass="xLarge_area0" value="#{EditImageMetadataBean.selectedProfileName}" valueChangeListener="#{EditImageMetadataBean.profileListener}">
-								<f:selectItems value="#{EditImageMetadataBean.profileMenu}"/>
-								<a4j:support event="onchange" reRender="ajaxContent" />
-							</h:selectOneMenu>
-							<br/><br/><br/>
-							<br/>
-						</h:panelGroup>
-						<h:panelGroup styleClass="huge_area0">
-							<h:outputLabel styleClass="huge_area0"  value="Select metadata type"/>
+							<h:outputLabel styleClass="huge_area0" value="Select metadata type"/>
 							<h:selectOneMenu styleClass="xLarge_area0"  id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" valueChangeListener="#{EditImageMetadataBean.statementListener}">
 								<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
 								<a4j:support event="onchange" reRender="ajaxContent" />
@@ -56,6 +48,9 @@
 						</h:panelGroup>
 						<div class="half_area0 formButtonArea">
 							<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="clear all"/>
+							<h:outputLink value="" styleClass="free_area1_p8 cancelButton medium_marginLIncl">
+									<h:outputText value="#{lbl.reset} changes" />
+							</h:outputLink>
 							<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 activeButton"  action="#{EditImageMetadataBean.addToAll}" value="Add to all"/>
 						</div>
 					</h:panelGroup>
@@ -64,8 +59,8 @@
 					<!-- SAVE BUTTON -->
 					<h:panelGroup styleClass="full_area0 preListHeader formButtonArea">
 						<h:panelGroup styleClass="full_area0 formButtonArea ">
-							<h:outputLink value="" styleClass="free_area1_p8 cancelButton">
-									<h:outputText value="#{lbl.reset}" />
+							<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton">
+									<h:outputText value="#{lbl.cancel}" />
 							</h:outputLink>	
 							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.editor.save}" value="#{lbl.save}"/>
 						</h:panelGroup>

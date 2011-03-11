@@ -15,6 +15,7 @@ import de.mpg.imeji.image.SelectedBean;
 import de.mpg.imeji.lang.labelHelper;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
+import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.util.MetadataFactory;
@@ -48,28 +49,26 @@ public class EditImageMetadataBean
 	
 	public EditImageMetadataBean() 
 	{
-		
+		statementMenu = new ArrayList<SelectItem>();
+		profileMenu = new ArrayList<SelectItem>();
+		modeRadio = new ArrayList<SelectItem>();
 	}
 	
 	public String getInit()
 	{
-		String init = (String) ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("init");
-		if ("1".equals(init))
+		try 
 		{
-			try 
-			{
-				initImagesBean();
-				initMenus();
-				profile = getSelectedProfile();
-				statement = getSelectedStatement();
-				metadata = MetadataFactory.newMetadata(statement);
-				editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
-			} 
-			catch (Exception e) 
-			{
-				BeanHelper.error("Error initializing page");
-				e.printStackTrace();
-			}
+			initImagesBean();
+			initMenus();
+			profile = getSelectedProfile();
+			statement = getSelectedStatement();
+		    metadata = MetadataFactory.newMetadata(statement);
+			editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
+		}
+		catch (Exception e) 
+		{
+			BeanHelper.error("Error initializing page");
+			e.printStackTrace();
 		}
 		return "";
 	}
@@ -87,11 +86,11 @@ public class EditImageMetadataBean
 		String typeString = (String) ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("type");
 		if ("selected".equals(typeString))
 		{
-			imagesBean = (SelectedBean) BeanHelper.getRequestBean(SelectedBean.class);
+			imagesBean = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
 		}
 		else if ("all".equals(typeString))
 		{
-			imagesBean = (ImagesBean)BeanHelper.getRequestBean(ImagesBean.class);
+			imagesBean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class);
 		}
 		imagesBean.update();
 		profiles =  ProfileHelper.loadProfiles((List<Image>) imagesBean.getImages()).values();
@@ -107,6 +106,7 @@ public class EditImageMetadataBean
 		{
 			profileMenu.add(new SelectItem(p.getId().toString(), p.getTitle()));
 		}
+		if (getSelectedProfile() == null || getSelectedProfile().getStatements().isEmpty()) statementMenu.add(new SelectItem("No statements found"));
 		for(Statement s: getSelectedProfile().getStatements())
 		{
 			statementMenu.add(new SelectItem(s.getName().toString(), labelHelper.getDefaultLabel(s.getLabels().iterator())));
@@ -151,7 +151,7 @@ public class EditImageMetadataBean
 		{
 			if (md.getNamespace().equals(metadata.getNamespace()))
 			{
-				if (MetadataFactory.isEmpty(md)) ((List<ImageMetadata>) im.getMetadataSet().getMetadata()).set(i, metadata);
+				if (MetadataHelper.isEmpty(md)) ((List<ImageMetadata>) im.getMetadataSet().getMetadata()).set(i, metadata);
 				hasValue = true;
 			}
 			i++;

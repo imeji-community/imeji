@@ -25,11 +25,14 @@ public class FiltersBean
 		
 		if (n != null) n = n.toLowerCase();
 		
-		List<Filter> filters =  parseQuery(q, n);
-		
-		filters = setRemoveQueries(filters, q);
-		
-		fs.setFilters(filters);
+		if (q != null)
+		{
+			List<Filter> filters =  parseQuery(q, n);
+			
+			filters = setRemoveQueries(filters, q);
+			
+			fs.setFilters(filters);
+		}
 	}
 	
 	private List<Filter> parseQuery(String q, String n)

@@ -6,28 +6,25 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.collection.CollectionBean;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
-import de.mpg.jena.ImejiJena;
+import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
-import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.Properties.Status;
-import de.mpg.jena.vo.MetadataProfile;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
@@ -83,30 +80,73 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     @Override
     public List<ImageBean> retrieveList(int offset, int limit) throws Exception
     {
-        ImageController controller = new ImageController(sb.getUser());
-        Collection<Image> images = new ArrayList<Image>();
-        SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
-        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-       
-        try
+        if (query != null)
         {
-            scList = URLQueryTransformer.transform2SCList(query);
-//            System.out.println("url:" + query);
-//            System.out.println("parsed:" + URLQueryTransformer.transform2URL(scList));
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error("Invalid search query!");
-        }
-        totalNumberOfRecords = controller.getNumberOfResults(scList);
-        images = controller.search(scList, sortCriterion, limit, offset);
-        
-        filters = new FiltersBean(query, totalNumberOfRecords);
-        
-        labels.init((List<Image>) images);
+	    	ImageController controller = new ImageController(sb.getUser());
+	        images = new ArrayList<Image>();
+	        SortCriterion sortCriterion = new SortCriterion();
+	        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+	        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+	       
+	        try
+	        {
+	            scList = URLQueryTransformer.transform2SCList(query);
+	            //System.out.println("url:" + query);
+	//            System.out.println("parsed:" + URLQueryTransformer.transform2URL(scList));
+	        }
+	        catch (Exception e)
+	        {
+	            BeanHelper.error("Invalid search query!");
+	        }
+	        totalNumberOfRecords = controller.getNumberOfResults(scList);
+	        
+	        images = controller.search(scList, sortCriterion, limit, offset);
+	        
+	        filters = new FiltersBean(query, totalNumberOfRecords);
+	        
+	        labels.init((List<Image>) images);
+    	}
         
         return ImejiFactory.imageListToBeanList(images);
+    }
+    
+    public String addToActiveAlbum() throws Exception
+    {
+    	AlbumBean activeAlbum = sb.getActiveAlbum();
+        AlbumController ac = new AlbumController(sb.getUser());
+        
+        for (Image im : getImages())
+        {
+        	 if (activeAlbum.getAlbum().getImages().contains(im.getId()))
+             {
+                 BeanHelper.error("Image " + im.getFilename() + " already in active album!");
+             }
+             else
+             {
+                 activeAlbum.getAlbum().getImages().add(im.getId());
+                 ac.update(activeAlbum.getAlbum());
+                 BeanHelper.info("Image " + im.getFilename() + " added to active album");
+             }
+        }
+        return "pretty:";
+    }
+    
+    public String deleteAll() 
+    {
+    	ImageController ic = new ImageController(sb.getUser());
+    	for(Image im : images)
+    	{
+    		try 
+    		{
+				ic.delete(im, sb.getUser());
+			} 
+    		catch (Exception e) 
+			{
+				BeanHelper.error("Error deleting " + im.getFilename());
+				e.printStackTrace();
+			}
+    	}
+    	return "pretty:";
     }
 
     public String getImageBaseUrl()

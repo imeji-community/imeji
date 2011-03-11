@@ -8,7 +8,7 @@ public class Page
 	{
 		IMAGES("Images.xhtml", "Images"), COLLECTION_IMAGES("CollectionBrowse.xhtml", "Images of Collection"), SEARCH("SearchPictures.xhtml", "Advanced Search"),
 		HOME("Welcome.xhtml", "Home"), IMAGE("Image.xhtml", "Image"), COLLECTIONS("Collections.xhtml", "Collections"), ALBUMS("Albums.xhtml", "Albums"),
-		COLLECTION_HOME("CollectionEntryPage.xhtml", "Collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "Search results");
+		COLLECTION_HOME("CollectionEntryPage.xhtml", "Collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "Search results"), EDIT("Edit.xhtml", "Edit images");
 		
 		private String fileName="";
 		private String label;

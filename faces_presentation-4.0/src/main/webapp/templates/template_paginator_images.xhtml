@@ -123,21 +123,21 @@
 				</h:outputLink>
 
 
-
-
-				<div class ="itemList" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionImages'}">
-					<input type="button" class="min_imgBtn checkboxSelectButton"/>
-					<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none; width:150px;">
-						<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
-						<h:outputLink id="lnkAddToAlbum2" immediate="true" >
-							<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1&amp;back=#{paginatorListSessionBean.backUrl}" id="lnkSelectEdit" immediate="true">
-							<span class="large_area0_p8"><h:outputText value="#{lbl.selected_edit}"/></span>
-						</h:outputLink>
-					 	<a4j:commandLink action="#{SelectedBean.deleteAll}" id="lnkSelectDelete">
-							<span class="large_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
-						</a4j:commandLink>
+				<div class="itemList" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionImages'}">
+					<div>
+						<input type="button" class="min_imgBtn checkboxSelectButton"/>
+						<div class="selectMenu" style="display: none; width:150px;">
+							<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
+							<h:outputLink id="lnkAddToAlbum2" immediate="true" >
+								<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
+							</h:outputLink>
+							<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1&amp;back=#{paginatorListSessionBean.backUrl}" id="lnkSelectEdit" immediate="true">
+								<span class="large_area0_p8"><h:outputText value="#{lbl.selected_edit}"/></span>
+							</h:outputLink>
+						 	<a4j:commandLink action="#{SelectedBean.deleteAll}" id="lnkSelectDelete">
+								<span class="large_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
+							</a4j:commandLink>
+						</div>
 					</div>
 				</div>
 			</h:panelGroup>
@@ -163,16 +163,10 @@
 			      		<input type="button" class="min_imgBtn checkboxSelectButton"/>
 						<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none; width:150px;">
 							<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
-							<h:commandLink action="#{paginatorListSessionBean.selectAllOnPage}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
+							<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
 								<span class="medium_area0_p8"><h:outputText value="#{lbl.all_on_page}"/></span>
 							</h:commandLink>
-							<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
-								<span class="medium_area0_p8"><h:outputText value="#{lbl.all}"/></span>
-							</h:commandLink>
-			 				<!-- <a class="large_area0 selectTotal"><span class="medium_area0_p8 tiny_marginLIncl">All</span></a>-->
-			 				<h:commandLink action="#{paginatorListSessionBean.selectNoneOnPage}" id="lnkSelectNoneOnPage" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
-								<span class="medium_area0_p8"><h:outputText value="#{lbl.none_on_page}"/></span>
-							</h:commandLink>
+
 							<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
 								<span class="medium_area0_p8"><h:outputText value="#{lbl.none}"/></span>
 							</h:commandLink>

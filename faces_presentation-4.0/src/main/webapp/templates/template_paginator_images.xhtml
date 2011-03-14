@@ -164,7 +164,7 @@
 					<a4j:commandLink styleClass="large_area0" action="#{SelectedBean.addToActiveAlbum}">
 						<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 					</a4j:commandLink>
-					<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit" rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}"">
+					<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit" rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}">
 						<span class="large_area0_p8"><h:outputText value="#{lbl.selected_edit}"/></span>
 					</h:outputLink>
 					<h:outputLink styleClass="large_area0" value="#">
@@ -299,7 +299,7 @@
 
 		<!-- FACETS -->
 		<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">
-			<h:panelGroup id="facetGroup" layout="block" styleClass="full_area1_p8">
+			<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl">
 				<a4j:repeat var="facets" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
 					<h:outputLink value="#{facets.uri}">
 						<h:outputText value="#{facets.label}(#{facets.count}) "/>

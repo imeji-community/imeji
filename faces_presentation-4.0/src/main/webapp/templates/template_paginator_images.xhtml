@@ -164,7 +164,7 @@
 					<a4j:commandLink styleClass="large_area0" action="#{SelectedBean.addToActiveAlbum}">
 						<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 					</a4j:commandLink>
-					<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit">
+					<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit" rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}"">
 						<span class="large_area0_p8"><h:outputText value="#{lbl.selected_edit}"/></span>
 					</h:outputLink>
 					<h:outputLink styleClass="large_area0" value="#">

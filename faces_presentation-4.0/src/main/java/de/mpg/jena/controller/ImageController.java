@@ -56,18 +56,15 @@ public class ImageController extends ImejiController
 
     public void create(Image img, URI coll) throws Exception
     {
-    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
         CollectionController cc = new CollectionController(user);
         CollectionImeji ic = cc.retrieve(coll);
-        
     	writeCreateProperties(img.getProperties(), user);
         img.setVisibility(Visibility.PUBLIC);
         img.setCollection(coll);
         img.setId(ObjectHelper.getURI(Image.class, Integer.toString(getUniqueId())));
         img.getMetadataSet().setProfile(ic.getProfile());
-        
+        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
         imejiBean2RDF.create(img, user);
-      
         ic.getImages().add(img.getId());
         cc.update(ic);
         cleanGraph();
@@ -75,7 +72,6 @@ public class ImageController extends ImejiController
 
     public void create(Collection<Image> images, URI coll) throws Exception
     {
-        
     	CollectionController cc = new CollectionController(user);
     	CollectionImeji ic = cc.retrieve(coll);
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);

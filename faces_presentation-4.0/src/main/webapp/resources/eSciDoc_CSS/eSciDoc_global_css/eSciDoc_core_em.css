@@ -136,7 +136,8 @@
 				}
 			/*H4*/
 				h4 {
-					font-size: 11px;
+				/*	font-size: 11px; - changed by Marco*/
+					font-size: 16px !important;
 				}
 			/*H5*/
 				h5 {
@@ -3721,3 +3722,25 @@
 			}
 	/*MARGINS*/
 /*GENERAL DEFINITIONS*/
+
+/* NEW ELEMENTS FROM MARCO */
+.fleft { float:left !important; }
+.fright { float:right !important; }
+.fnone { float:none !important; }
+
+.posAbs { position:absolute; }
+.posFix { position:fixed; }
+.posRel { position:relative; }
+
+.cleaning { clear:both; margin:0px; padding:0px; float:none; }
+.center { margin:0 auto !important; text-align:center; }
+
+.vertDist050 { height:0.50em; line-height:0.50em; }
+.vertDist075 { height:0.75em; line-height:0.75em; }
+.vertDist100 { height:1em; line-height:1em; }
+
+.txtRight { text-align:right; }
+.txtLeft {text-align:left;}
+.txtCenter {text-align:center;}
+
+.large_imgBtn, .large_imgArea {width:9.3636em; height:9.3636em;}

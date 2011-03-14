@@ -503,8 +503,30 @@ FORM BG			#FFFFFF
 		background-color: #DCECF1;
 		color: #BBBBBB;
 	}
-
+	.dialogBox {
+		background-color:#4c4c4c;
+	}
+	/* CSS3 Enhancements */
+	.bordst0 { -moz-border-radius:6px 6px 6px 6px; -webkit-border-radius:6px 6px 6px 6px; border-radius:6px 6px 6px 6px; border:0px; } /* border-radius = CSS3 */
+	.shadst1 { -moz-box-shadow:0 0 10px #CCCCCC; box-shadow:0 0 10px #CCCCCC; -webkit-box-shadow:0 0 10px #CCCCCC; } /* CSS3 in: FF > 3.5, Safari + Chrome */
+	
 /*FORM BUTTONS*/
+	.dialogCancelButton {
+		float: left;
+		color: #6CAD2F;
+		background-color: #4c4c4c;
+		border-top-color: #303030;
+		border-right: #6CAD2F solid 0.091em;
+		border-bottom: #6CAD2F solid 0.091em;
+		border-left-color: #303030;
+	}
+	
+	.dialogCancelButton:hover {
+		color: #FFFFFF;
+		background-color: #303030;
+		border-color: #FFFFFF;
+	}
+	
 	.cancelButton, .activeButton {
 		border-style: solid;
 		padding-top: 0.10em;

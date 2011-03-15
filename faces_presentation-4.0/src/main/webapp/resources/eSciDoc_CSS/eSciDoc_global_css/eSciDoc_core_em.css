@@ -3747,3 +3747,7 @@
 .txtCenter {text-align:center;}
 
 .large_imgBtn, .large_imgArea {width:9.3636em; height:9.3636em;}
+
+.negMarginTExcl050 { margin-top:-0.50em;}
+.marginTExcl025 { margin-top:0.25em;}
+.marginTExcl125 { margin-top:1.25em;}

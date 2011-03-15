@@ -44,6 +44,10 @@ public class ImejiRDF2Bean
 			}
 			return ObjectHelper.castAllHashSetToList(o);
 		} 
+		catch (thewebsemantic.NotFoundException e) 
+		{
+			throw e;
+		}
 		catch (Exception e) 
 		{
 			e.printStackTrace();

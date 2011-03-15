@@ -1,0 +1,105 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+<ui:remove>
+	  <!--  
+            CDDL HEADER START
+
+            The contents of this file are subject to the terms of the
+            Common Development and Distribution License, Version 1.0 only
+            (the "License"). You may not use this file except in compliance
+            with the License.
+
+            You can obtain a copy of the license at license/ESCIDOC.LICENSE
+            or http://www.escidoc.de/license.
+            See the License for the specific language governing permissions
+            and limitations under the License.
+
+            When distributing Covered Code, include this CDDL HEADER in each
+            file and include the License file at license/ESCIDOC.LICENSE.
+            If applicable, add the following below this CDDL HEADER, with the
+            fields enclosed by brackets "[]" replaced with your own identifying
+            information: Portions Copyright [yyyy] [name of copyright owner]
+
+            CDDL HEADER END
+
+
+            Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+          	 f�r wissenschaftlich-technische Information mbH and Max-Planck-
+            Gesellschaft zur F�rderung der Wissenschaft e.V.
+            All rights reserved. Use is subject to license terms.
+-->
+</ui:remove>
+
+
+<f:subview id="EditMetadataPopup">
+	<!-- Show only metadata of correct statement -->								
+	<rich:panel id="singleEditPanel" layout="block" styleClass="quad_area0_p6 ">
+	
+		<div class="vertDist100 linebreak"></div>
+		<div class="quad_area0_p0">
+			<div class="large_imgArea center">
+				<h:graphicImage alt="#{item.image.filename}"  url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
+			</div>
+		</div>
+		<div class="quad_area0_p0 center">
+			<h4><h:outputLabel value="#{item.image.filename}"/></h4>
+		</div>
+		<div class="vertDist050 linebreak"></div>
+		
+		<div class="quad_area0_p0" id="metadata">
+			<a4j:repeat var="statement" value="#{item.edit.profile.statements}" rows="0">
+				<div class="xLarge_area0_p0 txtRight fleft">
+					<h:outputText value="#{MetadataLabels.labels[statement.name]}"/>
+				</div>
+				<h:panelGroup layout="block" styleClass="xLarge_area0_p0 xTiny_marginLExcl" style="border: 1px solid rgb(204, 204, 204);">
+				<a4j:repeat var="md" value="#{item.edit.image.metadataSet.metadata}" rows="0" rendered="#{item.edit.valuesMap[statement.name]}"  rowKeyVar="indexMetadata">
+					<rich:togglePanel id="metadataTogglePanel" value="displayMd" switchType="client" stateOrder="displayMd, editMd">
+						 <f:facet name="displayMd">
+							<h:panelGroup layout="block" rendered="#{md.namespace == statement.name}"  styleClass="xLarge_area0_p0">
+								<h:panelGroup layout="block" styleClass="free_area0_p0" style="border: 1px solid rgb(204, 204, 204);">
+									<ui:include src="MetadataOutput.xhtml">
+										<ui:param name="md" value="#{md}"/>
+									</ui:include>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="medium_area0_p0" style="border: 1px solid rgb(204, 204, 204);">
+									<rich:toggleControl><h:outputText styleClass="free_area0_p0" value="Edit"/></rich:toggleControl>
+									<a4j:commandLink styleClass="free_area0_p0 xTiny_marginLExcl" immediate="true" reRender="singleEditPanel" action="#{item.edit.addMetadata}" value="Add">
+										<f:setPropertyActionListener value="#{indexMetadata}" target="#{item.edit.mdPosition}" />
+										<f:setPropertyActionListener value="#{statement}" target="#{item.edit.editor.statement}" />
+									</a4j:commandLink>
+								</h:panelGroup>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="editMd">
+							<h:panelGroup layout="block" rendered="#{md.namespace == statement.name}"  styleClass="xLarge_area0_p0">
+								<h:panelGroup layout="block" styleClass="free_area0_p0" style="border: 1px solid rgb(204, 204, 204);">
+									<ui:include src="Metadatainput.xhtml">
+										<ui:param name="metadata" value="#{md}"/>
+									</ui:include>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="medium_area0_p0" style="border: 1px solid rgb(204, 204, 204);">
+									<rich:toggleControl id="cancel"><h:outputText styleClass="free_area0_p0" value="Cancel"/></rich:toggleControl>
+									<a4j:commandLink styleClass="free_area0_p0 xTiny_marginLExcl"  immediate="true" action="#{item.edit.save}" value="Save">
+									 	<a4j:support event="onclick" reRender="metadataTogglePanel" />
+									</a4j:commandLink>
+								</h:panelGroup>
+							</h:panelGroup>
+						</f:facet>
+					</rich:togglePanel>
+				</a4j:repeat>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{!item.edit.valuesMap[statement.name]}">
+					<a4j:commandLink styleClass="free_area0_p0 xTiny_marginLExcl" immediate="true" reRender="singleEditPanel" action="#{item.edit.addMetadata}" value="Add">
+						<f:setPropertyActionListener value="#{statement}" target="#{item.edit.editor.statement}" />
+					</a4j:commandLink>
+				</h:panelGroup>
+				<div class="vertDist050 linebreak"></div>
+			</a4j:repeat>
+		</div>
+	</rich:panel>
+	
+</f:subview>
+</div>

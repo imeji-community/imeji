@@ -6,9 +6,12 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import repackage.EditBuildScript;
+
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.metadata.SingleEditBean;
 import de.mpg.imeji.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
@@ -41,6 +44,7 @@ public class ImageBean
     private List<String> techMd;
     private Navigation navigation;
     private MetadataProfile profile;
+    private SingleEditBean edit;
     protected String prettyLink;
 
     public ImageBean(Image img)
@@ -56,6 +60,7 @@ public class ImageBean
             setSelected(true);
         }
         profile = ProfileHelper.loadProfile(image);
+        edit = new SingleEditBean(img, profile);
     }
 
     public ImageBean()
@@ -272,6 +277,16 @@ public class ImageBean
     	catch (Exception e) {BeanHelper.error("An error occured reading Profile : " + e.getCause());}
     	return statementMenu;
     }
+	
+	
+
+	public SingleEditBean getEdit() {
+		return edit;
+	}
+
+	public void setEdit(SingleEditBean edit) {
+		this.edit = edit;
+	}
 
 	public boolean isEditable() 
 	{

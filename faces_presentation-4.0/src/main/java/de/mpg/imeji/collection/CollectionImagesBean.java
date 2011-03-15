@@ -41,14 +41,26 @@ public class CollectionImagesBean extends ImagesBean {
 
 	public void init() {
 		CollectionController cc = new CollectionController(sb.getUser());
-		this.collection = cc.retrieve(id);
+		try {
+			this.collection = cc.retrieve(id);
+		}
+		catch (thewebsemantic.NotFoundException e) {
+			BeanHelper.error("Collection " + id + " not found");
+			BeanHelper.error("Please check id.");
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
-	public String getNavigationString() {
-		if(sb.getSelectedImagesContext()!=null &&!(sb.getSelectedImagesContext().equals("pretty:collectionImages" + collection.getId().toString())))
-			sb.getSelected().clear();
-		sb.setSelectedImagesContext("pretty:collectionImages" + collection.getId().toString());
+	public String getNavigationString() 
+	{
+		if (collection != null)
+		{
+			if(sb.getSelectedImagesContext()!=null && !(sb.getSelectedImagesContext().equals("pretty:collectionImages" + collection.getId().toString())))
+				sb.getSelected().clear();
+			sb.setSelectedImagesContext("pretty:collectionImages" + collection.getId().toString());
+		}
 		return "pretty:collectionImages";
 	}
 

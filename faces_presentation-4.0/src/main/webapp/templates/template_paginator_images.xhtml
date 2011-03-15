@@ -67,8 +67,7 @@
 	jQuery(document).ready(function() {
 		document.getElementById('formular:facetInitialized').click();
 	});
-</script>
-			
+</script>			
 		 <rich:modalPanel id="panelConfirmDeleteAll" width="350" height="100" style="background-color:#434343" domElementAttachment="form">
 	        <f:facet name="header">
 	            <h:panelGroup>
@@ -136,7 +135,7 @@
 				
 				<h:outputText value=" (#{paginatorListSessionBean.totalNumberOfElements})" styleClass="free_area0 "/><span style="padding-left: 1px" />
 				
-				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images'}">
+				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
 					<h:outputText value="#{lbl.add_to_album}" styleClass="free_area0"/>
 				</a4j:commandLink>
 				
@@ -145,7 +144,7 @@
 					
 					<div class="selectMenu" style="display: none; width:150px;" >
 						<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
-						<a4j:commandLink styleClass="large_area0" action="#{paginatorListSessionBean.addToActiveAlbum}">
+						<a4j:commandLink styleClass="large_area0" action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 							<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 						</a4j:commandLink>
 						<h:outputLink styleClass="large_area0" value="#{Navigation.applicationUrl}edit?type=all" id="lnkSelectEdit2">
@@ -164,7 +163,7 @@
 			<h:panelGroup styleClass="free_area0_p2 huge_marginLIncl">
 				<h:outputText value="#{SessionBean.selectedSize} #{lbl.selected} " styleClass="free_area0 "/>
 				
-				<a4j:commandLink styleClass="free_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images'}">
+				<a4j:commandLink styleClass="free_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
 					<h:outputText styleClass="free_area0" value="#{lbl.add_to_album}"/>
 				</a4j:commandLink>
 				
@@ -172,7 +171,7 @@
 					<input type="button" class="min_imgBtn checkboxSelectButton" />
 					<div class="selectMenu" style="display: none; width:150px;">
 						<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
-						<a4j:commandLink styleClass="large_area0" action="#{SelectedBean.addToActiveAlbum}">
+						<a4j:commandLink styleClass="large_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 							<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 						</a4j:commandLink>
 						<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit">
@@ -242,10 +241,16 @@
 									</span>  
 								</span>
 								
-								<rich:toolTip id="imgToolTip" for="imgFrame" showDelay="500">
-									<ui:include src="../picturesPages/ui/MetadataPopup.xhtml" />
+							
+								
+								<rich:toolTip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-200" verticalOffset="-200" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="500">
+									<ui:include src="../picturesPages/ui/EditMetadataPopup.xhtml" />
 								</rich:toolTip>
 								
+								
+									<!-- <rich:toolTip id="imgToolTip" for="imgFrame" showDelay="500" rendered="false">
+									<ui:include src="../picturesPages/ui/MetadataPopup.xhtml" />
+								</rich:toolTip> -->
 								
 							</h:panelGroup> 
 						
@@ -331,5 +336,6 @@
 	</ui:define>
 	
 </ui:composition>
+
 </body>
 </html>

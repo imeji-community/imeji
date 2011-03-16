@@ -68,6 +68,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     {
 		if(sb.getSelectedImagesContext()!=null && !(sb.getSelectedImagesContext().equals("pretty:images")))
 			sb.getSelected().clear();
+		sb.setSelectedImagesContext("pretty:images");
         return "pretty:images";
     }
 
@@ -99,14 +100,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	            BeanHelper.error("Invalid search query!");
 	        }
 	        totalNumberOfRecords = controller.getNumberOfResults(scList);
-	        
 	        images = controller.search(scList, sortCriterion, limit, offset);
-	        
 	        filters = new FiltersBean(query, totalNumberOfRecords);
-	        
 	        labels.init((List<Image>) images);
     	}
-        
         return ImejiFactory.imageListToBeanList(images);
     }
     

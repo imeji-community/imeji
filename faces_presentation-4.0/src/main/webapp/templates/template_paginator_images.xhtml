@@ -68,32 +68,32 @@
 		document.getElementById('formular:facetInitialized').click();
 	});
 </script>			
-		 <rich:modalPanel id="panelConfirmDeleteAll" width="350" height="100" style="background-color:#434343" domElementAttachment="form">
-	        <f:facet name="header">
-	            <h:panelGroup>
-	                <h:outputText value="Confirm Delete"></h:outputText>
-	            </h:panelGroup>
-	        </f:facet>
-	        <h:outputText value="Delete images?"></h:outputText>
-	        <br/>
-	        <a href="#" onclick="#{rich:component('panelConfirmDeleteAll')}.hide()">Cancel</a>
-	        <a4j:commandLink action="#{paginatorListSessionBean.deleteAll}" id="lnkSelectDeleteSel">
-				<span class="large_area0_p8"><h:outputText value="#{lbl.delete_all}"/></span>
-			</a4j:commandLink>
-	    </rich:modalPanel>
+		 <rich:modalPanel id="panelConfirmDeleteAll" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
+	        <h4><h:outputText value="Delete images?" styleClass="xTiny_marginLExcl"/></h4>
+	        <h:panelGroup layout="block" styleClass="quad_area0_p1">
+				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
+					<div class="large_txtBtn">
+	       				<a href="#" class="large_txtBtn dialogCancelButton" onclick="#{rich:component('panelConfirmDeleteAll')}.hide()">Cancel</a>
+	       			</div>
+					<div class="xLarge_txtBtn tiny_marginLExcl">
+				        <a4j:commandButton action="#{paginatorListSessionBean.deleteAll}" value="Delete all images" id="lnkSelectDeleteSel"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
+					</div>
+				</div>
+			</h:panelGroup>
+		</rich:modalPanel>
 	    
-	     <rich:modalPanel id="panelConfirmDeleteSelected" width="350" height="100" style="background-color:#434343" domElementAttachment="form">
-	        <f:facet name="header">
-	            <h:panelGroup>
-	                <h:outputText value="Confirm Delete"></h:outputText>
-	            </h:panelGroup>
-	        </f:facet>
-	        <h:outputText value="Delete images?"></h:outputText>
-	        <br/>
-	        <a href="#" onclick="#{rich:component('panelConfirmDeleteSelected')}.hide()">Cancel</a>
-	        <a4j:commandLink action="#{SelectedBean.deleteAll}" id="lnkSelectDeleteAll">
-				<span class="large_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
-			</a4j:commandLink>
+	     <rich:modalPanel id="panelConfirmDeleteSelected" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
+	        <h4><h:outputText value="Delete images?" styleClass="xTiny_marginLExcl"/></h4>
+	        <h:panelGroup layout="block" styleClass="quad_area0_p1">
+				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
+					<div class="large_txtBtn">
+						 <a href="#" class="large_txtBtn dialogCancelButton" onclick="#{rich:component('panelConfirmDeleteSelected')}.hide()">Cancel</a>
+					</div>
+					<div class="xLarge_txtBtn tiny_marginLExcl">
+						<a4j:commandButton action="#{SelectedBean.deleteAll}" value="#{lbl.delete_selectedImages}" id="lnkSelectDeleteAll" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
+					</div>
+				</div>
+			</h:panelGroup>
 	    </rich:modalPanel>
 
 		<h:panelGroup id="preListHeaderActiveAlbum" layout="block" styleClass="full_area0 preListHeader" rendered="#{SessionBean.activeAlbum != null}">
@@ -133,7 +133,7 @@
 					<span style="padding-left: 1px" />
 				</a4j:repeat>
 				
-				<h:outputText value=" (#{paginatorListSessionBean.totalNumberOfElements})" styleClass="free_area0 "/><span style="padding-left: 1px" />
+				<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements})" styleClass="free_area0 "/><span style="padding-left: 1px" />
 				
 				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
 					<h:outputText value="#{lbl.add_to_album}" styleClass="free_area0"/>
@@ -161,14 +161,17 @@
 			
 		
 			<h:panelGroup styleClass="free_area0_p2 huge_marginLIncl">
-				<h:outputText value="#{SessionBean.selectedSize} #{lbl.selected} " styleClass="free_area0 "/>
-				
+				<h:panelGroup id="preListHeaderSelected">
+					<h:outputText value="#{SessionBean.selectedSize} #{lbl.selected} " styleClass="free_area0 "/>
+				</h:panelGroup>
 				<a4j:commandLink styleClass="free_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
 					<h:outputText styleClass="free_area0" value="#{lbl.add_to_album}"/>
 				</a4j:commandLink>
 				
 				<h:panelGroup styleClass="free_area0" rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}">
+					
 					<input type="button" class="min_imgBtn checkboxSelectButton" />
+					
 					<div class="selectMenu" style="display: none; width:150px;">
 						<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
 						<a4j:commandLink styleClass="large_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
@@ -225,58 +228,26 @@
 					<li class="large_area0 itemTile">
 						
 							<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'} free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
-								<span class="captionWrapper">
+								<!-- Image with link to the details view --> 
+								<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
+									<h:graphicImage alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
+								</h:outputLink>
 								
-									<!-- Image with link to the details view --> 
-									<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
-										<h:graphicImage alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
-									</h:outputLink>
-									
-									<!-- Edit Caption -->
-									<span class="editCaption"> 
-										<h:outputLink id="cmdPicEditCaption" value="#lnkPicDetailBrowse:#{index}" rendered="#{item.editable}">
-											<rich:componentControl event="onclick" for="menuEdit" operation="show"/>
-											<h:outputText style="color:white" value="Edit Metadata"/>
-										</h:outputLink>
-									</span>  
-								</span>
-								
-							
-								
-								<rich:toolTip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-200" verticalOffset="-200" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="500">
-									<ui:include src="../picturesPages/ui/EditMetadataPopup.xhtml" />
+								<rich:toolTip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-200" verticalOffset="-300" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="500">
+									<ui:include src="../picturesPages/ui/EditMetadataPopup.xhtml">
+										<ui:param name="showThumb" value="true"/>
+									</ui:include>
 								</rich:toolTip>
-								
-								
-									<!-- <rich:toolTip id="imgToolTip" for="imgFrame" showDelay="500" rendered="false">
-									<ui:include src="../picturesPages/ui/MetadataPopup.xhtml" />
-								</rich:toolTip> -->
-								
+														
 							</h:panelGroup> 
-						
-							<rich:contextMenu attached="false" attachTo="cmdPicEditCaption" id="menuEdit" submitMode="ajax" styleClass="free_area0 itemList listBackground">
-								<rich:menuItem ajaxSingle="true" styleClass="itemList listBackground selected">
-									<h:outputText value="Choose: "/>
-									<a4j:repeat var="statement" value="#{item.profile.statements}" rowKeyVar="index">
-										<rich:menuItem ajaxSingle="true" styleclass="">
-											<a4j:commandLink value="* #{MetadataLabels.labels[statement.name]} (#{statement.name})" actionListener="#{EditWorkspaceBean.requestEditor}" reRender="modalContent" onclick="Richfaces.showModalPanel('pnlLoading')" oncomplete="Richfaces.hideModalPanel('pnlLoading'); Richfaces.showModalPanel('pnlEdit');">
-												<f:attribute name="statementName" value="#{statement.name}"/>
-												<f:attribute name="profileId" value="#{item.profile.id}"/>
-												<f:attribute name="idOfImageToEdit" value="#{item.image.id}"/>
-												<f:attribute name="type" value="SINGLE"/>
-							               </a4j:commandLink>
-										</rich:menuItem>
-									</a4j:repeat>
-								</rich:menuItem>
-							</rich:contextMenu>
 						
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
 						
 						<!-- Album Selected --> 
 						<h:panelGroup styleClass="tiny_area1">
 							<span class="free_area0"> 
-								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectedChanged}">
-									<a4j:support event="onchange" reRender="preListHeader,imgFrame" />
+								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" immediate="true" valueChangeListener="#{item.selectedChanged}">
+									<a4j:support event="onchange" reRender="preListHeaderSelected, imgFrame" />
 								</h:selectBooleanCheckbox> 
 							</span>
 						</h:panelGroup> 

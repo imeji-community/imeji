@@ -39,62 +39,81 @@
 	<rich:panel id="singleEditPanel" layout="block" styleClass="quad_area0_p6 ">
 	
 		<div class="vertDist100 linebreak"></div>
-		<div class="quad_area0_p0">
+		<h:panelGroup layout="block" styleClass="quad_area0_p0" rendered="#{showThumb}">
+			<div class="xLarge_area0_p0">&#160;</div>
 			<div class="large_imgArea center">
-				<h:graphicImage alt="#{item.image.filename}"  url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
+				<h:graphicImage alt="#{item.image.filename}" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
 			</div>
-		</div>
-		<div class="quad_area0_p0 center">
-			<h4><h:outputLabel value="#{item.image.filename}"/></h4>
-		</div>
-		<div class="vertDist050 linebreak"></div>
+			<div class="xLarge_area0_p0">&#160;</div>
+			<div class="double_area0_p0 xTiny_marginLExcl">
+				<h4><h:outputLabel value="#{item.image.filename}"/></h4>
+			</div>
+		</h:panelGroup>
+		
+		<div class="cleaning"></div>
 		
 		<div class="quad_area0_p0" id="metadata">
-			<a4j:repeat var="statement" value="#{item.edit.profile.statements}" rows="0">
-				<div class="xLarge_area0_p0 txtRight fleft">
+			<a4j:repeat id="statementList" var="statement" value="#{item.edit.profile.statements}" rows="0">
+				<div class="xLarge_area0_p4 txtRight noPaddingTopBottom">
 					<h:outputText value="#{MetadataLabels.labels[statement.name]}"/>
 				</div>
-				<h:panelGroup layout="block" styleClass="xLarge_area0_p0 xTiny_marginLExcl" style="border: 1px solid rgb(204, 204, 204);">
-				<a4j:repeat var="md" value="#{item.edit.image.metadataSet.metadata}" rows="0" rendered="#{item.edit.valuesMap[statement.name]}"  rowKeyVar="indexMetadata">
-					<rich:togglePanel id="metadataTogglePanel" value="displayMd" switchType="client" stateOrder="displayMd, editMd">
+				<h:panelGroup layout="block">
+					<rich:togglePanel id="metadataTogglePanel" value="#{item.edit.togglePanelState[statement.name]}" initialState="displayMd" switchType="ajax" stateOrder="displayMd, editMd">
 						 <f:facet name="displayMd">
-							<h:panelGroup layout="block" rendered="#{md.namespace == statement.name}"  styleClass="xLarge_area0_p0">
-								<h:panelGroup layout="block" styleClass="free_area0_p0" style="border: 1px solid rgb(204, 204, 204);">
-									<ui:include src="MetadataOutput.xhtml">
-										<ui:param name="md" value="#{md}"/>
-									</ui:include>
-								</h:panelGroup>
-								<h:panelGroup layout="block" styleClass="medium_area0_p0" style="border: 1px solid rgb(204, 204, 204);">
-									<rich:toggleControl><h:outputText styleClass="free_area0_p0" value="Edit"/></rich:toggleControl>
-									<a4j:commandLink styleClass="free_area0_p0 xTiny_marginLExcl" immediate="true" reRender="singleEditPanel" action="#{item.edit.addMetadata}" value="Add">
-										<f:setPropertyActionListener value="#{indexMetadata}" target="#{item.edit.mdPosition}" />
-										<f:setPropertyActionListener value="#{statement}" target="#{item.edit.editor.statement}" />
-									</a4j:commandLink>
-								</h:panelGroup>
+							 <h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl">
+							 	<a4j:repeat var="md" value="#{item.edit.image.metadataSet.metadata}" rows="0" rowKeyVar="indexMetadata">
+									<h:panelGroup layout="block" rendered="#{md.namespace == statement.name}" >
+										<ui:include src="MetadataOutput.xhtml">
+											<ui:param name="md" value="#{md}"/>
+										</ui:include>
+									</h:panelGroup>
+								</a4j:repeat>
+								<a4j:commandLink rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null and item.editable and !item.edit.valuesMap[statement.name]}" reRender="singleEditPanel" action="#{item.edit.addMetadata}" value="Add value">
+									<f:setPropertyActionListener value="#{statement}" target="#{item.edit.editor.statement}" />
+								</a4j:commandLink>
+								<h:outputText value="No value" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' or (!item.editable and !item.edit.valuesMap[statement.name])}"/>
+								<rich:toggleControl rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null and item.editable and item.edit.valuesMap[statement.name]}" value="Edit" switchToState="editMd"/>
 							</h:panelGroup>
 						</f:facet>
 						<f:facet name="editMd">
-							<h:panelGroup layout="block" rendered="#{md.namespace == statement.name}"  styleClass="xLarge_area0_p0">
-								<h:panelGroup layout="block" styleClass="free_area0_p0" style="border: 1px solid rgb(204, 204, 204);">
-									<ui:include src="Metadatainput.xhtml">
-										<ui:param name="metadata" value="#{md}"/>
-									</ui:include>
-								</h:panelGroup>
-								<h:panelGroup layout="block" styleClass="medium_area0_p0" style="border: 1px solid rgb(204, 204, 204);">
-									<rich:toggleControl id="cancel"><h:outputText styleClass="free_area0_p0" value="Cancel"/></rich:toggleControl>
-									<a4j:commandLink styleClass="free_area0_p0 xTiny_marginLExcl"  immediate="true" action="#{item.edit.save}" value="Save">
-									 	<a4j:support event="onclick" reRender="metadataTogglePanel" />
-									</a4j:commandLink>
+							<h:panelGroup  layout="block" styleClass="huge_area0_p0">
+								<a4j:repeat var="md" value="#{item.edit.image.metadataSet.metadata}" rows="0"  rowKeyVar="indexMetadata">
+									<h:panelGroup rendered="#{md.namespace == statement.name}">
+										<h:panelGroup layout="block" styleClass="xLarge_area0_p0 xTiny_marginLExcl">
+											<ui:include src="Metadatainput.xhtml">
+												<ui:param name="metadata" value="#{md}"/>
+												<ui:param name="areaClass" value="xLarge_txtArea"/>
+											</ui:include>
+										</h:panelGroup>
+										<div class="small_area0_p8 lineToolSection">
+											<a4j:commandButton styleClass="min_imgBtn groupTool remove af_commandButton" immediate="true" reRender="singleEditPanel" action="#{item.edit.removeMetadata}" value="">
+												<f:setPropertyActionListener value="#{statement}" target="#{item.edit.editor.statement}" />
+												<f:setPropertyActionListener value="#{indexMetadata}" target="#{item.edit.mdPosition}" />
+											</a4j:commandButton>
+											<a4j:commandButton styleClass="min_imgBtn groupTool add af_commandButton" immediate="true" reRender="singleEditPanel" action="#{item.edit.addMetadata}" value="">
+												<f:setPropertyActionListener value="#{statement}" target="#{item.edit.editor.statement}" />
+												<f:setPropertyActionListener value="#{indexMetadata}" target="#{item.edit.mdPosition}" />
+											</a4j:commandButton>
+										</div>
+									</h:panelGroup>
+								</a4j:repeat>
+								<div class="vertDist050 linebreak"></div>
+								<h:panelGroup layout="block" styleClass="quad_area0_p1">
+									<div class="double_area0_p0 xTiny_marginLExcl marginTExcl025">
+										<div class="small_txtBtn">
+											<rich:toggleControl styleClass="small_txtBtn dialogCancelButton" value="Cancel"/>
+										</div>
+										<div class="small_txtBtn xTiny_marginLExcl">
+											<a4j:commandButton styleClass="free_area0_p0 xTiny_marginLExcl small_txtBtn dialogActiveButton" action="#{item.edit.save}" value="Save">
+												<f:setPropertyActionListener value="#{statement}" target="#{item.edit.editor.statement}" />
+											 	<a4j:support event="oncomplete" reRender="metadataTogglePanel" />
+											</a4j:commandButton>
+										</div>
+									</div>
 								</h:panelGroup>
 							</h:panelGroup>
 						</f:facet>
 					</rich:togglePanel>
-				</a4j:repeat>
-				</h:panelGroup>
-				<h:panelGroup rendered="#{!item.edit.valuesMap[statement.name]}">
-					<a4j:commandLink styleClass="free_area0_p0 xTiny_marginLExcl" immediate="true" reRender="singleEditPanel" action="#{item.edit.addMetadata}" value="Add">
-						<f:setPropertyActionListener value="#{statement}" target="#{item.edit.editor.statement}" />
-					</a4j:commandLink>
 				</h:panelGroup>
 				<div class="vertDist050 linebreak"></div>
 			</a4j:repeat>

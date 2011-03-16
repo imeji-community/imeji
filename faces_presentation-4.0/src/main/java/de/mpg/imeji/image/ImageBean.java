@@ -6,8 +6,6 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import repackage.EditBuildScript;
-
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
@@ -22,7 +20,6 @@ import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
@@ -94,6 +91,8 @@ public class ImageBean
     public void initView() throws Exception
     {
         this.init();
+        profile = ProfileHelper.loadProfile(image);
+        edit = new SingleEditBean(image, profile);
         setTab(TabType.VIEW.toString());
     }
 
@@ -117,19 +116,6 @@ public class ImageBean
     public String getPageUrl()
     {
         return navigation.getApplicationUrl() + "image/" + this.id;
-    }
-
-    public String select()
-    {
-        if (!selected)
-        {
-            sessionBean.getSelected().remove(image.getId());
-        }
-        else
-        {
-            sessionBean.getSelected().add(this.image.getId());
-        }
-        return "";
     }
 
     public String clearAll()
@@ -244,7 +230,7 @@ public class ImageBean
 
     public void selectedChanged(ValueChangeEvent event)
     {
-        if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(image.getId()))
+       if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(image.getId()))
         {
             setSelected(true);
             select();
@@ -254,6 +240,19 @@ public class ImageBean
             setSelected(false);
             select();
         }
+    }
+    
+    public String select()
+    {
+        if (!selected)
+        {
+            sessionBean.getSelected().remove(image.getId());
+        }
+        else
+        {
+            sessionBean.getSelected().add(this.image.getId());
+        }
+        return "";
     }
     
     public MetadataProfile getProfile() {
@@ -278,13 +277,13 @@ public class ImageBean
     	return statementMenu;
     }
 	
-	
-
-	public SingleEditBean getEdit() {
+	public SingleEditBean getEdit() 
+	{
 		return edit;
 	}
 
-	public void setEdit(SingleEditBean edit) {
+	public void setEdit(SingleEditBean edit) 
+	{
 		this.edit = edit;
 	}
 

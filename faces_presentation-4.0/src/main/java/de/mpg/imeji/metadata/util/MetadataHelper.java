@@ -16,7 +16,7 @@ public class MetadataHelper
 	{
 		if (md instanceof Text)
 		{
-			if ("".equals(((Text) md).getText())) return true;
+			if (((Text) md).getText() == null || "".equals(((Text) md).getText())) return true;
 		}
 		else if (md instanceof Date)
 		{
@@ -24,29 +24,29 @@ public class MetadataHelper
 		}
 		else if (md instanceof Geolocation)
 		{
-			if (((Geolocation) md).getLatitude() == 0 &&
-					((Geolocation) md).getLongitude() == 0)
-				return true;
+			return Double.isNaN(((Geolocation) md).getLatitude()) ||  Double.isNaN(((Geolocation) md).getLongitude());
 		}
 		else if (md instanceof License)
 		{
-			if ("".equals(((License) md).getLicense())) return true;
+			if (((License) md).getLicense() == null || "".equals(((License) md).getLicense())) return true;
 		}
 		else if (md instanceof Publication)
 		{
-			if ("".equals(((Publication) md).getUri().toString())) return true;
+			if (((Publication) md).getUri() == null || "".equals(((Publication) md).getUri().toString())) return true;
 		}
 		else if (md instanceof Number)
 		{
-			if (((Number) md).getNumber() == 0) return true;
+			return Double.isNaN(((Number) md).getNumber());
 		}
 		else if (md instanceof ConePerson)
 		{
-			if ("".equals(((ConePerson) md).getPerson().getFamilyName())) return true;
+			if (((ConePerson) md).getPerson() == null || ((ConePerson) md).getPerson().getFamilyName() == null ||
+					"".equals(((ConePerson) md).getPerson().getFamilyName())) 
+				return true;
 		}
 		else if (md instanceof URI)
 		{
-			if ("".equals(((URI) md).getUri().toString())) return true;
+			if (((URI) md).getUri() == null || "".equals(((URI) md).getUri().toString())) return true;
 		}	
 		return false;
 	}

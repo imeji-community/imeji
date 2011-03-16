@@ -40,6 +40,7 @@
 					<h:panelGroup id="commonMetadata" styleClass="half_area0">
 						<ui:include src="./picturesPages/ui/MetadataInput.xhtml">
 							<ui:param name="metadata" value="#{EditImageMetadataBean.metadata}"/>
+							<ui:param name="areaClass" value="quad_txtArea"/>
 						</ui:include>
 						<h:panelGroup id="modeRadioMenu" styleClass="full_area0">
 							<h:selectOneRadio styleClass="huge_are0" value="#{EditImageMetadataBean.selectedMode}">
@@ -81,6 +82,7 @@
 				        						<!-- Field -->
 				        						<ui:include src="./picturesPages/ui/MetadataInput.xhtml">
 													<ui:param name="metadata" value="#{md}"/>
+													<ui:param name="areaClass" value="quad_txtArea"/>
 												</ui:include>
 												<!-- BUTTONS -->
 												<h:panelGroup layout="block">

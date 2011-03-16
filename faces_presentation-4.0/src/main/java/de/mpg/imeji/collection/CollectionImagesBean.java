@@ -33,23 +33,26 @@ public class CollectionImagesBean extends ImagesBean {
 	private Navigation navigation;
 	private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
 
-	public CollectionImagesBean() {
+	public CollectionImagesBean() 
+	{
 		super();
 		sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
 		this.navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 	} 
 
-	public void init() {
+	public void init() 
+	{
 		CollectionController cc = new CollectionController(sb.getUser());
-		try {
+		try 
+		{
 			this.collection = cc.retrieve(id);
 		}
-		catch (thewebsemantic.NotFoundException e) {
+		catch (thewebsemantic.NotFoundException e) 
+		{
 			BeanHelper.error("Collection " + id + " not found");
 			BeanHelper.error("Please check id.");
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
@@ -81,8 +84,6 @@ public class CollectionImagesBean extends ImagesBean {
 		try 
 		{
 			scList = URLQueryTransformer.transform2SCList(getQuery());
-//			System.out.println("url:" + getQuery());
-//	        System.out.println("parsed:" + URLQueryTransformer.transform2URL(scList));
 		} 
 		catch (Exception e) 
 		{
@@ -96,6 +97,11 @@ public class CollectionImagesBean extends ImagesBean {
 		labels.init((List<Image>) images);
 		return ImejiFactory.imageListToBeanList(images);
 	}
+	
+	public String getImageBaseUrl()
+    {
+        return navigation.getApplicationUri() + this.collection.getId().getPath();
+    }
 	
 	@Override
 	public String initFacets()

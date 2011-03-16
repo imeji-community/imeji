@@ -71,12 +71,12 @@ public class Locks
 		{
 			if (lock.getEmail() == null)
 			{
-				logger.info(lock.getUri()+ " locked by system");
+				logger.debug(lock.getUri()+ " locked by system");
 				getSystemLocks().put(lock.getUri(), lock);
 			}
 			else 
 			{
-				logger.info(lock.getUri()+ " locked by " + lock.getEmail());
+				logger.debug(lock.getUri()+ " locked by " + lock.getEmail());
 				getUserLocks().put(lock.getUri(), lock);
 			}
 		}
@@ -90,12 +90,12 @@ public class Locks
 	{
 		if (lock.getEmail() == null && getSystemLocks().get(lock.getUri()) != null)
 		{
-			logger.info(lock.getUri()+ " unlocked by system");
+			logger.debug(lock.getUri()+ " unlocked by system");
 			getSystemLocks().remove(lock.getUri());
 		}
 		else if(lock.getEmail() != null && getUserLocks().get(lock.getUri()) != null)
 		{
-			logger.info(lock.getUri()+ " unlocked by " + lock.getEmail());
+			logger.debug(lock.getUri()+ " unlocked by " + lock.getEmail());
 			getUserLocks().remove(lock.getUri());
 		}
 	}

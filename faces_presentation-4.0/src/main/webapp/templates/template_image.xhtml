@@ -94,7 +94,6 @@
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
 									
-						<h:panelGroup styleClass="seperator" />
 					</div>
 				</div>
 				
@@ -161,17 +160,17 @@
 											 <f:facet name="displayMd">
 												 <h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl">
 												 	<a4j:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0" rowKeyVar="indexMetadata">
-														<h:panelGroup layout="block" rendered="#{md.namespace == statement.name}" >
+														<h:panelGroup layout="block" styleClass="double_area0_p0" rendered="#{md.namespace == statement.name}" >
 															<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
 																<ui:param name="md" value="#{md}"/>
 															</ui:include>
 														</h:panelGroup>
 													</a4j:repeat>
-													<a4j:commandLink rendered="#{imageBean.collection != null and imageBean.editable and !imageBean.edit.valuesMap[statement.name]}" reRender="singleEditPanel" action="#{imageBean.edit.addMetadata}" value="Add value">
+													<a4j:commandLink rendered="#{imageBean.navigationString != 'pretty:viewImage' and imageBean.editable and !imageBean.edit.valuesMap[statement.name]}" reRender="singleEditPanel" action="#{imageBean.edit.addMetadata}" value="Add value">
 														<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 													</a4j:commandLink>
-													<h:outputText value="No value" rendered="#{(!imageBean.editable and !imageBean.edit.valuesMap[statement.name])}"/>
-													<rich:toggleControl rendered="#{imageBean.collection != null and imageBean.editable and imageBean.edit.valuesMap[statement.name]}" value="Edit" switchToState="editMd"/>
+													<h:outputText value="No value" rendered="#{(!imageBean.edit.valuesMap[statement.name]) and (!imageBean.editable || imageBean.navigationString == 'pretty:viewImage')}"/>
+													<rich:toggleControl rendered="#{imageBean.navigationString != 'pretty:viewImage' and imageBean.editable and imageBean.edit.valuesMap[statement.name]}" value="Edit" switchToState="editMd"/>
 												</h:panelGroup>
 											</f:facet>
 											<f:facet name="editMd">
@@ -179,7 +178,7 @@
 													<a4j:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0"  rowKeyVar="indexMetadata">
 														<h:panelGroup rendered="#{md.namespace == statement.name}">
 															<h:panelGroup layout="block" styleClass="xLarge_area0_p0 xTiny_marginLExcl">
-																<ui:include src="../picturesPages/ui/Metadatainput.xhtml">
+																<ui:include src="../picturesPages/ui/MetadataInput.xhtml">
 																	<ui:param name="metadata" value="#{md}"/>
 																	<ui:param name="areaClass" value="xLarge_txtArea"/>
 																</ui:include>

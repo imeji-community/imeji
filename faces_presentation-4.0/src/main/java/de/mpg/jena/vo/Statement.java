@@ -15,7 +15,7 @@ import thewebsemantic.RdfType;
 
 @Namespace("http://imeji.mpdl.mpg.de/mdprofile/")
 @RdfType("statement")
-public class Statement implements Serializable
+public class Statement implements Serializable, Comparable<Statement>
 {
     private URI type = URI.create("http://imeji.mpdl.mpg.de/ComplexTypes/text");
     private URI name;
@@ -111,5 +111,9 @@ public class Statement implements Serializable
 		this.pos = pos;
 	}
 
-
+	public int compareTo(Statement o) {
+		if (o.getPos() > this.pos) return -1;
+    	else if (o.getPos() == this.pos) return 0;
+    	else return 1;
+	}
 }

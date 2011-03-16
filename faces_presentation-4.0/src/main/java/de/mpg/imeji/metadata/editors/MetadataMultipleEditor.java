@@ -49,6 +49,7 @@ public class MetadataMultipleEditor extends MetadataEditor
 				{
 					((List<ImageMetadata>)im.getMetadataSet().getMetadata()).remove(i);
 				}
+				((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i).setPos(i);
 			}
 		}
 		if (images.size() == 0)

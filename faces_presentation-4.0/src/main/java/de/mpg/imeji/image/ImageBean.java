@@ -1,6 +1,7 @@
 package de.mpg.imeji.image;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
@@ -20,6 +21,7 @@ import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
@@ -58,6 +60,12 @@ public class ImageBean
         }
         profile = ProfileHelper.loadProfile(image);
         edit = new SingleEditBean(img, profile);
+        try{
+        	Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
+        }
+        catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
     public ImageBean()
@@ -86,6 +94,7 @@ public class ImageBean
         {
             setSelected(true);
         }
+        Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
     } 
 
     public void initView() throws Exception
@@ -187,7 +196,7 @@ public class ImageBean
         this.tab = tab.toUpperCase();
     }
 
-    protected String getNavigationString()
+    public String getNavigationString()
     {
         return "pretty:viewImage";
     }

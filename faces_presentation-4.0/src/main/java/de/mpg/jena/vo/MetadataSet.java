@@ -1,5 +1,6 @@
 package de.mpg.jena.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -14,7 +15,7 @@ import thewebsemantic.RdfType;
 @Namespace("http://imeji.mpdl.mpg.de/")
 @RdfType("metadataSet")
 @Embedded
-public class MetadataSet 
+public class MetadataSet implements Serializable
 {
 	private Collection<ImageMetadata> metadata =  new LinkedList<ImageMetadata>();
 	private URI profile;
@@ -44,4 +45,5 @@ public class MetadataSet
 	public void setProfile(URI profile) {
 		this.profile = profile;
 	}
+
 }

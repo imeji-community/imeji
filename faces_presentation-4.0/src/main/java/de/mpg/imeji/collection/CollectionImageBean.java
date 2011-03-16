@@ -30,4 +30,10 @@ public class CollectionImageBean extends ImageBean
     {
         return navigation.getApplicationUrl() + "collection/" + this.collectionId + "/image/" + this.getId();
     }
+    
+    public String getNavigationString()
+    {
+        return "pretty:viewImageCollection";
+    }
+    
 }

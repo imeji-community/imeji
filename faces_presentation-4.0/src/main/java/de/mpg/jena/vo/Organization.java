@@ -11,7 +11,8 @@ import thewebsemantic.RdfType;
 @Namespace("http://purl.org/escidoc/metadata/profiles/0.1/")
 @RdfType("organizationalunit")
 @Embedded
-public class Organization implements Serializable {
+public class Organization implements Serializable, Comparable<Organization>
+{
 	
 	private String name;
 	
@@ -83,6 +84,12 @@ public class Organization implements Serializable {
 
 	public void setPos(int pos) {
 		this.pos = pos;
+	}
+
+	public int compareTo(Organization o) {
+		if (o.getPos() > this.pos) return -1;
+    	else if (o.getPos() == this.pos) return 0;
+    	else return 1;
 	}
 	
 	

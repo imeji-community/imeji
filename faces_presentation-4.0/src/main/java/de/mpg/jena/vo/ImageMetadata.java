@@ -6,19 +6,17 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.UUID;
 
-import de.mpg.jena.vo.ComplexType.ComplexTypes;
-
 import thewebsemantic.Embedded;
 import thewebsemantic.Id;
-import thewebsemantic.LocalizedString;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
 import thewebsemantic.RdfType;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 @Namespace("http://imeji.mpdl.mpg.de/")
 @RdfType("metadata")
 @Embedded
-public class ImageMetadata implements Serializable
+public class ImageMetadata implements Serializable, Comparable<ImageMetadata>
 {
     private URI namespace;
     private ComplexTypes type;
@@ -71,7 +69,9 @@ public class ImageMetadata implements Serializable
 
     public int compareTo(ImageMetadata imd)
     {
-        return this.compareTo((ImageMetadata)imd);
+    	if (imd.getPos() > this.pos) return -1;
+    	else if (imd.getPos() == this.pos) return 0;
+    	else return 1;
     }
 
 	public Collection<ImageMetadata> getChilds() {

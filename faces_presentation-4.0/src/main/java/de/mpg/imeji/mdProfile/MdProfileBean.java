@@ -346,6 +346,7 @@ public class MdProfileBean
         	BeanHelper.error("Empty profile");
         	return false;
         }
+        int i=0;
         for (Statement s : profile.getStatements())
         {
         	if(s.getName() == null || !s.getName().isAbsolute())
@@ -371,6 +372,8 @@ public class MdProfileBean
             {
                 statementNames.add(s.getName().toString());
             }
+        	s.setPos(i);
+        	i++;
         }
         return true;
     }

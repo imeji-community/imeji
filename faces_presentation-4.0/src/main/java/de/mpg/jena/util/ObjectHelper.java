@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.apache.commons.collections.ListUtils;
 
+import com.hp.hpl.jena.enhanced.Implementation;
 import com.hp.hpl.jena.sparql.util.CollectionUtils;
 
 import de.mpg.jena.vo.Album;
@@ -70,8 +71,8 @@ public class ObjectHelper
                 f.setAccessible(true);
                 if (f.getType().isInstance(new LinkedList<Object>()))
                 {
+                	List<Object> list = new ArrayList<Object>((Collection<Object>)f.get(obj));                	
                 	
-                	List<Object> list = new ArrayList<Object>((Collection<Object>)f.get(obj));
                     f.set(obj, list);
                     for (Object o : list)
                     {
@@ -88,18 +89,9 @@ public class ObjectHelper
         return obj;
     }
     
-    public class ImejiCollectionComparator implements Comparator<Object>
-    {
-    	public ImejiCollectionComparator() {
-			// TODO Auto-generated constructor stub
-		}
-		public int compare(Object o1, Object o2) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-    	
-    }
 
+    
+    
     /**
      * Return Fields of this class (excluding superclass fields)
      * 

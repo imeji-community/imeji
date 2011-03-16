@@ -62,7 +62,7 @@
 						 <f:facet name="displayMd">
 							 <h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl">
 							 	<a4j:repeat var="md" value="#{item.edit.image.metadataSet.metadata}" rows="0" rowKeyVar="indexMetadata">
-									<h:panelGroup layout="block" rendered="#{md.namespace == statement.name}" >
+									<h:panelGroup layout="block" styleClass="double_area0_p0" rendered="#{md.namespace == statement.name}" >
 										<ui:include src="MetadataOutput.xhtml">
 											<ui:param name="md" value="#{md}"/>
 										</ui:include>
@@ -80,7 +80,7 @@
 								<a4j:repeat var="md" value="#{item.edit.image.metadataSet.metadata}" rows="0"  rowKeyVar="indexMetadata">
 									<h:panelGroup rendered="#{md.namespace == statement.name}">
 										<h:panelGroup layout="block" styleClass="xLarge_area0_p0 xTiny_marginLExcl">
-											<ui:include src="Metadatainput.xhtml">
+											<ui:include src="MetadataInput.xhtml">
 												<ui:param name="metadata" value="#{md}"/>
 												<ui:param name="areaClass" value="xLarge_txtArea"/>
 											</ui:include>

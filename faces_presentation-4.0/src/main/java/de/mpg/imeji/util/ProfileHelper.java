@@ -2,6 +2,7 @@ package de.mpg.imeji.util;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,7 @@ public class ProfileHelper
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Collections.sort((List<Statement>) profile.getStatements());
         return profile;
     }
     

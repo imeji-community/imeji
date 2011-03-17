@@ -8,6 +8,7 @@ import java.util.Map;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
+import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.vo.CollectionImeji;
 
 public class QueryElementFactory 
@@ -16,17 +17,33 @@ public class QueryElementFactory
 	private Map<String, QueryElement> els;
 	private List<String> names= new ArrayList<String>();
 	
-	public Map<String, QueryElement> createElements(List<SearchCriterion> scList, String root)
+	public Map<String, QueryElement> createElements(List<SearchCriterion> scList, String root, SortCriterion scSort)
 	{
 		els = new HashMap<String, QueryElement>();
 		this.root = root;
 		
 		findMandatoryElements();
 		findOptionalElements(scList);
+		findSortElement(scSort);
 		setOperatorNot();
 		return els;
 	}
 	
+	private void findSortElement(SortCriterion scSort)
+	{
+		if (scSort != null)
+		{
+			if (scSort.getSortingCriterion().getParent() == null || !scSort.getSortingCriterion().getParent().getNs().equals( els.get(root).getNameSpace()))
+			{	
+				addElement(new QueryElement("props", "http://imeji.mpdl.mpg.de/properties", els.get(root), false));
+				addElement(new QueryElement("sort0", scSort.getSortingCriterion().getNs(), els.get("http://imeji.mpdl.mpg.de/properties"), false));
+			}
+			else
+			{
+				addElement(new QueryElement("sort0", scSort.getSortingCriterion().getNs(), els.get(root), false));
+			}
+		}
+	}
 	
 	private void findMandatoryElements()
 	{
@@ -86,7 +103,7 @@ public class QueryElementFactory
 			addElements(ns.getParent(), op);
 			parent =  els.get(ns.getParent().getNs());
 		}
-		addElement( new QueryElement(null, ns.getNs(), parent, true));
+		addElement(new QueryElement(null, ns.getNs(), parent, true));
 	}
 	
 	private void addElement(QueryElement el)

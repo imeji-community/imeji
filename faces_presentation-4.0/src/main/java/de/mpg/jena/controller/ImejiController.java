@@ -117,7 +117,6 @@ public abstract class ImejiController
         StmtIterator it = r.listProperties(RDF.type);
         while (it.hasNext()) {
 			Resource r1 = it.nextStatement().getResource();
-			System.out.println(r1);
         }
 
         if (base.containsResource(r))

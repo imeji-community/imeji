@@ -168,6 +168,7 @@
 													</a4j:repeat>
 													<a4j:commandLink rendered="#{imageBean.navigationString != 'pretty:viewImage' and imageBean.editable and !imageBean.edit.valuesMap[statement.name]}" reRender="singleEditPanel" action="#{imageBean.edit.addMetadata}" value="Add value">
 														<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
+														<a4j:support event="oncomplete" reRender="singleEditPanel" />
 													</a4j:commandLink>
 													<h:outputText value="No value" rendered="#{(!imageBean.edit.valuesMap[statement.name]) and (!imageBean.editable || imageBean.navigationString == 'pretty:viewImage')}"/>
 													<rich:toggleControl rendered="#{imageBean.navigationString != 'pretty:viewImage' and imageBean.editable and imageBean.edit.valuesMap[statement.name]}" value="Edit" switchToState="editMd"/>
@@ -187,10 +188,12 @@
 																<a4j:commandButton styleClass="min_imgBtn groupTool remove af_commandButton" immediate="true" reRender="singleEditPanel" action="#{imageBean.edit.removeMetadata}" value="">
 																	<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 																	<f:setPropertyActionListener value="#{indexMetadata}" target="#{imageBean.edit.mdPosition}" />
+																	<a4j:support event="oncomplete" reRender="singleEditPanel" />
 																</a4j:commandButton>
 																<a4j:commandButton styleClass="min_imgBtn groupTool add af_commandButton" immediate="true" reRender="singleEditPanel" action="#{imageBean.edit.addMetadata}" value="">
 																	<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 																	<f:setPropertyActionListener value="#{indexMetadata}" target="#{imageBean.edit.mdPosition}" />
+																	<a4j:support event="oncomplete" reRender="singleEditPanel" />
 																</a4j:commandButton>
 															</div>
 														</h:panelGroup>
@@ -204,7 +207,7 @@
 															<div class="small_txtBtn xTiny_marginLExcl">
 																<a4j:commandButton styleClass="free_area0_p0 xTiny_marginLExcl small_txtBtn dialogActiveButton" action="#{imageBean.edit.save}" value="Save">
 																	<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
-																 	<a4j:support event="oncomplete" reRender="metadataTogglePanel" />
+																 	<a4j:support event="oncomplete" reRender="singleEditPanel" />
 																</a4j:commandButton>
 															</div>
 														</div>

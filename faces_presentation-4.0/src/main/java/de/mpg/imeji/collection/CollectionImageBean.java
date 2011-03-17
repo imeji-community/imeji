@@ -9,7 +9,7 @@ public class CollectionImageBean extends ImageBean
     private String collectionId;
     private Navigation navigation;
 
-    public CollectionImageBean()
+    public CollectionImageBean() throws Exception
     {
         super();
         this.prettyLink = "pretty:EditImageOfCollection";

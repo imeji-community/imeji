@@ -1,13 +1,10 @@
 package de.mpg.imeji.upload.helper;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -21,8 +18,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.xmlbeans.XmlCursor;
-
-//import com.sun.mail.handlers.image_gif;
 
 import de.escidoc.schemas.components.x09.ComponentDocument.Component;
 import de.escidoc.schemas.components.x09.ComponentDocument.Component.Content.Storage.Enum;

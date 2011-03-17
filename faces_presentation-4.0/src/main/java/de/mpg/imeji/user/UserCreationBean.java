@@ -60,8 +60,8 @@ public class UserCreationBean
                 else
                 {
                 	 user.setEncryptedPassword(UserController.convertToMD5(getPassword()));
-                	 System.out.println("USER email created: " + user.getEmail());
                      uc.create(user);
+                     logger.info("USER email created: " + user.getEmail());
                      BeanHelper.error("User created successfully");
                 }
             }

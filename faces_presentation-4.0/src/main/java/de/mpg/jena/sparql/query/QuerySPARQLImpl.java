@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.mpg.jena.ImejiJena;
+import thewebsemantic.vocabulary.DublinCore;
+
 import de.mpg.jena.controller.ImejiQueryVariable;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
@@ -25,24 +26,28 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	private String securityFilter = "";
 	private String limit = "";
 	private String offset = "";
+	private String sortQuery ="";
+	private String selectQuery="";
 	
 //	private String type = "http://imeji.mpdl.mpg.de/image";
 //	private Map<String, SearchCriterion> subqueries = new HashMap<String, SearchCriterion>();
 
 	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
     {
-		String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
-		String query = "SELECT DISTINCT ?s WHERE {" + select + "} " + this.limit + " " + this.offset;
+		//String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
+		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
+		String query = "SELECT DISTINCT ?s WHERE {" + selectQuery + "} " + this.sortQuery + this.limit + " " + this.offset;
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
-		//System.out.println(query);
-		//query="SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?s <http://imeji.mpdl.mpg.de/collection> ?coll .FILTER(?visibility=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC> ||  true) . OPTIONAL{ SELECT DISTINCT ?s0 WHERE { ?s0 a <http://imeji.mpdl.mpg.de/image> OPTIONAL {?s0 <http://imeji.mpdl.mpg.de/about> ?v1} .FILTER(?v1=<http://imeji.mpdl.mpg.de/image/2>)} }.FILTER( ?s=?s0 )} LIMIT 24 ";
+		System.out.println(query);
+		//query="SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/image> .?s <http://imeji.mpdl.mpg.de/properties> ?v1. OPTIONAL {?v1 <http://imeji.mpdl.mpg.de/creationDate> ?v2} . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?s <http://imeji.mpdl.mpg.de/collection> ?coll .FILTER(?visibility=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC> || ?coll=<http://imeji.mpdl.mpg.de/collection/14>) }  ORDER BY ?v2 LIMIT 24 ";
 		return query;
     }
 	
 	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user) 
 	{
-		String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
-		String query= "SELECT ?s count(DISTINCT ?s) WHERE {" + select + "} " + this.limit + " " + this.offset;
+		//String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
+		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
+		String query= "SELECT ?s count(DISTINCT ?s) WHERE {" + selectQuery + "} " + this.limit + " " + this.offset;
 		//System.out.println("COUNT:" + query);
 		return  query;
 	}
@@ -57,12 +62,21 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		return "CONSTRUCT { ?s a <" + root + "> . ?md a <http://imeji.mpdl.mpg.de/image/metadata> . ?type a <http://purl.org/dc/terms/type> } WHERE { " + variables.substring(2) +   securityFilter + "} " + this.limit + " " + this.offset;
 	}
 	
-	private String printSelect(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
+	private void init(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
 	{
+		this.els = qeFact.createElements(scList, root, sortCriterion);
 		if (offset > 0) this.offset = "OFFSET " + Integer.toString(offset);
 		if (limit > 0) this.limit = "LIMIT " +  Integer.toString(limit);
-		
-		els = qeFact.createElements(scList, root);
+		this.selectQuery = printSelect(scList, sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
+		this.sortQuery = SortQueryFactory.create(sortCriterion, els);
+	}
+	
+	private String printSelect(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
+	{
+//		if (offset > 0) this.offset = "OFFSET " + Integer.toString(offset);
+//		if (limit > 0) this.limit = "LIMIT " +  Integer.toString(limit);
+//		
+//		els = qeFact.createElements(scList, root);
 		
 		securityFilter = FilterFactory.generateUserFilters(user, els);
 		
@@ -79,7 +93,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 				i++;
 			}
 		}
-				
+		
 		String query = "";
 		for (SubQuery sq : subQueries.values())
 		{

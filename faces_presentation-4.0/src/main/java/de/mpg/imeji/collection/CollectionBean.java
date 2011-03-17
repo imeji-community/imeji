@@ -259,13 +259,12 @@ public abstract class CollectionBean
 
     public boolean getIsOwner()
     {
-        if (sessionBean.getUser() != null)
+        if (collection != null && collection.getProperties().getCreatedBy() != null && sessionBean.getUser() != null)
         {
             return collection.getProperties().getCreatedBy().equals(
                     ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
         }
-        else
-            return false;
+        return false;
     }
 
     public String release() throws Exception
@@ -278,6 +277,7 @@ public abstract class CollectionBean
     public List<ImageBean> getImages() throws Exception
     {
         ImageController ic = new ImageController(sessionBean.getUser());
+        if (collection.getId() == null) return null;
         try
         {
             Collection<Image> imgList = ic.searchImageInContainer(collection.getId(), null, null, 5, 0);

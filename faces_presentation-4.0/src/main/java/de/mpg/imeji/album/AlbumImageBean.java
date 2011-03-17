@@ -9,7 +9,7 @@ public class AlbumImageBean extends ImageBean
     private String albumId;
     private Navigation navigation;
 
-    public AlbumImageBean()
+    public AlbumImageBean() throws Exception
     {
         super();
         this.prettyLink = "pretty:editImageOfAlbum";
@@ -29,5 +29,10 @@ public class AlbumImageBean extends ImageBean
     public String getPageUrl()
     {
         return navigation.getApplicationUrl() + "album/" + this.albumId + "/image/" + this.getId();
+    }
+    
+    public String getNavigationString()
+    {
+        return "pretty:viewImageAlbum";
     }
 }

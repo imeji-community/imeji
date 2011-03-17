@@ -69,7 +69,7 @@ public class SubQuery
 			
 			// WRITE FILTERS SUBQUERY
 			List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-			scList.add(sc);		
+			scList.add(sc);
 			sq += " .FILTER(" + filter  + ")";
 			
 			if(sc.getOperator().equals(Operator.NOTAND) || sc.getOperator().equals(Operator.NOTOR)) sq += " }";

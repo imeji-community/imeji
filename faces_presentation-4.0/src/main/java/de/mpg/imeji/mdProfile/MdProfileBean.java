@@ -52,7 +52,6 @@ public class MdProfileBean
 
     public MdProfileBean()
     {
-    	ImejiJena.profileModel.write(System.out, "RDF/XML-ABBREV");
     	collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         pc = new ProfileController(sessionBean.getUser());

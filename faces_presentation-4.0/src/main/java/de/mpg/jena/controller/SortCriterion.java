@@ -4,7 +4,6 @@ import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 
 public class SortCriterion
 {
-    
     public enum SortOrder {
         ASCENDING, DESCENDING;
     }

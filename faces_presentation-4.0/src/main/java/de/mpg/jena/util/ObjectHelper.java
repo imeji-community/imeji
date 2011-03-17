@@ -44,6 +44,7 @@ public class ObjectHelper
         }
         catch (UnsupportedEncodingException e)
         {
+        	throw new RuntimeException(e);
         }
         return URI.create(namespace + objectType + "/" + encodedId);
     }

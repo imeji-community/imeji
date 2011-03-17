@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 
 import de.escidoc.schemas.item.x09.ItemDocument;
 import de.mpg.escidoc.services.framework.ServiceLocator;

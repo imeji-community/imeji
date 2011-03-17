@@ -20,6 +20,7 @@ import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.Image.Visibility;
 import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
 
@@ -86,6 +87,7 @@ public class CollectionController extends ImejiController
 	    	ImageController imageController = new ImageController(user);
 	    	Image img = imageController.retrieve(uri);
 	    	img.getProperties().setStatus(Status.RELEASED);
+	    	img.setVisibility(Visibility.PUBLIC);
 	    	imageController.update(img);
 	    }
         update(ic);

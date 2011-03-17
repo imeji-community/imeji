@@ -132,7 +132,6 @@ public class ImejiSPARQL
 	
 	public static Model execConstruct(String query)
 	{
-		System.out.println("Construct:" + query);
 		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
 		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
 		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;

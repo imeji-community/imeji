@@ -61,7 +61,6 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         
             collections = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
-            System.out.println("search done");
         }
         catch (Exception e)
         {

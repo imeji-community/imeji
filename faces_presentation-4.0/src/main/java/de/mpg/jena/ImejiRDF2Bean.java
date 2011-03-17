@@ -68,7 +68,7 @@ public class ImejiRDF2Bean
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Error loading object:" + e);
+			logger.error("Error loading object:" + e);
 		}
 		return null;
 		

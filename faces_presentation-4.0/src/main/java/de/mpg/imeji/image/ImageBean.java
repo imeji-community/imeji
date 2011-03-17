@@ -19,6 +19,7 @@ import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
@@ -68,7 +69,7 @@ public class ImageBean
 		}
     }
 
-    public ImageBean()
+    public ImageBean() throws Exception
     {
         image = new Image();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -83,7 +84,7 @@ public class ImageBean
     {
         try 
         {
-        	image = imageController.retrieve(id);
+        	if (id != null)	image = imageController.retrieve(id);
 		} 
         catch (Exception e) 
 		{
@@ -95,13 +96,13 @@ public class ImageBean
             setSelected(true);
         }
         Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
+        profile = ProfileHelper.loadProfile(image);
+        edit = new SingleEditBean(image, profile);
     } 
 
     public void initView() throws Exception
     {
-        this.init();
-        profile = ProfileHelper.loadProfile(image);
-        edit = new SingleEditBean(image, profile);
+    	if (image == null || image.getId() == null || !image.getId().toString().equals(ObjectHelper.getURI(Image.class, id).toString())) this.init();
         setTab(TabType.VIEW.toString());
     }
 

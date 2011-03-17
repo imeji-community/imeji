@@ -59,7 +59,8 @@ public class ImageController extends ImejiController
         CollectionController cc = new CollectionController(user);
         CollectionImeji ic = cc.retrieve(coll);
     	writeCreateProperties(img.getProperties(), user);
-        img.setVisibility(Visibility.PUBLIC);
+    	if (Status.PENDING.equals(ic.getProperties().getStatus())) img.setVisibility(Visibility.PRIVATE);
+    	else img.setVisibility(Visibility.PUBLIC);
         img.setCollection(coll);
         img.setId(ObjectHelper.getURI(Image.class, Integer.toString(getUniqueId())));
         img.getMetadataSet().setProfile(ic.getProfile());
@@ -79,7 +80,8 @@ public class ImageController extends ImejiController
         for (Image img : images)
         {
         	 writeCreateProperties(img.getProperties(), user);
-             img.setVisibility(Visibility.PUBLIC);
+        	 if (Status.PENDING.equals(ic.getProperties().getStatus())) img.setVisibility(Visibility.PRIVATE);
+        	 else img.setVisibility(Visibility.PUBLIC);
              img.setCollection(coll);
              img.setId(ObjectHelper.getURI(Image.class, Integer.toString(getUniqueId())));
              img.getMetadataSet().setProfile(ic.getProfile());

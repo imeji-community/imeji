@@ -7,6 +7,7 @@ import java.util.Map;
 
 import thewebsemantic.vocabulary.DublinCore;
 
+import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.ImejiQueryVariable;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
@@ -36,9 +37,9 @@ public class QuerySPARQLImpl implements QuerySPARQL
     {
 		//String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
-		String query = "SELECT DISTINCT ?s WHERE {" + selectQuery + "} " + this.sortQuery + this.limit + " " + this.offset;
+		String query = "SELECT DISTINCT ?s WHERE {" + selectQuery + "} " + this.sortQuery + " " + this.limit + " " + this.offset;
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
-		System.out.println(query);
+		//System.out.println(query);
 		//query="SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/image> .?s <http://imeji.mpdl.mpg.de/properties> ?v1. OPTIONAL {?v1 <http://imeji.mpdl.mpg.de/creationDate> ?v2} . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?s <http://imeji.mpdl.mpg.de/collection> ?coll .FILTER(?visibility=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC> || ?coll=<http://imeji.mpdl.mpg.de/collection/14>) }  ORDER BY ?v2 LIMIT 24 ";
 		return query;
     }

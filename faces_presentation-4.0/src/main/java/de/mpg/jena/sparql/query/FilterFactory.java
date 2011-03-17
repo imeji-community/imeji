@@ -1,6 +1,9 @@
 package de.mpg.jena.sparql.query;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +11,7 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
+import de.mpg.jena.util.DateFormatter;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.User;
@@ -206,15 +210,15 @@ public class FilterFactory
             }
             else if (sc.getFilterType().equals(Filtertype.EQUALS_DATE))
             {
-                filter += variable + "='" + sc.getValue() + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+            	filter += variable + "='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
             }
             else if (sc.getFilterType().equals(Filtertype.GREATER_DATE))
             {
-                filter += variable + ">='" + sc.getValue() + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+				filter += variable + ">='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
             }
             else if (sc.getFilterType().equals(Filtertype.LESSER_DATE))
             {
-                filter += variable + "<='" + sc.getValue() + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+				filter += variable + "<='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
             }
         }
 		return filter;

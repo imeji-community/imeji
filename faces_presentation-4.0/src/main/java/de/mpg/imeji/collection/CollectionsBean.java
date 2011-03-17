@@ -53,9 +53,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         try
         {
-            totalNumberOfRecords = controller.countAllCollections();
-            logger.info("Found " + totalNumberOfRecords + "collections");
-            
+            totalNumberOfRecords = controller.countAllCollections();            
             SortCriterion sortCriterion = new SortCriterion();
             sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));

@@ -24,8 +24,6 @@ public class SortQueryFactory
 	                q = " ORDER BY ?" + sortEl.getName() + " ";
 	            }
             }
-            System.out.println(ns.getNs());
-            System.out.println(q);
         }
 		return q;
 	}

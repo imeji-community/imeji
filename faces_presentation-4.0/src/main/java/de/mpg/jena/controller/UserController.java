@@ -24,12 +24,14 @@ public class UserController extends ImejiController
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
 		imejiBean2RDF.create(newUser, user);
+		cleanGraph(ImejiJena.userModel);
 	}
 	
 	public void delete(User user) throws Exception
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
 		imejiBean2RDF.delete(user, this.user);
+		cleanGraph(ImejiJena.userModel);
 	}
 	
 	public User retrieve(String email)

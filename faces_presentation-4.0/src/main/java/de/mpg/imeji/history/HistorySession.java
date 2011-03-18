@@ -14,7 +14,7 @@ public class HistorySession
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void add(String filename, String query, String id)
+	public void add(String filename, String query, String[] id)
 	{
 		Page newPage = null;
 		//pages.clear();
@@ -47,7 +47,11 @@ public class HistorySession
 				String uri = newPage.getUri().toString();
 				newPage.setUri(URI.create(uri + "&h=" + pages.size()));
 				
-				if(id != null) newPage.setName(newPage.getName() + " " + id);
+				if (id!= null)
+				{
+					if (id.length == 2) newPage.setName(newPage.getName() + " " + id[1]);
+					if (id.length == 1) newPage.setName(newPage.getName() + " " + id[0]);
+				}
 				
 				pages.add(newPage);
 			}

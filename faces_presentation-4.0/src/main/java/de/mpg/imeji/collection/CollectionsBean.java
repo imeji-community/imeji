@@ -5,18 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.faces.event.ValueChangeEvent;
-
-import com.ocpsoft.pretty.PrettyContext;
-
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.beans.SuperContainerBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
-import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Properties.Status;
@@ -53,11 +49,10 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         try
         {
-            totalNumberOfRecords = controller.countAllCollections();            
+            totalNumberOfRecords = controller.getNumberOfResults(new ArrayList<SearchCriterion>());
             SortCriterion sortCriterion = new SortCriterion();
             sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        
             collections = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
         }
         catch (Exception e)
@@ -65,8 +60,6 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
-        
         return ImejiFactory.collectionListToBeanList(collections);
     }
     

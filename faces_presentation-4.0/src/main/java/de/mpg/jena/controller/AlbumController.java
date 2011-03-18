@@ -47,7 +47,7 @@ public class AlbumController extends ImejiController
 		imejiBean2RDF.saveDeep(ic, user);
 		ic = imejiRDF2Bean.load(Album.class, ic.getId().toString());
 		user = addCreatorGrant(ic, user);
-		cleanGraph();
+		cleanGraph(ImejiJena.albumModel);
 	}
 	
 	public User addCreatorGrant(Album alb, User user) throws Exception
@@ -73,7 +73,7 @@ public class AlbumController extends ImejiController
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
 		writeUpdateProperties(ic.getProperties(), user);
 		imejiBean2RDF.saveDeep(ic, user);
-		cleanGraph();
+		cleanGraph(ImejiJena.albumModel);
 	}
 	
 	/**
@@ -107,6 +107,7 @@ public class AlbumController extends ImejiController
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
 		imejiBean2RDF.delete(album, user);
+		cleanGraph(ImejiJena.albumModel);
 	}
 	
 	

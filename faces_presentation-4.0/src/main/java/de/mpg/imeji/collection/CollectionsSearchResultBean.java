@@ -61,8 +61,7 @@ public class CollectionsSearchResultBean extends SuperContainerBean<ViewCollecti
         scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.COLLECTION_PROFILE, getQuery(), Filtertype.URI));
         try
         {
-            collections = controller.search(scList, null, -1, offset);
-            totalNumberOfRecords = collections.size();
+            totalNumberOfRecords = controller.getNumberOfResults(scList);
             logger.info("Found " + totalNumberOfRecords + "collections");
             
             SortCriterion sortCriterion = new SortCriterion();

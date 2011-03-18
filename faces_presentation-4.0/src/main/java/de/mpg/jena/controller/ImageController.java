@@ -68,7 +68,7 @@ public class ImageController extends ImejiController
         imejiBean2RDF.create(img, user);
         ic.getImages().add(img.getId());
         cc.update(ic);
-        cleanGraph();
+        cleanGraph(ImejiJena.imageModel);
     }
 
     public void create(Collection<Image> images, URI coll) throws Exception
@@ -89,7 +89,7 @@ public class ImageController extends ImejiController
              ic.getImages().add(img.getId());
         }
         cc.update(ic);
-        cleanGraph();
+        cleanGraph(ImejiJena.imageModel);
     }
     
 

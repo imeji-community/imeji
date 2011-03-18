@@ -52,7 +52,7 @@ public class SearchCriterion {
 		IMAGE_METADATA_NUMBER("http://imeji.mpdl.mpg.de/metadata/number", IMAGE_METADATA),
 	    
 		IMAGE_COLLECTION("http://imeji.mpdl.mpg.de/collection"),
-		IMAGE_COLLECTION_PROFILE("http://imeji.mpdl.mpg.de/profile", IMAGE_COLLECTION),
+		IMAGE_COLLECTION_PROFILE("http://imeji.mpdl.mpg.de/mdprofile", IMAGE_COLLECTION),
 
 		CONTAINER_METADATA("http://imeji.mpdl.mpg.de/container/metadata"),
 		CONTAINER_METADATA_TITLE("http://purl.org/dc/elements/1.1/title", CONTAINER_METADATA),
@@ -62,7 +62,7 @@ public class SearchCriterion {
 		CONTAINER_METADATA_PERSON_GIVEN_NAME("http://purl.org/escidoc/metadata/terms/0.1/given-name", CONTAINER_METADATA_PERSON),
 		CONTAINER_METADATA_PERSON_ORGANIZATION("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit", CONTAINER_METADATA_PERSON, true),
 		CONTAINER_METADATA_PERSON_ORGANIZATION_NAME("http://purl.org/dc/elements/1.1/title", CONTAINER_METADATA_PERSON_ORGANIZATION),
-		COLLECTION_PROFILE("http://imeji.mpdl.mpg.de/profile");
+		COLLECTION_PROFILE("http://imeji.mpdl.mpg.de/mdprofile");
 		
 
 		private String ns;

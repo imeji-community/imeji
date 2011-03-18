@@ -1,6 +1,5 @@
 package de.mpg.jena.controller;
 
-import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.User;
 

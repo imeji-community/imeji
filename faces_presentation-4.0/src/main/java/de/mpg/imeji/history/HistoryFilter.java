@@ -1,6 +1,7 @@
 package de.mpg.imeji.history;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Enumeration;
 
 import javax.faces.FactoryFinder;
@@ -39,16 +40,16 @@ public class HistoryFilter  implements Filter{
 		HistorySession hs = getHistorySession(request, resp);
 		
 		String q = (String) request.getParameter("q");
-		String id = (String) request.getParameter("com.ocpsoft.vP_0");
 		String h = (String) request.getParameter("h");
 		String f = (String) request.getParameter("f");
+		String[] ids = request.getParameterValues("com.ocpsoft.vP_0");
 		
 		// If f exists, then it is a filter, not added to history
 		if (f == null)
 		{
 			if (h == null)
 			{
-				hs.add(request.getPathInfo().replaceAll("/", ""), q, id);
+				hs.add(request.getPathInfo().replaceAll("/", ""), q, ids);
 			}
 			else
 			{

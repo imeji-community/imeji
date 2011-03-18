@@ -2,9 +2,7 @@ package de.mpg.imeji.facet;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
@@ -17,9 +15,7 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
-import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
@@ -39,8 +35,12 @@ public class CollectionFacets
 		Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
 		String baseURI = nav.getImagesUrl() + col.getId().getPath() + "?q=";
 		
+		SearchCriterion scColl = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_COLLECTION, col.getId().toString(), Filtertype.URI);
+		scList.add(scColl);
+
 		FacetURIFactory uriFactory = new FacetURIFactory(scList);
 		
+
 		for (Statement st : profile.getStatements()) 
 		{
 			if (!fs.isFilter(getName(st.getName())))

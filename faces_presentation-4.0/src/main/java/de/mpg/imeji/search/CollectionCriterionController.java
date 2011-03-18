@@ -1,10 +1,7 @@
 package de.mpg.imeji.search;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
@@ -17,7 +14,6 @@ import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class CollectionCriterionController implements Serializable {
@@ -142,10 +138,9 @@ public class CollectionCriterionController implements Serializable {
  				        {
  				        	case DATE:
  				        		String dop = mdc.getDateOperator();
- 				        		Filtertype f = Filtertype.EQUALS_DATE;
- 				        		if ("<".equals(dop)) f = Filtertype.LESSER_DATE;
- 				        		else if (">".equals(dop)) f = Filtertype.GREATER_DATE;
- 				        		mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_DATE, mdc.getMdText(), f));
+ 				        		System.out.println(dop);
+ 				        		Filtertype ft = Filtertype.valueOf(dop);
+ 				        		mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_DATE, mdc.getMdText(), ft));
  				        		break;
  				        	case GEOLOCATION:
  				        		//TODO to create a new searchcriterion with the 2 values as childs
@@ -160,10 +155,8 @@ public class CollectionCriterionController implements Serializable {
  				        		break;
  				        	case NUMBER:
  				        		String nop = mdc.getNumberOperator();
- 				        		Filtertype f1 = Filtertype.EQUALS_NUMBER;
- 				        		if ("<".equals(nop)) f1 = Filtertype.LESSER_NUMBER;
- 				        		else if (">".equals(nop)) f1 = Filtertype.GREATER_NUMBER;
- 				        		mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NUMBER, mdc.getMdText(), f1));
+ 				        		Filtertype ft1 = Filtertype.valueOf(nop);
+ 				        		mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NUMBER, mdc.getMdText(), ft1));
  				        		break;
  				        	case PERSON:
  				        		mdSC.getChildren().add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME, mdc.getMdText(),  Filtertype.REGEX));

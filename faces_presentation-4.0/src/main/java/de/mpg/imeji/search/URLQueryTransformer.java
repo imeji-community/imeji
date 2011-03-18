@@ -222,8 +222,12 @@ public class URLQueryTransformer
 			}
     		else
     		{
-    			//query += "( " + sc.getNamespace().name() + "." + sc.getFilterType().name() +  "=\"" + sc.getValue() + "\" )";
-    			query += " " +sc.getNamespace().name() + "." + sc.getFilterType().name() +  "=\"" + sc.getValue() + "\" ";
+    			String value = "";
+    			if (sc.getValue() != null) value = sc.getValue();
+    			if (sc.getNamespace() != null)
+    			{
+    				query += " " +sc.getNamespace().name() + "." + sc.getFilterType().name() +  "=\"" + value + "\" ";
+    			}
     		}
 		}
 		return query;

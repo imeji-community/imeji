@@ -214,7 +214,7 @@ public class EditImageMetadataBean
 	
 	public Statement getDefaultStatement()
 	{
-		if (profile != null)
+		if (profile != null &&  profile.getStatements().iterator().hasNext())
 		{
 			return profile.getStatements().iterator().next();
 		}

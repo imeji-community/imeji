@@ -77,6 +77,10 @@
 						<h:outputText value="#{lbl.collection_release}"></h:outputText>
 					</h:commandLink>
 					<h:outputText styleClass="seperator void" />
+					<h:commandLink id="lnkDeleteCollection" styleClass="free_area0" action="#{ViewCollectionBean.delete}" rendered="#{ViewCollectionBean.deletable}">
+						<h:outputText value="#{lbl.collection_delete}"></h:outputText>
+					</h:commandLink>
+					<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.deletable}"/>
 					<rich:togglePanel value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{ViewCollectionBean.deletable}">
 						 <f:facet name="closed">
 					            <rich:toggleControl value="Share" switchToState="open"/>

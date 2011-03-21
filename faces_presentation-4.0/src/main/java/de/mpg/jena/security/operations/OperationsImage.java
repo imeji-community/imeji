@@ -4,6 +4,7 @@ import de.mpg.jena.security.Authorization;
 import de.mpg.jena.security.Operations;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Image.Visibility;
+import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
 
 public class OperationsImage implements Operations
@@ -63,7 +64,10 @@ public class OperationsImage implements Operations
 	 */
 	public boolean delete(User user, Object object) 
 	{
-		return false;
+		return ((auth.isPictureEditor(user, (Image) object)
+				|| auth.isContainerEditor(user, ((Image)object))
+				|| auth.isContainerAdmin(user, ((Image)object)))
+				&& !Status.PENDING.equals(((Image)object).getProperties().getStatus()));
 	}
 
 

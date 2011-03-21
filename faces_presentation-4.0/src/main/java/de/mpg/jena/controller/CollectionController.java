@@ -86,9 +86,7 @@ public class CollectionController extends ImejiController
 	    {
 	    	ImageController imageController = new ImageController(user);
 	    	Image img = imageController.retrieve(uri);
-	    	img.getProperties().setStatus(Status.RELEASED);
-	    	img.setVisibility(Visibility.PUBLIC);
-	    	imageController.update(img);
+	    	imageController.release(img);
 	    }
         update(ic);
     }

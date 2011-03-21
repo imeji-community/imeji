@@ -37,14 +37,14 @@ public class AlbumController extends ImejiController
 	 * @param ic
 	 * @param user
 	 */
-	public synchronized void create(Album ic) throws Exception
+	public void create(Album ic) throws Exception
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
 		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
 		writeCreateProperties(ic.getProperties(), user);
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(new URI("http://imeji.mpdl.mpg.de/album/" + getUniqueId()));
-		imejiBean2RDF.saveDeep(ic, user);
+		imejiBean2RDF.create(ic, user);
 		ic = imejiRDF2Bean.load(Album.class, ic.getId().toString());
 		user = addCreatorGrant(ic, user);
 		cleanGraph(ImejiJena.albumModel);
@@ -52,8 +52,8 @@ public class AlbumController extends ImejiController
 	
 	public User addCreatorGrant(Album alb, User user) throws Exception
 	{
-		GrantController gc = new GrantController(user);
-		Grant grant = new Grant(GrantType.CONTAINER_ADMIN,alb.getId());
+	 	GrantController gc = new GrantController(user);
+		Grant grant = new Grant(GrantType.CONTAINER_ADMIN, alb.getId());
 		gc.addGrant(user, grant);
 		UserController uc = new UserController(user);
 		return uc.retrieve(user.getEmail());
@@ -68,7 +68,7 @@ public class AlbumController extends ImejiController
 	 * @param user
 	 * @throws Exception 
 	 */
-	public synchronized void update(Album ic) throws Exception
+	public void update(Album ic) throws Exception
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
 		writeUpdateProperties(ic.getProperties(), user);
@@ -136,8 +136,15 @@ public class AlbumController extends ImejiController
 	{
 	    QuerySPARQL querySPARQL = new QuerySPARQLImpl();
 	    String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/album", "", "", limit, offset, user);
-	    return ImejiSPARQL.execAndLoad(query,  Album.class);
+	    return ImejiSPARQL.execAndLoad(query, Album.class);
 	}
+	
+	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
+    {
+        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/albumn", "", "", -1, 0, user);
+    	return ImejiSPARQL.execCount(query);
+    }
 	
 //	public Collection<Album> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 //    {

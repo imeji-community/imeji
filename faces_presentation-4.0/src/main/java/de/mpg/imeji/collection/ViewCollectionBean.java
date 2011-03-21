@@ -53,7 +53,7 @@ public class ViewCollectionBean extends CollectionBean
             }
             this.getCollection().getMetadata().setPersons(persons);
             ProfileController profileController = new ProfileController(sessionBean.getUser());
-            this.getCollection().setProfile(this.getCollection().getProfile());
+            this.setProfile(profileController.retrieve( this.getCollection().getProfile()));
         }
         catch (Exception e)
         {

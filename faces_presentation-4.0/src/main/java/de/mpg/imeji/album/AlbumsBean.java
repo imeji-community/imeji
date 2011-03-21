@@ -7,17 +7,15 @@ import java.util.List;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.beans.SuperContainerBean;
-import de.mpg.imeji.collection.CollectionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
-import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
-import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.controller.UserController;
 import de.mpg.jena.vo.Album;
-import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Properties.Status;
 
 public class AlbumsBean extends SuperContainerBean<AlbumBean>
@@ -30,7 +28,6 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-      
     }
 
     @Override
@@ -48,7 +45,9 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
     @Override
     public List<AlbumBean> retrieveList(int offset, int limit)
     {
-        AlbumController controller = new AlbumController(sb.getUser());
+        UserController uc = new UserController(sb.getUser());
+        sb.setUser(uc.retrieve(sb.getUser().getEmail()));
+    	AlbumController controller = new AlbumController(sb.getUser());
         
         Collection<Album> albums = new ArrayList<Album>();
 

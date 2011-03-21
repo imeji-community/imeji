@@ -132,7 +132,8 @@ public class FilterFactory
 					||	GrantType.PRIVILEGED_VIEWER.equals(g.getGrantType()))
 				{
 					if (!"".equals(f)) f += " || ";
-					f += "?" + els.get("http://imeji.mpdl.mpg.de/collection").getName() + "=<" + g.getGrantFor() + ">";
+					if (els.get("http://imeji.mpdl.mpg.de/collection") != null) f += "?" + els.get("http://imeji.mpdl.mpg.de/collection").getName() + "=<" + g.getGrantFor() + ">";
+					if (els.get("http://imeji.mpdl.mpg.de/album") != null) f += "?" + els.get("http://imeji.mpdl.mpg.de/album").getName() + "=<" + g.getGrantFor() + ">";
 				}
 				else if(GrantType.SYSADMIN.equals(g.getGrantType()))
 				{

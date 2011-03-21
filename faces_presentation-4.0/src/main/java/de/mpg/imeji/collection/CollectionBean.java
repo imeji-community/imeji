@@ -20,6 +20,7 @@ import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.User;
@@ -34,6 +35,7 @@ public abstract class CollectionBean
     private TabType tab = TabType.HOME;
     private SessionBean sessionBean = null;
     private CollectionImeji collection = null;
+    private MetadataProfile profile = null;
     private String id = null;
     private int authorPosition;
     private int organizationPosition;
@@ -294,7 +296,17 @@ public abstract class CollectionBean
         return null;
     }
     
-    public boolean isEditable()
+    
+    
+    public MetadataProfile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(MetadataProfile profile) {
+		this.profile = profile;
+	}
+
+	public boolean isEditable()
     {
     	Security security = new Security();
     	return security.check(OperationsType.UPDATE, sessionBean.getUser(), collection);
@@ -321,4 +333,5 @@ public abstract class CollectionBean
     {
         this.corruptedList = corruptedList;
     }
+    
 }

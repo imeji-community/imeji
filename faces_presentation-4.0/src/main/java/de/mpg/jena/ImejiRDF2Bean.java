@@ -1,18 +1,14 @@
 package de.mpg.jena;
 
-import java.awt.List;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
 import thewebsemantic.RDF2Bean;
 
-import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
 
-import de.mpg.jena.controller.DataFactory;
+import de.mpg.jena.readers.ImejiJenaReaders;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
@@ -23,11 +19,11 @@ public class ImejiRDF2Bean
 {
 	private RDF2Bean rdf2Bean;
 	private Model model;
-	private static Logger logger = Logger.getLogger(ImejiBean2RDF.class);
+	private static Logger logger = Logger.getLogger(ImejiRDF2Bean.class);
 	
 	public ImejiRDF2Bean(Model model) 
 	{
-		rdf2Bean = new RDF2Bean(model);
+		rdf2Bean = ImejiJenaReaders.getReader(model);
 	}
 	
 	

@@ -33,6 +33,7 @@ public class LocksSurveyor extends Thread
 						Locks.unLock(l);
 					}
 				}
+				Thread.sleep(10000);
 			}
 			catch (Exception e) 
 			{

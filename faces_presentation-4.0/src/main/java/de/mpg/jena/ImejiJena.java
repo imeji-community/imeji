@@ -5,6 +5,8 @@ import java.lang.annotation.Annotation;
 
 import org.apache.log4j.Logger;
 
+import tdb.tdbstats;
+
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.tdb.TDBFactory;
@@ -44,11 +46,13 @@ public class ImejiJena
 			throw new RuntimeException("Error reading property imeji.tdb.path", e);
 		}
 		imejiDataSet = TDBFactory.createDataset(tdbPath);
+		
 		collectionModel = ImejiJena.initModel(getModelName(CollectionImeji.class));
 		albumModel = ImejiJena.initModel(getModelName(Album.class));
 		imageModel =ImejiJena.initModel(getModelName(Image.class));
 		userModel = ImejiJena.initModel(getModelName(User.class));
 		profileModel = ImejiJena.initModel(getModelName(MetadataProfile.class));
+	
 		logger.info("... done!");
 	}
 	

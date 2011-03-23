@@ -1,10 +1,12 @@
 package de.mpg.jena.sparql.query;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import thewebsemantic.Bean2RDF;
 import thewebsemantic.vocabulary.DublinCore;
 
 import de.mpg.jena.ImejiJena;
@@ -35,12 +37,14 @@ public class QuerySPARQLImpl implements QuerySPARQL
 
 	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
     {
-		//String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
+		//String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
+		System.out.println("create query...");
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query = "SELECT DISTINCT ?s WHERE {" + selectQuery + "} " + this.sortQuery + " " + this.limit + " " + this.offset;
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
 		//System.out.println(query);
-		//query="SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/image> .?s <http://imeji.mpdl.mpg.de/properties> ?v1. OPTIONAL {?v1 <http://imeji.mpdl.mpg.de/creationDate> ?v2} . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility . ?s <http://imeji.mpdl.mpg.de/collection> ?coll .FILTER(?visibility=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC> || ?coll=<http://imeji.mpdl.mpg.de/collection/14>) }  ORDER BY ?v2 LIMIT 24 ";
+	//	query="SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/collection> ?coll . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility .FILTER(?visibility=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC> || ?coll=<http://imeji.mpdl.mpg.de/collection/45> || ?coll=<http://imeji.mpdl.mpg.de/collection/14> || ?coll=<http://imeji.mpdl.mpg.de/collection/30> || ?coll=<http://imeji.mpdl.mpg.de/album/36> || ?coll=<http://imeji.mpdl.mpg.de/album/38> || ?coll=<http://imeji.mpdl.mpg.de/collection/4> || ?coll=<http://imeji.mpdl.mpg.de/album/37> || ?coll=<http://imeji.mpdl.mpg.de/collection/50>) . OPTIONAL{ SELECT DISTINCT ?s5 WHERE { ?s5 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s5 <http://imeji.mpdl.mpg.de/metadataSet> ?v2 . OPTIONAL {?v2 <http://imeji.mpdl.mpg.de/metadata> ?v3 . OPTIONAL {?v3 <http://imeji.mpdl.mpg.de/metadata/person> ?v6 . OPTIONAL {?v6 <http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit> ?v9 . OPTIONAL {?v9 <http://purl.org/dc/elements/1.1/title> ?v10}}}}} .FILTER(regex(?v10, 'joujou', 'i'))} } . OPTIONAL{ SELECT DISTINCT ?s0 WHERE { ?s0 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s0 <http://imeji.mpdl.mpg.de/filename> ?v1} .FILTER(regex(?v1, 'joujou', 'i'))} } . OPTIONAL{ SELECT DISTINCT ?s7 WHERE { ?s7 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s7 <http://imeji.mpdl.mpg.de/metadataSet> ?v2 . OPTIONAL {?v2 <http://imeji.mpdl.mpg.de/metadata> ?v3 . OPTIONAL {?v3 <http://imeji.mpdl.mpg.de/complexTypes> ?v13}}} .FILTER(str(?v13)='http://imeji.mpdl.mpg.de/complexTypes/DATE')} } . OPTIONAL{ SELECT DISTINCT ?s4 WHERE { ?s4 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s4 <http://imeji.mpdl.mpg.de/metadataSet> ?v2 . OPTIONAL {?v2 <http://imeji.mpdl.mpg.de/metadata> ?v3 . OPTIONAL {?v3 <http://imeji.mpdl.mpg.de/metadata/person> ?v6 . OPTIONAL {?v6 <http://purl.org/escidoc/metadata/terms/0.1/given-name> ?v8}}}} .FILTER(regex(?v8, 'joujou', 'i'))} } . OPTIONAL{ SELECT DISTINCT ?s6 WHERE { ?s6 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s6 <http://imeji.mpdl.mpg.de/properties> ?v11 . OPTIONAL {?v11 <http://imeji.mpdl.mpg.de/createdBy> ?v12}} .FILTER(str(?v12)='http://xmlns.com/foaf/0.1/Person/saquet%40mpdl.mpg.de')} } . OPTIONAL{ SELECT DISTINCT ?s1 WHERE { ?s1 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s1 <http://imeji.mpdl.mpg.de/metadataSet> ?v2 . OPTIONAL {?v2 <http://imeji.mpdl.mpg.de/metadata> ?v3 . OPTIONAL {?v3 <http://imeji.mpdl.mpg.de/metadata/text> ?v4}}} .FILTER(regex(?v4, 'joujou', 'i'))} } . OPTIONAL{ SELECT DISTINCT ?s3 WHERE { ?s3 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s3 <http://imeji.mpdl.mpg.de/metadataSet> ?v2 . OPTIONAL {?v2 <http://imeji.mpdl.mpg.de/metadata> ?v3 . OPTIONAL {?v3 <http://imeji.mpdl.mpg.de/metadata/person> ?v6 . OPTIONAL {?v6 <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?v7}}}} .FILTER(regex(?v7, 'joujou', 'i'))} }.FILTER( (?s=?s0 || ?s=?s1 || ?s=?s3 || ?s=?s4 || ?s=?s5 && ?s=?s6) && ?s=?s7 )}";
+		System.out.println("...done");
 		return query;
     }
 	
@@ -110,7 +114,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		String filter = FilterFactory.getAdvancedFilter(scList, subQueries, els);
 		if (!"".equals(filter)) filter = ".FILTER( " + filter + " )";
 		
-		String s =  "?s a <" + root + ">" + printMandatoryVariables(root) + specificQuery + securityFilter + query + filter;
+		String s =  "?s a <" + root + ">" + printMandatoryVariables(root) + specificQuery + securityFilter + query + filter + printSortVariables();
 		return s;
 	}
 	
@@ -135,7 +139,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		{
 			if (el.getParent() != null)
 			{
-				if (!el.isOptional())
+				if (!el.isOptional() && !el.getName().contains("sort"))
 				{
 					mandatory += " . "+ printSingleVariable(el);
 				}
@@ -144,6 +148,21 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		return mandatory;
 	}
 	
+	private String printSortVariables()
+	{
+		String str ="";
+		for (QueryElement el : els.values())
+		{
+			if (el.getParent() != null)
+			{
+				if (el.getName().contains("sort"))
+				{
+					str += " . "+ printSingleVariable(el);
+				}
+			}
+		}
+		return str;
+	}
 	
 
 	private String printSingleVariable(QueryElement el)

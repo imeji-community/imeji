@@ -9,7 +9,6 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.SortCriterion;
-import de.mpg.jena.vo.CollectionImeji;
 
 public class QueryElementFactory 
 {
@@ -80,16 +79,18 @@ public class QueryElementFactory
 	public List<QueryElement> getAllParents(QueryElement el)
 	{
 		List<QueryElement> els = new ArrayList<QueryElement>();
+		List<String> elsNames = new ArrayList<String>();
 		
 		if(el.getParent() != null && !"s".equals(el.getParent().getName()))
 		{
-			els.add(el.getParent());
 			for (QueryElement e : getAllParents(el.getParent()))
 			{
 				els.add(e);
+				elsNames.add(e.getName());
 			}
+			els.add(el.getParent());
+			elsNames.add(el.getParent().getName());
 		}
-		
 		return els;
 	}
 	

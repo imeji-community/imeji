@@ -48,13 +48,13 @@ public class SubQuery
 			
 			for(QueryElement e : parents)
 			{
-				if ("".equals(ssq)) ssq += ".";
+				if (!" .MINUS {".equals(ssq)) ssq += " .";
 				ssq += " OPTIONAL {";
 				ssq +=  printSingleVariable(e, name);
 			}
 			
 			// If no parents, print only this variable
-			if (!"".equals(ssq)) ssq += ".";
+			if (!" .MINUS {".equals(ssq)) ssq += " .";
 			ssq += " OPTIONAL {";
 			ssq += printSingleVariable(el, name);
 			

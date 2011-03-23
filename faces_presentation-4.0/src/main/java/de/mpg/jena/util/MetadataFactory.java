@@ -1,6 +1,11 @@
 package de.mpg.jena.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
+import com.hp.hpl.jena.datatypes.xsd.impl.XSDDateType;
 
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.ImageMetadata;
@@ -60,6 +65,64 @@ public class MetadataFactory
 		
 	}
 	
+	public static ImageMetadata newMetadata(ImageMetadata metadata)
+	{
+		ImageMetadata md = null;
+				
+		switch (metadata.getType()) 
+		{
+			case DATE:
+				md = new Date();
+				((Date)md).setDate(((Date)metadata).getDate());
+			 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			 	if (((Date)md).getDate() != null)
+				{
+			 		try {((Date)md).setDateTime(sdf.parse(((Date)md).getDate()).getTime());} 
+			 		catch (Exception e){e.printStackTrace();}
+				}
+				break;
+			case GEOLOCATION:
+				md = new Geolocation();
+				((Geolocation)md).setLatitude(((Geolocation)metadata).getLatitude());
+				((Geolocation)md).setLongitude(((Geolocation)metadata).getLongitude());
+				((Geolocation)md).setName(((Geolocation)metadata).getName());
+				break;
+			case LICENSE:
+				md = new License();
+				((License)md).setLicense(((License)metadata).getLicense());
+				break;
+			case NUMBER:
+				md = new Number();
+				((Number)md).setNumber(((Number)metadata).getNumber());
+				break;
+			case PERSON:
+				md = new ConePerson();
+				((ConePerson)md).setPerson(((ConePerson)metadata).getPerson());
+				((ConePerson)md).setConeId(((ConePerson)metadata).getConeId());
+				break;
+			case PUBLICATION:
+				md = new Publication();
+				((Publication)md).setCitation(((Publication)metadata).getCitation());
+				((Publication)md).setExportFormat(((Publication)metadata).getExportFormat());
+				((Publication)md).setUri(((Publication)metadata).getUri());
+				break;
+			case URI:
+				md= new URI();
+				((URI)md).setUri(((URI)metadata).getUri());
+				break;
+			default:
+				md = new Text();
+				((Text)md).setText(((Text)metadata).getText());
+				break;
+		}
+		
+		md.setType(metadata.getType());
+		md.setNamespace(metadata.getNamespace());
+		
+		return md;
+		
+	}
+	
 	public static ImageMetadata newMetadataWithNonNullValues(Statement st)
 	{
 		ImageMetadata md = null;
@@ -72,7 +135,7 @@ public class MetadataFactory
 				Date d = new Date();
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
 				try {
-					d.setDate(format.parse("2000-01-02"));
+					d.setDate("2000-01-02");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

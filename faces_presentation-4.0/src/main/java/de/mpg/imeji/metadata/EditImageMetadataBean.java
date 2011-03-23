@@ -118,20 +118,20 @@ public class EditImageMetadataBean
 		modeRadio.add(new SelectItem("overwrite", "Overwrite all values"));
 	}
 	
-
-	
 	public String addToAll()
 	{
 		for (Image im : editor.getImages())
 		{
+			ImageMetadata newMD = MetadataFactory.newMetadata(metadata);
 			if ("overwrite".equals(selectedMode)) 
 			{
 				im = removeAllMetadata(im);
-				im.getMetadataSet().getMetadata().add(metadata);
+				im.getMetadataSet().getMetadata().add(newMD);
 			}
-			else if ("append".equals(selectedMode)) im.getMetadataSet().getMetadata().add(metadata);
-			else if ("basic".equals(selectedMode))addMetadataIfNotExists(im);
+			else if ("append".equals(selectedMode)) im.getMetadataSet().getMetadata().add(newMD);
+			else if ("basic".equals(selectedMode))addMetadataIfNotExists(im, newMD);
 		}
+		metadata =  MetadataFactory.newMetadata(statement);
 		return "";
 	}
 	
@@ -144,7 +144,7 @@ public class EditImageMetadataBean
 		return "";
 	}
 	
-	private Image addMetadataIfNotExists(Image im)
+	private Image addMetadataIfNotExists(Image im, ImageMetadata metadata)
 	{	
 		boolean hasValue = false;
 		int i = 0;
@@ -169,7 +169,8 @@ public class EditImageMetadataBean
 	{
 		for(int i=0; i<im.getMetadataSet().getMetadata().size(); i++)
 		{
-			if (((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i).getNamespace().equals(metadata.getNamespace()))
+			if (((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i).getNamespace() == null ||
+					((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i).getNamespace().equals(metadata.getNamespace()))
 			{
 				((List<ImageMetadata>)im.getMetadataSet().getMetadata()).remove(i);
 				i--;

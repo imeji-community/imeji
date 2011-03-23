@@ -78,8 +78,8 @@
 		<!-- METADATA TYPE DATE -->
 		<h:panelGroup rendered="#{metadata.type =='DATE'}">
 			<h:inputText styleClass="huge_txtInput" value="#{metadata.date}">
-				<f:convertDateTime type="date" pattern="yyyy-MM-dd" />
 			</h:inputText>
+			<h:outputLabel value="YYYY-MM-DD" styleClass="medium_label"/>
 		</h:panelGroup>
 		
 		<!-- METADATA TYPE LICENSE -->

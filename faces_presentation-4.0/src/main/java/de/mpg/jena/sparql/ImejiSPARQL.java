@@ -34,19 +34,29 @@ public class ImejiSPARQL
 	 */
 	public static <T> LinkedList<T> execAndLoad(String query, Class<T> c)
 	{
+		System.out.println("Search query: " + query);
 		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
+		System.out.println("queryFactory ");
 		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
-		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;
+		System.out.println("queryexecutionFactory ");
+		qexec.getContext().set(TDB.symUnionDefaultGraph, true);
 		Model m = ImejiJena.imejiDataSet.getNamedModel(ImejiJena.getModelName(c));
+		System.out.println("model ");
 		ImejiRDF2Bean reader = new ImejiRDF2Bean(m);
+		System.out.println("reader ");
 		LinkedList<T> beans = new LinkedList<T>();
         try 
         {
                 m.enterCriticalSection(Lock.READ);
+                System.out.println("Search exec");
+                long before = System.currentTimeMillis();
                 ResultSet results = qexec.execSelect();
+                System.out.println("Search query done in " +  Long.valueOf(System.currentTimeMillis() - before));
                // ResultSetFormatter.out(System.out, results) ;
+                before = System.currentTimeMillis();
                
-                for (;results.hasNext();) beans.add(reader.load(c, resource(results).toString()));
+                for (;results.hasNext();)beans.add(reader.load(c, resource(results).toString()));
+                System.out.println("Object loaded in " + Long.valueOf(System.currentTimeMillis() - before) + " rownumber: " + results.getRowNumber());
                 return beans;
         } finally 
         {
@@ -119,10 +129,13 @@ public class ImejiSPARQL
 	 */
 	public static int execCount(String query)
 	{
+		System.out.println("Count query: " + query);
 		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
 		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
 		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;
+		long before = System.currentTimeMillis();
 		ResultSet rs = qexec.execSelect();
+		System.out.println("Count query done in " +  Long.valueOf(System.currentTimeMillis() - before));
 		if (rs.hasNext())
 		{
 			return rs.next().getLiteral("?.1").getInt();

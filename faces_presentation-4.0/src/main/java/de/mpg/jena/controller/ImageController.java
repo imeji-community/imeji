@@ -193,17 +193,21 @@ public class ImageController extends ImejiController
     
     public void delete(Image img, User user) throws Exception
     {
-    	String itemId = img.getEscidocId();
-    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-		imejiBean2RDF.delete(img, user);
-    	try
-        {
-            ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(itemId);
-        }
-        catch (Exception e)
-        {
-            logger.warn("Error deleting image in escidoc: ", e);
-        }
+    	if (img != null)
+    	{
+	    	String itemId = img.getEscidocId();
+	    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+			imejiBean2RDF.delete(img, user);
+    	
+			try
+		    {
+		        ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(itemId);
+		    }
+		    catch (Exception e)
+		    {
+		        logger.warn("Error deleting image in escidoc: ", e);
+		    }
+    	}
     }
 
     public void release(Image img) throws Exception

@@ -4,10 +4,13 @@ import java.util.List;
 
 import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.jena.util.MetadataFactory;
+import de.mpg.jena.vo.ComplexType;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.complextypes.Date;
 
 public class MetadataMultipleEditor extends MetadataEditor
 {
@@ -27,7 +30,7 @@ public class MetadataMultipleEditor extends MetadataEditor
 				boolean empty = true;
 				for(ImageMetadata md : im.getMetadataSet().getMetadata())
 				{
-					if (hasStatement && md.getNamespace().equals(statement.getName()))
+					if (hasStatement && md.getNamespace()!= null && md.getNamespace().equals(statement.getName()))
 					{
 						empty = false;
 					}
@@ -49,7 +52,11 @@ public class MetadataMultipleEditor extends MetadataEditor
 				{
 					((List<ImageMetadata>)im.getMetadataSet().getMetadata()).remove(i);
 				}
-				((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i).setPos(i);
+				else 
+				{
+					((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i).setPos(i);
+				}
+				
 			}
 		}
 		if (images.size() == 0)

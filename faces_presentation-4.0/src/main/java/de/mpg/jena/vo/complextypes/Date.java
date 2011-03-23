@@ -1,10 +1,14 @@
 package de.mpg.jena.vo.complextypes;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfType;
+
+
 import de.mpg.jena.vo.ComplexType;
 
 @Namespace("http://imeji.mpdl.mpg.de/metadata/")
@@ -12,22 +16,33 @@ import de.mpg.jena.vo.ComplexType;
 @Embedded
 public class Date extends ComplexType implements Serializable
 {
-    private java.util.Date date;
+    private String date;
+    private long dateTime;
     
     public Date()
     {
         super(ComplexTypes.DATE);
     }
 
-    public void setDate(java.util.Date date)
-    {
-        this.date = date;
-    }
+	public String getDate() {
+		return date;
+	}
 
-    public java.util.Date getDate()
-    {
-        return date;
-    }
+	public void setDate(String date)
+	{
+		this.date = date;
+	}
+
+	public long getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(long dateTime) {
+		this.dateTime = dateTime;
+	}
+    
+
+
     
     
 }

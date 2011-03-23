@@ -147,10 +147,13 @@ public class ImageHelper{
     	{
     		if(resolution.equals(getThumb()))
     		{
-	    		newImg= new BufferedImage(height, height,image.getType());
+	    		newImg= new BufferedImage(height, height,BufferedImage.TYPE_INT_RGB);
 	        	Graphics g1 = newImg.createGraphics();
 	        	g1.drawImage(image, (height-width)/2, 0, null);
-	        	rescaledImage = newImg.getScaledInstance(size, -1, Image.SCALE_SMOOTH);
+	        	if(height>size)
+	        		rescaledImage = newImg.getScaledInstance(size, -1, Image.SCALE_SMOOTH);
+	        	else
+	        		rescaledImage = newImg;
     		}
     		else
     			rescaledImage = image.getScaledInstance(size, -1, Image.SCALE_SMOOTH);
@@ -159,18 +162,20 @@ public class ImageHelper{
     	{
     		if(resolution.equals(getThumb()))
     		{
-	    		newImg= new BufferedImage(width, width,image.getType());
+	    		newImg= new BufferedImage(width, width,BufferedImage.TYPE_INT_RGB);
 	        	Graphics g1 = newImg.createGraphics();
 	        	g1.drawImage(image, 0, (width-height)/2, null);
-	        	rescaledImage = newImg.getScaledInstance(-1, size, Image.SCALE_SMOOTH);
+	        	if(width>size)
+	        		rescaledImage = newImg.getScaledInstance(-1, size, Image.SCALE_SMOOTH);
+	        	else
+	        		rescaledImage = newImg;
     		}
     		else
             	rescaledImage = image.getScaledInstance(-1, size, Image.SCALE_SMOOTH);
 
     	}
 
-
-        BufferedImage rescaledBufferedImage = new BufferedImage(rescaledImage.getWidth(null), rescaledImage.getHeight(null), image.getType());
+        BufferedImage rescaledBufferedImage = new BufferedImage(rescaledImage.getWidth(null), rescaledImage.getHeight(null), BufferedImage.TYPE_INT_RGB);
         Graphics g2 = rescaledBufferedImage.getGraphics();
         g2.drawImage(rescaledImage, 0, 0, null);
         return rescaledBufferedImage;
@@ -326,6 +331,7 @@ public class ImageHelper{
 //    	BufferedImage image = stream4Image.getImage();
 //    	return image;
 //    }
+
 
 
 }

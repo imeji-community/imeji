@@ -36,21 +36,21 @@ public class TechnicalFacets
 		{
 			if (sb.getUser() != null)
 			{	
-				if (!fs.isFilter("My images"))
-				{
-					SearchCriterion myImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_CREATED_BY , ObjectHelper.getURI(User.class, sb.getUser().getEmail()).toString(), Filtertype.URI);
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "My images"), "My images", getCount(new ArrayList<SearchCriterion>(scList), myImagesSC)));	
-				}
+//				if (!fs.isFilter("My images"))
+//				{
+//					SearchCriterion myImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.i , ObjectHelper.getURI(User.class, sb.getUser().getEmail()).toString(), Filtertype.URI);
+//					facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "My images"), "My images", getCount(new ArrayList<SearchCriterion>(scList), myImagesSC)));	
+//				}
 				
-				if (!fs.isFilter("Private images"))
+				if (!fs.isFilter("Pending images"))
 				{
-					SearchCriterion privateImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_VISIBILITY, "http://imeji.mpdl.mpg.de/image/visibility/PRIVATE", Filtertype.URI);
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, privateImagesSC, "Private images"), "Private images", getCount(new ArrayList<SearchCriterion>(scList), privateImagesSC)));
+					SearchCriterion privateImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_STATUS, "http://imeji.mpdl.mpg.de/status/PENDING", Filtertype.URI);
+					facets.add(new Facet(uriFactory.createFacetURI(baseURI, privateImagesSC, "Pending images"), "Pending images", getCount(new ArrayList<SearchCriterion>(scList), privateImagesSC)));
 				}
-				if (!fs.isFilter("Public images"))
+				if (!fs.isFilter("Released images"))
 				{
-					SearchCriterion publicImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_VISIBILITY,"http://imeji.mpdl.mpg.de/image/visibility/PUBLIC", Filtertype.URI);
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, publicImagesSC, "Public images"), "Public images", getCount(new ArrayList<SearchCriterion>(scList), publicImagesSC)));
+					SearchCriterion publicImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_STATUS,"http://imeji.mpdl.mpg.de/status/RELEASED", Filtertype.URI);
+					facets.add(new Facet(uriFactory.createFacetURI(baseURI, publicImagesSC, "Released images"), "Released images", getCount(new ArrayList<SearchCriterion>(scList), publicImagesSC)));
 				}
 			}
 				

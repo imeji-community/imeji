@@ -38,7 +38,7 @@
 	<!-- Show only metadata of correct statement -->								
 	<h:panelGroup layout="block" styleClass="free_area0">
 		
-		<h:outputLabel value="#{MetadataLabels.labels[metadata.namespace]} (#{MetadataLabels.lang}) #{metadata.type}" styleClass="huge_label"/>
+		<h:outputLabel value="#{MetadataLabels.labels[metadata.namespace]} (#{MetadataLabels.lang}) #{metadata.type} " styleClass="huge_label"/>
 		
 		<!-- METADATA TYPE TEXT -->
 		<h:inputTextarea  id="inputText" styleClass="#{areaClass} inputTxtArea" value="#{metadata.text}" rendered="#{metadata.type =='TEXT'}">

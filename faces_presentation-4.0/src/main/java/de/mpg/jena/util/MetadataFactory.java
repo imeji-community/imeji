@@ -68,6 +68,8 @@ public class MetadataFactory
 	public static ImageMetadata newMetadata(ImageMetadata metadata)
 	{
 		ImageMetadata md = null;
+		
+		String searchValue= metadata.getNamespace().toString();
 				
 		switch (metadata.getType()) 
 		{
@@ -80,42 +82,57 @@ public class MetadataFactory
 			 		try {((Date)md).setDateTime(sdf.parse(((Date)md).getDate()).getTime());} 
 			 		catch (Exception e){e.printStackTrace();}
 				}
+			 	searchValue += " " +((Date)metadata).getDate();
 				break;
 			case GEOLOCATION:
 				md = new Geolocation();
 				((Geolocation)md).setLatitude(((Geolocation)metadata).getLatitude());
 				((Geolocation)md).setLongitude(((Geolocation)metadata).getLongitude());
 				((Geolocation)md).setName(((Geolocation)metadata).getName());
+				searchValue += " " + ((Geolocation)metadata).getLatitude() + " " + ((Geolocation)metadata).getLongitude();
 				break;
 			case LICENSE:
 				md = new License();
 				((License)md).setLicense(((License)metadata).getLicense());
+				searchValue += " " + ((License)metadata).getLicense() + " " + ((License)metadata).getDateString();
 				break;
 			case NUMBER:
 				md = new Number();
 				((Number)md).setNumber(((Number)metadata).getNumber());
+				searchValue += " " + ((Number)metadata).getNumber();
 				break;
 			case PERSON:
 				md = new ConePerson();
 				((ConePerson)md).setPerson(((ConePerson)metadata).getPerson());
 				((ConePerson)md).setConeId(((ConePerson)metadata).getConeId());
+				searchValue += " " + ((ConePerson)metadata).getConeId() + " " + ((ConePerson)metadata).getPerson().getFamilyName()
+							+ " " +  ((ConePerson)metadata).getPerson().getGivenName() + " " + ((ConePerson)metadata).getPerson().getAlternativeName()
+							+ " " +  ((ConePerson)metadata).getPerson().getIdentifier();
+				for (Organization o :  ((ConePerson)metadata).getPerson().getOrganizations())
+				{
+					searchValue += " " + o.getCountry() + " " + o.getDescription() + " " + o.getIdentifier() + " " + o.getName() + " " + o.getCity();
+				}
 				break;
 			case PUBLICATION:
 				md = new Publication();
 				((Publication)md).setCitation(((Publication)metadata).getCitation());
 				((Publication)md).setExportFormat(((Publication)metadata).getExportFormat());
 				((Publication)md).setUri(((Publication)metadata).getUri());
+				searchValue += " " + ((Publication)md).getCitation() + " " +((Publication)md).getUri();
 				break;
 			case URI:
 				md= new URI();
 				((URI)md).setUri(((URI)metadata).getUri());
+				searchValue += " " +((URI)md).getUri();
 				break;
 			default:
 				md = new Text();
 				((Text)md).setText(((Text)metadata).getText());
+				searchValue += ((Text)md).getText();
 				break;
 		}
 		
+		md.setSearchValue(searchValue.replaceAll("null", "").trim());
 		md.setType(metadata.getType());
 		md.setNamespace(metadata.getNamespace());
 		

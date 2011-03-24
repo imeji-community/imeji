@@ -67,7 +67,7 @@ public class OperationsImage implements Operations
 		return ((auth.isPictureEditor(user, (Image) object)
 				|| auth.isContainerEditor(user, ((Image)object))
 				|| auth.isContainerAdmin(user, ((Image)object)))
-				&& !Status.PENDING.equals(((Image)object).getProperties().getStatus()));
+				&& Status.PENDING.equals(((Image)object).getProperties().getStatus()));
 	}
 
 

@@ -4,33 +4,27 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.rdf.model.Model;
-
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
+import de.mpg.imeji.collection.CollectionBean;
 import de.mpg.imeji.util.LoginHelper;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
-import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
 import de.mpg.jena.sparql.query.QuerySPARQLImpl;
+import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
-import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.Image.Visibility;
-import de.mpg.jena.vo.MetadataProfile;
-import de.mpg.jena.vo.Organization;
-import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
 
@@ -47,13 +41,7 @@ public class ImageController extends ImejiController
         super(user);
         logger = Logger.getLogger(ImageController.class);
     }
-    
-    private void init()
-    {
-    	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
-    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-    }
-
+   
     public void create(Image img, URI coll) throws Exception
     {
         CollectionController cc = new CollectionController(user);
@@ -105,6 +93,10 @@ public class ImageController extends ImejiController
     	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel); 
     	for (Image img : images)
         {
+    		for(int i=0; i< img.getMetadataSet().getMetadata().size(); i++)
+    		{
+    			((List<ImageMetadata>)img.getMetadataSet().getMetadata()).set(i, MetadataFactory.newMetadata(((List<ImageMetadata>)img.getMetadataSet().getMetadata()).get(i)));
+    		}
     		imejiBean2RDF.saveDeep(img, user);
         }
     	cleanGraph(ImejiJena.imageModel);
@@ -120,6 +112,12 @@ public class ImageController extends ImejiController
     {
     	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
     	return (Image)imejiRDF2Bean.load(ObjectHelper.getURI(Image.class, id).toString(), user);
+    }
+    
+    public Collection<Image> retrieveAll()
+    {
+    	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
+    	return imejiRDF2Bean.load(Image.class);
     }
     
     /**

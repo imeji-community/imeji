@@ -110,7 +110,7 @@ public class ImejiBean2RDF
 	{
 		if (!security.check(opType, user, bean) )
 		{
-			throw new RuntimeException("Imeji Security exception: " +  user.getEmail() +" not allowed to update " + extractID(bean));
+			throw new RuntimeException("Imeji Security exception: " +  user.getEmail() +" not allowed to " +  opType.name() + " " +  extractID(bean));
 		}
 	}
 	

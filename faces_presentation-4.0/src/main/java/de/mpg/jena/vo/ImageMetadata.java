@@ -22,6 +22,7 @@ public class ImageMetadata implements Serializable, Comparable<ImageMetadata>
     private ComplexTypes type;
     private Collection<ImageMetadata> childs = new LinkedList<ImageMetadata>();
     private int pos = 0;
+    private String searchValue;
     
     private String id = UUID.randomUUID().toString();
     
@@ -89,6 +90,15 @@ public class ImageMetadata implements Serializable, Comparable<ImageMetadata>
 	public void setPos(int pos) {
 		this.pos = pos;
 	}
-	 
+
+	public String getSearchValue() {
+		return searchValue;
+	}
+
+	public void setSearchValue(String searchValue) {
+		this.searchValue = searchValue;
+	}
+	
+	
 	
 }

@@ -1,6 +1,7 @@
 package de.mpg.imeji.user;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -19,6 +20,7 @@ import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
+import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.User;
 
 public class UserCreationBean
@@ -118,6 +120,15 @@ public class UserCreationBean
     {
     	try { return this.getAllUsers().size(); }
 		catch (Exception e) { return 0; }
+    }
+    
+    public String transformMd() throws Exception
+    {
+    	ImageController ic = new ImageController(sb.getUser());
+    	Collection<Image> allImages = ic.retrieveAll();
+    	for(Image im : allImages) ObjectHelper.castAllHashSetToList(im);
+    	ic.update(allImages);
+    	return "";
     }
     
     public String reInitializeUserRights() throws Exception

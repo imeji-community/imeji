@@ -1,6 +1,7 @@
 package de.mpg.jena;
 
 import java.net.URI;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
@@ -70,9 +71,9 @@ public class ImejiRDF2Bean
 		
 	}
 	
-	public <T> T load(Class<T> c)
+	public <T> Collection<T> load(Class<T> c)
 	{
-		return (T) rdf2Bean.loadDeep(c);
+		return  rdf2Bean.loadDeep(c);
 	}
 	
 	public void removePrivateImages(Image im)

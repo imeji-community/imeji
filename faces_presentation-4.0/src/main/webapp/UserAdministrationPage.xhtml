@@ -48,7 +48,8 @@
 				<h:panelGroup layout="block" styleClass="full_area0 endline">
 					<h2>
 					<h:outputLink styleClass="large_area0" value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml"><h:outputText value="Create new User "/></h:outputLink>
-					<h:commandLink action="#{UserCreationBean.reInitializeUserRights}" value=" Init Users rights" styleClass=""/>		
+					<h:commandLink action="#{UserCreationBean.reInitializeUserRights}" value=" Init Users rights" styleClass=""/>
+					<h:commandLink action="#{UserCreationBean.transformMd}" value=" Run md transform" styleClass=""/>		
 					</h2>			
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="full_area0 endline">

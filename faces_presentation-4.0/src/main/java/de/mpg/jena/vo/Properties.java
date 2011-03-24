@@ -24,7 +24,7 @@ public class Properties implements Serializable {
 
 	private Date lastModificationDate;
 	
-	private Status status;
+	private Status status = Status.PENDING;
 	
 	private int version = 0;
 	

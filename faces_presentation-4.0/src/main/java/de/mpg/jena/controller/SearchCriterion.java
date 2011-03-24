@@ -37,6 +37,7 @@ public class SearchCriterion {
 		IMAGE_METADATA_SET("http://imeji.mpdl.mpg.de/metadataSet"),
 		IMAGE_METADATA("http://imeji.mpdl.mpg.de/metadata", IMAGE_METADATA_SET),
 		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/metadata/ns", IMAGE_METADATA),
+		IMAGE_METADATA_SEARCH("http://imeji.mpdl.mpg.de/metadata/searchValue", IMAGE_METADATA),
 		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/metadata/name", IMAGE_METADATA),
 		IMAGE_METADATA_TYPE("http://imeji.mpdl.mpg.de/complexTypes", IMAGE_METADATA),
 		IMAGE_METADATA_TYPE_URI("http://imeji.mpdl.mpg.de/complexTypes/URI", IMAGE_METADATA_TYPE),

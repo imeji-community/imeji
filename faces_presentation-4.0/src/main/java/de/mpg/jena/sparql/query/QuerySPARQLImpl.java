@@ -78,27 +78,34 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	
 	private String printSelect(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
 	{
-//		if (offset > 0) this.offset = "OFFSET " + Integer.toString(offset);
-//		if (limit > 0) this.limit = "LIMIT " +  Integer.toString(limit);
-//		
-//		els = qeFact.createElements(scList, root);
-		
 		securityFilter = FilterFactory.generateUserFilters(user, els);
 		
 		Map<String, SubQuery> subQueries = new HashMap<String, SubQuery>();
 		
 		if (scList == null) scList = new ArrayList<SearchCriterion>();
-		
+
+		//Remove non optional search criterion
+		for (int i=0; i<scList.size(); i++)
+		{
+			if (scList.get(i).getNamespace() != null && !els.get(scList.get(i).getNamespace().getNs()).isOptional()) 
+			{
+				scList.remove(i);
+				i--;
+			}
+		}
+
+		// Create one sub-query for each search criterion
 		int i=0;
 		for (SearchCriterion sc: getAllSearchCriterion(scList))
 		{
-			if (sc.getNamespace() != null && !sc.getNamespace().equals(ImejiNamespaces.ID_URI))
+			if (sc.getNamespace() != null && !sc.getNamespace().equals(ImejiNamespaces.ID_URI) && els.get(sc.getNamespace().getNs()).isOptional())
 			{
 				subQueries.put(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue(), new SubQuery(sc, els, root, "s" + i));
 				i++;
 			}
 		}
 		
+		// Print all sub-queries
 		String query = "";
 		for (SubQuery sq : subQueries.values())
 		{
@@ -111,6 +118,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 			}
 		}
 		
+		// Print the advanced filter (where all subqueries are related)
 		String filter = FilterFactory.getAdvancedFilter(scList, subQueries, els);
 		if (!"".equals(filter)) filter = ".FILTER( " + filter + " )";
 		

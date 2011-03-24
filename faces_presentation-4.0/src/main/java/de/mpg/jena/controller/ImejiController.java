@@ -41,6 +41,7 @@ import de.mpg.jena.util.Counter;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.User;
+import de.mpg.jena.vo.Properties.Status;
 
 public abstract class ImejiController
 {
@@ -102,6 +103,7 @@ public abstract class ImejiController
         properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
         properties.setCreationDate(now);
         properties.setLastModificationDate(now);
+        properties.setStatus(Status.PENDING);
     }
     
     public static void writeUpdateProperties(Properties properties, User user)

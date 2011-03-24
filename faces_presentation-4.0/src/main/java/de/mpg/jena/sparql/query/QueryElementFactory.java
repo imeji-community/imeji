@@ -25,6 +25,11 @@ public class QueryElementFactory
 		findOptionalElements(scList);
 		findSortElement(scSort);
 		setOperatorNot();
+		for (QueryElement qe : els.values())
+		{
+			if (qe.getName().equals("http://imeji.mpdl.mpg.de/visibility")) qe.setOptional(false);
+			if (qe.getName().equals("http://imeji.mpdl.mpg.de/status")) qe.setOptional(false);
+		}
 		return els;
 	}
 	
@@ -32,7 +37,7 @@ public class QueryElementFactory
 	{
 		if (scSort != null)
 		{
-			if (scSort.getSortingCriterion().getParent() == null || !scSort.getSortingCriterion().getParent().getNs().equals( els.get(root).getNameSpace()))
+			if (scSort.getSortingCriterion().getParent() == null || !scSort.getSortingCriterion().getParent().getNs().equals(els.get(root).getNameSpace()))
 			{	
 				addElement(new QueryElement("props", "http://imeji.mpdl.mpg.de/properties", els.get(root), false));
 				addElement(new QueryElement("sort0", scSort.getSortingCriterion().getNs(), els.get("http://imeji.mpdl.mpg.de/properties"), false));

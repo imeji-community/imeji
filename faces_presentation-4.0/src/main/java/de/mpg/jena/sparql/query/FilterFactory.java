@@ -1,9 +1,6 @@
 package de.mpg.jena.sparql.query;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,21 +41,24 @@ public class FilterFactory
 		{
 			for(SearchCriterion sc : scList)
 			{
-				if (!sc.getChildren().isEmpty())
+				if (els.get(sc.getNamespace().getNs()).isOptional())
 				{
-					String sub = getSearchFilters(sc.getChildren(), els);
-					if (!"( )".equals(sub.trim())) filter += sub;
+					if (!sc.getChildren().isEmpty())
+					{
+						String sub = getSearchFilters(sc.getChildren(), els);
+						if (!"( )".equals(sub.trim())) filter += sub;
+					}
+					String newFilter = "";
+					if (sc.getNamespace() != null)
+					{
+						 newFilter= getSimpleFilter(sc, els.get(sc.getNamespace().getNs()).getName());
+					}
+					if (!"(".equals(filter.trim()) && !"".equals(newFilter))
+					{
+						filter += getOperatorString(sc) + newFilter;
+					}
+					else filter += newFilter;
 				}
-				String newFilter = "";
-				if (sc.getNamespace() != null)
-				{
-					 newFilter= getSimpleFilter(sc, els.get(sc.getNamespace().getNs()).getName());
-				}
-				if (!"(".equals(filter.trim()) && !"".equals(newFilter))
-				{
-					filter += getOperatorString(sc) + newFilter;
-				}
-				else filter += newFilter;
 			}
 		}
 		filter += " ) ";
@@ -115,12 +115,16 @@ public class FilterFactory
 		
 		if(els.get("http://imeji.mpdl.mpg.de/visibility") != null)
 		{
-			f +=  "?" + els.get("http://imeji.mpdl.mpg.de/visibility").getName() + "=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC>";
+			f +=  "?" + els.get("http://imeji.mpdl.mpg.de/visibility").getName() + "=";
+			if (els.get("http://imeji.mpdl.mpg.de/visibility").getValue() == null) f+= "<http://imeji.mpdl.mpg.de/status/PUBLIC>";
+			else  f+= "<http://imeji.mpdl.mpg.de/visibility/"+ els.get("http://imeji.mpdl.mpg.de/visibility").getValue() + ">";
 		}
 		if(els.get("http://imeji.mpdl.mpg.de/status") != null)
 		{
 			if (!"".equals(f)) f += " || ";
-			f +=  "?" + els.get("http://imeji.mpdl.mpg.de/status").getName() + "=<http://imeji.mpdl.mpg.de/status/RELEASED>";
+			f +=  "?" + els.get("http://imeji.mpdl.mpg.de/status").getName() + "=";
+			if (els.get("http://imeji.mpdl.mpg.de/status").getValue() == null) f+= "<http://imeji.mpdl.mpg.de/status/RELEASED>";
+			else  f+= "<http://imeji.mpdl.mpg.de/status/"+ els.get("http://imeji.mpdl.mpg.de/status").getValue() + ">";
 		}
 		
 		if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())

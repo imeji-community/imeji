@@ -34,6 +34,7 @@ public class TechnicalFacets
 	
 		try 
 		{
+			int count = 0;
 			if (sb.getUser() != null)
 			{	
 //				if (!fs.isFilter("My images"))
@@ -45,12 +46,14 @@ public class TechnicalFacets
 				if (!fs.isFilter("Pending images"))
 				{
 					SearchCriterion privateImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_STATUS, "http://imeji.mpdl.mpg.de/status/PENDING", Filtertype.URI);
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, privateImagesSC, "Pending images"), "Pending images", getCount(new ArrayList<SearchCriterion>(scList), privateImagesSC)));
+					count = getCount(new ArrayList<SearchCriterion>(scList), privateImagesSC);
+					facets.add(new Facet(uriFactory.createFacetURI(baseURI, privateImagesSC, "Pending images"), "Pending images",count));
 				}
 				if (!fs.isFilter("Released images"))
 				{
 					SearchCriterion publicImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_STATUS,"http://imeji.mpdl.mpg.de/status/RELEASED", Filtertype.URI);
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, publicImagesSC, "Released images"), "Released images", getCount(new ArrayList<SearchCriterion>(scList), publicImagesSC)));
+					count = getCount(new ArrayList<SearchCriterion>(scList), publicImagesSC);
+					if (count > 0)	facets.add(new Facet(uriFactory.createFacetURI(baseURI, publicImagesSC, "Released images"), "Released images", count));
 				}
 			}
 				
@@ -59,7 +62,9 @@ public class TechnicalFacets
 				if (!fs.isFilter(ct.name()))
 				{
 					SearchCriterion sc = new  SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE, ct.getURI().toString(), Filtertype.URI);
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, ct.name()), ct.name().toLowerCase(), getCount(new ArrayList<SearchCriterion>(scList), sc)));
+					count = getCount(new ArrayList<SearchCriterion>(scList), sc);
+					if (count > 0) facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, ct.name()), ct.name().toLowerCase(), count));
+					count = 0;	
 				}
 			}
 		} 

@@ -36,7 +36,7 @@
 <f:subview id="Details">
 
 
-<div class="huge_area0 fullItem">
+<div class="xDouble_area0_p6">
 
 	<h:panelGroup layout="block" styleClass="huge_area0 itemBlock noTopBorder">
 
@@ -81,8 +81,16 @@
 				
 			</a4j:repeat>
 			
-		
-		
+			<h:panelGroup styleClass="medium_area0">
+				<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
+					<h:outputText value="View details"/>
+				</h:outputLink>
+			</h:panelGroup>
+			<h:panelGroup styleClass="medium_area0" rendered="#{item.editable}">
+				<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view?edit=1">
+					<h:outputText value="Edit metadata"/>
+				</h:outputLink>
+			</h:panelGroup>
 	
 	</h:panelGroup>
 

@@ -156,8 +156,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 		return navigation.getImagesUrl();
 	}
 
-    public String initFacets()
+    public String initFacets() throws Exception
     {
+    	scList =  URLQueryTransformer.transform2SCList(query);;
     	this.setFacets(new FacetsBean(scList));
     	return "pretty";
     }

@@ -84,15 +84,8 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		
 		if (scList == null) scList = new ArrayList<SearchCriterion>();
 
-		//Remove non optional search criterion
-		for (int i=0; i<scList.size(); i++)
-		{
-			if (scList.get(i).getNamespace() != null && !els.get(scList.get(i).getNamespace().getNs()).isOptional()) 
-			{
-				scList.remove(i);
-				i--;
-			}
-		}
+		SecurityQueryFactory sqf = new SecurityQueryFactory(els, root, user);
+		scList = sqf.setSecuritySearchCriterion(scList);
 
 		// Create one sub-query for each search criterion
 		int i=0;
@@ -122,7 +115,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		String filter = FilterFactory.getAdvancedFilter(scList, subQueries, els);
 		if (!"".equals(filter)) filter = ".FILTER( " + filter + " )";
 		
-		String s =  "?s a <" + root + ">" + printMandatoryVariables(root) + specificQuery + securityFilter + query + filter + printSortVariables();
+		String s =  "?s a <" + root + ">" + sqf.getVariablesAsSparql() + specificQuery + sqf.getSecurityFilter() + query + filter + printSortVariables();
 		return s;
 	}
 	
@@ -138,22 +131,6 @@ public class QuerySPARQLImpl implements QuerySPARQL
 			}
 		}
 		return all;
-	}
-	
-	private String printMandatoryVariables(String root)
-	{
-		String mandatory ="";
-		for (QueryElement el : els.values())
-		{
-			if (el.getParent() != null)
-			{
-				if (!el.isOptional() && !el.getName().contains("sort"))
-				{
-					mandatory += " . "+ printSingleVariable(el);
-				}
-			}
-		}
-		return mandatory;
 	}
 	
 	private String printSortVariables()

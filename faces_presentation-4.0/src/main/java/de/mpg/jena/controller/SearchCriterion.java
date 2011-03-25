@@ -19,6 +19,8 @@ public class SearchCriterion {
 	public enum ImejiNamespaces {
 
 	    ID_URI("http://imeji.mpdl.mpg.de/id"),
+	    
+	    MY_IMAGES("http://imeji.mpdl.mpg.de/"),
 
 		PROPERTIES("http://imeji.mpdl.mpg.de/properties"),
 		
@@ -94,8 +96,6 @@ public class SearchCriterion {
             }
         }
 		
-		
-
 		public void setNs(String ns) {
 			this.ns = ns;
 		}
@@ -131,11 +131,6 @@ public class SearchCriterion {
         {
             return listType;
         }
-
-        
-		
-		
-
        
 	}
 	

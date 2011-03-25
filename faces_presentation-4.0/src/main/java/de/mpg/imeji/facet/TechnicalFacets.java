@@ -13,10 +13,7 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
-import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
-import de.mpg.jena.vo.Image.Visibility;
-import de.mpg.jena.vo.User;
 
 public class TechnicalFacets 
 {
@@ -37,11 +34,11 @@ public class TechnicalFacets
 			int count = 0;
 			if (sb.getUser() != null)
 			{	
-//				if (!fs.isFilter("My images"))
-//				{
-//					SearchCriterion myImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.i , ObjectHelper.getURI(User.class, sb.getUser().getEmail()).toString(), Filtertype.URI);
-//					facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "My images"), "My images", getCount(new ArrayList<SearchCriterion>(scList), myImagesSC)));	
-//				}
+				if (!fs.isFilter("My images"))
+				{
+					SearchCriterion myImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.MY_IMAGES , "", Filtertype.EQUALS);
+					facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "My images"), "My images", getCount(new ArrayList<SearchCriterion>(scList), myImagesSC)));	
+				}
 				
 				if (!fs.isFilter("Pending images"))
 				{

@@ -52,16 +52,13 @@ public class QueryElementFactory
 	private void findMandatoryElements()
 	{
 		addElement(new QueryElement("s", root, null, false));
+		addElement(new QueryElement("props", "http://imeji.mpdl.mpg.de/properties", els.get(root), false));
+		addElement(new QueryElement("status", "http://imeji.mpdl.mpg.de/status", els.get( "http://imeji.mpdl.mpg.de/properties"), false));
 		
 		if ("http://imeji.mpdl.mpg.de/image".equals(root))
 		{
 			addElement(new QueryElement("coll", "http://imeji.mpdl.mpg.de/collection", els.get(root), false));
 			addElement(new QueryElement("visibility", "http://imeji.mpdl.mpg.de/visibility", els.get(root), false));
-		}
-		else if ("http://imeji.mpdl.mpg.de/collection".equals(root) || "http://imeji.mpdl.mpg.de/album".equals(root))
-		{
-			addElement(new QueryElement("props", "http://imeji.mpdl.mpg.de/properties", els.get(root), false));
-			addElement(new QueryElement("status", "http://imeji.mpdl.mpg.de/status", els.get( "http://imeji.mpdl.mpg.de/properties"), false));
 		}
 	}
 	

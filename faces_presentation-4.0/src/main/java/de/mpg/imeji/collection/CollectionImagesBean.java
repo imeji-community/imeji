@@ -104,8 +104,9 @@ public class CollectionImagesBean extends ImagesBean {
     }
 	
 	@Override
-	public String initFacets()
+	public String initFacets() throws Exception
     {
+		scList = URLQueryTransformer.transform2SCList(getQuery());
 		setFacets(new FacetsBean(collection, scList));
         return "pretty";
     }

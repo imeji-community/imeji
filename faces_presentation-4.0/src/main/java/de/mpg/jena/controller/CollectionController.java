@@ -7,20 +7,18 @@ import java.util.Collection;
 import java.util.List;
 
 import thewebsemantic.RDF2Bean;
-import thewebsemantic.Sparql;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
 import de.mpg.jena.sparql.query.QuerySPARQLImpl;
-import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.Image.Visibility;
 import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
 

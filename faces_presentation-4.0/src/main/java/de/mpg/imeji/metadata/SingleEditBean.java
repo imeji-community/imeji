@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.mpg.imeji.metadata.editors.SimpleImageEditor;
+import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
@@ -20,6 +21,7 @@ public class SingleEditBean
 	
 	private Map<URI, Boolean> valuesMap =  new HashMap<URI, Boolean>();
 	private Map<URI, String> togglePanelState = new HashMap<URI, String>();
+	private String toggleState = "displayMd";;
 	
 	private int mdPosition = 0;
 	
@@ -49,6 +51,9 @@ public class SingleEditBean
 			valuesMap.put(md.getNamespace(), true);
 		}
 		
+		if (UrlHelper.getParameterBoolean("edit")) this.toggleState = "editMd";
+		else toggleState = "displayMd";
+		
 		editor = new SimpleImageEditor(imAsList, profile, null);
 	}
 	
@@ -59,6 +64,18 @@ public class SingleEditBean
 		editor.save();
 		togglePanelState.put(editor.getStatement().getName(), "displayMd");
 		return "";
+	}
+	
+	public String cancel()
+	{
+		this.toggleState = "displayMd";
+		return "pretty:";
+	}
+	
+	public String showEditor()
+	{
+		this.toggleState = "editMd";
+		return "pretty:";
 	}
 	
 	public String addMetadata()
@@ -126,9 +143,13 @@ public class SingleEditBean
 		this.togglePanelState = togglePanelState;
 	}
 
+	public String getToggleState() {
+		return toggleState;
+	}
 
-	
-	
-	
+	public void setToggleState(String toggleState) {
+		this.toggleState = toggleState;
+	}
+
 
 }

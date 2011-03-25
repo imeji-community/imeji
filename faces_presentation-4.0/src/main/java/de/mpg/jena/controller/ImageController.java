@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
-import de.mpg.imeji.collection.CollectionBean;
 import de.mpg.imeji.util.LoginHelper;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
@@ -23,8 +22,8 @@ import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.Image.Visibility;
+import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
 

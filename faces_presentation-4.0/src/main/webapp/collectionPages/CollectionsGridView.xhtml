@@ -164,27 +164,30 @@
 										<span class="xHuge_area0 endline">
 											<h:outputText value="#{container.size}" styleClass="free_area0"/>
 											<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUrl}images#{container.collection.id.path}?q=">
-							      				<h:outputText value="#{lbl.view_images}"/>
+							      				<h:outputText value="View Images"/>
 							      			</h:outputLink>
-							      			<h:outputLink id="lnkUploadImages" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUrl}upload#{container.collection.id.path}?init=1">
-												<h:outputText value="#{lbl.upload_images}"></h:outputText>
+							      			<h:outputLink id="lnkUploadImages" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUrl}upload#{container.collection.id.path}?init=1" rendered="#{container.editable}">
+												<h:outputText value="Upload images"></h:outputText>
 											</h:outputLink>
-											
-											<h:commandLink id="lnkReleaseCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{ViewCollectionBean.release}" rendered="#{container.editable and container.collection.properties.status=='PENDING'}">
-												<h:outputText value="#{lbl.collection_release}"></h:outputText>
-											</h:commandLink>
-											
-											<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{ViewCollectionBean.withrdraw}" rendered="#{container.editable and container.collection.properties.status=='RELEASED'}">
-												<h:outputText value="#{lbl.collection_withdraw}"></h:outputText>
-											</h:commandLink>
-											
-											<h:commandLink id="lnkDeleteCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{ViewCollectionBean.delete}" rendered="#{container.editable and container.collection.properties.status=='PENDING'}">
-												<h:outputText value="#{lbl.collection_delete}"></h:outputText>
-											</h:commandLink>
 											
 											<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUri}#{container.collection.id.path}/details?init=1">
-												<h:outputText value="#{lbl.collection_metadata}"/>
+												<h:outputText value="View Metadata"/>
 											</h:outputLink>
+											
+											<h:panelGroup styleClass="free_area0 medium_marginLIncl">
+												<h:commandLink id="lnkReleaseCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{container.release}" rendered="#{container.editable and container.collection.properties.status=='PENDING'}">
+													<h:outputText value="#{lbl.collection_release}"></h:outputText>
+												</h:commandLink>
+												
+												<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0 small_marginLIncl" action="#{container.withrdraw}" rendered="#{container.editable and container.collection.properties.status=='RELEASED'}">
+													<h:outputText value="Withdraw"></h:outputText>
+												</h:commandLink>
+												
+												<h:commandLink id="lnkDeleteCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{container.delete}" rendered="#{container.editable and container.collection.properties.status=='PENDING'}">
+													<h:outputText value="#{lbl.delete}"></h:outputText>
+												</h:commandLink>
+											</h:panelGroup>
+											
 										</span>
 									</div>
 								</div>

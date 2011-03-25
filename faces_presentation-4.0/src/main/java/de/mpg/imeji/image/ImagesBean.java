@@ -98,6 +98,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	            BeanHelper.error("Invalid search query!");
 	        }
 	        totalNumberOfRecords = controller.getNumberOfResults(scList);
+	       // scList = URLQueryTransformer.transform2SCList(query);
 	        images = controller.search(scList, sortCriterion, limit, offset);
 	        filters = new FiltersBean(query, totalNumberOfRecords);
 	        labels.init((List<Image>) images);

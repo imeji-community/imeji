@@ -128,6 +128,7 @@ public class SecurityQueryFactory
 		{
 			uf += "?coll=<" +imageCollection.getValue() + ">";
 		}
+		else if (user != null && user.getGrants() != null && user.getGrants().isEmpty() && myImages) f = " false ";
 		
 		if (!"".equals(uf)) f = " .FILTER(" + f + op + "(" + uf + "))";
 		else if (!"".equals(f)) f = " .FILTER(" + f + ")";

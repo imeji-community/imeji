@@ -37,14 +37,14 @@ public class TechnicalFacets
 				if (!fs.isFilter("My images"))
 				{
 					SearchCriterion myImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.MY_IMAGES , "", Filtertype.EQUALS);
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "My images"), "My images", getCount(new ArrayList<SearchCriterion>(scList), myImagesSC)));	
+					if (count > 0 ) facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "My images"), "My images", getCount(new ArrayList<SearchCriterion>(scList), myImagesSC)));	
 				}
 				
 				if (!fs.isFilter("Pending images"))
 				{
 					SearchCriterion privateImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_STATUS, "http://imeji.mpdl.mpg.de/status/PENDING", Filtertype.URI);
 					count = getCount(new ArrayList<SearchCriterion>(scList), privateImagesSC);
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, privateImagesSC, "Pending images"), "Pending images",count));
+					if (count > 0 )facets.add(new Facet(uriFactory.createFacetURI(baseURI, privateImagesSC, "Pending images"), "Pending images",count));
 				}
 				if (!fs.isFilter("Released images"))
 				{

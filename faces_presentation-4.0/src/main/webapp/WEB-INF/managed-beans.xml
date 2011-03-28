@@ -259,6 +259,12 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
+	<managed-bean>
+		<managed-bean-name>AdminBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.admin.AdminBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
 	<!-- <managed-bean>
 		<managed-bean-name>ApplicationBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.beans.ApplicationBean</managed-bean-class>

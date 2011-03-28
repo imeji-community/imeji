@@ -78,23 +78,6 @@ public class CollectionCriterion extends Criterion implements Serializable{
     public void updateMDList()
     {
     	setMdCriterionList(newMdCriterionList());
-//        try{
-//          List<SelectItem> newMdList = new ArrayList<SelectItem>();
-//          Collection<Statement> s = selectedCollection.getProfile().getStatements();
-//          if (s.size() == 0){
-//            for(int j=0; j< getMdCriterionList().size(); j++)
-//            {
-//            	getMdCriterionList().get(j).setMdList(newMdList);
-////            	getMdCriterionList().get(j).setSelectedMdName(newMdList.get(0).getValue().toString());
-//            }
-//        	  BeanHelper.info("error: Selected Collection has no metadata profile");
-//          }else
-//        	  setMdCriterionList(newMdCriterionList());
-//          
-//           
-//    }catch (Exception e){
-//        e.getMessage();
-//    }
     }
     
     

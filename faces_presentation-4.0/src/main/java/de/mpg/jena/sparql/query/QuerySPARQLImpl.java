@@ -51,8 +51,9 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user) 
 	{
 		//String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
-		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
+	 	init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query= "SELECT ?s count(DISTINCT ?s) WHERE {" + selectQuery + "} " + this.limit + " " + this.offset;
+		
 		//System.out.println("COUNT:" + query);
 		return  query;
 	}
@@ -91,6 +92,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		int i=0;
 		for (SearchCriterion sc: getAllSearchCriterion(scList))
 		{
+			if (sc.isBound()) System.out.println("BOUND");
 			if (sc.getNamespace() != null && !sc.getNamespace().equals(ImejiNamespaces.ID_URI) && els.get(sc.getNamespace().getNs()).isOptional())
 			{
 				subQueries.put(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue(), new SubQuery(sc, els, root, "s" + i));

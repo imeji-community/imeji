@@ -141,6 +141,7 @@ public class SearchCriterion {
 	private List<SearchCriterion> children = new ArrayList<SearchCriterion>();
 	private SearchCriterion parent;
 	private boolean inverse = false;
+	private boolean bound = false;
 	
 	public SearchCriterion()
 	{
@@ -238,6 +239,15 @@ public class SearchCriterion {
     {
         return parent;
     }
-    
+
+
+	public boolean isBound() {
+		return bound;
+	}
+
+
+	public void setBound(boolean bound) {
+		this.bound = bound;
+	}
     
 }

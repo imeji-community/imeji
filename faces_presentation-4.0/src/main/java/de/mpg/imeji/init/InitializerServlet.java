@@ -7,6 +7,10 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.sparql.sse.Item;
+import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
+import com.hp.hpl.jena.tdb.store.GraphTDB;
+
 import thewebsemantic.NotFoundException;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.jena.ImejiJena;
@@ -39,7 +43,7 @@ public class InitializerServlet extends HttpServlet
 	{
 		try
         {
-            ImejiJena.init();
+            ImejiJena.init();            
 //			String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
 //            Model base = DataFactory.model(tdbPath);
         }

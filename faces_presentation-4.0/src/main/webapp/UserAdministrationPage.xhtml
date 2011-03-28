@@ -47,9 +47,10 @@
 				
 				<h:panelGroup layout="block" styleClass="full_area0 endline">
 					<h2>
-					<h:outputLink styleClass="large_area0" value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml"><h:outputText value="Create new User "/></h:outputLink>
-					<h:commandLink action="#{UserCreationBean.reInitializeUserRights}" value=" Init Users rights" styleClass=""/>
-					<h:commandLink action="#{UserCreationBean.transformMd}" value=" Run md transform" styleClass=""/>		
+					<h:outputLink styleClass="medium_area0" value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml"><h:outputText value="Create new User "/></h:outputLink>
+					<h:commandLink action="#{UserCreationBean.reInitializeUserRights}" value=" Init Users rights" styleClass="medium_area0"/>
+					<h:commandLink action="#{UserCreationBean.transformMd}" value=" Run md transform" styleClass="medium_area0"/>		
+					<h:commandLink action="#{AdminBean.getJenaTDBStats}" value="Run tdb stats" styleClass="medium_area0"/>		
 					</h2>			
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="full_area0 endline">
@@ -66,8 +67,9 @@
 						</a4j:repeat>
 						<br/>
 					</h:panelGroup>
-					
 				</a4j:repeat>
+				
+					<h:outputText value="#{AdminBean.jenaTDBStats}" styleClass="full_area0"/>
 			</h:panelGroup>
 		
 		</ui:define>

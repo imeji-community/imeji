@@ -33,6 +33,7 @@ public class SubQuery
 	private String getQuery(Map<String, QueryElement> els, String name)
 	{
 		String filter = FilterFactory.getSimpleFilter(sc, els.get(sc.getNamespace().getNs()).getName());
+		
 		String sq = "";
 		if (!"".equals(filter.trim()))
 		{

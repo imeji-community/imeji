@@ -129,10 +129,7 @@ public class CollectionCriterionController implements Serializable {
     					
     					//Create Search criterion
     					SearchCriterion mdSC = new SearchCriterion(op, new ArrayList<SearchCriterion>());
-    					
-    					// Add metadata type
-    					mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, mdc.getSelectedStatement().getName().toString(), Filtertype.URI));
-    					
+    					mdSC.setBound(true);
     					// Add metadata value
     					switch (ComplexTypeHelper.getComplexType(mdc.getSelectedStatement().getType()))
  				        {
@@ -170,7 +167,11 @@ public class CollectionCriterionController implements Serializable {
  				        		//TODO
  				        		break;
  				        }
+    					
     				    subSC.getChildren().add(mdSC);
+    				    // Add metadata type
+    					mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, mdc.getSelectedStatement().getName().toString(), Filtertype.URI));
+    				
     				}
     			}
     		}

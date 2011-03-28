@@ -36,8 +36,9 @@ public class TechnicalFacets
 			{	
 				if (!fs.isFilter("My images"))
 				{
-					SearchCriterion myImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.MY_IMAGES , "", Filtertype.EQUALS);
-					if (count > 0 ) facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "My images"), "My images", getCount(new ArrayList<SearchCriterion>(scList), myImagesSC)));	
+					SearchCriterion myImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.MY_IMAGES , "my", Filtertype.EQUALS);
+					count = getCount(new ArrayList<SearchCriterion>(scList), myImagesSC);
+					if (count > 0 ) facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "My images"), "My images", count));	
 				}
 				
 				if (!fs.isFilter("Pending images"))

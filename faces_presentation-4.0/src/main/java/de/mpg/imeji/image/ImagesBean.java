@@ -6,6 +6,10 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import com.hp.hpl.jena.sparql.sse.Item;
+import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
+import com.hp.hpl.jena.tdb.store.GraphTDB;
+
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
@@ -16,6 +20,7 @@ import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
@@ -98,7 +103,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	            BeanHelper.error("Invalid search query!");
 	        }
 	        totalNumberOfRecords = controller.getNumberOfResults(scList);
-	       // scList = URLQueryTransformer.transform2SCList(query);
+	        scList = URLQueryTransformer.transform2SCList(query);
 	        images = controller.search(scList, sortCriterion, limit, offset);
 	        filters = new FiltersBean(query, totalNumberOfRecords);
 	        labels.init((List<Image>) images);

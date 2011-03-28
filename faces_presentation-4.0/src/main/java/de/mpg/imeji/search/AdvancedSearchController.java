@@ -29,13 +29,6 @@ public class AdvancedSearchController extends BeanHelper implements Serializable
     }
 
     public String startSearch() throws IOException{
-       
-        /*
-        for(String s : anyFieldCriterionController.getSearchCriterion())
-        	q += s + "";
-        */
-        
-       
         
         ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class); 
         bean.setQuery(collectionCriterionController.getSearchCriterion());

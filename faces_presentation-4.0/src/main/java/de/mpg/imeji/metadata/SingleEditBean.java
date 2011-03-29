@@ -21,8 +21,7 @@ public class SingleEditBean
 	private	SimpleImageEditor editor = null;
 	
 	private Map<URI, Boolean> valuesMap =  new HashMap<URI, Boolean>();
-	private Map<URI, String> togglePanelState = new HashMap<URI, String>();
-	private String toggleState = "displayMd";;
+	private String toggleState = "displayMd";
 	
 	private int mdPosition = 0;
 	
@@ -30,10 +29,8 @@ public class SingleEditBean
 	{
 		image = im;
 		this.profile = profile;
-		for (Statement st : profile.getStatements())
-		{
-			togglePanelState.put(st.getName(), "displayMd");
-		}
+		if (UrlHelper.getParameterBoolean("edit")) this.toggleState = "editMd";
+		else toggleState = "displayMd";
 		this.init();
 	}
 	
@@ -51,10 +48,6 @@ public class SingleEditBean
 		{
 			valuesMap.put(md.getNamespace(), true);
 		}
-		
-		if (UrlHelper.getParameterBoolean("edit")) this.toggleState = "editMd";
-		else toggleState = "displayMd";
-		
 		editor = new SimpleImageEditor(imAsList, profile, null);
 	}
 	
@@ -78,6 +71,7 @@ public class SingleEditBean
 				((List<ImageMetadata>)image.getMetadataSet().getMetadata()).remove(i);i--;
 			}
 		}
+		this.init();
 		return "pretty:";
 	}
 	
@@ -91,7 +85,6 @@ public class SingleEditBean
 	{
 		editor.addMetadata(0, mdPosition);
 		this.image = editor.getImages().get(0);
-		togglePanelState.put(editor.getStatement().getName(), "editMd");
 		init();
 		return "";
 	}
@@ -142,14 +135,6 @@ public class SingleEditBean
 
 	public void setMdPosition(int mdPosition) {
 		this.mdPosition = mdPosition;
-	}
-
-	public Map<URI, String> getTogglePanelState() {
-		return togglePanelState;
-	}
-
-	public void setTogglePanelState(Map<URI, String> togglePanelState) {
-		this.togglePanelState = togglePanelState;
 	}
 
 	public String getToggleState() {

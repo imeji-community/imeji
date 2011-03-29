@@ -139,16 +139,16 @@
 										<rich:togglePanel id="metadataTogglePanel" value="#{imageBean.edit.toggleState}" initialState="displayMd" switchType="ajax" stateOrder="displayMd, editMd">
 											 <f:facet name="displayMd">
 											 	<h:panelGroup layout="block" styleClass="xHuge_area0_p0">
-											 	<a4j:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0" rowKeyVar="indexMetadata">
-											 		<div class="xLarge_area0_p8 txtRight noPaddingTopBottom">
-														<h:outputText value="#{MetadataLabels.labels[md.namespace]}"/>
-													</div>
-													<h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl" >
-														<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
-															<ui:param name="md" value="#{md}"/>
-														</ui:include>
-													</h:panelGroup><br/>
-												</a4j:repeat>
+												 	<a4j:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0" rowKeyVar="indexMetadata">
+												 		<div class="xLarge_area0_p8 txtRight noPaddingTopBottom">
+															<h:outputText value="#{MetadataLabels.labels[md.namespace]}"/>
+														</div>
+														<h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl" >
+															<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
+																<ui:param name="md" value="#{md}"/>
+															</ui:include>
+														</h:panelGroup><br/>
+													</a4j:repeat>
 												</h:panelGroup>
 											</f:facet>
 											<f:facet name="editMd">
@@ -157,9 +157,9 @@
 														<div class="xLarge_area0_p8 txtRight noPaddingTopBottom">
 															<h:outputText value="#{MetadataLabels.labels[statement.name]}"/>
 														</div>
-														<h:panelGroup  layout="block" styleClass="huge_area0_p0">
-															<h:panelGroup rendered="#{!imageBean.edit.valuesMap[statement.name]}">
-																<h:outputText value="No value "/>
+														<h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl">
+															<h:panelGroup layout="block" styleClass="xLarge_area0_p0 xTiny_marginLExcl" rendered="#{!imageBean.edit.valuesMap[statement.name]}">
+																<h:outputText styleClass="free_area0" value="No value "/>
 																<a4j:commandButton styleClass="min_imgBtn groupTool add af_commandButton" immediate="true" reRender="singleEditPanel" action="#{imageBean.edit.addMetadata}" value="">
 																	<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 																	<a4j:support event="oncomplete" reRender="singleEditPanel" />
@@ -194,7 +194,8 @@
 														<div class="large_marginLExcl marginTExcl025">
 															<div class="small_txtBtn">
 																<a4j:commandLink styleClass="small_txtBtn dialogCancelButton"  action="#{imageBean.edit.cancel}" reRender="singleEditPanel">
-																Cancel</a4j:commandLink>
+																	<h:outputText value="#{lbl.cancel}"/>
+																</a4j:commandLink>
 															</div>
 															<div class="small_txtBtn xTiny_marginLExcl">
 																<a4j:commandButton styleClass="free_area0_p0 medium_marginLExcl small_txtBtn dialogActiveButton" action="#{imageBean.edit.save}" value="Save">

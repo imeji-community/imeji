@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.mpg.imeji.metadata.editors.SimpleImageEditor;
+import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
@@ -62,13 +63,21 @@ public class SingleEditBean
 		editor.getImages().clear();
 		editor.getImages().add(image);
 		editor.save();
-		togglePanelState.put(editor.getStatement().getName(), "displayMd");
-		return "";
+		this.toggleState = "displayMd";
+		return "pretty:";
 	}
 	
 	public String cancel()
 	{
 		this.toggleState = "displayMd";
+		if (!editor.getImages().isEmpty()) image = editor.getImages().get(0);
+		for (int i=0; i < image.getMetadataSet().getMetadata().size(); i++)
+		{
+			if (MetadataHelper.isEmpty(((List<ImageMetadata>)image.getMetadataSet().getMetadata()).get(i)))
+			{
+				((List<ImageMetadata>)image.getMetadataSet().getMetadata()).remove(i);i--;
+			}
+		}
 		return "pretty:";
 	}
 	

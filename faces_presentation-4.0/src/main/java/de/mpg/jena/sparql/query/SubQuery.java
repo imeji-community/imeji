@@ -1,6 +1,8 @@
 package de.mpg.jena.sparql.query;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,16 +15,20 @@ public class SubQuery
 	
 	private String type ="http://imeji.mpdl.mpg.de/image";
 	
-	private SearchCriterion sc;
+	private List<SearchCriterion> scList;
+	
+	private Operator op = Operator.AND;
 	
 	private String query ="";
 	
-	public SubQuery(SearchCriterion sc, Map<String, QueryElement> els, String type, String name) 
+	public SubQuery(List<SearchCriterion> scList, Map<String, QueryElement> els, String type, String name) 
 	{
 		this.type = type;
 		this.name = name;
-		this.sc = sc;
+		this.scList = scList;
+		if (scList.size() == 1) this.op = scList.get(0).getOperator();
 		query = getQuery(els, name);
+	
 	}
 	
 	public String print()
@@ -30,22 +36,37 @@ public class SubQuery
 		return query;
 	}
 	
-	private String getQuery(Map<String, QueryElement> els, String name)
+	public String getQuery(Map<String, QueryElement> els, String name)
 	{
-		String filter = FilterFactory.getSimpleFilter(sc, els.get(sc.getNamespace().getNs()).getName());
+		String filter = "";
+		for (SearchCriterion sc: scList)
+		{
+			if (!"".equals(filter)) filter += FilterFactory.getOperatorString(sc);
+			filter += " " +  FilterFactory.getSimpleFilter(sc, els.get(sc.getNamespace().getNs()).getName());
+		}
 		
-		String sq = "";
+	 	String sq = "";
 		if (!"".equals(filter.trim()))
 		{
 			sq ="SELECT DISTINCT ?" + name + " WHERE { ?" + name + " a <" + type + ">";
 			QueryElementFactory elFactory = new QueryElementFactory();
 			
 			String ssq = "";
-			// WRITE QUERY ELEMENTS
-			QueryElement el = els.get(sc.getNamespace().getNs());
-			List<QueryElement> parents = elFactory.getAllParents(el);
 			
-			if(sc.getOperator().equals(Operator.NOTAND) || sc.getOperator().equals(Operator.NOTOR)) ssq += " .MINUS {";
+			// WRITE QUERY ELEMENTS
+			Map<String, QueryElement> parentsMap = new LinkedHashMap<String, QueryElement>();
+			for (SearchCriterion sc: scList)
+			{
+				QueryElement el = els.get(sc.getNamespace().getNs());
+				for (QueryElement e : elFactory.getAllParents(el))
+				{
+					if (!parentsMap.containsKey(e.getName())) parentsMap.put(e.getName(), e);
+				}
+			}
+			
+			List<QueryElement> parents = new ArrayList<QueryElement>(parentsMap.values());
+			
+			if(op.equals(Operator.NOTAND) || op.equals(Operator.NOTOR)) ssq += " .MINUS {";
 			
 			for(QueryElement e : parents)
 			{
@@ -57,7 +78,14 @@ public class SubQuery
 			// If no parents, print only this variable
 			if (!" .MINUS {".equals(ssq)) ssq += " .";
 			ssq += " OPTIONAL {";
-			ssq += printSingleVariable(el, name);
+			int i=0;
+			for (SearchCriterion sc: scList)
+			{
+				if (i > 0) ssq += " . ";
+				QueryElement el = els.get(sc.getNamespace().getNs());
+				ssq += printSingleVariable(el, name);
+				i++;
+			}
 			
 			sq+= ssq;
 			
@@ -69,11 +97,9 @@ public class SubQuery
 			}
 			
 			// WRITE FILTERS SUBQUERY
-			List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-			scList.add(sc);
 			sq += " .FILTER(" + filter  + ")";
 			
-			if(sc.getOperator().equals(Operator.NOTAND) || sc.getOperator().equals(Operator.NOTOR)) sq += " }";
+			if(op.equals(Operator.NOTAND) || op.equals(Operator.NOTOR)) sq += " }";
 			sq += "}";
 		}
 		return sq;
@@ -95,12 +121,21 @@ public class SubQuery
 		this.name = name;
 	}
 
-	public SearchCriterion getSc() {
-		return sc;
+	public List<SearchCriterion> getScList() {
+		return scList;
 	}
 
-	public void setSc(SearchCriterion sc) {
-		this.sc = sc;
+	public void setScList(List<SearchCriterion> scList) {
+		this.scList = scList;
 	}
+
+	public Operator getOp() {
+		return op;
+	}
+
+	public void setOp(Operator op) {
+		this.op = op;
+	}
+
 	
 }

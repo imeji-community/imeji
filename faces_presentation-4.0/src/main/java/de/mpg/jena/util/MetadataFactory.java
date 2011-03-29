@@ -94,7 +94,7 @@ public class MetadataFactory
 			case LICENSE:
 				md = new License();
 				((License)md).setLicense(((License)metadata).getLicense());
-				searchValue += " " + ((License)metadata).getLicense() + " " + ((License)metadata).getDateString();
+				searchValue += " " + ((License)metadata).getLicense();
 				break;
 			case NUMBER:
 				md = new Number();

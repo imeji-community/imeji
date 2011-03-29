@@ -63,7 +63,9 @@ public class URLQueryTransformer
             	List<SearchCriterion> children = parseQuery(subQuery, op);
             	if (children.size() > 0)
             	{
-            		scList.add(new SearchCriterion(op, children));
+            		SearchCriterion sc = new SearchCriterion(op, children);
+            		sc.setBound(bound);
+            		scList.add(sc);
             		subQuery ="";
             	}
             }

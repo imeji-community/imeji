@@ -12,8 +12,8 @@ import de.mpg.jena.vo.ComplexType;
 @Embedded
 public class Geolocation extends ComplexType implements Serializable
 {
-    private double longitude;
-    private double latitude;
+    private double longitude = Double.NaN;
+    private double latitude = Double.NaN;
     private String name;
     
     public double getLongitude()

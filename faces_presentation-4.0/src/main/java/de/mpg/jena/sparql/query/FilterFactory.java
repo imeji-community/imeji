@@ -87,7 +87,7 @@ public class FilterFactory
 				}
 				else
 				{
-					if(sc.getNamespace() != null && !"".equals(subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()).print()))
+					if(sc.getNamespace() != null && subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()) != null  && !"".equals(subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()).print()))
 					{
 						if (!"".equals(f)) f+= getOperatorString(sc);
 						f += "?s" + "=?" + subQueries.get(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue()).getName();
@@ -151,7 +151,7 @@ public class FilterFactory
 		return f;
 	}
 	
-	private static String getOperatorString(SearchCriterion sc)
+	public static String getOperatorString(SearchCriterion sc)
 	{
 		if (sc.getOperator().equals(Operator.AND) || sc.getOperator().equals(Operator.NOTAND))
 		{

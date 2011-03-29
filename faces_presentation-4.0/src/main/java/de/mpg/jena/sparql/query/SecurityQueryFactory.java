@@ -95,6 +95,7 @@ public class SecurityQueryFactory
 		}
 
 		String uf ="";
+		boolean hasGrantForCollection = false;
 		if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
 		{
 			for (Grant g : user.getGrants())
@@ -111,11 +112,14 @@ public class SecurityQueryFactory
 						}
 						if (els.get("http://imeji.mpdl.mpg.de/collection") != null) uf += "?" + els.get("http://imeji.mpdl.mpg.de/collection").getName() + "=<" + g.getGrantFor() + ">";
 						if (els.get("http://imeji.mpdl.mpg.de/album") != null) uf += "?" + els.get("http://imeji.mpdl.mpg.de/album").getName() + "=<" + g.getGrantFor() + ">";
+						
+						hasGrantForCollection = true;
 					}
 					else if(GrantType.SYSADMIN.equals(g.getGrantType()) && imageCollection == null )
 					{
 						if (!"".equals(uf)) uf += " || ";
 						uf += " true";
+						hasGrantForCollection = true;
 					}
 					else if (imageCollection != null )
 					{
@@ -124,9 +128,9 @@ public class SecurityQueryFactory
 				}
 			}
 		}
-		else if(imageCollection != null )
+		if(imageCollection != null && !hasGrantForCollection)
 		{
-			uf += "?coll=<" +imageCollection.getValue() + ">";
+			uf += "?coll=<" +imageCollection.getValue() + "> && ?status=<http://imeji.mpdl.mpg.de/status/RELEASED>";
 		}
 		else if (user != null && user.getGrants() != null && user.getGrants().isEmpty() && myImages) f = " false ";
 		

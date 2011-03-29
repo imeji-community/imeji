@@ -12,7 +12,7 @@ import de.mpg.jena.vo.ComplexType;
 @Embedded
 public class Number extends ComplexType implements Serializable
 {
-    private double number;
+    private double number = Double.NaN;
 
     public Number()
     {

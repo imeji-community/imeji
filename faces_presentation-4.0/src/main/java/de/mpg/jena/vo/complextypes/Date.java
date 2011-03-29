@@ -1,14 +1,10 @@
 package de.mpg.jena.vo.complextypes;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfType;
-
-
 import de.mpg.jena.vo.ComplexType;
 
 @Namespace("http://imeji.mpdl.mpg.de/metadata/")

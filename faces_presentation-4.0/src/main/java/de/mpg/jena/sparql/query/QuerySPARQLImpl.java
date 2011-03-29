@@ -37,20 +37,15 @@ public class QuerySPARQLImpl implements QuerySPARQL
 
 	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
     {
-		//String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
-		System.out.println("create query...");
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query = "SELECT DISTINCT ?s WHERE {" + selectQuery + "} " + this.sortQuery + " " + this.limit + " " + this.offset;
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
 		//System.out.println(query);
-	//	query="SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/collection> ?coll . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility .FILTER(?visibility=<http://imeji.mpdl.mpg.de/image/visibility/PUBLIC> || ?coll=<http://imeji.mpdl.mpg.de/collection/45> || ?coll=<http://imeji.mpdl.mpg.de/collection/14> || ?coll=<http://imeji.mpdl.mpg.de/collection/30> || ?coll=<http://imeji.mpdl.mpg.de/album/36> || ?coll=<http://imeji.mpdl.mpg.de/album/38> || ?coll=<http://imeji.mpdl.mpg.de/collection/4> || ?coll=<http://imeji.mpdl.mpg.de/album/37> || ?coll=<http://imeji.mpdl.mpg.de/collection/50>) . OPTIONAL{ SELECT DISTINCT ?s5 WHERE { ?s5 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s5 <http://imeji.mpdl.mpg.de/metadataSet> ?v2 . OPTIONAL {?v2 <http://imeji.mpdl.mpg.de/metadata> ?v3 . OPTIONAL {?v3 <http://imeji.mpdl.mpg.de/metadata/person> ?v6 . OPTIONAL {?v6 <http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit> ?v9 . OPTIONAL {?v9 <http://purl.org/dc/elements/1.1/title> ?v10}}}}} .FILTER(regex(?v10, 'joujou', 'i'))} } . OPTIONAL{ SELECT DISTINCT ?s0 WHERE { ?s0 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s0 <http://imeji.mpdl.mpg.de/filename> ?v1} .FILTER(regex(?v1, 'joujou', 'i'))} } . OPTIONAL{ SELECT DISTINCT ?s7 WHERE { ?s7 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s7 <http://imeji.mpdl.mpg.de/metadataSet> ?v2 . OPTIONAL {?v2 <http://imeji.mpdl.mpg.de/metadata> ?v3 . OPTIONAL {?v3 <http://imeji.mpdl.mpg.de/complexTypes> ?v13}}} .FILTER(str(?v13)='http://imeji.mpdl.mpg.de/complexTypes/DATE')} } . OPTIONAL{ SELECT DISTINCT ?s4 WHERE { ?s4 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s4 <http://imeji.mpdl.mpg.de/metadataSet> ?v2 . OPTIONAL {?v2 <http://imeji.mpdl.mpg.de/metadata> ?v3 . OPTIONAL {?v3 <http://imeji.mpdl.mpg.de/metadata/person> ?v6 . OPTIONAL {?v6 <http://purl.org/escidoc/metadata/terms/0.1/given-name> ?v8}}}} .FILTER(regex(?v8, 'joujou', 'i'))} } . OPTIONAL{ SELECT DISTINCT ?s6 WHERE { ?s6 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s6 <http://imeji.mpdl.mpg.de/properties> ?v11 . OPTIONAL {?v11 <http://imeji.mpdl.mpg.de/createdBy> ?v12}} .FILTER(str(?v12)='http://xmlns.com/foaf/0.1/Person/saquet%40mpdl.mpg.de')} } . OPTIONAL{ SELECT DISTINCT ?s1 WHERE { ?s1 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s1 <http://imeji.mpdl.mpg.de/metadataSet> ?v2 . OPTIONAL {?v2 <http://imeji.mpdl.mpg.de/metadata> ?v3 . OPTIONAL {?v3 <http://imeji.mpdl.mpg.de/metadata/text> ?v4}}} .FILTER(regex(?v4, 'joujou', 'i'))} } . OPTIONAL{ SELECT DISTINCT ?s3 WHERE { ?s3 a <http://imeji.mpdl.mpg.de/image> . OPTIONAL {?s3 <http://imeji.mpdl.mpg.de/metadataSet> ?v2 . OPTIONAL {?v2 <http://imeji.mpdl.mpg.de/metadata> ?v3 . OPTIONAL {?v3 <http://imeji.mpdl.mpg.de/metadata/person> ?v6 . OPTIONAL {?v6 <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?v7}}}} .FILTER(regex(?v7, 'joujou', 'i'))} }.FILTER( (?s=?s0 || ?s=?s1 || ?s=?s3 || ?s=?s4 || ?s=?s5 && ?s=?s6) && ?s=?s7 )}";
-		System.out.println("...done");
 		return query;
     }
 	
 	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user) 
 	{
-		//String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
 	 	init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query= "SELECT ?s count(DISTINCT ?s) WHERE {" + selectQuery + "} " + this.limit + " " + this.offset;
 		
@@ -78,24 +73,29 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	}
 	
 	private String printSelect(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
-	{
-		securityFilter = FilterFactory.generateUserFilters(user, els);
-		
+	{		
 		Map<String, SubQuery> subQueries = new HashMap<String, SubQuery>();
 		
 		if (scList == null) scList = new ArrayList<SearchCriterion>();
 
 		SecurityQueryFactory sqf = new SecurityQueryFactory(els, root, user);
 		scList = sqf.setSecuritySearchCriterion(scList);
-
+		
 		// Create one sub-query for each search criterion
-		int i=0;
-		for (SearchCriterion sc: getAllSearchCriterion(scList))
+		int i=0;		
+		for (SearchCriterion sc: getAllSearchCriterion(scList, null))
 		{
-			if (sc.isBound()) System.out.println("BOUND");
-			if (sc.getNamespace() != null && !sc.getNamespace().equals(ImejiNamespaces.ID_URI) && els.get(sc.getNamespace().getNs()).isOptional())
+			if (sc.isBound())
 			{
-				subQueries.put(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue(), new SubQuery(sc, els, root, "s" + i));
+				subQueries.put(sc.getChildren().get(0).getNamespace().getNs() + sc.getChildren().get(0).getFilterType() + sc.getChildren().get(0).getValue()
+						, new SubQuery(sc.getChildren(), els, root, "s" + i));
+				i++;
+			}
+			else if (!(sc.getParent() != null && sc.getParent().isBound()) && sc.getNamespace() != null && !sc.getNamespace().equals(ImejiNamespaces.ID_URI) && els.get(sc.getNamespace().getNs()).isOptional())
+			{
+				List<SearchCriterion> l = new ArrayList<SearchCriterion>();
+				l.add(sc);
+				subQueries.put(sc.getNamespace().getNs() + sc.getFilterType() + sc.getValue(), new SubQuery(l, els, root, "s" + i));
 				i++;
 			}
 		}
@@ -108,7 +108,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 			if (!"".equals(subquery.trim()))
 			{
 				query += " .";
-				if(!(sq.getSc().getOperator().equals(Operator.NOTAND) && sq.getSc().getOperator().equals(Operator.NOTOR))) query += " OPTIONAL";
+				if(!(sq.getOp().equals(Operator.NOTAND) && sq.getOp().equals(Operator.NOTOR))) query += " OPTIONAL";
 				query += "{ " +  subquery +  " }";
 			}
 		}
@@ -121,15 +121,16 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		return s;
 	}
 	
-	private List<SearchCriterion> getAllSearchCriterion(List<SearchCriterion> scList)
+	private List<SearchCriterion> getAllSearchCriterion(List<SearchCriterion> scList, SearchCriterion parent)
 	{
 		List<SearchCriterion> all = new ArrayList<SearchCriterion>();
 		for (SearchCriterion sc : scList)
 		{
+			if (parent != null) sc.setParent(parent);
 			all.add(sc);
 			if (!sc.getChildren().isEmpty())
 			{
-				all.addAll(all.size() -1, getAllSearchCriterion(sc.getChildren()));
+				all.addAll(all.size() -1,  getAllSearchCriterion(sc.getChildren(), sc));
 			}
 		}
 		return all;

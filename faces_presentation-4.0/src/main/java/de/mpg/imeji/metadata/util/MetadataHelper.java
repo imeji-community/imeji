@@ -1,10 +1,5 @@
 package de.mpg.imeji.metadata.util;
 
-import java.util.Calendar;
-
-import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
-
-import de.mpg.jena.util.DateFormatter;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.complextypes.ConePerson;
 import de.mpg.jena.vo.complextypes.Date;
@@ -25,7 +20,7 @@ public class MetadataHelper
 		}
 		else if (md instanceof Date)
 		{
-			if (((Date) md).getDate() == null || Double.isNaN(((Date) md).getDateTime())) return true;
+			if (((Date) md).getDate() == null || "".equals(((Date) md).getDate()) || Double.isNaN(((Date) md).getDateTime())) return true;
 		}
 		else if (md instanceof Geolocation)
 		{

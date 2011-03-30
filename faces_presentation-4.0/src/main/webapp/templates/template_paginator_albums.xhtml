@@ -283,7 +283,9 @@
 			</a4j:repeat>
 		</tbody>
 	</table>
-	<h:panelGroup layout="block" style="border-bottom-width: 0.10em; border-bottom-style: solid;" rendered="#{AlbumsBean.sb.user != null and AlbumsBean.totalNumberOfRecords != 0}">
+	<div class="cleaning"></div>
+
+	<h:panelGroup layout="block" styleClass="footPrintActionLine" style="border-bottom-width: 0.10em; border-bottom-style: solid;" rendered="#{AlbumsBean.sb.user != null and AlbumsBean.totalNumberOfRecords != 0}">
 		<a4j:commandLink value="#{lbl.delete_selected_albums}" styleClass="xSmall_marginLIncl" action="#{AlbumsBean.deleteAll}" />
 	</h:panelGroup>
 			

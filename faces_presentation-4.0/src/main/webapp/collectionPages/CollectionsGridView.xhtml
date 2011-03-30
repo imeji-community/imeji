@@ -161,7 +161,7 @@
 										<span class="huge_area0_p8 endline labelLine">
 										Images<span class="noDisplay">: </span>
 										</span>
-										<span class="xHuge_area0 endline">
+										<span class="third_area0_p8 endline">
 											<h:outputText value="#{container.size}" styleClass="free_area0"/>
 											<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUrl}images#{container.collection.id.path}?q=">
 							      				<h:outputText value="View Images"/>
@@ -198,8 +198,8 @@
 			</ol>
 
 		</div>
-		
-		<h:panelGroup layout="block" style="border-bottom-width: 0.10em; border-bottom-style: solid;" rendered="#{CollectionsBean.sb.user != null and CollectionsBean.totalNumberOfRecords != 0}">
+		<div class="cleaning"></div>
+		<h:panelGroup layout="block" styleClass="footPrintActionLine" rendered="#{CollectionsBean.sb.user != null and CollectionsBean.totalNumberOfRecords != 0}">
 			<a4j:commandLink value="#{lbl.delete_selected_collections}" styleClass="xSmall_marginLIncl" action="#{CollectionsBean.deleteAll}" />
 		</h:panelGroup>
 

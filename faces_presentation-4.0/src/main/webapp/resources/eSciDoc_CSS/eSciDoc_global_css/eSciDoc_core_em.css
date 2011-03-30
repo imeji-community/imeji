@@ -373,6 +373,17 @@
 				width: 18.28em;
 			}
 			
+			.third_txtInput, .third_txtInput input {	/* erweitert 2011-03-29 - Marco Schlender */
+				padding-left: 0.0909em;
+			    padding-right: 0.0909em;
+			    border-width: 0.0909em;
+			    margin: 0px;
+			    display: inline;
+			    margin-right: 0.0909em;
+			    float: left;
+				width:34.3636em;
+			}
+			
 			.xDouble_txtInput, .xDouble_txtInput input {
 				width: 24.83em;
 			}
@@ -3751,3 +3762,8 @@
 .negMarginTExcl050 { margin-top:-0.50em;}
 .marginTExcl025 { margin-top:0.25em;}
 .marginTExcl125 { margin-top:1.25em;}
+
+.invisible { visibility:hidden; }
+.capacity { background-color:#3C3C3C; }
+.full_area0 .noTopBorder { background-color:#3C3C3C; } /* erweitert 2011-03-30 */
+.pageBrowser { background-color:#262626; } /* erweitert 2011-03-30 */

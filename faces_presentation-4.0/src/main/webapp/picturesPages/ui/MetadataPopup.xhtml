@@ -36,65 +36,68 @@
 <f:subview id="Details">
 
 
-<div class="xDouble_area0_p6">
-
-	<h:panelGroup layout="block" styleClass="huge_area0 itemBlock noTopBorder">
-
-		<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
-			<!-- Filename -->
-			<div class="huge_area0_p0 endline">
-				<h:outputText class="medium_area0 xTiny_marginRExcl labelLine" value="#{lbl.name}"/>
-				<h:outputText class="large_area0 endline" value="#{item.image.filename}"/>
-			</div>
-		</h:panelGroup>
-			<!-- Collection -->
-			<!-- 
-			<div class="free_area0_p0 small_marginLIncl endline">
-				<h:outputText class="xLarge_area0_p8 endline labelLine" value="#{lbl.collection}"/>
-				<h:outputText class="huge_area0 endline" value="#{item.collection.metadata.title}"/>
-			</div>
-			-->
-			
+	<div class="vertDist075 linebreak"> </div>
+	<h:panelGroup layout="block" class="quad_area_p6">
+		<h:panelGroup layout="block" class="xLarge_area0_p4 txtRight noPaddingTopBottom invisible">.</h:panelGroup>
 		
-			<a4j:repeat var="md" value="#{item.image.metadataSet.metadata}" rows="0">
-				<h:panelGroup layout="block" styleClass="free_area0 itemBlockContent endline">
-					<h:panelGroup layout="block" class="huge_area0_p0 endline">
-						<h:outputText class="medium_area0 xTiny_marginRExcl labelLine" value="#{MetadataLabels.labels[md.namespace]}"/>
-						<h:outputText class="large_area0 endline" value="#{md.text}" rendered="#{md.type == 'TEXT'}"/>
-						<h:outputText class="large_area0 endline" value="#{md.number}" rendered="#{md.type == 'NUMBER'}"/>
-						<h:outputText class="large_area0 endline" value="#{md.date}" rendered="#{md.type == 'DATE'}"/>
-						<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.type == 'PUBLICATION' or md.type == 'URI'}">
-							<h:outputText class="large_area0 endline" value="Link" />
-						</h:outputLink>
-						<h:outputText class="large_area0 endline" value="#{md.type.license}" rendered="#{md.type == 'LICENSE'}"/>
-						<h:panelGroup class="large_area0 endline" rendered="#{md.type == 'PERSON'}">
-							<h:outputText value="#{md.person.familyName}, #{md.person.givenName} ("/>
-							<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty mdperson.organizations}">
-								<h:outputText value="#{orga.name}"/>
-							</a4j:repeat>
-							<h:outputText value=")" />
-						</h:panelGroup>
-						
-						<h:outputText class="large_area0 endline" value="#{md.longitude}/#{md.latitude}" rendered="#{md.type == 'GEOLOCATION'}"/>
-					</h:panelGroup>
-				</h:panelGroup>
-				
-			</a4j:repeat>
-			
-			<h:panelGroup styleClass="medium_area0">
+		<h:panelGroup layout="block" class="double_area0_p0 xTiny_marginLExcl">
+			<h:panelGroup styleClass="viewFileIcon">
 				<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
 					<h:outputText value="View details"/>
 				</h:outputLink>
 			</h:panelGroup>
-			<h:panelGroup styleClass="medium_area0" rendered="#{item.editable}">
+			
+			<h:panelGroup styleClass="editFileIcon xTiny_marginLExcl" rendered="#{item.editable}">
 				<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view?edit=1">
 					<h:outputText value="Edit metadata"/>
 				</h:outputLink>
 			</h:panelGroup>
-	
+		</h:panelGroup>
 	</h:panelGroup>
-
-	</div>
+	<div class="vertDist075 linebreak"> </div>
+	
+	<div class="vertDist075 linebreak"> </div>
+	<div class="vertDist075 linebreak"> </div>
+	
+	
+	<h:panelGroup layout="block" class="quad_area0_p0">
+		<h:panelGroup styleClass="xLarge_area0_p4 txtRight noPaddingTopBottom">
+			<h:outputText value="#{lbl.name}"/>
+		</h:panelGroup>
+		
+		<h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl">
+			<h:outputText value="#{item.image.filename}"/>
+		</h:panelGroup>
+	</h:panelGroup>
+	<div class="vertDist075 linebreak"> </div>
+	
+	<a4j:repeat var="md" value="#{item.image.metadataSet.metadata}" rows="0">
+		<h:panelGroup layout="block" class="quad_area0_p0">
+			<h:panelGroup styleClass="xLarge_area0_p4 txtRight noPaddingTopBottom">
+				<h:outputText value="#{MetadataLabels.labels[md.namespace]}"/>
+			</h:panelGroup>
+			
+			<h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl">
+				<h:outputText value="#{md.text}" rendered="#{md.type == 'TEXT'}"/>
+				<h:outputText value="#{md.number}" rendered="#{md.type == 'NUMBER'}"/>
+				<h:outputText value="#{md.date}" rendered="#{md.type == 'DATE'}"/>
+				<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.type == 'PUBLICATION' or md.type == 'URI'}">
+					<h:outputText value="Link" />
+				</h:outputLink>
+				<h:outputText value="#{md.type.license}" rendered="#{md.type == 'LICENSE'}"/>
+				<h:panelGroup rendered="#{md.type == 'PERSON'}">
+					<h:outputText value="#{md.person.familyName}, #{md.person.givenName} ("/>
+					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty mdperson.organizations}">
+						<h:outputText value="#{orga.name}"/>
+					</a4j:repeat>
+					<h:outputText value=")" />
+				</h:panelGroup>
+				<h:outputText value="#{md.longitude}/#{md.latitude}" rendered="#{md.type == 'GEOLOCATION'}"/>
+			</h:panelGroup>
+		</h:panelGroup>
+		
+	</a4j:repeat>
+	<div class="vertDist075 linebreak"> </div>
 </f:subview>
 </div>
 

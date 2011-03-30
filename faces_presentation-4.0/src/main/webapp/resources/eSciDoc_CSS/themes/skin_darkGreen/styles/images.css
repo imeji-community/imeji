@@ -681,7 +681,21 @@
 		background-position: bottom left;
 		padding-left: 2.10em !important;
 	}
-
+	
+	.editFileIcon {
+		background-image: url('../images/All_Status_AlbumEdit_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: bottom left;
+		padding-left: 2.10em !important;
+	}
+	
+	.viewFileIcon {
+		background-image: url('../images/All_File_EyeTrue_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: bottom left;
+		padding-left: 2.10em !important;
+	}
+	
 	@media print {
 		.files, .locators {
 			padding-left: 0em !important;

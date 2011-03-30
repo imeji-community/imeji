@@ -50,6 +50,10 @@ MOUSEOVER		#382926
 INPUT TEXT		#000000
 FORM BG			#FFFFFF
 
+
+COLOR EEEEEE was changed to EEEEEE; - 2011-03-28
+COLOR 303030 was changed to 262626; - 2011-03-28
+COLOR 4C4C4C was changed to 3C3C3C; - 2011-03-28
 */
 
 /*FONT DEFINITION*/
@@ -78,7 +82,7 @@ FORM BG			#FFFFFF
 		/*H6*/
 		h6 {
 				font-weight: bold;
-				color: #BBBBBB;
+				color: #EEEEEE;
 				margin: 0px;
 			}
 	/*GENERAL*/
@@ -100,12 +104,12 @@ FORM BG			#FFFFFF
 /*GENERAL*/
 	body {
 		background-color: #434343;
-		color: #BBBBBB;
+		color: #EEEEEE;
 		line-height: 145%;
 	}
 	
 	body .wrapper, body .footer {
-		background-color: #393939;
+		background-color: #262626;
 		border-right: 1px dotted #6CAD2F;
 		border-left: 1px dotted #6CAD2F;
 	}
@@ -120,7 +124,7 @@ FORM BG			#FFFFFF
 	}
 	
 	a.OraLinkDisabled {
-		color: #BBBBBB;
+		color: #EEEEEE;
 		cursor: default;
 	}
 	
@@ -158,11 +162,12 @@ FORM BG			#FFFFFF
 	}
 	/*SEPERATORS*/
 	.metaMenu .seperator, .contentMenu .seperator, .pageBrowser .seperator  {
-		background-color: #486131;
+		background-color: #486131; 
 	}
 	
 	.itemList .seperator {
-		background-color: #393939;
+		/*background-color: #393939; */
+		background-color:#262626;  /* erweitert 2011-03-30 - Marco */
 	}
 	
 	.fullItem .seperator, .tiledList .seperator {
@@ -170,7 +175,8 @@ FORM BG			#FFFFFF
 	}
 	
 	.metaMenu .seperator, .contentMenu .seperator, .pageBrowser .seperator {
-		border-color: #393939;
+		/*border-color: #393939;*/
+		border-color:#262626;  /* erweitert 2011-03-30 - Marco */
 	}
 	
 	.fullItem .fullItemControls .seperator {
@@ -188,8 +194,10 @@ FORM BG			#FFFFFF
 	}
 	
 	.contentMenu .void {
-		border-color: #393939;
-		background-color: #393939;
+		/*border-color: #393939;
+		background-color: #393939;*/
+		border-color:#262626;		/* erweitert 2011-03-30 - Marco */
+		background-color:#262626;	/* erweitert 2011-03-30 - Marco */
 	}
 
 /*HEADER
@@ -213,17 +221,18 @@ FORM BG			#FFFFFF
 */
 	/*COLORING FOR ALL MENU INPUTS AND LABELS*/
 	.metaMenu input, .metaMenu button, .metaMenu a, .quickSearchMenu a, .advancedSearchMenu input, .advancedSearchMenu a, .organisationSearchMenu input, .organisationSearchMenu a, .mainMenu input, .mainMenu a, .contentMenu input, .contentMenu a {
-		background-color: #393939;
+		/*background-color: #393939;*/
+		background-color:#262626;  /* erweitert 2011-03-30 - Marco */
 		color: #6CAD2F;
 	}
 
 .quickSearchCheckBoxMenu label {
-		color: #BBBBBB;
+		color: #EEEEEE;
 	} 
 	
 	.logoAlternate span {
 		font-weight: bold;
-		color: #BBBBBB;
+		color: #EEEEEE;
 	}
 	
 	.logoAlternate span a {
@@ -231,7 +240,7 @@ FORM BG			#FFFFFF
 	}
 	
 	.contentMenu span {
-		color: #BBBBBB;
+		color: #EEEEEE;
 	}
 	
 	.metaMenu input:hover, .metaMenu input:focus, .metaMenu button:hover, .metaMenu button:focus, .metaMenu a:hover, .metaMenu a:focus, .quickSearchMenu a:hover, .quickSearchMenu a:focus, .quickSearchCheckBoxMenu label:hover, .quickSearchCheckBoxMenu label:focus, .advancedSearchMenu input:hover, .advancedSearchMenu input:focus, .advancedSearchMenu a:hover, .advancedSearchMenu a:focus, .organisationSearchMenu input:hover, .organisationSearchMenu input:focus, .organisationSearchMenu a:hover, .organisationSearchMenu a:focus, .mainMenu input:hover, .mainMenu input:focus, .mainMenu a:hover, .mainMenu a:focus, .contentMenu input:hover, .contentMenu input:focus, .contentMenu a:hover, .contentMenu a:focus  {
@@ -282,18 +291,19 @@ FORM BG			#FFFFFF
 
 	/*PAGE BROWSER*/
 	.pageBrowser input, .pageBrowser button, .pageBrowser a {
-		background-color: #393939;
+		/*background-color: #393939;*/
+		background-color:#262626;  /* erweitert 2011-03-30 - Marco */
 		color: #6CAD2F;
 	}
 	
 	.pageBrowser input:hover, .pageBrowser button:hover, .pageBrowser a:hover, .pageBrowser input:focus, .pageBrowser button:focus, .pageBrowser a:focus {
-		color: #BBBBBB;
+		color: #EEEEEE;
 		cursor: pointer;
 	}
 	
 	.pageBrowser .actual, .pageBrowser .actual:hover, .pageBrowser .actual:focus {
 		font-weight: bold;
-		color: #BBBBBB;
+		color: #EEEEEE;
 		cursor: pointer;
 	}
 	
@@ -388,6 +398,7 @@ FORM BG			#FFFFFF
 		
 	.listItem, .listItem td {
 		border-top-color: #BAB4B3 !important;
+		background-color:#3C3C3C; /* erweitert 2011-03-30 - Marco */
 	}
 	
 	.searchHit {
@@ -431,7 +442,7 @@ FORM BG			#FFFFFF
 	}
 	
 	.fullItem .easySubmissionHeader b.actual {
-		color: #BBBBBB;
+		color: #EEEEEE;
 	}
 	
 	/*FULL ITEM HEADER*/
@@ -465,7 +476,7 @@ FORM BG			#FFFFFF
 	}
 	
 	.itemBlock .newBlock {
-		border-top-color: #BBBBBB;
+		border-top-color: #EEEEEE;
 	}
 	
 	.affHover {
@@ -501,29 +512,29 @@ FORM BG			#FFFFFF
 /*SINGLE ELEMENTS*/
 	.dateJSLabel {
 		background-color: #DCECF1;
-		color: #BBBBBB;
+		color: #EEEEEE;
 	}
 	.dialogBox {
-		background-color:#4c4c4c;
+		background-color:#3C3C3C;
 	}
 	/* CSS3 Enhancements */
 	.bordst0 { -moz-border-radius:6px 6px 6px 6px; -webkit-border-radius:6px 6px 6px 6px; border-radius:6px 6px 6px 6px; border:0px; } /* border-radius = CSS3 */
-	.shadst1 { -moz-box-shadow:0 0 10px #CCCCCC; box-shadow:0 0 10px #CCCCCC; -webkit-box-shadow:0 0 10px #CCCCCC; } /* CSS3 in: FF > 3.5, Safari + Chrome */
+	.shadst1 { -moz-box-shadow:5px 5px 5px #111111; box-shadow:5px 5px 5px #111111; -webkit-box-shadow:5px 5px 5px #111111; } /* CSS3 in: FF > 3.5, Safari + Chrome */
 	
 /*FORM BUTTONS*/
 	.dialogCancelButton {
 		float: left;
 		color: #6CAD2F;
-		background-color: #4c4c4c;
-		border-top-color: #303030;
+		background-color: #3C3C3C;
+		border-top-color: #262626;
 		border-right: #6CAD2F solid 0.091em;
 		border-bottom: #6CAD2F solid 0.091em;
-		border-left-color: #303030;
+		border-left-color: #262626;
 	}
 	
 	.dialogCancelButton:hover {
 		color: #FFFFFF;
-		background-color: #303030;
+		background-color: #262626;
 		border-color: #FFFFFF;
 	}
 	
@@ -644,6 +655,44 @@ FORM BG			#FFFFFF
 	
 /*UNDER REWORK*/
 
-	.underRework {
-		background-color: #F43E71 !important;
-	}
+.underRework {
+	background-color: #F43E71 !important;
+}
+	
+	
+
+.itemTile .tileIconArea {
+	background-color:#BBBBBB !important;
+	height:10.2727em !important;
+	line-height:10.2727em !important;
+	padding:1em 0em 0.4545em 0.0em !important;
+	text-align:center;
+}
+
+
+.tileIconAreaSelected {
+    background: none repeat scroll 0 0 #33698F;
+  	border:0em none !important;
+    height: 10.4545em;
+    line-height: 10.4545em;
+    padding:0.8182em 0em 0.4545em 0em !important;
+}
+
+.tileIconAreaSelected a {
+	color:#33698F; /* erweitert 2011-03-30 - Marco */
+}
+
+.tileTitle2LinesArea {
+	margin-top:0.1818em;
+	margin-bottom:0.5455em;
+	height:3em;
+	max-height:3em;
+	overflow:hidden;
+	vertical-align:top;
+}
+
+.footPrintActionLine {
+	background-color:#3C3C3C;
+	border-bottom-width: 0.10em; 
+	border-bottom-style: solid;
+}

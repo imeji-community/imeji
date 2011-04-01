@@ -32,6 +32,11 @@
 
 /*GENERAL*/
 
+@media print {
+
+	.messageArea {display: none;}
+}
+
 .fullItem {
 	border-top-width: 0.19em !important;
 	border-top-style: solid;
@@ -351,3 +356,20 @@
 .fullItem .advSearchCollapse {
 	 margin-top: -1.46em !important;
 }
+
+.inputInfoBox, .inputInfoBox a {
+	line-height: 1.6em;
+	cursor: pointer;
+}
+
+/*VALIDATION (Cone)*/
+
+.validatedUnique input {
+	 border-color: green;
+}
+
+.validatedUnique {
+	 color: white;
+	 background-color: green;
+}
+

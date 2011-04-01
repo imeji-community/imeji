@@ -60,22 +60,23 @@
 }
 
 .infoPage .mainSection ul {
-	font-size: 100%;
-	margin-left: 0em;
+	font-size: 85%;
+	margin-left: 5.19em;
 	padding-left: 0px;
 	list-style: inside;
-}
-
-.infoPage .mainSection li {
-	margin-bottom: 1em;
+	padding-left: 0.74em;
 }
 
 .infoPage .mainSection li a {
 	font-size: 100%;
 }
 
-.infoPage h2, .infoPage .mainSection h2, .infoPage .sideSection h2{
-	font-size: 150%;
+.mainSection h3 {
+	font-size: 200% !important;
+}
+
+.infoPage h2, .infoPage .mainSection h2, .infoPage .sideSection h2 {
+	line-height: 1.3em;
 	margin: 0px;
 	padding-top: 0.28em;
 	margin-left: -0.74em;
@@ -85,6 +86,12 @@
 .infoPage .mainSection h2 {
 	border-width: 0px;
 	border-top-width: 0.10em !important;
+}
+
+.infoPage .mainSection span h2 {
+	font-size: 18px !important;
+	margin-bottom: 0em;
+	padding-bottom: 0em;
 }
 
 .infoPage .sideSectionArea { 

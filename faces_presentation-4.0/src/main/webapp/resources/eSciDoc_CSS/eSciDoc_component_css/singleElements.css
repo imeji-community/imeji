@@ -91,6 +91,7 @@
 		text-align: left;
         line-height: 1.6em;
         background-color: #303030;
+		float: left;
 		position: absolute;
 		display: none;
 }

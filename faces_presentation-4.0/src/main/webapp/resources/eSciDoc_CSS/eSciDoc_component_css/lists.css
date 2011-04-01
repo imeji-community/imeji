@@ -121,17 +121,17 @@
 }
 	/*SELECT MENU*/
 	
-.itemList .checkboxSelectButton {
+.itemList .checkBoxSelectButton {
 	margin-top: 0.19em;
 	margin-right: 0.19em;
 }
 
 	/*REPLACEMENT HACK FOR IE LESS THAN 6*/
-	* html .itemList th .checkboxSelectButton {
+	* html .itemList th .checkBoxSelectButton {
 	margin-right: -1.19em;
 	}
 	/*REPLACEMENT HACK FOR IE 7*/
-	*:first-child+html .itemList th .checkboxSelectButton {
+	*:first-child+html .itemList th .checkBoxSelectButton {
 	margin-right: -1.19em;
 	}
 
@@ -228,8 +228,6 @@
 	padding: 18px 11px 0px 0px; 
 
 }
-
-
 
 .itemTile .tileIconArea img {
 	border: 0px;

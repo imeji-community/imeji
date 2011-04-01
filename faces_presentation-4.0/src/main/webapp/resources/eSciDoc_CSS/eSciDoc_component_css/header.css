@@ -31,12 +31,16 @@
 */
 
 @media print {
-	.header {
+	.header * {
 		display: none;
+	}
+	.headerSection .headLine h1, .headerSection .headLine {
+			float: none;
 	}
 }
 
 /*META MENU*/
+
 	.metaMenu {
 		height: 2.73em;
 		line-height: normal;
@@ -149,6 +153,12 @@
 /*SUB-HEADER SECTION*/
 	.subHeaderSection {
 		margin-bottom: 0.46em;
+	}
+
+	/*Force IE7 top-margin*/
+
+	*+html .header {
+		margin-bottom: 1em;
 	}
 
 /*BREADCRUMB*/

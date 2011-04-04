@@ -1,5 +1,6 @@
 package de.mpg.imeji.image;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +12,7 @@ import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
 import com.hp.hpl.jena.tdb.store.GraphTDB;
 
 import de.mpg.imeji.album.AlbumBean;
+import de.mpg.imeji.album.AlbumImagesBean;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
@@ -22,11 +24,13 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.AlbumController;
+import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
@@ -132,14 +136,20 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         return "pretty:";
     }
     
-    public String deleteAll() 
+    public String deleteAll() throws Exception 
     {
     	ImageController ic = new ImageController(sb.getUser());
+    	CollectionController cc = new CollectionController(sb.getUser());
+    	CollectionImeji coll = null;
+    	
+    	if (!images.isEmpty()) coll = cc.retrieve(images.iterator().next().getCollection());
+    	
     	for(Image im : images)
     	{
     		try 
     		{
 				ic.delete(im, sb.getUser());
+				if (coll.getImages().contains(im.getId())) coll.getImages().remove(im.getId());
 			} 
     		catch (Exception e) 
 			{
@@ -147,6 +157,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 				e.printStackTrace();
 			}
     	}
+    	
+    	cc.update(coll);
+    	
     	return "pretty:";
     }
 

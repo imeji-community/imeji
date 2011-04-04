@@ -47,13 +47,14 @@ public class AlbumBean implements Serializable
 
         public AlbumBean()
         {
-            sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class); 
+            sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         }
         
         public void initView()
         {
             AlbumController ac = new AlbumController(sessionBean.getUser()); 
             setAlbum(ac.retrieve(id));
+           
             if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
             {
                 active = true;
@@ -239,9 +240,12 @@ public class AlbumBean implements Serializable
         public List<ImageBean> getImages() throws Exception
         {
             ImageController ic = new ImageController(sessionBean.getUser()); 
-            
-            Collection<Image> imgList = ic.searchImageInContainer(getAlbum().getId(), null, null, 5, 0);
-            return ImejiFactory.imageListToBeanList(imgList); 
+            if (getAlbum() != null)
+            {
+            	Collection<Image> imgList = ic.searchImageInContainer(getAlbum().getId(), null, null, 5, 0);
+            	return ImejiFactory.imageListToBeanList(imgList); 
+            }
+            return null;	
         }
         
         public String save() throws Exception

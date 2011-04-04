@@ -104,8 +104,9 @@
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{EditWorkspaceBean.type != 'SINGLE' or !EditWorkspaceBean.editAllStatements}">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} " /><br/>
-							<a4j:commandLink rendered="#{imageBean.editable and imageBean.edit.toggleState == 'displayMd'}" action="#{imageBean.edit.showEditor}" reRender="singleEditPanel">
+							<a4j:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" action="#{imageBean.edit.showEditor}" reRender="singleEditPanel">
 							Edit</a4j:commandLink>
+							<h:outputText value="Image locked" rendered="#{imageBean.editable and imageBean.locked}"/><br/>
 						</h3>
 						
 						<span class="seperator"></span>
@@ -152,7 +153,7 @@
 												</h:panelGroup>
 											</f:facet>
 											<f:facet name="editMd">
-												<h:panelGroup layout="block" styleClass="xHuge_area0_p0" rendered="#{imageBean.editable}">
+												<h:panelGroup layout="block" styleClass="xHuge_area0_p0" rendered="#{imageBean.editable and !imageBean.locked}">
 													<a4j:repeat id="statementList" var="statement" value="#{imageBean.edit.profile.statements}" rows="0">
 														<div class="xLarge_area0_p8 txtRight noPaddingTopBottom">
 															<h:outputText value="#{MetadataLabels.labels[statement.name]}"/>

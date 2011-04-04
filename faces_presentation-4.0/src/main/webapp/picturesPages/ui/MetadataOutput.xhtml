@@ -57,7 +57,16 @@
 				<h:outputText value=")" />
 			</h:panelGroup>
 			<h:outputText styleClass="free_area0 endline" value="No value" rendered="#{md.type == 'PERSON' and md.person.familyName == null}"/>
-			<h:outputText styleClass="free_area0 endline" value="#{md.longitude}/#{md.latitude}" rendered="#{md.type == 'GEOLOCATION' and md.longitude != null}"/>
+			
+			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.type == 'GEOLOCATION'}">
+				<h:outputText value="#{md.name} (" rendered="#{md.name != null}"/>
+				<h:outputText value="#{md.longitude}/#{md.latitude}"/>
+				<h:outputText value=")" rendered="#{md.name != null}"/>
+				<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank">
+					<h:outputText styleClass="large_area0 endline" value="View in Google maps"/>
+				</h:outputLink>
+			</h:panelGroup>
+			
 			<h:outputText styleClass="free_area0 endline" value="No value" rendered="#{md.type == 'GEOLOCATION' and md.longitude == null}"/>
 		</h:panelGroup>
 	</h:panelGroup>

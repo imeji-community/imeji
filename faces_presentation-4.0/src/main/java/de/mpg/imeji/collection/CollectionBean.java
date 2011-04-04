@@ -275,6 +275,13 @@ public abstract class CollectionBean
         cc.release(collection);
         return "pretty:";
     }
+    
+    public String delete() throws Exception
+    {
+    	CollectionController cc = new CollectionController(sessionBean.getUser());
+    	cc.delete(collection, sessionBean.getUser());
+    	return "";
+    }
 
     public List<ImageBean> getImages() throws Exception
     {

@@ -10,18 +10,12 @@ import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.Navigation.Page;
-import de.mpg.imeji.filter.Filter;
-import de.mpg.imeji.util.BeanHelper;
-import de.mpg.jena.controller.ProfileController;
-import de.mpg.jena.security.Authorization;
 import de.mpg.jena.security.Security;
-import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.User;
 
 public class SessionBean implements Serializable

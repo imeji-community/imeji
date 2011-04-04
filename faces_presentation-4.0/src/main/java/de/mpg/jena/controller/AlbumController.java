@@ -86,12 +86,14 @@ public class AlbumController extends ImejiController
      */
     public Album retrieve(String id)
     {
-        return rdf2Bean.load(Album.class, ObjectHelper.getURI(Album.class, id).toString());
+    	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
+    	return imejiRDF2Bean.load(Album.class, ObjectHelper.getURI(Album.class, id).toString());
     }
 
     public Album retrieve(URI selectedAlbumId)
     {
-        return rdf2Bean.load(Album.class, selectedAlbumId);
+    	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
+        return (Album) imejiRDF2Bean.load(selectedAlbumId.toString(), user);
     }
 	
 	public Collection<Album> retrieveAll()

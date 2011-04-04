@@ -62,14 +62,13 @@ public class MetadataFactory
 		md.setNamespace(st.getName());
 		
 		return md;
-		
 	}
 	
 	public static ImageMetadata newMetadata(ImageMetadata metadata)
 	{
 		ImageMetadata md = null;
 		
-		String searchValue= metadata.getNamespace().toString();
+		String searchValue="";
 				
 		switch (metadata.getType()) 
 		{
@@ -89,7 +88,8 @@ public class MetadataFactory
 				((Geolocation)md).setLatitude(((Geolocation)metadata).getLatitude());
 				((Geolocation)md).setLongitude(((Geolocation)metadata).getLongitude());
 				((Geolocation)md).setName(((Geolocation)metadata).getName());
-				searchValue += " " + ((Geolocation)metadata).getLatitude() + " " + ((Geolocation)metadata).getLongitude();
+				searchValue += " " + ((Geolocation)metadata).getLatitude() + " " 
+				+ ((Geolocation)metadata).getLongitude() + " " + ((Geolocation)metadata).getName();
 				break;
 			case LICENSE:
 				md = new License();

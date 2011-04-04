@@ -5,24 +5,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
-
-import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
+import de.mpg.imeji.image.SelectedBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
-import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.Statement;
 
 public class AlbumImagesBean extends ImagesBean
 {
@@ -50,7 +45,7 @@ public class AlbumImagesBean extends ImagesBean
     @Override
     public String getNavigationString()
     {
-        return "pretty:";
+        return "pretty:albumImages";
     }
 
     @Override
@@ -76,12 +71,29 @@ public class AlbumImagesBean extends ImagesBean
         }
         return ImejiFactory.imageListToBeanList(images);
     }
+    
+    public String removeFromAlbum() throws Exception
+    {
+        AlbumController ac = new AlbumController(sb.getUser());
+        BeanHelper.info(album.getImages().size() + "Images removed from album");
+        album.getAlbum().getImages().clear();
+        ac.update(album.getAlbum());
+        AlbumBean activeAlbum = sb.getActiveAlbum();
+        if (activeAlbum != null && activeAlbum.getAlbum().getId().toString().equals(album.getAlbum().getId().toString()))
+        {
+        	sb.setActiveAlbum(album);
+        }
+        SelectedBean sb = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
+        sb.clearAll();
+        return "pretty:";
+    }
 
     
     public String getBackUrl() 
     {
 		return navigation.getImagesUrl() + "/album" + "/" + this.id;
 	}
+    
     public String getId()
     {
         return id;

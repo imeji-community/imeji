@@ -152,6 +152,8 @@
 
 		<!-- METADATA TYPE GEOLOCATION -->
 		<h:panelGroup rendered="#{metadata.type =='GEOLOCATION'}">
+			<h:outputLabel value="#{lbl.name}" styleClass="huge_label" />
+			<h:inputText styleClass="xHuge_txtInput" value="#{metadata.name}" />
 			<h:outputLabel value="#{lbl.geolocation_latitude}" styleClass="huge_label" />
 			<h:inputText styleClass="xHuge_txtInput" value="#{metadata.latitude}" />
 			<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="huge_label" />

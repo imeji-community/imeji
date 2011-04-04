@@ -61,7 +61,8 @@
 					<h:panelGroup styleClass="full_area0 preListHeader formButtonArea">
 						<h:panelGroup styleClass="full_area0 formButtonArea ">
 							<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton">
-									<h:outputText value="#{lbl.cancel}" />
+								 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
+								<h:outputText value="#{lbl.cancel}" />
 							</h:outputLink>	
 							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.editor.save}" value="#{lbl.save}"/>
 						</h:panelGroup>

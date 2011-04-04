@@ -197,7 +197,7 @@ public class FilterFactory
                 filter += "bound(" + variable + ")=" + sc.getValue() + "";
             }
             else if (sc.getFilterType().equals(Filtertype.EQUALS_NUMBER))
-            {
+            {	
             	try{ Double d = Double.valueOf(sc.getValue());
             	filter += variable + "='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";}
             	catch (Exception e) {/* Not a double*/}
@@ -216,15 +216,15 @@ public class FilterFactory
             }
             else if (sc.getFilterType().equals(Filtertype.EQUALS_DATE))
             {
-            	filter += variable + "='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+            	filter += variable + "='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
             }
             else if (sc.getFilterType().equals(Filtertype.GREATER_DATE))
             {
-				filter += variable + ">='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+				filter += variable + ">='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
             }
             else if (sc.getFilterType().equals(Filtertype.LESSER_DATE))
             {
-				filter += variable + "<='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+				filter += variable + "<='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
             }
         }
 		return filter;

@@ -6,36 +6,28 @@ import java.util.Date;
 
 public class DateFormatter 
 {
-	public static String format(String date)
+	public static String format(String str)
 	{
-		if (isFormatCompliant("yyyy-MM-dd", date)) date = date.concat("T00:00:00");
-		else if (isFormatCompliant("yyyy-MM", date)) date = date.concat("-01T00:00:00");
-		else if (isFormatCompliant("yyyy", date)) date = date.concat("-01-01T00:00:00");
+		Date d = parseDate(str, "yyyy-MM-dd");
+		if (d == null) d = parseDate(str, "yyyy-MM");
+		if (d == null) d = parseDate(str, "yyyy");
 		
-//		try 
-//    	{
-//			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
-//			Date d = sdf.parse(date);
-//			return sdf.format(d);
-//		} 
-//    	catch (ParseException e) 
-//    	{
-//    		/*ERROR FORMATTING*/
-//		} 
-		return date.concat("Z");
+		if (d != null) return Long.toString(d.getTime());
+		
+		return ""; 
 	}
 	
-	public static boolean isFormatCompliant(String pattern, String str)
+	public static Date parseDate(String str, String pattern)
 	{
 		try 
     	{
 			SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-			sdf.parse(str);
-    		return true;
+			return sdf.parse(str);
 		} 
     	catch (ParseException e) 
     	{
-    		return false;
+    		return null;
 		} 
 	}
+	
 }

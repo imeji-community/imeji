@@ -40,7 +40,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query = "SELECT DISTINCT ?s WHERE {" + selectQuery + "} " + this.sortQuery + " " + this.limit + " " + this.offset;
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
-		System.out.println(query);
+		//System.out.println(query);
 		return query;
     }
 	

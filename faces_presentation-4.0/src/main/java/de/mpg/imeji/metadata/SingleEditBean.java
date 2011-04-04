@@ -6,9 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.editors.SimpleImageEditor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
+import de.mpg.jena.concurrency.locks.Lock;
+import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
@@ -31,7 +35,7 @@ public class SingleEditBean
 		this.profile = profile;
 		if (UrlHelper.getParameterBoolean("edit")) this.toggleState = "editMd";
 		else toggleState = "displayMd";
-		this.init();
+		//this.init();
 	}
 	
 	public void init()
@@ -43,11 +47,11 @@ public class SingleEditBean
 		{
 			valuesMap.put(st.getName(), false);
 		}
-		
 		for (ImageMetadata md : image.getMetadataSet().getMetadata())
 		{
 			valuesMap.put(md.getNamespace(), true);
 		}
+		
 		editor = new SimpleImageEditor(imAsList, profile, null);
 	}
 	
@@ -56,14 +60,14 @@ public class SingleEditBean
 		editor.getImages().clear();
 		editor.getImages().add(image);
 		editor.save();
-		this.toggleState = "displayMd";
+		this.cancel();
 		return "pretty:";
 	}
 	
 	public String cancel()
 	{
 		this.toggleState = "displayMd";
-		if (!editor.getImages().isEmpty()) image = editor.getImages().get(0);
+		if (editor != null && !editor.getImages().isEmpty()) image = editor.getImages().get(0);
 		for (int i=0; i < image.getMetadataSet().getMetadata().size(); i++)
 		{
 			if (MetadataHelper.isEmpty(((List<ImageMetadata>)image.getMetadataSet().getMetadata()).get(i)))
@@ -71,6 +75,8 @@ public class SingleEditBean
 				((List<ImageMetadata>)image.getMetadataSet().getMetadata()).remove(i);i--;
 			}
 		}
+		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		Locks.unLock(new Lock(this.image.getId().toString(), sb.getUser().getEmail()));
 		this.init();
 		return "pretty:";
 	}
@@ -78,6 +84,8 @@ public class SingleEditBean
 	public String showEditor()
 	{
 		this.toggleState = "editMd";
+		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		Locks.lock(new Lock(this.image.getId().toString(), sb.getUser().getEmail()));
 		return "pretty:";
 	}
 	

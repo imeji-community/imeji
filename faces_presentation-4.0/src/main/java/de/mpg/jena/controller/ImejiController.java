@@ -103,7 +103,7 @@ public abstract class ImejiController
         properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
         properties.setCreationDate(now);
         properties.setLastModificationDate(now);
-        properties.setStatus(Status.PENDING);
+        if (properties.getStatus() == null) properties.setStatus(Status.PENDING);
     }
     
     public static void writeUpdateProperties(Properties properties, User user)

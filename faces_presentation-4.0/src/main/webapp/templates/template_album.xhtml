@@ -25,7 +25,6 @@
 					
 		<ui:define name="actionsMenu">
 			<h:panelGroup styleClass="free_area0 sub action">
-
 				<!-- ORGANIZE content menu lower line starts here -->
 				<h:commandLink id="lnkReleaseAlbum" styleClass="free_area0" action="#{AlbumBean.release}" rendered="#{AlbumBean.editable and AlbumBean.album.properties.status=='PENDING'}">
 					<h:outputText value="#{lbl.collection_release}"/>

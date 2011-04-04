@@ -1,5 +1,6 @@
 package de.mpg.imeji.user;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -125,9 +126,35 @@ public class UserCreationBean
     public String transformMd() throws Exception
     {
     	ImageController ic = new ImageController(sb.getUser());
+    	CollectionController cc = new CollectionController(sb.getUser());
     	Collection<Image> allImages = ic.retrieveAll();
-    	for(Image im : allImages) ObjectHelper.castAllHashSetToList(im);
+    	for(Image im : allImages) {
+    		ObjectHelper.castAllHashSetToList(im);
+    		CollectionImeji col = cc.retrieve(im.getCollection());
+    		im.getProperties().setStatus(col.getProperties().getStatus());
+    	}
     	ic.update(allImages);
+    	return "";
+    }
+    
+    public String cleanContainers() throws Exception
+    {
+    	CollectionController cc = new CollectionController(sb.getUser());
+    	ImageController ic = new ImageController(sb.getUser());
+    	Collection<CollectionImeji> cols = cc.retrieveAll();
+    	for (CollectionImeji c : cols)
+    	{
+    		c = (CollectionImeji) ObjectHelper.castAllHashSetToList(c);
+    		for (int i=0; i < ((List<URI>)c.getImages()).size(); i++)
+    		{
+    			try{ ic.retrieve(((List<URI>)c.getImages()).get(i));}
+    			catch (NotFoundException e) {
+    				((List<URI>)c.getImages()).remove(i);
+    				i--;
+				}
+    		}
+    		cc.update(c);
+    	}
     	return "";
     }
     

@@ -10,6 +10,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionImagesBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.SelectedBean;
@@ -19,6 +20,8 @@ import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
+import de.mpg.jena.concurrency.locks.Lock;
+import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
@@ -76,6 +79,7 @@ public class EditImageMetadataBean
 	
 	public String getAjaxInit()
 	{
+		lockImages();
 		profile = getSelectedProfile();
 		statement = getSelectedStatement();
 		editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
@@ -116,6 +120,30 @@ public class EditImageMetadataBean
 		modeRadio.add(new SelectItem("basic", "Write only when no values"));
 		modeRadio.add(new SelectItem("append", "Append a new value to all"));
 		modeRadio.add(new SelectItem("overwrite", "Overwrite all values"));
+	}
+	
+	public String cancel()
+	{
+		unlockImages();
+		return "";
+	}
+	
+	private void lockImages()
+	{
+		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		for (Image im : imagesBean.getImages())
+		{
+			Locks.lock(new Lock(im.getId().toString(), sb.getUser().getEmail()));
+		}
+	}
+	
+	private void unlockImages()
+	{
+		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		for (Image im : imagesBean.getImages())
+		{
+			Locks.unLock(new Lock(im.getId().toString(), sb.getUser().getEmail()));
+		}
 	}
 	
 	public String addToAll()

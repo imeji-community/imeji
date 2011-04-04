@@ -30,6 +30,8 @@ public class URLQueryTransformer
 		int bracketsOpened = 0;
         int bracketsClosed = 0;
         
+        if (query == null) query = "";
+        
 		StringReader reader = new StringReader(query);
 		int c = 0;
         while ((c = reader.read()) != -1)

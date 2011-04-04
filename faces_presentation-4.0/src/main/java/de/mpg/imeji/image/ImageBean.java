@@ -8,12 +8,14 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.album.AlbumBean;
+import de.mpg.imeji.album.AlbumImagesBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.SingleEditBean;
 import de.mpg.imeji.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
+import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -163,10 +165,8 @@ public class ImageBean
 
     public boolean getSelected()
     {
-        if (sessionBean.getSelected().contains(image.getId()))
-            selected = true;
-        else
-            selected = false;
+        if (sessionBean.getSelected().contains(image.getId())) selected = true;
+        else selected = false;
         return selected;
     }
 
@@ -227,6 +227,17 @@ public class ImageBean
         }
         return "pretty:";
     }
+    
+    public String removeFromAlbum() throws Exception
+    {
+    	AlbumImagesBean aib = (AlbumImagesBean) BeanHelper.getSessionBean(AlbumImagesBean.class);    	
+        AlbumController ac = new AlbumController(sessionBean.getUser());
+        aib.getAlbum().getAlbum().getImages().remove(image.getId());
+        ac.update(aib.getAlbum().getAlbum());
+        if(getIsInActiveAlbum()) sessionBean.getActiveAlbum().getAlbum().getImages().remove(image.getId());
+        BeanHelper.info("Image " + image.getFilename() + " removed from album");
+        return "pretty:";
+    }
 
     public boolean getIsInActiveAlbum()
     {
@@ -239,7 +250,7 @@ public class ImageBean
 
     public void selectedChanged(ValueChangeEvent event)
     {
-       if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(image.getId()))
+    	if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(image.getId()))
         {
             setSelected(true);
             select();
@@ -294,6 +305,11 @@ public class ImageBean
 	public void setEdit(SingleEditBean edit) 
 	{
 		this.edit = edit;
+	}
+	
+	public boolean isLocked()
+	{
+		return Locks.isLocked(this.image.getId().toString(), sessionBean.getUser().getEmail());
 	}
 
 	public boolean isEditable() 

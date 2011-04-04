@@ -51,7 +51,7 @@ public class SearchCriterion {
 		IMAGE_METADATA_GEOLOCATION_LONGITUDE("http://imeji.mpdl.mpg.de/metadata/longitude", IMAGE_METADATA),
 		IMAGE_METADATA_GEOLOCATION_LATITUDE("http://imeji.mpdl.mpg.de/metadata/latitude", IMAGE_METADATA),
 		IMAGE_METADATA_TEXT("http://imeji.mpdl.mpg.de/metadata/text", IMAGE_METADATA),
-		IMAGE_METADATA_DATE("http://imeji.mpdl.mpg.de/metadata/date", IMAGE_METADATA),
+		IMAGE_METADATA_DATE("http://imeji.mpdl.mpg.de/metadata/dateTime", IMAGE_METADATA),
 		IMAGE_METADATA_NUMBER("http://imeji.mpdl.mpg.de/metadata/number", IMAGE_METADATA),
 	    
 		IMAGE_COLLECTION("http://imeji.mpdl.mpg.de/collection"),

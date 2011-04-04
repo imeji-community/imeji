@@ -55,29 +55,6 @@ public class DepositController
         	img.getProperties().setStatus(Status.RELEASED);
         imageController.create(img, collection.getId());
 
-        
-//        String taskParam = "<param last-modification-date=\""
-//                + item.getItemDocument().getItem().getLastModificationDate()
-//                + "\"><comment>Submit for upload.</comment></param>";
-//        String lastModificationDate = ServiceLocator.getItemHandler(userHandle).submit(
-//                item.getItemDocument().getItem().getObjid(), taskParam);
-//        ResultDocument rdoc = ResultDocument.Factory.parse(lastModificationDate);
-//        taskParam = "<param last-modification-date=\"" + rdoc.getResult().getLastModificationDate() + "\"><url>"
-//                + ServiceLocator.getFrameworkUrl() + "ir/item/" + item.getItemDocument().getItem().getObjid()
-//                + "</url></param>";
-//        lastModificationDate = ServiceLocator.getItemHandler(userHandle).assignObjectPid(
-//                item.getItemDocument().getItem().getObjid(), taskParam);
-//        rdoc = ResultDocument.Factory.parse(lastModificationDate);
-//        taskParam = "<param last-modification-date=\"" + rdoc.getResult().getLastModificationDate() + "\"><url>"
-//                + ServiceLocator.getFrameworkUrl() + "ir/item/" + item.getItemDocument().getItem().getObjid()
-//                + ":1</url></param>";
-//        lastModificationDate = ServiceLocator.getItemHandler(userHandle).assignVersionPid(
-//                item.getItemDocument().getItem().getObjid(), taskParam);
-//        rdoc = ResultDocument.Factory.parse(lastModificationDate);
-//        taskParam = "<param last-modification-date=\"" + rdoc.getResult().getLastModificationDate()
-//                + "\"><comment>Release for upload.</comment></param>";
-//        lastModificationDate = ServiceLocator.getItemHandler(userHandle).release(
-//                item.getItemDocument().getItem().getObjid(), taskParam);
         return itemXml;
     }
     

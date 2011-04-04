@@ -2,7 +2,6 @@ package de.mpg.imeji.image;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -10,18 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ocpsoft.pretty.PrettyContext;
 
+import de.mpg.imeji.album.AlbumBean;
+import de.mpg.imeji.album.AlbumImagesBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
-import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.Properties.Status;
 
 public class SelectedBean extends ImagesBean {
 	private int totalNumberOfRecords;
@@ -95,6 +95,31 @@ public class SelectedBean extends ImagesBean {
 		super.addToActiveAlbum();
 		return "pretty:";
 	}
+	
+	public String removeFromAlbum() throws Exception
+    {
+		this.update();
+    	AlbumImagesBean bean = (AlbumImagesBean) BeanHelper.getSessionBean(AlbumImagesBean.class);
+        AlbumController ac = new AlbumController(sb.getUser());
+        int count =0;
+        for (Image im : getImages())
+        {
+        	if (bean.getAlbum().getAlbum().getImages().contains(im.getId()))
+        	{
+        		bean.getAlbum().getAlbum().getImages().remove(im.getId());
+        		count++;
+        	}
+        }
+        BeanHelper.info(count + " images removed from album");
+        ac.update(bean.getAlbum().getAlbum());
+        AlbumBean activeAlbum = sb.getActiveAlbum();
+        if (activeAlbum != null && activeAlbum.getAlbum().getId().toString().equals(bean.getAlbum().getAlbum().getId().toString()))
+        {
+        	sb.setActiveAlbum(bean.getAlbum());
+        }
+        clearAll();
+        return "pretty:";
+    }
 
 	public String clearAll() 
 	{
@@ -107,10 +132,11 @@ public class SelectedBean extends ImagesBean {
 
 	}
 
-	public String deleteAll()
+	public String deleteAll() throws Exception
 	{
 		update();
 		super.deleteAll();
+		clearAll();
 		return "pretty:";
 	}
 

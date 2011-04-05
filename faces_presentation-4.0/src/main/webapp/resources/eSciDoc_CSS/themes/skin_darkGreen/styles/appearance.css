@@ -696,3 +696,6 @@ COLOR 4C4C4C was changed to 3C3C3C; - 2011-03-28
 	border-bottom-width: 0.10em; 
 	border-bottom-style: solid;
 }
+
+.full_area0 .noTopBorder { background-color:#3C3C3C; } /* erweitert 2011-03-30 */
+.pageBrowser { background-color:#262626; } /* erweitert 2011-03-30 */

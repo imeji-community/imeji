@@ -34,6 +34,11 @@
 							<artifactId>faces_presentation4</artifactId>
 							<contextRoot>/faces</contextRoot>
 						</webModule>
+						<webModule>
+							<groupId>de.mpg.escidoc.services</groupId>
+							<artifactId>common_presentation</artifactId>
+							<contextRoot>/common</contextRoot>
+						</webModule>
 						<!--  <webModule>
                             <groupId>de.mpg.escidoc.services</groupId>
                             <artifactId>cone_presentation</artifactId>
@@ -550,6 +555,13 @@
 			<groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
 			<version>3.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>de.mpg.escidoc.services</groupId>
+			<artifactId>common_presentation</artifactId>
+			<version>1.0.45-SNAPSHOT</version>
+			<type>war</type>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 	

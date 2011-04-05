@@ -108,6 +108,11 @@ public class Navigation implements Serializable
         applicationUrl = PropertyReader.getProperty("escidoc.faces.instance.url");
     }
 
+    public String getDomain()
+    {
+    	return applicationUrl.replaceAll("faces/", "");
+    }
+    
     public String getAboutUrl()
     {
         return applicationUrl + ABOUT.getFile();

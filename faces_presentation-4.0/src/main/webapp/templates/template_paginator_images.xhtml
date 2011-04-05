@@ -105,7 +105,7 @@
 			</h:panelGroup>
 		</h:panelGroup>
 		
-		<div id="preListHeader" class="full_area0 itemList noBorder" style="border-bottom-width: 0px !important; background: #484848;">
+		<div id="preListHeader" class="full_area0 itemList noBorder" style="border-bottom-width: 0px !important;">
 			
 			<h:panelGroup id="preListHeaderHistory"  styleClass="half_area0_p4 small_marginLIncl">
 				<a4j:repeat id="history" var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
@@ -249,26 +249,23 @@
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
 						
 						<!-- Album Selected --> 
-						<div class="cleaning"></div>
-						<h:panelGroup layout="block" styleClass="tileTitle2LinesArea">
-							<h:panelGroup styleClass="tiny_area1">
-								<span class="free_area0"> 
-									<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
-										<a4j:support event="onchange" reRender="preListHeaderSelected, imgFrame" />
-									</h:selectBooleanCheckbox> 
-								</span>
-							</h:panelGroup> 
-					
-							
-							<span class="medium_area0"> 
-								<span class="free_area0_p3 tileControlIconArea"> 
-									<h:outputLabel value="#{item.image.filename}" style="white-space:nowrap;" /><br />
-									<h:commandLink id="lnkAddToActiveAlbumInactive"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
-										<h:outputText value="#{lbl.add_to_album}" />
-									</h:commandLink> 
-								</span> 
+						
+						<h:panelGroup styleClass="tiny_checkbox">
+							<span class="free_area0"> 
+								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
+									<a4j:support event="onchange" reRender="preListHeaderSelected, imgFrame" />
+								</h:selectBooleanCheckbox> 
+							</span>
+						</h:panelGroup> 
+						
+						<span class="medium_area0"> 
+							<span class="free_area0_p3 tileControlIconArea"> 
+								<h:outputLabel value="#{item.image.filename}" /><br />
+								<h:commandLink id="lnkAddToActiveAlbumInactive"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
+									<h:outputText value="#{lbl.add_to_album}" />
+								</h:commandLink> 
 							</span> 
-						</h:panelGroup>
+						</span> 
 											
 						<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
 						

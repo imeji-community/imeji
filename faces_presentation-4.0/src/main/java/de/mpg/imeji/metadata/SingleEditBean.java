@@ -35,7 +35,7 @@ public class SingleEditBean
 		this.profile = profile;
 		if (UrlHelper.getParameterBoolean("edit")) this.toggleState = "editMd";
 		else toggleState = "displayMd";
-		//this.init();
+		this.init();
 	}
 	
 	public void init()

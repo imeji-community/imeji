@@ -20,7 +20,7 @@ public class ViewMdProfileBean extends MdProfileBean
 
     }
 
-    public void init()
+    public String getInit()
     {
         if (init)
         {
@@ -41,7 +41,8 @@ public class ViewMdProfileBean extends MdProfileBean
             }
             init = false;
         }
-        super.init();
+        super.getInit();
+        return "";
     }
 
     public String save()

@@ -239,7 +239,7 @@
 									<h:graphicImage alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
 								</h:outputLink>
 								
-								<rich:toolTip id="imgEditToolTip" styleClass="xDouble_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="200">
+								<rich:toolTip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="200">
 									<ui:include src="../picturesPages/ui/MetadataPopup.xhtml">
 									</ui:include>
 								</rich:toolTip>
@@ -249,23 +249,26 @@
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
 						
 						<!-- Album Selected --> 
-						<h:panelGroup styleClass="tiny_area1">
-							<span class="free_area0"> 
-								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
-									<a4j:support event="onchange" reRender="preListHeaderSelected, imgFrame" />
-								</h:selectBooleanCheckbox> 
-							</span>
-						</h:panelGroup> 
-						
-						<span class="medium_area0"> 
-							<span class="free_area0_p3 tileControlIconArea"> 
-								<h:outputLabel value="#{item.image.filename}" style="white-space:nowrap;" /><br />
-								<h:commandLink id="lnkAddToActiveAlbumInactive"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
-									<h:outputText value="#{lbl.add_to_album}" />
-								</h:commandLink> 
+						<div class="cleaning"></div>
+						<h:panelGroup layout="block" styleClass="tileTitle2LinesArea">
+							<h:panelGroup styleClass="tiny_area1">
+								<span class="free_area0"> 
+									<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
+										<a4j:support event="onchange" reRender="preListHeaderSelected, imgFrame" />
+									</h:selectBooleanCheckbox> 
+								</span>
+							</h:panelGroup> 
+					
+							
+							<span class="medium_area0"> 
+								<span class="free_area0_p3 tileControlIconArea"> 
+									<h:outputLabel value="#{item.image.filename}" style="white-space:nowrap;" /><br />
+									<h:commandLink id="lnkAddToActiveAlbumInactive"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
+										<h:outputText value="#{lbl.add_to_album}" />
+									</h:commandLink> 
+								</span> 
 							</span> 
-						</span> 
-						
+						</h:panelGroup>
 											
 						<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
 						

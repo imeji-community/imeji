@@ -3,28 +3,22 @@ package de.mpg.imeji.collection;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
-
-import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ComplexType;
-import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
+import de.mpg.jena.vo.MetadataProfile;
 
 public class CollectionSessionBean
 {
     // Collection active (image browsed are in that collection)
     private CollectionImeji active = null;
     private MetadataProfile profile = null;
-    private SessionBean sessionBean = null;
     private String selectedMenu = "SORTING";
     private String filter = "all";
     private List<ComplexType> metadataTypes = null;
 
     public CollectionSessionBean()
     {
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         try
         {
             init();

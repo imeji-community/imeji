@@ -1,5 +1,10 @@
 package de.mpg.imeji.mdProfile;
 
+import java.io.IOException;
+
+import javax.faces.context.FacesContext;
+
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.util.BeanHelper;
@@ -12,6 +17,7 @@ public class EditMdProfileBean extends MdProfileBean
     private CollectionSessionBean collectionSession;
     private ProfileController profileController;
     private boolean init = false;
+    private String colId = null;
 
     public EditMdProfileBean()
     {
@@ -19,12 +25,15 @@ public class EditMdProfileBean extends MdProfileBean
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         profileController = new ProfileController(session.getUser());
-        init = UrlHelper.getParameterBoolean("init");
+       
     }
 
-    public void init()
+    public String getInit()
     {
-        if (init)  
+    	String col = UrlHelper.getParameterValue("col");
+    	if (col != null && !"".equals(col)) colId = col;
+    	init = UrlHelper.getParameterBoolean("init");
+    	if (init)  
         {
             if (this.getId() != null)
             {
@@ -44,10 +53,19 @@ public class EditMdProfileBean extends MdProfileBean
             }
             init = false;
         }
-        super.init();
+        super.getInit();
+        return "";
     }
-
-    public String save()
+    
+    public String cancel() throws IOException
+    {
+    	Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    	if (colId != null)
+    		FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + "/collection/" + colId + "/details?init=1");
+        return "";
+    }
+    
+    public String save() throws IOException
     {
         if(validateProfile(this.getProfile()))
         {
@@ -61,8 +79,8 @@ public class EditMdProfileBean extends MdProfileBean
   			}
             BeanHelper.info("Metadata Profile updates successfully!");
         }
-        
-        return "pretty:";
+        cancel();
+        return "";
     }
 
     @Override

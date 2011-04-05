@@ -2,6 +2,9 @@ package de.mpg.imeji.collection;
 
 import java.util.LinkedList;
 
+import javax.faces.context.FacesContext;
+
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
@@ -73,7 +76,9 @@ public class EditCollectionBean extends CollectionBean
             collectionController.update(super.getCollection());
             BeanHelper.info("collection_success_save");
         }
-        return "pretty:collections";
+        Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + getCollection().getId().getPath() + "/details?init=1");
+        return "";
     }
 
     @Override

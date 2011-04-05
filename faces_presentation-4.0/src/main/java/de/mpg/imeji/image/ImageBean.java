@@ -49,7 +49,7 @@ public class ImageBean
     private SingleEditBean edit;
     protected String prettyLink;
 
-    public ImageBean(Image img)
+    public ImageBean(Image img) throws Exception
     {
         this.image = img;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -79,10 +79,12 @@ public class ImageBean
         imageController = new ImageController(sessionBean.getUser());
         collectionController = new CollectionController(sessionBean.getUser());
         prettyLink = "pretty:editImage";
+       
     }
 
     public void init() throws Exception
     {
+    	System.out.println("init");
         try 
         {
         	if (id != null)	image = imageController.retrieve(id);

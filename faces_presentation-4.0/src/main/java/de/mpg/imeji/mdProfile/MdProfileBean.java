@@ -77,7 +77,7 @@ public class MdProfileBean
         collectionSession.setProfile(profile);
     }
     
-    public void init()
+    public String getInit()
     {
     	for (ComplexTypes t : ComplexTypes.values())
     	{
@@ -90,6 +90,7 @@ public class MdProfileBean
     	if (UrlHelper.getParameterBoolean("reset")) reset();
         loadtemplates();
         setStatementWrappers(profile);
+        return "";
     }
 
     public void setStatementWrappers(MetadataProfile mdp)
@@ -225,7 +226,7 @@ public class MdProfileBean
     public String addConstraint()
     {
         Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
-        if (getConstraintPosition() == 0)
+        if (getConstraintPosition() == 0 || getConstraintPosition() >= st.getLiteralConstraints().size())
             ((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", "eng"));
         else
             ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition(), new LocalizedString("","eng"));

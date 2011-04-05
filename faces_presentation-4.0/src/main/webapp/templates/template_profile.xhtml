@@ -12,7 +12,7 @@
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">					
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="#{lbl.metadata_profile}"/>
+						<h:outputText value="#{lbl.metadata_profile}#{FormularBean.init}"/>
 					</h3>
 					<span class="seperator"></span>
 					
@@ -129,9 +129,7 @@
 				</h:panelGroup>
 					
 				<div class="full_area0 formButtonArea">
-					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
-						<h:outputText value="#{lbl.reset}" />
-					</h:outputLink>			
+					<h:commandButton action="#{FormularBean.cancel}" value="#{lbl.reset}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl"/>		
 					<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
 				</div>
 					

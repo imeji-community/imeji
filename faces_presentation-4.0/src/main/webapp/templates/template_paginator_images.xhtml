@@ -107,7 +107,7 @@
 		
 		<div id="preListHeader" class="full_area0 itemList noBorder" style="border-bottom-width: 0px !important;">
 			
-			<h:panelGroup id="preListHeaderHistory"  styleClass="half_area0_p4 small_marginLIncl">
+			<h:panelGroup id="preListHeaderHistory"  styleClass="xHuge_area0_p4 small_marginLIncl">
 				<a4j:repeat id="history" var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
 					<h:panelGroup rendered="#{index + 6 &gt; HistorySession.historySize}">
 						<h:outputLink value="#{page.uri}">
@@ -119,7 +119,7 @@
 					</h:panelGroup>
 				</a4j:repeat>
 			</h:panelGroup>
-			<h:panelGroup styleClass="half_area0_p2 small_marginLIncl clear">
+			<h:panelGroup styleClass="xHuge_area0_p2 small_marginLIncl clear">
 				<h:outputText value="All " styleClass="free_area0" />
 				<a4j:repeat id="filterList" var="filter" value="#{FiltersSession.filters}" rows="0" rowKeyVar="index">
 					<h:outputText value=" / " styleClass="free_area0"/>
@@ -164,7 +164,7 @@
 			</h:panelGroup>
 			
 		
-			<h:panelGroup styleClass="free_area0_p2 huge_marginLIncl">
+			<h:panelGroup styleClass="free_area0_p2 double_marginLIncl">
 				<h:panelGroup id="preListHeaderSelected">
 					<h:outputText value="#{SessionBean.selectedSize} #{lbl.selected} " styleClass="free_area0 "/>
 				</h:panelGroup>
@@ -204,52 +204,53 @@
 		</h:panelGroup>
 
 		<h:panelGroup layout="block" styleClass="full_area0 noTopBorder"  rendered="#{!paginatorListSessionBean.corruptedList}">
-			<table class="itemList">
-			    <tr class="full_area0">
-			      	<th class="free_area0 endline status statusArea small_marginLIncl">
+			<div class="full_area0 itemList">
+				<div class="full_area0 listHeader">
+					<span class="small_area0">&#160;</span>
+					<span class="seperator"></span>
+					<span class="free_area0_p8 endline">
 						<h:outputText value="#{lbl.select}" />
-					</th>
-					<th class="free_area0_p8 endline itemSelectArea">
-			      		<input type="button" class="min_imgBtn checkboxSelectButton"/>
-						<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none; width:150px;">
-							<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
+						<input type="button" class="min_imgBtn checkboxSelectButton" title="Tooltip"/>
+						<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none;">
+							<input type="button" class="min_imgBtn checkBoxCloseSelectButton" title="Close selection menu" />
+							<span class="medium_area0_p8">Select Item:</span>
 							<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
-								<span class="medium_area0_p8"><h:outputText value="#{lbl.all_on_page}"/></span>
+								<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
 							</h:commandLink>
-
 							<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
-								<span class="medium_area0_p8"><h:outputText value="#{lbl.none}"/></span>
+								<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
 							</h:commandLink>
 						</div>
 						&#160;
-			      	</th>
-				</tr>
-			</table>
-
+					</span>
+				</div>
+			</div>
+			
 			<div class="small_area0">&#160;</div>
-
+			
+			<div class="clear"></div>
+			
 			<ul class="free_area0 fullBrowse small_marginLIncl noTopBorder">
 				<!-- Images -->
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 					<li class="large_area0 itemTile">
 						
-							<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'} free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
-								<!-- Image with link to the details view --> 
-								<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
-									<h:graphicImage alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
-								</h:outputLink>
-								
-								<rich:toolTip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="200">
-									<ui:include src="../picturesPages/ui/MetadataPopup.xhtml">
-									</ui:include>
-								</rich:toolTip>
-														
-							</h:panelGroup> 
+						<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'} free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
+							<!-- Image with link to the details view --> 
+							<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
+								<h:graphicImage alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
+							</h:outputLink>
+							
+							<rich:toolTip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="200">
+								<ui:include src="../picturesPages/ui/MetadataPopup.xhtml">
+								</ui:include>
+							</rich:toolTip>
+													
+						</h:panelGroup> 
 						
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
 						
 						<!-- Album Selected --> 
-						
 						<h:panelGroup styleClass="tiny_checkbox">
 							<span class="free_area0"> 
 								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
@@ -260,10 +261,13 @@
 						
 						<span class="medium_area0"> 
 							<span class="free_area0_p3 tileControlIconArea"> 
-								<h:outputLabel value="#{item.image.filename}" /><br />
+								<h:outputLabel value="#{item.image.filename}" />
+							<ui:remove>
+								<br />
 								<h:commandLink id="lnkAddToActiveAlbumInactive"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
 									<h:outputText value="#{lbl.add_to_album}" />
-								</h:commandLink> 
+								</h:commandLink>
+							</ui:remove> 
 							</span> 
 						</span> 
 											

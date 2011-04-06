@@ -35,11 +35,11 @@
 
 <f:subview id="Details">
 
-<div class="vertDist075 linebreak"> </div>
+<div class="marginTExcl075 linebreak"> </div>
 
 <div class="quad_area_p6">
 	
-	<h:panelGroup layout="block" class="xLarge_area0_p4 txtRight noPaddingTopBottom invisible">.</h:panelGroup>
+	<h:panelGroup layout="block" class="xLarge_area0_p4 noPaddingTopBottom" style="visibility:hidden;">.</h:panelGroup>
 	
 	<h:panelGroup layout="block" class="double_area0_p0 xTiny_marginLExcl">
 		<h:panelGroup styleClass="viewFileIcon">
@@ -55,12 +55,12 @@
 		</h:panelGroup>
 	</h:panelGroup>
 	
-	<div class="vertDist075 linebreak"> </div>
-	<div class="vertDist075 linebreak"> </div>
-	<div class="vertDist075 linebreak"> </div>
+	<div class="marginTExcl075 linebreak">&#160;</div>
+	<div class="marginTExcl075 linebreak">&#160;</div>
+	<div class="marginTExcl075 linebreak">&#160;</div>
 	
 	<h:panelGroup layout="block" class="quad_area0_p0">
-		<h:panelGroup styleClass="xLarge_area0_p4 txtRight noPaddingTopBottom">
+		<h:panelGroup styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
 			<h:outputText value="#{lbl.name}"/>
 		</h:panelGroup>
 		
@@ -69,11 +69,11 @@
 		</h:panelGroup>
 	</h:panelGroup>
 	
-	<div class="vertDist075 linebreak"> </div>
+	<div class="marginTExcl075 linebreak"> </div>
 	
 	<a4j:repeat var="md" value="#{item.image.metadataSet.metadata}" rows="0">
 		<h:panelGroup layout="block" styleClass="quad_area0_p0">
-			<h:panelGroup styleClass="xLarge_area0_p4 txtRight noPaddingTopBottom">
+			<h:panelGroup styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
 				<h:outputText value="#{MetadataLabels.labels[md.namespace]}"/>
 			</h:panelGroup>
 			<h:panelGroup layout="block" class="double_area0_p0 xTiny_marginLExcl">
@@ -102,7 +102,7 @@
 		
 	</a4j:repeat>
 	
-	<div class="vertDist075 linebreak"> </div>
+	<div class="marginTExcl075 linebreak"> </div>
 
 
 	</div>

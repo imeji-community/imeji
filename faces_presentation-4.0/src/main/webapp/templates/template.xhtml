@@ -88,7 +88,8 @@
 							<div class="clear">
 								
 								<div class="headerSection">
-									<div class="clear breadcrumb">
+									<div class="clear breadcrumb">&#160;
+										<ui:remove>
 										<h:panelGroup layout="block" styleClass="half_area8">
 											<a4j:repeat id="breadcrumb" var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
 												<h:panelGroup rendered="#{index + 6 &gt; HistorySession.historySize}">
@@ -101,7 +102,9 @@
 												</h:panelGroup>
 											</a4j:repeat>
 										</h:panelGroup>
+										</ui:remove>
 									</div>
+									
 									<div id="contentSkipLinkAnchor" class="clear headLine">
 										<!-- Headline starts here, taken from facelets parameter -->
 										<ui:insert name="headline"><h1><h:outputText value="#{headline}" /></h1></ui:insert>

@@ -90,25 +90,50 @@
 			
 			
 			<ui:define name="mainContent">
+				
+				<div id="preListHeader" class="full_area0 itemList" style="border-bottom-width: 0px !important;">
+					<h:panelGroup id="preListHeaderHistory"  styleClass="xHuge_area0_p4 small_marginLIncl">
+						<a4j:repeat id="history" var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
+							<h:panelGroup rendered="#{index + 6 &gt; HistorySession.historySize}">
+								<h:outputLink value="#{page.uri}">
+									<h:outputText value="#{page.name}"/>
+								</h:outputLink>
+								<span style="padding-left: 1px" />
+								<h:outputText value=" / "/>
+								<span style="padding-left: 1px" />
+							</h:panelGroup>
+						</a4j:repeat>
+					</h:panelGroup>
+				</div>
+				
 				<h:panelGroup layout="block" styleClass="full_area0">
 					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-							<h:panelGroup styleClass="full_area1_p8">
+						<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+							<ui:remove>
+								<!-- COLLECTION TITLE -->
+							<h:panelGroup styleClass="full_area0_p8">
 								<h1><h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> </h1>
 							</h:panelGroup>
-							<h:panelGroup styleClass="full_area1_p8">
-							<a4j:repeat var="img" value="#{ViewCollectionBean.images}">
-								
-									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
-								
-							</a4j:repeat>
-							<h2>
-								<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}?q=">
-									<h:outputText value ="#{lbl.collection_view_all_images}"/>
+							</ui:remove>
+							
+							<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
+								<!-- COLLECTION IMAGES -->
+								<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
+								<a4j:repeat var="img" value="#{ViewCollectionBean.images}">
+										<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
+								</a4j:repeat>
 								</h:outputLink>
-							</h2>
+								<h2>
+									<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}?q=">
+										<h:outputText value ="#{lbl.collection_view_all_images}"/>
+									</h:outputLink>
+								</h2>
 							</h:panelGroup>
-							<h:panelGroup styleClass="full_area1_p8">
+							
+							<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
+								<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
+									<h1><h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/></h1>
+								</h:panelGroup>
 								<h:panelGroup styleClass="half_area0">
 									<h:outputText escape="false" value="#{ViewCollectionBean.formattedDescription}"/>
 								</h:panelGroup>

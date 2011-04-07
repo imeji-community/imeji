@@ -38,14 +38,20 @@
 					<h:outputText value="Imeji - #{HistorySession.currentPage}"/></title>
 				<link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
 				
+				<ui:remove>
 				<!--
-				
 				<link rel="stylesheet" href="#{Navigation.domain}common/resources/cssFramework/main.css" type="text/css" />
 				-->
-				<link rel="stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_darkGrey/styles/theme.css" id="DarkGreyTheme" title="dark grey" type="text/css"/>
+				</ui:remove>
+				
+				<link rel="stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_darkGrey/styles/theme.css" id="DarkGreyTheme" title="dark grey" type="text/css" media="all"/>
 				<link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_highContrast/styles/theme.css" id="highContrastTheme" title="high contrast" type="text/css" />
 				<link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_classic/styles/theme.css" id="classicTheme" title="classic" type="text/css" />
 				
+				
+				
+				
+				<ui:remove>
 				<!--
 				<link rel="shortcut icon" type="image/x-icon" href="#{Navigation.applicationUrl}resources/icon/escidoc.ico" />
 				
@@ -57,6 +63,8 @@
 				
 				<link href="#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css" type="text/css" media="screen" rel="stylesheet"/>
 				-->
+				</ui:remove>
+				
 				<meta http-equiv="pragma" content="no-cache"/>
 				<meta http-equiv="cache-control" content="no-cache"/>
 				<meta http-equiv="expires" content="0"/>

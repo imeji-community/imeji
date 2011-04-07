@@ -45,23 +45,20 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
     @Override
     public List<AlbumBean> retrieveList(int offset, int limit)
     {
-        UserController uc = new UserController(sb.getUser());
-        sb.setUser(uc.retrieve(sb.getUser().getEmail()));
     	AlbumController controller = new AlbumController(sb.getUser());
         
         Collection<Album> albums = new ArrayList<Album>();
 
         try
         {
-        
-        SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
-        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        
-        totalNumberOfRecords = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset).size();
-        
-       
-        albums = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
+	        SortCriterion sortCriterion = new SortCriterion();
+	        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+	        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+	        
+	        totalNumberOfRecords = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset).size();
+	        
+	       
+	        albums = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
         }
         catch (Exception e)
         {

@@ -32,6 +32,11 @@ public class FiltersBean
 			filters = setRemoveQueries(filters, q);
 			
 			fs.setFilters(filters);
+			if (!q.contains(fs.getWholeQuery()) || "".equals(q)) 
+			{
+				fs.getNoResultsFilters().clear();
+			}
+			fs.setWholeQuery(q);
 		}
 	}
 	

@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -147,6 +148,22 @@ public class ImageController extends ImejiController
         String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/image", "", "", -1, 0, user);
     	return ImejiSPARQL.execCount(query);
     }
+    
+    public int getNumberOfResults(List<SearchCriterion> scList, int limit) throws Exception
+    {
+    	additionalQuery = "";
+        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/image", "", "", limit, 0, user);
+    	return ImejiSPARQL.execCount(query);
+    }
+    
+    public int getNumberOfResults2(List<SearchCriterion> scList, int limit) throws Exception
+    {
+    	additionalQuery = "";
+        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+        String query = querySPARQL.createQuery(scList, null, "http://imeji.mpdl.mpg.de/image", "", "", limit, 0, user);
+    	return ImejiSPARQL.execCount2(query);
+    }
 
     public Collection<Image> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
             throws Exception
@@ -156,6 +173,16 @@ public class ImageController extends ImejiController
         String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/image", additionalQuery, "", limit, offset, user);
         return  ImejiSPARQL.execAndLoad(query, Image.class);
     }
+    
+    public LinkedList<String> searchURI(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+    	throws Exception
+	{
+		additionalQuery = "";
+		QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+		String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/image", additionalQuery, "", limit, offset, user);
+		return  ImejiSPARQL.exec(query);
+	}
+    
     public Collection<Image> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset, List<String> uris) throws Exception
 	{
 		additionalQuery = "";

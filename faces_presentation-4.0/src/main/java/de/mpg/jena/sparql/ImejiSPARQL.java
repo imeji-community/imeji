@@ -1,18 +1,13 @@
 package de.mpg.jena.sparql;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
-import javax.faces.model.ResultSetDataModel;
-
-import com.hp.hpl.jena.db.impl.ResultSetReifIterator;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -99,9 +94,7 @@ public class ImejiSPARQL
                 ResultSet results = qexec.execSelect();
                 for (;results.hasNext();) 
                 {
-                	QuerySolution qs = results.nextSolution();
-                	Resource r = qs.getResource("v2");
-                	if (r != null) resultList.add(r.toString());
+                	for (;results.hasNext();) resultList.add(resource(results).toString());
                 }
                 return resultList;
         } finally 
@@ -122,11 +115,29 @@ public class ImejiSPARQL
 		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
 		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;
 		ResultSet rs = qexec.execSelect();
+		int count = 0;
 		if (rs.hasNext())
 		{
-			return rs.next().getLiteral("?.1").getInt();
+			count = rs.next().getLiteral("?.1").getInt();
 		}
-		return 0;
+		qexec.close();
+		return count;
+	}
+	
+	public static int execCount2(String query)
+	{
+		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
+		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
+		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;
+        try 
+        {
+                ResultSet results = qexec.execSelect();
+                for (;results.hasNext();) resource(results);
+                return results.getRowNumber();
+        } finally 
+        {
+        	 qexec.close();
+        }
 	}
 	
 	public static Model execConstruct(String query)

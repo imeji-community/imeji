@@ -81,11 +81,6 @@ public class URLQueryTransformer
                 if (nsFilter[0].trim().equals("ANY_METADATA"))
                 {
                 	scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_FILENAME, value, Filtertype.REGEX));
-//               	 	scList.add(new SearchCriterion(Operator.OR,  ImejiNamespaces.IMAGE_METADATA_TEXT, value, Filtertype.REGEX));
-//               	 	scList.add(new SearchCriterion(Operator.OR,   ImejiNamespaces.IMAGE_METADATA_NUMBER, value, Filtertype.EQUALS_NUMBER));
-//                    scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME, value,  Filtertype.REGEX));
-//                    scList.add(new SearchCriterion(Operator.OR,  ImejiNamespaces.IMAGE_METADATA_PERSON_GIVEN_NAME, value, Filtertype.REGEX));
-//                    scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME, value,  Filtertype.REGEX));
                     scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_SEARCH, value,  Filtertype.REGEX));
                 }
                 else

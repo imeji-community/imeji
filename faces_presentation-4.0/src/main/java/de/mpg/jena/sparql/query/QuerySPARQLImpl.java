@@ -48,6 +48,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	{
 	 	init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
 		String query= "SELECT ?s count(DISTINCT ?s) WHERE {" + selectQuery + "} " + this.limit + " " + this.offset;
+		System.out.println(query);
 		return  query;
 	}
 	
@@ -136,7 +137,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	
 	private String printSortVariables()
 	{
-		String str ="";
+		String str = "";
 		for (QueryElement el : els.values())
 		{
 			if (el.getParent() != null)

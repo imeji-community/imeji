@@ -24,7 +24,6 @@ public class QueryElementFactory
 		findMandatoryElements();
 		findOptionalElements(scList);
 		findSortElement(scSort);
-		setOperatorNot();
 		for (QueryElement qe : els.values())
 		{
 			if (qe.getName().equals("http://imeji.mpdl.mpg.de/visibility")) qe.setOptional(false);
@@ -130,24 +129,7 @@ public class QueryElementFactory
 			
 		}
 	}
-	
-	private void setOperatorNot()
-	{
-//		for(QueryElement qe :els.values())
-//		{
-//			if (qe.isNot())
-//			{
-//				QueryElement lastParent = findLastParent(qe);
-//				if (lastParent != null) 
-//				{
-//					lastParent.setNot(true);
-//					qe.setNot(false);
-//				}
-//			}
-//		}
-	}
-	
-	
+		
 	
 	public String getElementName(String namespace)
 	{

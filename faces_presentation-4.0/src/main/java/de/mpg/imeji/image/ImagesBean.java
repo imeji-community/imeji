@@ -1,18 +1,12 @@
 package de.mpg.imeji.image;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
 
-import com.hp.hpl.jena.sparql.sse.Item;
-import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
-import com.hp.hpl.jena.tdb.store.GraphTDB;
-
 import de.mpg.imeji.album.AlbumBean;
-import de.mpg.imeji.album.AlbumImagesBean;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
@@ -22,7 +16,6 @@ import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
-import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -92,6 +85,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         {
 	    	ImageController controller = new ImageController(sb.getUser());
 	        images = new ArrayList<Image>();
+	        if (facets != null)facets.getFacets().clear(); 
 	        SortCriterion sortCriterion = new SortCriterion();
 	        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 	        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));

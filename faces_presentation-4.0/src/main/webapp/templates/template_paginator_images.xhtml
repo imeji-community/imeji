@@ -120,7 +120,9 @@
 				</a4j:repeat>
 			</h:panelGroup>
 			<h:panelGroup styleClass="xHuge_area0_p2 small_marginLIncl clear">
-				<h:outputText value="All " styleClass="free_area0" />
+				<h:outputLink value="?q=">
+					<h:outputText value="All " styleClass="free_area0" />
+				</h:outputLink>
 				<a4j:repeat id="filterList" var="filter" value="#{FiltersSession.filters}" rows="0" rowKeyVar="index">
 					<h:outputText value=" / " styleClass="free_area0"/>
 					<h:outputText value="#{filter.label} " styleClass="free_area0"/>
@@ -143,7 +145,7 @@
 					<h:outputText value="Remove" styleClass="free_area0"/>
 				</a4j:commandLink>
 				
-				<h:panelGroup rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}">
+				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}">
 					<input type="button" class="min_imgBtn checkboxSelectButton"/>
 					
 					<div class="selectMenu" style="display: none; width:150px;" >
@@ -164,7 +166,7 @@
 			</h:panelGroup>
 			
 		
-			<h:panelGroup styleClass="free_area0_p2 double_marginLIncl">
+			<h:panelGroup styleClass="free_area0_p2 double_marginLIncl" rendered="#{SessionBean.user != null}">
 				<h:panelGroup id="preListHeaderSelected">
 					<h:outputText value="#{SessionBean.selectedSize} #{lbl.selected} " styleClass="free_area0 "/>
 				</h:panelGroup>
@@ -204,7 +206,7 @@
 		</h:panelGroup>
 
 		<h:panelGroup layout="block" styleClass="full_area0 noTopBorder"  rendered="#{!paginatorListSessionBean.corruptedList}">
-			<div class="full_area0 itemList">
+			<h:panelGroup layout="block"  styleClass="full_area0 itemList" rendered="SessionBean.user != null">
 				<div class="full_area0 listHeader">
 					<span class="small_area0">&#160;</span>
 					<span class="seperator"></span>
@@ -224,7 +226,7 @@
 						&#160;
 					</span>
 				</div>
-			</div>
+			</h:panelGroup>
 			
 			<div class="small_area0">&#160;</div>
 			
@@ -251,7 +253,7 @@
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
 						
 						<!-- Album Selected --> 
-						<h:panelGroup styleClass="tiny_checkbox">
+						<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null}">
 							<span class="free_area0"> 
 								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
 									<a4j:support event="onchange" reRender="preListHeaderSelected, imgFrame" />

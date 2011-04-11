@@ -75,6 +75,7 @@ public class CollectionImagesBean extends ImagesBean {
 	@Override
 	public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
 	{	
+		if (this.getFacets() != null) this.getFacets().getFacets().clear();
 		uri = ObjectHelper.getURI(CollectionImeji.class, id);
 		Collection<Image> images = new ArrayList<Image>();
 		SortCriterion sortCriterion = new SortCriterion();

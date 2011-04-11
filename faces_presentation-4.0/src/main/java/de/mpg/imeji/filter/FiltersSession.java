@@ -7,11 +7,7 @@ public class FiltersSession
 {
 	private List<Filter> filters = new ArrayList<Filter>();
 	private String wholeQuery = "";
-	
-	public FiltersSession() 
-	{
-		
-	}
+	private List<Filter> noResultsFilters = new ArrayList<Filter>();
 	
 	public boolean isFilter(String name)
 	{
@@ -19,6 +15,18 @@ public class FiltersSession
 		{
 			if (f.getLabel().equalsIgnoreCase(name)) return true;
 			if (f.getLabel().equalsIgnoreCase("no " + name)) return true;
+		}
+		return false;
+	}
+	
+	public boolean isNoResultFilter(String name)
+	{
+		for (Filter f : noResultsFilters)
+		{
+			if (f.getLabel().equalsIgnoreCase(name)) 
+			{
+				return true;
+			}
 		}
 		return false;
 	}
@@ -39,5 +47,12 @@ public class FiltersSession
 		this.wholeQuery = wholeQuery;
 	}
 	
+	public List<Filter> getNoResultsFilters() {
+		return noResultsFilters;
+	}
+	
+	public void setNoResultsFilters(List<Filter> noResultsFilters) {
+		this.noResultsFilters = noResultsFilters;
+	}
 	
 }

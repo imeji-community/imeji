@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -205,6 +206,26 @@ public class ImageController extends ImejiController
     	return ImejiSPARQL.execCount(query);
     }
     
+    public int getNumberOfResultsInContainer2(URI containerUri, List<SearchCriterion> scList) throws Exception
+    {
+    	additionalQuery = " . <" + containerUri.toString() + "> <http://imeji.mpdl.mpg.de/images> ?s";
+        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+        //String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/image", additionalQuery, "", limit, offset, user);
+        
+        String queryContainers = querySPARQL.createQuery(new ArrayList<SearchCriterion>(), null , "http://imeji.mpdl.mpg.de/image", additionalQuery, "", -1, 0, user);
+        LinkedList<String> all = ImejiSPARQL.exec(queryContainers);
+        
+        for (SearchCriterion c : scList) 
+		{
+			List<SearchCriterion> l = new ArrayList<SearchCriterion>();
+			l.add(c);
+			String q =  querySPARQL.createQuery(new ArrayList<SearchCriterion>(), null , "http://imeji.mpdl.mpg.de/image", "", "", -1, 0, user);
+			LinkedList<String> col =  ImejiSPARQL.exec(q);
+			List<String> inter = ListUtils.intersection(all, col);
+			all = new LinkedList<String>(inter);
+		}
+        return all.size();
+    }
 
     public Collection<Image> searchImageInContainer(URI containerUri, List<SearchCriterion> scList,
             SortCriterion sortCri, int limit, int offset) throws Exception
@@ -214,6 +235,38 @@ public class ImageController extends ImejiController
         String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/image", additionalQuery, "", limit, offset, user);
         return ImejiSPARQL.execAndLoad(query, Image.class);
     }
+    
+    public Collection<Image> searchImageInContainer2(URI containerUri, List<SearchCriterion> scList,
+            SortCriterion sortCri, int limit, int offset) throws Exception
+    {
+        additionalQuery = " . <" + containerUri.toString() + "> <http://imeji.mpdl.mpg.de/images> ?s";
+        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+        //String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/image", additionalQuery, "", limit, offset, user);
+        
+        String queryContainers = querySPARQL.createQuery(new ArrayList<SearchCriterion>(), sortCri , "http://imeji.mpdl.mpg.de/image", additionalQuery, "", -1, 0, user);
+        LinkedList<String> all = ImejiSPARQL.exec(queryContainers);
+        
+        for (SearchCriterion c : scList) 
+		{
+			List<SearchCriterion> l = new ArrayList<SearchCriterion>();
+			l.add(c);
+			String q =  querySPARQL.createQuery(new ArrayList<SearchCriterion>(), sortCri , "http://imeji.mpdl.mpg.de/image", "", "", -1, 0, user);
+			LinkedList<String> col =  ImejiSPARQL.exec(q);
+			List<String> inter = ListUtils.intersection(all, col);
+			all = new LinkedList<String>(inter);
+		}
+        
+        ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.imageModel);
+        LinkedList<Image> beans = new LinkedList<Image>();
+        int counter = 0;
+        for (String s : all)
+        {
+        	if (counter < limit) beans.add(reader.load(Image.class, s));
+        	counter ++;
+        }
+        return beans;
+    }
+    
     
     public void delete(Image img, User user) throws Exception
     {

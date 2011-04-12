@@ -20,6 +20,8 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.security.Security;
+import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
@@ -91,8 +93,8 @@ public class CollectionImagesBean extends ImagesBean {
 			BeanHelper.error("Invalid search query!");
 		}		
 		ImageController controller = new ImageController(sb.getUser());
-		totalNumberOfRecords = controller.getNumberOfResultsInContainer(uri, scList);
-		images = controller.searchImageInContainer(uri, scList, null, limit, offset);
+		totalNumberOfRecords = controller.getNumberOfResultsInContainer2(uri, scList);
+		images = controller.searchImageInContainer2(uri, scList, sortCriterion, limit, offset);
 		super.setImages(images);
 		filters = new FiltersBean(getQuery(), totalNumberOfRecords);
 		labels.init((List<Image>) images);
@@ -130,5 +132,23 @@ public class CollectionImagesBean extends ImagesBean {
 
 	public CollectionImeji getCollection() {
 		return collection;
+	}
+	
+	public boolean isEditable()
+    {
+    	Security security = new Security();
+    	return security.check(OperationsType.UPDATE, sb.getUser(), collection);
+    }
+
+	public boolean isVisible() 
+	{
+		Security security = new Security();
+		return security.check(OperationsType.READ, sb.getUser(), collection);
+	}
+	
+	public boolean isDeletable() 
+	{
+		Security security = new Security();
+		return security.check(OperationsType.DELETE, sb.getUser(), collection);
 	}
 }

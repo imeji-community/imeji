@@ -79,6 +79,7 @@ public class MdProfileBean
     
     public String getInit()
     {
+    	mdTypesMenu = new ArrayList<SelectItem>();
     	for (ComplexTypes t : ComplexTypes.values())
     	{
     		mdTypesMenu.add(new SelectItem(t.getURI(), t.name()));

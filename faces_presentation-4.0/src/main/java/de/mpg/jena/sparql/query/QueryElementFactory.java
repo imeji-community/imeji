@@ -36,7 +36,12 @@ public class QueryElementFactory
 	{
 		if (scSort != null)
 		{
-			if (scSort.getSortingCriterion().getParent() == null || !scSort.getSortingCriterion().getParent().getNs().equals(els.get(root).getNameSpace()))
+			if (scSort.getSortingCriterion().equals(ImejiNamespaces.CONTAINER_METADATA_TITLE))
+			{
+				addElement(new QueryElement("contMd", ImejiNamespaces.CONTAINER_METADATA.getNs(), els.get(root), false));
+				addElement(new QueryElement("sort0", ImejiNamespaces.CONTAINER_METADATA_TITLE.getNs(), els.get(ImejiNamespaces.CONTAINER_METADATA.getNs()), false));
+			}
+			else if (scSort.getSortingCriterion().getParent() == null || !scSort.getSortingCriterion().getParent().getNs().equals(els.get(root).getNameSpace()))
 			{	
 				addElement(new QueryElement("props", "http://imeji.mpdl.mpg.de/properties", els.get(root), false));
 				addElement(new QueryElement("sort0", scSort.getSortingCriterion().getNs(), els.get("http://imeji.mpdl.mpg.de/properties"), false));

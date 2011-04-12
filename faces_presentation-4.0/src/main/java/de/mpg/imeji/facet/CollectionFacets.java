@@ -2,15 +2,10 @@ package de.mpg.imeji.facet;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.collections.ListUtils;
-import org.apache.commons.collections.SetUtils;
-import org.apache.xml.security.utils.HelperNodeList;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
@@ -26,7 +21,6 @@ import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
@@ -53,7 +47,6 @@ public class CollectionFacets
 		scList.add(scColl);
 
 		FacetURIFactory uriFactory = new FacetURIFactory(scList);
-		long time = System.currentTimeMillis();
 		int count = 0;
 		for (Statement st : profile.getStatements()) 
 		{
@@ -72,7 +65,6 @@ public class CollectionFacets
 				else fs.getNoResultsFilters().add(new Filter("No " + getName(st.getName()), "", 0));
 			}
 		}
-		System.out.println("Facets done in " + Long.valueOf(System.currentTimeMillis() - time));
 	}
 
 	

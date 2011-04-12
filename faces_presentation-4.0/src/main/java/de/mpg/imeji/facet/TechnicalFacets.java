@@ -42,7 +42,6 @@ public class TechnicalFacets
 		try 
 		{
 			int count = 0;
-			long time = System.currentTimeMillis();
 			if (sb.getUser() != null)
 			{	
 				if (!fs.isFilter("My images") && !fs.isNoResultFilter("My images"))
@@ -78,7 +77,6 @@ public class TechnicalFacets
 					count = 0;	
 				}
 			}
-			System.out.println("Facets done in " + Long.valueOf(System.currentTimeMillis() - time));
 		} 
 		catch (UnsupportedEncodingException e) 
 		{

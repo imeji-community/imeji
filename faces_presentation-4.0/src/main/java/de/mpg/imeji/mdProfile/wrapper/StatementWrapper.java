@@ -68,7 +68,7 @@ public class StatementWrapper
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
             defaultLabel = event.getNewValue().toString();
-            statement.setName(URI.create(profile + "/"+ defaultLabel));
+            statement.setName(URI.create(profile + "/"+ defaultLabel.replace(" ", "_")));
             statement.getLabels().clear();
             statement.getLabels().add(new LocalizedString(defaultLabel, "eng"));
         }

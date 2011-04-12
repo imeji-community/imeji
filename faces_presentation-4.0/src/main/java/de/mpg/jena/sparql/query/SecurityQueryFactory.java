@@ -41,6 +41,11 @@ public class SecurityQueryFactory
 			 //v += " . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility";
 			 v += " . ?s <http://imeji.mpdl.mpg.de/collection> ?coll";
 		}
+		if ("http://imeji.mpdl.mpg.de/collection".equals(type) || "http://imeji.mpdl.mpg.de/album".equals(type))
+		{
+			 //v += " . ?s <http://imeji.mpdl.mpg.de/visibility> ?visibility";
+			 v += " . ?s <http://imeji.mpdl.mpg.de/container/metadata> ?contMd";
+		}
 		return v;
 	}
 	

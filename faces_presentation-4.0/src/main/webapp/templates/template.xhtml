@@ -34,8 +34,7 @@
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 
-				<title>
-					<h:outputText value="Imeji - #{HistorySession.currentPage}"/></title>
+				<title><h:outputText value="Imeji - #{HistorySession.currentPage}"/></title>
 				<link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
 				
 				<ui:remove>
@@ -44,6 +43,7 @@
 				-->
 				</ui:remove>
 				
+					
 				<link rel="stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_darkGrey/styles/theme.css" id="DarkGreyTheme" title="dark grey" type="text/css" media="all"/>
 				<link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_highContrast/styles/theme.css" id="highContrastTheme" title="high contrast" type="text/css" />
 				<link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_classic/styles/theme.css" id="classicTheme" title="classic" type="text/css" />
@@ -80,8 +80,11 @@
 				<script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_javascript.js" language="JavaScript" type="text/javascript">;</script>
 				<script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/jquery.shiftcheckbox.js" language="JavaScript" type="text/javascript">;</script>
 				<script>jQuery.noConflict();</script>
-
+				<script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/theme_cookie.js" language="JavaScript" type="text/javascript">;</script>
+			
 				<a4j:loadScript src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js" />
+				
+				
 				
 			</head>
 			
@@ -95,6 +98,7 @@
 		
 						<!-- import header -->
 						<ui:include src="/headerPages/Header.jspf" />
+						
 						<div id="content" class="full_area0 clear">
 						
 						
@@ -243,7 +247,8 @@
 				         else
 				              return true;
 				    }
-
+					
+					
 			    </script>			
 			</body>
 		</html>

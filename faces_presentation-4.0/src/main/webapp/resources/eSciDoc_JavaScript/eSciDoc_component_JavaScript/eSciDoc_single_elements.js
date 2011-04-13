@@ -111,60 +111,11 @@ var BrowserDetect = {
 
 BrowserDetect.init();
 
-/*EASTER EGG*/
-function bunny() {
-	if(BrowserDetect.browser == 'Firefox') {
-		$('.quickSearchTextInput').dblclick(function(){
-			if($(this).val() == 'PubWoman') {
-				showPubWomanStyle();
-			};
-		});
-	};
-}
 
-function raiseBunny() {
-	if(BrowserDetect.browser == 'Firefox') {
-		$($('link[id]')[0]).before('<link href="' + jsURL + 'eSciDoc_component_JavaScript/DateJS/easterEggs/skin_PubWoman/styles/theme.css" id="PubWomanTheme" type="text/css" rel="alternate stylesheet"/>');
-		applyCookieStyle();
-	};
-}
-
-function enableHiddenStyle(){
-	var now = new Date();
-	var exp = new Date(now.getTime() + (1000*60*60*24*30));
-	document.cookie = "enableHiddenSchemes=true;" +
-						"expires=" + exp.toGMTString() + ";" +
-						"path=/";
-}
-
-function setStyle(styleValue) {
-	if(document.getElementsByTagName) {
-		var el = document.getElementsByTagName("link");
-		for (var i = 0; i < el.length; i++ ) {
-			if (el[i].getAttribute("rel").indexOf("style") != -1 && el[i].getAttribute("id")) {
-				if(styleValue == el[i].getAttribute("id")){
-					el[i].disabled = false;
-				} else {
-					el[i].disabled = true;
-				}
-			}
-		}
-	}
-}
-
-function showPubWomanStyle() {
-	$('#PubWomanTheme').attr('title','PubWoman');
-	enableHiddenStyle();
-	setStyle('PubWomanTheme');
-	alert('PubWoman style activated! Happy easter!');
-}
-
-raiseBunny();
 
 /*QUICK SEARCH INITIALISATION*/
 
 function addQuickSearchFunction(){
-	bunny();
 	$('.quickSearchTextInput').keyup(function(keyEvent){
 		if(keyEvent.keyCode == '13'){
 			$(this).parents('.searchMenu').find('.quickSearchBtn').click();

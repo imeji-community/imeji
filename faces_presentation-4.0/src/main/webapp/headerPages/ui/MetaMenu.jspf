@@ -85,7 +85,7 @@
 	<h:panelGroup styleClass="seperator"></h:panelGroup>
 
 	<h:outputLabel id="txtAccountUserName" styleClass="free_area0_p8 endline" value="#{SessionBean.user.name}" rendered="#{SessionBean.user != null}"></h:outputLabel>
-
+	<div class="half_area0"> <span id="themeSelector" class="xTiny_marginRExcl"></span> <label for="themeSelector" class="xTiny_marginRExcl">Theme: </label></div>
 	<!-- meta Menu ends here -->
 </span>
 	<script type="text/javascript">

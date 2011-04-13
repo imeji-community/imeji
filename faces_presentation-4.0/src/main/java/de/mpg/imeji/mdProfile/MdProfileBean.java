@@ -27,7 +27,6 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.UrlHelper;
-import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
@@ -170,7 +169,7 @@ public class MdProfileBean
         {
             BeanHelper.error(uri + " is not a valid URL");
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             BeanHelper.error(uri + " is not a valid URL");
         }

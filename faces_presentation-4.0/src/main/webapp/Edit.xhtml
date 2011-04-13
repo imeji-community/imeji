@@ -16,6 +16,9 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
+		<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
+		 	<ui:include src="./include/History.xhtml"></ui:include>
+		 </h:panelGroup>
 		<h:outputText value="#{EditImageMetadataBean.init}"/>
 		<h:panelGroup styleClass="full_area0 itemBlock" >	
 				
@@ -47,31 +50,31 @@
 		  						<f:selectItems value="#{EditImageMetadataBean.modeRadio}" />
 							</h:selectOneRadio>
 						</h:panelGroup>
-						<div class="half_area0 formButtonArea">
+						<h:panelGroup styleClass="half_area0 formButtonArea" rendered="#{EditImageMetadataBean.editType == 'selected'}">
 							<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="clear all"/>
 							<h:outputLink value="" styleClass="free_area1_p8 cancelButton medium_marginLIncl">
 									<h:outputText value="#{lbl.reset} changes" />
 							</h:outputLink>
 							<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 activeButton"  action="#{EditImageMetadataBean.addToAll}" value="Add to all"/>
-						</div>
+						</h:panelGroup>
 					</h:panelGroup>
 					
 					<br/>
 					<!-- SAVE BUTTON -->
-					<h:panelGroup styleClass="full_area0 preListHeader formButtonArea">
+					<h:panelGroup styleClass="full_area0 formButtonArea">
 						<h:panelGroup styleClass="full_area0 formButtonArea ">
 							<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton">
 								 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
 								<h:outputText value="#{lbl.cancel}" />
 							</h:outputLink>	
-							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.editor.save}" value="#{lbl.save}"/>
+							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.editor.save}" value="#{lbl.save}" rendered="#{EditImageMetadataBean.editType == 'selected'}"/>
+							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.addToAllAndSave}" value="#{lbl.save}" rendered="#{EditImageMetadataBean.editType == 'all'}"/>
 						</h:panelGroup>
 					</h:panelGroup>	
 					
-					
 					<!-- IMAGES -->
 					<h:panelGroup styleClass="full_area0">	
-			        	<h:panelGroup id="imagesMetadata" layout="block" styleClass="free_area0 endline">
+			        	<h:panelGroup id="imagesMetadata" layout="block" styleClass="free_area0 endline" rendered="#{EditImageMetadataBean.editType == 'selected'}">
 		        			<a4j:repeat id="imagesList" var="image" value="#{EditImageMetadataBean.editor.images}" rowKeyVar="indexImage">
 		        				<h:panelGroup styleClass="full_area0 itemBlock preListHeader">
 			        				<h:panelGroup styleClass="huge_area0">

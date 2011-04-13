@@ -1,6 +1,5 @@
 package de.mpg.imeji.history;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,19 +42,18 @@ public class HistorySession
 		if (newPage != null)
 		{
 			if (pages.isEmpty() || !pages.get(pages.size() - 1).getType().equals(newPage.getType()))
-			{
-				String uri = newPage.getUri().toString();
-				newPage.setUri(URI.create(uri + "&h=" + pages.size()));
-				
+			{		
 				if (id!= null)
 				{
-					if (id.length == 2) newPage.setName(newPage.getName() + " " + id[1]);
-					if (id.length == 1) newPage.setName(newPage.getName() + " " + id[0]);
+					if (id.length == 2) newPage.setName(newPage.getName() + " id " + id[1]);
+					if (id.length == 1) newPage.setName(newPage.getName() + " id " + id[0]);
 				}
 				
 				pages.add(newPage);
 			}
 		}
+
+		while (pages.size() > 10) pages.remove(0);
 	}
 	
 	public void remove(int pos)

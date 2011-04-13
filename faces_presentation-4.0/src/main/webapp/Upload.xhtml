@@ -32,68 +32,75 @@
 		</ui:define>		
 		
 		<ui:define name="mainContent">
-			<!-- Load Queue widget CSS and jQuery -->
-			<!-- style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style -->
-			<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-			<script type="text/javascript">
-				google.load("jquery", "1.3");
-			</script>
-			<!-- Thirdparty intialization scripts, needed for the Google Gears and BrowserPlus runtimes -->
-			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/gears_init.js"></script>
-			<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
 			
+			<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
+			 	<ui:include src="./include/History.xhtml"></ui:include>
+			 </h:panelGroup>
+			 
+				<!-- Load Queue widget CSS and jQuery -->
+				<!-- style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style -->
+				<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+				<script type="text/javascript">
+					google.load("jquery", "1.3");
+				</script>
+				<!-- Thirdparty intialization scripts, needed for the Google Gears and BrowserPlus runtimes -->
+				<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/gears_init.js"></script>
+				<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+				
+				
+				
+				<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
+				<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/plupload.full.min.js"></script>
+				<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/jquery.plupload.queue.min.js"></script>
+				
+				<script>
 			
-			
-			<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
-			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/plupload.full.min.js"></script>
-			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/jquery.plupload.queue.min.js"></script>
-			
-			<script>
-		
-			$(function() {
-				// Setup html5 version
-				$("#uploader").pluploadQueue({
-					// General settings
-					runtimes : 'gears,html5,silverlight,browserplus,html4',
-					url : location.pathname  + "?start=1",
-					//max_file_size : '10mb',
-					multi_selection : true,
-					//chunk_size : '1mb',
-					unique_names : false,
-					filters : [{
-						title : "Image files", 
-						extensions : "jpg,jpeg,gif,png,bmp,tif,JPG,JPEG,GIF,PNG"}
-						//{title : "Zip files", extensions : "zip"}
-					],
-			
-					// Resize images on clientside
-					//resize : {width : 320, height : 240, quality : 90},
-					});
-
-			});
-			</script>
-				<div class="full_area0 small_marginLExcl infoPage">
-					<div class="half_area0_p8 listBackground" style="width:41.15em;">
-						<div id="uploader" style="width: 450px; height: 330px;" class="half_area0_p0">You browser doesn't support native upload. Try Firefox 3 or Safari 4.</div>
-					</div>
-					<br style="clear: both"/>
-						
-					<br />
-					<div class="messageError" >	
+				$(function() {
+					// Setup html5 version
+					$("#uploader").pluploadQueue({
+						// General settings
+						runtimes : 'gears,html5,silverlight,browserplus,html4',
+						url : location.pathname  + "?start=1",
+						//max_file_size : '10mb',
+						multi_selection : true,
+						//chunk_size : '1mb',
+						unique_names : false,
+						filters : [{
+							title : "Image files", 
+							extensions : "jpg,jpeg,gif,png,bmp,tif,JPG,JPEG,GIF,PNG"}
+							//{title : "Zip files", extensions : "zip"}
+						],
+				
+						// Resize images on clientside
+						//resize : {width : 320, height : 240, quality : 90},
+						});
+	
+				});
+				</script>
+					<div class="full_area0 small_marginLExcl infoPage">
+					<br/>
+						<div class="half_area0_p8 listBackground" style="width:41.15em;">
+							<div id="uploader" style="width: 450px; height: 330px;" class="half_area0_p0">You browser doesn't support native upload. Try Firefox 3 or Safari 4.</div>
+						</div>
+						<br style="clear: both"/>
+							
 						<br />
-						<h:outputText value ="#{UploadBean.fNum} files failed:" rendered="#{UploadBean.fNum > 0}"/><br />
-						<a4j:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}" rowKeyVar="indexf">
-							<h:outputText value="#{fFile}" /><br />
-						</a4j:repeat>					
-					</div>
-					<div >
-						<h:outputText value="#{UploadBean.sNum} files uploaded successfully:" rendered="#{UploadBean.sNum > 0}"/><br />
-						<a4j:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}" rowKeyVar="indexs">
-							<h:outputText value="#{sFile}" /><br />
-						</a4j:repeat>
+						<div class="messageError" >	
+							<br />
+							<h:outputText value ="#{UploadBean.fNum} files failed:" rendered="#{UploadBean.fNum > 0}"/><br />
+							<a4j:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}" rowKeyVar="indexf">
+								<h:outputText value="#{fFile}" /><br />
+							</a4j:repeat>					
+						</div>
+						<div >
+							<h:outputText value="#{UploadBean.sNum} files uploaded successfully:" rendered="#{UploadBean.sNum > 0}"/><br />
+							<a4j:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}" rowKeyVar="indexs">
+								<h:outputText value="#{sFile}" /><br />
+							</a4j:repeat>
+						</div>
+	
 					</div>
 
-				</div>
 		</ui:define>
 		
 	</ui:composition>

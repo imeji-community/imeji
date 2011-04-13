@@ -45,10 +45,16 @@
 		<ui:define name="mainContent">
 		
 		<div id="advancedSearch">
-			<h:panelGroup layout="block" styleClass="full_area0" rendered="true" >
-
-				<h:panelGroup layout="block" styleClass="full_area0 fullItem"  >
+			<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
+				
+				<h:panelGroup layout="block" styleClass="full_area0 fullItem" style="border-top-width: 0px !important;">
+					
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+					
+						<h:panelGroup layout="block" styleClass="full_area0" >
+						 	<ui:include src="./include/History.xhtml"></ui:include>
+						 </h:panelGroup>
+						 
 						<h:panelGroup styleClass="full_area0 fullItemControls">
 							<h:outputLink value="">
 								<h:outputText value="#{lbl.images}"/>
@@ -56,7 +62,7 @@
 						</h:panelGroup>
 					</h:panelGroup>
 					
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" >
 						<!-- import search here -->		
 						<h:panelGroup rendered="#{not empty AdvancedSearchController.collectionCriterionController.collections}">
 							<!-- <ui:include src="searchPages/ui/AnyFieldCriterionSearch.xhtml"/>-->

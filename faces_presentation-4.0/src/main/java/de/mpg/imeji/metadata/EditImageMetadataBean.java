@@ -50,6 +50,7 @@ public class EditImageMetadataBean
 	//other
 	private int mdPosition;
 	private int imagePosition;
+	private String editType = "selected";
 	
 	public EditImageMetadataBean() 
 	{
@@ -83,21 +84,30 @@ public class EditImageMetadataBean
 		profile = getSelectedProfile();
 		statement = getSelectedStatement();
 		editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
+		
+		modeRadio = new ArrayList<SelectItem>();
+		modeRadio.add(new SelectItem("basic", "Write only when no values"));
+		if (this.statement.getMaxOccurs().equals("unbounded"))	modeRadio.add(new SelectItem("append", "Append a new value to all"));
+		modeRadio.add(new SelectItem("overwrite", "Overwrite all values"));
 		return "";
 	}
 	
 	public void initImagesBean() throws Exception
 	{
-		String typeString = (String) ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("type");
-		if ("selected".equals(typeString))
+		editType = (String) ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("type");
+		int elementsPerPage = 24;
+		if ("selected".equals(editType))
 		{
 			imagesBean = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
 		}
-		else if ("all".equals(typeString))
+		else if ("all".equals(editType))
 		{
 			imagesBean = (CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class);
+			elementsPerPage = imagesBean.getElementsPerPage();
+			imagesBean.setElementsPerPage(10000);
 		}
 		imagesBean.update();
+		imagesBean.setElementsPerPage(elementsPerPage);
 		profiles =  ProfileHelper.loadProfiles((List<Image>) imagesBean.getImages()).values();
 	}
 	
@@ -105,7 +115,6 @@ public class EditImageMetadataBean
 	{
 		statementMenu = new ArrayList<SelectItem>();
 		profileMenu = new ArrayList<SelectItem>();
-		modeRadio = new ArrayList<SelectItem>();
 		
 		for(MetadataProfile p : profiles)
 		{
@@ -117,9 +126,7 @@ public class EditImageMetadataBean
 			statementMenu.add(new SelectItem(s.getName().toString(), labelHelper.getDefaultLabel(s.getLabels().iterator())));
 		}
 		selectedMode = "basic";
-		modeRadio.add(new SelectItem("basic", "Write only when no values"));
-		modeRadio.add(new SelectItem("append", "Append a new value to all"));
-		modeRadio.add(new SelectItem("overwrite", "Overwrite all values"));
+		
 	}
 	
 	public String cancel()
@@ -160,6 +167,13 @@ public class EditImageMetadataBean
 			else if ("basic".equals(selectedMode))addMetadataIfNotExists(im, newMD);
 		}
 		metadata =  MetadataFactory.newMetadata(statement);
+		return "";
+	}
+	
+	public String addToAllAndSave()
+	{
+		addToAll();
+		editor.save();
 		return "";
 	}
 	
@@ -379,6 +393,14 @@ public class EditImageMetadataBean
 
 	public void setSelectedMode(String selectedMode) {
 		this.selectedMode = selectedMode;
+	}
+
+	public String getEditType() {
+		return editType;
+	}
+
+	public void setEditType(String editType) {
+		this.editType = editType;
 	}
 	
 	

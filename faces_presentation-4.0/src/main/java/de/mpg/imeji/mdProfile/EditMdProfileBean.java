@@ -78,8 +78,9 @@ public class EditMdProfileBean extends MdProfileBean
   				 BeanHelper.error("Error saving profile");
   			}
             BeanHelper.info("Metadata Profile updates successfully!");
+            cancel();
         }
-        cancel();
+       
         return "";
     }
 

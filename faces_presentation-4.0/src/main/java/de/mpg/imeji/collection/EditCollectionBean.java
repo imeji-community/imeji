@@ -75,9 +75,10 @@ public class EditCollectionBean extends CollectionBean
         {
             collectionController.update(super.getCollection());
             BeanHelper.info("collection_success_save");
+            Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + getCollection().getId().getPath() + "/details?init=1");
         }
-        Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + getCollection().getId().getPath() + "/details?init=1");
+        
         return "";
     }
 

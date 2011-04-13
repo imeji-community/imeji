@@ -44,9 +44,15 @@
 
 	<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-			<h:outputLink value="#{Navigation.imagesUrl}" styleClass="free_area1_p6 medium_marginLIncl">
+			
+			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" style="border-width: 0px !important;">
+			 	<ui:include src="./include/History.xhtml"></ui:include>
+			 </h:panelGroup>
+			
+			<h:outputLink value="#{Navigation.imagesUrl}" styleClass="free_area1_p6 small_marginLIncl">
 				<h:outputText value="#{lbl.images_all}"/>
 			</h:outputLink>
+			
 			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})" styleClass="free_area1_p6 xHuge_marginLIncl"/>
 		</h:panelGroup>
 	</ui:define>

@@ -498,8 +498,6 @@ function appendStylesheet(href) {
 	}
 }
 
-
-
 function checkForPublicHolidays() {
 	var check = null;
 	var days_left = 9999;
@@ -617,15 +615,13 @@ function checkForPublicHolidays() {
 }
 
 function checkLayout(){
-	
 	if (!mpdlCookie.getCookie('layoutUpdateDate')) {
 		mpdlCookie.eraseCookie("layout");
 		var timeOutDate = mpdlDate.getNextDate(mpdlCookie.cookieTimeout, mpdlDate.now('date'));
 		mpdlCookie.setCookie("layoutUpdateDate", mpdlDate.now('today_date'), null, timeOutDate.toGMTString());
 		mpdlCookie.setCookie("layout", mpdlCSS.getDefaultStylesheet(), null, timeOutDate.toGMTString());
-	} else {
-		mpdlCSS.enablePageStyle(mpdlCookie.getCookie('layout'))
 	}
+	mpdlCSS.enablePageStyle(mpdlCookie.getCookie('layout'))
 	
 	checkForPublicHolidays();
 }
@@ -636,6 +632,18 @@ function returnValuesFromDOM(dom_element) {
 	}
 }
 
+function collectInfo(dom_element) {
+	var infoEL = '';
+	for (info in dom_element) {
+		infoEL += info +': '+dom_element[info]+' - typeof: '+typeof(dom_element[info])+'\n';
+		if (typeof(dom_element[info] == 'object')) {
+			for (detailinfo in dom_element[info]) {
+				infoEL += '-'+detailinfo+': '+dom_element[info][detailinfo]+'\n';
+			}
+		}
+	}
+	alert(infoEL);
+}
 
 jQuery(document).ready(function() {
 	checkLayout();
@@ -646,4 +654,73 @@ jQuery(document).ready(function() {
 
 
 
+function checkActiveCss() {
+	var cookieCSS = mpdlCookie.getCookie('layout');
+	var activeStyle = '';
+	
+	var style = document.getElementsByTagName("link");
+	
+	for (var i = 0; i < style.length; i++ ) {
+		if (style[i].getAttribute("rel").toLowerCase().indexOf("style") != -1 && style[i].getAttribute("id") && style[i].getAttribute("id") != 'holidaytheme') {
+			if (!style[i].disabled) {
+				activeStyle = style[i].getAttribute("id");
+			}
+		}
+	}
+	
+	if (activeStyle != cookieCSS) {
+		var timeOutDate = mpdlDate.getNextDate(mpdlCookie.cookieTimeout, mpdlDate.now('date'));
+		mpdlCookie.setCookie("layout", activeStyle, null, timeOutDate.toGMTString());
+		mpdlCSS.createThemebox('#themeSelector');
+	}
+	setTimeout("checkActiveCss()", 500);
+} 
 
+
+
+
+
+setTimeout("checkActiveCss()", 1000);
+
+
+
+
+
+
+
+
+
+
+var userAG = jQuery.browser;
+if (userAG.mozilla) {
+//	returnValuesFromDOM(navigator);
+//	collectInfo(navigator.plugins);
+}
+
+/*
+ * constructor - O
+ * userAgent
+ * plugins - O
+ * appCodeName
+ * appName
+ * appVersion
+ * language
+ * mimeTypes - O
+ * platform
+ * oscpu
+ * vendor
+ * vendorSub
+ * product
+ * productSub
+ * securityPolicy
+ * cookieEnabled
+ * onLine
+ * buildID
+ * javaEnabled - function
+ * taintEnabled - function
+ * preference - function
+ * geolocation - O
+ * registerContentHandler - function
+ * registerProtocolHandler - function
+ * mozIsLocallyAvailable - function
+ */

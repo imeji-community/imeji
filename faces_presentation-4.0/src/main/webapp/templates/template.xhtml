@@ -78,12 +78,15 @@
 				</script>
 				
 				<script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_javascript.js" language="JavaScript" type="text/javascript">;</script>
+				<ui:remove>
 				<script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/jquery.shiftcheckbox.js" language="JavaScript" type="text/javascript">;</script>
+				</ui:remove>
 				<script>jQuery.noConflict();</script>
+				<ui:remove>
 				<script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/theme_cookie.js" language="JavaScript" type="text/javascript">;</script>
-			
-				<a4j:loadScript src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js" />
 				
+				<a4j:loadScript src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js" />
+				</ui:remove>
 				
 				
 			</head>

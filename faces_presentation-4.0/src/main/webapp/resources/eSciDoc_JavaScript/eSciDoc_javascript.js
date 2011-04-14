@@ -37,6 +37,9 @@ if(typeof jsURL=='undefined') {
 if(typeof coneURL=='undefined') {
 	var coneURL = '../../cone/';
 }
+if (typeof jsfURL == 'undefined') {
+	var jsfURL = './';
+}
 var hiddenThemesEnabled = false;
 
 function applyCookieStyle() {
@@ -161,20 +164,24 @@ function install_javascripts() {
 	installQuickSearchShortcut();
 	installDateTextbox();
 	installSameHeight();
-	bindSuggests();
-	
+//	bindSuggests();	//from autoSuggestFunctions.js
+	themeCookieInit();
 }
 
 /*INCLUDES EXTERNAL JAVASCRIPTS*/
 function include_javascripts() {
 	if(!included){
-		include_dom(jsURL + 'jquery/jquery.min.js');
+//		include_dom(jsURL + 'jquery/jquery.min.js');	// a double include from jQuery starts incompatibility, generates errors in webkit - image overlay	
+		include_dom(jsfURL + 'jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js');	//import the great jQuery library automatically
+		
+		include_dom(coneURL + 'js/jquery.suggest.js')
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_ext_paginator.js');
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_item_list.js');
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_full_item.js');
 		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_single_elements.js');
-		include_dom(coneURL + 'js/jquery.suggest.js')
-		include_dom(jsURL + 'autoSuggestFunctions.js');
+//		include_dom(jsURL + 'autoSuggestFunctions.js');									// not needed in imeji
+		include_dom(jsURL + 'theme_cookie.js');
+		include_dom(jsURL + 'jquery.shiftcheckbox.js');
 		
 		/*REITERATION NEEDED TO START ALL INCLUDED JAVASCRIPTS*/
 		included = true;
@@ -184,7 +191,7 @@ function include_javascripts() {
 		}
 }
 
-	include_javascripts();
+include_javascripts();
 
 // applyCookieStyle();
 // window.onunload=function(e){setStyleCookie();};

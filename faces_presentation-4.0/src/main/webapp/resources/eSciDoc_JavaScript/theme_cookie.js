@@ -644,12 +644,9 @@ function collectInfo(dom_element) {
 	}
 	alert(infoEL);
 }
+/*
 
-jQuery(document).ready(function() {
-	checkLayout();
-	mpdlCSS.createThemebox('#themeSelector');
-});
-
+*/
 
 
 
@@ -676,26 +673,27 @@ function checkActiveCss() {
 	setTimeout("checkActiveCss()", 500);
 } 
 
-
-
-
-
-setTimeout("checkActiveCss()", 1000);
-
-
-
-
-
-
-
-
-
-
-var userAG = jQuery.browser;
-if (userAG.mozilla) {
-//	returnValuesFromDOM(navigator);
-//	collectInfo(navigator.plugins);
+function themeCookieInit() {
+	jQuery(document).ready(function() {
+		checkLayout();
+		mpdlCSS.createThemebox('#themeSelector');
+	});
+	setTimeout("checkActiveCss()", 1000);
 }
+
+/*
+
+
+
+
+
+*/
+
+
+
+
+
+
 
 /*
  * constructor - O

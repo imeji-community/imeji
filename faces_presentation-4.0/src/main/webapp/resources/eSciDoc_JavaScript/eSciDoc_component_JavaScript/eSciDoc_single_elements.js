@@ -116,7 +116,7 @@ BrowserDetect.init();
 /*QUICK SEARCH INITIALISATION*/
 
 function addQuickSearchFunction(){
-	$('.quickSearchTextInput').keyup(function(keyEvent){
+	jQuery('.quickSearchTextInput').keyup(function(keyEvent){
 		if(keyEvent.keyCode == '13'){
 			$(this).parents('.searchMenu').find('.quickSearchBtn').click();
 		};
@@ -205,7 +205,7 @@ function addDateJSLabels() {
 	*</div>
 	*
 	*/
-	$(".dateJSInput").each(function(){
+	jQuery(".dateJSInput").each(function(){
 		var classNameString = $(this).attr("class");
 		var lengthValue;
 		var possibleLengthValues = classNameString.split(' ');
@@ -221,7 +221,7 @@ function addDateJSLabels() {
 }
 
 function addDateJSFunctions() {
-	$(".dateJSInput").each(function(){
+	jQuery(".dateJSInput").each(function(){
 		$(this).focus(function() {
 			var input_empty = "", empty_string = "";
 			
@@ -307,5 +307,5 @@ function installDateTextbox() {
 }
 
 function installSameHeight() {
-	$('.sameHeightSlave').each(function(i,elem){$(elem).height($('.sameHeightMaster').height());});
+	jQuery('.sameHeightSlave').each(function(i,elem){$(elem).height($('.sameHeightMaster').height());});
 }

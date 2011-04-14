@@ -184,9 +184,7 @@ function include_javascripts() {
 		}
 }
 
-window.onload = function(e){
 	include_javascripts();
-}
 
 // applyCookieStyle();
 // window.onunload=function(e){setStyleCookie();};

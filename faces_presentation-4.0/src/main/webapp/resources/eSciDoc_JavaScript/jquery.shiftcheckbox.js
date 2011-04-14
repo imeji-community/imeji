@@ -16,7 +16,7 @@
  * Copyright (c) 2009 Aditya Mooley <adityamooley@sanisoft.com>
  * Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses
  */
-
+if (typeof jQuery != 'undefined') {
 (function (jQuery) {
     jQuery.fn.shiftcheckbox = function()
     {
@@ -89,3 +89,4 @@
         return checkedIndex;
     };
 })(jQuery);
+}

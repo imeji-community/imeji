@@ -41,8 +41,8 @@ All rights reserved. Use is subject to license terms.
                     var jsURL = '<h:outputText value="#{Navigation.applicationUrl}"/>' + 'resources/eSciDoc_JavaScript/';
                 </script>
             </ui:remove>
-            <script src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js" language="JavaScript" type="text/javascript">
-            </script>
+			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js"></script>
+            <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
         </head>
         <body lang="#{SessionBean.locale}">
             <h:form id="formular">

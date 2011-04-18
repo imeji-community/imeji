@@ -21,7 +21,6 @@ function appendScript(link) {
 	document.getElementsByTagName('head')[0].appendChild(script);
 }
 
-appendScript(jsfURL + 'jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js');
 appendScript(coneURL + 'js/jquery.suggest.js');
 appendScript(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_ext_paginator.js');
 appendScript(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_item_list.js');

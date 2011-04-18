@@ -644,11 +644,6 @@ function collectInfo(dom_element) {
 	}
 	alert(infoEL);
 }
-/*
-
-*/
-
-
 
 
 function checkActiveCss() {
@@ -680,45 +675,3 @@ function themeCookieInit() {
 	});
 	setTimeout("checkActiveCss()", 1000);
 }
-
-/*
-
-
-
-
-
-*/
-
-
-
-
-
-
-
-/*
- * constructor - O
- * userAgent
- * plugins - O
- * appCodeName
- * appName
- * appVersion
- * language
- * mimeTypes - O
- * platform
- * oscpu
- * vendor
- * vendorSub
- * product
- * productSub
- * securityPolicy
- * cookieEnabled
- * onLine
- * buildID
- * javaEnabled - function
- * taintEnabled - function
- * preference - function
- * geolocation - O
- * registerContentHandler - function
- * registerProtocolHandler - function
- * mozIsLocallyAvailable - function
- */

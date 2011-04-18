@@ -301,7 +301,8 @@ function installDateTextbox() {
 	language = document.body.lang;
 	if(language != '') language = '-'+language;
 	/*INCLUDE RIGHT LANGUAGE HERE*/
-	include_dom(jsURL + 'eSciDoc_component_JavaScript/DateJS/date'+language+'.js');
+/*	include_dom(jsURL + 'eSciDoc_component_JavaScript/DateJS/date'+language+'.js'); */ //replaced with appendScript
+	appendScript(jsURL + 'eSciDoc_component_JavaScript/DateJS/date'+language+'.js');
 	addDateJSLabels();
 	addDateJSFunctions();
 }

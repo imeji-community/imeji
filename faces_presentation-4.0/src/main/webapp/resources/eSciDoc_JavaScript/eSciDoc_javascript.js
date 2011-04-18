@@ -27,7 +27,7 @@
 * Gesellschaft zur F�rderung der Wissenschaft e.V.
 * All rights reserved. Use is subject to license terms.
 */
-
+/*
 if(typeof cookieVersion=='undefined') {
 	var cookieVersion = "1.1";
 }
@@ -40,6 +40,7 @@ if(typeof coneURL=='undefined') {
 if (typeof jsfURL == 'undefined') {
 	var jsfURL = './';
 }
+
 var hiddenThemesEnabled = false;
 
 function applyCookieStyle() {
@@ -130,8 +131,8 @@ function setStyleCookie() {
 }
 
 var included = false;
-
- /*INCLUDES EXTERNAL JAVASCRIPT TO PAGE DOM*/
+*/
+ /*INCLUDES EXTERNAL JAVASCRIPT TO PAGE DOM*/ /*
 function include_dom(script_filename) {
     var html_doc = document.getElementsByTagName('head').item(0);
     var js = document.createElement('script');
@@ -141,23 +142,24 @@ function include_dom(script_filename) {
     html_doc.appendChild(js);
     return false;
 }
-
+*/
 /*ADDS MULTIPLE EVENTS TO A EVENTLISTENER*/
 function addEvent(obj, evType, fn){
- if (obj.addEventListener){
-   obj.addEventListener(evType, fn, false);
-   return true;
- } else if (obj.attachEvent){
-   var r = obj.attachEvent("on"+evType, fn);
-   return r;
- } else {
-   return false;
- }
+    if (obj.addEventListener) {
+        obj.addEventListener(evType, fn, false);
+        return true;
+    }
+    else if (obj.attachEvent) {
+        var r = obj.attachEvent("on" + evType, fn);
+        return r;
+    }
+    else {
+        return false;
+    }
 }
 
 /*START ALL EXTERNAL JAVASCRIPTS*/
 function install_javascripts() {
-	
 	installExtPaginator();
 	installItemList();
 	installFullItem();
@@ -168,7 +170,8 @@ function install_javascripts() {
 	themeCookieInit();
 }
 
-/*INCLUDES EXTERNAL JAVASCRIPTS*/
+/* INCLUDES EXTERNAL JAVASCRIPTS */ 
+ /*
 function include_javascripts() {
 	if(!included){
 //		include_dom(jsURL + 'jquery/jquery.min.js');	// a double include from jQuery starts incompatibility, generates errors in webkit - image overlay	
@@ -183,15 +186,19 @@ function include_javascripts() {
 		include_dom(jsURL + 'theme_cookie.js');
 		include_dom(jsURL + 'jquery.shiftcheckbox.js');
 		
-		/*REITERATION NEEDED TO START ALL INCLUDED JAVASCRIPTS*/
+		/*REITERATION NEEDED TO START ALL INCLUDED JAVASCRIPTS*/ /*
 		included = true;
 		include_javascripts();
 	} else {
 			addEvent(window, 'load', function(){window.setTimeout('install_javascripts()', 1);});
 		}
 }
+*/
 
-include_javascripts();
-
+//include_javascripts();
 // applyCookieStyle();
 // window.onunload=function(e){setStyleCookie();};
+
+
+
+addEvent(window, 'load', function(){window.setTimeout('install_javascripts()', 1);});

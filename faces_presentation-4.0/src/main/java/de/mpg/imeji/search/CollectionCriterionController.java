@@ -16,7 +16,8 @@ import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
-public class CollectionCriterionController implements Serializable {
+public class CollectionCriterionController implements Serializable 
+{
 	
 	private List<CollectionCriterion> collectionCriterionList;
 	private int collectionPosition;
@@ -108,18 +109,18 @@ public class CollectionCriterionController implements Serializable {
 	{
 		List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
 
-		for(CollectionCriterion collectionCriterion : collectionCriterionList) 
+		for(CollectionCriterion collectionCriterion : collectionCriterionList)
 		{ 
-		    SearchCriterion subSC = new SearchCriterion(Operator.AND, new ArrayList<SearchCriterion>());
+		    SearchCriterion subSC = new SearchCriterion(Operator.OR, new ArrayList<SearchCriterion>());
 		    
 			if(!(collectionCriterion.getSelectedCollectionId().equals("")))
 			{    
-			    SearchCriterion collSC = new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_COLLECTION, collectionCriterion.getSelectedCollectionId(), Filtertype.URI);
-			    scList.add(collSC);
+			    SearchCriterion collSC = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_COLLECTION, collectionCriterion.getSelectedCollectionId(), Filtertype.URI);
+			    subSC.getChildren().add(collSC);
 
 			    for(MDCriterion mdc : collectionCriterion.getMdCriterionList())
     			{
-    				if(!mdc.getMdText().equals("") && mdc.getSelectedMdName()!=null && !mdc.getSelectedMdName().equals("")) 
+    				if(!mdc.getMdText().equals("") && mdc.getSelectedMdName()!= null && !mdc.getSelectedMdName().equals("")) 
     				{ 
     					Operator op  = Operator.AND;
     					if (mdc.getLogicOperator() != null)
@@ -129,7 +130,7 @@ public class CollectionCriterionController implements Serializable {
     					
     					//Create Search criterion
     					SearchCriterion mdSC = new SearchCriterion(op, new ArrayList<SearchCriterion>());
-    					mdSC.setBound(true);
+
     					// Add metadata value
     					switch (ComplexTypeHelper.getComplexType(mdc.getSelectedStatement().getType()))
  				        {
@@ -168,10 +169,9 @@ public class CollectionCriterionController implements Serializable {
  				        		break;
  				        }
     					
-    				    subSC.getChildren().add(mdSC);
     				    // Add metadata type
     					mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, mdc.getSelectedStatement().getName().toString(), Filtertype.URI));
-    				
+    					subSC.getChildren().add(mdSC);
     				}
     			}
     		}

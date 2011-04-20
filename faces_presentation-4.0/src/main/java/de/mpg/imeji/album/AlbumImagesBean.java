@@ -62,8 +62,8 @@ public class AlbumImagesBean extends ImagesBean
         Collection<Image> images = new ArrayList<Image>();
         try
         {
-            totalNumberOfRecords = controller.searchImageInContainer(uri, null, null, -1, 0).size();
-            images = controller.searchImageInContainer(uri, null, null, limit, offset);
+            totalNumberOfRecords = controller.countImagesInContainer(uri, null);
+            images = controller.searchImagesInContainer(uri, null, null, limit, offset);
         }
         catch (Exception e)
         {
@@ -75,7 +75,7 @@ public class AlbumImagesBean extends ImagesBean
     public String removeFromAlbum() throws Exception
     {
         AlbumController ac = new AlbumController(sb.getUser());
-        BeanHelper.info(album.getImages().size() + "Images removed from album");
+        BeanHelper.info(album.getAlbum().getImages().size() + "Images removed from album");
         album.getAlbum().getImages().clear();
         ac.update(album.getAlbum());
         AlbumBean activeAlbum = sb.getActiveAlbum();

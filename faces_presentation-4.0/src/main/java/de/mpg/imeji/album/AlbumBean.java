@@ -237,16 +237,16 @@ public class AlbumBean implements Serializable
             return "pretty:";
         }
         */
-        public List<ImageBean> getImages() throws Exception
-        {
-            ImageController ic = new ImageController(sessionBean.getUser()); 
-            if (getAlbum() != null)
-            {
-            	Collection<Image> imgList = ic.searchImageInContainer(getAlbum().getId(), null, null, 5, 0);
-            	return ImejiFactory.imageListToBeanList(imgList); 
-            }
-            return null;	
-        }
+//        public List<ImageBean> getImages() throws Exception
+//        {
+//            ImageController ic = new ImageController(sessionBean.getUser()); 
+//            if (getAlbum() != null)
+//            {
+//            	Collection<Image> imgList = ic.searchImageInContainer(getAlbum().getId(), null, null, 5, 0);
+//            	return ImejiFactory.imageListToBeanList(imgList); 
+//            }
+//            return null;	
+//        }
         
         public String save() throws Exception
         {

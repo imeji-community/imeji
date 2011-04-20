@@ -57,17 +57,17 @@
 	<ui:define name="list">
 
 		<!-- Script for Shiftcheckboxes -->
-<script>
-	jQuery(document).ready(function() {
-		jQuery('.shiftCheckbox').shiftcheckbox();
-	});
-</script>
+	<script>
+		jQuery(document).ready(function() {
+			jQuery('.shiftCheckbox').shiftcheckbox();
+		});
+	</script>
 
-<script>
-	jQuery(document).ready(function() {
-		document.getElementById('formular:facetInitialized').click();
-	});
-</script>			
+	<script>
+		jQuery(document).ready(function() {
+			document.getElementById('formular:facetInitialized').click();
+		});
+	</script>			
 		 <rich:modalPanel id="panelConfirmDeleteAll" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
 	        <h4><h:outputText value="Delete images?" styleClass="xTiny_marginLExcl"/></h4>
 	        <h:panelGroup layout="block" styleClass="quad_area0_p1">
@@ -105,7 +105,7 @@
 			</h:panelGroup>
 		</h:panelGroup>
 		
-		<div id="preListHeader" class="full_area0 itemList noBorder" style="border-bottom-width: 0px !important;">
+		<div id="preListHeader" class="full_area0 itemList noBorder" style="border-width: 0px !important;">
 			
 			<h:panelGroup styleClass="xHuge_area0_p2 small_marginLIncl clear">
 				<h:outputLink value="?q=">
@@ -134,6 +134,8 @@
 				</a4j:commandLink>
 				
 				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}">
+					
+					<span class="free_area0_p8 endline itemSelectArea">
 					<input type="button" class="min_imgBtn checkboxSelectButton"/>
 					
 					<div class="selectMenu" style="display: none; width:150px;" >
@@ -149,6 +151,7 @@
 							<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
 						</h:outputLink>
 					</div>
+					</span>
 				</h:panelGroup>
 				
 			</h:panelGroup>
@@ -194,7 +197,7 @@
 		</h:panelGroup>
 
 		<h:panelGroup layout="block" styleClass="full_area0 noTopBorder"  rendered="#{!paginatorListSessionBean.corruptedList}">
-			<h:panelGroup layout="block"  styleClass="full_area0 itemList" rendered="SessionBean.user != null">
+			<h:panelGroup layout="block"  styleClass="full_area0 itemList" rendered="#{SessionBean.user != null}">
 				<div class="full_area0 listHeader">
 					<span class="small_area0">&#160;</span>
 					<span class="seperator"></span>
@@ -232,8 +235,7 @@
 							</h:outputLink>
 							
 							<rich:toolTip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="client" hideDelay="0" showDelay="300">
-								<ui:include src="../picturesPages/ui/MetadataPopup.xhtml">
-								</ui:include>
+								<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"></ui:include>
 							</rich:toolTip>
 													
 						</h:panelGroup> 

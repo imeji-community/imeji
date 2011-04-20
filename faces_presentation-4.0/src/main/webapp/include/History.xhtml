@@ -2,7 +2,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:a4j="http://richfaces.org/a4j" 
+	xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 <!--
 
@@ -34,7 +35,6 @@
 -->
 </ui:remove>
 
-<body>
 
 	<h:panelGroup styleClass="full_area0_p4 small_marginLIncl" style="border-bottom-width: 0px !important;">
 		<a4j:repeat var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
@@ -48,7 +48,5 @@
 			</h:panelGroup>
 		</a4j:repeat>
 	</h:panelGroup>
-
-</body>
 
 </html>

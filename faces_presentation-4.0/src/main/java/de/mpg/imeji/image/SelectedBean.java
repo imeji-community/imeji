@@ -75,16 +75,18 @@ public class SelectedBean extends ImagesBean {
 	{
 		ImageController controller = new ImageController(sb.getUser());
 		super.setImages(new ArrayList<Image>());
-		List<SearchCriterion> uris = new ArrayList<SearchCriterion>();
+		//List<SearchCriterion> uris = new ArrayList<SearchCriterion>();
+		List<String> uris = new ArrayList<String>();
 		for (URI uri : sb.getSelected()) 
 		{
-			uris.add(new SearchCriterion(SearchCriterion.Operator.OR,
-					ImejiNamespaces.ID_URI, uri.toString(), Filtertype.URI));
+			//uris.add(new SearchCriterion(SearchCriterion.Operator.OR,
+				//	ImejiNamespaces.ID_URI, uri.toString(), Filtertype.URI));
+			uris.add(uri.toString());
 		}
 		if (uris.size() != 0) 
 		{
-			totalNumberOfRecords = controller.getNumberOfResults(uris);
-			super.setImages(controller.search(uris, null, limit, offset));
+			totalNumberOfRecords = uris.size();
+			super.setImages(controller.loadImages(uris, limit, offset));
 		}
 		return ImejiFactory.imageListToBeanList(super.getImages());
 	}

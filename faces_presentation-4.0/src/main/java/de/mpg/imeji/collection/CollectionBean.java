@@ -289,7 +289,7 @@ public abstract class CollectionBean
         if (collection.getId() == null) return null;
         try
         {
-            Collection<Image> imgList = ic.searchImageInContainer(collection.getId(), null, null, 5, 0);
+            Collection<Image> imgList = ic.searchImagesInContainer(collection.getId(), null, null, 5, 0);
             return ImejiFactory.imageListToBeanList(imgList);
         }
         catch (NotBoundException e)

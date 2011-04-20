@@ -84,31 +84,11 @@ public class TechnicalFacets
 		}
 	}
 	
-	
 	public int getCount(List<SearchCriterion> scList, SearchCriterion sc)
 	{
 		ImageController ic = new ImageController(sb.getUser());
 		scList.add(sc);
-		try 
-		{
-			LinkedList<String> all = ic.searchURI(new ArrayList<SearchCriterion>(), null, -1, 0);
-			for (SearchCriterion c : scList) 
-			{
-				List<SearchCriterion> l = new ArrayList<SearchCriterion>();
-				l.add(c);
-				LinkedList<String> col = ic.searchURI(l, null, -1, 0);
-				List<String> inter = ListUtils.intersection(all, col);
-				all = new LinkedList<String>(inter);
-			}
-			return all.size();
-			//return ic.getNumberOfResults(scList, maxRecord);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-		
-		return 0;
+		return ic.countImages(scList);
 	}
 
 	public List<Facet> getFacets() {

@@ -19,6 +19,7 @@ import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
@@ -56,6 +57,8 @@ public class ImageBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         imageController = new ImageController(sessionBean.getUser());
         collectionController = new CollectionController(sessionBean.getUser());
+        ProfileController pc = new ProfileController(sessionBean.getUser());
+        profile = pc.retrieve(image.getMetadataSet().getProfile());
         prettyLink = "pretty:editImage";
         if (sessionBean.getSelected().contains(img.getId()))
         {
@@ -63,7 +66,7 @@ public class ImageBean
         }
         try
         {
-        	Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
+        	Collections.sort((List<Statement>) profile.getStatements());
         }
         catch (Exception e) 
         {

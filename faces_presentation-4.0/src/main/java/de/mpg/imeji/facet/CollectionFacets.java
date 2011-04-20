@@ -31,20 +31,24 @@ public class CollectionFacets
 	
 	private List<Facet> facets = new ArrayList<Facet>();
 	
+	private URI colURI = null;
+	
 	private int maxRecord = 0;
 	
 	public CollectionFacets(CollectionImeji col, List<SearchCriterion> scList) throws Exception 
 	{
+		this.colURI = col.getId();
+		
 		ProfileController pc = new ProfileController(sb.getUser());
 		MetadataProfile profile = pc.retrieve(col.getProfile());
 		CollectionImagesBean cib = (CollectionImagesBean) BeanHelper.getSessionBean(CollectionImagesBean.class);
-		maxRecord = cib.getTotalNumberOfRecords();
+		//maxRecord = cib.getTotalNumberOfRecords();
 		
 		Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
 		String baseURI = nav.getImagesUrl() + col.getId().getPath() + "?q=";
 		
-		SearchCriterion scColl = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_COLLECTION, col.getId().toString(), Filtertype.URI);
-		scList.add(scColl);
+		//SearchCriterion scColl = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_COLLECTION, col.getId().toString(), Filtertype.URI);
+		//scList.add(scColl);
 
 		FacetURIFactory uriFactory = new FacetURIFactory(scList);
 		int count = 0;
@@ -78,26 +82,29 @@ public class CollectionFacets
 	{
 		ImageController ic = new ImageController(sb.getUser());
 		if (sc != null) scList.add(sc);
-		try 
-		{
-			LinkedList<String> all = ic.searchURI(new ArrayList<SearchCriterion>(), null, -1, 0);
-			for (SearchCriterion c : scList) 
-			{
-				List<SearchCriterion> l = new ArrayList<SearchCriterion>();
-				l.add(c);
-				LinkedList<String> col = ic.searchURI(l, null, -1, 0);
-				List<String> inter = ListUtils.intersection(all, col);
-				all = new LinkedList<String>(inter);
-			}
-			return all.size();
-			//return ic.getNumberOfResults(scList, maxRecord);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
 		
-		return 0;
+		return ic.countImagesInContainer(colURI, scList);
+		
+//		try 
+//		{
+//			LinkedList<String> all = ic.searchURI(new ArrayList<SearchCriterion>(), null, -1, 0);
+//			for (SearchCriterion c : scList) 
+//			{
+//				List<SearchCriterion> l = new ArrayList<SearchCriterion>();
+//				l.add(c);
+//				LinkedList<String> col = ic.searchURI(l, null, -1, 0);
+//				List<String> inter = ListUtils.intersection(all, col);
+//				all = new LinkedList<String>(inter);
+//			}
+//			return all.size();
+//			//return ic.getNumberOfResults(scList, maxRecord);
+//		} 
+//		catch (Exception e) 
+//		{
+//			e.printStackTrace();
+//		}
+//		
+//		return 0;
 	}
 	
 	public List<Facet> getFacets() {

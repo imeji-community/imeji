@@ -34,13 +34,7 @@ All rights reserved. Use is subject to license terms.
             <link rel="stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_darkGrey/styles/theme.css" id="DarkGreyTheme" title="dark grey" type="text/css" media="all"/>
             <link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_highContrast/styles/theme.css" id="highContrastTheme" title="high contrast" type="text/css" />
             <link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_classic/styles/theme.css" id="classicTheme" title="classic" type="text/css" />
-            <ui:remove>
-                <script type="text/javascript" language="JavaScript">
-                    var cookieVersion = "1.0";
-                    var coneURL = 'http://pubman.mpdl.mpg.de/cone/';
-                    var jsURL = '<h:outputText value="#{Navigation.applicationUrl}"/>' + 'resources/eSciDoc_JavaScript/';
-                </script>
-            </ui:remove>
+			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js"></script>
             <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
         </head>

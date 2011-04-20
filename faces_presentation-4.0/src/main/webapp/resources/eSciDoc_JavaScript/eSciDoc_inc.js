@@ -2,10 +2,10 @@ if(typeof(cookieVersion) == 'undefined') {
 	var cookieVersion = "1.1";
 }
 if (typeof(jsfURL) == 'undefined') {
-	var jsfURL = './';
+	var jsfURL = homeURL + '/';
 }
 if(typeof(jsURL) == 'undefined') {
-	var jsURL = './resources/eSciDoc_JavaScript/';
+	var jsURL = homeURL + '/resources/eSciDoc_JavaScript/';
 }
 if(typeof(coneURL) == 'undefined') {
 	/* var coneURL = '../../cone/'; */

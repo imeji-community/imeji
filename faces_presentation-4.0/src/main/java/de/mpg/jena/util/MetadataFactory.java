@@ -75,11 +75,10 @@ public class MetadataFactory
 			case DATE:
 				md = new Date();
 				((Date)md).setDate(((Date)metadata).getDate());
-			 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			 	if (((Date)md).getDate() != null)
 				{
-			 		try {((Date)md).setDateTime(sdf.parse(((Date)md).getDate()).getTime());} 
-			 		catch (Exception e){e.printStackTrace();}
+			 		String dateFormatted = DateFormatter.format(((Date)md).getDate());
+			 		((Date)metadata).setDate(dateFormatted);
 				}
 			 	searchValue += " " +((Date)metadata).getDate();
 				break;

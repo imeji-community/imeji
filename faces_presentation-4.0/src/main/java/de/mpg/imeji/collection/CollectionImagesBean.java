@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
+import de.mpg.imeji.filter.FiltersSession;
+import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.search.URLQueryTransformer;
@@ -84,6 +88,8 @@ public class CollectionImagesBean extends ImagesBean {
 		sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
 		
+		initBackPage();
+		
 		try 
 		{
 			scList = URLQueryTransformer.transform2SCList(getQuery());
@@ -96,7 +102,7 @@ public class CollectionImagesBean extends ImagesBean {
 		totalNumberOfRecords = controller.countImagesInContainer(uri, scList);
 		images = controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset);
 		super.setImages(images);
-		filters = new FiltersBean(getQuery(), totalNumberOfRecords);
+		
 		labels.init((List<Image>) images);
 		return ImejiFactory.imageListToBeanList(images);
 	}

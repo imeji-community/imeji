@@ -82,12 +82,10 @@ public class ImageBean
         imageController = new ImageController(sessionBean.getUser());
         collectionController = new CollectionController(sessionBean.getUser());
         prettyLink = "pretty:editImage";
-       
     }
 
     public void init() throws Exception
     {
-    	System.out.println("init");
         try 
         {
         	if (id != null)	image = imageController.retrieve(id);
@@ -103,7 +101,7 @@ public class ImageBean
         }
         Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
         profile = ProfileHelper.loadProfile(image);
-        edit = new SingleEditBean(image, profile);
+        edit = new SingleEditBean(image, profile, getPageUrl());
     } 
 
     public void initView() throws Exception

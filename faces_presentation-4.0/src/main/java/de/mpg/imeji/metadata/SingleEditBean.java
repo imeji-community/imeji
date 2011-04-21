@@ -1,11 +1,15 @@
 package de.mpg.imeji.metadata;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
+
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.editors.SimpleImageEditor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
@@ -13,6 +17,7 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
+import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
@@ -28,22 +33,32 @@ public class SingleEditBean
 	private String toggleState = "displayMd";
 	
 	private int mdPosition = 0;
+	private String pageUrl ="";
 	
-	public SingleEditBean(Image im, MetadataProfile profile) 
+	public SingleEditBean(Image im, MetadataProfile profile, String pageUrl) 
 	{
 		image = im;
 		this.profile = profile;
-		if (UrlHelper.getParameterBoolean("edit")) this.toggleState = "editMd";
-		else toggleState = "displayMd";
-		this.init();
+		this.pageUrl = pageUrl;
+		System.out.println("url:" + pageUrl);
+		init();
+	}
+	
+	public String getCheckToggleState()
+	{
+		toggleState = "displayMd";
+
+		if (UrlHelper.getParameterBoolean("edit")) 
+		{
+			this.toggleState = "editMd";
+		}
+		
+		return "";
 	}
 	
 	public void init()
 	{
-		List<Image> imAsList = new ArrayList<Image>();
-		imAsList.add(image);
-		
-		for (Statement st : profile.getStatements())
+ 		for (Statement st : profile.getStatements())
 		{
 			valuesMap.put(st.getName(), false);
 		}
@@ -51,23 +66,44 @@ public class SingleEditBean
 		{
 			valuesMap.put(md.getNamespace(), true);
 		}
-		
+		for (Statement st : profile.getStatements())
+		{
+			if (!valuesMap.get(st.getName())) image.getMetadataSet().getMetadata().add(MetadataFactory.newMetadata(st));
+			valuesMap.put(st.getName(), true);
+		}
+		List<Image> imAsList = new ArrayList<Image>();
+		imAsList.add(image);
 		editor = new SimpleImageEditor(imAsList, profile, null);
 	}
 	
-	public String save()
+	public String save() throws IOException
 	{
+		cleanImageMetadata();
 		editor.getImages().clear();
 		editor.getImages().add(image);
 		editor.save();
-		this.cancel();
-		return "pretty:";
+		reloadPage();
+		cancel();
+		return "";
 	}
-	
+
 	public String cancel()
 	{
 		this.toggleState = "displayMd";
 		if (editor != null && !editor.getImages().isEmpty()) image = editor.getImages().get(0);
+		cleanImageMetadata();
+		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		Locks.unLock(new Lock(this.image.getId().toString(), sb.getUser().getEmail()));
+		return "";
+	}
+	
+	private void reloadPage() throws IOException
+	{
+		FacesContext.getCurrentInstance().getExternalContext().redirect(pageUrl + "/view");
+	}
+
+	private void cleanImageMetadata()
+	{
 		for (int i=0; i < image.getMetadataSet().getMetadata().size(); i++)
 		{
 			if (MetadataHelper.isEmpty(((List<ImageMetadata>)image.getMetadataSet().getMetadata()).get(i)))
@@ -75,10 +111,6 @@ public class SingleEditBean
 				((List<ImageMetadata>)image.getMetadataSet().getMetadata()).remove(i);i--;
 			}
 		}
-		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		Locks.unLock(new Lock(this.image.getId().toString(), sb.getUser().getEmail()));
-		this.init();
-		return "pretty:";
 	}
 	
 	public String showEditor()
@@ -86,7 +118,8 @@ public class SingleEditBean
 		this.toggleState = "editMd";
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		Locks.lock(new Lock(this.image.getId().toString(), sb.getUser().getEmail()));
-		return "pretty:";
+		init();
+		return "";
 	}
 	
 	public String addMetadata()

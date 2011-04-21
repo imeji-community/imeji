@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.album.AlbumBean;
@@ -12,6 +13,8 @@ import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
+import de.mpg.imeji.filter.FiltersSession;
+import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
@@ -90,11 +93,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 	        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
 	       
+	        initBackPage();
 	        try
 	        {
 	            scList = URLQueryTransformer.transform2SCList(query);
-	            //System.out.println("url:" + query);
-	//            System.out.println("parsed:" + URLQueryTransformer.transform2URL(scList));
 	        }
 	        catch (Exception e)
 	        {
@@ -103,10 +105,29 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	        totalNumberOfRecords = controller.countImages(scList);
 	        scList = URLQueryTransformer.transform2SCList(query);
 	        images = controller.searchImages(scList, sortCriterion, limit, offset);
-	        filters = new FiltersBean(query, totalNumberOfRecords);
+	        
+	        
 	        labels.init((List<Image>) images);
     	}
         return ImejiFactory.imageListToBeanList(images);
+    }
+    
+    public void initBackPage()
+    {
+    	HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
+        FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
+        
+        if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
+        {
+        	fs.setFilters(hs.getCurrentPage().getFilters());
+        	query = hs.getCurrentPage().getQuery();
+        }
+        else
+        {
+        	filters = new FiltersBean(query, totalNumberOfRecords);
+        	hs.getCurrentPage().setFilters(fs.getFilters());
+        	hs.getCurrentPage().setQuery(fs.getWholeQuery());
+        }
     }
     
     public String addToActiveAlbum() throws Exception

@@ -76,8 +76,8 @@
 					
 		      	<span class="half_area0_p6 headerSwitchView">
 		      		<span class="seperator"></span>
-		      		<!--  <a class="expand" title="Show all items in medium view"><span class="noDisplay">Show </span>Medium View (All Items)</a>
-					<a class="collapse" title="Show all items in short view"><span class="noDisplay">Show </span>Short View (All Items)</a>-->
+		      		<a class="expand" title="Show all items in medium view"><span class="noDisplay">Show </span>Medium View (All Items)</a>
+					<a class="collapse" title="Show all items in short view"><span class="noDisplay">Show </span>Short View (All Items)</a>
 		      	</span>
 			      	
 			</div>
@@ -124,28 +124,21 @@
 						      				<b><h:outputText value="#{container.collection.metadata.title}" /></b>
 						      		</h:outputLink>				
 								</span>
-						      	
-						      	<div class="full_area0 shortView">
+						     </div>
+						      
+						     <div class="full_area0 shortView">
 									<div class="free_area0_p2 small_marginLIncl endline listItemLine">
 										<span class="huge_area0_p8 endline labelLine">
-											<!--  <a class="collapse">
+											<a class="collapse">
 												<span class="noDisplay">Show </span>Less<span class="noDisplay"> Details</span>
 											</a>
 											<a class="expand">
 												<span class="noDisplay">Show </span>More<span class="noDisplay"> Details</span>
-											</a>-->
+											</a>
 											Creator(s)<span class="noDisplay">: </span>
 										</span>
 										<span class="xHuge_area0 endline">
 											<h:outputText value="#{container.personString}"/>
-										</span>
-									</div>
-									<div class="free_area0_p2 small_marginLIncl endline listItemLine">
-										<span class="huge_area0_p8 endline labelLine">
-										Dates<span class="noDisplay">: </span>
-										</span>
-										<span class="xHuge_area0 endline">
-											<h:outputText value="#{container.collection.properties.lastModificationDate}"/>&#160;
 										</span>
 									</div>
 									<div class="free_area0_p2 small_marginLIncl endline listItemLine">
@@ -186,12 +179,38 @@
 													<h:outputText value="#{lbl.delete}"></h:outputText>
 												</h:commandLink>
 											</h:panelGroup>
-											
 										</span>
 									</div>
-								</div>
-						      	
-						     </div>
+							</div>
+							<div class="full_area0 mediumView">
+							      	<div class="free_area0_p0 small_marginLIncl endline listItemLine">
+										<span class="huge_area0_p8 endline labelLine">
+										Creation Date<span class="noDisplay">: </span>
+										</span>
+										<span class="xHuge_area0 endline">
+											<h:outputText value="#{container.collection.properties.creationDate}"/>&#160;
+										</span>
+									</div>
+									<div class="free_area0_p0 small_marginLIncl endline listItemLine">
+										<span class="huge_area0_p8 endline labelLine">
+										Last Modification Date<span class="noDisplay">: </span>
+										</span>
+										<span class="xHuge_area0 endline">
+											<h:outputText value="#{container.collection.properties.lastModificationDate}"/>&#160;
+										</span>
+									</div>
+									<div class="free_area0_p0 small_marginLIncl endline listItemLine">
+										<span class="huge_area0_p8 endline labelLine">
+											<h:outputText value="Release Date" rendered="#{container.collection.properties.status == 'RELEASED'}"/>
+											<h:outputText value="Withdraw Date" rendered="#{container.collection.properties.status == 'WITHDRAWN'}"/>
+											<span class="noDisplay">: </span>
+										</span>
+										<span class="xHuge_area0 endline">
+											<h:outputText value="#{container.collection.properties.versionDate}"/>&#160;
+										</span>
+									</div>
+							</div>
+						    
 					    </li>
 				</a4j:repeat>
 			</ol>

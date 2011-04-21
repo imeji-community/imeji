@@ -1,6 +1,11 @@
 package de.mpg.imeji.history;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.mpg.imeji.filter.Filter;
+import de.mpg.imeji.filter.FiltersBean;
 
 public class Page 
 {
@@ -32,6 +37,8 @@ public class Page
 	private ImejiPages type;
 	private URI uri;
 	private String name;
+	private List<Filter> filters = new ArrayList<Filter>();
+	private String query = "";
 	
 	public Page(ImejiPages type, URI uri)
 	{
@@ -63,6 +70,22 @@ public class Page
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
+	public List<Filter> getFilters() {
+		return filters;
+	}
+
+	public void setFilters(List<Filter> filters) {
+		this.filters = filters;
+	}
+
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
+	}	
+
+
 }

@@ -68,13 +68,13 @@ public class HistorySession
 		}
 	}
 	
-	public String getCurrentPage()
+	public Page getCurrentPage()
 	{
 		if (!pages.isEmpty())
 		{
-			return pages.get(pages.size() -1).getName();
+			return pages.get(pages.size() -1);
 		}
-		return "";
+		return null;
 	}
 	
 	public Page getPreviousPage()

@@ -48,15 +48,16 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
     	AlbumController controller = new AlbumController(sb.getUser());
         
         Collection<Album> albums = new ArrayList<Album>();
+        
+        UserController uc = new UserController(sb.getUser());
+        sb.setUser(uc.retrieve(sb.getUser().getEmail()));
 
         try
         {
 	        SortCriterion sortCriterion = new SortCriterion();
 	        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 	        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-	        
-	        totalNumberOfRecords = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset).size();
-	        
+	        totalNumberOfRecords = controller.getNumberOfResults(new ArrayList<SearchCriterion>());	        
 	        albums = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
         }
         catch (Exception e)

@@ -6,11 +6,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.filter.Filter;
-import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.search.URLQueryTransformer;
-import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.SearchCriterion;
 
 public class FacetURIFactory
@@ -33,7 +29,7 @@ public class FacetURIFactory
 	private String getCommonURI(List<SearchCriterion> scl, String facetName) throws UnsupportedEncodingException
 	{
         String commonURI ="";
-        commonURI +=  URLEncoder.encode(URLQueryTransformer.transform2URL(scl), "UTF-8") + "&f=" +  URLEncoder.encode(facetName,  "UTF-8");
+        commonURI +=  URLEncoder.encode(URLQueryTransformer.transform2URL(scl), "UTF-8") + "&f=" +  URLEncoder.encode(facetName,  "UTF-8") + "&page=1";
         return commonURI;
 	}
 	

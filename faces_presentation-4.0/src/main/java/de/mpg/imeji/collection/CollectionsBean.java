@@ -27,7 +27,6 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-
     }
 
     @Override

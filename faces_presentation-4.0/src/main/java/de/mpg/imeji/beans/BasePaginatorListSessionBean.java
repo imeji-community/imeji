@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
@@ -142,6 +143,10 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             if (elementsPerPage == 0)
             {
                 setElementsPerPage(24);
+            }
+            if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("page"))
+            {
+            	currentPageNumber = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("page"));
             }
             if (currentPageNumber == 0)
             {

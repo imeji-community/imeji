@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import thewebsemantic.RDF2Bean;
@@ -80,6 +81,7 @@ public class CollectionController extends ImejiController
 	public void release(CollectionImeji ic) throws Exception
     {
 		ic.getProperties().setStatus(Status.RELEASED);
+		ic.getProperties().setVersionDate(new Date());
 	    for(URI uri: ic.getImages())
 	    {
 	    	ImageController imageController = new ImageController(user);

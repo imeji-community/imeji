@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import de.mpg.jena.ImejiBean2RDF;
@@ -28,6 +29,8 @@ public class AlbumController extends ImejiController
 	public AlbumController(User user)
 	{
 		super(user);
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
 	}
 	
 	/**
@@ -39,12 +42,12 @@ public class AlbumController extends ImejiController
 	 */
 	public void create(Album ic) throws Exception
 	{
-		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
 		writeCreateProperties(ic.getProperties(), user);
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(new URI("http://imeji.mpdl.mpg.de/album/" + getUniqueId()));
+		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
 		imejiBean2RDF.create(ic, user);
+		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
 		ic = imejiRDF2Bean.load(Album.class, ic.getId().toString());
 		user = addCreatorGrant(ic, user);
 		cleanGraph(ImejiJena.albumModel);
@@ -117,6 +120,7 @@ public class AlbumController extends ImejiController
     {
         //first check user credentials
         album.getProperties().setStatus(Status.RELEASED);
+        album.getProperties().setVersionDate(new Date());
         update(album);
     }
 

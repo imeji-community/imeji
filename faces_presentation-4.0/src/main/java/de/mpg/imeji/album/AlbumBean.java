@@ -1,5 +1,6 @@
 package de.mpg.imeji.album;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,6 +13,7 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.util.ObjectHelper;
@@ -124,38 +126,36 @@ public class AlbumBean implements Serializable
             return valid;
         }
 
-//        public String addAuthor()
-//        {
-//            List<Person> list = getAlbum().getMetadata().getPersons(); 
-//            list.add(authorPosition + 1, ImejiFactory.newPerson());
-//            return "";
-//        }
-//
-//        public String removeAuthor()
-//        {
-//           
-//                List<Person> list = getAlbum().getMetadata().getPersons();
-//                list.remove(authorPosition);
-//            return "";
-//        }
-//
-//        public String addOrganization()
-//        {
-//            Collection<Person> persons = getAlbum().getMetadata().getPersons();
-//            
-//            Collection<Organization> orgs = persons.get(authorPosition).getOrganizations();
-//            orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
-//            return "";
-//        }
-//
-//        public String removeOrganization()
-//        {
-//            
-//                List<Person> persons = getAlbum().getMetadata().getPersons();
-//                List<Organization> orgs = persons.get(authorPosition).getOrganizations();
-//                orgs.remove(organizationPosition);
-//            return "";
-//        }
+        public String addAuthor()
+        {
+            List<Person> list = (List<Person>) getAlbum().getMetadata().getPersons(); 
+            list.add(authorPosition + 1, ImejiFactory.newPerson());
+            return "";
+        }
+
+        public String removeAuthor()
+        {
+            List<Person> list = (List<Person>) getAlbum().getMetadata().getPersons();
+            list.remove(authorPosition);
+            return "";
+        }
+
+        public String addOrganization()
+        {
+            Collection<Person> persons = getAlbum().getMetadata().getPersons();
+            
+            List<Organization> orgs = (List<Organization>) ((List<Person>) persons).get(authorPosition).getOrganizations();
+            orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
+            return "";
+        }
+
+        public String removeOrganization()
+        {
+            List<Person> persons = (List<Person>) getAlbum().getMetadata().getPersons();
+            List<Organization> orgs = (List<Organization>) persons.get(authorPosition).getOrganizations();
+            orgs.remove(organizationPosition);
+            return "";
+        }
 
         protected String getNavigationString()
         {
@@ -237,16 +237,18 @@ public class AlbumBean implements Serializable
             return "pretty:";
         }
         */
-//        public List<ImageBean> getImages() throws Exception
-//        {
-//            ImageController ic = new ImageController(sessionBean.getUser()); 
-//            if (getAlbum() != null)
-//            {
-//            	Collection<Image> imgList = ic.searchImageInContainer(getAlbum().getId(), null, null, 5, 0);
-//            	return ImejiFactory.imageListToBeanList(imgList); 
-//            }
-//            return null;	
-//        }
+        public List<ImageBean> getImages() throws Exception
+        {
+            ImageController ic = new ImageController(sessionBean.getUser()); 
+            if (getAlbum() != null)
+            {
+            	List<String> uris = new ArrayList<String>();
+            	for (URI uri : getAlbum().getImages()) uris.add(uri.toString());
+            	Collection<Image> imgList = ic.loadImages(uris, 5, 0);
+            	return ImejiFactory.imageListToBeanList(imgList); 
+            }
+            return null;	
+        }
         
         public String save() throws Exception
         {

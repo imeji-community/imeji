@@ -29,7 +29,7 @@ All rights reserved. Use is subject to license terms.
             <meta http-equiv="pragma" content="no-cache"/>
             <meta http-equiv="cache-control" content="no-cache"/>
             <meta http-equiv="expires" content="0"/>
-            <title><h:outputText value="Imeji - #{HistorySession.currentPage}"/></title>
+            <title><h:outputText value="Imeji - #{HistorySession.currentPage.name}"/></title>
             <link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
             <link rel="stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_darkGrey/styles/theme.css" id="DarkGreyTheme" title="dark grey" type="text/css" media="all"/>
             <link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_highContrast/styles/theme.css" id="highContrastTheme" title="high contrast" type="text/css" />
@@ -54,18 +54,7 @@ All rights reserved. Use is subject to license terms.
                         <div class="clear">
                             <div class="headerSection">
                                 <div class="clear breadcrumb">
-                                    &#160;
-                                    <ui:remove>
-                                        <h:panelGroup layout="block" styleClass="half_area8">
-                                            <a4j:repeat id="breadcrumb" var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
-                                                <h:panelGroup rendered="#{index + 6 &gt; HistorySession.historySize}">
-                                                    <h:outputLink value="#{page.uri}">
-                                                        <h:outputText value="#{page.name}"/>
-                                                    </h:outputLink><span style="padding-left: 1px"/><h:outputText value=" / "/><span style="padding-left: 1px"/>
-                                                </h:panelGroup>
-                                            </a4j:repeat>
-                                        </h:panelGroup>
-                                    </ui:remove>
+                                   
                                 </div>
                                 <div id="contentSkipLinkAnchor" class="clear headLine">
                                     <!-- Headline starts here, taken from facelets parameter -->

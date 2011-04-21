@@ -28,7 +28,7 @@ public class CollectionImageBean extends ImageBean
 
     public String getPageUrl()
     {
-        return navigation.getApplicationUrl() + "collection/" + this.collectionId + "/image/" + this.getId();
+        return navigation.getApplicationUrl() + "collection/" + collectionId + "/image/" + this.getId();
     }
     
     public String getNavigationString()

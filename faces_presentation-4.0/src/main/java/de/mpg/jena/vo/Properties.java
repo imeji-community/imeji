@@ -24,6 +24,8 @@ public class Properties implements Serializable {
 
 	private Date lastModificationDate;
 	
+	private Date versionDate;
+	
 	private Status status = Status.PENDING;
 	
 	private int version = 0;
@@ -50,6 +52,16 @@ public class Properties implements Serializable {
 		return lastModificationDate;
 	}
 	
+	public Date getVersionDate() {
+		return versionDate;
+	}
+
+
+	public void setVersionDate(Date versionDate) {
+		this.versionDate = versionDate;
+	}
+
+
 	public void setCreatedBy(URI createdBy) {
 		this.createdBy = createdBy;
 	}

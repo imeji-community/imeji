@@ -33,14 +33,11 @@ public class Filter
 		this.label = label; 
 		this.query = query;
 		this.count = count;
-		this.removeQuery = removeQuery;
 		init();
 	}
 	
 	public void init()
 	{
-//		if("".equals(query))label = "All";
-//		else if (label == null) label = "No name";
 		 if (label == null) label = "Search";
 	}
 

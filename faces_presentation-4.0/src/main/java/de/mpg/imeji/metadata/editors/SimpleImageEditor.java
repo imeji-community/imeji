@@ -11,8 +11,7 @@ import de.mpg.jena.vo.Statement;
 
 public class SimpleImageEditor extends MetadataEditor
 {
-	public SimpleImageEditor(List<Image> images, MetadataProfile profile,
-			Statement statement) 
+	public SimpleImageEditor(List<Image> images, MetadataProfile profile, Statement statement) 
 	{
 		super(images, profile, statement);
 		this.images = images;

@@ -64,7 +64,7 @@ public class FiltersBean
 	{
 		for (Filter f: filters)
 		{
-			f.setRemoveQuery(q.replace(f.getQuery(), ""));
+			f.setRemoveQuery(q.replace(f.getQuery(), "") + "&f=" + f.getLabel());
 		}
 		return filters;
 	}

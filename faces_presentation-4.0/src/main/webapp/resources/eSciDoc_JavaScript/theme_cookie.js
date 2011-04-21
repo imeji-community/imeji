@@ -670,8 +670,8 @@ function checkActiveCss() {
 
 function themeCookieInit() {
 	jQuery(document).ready(function() {
-		checkLayout();
 		mpdlCSS.createThemebox('#themeSelector');
 	});
 	setTimeout("checkActiveCss()", 1000);
 }
+checkLayout();

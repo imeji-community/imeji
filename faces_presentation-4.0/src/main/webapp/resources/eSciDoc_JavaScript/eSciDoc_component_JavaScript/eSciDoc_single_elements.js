@@ -112,7 +112,6 @@ var BrowserDetect = {
 BrowserDetect.init();
 
 
-
 /*QUICK SEARCH INITIALISATION*/
 
 function addQuickSearchFunction(){

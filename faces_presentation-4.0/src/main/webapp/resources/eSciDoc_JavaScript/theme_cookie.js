@@ -2,32 +2,6 @@
  * @author Marco Schlender
  * @base plain JavaScript - 2011-04-07
  */
-function returnMPDLUserAgent() {
-	var user_agent = jQuery.browser;
-	var txt = '';
-	
-	if (user_agent.msie && user_agent.version.match(/9/g)) {
-		return 'ie9';
-	} else if (user_agent.msie && user_agent.version.match(/8/g)) {
-		return 'ie8';
-	} else if (user_agent.msie && user_agent.version.match(/7/g)) {
-		return 'ie7';
-	} else if (user_agent.msie && user_agent.version.match(/6/g)) {
-		return 'ie6';
-	} else if (user_agent.safari) {
-		return 'safari';
-	} else if (user_agent.webkit) {
-		return 'webkit';
-	} else if (user_agent.mozilla) {
-		return 'mozilla';
-	} else {
-		for (var key in user_agent) {
-			txt += '\n'+key+': '+user_agent[key];
-		}
-		return txt;
-	}
-}
-
 var mpdlCookie = new function() {
 	
 	this.cookieTimeout = 30;
@@ -56,7 +30,6 @@ var mpdlCookie = new function() {
 		return null
 	}
 	
-	
 	this.eraseCookie = function (name, domain, path){
 		var cooky = name+"=; expires=Thu, 01-Jan-70 00:00:01 GMT";
 		cooky += (domain) ? "domain=" + domain : "";
@@ -78,7 +51,6 @@ var mpdlCookie = new function() {
 
 
 var mpdlCSS = new function() {
-	
 	
 	this.getDefaultStylesheet = function () {
 		var tmpvalue = null;
@@ -126,7 +98,6 @@ var mpdlCSS = new function() {
 		jQuery(target).html(select_output);
 	}
 }
-
 
 
 var mpdlDate = new function () {
@@ -210,18 +181,6 @@ var mpdlDate = new function () {
 		return null;
 	}
 } /* END CLASS mpdlDate */
-
-
-
-
-function changeThemeTo(theme_id) {
-	mpdlCookie.eraseCookie("layout");
-	mpdlCookie.eraseCookie("name");
-	var timeOutDate = mpdlDate.getNextDate(mpdlCookie.cookieTimeout, mpdlDate.now('date'));
-	mpdlCookie.setCookie("layout", theme_id, null, timeOutDate.toGMTString());
-	mpdlCSS.enablePageStyle(theme_id);
-}
-
 
 
 var importantDate = new function () {
@@ -484,6 +443,16 @@ var importantDate = new function () {
 };
 
 
+/***********************************   END CLASSES   ************************************************/
+/*********************************** START FUNCTIONS ************************************************/
+
+function changeThemeTo(theme_id) {
+	mpdlCookie.eraseCookie("layout");
+	mpdlCookie.eraseCookie("name");
+	var timeOutDate = mpdlDate.getNextDate(mpdlCookie.cookieTimeout, mpdlDate.now('date'));
+	mpdlCookie.setCookie("layout", theme_id, null, timeOutDate.toGMTString());
+	mpdlCSS.enablePageStyle(theme_id);
+}
 
 function appendStylesheet(href) {
 	if (!document.getElementById('holidaytheme')) {
@@ -615,36 +584,18 @@ function checkForPublicHolidays() {
 }
 
 function checkLayout(){
+	var timeOutDate = mpdlDate.getNextDate(mpdlCookie.cookieTimeout, mpdlDate.now('date'));
 	if (!mpdlCookie.getCookie('layoutUpdateDate')) {
 		mpdlCookie.eraseCookie("layout");
-		var timeOutDate = mpdlDate.getNextDate(mpdlCookie.cookieTimeout, mpdlDate.now('date'));
+		
 		mpdlCookie.setCookie("layoutUpdateDate", mpdlDate.now('today_date'), null, timeOutDate.toGMTString());
 		mpdlCookie.setCookie("layout", mpdlCSS.getDefaultStylesheet(), null, timeOutDate.toGMTString());
+	} else {
+		mpdlCookie.setCookie("layout", mpdlCookie.getCookie('layout'), null, timeOutDate.toGMTString());	//Refresh the timestamp for timeout of cookie
 	}
 	mpdlCSS.enablePageStyle(mpdlCookie.getCookie('layout'))
-	
 	checkForPublicHolidays();
 }
-
-function returnValuesFromDOM(dom_element) {
-	for (info in dom_element) {
-		alert(info +': '+dom_element[info]);
-	}
-}
-
-function collectInfo(dom_element) {
-	var infoEL = '';
-	for (info in dom_element) {
-		infoEL += info +': '+dom_element[info]+' - typeof: '+typeof(dom_element[info])+'\n';
-		if (typeof(dom_element[info] == 'object')) {
-			for (detailinfo in dom_element[info]) {
-				infoEL += '-'+detailinfo+': '+dom_element[info][detailinfo]+'\n';
-			}
-		}
-	}
-	alert(infoEL);
-}
-
 
 function checkActiveCss() {
 	var cookieCSS = mpdlCookie.getCookie('layout');
@@ -668,10 +619,37 @@ function checkActiveCss() {
 	setTimeout("checkActiveCss()", 500);
 } 
 
+/**
+ * function called by eSciDoc_javascript.js
+ */
 function themeCookieInit() {
 	jQuery(document).ready(function() {
 		mpdlCSS.createThemebox('#themeSelector');
 	});
-	setTimeout("checkActiveCss()", 1000);
+	setTimeout("checkActiveCss()", 700);
 }
+
 checkLayout();
+
+
+
+
+/********************************** STUFF FUNCTIONS *************************************************/
+function returnValuesFromDOM(dom_element) {
+	for (info in dom_element) {
+		alert(info +': '+dom_element[info]);
+	}
+}
+
+function collectInfo(dom_element) {
+	var infoEL = '';
+	for (info in dom_element) {
+		infoEL += info +': '+dom_element[info]+' - typeof: '+typeof(dom_element[info])+'\n';
+		if (typeof(dom_element[info] == 'object')) {
+			for (detailinfo in dom_element[info]) {
+				infoEL += '-'+detailinfo+': '+dom_element[info][detailinfo]+'\n';
+			}
+		}
+	}
+	alert(infoEL);
+}

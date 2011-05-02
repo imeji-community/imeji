@@ -108,11 +108,9 @@ public abstract class CollectionBean
 
     public String removeAuthor()
     {
-        if (authorPosition > 0)
-        {
-        	LinkedList<Person> c = (LinkedList<Person>)collection.getMetadata().getPersons();
-            c.remove(authorPosition);
-        }
+		LinkedList<Person> c = (LinkedList<Person>)collection.getMetadata().getPersons();
+        if (c.size() > 1 )c.remove(authorPosition);
+        else BeanHelper.error("A collection needs at leat one author!");
         return getNavigationString();
     }
 
@@ -128,12 +126,10 @@ public abstract class CollectionBean
 
     public String removeOrganization()
     {
-        if (organizationPosition > 0)
-        {
-            LinkedList<Person> persons = (LinkedList<Person>)collection.getMetadata().getPersons();
-            LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
-            orgs.remove(organizationPosition);
-        }
+        LinkedList<Person> persons = (LinkedList<Person>)collection.getMetadata().getPersons();
+        LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
+        if (orgs.size() > 1) orgs.remove(organizationPosition);
+        else BeanHelper.error("An author needs at leat one organization!");
         return getNavigationString();
     }
 
@@ -280,6 +276,13 @@ public abstract class CollectionBean
     {
     	CollectionController cc = new CollectionController(sessionBean.getUser());
     	cc.delete(collection, sessionBean.getUser());
+    	return "";
+    }
+    
+    public String withdraw() throws Exception
+    {
+    	CollectionController cc = new CollectionController(sessionBean.getUser());
+    	cc.withdraw(collection);
     	return "";
     }
 

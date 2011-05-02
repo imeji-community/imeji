@@ -141,14 +141,14 @@ public class AlbumController extends ImejiController
 	public Collection<Album> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
 	    QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-	    String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/album", "", "", limit, offset, user);
+	    String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/album", "", "", limit, offset, user, false);
 	    return ImejiSPARQL.execAndLoad(query, Album.class);
 	}
 	
 	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
     {
         QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/albumn", "", "", -1, 0, user);
+        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/albumn", "", "", -1, 0, user, false);
     	return ImejiSPARQL.execCount(query);
     }
 	

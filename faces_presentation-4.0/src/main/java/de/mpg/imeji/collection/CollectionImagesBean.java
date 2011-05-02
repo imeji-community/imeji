@@ -5,14 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
-
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
-import de.mpg.imeji.filter.FiltersBean;
-import de.mpg.imeji.filter.FiltersSession;
-import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.search.URLQueryTransformer;
@@ -24,8 +19,8 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
-import de.mpg.jena.security.Security;
 import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
@@ -139,6 +134,28 @@ public class CollectionImagesBean extends ImagesBean {
 	public CollectionImeji getCollection() {
 		return collection;
 	}
+	
+	 public String release() throws Exception
+	 {
+        CollectionController cc = new CollectionController(sb.getUser());
+        cc.release(collection);
+        return "pretty:";
+    	}
+    
+    public String delete() throws Exception
+    {
+    	CollectionController cc = new CollectionController(sb.getUser());
+    	cc.delete(collection, sb.getUser());
+    	return "";
+    }
+	
+    public String withdraw() throws Exception
+    {
+    	CollectionController cc = new CollectionController(sb.getUser());
+    	cc.withdraw(collection);
+    	return "";
+    }
+
 	
 	public boolean isEditable()
     {

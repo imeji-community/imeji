@@ -37,6 +37,7 @@
 </ui:remove>	
 		<div class="full_area0 itemList loggedIn">
 			<div class="full_area0 listHeader">
+			
 				<span class="free_area0_p8 endline itemSelectArea">
 		      		<input type="button" class="min_imgBtn checkboxSelectButton"/>
 					<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none; width:150px;">
@@ -171,7 +172,7 @@
 													<h:outputText value="#{lbl.collection_release}"></h:outputText>
 												</h:commandLink>
 												
-												<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{container.withrdraw}" rendered="#{container.editable and container.collection.properties.status=='RELEASED'}">
+												<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{container.withdraw}" rendered="#{container.editable and container.collection.properties.status=='RELEASED'}">
 													<h:outputText value="Withdraw"></h:outputText>
 												</h:commandLink>
 												
@@ -217,8 +218,4 @@
 
 		</div>
 		
-		<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{CollectionsBean.sb.user != null and CollectionsBean.totalNumberOfRecords != 0}">
-			<a4j:commandLink value="#{lbl.delete_selected_collections}" styleClass="xSmall_marginLIncl" action="#{CollectionsBean.deleteAll}" />
-		</h:panelGroup>
-
 </html>								

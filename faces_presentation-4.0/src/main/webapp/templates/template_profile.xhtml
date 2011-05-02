@@ -34,6 +34,7 @@
 							</h:panelGroup>
 						</h:panelGroup>
 						
+						
 						<a4j:repeat id="profile" var="statement" value="#{FormularBean.statements}" rowKeyVar="position">
 							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
 								<b class="xLarge_area0_p8 endline labelLine clear">
@@ -50,11 +51,12 @@
 										</h:selectOneMenu>
 									</h:panelGroup>
 									
-									<h:panelGroup styleClass="xLarge_area1 xmall_marginRIncl">
-										<h:outputLabel styleClass="large_label" value="#{lbl.name}"/>
-										<h:inputText value="#{statement.defaultLabel}" styleClass="large_txtInput" valueChangeListener="#{statement.nameListener}"/>
+									<h:panelGroup styleClass="xLarge_area1 xSmall_marginRIncl">
+										<h:outputLabel for="inputName" styleClass="xLarge_label" value="#{lbl.name}"/>
+										<h:inputText id="inputName" required="true" requiredMessage="Name is mandatoty!" value="#{statement.defaultLabel}" styleClass="xLarge_txtInput" valueChangeListener="#{statement.nameListener}"/>
+										<h:message for="inputName" styleClass="xLarge_label" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" globalOnly="false" showDetail="false" showSummary="true"/>
 									</h:panelGroup>	
-										
+									
 									<h:panelGroup styleClass="medium_area1 xmall_marginRIncl">
 										<h:outputLabel styleClass="large_label" value="#{lbl.multiple}"/>
 										<h:selectBooleanCheckbox value="#{statement.multiple}" valueChangeListener="#{statement.multipleListener}"/>
@@ -62,7 +64,7 @@
 																			
 									<br/><br/><br/>
 									
-									<h:panelGroup styleClass="xHuge_area0 xSmall_marginLExcl endline" rendered="#{statement.constraintsSize == 0 and statement.statement.vocabulary == null}">
+									<h:panelGroup styleClass="full_area0 xSmall_marginLExcl endline" rendered="#{statement.constraintsSize == 0 and statement.statement.vocabulary == null}">
 										<h:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_vocabulary}" action="#{FormularBean.addVocabulary}">
 											<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 										</h:commandButton>

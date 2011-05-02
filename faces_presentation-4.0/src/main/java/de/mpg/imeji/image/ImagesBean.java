@@ -26,6 +26,8 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.security.Security;
+import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 
@@ -158,13 +160,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     	CollectionImeji coll = null;
     	
     	if (!images.isEmpty()) coll = cc.retrieve(images.iterator().next().getCollection());
-    	
+    	int count = 0;
     	for(Image im : images)
     	{
     		try 
     		{
 				ic.delete(im, sb.getUser());
 				if (coll.getImages().contains(im.getId())) coll.getImages().remove(im.getId());
+				count++;
 			} 
     		catch (Exception e) 
 			{
@@ -172,9 +175,32 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 				e.printStackTrace();
 			}
     	}
-    	
+    	BeanHelper.info(count + " images deleted.");
     	cc.update(coll);
     	
+    	return "pretty:";
+    }
+    
+    public String withdrawAll() throws Exception 
+    {
+    	ImageController ic = new ImageController(sb.getUser());
+    	update();   	
+    	
+    	int count = 0;
+    	for(Image im : images)
+    	{
+    		try 
+    		{
+				ic.withdraw(im);
+				count++;
+			} 
+    		catch (Exception e) 
+			{
+				BeanHelper.error("Error withdrawing " + im.getFilename());
+				e.printStackTrace();
+			}
+    	}
+    	BeanHelper.info(count + " images deleted.");
     	return "pretty:";
     }
 
@@ -287,5 +313,22 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	public void setImages(Collection<Image> images) {
 		this.images = images;
 	}
+	
+	public boolean isEditable()
+    {
+    	return false;
+    }
+
+	public boolean isVisible() 
+	{
+		return false;
+	}
+	
+	public boolean isDeletable() 
+	{
+		return false;
+	}
+
+	
     
 }

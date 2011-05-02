@@ -50,7 +50,8 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
         Collection<Album> albums = new ArrayList<Album>();
         
         UserController uc = new UserController(sb.getUser());
-        sb.setUser(uc.retrieve(sb.getUser().getEmail()));
+        
+        if (sb.getUser() != null) sb.setUser(uc.retrieve(sb.getUser().getEmail()));
 
         try
         {

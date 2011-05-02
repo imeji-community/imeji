@@ -347,6 +347,7 @@ public class MdProfileBean
         	return false;
         }
         int i=0;
+
         for (Statement s : profile.getStatements())
         {
         	if(s.getName() == null || !s.getName().isAbsolute())
@@ -359,7 +360,7 @@ public class MdProfileBean
                 BeanHelper.error("Names must be unique!");
                 return false;
             }
-            else if (s.getName() == null || s.getName().equals(""))
+            else if (s.getName() == null || s.getName().toString().equals(profile.getId().toString() + "/"))
             {
                 BeanHelper.error("Names are required!");
                 return false;

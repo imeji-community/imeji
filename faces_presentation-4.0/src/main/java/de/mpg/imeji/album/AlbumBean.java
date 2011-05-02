@@ -136,7 +136,8 @@ public class AlbumBean implements Serializable
         public String removeAuthor()
         {
             List<Person> list = (List<Person>) getAlbum().getMetadata().getPersons();
-            list.remove(authorPosition);
+            if (list.size() > 1) list.remove(authorPosition);
+            else BeanHelper.error("An album needs at leat one author!");
             return "";
         }
 
@@ -153,7 +154,8 @@ public class AlbumBean implements Serializable
         {
             List<Person> persons = (List<Person>) getAlbum().getMetadata().getPersons();
             List<Organization> orgs = (List<Organization>) persons.get(authorPosition).getOrganizations();
-            orgs.remove(organizationPosition);
+            if (orgs.size() > 1) orgs.remove(organizationPosition);
+            else BeanHelper.error("An author needs at leat one organization!");
             return "";
         }
 

@@ -91,6 +91,19 @@ public class CollectionController extends ImejiController
         update(ic);
     }
 	
+	public void withdraw(CollectionImeji ic) throws Exception
+    {
+		ic.getProperties().setStatus(Status.WITHDRAWN);
+		ic.getProperties().setVersionDate(new Date());
+	    for(URI uri: ic.getImages())
+	    {
+	    	ImageController imageController = new ImageController(user);
+	    	Image img = imageController.retrieve(uri);
+	    	imageController.withdraw(img);
+	    }
+        update(ic);
+    }
+	
 	public CollectionImeji retrieve(String id)
 	{
 		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
@@ -159,7 +172,7 @@ public class CollectionController extends ImejiController
 	public Collection<CollectionImeji> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
 		QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-	    String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/collection", "", "", limit, offset, user);
+	    String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/collection", "", "", limit, offset, user, false);
 	    Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(query, CollectionImeji.class);
 	    
 		return res;
@@ -168,7 +181,7 @@ public class CollectionController extends ImejiController
 	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
     {
         QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/collection", "", "", -1, 0, user);
+        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/collection", "", "", -1, 0, user, false);
     	return ImejiSPARQL.execCount(query);
     }
 

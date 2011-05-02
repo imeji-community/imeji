@@ -60,6 +60,22 @@
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
 			</ui:define>
+			
+			<ui:define name="actionsMenu">
+			
+				<h:commandLink id="lnkReleaseCollection" styleClass="free_area0" action="#{CollectionImagesBean.release}" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.properties.status=='PENDING'}">
+					<h:outputText value="#{lbl.collection_release}"></h:outputText>
+				</h:commandLink>
+				
+				<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0" action="#{CollectionImagesBean.withdraw}" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.properties.status=='RELEASED'}">
+					<h:outputText value="Withdraw"></h:outputText>
+				</h:commandLink>
+				
+				<h:commandLink id="lnkDeleteCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{CollectionImagesBean.delete}" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.properties.status=='PENDING'}">
+					<h:outputText value="#{lbl.delete}"></h:outputText>
+				</h:commandLink>
+			
+			</ui:define>
 	</ui:composition>
 
 </body>

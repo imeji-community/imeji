@@ -81,6 +81,9 @@
 		 
 		 <h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 		 	<ui:include src="../include/History.xhtml"></ui:include>
+		 	<a4j:commandLink rendered="#{HistorySession.currentPage.name == 'Collections'}" value="#{lbl.delete_selected_collections}" styleClass="xSmall_marginLIncl" action="#{CollectionsBean.deleteAll}" />
+		 	<a4j:commandLink rendered="#{HistorySession.currentPage.name == 'Albums'}" value="#{lbl.delete_selected_albums}" styleClass="xSmall_marginLIncl" action="#{AlbumsBean.deleteAll}" />
+		 	
 		 </h:panelGroup>
 		 
 		 <ui:insert name="list"/>

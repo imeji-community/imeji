@@ -81,7 +81,7 @@ public class EditMdProfileBean extends MdProfileBean
             cancel();
         }
        
-        return "";
+        return "pretty:editProfile";
     }
 
     @Override

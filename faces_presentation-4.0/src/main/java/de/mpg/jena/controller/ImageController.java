@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -133,7 +132,7 @@ public class ImageController extends ImejiController
     {
     	additionalQuery = " . <" + uri.toString() + "> <http://imeji.mpdl.mpg.de/image/metadata> ?md . ?md <http://www.w3.org/2000/01/rdf-schema#member> ?list . ?list <http://purl.org/dc/terms/type> ?type";
     	QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-        String query = querySPARQL.createConstructQuery(new ArrayList<SearchCriterion>(), null,	"http://imeji.mpdl.mpg.de/image", additionalQuery , "?s=<http://imeji.mpdl.mpg.de/image/111>", 1, 0, user);
+        String query = querySPARQL.createConstructQuery(new ArrayList<SearchCriterion>(), null,	"http://imeji.mpdl.mpg.de/image", additionalQuery , "?s=<http://imeji.mpdl.mpg.de/image/111>", 1, 0, user, false);
     	ImejiSPARQL.execConstruct(query).write(System.out, "RDF/XML-ABBREV");
     }
     
@@ -298,7 +297,7 @@ public class ImageController extends ImejiController
     public Collection<Image> searchImages(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
     {
     	SearchHelper helper = new SearchHelper(null);
-    	
+      	
     	List<String> uris = helper.advancedSearchImages(scList, sortCri, user);
     	
     	return loadImages(uris, limit, offset);

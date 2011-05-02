@@ -66,9 +66,24 @@
 					
 			<ui:define name="actionsMenu">
 				<h:panelGroup>
-					<rich:togglePanel value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{ViewCollectionBean.deletable}">
+					<rich:togglePanel  value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{ViewCollectionBean.editable}">
 						 <f:facet name="closed">
-					            <rich:toggleControl value="Share Collection" switchToState="open"/>
+						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
+					            
+					            <rich:toggleControl styleClass="free_area0" value="Share Collection" switchToState="open"/>
+					            
+					            <h:commandLink id="lnkReleaseCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{ViewCollectionBean.release}" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status=='PENDING'}">
+									<h:outputText value="#{lbl.collection_release}"></h:outputText>
+								</h:commandLink>
+								
+								<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{ViewCollectionBean.withdraw}" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status=='RELEASED'}">
+									<h:outputText value="Withdraw"></h:outputText>
+								</h:commandLink>
+								
+								<h:commandLink id="lnkDeleteCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{ViewCollectionBean.delete}" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status=='PENDING'}">
+									<h:outputText value="#{lbl.delete}"></h:outputText>
+								</h:commandLink>
+							</h:panelGrid>
 					     </f:facet>
 					     <f:facet name="open">
 					         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
@@ -119,18 +134,34 @@
 										<h:outputText value ="#{lbl.collection_view_all_images}"/>
 									</h:outputLink>
 								</h2>
-							</h:panelGroup>
+							</h:panelGroup>	<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
 							
 							<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 								<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
-									<h1><h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/></h1>
-								</h:panelGroup>
-								<h:panelGroup styleClass="half_area0">
-									<h:outputText escape="false" value="#{ViewCollectionBean.formattedDescription}"/>
-								</h:panelGroup>
-								
+									<h1>
+										<h:outputText styleClass="free_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
+										<h:outputLabel>(</h:outputLabel>
+										<h:outputLabel rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}">
+											<h:outputText value="#{lbl.private}" />
+										</h:outputLabel>
+										<h:outputLabel  rendered="#{ViewCollectionBean.collection.properties.status == 'RELEASED'}">
+											<h:outputText value="#{lbl.published}" />
+										</h:outputLabel>
+										<h:outputLabel rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}">
+											<h:outputText value="#{lbl.withdrawn}" />
+										</h:outputLabel>
+										<h:outputLabel>)</h:outputLabel>
+									</h1>
+							
+							<h:panelGroup styleClass="half_area0">
+								<h:outputText escape="false" value="#{ViewCollectionBean.formattedDescription}"/>
+							</h:panelGroup>
+					</h:panelGroup>
 								
 							</h:panelGroup>
+			
+						
+								
 			
 							<h:panelGroup styleClass="full_area1_p8">
 								<h:outputText value=""/>

@@ -17,10 +17,12 @@ import de.mpg.jena.vo.User;
 public class SearchHelper 
 {
 	private String containerURI = null;
+	private boolean isCollection = false;
 	
 	public SearchHelper(String containerURI) 
 	{
 		this.containerURI = containerURI;
+		isCollection = (containerURI != null);
 	}
 	
 	
@@ -80,7 +82,7 @@ public class SearchHelper
 			l.add(sc);
 		}
 		
-		String q =  querySPARQL.createQuery(l, sortCri , "http://imeji.mpdl.mpg.de/image", "", "", -1, 0, user);
+		String q =  querySPARQL.createQuery(l, sortCri , "http://imeji.mpdl.mpg.de/image", "", "", -1, 0, user, isCollection);
 		results =  ImejiSPARQL.exec(q);
 		
 		return results;
@@ -94,7 +96,8 @@ public class SearchHelper
 		{
 			s =  " . <" + containerURI + "> <http://imeji.mpdl.mpg.de/images> ?s";
 		}
-		String q = querySPARQL.createQuery(new ArrayList<SearchCriterion>(), sortCri , "http://imeji.mpdl.mpg.de/image", s, "", -1, 0, user);
+		String q = querySPARQL.createQuery(new ArrayList<SearchCriterion>(), sortCri , "http://imeji.mpdl.mpg.de/image", s, "", -1, 0, user, isCollection);
+
 		return ImejiSPARQL.exec(q);
 	}
 }

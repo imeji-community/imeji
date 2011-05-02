@@ -1,5 +1,6 @@
 package de.mpg.imeji.metadata;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,6 +11,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionImagesBean;
 import de.mpg.imeji.image.ImagesBean;
@@ -126,7 +128,6 @@ public class EditImageMetadataBean
 			statementMenu.add(new SelectItem(s.getName().toString(), labelHelper.getDefaultLabel(s.getLabels().iterator())));
 		}
 		selectedMode = "basic";
-		
 	}
 	
 	public String cancel()
@@ -175,6 +176,27 @@ public class EditImageMetadataBean
 		addToAll();
 		editor.save();
 		return "";
+	}
+	
+	public String saveAndRedirect() throws IOException
+	{
+		editor.save();
+		redirectToView();
+		return "";
+	}
+	
+	public String saveAllAndRedirect() throws IOException
+	{
+		addToAllAndSave();
+		redirectToView();
+		return "";
+	}
+	
+	public void redirectToView() throws IOException
+	{
+		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+		String path = ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class)).getCollection().getId().getPath();
+    	FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + "/images" + path);
 	}
 	
 	public String clearAll()

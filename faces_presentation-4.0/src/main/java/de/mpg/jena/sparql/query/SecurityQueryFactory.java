@@ -25,12 +25,14 @@ public class SecurityQueryFactory
 	private SearchCriterion status = new SearchCriterion(Operator.OR, ImejiNamespaces.PROPERTIES_STATUS, "http://imeji.mpdl.mpg.de/status/RELEASED" , Filtertype.URI);
 	private SearchCriterion imageCollection = null;
 	private boolean myImages = false;
+	private boolean isCollection = false;
 	
-	public SecurityQueryFactory(Map<String,QueryElement> els, String type, User user) 
+	public SecurityQueryFactory(Map<String,QueryElement> els, String type, User user, boolean isCollection) 
 	{
 		this.els = els;
 		this.user = user;
 		this.type = type;
+		this.isCollection = isCollection;
 	}
 	
 	public String getVariablesAsSparql()
@@ -60,7 +62,7 @@ public class SecurityQueryFactory
 		{
 			if (ImejiNamespaces.PROPERTIES_STATUS.equals(scList.get(i).getNamespace()))
 			{
-				this.status = scList.get(i);
+				status = scList.get(i);
 				scList.remove(i);
 				i--;
 			}
@@ -84,8 +86,13 @@ public class SecurityQueryFactory
 	{
 		String f = "";
 		String op = " ";
-		
-		if ((!myImages && imageCollection == null) || Operator.AND.equals(status.getOperator()))
+
+		if ("http://imeji.mpdl.mpg.de/image".equals(type) && !isCollection)
+		{
+			f+= "?status!=<http://imeji.mpdl.mpg.de/status/WITHDRAWN> && (";
+		}
+
+		if ((!myImages && imageCollection == null) || (Operator.AND.equals(status.getOperator())))
 		{
 			f+="?status=<" + status.getValue() + ">";
 			
@@ -98,7 +105,6 @@ public class SecurityQueryFactory
 				op = " || ";
 			}
 		}
-
 		String uf ="";
 		boolean hasGrantForCollection = false;
 		if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
@@ -138,6 +144,11 @@ public class SecurityQueryFactory
 			uf += "?coll=<" +imageCollection.getValue() + "> && ?status=<http://imeji.mpdl.mpg.de/status/RELEASED>";
 		}
 		else if (user != null && user.getGrants() != null && user.getGrants().isEmpty() && myImages) f = " false ";
+		
+		if ("http://imeji.mpdl.mpg.de/image".equals(type) && !isCollection)
+		{
+			uf+= ")";
+		}
 		
 		if (!"".equals(uf)) f = " .FILTER(" + f + op + "(" + uf + "))";
 		else if (!"".equals(f)) f = " .FILTER(" + f + ")";

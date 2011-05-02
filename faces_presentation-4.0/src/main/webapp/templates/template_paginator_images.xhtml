@@ -69,32 +69,41 @@
 		});
 	</script>			
 		 <rich:modalPanel id="panelConfirmDeleteAll" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
-	        <h4><h:outputText value="Delete images?" styleClass="xTiny_marginLExcl"/></h4>
+	        <h4>
+	        	<a4j:status forceId="true" id="allDelStatus" startText="Deleting..., please wait." stopText="Delete images?" rendered="#{paginatorListSessionBean.deletable}"/>
+	        	<a4j:status forceId="true" id="allWithStatus" startText="Withdrawing..., please wait." stopText="Withdraw images?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
+	        </h4>
 	        <h:panelGroup layout="block" styleClass="quad_area0_p1">
 				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
 					<div class="large_txtBtn">
 	       				<a href="#" class="large_txtBtn dialogCancelButton" onclick="#{rich:component('panelConfirmDeleteAll')}.hide()">Cancel</a>
 	       			</div>
 					<div class="xLarge_txtBtn tiny_marginLExcl">
-				        <a4j:commandButton action="#{paginatorListSessionBean.deleteAll}" value="Delete all images" id="lnkSelectDeleteSel"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
-					</div>
+						<a4j:commandButton status="allDelStatus" action="#{paginatorListSessionBean.deleteAll}" rendered="#{paginatorListSessionBean.deletable}" value="Delete all images" id="lnkSelectDeleteSel"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
+						<a4j:commandButton status="allWithStatus" action="#{paginatorListSessionBean.withdrawAll}" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}" value="Withdraw all images" id="lnkSelectWithdrawSel"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>    
+				 	</div>
 				</div>
 			</h:panelGroup>
 		</rich:modalPanel>
 	    
 	     <rich:modalPanel id="panelConfirmDeleteSelected" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
-	        <h4><h:outputText value="Delete images?" styleClass="xTiny_marginLExcl"/></h4>
+	        <h3>
+	        	<a4j:status forceId="true" id="selDelStatus" startText="Deleting..., please wait." stopText="Delete images?" rendered="#{paginatorListSessionBean.deletable}"/>
+	        	<a4j:status forceId="true" id="selWithStatus" startText="Withdrawing..., please wait." stopText="Withdraw images?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
+	        </h3>
 	        <h:panelGroup layout="block" styleClass="quad_area0_p1">
 				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
 					<div class="large_txtBtn">
 						 <a href="#" class="large_txtBtn dialogCancelButton" onclick="#{rich:component('panelConfirmDeleteSelected')}.hide()">Cancel</a>
 					</div>
 					<div class="xLarge_txtBtn tiny_marginLExcl">
-						<a4j:commandButton action="#{SelectedBean.deleteAll}" value="#{lbl.delete_selectedImages}" id="lnkSelectDeleteAll" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
+						<a4j:commandButton status="selDelStatus" action="#{SelectedBean.deleteAll}" rendered="#{paginatorListSessionBean.deletable}" value="#{lbl.delete_selectedImages}" id="lnkSelectDeleteAll" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
+						<a4j:commandButton status="selWithStatus" action="#{SelectedBean.withdrawAll}" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}" value="Withdraw selected images" id="lnkSelectWithdrawAll"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>	
 					</div>
 				</div>
 			</h:panelGroup>
 	    </rich:modalPanel>
+	   
 
 		<h:panelGroup id="preListHeaderActiveAlbum" layout="block" styleClass="full_area0 preListHeader" rendered="#{SessionBean.activeAlbum != null}">
 			<h:panelGroup styleClass="huge_area0 small_marginLExcl">
@@ -143,11 +152,15 @@
 						<a4j:commandLink styleClass="large_area0" action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 							<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 						</a4j:commandLink>
-						<h:outputLink styleClass="large_area0" value="#{Navigation.applicationUrl}edit?type=all" id="lnkSelectEdit2">
+						<h:outputLink styleClass="large_area0" value="#{Navigation.applicationUrl}edit?type=all" id="lnkSelectEdit2"  rendered="#{paginatorListSessionBean.editable}">
 							<span class="large_area0_p8"><h:outputText value="#{lbl.edit_all}"/></span>
 						</h:outputLink>
-						<h:outputLink styleClass="large_area0" value="#">
+						<h:outputLink styleClass="large_area0" value="#" rendered="#{paginatorListSessionBean.deletable}">
 							<span class="large_area0_p8"><h:outputText value="Delete all"/></span>
+							<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
+						</h:outputLink>
+						<h:outputLink styleClass="large_area0" value="#" rendered="#{!paginatorListSessionBean.deletable  and paginatorListSessionBean.editable}">
+							<span class="large_area0_p8"><h:outputText value="Withdraw all"/></span>
 							<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
 						</h:outputLink>
 					</div>
@@ -157,7 +170,7 @@
 			</h:panelGroup>
 			
 		
-			<h:panelGroup styleClass="free_area0_p2 double_marginLIncl" rendered="#{SessionBean.user != null}">
+			<h:panelGroup  styleClass="free_area0_p2 double_marginLIncl" rendered="#{SessionBean.user != null}">
 				<h:panelGroup id="preListHeaderSelected">
 					<h:outputText value="#{SessionBean.selectedSize} #{lbl.selected} " styleClass="free_area0 "/>
 				</h:panelGroup>
@@ -173,16 +186,25 @@
 					
 					<div class="selectMenu" style="display: none; width:150px;">
 						<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
-						<a4j:commandLink styleClass="large_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
-							<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
-						</a4j:commandLink>
-						<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit">
-							<span class="large_area0_p8"><h:outputText value="#{lbl.selected_edit}"/></span>
-						</h:outputLink>
-						<h:outputLink styleClass="large_area0" value="#">
-							<span class="large_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
-							<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
-						</h:outputLink>
+						<h:panelGroup id="preListHeaderSelectedMenu">
+							<h:panelGroup rendered="#{SessionBean.selectedSize == 0}">No images selected</h:panelGroup>
+							<h:panelGroup rendered="#{SessionBean.selectedSize > 0}">
+								<a4j:commandLink styleClass="large_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+									<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
+								</a4j:commandLink>
+								<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit" rendered="#{paginatorListSessionBean.editable}">
+									<span class="large_area0_p8"><h:outputText value="#{lbl.selected_edit}"/></span>
+								</h:outputLink>
+								<h:outputLink styleClass="large_area0" value="#"  rendered="#{paginatorListSessionBean.deletable}">
+									<span class="large_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
+									<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+								</h:outputLink>
+								<h:outputLink styleClass="large_area0" value="#" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}">
+									<span class="large_area0_p8"><h:outputText value="Withdraw all"/></span>
+									<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+								</h:outputLink>
+							</h:panelGroup>
+						</h:panelGroup>
 					</div>
 				</h:panelGroup>
 			</h:panelGroup>	
@@ -228,8 +250,9 @@
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 					<li class="large_area0 itemTile">
 						
-						<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'} free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
+						<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'}  free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
 							<!-- Image with link to the details view --> 
+							
 							<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
 								<h:graphicImage alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
 							</h:outputLink>
@@ -245,15 +268,18 @@
 						<!-- Album Selected --> 
 						<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null}">
 							<span class="free_area0"> 
-								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
-									<a4j:support event="onchange" reRender="preListHeaderSelected, imgFrame" />
+								<h:selectBooleanCheckbox rendered="#{item.image.properties.status != 'WITHDRAWN'}" styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
+									<a4j:support event="onchange" reRender="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu" />
 								</h:selectBooleanCheckbox> 
+								
 							</span>
 						</h:panelGroup> 
 						
+						<h:graphicImage styleClass="tiny_area0" title="Image withdrawn" rendered="#{item.image.properties.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
+						
 						<span class="medium_area0"> 
 							<span class="free_area0_p3 tileControlIconArea"> 
-								<h:outputLabel value="#{item.image.filename}" />
+								<h:outputLabel value="#{item.image.filename}" /> 
 							<ui:remove>
 								<br />
 								<h:commandLink id="lnkAddToActiveAlbumInactive"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">

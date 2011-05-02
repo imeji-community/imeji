@@ -35,18 +35,18 @@ public class QuerySPARQLImpl implements QuerySPARQL
 //	private String type = "http://imeji.mpdl.mpg.de/image";
 //	private Map<String, SearchCriterion> subqueries = new HashMap<String, SearchCriterion>();
 
-	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
+	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user, boolean isCollection)
     {
-		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
+		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user, isCollection); 
 		String query = "SELECT DISTINCT ?s WHERE {" + selectQuery + "} " + this.sortQuery + " " + this.limit + " " + this.offset;
 		//ImejiJena.imageModel.write(System.out, "RDF/XML-ABBREV");
 		//System.out.println(query);
 		return query;
     }
 	
-	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user) 
+	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user, boolean isCollection) 
 	{
-	 	init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user); 
+	 	init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user, isCollection); 
 		String query= "SELECT ?s count(DISTINCT ?s) WHERE {" + selectQuery + "} " + this.limit + " " + this.offset;
 		//System.out.println(query);
 		return  query;
@@ -55,29 +55,29 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	/**
 	 * TODO not working
 	 */
-	public String createConstructQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user) 
+	public String createConstructQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user , boolean isCollection) 
 	{
-		String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
+		String select = printSelect(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user, false);
 		//System.out.println("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <" + root + "> " + variables +  filters + "} " + this.limit + " " + this.offset);
 		return "CONSTRUCT { ?s a <" + root + "> . ?md a <http://imeji.mpdl.mpg.de/image/metadata> . ?type a <http://purl.org/dc/terms/type> } WHERE { " + variables.substring(2) +   securityFilter + "} " + this.limit + " " + this.offset;
 	}
 	
-	private void init(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
+	private void init(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user, boolean isCollection)
 	{
 		this.els = qeFact.createElements(scList, root, sortCriterion);
 		if (offset > 0) this.offset = "OFFSET " + Integer.toString(offset);
 		if (limit > 0) this.limit = "LIMIT " +  Integer.toString(limit);
-		this.selectQuery = printSelect(scList, sortCriterion, root, specificQuery, specificFilter, limit, offset, user);
+		this.selectQuery = printSelect(scList, sortCriterion, root, specificQuery, specificFilter, limit, offset, user, isCollection);
 		this.sortQuery = SortQueryFactory.create(sortCriterion, els);
 	}
 	
-	private String printSelect(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user)
+	private String printSelect(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user, boolean isCollection)
 	{		
 		Map<String, SubQuery> subQueries = new HashMap<String, SubQuery>();
 		
 		if (scList == null) scList = new ArrayList<SearchCriterion>();
 
-		SecurityQueryFactory sqf = new SecurityQueryFactory(els, root, user);
+		SecurityQueryFactory sqf = new SecurityQueryFactory(els, root, user, isCollection);
 		scList = sqf.setSecuritySearchCriterion(scList);
 		
 		// Create one sub-query for each search criterion

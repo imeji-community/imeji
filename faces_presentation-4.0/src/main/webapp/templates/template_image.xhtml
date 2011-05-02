@@ -64,9 +64,9 @@
 						</span>
 					</h:panelGroup>
 					<h:panelGroup id="image" layout="block">
-						<h:outputLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" value="" disabled="#{imageBean.isInActiveAlbum || SessionBean.activeAlbum==null}">
+						<a4j:commandLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" disabled="#{imageBean.isInActiveAlbum || SessionBean.activeAlbum==null}">
 							<h:outputText value="#{lbl.add_to_album}"/>
-						</h:outputLink>
+						</a4j:commandLink>
 						<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" onchange="getElementById('formular:selectBtn').click();"/>
 						<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{imageBean.selected}" action="#{imageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
 						<h:outputText styleClass="small_label" value="#{lbl.selected}"/>

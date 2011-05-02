@@ -58,12 +58,13 @@
 				<h:outputText styleClass="free_area0" value="#{lbl.collection_metadata}" rendered="#{prettyContext.currentMapping.id == 'viewCollection'}"/>
 				
 				<h:outputText styleClass="seperator void" />
-				
-				
+
 				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
 			</ui:define>
+			
+			
 					
 			
 			<ui:define name="mainContent">

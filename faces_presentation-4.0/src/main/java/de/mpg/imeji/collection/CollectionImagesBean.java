@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.model.SelectItem;
+
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
@@ -54,6 +56,13 @@ public class CollectionImagesBean extends ImagesBean {
 			BeanHelper.error("Please check id.");
 			e.printStackTrace();
 		}
+		
+		List<SelectItem> sortMenu = new ArrayList<SelectItem>();
+        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_CREATION_DATE, sb
+                .getLabel(ImejiNamespaces.PROPERTIES_CREATION_DATE.name())));
+        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE, sb
+                .getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
+        setSortMenu(sortMenu);
 	}
 
 	@Override

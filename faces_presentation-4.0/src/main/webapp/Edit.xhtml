@@ -93,11 +93,11 @@
 												</ui:include>
 												<!-- BUTTONS -->
 												<h:panelGroup layout="block">
-													<a4j:commandLink styleClass="small_label" reRender="ajaxContent" action="#{EditImageMetadataBean.addMetadata}" value="#{lbl.add}">
+													<a4j:commandLink styleClass="small_label" reRender="ajaxContent" action="#{EditImageMetadataBean.addMetadata}" value="#{lbl.add}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
 														<f:setPropertyActionListener value="#{indexMetadata}" target="#{EditImageMetadataBean.mdPosition}" />
 														<f:setPropertyActionListener value="#{indexImage}" target="#{EditImageMetadataBean.imagePosition}" />
 													</a4j:commandLink>
-													<a4j:commandLink  styleClass="small_label"  reRender="ajaxContent" action="#{EditImageMetadataBean.removeMetadata}" value="#{lbl.remove}">
+													<a4j:commandLink  styleClass="small_label"  reRender="ajaxContent" action="#{EditImageMetadataBean.removeMetadata}" value="#{lbl.remove}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
 														<f:setPropertyActionListener value="#{indexMetadata}" target="#{EditImageMetadataBean.mdPosition}" />
 														<f:setPropertyActionListener value="#{indexImage}" target="#{EditImageMetadataBean.imagePosition}" />
 													</a4j:commandLink>	

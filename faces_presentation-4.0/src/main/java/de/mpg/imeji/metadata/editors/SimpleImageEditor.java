@@ -62,7 +62,7 @@ public class SimpleImageEditor extends MetadataEditor
 	{
 		if (metadataPos <= image.getMetadataSet().getMetadata().size()) 
 		{
-			((List<ImageMetadata>)image.getMetadataSet().getMetadata()).add(metadataPos, MetadataFactory.newMetadata(getStatement()));
+			((List<ImageMetadata>)image.getMetadataSet().getMetadata()).add(metadataPos + 1, MetadataFactory.newMetadata(getStatement()));
 		}
 	}
 	 

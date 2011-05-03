@@ -15,7 +15,6 @@ public class Container implements Serializable
     private Collection<URI> images = new LinkedList<URI>();
     private ContainerMetadata metadata = new ContainerMetadata();
 
-
     public void setId(URI id)
     {
         this.id = id;

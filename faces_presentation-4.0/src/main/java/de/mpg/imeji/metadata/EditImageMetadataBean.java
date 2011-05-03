@@ -424,6 +424,14 @@ public class EditImageMetadataBean
 	public void setEditType(String editType) {
 		this.editType = editType;
 	}
+
+	public Statement getStatement() {
+		return statement;
+	}
+
+	public void setStatement(Statement statement) {
+		this.statement = statement;
+	}
 	
 	
 }

@@ -13,6 +13,7 @@ import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.SingleEditBean;
 import de.mpg.imeji.metadata.extractors.BasicExtractor;
+import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.concurrency.locks.Locks;
@@ -102,7 +103,19 @@ public class ImageBean
         Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
         profile = ProfileHelper.loadProfile(image);
         edit = new SingleEditBean(image, profile, getPageUrl());
-    } 
+        cleanImageMetadata();
+    }
+    
+    private void cleanImageMetadata()
+	{
+		for (int i=0; i < image.getMetadataSet().getMetadata().size(); i++)
+		{
+			if (MetadataHelper.isEmpty(((List<ImageMetadata>)image.getMetadataSet().getMetadata()).get(i)))
+			{
+				((List<ImageMetadata>)image.getMetadataSet().getMetadata()).remove(i);i--;
+			}
+		}
+	}
 
     public void initView() throws Exception
     {
@@ -228,7 +241,7 @@ public class ImageBean
             ac.update(activeAlbum.getAlbum());
             BeanHelper.info("Image " + image.getFilename() + " added to active album");
         }
-        return "pretty:";
+        return "";
     }
     
     public String removeFromAlbum() throws Exception

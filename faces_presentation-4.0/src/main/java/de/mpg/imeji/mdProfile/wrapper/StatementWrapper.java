@@ -43,6 +43,7 @@ public class StatementWrapper
         // Wrapper variable initialization
         if (Integer.parseInt(st.getMinOccurs()) > 0) required = true;
         if ("unbounded".equals(st.getMaxOccurs()) || Integer.parseInt(st.getMaxOccurs()) > 1) multiple = true;
+        else multiple = false;
         defaultLabel = labelHelper.getDefaultLabel(st.getLabels().iterator());
     }
 
@@ -100,6 +101,10 @@ public class StatementWrapper
             if ((Boolean)event.getNewValue())
             {
                 statement.setMaxOccurs("unbounded");
+            }
+            else
+            {
+            	statement.setMaxOccurs("1");
             }
         }
     }

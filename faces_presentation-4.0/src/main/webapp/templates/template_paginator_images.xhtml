@@ -148,7 +148,13 @@
 					<input type="button" class="min_imgBtn checkboxSelectButton"/>
 					
 					<div class="selectMenu" style="display: none; width:150px;" >
-						<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
+						<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input><br/>
+						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{SessionBean.activeAlbum == null}">
+							<h:outputText value="No albums selected" styleClass="free_area0" />
+							<h:outputLink value="#{Navigation.albumsUrl}" styleClass="free_area0">
+								<h:outputText value="Select" styleClass="free_area0"/>
+							</h:outputLink>
+						</h:panelGroup>
 						<a4j:commandLink styleClass="large_area0" action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 							<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 						</a4j:commandLink>
@@ -189,6 +195,12 @@
 						<h:panelGroup id="preListHeaderSelectedMenu">
 							<h:panelGroup rendered="#{SessionBean.selectedSize == 0}">No images selected</h:panelGroup>
 							<h:panelGroup rendered="#{SessionBean.selectedSize > 0}">
+								<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{SessionBean.activeAlbum == null}">
+									<h:outputText value="No albums selected" styleClass="free_area0" />
+									<h:outputLink value="#{Navigation.albumsUrl}" styleClass="free_area0">
+										<h:outputText value="Select" styleClass="free_area0"/>
+									</h:outputLink>
+								</h:panelGroup>
 								<a4j:commandLink styleClass="large_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 									<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 								</a4j:commandLink>

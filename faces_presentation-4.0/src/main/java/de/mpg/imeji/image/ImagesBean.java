@@ -137,6 +137,19 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     	AlbumBean activeAlbum = sb.getActiveAlbum();
         AlbumController ac = new AlbumController(sb.getUser());
         
+        int els = getElementsPerPage();
+        int page = getCurrentPageNumber();
+        
+        setElementsPerPage(totalNumberOfRecords);
+        setCurrentPageNumber(1);
+        
+        update();
+        
+        setElementsPerPage(els);
+        setCurrentPageNumber(page);
+        
+        int count = 0;
+        
         for (Image im : getImages())
         {
         	 if (activeAlbum.getAlbum().getImages().contains(im.getId()))
@@ -146,10 +159,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
              else
              {
                  activeAlbum.getAlbum().getImages().add(im.getId());
-                 ac.update(activeAlbum.getAlbum());
-                 BeanHelper.info("Image " + im.getFilename() + " added to active album");
+                 count++;
              }
         }
+        ac.update(activeAlbum.getAlbum());
+        BeanHelper.info(count + " images added to active album");
+        
         return "pretty:";
     }
     

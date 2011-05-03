@@ -14,6 +14,7 @@ import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Authorization;
 import de.mpg.jena.util.ObjectHelper;
@@ -22,6 +23,7 @@ import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
 
 public class UserCreationBean
@@ -141,19 +143,26 @@ public class UserCreationBean
     {
     	CollectionController cc = new CollectionController(sb.getUser());
     	ImageController ic = new ImageController(sb.getUser());
+    	UserController uc = new UserController(sb.getUser());
     	Collection<CollectionImeji> cols = cc.retrieveAll();
     	for (CollectionImeji c : cols)
     	{
-    		c = (CollectionImeji) ObjectHelper.castAllHashSetToList(c);
-    		for (int i=0; i < ((List<URI>)c.getImages()).size(); i++)
+//    		c = (CollectionImeji) ObjectHelper.castAllHashSetToList(c);
+//    		for (int i=0; i < ((List<URI>)c.getImages()).size(); i++)
+//    		{
+//    			try{ ic.retrieve(((List<URI>)c.getImages()).get(i));}
+//    			catch (NotFoundException e) {
+//    				((List<URI>)c.getImages()).remove(i);
+//    				i--;
+//				}
+//    		}
+//    		cc.update(c);
+    		User user = uc.retrieve(c.getProperties().getCreatedBy());
+    		ProfileController pc = new ProfileController(user);
+    		if (c.getProperties().getStatus().equals(Status.RELEASED))
     		{
-    			try{ ic.retrieve(((List<URI>)c.getImages()).get(i));}
-    			catch (NotFoundException e) {
-    				((List<URI>)c.getImages()).remove(i);
-    				i--;
-				}
+    			pc.release(pc.retrieve(c.getProfile()));
     		}
-    		cc.update(c);
     	}
     	return "";
     }

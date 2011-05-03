@@ -57,7 +57,6 @@ public class MdProfileBean
         if (collectionSession.getProfile() == null)
             collectionSession.setProfile(new MetadataProfile());
         profile = collectionSession.getProfile();
-        profilesMenu = new ArrayList<SelectItem>();
         statements = new ArrayList<StatementWrapper>();
         mdTypesMenu = new ArrayList<SelectItem>();
     }
@@ -79,6 +78,7 @@ public class MdProfileBean
     public String getInit()
     {
     	mdTypesMenu = new ArrayList<SelectItem>();
+    	mdTypesMenu.add(new SelectItem(null, "--"));
     	for (ComplexTypes t : ComplexTypes.values())
     	{
     		mdTypesMenu.add(new SelectItem(t.getURI(), t.name()));
@@ -104,14 +104,15 @@ public class MdProfileBean
 
     public void loadtemplates()
     {
+    	profilesMenu = new ArrayList<SelectItem>();
         profilesMenu.add(new SelectItem(null, "Select Template"));
-//        for (MetadataProfile mdp : pc.retrieveAll())
-//        {
-//            if (mdp.getId().toString() != profile.getId().toString())
-//            {
-//                profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
-//            }
-//        }
+        for (MetadataProfile mdp : pc.search())
+        {
+            if (mdp.getId().toString() != profile.getId().toString())
+            {
+                profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
+            }
+        }
     }
 
     public String changeTemplate() throws Exception
@@ -226,10 +227,10 @@ public class MdProfileBean
     public String addConstraint()
     {
         Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
-        if (getConstraintPosition() == 0 || getConstraintPosition() >= st.getLiteralConstraints().size())
+        if (getConstraintPosition() >= st.getLiteralConstraints().size())
             ((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", "eng"));
         else
-            ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition(), new LocalizedString("","eng"));
+            ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition() + 1, new LocalizedString("","eng"));
         collectionSession.setProfile(profile);
         return getNavigationString();
     }
@@ -347,10 +348,16 @@ public class MdProfileBean
         	return false;
         }
         int i=0;
-
+        
         for (Statement s : profile.getStatements())
         {
-        	if(s.getName() == null || !s.getName().isAbsolute())
+        	System.out.println(s.getType());
+        	if (s.getType() == null)
+        	{
+        		BeanHelper.error("Please select a type for each metadata.");
+            	return false;
+        	}
+        	else if(s.getName() == null || !s.getName().isAbsolute())
             {
             	BeanHelper.error(s.getName()+" is not a valid name!");
             	return false;

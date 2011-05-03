@@ -82,13 +82,19 @@ public class CollectionController extends ImejiController
     {
 		ic.getProperties().setStatus(Status.RELEASED);
 		ic.getProperties().setVersionDate(new Date());
-	    for(URI uri: ic.getImages())
+	    
+		for(URI uri: ic.getImages())
 	    {
 	    	ImageController imageController = new ImageController(user);
 	    	Image img = imageController.retrieve(uri);
 	    	imageController.release(img);
 	    }
+	  
         update(ic);
+        
+        ProfileController pc = new ProfileController(user);
+	    pc.retrieve(ic.getProfile());
+	    pc.release(pc.retrieve(ic.getProfile()));
     }
 	
 	public void withdraw(CollectionImeji ic) throws Exception

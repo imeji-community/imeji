@@ -87,7 +87,8 @@ public class ViewCollectionBean extends CollectionBean
         String personString = "";
         for (Person p : getCollection().getMetadata().getPersons())
         {
-            personString += p.getFamilyName() + ", " + p.getGivenName();
+            if (!"".equalsIgnoreCase(personString)) personString += " / ";
+        	personString += p.getFamilyName() + ", " + p.getGivenName() + " ";
         }
         return personString;
     }

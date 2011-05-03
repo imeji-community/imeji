@@ -64,9 +64,13 @@
 						</span>
 					</h:panelGroup>
 					<h:panelGroup id="image" layout="block">
-						<a4j:commandLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" disabled="#{imageBean.isInActiveAlbum || SessionBean.activeAlbum==null}">
+						<h:outputText styleClass="small_label huge_marginLIncl" value="Image in " rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}"/>
+						<h:outputLink styleClass="free_area0  xLarge_marginRExcl" value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.album.id.path}" rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
+							<h:outputText value="active album"/>
+						</h:outputLink>
+						<h:commandLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
 							<h:outputText value="#{lbl.add_to_album}"/>
-						</a4j:commandLink>
+						</h:commandLink>
 						<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" onchange="getElementById('formular:selectBtn').click();"/>
 						<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{imageBean.selected}" action="#{imageBean.select}" style="visibility:hidden;" reRender="preListHeader"/>
 						<h:outputText styleClass="small_label" value="#{lbl.selected}"/>
@@ -126,12 +130,14 @@
 							</h:panelGroup>
 		
 							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear"> 
+								<b class="xLarge_area0_p8 endline labelLine clear">
 									<h:outputText value="#{lbl.collection }" /> 
 									<span class="noDisplay">: </span>
 								</b>
 								<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-									<h:outputText value="#{imageBean.collection.metadata.title}" /> 
+									<h:outputLink value="#{Navigation.applicationUri}#{imageBean.collection.id.path}">
+										<h:outputText value="#{imageBean.collection.metadata.title}" />
+									</h:outputLink>
 								</span>
 								
 							</h:panelGroup>
@@ -177,12 +183,12 @@
 																</ui:include>
 															</h:panelGroup>
 															<div class="small_area0_p8 lineToolSection">
-																<a4j:commandButton styleClass="min_imgBtn groupTool remove af_commandButton" immediate="true" reRender="singleEditPanel" action="#{imageBean.edit.removeMetadata}" value="">
+																<a4j:commandButton styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{statement.maxOccurs != '1'}" reRender="singleEditPanel" action="#{imageBean.edit.removeMetadata}" value="">
 																	<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 																	<f:setPropertyActionListener value="#{indexMetadata}" target="#{imageBean.edit.mdPosition}" />
 																	<a4j:support event="oncomplete" reRender="singleEditPanel" />
 																</a4j:commandButton>
-																<a4j:commandButton styleClass="min_imgBtn groupTool add af_commandButton" immediate="true" reRender="singleEditPanel" action="#{imageBean.edit.addMetadata}" value="">
+																<a4j:commandButton styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{statement.maxOccurs != '1'}" reRender="singleEditPanel" action="#{imageBean.edit.addMetadata}" value="">
 																	<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 																	<f:setPropertyActionListener value="#{indexMetadata}" target="#{imageBean.edit.mdPosition}" />
 																	<a4j:support event="oncomplete" reRender="singleEditPanel" />

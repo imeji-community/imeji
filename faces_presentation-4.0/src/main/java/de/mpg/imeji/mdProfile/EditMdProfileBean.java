@@ -3,6 +3,7 @@ package de.mpg.imeji.mdProfile;
 import java.io.IOException;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
@@ -25,7 +26,6 @@ public class EditMdProfileBean extends MdProfileBean
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         profileController = new ProfileController(session.getUser());
-       
     }
 
     public String getInit()
@@ -52,6 +52,7 @@ public class EditMdProfileBean extends MdProfileBean
                 BeanHelper.error("No profile Id found in URL");
             }
             init = false;
+            setTemplate(null);
         }
         super.getInit();
         return "";
@@ -80,13 +81,32 @@ public class EditMdProfileBean extends MdProfileBean
             BeanHelper.info("Metadata Profile updates successfully!");
             cancel();
         }
-       
-        return "pretty:editProfile";
+//        Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+//        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + "/collection/" + colId + "/details?init=1");
+        return "";
     }
 
+    public void titleListener(ValueChangeEvent event)
+    {
+    	 if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
+    	 {
+    		 this.getProfile().setTitle(event.getNewValue().toString());
+    	 }
+    }
+    
     @Override
     protected String getNavigationString()
     {
         return "pretty:editProfile";
     }
+
+	public String getColId() {
+		return colId;
+	}
+
+	public void setColId(String colId) {
+		this.colId = colId;
+	}
+    
+    
 }

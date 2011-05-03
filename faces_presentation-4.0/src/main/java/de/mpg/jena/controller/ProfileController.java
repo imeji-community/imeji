@@ -1,6 +1,7 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 import thewebsemantic.RDF2Bean;
@@ -70,6 +71,13 @@ public class ProfileController extends ImejiController
         imejiBean2RDF.saveDeep(mdp, user);
     }
     
+    public void release(MetadataProfile mdp) throws Exception
+    {
+    	mdp.getProperties().setStatus(Status.RELEASED);
+    	mdp.getProperties().setVersionDate(new Date());
+    	update(mdp);
+    }
+    
     public void delete(MetadataProfile mdp, User user) throws Exception
     {
     	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
@@ -89,6 +97,26 @@ public class ProfileController extends ImejiController
     {
     	rdf2Bean = new RDF2Bean(ImejiJena.profileModel);
     	return (List<MetadataProfile>)rdf2Bean.load(MetadataProfile.class);
+    }
+    
+    public  List<MetadataProfile> search()
+    {
+    	String q = "SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/mdprofile> . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/status> ?status " +
+    			".FILTER( ";
+    	
+    	q += "?status=<http://imeji.mpdl.mpg.de/status/RELEASED> ";
+    	
+    	for(Grant g : user.getGrants())
+    	{
+    		if (GrantType.PROFILE_EDITOR.equals(g.getGrantType())|| GrantType.PROFILE_ADMIN.equals(g.getGrantType()))
+    		{
+    			q += " || ?s=<" + g.getGrantFor() +"> ";
+    		}
+    	}
+    	
+    	q += " )}";
+    	
+    	return ImejiSPARQL.execAndLoad(q, MetadataProfile.class);
     }
     
     public MetadataProfile retrieve(String id) throws Exception

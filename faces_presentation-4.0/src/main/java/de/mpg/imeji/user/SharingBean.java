@@ -10,7 +10,9 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Grant.GrantType;
 
 public class SharingBean 
@@ -26,6 +28,7 @@ public class SharingBean
 		grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, "Viewer", "Can view all images for this collection"));
 		grantsMenu.add(new SelectItem(GrantType.IMAGE_EDITOR, "Image Editor", "Can view and edit all images for this collection"));
 		grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, "Collection Editor", "Can edit informations about the collection"));
+		grantsMenu.add(new SelectItem(GrantType.PROFILE_EDITOR, "Profile Editor", "Can edit the metadata profile"));
 	}
 
 	public List<SelectItem> getGrantsMenu() {
@@ -40,10 +43,23 @@ public class SharingBean
 	{
 		String id =  event.getComponent().getAttributes().get("collectionId").toString();
 		SharingManager sm = new SharingManager();
-		boolean shared = sm.share(retrieveCollection(id), sb.getUser(), email, selectedGrant);
+		boolean shared = false;
+		String message = "";
+		
+		if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
+		{
+			shared = sm.share(retrieveCollection(id), sb.getUser(), email, selectedGrant);
+			message = "Collection " + id + " shared with " + email;
+		}
+		else
+		{
+			shared = sm.share(retrieveProfile(id), sb.getUser(), email, selectedGrant);
+			message = "Profile shared with " + email;
+		}
+
 		if (shared)
 		{
-			BeanHelper.info("Collection " + id + " shared with " + email);
+			BeanHelper.info(message);
 			status= "closed";
 		}
 		return "pretty:";
@@ -61,8 +77,25 @@ public class SharingBean
 		try 
 		{
 			return cl.retrieve(URI.create(id));
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			BeanHelper.error("Collection " + id + " not found!");
+		}
+		return null;
+	}
+	
+	public MetadataProfile retrieveProfile(String collId)
+	{
+		CollectionImeji c = retrieveCollection(collId);
+		ProfileController pc = new ProfileController(sb.getUser());
+		try 
+		{
+			return pc.retrieve(c.getProfile());
+		} 
+		catch (Exception e) 
+		{
+			BeanHelper.error("Profile " + c.getProfile() + " not found!");
 		}
 		return null;
 	}

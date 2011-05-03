@@ -26,13 +26,14 @@ public class GrantController extends ImejiController
 		else throw new RuntimeException("User " + user.getEmail() + " is already " + grant.getGrantType() + " for " + grant.getGrantFor());
 	}
 	
-	public void removeGrant(User user, Grant grant) throws Exception
+	public User removeGrant(User user, Grant grant) throws Exception
 	{
 		if (hasGrant(user, grant))
 		{
 			user.getGrants().remove(grant);
 			saveUser(user);
 		}
+		return user;
 	}
 	
 	public boolean hasGrant(User user, Grant grant)

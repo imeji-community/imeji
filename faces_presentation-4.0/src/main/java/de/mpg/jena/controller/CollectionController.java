@@ -149,12 +149,13 @@ public class CollectionController extends ImejiController
 	
 	public void delete(CollectionImeji collection, User user) throws Exception
 	{	
+		ImageController imageController = new ImageController(user);
 		for(URI uri : collection.getImages())
 		{
-			ImageController imageController = new ImageController(user);
-			Image img = imageController.retrieve(uri);
-			imageController.delete(img, user);
+			imageController.delete(imageController.retrieve(uri), user);
 		}
+		ProfileController pc = new ProfileController(user);
+		pc.delete(pc.retrieve(collection.getProfile()), user);
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
 		imejiBean2RDF.delete(collection, user);
 		cleanGraph(ImejiJena.collectionModel);

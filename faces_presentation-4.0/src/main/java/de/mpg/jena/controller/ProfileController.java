@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
+import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
 import de.mpg.jena.ImejiBean2RDF;
@@ -39,11 +40,14 @@ public class ProfileController extends ImejiController
      	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
     	writeCreateProperties(mdp.getProperties(), user);
         mdp.getProperties().setStatus(Status.PENDING);
-        URI uri = ObjectHelper.getURI(MetadataProfile.class, Integer.toString(getUniqueId()));
-        mdp.setId(uri);
+        if (mdp.getId() == null)
+        {
+	        URI uri = ObjectHelper.getURI(MetadataProfile.class, Integer.toString(getUniqueId()));
+	        mdp.setId(uri);
+        }
         imejiBean2RDF.create(mdp, user);
         addCreatorGrant(mdp, user);
-        return uri;
+        return mdp.getId();
     }
     
 	private User addCreatorGrant(MetadataProfile p, User user) throws Exception

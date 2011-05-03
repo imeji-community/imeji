@@ -87,7 +87,7 @@ public class SecurityQueryFactory
 		String f = "";
 		String op = " ";
 
-		if ("http://imeji.mpdl.mpg.de/image".equals(type) && !isCollection)
+		if ("http://imeji.mpdl.mpg.de/image".equals(type) && !isCollection && user != null)
 		{
 			f+= "?status!=<http://imeji.mpdl.mpg.de/status/WITHDRAWN> && (";
 		}
@@ -145,7 +145,7 @@ public class SecurityQueryFactory
 		}
 		else if (user != null && user.getGrants() != null && user.getGrants().isEmpty() && myImages) f = " false ";
 		
-		if ("http://imeji.mpdl.mpg.de/image".equals(type) && !isCollection)
+		if ("http://imeji.mpdl.mpg.de/image".equals(type) && !isCollection && user != null)
 		{
 			uf+= ")";
 		}

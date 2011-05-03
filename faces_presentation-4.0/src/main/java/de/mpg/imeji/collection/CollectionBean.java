@@ -269,6 +269,7 @@ public abstract class CollectionBean
     {
         CollectionController cc = new CollectionController(sessionBean.getUser());
         cc.release(collection);
+        BeanHelper.info("Collection successfully released.");
         return "pretty:";
     }
     
@@ -276,14 +277,16 @@ public abstract class CollectionBean
     {
     	CollectionController cc = new CollectionController(sessionBean.getUser());
     	cc.delete(collection, sessionBean.getUser());
-    	return "";
+    	BeanHelper.info("Collection successfully deleted.");
+    	return "pretty:collections";
     }
     
     public String withdraw() throws Exception
     {
     	CollectionController cc = new CollectionController(sessionBean.getUser());
     	cc.withdraw(collection);
-    	return "";
+    	BeanHelper.info("Collection successfully withdrawn.");
+    	return "pretty:";
     }
 
     public List<ImageBean> getImages() throws Exception

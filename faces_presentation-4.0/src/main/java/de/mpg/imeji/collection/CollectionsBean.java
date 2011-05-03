@@ -86,13 +86,18 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 		return "";
 	}
 	
-	public String deleteAll() throws Exception{
-		for(URI uri : sb.getSelectedCollections()){
+	public String deleteAll() throws Exception
+	{
+		int count = 0;
+		for(URI uri : sb.getSelectedCollections())
+		{
 			CollectionController collectionController = new CollectionController(sb.getUser());
 			CollectionImeji collection = collectionController.retrieve(uri);
 			collectionController.delete(collection, sb.getUser());
+			count++;
 		}
 		sb.getSelectedCollections().clear();
+		BeanHelper.info(count + " collections deleted.");
 		return "pretty:collections";
 	}
   	

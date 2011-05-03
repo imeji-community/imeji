@@ -1,6 +1,8 @@
 package de.mpg.imeji.user;
 
 
+import java.net.URI;
+
 import thewebsemantic.NotFoundException;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.GrantController;
@@ -10,6 +12,7 @@ import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.vo.Container;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.User;
 
 public class SharingManager 
@@ -22,16 +25,30 @@ public class SharingManager
 	{
 		if (isAdmin(o, owner))
 		{
-			try{
+			try
+			{
 				User target = getUser(owner, email);
 				GrantController gc = new GrantController(owner);
-				gc.addGrant(target, new Grant(role, ((Container)o).getId()));
+				
+				URI uri = null;
+				if (o instanceof Container)
+				{
+					uri = ((Container)o).getId();
+				}
+				else if (o instanceof MetadataProfile)
+				{
+					 uri = ((MetadataProfile) o).getId();
+				}
+				
+				gc.addGrant(target, new Grant(role,uri));
 				return true;
 			}
-			catch (NotFoundException e){
+			catch (NotFoundException e)
+			{
 				BeanHelper.error("User " + email  + " doesn't have an account in Imeji! Sharing works only for Imeji Users.");
 			}
-			catch (Exception e) {
+			catch (Exception e) 
+			{
 				BeanHelper.error(e.getMessage());
 				return false;
 			}

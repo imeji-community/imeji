@@ -108,7 +108,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	        scList = URLQueryTransformer.transform2SCList(query);
 	        images = controller.searchImages(scList, sortCriterion, limit, offset);
 	        
-	        
 	        labels.init((List<Image>) images);
     	}
         return ImejiFactory.imageListToBeanList(images);

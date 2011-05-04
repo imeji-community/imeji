@@ -115,7 +115,8 @@ public class SecurityQueryFactory
 				{
 					if (	GrantType.CONTAINER_ADMIN.equals(g.getGrantType())
 						|| 	GrantType.CONTAINER_EDITOR.equals(g.getGrantType())
-						||	GrantType.PRIVILEGED_VIEWER.equals(g.getGrantType()))
+						||	GrantType.PRIVILEGED_VIEWER.equals(g.getGrantType())
+						|| 	GrantType.IMAGE_EDITOR.equals(g.getGrantType()))
 					{
 						if (!"".equals(uf))
 						{

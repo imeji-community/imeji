@@ -351,7 +351,6 @@ public class MdProfileBean
         
         for (Statement s : profile.getStatements())
         {
-        	System.out.println(s.getType());
         	if (s.getType() == null)
         	{
         		BeanHelper.error("Please select a type for each metadata.");

@@ -45,13 +45,13 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
     @Override
     public List<AlbumBean> retrieveList(int offset, int limit)
     {
-    	AlbumController controller = new AlbumController(sb.getUser());
-        
-        Collection<Album> albums = new ArrayList<Album>();
-        
         UserController uc = new UserController(sb.getUser());
         
         if (sb.getUser() != null) sb.setUser(uc.retrieve(sb.getUser().getEmail()));
+        
+        AlbumController controller = new AlbumController(sb.getUser());
+        
+        Collection<Album> albums = new ArrayList<Album>();
 
         try
         {

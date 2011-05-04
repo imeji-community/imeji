@@ -11,6 +11,7 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.UserController;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
@@ -44,8 +45,17 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
     @Override
     public List<ViewCollectionBean> retrieveList(int offset, int limit)
     {
+    	UserController uc = new UserController(sb.getUser());
+         
+        if (sb.getUser() != null)
+        {
+        	sb.setUser(uc.retrieve(sb.getUser().getEmail()));
+        }
+        
         CollectionController controller = new CollectionController(sb.getUser());
+        
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
+           
         try
         {
             totalNumberOfRecords = controller.getNumberOfResults(new ArrayList<SearchCriterion>());

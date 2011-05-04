@@ -268,24 +268,54 @@ public abstract class CollectionBean
     public String release() throws Exception
     {
         CollectionController cc = new CollectionController(sessionBean.getUser());
-        cc.release(collection);
-        BeanHelper.info("Collection successfully released.");
+        
+        try 
+        {
+        	 cc.release(collection);
+             BeanHelper.info("Collection successfully released.");
+		} 
+        catch (Exception e) 
+        {
+        	BeanHelper.error("Error releasing collection");
+			BeanHelper.error("Details: " + e.getMessage());
+		}
+       
         return "pretty:";
     }
     
-    public String delete() throws Exception
+    public String delete()
     {
     	CollectionController cc = new CollectionController(sessionBean.getUser());
-    	cc.delete(collection, sessionBean.getUser());
-    	BeanHelper.info("Collection successfully deleted.");
+    	
+    	try 
+    	{
+			cc.delete(collection, sessionBean.getUser());
+			BeanHelper.info("Collection successfully deleted.");
+		} 
+    	catch (Exception e) 
+    	{
+    		BeanHelper.error("Error deleting collection");
+			BeanHelper.error("Details: " + e.getMessage());
+		}
+    	
     	return "pretty:collections";
     }
     
     public String withdraw() throws Exception
     {
     	CollectionController cc = new CollectionController(sessionBean.getUser());
-    	cc.withdraw(collection);
-    	BeanHelper.info("Collection successfully withdrawn.");
+    	
+    	try 
+    	{
+    		cc.withdraw(collection);
+        	BeanHelper.info("Collection successfully withdrawn.");
+		} 
+    	catch (Exception e) 
+		{
+    		BeanHelper.error("Error withdrawing collection");
+			BeanHelper.error("Details: " + e.getMessage());
+		}
+    	
     	return "pretty:";
     }
 

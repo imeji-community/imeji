@@ -28,7 +28,6 @@ public class ItemVO
         //mdRecords = new MdsImejiItemVO(title, description);
         itemDoc = ItemDocument.Factory.newInstance();
         Item item = itemDoc.addNewItem();
-        System.out.println(item.getDomNode().getNamespaceURI());
         MdRecordDocument mdRDoc = MdRecordDocument.Factory.newInstance();
         mdRDoc.addNewMdRecord();
         MdRecord mdRec = mdRDoc.getMdRecord();

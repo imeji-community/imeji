@@ -69,10 +69,10 @@
 		});
 	</script>			
 		 <rich:modalPanel id="panelConfirmDeleteAll" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
-	        <h4>
-	        	<a4j:status forceId="true" id="allDelStatus" startText="Deleting..., please wait." stopText="Delete images?" rendered="#{paginatorListSessionBean.deletable}"/>
-	        	<a4j:status forceId="true" id="allWithStatus" startText="Withdrawing..., please wait." stopText="Withdraw images?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
-	        </h4>
+	        <h3>
+	        	<a4j:status forceId="true" id="allDelStatus" startText="Deleting, please wait......." stopText="Delete images?" rendered="#{paginatorListSessionBean.deletable}"/>
+	        	<a4j:status forceId="true" id="allWithStatus" startText="Withdrawing, please wait......" stopText="Withdraw images?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
+	        </h3>
 	        <h:panelGroup layout="block" styleClass="quad_area0_p1">
 				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
 					<div class="large_txtBtn">
@@ -88,8 +88,8 @@
 	    
 	     <rich:modalPanel id="panelConfirmDeleteSelected" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
 	        <h3>
-	        	<a4j:status forceId="true" id="selDelStatus" startText="Deleting..., please wait." stopText="Delete images?" rendered="#{paginatorListSessionBean.deletable}"/>
-	        	<a4j:status forceId="true" id="selWithStatus" startText="Withdrawing..., please wait." stopText="Withdraw images?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
+	        	<a4j:status forceId="true" id="selDelStatus" startText="Deleting, please wait......" stopText="Delete images?" rendered="#{paginatorListSessionBean.deletable}"/>
+	        	<a4j:status forceId="true" id="selWithStatus" startText="Withdrawing, please wait......" stopText="Withdraw images?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
 	        </h3>
 	        <h:panelGroup layout="block" styleClass="quad_area0_p1">
 				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">

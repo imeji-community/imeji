@@ -37,20 +37,17 @@
 </ui:remove>
 
 <body>
-	<ui:composition template="template_edit_metadata.xhtml">	
-		<!--<ui:define name="breadcrumb">
-			<ui:include src="headerPages/Breadcrumb.jspf"/>
-		</ui:define>	-->
+	<ui:composition template="template_edit_metadata.xhtml">
 		
 		<ui:define name="contentMenu">
-			<h:outputText id="txtMenue" styleClass="free_area0" value=""/>
+			<h:outputText id="txtMenue" styleClass="free_area0" value="#{imageBean.init}"/>
 		</ui:define>
 		
 		<ui:define name="actionsMenu">
 		</ui:define>
 							
 		<ui:define name="mainContent" >
-	
+			<h:outputText value="#{imageBean.init}"/>
 			<ui:insert name="preListHeader"/>
 			
 			<h:panelGroup styleClass="full_area0 fullItem">
@@ -59,7 +56,7 @@
 					<h:panelGroup layout="block" styleClass="full_area detailedItem">
 						<span>
 							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{imageBean.image.fullImageUrl}" target="_blank">
-								<h:graphicImage id="picWebResolution" title="imageBean.image.id" alt="imageBean.image.id" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{imageBean.image.webImageUrl}" />
+								<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>			
 						</span>
 					</h:panelGroup>
@@ -112,7 +109,10 @@
 							<a4j:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" reRender="metadata" value="Edit" action="#{imageBean.edit.showEditor}">
 								
 							</a4j:commandLink>
-							<h:outputText value="Image locked" rendered="#{imageBean.editable and imageBean.locked}"/><br/>
+							<h:outputText value="Image locked " rendered="#{imageBean.editable and imageBean.locked}"/>
+							<h:outputLink vallue="#" title="Image has been locked by another user. It will be automatically release after 15 minutes." rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
+							<br/>
+							
 						</h3>
 						
 						<span class="seperator"></span>
@@ -121,7 +121,7 @@
 							<!-- URL -->
 							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 								<b class="xLarge_area0_p8 endline labelLine clear">
-									 <h:outputText value="#{lbl.name }" /> 
+									 <h:outputText value="#{lbl.name} " /> 
 									 <span class="noDisplay">: </span> 
 								</b>
 								<span class="xHuge_area0 xTiny_marginLExcl endline"> 
@@ -146,12 +146,12 @@
 							<rich:panel id="singleEditPanel" styleClass="free_area0_p0">
 								<div id="metadata">
 									<h:panelGroup layout="block">
-
 									 	<h:panelGroup rendered="#{imageBean.edit.toggleState == 'displayMd'}" layout="block" styleClass="xHuge_area0_p0">
 										 	<a4j:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0" rowKeyVar="indexMetadata">
-										 		<div class="xLarge_area0_p8 txtRight noPaddingTopBottom">
-													<h:outputText value="#{MetadataLabels.labels[md.namespace]}"/>
-												</div>
+												<b class="xLarge_area0_p8 endline labelLine clear">
+													<h:outputText value="#{MetadataLabels.labels[md.namespace]}" /> 
+													<span class="noDisplay">: </span>
+												</b>
 												<h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl" >
 													<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
 														<ui:param name="md" value="#{md}"/>

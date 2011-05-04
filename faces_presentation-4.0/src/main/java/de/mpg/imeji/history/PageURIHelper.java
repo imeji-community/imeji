@@ -15,16 +15,16 @@ public class PageURIHelper
 		String baseURL = PropertyReader.getProperty("escidoc.faces.instance.url");
 		switch (pageType) 
 		{
-			case IMAGES: return URI.create(baseURL + "images?");
-			case COLLECTIONS: return URI.create(baseURL + "collections?");
-			case COLLECTION_IMAGES: return URI.create(baseURL + "images/collection/" + id[0] + "?");
-			case HOME : return URI.create(baseURL + "?");
-			case SEARCH : return URI.create(baseURL + "search" + "?");
-			case IMAGE : return URI.create(baseURL + "image/" + id[0] + "/view?");
-			case COLLECTION_IMAGE : if (id.length == 2) return URI.create(baseURL + "collection/" + id[0] + "/image/" + id[1] + "/view");
-			case ALBUMS : return URI.create(baseURL + "albums" + "?");
-			case COLLECTION_HOME : return URI.create(baseURL + "collection/" + id[0] + "?");
-			case SEARCH_RESULTS_IMAGES : return URI.create(baseURL + "images" + "?q=" + URLEncoder.encode(q, "UTF-8"));
+			case IMAGES: return URI.create(baseURL + "images?h=");
+			case COLLECTIONS: return URI.create(baseURL + "collections?h=");
+			case COLLECTION_IMAGES: return URI.create(baseURL + "images/collection/" + id[0] + "?h=");
+			case HOME : return URI.create(baseURL + "?h=");
+			case SEARCH : return URI.create(baseURL + "search" + "?h=");
+			case IMAGE : return URI.create(baseURL + "image/" + id[0] + "/view?h=");
+			case COLLECTION_IMAGE : if (id.length == 2) return URI.create(baseURL + "collection/" + id[0] + "/image/" + id[1] + "/view?h=");
+			case ALBUMS : return URI.create(baseURL + "albums" + "?h=");
+			case COLLECTION_HOME : return URI.create(baseURL + "collection/" + id[0] + "?h=");
+			case SEARCH_RESULTS_IMAGES : return URI.create(baseURL + "images" + "?q=" + URLEncoder.encode(q, "UTF-8") + "&h=");
 			default: return URI.create(baseURL);
 		}
 	}

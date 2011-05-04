@@ -7,10 +7,15 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
+import de.mpg.jena.concurrency.locks.Lock;
+import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
@@ -28,6 +33,7 @@ public class CollectionController extends ImejiController
 {
 	private static ImejiRDF2Bean imejiRDF2Bean = null;
 	private static ImejiBean2RDF imejiBean2RDF = null;
+	private static Logger logger = Logger.getLogger(CollectionController.class);
 	
 	public CollectionController(User user)
 	{
@@ -80,35 +86,115 @@ public class CollectionController extends ImejiController
 	
 	public void release(CollectionImeji ic) throws Exception
     {
-		ic.getProperties().setStatus(Status.RELEASED);
-		ic.getProperties().setVersionDate(new Date());
-	    
-		for(URI uri: ic.getImages())
-	    {
-	    	ImageController imageController = new ImageController(user);
-	    	Image img = imageController.retrieve(uri);
-	    	imageController.release(img);
-	    }
-	  
-        update(ic);
-        
-        ProfileController pc = new ProfileController(user);
-	    pc.retrieve(ic.getProfile());
-	    pc.release(pc.retrieve(ic.getProfile()));
+		if (hasNoImagesLocked(ic.getImages())) 
+		{	
+			ic.getProperties().setStatus(Status.RELEASED);
+			ic.getProperties().setVersionDate(new Date());
+			
+			ImageController imageController = new ImageController(user);
+			
+			for(URI uri: ic.getImages())
+		    {
+		    	try 
+		    	{
+		    		imageController.release(imageController.retrieve(uri));
+				} 
+		    	catch (NotFoundException e) 
+				{
+					logger.error("Release image error: " + uri + " could not be found");
+				}
+		    }
+		  
+	        update(ic);
+	        
+	        ProfileController pc = new ProfileController(user);
+		    pc.retrieve(ic.getProfile());
+		    pc.release(pc.retrieve(ic.getProfile()));
+		}
+		else
+		{
+			throw new RuntimeException("Collection has at least one image locked by an other user.");
+		}
     }
+	
+	public void delete(CollectionImeji collection, User user) throws Exception
+	{	
+		if (hasNoImagesLocked(collection.getImages())) 
+		{
+			ImageController imageController = new ImageController(user);
+			
+			for(URI uri : collection.getImages())
+			{
+				try 
+				{
+					imageController.delete(imageController.retrieve(uri), user);
+				} 
+				catch (NotFoundException e) 
+				{
+					logger.error("Delete image error: " + uri + " could not be found");
+				}
+			}
+			
+			ProfileController pc = new ProfileController(user);
+			
+			try 
+			{
+				pc.delete(pc.retrieve(collection.getProfile()), user);
+			} 
+			catch (Exception e) 
+			{
+				logger.warn("Profile " +  collection.getProfile() + " could not be deleted!", e);
+			}
+			
+			imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
+			imejiBean2RDF.delete(collection, user);
+			cleanGraph(ImejiJena.collectionModel);
+		}
+		else
+		{
+			throw new RuntimeException("Collection has at least one image locked by an other user.");
+		}
+	}
 	
 	public void withdraw(CollectionImeji ic) throws Exception
     {
-		ic.getProperties().setStatus(Status.WITHDRAWN);
-		ic.getProperties().setVersionDate(new Date());
-	    for(URI uri: ic.getImages())
-	    {
-	    	ImageController imageController = new ImageController(user);
-	    	Image img = imageController.retrieve(uri);
-	    	imageController.withdraw(img);
-	    }
-        update(ic);
+		if (hasNoImagesLocked(ic.getImages())) 
+		{
+			ic.getProperties().setStatus(Status.WITHDRAWN);
+			ic.getProperties().setVersionDate(new Date());
+			
+			ImageController imageController = new ImageController(user);
+			
+		    for(URI uri: ic.getImages())
+		    {
+		    	try 
+		    	{
+		    		imageController.withdraw(imageController.retrieve(uri));
+				} 
+		    	catch (NotFoundException e) 
+		    	{
+		    		logger.error("Withdraw image error: " + uri + " could not be found");
+				}
+		    }
+	        update(ic);
+		}
+		else
+		{
+			throw new RuntimeException("Collection has at least one image locked by an other user.");
+		}
     }
+	
+	public boolean hasNoImagesLocked(Collection<URI> collection)
+	{
+		for (URI u : collection)
+		{
+			if (Locks.isLocked(u.toString(), user.getEmail()))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	public CollectionImeji retrieve(String id)
 	{
@@ -142,23 +228,12 @@ public class CollectionController extends ImejiController
 	{
 		Security security = new Security();
 		rdf2Bean = new RDF2Bean(ImejiJena.collectionModel);
-		if (security.isSysAdmin(user))
-			return rdf2Bean.load(CollectionImeji.class);
-		return new ArrayList<CollectionImeji>();
-	}
-	
-	public void delete(CollectionImeji collection, User user) throws Exception
-	{	
-		ImageController imageController = new ImageController(user);
-		for(URI uri : collection.getImages())
+		if (security.isSysAdmin(user)) 
 		{
-			imageController.delete(imageController.retrieve(uri), user);
+			return rdf2Bean.load(CollectionImeji.class);
 		}
-		ProfileController pc = new ProfileController(user);
-		pc.delete(pc.retrieve(collection.getProfile()), user);
-		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
-		imejiBean2RDF.delete(collection, user);
-		cleanGraph(ImejiJena.collectionModel);
+			
+		return new ArrayList<CollectionImeji>();
 	}
 	
 	

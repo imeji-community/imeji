@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
-import thewebsemantic.Embedded;
 import thewebsemantic.Id;
 import thewebsemantic.LocalizedString;
 import thewebsemantic.Namespace;

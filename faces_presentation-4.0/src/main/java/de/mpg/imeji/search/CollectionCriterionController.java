@@ -136,7 +136,6 @@ public class CollectionCriterionController implements Serializable
  				        {
  				        	case DATE:
  				        		String dop = mdc.getDateOperator();
- 				        		System.out.println(dop);
  				        		Filtertype ft = Filtertype.valueOf(dop);
  				        		mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_DATE, mdc.getMdText(), ft));
  				        		break;

@@ -20,6 +20,7 @@ import de.mpg.imeji.lang.labelHelper;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
+import de.mpg.imeji.metadata.util.SuggestBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.concurrency.locks.Lock;
@@ -71,6 +72,7 @@ public class EditImageMetadataBean
 			statement = getSelectedStatement();
 		    metadata = MetadataFactory.newMetadata(statement);
 			editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
+			((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 		}
 		catch (Exception e) 
 		{

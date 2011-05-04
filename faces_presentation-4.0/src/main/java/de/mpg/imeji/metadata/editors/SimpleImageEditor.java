@@ -20,7 +20,6 @@ public class SimpleImageEditor extends MetadataEditor
 	@Override
 	public void initialize(List<Image> images) 
 	{
-
 	}
 	
 	@Override

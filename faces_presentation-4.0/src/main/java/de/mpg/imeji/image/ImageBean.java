@@ -14,6 +14,7 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.SingleEditBean;
 import de.mpg.imeji.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
+import de.mpg.imeji.metadata.util.SuggestBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.concurrency.locks.Locks;
@@ -84,6 +85,12 @@ public class ImageBean
         collectionController = new CollectionController(sessionBean.getUser());
         prettyLink = "pretty:editImage";
     }
+    
+    public String getInit() throws Exception
+    {
+    	init();
+    	return "";
+    }
 
     public void init() throws Exception
     {
@@ -95,14 +102,20 @@ public class ImageBean
 		{
 			BeanHelper.error(id + " not found");
 		}
-        collection = collectionController.retrieve(this.getImage().getCollection());
+       
         if (sessionBean.getSelected().contains(image.getId()))
         {
             setSelected(true);
         }
+        
+        collection = collectionController.retrieve(this.getImage().getCollection());
+        
         Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
+        
         profile = ProfileHelper.loadProfile(image);
+      
         edit = new SingleEditBean(image, profile, getPageUrl());
+    	
         cleanImageMetadata();
     }
     
@@ -119,13 +132,19 @@ public class ImageBean
 
     public void initView() throws Exception
     {
-    	if (image == null || image.getId() == null || !image.getId().toString().equals(ObjectHelper.getURI(Image.class, id).toString())) this.init();
+    	if (image == null || image.getId() == null || !image.getId().toString().equals(ObjectHelper.getURI(Image.class, id).toString())) 
+    	{
+    		this.init();
+    	}
         setTab(TabType.VIEW.toString());
     }
 
     public void initTechMd() throws Exception
     {
-        this.init();
+    	if (image == null || image.getId() == null || !image.getId().toString().equals(ObjectHelper.getURI(Image.class, id).toString())) 
+    	{
+    		this.init();
+    	}
         setTab(TabType.TECHMD.toString());
     }
 

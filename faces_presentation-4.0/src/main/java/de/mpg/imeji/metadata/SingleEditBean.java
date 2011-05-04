@@ -13,6 +13,7 @@ import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.editors.SimpleImageEditor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
+import de.mpg.imeji.metadata.util.SuggestBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.concurrency.locks.Lock;
@@ -34,13 +35,12 @@ public class SingleEditBean
 	
 	private int mdPosition = 0;
 	private String pageUrl ="";
-	
+		
 	public SingleEditBean(Image im, MetadataProfile profile, String pageUrl) 
 	{
 		image = im;
 		this.profile = profile;
 		this.pageUrl = pageUrl;
-		System.out.println("url:" + pageUrl);
 		init();
 	}
 	
@@ -50,7 +50,7 @@ public class SingleEditBean
 
 		if (UrlHelper.getParameterBoolean("edit")) 
 		{
-			this.toggleState = "editMd";
+			showEditor();
 		}
 		
 		return "";
@@ -74,6 +74,7 @@ public class SingleEditBean
 		List<Image> imAsList = new ArrayList<Image>();
 		imAsList.add(image);
 		editor = new SimpleImageEditor(imAsList, profile, null);
+		((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 	}
 	
 	public String save() throws IOException

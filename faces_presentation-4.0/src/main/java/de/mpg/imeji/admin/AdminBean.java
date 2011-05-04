@@ -20,7 +20,6 @@ public class AdminBean
 	public Item getJenaTDBStats()
 	{
         Item imageStats = StatsCollector.gatherTDB( (GraphTDB) ImejiJena.imageModel.getGraph());
-        System.out.println("done");
         return imageStats;
 	}
 	

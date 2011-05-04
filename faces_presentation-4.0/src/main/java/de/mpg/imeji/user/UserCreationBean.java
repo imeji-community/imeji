@@ -188,11 +188,6 @@ public class UserCreationBean
     		if (!found)
     		{
     			pc.delete(mdp, sb.getUser());
-    			System.out.println("NOT FOUNd" + mdp.getId());
-    		}
-    		else
-    		{
-    			System.out.println("FOUNd" + mdp.getId());
     		}
     	}
     	
@@ -222,7 +217,6 @@ public class UserCreationBean
     			
     			if(!found && g.getGrantFor()!= null && !g.getGrantFor().toString().contains("album"))
     			{
-    				System.out.println("Grant no found " + g.getGrantFor());
     				deadGrants.add(g);
     			}
     		}

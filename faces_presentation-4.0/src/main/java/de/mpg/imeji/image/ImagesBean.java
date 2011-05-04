@@ -189,6 +189,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 				e.printStackTrace();
 			}
     	}
+    	
     	BeanHelper.info(count + " images deleted.");
     	cc.update(coll);
     	

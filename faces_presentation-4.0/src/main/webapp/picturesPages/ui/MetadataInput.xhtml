@@ -42,7 +42,7 @@
 		
 		<!-- METADATA TYPE TEXT -->
 		<h:inputTextarea  id="inputText" styleClass="#{areaClass} inputTxtArea" value="#{metadata.text}" rendered="#{metadata.type =='TEXT'}">
-			<rich:suggestionbox frequency="0.001" rendered="#{editor.doAutoComplete}" for="inputText" var="results" suggestionAction="#{editor.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+			<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}"  onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" for="inputText" var="results"   nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 				<h:column>
 					<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
 				</h:column>
@@ -52,7 +52,7 @@
 		<!-- METADATA TYPE URI -->
 		<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" rendered="#{metadata.type =='URI'}" onfocus="this.select();">
 			<f:converter converterId="URIConverter" />
-			<rich:suggestionbox frequency="0.001" rendered="#{editor.doAutoComplete}" for="inputURI" var="results" suggestionAction="#{editor.autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+			<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}"  for="inputURI" var="results" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 				<h:column>
 					<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
 				</h:column>
@@ -96,7 +96,7 @@
 		<h:panelGroup rendered="#{metadata.type =='PERSON'}">
 			<h:outputLabel value="#{lbl.family_name}" styleClass="huge_label" />
 			<h:inputText id="inputFamilyName" styleClass="xHuge_txtInput" value="#{metadata.person.familyName}">
-				<rich:suggestionbox frequency="0.001" rendered="#{editor.doAutoComplete}" for="inputFamilyName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})"	suggestionAction="#{editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+				<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}"  for="inputFamilyName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
 							, 
@@ -107,7 +107,7 @@
 
 			<h:outputLabel value="#{lbl.first_name}" styleClass="huge_label" />
 			<h:inputText id="inputFirstName" styleClass="xHuge_txtInput" value="#{metadata.person.givenName}">
-				<rich:suggestionbox rendered="#{editor.doAutoComplete}" for="inputFirstName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" suggestionAction="#{editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+				<rich:suggestionbox rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}" for="inputFirstName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
 							, 
@@ -118,7 +118,7 @@
 
 			<h:outputLabel value="#{lbl.alternative_name}" styleClass="huge_label" />
 			<h:inputText id="inputAlternative" styleClass="xHuge_txtInput" value="#{metadata.person.alternativeName}">
-				<rich:suggestionbox frequency="0.001" rendered="#{editor.doAutoComplete}" for="inputAlternative" var="result"	onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" suggestionAction="#{editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+				<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}"   for="inputAlternative" var="result"	onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
 							, 
@@ -129,7 +129,7 @@
 
 			<h:outputLabel value="#{lbl.identifier}" styleClass="huge_label" />
 			<h:inputText id="inputIdentifier" styleClass="xHuge_txtInput" value="#{metadata.person.identifier}">
-				<rich:suggestionbox frequency="0.001" rendered="#{editor.doAutoComplete}" for="inputIdentifier" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" suggestionAction="#{editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+				<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}"  for="inputIdentifier" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})"  nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
 							, 
@@ -140,7 +140,7 @@
 
 			<h:outputLabel value="#{lbl.organization}" styleClass="huge_label" />
 			<h:inputText id="inputOrganization" styleClass="xHuge_txtInput" value="#{metadata.person.organizations[0].name}">
-				<rich:suggestionbox frequency="0.001" rendered="#{editor.doAutoComplete}" for="inputOrganization" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})" suggestionAction="#{editor.autoComplete}" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+				<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}"  for="inputOrganization" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata})"  nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
 							, 

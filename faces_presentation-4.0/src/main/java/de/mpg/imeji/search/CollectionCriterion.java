@@ -8,6 +8,7 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.metadata.util.SuggestBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;
@@ -26,34 +27,40 @@ public class CollectionCriterion extends Criterion implements Serializable{
     private Collection<CollectionImeji> collections;
     private int mdPosition;
 	
-	public Collection<CollectionImeji> getCollections() {
+	public Collection<CollectionImeji> getCollections() 
+	{
 		return collections;
 	}
 
-	public void setCollections(Collection<CollectionImeji> collections) {
+	public void setCollections(Collection<CollectionImeji> collections) 
+	{
 		this.collections = collections;
 	}
 
-	public CollectionCriterion(List<CollectionImeji> collections){
+	public CollectionCriterion(List<CollectionImeji> collections)
+	{
 		this.collections = collections; 
-		if(collections!=null && collections.size()>0)
-		{
-			SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-			ProfileController pc = new ProfileController(sb.getUser());
-			try {
-				setSelectedProfile(pc.retrieve(collections.get(0).getProfile()));
-			} catch (Exception e) {
-				BeanHelper.error("Error reading profile: " + collections.get(0).getProfile());
-			}
-		    setMdCriterionList(newMdCriterionList());
-		    setSelectedCollectionId(collections.get(0).getId().toString());
-	        updateMDList();
-		}
+//		if(collections!=null && collections.size()>0)
+//		{
+//			SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+//			ProfileController pc = new ProfileController(sb.getUser());
+//			try 
+//			{
+//				setSelectedProfile(pc.retrieve(collections.get(0).getProfile()));
+//			} 
+//			catch (Exception e) 
+//			{
+//				BeanHelper.error("Error reading profile: " + collections.get(0).getProfile());
+//			}
+//		    setMdCriterionList(newMdCriterionList());
+//		    setSelectedCollectionId(collections.get(0).getId().toString());
+//	        updateMDList();
+//		}
 	}
 	
-    public void collectionChanged(ValueChangeEvent event){
-    	
-       if(!event.getNewValue().toString().equals(getSelectedCollectionId()))
+    public void collectionChanged(ValueChangeEvent event)
+    {	
+       if(event.getNewValue() != null && !event.getNewValue().toString().equals(getSelectedCollectionId()))
        {
     	   String collId = (String)event.getNewValue();
            for(CollectionImeji coll : collections)
@@ -63,14 +70,22 @@ public class CollectionCriterion extends Criterion implements Serializable{
                    	setSelectedCollectionId(collId);
                    	SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 	       			ProfileController pc = new ProfileController(sb.getUser());
-	       			try {
+	       			try 
+	       			{
 	       				setSelectedProfile(pc.retrieve(coll.getProfile()));
-	       			} catch (Exception e) {
+	       				((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(getSelectedProfile());
+	       			} 
+	       			catch (Exception e) 
+	       			{
 	       				BeanHelper.error("Error reading profile: " + coll.getProfile());
 	       			}
                }
            }
            updateMDList();
+       }
+       if(event.getNewValue() == null)
+       {
+    	   setMdCriterionList(null);
        }
     }
     
@@ -90,7 +105,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
     	}
     	else
     	{
-    		 BeanHelper.info("error: Selected Collection has no metadata profile");
+    		 BeanHelper.error("Selected Collection has no metadata profile");
     	}
     	return mdCriterionList;
     }
@@ -109,11 +124,17 @@ public class CollectionCriterion extends Criterion implements Serializable{
 	}
 
 	
-	public boolean clearCriterion() {
+	public boolean clearCriterion() 
+	{
 		setSearchString("");
 		setSelectedProfile(null);
-		for(int i=0; i<mdCriterionList.size(); i++)
-			mdCriterionList.get(i).clearCriterion();
+		if (mdCriterionList != null)
+		{
+			for(int i=0; i< mdCriterionList.size(); i++)
+			{
+				mdCriterionList.get(i).clearCriterion();
+			}
+		}
 		return true;
 	}
 

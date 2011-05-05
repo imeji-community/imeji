@@ -59,21 +59,11 @@ public class ImageBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         imageController = new ImageController(sessionBean.getUser());
         collectionController = new CollectionController(sessionBean.getUser());
-        ProfileController pc = new ProfileController(sessionBean.getUser());
-        profile = pc.retrieve(image.getMetadataSet().getProfile());
         prettyLink = "pretty:editImage";
         if (sessionBean.getSelected().contains(img.getId()))
         {
             setSelected(true);
         }
-        try
-        {
-        	Collections.sort((List<Statement>) profile.getStatements());
-        }
-        catch (Exception e) 
-        {
-			e.printStackTrace();
-		}
     }
 
     public ImageBean() throws Exception
@@ -86,11 +76,13 @@ public class ImageBean
         prettyLink = "pretty:editImage";
     }
     
-    public String getInit() throws Exception
+    public String getInitPopup() throws Exception
     {
-    	init();
+    	//init();
+    	//loadCollection();
+    	loadProfile();
     	return "";
-    }
+    } 
 
     public void init() throws Exception
     {
@@ -108,15 +100,21 @@ public class ImageBean
             setSelected(true);
         }
         
-        collection = collectionController.retrieve(this.getImage().getCollection());
-        
-        Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
-        
-        profile = ProfileHelper.loadProfile(image);
-      
+        loadCollection();
+        loadProfile();      
         edit = new SingleEditBean(image, profile, getPageUrl());
-    	
         cleanImageMetadata();
+    }
+    
+    public void loadCollection()
+    {
+    	collection = collectionController.retrieve(this.getImage().getCollection());
+        Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
+    }
+    
+    public void loadProfile()
+    {
+    	profile = ProfileHelper.loadProfile(image);
     }
     
     private void cleanImageMetadata()

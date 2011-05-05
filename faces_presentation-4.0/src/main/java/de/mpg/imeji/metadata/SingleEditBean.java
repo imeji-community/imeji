@@ -18,6 +18,8 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
+import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
@@ -116,10 +118,18 @@ public class SingleEditBean
 	
 	public String showEditor()
 	{
-		this.toggleState = "editMd";
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		Locks.lock(new Lock(this.image.getId().toString(), sb.getUser().getEmail()));
-		init();
+		Security security = new Security();
+		if (security.check(OperationsType.UPDATE, sb.getUser(), image))
+		{
+			this.toggleState = "editMd";
+			Locks.lock(new Lock(this.image.getId().toString(), sb.getUser().getEmail()));
+			init();
+		}
+		else
+		{
+			BeanHelper.error("You are not allowed to edit this image!");
+		}
 		return "";
 	}
 	

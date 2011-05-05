@@ -1,6 +1,13 @@
 package de.mpg.imeji.metadata.util;
 
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.metadata.editors.MetadataEditor;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.ImageMetadata;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.complextypes.ConePerson;
 import de.mpg.jena.vo.complextypes.Date;
 import de.mpg.jena.vo.complextypes.Geolocation;
@@ -12,6 +19,8 @@ import de.mpg.jena.vo.complextypes.URI;
 
 public class MetadataHelper 
 {
+	private static Logger logger = Logger.getLogger(MetadataHelper.class);
+	
 	public static boolean isEmpty(ImageMetadata md)
 	{
 		if (md instanceof Text)
@@ -49,5 +58,29 @@ public class MetadataHelper
 			if (((URI) md).getUri() == null || "".equals(((URI) md).getUri().toString())) return true;
 		}	
 		return false;
+	}
+	
+	public static ImageMetadata setConeID(ImageMetadata md)
+	{
+		if (md.getType().equals(ComplexTypes.PERSON))
+		{
+			String id = ((ConePerson)md).getPerson().getIdentifier();
+			
+			try
+			{
+				if (id.contains("http"))
+				{
+					((ConePerson)md).setConeId(java.net.URI.create(id));
+					return md;
+				}
+			}
+			catch (Exception e) 
+			{
+				BeanHelper.error(id + " is not a correct URI");
+			}
+			((ConePerson)md).setConeId(null);
+			logger.warn("Author created without cone ID");
+		}
+		return md;
 	}
 }

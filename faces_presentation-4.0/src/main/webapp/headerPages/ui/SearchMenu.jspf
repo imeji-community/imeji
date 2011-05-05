@@ -41,11 +41,11 @@
 
 
 		<span class="xLarge_area0 quickSearchMenu">
-			<h:inputText id="quickSearchString" class="xLarge_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}" onkeypress="return quickSearchOnEnter(event)"/>
-			<h:panelGroup class="xLarge_area0">
-				<h:selectOneRadio id="quickSearchRadioBox" valueChangeListener="#{QuickSearchBean.selectedSearchTypeListerner}" value="#{QuickSearchBean.selectedSearchType}">
-					<f:selectItem itemLabel="#{lbl.images}" itemValue="images"/>
-					<f:selectItem itemLabel="#{lbl.collections}" itemValue="collections"/>
+			<h:inputText id="quickSearchString" styleClass="xLarge_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}" onkeypress="return quickSearchOnEnter(event)"/>
+			<h:panelGroup styleClass="xLarge_area0">
+				<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}" valueChangeListener="#{QuickSearchBean.selectedSearchTypeListener}">
+					<f:selectItem id="selIm" itemLabel="#{lbl.images}" itemValue="images"/>
+					<f:selectItem id="selCol" itemLabel="#{lbl.collections}" itemValue="collections"/>
 				</h:selectOneRadio>
 			</h:panelGroup>
 		</span>

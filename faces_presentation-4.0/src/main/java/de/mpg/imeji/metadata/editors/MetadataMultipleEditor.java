@@ -55,8 +55,8 @@ public class MetadataMultipleEditor extends MetadataEditor
 				else 
 				{
 					((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i).setPos(i);
+					MetadataHelper.setConeID(((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i));
 				}
-				
 			}
 		}
 		if (images.size() == 0)

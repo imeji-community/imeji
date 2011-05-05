@@ -26,11 +26,15 @@ public class CollectionCriterionController implements Serializable
 	private List<SelectItem> collectionList;
 	private List<CollectionImeji> collections;	
  
-	public CollectionCriterionController(){
+	public CollectionCriterionController()
+	{
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        try {
+        try 
+        {
 			getCollectionList(); 
-		} catch (Exception e) {
+		} 
+        catch (Exception e) 
+		{
 			e.printStackTrace();
 		} 
 		collectionCriterionList = new ArrayList<CollectionCriterion>(); 
@@ -39,12 +43,14 @@ public class CollectionCriterionController implements Serializable
 		
 	}     
 	
-	public void getUserCollecitons() throws Exception{
+	public void getUserCollecitons() throws Exception
+	{
         collections = new ArrayList<CollectionImeji>();
         CollectionController cc = new CollectionController(sb.getUser());
 		collections = (List<CollectionImeji>)cc.search(new ArrayList<SearchCriterion>(), null, -1, 0);
 		if(collectionCriterionList != null){
-			for(int i=0; i<collectionCriterionList.size(); i++){
+			for(int i=0; i<collectionCriterionList.size(); i++)
+			{
 				collectionCriterionList.get(i).setCollections(collections);
 				/*
 				for(int j=0; j<collectionCriterionList.get(i).getMdCriterionList().size(); j++)
@@ -57,6 +63,7 @@ public class CollectionCriterionController implements Serializable
 	public List<SelectItem> getCollectionList() throws Exception {
 		getUserCollecitons();
         collectionList = new ArrayList<SelectItem>();
+        collectionList.add(new SelectItem(null, "Select a Collection"));
         for (CollectionImeji ci : collections)
         {
             collectionList.add(new SelectItem(ci.getId().toString(), ci.getMetadata().getTitle()));

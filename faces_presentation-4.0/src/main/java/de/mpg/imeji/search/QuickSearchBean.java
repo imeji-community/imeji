@@ -1,8 +1,11 @@
 package de.mpg.imeji.search;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.collection.CollectionsSearchResultBean;
 import de.mpg.imeji.image.ImagesBean;
@@ -10,8 +13,11 @@ import de.mpg.imeji.util.BeanHelper;
 
 public class QuickSearchBean implements Serializable
 { 
-    private String searchString;
+    private String searchString ="";
     private String selectedSearchType = "images";
+
+    public QuickSearchBean() {
+	}
 
     public void setSearchString(String searchString)
     {
@@ -30,9 +36,10 @@ public class QuickSearchBean implements Serializable
 
     public String getSelectedSearchType()
     {
-        return selectedSearchType;
+        if (selectedSearchType == null) selectedSearchType = "images";
+    	return selectedSearchType;
     }
-    
+
     public void selectedSearchTypeListener(ValueChangeEvent event)
     {
     	if (event.getNewValue() != null && !event.getNewValue().equals(event.getOldValue()))
@@ -40,7 +47,6 @@ public class QuickSearchBean implements Serializable
     		selectedSearchType = (String) event.getNewValue();
     	}
     }
-    
     
     public String search()
     {
@@ -60,5 +66,6 @@ public class QuickSearchBean implements Serializable
         }
         return "pretty:";
     }
+    
     
 }

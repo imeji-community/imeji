@@ -53,15 +53,13 @@ public abstract class  MetadataEditor
 			{
 				if (validateMetadataofImages()) 
 				{
-					long before = System.currentTimeMillis();
 					try 
 					{
 						ic.update(images);
-						long after = System.currentTimeMillis();
 						BeanHelper.info("Edit done!");
 						String str = images.size() +" images edited";
 						if (images.size() == 1) str = "One image edited";
-						BeanHelper.info(str + " in " + (after - before) + "ms.");
+						BeanHelper.info(str);
 					} 
 					catch (Exception e) 
 					{

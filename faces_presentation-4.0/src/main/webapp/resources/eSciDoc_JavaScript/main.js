@@ -26,7 +26,7 @@ Gesellschaft zur FÃƒÂ¶rderung der Wissenschaft e.V.
 All rights reserved. Use is subject to license terms.
  */
 
-function autoSuggestWrite(suggestionBox, index) {
+function autoSuggestWrite(suggestionBox, index, pos, type) {
 	var items = suggestionBox.getSelectedItems();
 	var familyName, firstName, alternative, id, org, title, complete;
 	if (items && items.length > 0) {
@@ -69,16 +69,79 @@ function autoSuggestWrite(suggestionBox, index) {
 			}
 
 		}
-		setInputTextValue('formular:mdList:' + index + ':inputFamilyName', familyName);
-		setInputTextValue('formular:mdList:' + index + ':inputFirstName', firstName);
-		setInputTextValue('formular:mdList:' + index + ':inputAlternative', alternative);
-		setInputTextValue('formular:mdList:' + index + ':inputIdentifier', id);
-		setInputTextValue('formular:mdList:' + index + ':inputOrganization', org);
-		if (title != null) {
-			setInputTextValue('formular:mdList:' + index + ':inputText', title);
-		} else {
-			setInputTextValue('formular:mdList:' + index + ':inputText', complete);
+		
+		var baseId = 'formular:statementList:' + pos + ':metadata:' + index + ':MetadataInput:';
+		
+		if (type == 0)
+		{
+			if (index >= 0)
+			{
+				baseId = 'formular:imagesList:' + index + ':metadata:0:MetadataInput:';
+			}
+			else
+			{
+				baseId = 'formular:MetadataInput:';
+			}
 		}
+
+		setInputTextValue(baseId + 'inputFamilyName', familyName);
+		setInputTextValue(baseId + 'inputFirstName', firstName);
+		setInputTextValue(baseId + 'inputAlternative', alternative);
+		setInputTextValue(baseId + 'inputOrganization', org);
+		setInputTextValue(baseId + 'inputIdentifier', id);
+		
+		if (title != null) 
+		{
+			setInputTextValue(baseId + 'inputText', title);
+		} 
+		else 
+		{
+			setInputTextValue(baseId + 'inputText', complete);
+		}
+		
+		
+		/*if (type == 'multiple' )
+		{
+			if (index >= 0 )
+			{
+				setInputTextValue('formular:imagesList:' + index + ':metadata:0:MetadataInput:inputFamilyName', familyName);
+				setInputTextValue('formular:imagesList:' + index + ':metadata:0:MetadataInput:inputFirstName', firstName);
+				setInputTextValue('formular:imagesList:' + index + ':metadata:0:MetadataInput:inputAlternative', alternative);
+				setInputTextValue('formular:imagesList:' + index + ':metadata:0:MetadataInput:inputOrganization', org);
+				setInputTextValue('formular:imagesList:' + index + ':metadata:0:MetadataInput:inputIdentifier', id);
+				if (title != null) {
+					setInputTextValue('formular:imagesList:' + index + 'metadata:0:MetadataInput:inputText', title);
+				} else {
+					setInputTextValue('formular:imagesList:' + index + 'metadata:0:MetadataInput:inputText', complete);
+				}
+			}
+			else
+			{
+				setInputTextValue('formular:MetadataInput:inputFamilyName', familyName);
+				setInputTextValue('formular:MetadataInput:inputFirstName', firstName);
+				setInputTextValue('formular:MetadataInput:inputAlternative', alternative);
+				setInputTextValue('formular:MetadataInput:inputOrganization', org);
+				setInputTextValue('formular:MetadataInput:inputIdentifier', id);
+				if (title != null) {
+					setInputTextValue('formular:MetadataInput:inputText', title);
+				} else {
+					setInputTextValue('formular:MetadataInput:inputText', complete);
+				}
+			}
+		}
+		else
+		{
+			setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputFamilyName', familyName);
+			setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputFirstName', firstName);
+			setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputAlternative', alternative);
+			setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputOrganization', org);
+			setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputIdentifier', id);
+			if (title != null) {
+				setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputText', title);
+			} else {
+				setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputText', complete);
+			}
+		}*/
 	}
 }
 

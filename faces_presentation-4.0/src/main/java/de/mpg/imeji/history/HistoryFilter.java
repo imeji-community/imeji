@@ -51,7 +51,7 @@ public class HistoryFilter  implements Filter{
 			{
 				hs.add(request.getPathInfo().replaceAll("/", ""), q, ids);
 			}
-			else
+			else if (!"".equals(h))
 			{
 				hs.remove(Integer.parseInt(h));
 			}
@@ -63,7 +63,6 @@ public class HistoryFilter  implements Filter{
 	public void init(FilterConfig arg0) throws ServletException 
 	{
 		this.filterConfig = arg0;
-		
 	}
 	
 	private HistorySession getHistorySession(ServletRequest request, ServletResponse resp)

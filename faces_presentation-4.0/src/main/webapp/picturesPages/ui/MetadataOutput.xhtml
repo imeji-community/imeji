@@ -49,7 +49,17 @@
 			<h:outputText styleClass="free_area0 endline" value="No value" rendered="#{(md.type == 'PUBLICATION' or md.type == 'URI') and md.uri == null}"/>
 			<h:outputText styleClass="free_area0 endline" value="#{md.license}" rendered="#{md.type == 'LICENSE' and md.license != null}"/>
 			<h:outputText styleClass="free_area0 endline" value="No value" rendered="#{md.type == 'LICENSE' and md.license == null}"/>
-			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.type == 'PERSON' and md.person.familyName != null}">
+			
+			<h:outputLink value="#{md.coneId}" target="_blank" rendered="#{md.type == 'PERSON' and md.coneId != null}" >
+				<h:panelGroup styleClass="free_area0 endline" rendered="#{md.type == 'PERSON' and md.person.familyName != null}">
+				<h:outputText value="#{md.person.familyName}, #{md.person.givenName} ("/>
+				<a4j:repeat var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
+					<h:outputText value="#{orga.name}"/>
+				</a4j:repeat>
+				<h:outputText value=")" />
+			</h:panelGroup>
+			</h:outputLink>
+			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.type == 'PERSON' and md.coneId == null and md.person.familyName != null}">
 				<h:outputText value="#{md.person.familyName}, #{md.person.givenName} ("/>
 				<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
 					<h:outputText value="#{orga.name}"/>

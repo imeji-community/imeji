@@ -100,27 +100,35 @@
 								<b class="xLarge_area0_p8 endline labelLine clear">&#160;
 									<span class="noDisplay">: </span>
 								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl ">
+								<span class="xHuge_area0 xTiny_marginLExcl">
 									<h:panelGroup styleClass="huge_area0">
 										<h:outputLabel value="#{lbl.adv_search_lblMetaData}" styleClass="xLarge_label"/>
 									 	<h:selectOneMenu styleClass="xLarge_select replace" id="selectMd" value="#{md.selectedMdName}" onchange="submit();" valueChangeListener="#{md.mdTypeChanged}">
 											<f:selectItems value="#{md.mdList}"/>
 										</h:selectOneMenu>
-										<h:panelGroup rendered="#{md.type=='NUMBER'}">
+										<h:panelGroup rendered="#{md.type=='NUMBER' and md.selectedMdName != null}">
 											<h:selectOneMenu styleClass="small_select replace" id="selectNumberOp" value="#{md.numberOperator}">
 												<f:selectItems value="#{md.numberOpList}"/>
 											</h:selectOneMenu>
 										</h:panelGroup>
-										<h:panelGroup rendered="#{md.type=='DATE'}">
+										<h:panelGroup rendered="#{md.type=='DATE'  and md.selectedMdName != null}">
 											<h:selectOneMenu styleClass="small_select replace" id="selectDateOp" value="#{md.dateOperator}">
 												<f:selectItems value="#{md.dateOpList}"/>
 											</h:selectOneMenu>
 										</h:panelGroup>
 									</h:panelGroup>
-									<h:outputLabel value="Value " styleClass="xLarge_label" rendered="#{md.type!='NUMBER' and md.type !='DATE'}"/>
-									<h:outputLabel value="Example: 3.14" styleClass="xLarge_label" rendered="#{md.type=='NUMBER'}"/>
-									<h:outputLabel value="Example: YYYY-MM-DD" rendered="#{md.type=='DATE'}" styleClass="xLarge_label"/>
-									<h:inputText styleClass="xLarge_txtInput" id="mdContent" value="#{md.mdText}" onkeypress="return quickSearchOnEnter(event)"/>
+									<h:panelGroup rendered="#{md.selectedMdName != null}">
+										<h:outputLabel value="Value " styleClass="xLarge_label" rendered="#{md.type!='NUMBER' and md.type !='DATE'}"/>
+										<h:outputLabel value="Example: 3.14" styleClass="xLarge_label" rendered="#{md.type=='NUMBER'}"/>
+										<h:outputLabel value="Example: YYYY-MM-DD" rendered="#{md.type=='DATE'}" styleClass="xLarge_label"/>
+										<h:inputText styleClass="xLarge_txtInput" id="mdContent" value="#{md.mdText}" onkeypress="return quickSearchOnEnter(event)">
+											<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[md.selectedStatement.name].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[md.selectedStatement.name].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, 0, 0, 'search')" for="mdContent" var="results" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+												<h:column>
+													<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
+												</h:column>
+											</rich:suggestionbox>
+										</h:inputText>
+									</h:panelGroup>
 								</span>
 								<h:panelGroup layout="block" styleClass="large_area0_p8 lineToolSection">
 									<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_md}" action="#{collection.addMd}">

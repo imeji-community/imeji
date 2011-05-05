@@ -34,9 +34,11 @@ public class MDCriterion extends Criterion implements Serializable{
 	{
 		this.statements = statements;
         setMdList(newMdList());
-		setSelectedMdName(getMdList().get(0).getValue().toString());
-        setMdText("");
-        
+        if(getMdList().get(0).getValue() != null)
+        {
+			setSelectedMdName(getMdList().get(0).getValue().toString());
+	        setMdText("");
+        }   
         numberOpList = new ArrayList<SelectItem>();
         numberOpList.add(new SelectItem(Filtertype.EQUALS_NUMBER, "="));
         numberOpList.add(new SelectItem(Filtertype.GREATER_NUMBER, ">="));
@@ -48,7 +50,6 @@ public class MDCriterion extends Criterion implements Serializable{
         dateOpList.add(new SelectItem(Filtertype.GREATER_DATE, ">="));
         dateOpList.add(new SelectItem(Filtertype.LESSER_DATE, "<="));
         dateOperator = Filtertype.EQUALS_DATE.name();
-        
 	}
 	
 
@@ -57,6 +58,7 @@ public class MDCriterion extends Criterion implements Serializable{
     	List<SelectItem> newMdList = new ArrayList<SelectItem>();
         try
         {
+        	newMdList.add(new SelectItem(null,"Select metadata"));
         	for (Statement s : statements)
         	{
         		newMdList.add(new SelectItem(s.getName(), labelHelper.getDefaultLabel(s.getLabels().iterator())));

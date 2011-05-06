@@ -308,17 +308,21 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	}
 	
 	public String selectAll() {
-		for(ImageBean bean: getCurrentPartList()){
+		for(ImageBean bean: getCurrentPartList())
+		{
 			bean.setSelected(true);
 			if(!(sb.getSelected().contains(bean.getImage().getId())))
+			{
 				sb.getSelected().add(bean.getImage().getId());
+			}
 		}
-		return sb.getSelectedImagesContext();
+		return getNavigationString();
 	}
 	
-	public String selectNone(){
+	public String selectNone()
+	{
 		sb.getSelected().clear();
-		return sb.getSelectedImagesContext();
+		return getNavigationString();
 	}
     
 	public Collection<Image> getImages() {
@@ -327,6 +331,35 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 
 	public void setImages(Collection<Image> images) {
 		this.images = images;
+	}
+	
+	/**
+	 * Check that at leat one image is editable
+	 */
+	public boolean isImageEditable()
+	{
+		Security security = new Security();
+    	for (Image im : getImages())
+    	{
+    		if (security.check(OperationsType.UPDATE, sb.getUser(), im))
+    		{
+    			return true;
+    		}
+    	}
+    	return false;
+	}
+	
+	public boolean isImageDeletable()
+	{
+		Security security = new Security();
+    	for (Image im : getImages())
+    	{
+    		if (security.check(OperationsType.DELETE, sb.getUser(), im))
+    		{
+    			return true;
+    		}
+    	}
+    	return false;
 	}
 	
 	public boolean isEditable()

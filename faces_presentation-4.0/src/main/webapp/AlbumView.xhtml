@@ -39,6 +39,24 @@
 				</h1>
 			</ui:define>
 			
+			<ui:define name="contentMenu">
+			
+				<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.album.id.path}" rendered="true">
+					<h:outputText value="Album startpage"/>
+				</h:outputLink>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{AlbumBean.album.id.path}?q=" rendered="true">
+					<h:outputText value="View images"/>
+				</h:outputLink>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputText value="Album metadata" styleClass="free_area0"/>
+				
+			</ui:define>
+			
 			<ui:define name="mainContent">
 				<h:panelGroup layout="block" styleClass="full_area0">
 					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
@@ -46,6 +64,9 @@
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.metadata}"/>
+								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.applicationUrl}edit#{AlbumBean.album.id.path}?init=1" rendered="#{AlbumBean.editable}">
+									<h:outputText value="#{lbl.edit}"/>
+								</h:outputLink>
 							</h3>
 							<span class="seperator"/>
 							<h:panelGroup>

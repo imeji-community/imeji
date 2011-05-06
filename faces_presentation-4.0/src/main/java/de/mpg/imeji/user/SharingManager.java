@@ -23,7 +23,7 @@ public class SharingManager
 	
 	public boolean share(Object o, User owner, String email, GrantType role)
 	{
-		if (isAdmin(o, owner))
+		if (isShareUser(o, owner))
 		{
 			try
 			{
@@ -53,6 +53,7 @@ public class SharingManager
 				return false;
 			}
 		}
+		BeanHelper.error("You have not suffisant priviliges to share this collection");
 		return false;
 	}
 	
@@ -62,10 +63,10 @@ public class SharingManager
 		return uc.retrieve(email);
 	}
 	
-	public boolean isAdmin(Object o, User user)
+	public boolean isShareUser(Object o, User user)
 	{
 		Security security = new Security();
-		return security.check(OperationsType.DELETE, user, o);
+		return security.check(OperationsType.UPDATE, user, o);
 	}
 	
 }

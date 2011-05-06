@@ -158,17 +158,19 @@
 						<a4j:commandLink styleClass="large_area0" action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 							<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 						</a4j:commandLink>
-						<h:outputLink styleClass="large_area0" value="#{Navigation.applicationUrl}edit?type=all" id="lnkSelectEdit2"  rendered="#{paginatorListSessionBean.editable}">
+						<h:outputLink styleClass="large_area0" value="#{Navigation.applicationUrl}edit?type=all" id="lnkSelectEdit2"  rendered="#{paginatorListSessionBean.imageEditable}">
 							<span class="large_area0_p8"><h:outputText value="#{lbl.edit_all}"/></span>
 						</h:outputLink>
-						<h:outputLink styleClass="large_area0" value="#" rendered="#{paginatorListSessionBean.deletable}">
-							<span class="large_area0_p8"><h:outputText value="Delete all"/></span>
-							<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
-						</h:outputLink>
-						<h:outputLink styleClass="large_area0" value="#" rendered="#{!paginatorListSessionBean.deletable  and paginatorListSessionBean.editable}">
-							<span class="large_area0_p8"><h:outputText value="Withdraw all"/></span>
-							<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
-						</h:outputLink>
+						<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
+							<h:outputLink styleClass="large_area0" value="#" rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.properties.status == 'PENDING'}">
+								<span class="large_area0_p8"><h:outputText value="Delete all"/></span>
+								<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
+							</h:outputLink>
+							<h:outputLink styleClass="large_area0" value="#" rendered="#{paginatorListSessionBean.imageEditable  and paginatorListSessionBean.collection.properties.status == 'RELEASED'}">
+								<span class="large_area0_p8"><h:outputText value="Withdraw all"/></span>
+								<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
+							</h:outputLink>
+						</h:panelGroup>
 					</div>
 					</span>
 				</h:panelGroup>
@@ -204,17 +206,19 @@
 								<a4j:commandLink styleClass="large_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 									<span class="large_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 								</a4j:commandLink>
-								<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit" rendered="#{paginatorListSessionBean.editable}">
+								<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit" rendered="#{paginatorListSessionBean.imageEditable}">
 									<span class="large_area0_p8"><h:outputText value="#{lbl.selected_edit}"/></span>
 								</h:outputLink>
-								<h:outputLink styleClass="large_area0" value="#"  rendered="#{paginatorListSessionBean.deletable}">
-									<span class="large_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
-									<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
-								</h:outputLink>
-								<h:outputLink styleClass="large_area0" value="#" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}">
-									<span class="large_area0_p8"><h:outputText value="Withdraw all"/></span>
-									<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
-								</h:outputLink>
+								<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
+									<h:outputLink styleClass="large_area0" value="#"  rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.properties.status == 'PENDING'}">
+										<span class="large_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
+										<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+									</h:outputLink>
+									<h:outputLink styleClass="large_area0" value="#" rendered="#{paginatorListSessionBean.imageEditable and paginatorListSessionBean.collection.properties.status == 'RELEASED'}">
+										<span class="large_area0_p8"><h:outputText value="Withdraw all"/></span>
+										<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+									</h:outputLink>
+								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
 					</div>
@@ -291,29 +295,21 @@
 						
 						<span class="medium_area0"> 
 							<span class="free_area0_p3 tileControlIconArea"> 
-								<h:outputLabel value="#{item.image.filename}" /> 
+								<h:outputLabel value="#{item.image.filename}" />
 							<ui:remove>
 								<br />
 								<h:commandLink id="lnkAddToActiveAlbumInactive"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
 									<h:outputText value="#{lbl.add_to_album}" />
-								</h:commandLink>
+								</h:commandLink>aa
+								<h:outputText value="#{paginatorListSessionBean.navigationString }"/>
+								<h:commandLink id="lnkRemoveFromAlbum1"  action="#{item.removeFromAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumImages' and paginatorListSessionBean.album.album.properties.status == 'PENDING'}" >
+									<h:outputText value="#{lbl.remove_from_album}" />
+								</h:commandLink> 
 							</ui:remove> 
 							</span> 
 						</span> 
 											
-						<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
-						
-							<!-- View Album Page -->
-							<h:panelGroup styleClass="large_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumImages'}">
-								<!-- remove item from the view album -->
-								<h:panelGroup styleClass="free_area0 tileControlIconArea" rendered="#{paginatorListSessionBean.album.album.properties.status == 'PENDING'}">
-									<h:commandLink id="lnkRemoveFromAlbum"  action="#{item.removeFromAlbum}" >
-										<h:outputText value="#{lbl.remove_from_album}" />
-									</h:commandLink> 
-								</h:panelGroup>
-							</h:panelGroup>
-							<!-- End View Album Page -->
-						
+						<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->				
 					</li>
 				</a4j:repeat>
 				<!-- End images -->

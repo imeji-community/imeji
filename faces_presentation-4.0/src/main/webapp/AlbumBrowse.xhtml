@@ -3,7 +3,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:a4j="http://richfaces.org/a4j" 
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pretty="http://ocpsoft.com/prettyfaces">
 <ui:remove>
 <!--
 
@@ -39,8 +41,55 @@
 	<ui:composition template="templates/template_paginator_images.xhtml">	
 			<ui:param name="paginatorListSessionBean" value="#{AlbumImagesBean}" />
 			<ui:param name="headline" value="#{AlbumImagesBean.album.album.metadata.title}"/>
+	
+
+		<ui:define name="contentMenu">
+			
+			<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.album.id.path}" rendered="true">
+				<h:outputText value="Album startpage"/>
+			</h:outputLink>
+			
+			<h:outputText styleClass="seperator void" />
+			
+			<h:outputText  styleClass="free_area0" value="View images"/>
+			
+			<h:outputText styleClass="seperator void" />
+			
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.album.id.path}/details?init=1" rendered="true">
+				<h:outputText value="Album metadata"/>
+			</h:outputLink>
+			
+		</ui:define>
+		
+		<ui:define name="actionsMenu">
+			<h:panelGroup>
+				
+				<h:panelGroup styleClass="free_area0">
+					<!-- SORTING content menu lower line starts here -->
+					<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" />
+					<h:selectOneMenu id="selSort" value="#{AlbumImagesBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
+						<f:selectItems id="sortItem" value="#{AlbumImagesBean.sortMenu}" />
+					</h:selectOneMenu>
+					<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
+					<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
+					<h:outputText styleClass="seperator void" />
+					<!-- SORTING content menu lower line ends here -->
+				</h:panelGroup>
+				
+				 <h:commandLink id="lnkReleaseCollection" styleClass="free_area0" action="#{AlbumImagesBean.album.release}" rendered="#{AlbumImagesBean.album.editable and AlbumImagesBean.album.album.properties.status=='PENDING'}">
+					<h:outputText value="#{lbl.collection_release}"></h:outputText>
+				</h:commandLink>
+				
+				<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0" action="#{AlbumImagesBean.album.withdraw}" rendered="#{AlbumImagesBean.album.editable and AlbumImagesBean.album.album.properties.status=='RELEASED'}">
+					<h:outputText value="Withdraw"></h:outputText>
+				</h:commandLink>
+				
+				<h:commandLink id="lnkDeleteCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{AlbumImagesBean.album.delete}" rendered="#{AlbumImagesBean.album.editable and AlbumImagesBean.album.album.properties.status=='PENDING'}">
+					<h:outputText value="#{lbl.delete}"></h:outputText>
+				</h:commandLink>
+			</h:panelGroup>
+		</ui:define>
+	
 	</ui:composition>
-
-
 </body>
 </html>

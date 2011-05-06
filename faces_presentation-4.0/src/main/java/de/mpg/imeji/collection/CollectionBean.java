@@ -366,6 +366,12 @@ public abstract class CollectionBean
 		Security security = new Security();
 		return security.check(OperationsType.DELETE, sessionBean.getUser(), collection);
 	}
+	
+	public boolean isProfileEditor()
+	{
+		Security security = new Security();
+		return security.check(OperationsType.UPDATE, sessionBean.getUser(), profile);
+	}
 
     public boolean isCorruptedList()
     {

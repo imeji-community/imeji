@@ -39,7 +39,23 @@
 				</h1>
 			</ui:define>
 			
+			<ui:define name="contentMenu">
 			
+				<h:outputText styleClass="free_area0" value="Album startpage"/>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{AlbumBean.album.id.path}?q=" rendered="true">
+					<h:outputText value="View images"/>
+				</h:outputLink>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumBean.album.id.path}/details?init=1" rendered="true">
+					<h:outputText value="Album metadata"/>
+				</h:outputLink>
+				
+			</ui:define>
 			
 			
 			<ui:define name="mainContent">
@@ -94,13 +110,53 @@
 								</h:panelGroup>
 							</h:panelGroup>
 			
-							<h:panelGroup styleClass="full_area0_p8 small_marginLExcl">
-								<h:outputText value="Second paragraph"/>
-							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
 			</ui:define>
+			
+			
+			<ui:define name="actionsMenu">
+				<h:panelGroup>
+					<rich:togglePanel  value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{AlbumBean.editable}">
+						 <f:facet name="closed">
+						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
+					            
+					            <rich:toggleControl styleClass="free_area0" value="Share Album" switchToState="open"/>
+					            
+					            <h:commandLink id="lnkReleaseCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{AlbumBean.release}" rendered="#{AlbumBean.editable and AlbumBean.album.properties.status=='PENDING'}">
+									<h:outputText value="#{lbl.collection_release}"></h:outputText>
+								</h:commandLink>
+								
+								<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{AlbumBean.withdraw}" rendered="#{AlbumBean.editable and AlbumBean.album.properties.status=='RELEASED'}">
+									<h:outputText value="Withdraw"></h:outputText>
+								</h:commandLink>
+								
+								<h:commandLink id="lnkDeleteCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{AlbumBean.delete}" rendered="#{AlbumBean.editable and AlbumBean.album.properties.status=='PENDING'}">
+									<h:outputText value="#{lbl.delete}"></h:outputText>
+								</h:commandLink>
+							</h:panelGrid>
+					     </f:facet>
+					     <f:facet name="open">
+					         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
+     								<h:outputText value="Share with " />
+          							*<rich:inplaceInput styleClass="large_area0 selected" value="#{SharingBean.email}" defaultLabel="click to enter your email"/>*
+          							<h:outputText value=" as" />
+          							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
+											<f:selectItems value="#{SharingBean.grantsMenu}"/>
+									</h:selectOneMenu>
+					        		<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}">
+										<f:attribute name="collectionId" value="#{AlbumBean.album.id}"/>
+					           		</h:commandLink>
+					           		<h:outputLink value="#{Navigation.applicationUri}#{AlbumBean.album.id.path}"><h:outputText value="Cancel"/></h:outputLink>
+								</h:panelGrid>
+						 </f:facet>   
+					</rich:togglePanel>
+				</h:panelGroup>
+			</ui:define>
+			
+			
+			
 			<script>
 					function message(message)
 					{

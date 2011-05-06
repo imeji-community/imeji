@@ -81,7 +81,6 @@
 								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable}">
 									<h:outputText value="#{lbl.edit}"/>
 								</h:outputLink>
-								
 							</h3>
 							<span class="seperator"/>
 							<h:panelGroup>
@@ -160,7 +159,7 @@
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.collection_profile}"/>
-								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.applicationUri}/edit#{ViewCollectionBean.collection.profile.path}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.editable}">
+								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.applicationUri}/edit#{ViewCollectionBean.collection.profile.path}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.profileEditor}">
 									<h:outputText value="#{lbl.edit}"></h:outputText>
 								</h:outputLink>
 							</h3>

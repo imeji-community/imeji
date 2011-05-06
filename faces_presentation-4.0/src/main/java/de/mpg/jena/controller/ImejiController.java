@@ -1,8 +1,10 @@
 package de.mpg.jena.controller;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +36,7 @@ import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
+import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
@@ -113,6 +116,18 @@ public abstract class ImejiController
         properties.setLastModificationDate(now);
     }
 
+    public boolean hasNoImagesLocked(Collection<URI> containersUri, User user)
+	{
+		for (URI u : containersUri)
+		{
+			if (Locks.isLocked(u.toString(), user.getEmail()))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+    
     public static void deleteObjects(String uri)
     {
         Resource r = base.getResource(uri);

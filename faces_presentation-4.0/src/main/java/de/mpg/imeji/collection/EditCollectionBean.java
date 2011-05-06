@@ -74,7 +74,7 @@ public class EditCollectionBean extends CollectionBean
         if (valid())
         {
             collectionController.update(super.getCollection());
-            BeanHelper.info("collection_success_save");
+            BeanHelper.info("Collection successly saved");
             Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
             FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + getCollection().getId().getPath() + "/details?init=1");
         }

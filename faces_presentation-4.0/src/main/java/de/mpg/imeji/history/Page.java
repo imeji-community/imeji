@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.filter.Filter;
-import de.mpg.imeji.filter.FiltersBean;
 
 public class Page 
 {
@@ -14,7 +13,7 @@ public class Page
 		IMAGES("Images.xhtml", "Images"), COLLECTION_IMAGES("CollectionBrowse.xhtml", "Images of Collection"), SEARCH("SearchPictures.xhtml", "Advanced Search"),
 		HOME("Welcome.xhtml", "Home"), IMAGE("Image.xhtml", "Image"), COLLECTIONS("Collections.xhtml", "Collections"), ALBUMS("Albums.xhtml", "Albums"),
 		COLLECTION_HOME("CollectionEntryPage.xhtml", "Collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "Search results"), EDIT("Edit.xhtml", "Edit images"),
-		COLLECTION_IMAGE("CollectionImage.xhtml","Image");
+		COLLECTION_IMAGE("CollectionImage.xhtml","Image"),ALBUM_IMAGES("AlbumBrowse.xhtml", "Images of Album"), ALBUM_HOME("AlbumEntryPage.xhtml", "Album");
 		
 		private String fileName="";
 		private String label;

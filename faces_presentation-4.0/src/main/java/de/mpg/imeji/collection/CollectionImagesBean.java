@@ -168,9 +168,38 @@ public class CollectionImagesBean extends ImagesBean {
 	
 	public boolean isEditable()
     {
-    	Security security = new Security();
+		Security security = new Security();
     	return security.check(OperationsType.UPDATE, sb.getUser(), collection);
     }
+	
+	/**
+	 * Check that at leat one image is editable
+	 */
+	public boolean isImageEditable()
+	{
+		Security security = new Security();
+    	for (Image im : getImages())
+    	{
+    		if (security.check(OperationsType.UPDATE, sb.getUser(), im))
+    		{
+    			return true;
+    		}
+    	}
+    	return false;
+	}
+	
+	public boolean isImageDeletable()
+	{
+		Security security = new Security();
+    	for (Image im : getImages())
+    	{
+    		if (security.check(OperationsType.DELETE, sb.getUser(), im))
+    		{
+    			return true;
+    		}
+    	}
+    	return false;
+	}
 
 	public boolean isVisible() 
 	{

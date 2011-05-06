@@ -86,7 +86,7 @@ public class CollectionController extends ImejiController
 	
 	public void release(CollectionImeji ic) throws Exception
     {
-		if (hasNoImagesLocked(ic.getImages())) 
+		if (hasNoImagesLocked(ic.getImages(), user)) 
 		{	
 			ic.getProperties().setStatus(Status.RELEASED);
 			ic.getProperties().setVersionDate(new Date());
@@ -119,7 +119,7 @@ public class CollectionController extends ImejiController
 	
 	public void delete(CollectionImeji collection, User user) throws Exception
 	{	
-		if (hasNoImagesLocked(collection.getImages())) 
+		if (hasNoImagesLocked(collection.getImages(), user)) 
 		{
 			ImageController imageController = new ImageController(user);
 			
@@ -158,7 +158,7 @@ public class CollectionController extends ImejiController
 	
 	public void withdraw(CollectionImeji ic) throws Exception
     {
-		if (hasNoImagesLocked(ic.getImages())) 
+		if (hasNoImagesLocked(ic.getImages(), user)) 
 		{
 			ic.getProperties().setStatus(Status.WITHDRAWN);
 			ic.getProperties().setVersionDate(new Date());
@@ -183,19 +183,7 @@ public class CollectionController extends ImejiController
 			throw new RuntimeException("Collection has at least one image locked by an other user.");
 		}
     }
-	
-	public boolean hasNoImagesLocked(Collection<URI> collection)
-	{
-		for (URI u : collection)
-		{
-			if (Locks.isLocked(u.toString(), user.getEmail()))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-	
+		
 	public CollectionImeji retrieve(String id)
 	{
 		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);

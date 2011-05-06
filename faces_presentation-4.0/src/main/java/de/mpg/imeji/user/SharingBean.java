@@ -60,7 +60,7 @@ public class SharingBean
 		if (shared)
 		{
 			BeanHelper.info(message);
-			status= "closed";
+			cancel();
 		}
 		return "pretty:";
 	}

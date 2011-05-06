@@ -5,13 +5,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
+import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Security;
@@ -231,14 +234,7 @@ public class AlbumBean implements Serializable
                 return false;
         }
 
-        /*
-        public String release() throws Exception
-        {
-            CollectionController cc = new CollectionController(sessionBean.getUser());
-            cc.release(collection);
-            return "pretty:";
-        }
-        */
+        
         public List<ImageBean> getImages() throws Exception
         {
             ImageController ic = new ImageController(sessionBean.getUser()); 
@@ -268,7 +264,7 @@ public class AlbumBean implements Serializable
                 update();
             }
             
-            return "pretty:albums";
+            return "";
            
         }
         
@@ -279,8 +275,10 @@ public class AlbumBean implements Serializable
             {
                 ac.update(getAlbum());
                 BeanHelper.info("Album updated successfully");
+                Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+                FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + getAlbum().getId().getPath() + "/details?init=1");
             }
-            return "pretty:albums";
+            return "";
         }
 
         public void setAlbum(Album album)
@@ -332,6 +330,42 @@ public class AlbumBean implements Serializable
             AlbumController ac = new AlbumController(sessionBean.getUser());
             ac.release(album);
             return "pretty:";
+        }
+        
+        public String delete()
+        {
+        	AlbumController c = new AlbumController(sessionBean.getUser());
+        	
+        	try 
+        	{
+    			c.delete(album, sessionBean.getUser());
+    			BeanHelper.info("Album successfully deleted.");
+    		} 
+        	catch (Exception e) 
+        	{
+        		BeanHelper.error("Error deleting Album");
+    			BeanHelper.error("Details: " + e.getMessage());
+    		}
+        	
+        	return "pretty:albums";
+        }
+        
+        public String withdraw() throws Exception
+        {
+        	AlbumController c = new AlbumController(sessionBean.getUser());
+        	
+        	try 
+        	{
+        		c.withdraw(album);
+            	BeanHelper.info("Album successfully withdrawn.");
+    		} 
+        	catch (Exception e) 
+    		{
+        		BeanHelper.error("Error withdrawing Album");
+    			BeanHelper.error("Details: " + e.getMessage());
+    		}
+        	
+        	return "pretty:";
         }
         
         public boolean getSelected() 

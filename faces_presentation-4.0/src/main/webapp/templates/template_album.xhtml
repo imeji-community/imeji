@@ -7,36 +7,7 @@
 
 <ui:composition template="template.xhtml">
 		
-		<ui:define name="contentMenu">
-			
-			<pretty:link styleClass="free_area0" mappingId="viewAlbum">
-				<h:outputText value="ORGANIZE"/>
-				<f:param value="#{AlbumBean.id}"/>
-			</pretty:link>
-			
-			<h:outputText styleClass="seperator void" />
-			
-			<pretty:link styleClass="free_area0" mappingId="viewAlbumDetails">
-				<h:outputText value="INFO"/>
-				<f:param value="#{AlbumBean.id}"/>
-			</pretty:link>
 		
-		</ui:define>
-					
-		<ui:define name="actionsMenu">
-			<h:panelGroup styleClass="free_area0 sub action">
-				<!-- ORGANIZE content menu lower line starts here -->
-				<h:commandLink id="lnkReleaseAlbum" styleClass="free_area0" action="#{AlbumBean.release}" rendered="#{AlbumBean.editable and AlbumBean.album.properties.status=='PENDING'}">
-					<h:outputText value="#{lbl.collection_release}"/>
-				</h:commandLink>
-
-				<!-- ORGANIZE content menu lower line starts here -->
-				<pretty:link styleClass="free_area0 xTiny_marginLExcl" mappingId="editAlbum" rendered="#{AlbumBean.editable}">
-					<h:outputText value="#{lbl.edit_album}"/>
-					<f:param value="#{AlbumBean.id}"/>
-				</pretty:link>
-			</h:panelGroup>
-		</ui:define>
 
 </ui:composition>
 </html>

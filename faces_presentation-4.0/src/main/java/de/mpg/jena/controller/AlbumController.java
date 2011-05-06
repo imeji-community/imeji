@@ -7,14 +7,22 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import thewebsemantic.NotFoundException;
+import thewebsemantic.RDF2Bean;
+
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
+import de.mpg.jena.concurrency.locks.Locks;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
 import de.mpg.jena.sparql.query.QuerySPARQLImpl;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Properties.Status;
@@ -25,6 +33,8 @@ public class AlbumController extends ImejiController
 {
 	private static ImejiRDF2Bean imejiRDF2Bean = null;
 	private static ImejiBean2RDF imejiBean2RDF = null;
+	
+	private static Logger logger = Logger.getLogger(CollectionController.class);
 	
 	public AlbumController(User user)
 	{
@@ -99,12 +109,15 @@ public class AlbumController extends ImejiController
         return (Album) imejiRDF2Bean.load(selectedAlbumId.toString(), user);
     }
 	
+    @Deprecated
 	public Collection<Album> retrieveAll()
 	{
-//		RDF2Bean reader = new RDF2Bean(base);
-//		Security security = new Security();
-//		if (security.isSysAdmin(user))
-//			return reader.load(Album.class);
+		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
+		Security security = new Security();
+		if (security.isSysAdmin(user))
+		{
+			return imejiRDF2Bean.load(Album.class);
+		}
 		return new ArrayList<Album>();
 	}
 	
@@ -115,13 +128,44 @@ public class AlbumController extends ImejiController
 		cleanGraph(ImejiJena.albumModel);
 	}
 	
-	
-	public synchronized void release(Album album) throws Exception
+	public void release(Album album) throws Exception
     {
-        //first check user credentials
-        album.getProperties().setStatus(Status.RELEASED);
-        album.getProperties().setVersionDate(new Date());
-        update(album);
+		if (hasNoImagesLocked(album.getImages(), user)) 
+		{	
+			album.getProperties().setStatus(Status.RELEASED);
+			album.getProperties().setVersionDate(new Date());
+			
+			ImageController imageController = new ImageController(user);
+			
+			for(URI uri: album.getImages())
+		    {
+		    	try 
+		    	{
+		    		imageController.release(imageController.retrieve(uri));
+				} 
+		    	catch (NotFoundException e) 
+				{
+					logger.error("Release image error: " + uri + " could not be found");
+				}
+		    	catch (Exception e) 
+		    	{
+					logger.error("You are not allowed to release image " + uri + ". I could be deleted by it's owner." );
+				}
+		    }
+	        update(album);
+		}
+		else
+		{
+			throw new RuntimeException("Album has at least one image locked by an other user.");
+		}
+    }
+	
+	
+	public void withdraw(Album album) throws Exception
+    {
+		album.getProperties().setStatus(Status.WITHDRAWN);
+		album.getProperties().setVersionDate(new Date());
+		update(album);
     }
 
 	/**

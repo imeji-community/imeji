@@ -322,7 +322,7 @@ public abstract class CollectionBean
     public List<ImageBean> getImages() throws Exception
     {
         ImageController ic = new ImageController(sessionBean.getUser());
-        if (collection.getId() == null) return null;
+        if (collection == null || collection.getId() == null) return null;
         try
         {
             Collection<Image> imgList = ic.searchImagesInContainer(collection.getId(), null, null, 5, 0);

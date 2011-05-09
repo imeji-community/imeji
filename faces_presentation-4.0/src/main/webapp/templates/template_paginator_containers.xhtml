@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" 
+	xmlns:rich="http://richfaces.org/rich"
 	xmlns:pretty="http://ocpsoft.com/prettyfaces">
 <ui:remove>
 <!--
@@ -38,17 +39,18 @@
 </ui:remove>
 	<body>
 		<ui:composition template="template_paginator.xhtml">		
+			
 			<ui:define name="contentMenu">
-				<h:outputLink id="lnkFilter" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=VIEW" rendered="#{paginatorListSessionBean.selectedMenu != 'VIEW' and SessionBean.user != null}">
-					<h:outputText value="#{lbl.view}"/>
-				</h:outputLink>
-				<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.view}" rendered="#{paginatorListSessionBean.selectedMenu == 'VIEW' and SessionBean.user != null}" />
-				<h:outputText styleClass="seperator void" />
-				
 				<h:outputLink id="lnkSort" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=SORTING" rendered="#{paginatorListSessionBean.selectedMenu != 'SORTING'}">
 					<h:outputText value="#{lbl.sorting}"/>
 				</h:outputLink>
 				<h:outputText id="txtSortLink" styleClass="free_area0" value="#{lbl.sorting}" rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"/>
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkFilter" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=FILTER" rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER'}">
+					<h:outputText value="FILTER"/>
+				</h:outputLink>
+				<h:outputText id="txtFilterLink" styleClass="free_area0" value="FILTER" rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}"/>
 				<h:outputText styleClass="seperator void" />
 				
 				<h:outputLink id="lnkCreate" styleClass="free_area0" value="#{Navigation.collectionUrl}?reset=1" rendered="#{SessionBean.user != null}">
@@ -59,16 +61,8 @@
 			</ui:define>
 			
 			<ui:define name="actionsMenu">	
-				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'VIEW'}">
-				<!-- VIEW content menu lower line starts here -->
-					<!--  
-
-					-->
-				<!-- VIEW content menu lower line ends here -->
-				</h:panelGroup>
 			
 				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}">
-				<!-- SORTING content menu lower line starts here -->
 					<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0"/>
 					<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
 						<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}"/>
@@ -76,7 +70,14 @@
 					<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
 					<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
 					<h:outputText styleClass="seperator void" />
-				<!-- SORTING content menu lower line ends here -->
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}">
+					<h:outputText id="txtFilter" value="#{lbl.filter_by}" styleClass="free_area0"/>
+					<h:selectOneMenu id="selFilter" value="#{paginatorListSessionBean.selectedFilter}" styleClass="free_select" onchange="submit();">
+						<f:selectItems id="filterItem" value="#{paginatorListSessionBean.filterMenu}"/>
+					</h:selectOneMenu>
+					<h:outputText styleClass="seperator void" />
 				</h:panelGroup>
 				
 			</ui:define>

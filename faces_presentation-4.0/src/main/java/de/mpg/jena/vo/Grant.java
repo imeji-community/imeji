@@ -16,7 +16,8 @@ public class Grant implements Serializable {
     @RdfType("grantType")
 	public enum GrantType {
         SYSADMIN, CONTAINER_ADMIN, CONTAINER_EDITOR, IMAGE_UPLOADER
-        , IMAGE_EDITOR, PRIVILEGED_VIEWER, PROFILE_ADMIN, PROFILE_EDITOR;
+        , IMAGE_EDITOR, PRIVILEGED_VIEWER, PROFILE_ADMIN, PROFILE_EDITOR
+        , PROFILE_VIEWER;
 	}
 	
 	private GrantType grantType;

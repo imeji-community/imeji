@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.beans.SuperContainerBean;
 import de.mpg.imeji.util.BeanHelper;
@@ -20,14 +23,13 @@ import de.mpg.jena.vo.Properties.Status;
 
 public class AlbumsBean extends SuperContainerBean<AlbumBean>
 {
-
     private int totalNumberOfRecords;
     private SessionBean sb;
   
 	public AlbumsBean()
     {
         super();
-        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
     @Override
@@ -43,29 +45,34 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
     }
 
     @Override
-    public List<AlbumBean> retrieveList(int offset, int limit)
+    public List<AlbumBean> retrieveList(int offset, int limit) throws Exception
     {
-        UserController uc = new UserController(sb.getUser());
-        
-        if (sb.getUser() != null) sb.setUser(uc.retrieve(sb.getUser().getEmail()));
+    	super.initMenus();
+    	UserController uc = new UserController(sb.getUser());
+    	
+        if (sb.getUser() != null) 
+        {
+        	sb.setUser(uc.retrieve(sb.getUser().getEmail()));
+        }
         
         AlbumController controller = new AlbumController(sb.getUser());
-        
         Collection<Album> albums = new ArrayList<Album>();
 
-        try
+        SortCriterion sortCriterion = new SortCriterion();
+        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+        
+        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+        List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
+        
+        if (getFilter() != null)
         {
-	        SortCriterion sortCriterion = new SortCriterion();
-	        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
-	        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-	        totalNumberOfRecords = controller.getNumberOfResults(new ArrayList<SearchCriterion>());	        
-	        albums = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
+        	scList.add(getFilter());
+        	scList1.add(getFilter());
         }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        
+        totalNumberOfRecords = controller.getNumberOfResults(scList);	        
+        albums = controller.search(scList1, sortCriterion, limit, offset);
         
         return ImejiFactory.albumListToBeanList(albums);
     }
@@ -79,12 +86,17 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
 		this.sb = sb;
 	}
 	
-	public String selectAll() {
-		for(AlbumBean bean: getCurrentPartList()){
-			if(bean.getAlbum().getProperties().getStatus() != Status.RELEASED){
+	public String selectAll() 
+	{
+		for(AlbumBean bean: getCurrentPartList())
+		{
+			if(bean.getAlbum().getProperties().getStatus() != Status.RELEASED)
+			{
 				bean.setSelected(true);
 				if(!(sb.getSelectedAlbums().contains(bean.getAlbum().getId())))
+				{
 					sb.getSelectedAlbums().add(bean.getAlbum().getId());
+				}
 			}
 		}
 		return "";
@@ -95,7 +107,8 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
 		return "";
 	}
 	
-	public String deleteAll() throws Exception{
+	public String deleteAll() throws Exception
+	{
 		for(URI uri : sb.getSelectedAlbums()){
 			AlbumController albumController = new AlbumController(sb.getUser());
 			Album album = albumController.retrieve(uri);
@@ -104,6 +117,4 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
 		sb.getSelectedAlbums().clear();
 		return "pretty:albums";
 	}
-
-   
 }

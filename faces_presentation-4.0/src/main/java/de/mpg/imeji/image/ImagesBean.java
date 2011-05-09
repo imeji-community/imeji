@@ -42,7 +42,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     protected FiltersBean filters;
     private String query;
     private Navigation navigation;
-    protected MetadataLabels labels;
+  
     private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
     private Collection<Image> images = new ArrayList<Image>();
     
@@ -51,7 +51,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         super();
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
         initMenus();
     }
 
@@ -84,7 +83,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     }
 
     @Override
-    public List<ImageBean> retrieveList(int offset, int limit) throws Exception
+    public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
     {
         if (query != null)
         {
@@ -105,10 +104,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	            BeanHelper.error("Invalid search query!");
 	        }
 	        totalNumberOfRecords = controller.countImages(scList);
-	        scList = URLQueryTransformer.transform2SCList(query);
-	        images = controller.searchImages(scList, sortCriterion, limit, offset);
-	        
-	        labels.init((List<Image>) images);
+	    	scList = URLQueryTransformer.transform2SCList(query);
+			images = controller.searchImages(scList, sortCriterion, limit, offset);
     	}
         return ImejiFactory.imageListToBeanList(images);
     }
@@ -161,9 +158,17 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
                  count++;
              }
         }
-        ac.update(activeAlbum.getAlbum());
-        BeanHelper.info(count + " images added to active album");
-        
+        try 
+        {
+        	  ac.update(activeAlbum.getAlbum());
+              BeanHelper.info(count + " images added to active album");
+		} 
+        catch (Exception e) 
+        {
+			BeanHelper.error(e.getMessage());
+			activeAlbum.setAlbum(ac.retrieve(activeAlbum.getAlbum().getId()));
+		}
+
         return "pretty:";
     }
     

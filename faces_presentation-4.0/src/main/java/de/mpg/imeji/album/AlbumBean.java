@@ -11,16 +11,16 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
+import de.mpg.imeji.user.SharingBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
-import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
-import de.mpg.jena.controller.UserController;
-import de.mpg.jena.security.Security;
 import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
+import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
@@ -28,7 +28,6 @@ import de.mpg.jena.vo.User;
 
 public class AlbumBean implements Serializable
 {
-    
         private SessionBean sessionBean = null;
         private Album album = null;
         private String id = null;
@@ -58,23 +57,43 @@ public class AlbumBean implements Serializable
         public void initView()
         {
             AlbumController ac = new AlbumController(sessionBean.getUser()); 
-            setAlbum(ac.retrieve(id));
-           
+            try 
+            {
+            	setAlbum(ac.retrieve(id));
+			} 
+            catch (Exception e) 
+			{
+				BeanHelper.error("Album " + id + " not found");
+			}
+         
             if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
             {
                 active = true;
             }
+            
+            List<SelectItem> grantsMenu = new ArrayList<SelectItem>();
+    		grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, "Viewer", "Can view all images for this collection"));
+    		grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, "Album Editor", "Can edit informations about the collection"));
+            ((SharingBean)BeanHelper.getRequestBean(SharingBean.class)).setGrantsMenu(grantsMenu);
         }
         
         public void initEdit()
         {
             AlbumController ac = new AlbumController(sessionBean.getUser());
-            setAlbum(ac.retrieve(id));
-            save=false;
-            if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
+            
+            try 
             {
-                active = true;
-            }
+            	 setAlbum(ac.retrieve(id));
+            	 save=false;
+                 if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
+                 {
+                     active = true;
+                 }
+			} 
+            catch (Exception e) 
+            {
+				BeanHelper.error(e.getMessage());
+			}
         }
         
         public void initCreate()
@@ -84,7 +103,7 @@ public class AlbumBean implements Serializable
             getAlbum().getMetadata().setDescription("");
             getAlbum().getMetadata().getPersons().clear();
             getAlbum().getMetadata().getPersons().add(ImejiFactory.newPerson());
-            save=true;
+            save = true;
         }
 
         public boolean valid()
@@ -257,6 +276,8 @@ public class AlbumBean implements Serializable
                 {
                     ac.create(getAlbum());
                     BeanHelper.info("Album created successfully");
+                    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + getAlbum().getId().getPath() + "/details?init=1");
                 }
             }
             else

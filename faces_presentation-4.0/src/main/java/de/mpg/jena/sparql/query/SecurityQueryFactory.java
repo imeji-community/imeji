@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.mpg.jena.controller.SearchCriterion;
-import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.vo.Grant;
@@ -22,7 +21,8 @@ public class SecurityQueryFactory
 	private Map<String,QueryElement> els = new HashMap<String, QueryElement>();
 	private User user = null;
 	private String type = "http://imeji.mpdl.mpg.de/image";
-	private SearchCriterion status = new SearchCriterion(Operator.OR, ImejiNamespaces.PROPERTIES_STATUS, "http://imeji.mpdl.mpg.de/status/RELEASED" , Filtertype.URI);
+	//private SearchCriterion status = new SearchCriterion(Operator.OR, ImejiNamespaces.PROPERTIES_STATUS, "http://imeji.mpdl.mpg.de/status/RELEASED" , Filtertype.URI);
+	private SearchCriterion status =  null;
 	private SearchCriterion imageCollection = null;
 	private boolean myImages = false;
 	private boolean isCollection = false;
@@ -86,13 +86,13 @@ public class SecurityQueryFactory
 	{
 		String f = "";
 		String op = " ";
-
+		
 		if ("http://imeji.mpdl.mpg.de/image".equals(type) && !isCollection && user != null)
 		{
 			f+= "?status!=<http://imeji.mpdl.mpg.de/status/WITHDRAWN> && (";
 		}
 
-		if ((!myImages && imageCollection == null) || (Operator.AND.equals(status.getOperator())))
+		if (status != null && ((!myImages && imageCollection == null) || (Operator.AND.equals(status.getOperator()))))
 		{
 			f+="?status=<" + status.getValue() + ">";
 			
@@ -105,7 +105,7 @@ public class SecurityQueryFactory
 				op = " || ";
 			}
 		}
-		String uf ="";
+		String uf = "";
 		boolean hasGrantForCollection = false;
 		if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
 		{
@@ -140,6 +140,7 @@ public class SecurityQueryFactory
 				}
 			}
 		}
+
 		if(imageCollection != null && !hasGrantForCollection)
 		{
 			uf += "?coll=<" +imageCollection.getValue() + "> && ?status=<http://imeji.mpdl.mpg.de/status/RELEASED>";
@@ -151,9 +152,18 @@ public class SecurityQueryFactory
 			uf+= ")";
 		}
 		
-		if (!"".equals(uf)) f = " .FILTER(" + f + op + "(" + uf + "))";
-		else if (!"".equals(f)) f = " .FILTER(" + f + ")";
-		
+		if (!"".equals(uf)) 
+		{
+			f = " .FILTER(" + f + op + "( ?status=<http://imeji.mpdl.mpg.de/status/RELEASED> || " + uf + "))";
+		}
+		else if (!"".equals(f)) 
+		{
+			f = " .FILTER(" + f + ")";
+		}
+		else if ("".equals(f))
+		{
+			f = " .FILTER(?status=<http://imeji.mpdl.mpg.de/status/RELEASED>)";
+		}
 		return f;
 	}
 }

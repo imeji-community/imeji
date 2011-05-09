@@ -146,7 +146,7 @@
 											<f:selectItems value="#{SharingBean.grantsMenu}"/>
 									</h:selectOneMenu>
 					        		<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}">
-										<f:attribute name="collectionId" value="#{AlbumBean.album.id}"/>
+										<f:attribute name="albumId" value="#{AlbumBean.id}"/>
 					           		</h:commandLink>
 					           		<h:outputLink value="#{Navigation.applicationUri}#{AlbumBean.album.id.path}"><h:outputText value="Cancel"/></h:outputLink>
 								</h:panelGrid>

@@ -9,8 +9,10 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ProfileController;
+import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Grant.GrantType;
@@ -23,11 +25,12 @@ public class SharingBean
 	private GrantType selectedGrant = GrantType.PRIVILEGED_VIEWER;
 	private String status = "closed";
 	
-	public SharingBean() {
+	public SharingBean() 
+	{
 		grantsMenu = new ArrayList<SelectItem>();
 		grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, "Viewer", "Can view all images for this collection"));
-		grantsMenu.add(new SelectItem(GrantType.IMAGE_EDITOR, "Image Editor", "Can view and edit all images for this collection"));
 		grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, "Collection Editor", "Can edit informations about the collection"));
+		grantsMenu.add(new SelectItem(GrantType.IMAGE_EDITOR, "Image Editor", "Can view and edit all images for this collection"));
 		grantsMenu.add(new SelectItem(GrantType.PROFILE_EDITOR, "Profile Editor", "Can edit the metadata profile"));
 	}
 
@@ -41,20 +44,39 @@ public class SharingBean
 	
 	public String share(ActionEvent event)
 	{
-		String id =  event.getComponent().getAttributes().get("collectionId").toString();
+		String colId =  null;
+		String albId = null;
+		
+		if (event.getComponent().getAttributes().get("collectionId") != null)
+		{
+			colId = event.getComponent().getAttributes().get("collectionId").toString();
+		}
+		else if (event.getComponent().getAttributes().get("albumId") != null)
+		{
+			albId = event.getComponent().getAttributes().get("albumId").toString();
+		}
+
 		SharingManager sm = new SharingManager();
 		boolean shared = false;
 		String message = "";
 		
-		if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
+		if (colId != null)
 		{
-			shared = sm.share(retrieveCollection(id), sb.getUser(), email, selectedGrant);
-			message = "Collection " + id + " shared with " + email;
+			if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
+			{
+				shared = sm.share(retrieveCollection(colId), sb.getUser(), email, selectedGrant);
+				message = "Collection " + colId + " shared with " + email;
+			}
+			else
+			{
+				shared = sm.share(retrieveProfile(colId), sb.getUser(), email, selectedGrant);
+				message = "Profile shared with " + email;
+			}
 		}
-		else
+		else if (albId != null)
 		{
-			shared = sm.share(retrieveProfile(id), sb.getUser(), email, selectedGrant);
-			message = "Profile shared with " + email;
+			shared = sm.share(retrieveAlbum(albId), sb.getUser(), email, selectedGrant);
+			message = "Album shared with " + email;
 		}
 
 		if (shared)
@@ -96,6 +118,20 @@ public class SharingBean
 		catch (Exception e) 
 		{
 			BeanHelper.error("Profile " + c.getProfile() + " not found!");
+		}
+		return null;
+	}
+	
+	public Album retrieveAlbum(String albId)
+	{
+		AlbumController c = new AlbumController(sb.getUser());
+		try 
+		{
+			return c.retrieve(albId);
+		} 
+		catch (Exception e) 
+		{
+			BeanHelper.error("Album " + albId + " not found!");
 		}
 		return null;
 	}

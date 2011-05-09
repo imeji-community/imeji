@@ -42,15 +42,6 @@
 			<ui:param name="paginatorListSessionBean" value="#{AlbumsBean}" />
 			<ui:param name="headline" value="#{msg.albums_headline}"/>
 			
-			
-			<!-- FOLLOWING PART IS TEMPORARILY REMOVED!!! -->
-			<ui:define name="actionsMenu">	
-			
-				<pretty:link mappingId="createAlbum" rendered="#{SessionBean.user!=null}">
-					<h:outputText value="#{lbl.album_create}"/>
-				</pretty:link>
-			
-			</ui:define>
 		</ui:composition>
 	</body>
 </html>

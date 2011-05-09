@@ -114,7 +114,10 @@
 					</div>
 				</h:panelGroup>
 				<div class="full_area0 formButtonArea">
-					<h:outputLink value="#{Navigation.applicationUri}#{AlbumBean.album.id.path}/details" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
+					<h:outputLink value="#{Navigation.applicationUri}#{AlbumBean.album.id.path}/details" rendered="#{AlbumBean.album.id != null}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
+						<h:outputText value="#{lbl.cancel}" />
+					</h:outputLink>
+					<h:outputLink value="#{Navigation.applicationUrl}albums" rendered="#{AlbumBean.album.id == null}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
 						<h:outputText value="#{lbl.cancel}" />
 					</h:outputLink>
 					<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					

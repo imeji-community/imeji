@@ -3,41 +3,59 @@ package de.mpg.imeji.beans;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.User;
 
 public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean<T>
 {
-    private String selectedMenu;
+    protected String selectedMenu;
     
     private String selectedSortCriterion;
     private String selectedSortOrder;
-
+    
+    private String selectedFilter;
+    
     private SessionBean sb;
 
     
     private List<SelectItem> sortMenu = new ArrayList<SelectItem>();
-    
+    protected List<SelectItem> filterMenu = new ArrayList<SelectItem>();
 
     public SuperContainerBean()
     {
     	selectedMenu = "SORTING";
-        this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    	selectedFilter = "all";
+        sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         initMenus();
     }
     
 
-    private void initMenus()
+    protected void initMenus()
     {
-         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_STATUS,sb.getLabel(ImejiNamespaces.PROPERTIES_STATUS.name())));
-         sortMenu.add(new SelectItem(ImejiNamespaces.CONTAINER_METADATA_TITLE,sb.getLabel(ImejiNamespaces.CONTAINER_METADATA_TITLE.name())));
-         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE,sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
-         selectedSortCriterion = ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name();
-         selectedSortOrder = SortOrder.DESCENDING.name();
-        
+    	sortMenu = new ArrayList<SelectItem>();
+        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_STATUS,sb.getLabel(ImejiNamespaces.PROPERTIES_STATUS.name())));
+        sortMenu.add(new SelectItem(ImejiNamespaces.CONTAINER_METADATA_TITLE,sb.getLabel(ImejiNamespaces.CONTAINER_METADATA_TITLE.name())));
+        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE,sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
+        selectedSortCriterion = ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name();
+        selectedSortOrder = SortOrder.DESCENDING.name();
+        filterMenu = new ArrayList<SelectItem>();
+        filterMenu.add(new SelectItem("all", "All"));
+        if (sb.getUser() != null)
+        {
+        	filterMenu.add(new SelectItem("my", "My"));
+        	filterMenu.add(new SelectItem("private", "Only private"));
+        }
+        filterMenu.add(new SelectItem("public", "Only public"));
+        filterMenu.add(new SelectItem("withdrawn", "Only withdrawn"));
     }
     
     public void reset()
@@ -46,6 +64,30 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         initMenus();
     }
 
+    public SearchCriterion getFilter()
+    {
+    	SearchCriterion sc = null;	
+    	
+    	if ("my".equals(selectedFilter))
+    	{
+    		sc = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_CREATED_BY, ObjectHelper.getURI(User.class, sb.getUser().getEmail()).toString(), Filtertype.URI);
+    	}
+    	else if("private".equals(selectedFilter))
+    	{
+    		sc = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_STATUS, "http://imeji.mpdl.mpg.de/status/PENDING", Filtertype.URI);
+    	}
+    	else if("public".equals(selectedFilter))
+    	{
+    		sc = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_STATUS, "http://imeji.mpdl.mpg.de/status/RELEASED", Filtertype.URI);
+    	}
+    	else if("withdrawn".equals(selectedFilter))
+    	{
+    		sc = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_STATUS, "http://imeji.mpdl.mpg.de/status/WITHDRAWN", Filtertype.URI);
+    	}
+    	
+    	return sc;
+    }
+    
 
     public void setSelectedMenu(String selectedMenu)
     {
@@ -54,6 +96,10 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
     public String getSelectedMenu()
     {
+    	if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("tab"))
+		{
+    		selectedMenu = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tab");
+		}
         return selectedMenu;
     }
     
@@ -116,4 +162,27 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         return getNavigationString();
         
     }
+
+
+	public String getSelectedFilter() {
+		return selectedFilter;
+	}
+
+
+	public void setSelectedFilter(String selectedFilter) {
+		this.selectedFilter = selectedFilter;
+	}
+
+
+	public List<SelectItem> getFilterMenu() 
+	{
+		return filterMenu;
+	}
+
+
+	public void setFilterMenu(List<SelectItem> filterMenu) {
+		this.filterMenu = filterMenu;
+	}
+    
+    
 }

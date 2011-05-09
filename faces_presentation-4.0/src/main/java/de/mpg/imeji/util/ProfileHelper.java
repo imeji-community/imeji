@@ -38,7 +38,7 @@ public class ProfileHelper
         return "http://example.com";
     }
 
-    public static Map<URI, MetadataProfile> loadProfiles(List<Image> imgs)
+    public static Map<URI, MetadataProfile> loadProfiles(List<Image> imgs) throws Exception
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         ProfileController pc = new ProfileController(sb.getUser());
@@ -46,19 +46,14 @@ public class ProfileHelper
         for (Image im : imgs)
         {
             if (pMap.get(im.getMetadataSet().getProfile()) == null)
-				try 
-            	{
-					pMap.put(im.getMetadataSet().getProfile(), pc.retrieve(im.getMetadataSet().getProfile()));
-				} 
-            	catch (Exception e) 
-            	{
-					e.printStackTrace();
-				}
+            {
+            	pMap.put(im.getMetadataSet().getProfile(), pc.retrieve(im.getMetadataSet().getProfile()));
+            }
         }
         return pMap;
     }
 
-    public static Map<URI, CollectionImeji> loadCollections(List<Image> imgs)
+    public static Map<URI, CollectionImeji> loadCollections(List<Image> imgs) throws Exception
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         CollectionController c = new CollectionController(sb.getUser());
@@ -79,11 +74,13 @@ public class ProfileHelper
         MetadataProfile profile = new MetadataProfile();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         ProfileController pc = new ProfileController(sb.getUser());
-        try {
+        try 
+        {
 			profile = pc.retrieve(image.getMetadataSet().getProfile());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} 
+        catch (Exception e) 
+		{
+			throw new RuntimeException(e);
 		}
 		Collections.sort((List<Statement>) profile.getStatements());
         return profile;

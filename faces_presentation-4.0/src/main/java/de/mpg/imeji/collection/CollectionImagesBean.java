@@ -46,6 +46,7 @@ public class CollectionImagesBean extends ImagesBean {
 	public void init() 
 	{
 		CollectionController cc = new CollectionController(sb.getUser());
+		
 		try 
 		{
 			this.collection = cc.retrieve(id);
@@ -55,6 +56,10 @@ public class CollectionImagesBean extends ImagesBean {
 			BeanHelper.error("Collection " + id + " not found");
 			BeanHelper.error("Please check id.");
 			e.printStackTrace();
+		}
+		catch (Exception e) 
+		{
+			BeanHelper.error(e.getMessage());
 		}
 		
 		List<SelectItem> sortMenu = new ArrayList<SelectItem>();
@@ -106,14 +111,14 @@ public class CollectionImagesBean extends ImagesBean {
 		totalNumberOfRecords = controller.countImagesInContainer(uri, scList);
 		images = controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset);
 		super.setImages(images);
-		
-		labels.init((List<Image>) images);
+
 		return ImejiFactory.imageListToBeanList(images);
 	}
 	
 	public String getImageBaseUrl()
     {
-        return navigation.getApplicationUri() + this.collection.getId().getPath();
+		if (collection == null) return "";
+        return navigation.getApplicationUri() + collection.getId().getPath();
     }
 	
 	@Override

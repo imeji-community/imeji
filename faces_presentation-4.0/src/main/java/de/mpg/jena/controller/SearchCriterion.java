@@ -21,8 +21,8 @@ public class SearchCriterion {
 	    ID_URI("http://imeji.mpdl.mpg.de/id"),
 	    
 	    MY_IMAGES("http://imeji.mpdl.mpg.de/"),
-
-		PROPERTIES("http://imeji.mpdl.mpg.de/properties"),
+	    
+	    PROPERTIES("http://imeji.mpdl.mpg.de/properties"),
 		
 		PROPERTIES_CREATED_BY("http://imeji.mpdl.mpg.de/createdBy", PROPERTIES),
 		PROPERTIES_CREATED_BY_USER_GRANT("http://xmlns.com/foaf/0.1/grants", PROPERTIES_CREATED_BY),

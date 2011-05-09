@@ -39,6 +39,7 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import thewebsemantic.NotBoundException;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.ImejiController;
 
 /**
@@ -155,15 +156,19 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             // logger.info("No List update: "+noListUpdate);
             previousPartList = new ArrayList<ListElementType>();
             previousPartList.addAll(currentPartList);
+            
             currentPartList = retrieveList(getOffset(), elementsPerPage);
+           
             totalNumberOfElements = getTotalNumberOfRecords();
-            // reset current page and reload list if list is shorter than the given current page number allows
+       	 
+       	 	// reset current page and reload list if list is shorter than the given current page number allows
             if (getTotalNumberOfElements() <= getOffset())
             {
                 setCurrentPageNumber(((getTotalNumberOfElements() - 1) / getElementsPerPage()) + 1);
                 currentPartList = retrieveList(getOffset(), elementsPerPage);
                 totalNumberOfElements = getTotalNumberOfRecords();
             }
+            
             paginatorPageList.clear();
             for (int i = 0; i < ((getTotalNumberOfElements() - 1) / elementsPerPage) + 1; i++)
             {
@@ -177,7 +182,9 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         }
         catch (Exception e)
         {
-            throw new RuntimeException(e);
+            BeanHelper.error(e.getMessage());
+            BeanHelper.error("TTTTT");
+            e.printStackTrace();
         }
     }
 

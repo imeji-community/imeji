@@ -113,7 +113,7 @@ public class CollectionController extends ImejiController
 		}
 		else
 		{
-			throw new RuntimeException("Collection has at least one image locked by an other user.");
+			throw new RuntimeException("Collection has at least one image locked by another user.");
 		}
     }
 	
@@ -184,13 +184,13 @@ public class CollectionController extends ImejiController
 		}
     }
 		
-	public CollectionImeji retrieve(String id)
+	public CollectionImeji retrieve(String id) throws Exception
 	{
 		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
 		return (CollectionImeji)imejiRDF2Bean.load(ObjectHelper.getURI(CollectionImeji.class, id).toString(), user);
 	}
 	
-	public CollectionImeji retrieve(URI uri)
+	public CollectionImeji retrieve(URI uri) throws Exception
     {
 		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
 		return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user);
@@ -244,7 +244,6 @@ public class CollectionController extends ImejiController
 		QuerySPARQL querySPARQL = new QuerySPARQLImpl();
 	    String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/collection", "", "", limit, offset, user, false);
 	    Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(query, CollectionImeji.class);
-	    
 		return res;
 	}
 	

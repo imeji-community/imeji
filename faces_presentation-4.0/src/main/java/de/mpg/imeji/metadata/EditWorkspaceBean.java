@@ -291,7 +291,15 @@ public class EditWorkspaceBean
 	{
 		ImageController ic = new ImageController(user);
 		List<Image> l = new ArrayList<Image>();
-		l.add(ic.retrieve(idOfImageToEdit2));
+		try 
+		{
+			l.add(ic.retrieve(idOfImageToEdit2));
+		} 
+		catch (Exception e) 
+		{
+			BeanHelper.error(e.getMessage());
+		}
+		
 		return l;
 	}
 	

@@ -106,13 +106,13 @@ public class ImageController extends ImejiController
     	cleanGraph(ImejiJena.imageModel);
     }
     
-    public Image retrieve(URI imgUri)
+    public Image retrieve(URI imgUri) throws Exception
     {
     	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel); 
     	return (Image)imejiRDF2Bean.load(imgUri.toString(), user);
     }
 
-    public Image retrieve(String id)
+    public Image retrieve(String id) throws Exception
     {
     	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
     	return (Image)imejiRDF2Bean.load(ObjectHelper.getURI(Image.class, id).toString(), user);
@@ -338,7 +338,17 @@ public class ImageController extends ImejiController
     	int counter = 0;
         for (String s : uris)
         {
-        	if (offset <= counter && counter < (limit + offset)) images.add(reader.load(Image.class, s));
+        	if (offset <= counter && counter < (limit + offset)) 
+        	{
+        		try 
+        		{
+        			images.add((Image) reader.load(s, user));
+				} 
+        		catch (Exception e) 
+				{
+					logger.error("Error loading image " + s);
+				}
+        	}
          	counter ++;
         }
 		return images;

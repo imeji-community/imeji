@@ -20,7 +20,6 @@ import de.mpg.jena.vo.Properties.Status;
 
 public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 {
-  
 	private int totalNumberOfRecords;
     private SessionBean sb;
 
@@ -43,32 +42,33 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
     }
 
     @Override
-    public List<ViewCollectionBean> retrieveList(int offset, int limit)
+    public List<ViewCollectionBean> retrieveList(int offset, int limit) throws Exception
     {
+    	super.initMenus();
     	UserController uc = new UserController(sb.getUser());
-         
+      
         if (sb.getUser() != null)
         {
         	sb.setUser(uc.retrieve(sb.getUser().getEmail()));
         }
         
         CollectionController controller = new CollectionController(sb.getUser());
-        
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
-           
-        try
+        
+        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+        List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
+        
+        if (getFilter() != null)
         {
-            totalNumberOfRecords = controller.getNumberOfResults(new ArrayList<SearchCriterion>());
-            SortCriterion sortCriterion = new SortCriterion();
-            sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
-            sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-            collections = controller.search(new ArrayList<SearchCriterion>(), sortCriterion, limit, offset);
+        	scList.add(getFilter());
+        	scList1.add(getFilter());
         }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        
+        totalNumberOfRecords = controller.getNumberOfResults(scList);
+        SortCriterion sortCriterion = new SortCriterion();
+        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+        collections = controller.search(scList1, sortCriterion, limit, offset);
         return ImejiFactory.collectionListToBeanList(collections);
     }
     
@@ -80,18 +80,24 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 		this.sb = sb;
 	}
 	    
-	public String selectAll() {
-		for(CollectionBean bean: getCurrentPartList()){
-			if(bean.getCollection().getProperties().getStatus() != Status.RELEASED){
+	public String selectAll() 
+	{
+		for(CollectionBean bean: getCurrentPartList())
+		{
+			if(bean.getCollection().getProperties().getStatus() != Status.RELEASED)
+			{
 				bean.setSelected(true);
 				if(!(sb.getSelectedCollections().contains(bean.getCollection().getId())))
+				{
 					sb.getSelectedCollections().add(bean.getCollection().getId());
+				}
 			}
 		}
 		return "";
 	}
 	
-	public String selectNone(){
+	public String selectNone()
+	{
 		sb.getSelectedCollections().clear();
 		return "";
 	}
@@ -110,7 +116,4 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 		BeanHelper.info(count + " collections deleted.");
 		return "pretty:collections";
 	}
-  	
-
-   
 }

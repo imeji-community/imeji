@@ -112,7 +112,7 @@ public class Authorization
 	
 	public boolean isViewerFor(User user, Image image)
 	{
-		for (Grant g :  getGrantsForURI(user, image.getCollection()))
+		for (Grant g : getGrantsForURI(user, image.getCollection()))
 		{
 			if (GrantType.PRIVILEGED_VIEWER.equals(g.getGrantType())) return true;
 		}

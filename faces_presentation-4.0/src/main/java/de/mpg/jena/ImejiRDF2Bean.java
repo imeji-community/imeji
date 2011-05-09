@@ -27,17 +27,23 @@ public class ImejiRDF2Bean
 		rdf2Bean = ImejiJenaReaders.getReader(model);
 	}
 	
-	
-	public Object load(String uri, User user)
+	public Object load(String uri, User user) throws Exception
 	{
 		try 
 		{
 			Security security = new Security();
 			Object o = rdf2Bean.load(uri);
-			boolean b = security.check(OperationsType.READ, user, o);
+
 			if (!security.check(OperationsType.READ, user, o)) 
 			{
-				if (o instanceof Image) removePrivateImages((Image)o);
+				if (o instanceof Image) 
+				{
+					removePrivateImages((Image)o, user);
+				}
+				else
+				{
+					throw new RuntimeException("Security Exception: " + user.getEmail() + " is not allowed to view " + uri);
+				}
 			}
 			return ObjectHelper.castAllHashSetToList(o);
 		} 
@@ -45,14 +51,17 @@ public class ImejiRDF2Bean
 		{
 			throw e;
 		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-		return null;
-	
 	}
-	//TODO
+
+	/**
+	 * This method does not check security.
+	 * 
+	 * @deprecated
+	 * @param <T>
+	 * @param c
+	 * @param id
+	 * @return
+	 */
 	public <T> T load(Class<T> c, String id)
 	{
 		try 
@@ -61,7 +70,7 @@ public class ImejiRDF2Bean
 		} 
 		catch (thewebsemantic.NotFoundException e) 
 		{
-			logger.error(id + " not found for class " + c);
+			throw e;
 		}
 		catch (Exception e) 
 		{
@@ -76,11 +85,12 @@ public class ImejiRDF2Bean
 		return  rdf2Bean.loadDeep(c);
 	}
 	
-	public void removePrivateImages(Image im)
+	public void removePrivateImages(Image im, User user)
 	{
 		im.setThumbnailImageUrl(URI.create("private"));
 		im.setWebImageUrl(URI.create("private"));
 		im.setFullImageUrl(URI.create("private"));
+		logger.error("User " + user.getEmail() +  " is not allowed to see image " + im.getId());
 	}
 	
 }

@@ -34,6 +34,7 @@ public class OperationsContainer implements Operations
 		return (Status.RELEASED.equals(((Container)object).getProperties().getStatus())
 				|| auth.isViewerFor(user, (Container) object)
 				|| auth.isPictureEditor(user, (Container) object)
+				|| auth.isContainerEditor(user, (Container) object)
 				|| auth.isContainerAdmin(user, (Container) object));
 	}
 
@@ -58,6 +59,7 @@ public class OperationsContainer implements Operations
 	public boolean delete(User user, Object object) 
 	{
 		return (!Status.RELEASED.equals(((Container)object).getProperties().getStatus())
+				&& !Status.WITHDRAWN.equals(((Container)object).getProperties().getStatus())
 				&& auth.isContainerAdmin(user, (Container) object));
 	}
 }

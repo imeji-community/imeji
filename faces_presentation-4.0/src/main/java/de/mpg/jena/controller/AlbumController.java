@@ -96,14 +96,15 @@ public class AlbumController extends ImejiController
      * --OR user is collection editor
      * @param ic
      * @param user
+	 * @throws Exception 
      */
-    public Album retrieve(String id)
+    public Album retrieve(String id) throws Exception
     {
     	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
-    	return imejiRDF2Bean.load(Album.class, ObjectHelper.getURI(Album.class, id).toString());
+    	return (Album) imejiRDF2Bean.load(ObjectHelper.getURI(Album.class, id).toString(), user);
     }
 
-    public Album retrieve(URI selectedAlbumId)
+    public Album retrieve(URI selectedAlbumId) throws Exception
     {
     	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
         return (Album) imejiRDF2Bean.load(selectedAlbumId.toString(), user);
@@ -192,7 +193,7 @@ public class AlbumController extends ImejiController
 	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
     {
         QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/albumn", "", "", -1, 0, user, false);
+        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/album", "", "", -1, 0, user, false);
     	return ImejiSPARQL.execCount(query);
     }
 	

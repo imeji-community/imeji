@@ -39,7 +39,15 @@ public class AlbumImagesBean extends ImagesBean
     public void init()
     {
         AlbumController ac = new AlbumController(sb.getUser());
-        this.setAlbum(new AlbumBean(ac.retrieve(id)));
+        try 
+        {
+        	 this.setAlbum(new AlbumBean(ac.retrieve(id)));
+		} 
+        catch (Exception e) 
+        {
+			BeanHelper.error(e.getMessage());
+		}
+       
     }
 
     @Override

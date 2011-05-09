@@ -38,7 +38,16 @@ public class ViewCollectionBean extends CollectionBean
             User user = sessionBean.getUser();
             collectionController = new CollectionController(user);
             String id = super.getId();
-            super.setCollection(collectionController.retrieve(id));
+            
+            try 
+            {
+            	 super.setCollection(collectionController.retrieve(id));
+			} 
+            catch (Exception e) 
+            {
+				BeanHelper.error(e.getMessage());
+			}
+           
             super.setTab(TabType.COLLECTION);
             persons = new ArrayList<Person>();
             for (Person p : super.getCollection().getMetadata().getPersons())
@@ -57,7 +66,7 @@ public class ViewCollectionBean extends CollectionBean
         }
         catch (Exception e)
         {
-            throw new RuntimeException(e);
+        	BeanHelper.error(e.getMessage());
         }
     }
 
@@ -95,7 +104,7 @@ public class ViewCollectionBean extends CollectionBean
 
     public String getSmallDescription()
     {
-        if(this.getCollection().getMetadata().getDescription() == null) return "No Description";
+        if(this.getCollection() == null || this.getCollection().getMetadata().getDescription() == null) return "No Description";
     	if (this.getCollection().getMetadata().getDescription().length() > 100)
         {
             return this.getCollection().getMetadata().getDescription().substring(0, 100) + "...";
@@ -108,7 +117,7 @@ public class ViewCollectionBean extends CollectionBean
     
     public String getFormattedDescription()
     {
-        if (this.getCollection().getMetadata().getDescription() == null) return "";
+        if (this.getCollection()  == null || this.getCollection().getMetadata().getDescription() == null) return "";
     	return this.getCollection().getMetadata().getDescription().replaceAll("\n", "<br/>");
     }
 }

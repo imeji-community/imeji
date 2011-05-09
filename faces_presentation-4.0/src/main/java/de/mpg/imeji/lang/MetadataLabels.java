@@ -7,6 +7,7 @@ import java.util.Map;
 
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.util.ProfileHelper;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
@@ -21,7 +22,7 @@ public class MetadataLabels
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void init(List<Image> images)
+	public void init(List<Image> images) throws Exception
 	{
 		labels = new HashMap<URI, String>();
 		
@@ -29,7 +30,26 @@ public class MetadataLabels
 		
 		for (MetadataProfile p : profiles.values())
 		{
-			for (Statement s : p.getStatements())
+			if (p != null)
+			{
+				for (Statement s : p.getStatements())
+				{
+					for (LocalizedString ls : s.getLabels())
+					{
+						if (ls.getLang().equals(lang)) labels.put(s.getName(), ls.toString());
+					}
+				}
+			}
+		}
+	}
+	
+	public void init(MetadataProfile profile) throws Exception
+	{
+		labels = new HashMap<URI, String>();
+		
+		if (profile != null)
+		{
+			for (Statement s : profile.getStatements())
 			{
 				for (LocalizedString ls : s.getLabels())
 				{

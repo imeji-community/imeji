@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.metadata.editors.SimpleImageEditor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.imeji.metadata.util.SuggestBean;
@@ -18,6 +19,7 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
+import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.MetadataFactory;
@@ -49,12 +51,10 @@ public class SingleEditBean
 	public String getCheckToggleState()
 	{
 		toggleState = "displayMd";
-
 		if (UrlHelper.getParameterBoolean("edit")) 
 		{
 			showEditor();
 		}
-		
 		return "";
 	}
 	
@@ -79,7 +79,7 @@ public class SingleEditBean
 		((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 	}
 	
-	public String save() throws IOException
+	public String save() throws Exception
 	{
 		cleanImageMetadata();
 		editor.getImages().clear();
@@ -90,19 +90,36 @@ public class SingleEditBean
 		return "";
 	}
 
-	public String cancel()
+	public String cancel() throws Exception
 	{
 		this.toggleState = "displayMd";
 		if (editor != null && !editor.getImages().isEmpty()) image = editor.getImages().get(0);
-		cleanImageMetadata();
+		{
+			cleanImageMetadata();
+		}
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		Locks.unLock(new Lock(this.image.getId().toString(), sb.getUser().getEmail()));
+		reloadImage();
 		return "";
 	}
 	
 	private void reloadPage() throws IOException
 	{
-		FacesContext.getCurrentInstance().getExternalContext().redirect(pageUrl + "/view");
+		FacesContext.getCurrentInstance().getExternalContext().redirect(pageUrl + "/view?init=1");
+	}
+	
+	private void reloadImage()
+	{
+		SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		ImageController imageController = new ImageController(sessionBean.getUser());
+		try 
+		{
+			image = imageController.retrieve(image.getId());
+		} 
+		catch (Exception e) 
+		{
+			BeanHelper.error(e.getMessage());
+		}
 	}
 
 	private void cleanImageMetadata()
@@ -123,7 +140,7 @@ public class SingleEditBean
 		if (security.check(OperationsType.UPDATE, sb.getUser(), image))
 		{
 			this.toggleState = "editMd";
-			Locks.lock(new Lock(this.image.getId().toString(), sb.getUser().getEmail()));
+			Locks.lock(new Lock(image.getId().toString(), sb.getUser().getEmail()));
 			init();
 		}
 		else

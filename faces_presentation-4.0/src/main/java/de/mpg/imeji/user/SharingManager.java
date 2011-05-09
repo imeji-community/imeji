@@ -9,6 +9,7 @@ import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Container;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
@@ -31,6 +32,7 @@ public class SharingManager
 				GrantController gc = new GrantController(owner);
 				
 				URI uri = null;
+				
 				if (o instanceof Container)
 				{
 					uri = ((Container)o).getId();
@@ -41,6 +43,12 @@ public class SharingManager
 				}
 				
 				gc.addGrant(target, new Grant(role,uri));
+				
+				if(o instanceof CollectionImeji)
+				{
+					gc.addGrant(target, new Grant(GrantType.PROFILE_VIEWER, ((CollectionImeji) o).getProfile()));
+				}
+				
 				return true;
 			}
 			catch (NotFoundException e)

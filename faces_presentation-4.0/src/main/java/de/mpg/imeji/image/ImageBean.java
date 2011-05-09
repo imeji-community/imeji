@@ -11,6 +11,7 @@ import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.album.AlbumImagesBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.metadata.SingleEditBean;
 import de.mpg.imeji.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
@@ -51,6 +52,7 @@ public class ImageBean
     private MetadataProfile profile;
     private SingleEditBean edit;
     protected String prettyLink;
+    private MetadataLabels labels;
 
     public ImageBean(Image img) throws Exception
     {
@@ -60,6 +62,7 @@ public class ImageBean
         imageController = new ImageController(sessionBean.getUser());
         collectionController = new CollectionController(sessionBean.getUser());
         prettyLink = "pretty:editImage";
+        labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
         if (sessionBean.getSelected().contains(img.getId()))
         {
             setSelected(true);
@@ -74,47 +77,70 @@ public class ImageBean
         imageController = new ImageController(sessionBean.getUser());
         collectionController = new CollectionController(sessionBean.getUser());
         prettyLink = "pretty:editImage";
+        labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
     }
     
     public String getInitPopup() throws Exception
     {
-    	//init();
-    	//loadCollection();
     	loadProfile();
+    	labels.init(profile);
     	return "";
     } 
 
     public void init() throws Exception
     {
-        try 
-        {
-        	if (id != null)	image = imageController.retrieve(id);
-		} 
-        catch (Exception e) 
-		{
-			BeanHelper.error(id + " not found");
-		}
-       
-        if (sessionBean.getSelected().contains(image.getId()))
+    	loadImage();
+    	loadCollection();
+        loadProfile();
+        
+    	if (sessionBean.getSelected().contains(image.getId()))
         {
             setSelected(true);
         }
-        
-        loadCollection();
-        loadProfile();      
+          
         edit = new SingleEditBean(image, profile, getPageUrl());
+        labels.init(profile);
         cleanImageMetadata();
+    }
+    
+    public void loadImage()
+    {
+    	try 
+        {
+         	if (id != null)	image = imageController.retrieve(id);
+ 		} 
+        catch (Exception e) 
+ 		{
+ 			BeanHelper.error("Image " + id + " not found!");
+ 		}
     }
     
     public void loadCollection()
     {
-    	collection = collectionController.retrieve(this.getImage().getCollection());
-        Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
+    	try 
+    	{
+    		collection = collectionController.retrieve(this.getImage().getCollection());
+            Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
+		} 
+    	catch (Exception e) 
+    	{
+			BeanHelper.error(e.getMessage());
+			collection = null;
+		}
     }
     
     public void loadProfile()
     {
-    	profile = ProfileHelper.loadProfile(image);
+    	try 
+    	{
+    		profile = ProfileHelper.loadProfile(image);
+		} 
+    	catch (Exception e) 
+    	{
+			BeanHelper.error("Error reading profile " + image.getMetadataSet().getProfile() + " of image " + image.getId());
+			BeanHelper.error(e.getMessage());
+			profile = null;
+		}
     }
     
     private void cleanImageMetadata()
@@ -132,7 +158,7 @@ public class ImageBean
     {
     	if (image == null || image.getId() == null || !image.getId().toString().equals(ObjectHelper.getURI(Image.class, id).toString())) 
     	{
-    		this.init();
+    		init();
     	}
         setTab(TabType.VIEW.toString());
     }

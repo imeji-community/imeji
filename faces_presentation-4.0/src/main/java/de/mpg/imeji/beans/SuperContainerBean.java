@@ -42,8 +42,8 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     protected void initMenus()
     {
     	sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_STATUS,sb.getLabel(ImejiNamespaces.PROPERTIES_STATUS.name())));
-        sortMenu.add(new SelectItem(ImejiNamespaces.CONTAINER_METADATA_TITLE,sb.getLabel(ImejiNamespaces.CONTAINER_METADATA_TITLE.name())));
+        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_STATUS, sb.getLabel(ImejiNamespaces.PROPERTIES_STATUS.name())));
+        sortMenu.add(new SelectItem(ImejiNamespaces.CONTAINER_METADATA_TITLE, sb.getLabel(ImejiNamespaces.CONTAINER_METADATA_TITLE.name())));
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE,sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
         selectedSortCriterion = ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name();
         selectedSortOrder = SortOrder.DESCENDING.name();

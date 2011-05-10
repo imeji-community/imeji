@@ -95,6 +95,12 @@ public class AlbumImagesBean extends ImagesBean
         sb.clearAll();
         return "pretty:";
     }
+    
+    public String getImageBaseUrl()
+    {
+		if (album.getAlbum() == null) return "";
+        return navigation.getApplicationUri() + album.getAlbum().getId().getPath();
+    }
 
     
     public String getBackUrl() 

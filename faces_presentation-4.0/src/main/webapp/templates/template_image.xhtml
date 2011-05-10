@@ -41,7 +41,15 @@
 							
 		<ui:define name="mainContent" >
 			<ui:insert name="preListHeader"/>
+			<h:panelGroup styleClass="full_area0 fullItem">
+				<h:outputLink value="#{imageBean.browse.previous}" styleClass="free_area0">
+					previous
+				</h:outputLink>
+				<h:outputLink value="#{imageBean.browse.next}" styleClass="free_area0">
+					Next
+				</h:outputLink>
 			
+			</h:panelGroup>
 			<h:panelGroup styleClass="full_area0 fullItem">
 					
 				<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl"> 

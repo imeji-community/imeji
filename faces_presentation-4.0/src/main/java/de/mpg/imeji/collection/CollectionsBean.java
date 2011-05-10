@@ -44,7 +44,6 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
     @Override
     public List<ViewCollectionBean> retrieveList(int offset, int limit) throws Exception
     {
-    	super.initMenus();
     	UserController uc = new UserController(sb.getUser());
       
         if (sb.getUser() != null)

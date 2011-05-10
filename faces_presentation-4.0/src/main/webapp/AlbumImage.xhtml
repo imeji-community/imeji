@@ -42,15 +42,32 @@
 	
 	<ui:param name="headline" value="#{lbl.details}" />
 	
+	<ui:define name="contentMenu">
+			
+			<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.album.id.path}" rendered="true">
+				<h:outputText value="Album startpage"/>
+			</h:outputLink>
+			
+			<h:outputText styleClass="seperator void" />
+			
+			<h:outputLink value="#{Navigation.applicationUrl}images/album/#{AlbumImageBean.albumId}" styleClass="free_area0">
+				<h:outputText value="View images"/>
+			</h:outputLink>
+			
+			<h:outputText styleClass="seperator void" />
+			
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.album.id.path}/details?init=1" rendered="true">
+				<h:outputText value="Album metadata"/>
+			</h:outputLink>
+			
+		</ui:define>
+	
 	<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-			<h:outputLink value="#{Navigation.applicationUrl}images/album/#{AlbumImageBean.albumId}" styleClass="free_area1_p6">
+		<ui:include src="./include/History.xhtml"></ui:include><br/>
+			<h:outputLink value="#{Navigation.applicationUrl}images/album/#{AlbumImageBean.albumId}" styleClass="free_area1_p6 small_marginLIncl">
 				<h:outputText value="#{lbl.album_view_all_images}"/>
 			</h:outputLink>
-			<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">
-				<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
-			</h:outputLink>
-			<a4j:commandLink value="#{lbl.selected_clear}" action="#{ImageBean.clearAll}" styleClass="free_area2_p6 xHuge_marginLIncl " />	
 		</h:panelGroup>
 	</ui:define>
 

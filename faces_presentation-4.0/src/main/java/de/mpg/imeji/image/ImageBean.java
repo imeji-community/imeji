@@ -15,14 +15,12 @@ import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.metadata.SingleEditBean;
 import de.mpg.imeji.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
-import de.mpg.imeji.metadata.util.SuggestBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
-import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
@@ -53,6 +51,7 @@ public class ImageBean
     private SingleEditBean edit;
     protected String prettyLink;
     private MetadataLabels labels;
+    private SingleImageBrowse browse = null;
 
     public ImageBean(Image img) throws Exception
     {
@@ -92,6 +91,7 @@ public class ImageBean
     	loadImage();
     	loadCollection();
         loadProfile();
+        initBrowsing();
         
     	if (sessionBean.getSelected().contains(image.getId()))
         {
@@ -101,6 +101,11 @@ public class ImageBean
         edit = new SingleEditBean(image, profile, getPageUrl());
         labels.init(profile);
         cleanImageMetadata();
+    }
+    
+    public void initBrowsing()
+    {
+    	browse = new SingleImageBrowse((ImagesBean) BeanHelper.getSessionBean(ImagesBean.class), image);
     }
     
     public void loadImage()
@@ -387,5 +392,13 @@ public class ImageBean
 	{
 		Security security = new Security();
 		return security.check(OperationsType.DELETE, sessionBean.getUser(), image);
+	}
+
+	public SingleImageBrowse getBrowse() {
+		return browse;
+	}
+
+	public void setBrowse(SingleImageBrowse browse) {
+		this.browse = browse;
 	}
 }

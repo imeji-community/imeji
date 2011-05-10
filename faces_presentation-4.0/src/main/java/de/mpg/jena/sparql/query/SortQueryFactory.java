@@ -18,14 +18,28 @@ public class SortQueryFactory
             if (sortEl != null)
             {
 	            if (sortCriterion.getSortOrder().equals(SortOrder.DESCENDING))
-	                q = " ORDER BY DESC(?" + sortEl.getName() + ") ";
+	            {
+	            	q = " ORDER BY DESC(" + lowerCasePrefix(sortCriterion, sortEl) + ") ";
+	            }
 	            else
 	            {
-	                q = " ORDER BY ?" + sortEl.getName() + " ";
+	                q = " ORDER BY " + lowerCasePrefix(sortCriterion, sortEl) + " ";
 	            }
             }
         }
 		return q;
+	}
+	
+	private static String lowerCasePrefix(SortCriterion sortCriterion, QueryElement sortEl)
+	{
+		if (ImejiNamespaces.CONTAINER_METADATA_TITLE.equals(sortCriterion.getSortingCriterion()))
+		{
+			return "fn:lower-case(?" + sortEl.getName() + ")";
+		}
+		else
+		{
+			return "?" + sortEl.getName();
+		}
 	}
 	
 }

@@ -47,7 +47,6 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
     @Override
     public List<AlbumBean> retrieveList(int offset, int limit) throws Exception
     {
-    	super.initMenus();
     	UserController uc = new UserController(sb.getUser());
     	
         if (sb.getUser() != null) 

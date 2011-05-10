@@ -27,6 +27,7 @@ public class PageURIHelper
 			case SEARCH_RESULTS_IMAGES : return URI.create(baseURL + "images" + "?q=" + URLEncoder.encode(q, "UTF-8") + "&h=");
 			case ALBUM_IMAGES : return URI.create(baseURL + "images/album/" + id[0] + "?h=");
 			case ALBUM_HOME : return URI.create(baseURL + "album/" + id[0] + "?h=");
+			case ALBUM_IMAGE : if (id.length == 2) return URI.create(baseURL + "album/" + id[0] + "/image/" + id[1] + "/view?h=");
 			default: return URI.create(baseURL);
 		}
 	}

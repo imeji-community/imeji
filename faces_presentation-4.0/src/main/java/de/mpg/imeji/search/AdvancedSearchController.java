@@ -32,6 +32,10 @@ public class AdvancedSearchController extends BeanHelper implements Serializable
         
         ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class); 
         bean.setQuery(collectionCriterionController.getSearchCriterion());
+        if (bean.getQuery() == null || "".equals(bean.getQuery().trim()))
+        {
+        	return "";
+        }
         return "pretty:images";
     }
 

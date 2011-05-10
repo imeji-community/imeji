@@ -127,7 +127,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
 	public boolean clearCriterion() 
 	{
 		setSearchString("");
-		setSelectedProfile(null);
+		//setSelectedProfile(null);
 		if (mdCriterionList != null)
 		{
 			for(int i=0; i< mdCriterionList.size(); i++)

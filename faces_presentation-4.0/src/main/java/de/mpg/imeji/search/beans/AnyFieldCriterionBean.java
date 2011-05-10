@@ -23,7 +23,8 @@ public class AnyFieldCriterionBean extends CriterionBean implements Serializable
 		this.anyFieldCriterionVO = anyFieldCriterionVO;
 	}
 	
-	public boolean clearCriterion(){
+	public boolean clearCriterion()
+	{
 		anyFieldCriterionVO = new AnyFieldCriterion();
 		anyFieldCriterionVO.setSearchString("");
 		return true;

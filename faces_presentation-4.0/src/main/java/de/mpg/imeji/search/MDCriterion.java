@@ -89,7 +89,7 @@ public class MDCriterion extends Criterion implements Serializable{
 	}
 	public boolean clearCriterion() {
 		setSearchString("");
-		setSelectedMdName("");
+		//setSelectedMdName("");
 		setMdText("");
 		return true;
 	}

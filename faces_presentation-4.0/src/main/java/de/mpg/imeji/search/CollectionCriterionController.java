@@ -43,25 +43,26 @@ public class CollectionCriterionController implements Serializable
 		
 	}     
 	
-	public void getUserCollecitons() throws Exception
-	{
-        collections = new ArrayList<CollectionImeji>();
-        CollectionController cc = new CollectionController(sb.getUser());
-		collections = (List<CollectionImeji>)cc.search(new ArrayList<SearchCriterion>(), null, -1, 0);
-		if(collectionCriterionList != null){
-			for(int i=0; i<collectionCriterionList.size(); i++)
+	public void getUserCollections() throws Exception
+	{      
+        if (collections == null)
+        {
+        	collections = new ArrayList<CollectionImeji>();
+	        CollectionController cc = new CollectionController(sb.getUser());
+			collections = (List<CollectionImeji>)cc.search(new ArrayList<SearchCriterion>(), null, -1, 0);
+			if(collectionCriterionList != null)
 			{
-				collectionCriterionList.get(i).setCollections(collections);
-				/*
-				for(int j=0; j<collectionCriterionList.get(i).getMdCriterionList().size(); j++)
-					collectionCriterionList.get(i).getMdCriterionList().get(j).setCollections(collections);
-					*/
+				for(int i=0; i<collectionCriterionList.size(); i++)
+				{
+					collectionCriterionList.get(i).setCollections(collections);
+				}
 			}
-		}
+        }
 	}
 	
-	public List<SelectItem> getCollectionList() throws Exception {
-		getUserCollecitons();
+	public List<SelectItem> getCollectionList() throws Exception 
+	{
+		getUserCollections();
         collectionList = new ArrayList<SelectItem>();
         collectionList.add(new SelectItem(null, "Select a Collection"));
         for (CollectionImeji ci : collections)
@@ -109,25 +110,29 @@ public class CollectionCriterionController implements Serializable
 
 	public void clearAllForms() {
         for (CollectionCriterion vo : collectionCriterionList)
-            vo.clearCriterion();
+        {
+        	vo.clearCriterion();
+        }
     }
 		
 	public String getSearchCriterion() 
 	{
 		List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+		String errorMessage = "";
+		boolean validSearch = false;
 
 		for(CollectionCriterion collectionCriterion : collectionCriterionList)
 		{ 
 		    SearchCriterion subSC = new SearchCriterion(Operator.OR, new ArrayList<SearchCriterion>());
 		    
-			if(!(collectionCriterion.getSelectedCollectionId().equals("")))
+			if(collectionCriterion.getSelectedCollectionId() != null && !"".equals(collectionCriterion.getSelectedCollectionId()))
 			{    
 			    SearchCriterion collSC = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_COLLECTION, collectionCriterion.getSelectedCollectionId(), Filtertype.URI);
 			    subSC.getChildren().add(collSC);
 
 			    for(MDCriterion mdc : collectionCriterion.getMdCriterionList())
     			{
-    				if(!mdc.getMdText().equals("") && mdc.getSelectedMdName()!= null && !mdc.getSelectedMdName().equals("")) 
+    				if(mdc != null && mdc.getMdText() != null && !"".equals(mdc.getMdText().trim()) && mdc.getSelectedMdName()!= null && !"".equals(mdc.getSelectedMdName())) 
     				{ 
     					Operator op  = Operator.AND;
     					if (mdc.getLogicOperator() != null)
@@ -178,10 +183,24 @@ public class CollectionCriterionController implements Serializable
     				    // Add metadata type
     					mdSC.getChildren().add(new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, mdc.getSelectedStatement().getName().toString(), Filtertype.URI));
     					subSC.getChildren().add(mdSC);
+    					validSearch = true;
+    				}
+    				else
+    				{
+    					errorMessage = "No metadata selected!";
     				}
     			}
     		}
+			else
+			{
+				errorMessage = "No collection selected!";
+			}
 		    scList.add(subSC);
+		}
+		if (!validSearch)
+		{
+			BeanHelper.error(errorMessage);
+			return null;
 		}
 		String query = URLQueryTransformer.transform2URL(scList);
 		return query;

@@ -54,15 +54,10 @@
 						<h:panelGroup layout="block" styleClass="full_area0" >
 						 	<ui:include src="./include/History.xhtml"></ui:include>
 						 </h:panelGroup>
-						 
-						<h:panelGroup styleClass="full_area0 fullItemControls">
-							<h:outputLink value="">
-								<h:outputText value="#{lbl.images}"/>
-							</h:outputLink>
-						</h:panelGroup>
+						
 					</h:panelGroup>
 					
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" >
+					<h:panelGroup layout="block" styleClass="full_area0" >
 						<!-- import search here -->		
 						<h:panelGroup rendered="#{not empty AdvancedSearchController.collectionCriterionController.collections}">
 							<!-- <ui:include src="searchPages/ui/AnyFieldCriterionSearch.xhtml"/>-->

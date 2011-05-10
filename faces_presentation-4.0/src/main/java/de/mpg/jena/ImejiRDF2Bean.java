@@ -33,7 +33,6 @@ public class ImejiRDF2Bean
 		{
 			Security security = new Security();
 			Object o = rdf2Bean.load(uri);
-
 			if (!security.check(OperationsType.READ, user, o)) 
 			{
 				if (o instanceof Image) 

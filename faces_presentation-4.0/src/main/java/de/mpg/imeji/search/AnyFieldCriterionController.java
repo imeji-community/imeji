@@ -27,7 +27,10 @@ public class AnyFieldCriterionController implements Serializable{
 
 	public void clearAllForms() {
         for (AnyFieldCriterionBean bean : anyFieldCriterionBeanList)
-            bean.clearCriterion();
+        {
+        	 bean.clearCriterion();
+        }
+           
     }
 	 
 	public String addObject() {

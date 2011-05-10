@@ -58,7 +58,7 @@ public class AlbumController extends ImejiController
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
 		imejiBean2RDF.create(ic, user);
 		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
-		ic = imejiRDF2Bean.load(Album.class, ic.getId().toString());
+		//ic = (Album) imejiRDF2Bean.load(ic.getId().toString(), user);
 		user = addCreatorGrant(ic, user);
 		cleanGraph(ImejiJena.albumModel);
 	}

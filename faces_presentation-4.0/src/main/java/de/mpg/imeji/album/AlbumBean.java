@@ -16,6 +16,7 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
@@ -275,9 +276,10 @@ public class AlbumBean implements Serializable
                 if (valid())
                 {
                     ac.create(getAlbum());
+                    UserController uc = new UserController(sessionBean.getUser());
+                    sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
                     BeanHelper.info("Album created successfully");
-                    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + getAlbum().getId().getPath() + "/details?init=1");
+                    return "pretty:albums";
                 }
             }
             else

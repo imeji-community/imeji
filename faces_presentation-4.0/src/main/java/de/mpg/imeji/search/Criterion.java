@@ -26,7 +26,7 @@ public abstract class Criterion {
 	enum LogicOperatorItems{
 		AND ("and"),
 		OR ("or"),
-		NOT ("not");
+		NOTAND ("not");
 		
 		private String query;
 
@@ -50,7 +50,7 @@ public abstract class Criterion {
     	List<SelectItem> selectItems = new ArrayList<SelectItem>();
     	for (LogicOperatorItems op :LogicOperatorItems.values())
     	{
-    		selectItems.add(new SelectItem(op.name(), op.name()));
+    		selectItems.add(new SelectItem(op.name(), op.query));
     	}
     	return selectItems;
     }
@@ -69,7 +69,7 @@ public abstract class Criterion {
 			logicOperator = "OR";
 		}
 		else if (logicOperator.equals("NOT")){
-			logicOperator = "NOT";
+			logicOperator = "ANDNOT";
 		}
 	}
 

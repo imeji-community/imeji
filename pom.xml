@@ -159,102 +159,54 @@
 		<url>https://zim02.gwdg.de/repos/faces/</url>
 	</scm>
 
-	<distributionManagement>
-		<repository>
-			<id>deployment.webdav</id>
-			<name>Archiva deployment</name>
-			<url>
-				dav:http://archiva.mpdl.mpg.de/archiva/repository/internal/
-			</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots.webdav</id>
-			<url>
-				dav:http://archiva.mpdl.mpg.de/archiva/repository/snapshots/
-			</url>
-		</snapshotRepository>
-		<site>
-			<id>website</id>
-			<url>
-				scp://escidoc1.escidoc.mpg.de:/srv/www/staging/projects/faces
-			</url>
-		</site>
-	</distributionManagement>
 
 	<repositories>
 		<repository>
-			<id>deployment.webdav</id>
-			<name>Archiva Managed Internal Repository</name>
-			<url>
-				http://archiva.mpdl.mpg.de/archiva/repository/internal
-			</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
+		    <id>central</id>
+		    <url>http://central</url>
+		    <releases>
+		        <enabled>true</enabled>
+		    </releases>
+		    <snapshots>
+		        <enabled>true</enabled>
+		    </snapshots>
 		</repository>
-		<repository>
-			<id>snapshots.webdav</id>
-			<name>Archiva Managed Snapshot Repository</name>
-			<url>
-				http://archiva.mpdl.mpg.de/archiva/repository/snapshots
-			</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository> 
-		    <id>Jenabean</id> 
-		    <url>http://jenabean.googlecode.com/svn/repo</url> 
-  		</repository>
-  		<repository> 
-		    <id>JBoss</id> 
-		    <url>http://repository.jboss.org/maven2/</url> 
-  		</repository>
-  		
-		<repository>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-         <snapshots>
-            <enabled>false</enabled>
-            <updatePolicy>never</updatePolicy>
-         </snapshots>
-         <id>repository.jboss.com</id>
-         <name>Jboss Repository for Maven</name>
-         <url>
-            http://repository.jboss.com/maven2/
-         </url>
-         <layout>default</layout>
-      </repository>
+	
+		<repository>  
+			<id>prime-repo</id>  
+			<name>Prime Technology Maven Repository</name>  
+			<url>http://repository.prime.com.tr</url>  
+			<layout>default</layout>  
+		</repository>  
 	</repositories>
+
+
+	    <distributionManagement>
+		<repository>
+		    <id>releases</id>
+		    <name>Nexus Managed Releases</name>
+		    <url>http://rd.mpdl.mpg.de/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+		    <id>snapshots</id>
+		    <name>Nexus Managed Snapshots</name>
+		    <url>http://rd.mpdl.mpg.de/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	    </distributionManagement>
 
 	<pluginRepositories>
 		<pluginRepository>
-			<id>Archiva plugin snapshots</id>
-			<url>http://archiva.mpdl.mpg.de/archiva/repository/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</pluginRepository><pluginRepository>
-			<id>Archiva plugin internal</id>
-			<url>http://archiva.mpdl.mpg.de/archiva/repository/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
+		    <id>central</id>
+		    <url>http://central</url>
+		    <releases>
+			<enabled>true</enabled>
+		    </releases>
+		    <snapshots>
+			<enabled>true</enabled>
+		    </snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+
 	<build>
 		<resources>
 			<resource>
@@ -627,21 +579,12 @@
                 <escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
 				
 			</properties>
-				<distributionManagement>
-				<repository>
-					<id>deployment.webdav</id>
-					<name>Archiva deployment</name>
-					<url>dav:http://archiva.mpdl.mpg.de/archiva/repository/internal/</url>
-				</repository>
-				<snapshotRepository>
-					<id>snapshots.webdav</id>
-					<url>dav:http://archiva.mpdl.mpg.de/archiva/repository/snapshots/</url>
-				</snapshotRepository>
+			<distributionManagement>
 				<site>
 					<id>website</id>
-					<url>scp://escidoc1.escidoc.mpg.de:/srv/www/00_default/projects/faces</url>
+					<url>scp://escidoc1.escidoc.mpg.de:/srv/www/staging/projects/faces</url>
 				</site>
-			</distributionManagement>
+			</distributionManagement>		
 		</profile>
 		<profile>
 			<id>env-testing-continuum</id>
@@ -828,21 +771,12 @@
                 <escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
 
 			</properties>
-				<distributionManagement>
-				<repository>
-					<id>deployment.webdav</id>
-					<name>Archiva deployment</name>
-					<url>dav:http://archiva.mpdl.mpg.de/archiva/repository/internal/</url>
-				</repository>
-				<snapshotRepository>
-					<id>snapshots.webdav</id>
-					<url>dav:http://archiva.mpdl.mpg.de/archiva/repository/snapshots/</url>
-				</snapshotRepository>
+			<distributionManagement>
 				<site>
 					<id>website</id>
-					<url>scp://escidoc1.escidoc.mpg.de:/srv/www/00_default/projects/snapshots/faces</url>
+					<url>scp://escidoc1.escidoc.mpg.de:/srv/www/staging/projects/faces</url>
 				</site>
-			</distributionManagement>
+			</distributionManagement>		
 		</profile>
 		<profile>
 			<id>env-production-escidoc2</id>

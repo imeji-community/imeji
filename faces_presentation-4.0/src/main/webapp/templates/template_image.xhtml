@@ -40,16 +40,18 @@
 	<ui:composition template="template_edit_metadata.xhtml">
 							
 		<ui:define name="mainContent" >
-			<ui:insert name="preListHeader"/>
-			<h:panelGroup styleClass="full_area0 fullItem">
-				<h:outputLink value="#{imageBean.browse.previous}" styleClass="free_area0">
-					previous
+			<h:panelGroup styleClass="full_area0_p2 huge_marginLExcl pageBrowser">
+			 		
+				<h:outputLink value="#{imageBean.browse.previous}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
+					<h:outputText value="#{lbl.paginator_previous} image"/>
 				</h:outputLink>
-				<h:outputLink value="#{imageBean.browse.next}" styleClass="free_area0">
-					Next
+				<h:outputText value=" " styleClass="small_area0"/>
+				<h:outputLink value="#{imageBean.browse.next}" styleClass="forward small_marginLExcl"  disabled="#{imageBean.browse.next == null}">
+					<h:outputText value="#{lbl.paginator_next} image"/>
 				</h:outputLink>
-			
 			</h:panelGroup>
+			<ui:insert name="preListHeader"/>
+			
 			<h:panelGroup styleClass="full_area0 fullItem">
 					
 				<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl"> 

@@ -7,6 +7,8 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import thewebsemantic.NotFoundException;
+
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.album.AlbumImagesBean;
 import de.mpg.imeji.beans.Navigation;
@@ -58,8 +60,6 @@ public class ImageBean
         this.image = img;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        imageController = new ImageController(sessionBean.getUser());
-        collectionController = new CollectionController(sessionBean.getUser());
         prettyLink = "pretty:editImage";
         labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
         if (sessionBean.getSelected().contains(img.getId()))
@@ -73,8 +73,6 @@ public class ImageBean
         image = new Image();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        imageController = new ImageController(sessionBean.getUser());
-        collectionController = new CollectionController(sessionBean.getUser());
         prettyLink = "pretty:editImage";
         labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
     }
@@ -112,11 +110,16 @@ public class ImageBean
     {
     	try 
         {
+    		imageController = new ImageController(sessionBean.getUser());
          	if (id != null)	image = imageController.retrieve(id);
  		} 
+    	catch (NotFoundException e) 
+    	{
+    		BeanHelper.error("Image " + id + " not found!");
+		}
         catch (Exception e) 
  		{
- 			BeanHelper.error("Image " + id + " not found!");
+ 			BeanHelper.error("Error loading image: " + e );
  		}
     }
     
@@ -124,6 +127,7 @@ public class ImageBean
     {
     	try 
     	{
+    		collectionController = new CollectionController(sessionBean.getUser());
     		collection = collectionController.retrieve(this.getImage().getCollection());
             Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
 		} 

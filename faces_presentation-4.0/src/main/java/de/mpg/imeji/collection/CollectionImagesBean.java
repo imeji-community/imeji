@@ -63,10 +63,8 @@ public class CollectionImagesBean extends ImagesBean {
 		}
 		
 		List<SelectItem> sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_CREATION_DATE, sb
-                .getLabel(ImejiNamespaces.PROPERTIES_CREATION_DATE.name())));
-        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE, sb
-                .getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
+        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_CREATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_CREATION_DATE.name())));
+        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
         setSortMenu(sortMenu);
 	}
 

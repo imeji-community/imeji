@@ -72,6 +72,7 @@ public class AlbumImagesBean extends ImagesBean
         {
             totalNumberOfRecords = controller.countImagesInContainer(uri, null);
             images = controller.searchImagesInContainer(uri, null, null, limit, offset);
+            super.setImages(images);
         }
         catch (Exception e)
         {

@@ -2,6 +2,7 @@ package de.mpg.imeji.collection;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.image.ImageBean;
+import de.mpg.imeji.image.SingleImageBrowse;
 import de.mpg.imeji.util.BeanHelper;
 
 public class CollectionImageBean extends ImageBean
@@ -14,6 +15,11 @@ public class CollectionImageBean extends ImageBean
         super();
         this.prettyLink = "pretty:EditImageOfCollection";
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+    }
+    
+    public void initBrowsing()
+    {
+    	setBrowse(new SingleImageBrowse((CollectionImagesBean) BeanHelper.getSessionBean(CollectionImagesBean.class), getImage()));
     }
 
     public String getCollectionId()

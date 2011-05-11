@@ -104,15 +104,6 @@
 			</h:panelGroup>
 	    </rich:modalPanel>
 	   
-
-		<h:panelGroup id="preListHeaderActiveAlbum" layout="block" styleClass="full_area0 preListHeader" rendered="#{SessionBean.activeAlbum != null}">
-			<h:panelGroup styleClass="huge_area0 small_marginLExcl">
-				<h:outputText value="#{lbl.active_album}: " />
-				<h:outputLink value="#{Navigation.imagesUrl}/album#{SessionBean.activeAlbum.id}">
-					<h:outputText value="#{SessionBean.activeAlbum.album.metadata.title} (#{SessionBean.activeAlbum.size})" />
-				</h:outputLink>
-			</h:panelGroup>
-		</h:panelGroup>
 		
 		<div id="preListHeader" class="full_area0 itemList noBorder" style="border-width: 0px !important;">
 			

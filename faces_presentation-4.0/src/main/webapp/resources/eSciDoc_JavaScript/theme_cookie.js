@@ -2,22 +2,26 @@
  * @author Marco Schlender
  * @base plain JavaScript - 2011-04-07
  */
+var layoutCookieName = 'customStyleSheet';
+
 var mpdlCookie = new function() {
 	
 	this.cookieTimeout = 30;
 	
-	this.setCookie = function (name, wert, domain, expires, path, secure){
-		var cooky = name+"="+unescape(wert);
-		cooky += (domain) ? "; domain="+ domain : "";
-		cooky += (expires) ? "; expires="+expires : "";
-		cooky += (path) ? "; path="+path : "";
-		cooky += (secure) ? "; secure" : "";
+	this.setCookie = function (name, wert, domain, expires, path, secure) {
+		expires = expires.toGMTString();
+		// check for existing
+		var oldValue = this.getCookie(name);
+		if (oldValue) {	//if cookie exist -> delete them
+			this.eraseCookie(name, domain, path);
+		}
+		var cooky = name+"="+escape(wert)+"; expires="+expires+"; path=/";
 		document.cookie = cooky;
 	}
 	
 	this.getCookie = function (name) {
 		var i = 0  //Suchposition im Cookie
-		var suche = name+"="
+		var suche = name + "=";
 		while (i<document.cookie.length){
 			if (document.cookie.substring(i, i+suche.length) == suche){
 				var ende = document.cookie.indexOf(";", i+suche.length);
@@ -25,15 +29,16 @@ var mpdlCookie = new function() {
 				var cook = document.cookie.substring(i+suche.length, ende);
 				return unescape(cook);
 			}
-			i++
+			i++;
 		}
 		return null
 	}
-	
+	/*
+	 * delete existing cookie
+	 */
 	this.eraseCookie = function (name, domain, path){
-		var cooky = name+"=; expires=Thu, 01-Jan-70 00:00:01 GMT";
-		cooky += (domain) ? "domain=" + domain : "";
-		cooky += (path) ? "path=" + path : "";
+		var deathDate = mpdlDate.getNextDate(-60, mpdlDate.now()).toGMTString();
+		var cooky = name+"=; expires="+deathDate+"; path=/";
 		document.cookie = cooky;
 	}
 	
@@ -63,6 +68,9 @@ var mpdlCSS = new function() {
 	}
 	
 	this.enablePageStyle = function (theme_id) {
+		var timeOutDate = mpdlDate.getNextDate(mpdlCookie.cookieTimeout, mpdlDate.now('date'));
+		mpdlCookie.setCookie(layoutCookieName, theme_id, null, timeOutDate);
+		
 		var el = document.getElementsByTagName("link");
 		
 		for (var i = 0; i < el.length; i++ ) {
@@ -80,7 +88,7 @@ var mpdlCSS = new function() {
 	}
 	
 	this.createThemebox = function (target) {
-		var selectedTheme = mpdlCookie.getCookie("layout");
+		var selectedTheme = mpdlCookie.getCookie(layoutCookieName);
 		var select_output = '<select name="themeSelectBox" onchange="changeThemeTo(this.value);">';
 		jQuery.each(jQuery('link'), function (index, element) {
 			var selected = '';
@@ -447,10 +455,6 @@ var importantDate = new function () {
 /*********************************** START FUNCTIONS ************************************************/
 
 function changeThemeTo(theme_id) {
-	mpdlCookie.eraseCookie("layout");
-	mpdlCookie.eraseCookie("name");
-	var timeOutDate = mpdlDate.getNextDate(mpdlCookie.cookieTimeout, mpdlDate.now('date'));
-	mpdlCookie.setCookie("layout", theme_id, null, timeOutDate.toGMTString());
 	mpdlCSS.enablePageStyle(theme_id);
 }
 
@@ -584,21 +588,19 @@ function checkForPublicHolidays() {
 }
 
 function checkLayout(){
+	var useCookie = '';
 	var timeOutDate = mpdlDate.getNextDate(mpdlCookie.cookieTimeout, mpdlDate.now('date'));
-	if (!mpdlCookie.getCookie('layoutUpdateDate')) {
-		mpdlCookie.eraseCookie("layout");
-		
-		mpdlCookie.setCookie("layoutUpdateDate", mpdlDate.now('today_date'), null, timeOutDate.toGMTString());
-		mpdlCookie.setCookie("layout", mpdlCSS.getDefaultStylesheet(), null, timeOutDate.toGMTString());
+	if (!mpdlCookie.getCookie(layoutCookieName)) {
+		useCookie = mpdlCSS.getDefaultStylesheet();
 	} else {
-		mpdlCookie.setCookie("layout", mpdlCookie.getCookie('layout'), null, timeOutDate.toGMTString());	//Refresh the timestamp for timeout of cookie
+		useCookie = mpdlCookie.getCookie(layoutCookieName);
 	}
-	mpdlCSS.enablePageStyle(mpdlCookie.getCookie('layout'))
+	mpdlCSS.enablePageStyle(useCookie);
 	checkForPublicHolidays();
 }
 
 function checkActiveCss() {
-	var cookieCSS = mpdlCookie.getCookie('layout');
+	var cookieCSS = mpdlCookie.getCookie(layoutCookieName);
 	var activeStyle = '';
 	
 	var style = document.getElementsByTagName("link");
@@ -613,11 +615,13 @@ function checkActiveCss() {
 	
 	if (activeStyle != cookieCSS) {
 		var timeOutDate = mpdlDate.getNextDate(mpdlCookie.cookieTimeout, mpdlDate.now('date'));
-		mpdlCookie.setCookie("layout", activeStyle, null, timeOutDate.toGMTString());
+		mpdlCookie.setCookie(layoutCookieName, activeStyle, null, timeOutDate);
 		mpdlCSS.createThemebox('#themeSelector');
 	}
 	setTimeout("checkActiveCss()", 500);
 } 
+
+
 
 /**
  * function called by eSciDoc_javascript.js

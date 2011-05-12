@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
+import thewebsemantic.NotFoundException;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.beans.SuperContainerBean;
 import de.mpg.imeji.util.BeanHelper;
@@ -101,17 +99,20 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
 		return "";
 	}
 	
-	public String selectNone(){
+	public String selectNone()
+	{
 		sb.getSelectedAlbums().clear();
 		return "";
 	}
 	
-	public String deleteAll() throws Exception
+	public String deleteAll() 
 	{
-		for(URI uri : sb.getSelectedAlbums()){
-			AlbumController albumController = new AlbumController(sb.getUser());
-			Album album = albumController.retrieve(uri);
-			albumController.delete(album, sb.getUser());
+		for (AlbumBean b : getCurrentPartList())
+		{
+			if (b.getSelected())
+			{
+				b.delete();
+			}
 		}
 		sb.getSelectedAlbums().clear();
 		return "pretty:albums";

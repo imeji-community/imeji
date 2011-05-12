@@ -10,19 +10,15 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import thewebsemantic.NotFoundException;
-import thewebsemantic.RDF2Bean;
-
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
-import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
 import de.mpg.jena.sparql.query.QuerySPARQLImpl;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
-import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Properties.Status;
@@ -126,6 +122,8 @@ public class AlbumController extends ImejiController
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
 		imejiBean2RDF.delete(album, user);
+		GrantController gc = new GrantController(user);
+		gc.removeAllGrantsFor(user, album.getId());
 		cleanGraph(ImejiJena.albumModel);
 	}
 	
@@ -196,14 +194,6 @@ public class AlbumController extends ImejiController
         String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/album", "", "", -1, 0, user, false);
     	return ImejiSPARQL.execCount(query);
     }
-	
-//	public Collection<Album> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
-//    {
-//        String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/album", limit, offset);
-//        //base.write(System.out);
-//        Model base = null;
-//        return ImejiSPARQL.execAndLoad(query,  Album.class);
-//    }
 
 	@Override
     protected String getSpecificQuery() throws Exception

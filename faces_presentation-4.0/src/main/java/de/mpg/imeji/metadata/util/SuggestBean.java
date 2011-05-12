@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.openjena.atlas.json.io.parserjavacc.javacc.JSON_Parser;
 import org.richfaces.json.JSONCollection;
 import org.richfaces.json.JSONException;
 
@@ -77,8 +78,10 @@ public class SuggestBean
 	        else if (statement.getVocabulary() != null)
 	        {
 	            if (suggest.toString().isEmpty())
-	                suggest = "a";
-	            if (!suggest.toString().isEmpty())
+	            {
+	            	suggest = "a";
+	            }
+	            else if (!suggest.toString().isEmpty())
 	            {
 	                try
 	                {
@@ -102,7 +105,8 @@ public class SuggestBean
 		{
 			if (statement != null) 
 	        {
-	        	 if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
+	        	 
+				 if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
 	        	 {
 	        		 return true;
 	        	 }

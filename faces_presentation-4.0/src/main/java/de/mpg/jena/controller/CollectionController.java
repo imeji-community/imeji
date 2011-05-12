@@ -148,6 +148,8 @@ public class CollectionController extends ImejiController
 			
 			imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
 			imejiBean2RDF.delete(collection, user);
+			GrantController gc = new GrantController(user);
+			gc.removeAllGrantsFor(user, collection.getId());
 			cleanGraph(ImejiJena.collectionModel);
 		}
 		else

@@ -15,7 +15,6 @@ import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.history.HistorySession;
-import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
@@ -26,8 +25,8 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
-import de.mpg.jena.security.Security;
 import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 

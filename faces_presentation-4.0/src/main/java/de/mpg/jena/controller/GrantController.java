@@ -1,5 +1,8 @@
 package de.mpg.jena.controller;
 
+import java.net.URI;
+import java.util.List;
+
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.vo.Grant;
@@ -33,6 +36,19 @@ public class GrantController extends ImejiController
 			user.getGrants().remove(grant);
 			saveUser(user);
 		}
+		return user;
+	}
+	
+	public User removeAllGrantsFor(User user, URI uri) throws Exception
+	{
+		for (int i = 0 ; i < user.getGrants().size(); i++)
+		{
+			if (((List<Grant>)user.getGrants()).get(i).getGrantFor().equals(uri))
+			{
+				((List<Grant>)user.getGrants()).remove(i);
+			}
+		}
+		saveUser(user);
 		return user;
 	}
 	

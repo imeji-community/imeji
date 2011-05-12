@@ -1,6 +1,8 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +18,7 @@ import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Properties.Status;
+import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.User;
 
 public class ProfileController extends ImejiController
@@ -86,6 +89,8 @@ public class ProfileController extends ImejiController
     {
     	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
     	imejiBean2RDF.delete(mdp, user);
+    	GrantController gc = new GrantController(user);
+		gc.removeAllGrantsFor(user, mdp.getId());
     }
     
     public int countAllProfiles()
@@ -126,13 +131,15 @@ public class ProfileController extends ImejiController
     public MetadataProfile retrieve(String id) throws Exception
     {
     	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
-    	return this.retrieve(ObjectHelper.getURI(MetadataProfile.class, id));
+    	return retrieve(ObjectHelper.getURI(MetadataProfile.class, id));
     }
     
     public MetadataProfile retrieve(URI uri) throws Exception
     {
     	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
-    	return ((MetadataProfile)ObjectHelper.castAllHashSetToList(imejiRDF2Bean.load(uri.toString(), user)));
+    	MetadataProfile p =  ((MetadataProfile)imejiRDF2Bean.load(uri.toString(), user));
+    	Collections.sort((List<Statement>) p.getStatements());
+    	return p;
     }
     
     public static void main(String[] arg) throws Exception

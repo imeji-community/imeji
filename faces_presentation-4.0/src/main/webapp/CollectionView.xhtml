@@ -207,7 +207,8 @@
 															<h:panelGroup styleClass="endline">
 																<span class="endline">
 																	<h:outputText value=", " rendered="#{indexO > 0}"/>
-																	<h:outputText value="#{label} (#{label.lang})"/>
+																	<h:outputText value="#{label}"/>
+																	<h:outputText value=" (#{label.lang})" rendered="false"/>
 																</span>
 															</h:panelGroup>
 														</a4j:repeat>

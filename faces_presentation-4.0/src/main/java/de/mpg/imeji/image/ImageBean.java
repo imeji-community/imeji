@@ -1,6 +1,7 @@
 package de.mpg.imeji.image;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -89,6 +90,7 @@ public class ImageBean
     	loadImage();
     	loadCollection();
         loadProfile();
+        sortMetadataAccordingtoProfile();
         initBrowsing();
         
     	if (sessionBean.getSelected().contains(image.getId()))
@@ -104,6 +106,22 @@ public class ImageBean
     public void initBrowsing()
     {
     	browse = new SingleImageBrowse((ImagesBean) BeanHelper.getSessionBean(ImagesBean.class), image);
+    }
+    
+    public void sortMetadataAccordingtoProfile()
+    {
+    	Collection<ImageMetadata> mdSorted = new ArrayList<ImageMetadata>();
+    	for (Statement st : profile.getStatements())
+    	{
+    		for (ImageMetadata md : image.getMetadataSet().getMetadata())
+    		{
+    			if (st.getName().equals(md.getNamespace()))
+    			{
+    				mdSorted.add(md);
+    			}
+    		}
+    	}
+    	image.getMetadataSet().setMetadata(mdSorted);
     }
     
     public void loadImage()
@@ -129,7 +147,6 @@ public class ImageBean
     	{
     		collectionController = new CollectionController(sessionBean.getUser());
     		collection = collectionController.retrieve(this.getImage().getCollection());
-            Collections.sort((List<ImageMetadata>) image.getMetadataSet().getMetadata());
 		} 
     	catch (Exception e) 
     	{

@@ -26,13 +26,14 @@ public class EditMdProfileBean extends MdProfileBean
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         profileController = new ProfileController(session.getUser());
+        readUrl();
     }
 
+    @Override
     public String getInit()
     {
-    	String col = UrlHelper.getParameterValue("col");
-    	if (col != null && !"".equals(col)) colId = col;
-    	init = UrlHelper.getParameterBoolean("init");
+    	readUrl();
+    	
     	if (init)  
         {
             if (this.getId() != null)
@@ -56,6 +57,16 @@ public class EditMdProfileBean extends MdProfileBean
         }
         super.getInit();
         return "";
+    }
+    
+    public void readUrl()
+    {
+    	String col = UrlHelper.getParameterValue("col");
+    	if (col != null && !"".equals(col)) 
+    	{
+    		colId = col;
+    	}
+    	init = UrlHelper.getParameterBoolean("init");
     }
     
     public String cancel() throws IOException

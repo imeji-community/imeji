@@ -4,13 +4,10 @@ import java.util.List;
 
 import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.jena.util.MetadataFactory;
-import de.mpg.jena.vo.ComplexType;
-import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.complextypes.Date;
 
 public class MetadataMultipleEditor extends MetadataEditor
 {

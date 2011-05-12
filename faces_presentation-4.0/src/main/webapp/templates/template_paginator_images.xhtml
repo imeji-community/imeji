@@ -129,7 +129,7 @@
 					<h:outputText value="#{lbl.add_to_album}" styleClass="free_area0"/>
 				</a4j:commandLink>
 				
-				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumImages' and paginatorListSessionBean.album.editable}">
+				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumImages' and paginatorListSessionBean.album.deletable}">
 					<h:outputText value="Remove" styleClass="free_area0"/>
 				</a4j:commandLink>
 				
@@ -176,7 +176,7 @@
 				<a4j:commandLink styleClass="free_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
 					<h:outputText styleClass="free_area0" value="#{lbl.add_to_album}"/>
 				</a4j:commandLink>
-				<a4j:commandLink styleClass="free_area0" action="#{SelectedBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumImages' and paginatorListSessionBean.album.editable}">
+				<a4j:commandLink styleClass="free_area0" action="#{SelectedBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumImages' and paginatorListSessionBean.album.deletable}">
 					<h:outputText value="Remove" styleClass="free_area0"/>
 				</a4j:commandLink>
 				<h:panelGroup styleClass="free_area0" rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}">

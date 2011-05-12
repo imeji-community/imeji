@@ -41,7 +41,7 @@ public class AlbumBean implements Serializable
 
 		public AlbumBean(Album album)
         {
-            this.setAlbum(album);
+			this.album = album;
             sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class); 
             this.id = ObjectHelper.getId(album.getId());
             if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().getAlbum().getId().equals(album.getId()))
@@ -350,6 +350,7 @@ public class AlbumBean implements Serializable
         
         public String release() throws Exception
         {
+        	makeInactive();
             AlbumController ac = new AlbumController(sessionBean.getUser());
             ac.release(album);
             return "pretty:";
@@ -361,6 +362,7 @@ public class AlbumBean implements Serializable
         	
         	try 
         	{
+        		makeInactive();
     			c.delete(album, sessionBean.getUser());
     			BeanHelper.info("Album successfully deleted.");
     		} 
@@ -368,6 +370,7 @@ public class AlbumBean implements Serializable
         	{
         		BeanHelper.error("Error deleting Album");
     			BeanHelper.error("Details: " + e.getMessage());
+    			e.printStackTrace();
     		}
         	
         	return "pretty:albums";

@@ -108,7 +108,7 @@ public class EditImageMetadataBean
 		{
 			imagesBean = (CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class);
 			elementsPerPage = imagesBean.getElementsPerPage();
-			imagesBean.setElementsPerPage(10000);
+			imagesBean.setElementsPerPage(100000);
 		}
 		imagesBean.update();
 		imagesBean.setElementsPerPage(elementsPerPage);

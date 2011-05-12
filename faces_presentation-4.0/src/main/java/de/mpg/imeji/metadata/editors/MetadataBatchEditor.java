@@ -34,8 +34,7 @@ public class MetadataBatchEditor extends MetadataEditor
 		{
 			return false;
 		}
-//		if (images.get(0).getMetadata().iterator().hasNext())
-//		{
+
 		ImageMetadata md = images.get(0).getMetadataSet().getMetadata().iterator().next();
 		for (Image im: originalImages)
 		{

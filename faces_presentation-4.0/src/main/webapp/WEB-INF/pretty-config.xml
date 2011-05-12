@@ -137,7 +137,7 @@
 	
 	<url-mapping id="editAlbum">
 		<pattern value="edit/album/#{AlbumBean.id}"/>
-		<view-id>/jsf/AlbumCreate.xhtml</view-id>
+		<view-id>/jsf/AlbumEdit.xhtml</view-id>
 		<action onPostback="false">#{AlbumBean.initEdit}</action>
 	</url-mapping>
 	

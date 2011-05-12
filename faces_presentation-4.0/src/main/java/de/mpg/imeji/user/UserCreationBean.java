@@ -63,19 +63,18 @@ public class UserCreationBean
                 {
                 	BeanHelper.error("User already exists!");
                 }
-                else
-                {
-                	 user.setEncryptedPassword(UserController.convertToMD5(getPassword()));
-                     uc.create(user);
-                     logger.info("USER email created: " + user.getEmail());
-                     BeanHelper.error("User created successfully");
-                }
             }
+            catch (NotFoundException e) 
+            {
+            	user.setEncryptedPassword(UserController.convertToMD5(getPassword()));
+                uc.create(user);
+                logger.info("USER email created: " + user.getEmail());
+                BeanHelper.info("User created successfully");
+			}
             catch (Exception e) 
             {
             	BeanHelper.error("ERROR " + e);
 			}
-            
         }
         return "pretty:";
     }

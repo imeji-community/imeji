@@ -55,19 +55,6 @@
 	</ui:define>
 
 	<ui:define name="list">
-
-		<!-- Script for Shiftcheckboxes -->
-	<script>
-		jQuery(document).ready(function() {
-			jQuery('.shiftCheckbox').shiftcheckbox();
-		});
-	</script>
-
-	<script>
-		jQuery(document).ready(function() {
-			document.getElementById('formular:facetInitialized').click();
-		});
-	</script>			
 		 <rich:modalPanel id="panelConfirmDeleteAll" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
 	        <h3>
 	        	<a4j:status forceId="true" id="allDelStatus" startText="Deleting, please wait......." stopText="Delete images?" rendered="#{paginatorListSessionBean.deletable}"/>
@@ -331,7 +318,24 @@
 			<a4j:support event="onchange" reRender="facetGroup" action="#{paginatorListSessionBean.initFacets}" status="loadFacets" />
 		</h:selectBooleanCheckbox>
 	
+	
+	
+	<script>
+		jQuery(document).ready(function() {
+			document.getElementById('formular:facetInitialized').click();
+		});
+	</script>			
+	
+	<!-- Script for Shiftcheckboxes -->
+	<script>
+		jQuery(document).ready(function() {
+			jQuery('.shiftCheckbox').shiftcheckbox();
+		});
+	</script>
+	
 	</ui:define>
+	
+	
 	
 </ui:composition>
 

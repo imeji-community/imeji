@@ -82,14 +82,14 @@
 			<h:panelGroup rendered="#{md.namespace == statement.name}" layout="block" styleClass="double_area0_p0 xTiny_marginLExcl">
 				<h:outputText value="#{md.text}" rendered="#{md.type == 'TEXT'}"/>
 				<h:outputText value="#{md.number}" rendered="#{md.type == 'NUMBER'}"/>
-				<h:outputText value="#{md.date}" rendered="#{md.type == 'DATE'}"/>
+				<h:outputText value="#{md.date}#{md.dateTime}" rendered="#{md.type == 'DATE'}"/>
 				<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.type == 'PUBLICATION' or md.type == 'URI'}">
 					<h:outputText value="Link" />
 				</h:outputLink>
 				<h:outputText value="#{md.license}" rendered="#{md.type == 'LICENSE'}"/>
 				<h:panelGroup rendered="#{md.type == 'PERSON'}">
 					<h:outputText value="#{md.person.familyName}, #{md.person.givenName} ("/>
-					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty mdperson.organizations}">
+					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
 						<h:outputText value="#{orga.name}"/>
 					</a4j:repeat>
 					<h:outputText value=")" />

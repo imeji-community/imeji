@@ -6,15 +6,15 @@ import java.util.Date;
 
 public class DateFormatter 
 {
-	public static String format(String str)
+	public static long getTime(String str)
 	{
 		Date d = parseDate(str, "yyyy-MM-dd");
 		if (d == null) d = parseDate(str, "yyyy-MM");
 		if (d == null) d = parseDate(str, "yyyy");
 		
-		if (d != null) return Long.toString(d.getTime());
+		if (d != null) return d.getTime();
 		
-		return ""; 
+		else throw new RuntimeException("Wrong date format");
 	}
 	
 	public static Date parseDate(String str, String pattern)

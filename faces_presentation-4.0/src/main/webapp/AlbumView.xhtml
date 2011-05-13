@@ -60,6 +60,10 @@
 			<ui:define name="mainContent">
 				<h:panelGroup layout="block" styleClass="full_area0">
 					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
+					
+					<h:panelGroup layout="block" styleClass="full_area0 preListHeader" style="border-width: 0px !important;">
+						 	<ui:include src="./include/History.xhtml"></ui:include>
+						 </h:panelGroup>
 						
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
@@ -124,17 +128,18 @@
 												<h:outputText value=" #{lbl.organization} " style="visibility:hidden;"/>
 												<span class="noDisplay">: </span>
 											</b>
-											<span class="xTiny_marginLExcl endline">
+											<span class="xHuge_area0 xTiny_marginLExcl endline">
 												<h:outputText value="#{lbl.organization} : "/>
+												<a4j:repeat var="organization" value="#{creator.organizations}" rowKeyVar="indexO">
+													<h:panelGroup styleClass="endline">
+														<span class="endline">
+															<h:outputText value=",  " rendered="#{indexO > 0}"/>
+															<h:outputText value=" #{organization.name}"/>
+														</span>
+													</h:panelGroup>
+												</a4j:repeat>
 											</span>
-											<a4j:repeat var="organization" value="#{creator.organizations}" rowKeyVar="indexO">
-												<h:panelGroup styleClass="endline">
-													<span class="endline">
-														<h:outputText value="#{organization.name}"/>
-														<h:outputText value=", " rendered="#{indexO > 0}"/>
-													</span>
-												</h:panelGroup>
-											</a4j:repeat>
+											
 										</a4j:repeat>
 									</h:panelGroup>
 								</div>

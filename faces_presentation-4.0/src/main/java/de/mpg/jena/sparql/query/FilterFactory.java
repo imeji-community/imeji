@@ -216,15 +216,15 @@ public class FilterFactory
             }
             else if (sc.getFilterType().equals(Filtertype.EQUALS_DATE))
             {
-            	filter += variable + "='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+            	filter += variable + "='" + DateFormatter.getTime(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
             }
             else if (sc.getFilterType().equals(Filtertype.GREATER_DATE))
             {
-				filter += variable + ">='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+				filter += variable + ">='" + DateFormatter.getTime(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
             }
             else if (sc.getFilterType().equals(Filtertype.LESSER_DATE))
             {
-				filter += variable + "<='" + DateFormatter.format(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+				filter += variable + "<='" + DateFormatter.getTime(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
             }
         }
 		return filter;

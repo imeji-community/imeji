@@ -91,7 +91,10 @@ public class EditImageMetadataBean
 		
 		modeRadio = new ArrayList<SelectItem>();
 		modeRadio.add(new SelectItem("basic", "Write only when no values"));
-		if (this.statement.getMaxOccurs().equals("unbounded"))	modeRadio.add(new SelectItem("append", "Append a new value to all"));
+		if (this.statement.getMaxOccurs().equals("unbounded"))
+		{
+			modeRadio.add(new SelectItem("append", "Append a new value to all"));
+		}
 		modeRadio.add(new SelectItem("overwrite", "Overwrite all values"));
 		return "";
 	}

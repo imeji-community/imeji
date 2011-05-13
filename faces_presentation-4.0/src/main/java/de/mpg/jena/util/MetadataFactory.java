@@ -77,8 +77,8 @@ public class MetadataFactory
 				((Date)md).setDate(((Date)metadata).getDate());
 			 	if (((Date)md).getDate() != null)
 				{
-			 		String dateFormatted = DateFormatter.format(((Date)md).getDate());
-			 		((Date)metadata).setDate(dateFormatted);
+			 		long time = DateFormatter.getTime(((Date)md).getDate());
+			 		((Date)md).setDateTime(time);
 				}
 			 	searchValue += " " +((Date)metadata).getDate();
 				break;

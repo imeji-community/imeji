@@ -44,21 +44,7 @@
 	<ui:param name="FormularBean" value="#{AlbumBean}" />
 	
 	<ui:define name="contentMenu">
-			
-		<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.album.id.path}" rendered="true">
-			<h:outputText value="Album startpage"/>
-		</h:outputLink>
-		
-		<h:outputText styleClass="seperator void" />
-		
-		<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{AlbumBean.album.id.path}?q=" rendered="true">
-			<h:outputText value="View images"/>
-		</h:outputLink>
-		
-		<h:outputText styleClass="seperator void" />
-		
-		<h:outputText value="Album metadata" styleClass="free_area0"/>
-		
+				
 	</ui:define>
 </ui:composition>
 </body>

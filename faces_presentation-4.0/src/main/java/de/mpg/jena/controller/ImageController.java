@@ -297,36 +297,28 @@ public class ImageController extends ImejiController
     public Collection<Image> searchImages(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
     {
     	SearchHelper helper = new SearchHelper(null);
-      	
     	List<String> uris = helper.advancedSearchImages(scList, sortCri, user);
-    	
     	return loadImages(uris, limit, offset);
     }
     
     public Collection<Image> searchImagesInContainer(URI containerUri, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
     {
     	SearchHelper helper = new SearchHelper(containerUri.toString());
-    	
     	List<String> uris = helper.advancedSearchImages(scList, sortCri, user);
-    	
     	return loadImages(uris, limit, offset);
     }
     
     public int countImages(List<SearchCriterion> scList)
     {
     	SearchHelper helper = new SearchHelper(null);
-    	
     	List<String> uris = helper.advancedSearchImages(scList, null, user);
-    	
     	return uris.size();
     }
     
     public int countImagesInContainer(URI containerUri, List<SearchCriterion> scList)
     {
     	SearchHelper helper = new SearchHelper(containerUri.toString());
-    	
     	List<String> uris = helper.advancedSearchImages(scList, null, user);
-    	
     	return uris.size();
     }
     

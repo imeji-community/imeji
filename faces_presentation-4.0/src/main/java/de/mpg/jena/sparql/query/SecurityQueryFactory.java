@@ -164,6 +164,7 @@ public class SecurityQueryFactory
 		{
 			f = " .FILTER(?status=<http://imeji.mpdl.mpg.de/status/RELEASED>)";
 		}
+
 		return f;
 	}
 }

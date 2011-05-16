@@ -40,14 +40,14 @@ public class HistorySession
 			}
 		}
 		
-		if (id!= null)
-		{
-			if (id.length == 2) newPage.setName(newPage.getName() + " id " + id[1]);
-			if (id.length == 1) newPage.setName(newPage.getName() + " id " + id[0]);
-		}
-		
 		if (newPage != null)
 		{
+			if (id!= null)
+			{
+				if (id.length == 2) newPage.setName(newPage.getName() + " id " + id[1]);
+				if (id.length == 1) newPage.setName(newPage.getName() + " id " + id[0]);
+			}
+			
 			if (pages.isEmpty() || !pages.get(pages.size() - 1).getName()	.equals(newPage.getName()))
 			{					
 				pages.add(newPage);

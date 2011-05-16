@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.collections.ListUtils;
+import org.apache.log4j.Logger;
 
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Operator;
@@ -12,12 +13,15 @@ import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
 import de.mpg.jena.sparql.query.QuerySPARQLImpl;
+import de.mpg.jena.sparql.query.SimpleQueryFactory;
 import de.mpg.jena.vo.User;
 
 public class SearchHelper 
 {
 	private String containerURI = null;
 	private boolean isCollection = false;
+	
+	private static Logger logger = Logger.getLogger(SearchHelper.class);
 	
 	public SearchHelper(String containerURI) 
 	{
@@ -82,10 +86,28 @@ public class SearchHelper
 			l.add(sc);
 		}
 		
-		String q =  querySPARQL.createQuery(l, sortCri , "http://imeji.mpdl.mpg.de/image", "", "", -1, 0, user, isCollection);
-		results =  ImejiSPARQL.exec(q);
-		
+		//String q =  querySPARQL.createQuery(l, sortCri , "http://imeji.mpdl.mpg.de/image", "", "", -1, 0, user, isCollection);
+		String sq = SimpleQueryFactory.search("http://imeji.mpdl.mpg.de/image", sc, sortCri, user, isCollection);
+//		
+//		logger.info("current:" + q);
+//		logger.info("experiment:" + sq);
+//		
+//		long a = System.currentTimeMillis();
+		results =  ImejiSPARQL.exec(sq);
+		//long b = System.currentTimeMillis();
+		//LinkedList<String> resultsOld =  ImejiSPARQL.exec(q);
+//		long c = System.currentTimeMillis();
+//		logger.info("SEARCH FOR " + sc.getNamespace());
+//		logger.info("simple query:" + Long.toString(b - a));
+//		logger.info("Old query:" +  Long.toString(c - b));
+//		if (ListUtils.subtract(results, resultsOld).size() > 0 || ListUtils.subtract(resultsOld, results).size()> 0)
+//		{
+//			logger.error("DIFFERENCE between old and new queries!!!!!");
+//			System.out.println(ListUtils.subtract(results, resultsOld));
+//			System.out.println(ListUtils.subtract(resultsOld, results));
+//		}
 		return results;
+		//return resultsOld;
 	}
 	
 	private LinkedList<String> getAllURIs(SortCriterion sortCri, User user)

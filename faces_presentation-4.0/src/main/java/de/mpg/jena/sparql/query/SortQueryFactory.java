@@ -19,26 +19,44 @@ public class SortQueryFactory
             {
 	            if (sortCriterion.getSortOrder().equals(SortOrder.DESCENDING))
 	            {
-	            	q = " ORDER BY DESC(" + lowerCasePrefix(sortCriterion, sortEl) + ") ";
+	            	q = " ORDER BY DESC(" + lowerCasePrefix(sortCriterion, sortEl.getName()) + ") ";
 	            }
 	            else
 	            {
-	                q = " ORDER BY " + lowerCasePrefix(sortCriterion, sortEl) + " ";
+	                q = " ORDER BY " + lowerCasePrefix(sortCriterion, sortEl.getName()) + " ";
 	            }
             }
         }
 		return q;
 	}
 	
-	private static String lowerCasePrefix(SortCriterion sortCriterion, QueryElement sortEl)
+	public static String create(SortCriterion sortCriterion)
+	{
+		String q = "";
+        if (sortCriterion != null)
+        {
+	        if (sortCriterion.getSortOrder().equals(SortOrder.DESCENDING))
+	        {
+	        	q = " ORDER BY DESC(" + lowerCasePrefix(sortCriterion, "sort0") + ") ";
+	        }
+	        else
+	        {
+	            q = " ORDER BY " + lowerCasePrefix(sortCriterion, "sort0") + " ";
+	        }
+        }
+        System.out.println("sort:" + q);
+		return q;
+	}
+	
+	private static String lowerCasePrefix(SortCriterion sortCriterion, String name)
 	{
 		if (ImejiNamespaces.CONTAINER_METADATA_TITLE.equals(sortCriterion.getSortingCriterion()))
 		{
-			return "fn:lower-case(?" + sortEl.getName() + ")";
+			return "fn:lower-case(?" + name + ")";
 		}
 		else
 		{
-			return "?" + sortEl.getName();
+			return "?" + name;
 		}
 	}
 	

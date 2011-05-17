@@ -11,6 +11,9 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.log4j.Logger;
 
 import de.mpg.escidoc.services.framework.ServiceLocator;
+import de.mpg.imeji.album.AlbumImagesBean;
+import de.mpg.imeji.collection.CollectionImagesBean;
+import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.UserController;
@@ -59,6 +62,9 @@ public class LoginBean
             {
                 sb.setUser(user);
                 BeanHelper.info(sb.getMessage("success_log_in"));
+                ((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class)).setSearchResult(null);
+                ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class)).setSearchResult(null);
+                ((AlbumImagesBean)BeanHelper.getSessionBean(AlbumImagesBean.class)).setSearchResult(null);
                 try
                 {
                     createLoginStatisticData(user);

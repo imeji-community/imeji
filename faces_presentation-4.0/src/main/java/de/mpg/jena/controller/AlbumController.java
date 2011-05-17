@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -13,12 +14,15 @@ import thewebsemantic.NotFoundException;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
+import de.mpg.jena.search.Search;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
 import de.mpg.jena.sparql.query.QuerySPARQLImpl;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Properties.Status;
@@ -168,7 +172,7 @@ public class AlbumController extends ImejiController
     }
 
 	/**
-	 * Search for collections
+	 * Search for albums
 	 * - Logged-out user:
 	 * --Collection must be released
 	 * 
@@ -181,11 +185,13 @@ public class AlbumController extends ImejiController
 	 * @param scList
 	 * @return
 	 */
-	public Collection<Album> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
-	    QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-	    String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/album", "", "", limit, offset, user, false);
-	    return ImejiSPARQL.execAndLoad(query, Album.class);
+	    //QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+	    //String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/album", "", "", limit, offset, user, false);
+	    Search search = new Search("http://imeji.mpdl.mpg.de/album", null);
+	    return search.search(scList, sortCri, user);
+	    //return ImejiSPARQL.execAndLoad(query, Album.class);
 	}
 	
 	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
@@ -193,6 +199,30 @@ public class AlbumController extends ImejiController
         QuerySPARQL querySPARQL = new QuerySPARQLImpl();
         String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/album", "", "", -1, 0, user, false);
     	return ImejiSPARQL.execCount(query);
+    }
+	
+	public Collection<Album> load(List<String> uris, int limit, int offset)
+    {
+    	LinkedList<Album> albs = new LinkedList<Album>();
+    	ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.albumModel);
+    	
+    	int counter = 0;
+        for (String s : uris)
+        {
+        	if (offset <= counter && counter < (limit + offset)) 
+        	{
+        		try 
+        		{
+        			albs.add((Album) reader.load(s, user));
+				} 
+        		catch (Exception e) 
+				{
+					logger.error("Error loading image " + s);
+				}
+        	}
+         	counter ++;
+        }
+		return albs;
     }
 
 	@Override

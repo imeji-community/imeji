@@ -3,23 +3,32 @@ package de.mpg.jena.sparql.query;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
-import de.mpg.jena.vo.Grant.GrantType;
-import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.Grant;
+import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.User;
 
 public class SimpleSecurityQuery 
 {
-	public static String getQuery(User user, SearchCriterion sc)
+	public static String getQuery(User user, SearchCriterion sc, String type, boolean includeWithdrawn)
 	{
 		String f = "?status!=<http://imeji.mpdl.mpg.de/status/WITHDRAWN> && (";
-		String op = " ";
 		
+		if(includeWithdrawn)
+		{
+			f= "(";	
+		}
+		
+		String op = " ";
+
+		if (user == null)
+		{
+			return  " .FILTER(?status=<http://imeji.mpdl.mpg.de/status/RELEASED>)";
+		}
 		
 		if (sc != null && ImejiNamespaces.PROPERTIES_STATUS.equals(sc.getNamespace()))
 		{
 			f = "?status=<" +  sc.getValue() + ">";
-			
+
 			if (Operator.AND.equals(sc.getOperator()))
 			{
 				op = " && (";
@@ -30,16 +39,17 @@ public class SimpleSecurityQuery
 			}
 		}
 		
+		
 		String uf = "";
 		
 		String imageCollection = null;
 		
-		if (ImejiNamespaces.IMAGE_COLLECTION.equals(sc.getNamespace()))
+		if (sc != null && ImejiNamespaces.IMAGE_COLLECTION.equals(sc.getNamespace()))
 		{
 			imageCollection = sc.getValue();
 		}
 		
-		boolean myImages = ImejiNamespaces.MY_IMAGES.equals(sc.getNamespace());
+		boolean myImages = sc!= null && ImejiNamespaces.MY_IMAGES.equals(sc.getNamespace());
 		
 		boolean hasGrantForCollection = false;
 		
@@ -58,8 +68,16 @@ public class SimpleSecurityQuery
 						{
 							uf += " || ";
 						}
-						uf += "?coll=<" + g.getGrantFor() + ">";
-						//if (els.get("http://imeji.mpdl.mpg.de/album") != null) uf += "?" + els.get("http://imeji.mpdl.mpg.de/album").getName() + "=<" + g.getGrantFor() + ">";
+						
+						if ("http://imeji.mpdl.mpg.de/collection".equals(type) || "http://imeji.mpdl.mpg.de/album".equals(type))
+						{
+							uf += "?s";
+						}
+						else
+						{
+							uf += "?c";
+						}
+						uf += "=<" + g.getGrantFor() + ">";
 						
 						hasGrantForCollection = true;
 					}
@@ -71,7 +89,7 @@ public class SimpleSecurityQuery
 					}
 					else if (imageCollection != null )
 					{
-						uf += "?coll=<" +imageCollection + ">";
+						uf += "?c=<" +imageCollection + ">";
 					}
 				}
 			}
@@ -79,7 +97,7 @@ public class SimpleSecurityQuery
 
 		if(imageCollection != null && !hasGrantForCollection)
 		{
-			uf += "?coll=<" +imageCollection + "> && ?status=<http://imeji.mpdl.mpg.de/status/RELEASED>";
+			uf += "?c=<" +imageCollection + "> && ?status=<http://imeji.mpdl.mpg.de/status/RELEASED>";
 		}
 		else if (user != null && user.getGrants() != null && user.getGrants().isEmpty() && myImages) 
 		{
@@ -88,14 +106,14 @@ public class SimpleSecurityQuery
 		
 		uf+= ")";
 		
-//		if ("http://imeji.mpdl.mpg.de/image".equals(type) && !isCollection && user != null)
-//		{
-//			uf+= ")";
-//		}
-		
 		if (!"".equals(uf)) 
 		{
-			f = " .FILTER(" + f + op + "( ?status=<http://imeji.mpdl.mpg.de/status/RELEASED> || " + uf + "))";
+			f = " .FILTER(" + f + op + "(";
+			if (sc == null || (sc != null  && !ImejiNamespaces.MY_IMAGES.equals(sc.getNamespace())))
+			{
+				f += "?status=<http://imeji.mpdl.mpg.de/status/RELEASED> || ";
+			}
+			f += uf + "))";
 		}
 		else if (!"".equals(f)) 
 		{

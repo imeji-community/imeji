@@ -38,7 +38,6 @@ public class TechnicalFacets
 		
 		ImagesBean cib = (ImagesBean) BeanHelper.getSessionBean(ImagesBean.class);
 		maxRecord = cib.getTotalNumberOfRecords();
-	
 		try 
 		{
 			int count = 0;
@@ -72,8 +71,14 @@ public class TechnicalFacets
 				{
 					SearchCriterion sc = new  SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE, ct.getURI().toString(), Filtertype.URI);
 					count = getCount(new ArrayList<SearchCriterion>(scList), sc);
-					if (count > 0) facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, ct.name()), ct.name().toLowerCase(), count));
-					else fs.getNoResultsFilters().add(new Filter(ct.name(), "", 0));
+					if (count > 0)
+					{
+						facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, ct.name()), ct.name().toLowerCase(), count));
+					}
+					else 
+					{
+						fs.getNoResultsFilters().add(new Filter(ct.name(), "", 0));
+					}
 					count = 0;	
 				}
 			}

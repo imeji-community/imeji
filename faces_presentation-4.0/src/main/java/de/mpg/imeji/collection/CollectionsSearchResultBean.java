@@ -15,6 +15,7 @@ import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.vo.CollectionImeji;
 
 public class CollectionsSearchResultBean extends SuperContainerBean<ViewCollectionBean>
@@ -60,25 +61,20 @@ public class CollectionsSearchResultBean extends SuperContainerBean<ViewCollecti
         scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, getQuery(), Filtertype.REGEX));
         scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.COLLECTION_PROFILE, getQuery(), Filtertype.URI));
         try
-        {
-            totalNumberOfRecords = controller.getNumberOfResults(scList);
-            logger.info("Found " + totalNumberOfRecords + "collections");
-            
+        {          
             SortCriterion sortCriterion = new SortCriterion();
             sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        
-        
-      
-            collections = controller.search(scList, sortCriterion, limit, offset);
+            SearchResult results = controller.search(scList, sortCriterion, limit, offset);
+            collections = controller.load(results.getResults(), limit, offset);
+            totalNumberOfRecords = results.getNumberOfRecords();
+            
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
+        	BeanHelper.error(e.getMessage());
             e.printStackTrace();
         }
-        
-        
         return ImejiFactory.collectionListToBeanList(collections);
     }
 

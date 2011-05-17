@@ -25,6 +25,7 @@ public class FacetsBean
         catch (Exception e) 
         {
         	BeanHelper.error("Error initializing facets! " + e.getMessage());
+        	e.printStackTrace();
  		}
 	}
     

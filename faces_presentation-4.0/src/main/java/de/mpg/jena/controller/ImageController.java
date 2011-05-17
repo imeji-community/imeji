@@ -18,12 +18,13 @@ import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
+import de.mpg.jena.search.Search;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
 import de.mpg.jena.sparql.query.QuerySPARQLImpl;
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.util.ObjectHelper;
-import de.mpg.jena.util.SearchHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Image;
@@ -87,14 +88,14 @@ public class ImageController extends ImejiController
 
     public void update(Image img) throws Exception
     {
-    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel); 
-    	imejiBean2RDF.saveDeep(img, user);
-    	cleanGraph(ImejiJena.imageModel);
+    	Collection<Image> im = new ArrayList<Image>();
+    	im.add(img);
+    	update(im);
     }
 
     public void update(Collection<Image> images) throws Exception
     {
-    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel); 
+    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
     	for (Image img : images)
         {
     		for(int i=0; i< img.getMetadataSet().getMetadata().size(); i++)
@@ -294,35 +295,33 @@ public class ImageController extends ImejiController
   * 
   */
     
-    public Collection<Image> searchImages(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+    public SearchResult searchImages(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
     {
-    	SearchHelper helper = new SearchHelper(null);
-    	List<String> uris = helper.advancedSearchImages(scList, sortCri, user);
-    	return loadImages(uris, limit, offset);
+    	Search search = new Search("http://imeji.mpdl.mpg.de/image", null);
+    	return search.search(scList, sortCri, user);
     }
     
-    public Collection<Image> searchImagesInContainer(URI containerUri, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+    public SearchResult searchImagesInContainer(URI containerUri, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
     {
-    	SearchHelper helper = new SearchHelper(containerUri.toString());
-    	List<String> uris = helper.advancedSearchImages(scList, sortCri, user);
-    	return loadImages(uris, limit, offset);
+    	Search search = new Search("http://imeji.mpdl.mpg.de/image", containerUri.toString());
+    	return search.search(scList, sortCri, user);
     }
     
     public int countImages(List<SearchCriterion> scList)
     {
-    	SearchHelper helper = new SearchHelper(null);
-    	List<String> uris = helper.advancedSearchImages(scList, null, user);
+    	Search search = new Search("http://imeji.mpdl.mpg.de/image",null);
+    	List<String> uris = search.searchAdvanced(scList, null, user);
     	return uris.size();
     }
     
     public int countImagesInContainer(URI containerUri, List<SearchCriterion> scList)
     {
-    	SearchHelper helper = new SearchHelper(containerUri.toString());
-    	List<String> uris = helper.advancedSearchImages(scList, null, user);
+    	Search search = new Search("http://imeji.mpdl.mpg.de/image",containerUri.toString());
+    	List<String> uris = search.searchAdvanced(scList, null, user);
     	return uris.size();
     }
     
-    public  Collection<Image> loadImages(List<String> uris, int limit, int offset)
+    public Collection<Image> loadImages(List<String> uris, int limit, int offset)
     {
     	LinkedList<Image> images = new LinkedList<Image>();
     	ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.imageModel);

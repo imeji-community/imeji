@@ -8,28 +8,29 @@ import de.mpg.jena.vo.User;
 
 public class SimpleQueryFactory 
 {
-	private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <SEARCH_TYPE_ELEMENT> . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/status> ?status . ?s <http://imeji.mpdl.mpg.de/collection> ?coll SECURITY_FILTER  SEARCH_ELEMENT SORT_ELEMENT} SORT_QUERY";
-	private static String PATTERN_COUNT =  "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <SEARCH_TYPE_ELEMENT> . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/status> ?status . ?s <http://imeji.mpdl.mpg.de/collection> ?coll SECURITY_FILTER . SEARCH_ELEMENT}";
+	private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <XXX_SEARCH_TYPE_ELEMENT_XXX> . " +
+			"?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/status> ?status XXX_SPECIFIC_QUERY_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SORT_ELEMENT_XXX} " +
+			"XXX_SORT_QUERY_XXX";
 	
-	public static String search(String type, SearchCriterion sc, SortCriterion sortCriterion,  User user, boolean isCollection)
+	public static String search(String type, SearchCriterion sc, SortCriterion sortCriterion, User user, boolean isCollection, String specificQuery)
 	{
-		return 	PATTERN_SELECT.replaceAll("SECURITY_FILTER",  SimpleSecurityQuery.getQuery(user, sc))
-							  .replaceAll("SORT_QUERY",  SortQueryFactory.create(sortCriterion))
-							  .replace("SEARCH_ELEMENT", getSearchElement(sc))
-							  .replaceAll("SEARCH_TYPE_ELEMENT", type)
-							  .replace("SORT_ELEMENT", getSortElement(sortCriterion));
-	}
-	
-	public String count(SearchCriterion sc)
-	{
-		return PATTERN_COUNT;
+		return 	PATTERN_SELECT.replaceAll("XXX_SECURITY_FILTER_XXX",  SimpleSecurityQuery.getQuery(user, sc, type, isCollection))
+							  .replaceAll("XXX_SORT_QUERY_XXX",  SortQueryFactory.create(sortCriterion))
+							  .replaceAll("XXX_SEARCH_ELEMENT_XXX", getSearchElement(sc))
+							  .replaceAll("XXX_SEARCH_TYPE_ELEMENT_XXX", type)
+							  .replaceAll("XXX_SORT_ELEMENT_XXX", getSortElement(sortCriterion))
+							  .replaceAll("XXX_SPECIFIC_QUERY_XXX", specificQuery);
 	}
 	
 	public static String getSearchElement(SearchCriterion sc)
 	{
 		String searchQuery = "";
-		
-		if(ImejiNamespaces.IMAGE_FILENAME.equals(sc.getNamespace()))
+		 
+		if(sc == null)
+		{
+			return "";
+		}
+		else if(ImejiNamespaces.IMAGE_FILENAME.equals(sc.getNamespace()))
 		{
 			searchQuery = ". ?s <" + sc.getNamespace().getNs() + "> ?el";
 		}
@@ -74,9 +75,17 @@ public class SimpleQueryFactory
 			{
 				return ". ?props <" + sc.getSortingCriterion().getNs() + "> ?sort0";
 			}
+			else if (ImejiNamespaces.PROPERTIES_STATUS.equals(sc.getSortingCriterion()))
+			{
+				return ". ?props <" + sc.getSortingCriterion().getNs() + "> ?sort0";
+			}
 			else if (ImejiNamespaces.IMAGE_COLLECTION.equals(sc.getSortingCriterion()))
 			{
-				return " .?coll <http://imeji.mpdl.mpg.de/container/metadata> ?collmd . ?collmd <http://purl.org/dc/elements/1.1/title> ?sort0";
+				return ". ?c <http://imeji.mpdl.mpg.de/container/metadata> ?cmd . ?cmd <http://purl.org/dc/elements/1.1/title> ?sort0";
+			}
+			else if (ImejiNamespaces.CONTAINER_METADATA_TITLE.equals(sc.getSortingCriterion()))
+			{
+				return ". ?s <http://imeji.mpdl.mpg.de/container/metadata> ?cmd . ?cmd <http://purl.org/dc/elements/1.1/title> ?sort0" ;
 			}
 		}
 		return "";

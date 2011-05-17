@@ -15,6 +15,7 @@ import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
@@ -325,8 +326,8 @@ public abstract class CollectionBean
         if (collection == null || collection.getId() == null) return null;
         try
         {
-            Collection<Image> imgList = ic.searchImagesInContainer(collection.getId(), null, null, 5, 0);
-            return ImejiFactory.imageListToBeanList(imgList);
+            SearchResult res = ic.searchImagesInContainer(collection.getId(), null, null, 5, 0);
+            return ImejiFactory.imageListToBeanList(ic.loadImages(res.getResults(), 5, 0));
         }
         catch (NotBoundException e)
         {

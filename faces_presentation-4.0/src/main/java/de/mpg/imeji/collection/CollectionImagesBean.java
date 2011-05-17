@@ -21,6 +21,7 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
@@ -88,29 +89,36 @@ public class CollectionImagesBean extends ImagesBean {
 	@Override
 	public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
 	{	
-		if (this.getFacets() != null) this.getFacets().getFacets().clear();
-		uri = ObjectHelper.getURI(CollectionImeji.class, id);
-		Collection<Image> images = new ArrayList<Image>();
-		SortCriterion sortCriterion = new SortCriterion();
-		sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
-		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-		
-		initBackPage();
-		
-		try 
-		{
-			scList = URLQueryTransformer.transform2SCList(getQuery());
-		} 
-		catch (Exception e) 
-		{
-			BeanHelper.error("Invalid search query!");
-		}		
 		ImageController controller = new ImageController(sb.getUser());
-		totalNumberOfRecords = controller.countImagesInContainer(uri, scList);
-		images = controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset);
-		super.setImages(images);
+		if (reloadPage() || !uri.equals(ObjectHelper.getURI(CollectionImeji.class, id)))
+		{
+			if (this.getFacets() != null)
+			{
+				this.getFacets().getFacets().clear();
+			}
 
-		return ImejiFactory.imageListToBeanList(images);
+			SortCriterion sortCriterion = new SortCriterion();
+			sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+			sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+			
+			initBackPage();
+			
+			try 
+			{
+				scList = URLQueryTransformer.transform2SCList(getQuery());
+			} 
+			catch (Exception e) 
+			{
+				BeanHelper.error("Invalid search query!");
+			}		
+			uri = ObjectHelper.getURI(CollectionImeji.class, id);
+			setSearchResult(controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset));
+			totalNumberOfRecords = getSearchResult().getNumberOfRecords();
+			getSearchResult().setQuery(getQuery());
+			getSearchResult().setSort(sortCriterion);
+		}
+		super.setImages(controller.loadImages(getSearchResult().getResults(), limit, offset));
+		return ImejiFactory.imageListToBeanList(getImages());
 	}
 	
 	public String getImageBaseUrl()

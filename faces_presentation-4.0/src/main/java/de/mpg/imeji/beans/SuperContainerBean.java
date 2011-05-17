@@ -48,7 +48,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         selectedSortCriterion = ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name();
         selectedSortOrder = SortOrder.DESCENDING.name();
         filterMenu = new ArrayList<SelectItem>();
-        filterMenu.add(new SelectItem("all", "All"));
+        filterMenu.add(new SelectItem("all", "All (except withdrawn)"));
         if (sb.getUser() != null)
         {
         	filterMenu.add(new SelectItem("my", "My"));
@@ -70,7 +70,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     	
     	if ("my".equals(selectedFilter))
     	{
-    		sc = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_CREATED_BY, ObjectHelper.getURI(User.class, sb.getUser().getEmail()).toString(), Filtertype.URI);
+    		sc = new SearchCriterion(Operator.AND, ImejiNamespaces.MY_IMAGES, ObjectHelper.getURI(User.class, sb.getUser().getEmail()).toString(), Filtertype.URI);
     	}
     	else if("private".equals(selectedFilter))
     	{

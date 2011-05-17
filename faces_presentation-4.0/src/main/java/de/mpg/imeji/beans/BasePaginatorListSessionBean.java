@@ -183,7 +183,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         catch (Exception e)
         {
             BeanHelper.error(e.getMessage());
-            BeanHelper.error("TTTTT");
             e.printStackTrace();
         }
     }

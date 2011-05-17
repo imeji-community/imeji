@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -16,10 +17,13 @@ import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
+import de.mpg.jena.search.Search;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
 import de.mpg.jena.sparql.query.QuerySPARQLImpl;
+import de.mpg.jena.sparql.query.SimpleQueryFactory;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
@@ -241,12 +245,14 @@ public class CollectionController extends ImejiController
 	 * @param scList
 	 * @return
 	 */
-	public Collection<CollectionImeji> search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
-		QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-	    String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/collection", "", "", limit, offset, user, false);
-	    Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(query, CollectionImeji.class);
-		return res;
+		//QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+	    //String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/collection", "", "", limit, offset, user, false);
+	    Search search = new Search("http://imeji.mpdl.mpg.de/collection", null);
+	    SearchResult result = search.search(scList, sortCri, user);
+	    //Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(query, CollectionImeji.class);
+		return result;
 	}
 	
 	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
@@ -255,6 +261,30 @@ public class CollectionController extends ImejiController
         String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/collection", "", "", -1, 0, user, false);
     	return ImejiSPARQL.execCount(query);
     }
+	
+	 public Collection<CollectionImeji> load(List<String> uris, int limit, int offset)
+	    {
+	    	LinkedList<CollectionImeji> cols = new LinkedList<CollectionImeji>();
+	    	ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.collectionModel);
+	    	
+	    	int counter = 0;
+	        for (String s : uris)
+	        {
+	        	if (offset <= counter && counter < (limit + offset)) 
+	        	{
+	        		try 
+	        		{
+	        			cols.add((CollectionImeji) reader.load(s, user));
+					} 
+	        		catch (Exception e) 
+					{
+						logger.error("Error loading image " + s);
+					}
+	        	}
+	         	counter ++;
+	        }
+			return cols;
+	    }
 
 	
 //	public Collection<CollectionImeji> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception

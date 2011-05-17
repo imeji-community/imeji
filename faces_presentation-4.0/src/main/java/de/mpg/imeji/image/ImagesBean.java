@@ -25,6 +25,7 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
@@ -44,6 +45,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
   
     private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
     private Collection<Image> images = new ArrayList<Image>();
+    private SearchResult searchResult = null;
     
     public ImagesBean()
     {
@@ -83,11 +85,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     @Override
     public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
     {
-        if (query != null)
+    	ImageController controller = new ImageController(sb.getUser());
+        if (reloadPage())
         {
-	    	ImageController controller = new ImageController(sb.getUser());
 	        images = new ArrayList<Image>();
-	        if (facets != null)facets.getFacets().clear(); 
+	        if (facets != null)
+	        {
+	        	facets.getFacets().clear(); 
+	        }
 	        SortCriterion sortCriterion = new SortCriterion();
 	        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 	        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
@@ -101,12 +106,21 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	        {
 	            BeanHelper.error("Invalid search query!");
 	        }
-	        totalNumberOfRecords = controller.countImages(scList);
-	    	scList = URLQueryTransformer.transform2SCList(query);
-			images = controller.searchImages(scList, sortCriterion, limit, offset);
+			searchResult = controller.searchImages(scList, sortCriterion, limit, offset);
+			totalNumberOfRecords = searchResult.getNumberOfRecords();
+			searchResult.setQuery(query);
+			searchResult.setSort(sortCriterion);
     	}
-
+        images = controller.loadImages(searchResult.getResults(), limit, offset);
         return ImejiFactory.imageListToBeanList(images);
+    }
+    
+    public boolean reloadPage()
+    {
+    	return searchResult == null || (query != null && !query.equals(searchResult.getQuery())) 
+    	|| searchResult.getSort() == null
+    	|| !(ImejiNamespaces.valueOf(getSelectedSortCriterion()).getNs().equals(searchResult.getSort().getSortingCriterion().getNs())
+    			&& SortOrder.valueOf(getSelectedSortOrder()).equals(searchResult.getSort().getSortOrder()));
     }
     
     public void initBackPage()
@@ -381,6 +395,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 		return false;
 	}
 
-	
+	public SearchResult getSearchResult() {
+		return searchResult;
+	}
+
+	public void setSearchResult(SearchResult searchResult) {
+		this.searchResult = searchResult;
+	}
     
 }

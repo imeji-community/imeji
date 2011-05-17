@@ -16,6 +16,7 @@ import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.controller.UserController;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.Properties.Status;
 
@@ -53,25 +54,20 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
         }
         
         AlbumController controller = new AlbumController(sb.getUser());
-        Collection<Album> albums = new ArrayList<Album>();
-
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         
         List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-        List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
         
         if (getFilter() != null)
         {
         	scList.add(getFilter());
-        	scList1.add(getFilter());
         }
-        
-        totalNumberOfRecords = controller.getNumberOfResults(scList);	        
-        albums = controller.search(scList1, sortCriterion, limit, offset);
-        
-        return ImejiFactory.albumListToBeanList(albums);
+              
+        SearchResult searchResult = controller.search(scList, sortCriterion, limit, offset);
+        totalNumberOfRecords = searchResult.getNumberOfRecords();
+        return ImejiFactory.albumListToBeanList(controller.load(searchResult.getResults(), limit, offset));
     }
 
     

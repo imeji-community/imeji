@@ -15,6 +15,7 @@ import de.mpg.jena.controller.UserController;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Properties.Status;
 
@@ -45,7 +46,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
     public List<ViewCollectionBean> retrieveList(int offset, int limit) throws Exception
     {
     	UserController uc = new UserController(sb.getUser());
-      
+    	initMenus();
         if (sb.getUser() != null)
         {
         	sb.setUser(uc.retrieve(sb.getUser().getEmail()));
@@ -55,27 +56,28 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         
         List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-        List<SearchCriterion> scList1 = new ArrayList<SearchCriterion>();
         
         if (getFilter() != null)
         {
         	scList.add(getFilter());
-        	scList1.add(getFilter());
         }
         
-        totalNumberOfRecords = controller.getNumberOfResults(scList);
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        collections = controller.search(scList1, sortCriterion, limit, offset);
+        SearchResult results = controller.search(scList, sortCriterion, limit, offset);
+        collections = controller.load(results.getResults(), limit, offset);
+        totalNumberOfRecords = results.getNumberOfRecords();
         return ImejiFactory.collectionListToBeanList(collections);
     }
     
-    public SessionBean getSb() {
+    public SessionBean getSb() 
+    {
 		return sb;
 	}
 
-	public void setSb(SessionBean sb) {
+	public void setSb(SessionBean sb) 
+	{
 		this.sb = sb;
 	}
 	    

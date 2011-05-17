@@ -2,7 +2,6 @@ package de.mpg.imeji.album;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.beans.Navigation;
@@ -14,10 +13,13 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SortCriterion;
+import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.Image;
 
 public class AlbumImagesBean extends ImagesBean
 {
@@ -63,22 +65,23 @@ public class AlbumImagesBean extends ImagesBean
     }
 
     @Override
-    public List<ImageBean> retrieveList(int offset, int limit)
+    public List<ImageBean> retrieveList(int offset, int limit) throws Exception
     {
         ImageController controller = new ImageController(sb.getUser());
-        uri = ObjectHelper.getURI(Album.class, id);
-        Collection<Image> images = new ArrayList<Image>();
-        try
-        {
-            totalNumberOfRecords = controller.countImagesInContainer(uri, null);
-            images = controller.searchImagesInContainer(uri, null, null, limit, offset);
-            super.setImages(images);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return ImejiFactory.imageListToBeanList(images);
+    	if (reloadPage() || !uri.equals(ObjectHelper.getURI(Album.class, id)))
+    	{
+    		uri = ObjectHelper.getURI(Album.class, id);
+    		SortCriterion sortCriterion = new SortCriterion();
+ 	        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+ 	        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+ 	        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+ 	        setSearchResult(controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset));
+           	totalNumberOfRecords = getSearchResult().getNumberOfRecords();
+           	getSearchResult().setQuery(getQuery());
+			getSearchResult().setSort(sortCriterion);
+    	}
+    	super.setImages(controller.loadImages(getSearchResult().getResults(), limit, offset));
+        return ImejiFactory.imageListToBeanList(getImages());
     }
     
     public String removeFromAlbum() throws Exception

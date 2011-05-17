@@ -44,7 +44,6 @@ public class SortQueryFactory
 	            q = " ORDER BY " + lowerCasePrefix(sortCriterion, "sort0") + " ";
 	        }
         }
-        System.out.println("sort:" + q);
 		return q;
 	}
 	

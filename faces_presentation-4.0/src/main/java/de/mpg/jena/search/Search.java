@@ -83,6 +83,7 @@ public class Search
 	public List<String> searchSimple(SearchCriterion sc, SortCriterion sortCri, User user)
 	{	
 		String sq = SimpleQueryFactory.search(type, sc, sortCri, user, (containerURI != null), getSpecificQuery());
+		logger.info(sc.getNamespace()+ sq);
 		return  ImejiSPARQL.exec(sq);
 	}
 	

@@ -68,7 +68,6 @@ public class CollectionsSearchResultBean extends SuperContainerBean<ViewCollecti
             SearchResult results = controller.search(scList, sortCriterion, limit, offset);
             collections = controller.load(results.getResults(), limit, offset);
             totalNumberOfRecords = results.getNumberOfRecords();
-            
         }
         catch (Exception e)
         {

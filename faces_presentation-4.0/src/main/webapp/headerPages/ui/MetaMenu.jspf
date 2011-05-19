@@ -38,7 +38,7 @@
 	<!-- meta Menu starts here -->
 
 	<!-- Language -->
-	<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit();return false;" rendered="true">
+	<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit();return false;" rendered="false">
 		<f:selectItems value="#{Internationalization.languages}"/>
 	</h:selectOneMenu>
 	

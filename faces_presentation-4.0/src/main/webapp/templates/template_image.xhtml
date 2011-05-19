@@ -149,16 +149,20 @@
 								<div id="metadata">
 									<h:panelGroup layout="block">
 									 	<h:panelGroup rendered="#{imageBean.edit.toggleState == 'displayMd'}" layout="block" styleClass="xHuge_area0_p0">
-										 	<a4j:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0" rowKeyVar="indexMetadata">
-												<b class="xLarge_area0_p8 endline labelLine clear">
-													<h:outputText value="#{MetadataLabels.labels[md.namespace]}" /> 
-													<span class="noDisplay">: </span>
-												</b>
-												<h:panelGroup layout="block" styleClass="double_area0_p2 xTiny_marginLExcl" >
-													<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
-														<ui:param name="md" value="#{md}"/>
-													</ui:include>
-												</h:panelGroup><br/>
+									 		<a4j:repeat var="statement" value="#{imageBean.edit.profile.statements}" rows="0" rowKeyVar="indexStatement">
+											 	<a4j:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0" rowKeyVar="indexMetadata">
+											 		<h:panelGroup rendered="#{md.namespace == statement.name}">
+														<b class="xLarge_area0_p8 endline labelLine clear">
+															<h:outputText value="#{MetadataLabels.labels[md.namespace]}" /> 
+															<span class="noDisplay">: </span>
+														</b>
+														<h:panelGroup layout="block" styleClass="double_area0_p2 xTiny_marginLExcl" >
+															<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
+																<ui:param name="md" value="#{md}"/>
+															</ui:include>
+														</h:panelGroup><br/>
+													</h:panelGroup>
+												</a4j:repeat>
 											</a4j:repeat>
 										</h:panelGroup>
 										<h:panelGroup layout="block" styleClass="xHuge_area0_p0" rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">
@@ -174,7 +178,7 @@
 															<a4j:support event="oncomplete" reRender="singleEditPanel" />
 														</a4j:commandButton>
 													</h:panelGroup>
-
+		
 													<a4j:repeat id="metadata" var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0" rowKeyVar="indexMetadata">
 														<h:panelGroup rendered="#{md.namespace == statement.name}">
 														

@@ -92,6 +92,7 @@
 		<thead class="listHeader" style="text-align: left; vertical-align:top;">
 		    <tr class="full_area0">
 		      	<th class="free_area0_p8 endline itemSelectArea">
+		      		<h:panelGroup rendered="#{SessionBean.user != null}">
 		      		<input type="button" class="min_imgBtn checkboxSelectButton"/>
 					<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none;">
 						<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
@@ -106,6 +107,7 @@
 							<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
 						</h:commandLink>
 					</div>
+					</h:panelGroup>
 					&#160;
 		      	</th>
 		      	

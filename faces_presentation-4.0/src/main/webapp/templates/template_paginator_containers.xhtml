@@ -48,9 +48,9 @@
 				<h:outputText styleClass="seperator void" />
 				
 				<h:outputLink id="lnkFilter" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=FILTER" rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER'}">
-					<h:outputText value="FILTER"/>
+					<h:outputText value="#{lbl.filter}"/>
 				</h:outputLink>
-				<h:outputText id="txtFilterLink" styleClass="free_area0" value="FILTER" rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}"/>
+				<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.filter}" rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}"/>
 				<h:outputText styleClass="seperator void" />
 				
 				<h:outputLink id="lnkCreate" styleClass="free_area0" value="#{Navigation.collectionUrl}?reset=1" rendered="#{SessionBean.user != null}">

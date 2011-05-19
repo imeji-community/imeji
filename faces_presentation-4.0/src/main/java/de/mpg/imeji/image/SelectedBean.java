@@ -104,22 +104,25 @@ public class SelectedBean extends ImagesBean {
     	AlbumImagesBean bean = (AlbumImagesBean) BeanHelper.getSessionBean(AlbumImagesBean.class);
         AlbumController ac = new AlbumController(sb.getUser());
         int count =0;
-        for (Image im : getImages())
+        if (bean.getAlbum() != null && bean.getAlbum().getAlbum() != null)
         {
-        	if (bean.getAlbum().getAlbum().getImages().contains(im.getId()))
-        	{
-        		bean.getAlbum().getAlbum().getImages().remove(im.getId());
-        		count++;
-        	}
+	        for (Image im : getImages())
+	        {
+	        	if (bean.getAlbum().getAlbum().getImages().contains(im.getId()))
+	        	{
+	        		bean.getAlbum().getAlbum().getImages().remove(im.getId());
+	        		count++;
+	        	}
+	        }
+	        if ( count >0 )BeanHelper.info(count + " images removed from album");
+	        ac.update(bean.getAlbum().getAlbum());
+	        AlbumBean activeAlbum = sb.getActiveAlbum();
+	        if (activeAlbum != null && activeAlbum.getAlbum().getId().toString().equals(bean.getAlbum().getAlbum().getId().toString()))
+	        {
+	        	sb.setActiveAlbum(bean.getAlbum());
+	        }
+	        clearAll();
         }
-        BeanHelper.info(count + " images removed from album");
-        ac.update(bean.getAlbum().getAlbum());
-        AlbumBean activeAlbum = sb.getActiveAlbum();
-        if (activeAlbum != null && activeAlbum.getAlbum().getId().toString().equals(bean.getAlbum().getAlbum().getId().toString()))
-        {
-        	sb.setActiveAlbum(bean.getAlbum());
-        }
-        clearAll();
         return "pretty:";
     }
 
@@ -128,15 +131,19 @@ public class SelectedBean extends ImagesBean {
 		String prettyLink = PrettyContext.getCurrentInstance().getCurrentMapping().getId();
 		sb.getSelected().clear();
 		if (prettyLink.equalsIgnoreCase("selected"))
+		{
 			return "pretty:collectionImages";
+		}
 		else
+		{
 			return "pretty:";
-
+		}
 	}
 
 	public String deleteAll() throws Exception
 	{
 		update();
+		removeFromAlbum();
 		super.deleteAll();
 		clearAll();
 		return "pretty:";

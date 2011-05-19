@@ -70,9 +70,16 @@ public class EditImageMetadataBean
 			initMenus();
 			profile = getSelectedProfile();
 			statement = getSelectedStatement();
-		    metadata = MetadataFactory.newMetadata(statement);
-			editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
-			((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
+			if (statement != null)
+			{
+			    metadata = MetadataFactory.newMetadata(statement);
+				editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
+				((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
+			}
+			else
+			{
+				BeanHelper.error("No statements found in profile!");
+			}
 		}
 		catch (Exception e) 
 		{
@@ -87,15 +94,18 @@ public class EditImageMetadataBean
 		lockImages();
 		profile = getSelectedProfile();
 		statement = getSelectedStatement();
-		editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
-		
-		modeRadio = new ArrayList<SelectItem>();
-		modeRadio.add(new SelectItem("basic", "Write only when no values"));
-		if (this.statement.getMaxOccurs().equals("unbounded"))
+		if (statement != null)
 		{
-			modeRadio.add(new SelectItem("append", "Append a new value to all"));
+			editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
+			
+			modeRadio = new ArrayList<SelectItem>();
+			modeRadio.add(new SelectItem("basic", "Write only when no values"));
+			if (this.statement.getMaxOccurs().equals("unbounded"))
+			{
+				modeRadio.add(new SelectItem("append", "Append a new value to all"));
+			}
+			modeRadio.add(new SelectItem("overwrite", "Overwrite all values"));
 		}
-		modeRadio.add(new SelectItem("overwrite", "Overwrite all values"));
 		return "";
 	}
 	

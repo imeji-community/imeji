@@ -18,6 +18,7 @@ import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -117,7 +118,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     
     public boolean reloadPage()
     {
-    	return searchResult == null || (query != null && !query.equals(searchResult.getQuery())) 
+    	return searchResult == null 
+    	|| UrlHelper.getParameterBoolean("load")
+    	|| (query != null && !query.equals(searchResult.getQuery())) 
     	|| searchResult.getSort() == null
     	|| !(ImejiNamespaces.valueOf(getSelectedSortCriterion()).getNs().equals(searchResult.getSort().getSortingCriterion().getNs())
     			&& SortOrder.valueOf(getSelectedSortOrder()).equals(searchResult.getSort().getSortOrder()));

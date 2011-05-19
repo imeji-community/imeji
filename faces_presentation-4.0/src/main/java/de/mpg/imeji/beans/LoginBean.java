@@ -77,11 +77,13 @@ public class LoginBean
             else
             {
                 BeanHelper.error(sb.getMessage("error_log_in"));
+                BeanHelper.error(sb.getMessage("error_log_in_description"));
             }
         }
         catch (Exception e)
         {
             BeanHelper.error(sb.getMessage("error_log_in"));
+            BeanHelper.error(sb.getMessage("error_log_in_description"));
             logger.error("Problem logging in User", e);
         }
         return "pretty:";

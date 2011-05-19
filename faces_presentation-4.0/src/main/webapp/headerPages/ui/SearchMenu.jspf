@@ -49,7 +49,7 @@
 				</h:selectOneRadio>
 			</h:panelGroup>
 		</span>
-		<h:commandButton id="btnQuickSearchStart" styleClass="xSmall_txtBtn activeButton quickSearchBtn" value="Go" action="#{QuickSearchBean.search}"/>
+		<h:commandButton id="btnQuickSearchStart" styleClass="xSmall_txtBtn activeButton quickSearchBtn" value="#{lbl.paginator_go}" action="#{QuickSearchBean.search}"/>
 
 		<h:outputLink id="lnkAdvancedSearch" styleClass="medium_area0_p3 advancedSearchMenu" value="#{Navigation.searchUrl}">
 	   		<h:outputText value="#{lbl.advanced_search}"/>

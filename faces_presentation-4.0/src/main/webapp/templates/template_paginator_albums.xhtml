@@ -49,13 +49,13 @@
 				<h:outputText styleClass="seperator void" />
 				
 				<h:outputLink id="lnkFilter" styleClass="free_area0" value="?tab=FILTER" rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER'}">
-					<h:outputText value="FILTER"/>
+					<h:outputText value="#{lbl.filter}"/>
 				</h:outputLink>
-				<h:outputText id="txtFilterLink" styleClass="free_area0" value="FILTER" rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}"/>
+				<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.filter}" rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}"/>
 				<h:outputText styleClass="seperator void" />
 				
 				<pretty:link mappingId="createAlbum" rendered="#{SessionBean.user!=null}" styleClass="free_area0">
-					<h:outputText value="CREATE ALBUM"/>
+					<h:outputText value="#{lbl.album_create}"/>
 				</pretty:link>
 				<h:outputText styleClass="seperator void" />
 			</ui:define>
@@ -257,7 +257,7 @@
 				      		<span class="medium_area0_p8">
 				      			<h:commandLink value="#{lbl.make_active}" action="#{container.makeActive}" rendered="#{!container.active and container.album.properties.status=='PENDING' and container.editable}"/>
 				      			<h:outputText value="Only View allowed" rendered="#{!container.active and container.album.properties.status=='PENDING' and !container.editable}"/>
-				      			<h:commandLink value="Make inactive" action="#{container.makeInactive}" rendered="#{container.active}"/>
+				      			<h:commandLink value="#{lbl.make_inactive}" action="#{container.makeInactive}" rendered="#{container.active}"/>
 				      		</span>
 				      	</td>
 				    </tr>

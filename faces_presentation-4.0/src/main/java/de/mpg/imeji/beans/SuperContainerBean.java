@@ -36,6 +36,8 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     	selectedFilter = "all";
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         initMenus();
+        selectedSortCriterion = ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name();
+        selectedSortOrder = SortOrder.DESCENDING.name();
     }
     
 
@@ -45,8 +47,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_STATUS, sb.getLabel(ImejiNamespaces.PROPERTIES_STATUS.name())));
         sortMenu.add(new SelectItem(ImejiNamespaces.CONTAINER_METADATA_TITLE, sb.getLabel(ImejiNamespaces.CONTAINER_METADATA_TITLE.name())));
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE,sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
-        selectedSortCriterion = ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name();
-        selectedSortOrder = SortOrder.DESCENDING.name();
+       
         filterMenu = new ArrayList<SelectItem>();
         filterMenu.add(new SelectItem("all", "All (except withdrawn)"));
         if (sb.getUser() != null)

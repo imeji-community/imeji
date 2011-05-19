@@ -154,7 +154,7 @@
 													<h:outputText value="#{MetadataLabels.labels[md.namespace]}" /> 
 													<span class="noDisplay">: </span>
 												</b>
-												<h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl" >
+												<h:panelGroup layout="block" styleClass="double_area0_p2 xTiny_marginLExcl" >
 													<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
 														<ui:param name="md" value="#{md}"/>
 													</ui:include>
@@ -211,7 +211,7 @@
 														</a4j:commandLink>
 													</div>
 													<div class="small_txtBtn xTiny_marginLExcl">
-														<h:commandButton styleClass="free_area0_p0 medium_marginLExcl small_txtBtn dialogActiveButton" action="#{imageBean.edit.save}" value="Save">
+														<h:commandButton styleClass="free_area0_p0 medium_marginLExcl small_txtBtn dialogActiveButton" action="#{imageBean.edit.save}" value="#{lbl.save}">
 															<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 														</h:commandButton>
 													</div>

@@ -77,8 +77,8 @@
 				<span class="seperator"></span>
 		      	<span class="half_area0_p6 headerSwitchView">
 		      		
-		      		<a class="expand" title="Show all items in medium view"><span class="noDisplay">Show </span>Medium View (All Items)</a>
-					<a class="collapse" title="Show all items in short view"><span class="noDisplay">Show </span>Short View (All Items)</a>
+		      		<a class="expand" title="#{msg.show_all_items_in_medium_view}"><span class="noDisplay"><h:outputText value="#{lbl.show} "/></span><h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/></a>
+					<a class="collapse" title="#{msg.show_all_items_in_short_view}"><span class="noDisplay"><h:outputText value="#{lbl.show} "/></span><h:outputText value="#{lbl.short_view} (#{lbl.all_items})"/></a>
 		      	</span>
 			      	
 			</div>
@@ -131,12 +131,12 @@
 									<div class="free_area0_p2 small_marginLIncl endline listItemLine">
 										<span class="huge_area0_p8 endline labelLine">
 											<a class="collapse">
-												<span class="noDisplay">Show </span>Less<span class="noDisplay"> Details</span>
+												<span class="noDisplay"><h:outputText value="#{lbl.show}"/> </span><h:outputText value="#{lbl.less}"/><span class="noDisplay"> Details</span>
 											</a>
 											<a class="expand">
-												<span class="noDisplay">Show </span>More<span class="noDisplay"> Details</span>
+												<span class="noDisplay"><h:outputText value="#{lbl.show}"/> </span><h:outputText value="#{lbl.more}"/><span class="noDisplay"> Details</span>
 											</a>
-											Creator(s)<span class="noDisplay">: </span>
+											<h:outputText value="#{lbl.creator_s}"/><span class="noDisplay">: </span>
 										</span>
 										<span class="xHuge_area0 endline">
 											<h:outputText value="#{container.personString}"/>
@@ -144,7 +144,7 @@
 									</div>
 									<div class="free_area0_p2 small_marginLIncl endline listItemLine">
 										<span class="huge_area0_p8 endline labelLine">
-										Description<span class="noDisplay">: </span>
+										<h:outputText value="#{lbl.description}"/><span class="noDisplay">: </span>
 										</span>
 										<span class="xHuge_area0 endline">
 											<h:outputText escape="true" title="#{container.smallDescription}" value="#{container.smallDescription}"/>
@@ -152,28 +152,28 @@
 									</div>
 									<div class="free_area0_p2 small_marginLIncl endline listItemLine">
 										<span class="huge_area0_p8 endline labelLine">
-										Images<span class="noDisplay">: </span>
+										<h:outputText value="#{lbl.images}"/><span class="noDisplay">: </span>
 										</span>
 										<span class="third_area0_p8 endline">
-											<h:outputText value="#{container.size}" styleClass="free_area0"/>
+											<h:outputText value="#{container.size}" styleClass="tiny_area0"/>
 											<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUrl}images#{container.collection.id.path}?q=">
-							      				<h:outputText value="View Images"/>
+							      				<h:outputText value="#{lbl.view_images}"/>
 							      			</h:outputLink>
 							      			<h:outputLink id="lnkUploadImages" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUrl}upload#{container.collection.id.path}?init=1" rendered="#{container.editable}">
-												<h:outputText value="Upload images"></h:outputText>
+												<h:outputText value="#{lbl.upload_images}"></h:outputText>
 											</h:outputLink>
 											
 											<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUri}#{container.collection.id.path}/details?init=1">
-												<h:outputText value="View Metadata"/>
+												<h:outputText value="#{lbl.view_md}"/>
 											</h:outputLink>
 											
-											<h:panelGroup styleClass="free_area0 medium_marginLIncl">
+											<h:panelGroup styleClass="free_area0 small_marginLIncl">
 												<h:commandLink id="lnkReleaseCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{container.release}" rendered="#{container.editable and container.collection.properties.status=='PENDING'}">
 													<h:outputText value="#{lbl.collection_release}"></h:outputText>
 												</h:commandLink>
 												
 												<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{container.withdraw}" rendered="#{container.editable and container.collection.properties.status=='RELEASED'}">
-													<h:outputText value="Withdraw"></h:outputText>
+													<h:outputText value="#{lbl.withdraw}"></h:outputText>
 												</h:commandLink>
 												
 												<h:commandLink id="lnkDeleteCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{container.delete}" rendered="#{container.editable and container.collection.properties.status=='PENDING'}">
@@ -186,7 +186,7 @@
 							<div class="full_area0 mediumView">
 							      	<div class="free_area0_p0 small_marginLIncl endline listItemLine">
 										<span class="huge_area0_p8 endline labelLine">
-										Creation Date<span class="noDisplay">: </span>
+										<h:outputText value="#{lbl.date_creation}"/><span class="noDisplay">: </span>
 										</span>
 										<span class="xHuge_area0 endline">
 											<h:outputText value="#{container.collection.properties.creationDate}"/>&#160;
@@ -194,7 +194,7 @@
 									</div>
 									<div class="free_area0_p0 small_marginLIncl endline listItemLine">
 										<span class="huge_area0_p8 endline labelLine">
-										Last Modification Date<span class="noDisplay">: </span>
+										<h:outputText value="#{lbl.date_last_modification}"/><span class="noDisplay">: </span>
 										</span>
 										<span class="xHuge_area0 endline">
 											<h:outputText value="#{container.collection.properties.lastModificationDate}"/>&#160;
@@ -202,8 +202,8 @@
 									</div>
 									<div class="free_area0_p0 small_marginLIncl endline listItemLine">
 										<span class="huge_area0_p8 endline labelLine">
-											<h:outputText value="Release Date" rendered="#{container.collection.properties.status == 'RELEASED'}"/>
-											<h:outputText value="Withdraw Date" rendered="#{container.collection.properties.status == 'WITHDRAWN'}"/>
+											<h:outputText value="#{lbl.date_released}" rendered="#{container.collection.properties.status == 'RELEASED'}"/>
+											<h:outputText value="#{lbl.date_withdraw}" rendered="#{container.collection.properties.status == 'WITHDRAWN'}"/>
 											<span class="noDisplay">: </span>
 										</span>
 										<span class="xHuge_area0 endline">

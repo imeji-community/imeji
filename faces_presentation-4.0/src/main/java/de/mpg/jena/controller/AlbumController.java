@@ -187,13 +187,11 @@ public class AlbumController extends ImejiController
 	 */
 	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
-	    //QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-	    //String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/album", "", "", limit, offset, user, false);
 	    Search search = new Search("http://imeji.mpdl.mpg.de/album", null);
 	    return search.search(scList, sortCri, user);
-	    //return ImejiSPARQL.execAndLoad(query, Album.class);
 	}
 	
+	@Deprecated
 	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
     {
         QuerySPARQL querySPARQL = new QuerySPARQLImpl();
@@ -209,7 +207,7 @@ public class AlbumController extends ImejiController
     	int counter = 0;
         for (String s : uris)
         {
-        	if (offset <= counter && counter < (limit + offset)) 
+        	if (offset <= counter && (counter < (limit + offset) || limit == -1)) 
         	{
         		try 
         		{
@@ -226,6 +224,7 @@ public class AlbumController extends ImejiController
     }
 
 	@Override
+	@Deprecated
     protected String getSpecificQuery() throws Exception
     {
       return " . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/createdBy> ?createdBy . ?props <http://imeji.mpdl.mpg.de/status> ?status";

@@ -90,7 +90,7 @@ public class CollectionImagesBean extends ImagesBean {
 	public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
 	{	
 		ImageController controller = new ImageController(sb.getUser());
-		if (reloadPage() || !uri.equals(ObjectHelper.getURI(CollectionImeji.class, id)))
+		if (true)
 		{
 			if (this.getFacets() != null)
 			{

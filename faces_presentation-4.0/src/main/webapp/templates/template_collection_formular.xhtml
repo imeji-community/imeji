@@ -7,7 +7,7 @@
 
 <ui:composition template="template_collection.xhtml">
 	<h:messages/>
-				<ui:define name="contentMenu">
+			<ui:define name="contentMenus">
 				<h:outputLink id="lnkFilter" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=VIEW" rendered="#{paginatorListSessionBean.selectedMenu != 'VIEW' and SessionBean.user != null}">
 					<h:outputText value="#{lbl.view}"/>
 				</h:outputLink>

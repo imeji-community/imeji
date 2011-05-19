@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import thewebsemantic.NotFoundException;
+
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
@@ -20,6 +22,7 @@ import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Image;
 
 public class AlbumImagesBean extends ImagesBean
 {
@@ -55,6 +58,14 @@ public class AlbumImagesBean extends ImagesBean
     @Override
     public String getNavigationString()
     {
+    	if (album != null)
+		{
+			if(sb.getSelectedImagesContext()!=null && !(sb.getSelectedImagesContext().equals("pretty:albumImages" + album.getAlbum().getId().toString())))
+			{
+				sb.getSelected().clear();
+			}
+			sb.setSelectedImagesContext("pretty:albumImages" +  album.getAlbum().getId().toString());
+		}
         return "pretty:albumImages";
     }
 
@@ -68,7 +79,8 @@ public class AlbumImagesBean extends ImagesBean
     public List<ImageBean> retrieveList(int offset, int limit) throws Exception
     {
         ImageController controller = new ImageController(sb.getUser());
-    	if (reloadPage() || !uri.equals(ObjectHelper.getURI(Album.class, id)))
+    	//if (reloadPage() || !uri.equals(ObjectHelper.getURI(Album.class, id)))
+    	if (true)
     	{
     		uri = ObjectHelper.getURI(Album.class, id);
     		SortCriterion sortCriterion = new SortCriterion();
@@ -79,9 +91,38 @@ public class AlbumImagesBean extends ImagesBean
            	totalNumberOfRecords = getSearchResult().getNumberOfRecords();
            	getSearchResult().setQuery(getQuery());
 			getSearchResult().setSort(sortCriterion);
+			deleteNonExistingImages();
     	}
     	super.setImages(controller.loadImages(getSearchResult().getResults(), limit, offset));
         return ImejiFactory.imageListToBeanList(getImages());
+    }
+    
+    /**
+     * Since an album only reference images, this images could have been deleted in Jena but not in albums
+     * @throws Exception 
+     */
+    public void deleteNonExistingImages() throws Exception
+    {
+    	if (album.getAlbum().getImages().size() != totalNumberOfRecords)
+    	{
+    		System.out.println("album corrupted");
+    		ImageController controller = new ImageController(sb.getUser());
+    		for (int i=0 ; i < album.getAlbum().getImages().size(); i++)
+    		{
+    			try 
+    			{
+					controller.retrieve(((List<URI>) album.getAlbum().getImages()).get(i));
+				} 
+    			catch (NotFoundException e) 
+				{
+    				((List<URI>) album.getAlbum().getImages()).remove(i);
+    				System.out.println("one not found");
+    				i--;
+				}     			
+    		}
+    		AlbumController albumController = new AlbumController(sb.getUser());
+    		albumController.update(album.getAlbum());
+    	}
     }
     
     public String removeFromAlbum() throws Exception

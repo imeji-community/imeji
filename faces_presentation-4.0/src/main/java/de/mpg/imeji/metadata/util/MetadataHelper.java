@@ -79,7 +79,6 @@ public class MetadataHelper
 				BeanHelper.error(id + " is not a correct URI");
 			}
 			((ConePerson)md).setConeId(null);
-			logger.warn("Author created without cone ID");
 		}
 		return md;
 	}

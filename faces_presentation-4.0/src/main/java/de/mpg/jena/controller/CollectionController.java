@@ -247,12 +247,8 @@ public class CollectionController extends ImejiController
 	 */
 	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
-		//QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-	    //String query = querySPARQL.createQuery(scList, sortCri,	"http://imeji.mpdl.mpg.de/collection", "", "", limit, offset, user, false);
 	    Search search = new Search("http://imeji.mpdl.mpg.de/collection", null);
-	    SearchResult result = search.search(scList, sortCri, user);
-	    //Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(query, CollectionImeji.class);
-		return result;
+		return search.search(scList, sortCri, user);
 	}
 	
 	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
@@ -270,7 +266,7 @@ public class CollectionController extends ImejiController
 	    	int counter = 0;
 	        for (String s : uris)
 	        {
-	        	if (offset <= counter && counter < (limit + offset)) 
+	        	if (offset <= counter && (counter < (limit + offset) || limit == -1)) 
 	        	{
 	        		try 
 	        		{

@@ -19,6 +19,7 @@ import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.UserController;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.User;
 
@@ -47,14 +48,18 @@ public class UploadBean
     	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         collectionController = new CollectionController(sessionBean.getUser());
-        try {
+        try 
+        {
 			logInEscidoc();
-		} catch (Exception e) {
+		} 
+        catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
     }    
           
-    public void status(){
+    public void status()
+    {
     	if(UrlHelper.getParameterBoolean("init")){
 			loadCollection();
     	    totalNum = "";
@@ -158,14 +163,23 @@ public class UploadBean
 		this.fFiles = fFiles;
 	}
 
-	public void loadCollection(){
-        if (id != null){
-            try{
-                collection = collectionController.retrieve(id);
-            }catch (Exception e){
-                BeanHelper.error("Collection " + id + " not found.");
+	public void loadCollection()
+	{
+        if (id != null)
+        {
+            try
+            {
+            	collectionController = new CollectionController(sessionBean.getUser());
+                collection = collectionController.retrieve(ObjectHelper.getURI(CollectionImeji.class, id));
             }
-        }else{
+            catch (Exception e)
+            {
+                BeanHelper.error("Collection " + ObjectHelper.getURI(CollectionImeji.class, id) + " not found.");
+                BeanHelper.error(e.getMessage());
+            }
+        }
+        else
+        {
             BeanHelper.error("No Collection information found. Please check your URL.");
         }
     }

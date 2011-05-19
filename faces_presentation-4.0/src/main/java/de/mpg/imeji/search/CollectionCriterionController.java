@@ -13,6 +13,7 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
@@ -49,7 +50,8 @@ public class CollectionCriterionController implements Serializable
         {
         	collections = new ArrayList<CollectionImeji>();
 	        CollectionController cc = new CollectionController(sb.getUser());
-			collections = (List<CollectionImeji>)cc.search(new ArrayList<SearchCriterion>(), null, -1, 0);
+	        SearchResult results = cc.search(new ArrayList<SearchCriterion>(), null, -1, 0);
+			collections = (List<CollectionImeji>) cc.load(results.getResults(), -1, 0);
 			if(collectionCriterionList != null)
 			{
 				for(int i=0; i<collectionCriterionList.size(); i++)

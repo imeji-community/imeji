@@ -329,7 +329,7 @@ public class ImageController extends ImejiController
     	int counter = 0;
         for (String s : uris)
         {
-        	if (offset <= counter && counter < (limit + offset)) 
+        	if (offset <= counter && (counter < (limit + offset) || limit == -1)) 
         	{
         		try 
         		{

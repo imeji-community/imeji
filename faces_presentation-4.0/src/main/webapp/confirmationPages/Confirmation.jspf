@@ -152,7 +152,7 @@
 					<!-- Withdrawal -->
 					<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder" rendered="#{SessionBean.action == 'withdraw'}">
 						<b class="xLarge_area0_p8 endline labelLine clear">
-							<h:outputText value="Withdraw comment*" /><span class="noDisplay">: </span>
+							<h:outputText value="#{lbl.withdraw_comment}*" /><span class="noDisplay">: </span>
 						</b>
 						<span class="xHuge_area0 xTiny_marginLExcl endline">
 							<h:inputTextarea styleClass="quad_txtArea inputTxtArea" value="#{AlbumInterfaceBean.withdrawComment}" valueChangeListener="#{AlbumInterfaceBean.withdrawCommentListener}" immediate="true" cols="15" rows="3" ></h:inputTextarea>

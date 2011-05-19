@@ -42,17 +42,20 @@
 		</h:outputLink>
 		<h:outputText id="txtHomeInactive" styleClass="free_area0" value="Home" rendered="false" />
 	
-		<h:outputLink id="lnkCollections" value="#{Navigation.collectionsUrl}">
+	
+		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="/faces/images?load=1&amp;q=" rendered="true">
+	  		<h:outputText value="#{lbl.header_browse}"/>
+	  	</h:outputLink>
+	  	
+		<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.browse}" rendered="false" />
+		
+		<h:outputLink id="lnkCollections" styleClass="free_area0" value="#{Navigation.collectionsUrl}">
 			<h:outputText value="#{lbl.header_collections}"></h:outputText>
 		</h:outputLink>
 		<h:outputText id="lnkCollectionsInactive" styleClass="free_area0" value="#{lbl.header_collections}" rendered="false" />
 		
-		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="/faces/images?q=" rendered="true">
-	  		<h:outputText value="#{lbl.header_browse}"/>
-	  	</h:outputLink>	
-		<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.browse}" rendered="false" />
-	
-		<h:outputLink id="lnkAlbums" value="#{Navigation.albumsUrl}">
+		
+		<h:outputLink id="lnkAlbums" styleClass="free_area0" value="#{Navigation.albumsUrl}">
 			<h:outputText value="#{lbl.header_albums}"></h:outputText>
 		</h:outputLink>
 		

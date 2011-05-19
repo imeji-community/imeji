@@ -19,7 +19,7 @@ public class HistorySession
 		//pages.clear();
 		for (ImejiPages type : ImejiPages.values())
 		{
-			if (type.getFileName().endsWith(filename))
+			if (type.getFileName().equals(filename))
 			{
 				try
 				{

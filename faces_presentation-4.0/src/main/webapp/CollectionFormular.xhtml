@@ -69,7 +69,7 @@
 				</h:outputLink>
 				<h:outputText styleClass="seperator" rendered="#{CollectionSession.current.stateString == 'pending'}" />
 				<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0" value="#{Navigation.confirmationUrl}/withdraw/#{CollectionSession.current.latestVersion.objectId}" rendered="#{(CollectionSession.current.stateString == 'released') and (CollectionSession.current.owner.objectId == SessionBean.user.reference.objectId)}">
-					<h:outputText value="Withdraw Collection"></h:outputText>
+					<h:outputText value="#{collection_withdraw}"></h:outputText>
 				</h:outputLink>
 				<!-- ORGANIZE content menu lower line ends here -->
 			</h:panelGroup>

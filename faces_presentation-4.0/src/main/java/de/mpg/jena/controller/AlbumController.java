@@ -25,6 +25,7 @@ import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
+import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
 
@@ -133,7 +134,15 @@ public class AlbumController extends ImejiController
 	
 	public void release(Album album) throws Exception
     {
-		if (hasNoImagesLocked(album.getImages(), user)) 
+		if (hasImageLocked(album.getImages(), user))
+		{
+			throw new RuntimeException("Album has at least one image locked by an other user.");
+		}
+		else if(hasPendingImage(album.getImages()))
+		{
+			throw new RuntimeException("Album has at least one image with status pending. All images have to be released to release an album");
+		}
+		else
 		{	
 			album.getProperties().setStatus(Status.RELEASED);
 			album.getProperties().setVersionDate(new Date());
@@ -157,11 +166,21 @@ public class AlbumController extends ImejiController
 		    }
 	        update(album);
 		}
-		else
-		{
-			throw new RuntimeException("Album has at least one image locked by an other user.");
-		}
     }
+	
+	public boolean hasPendingImage(Collection<URI> images) throws Exception
+	{
+		ImageController c = new ImageController(user);
+		for (URI im : images)
+		{
+			Image vo = c.retrieve(im);
+			if (Status.PENDING.equals(vo.getProperties().getStatus()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	
 	public void withdraw(Album album) throws Exception

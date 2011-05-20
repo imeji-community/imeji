@@ -2,7 +2,6 @@ package de.mpg.imeji.collection;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
@@ -21,7 +20,6 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
-import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
@@ -155,24 +153,51 @@ public class CollectionImagesBean extends ImagesBean {
 		return collection;
 	}
 	
-	 public String release() throws Exception
+	 public String release()
 	 {
         CollectionController cc = new CollectionController(sb.getUser());
-        cc.release(collection);
+        try 
+        {
+			cc.release(collection);
+		} 
+        catch (Exception e) 
+        {
+        	BeanHelper.error("Error releasing collection");
+			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
+		}
         return "pretty:";
-    	}
+    }
     
-    public String delete() throws Exception
+    public String delete()
     {
     	CollectionController cc = new CollectionController(sb.getUser());
-    	cc.delete(collection, sb.getUser());
+    	try 
+    	{
+			cc.delete(collection, sb.getUser());
+		} 
+    	catch (Exception e) 
+		{
+			BeanHelper.error("Error deleting collection");
+			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
+		}
     	return "";
     }
 	
-    public String withdraw() throws Exception
+    public String withdraw()
     {
     	CollectionController cc = new CollectionController(sb.getUser());
-    	cc.withdraw(collection);
+    	try 
+    	{
+			cc.withdraw(collection);
+		} 
+    	catch (Exception e) 
+		{
+			BeanHelper.error("Error withdrawing collection");
+			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
+		}
     	return "";
     }
 

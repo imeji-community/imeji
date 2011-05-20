@@ -348,11 +348,20 @@ public class AlbumBean implements Serializable
             return "pretty:";
         }
         
-        public String release() throws Exception
+        public String release() 
         {
         	makeInactive();
             AlbumController ac = new AlbumController(sessionBean.getUser());
-            ac.release(album);
+            try 
+            {
+				ac.release(album);
+			} 
+            catch (Exception e) 
+            {
+            	BeanHelper.error("Error releasing album");
+				BeanHelper.error(e.getMessage());
+				e.printStackTrace();
+			}
             return "pretty:";
         }
         

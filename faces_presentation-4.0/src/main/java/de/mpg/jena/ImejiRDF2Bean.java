@@ -41,7 +41,14 @@ public class ImejiRDF2Bean
 				}
 				else
 				{
-					throw new RuntimeException("Security Exception: " + user.getEmail() + " is not allowed to view " + uri);
+					if (user != null )
+					{
+						throw new RuntimeException("Security Exception: " + user.getEmail() + " is not allowed to view " + uri);
+					}
+					else
+					{
+						throw new RuntimeException("Security Exception: You need to log in to view " + uri);
+					}
 				}
 			}
 			return ObjectHelper.castAllHashSetToList(o);

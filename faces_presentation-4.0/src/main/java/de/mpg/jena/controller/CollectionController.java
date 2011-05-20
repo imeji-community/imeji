@@ -90,9 +90,12 @@ public class CollectionController extends ImejiController
 	
 	public void release(CollectionImeji ic) throws Exception
     {
-		if (hasNoImagesLocked(ic.getImages(), user)) 
-		{	
-			ic.getProperties().setStatus(Status.RELEASED);
+		if (hasImageLocked(ic.getImages(), user)) 
+		{
+			throw new RuntimeException("Collection has at least one image locked by another user.");
+		}
+		else
+		{	ic.getProperties().setStatus(Status.RELEASED);
 			ic.getProperties().setVersionDate(new Date());
 			
 			ImageController imageController = new ImageController(user);
@@ -115,15 +118,15 @@ public class CollectionController extends ImejiController
 		    pc.retrieve(ic.getProfile());
 		    pc.release(pc.retrieve(ic.getProfile()));
 		}
-		else
-		{
-			throw new RuntimeException("Collection has at least one image locked by another user.");
-		}
     }
 	
 	public void delete(CollectionImeji collection, User user) throws Exception
 	{	
-		if (hasNoImagesLocked(collection.getImages(), user)) 
+		if (hasImageLocked(collection.getImages(), user)) 
+		{
+			throw new RuntimeException("Collection has at least one image locked by another user.");
+		}
+		else
 		{
 			ImageController imageController = new ImageController(user);
 			
@@ -156,15 +159,15 @@ public class CollectionController extends ImejiController
 			gc.removeAllGrantsFor(user, collection.getId());
 			cleanGraph(ImejiJena.collectionModel);
 		}
-		else
-		{
-			throw new RuntimeException("Collection has at least one image locked by an other user.");
-		}
 	}
 	
 	public void withdraw(CollectionImeji ic) throws Exception
     {
-		if (hasNoImagesLocked(ic.getImages(), user)) 
+		if (hasImageLocked(ic.getImages(), user)) 
+		{
+			throw new RuntimeException("Collection has at least one image locked by another user.");
+		}
+		else
 		{
 			ic.getProperties().setStatus(Status.WITHDRAWN);
 			ic.getProperties().setVersionDate(new Date());
@@ -183,10 +186,6 @@ public class CollectionController extends ImejiController
 				}
 		    }
 	        update(ic);
-		}
-		else
-		{
-			throw new RuntimeException("Collection has at least one image locked by an other user.");
 		}
     }
 		

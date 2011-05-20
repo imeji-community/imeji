@@ -29,12 +29,12 @@
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd">
 
-	<jsp-config>
+	<!--  <jsp-config>
 		<taglib>
 			<taglib-uri>escidoc.tld</taglib-uri>
 			<taglib-location>escidoc.tld</taglib-location>
 		</taglib>
-	</jsp-config>
+	</jsp-config>-->
 	<context-param>
 		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
 		<param-value>client</param-value>
@@ -43,6 +43,10 @@
 	<context-param>
 		<param-name>javax.faces.CONFIG_FILES</param-name>
 		<param-value>/WEB-INF/navigation.xml,/WEB-INF/managed-beans.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
+		<param-value>false</param-value>
 	</context-param>
 
 
@@ -107,6 +111,11 @@
         <param-name>org.richfaces.LoadScriptStrategy</param-name>
         <param-value>ALL</param-value>
     </context-param> 
+    
+    <context-param>
+        <param-name>org.ajax4jsf.COMPRESS_SCRIPT</param-name>
+        <param-value>false</param-value>
+    </context-param> 
 
 	<!-- Defining and mapping the RichFaces filter -->
 	
@@ -128,8 +137,21 @@
 	  <context-param>
 	    <param-name>facelets.VIEW_MAPPINGS</param-name>
 	    <param-value>*.xhtml</param-value>
-	  </context-param>     
-
+	  </context-param>
+	  <!-- TEST FACELETS PERFORMANCE TUNING -->
+	 <context-param>
+	 	<param-name>facelets.DEVELOPMENT</param-name>
+	    <param-value>false</param-value>
+	 </context-param>  
+	 <context-param>
+	 	<param-name>com.sun.faces.responseBufferSize</param-name>
+	    <param-value>500000</param-value>
+	 </context-param>  
+	 <context-param>
+	 	<param-name>facelets.REFRESH_PERIOD</param-name>
+	    <param-value>-1</param-value>
+	 </context-param>
+	<!-- ENd TUNING -->
 	
 	<session-config>
 		<session-timeout>180</session-timeout>

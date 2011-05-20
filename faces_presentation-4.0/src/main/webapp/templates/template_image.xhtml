@@ -104,9 +104,9 @@
 				
 				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab == 'VIEW'}">	
 					
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock" rendered="#{EditWorkspaceBean.type != 'SINGLE' or !EditWorkspaceBean.editAllStatements}">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
-							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} " /><br/>
+							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata}" /><br/>
 							
 							<a4j:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" reRender="metadata" value="Edit" action="#{imageBean.edit.showEditor}">
 								

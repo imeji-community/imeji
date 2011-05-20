@@ -1,20 +1,13 @@
 package de.mpg.jena.vo.complextypes.util;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.metadata.MetadataBean.MdField;
 import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.complextypes.ConePerson;
-import de.mpg.jena.vo.complextypes.Date;
-import de.mpg.jena.vo.complextypes.Geolocation;
-import de.mpg.jena.vo.complextypes.License;
-import de.mpg.jena.vo.complextypes.Number;
-import de.mpg.jena.vo.complextypes.Publication;
 import de.mpg.jena.vo.complextypes.Text;
 
 public class ComplexTypeHelper

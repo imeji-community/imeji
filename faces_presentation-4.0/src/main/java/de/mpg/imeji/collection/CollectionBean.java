@@ -266,7 +266,7 @@ public abstract class CollectionBean
         return false;
     }
 
-    public String release() throws Exception
+    public String release()
     {
         CollectionController cc = new CollectionController(sessionBean.getUser());
         

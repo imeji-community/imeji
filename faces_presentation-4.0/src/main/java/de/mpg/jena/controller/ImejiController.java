@@ -116,16 +116,16 @@ public abstract class ImejiController
         properties.setLastModificationDate(now);
     }
 
-    public boolean hasNoImagesLocked(Collection<URI> containersUri, User user)
+    public boolean hasImageLocked(Collection<URI> containersUri, User user)
 	{
 		for (URI u : containersUri)
 		{
 			if (Locks.isLocked(u.toString(), user.getEmail()))
 			{
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
     
     public static void deleteObjects(String uri)

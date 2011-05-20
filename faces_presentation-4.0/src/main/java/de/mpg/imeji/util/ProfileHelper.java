@@ -1,26 +1,19 @@
 package de.mpg.imeji.util;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thewebsemantic.LocalizedString;
-
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.metadata.MetadataBean;
-import de.mpg.imeji.metadata.MetadataBean.MdField;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.ComplexType;
+import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class ProfileHelper

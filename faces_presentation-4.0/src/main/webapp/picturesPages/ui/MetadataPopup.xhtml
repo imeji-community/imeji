@@ -108,38 +108,6 @@
 
 	</a4j:repeat>
 	
-	
-	<!-- <a4j:repeat var="md" value="#{item.image.metadataSet.metadata}" rows="0">
-		<h:panelGroup layout="block" styleClass="quad_area0_p0">
-			<h:panelGroup styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
-				<h:outputText value="#{MetadataLabels.labels[md.namespace]}"/>
-			</h:panelGroup>
-			<h:panelGroup layout="block" class="double_area0_p0 xTiny_marginLExcl">
-				<h:outputText value="#{md.text}" rendered="#{md.type == 'TEXT'}"/>
-				<h:outputText value="#{md.number}" rendered="#{md.type == 'NUMBER'}"/>
-				<h:outputText value="#{md.date}" rendered="#{md.type == 'DATE'}"/>
-				<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.type == 'PUBLICATION' or md.type == 'URI'}">
-					<h:outputText value="Link" />
-				</h:outputLink>
-				<h:outputText value="#{md.type.license}" rendered="#{md.type == 'LICENSE'}"/>
-				<h:panelGroup rendered="#{md.type == 'PERSON'}">
-					<h:outputText value="#{md.person.familyName}, #{md.person.givenName} ("/>
-					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty mdperson.organizations}">
-						<h:outputText value="#{orga.name}"/>
-					</a4j:repeat>
-					<h:outputText value=")" />
-				</h:panelGroup>
-				
-				<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank" rendered="#{md.type == 'GEOLOCATION'}">
-					<h:outputText value="#{md.name} (" rendered="#{md.type == 'GEOLOCATION' and md.name != null}"/>
-					<h:outputText  value="#{md.longitude}/#{md.latitude}" rendered="#{md.type == 'GEOLOCATION'}"/>
-					<h:outputText value=")" rendered="#{md.type == 'GEOLOCATION' and md.name != null}"/>
-				</h:outputLink>
-			</h:panelGroup>
-		</h:panelGroup>
-		
-	</a4j:repeat> -->
-	
 	<div class="marginTExcl075 linebreak">&#160;</div>
 
 

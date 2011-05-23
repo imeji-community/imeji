@@ -44,7 +44,7 @@
 	
 	<h:panelGroup styleClass="seperator"></h:panelGroup>
 	<!-- Help -->
-	<h:outputLink id="lnkHelp" styleClass="xSmall_area0_p8 endline" value="#{Navigation.helpUrl}" target="_blank">
+	<h:outputLink id="lnkHelp" styleClass="medium_area0_p8 endline" value="#{Navigation.helpUrl}" target="_blank">
 		<h:outputText value="#{lbl.help}"/>
 	</h:outputLink>
 	<h:panelGroup styleClass="seperator"></h:panelGroup>
@@ -74,15 +74,15 @@
 	<h:panelGroup styleClass="seperator" rendered="#{StaticContent.about}"></h:panelGroup> -->
 
 	<!-- LogIn, LogOut -->
-	<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="huge_area0_p4">
+	<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="free_area0_p4">
 		<h:inputText styleClass="medium_txtInput" value="#{LoginBean.login}"/>
 		<h:inputSecret styleClass="medium_txtInput" value="#{LoginBean.passwd}" onkeypress="return loginOnEnter(event)"/>
-		<h:commandButton id="lnkLogin" styleClass="xSmall_txtBtn activeButton" value="#{lbl.login}" action ="#{LoginBean.login}"/>
+		<h:commandButton id="lnkLogin" styleClass="medium_area0 endline" style="text-align:left;" value="#{lbl.login}" action ="#{LoginBean.login}"/>
 	</h:panelGroup>
 	
 	
 
-	<h:commandLink id="lnkLogout" action ="#{LoginBean.logout}" styleClass="small_area0_p8 endline" rendered="#{SessionBean.user != null}">
+	<h:commandLink id="lnkLogout" action ="#{LoginBean.logout}" styleClass="medium_area0_p8 endline" rendered="#{SessionBean.user != null}">
     	<h:outputText value="#{lbl.logout}"></h:outputText>
     </h:commandLink>
 

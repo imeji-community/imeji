@@ -42,16 +42,18 @@
 
 		<span class="xLarge_area0 quickSearchMenu">
 			<h:inputText id="quickSearchString" styleClass="xLarge_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}" onkeypress="return quickSearchOnEnter(event)"/>
-			<h:panelGroup styleClass="xLarge_area0">
+			<h:panelGroup styleClass="xLarge_area0" style="text-align:left;">
+				
 				<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}" valueChangeListener="#{QuickSearchBean.selectedSearchTypeListener}">
 					<f:selectItem id="selIm" itemLabel="#{lbl.images}" itemValue="images"/>
 					<f:selectItem id="selCol" itemLabel="#{lbl.collections}" itemValue="collections"/>
 				</h:selectOneRadio>
+				
 			</h:panelGroup>
 		</span>
 		<h:commandButton id="btnQuickSearchStart" styleClass="xSmall_txtBtn activeButton quickSearchBtn" value="#{lbl.paginator_go}" action="#{QuickSearchBean.search}"/>
 
-		<h:outputLink id="lnkAdvancedSearch" styleClass="medium_area0_p3 advancedSearchMenu" value="#{Navigation.searchUrl}">
+		<h:outputLink id="lnkAdvancedSearch" styleClass="free_area0 advancedSearchMenu tiny_marginLExcl" value="#{Navigation.searchUrl}">
 	   		<h:outputText value="#{lbl.advanced_search}"/>
 	   	</h:outputLink>
 	   <!-- 

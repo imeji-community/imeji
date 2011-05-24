@@ -244,11 +244,11 @@
 		  					 <artifactId>jenabean</artifactId> 
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
-						<jarModule>
+						<!--  <jarModule>
 							 <groupId>thewebsemantic</groupId> 
 		   					<artifactId>jpa4jena</artifactId> 
 							<includeInApplicationXml>true</includeInApplicationXml>
-						</jarModule>
+						</jarModule>-->
 						<jarModule>
 							 <groupId>com.ibm.icu</groupId> 
 		   					<artifactId>icu4j</artifactId> 
@@ -540,12 +540,12 @@
 		   <version>1.0.7-Imeji</version>
 		   <scope>provided</scope>
 		</dependency>
-		<dependency> 
+		<!--  <dependency> 
 		   <groupId>thewebsemantic</groupId> 
 		   <artifactId>jpa4jena</artifactId> 
 		   <version>0.7</version>
 		   <scope>provided</scope>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>com.ocpsoft</groupId>
 			<artifactId>prettyfaces-jsf12</artifactId>

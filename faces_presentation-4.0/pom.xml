@@ -197,11 +197,11 @@
         </exclusions>
 	</dependency>
 
-	<dependency> 
+	<!--  <dependency> 
 	   <groupId>thewebsemantic</groupId> 
 	   <artifactId>jpa4jena</artifactId> 
 	   <version>0.7</version> 
-	</dependency>
+	</dependency>-->
 	<dependency>
 		<groupId>com.ocpsoft</groupId>
 		<artifactId>prettyfaces-jsf12</artifactId>

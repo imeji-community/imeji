@@ -92,7 +92,7 @@
 									<h:panelGroup styleClass="full_area0 xSmall_marginLExcl" rendered="#{statement.statement.vocabulary != null}">
 										<h:outputLabel styleClass="huge_label" value="#{lbl.vocabulary}" />
 										<h:panelGroup styleClass="full_area0 tiny_marginRIncl clear">
-											<h:inputText styleClass="huge_txtInput endline" value="#{statement.vocabularyString}" valueChangeListener="#{statement.vocabularyListener}" onfocus="this.select();"/>
+											<h:inputText styleClass="huge_txtInput endline" value="#{statement.vocabularyString}" immediate="true" valueChangeListener="#{statement.vocabularyListener}" onfocus="this.select();"/>
 											<span style="padding-left:10px"></span>
 											<h:commandLink styleClass="" value="#{lbl.check_validity}" shortDesc="#{lbl.add_constraint}" action="#{FormularBean.checkVocabulary}" immediate="true">
 												<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>

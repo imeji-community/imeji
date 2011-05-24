@@ -213,6 +213,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     	
     	BeanHelper.info(count + " images deleted.");
     	cc.update(coll);
+    	sb.getSelected().clear();
     	
     	return "pretty:";
     }

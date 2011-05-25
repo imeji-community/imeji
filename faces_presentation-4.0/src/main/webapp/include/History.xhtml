@@ -36,16 +36,16 @@
 </ui:remove>
 
 
-	<h:panelGroup styleClass="full_area0_p4 small_marginLIncl" style="border-bottom-width: 0px !important;">
-		<h:outputText value="#{lbl.history} : " styleClass="small_area0"/>
+	<h:panelGroup styleClass="full_area0 small_marginLIncl">
+		<h:outputText value="#{lbl.history}: " styleClass="free_area0" style="margin-right:0.36em;" />
 		<a4j:repeat var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
-			<h:panelGroup rendered="#{index + 6 &gt; HistorySession.historySize}">
+			<h:panelGroup rendered="#{index + 6 &gt; HistorySession.historySize}" styleClass="historyText">
 				<h:outputLink value="#{page.uri}#{index}">
 					<h:outputText value="#{page.name}"/>
 				</h:outputLink>
-				<span style="padding-left: 1px;" />
-				<h:outputText value=" / "/>
-				<span style="padding-left: 1px;" />
+				<span />
+				<h:outputText value="/"/>
+				<span />
 			</h:panelGroup>
 		</a4j:repeat>
 	</h:panelGroup>

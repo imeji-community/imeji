@@ -40,7 +40,8 @@
 	<ui:composition template="template.xhtml">
 							
 		<ui:define name="mainContent" >
-			<h:panelGroup styleClass="full_area0_p2 huge_marginLExcl pageBrowser">
+			<div class="full_area0 paginator">
+			<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
 			 		
 				<h:outputLink value="#{imageBean.browse.previous}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
 					<h:outputText value="#{lbl.paginator_previous} image"/>
@@ -50,6 +51,7 @@
 					<h:outputText value="#{lbl.paginator_next} image"/>
 				</h:outputLink>
 			</h:panelGroup>
+			</div>
 			<ui:insert name="preListHeader"/>
 			
 			<h:panelGroup styleClass="full_area0 fullItem">

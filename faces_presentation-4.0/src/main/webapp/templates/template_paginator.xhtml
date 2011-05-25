@@ -79,11 +79,11 @@
 		 	</div>
 		 </div>
 		 
-		 <h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
+		 <h:panelGroup layout="block" styleClass="contentHeader">
 		 	<ui:include src="../include/History.xhtml"></ui:include>
 		 	<a4j:commandLink rendered="#{HistorySession.currentPage.name == 'Collections' and SessionBean.user != null}" value="#{lbl.delete_selected_collections}" styleClass="small_marginLIncl" action="#{CollectionsBean.deleteAll}" />
 		 	<a4j:commandLink rendered="#{HistorySession.currentPage.name == 'Albums' and SessionBean.user != null}" value="#{lbl.delete_selected_albums}" styleClass="small_marginLIncl" action="#{AlbumsBean.deleteAll}" />
-		 	
+		 	<ui:insert name="prelistHeaderTest"/>
 		 </h:panelGroup>
 		 
 		 <ui:insert name="list"/>

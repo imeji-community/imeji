@@ -82,7 +82,7 @@
 			<h:panelGroup rendered="#{md.namespace == statement.name}" layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">
 				<h:outputText value="#{md.text}" rendered="#{md.type == 'TEXT'}"/>
 				<h:outputText value="#{md.number}" rendered="#{md.type == 'NUMBER'}"/>
-				<h:outputText value="#{md.date}#{md.dateTime}" rendered="#{md.type == 'DATE'}"/>
+				<h:outputText value="#{md.date}" rendered="#{md.type == 'DATE'}"/>
 				<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.type == 'PUBLICATION' or md.type == 'URI'}">
 					<h:outputText value="Link" />
 				</h:outputLink>

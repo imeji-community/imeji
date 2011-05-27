@@ -272,6 +272,59 @@ public class UserCreationBean
     	return "pretty:";
     }
     
+    public String removeDeadGrants() throws Exception
+    {
+    	Authorization authorization = new Authorization();
+    	GrantController gc = new GrantController(sb.getUser());
+    	List<User> allUsers = getAllUsers();
+    	
+    	CollectionController cc = new CollectionController(sb.getUser());
+    	AlbumController ac = new AlbumController(sb.getUser());
+    	ProfileController pc = new ProfileController(sb.getUser());
+    	
+    	for (User u : allUsers)
+    	{
+    		if (!authorization.isSysAdmin(u))
+    		{
+	    		List<Grant> grants = new ArrayList<Grant>();
+	    		grants.addAll(u.getGrants());
+    			for (Grant g: grants)
+	    		{
+    				boolean exists = false;
+    				try{
+    					cc.retrieve(g.getGrantFor());
+    					exists =true;
+    				}
+    				catch (Exception e) {
+						// Not FOUND
+					}
+    				try{
+    					ac.retrieve(g.getGrantFor());
+    					exists =true;
+    				}
+    				catch (Exception e) {
+						// notFOUND
+					}
+    				try{
+    					pc.retrieve(g.getGrantFor());
+    					exists =true;
+    				}
+    				catch (Exception e) {
+						// Not found
+					}
+    				if (!exists)
+    				{
+    					logger.info("deleting " + g.getGrantFor());
+    					gc.removeGrant(u, g);
+    					
+    				}
+	    			
+	    		}
+    		}
+    	}
+    	return "pretty:";
+    }
+    
 
     public void setPassword(String password)
     {

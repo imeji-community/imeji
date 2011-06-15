@@ -66,7 +66,7 @@ public class CollectionCriterionController implements Serializable
 	{
 		getUserCollections();
         collectionList = new ArrayList<SelectItem>();
-        collectionList.add(new SelectItem(null, "Select a Collection"));
+        collectionList.add(new SelectItem(null, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("select_collection")));
         for (CollectionImeji ci : collections)
         {
             collectionList.add(new SelectItem(ci.getId().toString(), ci.getMetadata().getTitle()));

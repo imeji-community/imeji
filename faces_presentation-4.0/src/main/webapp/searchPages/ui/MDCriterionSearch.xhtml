@@ -36,7 +36,7 @@
 <f:subview id="MDCrietrionSearch">			
 	<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 		<h3 class="xLarge_area0_p8 endline blockHeader">
-			<h:outputText value="Search MD"/>
+			<h:outputText value="#{lbl.search_md}"/>
 		</h3>
 		<span class="seperator"></span>
 				
@@ -52,7 +52,7 @@
 							</b>
 							
 							<h:panelGroup class="xHuge_area0 xTiny_marginLExcl endline">
-					    		<h:outputLabel value="OR"/>
+					    		<h:outputLabel value="#{lbl.or_big}"/>
 					    		<!-- 
 					    		<h:selectOneMenu id="selCollectionCriterionLogicOption" styleClass="small_select replace" value="#{collection.logicOperator}">
 									<f:selectItems value="#{collection.logicOperatorItems}"/>
@@ -118,9 +118,9 @@
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup rendered="#{md.selectedMdName != null}">
-										<h:outputLabel value="Value " styleClass="xLarge_label" rendered="#{md.type!='NUMBER' and md.type !='DATE'}"/>
-										<h:outputLabel value="Example: 3.14" styleClass="xLarge_label" rendered="#{md.type=='NUMBER'}"/>
-										<h:outputLabel value="Example: YYYY-MM-DD" rendered="#{md.type=='DATE'}" styleClass="xLarge_label"/>
+										<h:outputLabel value="#{lbl.value} " styleClass="xLarge_label" rendered="#{md.type!='NUMBER' and md.type !='DATE'}"/>
+										<h:outputLabel value="#{lbl.example}: 3.14" styleClass="xLarge_label" rendered="#{md.type=='NUMBER'}"/>
+										<h:outputLabel value="#{lbl.example}: YYYY-MM-DD" rendered="#{md.type=='DATE'}" styleClass="xLarge_label"/>
 										<h:inputText styleClass="xLarge_txtInput" id="mdContent" value="#{md.mdText}" onkeypress="return quickSearchOnEnter(event)">
 											<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[md.selectedStatement.name].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[md.selectedStatement.name].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, 0, 0, 'search')" for="mdContent" var="results" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 												<h:column>
@@ -145,7 +145,7 @@
 					</h:panelGroup>
 				</a4j:repeat>
 				</h:panelGroup>
-				     		 <a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide: MD Profile" /></a>  		     
+			<a class="free_area0 collapse advSearchCollapse"><h:outputText value="Hide: MD Profile" /></a>  		     
 		</div>
 		
 		   <a class="free_area0 expand"><h:outputText value="Show: MD Profile" /></a>

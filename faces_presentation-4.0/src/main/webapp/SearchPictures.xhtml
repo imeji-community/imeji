@@ -70,9 +70,9 @@
 				</h:panelGroup>			
 				
 				
-				<h:commandLink id="lnkAdvancedSearchClearAll" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" value="Clear all values" action="#{AdvancedSearchController.clearAllForms}"/>						
+				<h:commandLink id="lnkAdvancedSearchClearAll" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" value="#{lbl.clear_all_values}" action="#{AdvancedSearchController.clearAllForms}"/>						
 				<h:outputLink id="lnkAdvancedSearchInit" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" value="">
-					<h:outputText value="Initialize"/>
+					<h:outputText value="#{lbl.initialize}"/>
 				</h:outputLink>						
 				<h:commandButton id="lnkAdvancedSearchStartSearch" styleClass="free_area1_p8 activeButton advancedSearchButton" value="#{lbl.search_bt_Start}" action="#{AdvancedSearchController.startSearch}"/>
 		

@@ -8,11 +8,12 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.lang.labelHelper;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
-import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
+import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class MDCriterion extends Criterion implements Serializable{
@@ -51,14 +52,13 @@ public class MDCriterion extends Criterion implements Serializable{
         dateOpList.add(new SelectItem(Filtertype.LESSER_DATE, "<="));
         dateOperator = Filtertype.EQUALS_DATE.name();
 	}
-	
 
     public List<SelectItem> newMdList()
     {
     	List<SelectItem> newMdList = new ArrayList<SelectItem>();
         try
         {
-        	newMdList.add(new SelectItem(null,"Select metadata"));
+        	newMdList.add(new SelectItem(null,((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("select_metadata")));
         	for (Statement s : statements)
         	{
         		newMdList.add(new SelectItem(s.getName(), labelHelper.getDefaultLabel(s.getLabels().iterator())));
@@ -72,6 +72,7 @@ public class MDCriterion extends Criterion implements Serializable{
     }
 	
 	public List<SelectItem> getMdList() {
+		mdList.set(0,new SelectItem(null,((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("select_metadata")));
 		return mdList;
 	}
 

@@ -53,7 +53,7 @@
 			<!-- SORTING content menu lower line ends here -->
 		</h:panelGroup>
 	</ui:define>
-	<ui:define name="prelistHeaderTest"> 
+	<ui:define name="prelistHeaderTest">
 		<div id="preListHeader" class="full_area0">
 			
 			<h:panelGroup styleClass="xHuge_area0 small_marginLIncl clear">
@@ -130,9 +130,9 @@
 				</a4j:commandLink>
 				<h:panelGroup styleClass="free_area0" rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}">
 					
-					<input type="button" class="min_imgBtn checkboxSelectButton" />
-					
-					<div class="selectMenu" style="display: none; width:150px;">
+					<div type="button" class="min_imgBtn checkboxSelectButton">&#160;</div>
+				
+					<div class="selectMenu" style="display:none; width:150px;">
 						<input type="button" class="min_imgBtn checkBoxCloseSelectButton"></input>
 						<h:panelGroup id="preListHeaderSelectedMenu">
 							<h:panelGroup rendered="#{SessionBean.selectedSize == 0}"><h:outputText value="#{lbl.no_image_selected}"/></h:panelGroup>

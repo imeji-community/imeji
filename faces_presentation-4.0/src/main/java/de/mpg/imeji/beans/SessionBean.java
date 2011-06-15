@@ -60,7 +60,14 @@ public class SessionBean implements Serializable
      */
     public String getLabel(String placeholder)
     {
-        return ResourceBundle.getBundle(this.getSelectedLabelBundle()).getString(placeholder);
+        try
+        {
+        	return ResourceBundle.getBundle(this.getSelectedLabelBundle()).getString(placeholder);
+        }
+        catch (Exception e)
+        {
+            return placeholder;
+        }
     }
 
     /**

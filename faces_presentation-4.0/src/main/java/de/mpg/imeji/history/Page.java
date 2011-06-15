@@ -4,8 +4,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.xml.security.utils.HelperNodeList;
-
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.filter.Filter;
 import de.mpg.imeji.util.BeanHelper;
@@ -14,11 +12,11 @@ public class Page
 {
 	public enum ImejiPages
 	{
-		IMAGES("Images.xhtml", "images"), COLLECTION_IMAGES("CollectionBrowse.xhtml", "Images of Collection"), SEARCH("SearchPictures.xhtml", "Advanced Search"),
-		HOME("Welcome.xhtml", "Home"), IMAGE("Image.xhtml", "Image"), COLLECTIONS("Collections.xhtml", "Collections"), ALBUMS("Albums.xhtml", "Albums"),
+		IMAGES("Images.xhtml", "history_images"), COLLECTION_IMAGES("CollectionBrowse.xhtml", "history_images_collection"), SEARCH("SearchPictures.xhtml", "history_advanced_search"),
+		HOME("Welcome.xhtml", "history_home"), IMAGE("Image.xhtml", "history_image"), COLLECTIONS("Collections.xhtml", "history_collections"), ALBUMS("Albums.xhtml", "history_albums"),
 		COLLECTION_HOME("CollectionEntryPage.xhtml", "Collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "Search results"), EDIT("Edit.xhtml", "Edit images"),
-		COLLECTION_IMAGE("CollectionImage.xhtml","Image"),ALBUM_IMAGES("AlbumBrowse.xhtml", "Images of Album"), ALBUM_HOME("AlbumEntryPage.xhtml", "Album"),
-		ALBUM_IMAGE("AlbumImage.xhtml","Image");
+		COLLECTION_IMAGE("CollectionImage.xhtml","history_image"),ALBUM_IMAGES("AlbumBrowse.xhtml", "history_images_album"), ALBUM_HOME("AlbumEntryPage.xhtml", "history_album"),
+		ALBUM_IMAGE("AlbumImage.xhtml","history_image");
 		
 		private String fileName="";
 		private String label;
@@ -70,7 +68,14 @@ public class Page
 	}
 
 	public String getName() {
-		return name;
+		try 
+		{
+			return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel(name);
+		} 
+		catch (Exception e) 
+		{
+			return name;
+		}
 	}
 
 	public void setName(String name) {

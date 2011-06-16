@@ -62,7 +62,7 @@
 				</h:outputLink>
 				<a4j:repeat id="filterList" var="filter" value="#{FiltersSession.filters}" rows="0" rowKeyVar="index">
 					<h:outputText value=" / " styleClass="free_area0"/>
-					<h:outputText value="#{filter.label} " styleClass="free_area0"/>
+					<h:outputText value="#{filter.internationalizedLabel} " styleClass="free_area0"/>
 					<h:outputLink value="#{Navigation.imagesUrl}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images'}" styleClass="free_area0 ">
 						<h:outputText value="[x]" styleClass="free_area0 "/>
 					</h:outputLink>
@@ -205,9 +205,6 @@
 			</h:panelGroup>
 	    </rich:modalPanel>
 	   
-	
-		
-		
 		
 		<h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{paginatorListSessionBean.corruptedList}">
 			<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2>
@@ -224,7 +221,7 @@
 					<span class="seperator"></span>
 					<span class="free_area0_p8 endline">
 						<h:outputText value="#{lbl.select}" />
-						<input type="button" class="min_imgBtn checkboxSelectButton" title="Tooltip"/>
+						<input type="button" class="min_imgBtn checkboxSelectButton" title="#{lbl.select}"/>
 						<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none;">
 							<input type="button" class="min_imgBtn checkBoxCloseSelectButton" title="Close selection menu" />
 							<span class="medium_area0_p8">Select Item:</span>
@@ -309,7 +306,7 @@
 			<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{ paginatorListSessionBean.navigationString != 'pretty:albumImages'}">
 				<a4j:repeat var="facets" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
 					<h:outputLink value="#{facets.uri}">
-						<h:outputText value="#{facets.label}(#{facets.count}) "/>
+						<h:outputText value="#{facets.internationalizedLabel}(#{facets.count}) "/>
 					</h:outputLink>
 					<span style="padding-left: 10px" />
 				</a4j:repeat>

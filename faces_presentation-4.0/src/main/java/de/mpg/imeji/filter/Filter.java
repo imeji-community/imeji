@@ -2,6 +2,8 @@ package de.mpg.imeji.filter;
 
 import java.net.URI;
 
+import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.SearchCriterion;
 
 public class Filter 
@@ -49,6 +51,11 @@ public class Filter
 		this.filter = filter;
 	}
 
+	 public String getinternationalizedLabel()
+    {
+    	return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
+    }
+	
 	public String getLabel() {
 		return label;
 	}
@@ -88,5 +95,7 @@ public class Filter
 	public void setRemoveQuery(String removeQuery) {
 		this.removeQuery = removeQuery;
 	}
+
+	
 	
 }

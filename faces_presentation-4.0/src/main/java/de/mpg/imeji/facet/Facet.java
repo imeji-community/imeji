@@ -2,7 +2,8 @@ package de.mpg.imeji.facet;
 
 import java.net.URI;
 
-import de.mpg.imeji.filter.Filter;
+import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.util.BeanHelper;
 
 public class Facet
 {
@@ -25,6 +26,11 @@ public class Facet
     public void setUri(URI uri)
     {
         this.uri = uri;
+    }
+    
+    public String getinternationalizedLabel()
+    {
+    	return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
     }
 
     public String getLabel()

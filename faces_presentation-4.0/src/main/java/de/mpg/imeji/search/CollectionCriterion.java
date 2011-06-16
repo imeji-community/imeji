@@ -77,7 +77,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
 	       			} 
 	       			catch (Exception e) 
 	       			{
-	       				BeanHelper.error("Error reading profile: " + coll.getProfile());
+	       	            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error_reading_profile") + ": " + coll.getProfile());  
 	       			}
                }
            }

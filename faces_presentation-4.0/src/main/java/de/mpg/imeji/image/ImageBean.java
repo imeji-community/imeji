@@ -302,13 +302,14 @@ public class ImageBean
         AlbumController ac = new AlbumController(sessionBean.getUser());
         if (activeAlbum.getAlbum().getImages().contains(image.getId()))
         {
-            BeanHelper.error("Image " + image.getFilename() + " already in active album!");
+            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("image") + " " + image.getFilename() + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("already_in_active_album"));       
         }
         else
         {
             activeAlbum.getAlbum().getImages().add(image.getId());
             ac.update(activeAlbum.getAlbum());
-            BeanHelper.info("Image " + image.getFilename() + " added to active album");
+            BeanHelper.info(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("image") + " " + image.getFilename() + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("added_to_active_album"));       
+
         }
         return "";
     }

@@ -166,7 +166,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         {
         	 if (activeAlbum.getAlbum().getImages().contains(im.getId()))
              {
-                 BeanHelper.error("Image " + im.getFilename() + " already in active album!");
+                 BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("image") + " " + im.getFilename() + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("already_in_active_album"));       
              }
              else
              {
@@ -178,6 +178,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         {
         	  ac.update(activeAlbum.getAlbum());
               BeanHelper.info(count + " images added to active album");
+              BeanHelper.info(count + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("images_added_to_active_album"));       
+
 		} 
         catch (Exception e) 
         {

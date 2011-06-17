@@ -28,10 +28,10 @@ public class SharingBean
 	public SharingBean() 
 	{
 		grantsMenu = new ArrayList<SelectItem>();
-		grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, "Viewer", "Can view all images for this collection"));
-		grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, "Collection Editor", "Can edit informations about the collection"));
-		grantsMenu.add(new SelectItem(GrantType.IMAGE_EDITOR, "Image Editor", "Can view and edit all images for this collection"));
-		grantsMenu.add(new SelectItem(GrantType.PROFILE_EDITOR, "Profile Editor", "Can edit the metadata profile"));
+		grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER,  ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_viewer"), "Can view all images for this collection"));
+		grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR,  ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_collection_editor"), "Can edit informations about the collection"));
+		grantsMenu.add(new SelectItem(GrantType.IMAGE_EDITOR,  ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_image_editor"), "Can view and edit all images for this collection"));
+		grantsMenu.add(new SelectItem(GrantType.PROFILE_EDITOR,  ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_profile_editor"), "Can edit the metadata profile"));
 	}
 
 	public List<SelectItem> getGrantsMenu() {

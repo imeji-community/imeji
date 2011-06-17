@@ -73,8 +73,8 @@ public class AlbumBean implements Serializable
             }
             
             List<SelectItem> grantsMenu = new ArrayList<SelectItem>();
-    		grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, "Viewer", "Can view all images for this collection"));
-    		grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, "Album Editor", "Can edit informations about the collection"));
+    		grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_viewer"), "Can view all images for this collection"));
+    		grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_album_editor"), "Can edit informations about the collection"));
             ((SharingBean)BeanHelper.getRequestBean(SharingBean.class)).setGrantsMenu(grantsMenu);
         }
         

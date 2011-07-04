@@ -16,6 +16,7 @@ public class Publication extends ComplexType implements Serializable
     private java.net.URI uri;
     private String exportFormat;
     private String citation;
+   
 
     public Publication()
     {

@@ -30,7 +30,14 @@ public class Facet
     
     public String getinternationalizedLabel()
     {
-    	return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
+    	String s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
+    	
+    	if (s.equals("facet_" + label.toLowerCase()))
+    	{
+    		return label;
+    	}
+    	
+    	return s;
     }
 
     public String getLabel()

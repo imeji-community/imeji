@@ -250,8 +250,9 @@ public class ImageBean
 
     public boolean getSelected()
     {
-        if (sessionBean.getSelected().contains(image.getId())) selected = true;
-        else selected = false;
+//    	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+//        if (sessionBean.getSelected().contains(image.getId())) selected = true;
+//        else selected = false;
         return selected;
     }
 
@@ -309,7 +310,6 @@ public class ImageBean
             activeAlbum.getAlbum().getImages().add(image.getId());
             ac.update(activeAlbum.getAlbum());
             BeanHelper.info(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("image") + " " + image.getFilename() + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("added_to_active_album"));       
-
         }
         return "";
     }
@@ -336,6 +336,8 @@ public class ImageBean
 
     public void selectedChanged(ValueChangeEvent event)
     {
+    	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+
     	if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(image.getId()))
         {
             setSelected(true);
@@ -352,11 +354,11 @@ public class ImageBean
     {
         if (!selected)
         {
-            sessionBean.getSelected().remove(image.getId());
+        	((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(image.getId());
         }
         else
         {
-            sessionBean.getSelected().add(this.image.getId());
+            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(image.getId());
         }
         return "";
     }

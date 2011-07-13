@@ -178,10 +178,10 @@ public class SessionBean implements Serializable
     {
         this.selected = selected;
     }
-
+    
     public int getSelectedSize()
     {
-        return this.selected.size();
+        return selected.size();
     }
     
     public List<URI> getSelectedCollections() {

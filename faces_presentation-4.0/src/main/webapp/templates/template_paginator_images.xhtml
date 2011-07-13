@@ -117,10 +117,10 @@
 				
 			</h:panelGroup>
 			
-		
 			<h:panelGroup  styleClass="free_area0 double_marginLIncl" rendered="#{SessionBean.user != null}">
+			<a4j:outputPanel>
 				<h:panelGroup id="preListHeaderSelected">
-					<h:outputText value="#{SessionBean.selectedSize} #{lbl.selected} " styleClass="free_area0 "/>
+					<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected} " styleClass="free_area0 "/>
 				</h:panelGroup>
 				<a4j:commandLink styleClass="free_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
 					<h:outputText styleClass="free_area0" value="#{lbl.add_to_album}"/>
@@ -163,6 +163,7 @@
 						</h:panelGroup>
 					</div>
 				</h:panelGroup>
+				</a4j:outputPanel>
 			</h:panelGroup>	
 		</div>
 
@@ -265,9 +266,8 @@
 						<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null}">
 							<span class="free_area0"> 
 								<h:selectBooleanCheckbox rendered="#{item.image.properties.status != 'WITHDRAWN'}" styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
-									<a4j:support event="onchange" reRender="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu" />
+									<a4j:support event="onchange" ajaxSingle="true" reRender="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu" />
 								</h:selectBooleanCheckbox> 
-								
 							</span>
 						</h:panelGroup> 
 						
@@ -280,7 +280,7 @@
 								<br />
 								<h:commandLink id="lnkAddToActiveAlbumInactive"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
 									<h:outputText value="#{lbl.add_to_album}" />
-								</h:commandLink>aa
+								</h:commandLink>
 								<h:outputText value="#{paginatorListSessionBean.navigationString }"/>
 								<h:commandLink id="lnkRemoveFromAlbum1"  action="#{item.removeFromAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumImages' and paginatorListSessionBean.album.album.properties.status == 'PENDING'}" >
 									<h:outputText value="#{lbl.remove_from_album}" />
@@ -321,11 +321,35 @@
 		</h:selectBooleanCheckbox>
 	
 	
-	
+	<!-- 
+		Reload the page if selected images don't have the correct style
+		Happening by back button
+	 -->
 	<script>
 		jQuery(document).ready(function() {
-			document.getElementById('formular:facetInitialized').click();
+			var $checkbox = jQuery(".fullBrowse input:checkbox");
+			var $images = jQuery(".fullBrowse .itemTile");
+			
+			$images.each(function(i){
+				var $selectBox = jQuery(".shiftCheckbox", this);
+				var $style = jQuery(".matrixItem", this);
+				if (jQuery($style).is('.tileIconAreaSelected') != jQuery($selectBox).is(':checked'))
+				{
+					location.reload();
+					return false;
+				}
+			});
 		});
+	</script>
+	
+	<!-- 
+		Initialize the facets
+	 -->
+	<script>
+		jQuery(document).ready(function() {
+		document.getElementById('formular:facetInitialized').click();
+	});
+		
 	</script>			
 	
 	<!-- Script for Shiftcheckboxes -->

@@ -27,10 +27,9 @@ public class UploadBean
 {
     private CollectionImeji collection;
     private SessionBean sessionBean;
-    private CollectionSessionBean collectionSession;
     private CollectionController collectionController;
     private String id;
-    private String escidocContext = "escidoc:108013";
+    private String escidocContext;
     private String escidocUserHandle;
     private User user;
     private String title;
@@ -46,10 +45,11 @@ public class UploadBean
     
     public UploadBean(){
     	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         collectionController = new CollectionController(sessionBean.getUser());
+        
         try 
         {
+        	escidocContext = PropertyReader.getProperty("escidoc.faces.context.id");
 			logInEscidoc();
 		} 
         catch (Exception e) 

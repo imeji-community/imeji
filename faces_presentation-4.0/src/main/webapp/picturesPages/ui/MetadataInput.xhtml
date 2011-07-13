@@ -39,7 +39,7 @@
 	<h:panelGroup layout="block" styleClass="free_area0">
 		
 		<h:outputLabel value="#{MetadataLabels.labels[metadata.namespace]} (#{MetadataLabels.lang})" styleClass="huge_label"/>
-		
+		<h:messages/>
 		<!-- METADATA TYPE TEXT -->
 		<h:inputTextarea  id="inputText" name="inputText" styleClass="#{areaClass} inputTxtArea" value="#{metadata.text}" rendered="#{metadata.type =='TEXT'}">
 			<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" for="inputText" var="results" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">

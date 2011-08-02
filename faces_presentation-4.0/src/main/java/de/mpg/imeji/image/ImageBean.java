@@ -2,14 +2,12 @@ package de.mpg.imeji.image;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import thewebsemantic.NotFoundException;
-
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.album.AlbumImagesBean;
 import de.mpg.imeji.beans.Navigation;
@@ -250,9 +248,9 @@ public class ImageBean
 
     public boolean getSelected()
     {
-//    	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-//        if (sessionBean.getSelected().contains(image.getId())) selected = true;
-//        else selected = false;
+    	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        if (sessionBean.getSelected().contains(image.getId())) selected = true;
+        else selected = false;
         return selected;
     }
 

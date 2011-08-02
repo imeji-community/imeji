@@ -407,7 +407,7 @@
 				<!-- URL of the FIZ framework instance -->
 				<!--<escidoc.framework_access.framework.url>http://134.76.28.244:8080</escidoc.framework_access.framework.url>-->
 				<escidoc.framework_access.framework.url>http://dev-coreservice.mpdl.mpg.de:8080</escidoc.framework_access.framework.url>
-                
+				
                          				
 				
 				<!--  Identifier of the content model "FACES" in the current framework instance -->
@@ -423,7 +423,7 @@
 				
 				<!-- Identifier of the context of "FACES" in the current framework instance -->
 				<!-- DEV - FACES -->
-				 <escidoc.faces.context.id>escidoc:108013</escidoc.faces.context.id>
+				<escidoc.faces.context.id>escidoc:108013</escidoc.faces.context.id>
 				<!-- QA - FACES -->
 				<!--  <escidoc.faces.context.id>escidoc:40001</escidoc.faces.context.id>-->
 				<!-- DEV - Bretagne -->

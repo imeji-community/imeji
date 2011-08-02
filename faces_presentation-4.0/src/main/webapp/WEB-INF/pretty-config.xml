@@ -186,7 +186,6 @@
 	<url-mapping id="editProfile">
 		<pattern value="/edit/mdprofile/#{EditMdProfileBean.id}"/>
 		<view-id>/jsf/ProfileEdit.xhtml</view-id>
-		<action onPostback="true">#{EditMdProfileBean.init}</action>
 	</url-mapping>
 	
 	<!-- Search Pages -->

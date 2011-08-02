@@ -8,10 +8,12 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.Init;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.bcel.generic.LALOAD;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -25,6 +27,7 @@ import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.imeji.util.LocalizedStringHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
@@ -37,10 +40,10 @@ import de.mpg.jena.vo.Statement;
 public class MdProfileBean
 {
     private MetadataProfile profile = null;
-    private int statementPosition = 0;
+   
     private TabType tab = TabType.PROFILE;
     private CollectionSessionBean collectionSession = null;
-    private int constraintPosition;
+   
     private List<StatementWrapper> statements = null;
     private List<SelectItem> mdTypesMenu = null;
     private String id = null;
@@ -48,17 +51,26 @@ public class MdProfileBean
     private SessionBean sessionBean;
     private String template;
     private ProfileController pc;
+    
+    private int statementPosition = 0;
+    private int constraintPosition = 0;
+    private int labelPosition=0;
 
     public MdProfileBean()
     {
     	collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        pc = new ProfileController(sessionBean.getUser());
+       
         if (collectionSession.getProfile() == null)
-            collectionSession.setProfile(new MetadataProfile());
+        {
+        	 collectionSession.setProfile(new MetadataProfile());
+        }
         profile = collectionSession.getProfile();
+        
         statements = new ArrayList<StatementWrapper>();
-        mdTypesMenu = new ArrayList<SelectItem>();
+        pc = new ProfileController(sessionBean.getUser());
+        
+        initMenus();
     }
        
 
@@ -67,7 +79,34 @@ public class MdProfileBean
         this();
     	this.profile = profile;
     }
-
+    
+    public void initMenus()
+    {
+    	mdTypesMenu = new ArrayList<SelectItem>();
+      	mdTypesMenu.add(new SelectItem(null, "--"));
+      	for (ComplexTypes t : ComplexTypes.values())
+    	{
+    		mdTypesMenu.add(
+    				new SelectItem(t.getURI()
+    						, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + t.name().toLowerCase())));
+    	}    
+    }
+    
+    public String getInit()
+    {
+    	parseID();
+    	if (UrlHelper.getParameterBoolean("reset"))
+    	{
+    		reset();
+    	}
+    	if (UrlHelper.getParameterBoolean("init"))
+    	{
+    		 loadtemplates();
+    	     initBeanObjects(profile);
+    	}
+        return "";
+    }
+    
     public void reset()
     {
         profile.getStatements().clear();
@@ -75,25 +114,7 @@ public class MdProfileBean
         collectionSession.setProfile(profile);
     }
     
-    public String getInit()
-    {
-    	mdTypesMenu = new ArrayList<SelectItem>();
-    	mdTypesMenu.add(new SelectItem(null, "--"));
-    	for (ComplexTypes t : ComplexTypes.values())
-    	{
-    		mdTypesMenu.add(new SelectItem(t.getURI(), t.name()));
-    	}    
-        if (this.getId() == null && this.getProfile().getId() != null)
-        {
-        	this.setId(this.getProfile().getId().getPath().split("/")[2]);
-        }
-    	if (UrlHelper.getParameterBoolean("reset")) reset();
-        loadtemplates();
-        setStatementWrappers(profile);
-        return "";
-    }
-
-    public void setStatementWrappers(MetadataProfile mdp)
+    public void initBeanObjects(MetadataProfile mdp)
     {
         statements.clear();
         for (Statement st : mdp.getStatements())
@@ -101,7 +122,7 @@ public class MdProfileBean
         	statements.add(new StatementWrapper(st, mdp.getId()));
         }
     }
-
+    
     public void loadtemplates()
     {
     	profilesMenu = new ArrayList<SelectItem>();
@@ -114,14 +135,14 @@ public class MdProfileBean
             }
         }
     }
-
+    
     public String changeTemplate() throws Exception
     {
         MetadataProfile tp = pc.retrieve(URI.create(this.template));
         profile.getStatements().clear();
         profile.setStatements(tp.getStatements());
         collectionSession.setProfile(profile);
-        setStatementWrappers(profile);
+        initBeanObjects(profile);
         return getNavigationString();
     }
     
@@ -134,14 +155,24 @@ public class MdProfileBean
             profile.getStatements().clear();
             profile.setStatements(tp.getStatements());
             collectionSession.setProfile(profile);
-            setStatementWrappers(profile);
+            initBeanObjects(profile);
+        }
+    }
+    
+    public void parseID()
+    {
+    	if (this.getId() == null && this.getProfile().getId() != null)
+        {
+    		this.setId(this.getProfile().getId().getPath().split("/")[2]);
         }
     }
 
     public String getEncodedId() throws UnsupportedEncodingException
     {
         if(profile != null && profile.getId() != null)
-            return URLEncoder.encode(profile.getId().toString(), "UTF-8");
+        {
+        	return URLEncoder.encode(profile.getId().toString(), "UTF-8");
+        }
         else return "";
     }
 
@@ -150,78 +181,47 @@ public class MdProfileBean
         return "pretty:";
     }
 
-    public boolean isVocabulary(String uri)
+    public String addVocabulary()
     {
-        try
-        {
-            HttpClient client = new HttpClient();
-            GetMethod method = new GetMethod(uri + "?format=json&n=2&m=full&q=e");
-            client.executeMethod(method);
-            if (HttpServletResponse.SC_OK != method.getStatusCode())
-                throw new HttpException();
-            new JSONCollection(method.getResponseBodyAsString());
-            return true;
-        }
-        catch (JSONException e)
-        {
-            BeanHelper.error(uri + " is not a valid JSON source");
-        }
-        catch (HttpException e)
-        {
-            BeanHelper.error(uri + " is not a valid URL");
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(uri + " is not a valid URL");
-        }
-        return false;
-    }
-
-    public String checkVocabulary()
-    {
-        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
-        if (isVocabulary(st.getVocabulary().toString()))
-            BeanHelper.info(st.getVocabulary().toString() + " is valid");
-        return "pretty:";
-    }
-
-    public String addVocabulary() throws URISyntaxException
-    {
-        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
-        st.setVocabulary(new URI(ProfileHelper.getDefaultVocabulary(st.getType())));
-        collectionSession.setProfile(profile);
+    	statements.get(getStatementPosition()).setVocabularyString("--");
         return getNavigationString();
     }
 
-    public String removeVocabulary() throws URISyntaxException
+    public String removeVocabulary()
     {
-        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
-        st.setVocabulary(null);
-        collectionSession.setProfile(profile);
+    	statements.get(getStatementPosition()).setVocabularyString(null);
         return getNavigationString();
     }
 
     public String addStatement()
     {
-        Statement st = ImejiFactory.newStatement();
-        if (profile.getStatements().size() == 0)
-        {
-            profile.getStatements().add(st);
-        }
-        else
-        {
-            st.setPos(getStatementPosition() + 1);
-            ((List<Statement>)profile.getStatements()).add(getStatementPosition() + 1, st);
-        }
-        collectionSession.setProfile(profile);
+    	if (statements.isEmpty())
+    	{
+    		statements.add(new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
+    	}
+    	else
+    	{
+    		statements.add(getStatementPosition() + 1, new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
+    	}
         return getNavigationString();
     }
 
     public String removeStatement()
     {
-        ((List<Statement>)profile.getStatements()).remove(getStatementPosition());
-        collectionSession.setProfile(profile);
+    	statements.remove(getStatementPosition());
         return getNavigationString();
+    }
+    
+    public String addLabel()
+    {
+    	statements.get(getStatementPosition()).getLabels().add(new LocalizedStringHelper(new LocalizedString("", "eng")));
+    	return  getNavigationString();
+    }
+    
+    public String removeLabel()
+    {
+    	statements.get(getStatementPosition()).getLabels().remove(getLabelPosition());
+    	return  getNavigationString();
     }
 
     public String addConstraint()
@@ -349,8 +349,10 @@ public class MdProfileBean
         }
         int i=0;
         
-        for (Statement s : profile.getStatements())
+        for (StatementWrapper wrapper : statements)
         {
+        	Statement s = wrapper.getAsStatement();
+        	
         	if (s.getType() == null)
         	{
         		BeanHelper.error("Please select a type for each metadata.");
@@ -369,10 +371,6 @@ public class MdProfileBean
             else if (s.getName() == null || s.getName().toString().equals(profile.getId().toString() + "/"))
             {
                 BeanHelper.error("Names are required!");
-                return false;
-            }
-            else if (s.getVocabulary() != null && !isVocabulary(s.getVocabulary().toString()))
-            {
                 return false;
             }
             else
@@ -402,4 +400,16 @@ public class MdProfileBean
 		Security security = new Security();
 		return security.check(OperationsType.DELETE, sessionBean.getUser(), profile);
 	}
+
+
+	public int getLabelPosition() {
+		return labelPosition;
+	}
+
+
+	public void setLabelPosition(int labelPosition) {
+		this.labelPosition = labelPosition;
+	}
+	
+	
 }

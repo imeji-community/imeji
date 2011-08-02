@@ -8,6 +8,7 @@ import javax.faces.event.ValueChangeEvent;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
+import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
@@ -32,30 +33,38 @@ public class EditMdProfileBean extends MdProfileBean
     @Override
     public String getInit()
     {
-    	readUrl();
-    	
-    	if (init)  
-        {
-            if (this.getId() != null)
+    	try
+    	{
+    		readUrl();
+        	
+        	if (init)  
             {
-                try
+                if (this.getId() != null)
                 {
-                    this.setProfile(profileController.retrieve(this.getId()));
-                    collectionSession.setProfile(this.getProfile());
+                    try
+                    {
+                        this.setProfile(profileController.retrieve(this.getId()));
+                        collectionSession.setProfile(this.getProfile());
+                    }
+                    catch (Exception e)
+                    {
+                        throw new RuntimeException(e);
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    throw new RuntimeException(e);
+                    BeanHelper.error("No profile Id found in URL");
                 }
+                init = false;
+                setTemplate(null);
             }
-            else
-            {
-                BeanHelper.error("No profile Id found in URL");
-            }
-            init = false;
-            setTemplate(null);
-        }
-        super.getInit();
+            super.getInit();
+    	}
+    	catch (Exception e)
+    	{
+    		BeanHelper.error(e.getMessage());
+    		e.printStackTrace();
+    	}
         return "";
     }
     
@@ -79,11 +88,16 @@ public class EditMdProfileBean extends MdProfileBean
     
     public String save() throws IOException
     {
-        if(validateProfile(this.getProfile()))
+        if(validateProfile(getProfile()))
         {
         	try 
             {	
-        		profileController.update(this.getProfile());
+        		getProfile().getStatements().clear();
+        		for (StatementWrapper wrapper : getStatements())
+        		{
+        			getProfile().getStatements().add(wrapper.getAsStatement());
+        		}
+        		profileController.update(getProfile());
   			} 
             catch (Exception e) 
   			{
@@ -118,6 +132,4 @@ public class EditMdProfileBean extends MdProfileBean
 	public void setColId(String colId) {
 		this.colId = colId;
 	}
-    
-    
 }

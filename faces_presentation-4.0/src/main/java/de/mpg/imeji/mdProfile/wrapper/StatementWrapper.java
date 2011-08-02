@@ -1,33 +1,27 @@
 package de.mpg.imeji.mdProfile.wrapper;
 
-import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.richfaces.json.JSONCollection;
-import org.richfaces.json.JSONException;
+import javax.faces.model.SelectItem;
 
 import thewebsemantic.LocalizedString;
-import de.mpg.imeji.lang.labelHelper;
-import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.LocalizedStringHelper;
+import de.mpg.imeji.util.VocabularyHelper;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class StatementWrapper
 {
     private boolean required = false;
     private boolean multiple = false;
     private Statement statement;
-    private String defaultLabel;
     private String vocabularyString = null;
     private String typeString;
     private URI profile;
+    private List<LocalizedStringHelper> labels = null;
+    private VocabularyHelper vocabularyHelper = null;
 
     public StatementWrapper(Statement st, URI profile)
     {
@@ -40,17 +34,57 @@ public class StatementWrapper
         statement.setType(st.getType());
         statement.setName(st.getName());
         statement.setVocabulary(st.getVocabulary());
-        // Wrapper variable initialization
-        if (Integer.parseInt(st.getMinOccurs()) > 0) required = true;
-        if ("unbounded".equals(st.getMaxOccurs()) || Integer.parseInt(st.getMaxOccurs()) > 1) multiple = true;
-        else multiple = false;
-        defaultLabel = labelHelper.getDefaultLabel(st.getLabels().iterator());
-    }
+        
+        if (Integer.parseInt(st.getMinOccurs()) > 0)
+        {
+        	required = true;
+        }
+        if ("unbounded".equals(st.getMaxOccurs()) || Integer.parseInt(st.getMaxOccurs()) > 1) 
+        {
+        	multiple = true;
+        }
+        else 
+        {
+        	multiple = false;
+        }
 
+        labels = new ArrayList<LocalizedStringHelper>();
+        for (LocalizedString  locString : st.getLabels())
+    	{
+    		labels.add(new LocalizedStringHelper(locString));
+    	}
+        
+        vocabularyHelper = new VocabularyHelper();
+        if (statement.getVocabulary() != null)
+        {
+	        vocabularyString = statement.getVocabulary().toString();
+	        if ("unknown".equals(vocabularyHelper.getVocabularyName(statement.getVocabulary())))
+	        {
+	        	vocabularyHelper.getVocabularies().add(new SelectItem(statement.getVocabulary().toString(), vocabularyString));
+	        }
+        }
+    }
+    
+    public Statement getAsStatement()
+    {
+    	if (statement.getName() == null)
+    	{
+    		statement.setName(URI.create(profile + "/"+ labels.get(0).getString().replace(" ", "_")));
+    	}
+    	statement.getLabels().clear();
+    	for(LocalizedStringHelper lsh : labels)
+    	{
+    		statement.getLabels().add(lsh.getAsLocalizedString());
+    	}
+    	return statement;
+    }
+    
     public void vocabularyListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
-            this.statement.setVocabulary(URI.create(event.getNewValue().toString()));
+        {
+        	this.statement.setVocabulary(URI.create(event.getNewValue().toString()));
+        }
         vocabularyString = statement.getVocabulary().toString();
     }
 
@@ -61,17 +95,6 @@ public class StatementWrapper
             int pos = Integer.parseInt(event.getComponent().getAttributes().get("position").toString());
             ((List<LocalizedString>)statement.getLiteralConstraints()).set(pos, new LocalizedString(event.getNewValue()
                     .toString(), "eng"));
-        }
-    }
-
-    public void nameListener(ValueChangeEvent event)
-    {
-        if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
-        {
-            defaultLabel = event.getNewValue().toString();
-            statement.setName(URI.create(profile + "/"+ defaultLabel.replace(" ", "_")));
-            statement.getLabels().clear();
-            statement.getLabels().add(new LocalizedString(defaultLabel, "eng"));
         }
     }
 
@@ -143,20 +166,10 @@ public class StatementWrapper
     {
         this.multiple = multiple;
     }
-
-    public String getDefaultLabel()
-    {
-        return defaultLabel;
-    }
-
-    public void setDefaultLabel(String defaultLabel)
-    {
-        this.defaultLabel = defaultLabel;
-    }
-
+    
     public String getVocabularyString()
     {
-        return statement.getVocabulary().toString();
+        return vocabularyString;
     }
 
     public void setVocabularyString(String vocabularyString)
@@ -171,5 +184,23 @@ public class StatementWrapper
 	public void setTypeString(String typeString) {
 		this.typeString = typeString;
 	}
+
+	public List<LocalizedStringHelper> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(List<LocalizedStringHelper> labels) {
+		this.labels = labels;
+	}
+
+	public VocabularyHelper getVocabularyHelper() {
+		return vocabularyHelper;
+	}
+
+	public void setVocabularyHelper(VocabularyHelper vocabularyHelper) {
+		this.vocabularyHelper = vocabularyHelper;
+	}
+	
+	
     
 }

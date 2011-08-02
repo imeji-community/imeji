@@ -7,7 +7,6 @@ import java.util.Map;
 
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.util.ProfileHelper;
-import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;

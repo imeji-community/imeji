@@ -1,6 +1,5 @@
 package de.mpg.imeji.image;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,43 +18,23 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.ImageController;
-import de.mpg.jena.controller.SearchCriterion;
-import de.mpg.jena.controller.SearchCriterion.Filtertype;
-import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.vo.Image;
 
 public class SelectedBean extends ImagesBean {
 	private int totalNumberOfRecords;
 	private SessionBean sb;
-//	private String mdEdited;
 	private URI currentCollection;
 	private String backUrl = null;
-	private HistorySession historySession;
 	
 	private String selectedImagesContext=null;
 	
 
-	public String getSelectedImagesContext() {
-		return selectedImagesContext;
-	}
+	
 
-	public void setSelectedImagesContext(String selectedImagesContext) {
-		if(selectedImagesContext.equals(sb.getSelectedImagesContext()))
-		{
-			this.selectedImagesContext = selectedImagesContext;
-		}
-		else
-		{
-			clearAll();
-			this.selectedImagesContext = selectedImagesContext;
-			sb.setSelectedImagesContext(selectedImagesContext);
-		}
-	}
-
-	public SelectedBean() {
+	public SelectedBean() 
+	{
 		super();
 		this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		this.historySession = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
 		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 		backUrl = navigation.getImagesUrl();
 		
@@ -90,6 +69,25 @@ public class SelectedBean extends ImagesBean {
 			super.setImages(controller.loadImages(uris, limit, offset));
 		}
 		return ImejiFactory.imageListToBeanList(super.getImages());
+	}
+	
+	public String getSelectedImagesContext() 
+	{
+		return selectedImagesContext;
+	}
+
+	public void setSelectedImagesContext(String selectedImagesContext) 
+	{
+		if(selectedImagesContext.equals(sb.getSelectedImagesContext()))
+		{
+			this.selectedImagesContext = selectedImagesContext;
+		}
+		else
+		{
+			clearAll();
+			this.selectedImagesContext = selectedImagesContext;
+			sb.setSelectedImagesContext(selectedImagesContext);
+		}
 	}
 	
 	public String addToActiveAlbum() throws Exception

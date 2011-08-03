@@ -63,7 +63,7 @@ public class Search
     		{
     			results =  new LinkedList<String>(subResults);
     		}
-    		
+
     		if (Operator.AND.equals(sc.getOperator()) || Operator.NOTAND.equals(sc.getOperator()))
     		{
     			List<String> inter = ListUtils.intersection(results, subResults);

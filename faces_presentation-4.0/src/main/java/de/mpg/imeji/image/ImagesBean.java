@@ -15,9 +15,11 @@ import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.history.HistorySession;
+import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
@@ -130,7 +132,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     {
     	HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
         FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
-        
+                
         if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
         {
         	fs.setFilters(hs.getCurrentPage().getFilters());

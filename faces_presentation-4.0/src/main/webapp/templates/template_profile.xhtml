@@ -82,10 +82,8 @@
 													<f:setPropertyActionListener value="#{labelPosition}" target="#{FormularBean.labelPosition}"/>
 												</h:commandButton>
 											
-												<h:selectOneMenu value="#{label.lang}"  styleClass="medium_txtInput" >
-												  	<f:selectItem itemLabel="English" itemValue="eng" />
-												 	<f:selectItem itemLabel="Deutsch" itemValue="deu" />
-												  	<f:selectItem itemLabel="Japanese" itemValue="jpn" />
+												<h:selectOneMenu value="#{label.lang}" styleClass="medium_txtInput" >
+													<f:selectItems value="#{Internationalization.languages}"/>
 	  											</h:selectOneMenu>
 	  											
 	  										</h:panelGroup>
@@ -121,30 +119,13 @@
 												 <f:selectItems value="#{statement.vocabularyHelper.vocabularies}"/>
 	  										</h:selectOneMenu>
 										</h:panelGroup>
-									</h:panelGroup>
+									</h:panelGroup>	
 									
-									<h:panelGroup styleClass="full_area0 xSmall_marginLExcl" rendered="#{false and statement.statement.vocabulary != null}">
-										<h:outputLabel styleClass="huge_label" value="#{lbl.vocabulary}" />
-										<h:panelGroup styleClass="full_area0 tiny_marginRIncl clear">
-											<h:inputText styleClass="huge_txtInput endline" value="#{statement.vocabularyString}"  valueChangeListener="#{statement.vocabularyListener}" onfocus="this.select();"/>
-											<span style="padding-left:10px"></span>
-											<h:commandLink styleClass="" value="#{lbl.check_validity}" shortDesc="#{lbl.add_constraint}" action="#{FormularBean.checkVocabulary}" >
-												<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-											</h:commandLink>
-											<h:outputText styleClass="full_label" value="#{statement.vocabularyString}" rendered="#{statement.statement.vocabulary != ''}"/>
-											<span style="padding-left:5px"></span>
-											<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{remove_vocabulary}" action="#{FormularBean.removeVocabulary}" >
-												<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-											</h:commandButton>
-											<h:outputLabel styleClass="" value="#{lbl.remove_vocabulary}  " />
-										</h:panelGroup>
-									</h:panelGroup>			
-									
-									<h:panelGroup styleClass="huge_area0 xSmall_marginLExcl" rendered="#{statement.constraintsSize > 0}">
-										<h:outputLabel styleClass="large_label" value="#{lbl.constraints}" />
+									<h:panelGroup styleClass="full_area0" rendered="#{statement.constraintsSize > 0}">
+										<h:outputLabel styleClass="huge_label" value="#{lbl.constraints}" />
 										<a4j:repeat id="constraints" var="constraint" value="#{statement.statement.literalConstraints}" rowKeyVar="index">
 											<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
-												<h:inputText styleClass="large_txtInput endline" value="#{constraint}"  valueChangeListener="#{statement.constraintListener}">
+												<h:inputText styleClass="huge_txtInput endline" value="#{constraint}"  valueChangeListener="#{statement.constraintListener}">
 													<f:attribute name="position" value="#{index}"/>
 												</h:inputText>
 												<h:panelGroup styleClass="large_area0 endline">

@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.facet.Facet.FacetType;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.jena.controller.SearchCriterion;
 
@@ -18,18 +19,18 @@ public class FacetURIFactory
 		this.scList = scList;
 	}
 	
-	public URI createFacetURI(String baseURI, SearchCriterion sc, String facetName) throws UnsupportedEncodingException
+	public URI createFacetURI(String baseURI, SearchCriterion sc, String facetName, FacetType type) throws UnsupportedEncodingException
 	{
 		List<SearchCriterion> scl = new ArrayList<SearchCriterion>(scList);
 		if(sc != null) scl.add(sc);
-		String uri = baseURI + getCommonURI(scl, facetName);
+		String uri = baseURI + getCommonURI(scl, facetName, type);
 		return URI.create(uri);
 	}
 	
-	private String getCommonURI(List<SearchCriterion> scl, String facetName) throws UnsupportedEncodingException
+	private String getCommonURI(List<SearchCriterion> scl, String facetName, FacetType type) throws UnsupportedEncodingException
 	{
         String commonURI ="";
-        commonURI +=  URLEncoder.encode(URLQueryTransformer.transform2URL(scl), "UTF-8") + "&f=" +  URLEncoder.encode(facetName,  "UTF-8") + "&page=1";
+        commonURI +=  URLEncoder.encode(URLQueryTransformer.transform2URL(scl), "UTF-8") + "&f=" +  URLEncoder.encode(facetName,  "UTF-8") + "&t=" + type.name().toLowerCase() + "&page=1";
         return commonURI;
 	}
 	

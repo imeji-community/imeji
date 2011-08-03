@@ -11,11 +11,13 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
+import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
@@ -26,7 +28,8 @@ import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 
-public class CollectionImagesBean extends ImagesBean {
+public class CollectionImagesBean extends ImagesBean 
+{
 	private int totalNumberOfRecords;
 	private String id = null;
 	private URI uri;
@@ -65,6 +68,7 @@ public class CollectionImagesBean extends ImagesBean {
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_CREATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_CREATION_DATE.name())));
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
         setSortMenu(sortMenu);
+        
 	}
 
 	@Override
@@ -97,7 +101,10 @@ public class CollectionImagesBean extends ImagesBean {
 
 			SortCriterion sortCriterion = new SortCriterion();
 			sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
-			sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+			sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));		
+			
+			ProfileController pc = new ProfileController(sb.getUser());
+			((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(pc.retrieve(collection.getProfile()));
 			
 			initBackPage();
 			
@@ -121,7 +128,10 @@ public class CollectionImagesBean extends ImagesBean {
 	
 	public String getImageBaseUrl()
     {
-		if (collection == null) return "";
+		if (collection == null)
+		{
+			return "";
+		}
         return navigation.getApplicationUri() + collection.getId().getPath();
     }
 	

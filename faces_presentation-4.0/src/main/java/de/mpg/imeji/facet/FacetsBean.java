@@ -8,11 +8,8 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.vo.CollectionImeji;
 
 public class FacetsBean
-{
-   // private List<FacetGroupBean> groups = new ArrayList<FacetGroupBean>();
-    
+{    
     private List<Facet> facets = new ArrayList<Facet>();
-    
     private List<Facet> collectionFacets = new ArrayList<Facet>();
     private List<Facet> technicalFacets = new ArrayList<Facet>();
     
@@ -42,16 +39,6 @@ public class FacetsBean
 		}
     }
     
-//	public List<FacetGroupBean> getGroups()
-//    {
-//        return groups;
-//    }
-//
-//    public void setGroups(List<FacetGroupBean> groups)
-//    {
-//        this.groups = groups;
-//    }
-//   
     public List<Facet> getCollectionFacets()
     {
     	return collectionFacets;

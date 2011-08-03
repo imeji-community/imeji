@@ -6,6 +6,7 @@ import java.util.List;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import de.mpg.imeji.facet.Facet.FacetType;
 import de.mpg.imeji.util.BeanHelper;
 
 public class FiltersBean
@@ -22,12 +23,13 @@ public class FiltersBean
 		
 		String q = ec.getRequestParameterMap().get("q");
 		String n = ec.getRequestParameterMap().get("f");
+		String t = ec.getRequestParameterMap().get("t");
 		
 		if (n != null) n = n.toLowerCase();
 		
 		if (q != null)
 		{
-			List<Filter> filters =  parseQuery(q, n);
+			List<Filter> filters =  parseQuery(q, n, t);
 			
 			filters = setRemoveQueries(filters, q);
 			
@@ -40,7 +42,7 @@ public class FiltersBean
 		}
 	}
 	
-	private List<Filter> parseQuery(String q, String n)
+	private List<Filter> parseQuery(String q, String n, String t)
 	{
 		List<Filter> filters = new ArrayList<Filter>();
 		
@@ -52,11 +54,13 @@ public class FiltersBean
 				q = q.replace(f.getQuery(), "");
 			}
 		}
+
 		if (q != null && !"".equals(q.trim()))
 		{
-			Filter nf = new Filter(n, q, count);
+			Filter nf = new Filter(n, q, count, FacetType.valueOf(t.toUpperCase()), null);
 			filters.add(nf);
 		}
+		
 		return filters;
 	}	
 	

@@ -1,24 +1,14 @@
 package de.mpg.imeji.mdProfile;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import javax.ejb.Init;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.bcel.generic.LALOAD;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.richfaces.json.JSONCollection;
-import org.richfaces.json.JSONException;
 
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.beans.SessionBean;
@@ -28,7 +18,6 @@ import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.LocalizedStringHelper;
-import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.security.Operations.OperationsType;

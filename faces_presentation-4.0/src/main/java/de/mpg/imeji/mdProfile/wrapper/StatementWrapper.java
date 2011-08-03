@@ -76,6 +76,10 @@ public class StatementWrapper
     	{
     		statement.getLabels().add(lsh.getAsLocalizedString());
     	}
+    	if(vocabularyString != null)
+    	{
+    		statement.setVocabulary(URI.create(vocabularyString));
+    	}
     	return statement;
     }
     

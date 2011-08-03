@@ -39,8 +39,10 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import thewebsemantic.NotBoundException;
+import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.ImejiController;
+import de.mpg.jena.vo.Image;
 
 /**
  * This abstract bean class is used to manage lists with one or two paginators. It can work together with different
@@ -153,10 +155,9 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             {
                 setCurrentPageNumber(1);
             }
-            // logger.info("No List update: "+noListUpdate);
+
             previousPartList = new ArrayList<ListElementType>();
             previousPartList.addAll(currentPartList);
-            
             currentPartList = retrieveList(getOffset(), elementsPerPage);
            
             totalNumberOfElements = getTotalNumberOfRecords();

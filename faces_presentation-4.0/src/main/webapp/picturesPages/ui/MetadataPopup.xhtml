@@ -76,7 +76,7 @@
 		
 		<a4j:repeat var="md" value="#{item.image.metadataSet.metadata}" rows="0">
 			<h:panelGroup  rendered="#{md.namespace == statement.name}" styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
-				<h:outputText value="#{MetadataLabels.labels[statement.name]}"/>
+				<h:outputText value="#{MetadataLabels.internationalizedLabels[statement.name]}"/>
 			</h:panelGroup>
 			
 			<h:panelGroup rendered="#{md.namespace == statement.name}" layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">

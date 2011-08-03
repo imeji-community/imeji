@@ -6,8 +6,7 @@ import java.util.List;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.collection.CollectionImagesBean;
-import de.mpg.imeji.filter.Filter;
+import de.mpg.imeji.facet.Facet.FacetType;
 import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
@@ -44,37 +43,31 @@ public class CollectionFacets
 		
 		FacetURIFactory uriFactory = new FacetURIFactory(scList);
 		int count = 0;
+		
+		int sizeAllImages = col.getImages().size();
+		if (scList.size() > 0)
+		{
+			sizeAllImages = getCount(scList, null);
+		}
+			
 		for (Statement st : profile.getStatements()) 
 		{
-			if (!fs.isFilter(getName(st.getName())) && !fs.isNoResultFilter(getName(st.getName())))
+			if (!fs.isFilter(getName(st.getName())) || !fs.isFilter("No " + getName(st.getName())))
 			{
 				SearchCriterion sc = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
 				count =  getCount(new ArrayList<SearchCriterion>(scList), sc);
 				if (count > 0) 
 				{
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, getName(st.getName())), getName(st.getName()), count ));
+					facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, getName(st.getName()), FacetType.COLLECTION), getName(st.getName()), count, FacetType.COLLECTION, st.getName() ));
 				}
-				else 
+				if (count < sizeAllImages)
 				{
-					fs.getNoResultsFilters().add(new Filter(getName(st.getName()), "", 0));
-				}
-			}
-			if (!fs.isFilter("No " + getName(st.getName())) && !fs.isNoResultFilter("No " + getName(st.getName())))
-			{
-				SearchCriterion sc =  new SearchCriterion(Operator.NOTAND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
-				count =  getCount(new ArrayList<SearchCriterion>(scList), sc);
-				if (count > 0) 
-				{
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, "No " + getName(st.getName())), "No " + getName(st.getName()), count));
-				}
-				else 
-				{
-					fs.getNoResultsFilters().add(new Filter("No " + getName(st.getName()), "", 0));
+					sc =  new SearchCriterion(Operator.NOTAND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
+					facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, "No " + getName(st.getName()), FacetType.COLLECTION), "No " + getName(st.getName()), sizeAllImages - count, FacetType.COLLECTION, st.getName()));
 				}
 			}
 		}
 	}
-
 	
 	public String getName(URI uri)
 	{
@@ -82,33 +75,12 @@ public class CollectionFacets
 		String name = metadataLabels.getLabels().get(uri);
 		return name;
 	}
+	
 	public int getCount(List<SearchCriterion> scList, SearchCriterion sc)
 	{
 		ImageController ic = new ImageController(sb.getUser());
 		if (sc != null) scList.add(sc);
-		
 		return ic.countImagesInContainer(colURI, scList);
-		
-//		try 
-//		{
-//			LinkedList<String> all = ic.searchURI(new ArrayList<SearchCriterion>(), null, -1, 0);
-//			for (SearchCriterion c : scList) 
-//			{
-//				List<SearchCriterion> l = new ArrayList<SearchCriterion>();
-//				l.add(c);
-//				LinkedList<String> col = ic.searchURI(l, null, -1, 0);
-//				List<String> inter = ListUtils.intersection(all, col);
-//				all = new LinkedList<String>(inter);
-//			}
-//			return all.size();
-//			//return ic.getNumberOfResults(scList, maxRecord);
-//		} 
-//		catch (Exception e) 
-//		{
-//			e.printStackTrace();
-//		}
-//		
-//		return 0;
 	}
 	
 	public List<Facet> getFacets() {

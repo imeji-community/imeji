@@ -1,37 +1,40 @@
 package de.mpg.imeji.filter;
 
 import java.net.URI;
+import java.util.List;
 
-import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.facet.Facet;
+import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.jena.controller.SearchCriterion;
 
-public class Filter 
+public class Filter extends Facet
 {
-	private SearchCriterion filter;
+	//private SearchCriterion filter;
 	private String query ="";
 	private URI collectionID;
 	private String label = "Search";
 	private int count = 0;
 	private String removeQuery = "";
 	
-	public Filter(String label, SearchCriterion filter, URI collectionId) 
-	{
-		this.filter = filter;
-		if (label != null) this.label = label;
-		this.collectionID = collectionId;
-	}
 	
-	public Filter(String label, URI collectionId, int count) 
-	{
-		this.count = count;
-		if (label != null) this.label = label;
-		this.collectionID = collectionId;
-		init();
-	}
+//	public Filter(String label, SearchCriterion filter, URI collectionId) 
+//	{
+//		this.filter = filter;
+//		if (label != null) this.label = label;
+//		this.collectionID = collectionId;
+//	}
 	
-	public Filter(String label, String query, int count) 
+//	public Filter(String label, URI collectionId, int count) 
+//	{
+//		this.count = count;
+//		if (label != null) this.label = label;
+//		this.collectionID = collectionId;
+//		init();
+//	}
+	
+	public Filter(String label, String query, int count, FacetType type, URI metadataURI) 
 	{
+		super(null, label, count, type, metadataURI);
 		this.label = label; 
 		this.query = query;
 		this.count = count;
@@ -40,21 +43,35 @@ public class Filter
 	
 	public void init()
 	{
-		 if (label == null) label = "Search";
+		if (label == null) label = "Search";
+		 
+		try 
+		{
+			List<SearchCriterion> scList = URLQueryTransformer.transform2SCList(query);
+			if (scList.size() == 1) 
+			{
+				this.setMetadataURI(URI.create(scList.get(0).getValue()));
+			}
+		} 
+		catch (Exception e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public SearchCriterion getFilter() {
-		return filter;
-	}
+//	public SearchCriterion getFilter() {
+//		return filter;
+//	}
+//
+//	public void setFilter(SearchCriterion filter) {
+//		this.filter = filter;
+//	}
 
-	public void setFilter(SearchCriterion filter) {
-		this.filter = filter;
-	}
-
-	 public String getinternationalizedLabel()
-    {
-    	return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
-    }
+//	 public String getinternationalizedLabel()
+//    {
+//    	return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
+//    }
 	
 	public String getLabel() {
 		return label;

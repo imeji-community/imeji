@@ -3,6 +3,7 @@ package de.mpg.imeji.facet;
 import java.net.URI;
 
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
 
 public class Facet
@@ -10,12 +11,21 @@ public class Facet
     private URI uri;
     private String label;
     private int count;
+    private FacetType type;
+    private  URI metadataURI;
+    
+    public enum FacetType
+    {
+    	TECHNICAL, COLLECTION;
+    }
 
-    public Facet(URI uri,String label, int count)
+    public Facet(URI uri, String label, int count, FacetType type, URI metadataURI)
     {
         this.count = count;
         this.label = label;
         this.uri = uri;
+        this.type = type;
+        this.metadataURI = metadataURI;
     }
 
     public URI getUri()
@@ -30,9 +40,23 @@ public class Facet
     
     public String getinternationalizedLabel()
     {
-    	String s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
+    	String s = label;
     	
-    	if (s.equals("facet_" + label.toLowerCase()))
+    	if (FacetType.TECHNICAL.name().equals(type.name()))
+		{
+    		s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
+		}
+    	else if (FacetType.COLLECTION.name().equals(type.name()))
+    	{
+    		s = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(metadataURI);
+    		
+    		if (label.toLowerCase().startsWith("no "))
+    		{
+    			s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("no") + " " + s;
+    		}
+    	}
+    	
+    	if (s == null || s.equals("facet_" + label.toLowerCase()))
     	{
     		return label;
     	}
@@ -59,4 +83,22 @@ public class Facet
     {
         this.count = count;
     }
+
+	public FacetType getType() {
+		return type;
+	}
+
+	public void setType(FacetType type) {
+		this.type = type;
+	}
+
+	public URI getMetadataURI() {
+		return metadataURI;
+	}
+
+	public void setMetadataURI(URI metadataURI) {
+		this.metadataURI = metadataURI;
+	}
+    
+    
 }

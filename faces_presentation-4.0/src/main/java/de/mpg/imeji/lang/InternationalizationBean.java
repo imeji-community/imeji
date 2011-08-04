@@ -7,7 +7,9 @@ import java.util.Locale;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.image.SelectedBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.PropertyReader;
 
 public class InternationalizationBean 
 {
@@ -15,30 +17,73 @@ public class InternationalizationBean
 	private String currentLanguage = "en";
 	private SessionBean session = null;
 	
+	private List<SelectItem> internationalizedLanguages;
+	
 	public InternationalizationBean() 
 	{
 		session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		
 		languages = new ArrayList<SelectItem>();
-		languages.add(new SelectItem("en", "English"));
-		languages.add(new SelectItem("de", "Deutsch"));
+		internationalizedLanguages = new ArrayList<SelectItem>();
+		
+		initLanguagesFromProperties();
 	}
-
+	
+	private void initLanguagesFromProperties()
+	{
+		try 
+		{
+			String p = PropertyReader.getProperty("imeji.i18n.languages");
+			
+			for (int i = 0; i < p.split(",").length; i++) 
+			{
+				languages.add(new SelectItem(p.split(",")[i].split("-")[0] , p.split(",")[i].split("-")[1] ));
+			} 
+			
+		} 
+		catch (Exception e) 
+		{
+			throw new RuntimeException("Error reading property imeji.i18n.languages. Check Propety file: " + e);
+		}
+	}
+	
+	private void internationalizeLanguages()
+	{
+		for (SelectItem si : languages) 
+		{
+			internationalizedLanguages.add(new SelectItem(si.getValue(), session.getLabel(si.getLabel())));
+		}
+	}
+	
 	public void setCurrentLanguage(String currentLanguage) 
 	{
 		this.currentLanguage = currentLanguage;
 		session.setLocale(new Locale(currentLanguage));
 	}
 	
-	public String getCurrentLanguage() {
-		
+	public String getCurrentLanguage() 
+	{	
 		return currentLanguage;
 	}
 	
-	public List<SelectItem> getLanguages() {
+	public List<SelectItem> getLanguages() 
+	{
 		return languages;
 	}
 	
-	public void setLanguages(List<SelectItem> languages) {
+	public void setLanguages(List<SelectItem> languages) 
+	{
 		this.languages = languages;
+	}
+	
+	public List<SelectItem> getInternationalizedLanguages()
+	{
+		internationalizeLanguages();
+		return internationalizedLanguages;
+	}
+	
+	public void setInternationalizedLanguages(List<SelectItem> internationalizedLanguages) 
+	{
+		this.internationalizedLanguages = internationalizedLanguages;
 	}
 }

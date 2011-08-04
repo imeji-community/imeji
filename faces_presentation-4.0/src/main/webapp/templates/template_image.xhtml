@@ -98,7 +98,7 @@
 						<h:outputLink id="lnkViewItemPage2" styleClass="free_area0" value="#{imageBean.pageUrl}/view" rendered="#{imageBean.tab != 'VIEW'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
-									
+						
 					</div>
 				</div>
 			
@@ -110,9 +110,7 @@
 						<h3 class="xLarge_area0_p8 endline blockHeader">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata}" /><br/>
 							
-							<a4j:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" reRender="metadata" value="Edit" action="#{imageBean.edit.showEditor}">
-								
-							</a4j:commandLink>
+							<a4j:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" reRender="metadata" value="Edit" action="#{imageBean.edit.showEditor}"/>
 							<h:outputText value="Image locked " rendered="#{imageBean.editable and imageBean.locked}"/>
 							<h:outputLink vallue="#" title="Image has been locked by another user. It will be automatically release after 15 minutes." rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
 							<br/>
@@ -155,7 +153,7 @@
 											 	<a4j:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0" rowKeyVar="indexMetadata">
 											 		<h:panelGroup rendered="#{md.namespace == statement.name}">
 														<b class="xLarge_area0_p8 endline labelLine clear">
-															<h:outputText value="#{MetadataLabels.labels[md.namespace]}" /> 
+															<h:outputText value="#{MetadataLabels.internationalizedLabels[md.namespace]}" /> 
 															<span class="noDisplay">: </span>
 														</b>
 														<h:panelGroup layout="block" styleClass="double_area0_p2 xTiny_marginLExcl" >

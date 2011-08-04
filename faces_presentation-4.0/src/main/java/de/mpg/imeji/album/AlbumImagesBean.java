@@ -8,9 +8,11 @@ import thewebsemantic.NotFoundException;
 
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.SelectedBean;
+import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
@@ -105,7 +107,6 @@ public class AlbumImagesBean extends ImagesBean
     {
     	if (album.getAlbum().getImages().size() != totalNumberOfRecords)
     	{
-    		System.out.println("album corrupted");
     		ImageController controller = new ImageController(sb.getUser());
     		for (int i=0 ; i < album.getAlbum().getImages().size(); i++)
     		{
@@ -123,6 +124,17 @@ public class AlbumImagesBean extends ImagesBean
     		AlbumController albumController = new AlbumController(sb.getUser());
     		albumController.update(album.getAlbum());
     	}
+    	if (album.getAlbum().getImages().size() != totalNumberOfRecords)
+    	{
+    		BeanHelper.error("You are not allowed to see all images of this album");
+    	}
+    }
+    
+    @Override
+	public String initFacets() throws Exception
+    {
+    	// NO FACETs FOR ALBUMS
+        return "pretty";
     }
     
     public String removeFromAlbum() throws Exception

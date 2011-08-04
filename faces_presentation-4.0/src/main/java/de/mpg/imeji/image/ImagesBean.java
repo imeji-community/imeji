@@ -89,7 +89,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
     {
     	ImageController controller = new ImageController(sb.getUser());
-        if (reloadPage())
+        if (true || reloadPage())
         {
 	        images = new ArrayList<Image>();
 	        if (facets != null)

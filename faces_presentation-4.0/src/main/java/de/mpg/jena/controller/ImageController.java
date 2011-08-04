@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.richfaces.renderkit.html.images.GradientType;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
@@ -24,6 +25,7 @@ import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
+import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Image.Visibility;
 import de.mpg.jena.vo.ImageMetadata;
@@ -146,7 +148,7 @@ public class ImageController extends ImejiController
     public SearchResult searchImages(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
     {
     	Search search = new Search("http://imeji.mpdl.mpg.de/image", null);
-    	return search.search(scList, sortCri, user);
+    	return search.search(scList, sortCri, simplifyUser(null));
     }
     
     public SearchResult searchImagesInContainer(URI containerUri, List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
@@ -158,7 +160,7 @@ public class ImageController extends ImejiController
     public int countImages(List<SearchCriterion> scList)
     {
     	Search search = new Search("http://imeji.mpdl.mpg.de/image",null);
-    	List<String> uris = search.searchAdvanced(scList, null, user);
+    	List<String> uris = search.searchAdvanced(scList, null, simplifyUser(null));
     	return uris.size();
     }
     
@@ -194,7 +196,7 @@ public class ImageController extends ImejiController
     }
     
     /**
-     * Increase performance by restricting grants to users to only grants for the current container
+     * Increase performance by restricting grants to the only grants needed
      * @param user
      * @return
      */
@@ -203,7 +205,15 @@ public class ImageController extends ImejiController
     	User simplifiedUser = new User();
     	for (Grant g :user.getGrants()) 
     	{
-			if (g.getGrantFor().equals(containerUri))
+			if (containerUri != null && containerUri.toString().contains("collection") && g.getGrantFor().equals(containerUri))
+			{
+				simplifiedUser.getGrants().add(g);
+			}
+			else if (containerUri != null && containerUri.toString().contains("album") && g.getGrantFor().toString().contains("collection"))
+			{
+				simplifiedUser.getGrants().add(g);
+			}
+			else if (containerUri == null && g.getGrantFor().toString().contains("collection"))
 			{
 				simplifiedUser.getGrants().add(g);
 			}

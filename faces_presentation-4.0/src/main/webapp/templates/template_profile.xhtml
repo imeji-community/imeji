@@ -100,7 +100,7 @@
 																			
 									<br/><br/><br/><br/>
 									
-									<h:panelGroup styleClass="full_area0 xSmall_marginLExcl endline" rendered="#{statement.constraintsSize == 0 and statement.statement.vocabulary == null}">
+									<h:panelGroup styleClass="full_area0 xSmall_marginLExcl endline" rendered="#{statement.constraintsSize == 0 and statement.vocabularyString == null}">
 										<h:commandButton styleClass="min_imgBtn add"  shortDesc="#{lbl.add_vocabulary}" action="#{FormularBean.addVocabulary}" >
 											<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 										</h:commandButton>
@@ -113,12 +113,19 @@
 									</h:panelGroup>
 									
 									<h:panelGroup styleClass="full_area0" rendered="#{statement.vocabularyString != null}">
-										<h:outputLabel styleClass="huge_label" value="#{lbl.vocabulary}" />
+										
+										<h:outputLabel styleClass="full_label" value="#{lbl.vocabulary}" />
 										<h:panelGroup styleClass="full_area0 tiny_marginRIncl clear">
 											<h:selectOneMenu value="#{statement.vocabularyString}"  styleClass="free_txtInput" >
 												 <f:selectItems value="#{statement.vocabularyHelper.vocabularies}"/>
 	  										</h:selectOneMenu>
 										</h:panelGroup>
+										
+										
+										<h:commandButton styleClass="min_imgBtn remove"  shortDesc="#{lbl.remove_vocabulary}" action="#{FormularBean.removeVocabulary}" >
+											<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
+										</h:commandButton>
+										<h:outputLabel styleClass="" value="#{lbl.remove_vocabulary}" />
 									</h:panelGroup>	
 									
 									<h:panelGroup styleClass="full_area0" rendered="#{statement.constraintsSize > 0}">

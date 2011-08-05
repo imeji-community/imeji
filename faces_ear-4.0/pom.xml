@@ -606,7 +606,7 @@
 										<copy overwrite="true" file="${project.build.directory}/classes/faces.properties" todir="${project.build.directory}/jboss/server/conf">
 										</copy>
 										<!-- copy over the descriptio set template file -->
-										<copy overwrite="true" file="${project.build.directory}/classes/screenConfig.xml" todir="${project.build.directory}/jboss/server/conf">
+										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${project.build.directory}/jboss/server/conf">
 										</copy>
 									</tasks>
 								</configuration>
@@ -630,10 +630,7 @@
 										<copy overwrite="true" file="${project.build.directory}/classes/faces.properties" todir="${jboss.install.dir}/server/default/conf">
 										</copy>
 										<!-- copy over the screen config file file -->
-										<copy overwrite="true" file="${project.build.directory}/classes/screenConfig.xml" todir="${jboss.install.dir}/server/default/conf">
-										</copy>
-										<!-- copy over the description set template file -->
-										<copy overwrite="true" file="${project.build.directory}/classes/DSProfile.xml" todir="${jboss.install.dir}/server/default/conf">
+										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${jboss.install.dir}/server/default/conf">
 										</copy>
 
 										<!-- configuration for the runtime server jboss server -->

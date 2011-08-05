@@ -1,23 +1,46 @@
 package de.mpg.imeji.util;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.faces.model.SelectItem;
 
 public class VocabularyHelper
 {
-	private List<SelectItem> vocabularies = new ArrayList<SelectItem>();
+	private List<SelectItem> vocabularies;
+	private Properties properties;
 	
 	public VocabularyHelper() 
 	{
+		loadProperties();
+		initVocabularies();
+	}
+	
+	public void initVocabularies()
+	{
+		vocabularies = new ArrayList<SelectItem>();
 		vocabularies.add(new SelectItem("", "--"));
-		vocabularies.add(new SelectItem("http://pubman.mpdl.mpg.de/cone/persons/query", "Cone authors"));
-    	vocabularies.add(new SelectItem("http://pubman.mpdl.mpg.de/cone/cclicences/query", "Cone CreativeCommons licenses"));
-    	vocabularies.add(new SelectItem("http://pubman.mpdl.mpg.de/cone/journals/query", "Cone journals"));
-    	vocabularies.add(new SelectItem("http://pubman.mpdl.mpg.de/cone/iso639-3/query", "Cone Languages (iso639-3)"));
-    	vocabularies.add(new SelectItem("http://pubman.mpdl.mpg.de/cone/mimetypes/query", "Cone IANA Mimetypes"));
+		for (Object o : properties.keySet())
+		{
+			vocabularies.add(new SelectItem(properties.getProperty(o.toString()), o.toString()));
+		}
+	}
+	
+	public void loadProperties()
+	{
+		try 
+		{
+			InputStream instream = PropertyReader.getInputStream("vocabulary.properties");
+			properties = new Properties();
+			properties.load(instream);
+		} 
+		catch (Exception e) 
+		{
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public String getVocabularyName(URI uri)

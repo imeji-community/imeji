@@ -95,9 +95,11 @@ public class ImageBean
         {
             setSelected(true);
         }
-          
+        
+    	labels.init(profile);
+    	
         edit = new SingleEditBean(image, profile, getPageUrl());
-        labels.init(profile);
+      
         cleanImageMetadata();
     }
     
@@ -177,6 +179,12 @@ public class ImageBean
 			}
 		}
 	}
+    
+    public String getInitLabels() throws Exception
+    {
+    	labels.init(profile);
+    	return "";
+    }
 
     public void initView() throws Exception
     {
@@ -184,6 +192,7 @@ public class ImageBean
     	{
     		init();
     	}
+
         setTab(TabType.VIEW.toString());
     }
 

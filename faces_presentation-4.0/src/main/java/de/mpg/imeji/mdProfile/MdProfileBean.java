@@ -73,6 +73,7 @@ public class MdProfileBean
     {
     	mdTypesMenu = new ArrayList<SelectItem>();
       	mdTypesMenu.add(new SelectItem(null, "--"));
+      	
       	for (ComplexTypes t : ComplexTypes.values())
     	{
     		mdTypesMenu.add(
@@ -84,6 +85,7 @@ public class MdProfileBean
     public String getInit()
     {
     	parseID();
+    	
     	if (UrlHelper.getParameterBoolean("reset"))
     	{
     		reset();

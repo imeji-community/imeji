@@ -7,7 +7,6 @@ import java.util.Locale;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.image.SelectedBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.PropertyReader;
 
@@ -22,17 +21,17 @@ public class InternationalizationBean
 	public InternationalizationBean() 
 	{
 		session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		
-		languages = new ArrayList<SelectItem>();
-		internationalizedLanguages = new ArrayList<SelectItem>();
-		
+				
 		initLanguagesFromProperties();
+		internationalizeLanguages();
 	}
 	
 	private void initLanguagesFromProperties()
 	{
 		try 
 		{
+			languages = new ArrayList<SelectItem>();
+			
 			String p = PropertyReader.getProperty("imeji.i18n.languages");
 			
 			for (int i = 0; i < p.split(",").length; i++) 
@@ -49,6 +48,7 @@ public class InternationalizationBean
 	
 	private void internationalizeLanguages()
 	{
+		internationalizedLanguages = new ArrayList<SelectItem>();
 		for (SelectItem si : languages) 
 		{
 			internationalizedLanguages.add(new SelectItem(si.getValue(), session.getLabel(si.getLabel())));
@@ -59,6 +59,7 @@ public class InternationalizationBean
 	{
 		this.currentLanguage = currentLanguage;
 		session.setLocale(new Locale(currentLanguage));
+		internationalizeLanguages();
 	}
 	
 	public String getCurrentLanguage() 
@@ -78,7 +79,6 @@ public class InternationalizationBean
 	
 	public List<SelectItem> getInternationalizedLanguages()
 	{
-		internationalizeLanguages();
 		return internationalizedLanguages;
 	}
 	

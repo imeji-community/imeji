@@ -14,6 +14,7 @@ import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.user.SharingBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.UserController;
@@ -57,16 +58,8 @@ public class AlbumBean implements Serializable
         
         public void initView()
         {
-            AlbumController ac = new AlbumController(sessionBean.getUser()); 
-            try 
-            {
-            	setAlbum(ac.retrieve(id));
-			} 
-            catch (Exception e) 
-			{
-				BeanHelper.error("Album " + id + " not found");
-			}
-         
+        	setAlbum(ObjectLoader.loadAlbum(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
+        	
             if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
             {
                 active = true;
@@ -160,7 +153,7 @@ public class AlbumBean implements Serializable
         {
             List<Person> list = (List<Person>) getAlbum().getMetadata().getPersons();
             if (list.size() > 1) list.remove(authorPosition);
-            else BeanHelper.error("An album needs at leat one author!");
+            else BeanHelper.error(sessionBean.getMessage("error_album_need_one_author"));
             return "";
         }
 
@@ -178,7 +171,7 @@ public class AlbumBean implements Serializable
             List<Person> persons = (List<Person>) getAlbum().getMetadata().getPersons();
             List<Organization> orgs = (List<Organization>) persons.get(authorPosition).getOrganizations();
             if (orgs.size() > 1) orgs.remove(organizationPosition);
-            else BeanHelper.error("An author needs at leat one organization!");
+            else BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
             return "";
         }
 
@@ -278,7 +271,7 @@ public class AlbumBean implements Serializable
                     ac.create(getAlbum());
                     UserController uc = new UserController(sessionBean.getUser());
                     sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
-                    BeanHelper.info("Album created successfully");
+                    BeanHelper.info(sessionBean.getMessage("success_album_create"));
                     return "pretty:albums";
                 }
             }
@@ -297,7 +290,7 @@ public class AlbumBean implements Serializable
             if (valid())
             {
                 ac.update(getAlbum());
-                BeanHelper.info("Album updated successfully");
+                BeanHelper.info(sessionBean.getMessage("success_album_update"));
                 Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
                 FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + getAlbum().getId().getPath() + "/details?init=1");
             }
@@ -355,10 +348,11 @@ public class AlbumBean implements Serializable
             try 
             {
 				ac.release(album);
+				BeanHelper.info(sessionBean.getMessage("success_album_release"));
 			} 
             catch (Exception e) 
             {
-            	BeanHelper.error("Error releasing album");
+            	BeanHelper.error(sessionBean.getMessage("error_album_release"));
 				BeanHelper.error(e.getMessage());
 				e.printStackTrace();
 			}
@@ -373,12 +367,12 @@ public class AlbumBean implements Serializable
         	{
         		makeInactive();
     			c.delete(album, sessionBean.getUser());
-    			BeanHelper.info("Album successfully deleted.");
+    			BeanHelper.info(sessionBean.getMessage("success_album_delete"));
     		} 
         	catch (Exception e) 
         	{
-        		BeanHelper.error("Error deleting Album");
-    			BeanHelper.error("Details: " + e.getMessage());
+        		BeanHelper.error(sessionBean.getMessage("error_album_delete"));
+    			BeanHelper.error(e.getMessage());
     			e.printStackTrace();
     		}
         	
@@ -392,12 +386,12 @@ public class AlbumBean implements Serializable
         	try 
         	{
         		c.withdraw(album);
-            	BeanHelper.info("Album successfully withdrawn.");
+            	BeanHelper.info(sessionBean.getMessage("success_album_withdraw"));
     		} 
         	catch (Exception e) 
     		{
-        		BeanHelper.error("Error withdrawing Album");
-    			BeanHelper.error("Details: " + e.getMessage());
+        		BeanHelper.error(sessionBean.getMessage("error_album_withdraw"));
+    			BeanHelper.error(e.getMessage());
     		}
         	
         	return "pretty:";

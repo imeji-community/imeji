@@ -133,11 +133,11 @@ public class ImageBean
  		} 
     	catch (NotFoundException e) 
     	{
-    		BeanHelper.error("Image " + id + " not found!");
+    		BeanHelper.error(sessionBean.getLabel("image") + " " + id + sessionBean.getLabel("not_found"));
 		}
         catch (Exception e) 
  		{
- 			BeanHelper.error("Error loading image: " + e );
+ 			BeanHelper.error(sessionBean.getMessage("error_image_load") + ": " + e );
  		}
     }
     
@@ -163,7 +163,7 @@ public class ImageBean
 		} 
     	catch (Exception e) 
     	{
-			BeanHelper.error("Error reading profile " + image.getMetadataSet().getProfile() + " of image " + image.getId());
+			BeanHelper.error(sessionBean.getMessage("error_profile_load") + " " + image.getMetadataSet().getProfile() + "  " + sessionBean.getLabel("of") + " " + image.getId());
 			BeanHelper.error(e.getMessage());
 			profile = null;
 		}
@@ -328,7 +328,7 @@ public class ImageBean
         aib.getAlbum().getAlbum().getImages().remove(image.getId());
         ac.update(aib.getAlbum().getAlbum());
         if(getIsInActiveAlbum()) sessionBean.getActiveAlbum().getAlbum().getImages().remove(image.getId());
-        BeanHelper.info("Image " + image.getFilename() + " removed from album");
+        BeanHelper.info(sessionBean.getLabel("image") + " " + image.getFilename() + " " + sessionBean.getMessage("success_album_remove_from"));
         return "pretty:";
     }
 
@@ -381,14 +381,14 @@ public class ImageBean
 	public List<SelectItem> getStatementMenu()
     {
     	List<SelectItem> statementMenu = new ArrayList<SelectItem>();
-    	try 
+    	if (profile == null)
     	{
-	        for (Statement s : ProfileHelper.loadProfile(image).getStatements())
-	        {
-	        	 statementMenu.add(new SelectItem(s.getName(), s.getLabels().iterator().next().toString()));
-	        }
+    		loadProfile();
     	}
-    	catch (Exception e) {BeanHelper.error("An error occured reading Profile : " + e.getCause());}
+    	for (Statement s : profile.getStatements())
+	    {
+    		statementMenu.add(new SelectItem(s.getName(), s.getLabels().iterator().next().toString()));
+	    }
     	return statementMenu;
     }
 	

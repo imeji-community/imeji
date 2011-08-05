@@ -3,6 +3,7 @@ package de.mpg.imeji.facet;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.vo.CollectionImeji;
@@ -21,7 +22,7 @@ public class FacetsBean
  		} 
         catch (Exception e) 
         {
-        	BeanHelper.error("Error initializing facets! " + e.getMessage());
+        	BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + ", Facets intialization: " + e.getMessage());
         	e.printStackTrace();
  		}
 	}
@@ -34,7 +35,7 @@ public class FacetsBean
 		} 
     	catch (Exception e) 
     	{
-			BeanHelper.error("Error initializing facets! " + e.getMessage());
+    		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + ", Facets intialization: " + e.getMessage());
 			e.printStackTrace();
 		}
     }

@@ -7,8 +7,10 @@ import javax.faces.context.FacesContext;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
@@ -38,7 +40,7 @@ public class EditCollectionBean extends CollectionBean
             String id = super.getId();
             if (id != null)
             {
-                CollectionImeji coll = collectionController.retrieve(id);
+                CollectionImeji coll = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, id), sessionBean.getUser());
                 if (coll != null)
                 {
                     super.setCollection(coll);
@@ -56,14 +58,10 @@ public class EditCollectionBean extends CollectionBean
                     super.getCollection().getMetadata().setPersons(persons);
                     collectionSession.setActive(super.getCollection());
                 }
-                else
-                {
-                    BeanHelper.error("Collection " + id + " not found");
-                }
             }
             else
             {
-                BeanHelper.error("id not found", "No parameter id found in the url");
+                BeanHelper.error(sessionBean.getLabel("error") + " : no ID in URL");
             }
             init = false;
         }
@@ -74,7 +72,7 @@ public class EditCollectionBean extends CollectionBean
         if (valid())
         {
             collectionController.update(super.getCollection());
-            BeanHelper.info("Collection successly saved");
+            BeanHelper.info(sessionBean.getMessage("success_collection_save"));
             Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
             FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + getCollection().getId().getPath() + "/details?init=1");
         }

@@ -49,11 +49,11 @@ public class UserCreationBean
         
         if (!user.getEmail().matches(regexEmailMatch))
         {
-            BeanHelper.error("The email is not valid!");
+            BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
         }
         else if(!getPassword().equals(getRepeatedPassword()))
         {
-            BeanHelper.error("Password and repeated password are not the same");
+        	BeanHelper.error(sb.getMessage("error_user_repeat_password"));
         }
         else
         {
@@ -61,7 +61,7 @@ public class UserCreationBean
             {
                 if (uc.retrieve(user.getEmail()) != null)
                 {
-                	BeanHelper.error("User already exists!");
+                	BeanHelper.error(sb.getMessage("error_user_already_exists"));
                 }
             }
             catch (NotFoundException e) 
@@ -69,11 +69,11 @@ public class UserCreationBean
             	user.setEncryptedPassword(UserController.convertToMD5(getPassword()));
                 uc.create(user);
                 logger.info("USER email created: " + user.getEmail());
-                BeanHelper.info("User created successfully");
+                BeanHelper.info(sb.getMessage("success_user_create"));
 			}
             catch (Exception e) 
             {
-            	BeanHelper.error("ERROR " + e);
+            	BeanHelper.error(sb.getMessage("error") + ": " + e);
 			}
         }
         return "pretty:";

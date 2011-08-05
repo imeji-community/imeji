@@ -15,6 +15,7 @@ import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.ProfileController;
@@ -47,28 +48,12 @@ public class CollectionImagesBean extends ImagesBean
 
 	public void init() 
 	{
-		CollectionController cc = new CollectionController(sb.getUser());
-		
-		try 
-		{
-			this.collection = cc.retrieve(id);
-		}
-		catch (thewebsemantic.NotFoundException e) 
-		{
-			BeanHelper.error("Collection " + id + " not found");
-			BeanHelper.error("Please check id.");
-			e.printStackTrace();
-		}
-		catch (Exception e) 
-		{
-			BeanHelper.error(e.getMessage());
-		}
+		collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, id), sb.getUser());
 		
 		List<SelectItem> sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_CREATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_CREATION_DATE.name())));
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
         setSortMenu(sortMenu);
-        
 	}
 
 	@Override
@@ -114,7 +99,7 @@ public class CollectionImagesBean extends ImagesBean
 			} 
 			catch (Exception e) 
 			{
-				BeanHelper.error("Invalid search query!");
+				BeanHelper.error(sb.getMessage("error_search_query"));
 			}		
 			uri = ObjectHelper.getURI(CollectionImeji.class, id);
 			setSearchResult(controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset));
@@ -162,52 +147,58 @@ public class CollectionImagesBean extends ImagesBean
 	public CollectionImeji getCollection() {
 		return collection;
 	}
-	
-	 public String release()
-	 {
+    
+    public String release()
+    {
         CollectionController cc = new CollectionController(sb.getUser());
+        
         try 
         {
-			cc.release(collection);
+        	 cc.release(collection);
+             BeanHelper.info(sb.getMessage("success_collection_release"));
 		} 
         catch (Exception e) 
         {
-        	BeanHelper.error("Error releasing collection");
+        	BeanHelper.error(sb.getMessage("error_collection_release"));
 			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
 		}
-        return "pretty:";
+       
+        return "";
     }
     
     public String delete()
     {
     	CollectionController cc = new CollectionController(sb.getUser());
+    	
     	try 
     	{
 			cc.delete(collection, sb.getUser());
+			BeanHelper.info(sb.getMessage("success_collection_delete"));
 		} 
     	catch (Exception e) 
-		{
-			BeanHelper.error("Error deleting collection");
+    	{
+    		BeanHelper.error(sb.getMessage("success_collection_delete"));
 			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
 		}
+    	
     	return "";
     }
-	
-    public String withdraw()
+    
+    public String withdraw() throws Exception
     {
     	CollectionController cc = new CollectionController(sb.getUser());
+    	
     	try 
     	{
-			cc.withdraw(collection);
+    		cc.withdraw(collection);
+        	BeanHelper.info(sb.getMessage("success_collection_withdraw"));
 		} 
     	catch (Exception e) 
 		{
-			BeanHelper.error("Error withdrawing collection");
+    		BeanHelper.error(sb.getMessage("error_collection_withdraw"));
 			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
 		}
+    	
     	return "";
     }
 

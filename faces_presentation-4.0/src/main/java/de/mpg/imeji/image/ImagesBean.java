@@ -107,7 +107,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	        }
 	        catch (Exception e)
 	        {
-	            BeanHelper.error("Invalid search query!");
+	        	BeanHelper.error(sb.getMessage("error_search_query"));
 	        }
 			searchResult = controller.searchImages(scList, sortCriterion, limit, offset);
 			totalNumberOfRecords = searchResult.getNumberOfRecords();
@@ -179,7 +179,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         try 
         {
         	  ac.update(activeAlbum.getAlbum());
-              BeanHelper.info(count + " images added to active album");
               BeanHelper.info(count + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("images_added_to_active_album"));       
 
 		} 
@@ -210,12 +209,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 			} 
     		catch (Exception e) 
 			{
-				BeanHelper.error("Error deleting " + im.getFilename());
+				BeanHelper.error(sb.getMessage("error_image_delete") + " " + im.getFilename());
 				e.printStackTrace();
 			}
     	}
     	
-    	BeanHelper.info(count + " images deleted.");
+    	BeanHelper.info(count + " " + sb.getLabel("images_deleted"));
     	cc.update(coll);
     	sb.getSelected().clear();
     	
@@ -237,11 +236,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 			} 
     		catch (Exception e) 
 			{
-				BeanHelper.error("Error withdrawing " + im.getFilename());
+				BeanHelper.error(sb.getMessage("error_image_withdraw") + " " + im.getFilename());
 				e.printStackTrace();
 			}
     	}
-    	BeanHelper.info(count + " images deleted.");
+    	BeanHelper.info(count + " " + sb.getLabel("images_withdraw"));
     	return "pretty:";
     }
 

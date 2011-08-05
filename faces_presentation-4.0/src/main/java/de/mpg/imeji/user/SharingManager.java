@@ -4,6 +4,7 @@ package de.mpg.imeji.user;
 import java.net.URI;
 
 import thewebsemantic.NotFoundException;
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.UserController;
@@ -53,7 +54,7 @@ public class SharingManager
 			}
 			catch (NotFoundException e)
 			{
-				BeanHelper.error("User " + email  + " doesn't have an account in Imeji! Sharing works only for Imeji Users.");
+				BeanHelper.error(email  + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("error_share_email_not_imeji_account"));
 			}
 			catch (Exception e) 
 			{
@@ -61,7 +62,7 @@ public class SharingManager
 				return false;
 			}
 		}
-		BeanHelper.error("You have not suffisant priviliges to share this collection");
+		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("error_share_not_enough_priviliges"));
 		return false;
 	}
 	

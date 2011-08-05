@@ -31,6 +31,13 @@ import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
+/**
+ * 
+ * Bean for metadata batch editor
+ * 
+ * @author saquet
+ *
+ */
 public class EditImageMetadataBean 
 {
 	//objects
@@ -78,12 +85,12 @@ public class EditImageMetadataBean
 			}
 			else
 			{
-				BeanHelper.error("No statements found in profile!");
+				BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("profile_empty"));
 			}
 		}
 		catch (Exception e) 
 		{
-			BeanHelper.error("Error initializing page");
+			BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
 			e.printStackTrace();
 		}
 		return "";
@@ -99,12 +106,12 @@ public class EditImageMetadataBean
 			editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
 			
 			modeRadio = new ArrayList<SelectItem>();
-			modeRadio.add(new SelectItem("basic", "Write only when no values"));
+			modeRadio.add(new SelectItem("basic",((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("editor_basic")));
 			if (this.statement.getMaxOccurs().equals("unbounded"))
 			{
-				modeRadio.add(new SelectItem("append", "Append a new value to all"));
+				modeRadio.add(new SelectItem("append", ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("editor_append")));
 			}
-			modeRadio.add(new SelectItem("overwrite", "Overwrite all values"));
+			modeRadio.add(new SelectItem("overwrite", ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("editor_overwrite")));
 		}
 		return "";
 	}
@@ -137,7 +144,7 @@ public class EditImageMetadataBean
 		{
 			profileMenu.add(new SelectItem(p.getId().toString(), p.getTitle()));
 		}
-		if (getSelectedProfile() == null || getSelectedProfile().getStatements().isEmpty()) statementMenu.add(new SelectItem("No statements found"));
+		if (getSelectedProfile() == null || getSelectedProfile().getStatements().isEmpty()) statementMenu.add(new SelectItem(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("profile_empty")));
 		for(Statement s: getSelectedProfile().getStatements())
 		{
 			statementMenu.add(new SelectItem(s.getName().toString(), labelHelper.getDefaultLabel(s.getLabels().iterator())));

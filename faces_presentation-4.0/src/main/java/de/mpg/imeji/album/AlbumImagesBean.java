@@ -117,7 +117,6 @@ public class AlbumImagesBean extends ImagesBean
     			catch (NotFoundException e) 
 				{
     				((List<URI>) album.getAlbum().getImages()).remove(i);
-    				System.out.println("one not found");
     				i--;
 				}     			
     		}
@@ -126,7 +125,7 @@ public class AlbumImagesBean extends ImagesBean
     	}
     	if (album.getAlbum().getImages().size() != totalNumberOfRecords)
     	{
-    		BeanHelper.error("You are not allowed to see all images of this album");
+    		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("album_not_allowed_see_all"));
     	}
     }
     
@@ -140,7 +139,7 @@ public class AlbumImagesBean extends ImagesBean
     public String removeFromAlbum() throws Exception
     {
         AlbumController ac = new AlbumController(sb.getUser());
-        BeanHelper.info(album.getAlbum().getImages().size() + "Images removed from album");
+        BeanHelper.info(album.getAlbum().getImages().size() + " " + sb.getMessage("success_album_remove_images"));
         album.getAlbum().getImages().clear();
         ac.update(album.getAlbum());
         AlbumBean activeAlbum = sb.getActiveAlbum();

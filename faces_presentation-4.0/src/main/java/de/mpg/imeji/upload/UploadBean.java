@@ -16,6 +16,7 @@ import de.mpg.imeji.escidoc.ItemVO;
 import de.mpg.imeji.upload.deposit.DepositController;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.LoginHelper;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.UserController;
@@ -167,24 +168,16 @@ public class UploadBean
 	{
         if (id != null)
         {
-            try
-            {
-            	collectionController = new CollectionController(sessionBean.getUser());
-                collection = collectionController.retrieve(ObjectHelper.getURI(CollectionImeji.class, id));
-            }
-            catch (Exception e)
-            {
-                BeanHelper.error("Collection " + ObjectHelper.getURI(CollectionImeji.class, id) + " not found.");
-                BeanHelper.error(e.getMessage());
-            }
+        	collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class,id), sessionBean.getUser());
         }
         else
         {
-            BeanHelper.error("No Collection information found. Please check your URL.");
+            BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
         }
     }
 
-    public void logInEscidoc() throws Exception{
+    public void logInEscidoc() throws Exception
+    {
         String userName = PropertyReader.getProperty("imeji.escidoc.user");
         String password = PropertyReader.getProperty("imeji.escidoc.password");
         escidocUserHandle = LoginHelper.login(userName, password);

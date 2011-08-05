@@ -40,22 +40,6 @@ public class CollectionCriterion extends Criterion implements Serializable{
 	public CollectionCriterion(List<CollectionImeji> collections)
 	{
 		this.collections = collections; 
-//		if(collections!=null && collections.size()>0)
-//		{
-//			SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-//			ProfileController pc = new ProfileController(sb.getUser());
-//			try 
-//			{
-//				setSelectedProfile(pc.retrieve(collections.get(0).getProfile()));
-//			} 
-//			catch (Exception e) 
-//			{
-//				BeanHelper.error("Error reading profile: " + collections.get(0).getProfile());
-//			}
-//		    setMdCriterionList(newMdCriterionList());
-//		    setSelectedCollectionId(collections.get(0).getId().toString());
-//	        updateMDList();
-//		}
 	}
 	
     public void collectionChanged(ValueChangeEvent event)
@@ -105,7 +89,7 @@ public class CollectionCriterion extends Criterion implements Serializable{
     	}
     	else
     	{
-    		 BeanHelper.error("Selected Collection has no metadata profile");
+    		 BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("profile_empty"));
     	}
     	return mdCriterionList;
     }

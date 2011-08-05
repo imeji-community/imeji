@@ -37,7 +37,7 @@ public class LoginHelper
 		catch (Exception e) 
 		{
 			sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-			BeanHelper.info("Wrong administrator user. Check config file or FW");
+			BeanHelper.info(sessionBean.getLabel("error") + ", wrong administrator user. Check config file or FW: " + e);
 		}
 		return handle;
 	}

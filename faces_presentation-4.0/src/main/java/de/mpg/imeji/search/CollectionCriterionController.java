@@ -189,13 +189,13 @@ public class CollectionCriterionController implements Serializable
     				}
     				else
     				{
-    					errorMessage = "No metadata selected!";
+    					errorMessage = sb.getMessage("error_search_no_metadata_selected");
     				}
     			}
     		}
 			else
 			{
-				errorMessage = "No collection selected!";
+				errorMessage = sb.getMessage("error_search_no_collection_selected");
 			}
 		    scList.add(subSC);
 		}

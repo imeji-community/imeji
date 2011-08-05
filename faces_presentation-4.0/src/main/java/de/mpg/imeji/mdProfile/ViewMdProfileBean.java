@@ -37,7 +37,7 @@ public class ViewMdProfileBean extends MdProfileBean
             }
             else
             {
-                BeanHelper.error("No profile Id found in URL");
+                BeanHelper.error(session.getLabel("error") + "  No profile Id found in URL");
             }
             init = false;
         }
@@ -51,11 +51,11 @@ public class ViewMdProfileBean extends MdProfileBean
         {	
     		 profileController.update(this.getProfile());
 		} 
-        catch (Exception e) 
+    	catch (Exception e) 
 		{
-			 BeanHelper.error("Error saving profile");
+			 BeanHelper.error(session.getMessage("error_profile_save"));
 		}
-        BeanHelper.info("Metadata Profile updates successfully!");
+        BeanHelper.info(session.getMessage("success_profile_save"));
         return "pretty:";
     }
 

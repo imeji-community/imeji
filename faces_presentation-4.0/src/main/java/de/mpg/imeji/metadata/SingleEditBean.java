@@ -145,7 +145,7 @@ public class SingleEditBean
 		}
 		else
 		{
-			BeanHelper.error("You are not allowed to edit this image!");
+			BeanHelper.error(sb.getMessage("error_editor_not_allowed"));
 		}
 		return "";
 	}

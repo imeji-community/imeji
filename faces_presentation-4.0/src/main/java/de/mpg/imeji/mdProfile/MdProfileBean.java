@@ -333,11 +333,13 @@ public class MdProfileBean
     public boolean validateProfile(MetadataProfile profile)
     {
         List<String> statementNames = new ArrayList<String>();
+        
         if (profile.getStatements() == null)
         {
-        	BeanHelper.error("Empty profile");
+        	BeanHelper.error(sessionBean.getLabel("profile_empty"));
         	return false;
         }
+        
         int i=0;
         
         for (StatementWrapper wrapper : statements)
@@ -346,22 +348,22 @@ public class MdProfileBean
         	
         	if (s.getType() == null)
         	{
-        		BeanHelper.error("Please select a type for each metadata.");
+        		BeanHelper.error(sessionBean.getMessage("error_profile_select_metadata_type"));
             	return false;
         	}
         	else if(s.getName() == null || !s.getName().isAbsolute())
             {
-            	BeanHelper.error(s.getName()+" is not a valid name!");
+            	BeanHelper.error(s.getName()+ " " + sessionBean.getMessage("error_profile_name_not_valid"));
             	return false;
             }
             else if (statementNames.contains(s.getName()))
             {
-                BeanHelper.error("Names must be unique!");
+                BeanHelper.error(sessionBean.getMessage("error_profile_name_not_unique"));
                 return false;
             }
             else if (s.getName() == null || s.getName().toString().equals(profile.getId().toString() + "/"))
             {
-                BeanHelper.error("Names are required!");
+                BeanHelper.error(sessionBean.getMessage("error_profile_name_required"));
                 return false;
             }
             else

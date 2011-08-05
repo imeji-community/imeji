@@ -30,9 +30,9 @@ public class CreateMdProfileBean extends MdProfileBean
 			} 
             catch (Exception e) 
 			{
-				 BeanHelper.error("Error saving profile");
+				 BeanHelper.error(session.getMessage("error_profile_save"));
 			}
-            BeanHelper.info(session.getMessage("profile_save_success"));
+            BeanHelper.info(session.getMessage("success_profile_save"));
         }
         return "pretty:";
     }

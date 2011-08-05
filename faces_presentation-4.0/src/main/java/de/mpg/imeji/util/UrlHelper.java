@@ -7,6 +7,8 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import de.mpg.imeji.beans.SessionBean;
+
 public class UrlHelper
 {
     public static String getParameterValue(String parameterName)
@@ -35,7 +37,7 @@ public class UrlHelper
         }
         catch (Exception e)
         {
-            BeanHelper.error("'" + uri + "' is not a valid URL");
+        	BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("error") + " (Non valid URL): " + e);
         }
         return false;
     }

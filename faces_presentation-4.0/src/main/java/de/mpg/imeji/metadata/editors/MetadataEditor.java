@@ -56,30 +56,30 @@ public abstract class  MetadataEditor
 					try 
 					{
 						ic.update(images);
-						BeanHelper.info("Edit done!");
-						String str = images.size() +" images edited";
-						if (images.size() == 1) str = "One image edited";
+						BeanHelper.info(sb.getMessage("success_editor_edit"));
+						String str = images.size() +" " + sb.getMessage("success_editor_images");
+						if (images.size() == 1) str = sb.getMessage("success_editor_image");
 						BeanHelper.info(str);
 					} 
 					catch (Exception e) 
 					{
 						logger.error(e);
-						BeanHelper.warn("Edit error: " + e.getMessage());
+						BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getMessage());
 					}
 				}
 				else
 				{
-					BeanHelper.error("Validation error!");
+					BeanHelper.error(sb.getMessage("error_metadata_validation"));
 				}
 			}
 			else
 			{
-				BeanHelper.error("No Images to edit!");
+				BeanHelper.error(sb.getMessage("error_metadata_edit_no_images"));
 			}
 		} 
         catch (Exception e) 
 		{
-			throw new RuntimeException("Metadata Editor error (Update images): " + e);
+			throw new RuntimeException(sb.getMessage("error_metadata_edit") + " " + e);
 		}
 	}
 

@@ -113,7 +113,10 @@ public class SelectedBean extends ImagesBean {
 	        		count++;
 	        	}
 	        }
-	        if ( count >0 )BeanHelper.info(count + " images removed from album");
+	        if ( count >0 )
+	        {
+	        	BeanHelper.info(count + sb.getMessage("success_album_remove_images"));
+	        }
 	        ac.update(bean.getAlbum().getAlbum());
 	        AlbumBean activeAlbum = sb.getActiveAlbum();
 	        if (activeAlbum != null && activeAlbum.getAlbum().getId().toString().equals(bean.getAlbum().getAlbum().getId().toString()))
@@ -152,10 +155,9 @@ public class SelectedBean extends ImagesBean {
 	 * WORKAROUND!
 	 */
 	public String getBackUrl() {
-		HttpServletRequest req = (HttpServletRequest) FacesContext
-				.getCurrentInstance().getExternalContext().getRequest();
-		if (req.getParameter("back") != null
-				&& !"".equals(req.getParameter("back"))) {
+		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		if (req.getParameter("back") != null && !"".equals(req.getParameter("back"))) 
+		{
 			backUrl = req.getParameter("back");
 		}
 		return backUrl;

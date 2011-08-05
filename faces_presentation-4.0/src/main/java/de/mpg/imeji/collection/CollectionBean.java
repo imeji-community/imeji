@@ -111,7 +111,7 @@ public abstract class CollectionBean
     {
 		LinkedList<Person> c = (LinkedList<Person>)collection.getMetadata().getPersons();
         if (c.size() > 1 )c.remove(authorPosition);
-        else BeanHelper.error("A collection needs at leat one author!");
+        else BeanHelper.error(sessionBean.getMessage("error_collection_need_one_author"));
         return getNavigationString();
     }
 
@@ -130,7 +130,7 @@ public abstract class CollectionBean
         LinkedList<Person> persons = (LinkedList<Person>)collection.getMetadata().getPersons();
         LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
         if (orgs.size() > 1) orgs.remove(organizationPosition);
-        else BeanHelper.error("An author needs at leat one organization!");
+        else BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
         return getNavigationString();
     }
 
@@ -273,12 +273,12 @@ public abstract class CollectionBean
         try 
         {
         	 cc.release(collection);
-             BeanHelper.info("Collection successfully released.");
+             BeanHelper.info(sessionBean.getMessage("success_collection_release"));
 		} 
         catch (Exception e) 
         {
-        	BeanHelper.error("Error releasing collection");
-			BeanHelper.error("Details: " + e.getMessage());
+        	BeanHelper.error(sessionBean.getMessage("error_collection_release"));
+			BeanHelper.error(e.getMessage());
 		}
        
         return "pretty:";
@@ -291,12 +291,12 @@ public abstract class CollectionBean
     	try 
     	{
 			cc.delete(collection, sessionBean.getUser());
-			BeanHelper.info("Collection successfully deleted.");
+			BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
 		} 
     	catch (Exception e) 
     	{
-    		BeanHelper.error("Error deleting collection");
-			BeanHelper.error("Details: " + e.getMessage());
+    		BeanHelper.error(sessionBean.getMessage("success_collection_delete"));
+			BeanHelper.error(e.getMessage());
 		}
     	
     	return "pretty:collections";
@@ -309,12 +309,12 @@ public abstract class CollectionBean
     	try 
     	{
     		cc.withdraw(collection);
-        	BeanHelper.info("Collection successfully withdrawn.");
+        	BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
 		} 
     	catch (Exception e) 
 		{
-    		BeanHelper.error("Error withdrawing collection");
-			BeanHelper.error("Details: " + e.getMessage());
+    		BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
+			BeanHelper.error(e.getMessage());
 		}
     	
     	return "pretty:";

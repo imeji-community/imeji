@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.vo.ImageMetadata;
@@ -76,7 +77,7 @@ public class MetadataHelper
 			}
 			catch (Exception e) 
 			{
-				BeanHelper.error(id + " is not a correct URI");
+				BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " CONE ID");
 			}
 			((ConePerson)md).setConeId(null);
 		}

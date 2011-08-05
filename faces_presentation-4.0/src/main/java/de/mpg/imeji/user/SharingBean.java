@@ -9,9 +9,11 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ProfileController;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.MetadataProfile;
@@ -65,18 +67,18 @@ public class SharingBean
 			if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
 			{
 				shared = sm.share(retrieveCollection(colId), sb.getUser(), email, selectedGrant);
-				message = "Collection " + colId + " shared with " + email;
+				message = sb.getLabel("collection") + " " + colId + " " + sb.getLabel("shared_with")+ " " + email;
 			}
 			else
 			{
 				shared = sm.share(retrieveProfile(colId), sb.getUser(), email, selectedGrant);
-				message = "Profile shared with " + email;
+				message = sb.getLabel("profile") + " " + colId + " " + sb.getLabel("shared_with")+ " " + email;
 			}
 		}
 		else if (albId != null)
 		{
 			shared = sm.share(retrieveAlbum(albId), sb.getUser(), email, selectedGrant);
-			message = "Album shared with " + email;
+			message = sb.getLabel("album") + " " + colId + " " + sb.getLabel("shared_with")+ " " + email;
 		}
 
 		if (shared)
@@ -95,45 +97,17 @@ public class SharingBean
 	
 	public CollectionImeji retrieveCollection(String id)
 	{
-		CollectionController cl = new CollectionController(sb.getUser());
-		try 
-		{
-			return cl.retrieve(URI.create(id));
-		} 
-		catch (Exception e) 
-		{
-			BeanHelper.error("Collection " + id + " not found!");
-		}
-		return null;
+		return ObjectLoader.loadCollection(URI.create(id), sb.getUser());
 	}
 	
 	public MetadataProfile retrieveProfile(String collId)
 	{
-		CollectionImeji c = retrieveCollection(collId);
-		ProfileController pc = new ProfileController(sb.getUser());
-		try 
-		{
-			return pc.retrieve(c.getProfile());
-		} 
-		catch (Exception e) 
-		{
-			BeanHelper.error("Profile " + c.getProfile() + " not found!");
-		}
-		return null;
+		return ObjectLoader.loadProfile(retrieveCollection(collId).getProfile(), sb.getUser());
 	}
 	
 	public Album retrieveAlbum(String albId)
 	{
-		AlbumController c = new AlbumController(sb.getUser());
-		try 
-		{
-			return c.retrieve(albId);
-		} 
-		catch (Exception e) 
-		{
-			BeanHelper.error("Album " + albId + " not found!");
-		}
-		return null;
+		return ObjectLoader.loadAlbum(ObjectHelper.getURI(Album.class, albId), sb.getUser());
 	}
 
 	public String getStatus() {

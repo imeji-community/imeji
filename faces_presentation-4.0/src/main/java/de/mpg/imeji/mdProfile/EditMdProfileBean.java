@@ -53,7 +53,7 @@ public class EditMdProfileBean extends MdProfileBean
                 }
                 else
                 {
-                    BeanHelper.error("No profile Id found in URL");
+                    BeanHelper.error(session.getLabel("error") + ": No profile Id found in URL");
                 }
                 init = false;
                 setTemplate(null);
@@ -101,13 +101,12 @@ public class EditMdProfileBean extends MdProfileBean
   			} 
             catch (Exception e) 
   			{
-  				 BeanHelper.error("Error saving profile");
+  				 BeanHelper.error(session.getMessage("error_profile_save"));
   			}
-            BeanHelper.info("Metadata Profile updates successfully!");
+            BeanHelper.info(session.getMessage("success_profile_save"));
             cancel();
         }
-//        Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-//        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + "/collection/" + colId + "/details?init=1");
+
         return "";
     }
 

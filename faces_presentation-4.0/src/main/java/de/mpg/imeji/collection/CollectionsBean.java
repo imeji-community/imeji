@@ -114,7 +114,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 			count++;
 		}
 		sb.getSelectedCollections().clear();
-		BeanHelper.info(count + " collections deleted.");
+		BeanHelper.info(count + " " + sb.getMessage("success_collections_delete"));
 		return "pretty:collections";
 	}
 }

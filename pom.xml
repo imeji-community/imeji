@@ -412,7 +412,9 @@
 				
 				<!--  Identifier of the content model "FACES" in the current framework instance -->
 				<!-- FACES -->
-				<escidoc.faces.content-model.id>escidoc:faces40</escidoc.faces.content-model.id>
+				<!--  <escidoc.faces.content-model.id>escidoc:faces40</escidoc.faces.content-model.id>-->
+				<!-- TEST -->
+				<escidoc.faces.content-model.id>escidoc:312894</escidoc.faces.content-model.id>
 				<!-- DEV - Bretagne -->
 				<!--<escidoc.faces.content-model.id>escidoc:139003</escidoc.faces.content-model.id>-->
 				<!-- DEV Diamonds -->
@@ -423,7 +425,9 @@
 				
 				<!-- Identifier of the context of "FACES" in the current framework instance -->
 				<!-- DEV - FACES -->
-				<escidoc.faces.context.id>escidoc:108013</escidoc.faces.context.id>
+				<!--  <escidoc.faces.context.id>escidoc:108013</escidoc.faces.context.id>-->
+				<!-- test -->
+				<escidoc.faces.context.id>escidoc:310954</escidoc.faces.context.id>
 				<!-- QA - FACES -->
 				<!--  <escidoc.faces.context.id>escidoc:40001</escidoc.faces.context.id>-->
 				<!-- DEV - Bretagne -->

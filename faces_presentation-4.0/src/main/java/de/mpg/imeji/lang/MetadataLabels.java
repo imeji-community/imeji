@@ -68,9 +68,13 @@ public class MetadataLabels
 			for (Statement s : profile.getStatements())
 			{
 				boolean hasInternationalizedLabel = false;
+				
 				for (LocalizedString ls : s.getLabels())
 				{
-					if (ls.getLang().equals("en")) labels.put(s.getName(), ls.toString());
+					if (ls.getLang().equals("en"))
+					{
+						labels.put(s.getName(), ls.toString());
+					}
 					if (ls.getLang().equals(lang))
 					{
 						internationalizedLabels.put(s.getName(), ls.toString());

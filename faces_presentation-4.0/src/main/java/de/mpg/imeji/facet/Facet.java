@@ -16,7 +16,7 @@ public class Facet
     
     public enum FacetType
     {
-    	TECHNICAL, COLLECTION;
+    	TECHNICAL, COLLECTION, SEARCH;
     }
 
     public Facet(URI uri, String label, int count, FacetType type, URI metadataURI)
@@ -55,8 +55,12 @@ public class Facet
     			s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("no") + " " + s;
     		}
     	}
+    	else if (FacetType.SEARCH.name().equals(type.name()))
+    	{
+    		s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("search");
+    	}
     	
-    	if (s == null || s.equals("facet_" + label.toLowerCase()))
+    	if (s == null || (label != null && s.equals("facet_" + label.toLowerCase())))
     	{
     		return label;
     	}

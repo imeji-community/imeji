@@ -202,7 +202,13 @@ public class ImageController extends ImejiController
      */
     public User simplifyUser(URI containerUri)
     {
+    	if (user == null)
+    	{
+    		return null;
+    	}
+    	
     	User simplifiedUser = new User();
+    	
     	for (Grant g :user.getGrants()) 
     	{
 			if (containerUri != null && containerUri.toString().contains("collection") && g.getGrantFor().equals(containerUri))
@@ -213,7 +219,11 @@ public class ImageController extends ImejiController
 			{
 				simplifiedUser.getGrants().add(g);
 			}
-			else if (containerUri == null && g.getGrantFor().toString().contains("collection"))
+			else if (containerUri == null &&  g.getGrantFor() != null && g.getGrantFor().toString().contains("collection"))
+			{
+				simplifiedUser.getGrants().add(g);
+			}
+			else
 			{
 				simplifiedUser.getGrants().add(g);
 			}

@@ -68,6 +68,7 @@ public class ImageHelper{
 	            url = ImageHelper.uploadFile(scaledImageStream, mimetype, userHandle);
         	}
         	catch(Exception e){
+        		System.err.println("Error transforming image: " + e.getMessage());
         		Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         		String test = navigation.getApplicationUrl() + "resources/icon/defaultThumb.gif";
         		URL noThumbUrl = new URL(test);

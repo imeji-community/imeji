@@ -57,6 +57,7 @@ public class FiltersBean
 
 		if (q != null && !"".equals(q.trim()))
 		{
+			if (t == null) t = FacetType.SEARCH.name();
 			Filter nf = new Filter(n, q, count, FacetType.valueOf(t.toUpperCase()), null);
 			filters.add(nf);
 		}

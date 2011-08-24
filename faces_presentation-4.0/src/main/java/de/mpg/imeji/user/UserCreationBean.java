@@ -1,15 +1,19 @@
 package de.mpg.imeji.user;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import thewebsemantic.LocalizedString;
 import thewebsemantic.NotFoundException;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.Scripts;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.GrantController;
@@ -25,6 +29,7 @@ import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Properties.Status;
+import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.User;
 
 public class UserCreationBean
@@ -136,6 +141,36 @@ public class UserCreationBean
     		im.getProperties().setStatus(col.getProperties().getStatus());
     	}
     	ic.update(allImages);
+    	return "";
+    }
+    
+    public String copyDataFromCoreToCore() throws IOException, URISyntaxException, Exception
+    {
+    	Scripts scripts = new Scripts();
+    	
+    	scripts.copyDataFromCoreToCore(sb.getUser());
+    	
+    	return "";
+    }
+    
+    public String cleanProfiles() throws Exception
+    {
+    	ProfileController pc = new ProfileController(sb.getUser());
+    	for (MetadataProfile p : pc.retrieveAll())
+    	{
+    		p = (MetadataProfile) ObjectHelper.castAllHashSetToList(p);
+    		for (int i=0; i < p.getStatements().size(); i++)
+    		{
+    			for (int j=0; j < ((List<Statement>)p.getStatements()).get(i).getLabels().size();j++)
+    			{
+    				if (((List<LocalizedString>)((List<Statement>)p.getStatements()).get(i).getLabels()).get(j).getLang().equals("eng"))
+    				{
+    					((List<LocalizedString>)((List<Statement>)p.getStatements()).get(i).getLabels()).set(j, new LocalizedString(((List<LocalizedString>)((List<Statement>)p.getStatements()).get(i).getLabels()).get(j).toString(), "en"));
+    				}
+    			}
+    		}
+    		pc.update(p);
+    	}
     	return "";
     }
     

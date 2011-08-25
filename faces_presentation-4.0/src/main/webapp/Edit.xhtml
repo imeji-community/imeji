@@ -70,10 +70,10 @@
 								 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
 								<h:outputText value="#{lbl.cancel}" />
 							</h:outputLink>	
-							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.editor.save}" value="#{lbl.save}" rendered="#{EditImageMetadataBean.editType == 'selected'}"/>
-							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.addToAllAndSave}" value="#{lbl.save}" rendered="#{EditImageMetadataBean.editType == 'all'}"/>
-							<h:commandButton styleClass="free_area1_p8 activeButton tiny_marginRExcl"  action="#{EditImageMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return_to_view}" rendered="#{EditImageMetadataBean.editType == 'selected'}"/>
-							<h:commandButton styleClass="free_area1_p8 activeButton tiny_marginRExcl"  action="#{EditImageMetadataBean.saveAllAndRedirect}" value="#{lbl.save_and_return_to_view}" rendered="#{EditImageMetadataBean.editType == 'all'}"/>
+							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.editor.save}" value="#{lbl.save}" rendered="#{EditImageMetadataBean.editType == 'selected' and false}"/>
+							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.addToAllAndSave}" value="#{lbl.save}" rendered="#{EditImageMetadataBean.editType == 'all' and false}"/>
+							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.saveAndRedirect}" value="#{lbl.save}" rendered="#{EditImageMetadataBean.editType == 'selected'}"/>
+							<h:commandButton styleClass="free_area1_p8 activeButton medium_marginRExcl"  action="#{EditImageMetadataBean.saveAllAndRedirect}" value="#{lbl.save}" rendered="#{EditImageMetadataBean.editType == 'all'}"/>
 						</h:panelGroup>
 					</h:panelGroup>	
 					

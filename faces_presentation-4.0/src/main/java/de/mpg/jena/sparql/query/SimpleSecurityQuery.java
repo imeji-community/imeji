@@ -22,7 +22,9 @@ public class SimpleSecurityQuery
 
 		if (user == null)
 		{
+			if (includeWithdrawn) return  " .FILTER(?status!=<http://imeji.mpdl.mpg.de/status/PENDING>)";
 			return  " .FILTER(?status=<http://imeji.mpdl.mpg.de/status/RELEASED>)";
+			
 		}
 		
 		if (sc != null && ImejiNamespaces.PROPERTIES_STATUS.equals(sc.getNamespace()))

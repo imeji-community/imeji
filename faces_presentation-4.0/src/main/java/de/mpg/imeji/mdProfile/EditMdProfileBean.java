@@ -26,13 +26,14 @@ public class EditMdProfileBean extends MdProfileBean
         super();
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
-        profileController = new ProfileController(session.getUser());
+       
         readUrl();
     }
 
     @Override
     public String getInit()
     {
+    	profileController = new ProfileController(session.getUser());
     	try
     	{
     		readUrl();

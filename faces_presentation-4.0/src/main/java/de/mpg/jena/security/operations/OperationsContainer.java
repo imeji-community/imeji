@@ -32,6 +32,7 @@ public class OperationsContainer implements Operations
 	public boolean read(User user, Object object) 
 	{
 		return (Status.RELEASED.equals(((Container)object).getProperties().getStatus())
+				|| Status.WITHDRAWN.equals(((Container)object).getProperties().getStatus())
 				|| auth.isViewerFor(user, (Container) object)
 				|| auth.isPictureEditor(user, (Container) object)
 				|| auth.isContainerEditor(user, (Container) object)

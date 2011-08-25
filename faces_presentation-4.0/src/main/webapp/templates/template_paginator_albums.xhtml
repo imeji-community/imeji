@@ -48,7 +48,7 @@
 				<h:outputText id="txtSortLink" styleClass="free_area0" value="#{lbl.sorting}" rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"/>
 				<h:outputText styleClass="seperator void" />
 				
-				<h:outputLink id="lnkFilter" styleClass="free_area0" value="?tab=FILTER" rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER'}">
+				<h:outputLink id="lnkFilter" styleClass="free_area0" value="?tab=FILTER" rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER' and SessionBean.user != null}">
 					<h:outputText value="#{lbl.filter}"/>
 				</h:outputLink>
 				<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.filter}" rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}"/>
@@ -74,7 +74,7 @@
 					<h:outputText styleClass="seperator void" />
 				</h:panelGroup>
 				
-				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}">
+				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' and SessionBean.user != null}">
 					<h:outputText id="txtFilter" value="#{lbl.filter_by}" styleClass="free_area0"/>
 					<h:selectOneMenu id="selFilter" value="#{paginatorListSessionBean.selectedFilter}" styleClass="free_select" onchange="submit()">
 						<f:selectItems id="filterItem" value="#{paginatorListSessionBean.filterMenu}"/>

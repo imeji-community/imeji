@@ -45,7 +45,9 @@ public class Search
 		{
 			results = (LinkedList<String>) searchSimple(null, sortCri, user);
 		}
-    	
+
+		boolean hasAnEmptySubResults = false;
+		
     	for (SearchCriterion sc : scList) 
    		{
     		LinkedList<String> subResults = new LinkedList<String>();
@@ -59,7 +61,9 @@ public class Search
     			subResults = (LinkedList<String>) searchAdvanced(sc.getChildren(), sortCri, user);
     		}
     		
-    		if (results.isEmpty())
+    		if (subResults.isEmpty()) hasAnEmptySubResults = true;
+    		
+    		if (results.isEmpty() && !hasAnEmptySubResults)
     		{
     			results =  new LinkedList<String>(subResults);
     		}
@@ -75,7 +79,7 @@ public class Search
        			results = new LinkedList<String>(sum);
     		}
    		}
-    	
+
 		return results;
 	}
 	

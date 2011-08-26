@@ -21,6 +21,7 @@ import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Authorization;
+import de.mpg.jena.util.DataDoctor;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
@@ -174,98 +175,7 @@ public class UserCreationBean
     	return "";
     }
     
-    public String cleanContainers() throws Exception
-    {
-    	UserController uc = new UserController(sb.getUser());
-    	CollectionController cc = new CollectionController(sb.getUser());
-    	ImageController ic = new ImageController(sb.getUser());
-    	Collection<CollectionImeji> cols = cc.retrieveAll();
-    	for (CollectionImeji c : cols)
-    	{
-//    		c = (CollectionImeji) ObjectHelper.castAllHashSetToList(c);
-//    		for (int i=0; i < ((List<URI>)c.getImages()).size(); i++)
-//    		{
-//    			try{ ic.retrieve(((List<URI>)c.getImages()).get(i));}
-//    			catch (NotFoundException e) {
-//    				((List<URI>)c.getImages()).remove(i);
-//    				i--;
-//				}
-//    		}
-//    		cc.update(c);
-    		
-    		// SET CORRECT STATUS TO EXISTING PROFILE
-    		
-    		User user = uc.retrieve(c.getProperties().getCreatedBy());
-    		ProfileController pc1 = new ProfileController(user);
-    		if (c.getProperties().getStatus().equals(Status.RELEASED))
-    		{
-    			pc1.release(pc1.retrieve(c.getProfile()));
-    		}
-    		
-    	}
-    	
-    	ProfileController pc = new ProfileController(sb.getUser());
-    	List<MetadataProfile> profiles = pc.retrieveAll();
-    	
-    	// REMOVE PROFILES WITHOUT A COLLECTION 
-    	// TOO DANGEROUS TRY LATER
-    	for(MetadataProfile mdp : profiles)
-    	{
-    		boolean found = false;
-    		for (CollectionImeji c : cols)
-    		{
-    			if(c.getProfile().equals(mdp.getId()))
-    			{
-    				found = true;
-    			}
-    		}
-    		if (!found)
-    		{
-    			pc.delete(mdp, sb.getUser());
-    		}
-    	}
-    	
-    	// REMOVE NON EXISTING GRANTS
-    	Collection<User> users = uc.retrieveAll();
-    	
-    	for(User u : users)
-    	{
-    		List<Grant> deadGrants = new ArrayList<Grant>();
-    		for (Grant g : u.getGrants())
-    		{
-    			boolean found = false;
-    			for(MetadataProfile mdp : profiles)
-    			{
-    				if (mdp.getId().equals(g.getGrantFor()))
-    				{
-    					found = true;
-    				}
-    			}
-    			for(CollectionImeji c : cols)
-    			{
-    				if (c.getId().equals(g.getGrantFor()))
-    				{
-    					found = true;
-    				}
-    			}
-    			
-    			if(!found && g.getGrantFor()!= null && !g.getGrantFor().toString().contains("album"))
-    			{
-    				deadGrants.add(g);
-    			}
-    		}
-    		
-    		for (Grant g : deadGrants) 
-    		{
-    			GrantController gc = new GrantController(sb.getUser());
-				gc.removeGrant(u, g);
-			}
-    	}
-    		
-    	
-    	return "";
-    }
-    
+
     public String reInitializeUserRights() throws Exception
     {
     	List<CollectionImeji> allColls = getAllcollections();

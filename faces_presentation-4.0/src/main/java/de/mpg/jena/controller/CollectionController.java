@@ -182,6 +182,10 @@ public class CollectionController extends ImejiController
 				}
 		    }
 	        update(ic);
+	        
+	        ProfileController pc = new ProfileController(user);
+		    pc.retrieve(ic.getProfile());
+		    pc.withdraw(pc.retrieve(ic.getProfile()), user);
 		}
     }
 		

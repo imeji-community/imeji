@@ -82,6 +82,10 @@
 					<h:outputText value="#{lbl.remove}" styleClass="free_area0"/>
 				</a4j:commandLink>
 				
+				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.export}" rendered="false">
+					<h:outputText value="#{lbl.export}" styleClass="free_area0"/>
+				</a4j:commandLink>
+				
 				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}">
 					
 					<span class="free_area0_p8 endline itemSelectArea">

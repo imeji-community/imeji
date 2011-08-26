@@ -93,6 +93,13 @@ public class ProfileController extends ImejiController
 		gc.removeAllGrantsFor(user, mdp.getId());
     }
     
+    public void withdraw(MetadataProfile mdp, User user) throws Exception
+    {
+    	mdp.getProperties().setStatus(Status.WITHDRAWN);
+    	mdp.getProperties().setVersionDate(new Date());
+    	update(mdp);
+    }
+    
     public int countAllProfiles()
     {
 		return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/profile>}");

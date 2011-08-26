@@ -1,11 +1,8 @@
 package de.mpg.jena;
 
-import java.io.File;
 import java.lang.annotation.Annotation;
 
 import org.apache.log4j.Logger;
-
-import tdb.tdbstats;
 
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -15,7 +12,6 @@ import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.User;
 

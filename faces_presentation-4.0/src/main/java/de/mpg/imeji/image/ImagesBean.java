@@ -28,6 +28,7 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.search.Export;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
@@ -116,6 +117,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     	}
         images = controller.loadImages(searchResult.getResults(), limit, offset);
         return ImejiFactory.imageListToBeanList(images);
+    }
+    
+    public String export()
+    {
+    	Export export = new Export();
+    	String xml = export.export(searchResult);
+    	System.out.println(xml);
+    	return "";
     }
     
     public boolean reloadPage()

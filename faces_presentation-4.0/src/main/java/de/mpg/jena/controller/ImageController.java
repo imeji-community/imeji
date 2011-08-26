@@ -211,7 +211,7 @@ public class ImageController extends ImejiController
     	
     	for (Grant g :user.getGrants()) 
     	{
-			if (containerUri != null && containerUri.toString().contains("collection") && g.getGrantFor().equals(containerUri))
+			if (containerUri != null && containerUri.toString().contains("collection") && containerUri.equals(g.getGrantFor()))
 			{
 				simplifiedUser.getGrants().add(g);
 			}

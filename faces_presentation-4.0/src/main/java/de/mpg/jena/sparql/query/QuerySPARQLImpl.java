@@ -35,6 +35,10 @@ public class QuerySPARQLImpl implements QuerySPARQL
 //	private String type = "http://imeji.mpdl.mpg.de/image";
 //	private Map<String, SearchCriterion> subqueries = new HashMap<String, SearchCriterion>();
 
+	/**
+	 * Too complicated, not performant
+	 * @deprecated
+	 */
 	public String createQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user, boolean isCollection)
     {
 		init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user, isCollection); 
@@ -44,6 +48,10 @@ public class QuerySPARQLImpl implements QuerySPARQL
 		return query;
     }
 	
+	/**
+	 * Too complicated, not performant
+	 * @deprecated
+	 */
 	public String createCountQuery(List<SearchCriterion> scList, SortCriterion sortCriterion, String root, String specificQuery, String specificFilter, int limit, int offset, User user, boolean isCollection) 
 	{
 	 	init(scList,sortCriterion, root, specificQuery, specificFilter, limit, offset, user, isCollection); 

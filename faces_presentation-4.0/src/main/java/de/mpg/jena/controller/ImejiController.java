@@ -936,6 +936,7 @@ public abstract class ImejiController
                 QuerySolution qs = results.next();
                 Resource s = qs.getResource("?s");
                 s.removeProperties();
+                logger.info("cleaning graph...");
             }
             qe.close();
         }

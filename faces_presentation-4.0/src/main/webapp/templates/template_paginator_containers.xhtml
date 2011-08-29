@@ -41,6 +41,7 @@
 		<ui:composition template="template_paginator.xhtml">		
 			
 			<ui:define name="contentMenu">
+				
 				<h:outputLink id="lnkSort" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=SORTING" rendered="#{paginatorListSessionBean.selectedMenu != 'SORTING'}">
 					<h:outputText value="#{lbl.sorting}"/>
 				</h:outputLink>
@@ -61,7 +62,7 @@
 			</ui:define>
 			
 			<ui:define name="actionsMenu">	
-			
+				<h:outputText value="#{paginatorListSessionBean.initMenus}"/>
 				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}">
 					<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" style="margin-top:0.18em;" />
 

@@ -49,14 +49,20 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE,sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
        
         filterMenu = new ArrayList<SelectItem>();
-        filterMenu.add(new SelectItem("all", "All (except withdrawn)"));
+        filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
         if (sb.getUser() != null)
         {
-        	filterMenu.add(new SelectItem("my", "My"));
-        	filterMenu.add(new SelectItem("private", "Only private"));
+        	filterMenu.add(new SelectItem("my", sb.getLabel("my")));
+        	filterMenu.add(new SelectItem("private", sb.getLabel("only_private")));
         }
-        filterMenu.add(new SelectItem("public", "Only public"));
-        filterMenu.add(new SelectItem("withdrawn", "Only withdrawn"));
+        filterMenu.add(new SelectItem("public", sb.getLabel("only_public")));
+        filterMenu.add(new SelectItem("withdrawn", sb.getLabel("only_withdrawn")));
+    }
+    
+    public String getInitMenus()
+    {
+    	initMenus();
+    	return "";
     }
     
     public void reset()

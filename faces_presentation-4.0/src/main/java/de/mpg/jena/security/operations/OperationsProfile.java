@@ -18,6 +18,7 @@ public class OperationsProfile implements Operations
 
 	public boolean read(User user, Object object) {
 		return ( Status.RELEASED.equals(((MetadataProfile) object).getProperties().getStatus())
+				|| Status.WITHDRAWN.equals(((MetadataProfile) object).getProperties().getStatus())
 				||auth.is(GrantType.PROFILE_VIEWER, user, ((MetadataProfile) object).getId())
 				||auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile) object).getId())
 				|| auth.is(GrantType.PROFILE_EDITOR, user, ((MetadataProfile) object).getId()));

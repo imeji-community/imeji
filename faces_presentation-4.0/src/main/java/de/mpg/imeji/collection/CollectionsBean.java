@@ -46,7 +46,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
     public List<ViewCollectionBean> retrieveList(int offset, int limit) throws Exception
     {
     	UserController uc = new UserController(sb.getUser());
-    	initMenus();
+    	//initMenus();
         if (sb.getUser() != null)
         {
         	sb.setUser(uc.retrieve(sb.getUser().getEmail()));

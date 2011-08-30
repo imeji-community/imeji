@@ -529,11 +529,11 @@
     	 were removed. With the original version, the jar module integra
     	 -->
 		<dependency>
-			<groupId>com.hp.hpl.jena</groupId>
-			<artifactId>tdb</artifactId>
-			<version>0.8.7</version>
-			<scope>provided</scope>
+		  <groupId>com.hp.hpl.jena</groupId>
+		  <artifactId>tdb</artifactId>
+		  <version>0.8.9</version>
 		</dependency>
+		
     	<dependency> 
 		   <groupId>thewebsemantic</groupId> 
 		   <artifactId>jenabean</artifactId> 

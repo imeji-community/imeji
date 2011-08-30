@@ -452,6 +452,8 @@
 				<escidoc.organizationTree.integration>yes</escidoc.organizationTree.integration> <!-- User option, if organization selection should be displayed on create/edit album -->				
 				
 				<imeji.i18n.languages>en-english,de-deutsch</imeji.i18n.languages>
+				
+				<escidoc.cone.isos639_1.all>http://pubman.mpdl.mpg.de/cone/iso639-1/all</escidoc.cone.isos639_1.all>
 						
 				<!-- Blog's URL -->
 				<!--<escidoc.faces.blog.url>http://faces.blogs.mpdl.mpg.de</escidoc.faces.blog.url>-->

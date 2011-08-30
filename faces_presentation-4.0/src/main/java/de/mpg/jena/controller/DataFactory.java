@@ -10,7 +10,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.tdb.solver.Explain.InfoLevel;
 
 /**
  * Helper class to interact with the persistent TDB store.
@@ -30,7 +29,7 @@ public class DataFactory
      */
     public static Model model(String path2db)
     {
-        TDB.setExecutionLogging(InfoLevel.INFO);
+        //TDB.setExecutionLoggin(InfoLevel.INFO);
         TDB.getContext().set(TDB.symLogExec, false) ;
         TDB.getContext().set(TDB.symUnionDefaultGraph, true) ;
         rdf_model = TDBFactory.createModel(path2db);
@@ -43,7 +42,7 @@ public class DataFactory
      */
     public static void removeData(String path2db)
     {
-        TDB.setExecutionLogging(InfoLevel.INFO);
+       // TDB.setExecutionLogging(InfoLevel.INFO);
         TDB.getContext().set(TDB.symLogExec, true) ;
         rdf_model = TDBFactory.createModel(path2db);
         rdf_model.removeAll();
@@ -60,7 +59,7 @@ public class DataFactory
      */
     public static void removeResource(String path2db, String uri, String id, Property property)
     {
-        TDB.setExecutionLogging(InfoLevel.INFO);
+        //TDB.setExecutionLogging(InfoLevel.INFO);
         TDB.getContext().set(TDB.symLogExec, true) ;
         rdf_model = TDBFactory.createModel(path2db);
         if (property == null)

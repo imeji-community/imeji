@@ -32,13 +32,23 @@ public class InternationalizationBean
 		{
 			languages = new ArrayList<SelectItem>();
 			
-			String p = PropertyReader.getProperty("imeji.i18n.languages");
+			Iso639_1Helper iso639_1Helper = new Iso639_1Helper();
 			
-			for (int i = 0; i < p.split(",").length; i++) 
+			List<SelectItem> isolanguages = iso639_1Helper.getList();
+			
+			String supportedLanguages = PropertyReader.getProperty("imeji.i18n.languages");
+			
+			for (SelectItem iso : isolanguages)
 			{
-				languages.add(new SelectItem(p.split(",")[i].split("-")[0] , p.split(",")[i].split("-")[1] ));
-			} 
-			
+				for (int i = 0; i < supportedLanguages.split(",").length; i++) 
+				{
+					if (supportedLanguages.split(",")[i].split("-")[0].equals(iso.getValue().toString()))
+					{
+						languages.add(iso);
+						//languages.add(new SelectItem(supportedLanguages.split(",")[i].split("-")[0] , supportedLanguages.split(",")[i].split("-")[1] ));
+					}
+				} 
+			}
 		} 
 		catch (Exception e) 
 		{

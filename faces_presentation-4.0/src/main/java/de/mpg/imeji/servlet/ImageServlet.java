@@ -117,7 +117,7 @@ public class ImageServlet extends HttpServlet
 	                method.releaseConnection();
 	                userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
 	                method = new GetMethod(imageUrl);
-	                method.setFollowRedirects(false);
+	                method.setFollowRedirects(true);
 	                method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
 	                client.executeMethod(method);
 	                
@@ -168,7 +168,8 @@ public class ImageServlet extends HttpServlet
         }
         catch(Exception e)
         {
-        	//throw new ServletException(e);
+        	logger.error(e.getMessage());
+        	throw new ServletException(e);
         }
         
     }

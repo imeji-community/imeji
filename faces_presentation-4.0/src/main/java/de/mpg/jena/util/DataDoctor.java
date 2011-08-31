@@ -13,6 +13,7 @@ import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
+import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
@@ -33,6 +34,7 @@ public class DataDoctor
     	
     	runContainerDoctor(proceed);
     	runGrantsDoctor(proceed);
+    	runImagesDoctor(proceed);
     	
     	cleanGraphs();
     	
@@ -144,6 +146,7 @@ public class DataDoctor
     		for (Grant g : u.getGrants())
     		{
     			boolean found = false;
+    			
     			for(MetadataProfile mdp : profiles)
     			{
     				if (mdp.getId().equals(g.getGrantFor()))
@@ -151,6 +154,7 @@ public class DataDoctor
     					found = true;
     				}
     			}
+    			
     			for(CollectionImeji c : cols)
     			{
     				if (c.getId().equals(g.getGrantFor()))
@@ -176,6 +180,72 @@ public class DataDoctor
     			{
     				report.add("Grant " + g.getGrantType() + " for " + g.getGrantFor() + " is dead");
     			}
+			}
+    	}
+    }
+    
+    public void runsSharingDoctor(boolean proceed)
+    {
+    	UserController uc = new UserController(user);
+    	Collection<User> users = uc.retrieveAll();
+    	
+    	ProfileController pc = new ProfileController(user);
+    	List<MetadataProfile> profiles = pc.retrieveAll();
+    	
+    	CollectionController cc = new CollectionController(user);
+    	Collection<CollectionImeji> cols = cc.retrieveAll();
+    	
+//    	for (User u : users)
+//    	{
+//    		for (Grant g : u.getGrants())
+//    		{
+//    			for (CollectionImeji c : cols)
+//    			{
+//    				if (g.getGrantFor().toString().equals(c.getId().toString()))
+//    				{
+//    					isCollection = true;
+//    				}
+//    			}
+//    			for (MetadataProfile p : profiles)
+//    			{
+//    				if (g.getGrantFor().toString().equals(c.getId().toString()))
+//    				{
+//    					isCollection = true;
+//    				}
+//    			}
+//    		}
+//    	}
+    }
+    
+    public void runImagesDoctor(boolean proceed) throws Exception
+    {
+    	ImageController ic = new ImageController(user);
+    	
+    	CollectionController cc = new CollectionController(user);
+    	Collection<CollectionImeji> cols = cc.retrieveAll();
+    	
+    	for (Image im : ic.retrieveAll())
+    	{
+    		boolean colFound = false;
+    		
+    		for (CollectionImeji c : cols)
+    		{
+    			if (im.getCollection().toString().equals(c.getId().toString()))
+    			{
+    				colFound = true;
+    			}
+    		}
+    		
+    		if (!colFound) 
+    		{
+				if (proceed) 
+				{
+					ic.delete(im, user);
+				}
+				else
+				{
+					report.add("Image " + im.getId() + " belongs to no collection");
+				}
 			}
     	}
     }

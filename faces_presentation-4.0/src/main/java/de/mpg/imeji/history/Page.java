@@ -41,6 +41,7 @@ public class Page
 	private String name;
 	private List<Filter> filters = new ArrayList<Filter>();
 	private String query = "";
+	private String id = null;
 	
 	public Page(ImejiPages type, URI uri)
 	{
@@ -96,7 +97,16 @@ public class Page
 
 	public void setQuery(String query) {
 		this.query = query;
-	}	
+	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}	
+	
+	
 
 }

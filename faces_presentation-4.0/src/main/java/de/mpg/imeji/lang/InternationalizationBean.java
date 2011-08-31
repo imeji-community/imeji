@@ -13,6 +13,7 @@ import de.mpg.imeji.util.PropertyReader;
 public class InternationalizationBean 
 {
 	private List<SelectItem> languages = null;
+	List<SelectItem> isolanguages = null;
 	private String currentLanguage = "en";
 	private SessionBean session = null;
 	
@@ -22,11 +23,11 @@ public class InternationalizationBean
 	{
 		session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 				
-		initLanguagesFromProperties();
+		init();
 		internationalizeLanguages();
 	}
 	
-	private void initLanguagesFromProperties()
+	private void init()
 	{
 		try 
 		{
@@ -34,20 +35,34 @@ public class InternationalizationBean
 			
 			Iso639_1Helper iso639_1Helper = new Iso639_1Helper();
 			
-			List<SelectItem> isolanguages = iso639_1Helper.getList();
+			isolanguages = iso639_1Helper.getList();
 			
 			String supportedLanguages = PropertyReader.getProperty("imeji.i18n.languages");
-			
+						
+			// Add first languages out of properties
 			for (SelectItem iso : isolanguages)
 			{
 				for (int i = 0; i < supportedLanguages.split(",").length; i++) 
 				{
-					if (supportedLanguages.split(",")[i].split("-")[0].equals(iso.getValue().toString()))
+					if (supportedLanguages.split(",")[i].equals(iso.getValue().toString()))
 					{
 						languages.add(iso);
-						//languages.add(new SelectItem(supportedLanguages.split(",")[i].split("-")[0] , supportedLanguages.split(",")[i].split("-")[1] ));
 					}
 				} 
+			}
+			// Add than the other languages
+			languages.add(new SelectItem(null,"--"));
+			for (SelectItem iso : isolanguages)
+			{
+				boolean isSupported = false;
+				for (int i = 0; i < supportedLanguages.split(",").length; i++) 
+				{
+					if (supportedLanguages.split(",")[i].equals(iso.getValue().toString()))
+					{
+						isSupported = true;
+					}
+				} 
+				if (!isSupported) languages.add(iso);;
 			}
 		} 
 		catch (Exception e) 
@@ -56,12 +71,30 @@ public class InternationalizationBean
 		}
 	}
 	
+	/**
+	 * Languages for imeji internationalization
+	 */
 	private void internationalizeLanguages()
 	{
 		internationalizedLanguages = new ArrayList<SelectItem>();
-		for (SelectItem si : languages) 
+		try 
 		{
-			internationalizedLanguages.add(new SelectItem(si.getValue(), session.getLabel(si.getLabel())));
+			String supportedLanguages = PropertyReader.getProperty("imeji.i18n.languages");
+			
+			for (SelectItem iso : isolanguages)
+			{
+				for (int i = 0; i < supportedLanguages.split(",").length; i++) 
+				{
+					if (supportedLanguages.split(",")[i].equals(iso.getValue().toString()))
+					{
+						internationalizedLanguages.add(new SelectItem(iso.getValue().toString(), iso.getLabel().split("-")[1]));
+					}
+				} 
+			}
+		} 
+		catch (Exception e) 
+		{
+			throw new RuntimeException("Error reading property imeji.i18n.languages. Check Propety file: " + e);
 		}
 	}
 	

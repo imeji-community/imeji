@@ -39,7 +39,7 @@
 
 	<!-- Language -->
 	<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit(); return false;" rendered="true">
-		<f:selectItems value="#{Internationalization.languages}"/>
+		<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
 	</h:selectOneMenu>
 
 

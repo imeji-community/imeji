@@ -229,7 +229,7 @@
 							<artifactId>iri</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
-						<jarModule>
+						<!-- <jarModule>
 							<groupId>org.slf4j</groupId>
 							<artifactId>slf4j-api</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
@@ -238,7 +238,7 @@
 							<groupId>org.slf4j</groupId>
 							<artifactId>slf4j-log4j12</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
-						</jarModule>
+						</jarModule>-->
 						<jarModule>
 							 <groupId>thewebsemantic</groupId> 
 		  					 <artifactId>jenabean</artifactId> 

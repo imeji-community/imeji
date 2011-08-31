@@ -48,7 +48,7 @@ public class HistorySession
 				if (id.length == 1) newPage.setName(newPage.getName() + " id " + id[0]);
 			}
 			
-			if (pages.isEmpty() || !pages.get(pages.size() - 1).getName()	.equals(newPage.getName()))
+			if (pages.isEmpty() || !pages.get(pages.size() - 1).getName().equals(newPage.getName()))
 			{					
 				pages.add(newPage);
 			}

@@ -451,7 +451,7 @@
 				<escidoc.faces.album.list.size.options>10,25,50,75,100</escidoc.faces.album.list.size.options> <!-- User options for the displayed number of albums -->
 				<escidoc.organizationTree.integration>yes</escidoc.organizationTree.integration> <!-- User option, if organization selection should be displayed on create/edit album -->				
 				
-				<imeji.i18n.languages>en-english,de-deutsch</imeji.i18n.languages>
+				<imeji.i18n.languages>en,de</imeji.i18n.languages>
 				
 				<escidoc.cone.isos639_1.all>http://pubman.mpdl.mpg.de/cone/iso639-1/all</escidoc.cone.isos639_1.all>
 						

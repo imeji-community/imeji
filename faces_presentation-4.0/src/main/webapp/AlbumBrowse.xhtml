@@ -76,18 +76,33 @@
 					<!-- SORTING content menu lower line ends here -->
 				</h:panelGroup>
 				
-				 <h:commandLink id="lnkReleaseCollection" styleClass="free_area0" action="#{AlbumImagesBean.album.release}" rendered="#{AlbumImagesBean.album.editable and AlbumImagesBean.album.album.properties.status=='PENDING'}">
-					<h:outputText value="#{lbl.collection_release}"></h:outputText>
-				</h:commandLink>
+				<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.album.properties.status=='PENDING'}">
+					<h:outputText value="#{lbl.release}"/>
+					<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
+				</h:outputLink>
 				
-				<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0" action="#{AlbumImagesBean.album.withdraw}" rendered="#{AlbumImagesBean.album.editable and AlbumImagesBean.album.album.properties.status=='RELEASED'}">
-					<h:outputText value="#{lbl.withdraw}"></h:outputText>
-				</h:commandLink>
+				<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.album.properties.status=='RELEASED'}">
+					<h:outputText value="#{lbl.withdraw}"/>
+					<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
+				</h:outputLink>
 				
-				<h:commandLink id="lnkDeleteCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{AlbumImagesBean.album.delete}" rendered="#{AlbumImagesBean.album.editable and AlbumImagesBean.album.album.properties.status=='PENDING'}">
-					<h:outputText value="#{lbl.delete}"></h:outputText>
-				</h:commandLink>
+				<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumImagesBean.deletable}">
+					<h:outputText value="#{lbl.delete}"/>
+					<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
+				</h:outputLink>
+								
 			</h:panelGroup>
+			
+			<ui:include src="confirmationPages/ContainerRelease.xhtml">
+				<ui:param name="bean" value="#{AlbumImagesBean}"/>
+			</ui:include>
+			<ui:include src="confirmationPages/ContainerDelete.xhtml">
+				<ui:param name="bean" value="#{AlbumImagesBean}"/>
+			</ui:include>
+			<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
+				<ui:param name="bean" value="#{AlbumImagesBean}"/>
+				<ui:param name="status" value="#{AlbumImagesBean.album.album.properties.status}"/>
+			</ui:include>
 		</ui:define>
 	
 	</ui:composition>

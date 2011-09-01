@@ -5,11 +5,15 @@ import java.net.URI;
 
 import thewebsemantic.NotFoundException;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.collection.CollectionBean;
+import de.mpg.imeji.collection.CollectionSessionBean;
+import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Container;
 import de.mpg.jena.vo.Grant;
@@ -43,11 +47,33 @@ public class SharingManager
 					 uri = ((MetadataProfile) o).getId();
 				}
 				
-				gc.addGrant(target, new Grant(role,uri));
+				Grant ng = new Grant(role,uri);
+				gc.addGrant(target, ng);
 				
 				if(o instanceof CollectionImeji)
 				{
-					gc.addGrant(target, new Grant(GrantType.PROFILE_VIEWER, ((CollectionImeji) o).getProfile()));
+					try 
+					{
+						gc.addGrant(target, new Grant(GrantType.PROFILE_VIEWER, ((CollectionImeji) o).getProfile()));
+					} 
+					catch (Exception e) 
+					{
+						gc.removeGrant(target, ng);
+						throw e;
+					}
+				}
+				else if (o instanceof MetadataProfile)
+				{	
+					try 
+					{
+						URI uriCol = ObjectHelper.getURI(CollectionImeji.class, ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getId());
+						gc.addGrant(target, new Grant(GrantType.PRIVILEGED_VIEWER, uriCol));
+					} 
+					catch (Exception e) 
+					{
+						gc.removeGrant(target, ng);
+						throw e;
+					}
 				}
 				
 				return true;

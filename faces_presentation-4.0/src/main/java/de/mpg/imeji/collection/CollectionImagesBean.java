@@ -163,7 +163,7 @@ public class CollectionImagesBean extends ImagesBean
 			BeanHelper.error(e.getMessage());
 		}
        
-        return "";
+        return "pretty:";
     }
     
     public String delete()
@@ -181,7 +181,7 @@ public class CollectionImagesBean extends ImagesBean
 			BeanHelper.error(e.getMessage());
 		}
     	
-    	return "";
+    	return "pretty:collections";
     }
     
     public String withdraw() throws Exception

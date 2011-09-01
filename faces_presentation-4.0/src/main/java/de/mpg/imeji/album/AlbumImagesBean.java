@@ -21,6 +21,8 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.security.Security;
+import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
@@ -162,6 +164,40 @@ public class AlbumImagesBean extends ImagesBean
     public String getBackUrl() 
     {
 		return navigation.getImagesUrl() + "/album" + "/" + this.id;
+	}
+    
+    public String release() 
+    {
+    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).release();
+        return "pretty:";
+    }
+    
+    public String delete()
+    {
+    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).delete();
+    	
+    	return "pretty:albums";
+    }
+    
+    public String withdraw() throws Exception
+    {
+    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
+    	return "pretty:";
+    }
+    
+    public boolean isEditable()
+    {
+		Security security = new Security();
+    	return security.check(OperationsType.UPDATE, sb.getUser(), album.getAlbum());
+    }
+    
+    public boolean isDeletable() 
+	{
+		Security security = new Security();
+		return security.check(OperationsType.DELETE, sb.getUser(), album.getAlbum());
 	}
     
     public String getId()

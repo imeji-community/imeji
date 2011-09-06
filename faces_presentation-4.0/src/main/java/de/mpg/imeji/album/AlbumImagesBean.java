@@ -177,7 +177,6 @@ public class AlbumImagesBean extends ImagesBean
     {
     	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
     	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).delete();
-    	
     	return "pretty:albums";
     }
     

@@ -295,8 +295,8 @@ public abstract class CollectionBean
 		} 
     	catch (Exception e) 
     	{
-    		BeanHelper.error(sessionBean.getMessage("success_collection_delete"));
-			BeanHelper.error(e.getMessage());
+    		BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
+			BeanHelper.error(e.toString());
 		}
     	
     	return "pretty:collections";

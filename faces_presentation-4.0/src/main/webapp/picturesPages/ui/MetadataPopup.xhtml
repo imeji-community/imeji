@@ -67,6 +67,13 @@
 		<h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl">
 			<h:outputText value="#{item.image.filename}"/>
 		</h:panelGroup>
+		
+		<h:panelGroup rendered="#{item.image.properties.discardComment != null}">
+			<h:panelGroup styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
+				<h:outputText value="#{lbl.withdraw_comment}"/>
+			</h:panelGroup>
+			<h:outputText value="#{item.image.properties.discardComment}" styleClass="double_area0_p0 xTiny_marginLExcl"/> 
+		</h:panelGroup>
 	</h:panelGroup>
 	
 	<div class="marginTExcl075 linebreak">&#160;</div>

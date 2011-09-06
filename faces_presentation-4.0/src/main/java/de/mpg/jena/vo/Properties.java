@@ -30,6 +30,7 @@ public class Properties implements Serializable {
 	
 	private int version = 0;
 	
+	private String discardComment;
 	
 	
 	@Namespace("http://imeji.mpdl.mpg.de/")
@@ -100,6 +101,14 @@ public class Properties implements Serializable {
 
 	public int getVersion() {
 		return version;
+	}
+	
+	public String getDiscardComment() {
+		return discardComment;
+	}
+	
+	public void setDiscardComment(String discardComment) {
+		this.discardComment = discardComment;
 	}
 
 }

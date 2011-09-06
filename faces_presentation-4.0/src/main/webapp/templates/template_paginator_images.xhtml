@@ -174,7 +174,16 @@
 
 	</ui:define>
 	<ui:define name="list">
-		 <rich:modalPanel id="panelConfirmDeleteAll" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
+		
+		<ui:include src="../confirmationPages/AllDeleteWithdraw.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+		
+		<ui:include src="../confirmationPages/SelectedDeleteWithdraw.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+		
+		 <rich:modalPanel id="panelConfirmDeleteAllNcih" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
 	        <h3>
 	        	<a4j:status forceId="true" id="allDelStatus" startText="#{msg.delete_wait}......." stopText="#{lbl.delete_images}?" rendered="#{paginatorListSessionBean.deletable}"/>
 	        	<a4j:status forceId="true" id="allWithStatus" startText="#{msg.withdraw_wait}......" stopText="#{lbl.withdraw_images}?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
@@ -192,7 +201,7 @@
 			</h:panelGroup>
 		</rich:modalPanel>
 	    
-	     <rich:modalPanel id="panelConfirmDeleteSelected" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
+	     <rich:modalPanel id="panelConfirmDeleteSelectedauchnciht" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
 	        <h3>
 	        	<a4j:status forceId="true" id="selDelStatus" startText="Deleting, please wait......" stopText="Delete images?" rendered="#{paginatorListSessionBean.deletable}"/>
 	        	<a4j:status forceId="true" id="selWithStatus" startText="Withdrawing, please wait......" stopText="Withdraw images?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>

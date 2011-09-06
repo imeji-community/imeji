@@ -111,12 +111,15 @@
 								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.collection.properties.status == 'WITHDRAWN'}" />
 								<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.collection.properties.status == 'PENDING'}" />
 								<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.collection.properties.status == 'RELEASED'}" />
+								
 								<h:outputLabel styleClass="medium_label endline" rendered="#{container.collection.properties.status == 'PENDING'}">
 									<h:outputText value="#{lbl.private}" />
 								</h:outputLabel>
+								
 								<h:outputLabel styleClass="medium_label endline" rendered="#{container.collection.properties.status == 'RELEASED'}">
 									<h:outputText value="#{lbl.published}" />
 								</h:outputLabel>
+								
 								<h:outputLabel styleClass="medium_label endline" rendered="#{container.collection.properties.status == 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.withdrawn}" />
 								</h:outputLabel>
@@ -173,17 +176,22 @@
 											</h:outputLink>
 											
 											<h:panelGroup styleClass="free_area0 small_marginLIncl">
-												<h:commandLink id="lnkReleaseCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{container.release}" rendered="#{container.editable and container.collection.properties.status=='PENDING'}">
-													<h:outputText value="#{lbl.collection_release}"></h:outputText>
-												</h:commandLink>
 												
-												<h:commandLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{container.withdraw}" rendered="#{container.editable and container.collection.properties.status=='RELEASED'}">
-													<h:outputText value="#{lbl.withdraw}"></h:outputText>
-												</h:commandLink>
+												<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{container.editable and container.collection.properties.status=='PENDING'}">
+													<h:outputText value="#{lbl.collection_release}"/>
+													<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
+												</h:outputLink>
 												
-												<h:commandLink id="lnkDeleteCollection" styleClass="free_area0 xTiny_marginLIncl" action="#{container.delete}" rendered="#{container.editable and container.collection.properties.status=='PENDING'}">
-													<h:outputText value="#{lbl.delete}"></h:outputText>
-												</h:commandLink>
+												<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{container.editable and container.collection.properties.status=='RELEASED'}">
+													<h:outputText value="#{lbl.withdraw}"/>
+													<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
+												</h:outputLink>
+												
+												<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{container.deletable}">
+													<h:outputText value="#{lbl.delete}"/>
+													<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
+												</h:outputLink>
+																								
 											</h:panelGroup>
 										</span>
 									</div>
@@ -215,9 +223,18 @@
 											<h:outputText value="#{container.collection.properties.versionDate}"/>&#160;
 										</span>
 									</div>
-							</div>
-						    
+							</div>   
 					    </li>
+					    <ui:include src="../confirmationPages/ContainerRelease.xhtml">
+							<ui:param name="bean" value="#{container}"/>
+						</ui:include>
+						<ui:include src="../confirmationPages/ContainerDelete.xhtml">
+							<ui:param name="bean" value="#{container}"/>
+						</ui:include>
+						<ui:include src="../confirmationPages/ContainerWithdraw.xhtml">
+							<ui:param name="bean" value="#{container}"/>
+							<ui:param name="discardComment" value="#{container.collection.properties.discardComment}"/>
+						</ui:include>
 				</a4j:repeat>
 			</ol>
 

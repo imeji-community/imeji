@@ -936,7 +936,6 @@ public abstract class ImejiController
                 QuerySolution qs = results.next();
                 Resource s = qs.getResource("?s");
                 s.removeProperties();
-                logger.info("cleaning graph...");
             }
             qe.close();
         }
@@ -945,7 +944,6 @@ public abstract class ImejiController
         	graph.leaveCriticalSection();
         }
     }
-
     
     protected abstract String getSpecificQuery() throws Exception;
 

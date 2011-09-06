@@ -1,10 +1,12 @@
 package de.mpg.imeji.image;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.album.AlbumBean;
@@ -15,11 +17,9 @@ import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.history.HistorySession;
-import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
-import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
@@ -34,6 +34,7 @@ import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.MetadataProfile;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
@@ -50,6 +51,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
     private Collection<Image> images = new ArrayList<Image>();
     private SearchResult searchResult = null;
+    
+    private String discardComment;
     
     public ImagesBean()
     {
@@ -205,7 +208,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     	ImageController ic = new ImageController(sb.getUser());
     	CollectionController cc = new CollectionController(sb.getUser());
     	CollectionImeji coll = null;
-    	
+    	long debut = System.currentTimeMillis();
     	if (!images.isEmpty()) coll = cc.retrieve(images.iterator().next().getCollection());
     	int count = 0;
     	for(Image im : images)
@@ -213,7 +216,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     		try 
     		{
 				ic.delete(im, sb.getUser());
-				if (coll.getImages().contains(im.getId())) coll.getImages().remove(im.getId());
+//				if (coll.getImages().contains(im.getId())) coll.getImages().remove(im.getId());
+    			System.out.println("removing images");
 				count++;
 			} 
     		catch (Exception e) 
@@ -227,6 +231,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     	cc.update(coll);
     	sb.getSelected().clear();
     	
+    	long fin = System.currentTimeMillis();
+    	System.out.println(fin-debut);
+    	
     	return "pretty:";
     }
     
@@ -234,12 +241,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     {
     	ImageController ic = new ImageController(sb.getUser());
     	update();   	
-    	
     	int count = 0;
     	for(Image im : images)
     	{
     		try 
     		{
+    			im.getProperties().setDiscardComment(discardComment);
 				ic.withdraw(im);
 				count++;
 			} 
@@ -249,6 +256,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 				e.printStackTrace();
 			}
     	}
+    	discardComment = null;
     	BeanHelper.info(count + " " + sb.getLabel("images_withdraw"));
     	return "pretty:";
     }
@@ -418,5 +426,18 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	public void setSearchResult(SearchResult searchResult) {
 		this.searchResult = searchResult;
 	}
-    
+
+	public String getDiscardComment() {
+		return discardComment;
+	}
+
+	public void setDiscardComment(String discardComment) {
+		if (discardComment != "")
+			this.discardComment = discardComment;
+	}
+	
+	public void discardCommentListener(ValueChangeEvent event) throws Exception
+    {
+		discardComment = event.getNewValue().toString();
+    }
 }

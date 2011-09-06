@@ -157,11 +157,14 @@
 										<h:outputLabel>)</h:outputLabel>
 									</h1>
 							
+							<h:panelGroup styleClass="half_area0" rendered="#{ViewCollectionBean.collection.properties.discardComment != null and ViewCollectionBean.collection.properties.discardComment != ''}">
+								<h:outputText value="#{lbl.withdraw_comment}: "/>
+								<h:outputText value="#{ViewCollectionBean.collection.properties.discardComment}"/>
+							</h:panelGroup>
+							
 							<h:panelGroup styleClass="half_area0">
 								<h:outputText escape="false" value="#{ViewCollectionBean.formattedDescription}"/>
 							</h:panelGroup>
-							
-								
 							
 						</h:panelGroup>
 					</h:panelGroup>

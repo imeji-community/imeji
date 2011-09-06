@@ -150,6 +150,14 @@ public class SelectedBean extends ImagesBean {
 		clearAll();
 		return "pretty:";
 	}
+	
+	public String withdrawAll() throws Exception
+	{
+		update();
+		super.withdrawAll();
+		clearAll();
+		return "pretty:";
+	}
 
 	/**
 	 * WORKAROUND!

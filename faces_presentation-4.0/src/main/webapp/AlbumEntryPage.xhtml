@@ -105,8 +105,14 @@
 								<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
 									<h1><h:outputText value="#{AlbumBean.album.metadata.title}"/></h1>
 								</h:panelGroup>
-								<h:panelGroup styleClass="half_area0">
-									<h:outputText value="#{AlbumBean.album.metadata.description}"/>
+								
+								<h:panelGroup styleClass="full_area0" rendered="#{AlbumBean.album.properties.discardComment != null and AlbumBean.album.properties.discardComment != ''}">
+									<h:outputText value="#{lbl.withdraw_comment}: "/>
+									<h:outputText value="#{AlbumBean.album.properties.discardComment}"/><br/><br/><br/>
+								</h:panelGroup>
+								
+								<h:panelGroup styleClass="full_area0">
+									<h:outputText escape="false" value="#{AlbumBean.album.metadata.description}"/>
 								</h:panelGroup>
 							</h:panelGroup>
 			
@@ -166,7 +172,7 @@
 				</ui:include>
 				<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
 					<ui:param name="bean" value="#{AlbumBean}"/>
-					<ui:param name="status" value="#{AlbumBean.album.properties.status}"/>
+					<ui:param name="discardComment" value="#{AlbumBean.album.properties.discardComment}"/>
 				</ui:include>
 				
 			</ui:define>

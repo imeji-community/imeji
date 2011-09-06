@@ -3,7 +3,6 @@ package de.mpg.jena.vo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
@@ -13,17 +12,13 @@ import thewebsemantic.RdfType;
 @Namespace("http://imeji.mpdl.mpg.de/container/")
 @RdfType("metadata")
 @Embedded
-public class ContainerMetadata implements Serializable {
-	
-
+public class ContainerMetadata implements Serializable 
+{	
 	private String title;
 	
-
 	private String description;
 	
-	
 	protected Collection<Person> persons = new LinkedList<Person>();
-
 
 	@RdfProperty("http://purl.org/dc/elements/1.1/title")
 	public String getTitle() {
@@ -51,5 +46,4 @@ public class ContainerMetadata implements Serializable {
 	public void setPersons(Collection<Person> person) {
 		this.persons = person;
 	}
-	
 }

@@ -57,7 +57,7 @@ public class ImageController extends ImejiController
         img.setId(ObjectHelper.getURI(Image.class, Integer.toString(getUniqueId())));
         img.getMetadataSet().setProfile(ic.getProfile());
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-        imejiBean2RDF.create(img, user);
+        imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
         ic.getImages().add(img.getId());
         cc.update(ic);
         cleanGraph(ImejiJena.imageModel);
@@ -77,7 +77,7 @@ public class ImageController extends ImejiController
              img.setCollection(coll);
              img.setId(ObjectHelper.getURI(Image.class, Integer.toString(getUniqueId())));
              img.getMetadataSet().setProfile(ic.getProfile());
-             imejiBean2RDF.create(img, user);
+             imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
              ic.getImages().add(img.getId());
         }
         cc.update(ic);
@@ -95,14 +95,16 @@ public class ImageController extends ImejiController
     public void update(Collection<Image> images) throws Exception
     {
     	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+    	List<Object> imBeans = new ArrayList<Object>();
     	for (Image img : images)
         {
     		for(int i=0; i< img.getMetadataSet().getMetadata().size(); i++)
     		{
     			((List<ImageMetadata>)img.getMetadataSet().getMetadata()).set(i, MetadataFactory.newMetadata(((List<ImageMetadata>)img.getMetadataSet().getMetadata()).get(i)));
     		}
-    		imejiBean2RDF.saveDeep(img, user);
+    		imBeans.add(img);
         }
+    	imejiBean2RDF.saveDeep(imBeans, user);
     	cleanGraph(ImejiJena.imageModel);
     }
     
@@ -142,7 +144,7 @@ public class ImageController extends ImejiController
      */
     public int allImagesSize()
     {
-    	return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/image>}");
+    	return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/image>} ");
     }
     
     public SearchResult searchImages(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
@@ -187,7 +189,8 @@ public class ImageController extends ImejiController
 				} 
         		catch (Exception e) 
 				{
-					logger.error("Error loading image " + s);
+					logger.error("Error loading image " + s + ":" + e.getMessage());
+					e.printStackTrace();
 				}
         	}
          	counter ++;
@@ -237,7 +240,7 @@ public class ImageController extends ImejiController
     	{
 	    	String itemId = img.getEscidocId();
 	    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-			imejiBean2RDF.delete(img, user);
+			imejiBean2RDF.delete(imejiBean2RDF.toList(img), user);
     	
 			try
 		    {

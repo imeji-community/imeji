@@ -57,7 +57,7 @@ public class AlbumController extends ImejiController
 	    ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(new URI("http://imeji.mpdl.mpg.de/album/" + getUniqueId()));
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-		imejiBean2RDF.create(ic, user);
+		imejiBean2RDF.create(imejiBean2RDF.toList(ic), user);
 		imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
 		//ic = (Album) imejiRDF2Bean.load(ic.getId().toString(), user);
 		user = addCreatorGrant(ic, user);
@@ -86,7 +86,7 @@ public class AlbumController extends ImejiController
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
 		writeUpdateProperties(ic.getProperties(), user);
-		imejiBean2RDF.saveDeep(ic, user);
+		imejiBean2RDF.saveDeep(imejiBean2RDF.toList(ic), user);
 		cleanGraph(ImejiJena.albumModel);
 	}
 	
@@ -126,7 +126,7 @@ public class AlbumController extends ImejiController
 	public void delete(Album album, User user) throws Exception
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-		imejiBean2RDF.delete(album, user);
+		imejiBean2RDF.delete(imejiBean2RDF.toList(album), user);
 		GrantController gc = new GrantController(user);
 		gc.removeAllGrantsFor(user, album.getId());
 		cleanGraph(ImejiJena.albumModel);

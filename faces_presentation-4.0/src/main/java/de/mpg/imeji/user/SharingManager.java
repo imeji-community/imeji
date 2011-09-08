@@ -5,14 +5,12 @@ import java.net.URI;
 
 import thewebsemantic.NotFoundException;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.collection.CollectionBean;
-import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.UserController;
-import de.mpg.jena.security.Security;
 import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Container;
@@ -54,7 +52,14 @@ public class SharingManager
 				{
 					try 
 					{
-						gc.addGrant(target, new Grant(GrantType.PROFILE_VIEWER, ((CollectionImeji) o).getProfile()));
+						if (GrantType.CONTAINER_EDITOR.equals(role))
+						{
+							gc.addGrant(target, new Grant(GrantType.PROFILE_ADMIN, ((CollectionImeji) o).getProfile()));
+						}
+						else
+						{
+							gc.addGrant(target, new Grant(GrantType.PROFILE_VIEWER, ((CollectionImeji) o).getProfile()));
+						}
 					} 
 					catch (Exception e) 
 					{

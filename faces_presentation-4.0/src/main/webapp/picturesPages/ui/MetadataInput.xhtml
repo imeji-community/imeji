@@ -97,7 +97,7 @@
 		
 		<!-- METADATA TYPE NUMBER -->
 		<h:panelGroup rendered="#{metadata.type =='NUMBER'}">
-			<h:inputText styleClass="huge_txtInput" value="#{metadata.number}" rendered="#{metadata.type=='NUMBER'}" />
+			<h:inputText immediate="true" onfocus="this.select();" styleClass="huge_txtInput" value="#{metadata.number}" rendered="#{metadata.type=='NUMBER'}" />
 		</h:panelGroup>
 				
 		<!-- METADATA TYPE CONE AUTHOR -->

@@ -1,5 +1,7 @@
 package de.mpg.jena.sparql;
 
+import java.lang.management.MemoryNotificationInfo;
+import java.lang.management.MemoryUsage;
 import java.util.LinkedList;
 
 import com.hp.hpl.jena.query.Query;
@@ -37,14 +39,14 @@ public class ImejiSPARQL
 		LinkedList<T> beans = new LinkedList<T>();
         try 
         {
-                m.enterCriticalSection(Lock.READ);
+                //m.enterCriticalSection(Lock.READ);
                 ResultSet results = qexec.execSelect();
                // ResultSetFormatter.out(System.out, results) ;
                 for (;results.hasNext();)beans.add(reader.load(c, resource(results).toString()));
                 return beans;
         } finally 
         {
-                m.leaveCriticalSection();
+                //m.leaveCriticalSection();
                 qexec.close();
         }
 	}
@@ -65,13 +67,13 @@ public class ImejiSPARQL
 		LinkedList<T> beans = new LinkedList<T>();
         try 
         {
-                m.enterCriticalSection(Lock.READ);
+                //m.enterCriticalSection(Lock.READ);
                 ResultSet results = qexec.execSelect();
                 for (;results.hasNext();) beans.add(reader.load(c, resource(results).toString()));
                 return beans;
         } finally 
         {
-                m.leaveCriticalSection();
+                //m.leaveCriticalSection();
                 qexec.close();
         }
 	}
@@ -94,7 +96,7 @@ public class ImejiSPARQL
                 ResultSet results = qexec.execSelect();
                 for (;results.hasNext();) 
                 {
-                	for (;results.hasNext();) resultList.add(resource(results).toString());
+                	resultList.add(resource(results).toString());
                 }
                 return resultList;
         } finally 
@@ -152,7 +154,8 @@ public class ImejiSPARQL
                 ResultSet results = qexec.execSelect();
                 for (;results.hasNext();) resource(results);
                 return results.getRowNumber();
-        } finally 
+        } 
+        finally 
         {
         	 qexec.close();
         }

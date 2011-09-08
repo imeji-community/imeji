@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 
 import thewebsemantic.RDF2Bean;
 
+import com.hp.hpl.jena.Jena;
+import com.hp.hpl.jena.JenaRuntime;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.jena.readers.ImejiJenaReaders;
@@ -32,7 +34,9 @@ public class ImejiRDF2Bean
 		try 
 		{
 			Security security = new Security();
+			
 			Object o = rdf2Bean.load(uri);
+						
 			if (!security.check(OperationsType.READ, user, o)) 
 			{
 				if (o instanceof Image) 

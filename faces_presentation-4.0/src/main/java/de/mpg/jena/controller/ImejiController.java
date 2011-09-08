@@ -13,6 +13,7 @@ import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
+import tdb.tdbloader;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
@@ -30,6 +31,7 @@ import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.Lock;
+import com.hp.hpl.jena.tdb.TDBLoader;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -84,7 +86,7 @@ public abstract class ImejiController
      * //store.getLoader().setChunkSize(50000); store.getLoader(). base = SDBFactory.connectDefaultModel(store); }
      */
     /*
-     * static { try { String path = PropertyReader.getProperty("imeji.tdb.path"); System.out.println("TDB at: " + path);
+     * static { try { String path = PropertyReader.getProperty("imeji.tdb.path"); 
      * base = DataFactory.model(path); } catch (Exception e) { } }
      */
     protected static Bean2RDF bean2RDF;// = new Bean2RDF(base);
@@ -369,7 +371,6 @@ public abstract class ImejiController
     // String completeQuery = "SELECT DISTINCT ?s WHERE { ?s a <" + type + "> " + query + filter + " } " + sortQuery +
     // limitString + " OFFSET " + offset;
     //			
-    // System.out.println("Created Query:\n"+completeQuery);
     // return completeQuery;
     // }
     private static String createSubQuery(List<ImejiQueryVariable> qvList, VarCounter y, String oldSubjectVar,
@@ -626,7 +627,6 @@ public abstract class ImejiController
 //        if ("SELECT".equals(mode)) mode += " DISTINCT ";
 //        String completeQuery = mode + " ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } "
 //                + sortQuery + limitString + " OFFSET " + offset;
-//        System.out.println("OLD QUERY: " +completeQuery);
 //        return completeQuery;
 //    }
 
@@ -732,10 +732,8 @@ public abstract class ImejiController
         {
             createOntology(variableMap, scList, roots);
             String subquery = createSubQuery2(roots, new VarCounter(), "?s", false);
-            System.out.println(subquery);
             query += subquery;
             filter = createFilter(scList, variableMap);
-            System.out.println(filter);
         }
         /*
          * if(scList!=null && scList.size()>0) { filter = " . FILTER("; int j=0; boolean operatorWritten = false;
@@ -799,7 +797,6 @@ public abstract class ImejiController
          */
         String completeQuery = "SELECT DISTINCT ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } "
                 + sortQuery + limitString + " OFFSET " + offset;
-        System.out.println("Created Query:\n" + completeQuery);
         return completeQuery;
     }
 
@@ -931,18 +928,25 @@ public abstract class ImejiController
             Query queryObject = QueryFactory.create(q);
             QueryExecution qe = QueryExecutionFactory.create(queryObject, graph);
             ResultSet results = qe.execSelect();
+           
             while (results.hasNext())
-            {
-                QuerySolution qs = results.next();
+        	{
+             	QuerySolution qs = results.next();
                 Resource s = qs.getResource("?s");
                 s.removeProperties();
             }
+           
             qe.close();
         }
+        catch (Exception e) 
+        {
+			logger.error(e.getMessage());
+		}
         finally
         {
         	graph.leaveCriticalSection();
         }
+        
     }
     
     protected abstract String getSpecificQuery() throws Exception;

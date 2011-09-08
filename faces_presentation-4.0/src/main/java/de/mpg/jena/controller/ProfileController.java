@@ -48,7 +48,7 @@ public class ProfileController extends ImejiController
 	        URI uri = ObjectHelper.getURI(MetadataProfile.class, Integer.toString(getUniqueId()));
 	        mdp.setId(uri);
         }
-        imejiBean2RDF.create(mdp, user);
+        imejiBean2RDF.create(imejiBean2RDF.toList(mdp), user);
         addCreatorGrant(mdp, user);
         return mdp.getId();
     }
@@ -75,7 +75,7 @@ public class ProfileController extends ImejiController
     {
     	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
     	writeUpdateProperties(mdp.getProperties(), user);
-        imejiBean2RDF.saveDeep(mdp, user);
+        imejiBean2RDF.saveDeep(imejiBean2RDF.toList(mdp), user);
     }
     
     public void release(MetadataProfile mdp) throws Exception
@@ -88,7 +88,7 @@ public class ProfileController extends ImejiController
     public void delete(MetadataProfile mdp, User user) throws Exception
     {
     	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
-    	imejiBean2RDF.delete(mdp, user);
+    	imejiBean2RDF.delete(imejiBean2RDF.toList(mdp), user);
     	GrantController gc = new GrantController(user);
 		gc.removeAllGrantsFor(user, mdp.getId());
     }
@@ -120,17 +120,20 @@ public class ProfileController extends ImejiController
     	String q = "SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/mdprofile> . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/status> ?status " +
     			".FILTER( ";
     	
-    	q += "?status=<http://imeji.mpdl.mpg.de/status/RELEASED> ";
+    	q += "?status=<http://imeji.mpdl.mpg.de/status/RELEASED> || (?status!=<http://imeji.mpdl.mpg.de/status/WITHDRAWN> && (";
     	
+    	int i=0;
     	for(Grant g : user.getGrants())
     	{
     		if (GrantType.PROFILE_EDITOR.equals(g.getGrantType())|| GrantType.PROFILE_ADMIN.equals(g.getGrantType()))
     		{
-    			q += " || ?s=<" + g.getGrantFor() +"> ";
+    			if (i > 0) q+= " || ";
+    			q += " ?s=<" + g.getGrantFor() +"> ";
+    			i++;
     		}
     	}
     	
-    	q += " )}";
+    	q += " )))}";
     	
     	return ImejiSPARQL.execAndLoad(q, MetadataProfile.class);
     }

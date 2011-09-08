@@ -2,7 +2,10 @@ package de.mpg.jena.controller;
 
 import java.net.URI;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Collection;
+
+import org.apache.commons.collections.iterators.ArrayListIterator;
 
 import thewebsemantic.RDF2Bean;
 import de.mpg.jena.ImejiBean2RDF;
@@ -23,14 +26,14 @@ public class UserController extends ImejiController
 	public void create(User newUser) throws Exception
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
-		imejiBean2RDF.create(newUser, user);
+		imejiBean2RDF.create(imejiBean2RDF.toList(newUser), user);
 		cleanGraph(ImejiJena.userModel);
 	}
 	
 	public void delete(User user) throws Exception
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
-		imejiBean2RDF.delete(user, this.user);
+		imejiBean2RDF.delete(imejiBean2RDF.toList(user), this.user);
 		cleanGraph(ImejiJena.userModel);
 	}
 	
@@ -64,7 +67,7 @@ public class UserController extends ImejiController
 	public void update(User user) throws Exception
 	{
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
-		imejiBean2RDF.saveDeep(user, this.user);
+		imejiBean2RDF.saveDeep(imejiBean2RDF.toList(user), this.user);
 		cleanGraph(ImejiJena.userModel);
 	}
 	

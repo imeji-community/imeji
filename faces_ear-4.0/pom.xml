@@ -427,31 +427,6 @@
 			<version>20040801</version>
 			<scope>compile</scope>
 		</dependency>
-		<!--  <dependency>
-	      <groupId>urlrewrite</groupId>
-	      <artifactId>urlrewrite</artifactId>     
-	      <version>3.2.0</version>
-	    </dependency>
-	    <dependency>
-			<groupId>jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-			<version>2.0.1-patched</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.mpg.escidoc.services</groupId>
-			<artifactId>structuredexportmanager</artifactId>
-			<version>1.0.56-SNAPSHOT</version>
-			<scope>compile</scope>
-			<type>ejb</type>
-		</dependency>
-		<dependency>
-			<groupId>de.mpg.escidoc.services</groupId>
-			<artifactId>citationmanager</artifactId>
-			<version>1.0.58-SNAPSHOT</version>
-			<scope>compile</scope>
-			<type>ejb</type>
-		</dependency>-->
 		<dependency>
 			<groupId>org.apache.ant</groupId>
 			<artifactId>ant</artifactId>
@@ -487,32 +462,6 @@
 	       <version>1.2rc1</version>
 	       <scope>provided</scope>
 	    </dependency> 
-		<!-- For old FW -->
-	  <!--    <dependency>
-	      <groupId>xmlbeans</groupId>
-	      <artifactId>escidoc-1.1</artifactId>
-	      <version>1.1.0</version>
-	      <scope>provided</scope>
-	    </dependency>
-		<dependency>
-	    <groupId>xmlbeans</groupId>
-	     	<artifactId>faces_metadata</artifactId>
-	     	<version>1.0.0</version>
-	     	<scope>provided</scope>
-	    </dependency>
-     	<dependency>
-	      <groupId>xmlbeans</groupId>
-	      <artifactId>escidoc-generic</artifactId>
-	      <version>1.0.0</version>
-	      <scope>provided</scope>
-	    </dependency>-->
-     	<!--  <dependency>
-     		<groupId>de.mpg.escidoc.services</groupId>
-     		<artifactId>cone_presentation</artifactId>
-     		<version>1.1.1</version>
-     		<scope>compile</scope>
-     		<type>war</type>
-     	</dependency>-->
      	<dependency>
 	      	<groupId>com.maxmind.geoip</groupId>
 	      	<artifactId>geoip</artifactId>
@@ -531,7 +480,7 @@
 		<dependency>
 		  <groupId>com.hp.hpl.jena</groupId>
 		  <artifactId>tdb</artifactId>
-		  <version>0.8.9</version>
+		  <version>0.8.10</version>
 		</dependency>
 		
     	<dependency> 

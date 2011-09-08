@@ -1,7 +1,9 @@
 package de.mpg.jena;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -50,25 +52,65 @@ public class ImejiBean2RDF
 		security = new Security();
 	}
 	
-	public void create(Object bean, User user) throws Exception
+	public List<Object> toList(Object o)
 	{
-		beginTransaction(bean, user, OperationsType.CREATE);
-		bean2rdf.saveDeep(bean);
-		commitTransaction(bean, user);
+		List<Object> list = new ArrayList<Object>();
+		list.add(o);
+		return list;
+	}
+	
+	public void create(List<Object> beans, User user) throws Exception
+	{
+		try
+		{
+			beginModel();
+			for (Object bean : beans)
+			{
+				beginTransaction(bean, user, OperationsType.CREATE);
+				bean2rdf.saveDeep(bean);
+				commitTransaction(bean, user);
+			}
+		}
+		finally
+		{
+			commitModel();
+		}
 	}
 
-	public void delete(Object bean, User user) throws Exception 
-	{
-		beginTransaction(bean, user, OperationsType.DELETE);
-		bean2rdf.delete(bean);
-		commitTransaction(bean, user);
+	public void delete(List<Object> beans, User user) throws Exception 
+		{try
+		{
+			beginModel();
+			for (Object bean : beans)
+			{
+				beginTransaction(bean, user, OperationsType.DELETE);
+				bean2rdf.delete(bean);
+				commitTransaction(bean, user);
+			}
+		}
+		finally
+		{
+			commitModel();
+		}
 	}
 
-	public Resource saveDeep(Object bean, User user) throws Exception
+	public Resource saveDeep(List<Object> beans, User user) throws Exception
 	{
-		beginTransaction(bean, user, OperationsType.UPDATE);
-		bean2rdf.saveDeep(bean);
-		commitTransaction(bean, user);
+		try
+		{
+			beginModel();
+			for (Object bean : beans)
+			{
+				beginTransaction(bean, user, OperationsType.UPDATE);
+				bean2rdf.saveDeep(bean);
+				commitTransaction(bean, user);
+			}
+		}
+		finally
+		{
+			commitModel();
+		}
+		
 		return null;
 	}
 	
@@ -90,12 +132,12 @@ public class ImejiBean2RDF
 			if (optimisticLocking) checkOptimisticLocks(bean);
 			if (pessimisticLocking) checkPessimisticLock(bean, user);
 			Locks.lock(new Lock(extractID(bean).toString()));
-			bean2rdf.getModel().begin();
 			setLastModificationDate(bean, user);
 		}
 		catch (Exception e)
 		{
 			commitTransaction(bean, user);
+			logger.error(e);
 			throw e;
 		}
 	}
@@ -103,7 +145,28 @@ public class ImejiBean2RDF
 	private void commitTransaction(Object bean, User user)
 	{
 		Locks.unLock(new Lock(extractID(bean).toString()));
+		//leanGraph();
+		//bean2rdf.getModel().commit();
+	}
+	
+	/**
+	 * Important to enable synchronisation with model
+	 * to use carefully, kills performance
+	 */
+	private void beginModel()
+	{
+		//bean2rdf.getModel().enterCriticalSection(com.hp.hpl.jena.shared.Lock.WRITE);
+		bean2rdf.getModel().begin();
+	}
+	
+	/**
+	 * Start synchronisation with model
+	 * to use carefully, kills performance
+	 */
+	private void commitModel()
+	{
 		bean2rdf.getModel().commit();
+		//bean2rdf.getModel().leaveCriticalSection();
 	}
 	
 	private void checkSecurity(Object bean, User user, OperationsType opType)

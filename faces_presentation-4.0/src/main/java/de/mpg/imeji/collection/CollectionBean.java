@@ -16,10 +16,12 @@ import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.search.SearchResult;
+import de.mpg.jena.security.Authorization;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Organization;
@@ -372,6 +374,12 @@ public abstract class CollectionBean
 	{
 		Security security = new Security();
 		return security.check(OperationsType.UPDATE, sessionBean.getUser(), profile);
+	}
+	
+	public boolean isAdmin()
+	{
+		Authorization auth = new Authorization();
+		return auth.isContainerAdmin(sessionBean.getUser(), collection);
 	}
 
     public boolean isCorruptedList()

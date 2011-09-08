@@ -60,7 +60,7 @@ public class LoginHelper
         PostMethod login = new PostMethod( frameworkUrl + "/aa/j_spring_security_check");
         login.addParameter("j_username", userName);
         login.addParameter("j_password", password);
-        
+
         client.executeMethod(login);
         //System.out.println("Login form post: " + login.getStatusLine().toString());
                 

@@ -376,7 +376,7 @@ public class QuerySPARQLImpl implements QuerySPARQL
 	        if ("SELECT".equals(mode)) mode += " DISTINCT ";
 	        String completeQuery = mode + " ?s WHERE { ?s a <" + type + "> " + query + specificFilter + " } "
 	                + sortQuery + limitString + " OFFSET " + offset;
-	        System.out.println(completeQuery);
+
 	        return completeQuery;
 	    }
 

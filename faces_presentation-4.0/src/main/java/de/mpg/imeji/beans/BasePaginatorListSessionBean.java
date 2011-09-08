@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 import thewebsemantic.NotBoundException;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImejiController;
 import de.mpg.jena.vo.Image;
 

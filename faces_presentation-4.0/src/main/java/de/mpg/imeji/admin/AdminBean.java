@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.hp.hpl.jena.sparql.sse.Item;
+import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
 import com.hp.hpl.jena.tdb.store.GraphTDB;
 
@@ -19,7 +20,8 @@ public class AdminBean
 	
 	public Item getJenaTDBStats()
 	{
-        Item imageStats = StatsCollector.gatherTDB( (GraphTDB) ImejiJena.imageModel.getGraph());
+		StatsCollector sc = new StatsCollector();
+        Item imageStats = null;//StatsCollector.gatherTDB( (GraphTDB) ImejiJena.imageModel.getGraph());
         return imageStats;
 	}
 	

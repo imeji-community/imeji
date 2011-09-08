@@ -52,6 +52,11 @@ public class DataDoctor
 		c.cleanGraph(ImejiJena.userModel);
 		
 	}
+	
+	public void eleminateNonStriclyIncreasing()
+	{
+		
+	}
     
     /**
      * Checks album and collections

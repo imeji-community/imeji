@@ -130,8 +130,14 @@ public class MdProfileBean
     public String changeTemplate() throws Exception
     {
         MetadataProfile tp = pc.retrieve(URI.create(this.template));
-        profile.getStatements().clear();
+        profile.getStatements().clear();        
         profile.setStatements(tp.getStatements());
+        
+        for (Statement s : profile.getStatements())
+        {
+        	s.setName(URI.create(s.getName().toString().replace(tp.getId().toString(),profile.getId().toString())));
+        }
+        
         collectionSession.setProfile(profile);
         initBeanObjects(profile);
         return getNavigationString();

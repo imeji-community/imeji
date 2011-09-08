@@ -102,7 +102,7 @@ public class InitializerServlet extends HttpServlet
 	    }
 	    catch (Exception e)
 	    {
-	    	throw new RuntimeException("Erroor initializing Admin user!" + e);
+	    	throw new RuntimeException("Error initializing Admin user! " + e);
 	    }
 	   
     }

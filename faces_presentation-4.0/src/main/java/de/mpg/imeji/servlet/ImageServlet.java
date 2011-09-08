@@ -96,7 +96,7 @@ public class ImageServlet extends HttpServlet
 	            
 	            if (userHandle == null)
 	            {
-	                userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
+	                 userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
 	               
 	            }
 	            method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);

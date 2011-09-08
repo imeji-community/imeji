@@ -202,6 +202,7 @@ public class EditImageMetadataBean
 	
 	public String saveAndRedirect() throws IOException
 	{
+		System.out.println("save start");
 		editor.save();
 		redirectToView();
 		return "";
@@ -227,6 +228,7 @@ public class EditImageMetadataBean
 		{
 			im = removeAllMetadata(im);
 		}
+		metadata = MetadataFactory.newMetadata(statement);
 		return "";
 	}
 	

@@ -35,6 +35,7 @@ import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
+import de.mpg.jena.vo.Properties.Status;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 {
@@ -93,6 +94,20 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
     {
     	ImageController controller = new ImageController(sb.getUser());
+
+//    	CollectionController cc = new CollectionController(sb.getUser());
+//    	
+//    	CollectionImeji c = cc.retrieve("1718");
+//    	
+//    	for (URI i : c.getImages())
+//    	{
+//    		Image im = controller.retrieve(i);
+//    		im.getProperties().setStatus(Status.PENDING);
+//    		controller.delete(im, sb.getUser());
+//    	}
+//    	c.getImages().clear();
+//    	cc.update(c);
+    	
         if (true || reloadPage())
         {
 	        images = new ArrayList<Image>();
@@ -208,7 +223,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     	ImageController ic = new ImageController(sb.getUser());
     	CollectionController cc = new CollectionController(sb.getUser());
     	CollectionImeji coll = null;
-    	long debut = System.currentTimeMillis();
+
     	if (!images.isEmpty()) coll = cc.retrieve(images.iterator().next().getCollection());
     	int count = 0;
     	for(Image im : images)
@@ -216,8 +231,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     		try 
     		{
 				ic.delete(im, sb.getUser());
-//				if (coll.getImages().contains(im.getId())) coll.getImages().remove(im.getId());
-    			System.out.println("removing images");
+				if (coll.getImages().contains(im.getId())) coll.getImages().remove(im.getId());
 				count++;
 			} 
     		catch (Exception e) 
@@ -230,10 +244,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     	BeanHelper.info(count + " " + sb.getLabel("images_deleted"));
     	cc.update(coll);
     	sb.getSelected().clear();
-    	
-    	long fin = System.currentTimeMillis();
-    	System.out.println(fin-debut);
-    	
+    	    	
     	return "pretty:";
     }
     

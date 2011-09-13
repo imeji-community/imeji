@@ -3,6 +3,7 @@ package de.mpg.imeji.beans;
 import java.util.List;
 
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.Scripts;
 import de.mpg.jena.util.DataDoctor;
 
 public class DoctorBean 
@@ -29,7 +30,14 @@ public class DoctorBean
 	{
 		DataDoctor doc = new DataDoctor(sb.getUser());
 		doc.runDoctor(true);
-		return "pretty:";
+		return "";
+	}
+	
+	public String runScript() throws Exception
+	{
+		Scripts s = new Scripts();
+		s.setCompleteNamesForContainers(sb.getUser());
+		return "";
 	}
 
 	public List<String> getReport() 

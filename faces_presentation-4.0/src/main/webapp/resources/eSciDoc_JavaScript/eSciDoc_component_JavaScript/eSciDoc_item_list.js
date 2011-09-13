@@ -53,13 +53,73 @@ function addItemListFunctions() {
 					);
 			});
 
-	jQuery('.checkboxSelectButton').click(function(){jQuery(this).siblings('.selectMenu').show();});
+	/*jQuery('.checkboxSelectButton').click(function(){jQuery(this).siblings('.selectMenu').show();});
 	jQuery('.checkBoxCloseSelectButton').click(function(){jQuery(this).parent().hide();});
 		jQuery('.selectMenu').find('.selectTotal').click(function(){jQuery(this).parents('.itemList').find('.itemCheckBox').each(function(i, elem){elem.checked=true;}); jQuery(this).parents('.selectMenu').hide();});
 		jQuery('.selectMenu').find('.selectAll').click(function(){jQuery(this).parents('.itemList').find('.itemCheckBox').each(function(i, elem){elem.checked=true;}); jQuery(this).parents('.selectMenu').hide();});
 		jQuery('.selectMenu').find('.selectNone').click(function(){jQuery(this).parents('.itemList').find('.itemCheckBox').each(function(i, elem){elem.checked=false;});});
 		jQuery('.selectMenu').find('a').each(function(i,elem){jQuery(elem).click(function(){jQuery(this).parents('.selectMenu').hide()});});
+	*/
+	
+	// Openration of the select menu for checkboxes
+	// Start with event on document to close the select menu on click elswhere
+	jQuery('body').ready(function(e){
 		
+	
+		jQuery('html').click(function(){
+			// $('.selectMenu').hide();
+		});
+		
+		jQuery('.selectMenu').click(function(evt){
+			evt.preventDefault();
+			evt.stopPropagation();
+			evt.stopImmediatePropagation();
+		});
+		
+		function hideElement(element) {
+			element.hide(30);
+		} 
+		
+		function check4OpenSelectMenues() {
+			jQuery('.selectMenu').each(function(e){
+				if (jQuery(this).is(':visible')) {
+					hideElement(jQuery(this));
+				}
+			});
+		}
+		
+		jQuery('.checkboxSelectButton').click(function(evt){
+			evt.preventDefault();
+			evt.stopPropagation();
+			evt.stopImmediatePropagation();
+			
+			check4OpenSelectMenues();
+			
+			jQuery('body').unbind("click");
+			jQuery('body').unbind("keydown");
+			var cbsButton = jQuery(this);
+			var cbsButtonPosition = jQuery(this).position();
+			var slctMenu = jQuery(this).siblings('.selectMenu');
+			jQuery('body').one("click", function(evt) {
+				hideElement(slctMenu);
+			});
+			jQuery('body').one('keydown', function(evt){
+				if (Number(evt.which) === 27) { //check the key-number for number of escape
+					hideElement(slctMenu);
+				}
+			});
+			slctMenu.toggle(30, function(){
+				if (cbsButtonPosition.left > (jQuery(document).width() / 2)) {
+					var tmpPos = cbsButtonPosition.left + cbsButton.width() / 2 - slctMenu.width();
+					slctMenu.css("left", tmpPos);
+				}
+			});
+			
+		}); 
+	});
+	
+
+	
 	jQuery('.headerSwitchView').find('.expand').click(
 			function(){
 				jQuery(this).hide();

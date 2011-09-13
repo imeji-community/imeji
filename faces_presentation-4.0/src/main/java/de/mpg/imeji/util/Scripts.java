@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,9 +33,16 @@ import de.mpg.escidoc.services.framework.ProxyHelper;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.escidoc.ItemVO;
 import de.mpg.imeji.upload.deposit.DepositController;
+import de.mpg.jena.ImejiBean2RDF;
+import de.mpg.jena.ImejiJena;
+import de.mpg.jena.controller.AlbumController;
+import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.Album;
+import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.User;
 
 public class Scripts 
@@ -175,23 +183,6 @@ public class Scripts
          }
          
          return method;
-//         buffer = new byte[2048];
-//         int numRead;
-//         long numWritten = 0;
-//         while ((numRead = input.read(buffer)) != -1)
-//         {
-//             out.write(buffer, 0, numRead);
-//             //out.flush();
-//             numWritten += numRead;
-//         }
-//         input.close();
-//         
-//         method.releaseConnection();
-//         //out.write(input);
-//         out.flush();
-//         out.close();
-// 		
-//         return out;
 	 }
 	 
 	 public static String login(String frameworkUrl, String userName, String password) throws Exception
@@ -254,4 +245,40 @@ public class Scripts
 	        }
 	        return userHandle;
 		}
+	 
+	 public void setCompleteNamesForContainers(User admin) throws Exception
+	 {
+		 CollectionController cc = new CollectionController(admin);
+		 ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
+			
+		 for (CollectionImeji c : cc.retrieveAll())
+		 {
+			 c = (CollectionImeji) ObjectHelper.castAllHashSetToList(c);
+			 for (int i = 0; i < c.getMetadata().getPersons().size(); i++) 
+			 {
+				 ((List<Person>)c.getMetadata().getPersons()).get(i).setCompleteName(
+						 	((List<Person>)c.getMetadata().getPersons()).get(i).getFamilyName() + " " 
+						 	+ ((List<Person>)c.getMetadata().getPersons()).get(i).getGivenName());
+				 System.out.println(((List<Person>)c.getMetadata().getPersons()).get(i).getCompleteName());
+			 }
+			 imejiBean2RDF.saveDeep(imejiBean2RDF.toList(c), admin);
+		 }
+		 
+		 cc.cleanGraph(ImejiJena.collectionModel);
+		 AlbumController ac = new AlbumController(admin);
+		 imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+		 
+		 for (Album a : ac.retrieveAll())
+		 {
+			 a = (Album) ObjectHelper.castAllHashSetToList(a);
+			 for (int i = 0; i < a.getMetadata().getPersons().size(); i++) 
+			 {
+				 ((List<Person>)a.getMetadata().getPersons()).get(i).setCompleteName(
+						 	((List<Person>)a.getMetadata().getPersons()).get(i).getFamilyName() + " " 
+						 	+ ((List<Person>)a.getMetadata().getPersons()).get(i).getGivenName()); 
+			 }
+			 imejiBean2RDF.saveDeep(imejiBean2RDF.toList(a), admin);
+		 }
+		 ac.cleanGraph(ImejiJena.albumModel);
+	 }
 }

@@ -17,6 +17,7 @@ import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.Properties.Status;
 
 public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
@@ -68,6 +69,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         SearchResult results = controller.search(scList, sortCriterion, limit, offset);
         collections = controller.load(results.getResults(), limit, offset);
         totalNumberOfRecords = results.getNumberOfRecords();
+        
         return ImejiFactory.collectionListToBeanList(collections);
     }
     

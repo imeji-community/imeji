@@ -1,8 +1,11 @@
 package de.mpg.jena.util;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import thewebsemantic.NotFoundException;
 
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.CollectionController;
@@ -70,6 +73,7 @@ public class DataDoctor
     	// Compare Status of profile and collection: should be same
     	CollectionController cc = new CollectionController(user);
     	Collection<CollectionImeji> cols = cc.retrieveAll();
+    	ImageController ic = new ImageController(user);
     	
     	for (CollectionImeji c : cols)
     	{    		
@@ -94,6 +98,27 @@ public class DataDoctor
     						+ ") with collection " + c.getId() + " (" + c.getProperties().getStatus() + ")") ;
     			}
     		}
+    		
+    		for (int i=0; i < c.getImages().size(); i++)
+    		{
+    			try
+    			{
+    				c = (CollectionImeji) ObjectHelper.castAllHashSetToList(c);
+    				ic.retrieve(((List<URI>)c.getImages()).get(i));
+    			}
+    			catch (NotFoundException e) 
+    			{
+					if (proceed)
+					{
+						((List<URI>)c.getImages()).remove(i);
+					}
+					else
+					{
+						report.add("Dead image link in collection: " + c.getId() + " ( image " + ((List<URI>)c.getImages()).get(i) + " doesn't exists) ");
+					}
+				}
+    		}
+    		if (proceed) cc.update(c);
     	}
     	
     	// remove profiles without collection

@@ -60,11 +60,15 @@ public class SimpleQueryFactory
 		}
 		else if (ImejiNamespaces.CONTAINER_METADATA_PERSON_FAMILY_NAME.equals(sc.getNamespace()))
 		{
-			searchQuery = " .OPTIONAL {?s <http://imeji.mpdl.mpg.de/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/terms/0.1/given-name> ?el}}}";
+			searchQuery = " .OPTIONAL {?s <http://imeji.mpdl.mpg.de/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?el}}}";
+		}
+		else if (ImejiNamespaces.CONTAINER_METADATA_PERSON_COMPLETE_NAME.equals(sc.getNamespace()))
+		{
+			searchQuery = " .OPTIONAL {?s <http://imeji.mpdl.mpg.de/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?el}}}";
 		}
 		else if (ImejiNamespaces.CONTAINER_METADATA_PERSON_GIVEN_NAME.equals(sc.getNamespace()))
 		{
-			searchQuery = " .OPTIONAL {?s <http://imeji.mpdl.mpg.de/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?el}}}";
+			searchQuery = " .OPTIONAL {?s <http://imeji.mpdl.mpg.de/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/terms/0.1/given-name> ?el}}}";
 		}
 		else if (ImejiNamespaces.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME.equals(sc.getNamespace()))
 		{

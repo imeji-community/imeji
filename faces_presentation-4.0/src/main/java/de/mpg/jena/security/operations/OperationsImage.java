@@ -53,9 +53,12 @@ public class OperationsImage implements Operations
 	 */
 	public boolean update(User user, Object object) 
 	{	
-		return (auth.isPictureEditor(user, (Image) object)
-				|| auth.isContainerEditor(user, ((Image)object))
-				|| auth.isContainerAdmin(user, ((Image)object)));
+		return ( !Status.WITHDRAWN.equals(((Image)object).getProperties().getStatus()) &&
+				(
+					auth.isPictureEditor(user, (Image) object)
+					|| auth.isContainerEditor(user, ((Image)object))
+					|| auth.isContainerAdmin(user, ((Image)object)))
+				);
 	}
 	/**
 	 * Delete Images (Not specified!!!!):

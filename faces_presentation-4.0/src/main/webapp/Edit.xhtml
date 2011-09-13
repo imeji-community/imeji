@@ -26,66 +26,83 @@
 				<a4j:outputPanel id="ajaxContent">
 					<h:outputLabel value="#{EditImageMetadataBean.ajaxInit}"/>
 				
+					<h:panelGroup rendered="#{!EditImageMetadataBean.profileWithStatements}">
+						<h2><h:outputText value="#{lbl.profile_empty}"/></h2>
+						<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8">
+							<h:outputText value=" #{lbl.back_to_pictures} " />
+						</h:outputLink>	
+					</h:panelGroup>
+					
 					<!-- MAIN FORMULAR -->
 					
-					<!-- Selectors -->
-					<h:panelGroup styleClass="huge_area0">
-							<h:outputLabel styleClass="huge_area0" value="Select metadata type"/>
-							<h:selectOneMenu styleClass="xLarge_area0"  id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" valueChangeListener="#{EditImageMetadataBean.statementListener}">
-								<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
-								<a4j:support event="onchange" reRender="ajaxContent" />
-							</h:selectOneMenu>
-					</h:panelGroup>
+					<h:panelGroup rendered="#{EditImageMetadataBean.profileWithStatements}">
 					
-					<!-- COMMON METADATA -->
-					<h:panelGroup id="commonMetadata" styleClass="preListHeader half_area0_p8">
-						<ui:include src="./picturesPages/ui/MetadataInput.xhtml">
-							<ui:param name="metadata" value="#{EditImageMetadataBean.metadata}"/>
-							<ui:param name="areaClass" value="quad_txtArea"/>
-							<ui:param name="indexMetadata" value="-1"/>
-							<ui:param name="indexStatement" value="-1"/>
-							<ui:param name="type" value="0"/>
-						</ui:include>
-						<h:panelGroup id="modeRadioMenu" styleClass="full_area0">
-							<h:selectOneRadio styleClass="huge_are0" value="#{EditImageMetadataBean.selectedMode}">
-		  						<f:selectItems value="#{EditImageMetadataBean.modeRadio}" />
-							</h:selectOneRadio>
+						<!-- Selectors -->
+						
+						<h:panelGroup styleClass="half_area0_p0 huge_marginLExcl">
+								<h:outputLabel for="selStatement" styleClass="full_area0_p0" value="#{lbl.metadata_type_select}"/>
+								<h:selectOneMenu styleClass="huge_area0"  id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" valueChangeListener="#{EditImageMetadataBean.statementListener}">
+									<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
+									<a4j:support event="onchange" reRender="ajaxContent" />
+								</h:selectOneMenu>
 						</h:panelGroup>
-						
-						<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}"  action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}"/>
-						
-						
-						<h:panelGroup rendered="#{EditImageMetadataBean.editType != 'selected'}">
-							<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton">
-								 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
-								<h:outputText value=" #{lbl.cancel}" />
-							</h:outputLink>	
-							<h:commandButton immediate="true" styleClass="free_area1_p8 activeButton"  action="#{EditImageMetadataBean.saveAllAndRedirect}" value=" #{lbl.save} ">
-								<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
-							</h:commandButton>			
+						<h:panelGroup styleClass="full_area0_p8">
+						</h:panelGroup>
+						<!-- COMMON METADATA -->
+						<h:panelGroup id="commonMetadata" styleClass="preListHeader full_area0_p0">
+							<h:panelGroup  styleClass="quad_area0_p0 huge_marginLExcl">
+								<ui:include src="./picturesPages/ui/MetadataInput.xhtml">
+									<ui:param name="metadata" value="#{EditImageMetadataBean.metadata}"/>
+									<ui:param name="areaClass" value="quad_txtArea"/>
+									<ui:param name="indexMetadata" value="-1"/>
+									<ui:param name="indexStatement" value="-1"/>
+									<ui:param name="type" value="0"/>
+									<ui:param name="hideLabel" value="true"/>
+								</ui:include>
+								<a4j:commandButton reRender="ajaxContent" styleClass="xLarge_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}"  action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}"/>
+								
+								<h:panelGroup id="modeRadioMenu" styleClass="full_area0 ">
+									<h:selectOneRadio layout="pageDirection" styleClass="huge_are0" value="#{EditImageMetadataBean.selectedMode}">
+				  						<f:selectItems value="#{EditImageMetadataBean.modeRadio}" />
+									</h:selectOneRadio>
+								</h:panelGroup>
+								
+							</h:panelGroup>
+								
+							
+							<h:panelGroup rendered="#{EditImageMetadataBean.editType != 'selected'}" styleClass="full_area0">
+								<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton">
+									 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
+									<h:outputText value=" #{lbl.cancel}" />
+								</h:outputLink>	
+								<h:commandButton immediate="true" styleClass="free_area1_p8 activeButton small_marginRExcl"  action="#{EditImageMetadataBean.saveAllAndRedirect}" value=" #{lbl.save} ">
+									<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
+								</h:commandButton>			
+							</h:panelGroup>	
+						</h:panelGroup>
+							
+	
+	
+						<h:panelGroup styleClass="full_area0_p8 preListHeader"  rendered="#{EditImageMetadataBean.editType == 'selected'}">
+							
+							
+							<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
+								<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
+								<h:outputLink value="" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
+									<h:outputText value="#{lbl.reset_changes}" />
+								</h:outputLink>
+								<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
+									 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
+									<h:outputText value=" #{lbl.cancel} " />
+								</h:outputLink>	
+								
+								<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" immediate="true"  action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
+									<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
+								</h:commandButton>
+							</h:panelGroup>
 						</h:panelGroup>	
-						
+					
 					</h:panelGroup>
-					
-
-
-					<h:panelGroup styleClass="full_area0_p8 preListHeader" style="margin-top:10px;" rendered="#{EditImageMetadataBean.editType == 'selected'}">
-							
-						<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
-						<h:outputLink value="" styleClass="free_area1_p8 cancelButton small_marginLIncl">
-								<h:outputText value="#{lbl.reset_changes}" />
-						</h:outputLink>
-					
-						<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton half_marginLIncl">
-							 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
-							<h:outputText value=" #{lbl.cancel} " />
-						</h:outputLink>	
-						
-						<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl" immediate="true"  action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
-							<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
-						</h:commandButton>
-							
-					</h:panelGroup>	
 					
 					<!-- IMAGES -->
 					<h:panelGroup styleClass="full_area0 " >	
@@ -131,24 +148,22 @@
 						</h:panelGroup>
 			        </h:panelGroup>
 			        <!-- SAVE BUTTON -->
-					<h:panelGroup styleClass="full_area0 preListHeader"  rendered="#{EditImageMetadataBean.editType == 'selected'}">
+					<h:panelGroup styleClass="full_area0_p8 preListHeader"  rendered="#{EditImageMetadataBean.profileWithStatements and EditImageMetadataBean.editType == 'selected'}">
 							
-							<h:panelGroup rendered="#{EditImageMetadataBean.editType == 'selected'}" >
-								<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
-								<h:outputLink value="" styleClass="free_area1_p8 cancelButton small_marginLIncl">
-										<h:outputText value="#{lbl.reset_changes}" />
-								</h:outputLink>
-							</h:panelGroup>
+						<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
+							<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
+							<h:outputLink value="" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
+								<h:outputText value="#{lbl.reset_changes}" />
+							</h:outputLink>
+							<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
+								 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
+								<h:outputText value=" #{lbl.cancel} " />
+							</h:outputLink>	
 							
-							<h:panelGroup styleClass="  ">
-								<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton half_marginLIncl">
-									 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
-									<h:outputText value=" #{lbl.cancel} " />
-								</h:outputLink>	
-								
-								<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl"  action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} "/>
-							</h:panelGroup>
-							
+							<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" immediate="true"  action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
+								<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
+							</h:commandButton>
+						</h:panelGroup>
 					</h:panelGroup>	
 
 	        	</a4j:outputPanel> 

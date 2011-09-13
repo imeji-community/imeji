@@ -146,7 +146,6 @@ public class ImejiBean2RDF
 	{
 		Locks.unLock(new Lock(extractID(bean).toString()));
 		//leanGraph();
-		//bean2rdf.getModel().commit();
 	}
 	
 	/**

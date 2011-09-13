@@ -57,13 +57,20 @@ public class LoginHelper
         client.getHostConfiguration().setHost( host, port, "http");
         client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
         
+        
         PostMethod login = new PostMethod( frameworkUrl + "/aa/j_spring_security_check");
         login.addParameter("j_username", userName);
         login.addParameter("j_password", password);
-
-        client.executeMethod(login);
-        //System.out.println("Login form post: " + login.getStatusLine().toString());
-                
+        
+        try 
+        {
+        	  client.executeMethod(login);
+		} 
+        catch (Exception e) 
+        {
+			throw new RuntimeException("Error login in " + frameworkUrl  + "  status: " + login.getStatusCode() + " - " + login.getStatusText() );
+		}
+                      
         login.releaseConnection();
         CookieSpec cookiespec = CookiePolicy.getDefaultSpec();
         Cookie[] logoncookies = cookiespec.match(

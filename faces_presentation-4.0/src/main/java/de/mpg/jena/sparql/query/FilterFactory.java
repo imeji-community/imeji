@@ -176,6 +176,10 @@ public class FilterFactory
             {
                 filter += "str(" + variable + ")='" + sc.getValue() + "'";
             }
+			else if (sc.getValue().startsWith("\"") && sc.getValue().endsWith("\""))
+			{
+				filter +=  variable + "='" + sc.getValue().replaceAll("\"", "")+ "'";
+			}
             else if (sc.getFilterType().equals(Filtertype.URI) && sc.getNamespace().equals(ImejiNamespaces.ID_URI))
             {
                 filter +=  variable + "=<" + sc.getValue() + ">";

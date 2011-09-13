@@ -61,6 +61,7 @@ public class EditImageMetadataBean
 	private int mdPosition;
 	private int imagePosition;
 	private String editType = "selected";
+	private boolean isProfileWithStatements = true;
 	
 	public EditImageMetadataBean() 
 	{
@@ -77,6 +78,10 @@ public class EditImageMetadataBean
 			initMenus();
 			profile = getSelectedProfile();
 			statement = getSelectedStatement();
+			if (getSelectedProfile() == null || getSelectedProfile().getStatements().isEmpty()) 
+			{
+				isProfileWithStatements = false;
+			}
 			if (statement != null)
 			{
 			    metadata = MetadataFactory.newMetadata(statement);
@@ -120,6 +125,7 @@ public class EditImageMetadataBean
 	{
 		editType = (String) ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("type");
 		int elementsPerPage = 24;
+		isProfileWithStatements = true;
 		if ("selected".equals(editType))
 		{
 			imagesBean = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
@@ -128,7 +134,7 @@ public class EditImageMetadataBean
 		{
 			imagesBean = (CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class);
 			elementsPerPage = imagesBean.getElementsPerPage();
-			imagesBean.setElementsPerPage(100000);
+			imagesBean.setElementsPerPage(1000000);
 		}
 		imagesBean.update();
 		imagesBean.setElementsPerPage(elementsPerPage);
@@ -144,7 +150,6 @@ public class EditImageMetadataBean
 		{
 			profileMenu.add(new SelectItem(p.getId().toString(), p.getTitle()));
 		}
-		if (getSelectedProfile() == null || getSelectedProfile().getStatements().isEmpty()) statementMenu.add(new SelectItem(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("profile_empty")));
 		for(Statement s: getSelectedProfile().getStatements())
 		{
 			statementMenu.add(new SelectItem(s.getName().toString(), labelHelper.getDefaultLabel(s.getLabels().iterator())));
@@ -202,7 +207,6 @@ public class EditImageMetadataBean
 	
 	public String saveAndRedirect() throws IOException
 	{
-		System.out.println("save start");
 		editor.save();
 		redirectToView();
 		return "";
@@ -455,6 +459,14 @@ public class EditImageMetadataBean
 
 	public void setStatement(Statement statement) {
 		this.statement = statement;
+	}
+
+	public boolean isProfileWithStatements() {
+		return isProfileWithStatements;
+	}
+
+	public void setProfileWithStatements(boolean isProfileWithStatements) {
+		this.isProfileWithStatements = isProfileWithStatements;
 	}
 	
 	

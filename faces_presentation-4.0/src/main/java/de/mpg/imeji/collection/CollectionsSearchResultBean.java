@@ -56,8 +56,9 @@ public class CollectionsSearchResultBean extends SuperContainerBean<ViewCollecti
         List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
         scList.add(new SearchCriterion(ImejiNamespaces.CONTAINER_METADATA_TITLE, getQuery()));
         scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_DESCRIPTION, getQuery(), Filtertype.REGEX));
-        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_FAMILY_NAME, getQuery(), Filtertype.REGEX));
-        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_GIVEN_NAME, getQuery(), Filtertype.REGEX));
+        //scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_FAMILY_NAME, getQuery(), Filtertype.REGEX));
+        //scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_GIVEN_NAME, getQuery(), Filtertype.REGEX));
+        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_COMPLETE_NAME, getQuery(), Filtertype.REGEX));
         scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, getQuery(), Filtertype.REGEX));
         scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.COLLECTION_PROFILE, getQuery(), Filtertype.URI));
         try

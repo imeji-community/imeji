@@ -22,6 +22,7 @@ public class Person implements Serializable {
 	
 	private String givenName;
 	
+	private String completeName;
 	
 	private String alternativeName;
 
@@ -88,6 +89,15 @@ public class Person implements Serializable {
 
 	public void setOrganizations(Collection<Organization> organizations) {
 		this.organizations = organizations;
+	}
+	
+	@RdfProperty("http://purl.org/escidoc/metadata/terms/0.1/complete-name")
+	public String getCompleteName() {
+		return completeName;
+	}
+
+	public void setCompleteName(String completeName) {
+		this.completeName = completeName;
 	}
 
 	public int getPos() {

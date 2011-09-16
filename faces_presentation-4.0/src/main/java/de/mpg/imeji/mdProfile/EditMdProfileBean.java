@@ -12,6 +12,7 @@ import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
+import de.mpg.jena.vo.Statement;
 
 public class EditMdProfileBean extends MdProfileBean
 {
@@ -89,6 +90,7 @@ public class EditMdProfileBean extends MdProfileBean
     
     public String save() throws IOException
     {
+    	getProfile().setStatements(getUnwrappedStatements());
         if(validateProfile(getProfile()))
         {
         	try 

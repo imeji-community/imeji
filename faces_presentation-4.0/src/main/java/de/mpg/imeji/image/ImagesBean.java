@@ -364,7 +364,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 		for(ImageBean bean: getCurrentPartList())
 		{
 			bean.setSelected(true);
-			if(!(sb.getSelected().contains(bean.getImage().getId())))
+			if(!(sb.getSelected().contains(bean.getImage().getId())) 
+					&& !bean.getImage().getProperties().getStatus().equals(Status.WITHDRAWN))
 			{
 				sb.getSelected().add(bean.getImage().getId());
 			}

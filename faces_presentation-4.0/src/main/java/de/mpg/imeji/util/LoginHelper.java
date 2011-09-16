@@ -54,6 +54,7 @@ public class LoginHelper
         int port = Integer.parseInt( hostPort.nextToken() );
         
         HttpClient client = new HttpClient();
+        client.getHttpConnectionManager().closeIdleConnections(1000);
         client.getHostConfiguration().setHost( host, port, "http");
         client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
         
@@ -70,7 +71,7 @@ public class LoginHelper
         {
 			throw new RuntimeException("Error login in " + frameworkUrl  + "  status: " + login.getStatusCode() + " - " + login.getStatusText() );
 		}
-                      
+        
         login.releaseConnection();
         CookieSpec cookiespec = CookiePolicy.getDefaultSpec();
         Cookie[] logoncookies = cookiespec.match(
@@ -87,7 +88,7 @@ public class LoginHelper
       
         if (HttpServletResponse.SC_SEE_OTHER != postMethod.getStatusCode())
         {
-            throw new HttpException("Wrong status code: " + login.getStatusCode());
+            throw new HttpException("Wrong status code: " + postMethod.getStatusCode());
         }
         
         String userHandle = null;

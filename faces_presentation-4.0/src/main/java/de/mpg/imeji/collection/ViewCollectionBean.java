@@ -9,6 +9,7 @@ import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
+import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.User;
 
 public class ViewCollectionBean extends CollectionBean
@@ -61,8 +62,9 @@ public class ViewCollectionBean extends CollectionBean
                 persons.add(p);
             }
             this.getCollection().getMetadata().setPersons(persons);
+            
             ProfileController profileController = new ProfileController(sessionBean.getUser());
-            this.setProfile(profileController.retrieve( this.getCollection().getProfile()));
+            setProfile(profileController.retrieve(getCollection().getProfile()));
         }
         catch (Exception e)
         {

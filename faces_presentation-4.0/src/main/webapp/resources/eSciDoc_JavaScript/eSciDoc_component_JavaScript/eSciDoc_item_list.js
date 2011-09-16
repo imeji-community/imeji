@@ -71,7 +71,7 @@ function addItemListFunctions() {
 		});
 		
 		jQuery('.selectMenu').click(function(evt){
-			evt.preventDefault();
+			//evt.preventDefault();
 			evt.stopPropagation();
 			evt.stopImmediatePropagation();
 		});

@@ -65,6 +65,7 @@ public class ImageBean
         {
             setSelected(true);
         }
+        loadProfile();
     }
 
     public ImageBean() throws Exception
@@ -432,4 +433,24 @@ public class ImageBean
 	public void setBrowse(SingleImageBrowse browse) {
 		this.browse = browse;
 	}
+
+	public String getDescription() 
+	{
+		for (Statement s : getProfile().getStatements())
+		{
+			if (s.isDescription())
+			{
+				for (ImageMetadata md : this.getImage().getMetadataSet().getMetadata())
+				{
+					if (md.getNamespace().equals(s.getName()))
+					{
+						return md.getSearchValue();
+					}
+				}
+			}
+		}
+		return image.getFilename();
+	}
+	
+	
 }

@@ -20,6 +20,7 @@ public class Statement implements Serializable, Comparable<Statement>
     private Collection<LocalizedString> labels = new LinkedList<LocalizedString>();
     private URI vocabulary;
     private Collection<LocalizedString> literalConstraints = new LinkedList<LocalizedString>();
+    private boolean isDescription = false;
     private String minOccurs = "0";
     private String maxOccurs = "1";
     private int pos = 0;
@@ -114,4 +115,13 @@ public class Statement implements Serializable, Comparable<Statement>
     	else if (o.getPos() == this.pos) return 0;
     	else return 1;
 	}
+	
+	public boolean isDescription() {
+		return isDescription;
+	}
+	
+	public void setDescription(boolean isDescription) {
+		this.isDescription = isDescription;
+	}
+	
 }

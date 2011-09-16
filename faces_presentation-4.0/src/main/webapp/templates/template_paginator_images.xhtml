@@ -101,7 +101,7 @@
 						<a4j:commandLink action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 							<span class="xLarge_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 						</a4j:commandLink>
-						<h:outputLink value="#{Navigation.applicationUrl}edit?type=all" id="lnkSelectEdit2"  rendered="#{paginatorListSessionBean.imageEditable}">
+						<h:outputLink value="#{Navigation.applicationUrl}edit?type=all" id="lnkSelectEdit2" rendered="#{paginatorListSessionBean.imageEditable}">
 							<span class="xLarge_area0_p8"><h:outputText value="#{lbl.edit_all}"/></span>
 						</h:outputLink>
 						<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
@@ -237,7 +237,7 @@
 						<h:outputText value="#{lbl.select}" />
 						<input type="button" class="min_imgBtn checkboxSelectButton" title="#{lbl.select}"/>
 						<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none;">
-							<span class="medium_area0_p8">Select Item:</span><br />
+							<span class="medium_area0_p8"><h:outputText value="#{lbl.select_item}:"/></span><br />
 							<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
 								<span class="xLarge_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
 							</h:commandLink>
@@ -275,9 +275,9 @@
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
 						
 						<!-- Album Selected --> 
-						<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null}">
+						<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null and item.image.properties.status != 'WITHDRAWN'}">
 							<span class="free_area0"> 
-								<h:selectBooleanCheckbox rendered="#{item.image.properties.status != 'WITHDRAWN'}" styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
+								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
 									<a4j:support event="onchange" ajaxSingle="true" reRender="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu" />
 								</h:selectBooleanCheckbox> 
 							</span>
@@ -287,17 +287,7 @@
 						
 						<span class="medium_area0"> 
 							<span class="free_area0_p3 tileControlIconArea"> 
-								<h:outputLabel value="#{item.image.filename}" />
-							<ui:remove>
-								<br />
-								<h:commandLink id="lnkAddToActiveAlbumInactive"  action="#{item.addToActiveAlbum}" disabled="#{item.isInActiveAlbum || SessionBean.activeAlbum==null}" rendered="#{SessionBean.activeAlbum!=null}">
-									<h:outputText value="#{lbl.add_to_album}" />
-								</h:commandLink>
-								<h:outputText value="#{paginatorListSessionBean.navigationString }"/>
-								<h:commandLink id="lnkRemoveFromAlbum1"  action="#{item.removeFromAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumImages' and paginatorListSessionBean.album.album.properties.status == 'PENDING'}" >
-									<h:outputText value="#{lbl.remove_from_album}" />
-								</h:commandLink> 
-							</ui:remove> 
+								<h:outputLabel value="#{item.description}" />
 							</span> 
 						</span> 
 											

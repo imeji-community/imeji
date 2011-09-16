@@ -8,6 +8,9 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import thewebsemantic.LocalizedString;
+import de.mpg.imeji.mdProfile.EditMdProfileBean;
+import de.mpg.imeji.mdProfile.MdProfileBean;
+import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.LocalizedStringHelper;
 import de.mpg.imeji.util.VocabularyHelper;
 import de.mpg.jena.vo.Statement;
@@ -22,6 +25,7 @@ public class StatementWrapper
     private URI profile;
     private List<LocalizedStringHelper> labels = null;
     private VocabularyHelper vocabularyHelper = null;
+    private boolean description = false;
 
     public StatementWrapper(Statement st, URI profile)
     {
@@ -35,6 +39,8 @@ public class StatementWrapper
         statement.setName(st.getName());
         statement.setVocabulary(st.getVocabulary());
         
+        description = st.isDescription();
+
         if (Integer.parseInt(st.getMinOccurs()) > 0)
         {
         	required = true;
@@ -80,6 +86,7 @@ public class StatementWrapper
     	{
     		statement.setVocabulary(URI.create(vocabularyString));
     	}
+    	statement.setDescription(description);
     	return statement;
     }
     
@@ -97,8 +104,7 @@ public class StatementWrapper
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
             int pos = Integer.parseInt(event.getComponent().getAttributes().get("position").toString());
-            ((List<LocalizedString>)statement.getLiteralConstraints()).set(pos, new LocalizedString(event.getNewValue()
-                    .toString(), "eng"));
+            ((List<LocalizedString>)statement.getLiteralConstraints()).set(pos, new LocalizedString(event.getNewValue().toString(), "eng"));
         }
     }
 
@@ -134,6 +140,14 @@ public class StatementWrapper
             	statement.setMaxOccurs("1");
             }
         }
+    }
+    
+    public void descriptionListener(ValueChangeEvent event)
+    {
+    	if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
+    	{
+    		description =(Boolean) event.getNewValue();
+    	}
     }
 
     public Statement getStatement()
@@ -203,6 +217,14 @@ public class StatementWrapper
 
 	public void setVocabularyHelper(VocabularyHelper vocabularyHelper) {
 		this.vocabularyHelper = vocabularyHelper;
+	}
+
+	public boolean isDescription() {
+		return description;
+	}
+
+	public void setDescription(boolean description) {
+		this.description = description;
 	}
 	
 	

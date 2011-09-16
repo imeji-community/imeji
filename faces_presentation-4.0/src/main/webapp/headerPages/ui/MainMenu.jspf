@@ -38,7 +38,7 @@
 	
 		<!-- main Menu starts here -->
 		<h:outputLink id="lnkHome" styleClass="free_area0" value="#{Navigation.applicationUrl}" rendered="true">
-			<h:outputText value="HOME"/>
+			<h:outputText value="#{lbl.home}"/>
 		</h:outputLink>
 		<h:outputText id="txtHomeInactive" styleClass="free_area0" value="Home" rendered="false" />
 	

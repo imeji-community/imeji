@@ -123,7 +123,7 @@
 							<!-- URL -->
 							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 								<b class="xLarge_area0_p8 endline labelLine clear">
-									 <h:outputText value="#{lbl.name} " /> 
+									 <h:outputText value="#{lbl.filename} " /> 
 									 <span class="noDisplay">: </span> 
 								</b>
 								<span class="xHuge_area0 xTiny_marginLExcl endline"> 
@@ -191,9 +191,7 @@
 																	<ui:param name="areaClass" value="xLarge_txtArea"/>
 																	<ui:param name="type" value="1"/>
 																</ui:include>
-															</h:panelGroup>
-															
-															<div class="free_area0 lineToolSection ">
+																<div class="free_area0 ">
 																<a4j:commandButton styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{statement.maxOccurs != '1'}" reRender="singleEditPanel" action="#{imageBean.edit.removeMetadata}" value="">
 																	<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 																	<f:setPropertyActionListener value="#{indexMetadata}" target="#{imageBean.edit.mdPosition}" />
@@ -205,6 +203,7 @@
 																	<a4j:support event="oncomplete" reRender="singleEditPanel" />
 																</a4j:commandButton>
 															</div>
+															</h:panelGroup>
 										
 														</h:panelGroup>
 													</a4j:repeat>

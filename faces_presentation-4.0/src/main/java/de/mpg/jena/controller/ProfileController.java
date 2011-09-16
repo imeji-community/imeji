@@ -152,38 +152,6 @@ public class ProfileController extends ImejiController
     	return p;
     }
     
-    public static void main(String[] arg) throws Exception
-    {
-        
-//        MetadataProfile mdp = new MetadataProfile();
-//        CollectionImeji coll = new CollectionImeji();
-//        coll.getMetadata().setTitle("title");
-//        coll.getMetadata().getPersons().add(new Person());
-//        mdp.setTitle("Test MDProfile");
-//        Statement st = new Statement();
-//        st.setType(new URI("http://testtype"));
-//        st.getLabels().add(new LocalizedString("tesr", "en"));
-//        
-//        
-//        mdp.getStatements().add(st);
-//        
-//        ProfileController pc = new ProfileController(null);
-//        CollectionController cc = new CollectionController(null);
-//        mdp = pc.create(mdp);
-//        coll.setProfile(mdp);
-//        coll = cc.create(coll);
-//        coll.getMetadata().setDescription("update");
-//        cc.update(coll);
-//        coll = cc.retrieve(coll.getId());
-//        mdp.setTitle("new title");
-//        
-//        pc.update(mdp);
-//        
-//        mdp = pc.retrieve(mdp.getId());
-//        
-//        base.write(System.out, "RDF/XML");
-    }
-    
     @Override
     protected String getSpecificFilter() throws Exception
     {

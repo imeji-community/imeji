@@ -85,6 +85,7 @@ public class MdProfileBean
     public String getInit()
     {
     	parseID();
+    	initMenus();
     	
     	if (UrlHelper.getParameterBoolean("reset"))
     	{
@@ -183,6 +184,12 @@ public class MdProfileBean
     	statements.get(getStatementPosition()).setVocabularyString("--");
         return getNavigationString();
     }
+    
+    public int getSize()
+    {
+    	return statements.size();
+    }
+    
 
     public String removeVocabulary()
     {
@@ -223,18 +230,24 @@ public class MdProfileBean
 
     public String addConstraint()
     {
-        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+        //Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+    	Statement st = ((List<StatementWrapper>)statements).get(getStatementPosition()).getAsStatement();
         if (getConstraintPosition() >= st.getLiteralConstraints().size())
-            ((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", "eng"));
+        {
+        	((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", "eng"));
+        }
         else
-            ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition() + 1, new LocalizedString("","eng"));
+        {
+        	((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition() + 1, new LocalizedString("","eng"));
+        }
         collectionSession.setProfile(profile);
         return getNavigationString();
     }
 
     public String removeConstraint()
     {
-        Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+        //Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
+    	Statement st = ((List<StatementWrapper>)statements).get(getStatementPosition()).getAsStatement();
         ((List<LocalizedString>)st.getLiteralConstraints()).remove(getConstraintPosition());
         collectionSession.setProfile(profile);
         return getNavigationString();
@@ -286,6 +299,16 @@ public class MdProfileBean
         this.statementPosition = statementPosition;
     }
 
+    public List<Statement> getUnwrappedStatements()
+    {
+    	List<Statement> l = new ArrayList<Statement>();
+    	for (StatementWrapper w : getStatements())
+    	{
+    		l.add(w.getAsStatement());
+    	}
+    	return l;
+    }
+    
     public List<StatementWrapper> getStatements()
     {
         return statements;
@@ -348,10 +371,8 @@ public class MdProfileBean
         
         int i=0;
         
-        for (StatementWrapper wrapper : statements)
-        {
-        	Statement s = wrapper.getAsStatement();
-        	
+        for (Statement s : profile.getStatements())
+        {  	
         	if (s.getType() == null)
         	{
         		BeanHelper.error(sessionBean.getMessage("error_profile_select_metadata_type"));
@@ -367,9 +388,9 @@ public class MdProfileBean
                 BeanHelper.error(sessionBean.getMessage("error_profile_name_not_unique"));
                 return false;
             }
-            else if (s.getName() == null || s.getName().toString().equals(profile.getId().toString() + "/"))
+            else if (s.getLabels().isEmpty() || "".equals(((List<LocalizedString>)s.getLabels()).get(0).toString()))
             {
-                BeanHelper.error(sessionBean.getMessage("error_profile_name_required"));
+            	BeanHelper.error(sessionBean.getMessage("error_profile_name_required"));
                 return false;
             }
             else
@@ -377,6 +398,10 @@ public class MdProfileBean
                 statementNames.add(s.getName().toString());
             }
         	s.setPos(i);
+        	if (s.getName() != null && s.getName().toString().equals(profile.getId().toString() + "/"))
+        	{
+        		s.setName(URI.create(profile.getId().toString() + "/" + ((List<LocalizedString>)s.getLabels()).get(0).toString()));
+        	}
         	i++;
         }
         return true;

@@ -62,24 +62,33 @@ public class MetadataLabels
 		internationalizedLabels = new HashMap<URI, String>();
 		
 		lang = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLocale().getLanguage();
-		
+
 		if (profile != null)
 		{
 			for (Statement s : profile.getStatements())
 			{
 				boolean hasInternationalizedLabel = false;
+				boolean hasLabel = false;
+				
+				String labelFallBack = null;
 				
 				for (LocalizedString ls : s.getLabels())
 				{
 					if (ls.getLang().equals("en"))
 					{
 						labels.put(s.getName(), ls.toString());
+						hasLabel = true;
 					}
 					if (ls.getLang().equals(lang))
 					{
 						internationalizedLabels.put(s.getName(), ls.toString());
 						hasInternationalizedLabel = true;
 					}
+					labelFallBack = ls.toString();
+				}
+				if (!hasLabel)
+				{
+					labels.put(s.getName(), labelFallBack);
 				}
 				if (!hasInternationalizedLabel) 
 				{

@@ -129,40 +129,39 @@
 							<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 								<!-- COLLECTION IMAGES -->
 								<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
-								<a4j:repeat var="img" value="#{ViewCollectionBean.images}">
-										<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
-								</a4j:repeat>
+									<a4j:repeat var="img" value="#{ViewCollectionBean.images}" rendered="#{img.properties.status != 'WITHDRAWN'}">
+											<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
+									</a4j:repeat>
 								</h:outputLink>
+								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
 								<h2>
-									<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}?q=">
+									<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}?q=" rendered="#{ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
 										<h:outputText value ="#{lbl.collection_view_all_images}"/>
 									</h:outputLink>
+									<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}"/>
 								</h2>
 							</h:panelGroup>	<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
 							
 							<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 								<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
 									<h1>
-										<h:outputText styleClass="free_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
-										<h:outputLabel>(</h:outputLabel>
+										<h:outputText styleClass="full_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
+										<!--  <h:outputLabel>(</h:outputLabel>
 										<h:outputLabel rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}">
 											<h:outputText value="#{lbl.private}" />
 										</h:outputLabel>
 										<h:outputLabel  rendered="#{ViewCollectionBean.collection.properties.status == 'RELEASED'}">
 											<h:outputText value="#{lbl.published}" />
 										</h:outputLabel>
-										<h:outputLabel rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}">
-											<h:outputText value="#{lbl.withdrawn}" />
-										</h:outputLabel>
-										<h:outputLabel>)</h:outputLabel>
+										<h:outputLabel>)</h:outputLabel>-->
 									</h1>
 							
-							<h:panelGroup styleClass="half_area0" rendered="#{ViewCollectionBean.collection.properties.discardComment != null and ViewCollectionBean.collection.properties.discardComment != ''}">
-								<h:outputText value="#{lbl.withdraw_comment}: "/>
-								<h:outputText value="#{ViewCollectionBean.collection.properties.discardComment}"/>
+							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{ViewCollectionBean.collection.properties.discardComment != null and ViewCollectionBean.collection.properties.discardComment != ''}">
+								<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
+								<h:outputText styleClass="free_area0"  value=" #{ViewCollectionBean.collection.properties.discardComment}"/>
 							</h:panelGroup>
 							
-							<h:panelGroup styleClass="half_area0">
+							<h:panelGroup styleClass="full_area0">
 								<h:outputText escape="false" value="#{ViewCollectionBean.formattedDescription}"/>
 							</h:panelGroup>
 							

@@ -17,12 +17,8 @@ import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.search.Search;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Security;
-import de.mpg.jena.sparql.ImejiSPARQL;
-import de.mpg.jena.sparql.QuerySPARQL;
-import de.mpg.jena.sparql.query.QuerySPARQLImpl;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
-import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
@@ -187,6 +183,7 @@ public class AlbumController extends ImejiController
     {
 		album.getProperties().setStatus(Status.WITHDRAWN);
 		album.getProperties().setVersionDate(new Date());
+		album.getImages().clear();
 		update(album);
     }
 
@@ -210,13 +207,13 @@ public class AlbumController extends ImejiController
 	    return search.search(scList, sortCri, user);
 	}
 	
-	@Deprecated
-	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
-    {
-        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/album", "", "", -1, 0, user, false);
-    	return ImejiSPARQL.execCount(query);
-    }
+//	@Deprecated
+//	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
+//    {
+//        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+//        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/album", "", "", -1, 0, user, false);
+//    	return ImejiSPARQL.execCount(query);
+//    }
 	
 	public Collection<Album> load(List<String> uris, int limit, int offset)
     {

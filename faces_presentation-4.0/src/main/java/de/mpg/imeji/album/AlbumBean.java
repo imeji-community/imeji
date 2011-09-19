@@ -58,17 +58,19 @@ public class AlbumBean implements Serializable
         
         public void initView()
         {
-        	setAlbum(ObjectLoader.loadAlbum(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
-        	
-            if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
-            {
-                active = true;
-            }
-            
-            List<SelectItem> grantsMenu = new ArrayList<SelectItem>();
-    		grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_viewer"), "Can view all images for this collection"));
-    		grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_album_editor"), "Can edit informations about the collection"));
-            ((SharingBean)BeanHelper.getRequestBean(SharingBean.class)).setGrantsMenu(grantsMenu);
+        	if (id != null)
+        	{
+        		setAlbum(ObjectLoader.loadAlbum(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
+        		if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
+                {
+                    active = true;
+                }
+                
+                List<SelectItem> grantsMenu = new ArrayList<SelectItem>();
+        		grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_viewer"), "Can view all images for this collection"));
+        		grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_album_editor"), "Can edit informations about the collection"));
+                ((SharingBean)BeanHelper.getRequestBean(SharingBean.class)).setGrantsMenu(grantsMenu);
+        	}            
         }
         
         public void initEdit()

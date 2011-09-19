@@ -109,7 +109,6 @@ public class EditImageMetadataBean
 		if (statement != null)
 		{
 			editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
-			
 			modeRadio = new ArrayList<SelectItem>();
 			modeRadio.add(new SelectItem("basic",((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("editor_basic")));
 			if (this.statement.getMaxOccurs().equals("unbounded"))
@@ -191,19 +190,32 @@ public class EditImageMetadataBean
 				im = removeAllMetadata(im);
 				im.getMetadataSet().getMetadata().add(newMD);
 			}
-			else if ("append".equals(selectedMode)) im.getMetadataSet().getMetadata().add(newMD);
-			else if ("basic".equals(selectedMode))addMetadataIfNotExists(im, newMD);
+			else if ("append".equals(selectedMode))
+			{
+				im.getMetadataSet().getMetadata().add(newMD);
+			}
+			else if ("basic".equals(selectedMode))
+			{
+				addMetadataIfNotExists(im, newMD);
+			}
 		}
-		metadata =  MetadataFactory.newMetadata(statement);
 		return "";
 	}
 	
-	public String addToAllAndSave()
+	public String addToAllSaveAndRedirect() throws IOException
 	{
 		addToAll();
 		editor.save();
+		redirectToView();
 		return "";
 	}
+	
+//	public String addToAllAndSave()
+//	{
+//		addToAll();
+//		editor.save();
+//		return "";
+//	}
 	
 	public String saveAndRedirect() throws IOException
 	{
@@ -212,13 +224,13 @@ public class EditImageMetadataBean
 		return "";
 	}
 	
-	public String saveAllAndRedirect() throws IOException
-	{
-		addToAllAndSave();
-		redirectToView();
-		return "";
-	}
-	
+//	public String saveAllAndRedirect() throws IOException
+//	{
+//		addToAllAndSave();
+//		redirectToView();
+//		return "";
+//	}
+//	
 	public void redirectToView() throws IOException
 	{
 		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);

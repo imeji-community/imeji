@@ -30,6 +30,7 @@ import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.Properties.Status;
 
 public class ImageBean
 {
@@ -411,7 +412,7 @@ public class ImageBean
 	public boolean isEditable() 
 	{
 		Security security = new Security();
-		return security.check(OperationsType.UPDATE, sessionBean.getUser(), image);
+		return security.check(OperationsType.UPDATE, sessionBean.getUser(), image) && !image.getProperties().getStatus().equals(Status.WITHDRAWN);
 	}
 	
 	public boolean isVisible() 

@@ -1,9 +1,11 @@
 package de.mpg.jena.sparql.query;
 
 import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.SortCriterion;
+import de.mpg.jena.util.DateFormatter;
 import de.mpg.jena.vo.User;
 
 public class SimpleQueryFactory 
@@ -14,7 +16,7 @@ public class SimpleQueryFactory
 	
 	public static String search(String type, SearchCriterion sc, SortCriterion sortCriterion, User user, boolean isCollection, String specificQuery)
 	{
-		return 	PATTERN_SELECT.replaceAll("XXX_SECURITY_FILTER_XXX",  SimpleSecurityQuery.getQuery(user, sc, type, isCollection))
+		return 	PATTERN_SELECT.replaceAll("XXX_SECURITY_FILTER_XXX",  SimpleSecurityQuery.getQuery(user, sc, type, false))
 							  .replaceAll("XXX_SORT_QUERY_XXX",  SortQueryFactory.create(sortCriterion))
 							  .replaceAll("XXX_SEARCH_ELEMENT_XXX", getSearchElement(sc))
 							  .replaceAll("XXX_SEARCH_TYPE_ELEMENT_XXX", type)
@@ -81,10 +83,10 @@ public class SimpleQueryFactory
 		
 		if (Operator.NOTAND.equals(sc.getOperator()) || Operator.NOTOR.equals(sc.getOperator()))
 		{
-			return ".MINUS{ " + searchQuery.substring(1) + " .FILTER(" + FilterFactory.getSimpleFilter(sc,"el") + ")}";
+			return ".MINUS{ " + searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(sc,"el") + ")}";
 		}
 		
-		return searchQuery + " .FILTER(" + FilterFactory.getSimpleFilter(sc,"el") + ")";
+		return searchQuery + " .FILTER(" + getSimpleFilter(sc,"el") + ")";
 	}
 	
 	public static String getSortElement(SortCriterion sc)
@@ -113,6 +115,75 @@ public class SimpleQueryFactory
 			}
 		}
 		return "";
+	}
+	
+	public static String getSimpleFilter(SearchCriterion sc, String variable)
+	{
+		String filter ="";
+		variable = "?" + variable;
+		
+		if (sc.getValue() != null)
+        {
+			if (sc.getFilterType().equals(Filtertype.URI) && !sc.getNamespace().equals(ImejiNamespaces.ID_URI))
+            {
+                filter += "str(" + variable + ")='" + sc.getValue() + "'";
+            }
+			else if (sc.getValue().startsWith("\"") && sc.getValue().endsWith("\""))
+			{
+				filter +=  variable + "='" + sc.getValue().replaceAll("\"", "")+ "'";
+			}
+            else if (sc.getFilterType().equals(Filtertype.URI) && sc.getNamespace().equals(ImejiNamespaces.ID_URI))
+            {
+                filter +=  variable + "=<" + sc.getValue() + ">";
+            }
+            else if (sc.getFilterType().equals(Filtertype.REGEX))
+            {
+                filter += "regex(" + variable + ", '"  + sc.getValue() + "', 'i')";
+            }
+            else if (sc.getFilterType().equals(Filtertype.EQUALS))
+            {
+                filter += variable + "='" + sc.getValue()+ "'";
+            }
+            else if (sc.getFilterType().equals(Filtertype.NOT))
+            {
+                filter +=  variable + "!='" + sc.getValue() + "'";
+            }
+            else if (sc.getFilterType().equals(Filtertype.BOUND))
+            {
+                filter += "bound(" + variable + ")=" + sc.getValue() + "";
+            }
+            else if (sc.getFilterType().equals(Filtertype.EQUALS_NUMBER))
+            {	
+            	try{ Double d = Double.valueOf(sc.getValue());
+            	filter += variable + "='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";}
+            	catch (Exception e) {/* Not a double*/}
+            }
+            else if (sc.getFilterType().equals(Filtertype.GREATER_NUMBER))
+            {
+            	try{ Double d = Double.valueOf(sc.getValue());
+            	filter += variable + ">='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";}
+            	catch (Exception e) {/* Not a double*/}
+            }
+            else if (sc.getFilterType().equals(Filtertype.LESSER_NUMBER))
+            {
+            	try{ Double d = Double.valueOf(sc.getValue());
+            	filter += variable + "<='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";}
+            	catch (Exception e) {/* Not a double*/}
+            }
+            else if (sc.getFilterType().equals(Filtertype.EQUALS_DATE))
+            {
+            	filter += variable + "='" + DateFormatter.getTime(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+            }
+            else if (sc.getFilterType().equals(Filtertype.GREATER_DATE))
+            {
+				filter += variable + ">='" + DateFormatter.getTime(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+            }
+            else if (sc.getFilterType().equals(Filtertype.LESSER_DATE))
+            {
+				filter += variable + "<='" + DateFormatter.getTime(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+            }
+        }
+		return filter;
 	}
 
 }

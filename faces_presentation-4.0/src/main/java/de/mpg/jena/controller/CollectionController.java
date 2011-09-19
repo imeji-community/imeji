@@ -19,12 +19,11 @@ import de.mpg.jena.search.Search;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.sparql.ImejiSPARQL;
-import de.mpg.jena.sparql.QuerySPARQL;
-import de.mpg.jena.sparql.query.QuerySPARQLImpl;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
+import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
 
@@ -165,27 +164,35 @@ public class CollectionController extends ImejiController
 		}
 		else
 		{
-			ic.getProperties().setStatus(Status.WITHDRAWN);
-			ic.getProperties().setVersionDate(new Date());
-			
+			// Withdraw images
 			ImageController imageController = new ImageController(user);
-			
 		    for(URI uri: ic.getImages())
 		    {
 		    	try 
 		    	{
-		    		imageController.withdraw(imageController.retrieve(uri));
+		    		Image im = imageController.retrieve(uri);
+		    		im.getProperties().setDiscardComment(ic.getProperties().getDiscardComment());
+		    		imageController.withdraw(im);
 				} 
 		    	catch (NotFoundException e) 
 		    	{
 		    		logger.error("Withdraw image error: " + uri + " could not be found");
 				}
 		    }
+		    
+		    // Withdraw collection
+		    ic.getProperties().setStatus(Status.WITHDRAWN);
+			ic.getProperties().setVersionDate(new Date());
 	        update(ic);
 	        
+	        // Withdraw profile
 	        ProfileController pc = new ProfileController(user);
 		    pc.retrieve(ic.getProfile());
 		    pc.withdraw(pc.retrieve(ic.getProfile()), user);
+		    
+		    // Remove Grants (which are not useful anymore)
+//		    GrantController gc = new GrantController(user);
+//			gc.removeAllGrantsFor(user, ic.getId());
 		}
     }
 		
@@ -250,12 +257,12 @@ public class CollectionController extends ImejiController
 		return search.search(scList, sortCri, user);
 	}
 	
-	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
-    {
-        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/collection", "", "", -1, 0, user, false);
-    	return ImejiSPARQL.execCount(query);
-    }
+//	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
+//    {
+//        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+//        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/collection", "", "", -1, 0, user, false);
+//    	return ImejiSPARQL.execCount(query);
+//    }
 	
 	 public Collection<CollectionImeji> load(List<String> uris, int limit, int offset)
 	    {

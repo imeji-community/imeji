@@ -2,6 +2,7 @@ package de.mpg.imeji.image;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -13,10 +14,12 @@ import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.album.AlbumImagesBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.collection.CollectionImagesBean;
 import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
+import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.vo.Image;
 
@@ -28,9 +31,6 @@ public class SelectedBean extends ImagesBean {
 	
 	private String selectedImagesContext=null;
 	
-
-	
-
 	public SelectedBean() 
 	{
 		super();
@@ -154,10 +154,12 @@ public class SelectedBean extends ImagesBean {
 	public String withdrawAll() throws Exception
 	{
 		update();
+		removeFromAlbum();
 		super.withdrawAll();
 		clearAll();
 		return "pretty:";
 	}
+
 
 	/**
 	 * WORKAROUND!

@@ -25,8 +25,10 @@ public class OperationsProfile implements Operations
 	}
 
 	public boolean update(User user, Object object) {
-		return (auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile) object).getId())
-				|| auth.is(GrantType.PROFILE_EDITOR, user, ((MetadataProfile) object).getId()));
+		return (user != null && 
+				(	auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile) object).getId())
+					|| auth.is(GrantType.PROFILE_EDITOR, user, ((MetadataProfile) object).getId()))
+				);
 	}
 
 	public boolean delete(User user, Object object) {

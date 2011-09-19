@@ -199,9 +199,8 @@ public class CollectionImagesBean extends ImagesBean
 			BeanHelper.error(e.getMessage());
 		}
     	
-    	return "";
+    	return "pretty:";
     }
-
 	
 	public boolean isEditable()
     {

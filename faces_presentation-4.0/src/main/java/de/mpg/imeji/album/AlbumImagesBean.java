@@ -168,6 +168,7 @@ public class AlbumImagesBean extends ImagesBean
     
     public String release() 
     {
+    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
     	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
     	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).release();
         return "pretty:";
@@ -175,6 +176,7 @@ public class AlbumImagesBean extends ImagesBean
     
     public String delete()
     {
+    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
     	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
     	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).delete();
     	return "pretty:albums";
@@ -182,7 +184,10 @@ public class AlbumImagesBean extends ImagesBean
     
     public String withdraw() throws Exception
     {
+    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
     	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+    	String dc = getAlbum().getAlbum().getProperties().getDiscardComment();
+    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).getAlbum().getProperties().setDiscardComment(dc);
     	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
     	return "pretty:";
     }

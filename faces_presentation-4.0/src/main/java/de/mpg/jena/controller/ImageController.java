@@ -1,15 +1,26 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.richfaces.renderkit.html.images.GradientType;
+import javax.xml.rpc.ServiceException;
 
+import org.apache.log4j.Logger;
+
+import de.escidoc.core.common.exceptions.application.invalid.InvalidStatusException;
+import de.escidoc.core.common.exceptions.application.missing.MissingMethodParameterException;
+import de.escidoc.core.common.exceptions.application.notfound.ItemNotFoundException;
+import de.escidoc.core.common.exceptions.application.security.AuthenticationException;
+import de.escidoc.core.common.exceptions.application.security.AuthorizationException;
+import de.escidoc.core.common.exceptions.application.violated.AlreadyPublishedException;
+import de.escidoc.core.common.exceptions.application.violated.LockingException;
+import de.escidoc.core.common.exceptions.system.SystemException;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.util.LoginHelper;
@@ -20,12 +31,11 @@ import de.mpg.jena.search.Search;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.sparql.QuerySPARQL;
-import de.mpg.jena.sparql.query.QuerySPARQLImpl;
+
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
-import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Image.Visibility;
 import de.mpg.jena.vo.ImageMetadata;
@@ -133,9 +143,9 @@ public class ImageController extends ImejiController
     public void getGraph(URI uri)
     {
     	additionalQuery = " . <" + uri.toString() + "> <http://imeji.mpdl.mpg.de/image/metadata> ?md . ?md <http://www.w3.org/2000/01/rdf-schema#member> ?list . ?list <http://purl.org/dc/terms/type> ?type";
-    	QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-        String query = querySPARQL.createConstructQuery(new ArrayList<SearchCriterion>(), null,	"http://imeji.mpdl.mpg.de/image", additionalQuery , "?s=<http://imeji.mpdl.mpg.de/image/111>", 1, 0, user, false);
-    	ImejiSPARQL.execConstruct(query).write(System.out, "RDF/XML-ABBREV");
+//    	QuerySPARQL querySPARQL = new QuerySPARQLImpl();
+//        String query = querySPARQL.createConstructQuery(new ArrayList<SearchCriterion>(), null,	"http://imeji.mpdl.mpg.de/image", additionalQuery , "?s=<http://imeji.mpdl.mpg.de/image/111>", 1, 0, user, false);
+//    	ImejiSPARQL.execConstruct(query).write(System.out, "RDF/XML-ABBREV");
     }
     
     /**
@@ -238,18 +248,9 @@ public class ImageController extends ImejiController
     {
     	if (img != null)
     	{
-	    	String itemId = img.getEscidocId();
 	    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
 			imejiBean2RDF.delete(imejiBean2RDF.toList(img), user);
-    	
-			try
-		    {
-		        ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(itemId);
-		    }
-		    catch (Exception e)
-		    {
-		        logger.warn("Error deleting image in escidoc: ", e);
-		    }
+			removeImageFromEscidoc(img.getEscidocId());
     	}
     }
 
@@ -265,9 +266,31 @@ public class ImageController extends ImejiController
 
     public void withdraw(Image img) throws Exception
     {
-    	img.getProperties().setStatus(Status.WITHDRAWN);
-    	img.setVisibility(Visibility.PUBLIC);
-    	update(img);
+    	if (img.getProperties().getStatus().equals(Status.RELEASED))
+    	{
+    		img.getProperties().setStatus(Status.WITHDRAWN);
+    		img.setVisibility(Visibility.PUBLIC);
+    		update(img);
+    		if (img.getEscidocId() != null)
+        	{
+        		removeImageFromEscidoc(img.getEscidocId());
+            	img.setEscidocId(null);
+        	}
+    	}
+    	
+    	
+    }
+    
+    public void removeImageFromEscidoc(String id)
+    {
+    	try 
+    	{
+			ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(id);
+		} 
+    	catch (Exception e) 
+    	{
+			throw new RuntimeException("Error removing image from eSciDoc (id: " + id + ") : ", e);
+		}
     }
 
     public String getEscidocUserHandle() throws Exception

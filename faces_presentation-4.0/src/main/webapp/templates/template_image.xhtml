@@ -120,7 +120,17 @@
 						<span class="seperator"></span>
 		
 						<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
-							<!-- URL -->
+						
+							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder" style="color:red;" rendered="#{imageBean.image.properties.status == 'WITHDRAWN'}">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="#{lbl.withdraw_comment}" /> 
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+									<h:outputText value="#{imageBean.image.properties.discardComment}" /> 
+								</span>
+							</h:panelGroup>
+
 							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 								<b class="xLarge_area0_p8 endline labelLine clear">
 									 <h:outputText value="#{lbl.filename} " /> 

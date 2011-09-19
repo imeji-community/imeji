@@ -3,6 +3,7 @@ package de.mpg.jena.security.operations;
 import de.mpg.jena.security.Authorization;
 import de.mpg.jena.security.Operations;
 import de.mpg.jena.vo.Container;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
 

@@ -218,7 +218,7 @@ public class MdProfileBean
     
     public String addLabel()
     {
-    	statements.get(getStatementPosition()).getLabels().add(new LocalizedStringHelper(new LocalizedString("", "eng")));
+    	statements.get(getStatementPosition()).getLabels().add(new LocalizedStringHelper(new LocalizedString("", "")));
     	return  getNavigationString();
     }
     
@@ -234,11 +234,11 @@ public class MdProfileBean
     	Statement st = ((List<StatementWrapper>)statements).get(getStatementPosition()).getAsStatement();
         if (getConstraintPosition() >= st.getLiteralConstraints().size())
         {
-        	((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", "eng"));
+        	((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", "en"));
         }
         else
         {
-        	((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition() + 1, new LocalizedString("","eng"));
+        	((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition() + 1, new LocalizedString("","en"));
         }
         collectionSession.setProfile(profile);
         return getNavigationString();
@@ -373,6 +373,15 @@ public class MdProfileBean
         
         for (Statement s : profile.getStatements())
         {  	
+        	for (LocalizedString ls : s.getLabels())
+        	{
+        		if (ls.getLang() == null)
+        		{
+        			BeanHelper.error(sessionBean.getMessage("error_profile_label_no_lang"));
+                	return false;
+        		}
+        	}
+        	
         	if (s.getType() == null)
         	{
         		BeanHelper.error(sessionBean.getMessage("error_profile_select_metadata_type"));

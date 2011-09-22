@@ -100,6 +100,8 @@ function addItemListFunctions() {
 			var cbsButton = jQuery(this);
 			var cbsButtonPosition = jQuery(this).position();
 			var slctMenu = jQuery(this).siblings('.selectMenu');
+			slctMenu.css("top",  cbsButtonPosition.top + 20);
+			slctMenu.css("left",  cbsButtonPosition.left + 15);
 			jQuery('body').one("click", function(evt) {
 				hideElement(slctMenu);
 			});

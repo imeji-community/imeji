@@ -8,7 +8,7 @@
 
 <ui:composition template="template_collection.xhtml">
 	<ui:define name="mainContent">
-		
+		<h:messages/>
 		<h:panelGroup layout="block" styleClass="full_area0">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">					
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
@@ -29,6 +29,7 @@
 								<h:inputText styleClass="half_txtInput endline" value="#{FormularBean.profile.title}" valueChangeListener="#{FormularBean.titleListener}" />
 							</h:panelGroup>
 						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="free_area0  endline itemLine clear"></h:panelGroup>
 						
 						<h:panelGroup styleClass="full_area0_p8" rendered="#{empty FormularBean.statements}">
 							<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl">
@@ -49,7 +50,7 @@
 						
 						
 						<a4j:repeat id="profile" var="statement" value="#{FormularBean.statements}" rowKeyVar="position">
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine clear">
+							<h:panelGroup layout="block" styleClass="free_area0 noTopBorder endline itemLine clear">
 								<b class="xLarge_area0_p8 endline labelLine clear">
 									<h:outputText value="#{lbl.metadata}"/>
 									<h:outputText value="&#160;"/>
@@ -87,8 +88,8 @@
 													<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 													<f:setPropertyActionListener value="#{labelPosition}" target="#{FormularBean.labelPosition}"/>
 												</h:commandButton>
-											
-												<h:selectOneMenu value="#{label.lang}" styleClass="medium_txtInput" >
+												<h:outputLabel styleClass="" value="#{lbl.label_remove}" />
+												<h:selectOneMenu value="#{label.lang}" immediate="true" styleClass="medium_txtInput" >
 													<f:selectItems value="#{Internationalization.languages}"/>
 	  											</h:selectOneMenu>
 	  											
@@ -159,14 +160,19 @@
 								</h:panelGroup>
 										
 							</h:panelGroup>
-							<h:panelGroup layout="block" styleClass="free_area0 noTopBorder endline itemLine clear">
-							<span class="large_area0_p2">
+							<span class="full_area0_p2">
+								<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{remove_metadata}" action="#{FormularBean.removeStatement}" >
+											<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
+										</h:commandButton>
+										<h:outputLabel styleClass="" value="#{lbl.statement_remove}" />
+								</span>
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine clear">
+								<span class="full_area0_p2">
 									<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" action="#{FormularBean.addStatement}" >
 										<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 									</h:commandButton>
-									<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{remove_metadata}" action="#{FormularBean.removeStatement}" >
-										<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-									</h:commandButton>
+									<h:outputLabel styleClass="" value="#{lbl.statement_add}" />
+									
 								</span>
 							</h:panelGroup>
 						</a4j:repeat>

@@ -210,13 +210,6 @@ public class EditImageMetadataBean
 		return "";
 	}
 	
-//	public String addToAllAndSave()
-//	{
-//		addToAll();
-//		editor.save();
-//		return "";
-//	}
-	
 	public String saveAndRedirect() throws IOException
 	{
 		editor.save();
@@ -224,15 +217,9 @@ public class EditImageMetadataBean
 		return "";
 	}
 	
-//	public String saveAllAndRedirect() throws IOException
-//	{
-//		addToAllAndSave();
-//		redirectToView();
-//		return "";
-//	}
-//	
 	public void redirectToView() throws IOException
 	{
+		unlockImages();
 		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 		String path = ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class)).getCollection().getId().getPath();
     	FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + "/images" + path);

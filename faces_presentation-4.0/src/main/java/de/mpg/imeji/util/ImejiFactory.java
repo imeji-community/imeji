@@ -42,7 +42,7 @@ public class ImejiFactory
     public static Statement newStatement()
     {
         Statement s = new Statement();
-        s.getLabels().add(new LocalizedString("", ""));
+        s.getLabels().add(new LocalizedString("", null));
         return s;
     }
 

@@ -32,7 +32,7 @@ public class InternationalizationBean
 		try 
 		{
 			languages = new ArrayList<SelectItem>();
-			
+			languages.add(new SelectItem("","--"));
 			Iso639_1Helper iso639_1Helper = new Iso639_1Helper();
 			
 			isolanguages = iso639_1Helper.getList();
@@ -51,7 +51,7 @@ public class InternationalizationBean
 				} 
 			}
 			// Add than the other languages
-			languages.add(new SelectItem(null,"--"));
+			languages.add(new SelectItem("","--"));
 			for (SelectItem iso : isolanguages)
 			{
 				boolean isSupported = false;

@@ -251,7 +251,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     public String withdrawAll() throws Exception 
     {
     	ImageController ic = new ImageController(sb.getUser());
-    	update();   	
+    	//update();
     	int count = 0;
     	for(Image im : images)
     	{

@@ -5,25 +5,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.beans.SuperContainerBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.SearchCriterion;
-import de.mpg.jena.controller.UserController;
+import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
+import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.controller.UserController;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.Properties.Status;
 
 public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 {
 	private int totalNumberOfRecords;
     private SessionBean sb;
+	private String query = "";
 
 	public CollectionsBean()
     {
@@ -63,6 +67,22 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         	scList.add(getFilter());
         }
         
+        if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("q"))
+		{
+    		query = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("q");
+		}
+        
+        if (!"".equals(query))
+        {
+        	scList.add(new SearchCriterion(ImejiNamespaces.CONTAINER_METADATA_TITLE, getQuery()));
+	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_DESCRIPTION, getQuery(), Filtertype.REGEX));
+	        //scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_FAMILY_NAME, getQuery(), Filtertype.REGEX));
+	        //scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_GIVEN_NAME, getQuery(), Filtertype.REGEX));
+	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_COMPLETE_NAME, getQuery(), Filtertype.REGEX));
+	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, getQuery(), Filtertype.REGEX));
+	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.COLLECTION_PROFILE, getQuery(), Filtertype.URI));
+        }
+        
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
@@ -87,7 +107,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 	{
 		for(CollectionBean bean: getCurrentPartList())
 		{
-			if(bean.getCollection().getProperties().getStatus() != Status.RELEASED)
+			if(bean.getCollection().getProperties().getStatus() == Status.PENDING)
 			{
 				bean.setSelected(true);
 				if(!(sb.getSelectedCollections().contains(bean.getCollection().getId())))
@@ -119,4 +139,14 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 		BeanHelper.info(count + " " + sb.getMessage("success_collections_delete"));
 		return "pretty:collections";
 	}
+	
+    public void setQuery(String query)
+    {
+        this.query  = query;
+    }
+
+    public String getQuery()
+    {
+        return query;
+    }
 }

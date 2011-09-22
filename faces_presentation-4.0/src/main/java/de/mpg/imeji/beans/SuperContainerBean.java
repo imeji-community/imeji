@@ -52,7 +52,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
         if (sb.getUser() != null)
         {
-        	filterMenu.add(new SelectItem("my", sb.getLabel("my")));
+        	filterMenu.add(new SelectItem("my", sb.getLabel("my_except_withdrawn")));
         	filterMenu.add(new SelectItem("private", sb.getLabel("only_private")));
         }
         filterMenu.add(new SelectItem("public", sb.getLabel("only_public")));
@@ -171,7 +171,13 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     }
 
 
-	public String getSelectedFilter() {
+	public String getSelectedFilter() 
+	{
+		if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("f")
+				&& !FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("f").toString().equals(""))
+		{
+    		selectedFilter = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("f");
+		}
 		return selectedFilter;
 	}
 
@@ -189,6 +195,18 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
 	public void setFilterMenu(List<SelectItem> filterMenu) {
 		this.filterMenu = filterMenu;
+	}
+	
+	public String getFilterLabel()
+	{
+		for (SelectItem si : filterMenu)
+		{
+			if (selectedFilter.equals(si.getValue()))
+			{
+				return si.getLabel();
+			}
+		}
+		return sb.getLabel("all_except_withdrawn");
 	}
     
     

@@ -82,20 +82,14 @@
 		 <h:panelGroup layout="block" styleClass="contentHeader">
 		 	<ui:include src="../include/History.xhtml"></ui:include>
 		 	
-		 	<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#">
-				<h:outputText value="#{lbl.delete_selected_collections}" rendered="#{HistorySession.currentPage.name == 'Collections' and SessionBean.user != null}"/>
-	       		<h:outputText value="#{lbl.delete_selected_albums}" rendered="#{HistorySession.currentPage.name == 'Albums' and SessionBean.user != null}"/>
-	      
-				<rich:componentControl for="panelConfirmDeleteSelectedContainer" operation="show" event="onclick"/>
-			</h:outputLink>
-			
-			<ui:include src="../confirmationPages/SelectedContainerDelete.xhtml">
-			</ui:include>
+			<ui:include src="../confirmationPages/SelectedContainerDelete.xhtml"/>
 		 	
 		 	<ui:insert name="prelistHeaderTest"/>
 		 </h:panelGroup>
 		 
 		 <ui:insert name="list"/>
+		 
+		 <ui:insert name="listFooter"/>
 		 
 		 <div class="full_area0 paginator">
 

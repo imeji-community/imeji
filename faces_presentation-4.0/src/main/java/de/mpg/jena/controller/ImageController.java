@@ -1,26 +1,14 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.rpc.ServiceException;
-
 import org.apache.log4j.Logger;
 
-import de.escidoc.core.common.exceptions.application.invalid.InvalidStatusException;
-import de.escidoc.core.common.exceptions.application.missing.MissingMethodParameterException;
-import de.escidoc.core.common.exceptions.application.notfound.ItemNotFoundException;
-import de.escidoc.core.common.exceptions.application.security.AuthenticationException;
-import de.escidoc.core.common.exceptions.application.security.AuthorizationException;
-import de.escidoc.core.common.exceptions.application.violated.AlreadyPublishedException;
-import de.escidoc.core.common.exceptions.application.violated.LockingException;
-import de.escidoc.core.common.exceptions.system.SystemException;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.util.LoginHelper;
@@ -30,8 +18,6 @@ import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.search.Search;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.sparql.ImejiSPARQL;
-import de.mpg.jena.sparql.QuerySPARQL;
-
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
@@ -219,12 +205,12 @@ public class ImageController extends ImejiController
     	{
     		return null;
     	}
-    	
+
     	User simplifiedUser = new User();
-    	
+
     	for (Grant g :user.getGrants()) 
     	{
-			if (containerUri != null && containerUri.toString().contains("collection") && containerUri.equals(g.getGrantFor()))
+			if (containerUri != null && containerUri.toString().contains("collection") && containerUri.toString().equals(g.getGrantFor().toString()))
 			{
 				simplifiedUser.getGrants().add(g);
 			}
@@ -238,7 +224,7 @@ public class ImageController extends ImejiController
 			}
 			else
 			{
-				simplifiedUser.getGrants().add(g);
+				//simplifiedUser.getGrants().add(g);
 			}
 		}
     	return simplifiedUser;

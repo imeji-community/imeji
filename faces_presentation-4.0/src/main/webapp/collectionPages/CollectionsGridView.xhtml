@@ -46,10 +46,9 @@
 						<span class="large_area0_p8">
 							<h:outputText value="#{lbl.select_collections}"/>
 						</span>
-						<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
+						<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" styleClass="large_area0 selectAll">
 							<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
 						</h:commandLink>
-		 				<!-- <a class="large_area0 selectTotal"><span class="medium_area0_p8 tiny_marginLIncl">All</span></a>-->
 		 				<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
 							<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
 						</h:commandLink>

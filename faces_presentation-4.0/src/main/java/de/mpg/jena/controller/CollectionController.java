@@ -254,7 +254,8 @@ public class CollectionController extends ImejiController
 	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
 	{
 	    Search search = new Search("http://imeji.mpdl.mpg.de/collection", null);
-		return search.search(scList, sortCri, user);
+//		return search.search(scList, sortCri, user);
+	    return search.search(scList, sortCri, simplifyUser());
 	}
 	
 //	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
@@ -263,6 +264,30 @@ public class CollectionController extends ImejiController
 //        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/collection", "", "", -1, 0, user, false);
 //    	return ImejiSPARQL.execCount(query);
 //    }
+	
+	 /**
+     * Increase performance by restricting grants to the only grants needed
+     * @param user
+     * @return
+     */
+    public User simplifyUser()
+    {
+    	if (user == null)
+    	{
+    		return null;
+    	}
+
+    	User simplifiedUser = new User();
+
+    	for (Grant g :user.getGrants()) 
+    	{
+			if (g.getGrantFor().toString().contains("collection"))
+			{
+				simplifiedUser.getGrants().add(g);
+			}
+		}
+    	return simplifiedUser;
+    }
 	
 	 public Collection<CollectionImeji> load(List<String> uris, int limit, int offset)
 	    {

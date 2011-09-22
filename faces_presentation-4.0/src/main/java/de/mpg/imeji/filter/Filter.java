@@ -48,7 +48,7 @@ public class Filter extends Facet
 		try 
 		{
 			List<SearchCriterion> scList = URLQueryTransformer.transform2SCList(query);
-			if (scList.size() == 1) 
+			if (scList.size() == 1 && scList.get(0).getValue() != null) 
 			{
 				this.setMetadataURI(URI.create(scList.get(0).getValue()));
 			}

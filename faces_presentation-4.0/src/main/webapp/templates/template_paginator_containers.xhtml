@@ -76,7 +76,7 @@
 				
 				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' and SessionBean.user != null}">
 					<h:outputText id="txtFilter" value="#{lbl.filter_by}" styleClass="free_area0"/>
-					<h:selectOneMenu id="selFilter" value="#{paginatorListSessionBean.selectedFilter}" styleClass="free_select" onchange="submit();">
+					<h:selectOneMenu id="selFilter" value="#{paginatorListSessionBean.selectedFilter}" styleClass="free_select" onchange="window.location.href = '?f=' + this.value">
 						<f:selectItems id="filterItem" value="#{paginatorListSessionBean.filterMenu}"/>
 					</h:selectOneMenu>
 					<h:outputText styleClass="seperator void" />
@@ -84,12 +84,42 @@
 				
 			</ui:define>
 			
+			<ui:define name="prelistHeaderTest">
+			
+				<h:outputLink styleClass="free_area0 small_marginLExcl" value="?q=&amp;f=all" style="margin-right:0.36em;" >
+					<h:outputText value="#{lbl.all}"/>
+				</h:outputLink>
+				
+				<h:outputText value="#{lbl.search}" styleClass="free_area0 xTiny_marginLExcl" rendered="#{paginatorListSessionBean.query != ''}"/>
+				<h:outputLink value="?q=" rendered="#{paginatorListSessionBean.query != ''}" styleClass="free_area0 ">
+					<h:outputText value="[x]" styleClass="free_area0 "/>
+				</h:outputLink>
+				<h:outputText value="#{paginatorListSessionBean.filterLabel}"  styleClass="free_area0 xTiny_marginLExcl" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}"/>
+				<h:outputLink value="?f=all" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}" styleClass="free_area0 ">
+					<h:outputText value="[x]" styleClass="free_area0 "/>
+				</h:outputLink>
+				<h:outputText styleClass="free_area0" value=" (#{paginatorListSessionBean.totalNumberOfElements})"/>
+				
+				<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#">
+					<h:outputText value="#{lbl.delete_selected_collections}" rendered="#{SessionBean.user != null}"/>
+					<rich:componentControl for="panelConfirmDeleteSelectedContainer" operation="show" event="onclick"/>
+				</h:outputLink>
+			
+			</ui:define>
+			
 			
 			<ui:define name="list">
 				<ui:include src="../collectionPages/CollectionsGridView.xhtml"/>
 			</ui:define>
-
+			
+			<ui:define name="listFooter">
+				<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#">
+					<h:outputText value="#{lbl.delete_selected_collections}" rendered="#{SessionBean.user != null}"/>
+					<rich:componentControl for="panelConfirmDeleteSelectedContainer" operation="show" event="onclick"/>
+				</h:outputLink>
+			</ui:define>
 
 		</ui:composition>
+
 	</body>
 </html>								

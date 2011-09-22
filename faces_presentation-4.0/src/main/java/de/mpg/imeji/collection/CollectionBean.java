@@ -64,7 +64,7 @@ public abstract class CollectionBean
         boolean hasAuthor = false;
         if (collection.getMetadata().getTitle() == null || "".equals(collection.getMetadata().getTitle()))
         {
-            BeanHelper.error(sessionBean.getMessage("collection_create_error_title"));
+            BeanHelper.error(sessionBean.getMessage("error_collection_need_title"));
             valid = false;
         }
         for (Person c : collection.getMetadata().getPersons())
@@ -82,19 +82,19 @@ public abstract class CollectionBean
                 }
                 if (hasOrganization && "".equals(c.getFamilyName()))
                 {
-                    BeanHelper.error(sessionBean.getMessage("collection_create_error_family_name"));
+                    BeanHelper.error(sessionBean.getMessage("error_author_need_one_family_name"));
                     valid = false;
                 }
             }
             if (!hasOrganization)
             {
-                BeanHelper.error(sessionBean.getMessage("collection_create_error_organization"));
+                BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
                 valid = false;
             }
         }
         if (!hasAuthor)
         {
-            BeanHelper.error(sessionBean.getMessage("collection_create_error_author"));
+            BeanHelper.error(sessionBean.getMessage("error_collection_need_one_author"));
             valid = false;
         }
         return valid;

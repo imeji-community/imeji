@@ -8,12 +8,14 @@ import java.util.List;
 import thewebsemantic.NotFoundException;
 
 import de.mpg.jena.ImejiJena;
+import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.ImejiController;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.controller.UserController;
+import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Image;
@@ -35,9 +37,10 @@ public class DataDoctor
     {
 		report = new ArrayList<String>();
     	
-    	runContainerDoctor(proceed);
+		runCollectionDoctor(proceed);
     	runGrantsDoctor(proceed);
     	runImagesDoctor(proceed);
+    	runAlbumDoctor(proceed);
     	
     	cleanGraphs();
     	
@@ -62,11 +65,11 @@ public class DataDoctor
 	}
     
     /**
-     * Checks album and collections
+     * Checks collections
      * @return
      * @throws Exception 
      */
-    public void runContainerDoctor(boolean proceed) throws Exception
+    public void runCollectionDoctor(boolean proceed) throws Exception
     {
     	UserController uc = new UserController(user);
     	uc.cleanGraph();
@@ -80,24 +83,37 @@ public class DataDoctor
     		
     		User user = uc.retrieve(c.getProperties().getCreatedBy());
     		ProfileController pc1 = new ProfileController(user);
-    		MetadataProfile p = pc1.retrieve(c.getProfile());
-    		if (!c.getProperties().getStatus().equals(p.getProperties().getStatus()))
+    		try 
     		{
-    			if (proceed)
-    			{
-    				if (Status.RELEASED.equals(c.getProperties().getStatus()))	{
-    					pc1.release(p);
-    				}
-    				else if ((Status.WITHDRAWN.equals(c.getProperties().getStatus()))){
-    					pc1.withdraw(p, user);
-    				}
-    			}
-    			else 
-    			{
-    				report.add("non valid status of profile: " + c.getProfile() + " (" + p.getProperties().getStatus() 
-    						+ ") with collection " + c.getId() + " (" + c.getProperties().getStatus() + ")") ;
-    			}
-    		}
+    			MetadataProfile p = pc1.retrieve(c.getProfile());
+			
+    		
+	    		if (!c.getProperties().getStatus().equals(p.getProperties().getStatus()))
+	    		{
+	    			if (proceed)
+	    			{
+	    				if (Status.RELEASED.equals(c.getProperties().getStatus()))	{
+	    					pc1.release(p);
+	    				}
+	    				else if ((Status.WITHDRAWN.equals(c.getProperties().getStatus()))){
+	    					pc1.withdraw(p, user);
+	    				}
+	    			}
+	    			else 
+	    			{
+	    				report.add("non valid status of profile: " + c.getProfile() + " (" + p.getProperties().getStatus() 
+	    						+ ") with collection " + c.getId() + " (" + c.getProperties().getStatus() + ")") ;
+	    			}
+	    		}
+    		} 
+    		catch (NotFoundException e) 
+    		{
+    			report.add("Profile not found: " + c.getProfile() + " for collection " + c.getId());
+			}
+    		catch (Exception e) 
+    		{
+				throw new RuntimeException(e);
+			}
     		
     		for (int i=0; i < c.getImages().size(); i++)
     		{
@@ -277,6 +293,36 @@ public class DataDoctor
 					report.add("Image " + im.getId() + " belongs to no collection");
 				}
 			}
+    	}
+    }
+    
+    public void runAlbumDoctor(boolean proceed) throws Exception
+    {
+    	AlbumController ac = new AlbumController(user);
+    	ImageController ic = new ImageController(user);
+    	
+    	for (Album a :ac.retrieveAll())
+    	{
+    		for (int i=0; i < a.getImages().size(); i++)
+    		{
+    			try
+    			{
+    				a = (Album) ObjectHelper.castAllHashSetToList(a);
+    				ic.retrieve(((List<URI>)a.getImages()).get(i));
+    			}
+    			catch (NotFoundException e) 
+    			{
+					if (proceed)
+					{
+						((List<URI>)a.getImages()).remove(i);
+					}
+					else
+					{
+						report.add("Dead image link in album: " + a.getId() + " ( image " + ((List<URI>)a.getImages()).get(i) + " doesn't exists) ");
+					}
+				}
+    		}
+    		if (proceed) ac.update(a);
     	}
     }
 }

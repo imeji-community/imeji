@@ -43,7 +43,7 @@ public class GrantController extends ImejiController
 	{
 		for (int i = 0 ; i < user.getGrants().size(); i++)
 		{
-			if (((List<Grant>)user.getGrants()).get(i).getGrantFor().equals(uri))
+			if (uri != null && uri.equals(((List<Grant>)user.getGrants()).get(i).getGrantFor()))
 			{
 				((List<Grant>)user.getGrants()).remove(i);
 			}

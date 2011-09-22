@@ -105,7 +105,7 @@
 					</h:panelGroup>
 					
 					<!-- IMAGES -->
-					<h:panelGroup styleClass="full_area0 " >	
+					<h:panelGroup styleClass="full_area0 " rendered="#{EditImageMetadataBean.profileWithStatements}">	
 			        	<h:panelGroup id="imagesMetadata" layout="block" styleClass="free_area0 endline" rendered="#{EditImageMetadataBean.editType == 'selected'}">
 		        			<a4j:repeat id="imagesList" var="image" value="#{EditImageMetadataBean.editor.images}" rowKeyVar="indexImage">
 		        				<h:panelGroup styleClass="full_area0_p0 preListHeader" >

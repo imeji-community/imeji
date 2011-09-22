@@ -20,7 +20,7 @@ public class SimpleSecurityQuery
 		
 		String op = " ";
 
-		if (user == null)
+		if (user == null || user.getGrants().isEmpty())
 		{
 			if (includeWithdrawn) return  " .FILTER(?status!=<http://imeji.mpdl.mpg.de/status/PENDING>)";
 			return  " .FILTER(?status=<http://imeji.mpdl.mpg.de/status/RELEASED>)";

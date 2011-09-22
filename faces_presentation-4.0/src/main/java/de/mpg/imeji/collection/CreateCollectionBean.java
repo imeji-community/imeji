@@ -50,7 +50,7 @@ public class CreateCollectionBean extends CollectionBean
             mdp.setTitle(getCollection().getMetadata().getTitle());
             URI profile = profileController.create(mdp);
             collectionController.create(getCollection(), profile);
-            BeanHelper.info(sessionBean.getMessage("collection_success_create"));
+            BeanHelper.info(sessionBean.getMessage("success_collection_create"));
             return "pretty:collections";
         }
         else return "";

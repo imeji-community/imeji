@@ -268,6 +268,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 			}
     	}
     	discardComment = null;
+    	sb.getSelected().clear();
     	BeanHelper.info(count + " " + sb.getLabel("images_withdraw"));
     	return "pretty:";
     }

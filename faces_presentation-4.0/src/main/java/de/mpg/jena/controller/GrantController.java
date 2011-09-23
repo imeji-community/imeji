@@ -1,6 +1,8 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.mpg.jena.ImejiBean2RDF;
@@ -27,6 +29,32 @@ public class GrantController extends ImejiController
 			saveUser(user);
 		}
 		else throw new RuntimeException("User " + user.getEmail() + " is already " + grant.getGrantType() + " for " + grant.getGrantFor());
+	}
+	
+	/**
+	 * Replace the grant of one user for one object with the new Grant. It means only one grant for one object pro user.
+	 * @param user
+	 * @param grant
+	 * @throws Exception 
+	 */
+	public void updateGrant(User user, Grant grant) throws Exception
+	{
+		if (!isValid(grant)) 
+		{
+			throw new RuntimeException("Grant: " + grant.getGrantType() + " for " + grant.getGrantFor() + " not valid");
+		}
+		
+		Collection<Grant> newGrants = new ArrayList<Grant>();
+		newGrants.add(grant);
+		for (Grant g : user.getGrants())
+		{
+			if (!g.getGrantFor().equals(grant.getGrantFor()))
+			{
+				newGrants.add(g);
+			}
+		}
+		user.setGrants(newGrants);
+		saveUser(user);
 	}
 	
 	public User removeGrant(User user, Grant grant) throws Exception

@@ -87,7 +87,7 @@ All rights reserved. Use is subject to license terms.
                                 <ui:insert name="additionalSubheaders">
                                     &#160;
                                 </ui:insert>
-                                <div class="subHeader">
+                               	<div class="subHeader">
                                     <!-- Subheadline starts here -->
                                     <h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
                                     <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
@@ -96,7 +96,7 @@ All rights reserved. Use is subject to license terms.
                                     <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{MessagesBean.hasMessages and !MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
                                         <h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
                                     </h:panelGroup><h:outputText value="&#160;" rendered="#{!MessagesBean.hasErrorMessages}" /><!-- Subheadline ends here -->
-                                	<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="full_area0" rendered="#{SessionBean.activeAlbum != null}">
+                                   	<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="full_area0" rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.name != 'Help'}">
 										<h:panelGroup styleClass="huge_area0">
 											<h:outputText value="#{lbl.active_album}: " />
 											<h:outputLink value="#{Navigation.imagesUrl}/album#{SessionBean.activeAlbum.id}">
@@ -104,7 +104,6 @@ All rights reserved. Use is subject to license terms.
 											</h:outputLink>
 										</h:panelGroup>
 									</h:panelGroup>
-                                
                                 </div>
                             </div>
                         </div>

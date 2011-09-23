@@ -46,6 +46,9 @@
 				</h:panelGroup>
 				<h:panelGroup rendered="#{SessionBean.locale.language == 'de'}">
 					<h:outputText escape="false" value="#{StaticContent.helpContent}"></h:outputText>
+				</h:panelGroup>	
+				<h:panelGroup rendered="#{SessionBean.locale.language == 'ja'}">
+					<h:outputText escape="false" value="#{StaticContent.helpContent}"></h:outputText>
 				</h:panelGroup>				
 			</div>
 		</ui:define>

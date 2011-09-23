@@ -18,7 +18,7 @@ public class DoctorBean
 		doc = new DataDoctor(sb.getUser());
 		try 
 		{
-			report = doc.runDoctor(false);
+			//report = doc.runDoctor(false);
 		} 
 		catch (Exception e) 
 		{
@@ -36,7 +36,7 @@ public class DoctorBean
 	public String runScript() throws Exception
 	{
 		Scripts s = new Scripts();
-		s.setCompleteNamesForContainers(sb.getUser());
+		//s.setCompleteNamesForContainers(sb.getUser());
 		return "";
 	}
 

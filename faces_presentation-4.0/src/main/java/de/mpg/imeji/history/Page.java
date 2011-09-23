@@ -16,7 +16,7 @@ public class Page
 		HOME("Welcome.xhtml", "history_home"), IMAGE("Image.xhtml", "history_image"), COLLECTIONS("Collections.xhtml", "history_collections"), ALBUMS("Albums.xhtml", "history_albums"),
 		COLLECTION_HOME("CollectionEntryPage.xhtml", "Collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "Search results"), EDIT("Edit.xhtml", "Edit images"),
 		COLLECTION_IMAGE("CollectionImage.xhtml","history_image"),ALBUM_IMAGES("AlbumBrowse.xhtml", "history_images_album"), ALBUM_HOME("AlbumEntryPage.xhtml", "history_album"),
-		ALBUM_IMAGE("AlbumImage.xhtml","history_image");
+		ALBUM_IMAGE("AlbumImage.xhtml","history_image"), HELP("Help.xhtml", "help");
 		
 		private String fileName="";
 		private String label;

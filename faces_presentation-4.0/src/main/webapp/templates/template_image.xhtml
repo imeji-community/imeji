@@ -69,7 +69,7 @@
 						<h:outputLink styleClass="free_area0  xLarge_marginRExcl" value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.album.id.path}" rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
 							<h:outputText value="active album"/>
 						</h:outputLink>
-						<h:commandLink styleClass="medium_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
+						<h:commandLink styleClass="free_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
 							<h:outputText value="#{lbl.add_to_album}"/>
 						</h:commandLink>
 						<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" onchange="getElementById('formular:selectBtn').click();" rendered="#{SessionBean.user != null}"/>

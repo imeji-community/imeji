@@ -103,32 +103,33 @@ public class AlbumImagesBean extends ImagesBean
     
     /**
      * Since an album only reference images, this images could have been deleted in Jena but not in albums
+     * ATTENTION: BAD IDEA: SOME IMAGES MIGHT NOT BE FOUND ACCORDING TO USER PRIVILIGES
      * @throws Exception 
      */
     public void deleteNonExistingImages() throws Exception
     {
-    	if (album.getAlbum().getImages().size() != totalNumberOfRecords)
-    	{
-    		ImageController controller = new ImageController(sb.getUser());
-    		for (int i=0 ; i < album.getAlbum().getImages().size(); i++)
-    		{
-    			try 
-    			{
-					controller.retrieve(((List<URI>) album.getAlbum().getImages()).get(i));
-				} 
-    			catch (NotFoundException e) 
-				{
-    				((List<URI>) album.getAlbum().getImages()).remove(i);
-    				i--;
-				}     			
-    		}
-    		AlbumController albumController = new AlbumController(sb.getUser());
-    		albumController.update(album.getAlbum());
-    	}
-    	if (album.getAlbum().getImages().size() != totalNumberOfRecords)
-    	{
-    		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("album_not_allowed_see_all"));
-    	}
+//    	if (album.getAlbum().getImages().size() != totalNumberOfRecords)
+//    	{
+//    		ImageController controller = new ImageController(sb.getUser());
+//    		for (int i=0 ; i < album.getAlbum().getImages().size(); i++)
+//    		{
+//    			try 
+//    			{
+//					controller.retrieve(((List<URI>) album.getAlbum().getImages()).get(i));
+//				} 
+//    			catch (NotFoundException e) 
+//				{
+//    				((List<URI>) album.getAlbum().getImages()).remove(i);
+//    				i--;
+//				}     			
+//    		}
+//    		AlbumController albumController = new AlbumController(sb.getUser());
+//    		albumController.update(album.getAlbum());
+//    	}
+//    	if (album.getAlbum().getImages().size() != totalNumberOfRecords)
+//    	{
+//    		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("album_not_allowed_see_all"));
+//    	}
     }
     
     @Override

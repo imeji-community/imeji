@@ -16,6 +16,7 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionImagesBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.SelectedBean;
+import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.lang.labelHelper;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
@@ -75,9 +76,11 @@ public class EditImageMetadataBean
 		try 
 		{
 			initImagesBean();
-			initMenus();
 			profile = getSelectedProfile();
 			statement = getSelectedStatement();
+			((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
+			initMenus();
+			
 			if (getSelectedProfile() == null || getSelectedProfile().getStatements().isEmpty()) 
 			{
 				isProfileWithStatements = false;
@@ -144,14 +147,14 @@ public class EditImageMetadataBean
 	{
 		statementMenu = new ArrayList<SelectItem>();
 		profileMenu = new ArrayList<SelectItem>();
-		
 		for(MetadataProfile p : profiles)
 		{
 			profileMenu.add(new SelectItem(p.getId().toString(), p.getTitle()));
 		}
 		for(Statement s: getSelectedProfile().getStatements())
 		{
-			statementMenu.add(new SelectItem(s.getName().toString(), labelHelper.getDefaultLabel(s.getLabels().iterator())));
+			statementMenu.add(new SelectItem(s.getName().toString()
+					, ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(s.getName())));
 		}
 		selectedMode = "basic";
 	}

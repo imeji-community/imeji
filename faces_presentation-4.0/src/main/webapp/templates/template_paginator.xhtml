@@ -47,8 +47,8 @@
 		 			<f:selectItem itemValue="24" itemLabel="24"></f:selectItem>
 		 			<f:selectItem itemValue="60" itemLabel="60"></f:selectItem>
 		 			<f:selectItem itemValue="90" itemLabel="90"></f:selectItem>
-		 			<f:selectItem itemValue="500" itemLabel="500"></f:selectItem>
-		 			<f:selectItem itemValue="1000" itemLabel="1000"></f:selectItem>
+		 			<f:selectItem itemValue="150" itemLabel="150"></f:selectItem>
+		 			<f:selectItem itemValue="300" itemLabel="300"></f:selectItem>
 		 		</h:selectOneMenu>
 				<h:commandButton id="btnChangeElementsPerPageTop" title="#{lbl.paginator_go}" styleClass="xTiny_txtBtn paginatorFallbackGoBtn hiddenElementsNumberChangedButton"  value=""  action="#{paginatorListSessionBean.changeElementsPerPageTop}"/>
 		 		<h:outputLabel id="lblItemList_ObjectsPerPage" for="extSelectTop" styleClass="free_label hitsLabel" value=" #{lbl.paginator_objectsPerPage}" />
@@ -100,6 +100,8 @@
  			<f:selectItem itemValue="24" itemLabel="24"></f:selectItem>
  			<f:selectItem itemValue="60" itemLabel="60"></f:selectItem>
  			<f:selectItem itemValue="90" itemLabel="90"></f:selectItem>
+ 			<f:selectItem itemValue="150" itemLabel="150"></f:selectItem>
+		 	<f:selectItem itemValue="300" itemLabel="300"></f:selectItem>
  		</h:selectOneMenu>
 		<h:commandButton id="btnChangeElementsPerPageBottom" title="#{lbl.paginator_go}" styleClass="xTiny_txtBtn paginatorFallbackGoBtn hiddenElementsNumberChangedButton"  value="#{lbl.paginator_go}"  action="#{paginatorListSessionBean.changeElementsPerPageBottom}"/>
  		<h:outputLabel id="lblItemList_ObjectsPerPageBottom" for="extSelectBottom" styleClass="free_label hitsLabel" value=" #{lbl.paginator_objectsPerPage}" />

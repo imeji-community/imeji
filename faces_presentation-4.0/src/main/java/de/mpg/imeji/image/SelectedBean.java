@@ -16,6 +16,7 @@ import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionImagesBean;
 import de.mpg.imeji.history.HistorySession;
+import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.jena.controller.AlbumController;
@@ -68,6 +69,7 @@ public class SelectedBean extends ImagesBean {
 			totalNumberOfRecords = uris.size();
 			super.setImages(controller.loadImages(uris, limit, offset));
 		}
+		
 		return ImejiFactory.imageListToBeanList(super.getImages());
 	}
 	

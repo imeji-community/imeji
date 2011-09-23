@@ -18,6 +18,7 @@ import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.UserController;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
@@ -255,10 +256,8 @@ public class AlbumBean implements Serializable
             ImageController ic = new ImageController(sessionBean.getUser()); 
             if (getAlbum() != null)
             {
-            	List<String> uris = new ArrayList<String>();
-            	for (URI uri : getAlbum().getImages()) uris.add(uri.toString());
-            	Collection<Image> imgList = ic.loadImages(uris, 5, 0);
-            	return ImejiFactory.imageListToBeanList(imgList); 
+            	SearchResult r = ic.searchImagesInContainer(getAlbum().getId(), null, null, 5, 0);
+            	return ImejiFactory.imageListToBeanList(ic.loadImages(r.getResults(), 5, 0));
             }
             return null;	
         }

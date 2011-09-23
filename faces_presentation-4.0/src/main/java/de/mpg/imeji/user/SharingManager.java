@@ -46,7 +46,8 @@ public class SharingManager
 				}
 				
 				Grant ng = new Grant(role,uri);
-				gc.addGrant(target, ng);
+				//gc.addGrant(target, ng);
+				gc.updateGrant(target, ng);
 				
 				if(o instanceof CollectionImeji)
 				{
@@ -54,11 +55,12 @@ public class SharingManager
 					{
 						if (GrantType.CONTAINER_EDITOR.equals(role))
 						{
-							gc.addGrant(target, new Grant(GrantType.PROFILE_ADMIN, ((CollectionImeji) o).getProfile()));
+							//gc.addGrant(target, new Grant(GrantType.PROFILE_ADMIN, ((CollectionImeji) o).getProfile()));
+							gc.updateGrant(target, new Grant(GrantType.PROFILE_ADMIN, ((CollectionImeji) o).getProfile()));
 						}
 						else
 						{
-							gc.addGrant(target, new Grant(GrantType.PROFILE_VIEWER, ((CollectionImeji) o).getProfile()));
+							gc.updateGrant(target, new Grant(GrantType.PROFILE_VIEWER, ((CollectionImeji) o).getProfile()));
 						}
 					} 
 					catch (Exception e) 
@@ -72,7 +74,7 @@ public class SharingManager
 					try 
 					{
 						URI uriCol = ObjectHelper.getURI(CollectionImeji.class, ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getId());
-						gc.addGrant(target, new Grant(GrantType.PRIVILEGED_VIEWER, uriCol));
+						gc.updateGrant(target, new Grant(GrantType.PRIVILEGED_VIEWER, uriCol));
 					} 
 					catch (Exception e) 
 					{

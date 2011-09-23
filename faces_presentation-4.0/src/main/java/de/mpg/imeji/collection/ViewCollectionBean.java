@@ -122,4 +122,5 @@ public class ViewCollectionBean extends CollectionBean
         if (this.getCollection()  == null || this.getCollection().getMetadata().getDescription() == null) return "";
     	return this.getCollection().getMetadata().getDescription().replaceAll("\n", "<br/>");
     }
+    
 }

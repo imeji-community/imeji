@@ -255,7 +255,9 @@ public abstract class CollectionBean
 
     public int getSize()
     {
-        return collection.getImages().size();
+    	ImageController ic = new ImageController(sessionBean.getUser());
+    	return ic.countImagesInContainer(this.getCollection().getId(), null);
+        //return collection.getImages().size();
     }
 
     public boolean getIsOwner()

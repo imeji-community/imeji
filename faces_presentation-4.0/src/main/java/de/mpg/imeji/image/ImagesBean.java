@@ -63,12 +63,19 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         initMenus();
     }
 
+    public String getInitPage()
+    {
+    	initMenus();
+    	return "";
+    }
+    
     private void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_CREATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_CREATION_DATE.name())));
         sortMenu.add(new SelectItem(ImejiNamespaces.IMAGE_COLLECTION, sb.getLabel(ImejiNamespaces.IMAGE_COLLECTION.name())));
         sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
+        
         selectedSortCriterion = ImejiNamespaces.PROPERTIES_CREATION_DATE.name();
         selectedSortOrder = SortOrder.DESCENDING.name();
     }
@@ -93,7 +100,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     @Override
     public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
     {
-    	ImageController controller = new ImageController(sb.getUser());
+    	ImageController controller = new ImageController(sb.getUser());    	
 
 //    	CollectionController cc = new CollectionController(sb.getUser());
 //    	

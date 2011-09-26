@@ -44,11 +44,11 @@
 			<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
 			 		
 				<h:outputLink value="#{imageBean.browse.previous}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
-					<h:outputText value="#{lbl.paginator_previous} image #{imageBean.initLabels}"/>
+					<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
 				</h:outputLink>
 				<h:outputText value=" " styleClass="small_area0"/>
 				<h:outputLink value="#{imageBean.browse.next}" styleClass="forward small_marginLExcl"  disabled="#{imageBean.browse.next == null}">
-					<h:outputText value="#{lbl.paginator_next} image"/>
+					<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
 				</h:outputLink>
 			</h:panelGroup>
 			</div>

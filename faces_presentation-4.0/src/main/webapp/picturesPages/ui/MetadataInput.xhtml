@@ -41,16 +41,20 @@
 		<h:outputLabel value="#{MetadataLabels.internationalizedLabels[metadata.namespace]} (#{MetadataLabels.lang})" styleClass="huge_label"/>
 		
 		<!-- METADATA TYPE TEXT -->
-		<h:inputTextarea id="inputText" name="inputText" styleClass="#{areaClass} inputTxtArea" immediate="true" value="#{metadata.text}" rendered="#{metadata.type =='TEXT'}">
+		<h:inputTextarea id="inputText" name="inputText" styleClass="#{areaClass} inputTxtArea" immediate="true" value="#{metadata.text}" rendered="#{metadata.type =='TEXT'  and !SuggestBean.suggests[metadata.namespace].hasRestrictedValues}">
 			<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" for="inputText" var="results" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 				<h:column>
 					<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
 				</h:column>
 			</rich:suggestionbox>
 		</h:inputTextarea>
+		
+		<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.text}" rendered="#{SuggestBean.suggests[metadata.namespace].hasRestrictedValues}">
+			<f:selectItems value="#{SuggestBean.suggests[metadata.namespace].restrictedValues}"/>
+		</h:selectOneMenu>
 				
 		<!-- METADATA TYPE URI -->
-		<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" immediate="true" rendered="#{metadata.type =='URI'}" onfocus="this.select();">
+		<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" immediate="true" rendered="#{metadata.type =='URI' and !SuggestBean.suggests[metadata.namespace].hasRestrictedValues}" onfocus="this.select();">
 			<f:converter converterId="URIConverter" />
 			<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}"  for="inputURI" var="results" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 				<h:column>
@@ -59,9 +63,13 @@
 			</rich:suggestionbox>
 		</h:inputText>
 		
+		<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{metadata.type =='URI' and SuggestBean.suggests[metadata.namespace].hasRestrictedValues}">
+			<f:selectItems value="#{SuggestBean.suggests[metadata.namespace].restrictedValues}"/>
+		</h:selectOneMenu>
+		
 		<!-- METADATA TYPE PUBLICATION -->
 		<h:panelGroup rendered="#{metadata.type=='PUBLICATION'}">
-			<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" immediate="true" rendered="#{metadata.type=='PUBLICATION'}" onfocus="this.select();">
+			<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" immediate="true" onfocus="this.select();" rendered="#{metadata.type=='PUBLICATION' and !SuggestBean.suggests[metadata.namespace].hasRestrictedValues}">
 				<f:converter converterId="URIConverter" />
 				<rich:suggestionbox frequency="0.0001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" for="inputPublicationURI" var="results" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
@@ -69,14 +77,17 @@
 					</h:column>
 				</rich:suggestionbox>
 			</h:inputText>
+			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[metadata.namespace].hasRestrictedValues}">
+				<f:selectItems value="#{SuggestBean.suggests[metadata.namespace].restrictedValues}"/>
+			</h:selectOneMenu>
 			<h:outputLabel value="#{lbl.export_formats}" styleClass="xHuge_label"/>
 			<h:selectOneMenu value="#{metadata.exportFormat}" styleClass="xLarge_select">
 				<f:selectItem itemLabel="APA" itemValue="APA"></f:selectItem>
 				<f:selectItem itemLabel="AJP" itemValue="AJP"></f:selectItem>
 				<f:selectItem itemLabel="JUS" itemValue="JUS"></f:selectItem>
 			</h:selectOneMenu>
-		</h:panelGroup>
-
+		</h:panelGroup>		
+		
 		<!-- METADATA TYPE DATE -->
 		<h:panelGroup rendered="#{metadata.type =='DATE'}">
 			<h:inputText styleClass="huge_txtInput" value="#{metadata.date}" immediate="true">
@@ -86,18 +97,24 @@
 		
 		<!-- METADATA TYPE LICENSE -->
 		<h:panelGroup rendered="#{metadata.type =='LICENSE'}">
-			<h:inputText id="inputLicense" styleClass="huge_txtInput" value="#{metadata.license}" immediate="true">
+			<h:inputText id="inputLicense" styleClass="huge_txtInput" value="#{metadata.license}" rendered="#{!SuggestBean.suggests[metadata.namespace].hasRestrictedValues}" immediate="true">
 				<rich:suggestionbox frequency="0.0001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}"  for="inputLicense" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{result.http_purl_org_dc_elements_1_1_title}" />
 					</h:column>
 				</rich:suggestionbox>
 			</h:inputText>
+			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[metadata.namespace].hasRestrictedValues}">
+				<f:selectItems value="#{SuggestBean.suggests[metadata.namespace].restrictedValues}"/>
+			</h:selectOneMenu>
 		</h:panelGroup>
 		
 		<!-- METADATA TYPE NUMBER -->
 		<h:panelGroup rendered="#{metadata.type =='NUMBER'}">
-			<h:inputText immediate="true" onfocus="this.select();" styleClass="huge_txtInput" value="#{metadata.number}" rendered="#{metadata.type=='NUMBER'}"/>
+			<h:inputText immediate="true" onfocus="this.select();" styleClass="huge_txtInput" value="#{metadata.number}" rendered="#{metadata.type=='NUMBER' and !SuggestBean.suggests[metadata.namespace].hasRestrictedValues}"/>
+			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[metadata.namespace].hasRestrictedValues}">
+				<f:selectItems value="#{SuggestBean.suggests[metadata.namespace].restrictedValues}"/>
+			</h:selectOneMenu>
 		</h:panelGroup>
 				
 		<!-- METADATA TYPE CONE AUTHOR -->
@@ -161,13 +178,16 @@
 		<!-- METADATA TYPE GEOLOCATION -->
 		<h:panelGroup rendered="#{metadata.type =='GEOLOCATION'}">
 			<h:outputLabel id="inputLocationName" value="#{lbl.name}" styleClass="huge_label" />
-			<h:inputText styleClass="xHuge_txtInput" value="#{metadata.name}" immediate="true">
+			<h:inputText styleClass="xHuge_txtInput" value="#{metadata.name}" immediate="true" rendered="#{!SuggestBean.suggests[metadata.namespace].hasRestrictedValues}">
 				<rich:suggestionbox frequency="0.00001" rendered="#{SuggestBean.suggests[metadata.namespace].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.namespace].autoComplete}"  for="inputLocationName" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{result.http_purl_org_dc_elements_1_1_title}" />
 					</h:column>
 				</rich:suggestionbox>
 			</h:inputText>
+			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.name}" rendered="#{SuggestBean.suggests[metadata.namespace].hasRestrictedValues}">
+				<f:selectItems value="#{SuggestBean.suggests[metadata.namespace].restrictedValues}"/>
+			</h:selectOneMenu>
 			<h:outputLabel value="#{lbl.geolocation_latitude}" styleClass="huge_label" />
 			<h:inputText styleClass="xHuge_txtInput" value="#{metadata.latitude}"  immediate="true"/>
 			<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="huge_label" />

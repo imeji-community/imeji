@@ -69,7 +69,7 @@
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 			<ui:include src="./include/History.xhtml"></ui:include><br/>
 			<h:outputLink value="#{Navigation.applicationUrl}images/collection/#{CollectionImageBean.collectionId}" styleClass="free_area1_p6 small_marginLIncl">
-				<h:outputText value="Back to collection images"/>
+				<h:outputText value="#{lbl.collection_back_to_images}"/>
 			</h:outputLink>
 			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})"  styleClass="free_area2_p6 xHuge_marginLIncl"/>
 		</h:panelGroup>

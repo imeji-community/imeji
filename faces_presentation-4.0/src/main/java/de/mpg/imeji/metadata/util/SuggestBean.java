@@ -7,16 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.model.SelectItem;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.openjena.atlas.json.io.parserjavacc.javacc.JSON_Parser;
 import org.richfaces.json.JSONCollection;
-import org.richfaces.json.JSONException;
-
-import de.mpg.jena.vo.MetadataProfile;
-import de.mpg.jena.vo.Statement;
 
 import thewebsemantic.LocalizedString;
+import de.mpg.jena.vo.MetadataProfile;
+import de.mpg.jena.vo.Statement;
 
 public class SuggestBean
 {
@@ -39,6 +38,7 @@ public class SuggestBean
 	public void setSuggests(Map<URI, Suggest> suggests) {
 		this.suggests = suggests;
 	}
+	
 
 	public class Suggest
 	{
@@ -49,31 +49,47 @@ public class SuggestBean
 			statement = s;
 		}
 		
+		public List<SelectItem> getRestrictedValues()
+		{
+			if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
+			{	            
+				List<SelectItem> list = new ArrayList<SelectItem>();
+	            list.add(new SelectItem(null, "-"));
+	            for (LocalizedString str : statement.getLiteralConstraints())
+	            {
+	            	list.add(new SelectItem(str.toString(), str.toString()));
+	            }
+		        return list;
+			}
+			return null;
+		}
+		
 		public List<Object> autoComplete(Object suggest)
 	    {
 	        if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
 	        {
-	            List<String> suggestions = new ArrayList<String>();
-	            List<String> literals = new ArrayList<String>();
-	            for (LocalizedString str : statement.getLiteralConstraints())
-	                literals.add(str.toString());
-	            for (String str : literals)
-	                if (str.toLowerCase().contains(suggest.toString().toLowerCase()))
-	                    suggestions.add(str);
-	            String json = "[";
-	            for (String str : suggestions)
-	                json += "{\"http_purl_org_dc_elements_1_1_title\" : \"" + str + "\"},";
-	            json = json.substring(0, json.length() - 1) + "]";
-	            JSONCollection jsc;
-	            try
-	            {
-	                jsc = new JSONCollection(json);
-	            }
-	            catch (JSONException e)
-	            {
-	                return null;
-	            }
-	            return Arrays.asList(jsc.toArray());
+//	            List<String> suggestions = new ArrayList<String>();
+//	            List<String> literals = new ArrayList<String>();
+//	            for (LocalizedString str : statement.getLiteralConstraints())
+//	                literals.add(str.toString());
+//	            for (String str : literals)
+//	                if (str.toLowerCase().contains(suggest.toString().toLowerCase()))
+//	                    suggestions.add(str);
+//	            String json = "[";
+//	            for (String str : suggestions)
+//	                json += "{\"http_purl_org_dc_elements_1_1_title\" : \"" + str + "\"},";
+//	            json = json.substring(0, json.length() - 1) + "]";
+//	            JSONCollection jsc;
+//	            try
+//	            {
+//	                jsc = new JSONCollection(json);
+//	            }
+//	            catch (JSONException e)
+//	            {
+//	                return null;
+//	            }
+// 
+	            //return Arrays.asList(jsc.toArray());
 	        }
 	        else if (statement.getVocabulary() != null)
 	        {
@@ -101,14 +117,25 @@ public class SuggestBean
 	        return null;
 	    }
 		
+		public boolean getHasRestrictedValues()
+		{
+			if (statement != null) 
+	        {
+				 if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
+	        	 {
+	        		 return true;
+	        	 }
+	        }
+	        return false;
+		}
+		
 		public boolean getDoAutoComplete()
 		{
 			if (statement != null) 
 	        {
-	        	 
 				 if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
 	        	 {
-	        		 return true;
+	        		 return false;
 	        	 }
 	             if (statement.getVocabulary() != null)
 	             {

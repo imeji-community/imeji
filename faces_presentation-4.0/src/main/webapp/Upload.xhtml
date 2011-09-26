@@ -60,12 +60,14 @@
 					// Setup html5 version
 					$("#uploader").pluploadQueue({
 						// General settings
-						runtimes : 'gears,html5,silverlight,browserplus,html4',
+						runtimes : 'html5,silverlight,flash,gears,browserplus,html4',
 						url : location.pathname  + "?start=1",
 						//max_file_size : '10mb',
 						multi_selection : true,
 						//chunk_size : '1mb',
 						unique_names : false,
+						flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.flash.swf',
+						silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.silverlight.xap',
 						filters : [{
 							title : "Image files", 
 							extensions : "jpg,jpeg,gif,png,bmp,tif,JPG,JPEG,GIF,PNG"}
@@ -77,6 +79,38 @@
 						});
 				});
 				
+				function getUploadTitle()
+				{
+					return '<h:outputText value="#{lbl.upload_title}"/>';
+				}				
+				function getUploadDescription()
+				{
+					return '<h:outputText value="#{lbl.upload_description}"/>';
+				}
+				function getUploadFilename()
+				{
+					return '<h:outputText value="#{lbl.filename}"/>';
+				}
+				function getUploadStatus()
+				{
+					return '<h:outputText value="#{lbl.status}"/>';
+				}
+				function getUploadSize()
+				{
+					return '<h:outputText value="#{lbl.size}"/>';
+				}
+				function getUploadAddFiles()
+				{
+					return '<h:outputText value="#{lbl.upload_add_files}"/>';
+				}
+				function getUploadStart()
+				{
+					return '<h:outputText value="#{lbl.upload_start}"/>';
+				}
+				function getDragHere()
+				{
+					return '<h:outputText value="#{lbl.upload_drag_files_here}"/>';
+				}
 				
 				</script>
 					<div class="full_area0 small_marginLExcl infoPage">

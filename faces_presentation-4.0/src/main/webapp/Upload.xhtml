@@ -60,7 +60,7 @@
 					// Setup html5 version
 					$("#uploader").pluploadQueue({
 						// General settings
-						runtimes : 'html5,silverlight,flash,gears,browserplus,html4',
+						runtimes : 'html5,flash,silverlight,gears,browserplus',
 						url : location.pathname  + "?start=1",
 						//max_file_size : '10mb',
 						multi_selection : true,
@@ -116,7 +116,18 @@
 					<div class="full_area0 small_marginLExcl infoPage">
 					<br/>
 						<div class="half_area0_p8 listBackground" style="width:41.15em;">
-							<div id="uploader" style="width: 450px; height: 330px;" class="half_area0_p0">You browser doesn't support native upload. Try Firefox 3 or Safari 4.</div>
+							<div id="uploader" style="width: 450px; height: 330px;" class="half_area0_p0">
+								Your browser doens't support native upload!<br/>
+								Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br/>
+							<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">
+								Download Siverlight
+							</a>
+							<br/>
+							or
+							<br/>
+							<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">
+								Download Flash
+							</a></div>
 						</div>
 						<br style="clear: both"/>
 							

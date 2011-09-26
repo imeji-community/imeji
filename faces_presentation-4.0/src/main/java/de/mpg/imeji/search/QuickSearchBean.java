@@ -67,7 +67,20 @@ public class QuickSearchBean implements Serializable
             //bean.setQuery("( ANY_METADATA=\"" + searchString +"\" )");
             try 
             {
-				List<SearchCriterion> scl = URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + searchString +"\" )");
+            	List<SearchCriterion> scl = new ArrayList<SearchCriterion>();
+            	if (searchString.startsWith("\"") && searchString.endsWith("\""))
+            	{
+            		scl.addAll(URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + searchString +"\" )"));
+            	}
+            	else
+            	{
+            		for(String s : searchString.split("\\s"))
+                	{
+                		scl.addAll(URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + s +"\" )"));
+                	}
+            	}
+            	
+				//List<SearchCriterion> scl = URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + searchString +"\" )");
 				bean.setQuery(URLQueryTransformer.transform2URL(scl));
 			} catch (Exception e) 
 			{

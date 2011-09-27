@@ -26,6 +26,7 @@ public class SharingBean
 	private List<SelectItem> grantsMenu;
 	private GrantType selectedGrant = GrantType.PRIVILEGED_VIEWER;
 	private String status = "closed";
+	private String colId = null;
 	
 	public SharingBean() 
 	{
@@ -46,7 +47,6 @@ public class SharingBean
 	
 	public String share(ActionEvent event)
 	{
-		String colId =  null;
 		String albId = null;
 		
 		if (event.getComponent().getAttributes().get("collectionId") != null)
@@ -66,27 +66,30 @@ public class SharingBean
 		{
 			if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
 			{
-				shared = sm.share(retrieveCollection(colId), sb.getUser(), email, selectedGrant);
-				message = sb.getLabel("collection") + " " + colId + " " + sb.getLabel("shared_with")+ " " + email;
+				shared = sm.share(retrieveCollection(colId), sb.getUser(), email, selectedGrant, true);
+				message = sb.getLabel("collection") + " " + colId + " " + sb.getLabel("shared_with")+ " " + email + " " + sb.getLabel("as") + " " + selectedGrant.toString();
 			}
 			else
 			{
-				shared = sm.share(retrieveProfile(colId), sb.getUser(), email, selectedGrant);
-				message = sb.getLabel("profile") + " " + colId + " " + sb.getLabel("shared_with")+ " " + email;
+				shared = sm.share(retrieveProfile(colId), sb.getUser(), email, selectedGrant, true);
+				shared =  sm.share(retrieveCollection(colId), sb.getUser(), email, GrantType.PRIVILEGED_VIEWER, true);
+				message = sb.getLabel("profile") + " " + colId + " " + sb.getLabel("shared_with")+ " " + email+ " " + sb.getLabel("as") + " " + selectedGrant.toString();
 			}
 		}
 		else if (albId != null)
 		{
-			shared = sm.share(retrieveAlbum(albId), sb.getUser(), email, selectedGrant);
-			message = sb.getLabel("album") + " " + colId + " " + sb.getLabel("shared_with")+ " " + email;
+			shared = sm.share(retrieveAlbum(albId), sb.getUser(), email, selectedGrant, true);
+			message = sb.getLabel("album") + " " + colId + " " + sb.getLabel("shared_with")+ " " + email + " " + sb.getLabel("as") + " "  + selectedGrant.toString();
 		}
 
 		if (shared)
 		{
+			BeanHelper.info(sb.getMessage("success_share"));
 			BeanHelper.info(message);
 			cancel();
 		}
-		return "pretty:";
+		
+		return "";
 	}
 	
 	public String cancel()
@@ -134,7 +137,10 @@ public class SharingBean
 		this.selectedGrant = selectedGrant;
 	}
 	
-	
+	public String getColId()
+	{
+		return colId;
+	}
 	
 	
 	

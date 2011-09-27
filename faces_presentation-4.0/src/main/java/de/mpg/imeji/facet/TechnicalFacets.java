@@ -22,7 +22,7 @@ public class TechnicalFacets
 	private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 	private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
 	
-	private List<Facet> facets = new ArrayList<Facet>();
+	private List<List<Facet>> facets = new ArrayList<List<Facet>>();
 	
 	public TechnicalFacets(List<SearchCriterion> scList) 
 	{
@@ -30,6 +30,8 @@ public class TechnicalFacets
 		Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
 		
 		String baseURI = nav.getImagesUrl() + "?q=";
+		
+		List<Facet> techFacets = new ArrayList<Facet>();
 		
 		try 
 		{
@@ -40,7 +42,7 @@ public class TechnicalFacets
 				{
 					SearchCriterion myImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.MY_IMAGES , "my", Filtertype.EQUALS);
 					count = getCount(new ArrayList<SearchCriterion>(scList), myImagesSC);
-					if (count > 0 ) facets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "my_images", FacetType.TECHNICAL), "my_images", count, FacetType.TECHNICAL, null));
+					if (count > 0 ) techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, myImagesSC, "my_images", FacetType.TECHNICAL), "my_images", count, FacetType.TECHNICAL, null));
 					else fs.getNoResultsFilters().add(new Filter("My images", "", 0, FacetType.TECHNICAL, null));
 				}
 				
@@ -48,13 +50,13 @@ public class TechnicalFacets
 				{
 					SearchCriterion privateImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_STATUS, "http://imeji.mpdl.mpg.de/status/PENDING", Filtertype.URI);
 					count = getCount(new ArrayList<SearchCriterion>(scList), privateImagesSC);
-					if (count > 0 )facets.add(new Facet(uriFactory.createFacetURI(baseURI, privateImagesSC, "pending_images", FacetType.TECHNICAL), "pending_images",count, FacetType.TECHNICAL, null));
+					if (count > 0 )techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, privateImagesSC, "pending_images", FacetType.TECHNICAL), "pending_images",count, FacetType.TECHNICAL, null));
 				}
 				if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
 				{
 					SearchCriterion publicImagesSC = new SearchCriterion(Operator.AND, ImejiNamespaces.PROPERTIES_STATUS,"http://imeji.mpdl.mpg.de/status/RELEASED", Filtertype.URI);
 					count = getCount(new ArrayList<SearchCriterion>(scList), publicImagesSC);
-					if (count > 0)	facets.add(new Facet(uriFactory.createFacetURI(baseURI, publicImagesSC, "released_images", FacetType.TECHNICAL), "released_images", count, FacetType.TECHNICAL, null));
+					if (count > 0)	techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, publicImagesSC, "released_images", FacetType.TECHNICAL), "released_images", count, FacetType.TECHNICAL, null));
 				}
 			}
 				
@@ -66,7 +68,7 @@ public class TechnicalFacets
 					count = getCount(new ArrayList<SearchCriterion>(scList), sc);
 					if (count > 0)
 					{
-						facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, ct.name(), FacetType.TECHNICAL), ct.name().toLowerCase(), count, FacetType.TECHNICAL, null));
+						techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, ct.name(), FacetType.TECHNICAL), ct.name().toLowerCase(), count, FacetType.TECHNICAL, null));
 					}
 					else 
 					{
@@ -75,6 +77,7 @@ public class TechnicalFacets
 					count = 0;	
 				}
 			}
+			facets.add(techFacets);
 		} 
 		catch (UnsupportedEncodingException e) 
 		{
@@ -89,11 +92,13 @@ public class TechnicalFacets
 		return ic.countImages(scList);
 	}
 
-	public List<Facet> getFacets() {
+	public List<List<Facet>> getFacets() 
+	{
 		return facets;
 	}
 
-	public void setFacets(List<Facet> facets) {
+	public void setFacets(List<List<Facet>> facets) 
+	{
 		this.facets = facets;
 	}
 	

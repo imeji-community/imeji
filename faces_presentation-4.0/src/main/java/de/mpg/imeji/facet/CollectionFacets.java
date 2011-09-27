@@ -25,7 +25,7 @@ public class CollectionFacets
 	private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 	private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
 	
-	private List<Facet> facets = new ArrayList<Facet>();
+	 private List<List<Facet>> facets = new ArrayList<List<Facet>>();
 	
 	private URI colURI = null;
 	
@@ -44,28 +44,29 @@ public class CollectionFacets
 		FacetURIFactory uriFactory = new FacetURIFactory(scList);
 		int count = 0;
 		
-		int sizeAllImages = col.getImages().size();
-		if (scList.size() > 0)
-		{
-			sizeAllImages = getCount(scList, null);
-		}
+		int sizeAllImages = getCount(scList, null);
 			
 		for (Statement st : profile.getStatements()) 
 		{
+			List<Facet> group = new ArrayList<Facet>();
+			
 			if (!fs.isFilter(getName(st.getName())) || !fs.isFilter("No " + getName(st.getName())))
 			{
 				SearchCriterion sc = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
 				count =  getCount(new ArrayList<SearchCriterion>(scList), sc);
-				if (count > 0) 
+				System.out.println("saasas");
+				if (count > 0 || true) 
 				{
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, getName(st.getName()), FacetType.COLLECTION), getName(st.getName()), count, FacetType.COLLECTION, st.getName() ));
+					group.add(new Facet(uriFactory.createFacetURI(baseURI, sc, getName(st.getName()), FacetType.COLLECTION), getName(st.getName()), count, FacetType.COLLECTION, st.getName() ));
 				}
-				if (count < sizeAllImages)
+				if (count < sizeAllImages || true)
 				{
 					sc =  new SearchCriterion(Operator.NOTAND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
-					facets.add(new Facet(uriFactory.createFacetURI(baseURI, sc, "No " + getName(st.getName()), FacetType.COLLECTION), "No " + getName(st.getName()), sizeAllImages - count, FacetType.COLLECTION, st.getName()));
+					group.add(new Facet(uriFactory.createFacetURI(baseURI, sc, "No " + getName(st.getName()), FacetType.COLLECTION), "No " + getName(st.getName()), sizeAllImages - count, FacetType.COLLECTION, st.getName()));
 				}
 			}
+			
+			facets.add(group);
 		}
 	}
 	
@@ -83,11 +84,13 @@ public class CollectionFacets
 		return ic.countImagesInContainer(colURI, scList);
 	}
 	
-	public List<Facet> getFacets() {
+	public List<List<Facet>> getFacets() 
+	{
 		return facets;
 	}
 
-	public void setFacets(List<Facet> facets) {
+	public void setFacets(List<List<Facet>> facets) 
+	{
 		this.facets = facets;
 	}
 	

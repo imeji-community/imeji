@@ -17,7 +17,7 @@ public class GrantController extends ImejiController
 		super(user);
 	}
 	
-	public void addGrant(User user, Grant grant) throws Exception
+	public User addGrant(User user, Grant grant) throws Exception
 	{
 		if (!isValid(grant)) 
 		{
@@ -29,6 +29,7 @@ public class GrantController extends ImejiController
 			saveUser(user);
 		}
 		else throw new RuntimeException("User " + user.getEmail() + " is already " + grant.getGrantType() + " for " + grant.getGrantFor());
+		return user;
 	}
 	
 	/**
@@ -37,7 +38,7 @@ public class GrantController extends ImejiController
 	 * @param grant
 	 * @throws Exception 
 	 */
-	public void updateGrant(User user, Grant grant) throws Exception
+	public User updateGrant(User user, Grant grant) throws Exception
 	{
 		if (!isValid(grant)) 
 		{
@@ -46,6 +47,7 @@ public class GrantController extends ImejiController
 		
 		Collection<Grant> newGrants = new ArrayList<Grant>();
 		newGrants.add(grant);
+
 		for (Grant g : user.getGrants())
 		{
 			if (!g.getGrantFor().equals(grant.getGrantFor()))
@@ -55,6 +57,7 @@ public class GrantController extends ImejiController
 		}
 		user.setGrants(newGrants);
 		saveUser(user);
+		return user;
 	}
 	
 	public User removeGrant(User user, Grant grant) throws Exception

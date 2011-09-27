@@ -49,10 +49,9 @@ public class Facet
     	else if (FacetType.COLLECTION.name().equals(type.name()))
     	{
     		s = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(metadataURI);
-    		
-    		if (label.toLowerCase().startsWith("no "))
+    		if (isNotDefine())
     		{
-    			s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("no") + " " + s;
+    			s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_not_define");// + " " + s;
     		}
     	}
     	else if (FacetType.SEARCH.name().equals(type.name()))
@@ -67,7 +66,18 @@ public class Facet
     	
     	return s;
     }
+    
+    public String getNotDefineType()
+    {
+    	return ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(metadataURI);
+    }
 
+    public boolean isNotDefine()
+    {
+    	if (label == null) return false;
+    	return (label.toLowerCase().startsWith("no "));
+    }
+    
     public String getLabel()
     {
         return label;

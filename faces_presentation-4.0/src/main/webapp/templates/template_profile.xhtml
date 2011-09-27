@@ -8,7 +8,7 @@
 
 <ui:composition template="template_collection.xhtml">
 	<ui:define name="mainContent">
-		<h:messages/>
+
 		<h:panelGroup layout="block" styleClass="full_area0">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">					
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
@@ -34,7 +34,6 @@
 						<h:panelGroup styleClass="full_area0_p8" rendered="#{empty FormularBean.statements}">
 							<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl">
 								<h:commandLink  action="#{FormularBean.addStatement}"><h:outputText value="#{lbl.profile_start_new} "/></h:commandLink>
-								<h:commandButton styleClass="min_imgBtn add" shortDesc="#{lbl.create_profile}" action="#{FormularBean.addStatement}"/>
 							</h:panelGroup>
 							<h:outputText value=" #{lbl.or_small} " styleClass="full_area0_p8 huge_marginLExcl"/>
 							<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl" >

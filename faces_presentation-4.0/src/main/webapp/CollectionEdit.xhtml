@@ -41,7 +41,13 @@
 			<ui:define name="contentMenu">
 				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{EditCollectionBean.collection.id.path}" rendered="true">
 					<h:outputText value="#{lbl.collection_home}"/>
-				</h:outputLink>			
+				</h:outputLink>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{ViewCollectionBean.collection.id.path}?q=" rendered="true">
+					<h:outputText value="#{lbl.view_images}"/>
+				</h:outputLink>
 				
 				<h:outputText styleClass="seperator void" />
 				
@@ -51,13 +57,7 @@
 				
 				<h:outputText styleClass="seperator void" />
 				
-				<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{EditCollectionBean.collection.profile.path}?init=1" rendered="true">
-					<h:outputText value="#{lbl.collection_profile}"></h:outputText>
-				</h:outputLink>
-				
-				<h:outputText styleClass="seperator void" />
-				
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{EditCollectionBean.collection.id.path}?init=1" rendered="true">
+				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{EditCollectionBean.collection.id.path}?init=1" rendered="#{EditCollectionBean.editable}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
 			</ui:define>

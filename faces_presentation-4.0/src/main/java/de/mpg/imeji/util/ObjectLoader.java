@@ -9,6 +9,7 @@ import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.ProfileController;
+import de.mpg.jena.controller.UserController;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
@@ -71,6 +72,24 @@ public class ObjectLoader
 			writeException(e);
 		}
 		return null;
+	}
+	
+	public static User loadUser(String email, User user)
+	{
+		try 
+        {
+			UserController uc = new UserController(user);
+			return uc.retrieve(email);
+		} 
+		catch (thewebsemantic.NotFoundException e) 
+		{
+			writeErrorNotFound("user", URI.create(user.getEmail()));
+		}
+	    catch (Exception e) 
+	    {
+			writeException(e);
+		}
+	    return null;
 	}
 	
 	public static MetadataProfile loadProfile(URI id, User user)

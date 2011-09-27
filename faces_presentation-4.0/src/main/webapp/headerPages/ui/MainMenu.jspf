@@ -35,29 +35,30 @@
 </ui:remove>
 
 	<div id="mainMenuSkipLinkAnchor" class="full_area0 mainMenu">
-	
+
 		<!-- main Menu starts here -->
-		<h:outputLink id="lnkHome" styleClass="free_area0" value="#{Navigation.applicationUrl}" rendered="true">
+		<h:outputLink id="lnkHome" styleClass="free_area0" value="#{Navigation.applicationUrl}" rendered="#{HistorySession.currentPage.type.fileName != 'Welcome.xhtml'}">
 			<h:outputText value="#{lbl.home}"/>
 		</h:outputLink>
-		<h:outputText id="txtHomeInactive" styleClass="free_area0" value="Home" rendered="false" />
+		<h:outputText id="txtHomeInactive" styleClass="free_area0" value="#{lbl.home}" rendered="#{HistorySession.currentPage.type.fileName == 'Welcome.xhtml'}" />
 	
-	
-		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="/faces/images?load=1&amp;q=" rendered="true">
+		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="/faces/images?q=" rendered="#{HistorySession.currentPage.type.fileName != 'Images.xhtml'}">
 	  		<h:outputText value="#{lbl.header_browse}"/>
 	  	</h:outputLink>
 	  	
-		<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.browse}" rendered="false" />
+		<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.header_browse}" rendered="#{HistorySession.currentPage.type.fileName == 'Images.xhtml'}" />
 		
-		<h:outputLink id="lnkCollections" styleClass="free_area0" value="#{Navigation.collectionsUrl}">
+		<h:outputLink id="lnkCollections" styleClass="free_area0" value="#{Navigation.collectionsUrl}" rendered="#{HistorySession.currentPage.type.fileName != 'Collections.xhtml'}">
 			<h:outputText value="#{lbl.header_collections}"></h:outputText>
 		</h:outputLink>
-		<h:outputText id="lnkCollectionsInactive" styleClass="free_area0" value="#{lbl.header_collections}" rendered="false" />
+		<h:outputText id="lnkCollectionsInactive" styleClass="free_area0" value="#{lbl.header_collections}" rendered="#{HistorySession.currentPage.type.fileName == 'Collections.xhtml'}" />
 		
 		
-		<h:outputLink id="lnkAlbums" styleClass="free_area0" value="#{Navigation.albumsUrl}">
+		<h:outputLink id="lnkAlbums" styleClass="free_area0" value="#{Navigation.albumsUrl}" rendered="#{HistorySession.currentPage.type.fileName != 'Albums.xhtml'}">
 			<h:outputText value="#{lbl.header_albums}"></h:outputText>
 		</h:outputLink>
+		<h:outputText id="lnkAlbumssInactive" styleClass="free_area0" value="#{lbl.header_albums}" rendered="#{HistorySession.currentPage.type.fileName == 'Albums.xhtml'}" />
+		
 		
 		<h:outputLink id="lnkAdmin" value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" rendered="#{SessionBean.admin}">
 			<h:outputText value="ADMIN"></h:outputText>

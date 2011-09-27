@@ -63,6 +63,7 @@
 				<a4j:repeat id="filterList" var="filter" value="#{FiltersSession.filters}" rows="0" rowKeyVar="index">
 					<h:outputText value=" / " styleClass="free_area0"/>
 					<h:outputText value="#{filter.internationalizedLabel} " styleClass="free_area0"/>
+					<h:outputText value="(#{filter.notDefineType})" styleClass="free_area0"	rendered="#{filter.notDefine}"/>
 					<h:outputLink value="#{Navigation.imagesUrl}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images'}" styleClass="free_area0 ">
 						<h:outputText value="[x]" styleClass="free_area0 "/>
 					</h:outputLink>
@@ -290,6 +291,7 @@
 			
 			<ul class="free_area0 fullBrowse small_marginLIncl noTopBorder">
 				<!-- Images -->
+				<h:outputText value="#{msg.no_images_found}!" rendered="#{paginatorListSessionBean.totalNumberOfElements  == 0}" styleClass="free_area0 "/>
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 					<li class="large_area0 itemTile">
 						
@@ -340,11 +342,15 @@
 		<!-- FACETS -->
 		<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">
 			<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{ paginatorListSessionBean.navigationString != 'pretty:albumImages'}">
-				<a4j:repeat var="facets" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
-					<h:outputLink value="#{facets.uri}">
-						<h:outputText value="#{facets.internationalizedLabel}(#{facets.count}) "/>
-					</h:outputLink>
-					<span style="padding-left: 10px" />
+				<a4j:repeat var="groups" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
+					<h:panelGroup layout="block" style="margin:0 0.9090em;" styleClass="free_area0">
+					<a4j:repeat var="facets" value="#{groups}" rowKeyVar="index">
+						<h:outputText value="|&#160;" rendered="#{index &gt; 0}" style="color:#486131;"/>
+						<h:outputLink value="#{facets.uri}">
+							<h:outputText value="#{facets.internationalizedLabel}(#{facets.count}) "/>
+						</h:outputLink>
+					</a4j:repeat>
+					</h:panelGroup>
 				</a4j:repeat>
 				<h:panelGroup layout="block" styleClass="full_area0" >
 					<a4j:status id="loadFacets" forceId="true" startText="#{lbl.facets_loading}..." />
@@ -391,7 +397,7 @@
 	<!-- Script for Shiftcheckboxes -->
 	<script>
 		jQuery(document).ready(function() {
-			//jQuery('.shiftCheckbox').shiftcheckbox();
+			jQuery('.shiftCheckbox').shiftcheckbox();
 		});
 	</script>
 	

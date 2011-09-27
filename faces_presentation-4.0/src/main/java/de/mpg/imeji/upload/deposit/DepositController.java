@@ -39,7 +39,6 @@ public class DepositController
 
     public static String depositImejiItem(ItemVO item, String userHandle, CollectionImeji collection, User user, String title) throws Exception
     {
-    	System.out.println(ServiceLocator.getFrameworkUrl());
         String itemXml = ServiceLocator.getItemHandler(userHandle).create(item.getItemDocument().xmlText());
         item.setItem(ItemDocument.Factory.parse(itemXml));
         

@@ -10,9 +10,9 @@ import de.mpg.jena.vo.CollectionImeji;
 
 public class FacetsBean
 {    
-    private List<Facet> facets = new ArrayList<Facet>();
-    private List<Facet> collectionFacets = new ArrayList<Facet>();
-    private List<Facet> technicalFacets = new ArrayList<Facet>();
+    private List<List<Facet>> facets = new ArrayList<List<Facet>>();
+    private  List<List<Facet>> collectionFacets =  new ArrayList<List<Facet>>();
+    private  List<List<Facet>> technicalFacets =  new ArrayList<List<Facet>>();
     
     public FacetsBean(List<SearchCriterion> scList) 
     {
@@ -39,31 +39,18 @@ public class FacetsBean
 			e.printStackTrace();
 		}
     }
-    
-    public List<Facet> getCollectionFacets()
-    {
-    	return collectionFacets;
-    }
 
-    public void setCollectionFacets(List<Facet> collectionFacets) {
-		this.collectionFacets = collectionFacets;
-	}
-
-	public List<Facet> getTechnicalFacets() {
-		return technicalFacets;
-	}
-
-	public void setTechnicalFacets(List<Facet> technicalFacets) {
-		this.technicalFacets = technicalFacets;
-	}
-
-	public List<Facet> getFacets() {
+	public List<List<Facet>> getFacets() 
+	{
 		return facets;
 	}
 
-	public void setFacets(List<Facet> facets) {
+	public void setFacets(List<List<Facet>> facets) 
+	{
 		this.facets = facets;
 	}
+    
+
 
 
 }

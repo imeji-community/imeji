@@ -55,6 +55,7 @@ public abstract class  MetadataEditor
 				{
 					try 
 					{
+						addPositionToMetadata();
 						ic.update(images);
 						BeanHelper.info(sb.getMessage("success_editor_edit"));
 						String str = images.size() +" " + sb.getMessage("success_editor_images");
@@ -80,6 +81,22 @@ public abstract class  MetadataEditor
         catch (Exception e) 
 		{
 			throw new RuntimeException(sb.getMessage("error_metadata_edit") + " " + e);
+		}
+	}
+	
+	/**
+	 * enable ordering for metadata values
+	 */
+	private void addPositionToMetadata()
+	{
+		for (Image im : images)
+		{
+			int pos = 0;
+			for (ImageMetadata md : im.getMetadataSet().getMetadata())
+			{
+				md.setPos(pos);
+				pos++;
+			}
 		}
 	}
 

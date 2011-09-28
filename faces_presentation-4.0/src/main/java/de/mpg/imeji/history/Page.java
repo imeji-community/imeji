@@ -16,7 +16,7 @@ public class Page
 		HOME("Welcome.xhtml", "history_home"), IMAGE("Image.xhtml", "history_image"), COLLECTIONS("Collections.xhtml", "history_collections"), ALBUMS("Albums.xhtml", "history_albums"),
 		COLLECTION_HOME("CollectionEntryPage.xhtml", "Collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "Search results"), EDIT("Edit.xhtml", "Edit images"),
 		COLLECTION_IMAGE("CollectionImage.xhtml","history_image"),ALBUM_IMAGES("AlbumBrowse.xhtml", "history_images_album"), ALBUM_HOME("AlbumEntryPage.xhtml", "history_album"),
-		ALBUM_IMAGE("AlbumImage.xhtml","history_image"), HELP("Help.xhtml", "help");
+		ALBUM_IMAGE("AlbumImage.xhtml","history_image"), HELP("Help.xhtml", "help"), COLLECTION_INFO("CollectionView.xhtml","history_collection_info"), UPLOAD("Upload.xhtml","history_upload");
 		
 		private String fileName="";
 		private String label;
@@ -51,6 +51,18 @@ public class Page
 //		this.name = session.getLabel(type.getLabel());
 		this.name = type.getLabel();
 	}
+	
+	public boolean equals(Page page)
+	{
+		if (isNull() && page.isNull()) return true;
+		else if (isNull() || page == null || page.isNull()) return false;
+		else return (type.equals(page.getType()) && uri.equals(page.getUri()));
+	}
+	
+	public boolean isNull()
+	{
+		return (type == null && uri == null);
+	}
 
 	public URI getUri() {
 		return uri;
@@ -68,10 +80,18 @@ public class Page
 		this.type = type;
 	}
 
-	public String getName() {
+	public String getName() 
+	{
+		return name;
+	}
+	
+	public String getInternationalizedName()
+	{
 		try 
 		{
-			return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel(name);
+			String s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel(name);
+			if (id != null) s += " id " + id;
+			return s;
 		} 
 		catch (Exception e) 
 		{
@@ -80,6 +100,7 @@ public class Page
 	}
 
 	public void setName(String name) {
+		System.out.println("SETNAME" + name);
 		this.name = name;
 	}
 

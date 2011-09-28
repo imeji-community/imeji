@@ -10,14 +10,11 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ObjectLoader;
-import de.mpg.jena.controller.AlbumController;
-import de.mpg.jena.controller.CollectionController;
-import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Grant.GrantType;
+import de.mpg.jena.vo.MetadataProfile;
 
 public class SharingBean 
 {
@@ -79,7 +76,7 @@ public class SharingBean
 		else if (albId != null)
 		{
 			shared = sm.share(retrieveAlbum(albId), sb.getUser(), email, selectedGrant, true);
-			message = sb.getLabel("album") + " " + colId + " " + sb.getLabel("shared_with")+ " " + email + " " + sb.getLabel("as") + " "  + selectedGrant.toString();
+			message = sb.getLabel("album") + " " + albId + " " + sb.getLabel("shared_with")+ " " + email + " " + sb.getLabel("as") + " "  + selectedGrant.toString();
 		}
 
 		if (shared)

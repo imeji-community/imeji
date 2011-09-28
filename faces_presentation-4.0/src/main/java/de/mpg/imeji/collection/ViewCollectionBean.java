@@ -2,19 +2,19 @@ package de.mpg.imeji.collection;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.CollectionController;
-import de.mpg.jena.controller.ProfileController;
+import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
-import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.User;
 
 public class ViewCollectionBean extends CollectionBean
 {
-    private CollectionController collectionController = null;
     private SessionBean sessionBean = null;
     private List<Person> persons = null;
 
@@ -22,14 +22,12 @@ public class ViewCollectionBean extends CollectionBean
     {
         super(coll);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        collectionController = new CollectionController(sessionBean.getUser());
     }
 
     public ViewCollectionBean()
     {
         super();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        collectionController = new CollectionController(sessionBean.getUser());
     }
 
     public void init()
@@ -37,17 +35,10 @@ public class ViewCollectionBean extends CollectionBean
         try
         {
             User user = sessionBean.getUser();
-            collectionController = new CollectionController(user);
             String id = super.getId();
-            
-            try 
-            {
-            	 super.setCollection(collectionController.retrieve(id));
-			} 
-            catch (Exception e) 
-            {
-				BeanHelper.error(e.getMessage());
-			}
+
+            setCollection(ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, id), user));
+            setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
            
             super.setTab(TabType.COLLECTION);
             persons = new ArrayList<Person>();
@@ -61,10 +52,8 @@ public class ViewCollectionBean extends CollectionBean
                 p.setOrganizations(orgs);
                 persons.add(p);
             }
-            this.getCollection().getMetadata().setPersons(persons);
             
-            ProfileController profileController = new ProfileController(sessionBean.getUser());
-            setProfile(profileController.retrieve(getCollection().getProfile()));
+            getCollection().getMetadata().setPersons(persons);
         }
         catch (Exception e)
         {
@@ -72,11 +61,7 @@ public class ViewCollectionBean extends CollectionBean
         }
     }
 
-    /**
-     * Transform Persons from HashSet to List TODO: Check why persons are return in hashSet
-     * 
-     * @return
-     */
+
     public List<Person> getPersons()
     {
         return persons;

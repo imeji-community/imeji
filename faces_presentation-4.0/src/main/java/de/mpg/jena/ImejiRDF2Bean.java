@@ -1,14 +1,14 @@
 package de.mpg.jena;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import thewebsemantic.RDF2Bean;
 
-import com.hp.hpl.jena.Jena;
-import com.hp.hpl.jena.JenaRuntime;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.jena.readers.ImejiJenaReaders;
@@ -16,6 +16,7 @@ import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Image;
+import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.User;
 
 public class ImejiRDF2Bean 
@@ -36,7 +37,6 @@ public class ImejiRDF2Bean
 			Security security = new Security();
 			
 			Object o = rdf2Bean.load(uri);
-						
 			if (!security.check(OperationsType.READ, user, o)) 
 			{
 				if (o instanceof Image) 
@@ -55,6 +55,12 @@ public class ImejiRDF2Bean
 					}
 				}
 			}
+			
+			if (o instanceof Image) 
+			{
+				sortMetadataAccordingToPosition((Image)o);
+			}
+			
 			return ObjectHelper.castAllHashSetToList(o);
 		} 
 		catch (thewebsemantic.NotFoundException e) 
@@ -95,12 +101,23 @@ public class ImejiRDF2Bean
 		return  rdf2Bean.loadDeep(c);
 	}
 	
-	public void removePrivateImages(Image im, User user)
+	private void removePrivateImages(Image im, User user)
 	{
 		im.setThumbnailImageUrl(URI.create("private"));
 		im.setWebImageUrl(URI.create("private"));
 		im.setFullImageUrl(URI.create("private"));
 		logger.error("User " + user.getEmail() +  " is not allowed to see image " + im.getId());
 	}
+	
+	private  void sortMetadataAccordingToPosition(Image im)
+    {
+    	List<ImageMetadata> mdSorted = new ArrayList<ImageMetadata>();
+    	for (ImageMetadata md : im.getMetadataSet().getMetadata())
+		{
+    		if (md.getPos() < mdSorted.size()) mdSorted.add(md.getPos(), md);
+    		else  mdSorted.add(md);
+		}
+    	im.getMetadataSet().setMetadata(mdSorted);
+    }
 	
 }

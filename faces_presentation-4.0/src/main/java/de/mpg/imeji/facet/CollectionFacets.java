@@ -54,7 +54,6 @@ public class CollectionFacets
 			{
 				SearchCriterion sc = new SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_NAMESPACE, st.getName().toString(), Filtertype.URI);
 				count =  getCount(new ArrayList<SearchCriterion>(scList), sc);
-				System.out.println("saasas");
 				if (count > 0 || true) 
 				{
 					group.add(new Facet(uriFactory.createFacetURI(baseURI, sc, getName(st.getName()), FacetType.COLLECTION), getName(st.getName()), count, FacetType.COLLECTION, st.getName() ));

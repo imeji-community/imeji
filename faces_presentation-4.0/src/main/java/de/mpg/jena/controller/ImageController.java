@@ -104,12 +104,26 @@ public class ImageController extends ImejiController
     	cleanGraph(ImejiJena.imageModel);
     }
     
+    /**
+     * User ObjectLoader to load image
+	 *
+     * @param imgUri
+     * @return
+     * @throws Exception
+     */
     public Image retrieve(URI imgUri) throws Exception
     {
     	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel); 
     	return (Image)imejiRDF2Bean.load(imgUri.toString(), user);
     }
 
+    /**
+     * User ObjectLoader instead
+     * @deprecated
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public Image retrieve(String id) throws Exception
     {
     	imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);

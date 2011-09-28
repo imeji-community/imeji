@@ -8,11 +8,14 @@ import javax.faces.event.ValueChangeEvent;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
+import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
-import de.mpg.jena.vo.Statement;
+import de.mpg.jena.util.ObjectHelper;
+import de.mpg.jena.vo.CollectionImeji;
 
 public class EditMdProfileBean extends MdProfileBean
 {
@@ -21,7 +24,8 @@ public class EditMdProfileBean extends MdProfileBean
     private ProfileController profileController;
     private boolean init = false;
     private String colId = null;
-
+    private CollectionImeji collection = null;
+    
     public EditMdProfileBean()
     {
         super();
@@ -45,8 +49,13 @@ public class EditMdProfileBean extends MdProfileBean
                 {
                     try
                     {
-                        this.setProfile(profileController.retrieve(this.getId()));
-                        collectionSession.setProfile(this.getProfile());
+                    	((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).setId(getColId());
+                    	((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
+                    	setProfile(((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getProfile());
+//                        this.setProfile(profileController.retrieve(this.getId()));
+//                        collectionSession.setProfile(this.getProfile());
+//                        collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, colId), session.getUser());
+                        
                     }
                     catch (Exception e)
                     {

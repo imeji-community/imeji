@@ -49,7 +49,7 @@ public class MdProfileBean
     {
     	collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-       
+      
         if (collectionSession.getProfile() == null)
         {
         	 collectionSession.setProfile(new MetadataProfile());

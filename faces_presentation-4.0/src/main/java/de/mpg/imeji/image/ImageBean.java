@@ -17,7 +17,9 @@ import de.mpg.imeji.metadata.SingleEditBean;
 import de.mpg.imeji.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.imeji.util.ProfileHelper;
+import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
@@ -67,6 +69,8 @@ public class ImageBean
             setSelected(true);
         }
         loadProfile();
+        removeDeadMetadata();
+        sortMetadataAccordingtoProfile();
     }
 
     public ImageBean() throws Exception
@@ -80,7 +84,7 @@ public class ImageBean
     
     public String getInitPopup() throws Exception
     {
-    	loadProfile();
+    	//loadProfile();
     	labels.init(profile);
     	return "";
     } 
@@ -90,6 +94,7 @@ public class ImageBean
     	loadImage();
     	loadCollection();
         loadProfile();
+        removeDeadMetadata();
         sortMetadataAccordingtoProfile();
         initBrowsing();
         
@@ -110,7 +115,7 @@ public class ImageBean
     	browse = new SingleImageBrowse((ImagesBean) BeanHelper.getSessionBean(ImagesBean.class), image);
     }
     
-    public void sortMetadataAccordingtoProfile()
+    private void sortMetadataAccordingtoProfile()
     {
     	Collection<ImageMetadata> mdSorted = new ArrayList<ImageMetadata>();
     	for (Statement st : profile.getStatements())
@@ -171,6 +176,45 @@ public class ImageBean
 		}
     }
     
+    
+    /**
+     * If a metadata is deleted in profile, or the type is changed, the metadata should be removed in image
+     * @throws Exception 
+     */
+    public void removeDeadMetadata() throws Exception
+    {
+    	boolean update = false;
+    	Collection<ImageMetadata> mds = new ArrayList<ImageMetadata>();
+    	for (ImageMetadata md : image.getMetadataSet().getMetadata())
+    	{
+    		boolean isStatement = false;
+    		
+    		for (Statement st : profile.getStatements())
+    		{
+    			if (st.getName().equals(md.getNamespace()))
+    			{
+    				isStatement = true;
+    				if(!st.getType().equals(md.getType().getURI())) isStatement = false;
+    			}
+    		}
+    		if (isStatement) mds.add(md);
+    		else update = true;
+    	}
+    	
+    	if (update)
+    	{
+    		imageController = new ImageController(sessionBean.getUser());
+    		image.getMetadataSet().setMetadata(mds);
+    		List<Image> l = new ArrayList<Image>();
+    		l.add(image);
+    		imageController.update(l);
+    		
+    	}
+    }
+    
+    /**
+     * Remove empty metadata
+     */
     private void cleanImageMetadata()
 	{
 		for (int i=0; i < image.getMetadataSet().getMetadata().size(); i++)

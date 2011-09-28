@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
+import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.escidoc.ItemVO;
 import de.mpg.imeji.upload.deposit.DepositController;
 import de.mpg.imeji.util.BeanHelper;
@@ -28,7 +29,6 @@ public class UploadBean
 {
     private CollectionImeji collection;
     private SessionBean sessionBean;
-    private CollectionController collectionController;
     private String id;
     private String escidocContext;
     private String escidocUserHandle;
@@ -44,9 +44,9 @@ public class UploadBean
     private List<String> sFiles;
     private List<String> fFiles;
     
-    public UploadBean(){
+    public UploadBean()
+    {
     	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        collectionController = new CollectionController(sessionBean.getUser());
         
         try 
         {
@@ -85,7 +85,8 @@ public class UploadBean
     	}
 	}
     
-	public void upload() throws IOException{
+	public void upload() throws IOException
+	{
     	HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
     	title = req.getParameter("name");
         ServletInputStream inputStream = req.getInputStream();
@@ -96,7 +97,8 @@ public class UploadBean
      
         // TODO remove static image description
         description = "";
-        try{
+        try
+        {
             UserController uc = new UserController(null);
             User user = uc.retrieve(getUser().getEmail());
             try{
@@ -168,7 +170,10 @@ public class UploadBean
 	{
         if (id != null)
         {
-        	collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class,id), sessionBean.getUser());
+        	((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).setId(id);
+        	((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
+        	//collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class,id), sessionBean.getUser());
+        	collection = ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getCollection();
         }
         else
         {

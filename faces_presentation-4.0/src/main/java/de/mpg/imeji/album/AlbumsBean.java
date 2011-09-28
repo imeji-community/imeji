@@ -103,6 +103,12 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
 	
 	public String deleteAll() 
 	{
+		if (sb.getSelectedAlbums().size() == 0) 
+		{
+			BeanHelper.warn(sb.getMessage("error_delete_no_albums_selected"));
+			return "pretty:albums";
+		}
+		
 		for (AlbumBean b : getCurrentPartList())
 		{
 			if (b.getSelected())

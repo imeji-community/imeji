@@ -41,7 +41,7 @@
 		<a4j:repeat var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
 			<h:panelGroup rendered="#{index + 6 &gt; HistorySession.historySize}" styleClass="historyText">
 				<h:outputLink value="#{page.uri}#{index}">
-					<h:outputText value="#{page.name}"/>
+					<h:outputText value="#{page.internationalizedName}"/>
 				</h:outputLink>
 				<span />
 				<h:outputText value="/"/>

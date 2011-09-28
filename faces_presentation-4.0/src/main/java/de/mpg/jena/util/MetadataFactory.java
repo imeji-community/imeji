@@ -134,6 +134,7 @@ public class MetadataFactory
 		md.setSearchValue(searchValue.replaceAll("null", "").trim());
 		md.setType(metadata.getType());
 		md.setNamespace(metadata.getNamespace());
+		md.setPos(metadata.getPos());
 		
 		return md;
 		

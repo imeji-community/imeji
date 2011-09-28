@@ -8,6 +8,7 @@ import de.mpg.imeji.history.Page.ImejiPages;
 public class HistorySession 
 {
 	private List<Page> pages = new ArrayList<Page>();
+	private static int HISTORY_SIZE = 10;
 	
 	public HistorySession() {
 		// TODO Auto-generated constructor stub
@@ -21,6 +22,7 @@ public class HistorySession
 		{
 			if (type.getFileName().equals(filename))
 			{
+				System.out.println();
 				try
 				{
 					if (ImejiPages.IMAGES.equals(type) && query != null && !"".equals(query))
@@ -44,17 +46,22 @@ public class HistorySession
 		{
 			if (id!= null)
 			{
-				if (id.length == 2) newPage.setName(newPage.getName() + " id " + id[1]);
-				if (id.length == 1) newPage.setName(newPage.getName() + " id " + id[0]);
+				if (id.length == 2) newPage.setId(id[1]);// newPage.setName(newPage.getName() + " id " + id[1]);
+				if (id.length == 1) newPage.setId(id[0]);// newPage.setName(newPage.getName() + " id " + id[0]);
 			}
 			
-			if (pages.isEmpty() || !pages.get(pages.size() - 1).getName().equals(newPage.getName()))
-			{					
+//			if (pages.isEmpty() || !pages.get(pages.size() - 1).getName().equals(newPage.getName()))
+//			{					
+//				pages.add(newPage);
+//			}
+			
+			if (!newPage.equals(getCurrentPage()))
+			{
 				pages.add(newPage);
 			}
 		}
 
-		while (pages.size() > 10) pages.remove(0);
+		while (pages.size() > HISTORY_SIZE) pages.remove(0);
 	}
 	
 	public void remove(int pos)

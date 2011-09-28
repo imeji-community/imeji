@@ -3,17 +3,13 @@ package de.mpg.imeji.user;
 
 import java.net.URI;
 
-import thewebsemantic.NotFoundException;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.GrantController;
-import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Authorization;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
-import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Container;
 import de.mpg.jena.vo.Grant;
@@ -31,12 +27,17 @@ public class SharingManager
 			try
 			{
 				User target = ObjectLoader.loadUser(email, owner);
+				
+				if (target == null) return false;
+				else if (owner.getEmail().equals(email))
+				{
+					BeanHelper.error("Forbidden action!");
+					return false;
+				}
+
 				GrantController gc = new GrantController(owner);
-				
-				//for (Grant  g : target.getGrants()) System.out.println(g.getGrantType() + " - " + g.getGrantFor());
-				
+								
 				URI uri = null;
-				
 				
 				if (o instanceof Container)
 				{
@@ -46,7 +47,7 @@ public class SharingManager
 				{
 					 uri = ((MetadataProfile) o).getId();
 				}
-
+				
 				Grant ng = new Grant(role,uri);
 				
 				if (replaceGrant) target = gc.updateGrant(target, ng);
@@ -74,26 +75,8 @@ public class SharingManager
 						gc.removeGrant(target, ng);
 						throw e;
 					}
-				}
-				else if (o instanceof MetadataProfile && false)
-				{	
-					try 
-					{
-						URI uriCol = ObjectHelper.getURI(CollectionImeji.class, ((SharingBean)BeanHelper.getSessionBean(SharingBean.class)).getColId());
-						gc.updateGrant(target, new Grant(GrantType.PRIVILEGED_VIEWER, uriCol));
-					} 
-					catch (Exception e) 
-					{
-						gc.removeGrant(target, ng);
-						throw e;
-					}
-				}
-				
+				}				
 				return true;
-			}
-			catch (NotFoundException e)
-			{
-				BeanHelper.error(email  + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("error_share_email_not_imeji_account"));
 			}
 			catch (Exception e) 
 			{

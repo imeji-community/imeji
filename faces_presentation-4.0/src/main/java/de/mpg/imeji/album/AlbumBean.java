@@ -20,6 +20,7 @@ import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Operations.OperationsType;
+import de.mpg.jena.security.Authorization;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
@@ -62,6 +63,7 @@ public class AlbumBean implements Serializable
         	if (id != null)
         	{
         		setAlbum(ObjectLoader.loadAlbum(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
+        		
         		if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
                 {
                     active = true;
@@ -82,6 +84,7 @@ public class AlbumBean implements Serializable
             {
             	 setAlbum(ac.retrieve(id));
             	 save=false;
+            	 
                  if(sessionBean.getActiveAlbum()!=null && sessionBean.getActiveAlbum().equals(album.getId()))
                  {
                      active = true;
@@ -436,6 +439,12 @@ public class AlbumBean implements Serializable
 		{
 			Security security = new Security();
 			return security.check(OperationsType.DELETE, sessionBean.getUser(), album);
+		}
+		
+		public boolean isAdmin()
+		{
+			Authorization auth = new Authorization();
+			return auth.isContainerAdmin(sessionBean.getUser(), album);
 		}
 
 }

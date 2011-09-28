@@ -42,16 +42,16 @@
 			<ui:define name="contentMenu">
 			
 				<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumBean.album.id.path}" rendered="true">
-					<h:outputText value="Album startpage"/>
+					<h:outputText value="#{lbl.album_home}"/>
 				</h:outputLink>
 				
 				<h:outputText styleClass="seperator void" />
 				
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{AlbumBean.album.id.path}?q=" rendered="true">
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{AlbumBean.album.id.path}?q=" rendered="#{AlbumBean.size > 0}">
 					<h:outputText value="#{lbl.view_images}"/>
 				</h:outputLink>
 				
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="seperator void" rendered="#{AlbumBean.size > 0}"/>
 				
 				<h:outputText value="Album metadata" styleClass="free_area0"/>
 				

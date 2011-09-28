@@ -185,9 +185,9 @@ public class EditImageMetadataBean
 	
 	public String addToAll()
 	{
+		ImageMetadata newMD = MetadataFactory.newMetadata(metadata);
 		for (Image im : editor.getImages())
 		{
-			ImageMetadata newMD = MetadataFactory.newMetadata(metadata);
 			if ("overwrite".equals(selectedMode)) 
 			{
 				im = removeAllMetadata(im);
@@ -202,6 +202,7 @@ public class EditImageMetadataBean
 				addMetadataIfNotExists(im, newMD);
 			}
 		}
+		metadata = MetadataFactory.newMetadata(getSelectedStatement());
 		return "";
 	}
 	
@@ -235,6 +236,12 @@ public class EditImageMetadataBean
 			im = removeAllMetadata(im);
 		}
 		metadata = MetadataFactory.newMetadata(statement);
+		return "";
+	}
+	
+	public String resetChanges()
+	{
+		getInit();
 		return "";
 	}
 	
@@ -332,6 +339,7 @@ public class EditImageMetadataBean
 	{
 		if (event != null && event.getNewValue() != event.getOldValue())
 		{
+			resetChanges();
 			selectedStatementName = (String) event.getNewValue();
 			statement = getSelectedStatement();
 			metadata = MetadataFactory.newMetadata(statement);

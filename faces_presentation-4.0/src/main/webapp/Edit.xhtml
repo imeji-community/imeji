@@ -59,6 +59,7 @@
 									<ui:param name="type" value="0"/>
 									<ui:param name="hideLabel" value="true"/>
 								</ui:include>
+								
 								<a4j:commandButton reRender="ajaxContent" styleClass="xLarge_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}"  action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}"/>
 								
 								<h:panelGroup id="modeRadioMenu" styleClass="full_area0 ">
@@ -88,7 +89,10 @@
 							
 							<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
 								<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
-								<h:outputLink value="" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
+								
+								<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}"/>
+								
+								<h:outputLink value="" rendered="false" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
 									<h:outputText value="#{lbl.reset_changes}" />
 								</h:outputLink>
 								<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">

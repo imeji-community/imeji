@@ -83,7 +83,7 @@ public class ObjectLoader
 		} 
 		catch (thewebsemantic.NotFoundException e) 
 		{
-			writeErrorNotFound("user", URI.create(user.getEmail()));
+			writeErrorNotFound("user", URI.create(email));
 		}
 	    catch (Exception e) 
 	    {
@@ -114,7 +114,7 @@ public class ObjectLoader
 		
 	private static void writeErrorNotFound(String objectType, URI id)
 	{
-		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel(objectType) + " " + id 
+		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel(objectType) + " " + id + " "
 				+ ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("not_found"));
 	}
 	

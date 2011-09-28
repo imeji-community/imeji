@@ -2,6 +2,7 @@ package de.mpg.jena.security.operations;
 
 import de.mpg.jena.security.Authorization;
 import de.mpg.jena.security.Operations;
+import de.mpg.jena.vo.Container;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Properties.Status;
 import de.mpg.jena.vo.User;
@@ -25,10 +26,11 @@ public class OperationsProfile implements Operations
 	}
 
 	public boolean update(User user, Object object) {
-		return (user != null && 
-				(	auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile) object).getId())
-					|| auth.is(GrantType.PROFILE_EDITOR, user, ((MetadataProfile) object).getId()))
-				);
+		return (user != null
+				&& !Status.WITHDRAWN.equals(((MetadataProfile)object).getProperties().getStatus())
+				&& 	(	auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile) object).getId())
+						|| auth.is(GrantType.PROFILE_EDITOR, user, ((MetadataProfile) object).getId()))
+					);
 	}
 
 	public boolean delete(User user, Object object) {

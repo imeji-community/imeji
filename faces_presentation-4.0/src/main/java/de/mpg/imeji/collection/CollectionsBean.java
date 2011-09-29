@@ -74,13 +74,28 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         
         if (!"".equals(query))
         {
-        	scList.add(new SearchCriterion(ImejiNamespaces.CONTAINER_METADATA_TITLE, getQuery()));
-	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_DESCRIPTION, getQuery(), Filtertype.REGEX));
-	        //scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_FAMILY_NAME, getQuery(), Filtertype.REGEX));
-	        //scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_GIVEN_NAME, getQuery(), Filtertype.REGEX));
-	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_COMPLETE_NAME, getQuery(), Filtertype.REGEX));
-	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, getQuery(), Filtertype.REGEX));
-	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.COLLECTION_PROFILE, getQuery(), Filtertype.URI));
+        	if (query.startsWith("\"") && query.endsWith("\""))
+        	{
+        		scList.add(new SearchCriterion(ImejiNamespaces.CONTAINER_METADATA_TITLE, query));
+    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_DESCRIPTION, query, Filtertype.REGEX));
+    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_FAMILY_NAME, query, Filtertype.REGEX));
+    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_GIVEN_NAME, query, Filtertype.REGEX));
+    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_COMPLETE_NAME, query, Filtertype.REGEX));
+    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, query, Filtertype.REGEX));
+    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.COLLECTION_PROFILE, query, Filtertype.URI));
+        	}
+        	else
+        	{
+        		for (String s : query.split("\\s"))
+        		{
+	        		scList.add(new SearchCriterion(ImejiNamespaces.CONTAINER_METADATA_TITLE, s));
+	    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_DESCRIPTION, s, Filtertype.REGEX));
+	    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_FAMILY_NAME, s, Filtertype.REGEX));
+	    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_GIVEN_NAME, s, Filtertype.REGEX));
+	    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, s, Filtertype.REGEX));
+	    	        scList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.COLLECTION_PROFILE, s, Filtertype.URI));
+        		}
+        	}
         }
         
         SortCriterion sortCriterion = new SortCriterion();

@@ -206,7 +206,8 @@
 			</h:panelGroup>	
 		</div>
 
-
+		
+	
 	</ui:define>
 	<ui:define name="list">
 		
@@ -216,44 +217,7 @@
 		
 		<ui:include src="../confirmationPages/SelectedDeleteWithdraw.xhtml">
 			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-		</ui:include>
-		
-		 <rich:modalPanel id="panelConfirmDeleteAllNcih" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
-	        <h3>
-	        	<a4j:status forceId="true" id="allDelStatus" startText="#{msg.delete_wait}......." stopText="#{lbl.delete_images}?" rendered="#{paginatorListSessionBean.deletable}"/>
-	        	<a4j:status forceId="true" id="allWithStatus" startText="#{msg.withdraw_wait}......" stopText="#{lbl.withdraw_images}?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
-	        </h3>
-	        <h:panelGroup layout="block" styleClass="quad_area0_p1">
-				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
-					<div class="large_txtBtn">
-	       				<a href="#" class="large_txtBtn dialogCancelButton" onclick="#{rich:component('panelConfirmDeleteAll')}.hide()">Cancel</a>
-	       			</div>
-					<div class="xLarge_txtBtn tiny_marginLExcl">
-						<a4j:commandButton status="allDelStatus" action="#{paginatorListSessionBean.deleteAll}" rendered="#{paginatorListSessionBean.deletable}" value="Delete all images" id="lnkSelectDeleteSel"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
-						<a4j:commandButton status="allWithStatus" action="#{paginatorListSessionBean.withdrawAll}" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}" value="Withdraw all images" id="lnkSelectWithdrawSel"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>    
-				 	</div>
-				</div>
-			</h:panelGroup>
-		</rich:modalPanel>
-	    
-	     <rich:modalPanel id="panelConfirmDeleteSelectedauchnciht" width="390" height="110" style="background-color:#434343" domElementAttachment="form">
-	        <h3>
-	        	<a4j:status forceId="true" id="selDelStatus" startText="Deleting, please wait......" stopText="Delete images?" rendered="#{paginatorListSessionBean.deletable}"/>
-	        	<a4j:status forceId="true" id="selWithStatus" startText="Withdrawing, please wait......" stopText="Withdraw images?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
-	        </h3>
-	        <h:panelGroup layout="block" styleClass="quad_area0_p1">
-				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
-					<div class="large_txtBtn">
-						 <a href="#" class="large_txtBtn dialogCancelButton" onclick="#{rich:component('panelConfirmDeleteSelected')}.hide()">Cancel</a>
-					</div>
-					<div class="xLarge_txtBtn tiny_marginLExcl">
-						<a4j:commandButton status="selDelStatus" action="#{SelectedBean.deleteAll}" rendered="#{paginatorListSessionBean.deletable}" value="#{lbl.delete_selectedImages}" id="lnkSelectDeleteAll" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
-						<a4j:commandButton status="selWithStatus" action="#{SelectedBean.withdrawAll}" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}" value="Withdraw selected images" id="lnkSelectWithdrawAll"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>	
-					</div>
-				</div>
-			</h:panelGroup>
-	    </rich:modalPanel>
-	   
+		</ui:include>	   
 		
 		<h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{paginatorListSessionBean.corruptedList}">
 			<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2>
@@ -288,9 +252,10 @@
 			<div class="small_area0">&#160;</div>
 			
 			<div class="clear"></div>
-			
+			<a4j:outputPanel id="ajaxList">
 			<ul class="free_area0 fullBrowse small_marginLIncl noTopBorder">
 				<!-- Images -->
+			
 				<h:outputText value="#{msg.no_images_found}!" rendered="#{paginatorListSessionBean.totalNumberOfElements  == 0}" styleClass="free_area0 "/>
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 					<li class="large_area0 itemTile">
@@ -331,8 +296,9 @@
 					</li>
 				</a4j:repeat>
 				<!-- End images -->
-				
+			
 			</ul>
+			</a4j:outputPanel>
 			<h:panelGroup styleClass="fullItem"	rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
 				<ui:insert name="subImagesContent"/>
 			</h:panelGroup>
@@ -400,7 +366,6 @@
 			jQuery('.shiftCheckbox').shiftcheckbox();
 		});
 	</script>
-	
 	</ui:define>
 	
 	

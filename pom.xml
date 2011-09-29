@@ -488,8 +488,8 @@
 				<!-- Confirmation URL -->
 				<escidoc.faces.confirmation.url />
 				
-				<!-- FACES Collection id -->
-				<escidoc.faces.collection.id>escidoc:219719</escidoc.faces.collection.id>
+				<!-- pagination ajax -->
+				<imeji.pagination.ajaxmodus>true</imeji.pagination.ajaxmodus>
 				
 				<!-- License url  -->
 				<!--  <escidoc.faces.picture.license.url>http://creativecommons.org/licenses/by-nc-nd/3.0/de/</escidoc.faces.picture.license.url>-->

@@ -59,7 +59,7 @@
 				
 				<h:outputText styleClass="seperator void" />
 
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable}">
+				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
 			</ui:define>
@@ -76,7 +76,7 @@
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.collection_basics}"/>
-								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable}">
+								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.edit}"/>
 								</h:outputLink>
 							</h3>
@@ -157,7 +157,7 @@
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.collection_profile}"/>
-								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.applicationUri}/edit#{ViewCollectionBean.collection.profile.path}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.profileEditor}">
+								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.applicationUri}/edit#{ViewCollectionBean.collection.profile.path}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.profileEditor and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.edit}"></h:outputText>
 								</h:outputLink>
 							</h3>

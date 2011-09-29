@@ -102,45 +102,32 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     {
     	ImageController controller = new ImageController(sb.getUser());    	
 
-//    	CollectionController cc = new CollectionController(sb.getUser());
-//    	
-//    	CollectionImeji c = cc.retrieve("1718");
-//    	
-//    	for (URI i : c.getImages())
-//    	{
-//    		Image im = controller.retrieve(i);
-//    		im.getProperties().setStatus(Status.PENDING);
-//    		controller.delete(im, sb.getUser());
-//    	}
-//    	c.getImages().clear();
-//    	cc.update(c);
-    	
-        if (true || reloadPage())
+        images = new ArrayList<Image>();
+        if (facets != null)
         {
-	        images = new ArrayList<Image>();
-	        if (facets != null)
-	        {
-	        	facets.getFacets().clear(); 
-	        }
-	        SortCriterion sortCriterion = new SortCriterion();
-	        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
-	        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-	       
-	        initBackPage();
-	        try
-	        {
-	            scList = URLQueryTransformer.transform2SCList(query);
-	        }
-	        catch (Exception e)
-	        {
-	        	BeanHelper.error(sb.getMessage("error_search_query"));
-	        }
-			searchResult = controller.searchImages(scList, sortCriterion, limit, offset);
-			totalNumberOfRecords = searchResult.getNumberOfRecords();
-			searchResult.setQuery(query);
-			searchResult.setSort(sortCriterion);
-    	}
+        	facets.getFacets().clear(); 
+        }
+        SortCriterion sortCriterion = new SortCriterion();
+        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+       
+        initBackPage();
+        try
+        {
+            scList = URLQueryTransformer.transform2SCList(query);
+        }
+        catch (Exception e)
+        {
+        	BeanHelper.error(sb.getMessage("error_search_query"));
+        }
+        
+		searchResult = controller.searchImages(scList, sortCriterion, limit, offset);
+		totalNumberOfRecords = searchResult.getNumberOfRecords();
+		searchResult.setQuery(query);
+		searchResult.setSort(sortCriterion);
+
         images = controller.loadImages(searchResult.getResults(), limit, offset);
+        
         return ImejiFactory.imageListToBeanList(images);
     }
     

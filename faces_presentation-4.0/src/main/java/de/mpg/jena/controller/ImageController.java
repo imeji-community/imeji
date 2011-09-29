@@ -22,6 +22,7 @@ import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
+import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.Image.Visibility;
 import de.mpg.jena.vo.ImageMetadata;
@@ -224,7 +225,11 @@ public class ImageController extends ImejiController
 
     	for (Grant g :user.getGrants()) 
     	{
-			if (containerUri != null && containerUri.toString().contains("collection") && containerUri.toString().equals(g.getGrantFor().toString()))
+    		if (GrantType.SYSADMIN.equals(g.getGrantType()))
+			{
+				simplifiedUser.getGrants().add(g);
+			}
+    		else if (containerUri != null && containerUri.toString().contains("collection") && containerUri.toString().equals(g.getGrantFor().toString()))
 			{
 				simplifiedUser.getGrants().add(g);
 			}

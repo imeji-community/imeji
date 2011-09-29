@@ -106,7 +106,7 @@
 	
 			
 			<ui:define name="list">
-				
+	<a4j:outputPanel id="ajaxList">	
 	<table class="full_area0 itemList loggedIn" rules="none" style="border-collapse: collapse;">
 		<thead class="listHeader" style="text-align: left; vertical-align:top;">
 		    <tr class="full_area0">
@@ -205,7 +205,7 @@
 			</tr>
 		</thead>
 		<tbody style="text-align: left; vertical-align:top;">
-			
+		
 			<a4j:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0">
 				<h:panelGroup>
 				   
@@ -283,8 +283,11 @@
 				    </tr>
 				</h:panelGroup>
 			</a4j:repeat>
+			
 		</tbody>
+		
 	</table>
+	</a4j:outputPanel>
 	<div class="cleaning"></div>
 	
 	<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#">

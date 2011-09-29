@@ -18,6 +18,7 @@ import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.search.Search;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Security;
+import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
@@ -179,11 +180,13 @@ public class CollectionController extends ImejiController
 		    		logger.error("Withdraw image error: " + uri + " could not be found");
 				}
 		    }
-		    
+		    Security security = new Security();
+	    	System.out.println(security.check(OperationsType.UPDATE, user, ic));
 		    // Withdraw collection
 		    ic.getProperties().setStatus(Status.WITHDRAWN);
 			ic.getProperties().setVersionDate(new Date());
-	        update(ic);
+	    	System.out.println(security.check(OperationsType.UPDATE, user, ic));
+	        this.update(ic);
 	        
 	        // Withdraw profile
 	        ProfileController pc = new ProfileController(user);
@@ -281,7 +284,11 @@ public class CollectionController extends ImejiController
 
     	for (Grant g :user.getGrants()) 
     	{
-			if (g.getGrantFor().toString().contains("collection"))
+    		if (GrantType.SYSADMIN.equals(g.getGrantType()))
+    		{
+    			simplifiedUser.getGrants().add(g);
+    		}
+    		else if (g.getGrantFor().toString().contains("collection"))
 			{
 				simplifiedUser.getGrants().add(g);
 			}

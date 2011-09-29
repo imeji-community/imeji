@@ -59,7 +59,7 @@
 				
 				<h:outputText styleClass="seperator void" />
 				
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable}">
+				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
 			</ui:define>

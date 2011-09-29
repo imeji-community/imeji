@@ -125,7 +125,11 @@ public class ProfileController extends ImejiController
     	int i=0;
     	for(Grant g : user.getGrants())
     	{
-    		if (GrantType.PROFILE_EDITOR.equals(g.getGrantType())|| GrantType.PROFILE_ADMIN.equals(g.getGrantType()))
+    		if (GrantType.SYSADMIN.equals(g.getGrantType()))
+    		{
+    			q += " true ";
+    		}
+    		else if (GrantType.PROFILE_EDITOR.equals(g.getGrantType())|| GrantType.PROFILE_ADMIN.equals(g.getGrantType()))
     		{
     			if (i > 0) q+= " || ";
     			q += " ?s=<" + g.getGrantFor() +"> ";

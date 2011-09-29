@@ -35,6 +35,7 @@
 -->
 
 </ui:remove>	
+<a4j:outputPanel id="ajaxList">
 		<div class="full_area0 itemList loggedIn">
 			<div class="full_area0 listHeader">
 			
@@ -137,7 +138,7 @@
 						     <div class="full_area0 shortView">
 									<div class="free_area0_p2 small_marginLIncl endline listItemLine">
 										<span class="huge_area0_p8 endline labelLine">
-											<a class="collapse">
+											<a class="collapse" >
 												<span class="noDisplay"><h:outputText value="#{lbl.show}"/> </span><h:outputText value="#{lbl.less}"/><span class="noDisplay"> Details</span>
 											</a>
 											<a class="expand">
@@ -236,7 +237,11 @@
 						</ui:include>
 				</a4j:repeat>
 			</ol>
-
-		</div>
 		
+		</div>
+		<script type="text/javascript">
+			addItemListFunctions();
+		</script>
+	</a4j:outputPanel>
+	
 </html>								

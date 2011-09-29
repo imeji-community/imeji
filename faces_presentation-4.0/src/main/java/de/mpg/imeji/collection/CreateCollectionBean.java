@@ -2,8 +2,10 @@ package de.mpg.imeji.collection;
 
 import java.net.URI;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
@@ -51,7 +53,9 @@ public class CreateCollectionBean extends CollectionBean
             URI profile = profileController.create(mdp);
             collectionController.create(getCollection(), profile);
             BeanHelper.info(sessionBean.getMessage("success_collection_create"));
-            return "pretty:collections";
+            System.out.println("CREATE");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getApplicationUrl()+ "collections?q=");
+            return "";
         }
         else return "";
        

@@ -77,37 +77,37 @@ public class CollectionImagesBean extends ImagesBean
 	public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
 	{	
 		ImageController controller = new ImageController(sb.getUser());
-		if (true)
-		{
-			if (this.getFacets() != null)
-			{
-				this.getFacets().getFacets().clear();
-			}
 
-			SortCriterion sortCriterion = new SortCriterion();
-			sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
-			sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));		
-			
-			ProfileController pc = new ProfileController(sb.getUser());
-			((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(pc.retrieve(collection.getProfile()));
-			
-			initBackPage();
-			
-			try 
-			{
-				scList = URLQueryTransformer.transform2SCList(getQuery());
-			} 
-			catch (Exception e) 
-			{
-				BeanHelper.error(sb.getMessage("error_search_query"));
-			}		
-			uri = ObjectHelper.getURI(CollectionImeji.class, id);
-			setSearchResult(controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset));
-			totalNumberOfRecords = getSearchResult().getNumberOfRecords();
-			getSearchResult().setQuery(getQuery());
-			getSearchResult().setSort(sortCriterion);
+		if (this.getFacets() != null)
+		{
+			this.getFacets().getFacets().clear();
 		}
+
+		SortCriterion sortCriterion = new SortCriterion();
+		sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));		
+		
+		ProfileController pc = new ProfileController(sb.getUser());
+		((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(pc.retrieve(collection.getProfile()));
+		
+		initBackPage();
+		
+		try 
+		{
+			scList = URLQueryTransformer.transform2SCList(getQuery());
+		} 
+		catch (Exception e) 
+		{
+			BeanHelper.error(sb.getMessage("error_search_query"));
+		}
+		uri = ObjectHelper.getURI(CollectionImeji.class, id);
+		setSearchResult(controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset));
+		totalNumberOfRecords = getSearchResult().getNumberOfRecords();
+		getSearchResult().setQuery(getQuery());
+		getSearchResult().setSort(sortCriterion);
+		
 		super.setImages(controller.loadImages(getSearchResult().getResults(), limit, offset));
+	        
 		return ImejiFactory.imageListToBeanList(getImages());
 	}
 	

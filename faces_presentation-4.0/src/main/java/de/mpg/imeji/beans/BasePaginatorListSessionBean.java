@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.beans;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -39,11 +41,9 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import thewebsemantic.NotBoundException;
-import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.jena.controller.CollectionController;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.jena.controller.ImejiController;
-import de.mpg.jena.vo.Image;
 
 /**
  * This abstract bean class is used to manage lists with one or two paginators. It can work together with different
@@ -110,6 +110,8 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     private int totalNumberOfElements = 0;
     private boolean corruptedList = false;
+    
+    private boolean ajaxMode = true;
 
     /**
      * Initializes a new BasePaginatorListSessionBean
@@ -118,6 +120,14 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     {
         paginatorPageList = new ArrayList<PaginatorPage>();
         currentPartList = new ArrayList<ListElementType>();
+        try 
+        {
+			ajaxMode = Boolean.valueOf(PropertyReader.getProperty("imeji.pagination.ajaxmodus"));
+		} 
+        catch (Exception e) 
+        {
+			e.printStackTrace();
+		} 
     }
 
     // Must be called by PrettyFaces action method
@@ -133,6 +143,20 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         update();
         return "";
     }
+    
+    // Should not be call in AJAX area
+    public String getUrlParameters()
+    {
+		if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("page"))
+        {
+			currentPageNumber = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("page"));
+        }
+		if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("el"))
+		{
+         	elementsPerPage = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("el"));
+		}
+    	return "";
+    }
 
     /**
      * This method is called by the corresponding BaseListRetrieverRequestBean whenever the list has to be updated. It
@@ -147,10 +171,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             if (elementsPerPage == 0)
             {
                 setElementsPerPage(24);
-            }
-            if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("page"))
-            {
-            	currentPageNumber = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("page"));
             }
             if (currentPageNumber == 0)
             {
@@ -177,6 +197,8 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
                 paginatorPageList.add(new PaginatorPage(i + 1));
             }
             corruptedList = false;
+            
+           
         }
         catch (NotBoundException e)
         {
@@ -215,7 +237,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
                 throw new RuntimeException(e);
             }
         }
-        return getNavigationString();
+        return getPrettyNavigation();
     }
 
     public boolean isCorruptedList()
@@ -373,7 +395,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         setElementsPerPage(getElementsPerPageTop());
         // set new PageNumber to a number where the first element of the current Page is still displayed
         setCurrentPageNumber(((currentPageNumber - 1 * elementsPerPage + 1) / (elementsPerPage)) + 1);
-        return getNavigationString();
+        return getPrettyNavigation();
     }
 
     /**
@@ -387,7 +409,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         setElementsPerPage(getElementsPerPageBottom());
         // set new PageNumber to a number where the first element of the current Page is still displayed
         setCurrentPageNumber(((currentPageNumber - 1 * elementsPerPage + 1) / (elementsPerPage)) + 1);
-        return getNavigationString();
+        return getPrettyNavigation();
     }
 
     /**
@@ -415,7 +437,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         {
             // error(getMessage("paginator_errorGoToPage"));
         }
-        return getNavigationString();
+        return getPrettyNavigation();
     }
 
     /**
@@ -565,7 +587,8 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         public String goToPage()
         {
             setCurrentPageNumber(getNumber());
-            return getNavigationString();
+            return "";
+            //return getNavigationString();
         }
     }
 
@@ -577,7 +600,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     public String goToNextPage()
     {
         currentPageNumber += 1;
-        return getNavigationString();
+        return getPrettyNavigation();
     }
 
     /**
@@ -588,7 +611,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     public String goToPreviousPage()
     {
         currentPageNumber -= 1;
-        return getNavigationString();
+        return getPrettyNavigation();
     }
 
     /**
@@ -599,7 +622,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     public String goToFirstPage()
     {
         currentPageNumber = 1;
-        return getNavigationString();
+        return getPrettyNavigation();
     }
 
     /**
@@ -610,7 +633,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     public String goToLastPage()
     {
         currentPageNumber = getPaginatorPageSize();
-        return getNavigationString();
+        return getPrettyNavigation();
     }
 
     /**
@@ -714,4 +737,15 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     public abstract int getTotalNumberOfRecords();
 
     public abstract String getNavigationString();
+    
+    public String getPrettyNavigation()
+    {
+    	if (ajaxMode) return "";
+    	else return getNavigationString();
+    }
+    
+    public boolean isAjaxMode() 
+    {
+		return ajaxMode;
+	}
 }

@@ -49,7 +49,6 @@ public class OperationsContainer implements Operations
 	public boolean update(User user, Object object) 
 	{
 		return (user != null
-				&& !Status.WITHDRAWN.equals(((Container)object).getProperties().getStatus())
 				&& (auth.isContainerEditor(user,(Container) object)
 						|| auth.isContainerAdmin(user, (Container) object)));
 	}

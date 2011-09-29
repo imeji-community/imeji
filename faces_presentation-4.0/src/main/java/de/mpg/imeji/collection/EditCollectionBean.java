@@ -1,5 +1,7 @@
 package de.mpg.imeji.collection;
 
+import java.util.LinkedList;
+
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.beans.Navigation;
@@ -7,6 +9,8 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.CollectionController;
+import de.mpg.jena.vo.Organization;
+import de.mpg.jena.vo.Person;
 
 public class EditCollectionBean extends CollectionBean
 {
@@ -38,24 +42,24 @@ public class EditCollectionBean extends CollectionBean
             	setProfile(((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getProfile());
             	setCollection(((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getCollection());
             	
-//                CollectionImeji coll = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, id), sessionBean.getUser());
-//                if (coll != null)
-//                {
-//                    super.setCollection(coll);
-//                    LinkedList<Person> persons = new LinkedList<Person>();
-//                    for (Person p : super.getCollection().getMetadata().getPersons())
-//                    {
-//                        LinkedList<Organization> orgs = new LinkedList<Organization>();
-//                        for (Organization o : p.getOrganizations())
-//                        {
-//                            orgs.add(o);
-//                        }
-//                        p.setOrganizations(orgs);
-//                        persons.add(p);
-//                    }
-//                    super.getCollection().getMetadata().setPersons(persons);
-//                    collectionSession.setActive(super.getCollection());
-//                }
+               // CollectionImeji coll = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, id), sessionBean.getUser());
+               // if (coll != null)
+                //{
+                 //   super.setCollection(coll);
+                    LinkedList<Person> persons = new LinkedList<Person>();
+                    for (Person p : super.getCollection().getMetadata().getPersons())
+                    {
+                        LinkedList<Organization> orgs = new LinkedList<Organization>();
+                        for (Organization o : p.getOrganizations())
+                        {
+                            orgs.add(o);
+                        }
+                        p.setOrganizations(orgs);
+                        persons.add(p);
+                    }
+                    super.getCollection().getMetadata().setPersons(persons);
+                    collectionSession.setActive(super.getCollection());
+                //}
             }
             else
             {

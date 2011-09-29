@@ -241,6 +241,7 @@ public class AlbumBean implements Serializable
         public int getSize()
         {
         	ImageController ic = new ImageController(sessionBean.getUser());
+        	if (album == null) return 0;
         	return ic.countImagesInContainer(this.getAlbum().getId(), null);
         }
 

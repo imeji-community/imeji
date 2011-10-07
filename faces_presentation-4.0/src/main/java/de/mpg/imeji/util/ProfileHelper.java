@@ -33,14 +33,12 @@ public class ProfileHelper
 
     public static Map<URI, MetadataProfile> loadProfiles(List<Image> imgs) throws Exception
     {
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        ProfileController pc = new ProfileController(sb.getUser());
         Map<URI, MetadataProfile> pMap = new HashMap<URI, MetadataProfile>();
         for (Image im : imgs)
         {
             if (pMap.get(im.getMetadataSet().getProfile()) == null)
             {
-            	pMap.put(im.getMetadataSet().getProfile(), pc.retrieve(im.getMetadataSet().getProfile()));
+            	pMap.put(im.getMetadataSet().getProfile(), ObjectCachedLoader.loadProfile(im.getMetadataSet().getProfile()));
             }
         }
         return pMap;

@@ -145,7 +145,7 @@ public class ImejiBean2RDF
 	private void commitTransaction(Object bean, User user)
 	{
 		Locks.unLock(new Lock(extractID(bean).toString()));
-		//leanGraph();
+		cleanGraph();
 	}
 	
 	/**
@@ -154,7 +154,7 @@ public class ImejiBean2RDF
 	 */
 	private void beginModel()
 	{
-		//bean2rdf.getModel().enterCriticalSection(com.hp.hpl.jena.shared.Lock.WRITE);
+		bean2rdf.getModel().enterCriticalSection(com.hp.hpl.jena.shared.Lock.WRITE);
 		bean2rdf.getModel().begin();
 	}
 	
@@ -165,7 +165,7 @@ public class ImejiBean2RDF
 	private void commitModel()
 	{
 		bean2rdf.getModel().commit();
-		//bean2rdf.getModel().leaveCriticalSection();
+		bean2rdf.getModel().leaveCriticalSection();
 	}
 	
 	private void checkSecurity(Object bean, User user, OperationsType opType)

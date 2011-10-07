@@ -36,7 +36,6 @@ public class DataDoctor
 	public List<String> runDoctor(boolean proceed) throws Exception
     {
 		report = new ArrayList<String>();
-    	
 		runCollectionDoctor(proceed);
     	runGrantsDoctor(proceed);
     	runImagesDoctor(proceed);
@@ -58,11 +57,7 @@ public class DataDoctor
 		c.cleanGraph(ImejiJena.userModel);
 		
 	}
-	
-	public void eleminateNonStriclyIncreasing()
-	{
-		
-	}
+
     
     /**
      * Checks collections
@@ -120,7 +115,18 @@ public class DataDoctor
     			try
     			{
     				c = (CollectionImeji) ObjectHelper.castAllHashSetToList(c);
-    				ic.retrieve(((List<URI>)c.getImages()).get(i));
+    				Image im = ic.retrieve(((List<URI>)c.getImages()).get(i));
+    				if (c.getProperties().getStatus().equals(Status.WITHDRAWN) && !im.getProperties().getStatus().equals(Status.WITHDRAWN))
+    				{
+    					if (proceed)
+    					{
+    						ic.withdraw(im);
+    					}
+    					else
+    					{
+    						report.add("Non withdrawn image in collection: " + c.getId() + " ( image " + im.getId() + ") ");
+    					}
+    				}
     			}
     			catch (NotFoundException e) 
     			{

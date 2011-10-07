@@ -1,6 +1,7 @@
 package de.mpg.imeji.mdProfile;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -17,7 +18,7 @@ import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 
-public class EditMdProfileBean extends MdProfileBean
+public class EditMdProfileBean extends MdProfileBean implements Serializable
 {
     private SessionBean session;
     private CollectionSessionBean collectionSession;

@@ -141,7 +141,7 @@ public class Authorization
 		
 		for (Grant g : user.getGrants())
 		{
-			if(g.getGrantFor().equals(uri))
+			if(g.getGrantType().equals(GrantType.SYSADMIN) || g.getGrantFor().equals(uri))
 			{
 				grants.add(g);
 			}

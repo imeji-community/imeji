@@ -1,5 +1,6 @@
 package de.mpg.imeji.lang;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,7 @@ import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
-public class MetadataLabels
+public class MetadataLabels implements Serializable
 {
 	private String lang = "en";
 	

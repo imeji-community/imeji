@@ -10,16 +10,17 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import thewebsemantic.NotBoundException;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
+import de.mpg.jena.search.ImejiSPARQL;
 import de.mpg.jena.search.Search;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.security.Operations.OperationsType;
-import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;

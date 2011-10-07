@@ -1,5 +1,6 @@
 package de.mpg.imeji.collection;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import de.mpg.jena.vo.ComplexType;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.MetadataProfile;
 
-public class CollectionSessionBean
+public class CollectionSessionBean implements Serializable
 {
     // Collection active (image browsed are in that collection)
     private CollectionImeji active = null;

@@ -1,9 +1,10 @@
 package de.mpg.imeji.filter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FiltersSession 
+public class FiltersSession implements Serializable
 {
 	private List<Filter> filters = new ArrayList<Filter>();
 	private String wholeQuery = "";

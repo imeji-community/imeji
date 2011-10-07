@@ -1,5 +1,6 @@
 package de.mpg.imeji.mdProfile;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -7,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.faces.convert.BooleanConverter;
+import javax.faces.convert.Converter;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
@@ -18,6 +21,7 @@ import de.mpg.imeji.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.LocalizedStringHelper;
+import de.mpg.imeji.util.ObjectCachedLoader;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.security.Operations.OperationsType;
@@ -26,7 +30,7 @@ import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
-public class MdProfileBean
+public class MdProfileBean implements Serializable
 {
     private MetadataProfile profile = null;
    
@@ -55,6 +59,7 @@ public class MdProfileBean
         	 collectionSession.setProfile(new MetadataProfile());
         }
         profile = collectionSession.getProfile();
+        
         
         statements = new ArrayList<StatementWrapper>();
         pc = new ProfileController(sessionBean.getUser());
@@ -130,7 +135,7 @@ public class MdProfileBean
     
     public String changeTemplate() throws Exception
     {
-        MetadataProfile tp = pc.retrieve(URI.create(this.template));
+        MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
         profile.getStatements().clear();        
         profile.setStatements(tp.getStatements());
         
@@ -149,7 +154,7 @@ public class MdProfileBean
         if (event != null && event.getNewValue() != event.getOldValue())
         {
             this.template = event.getNewValue().toString();
-            MetadataProfile tp = pc.retrieve(URI.create(this.template));
+            MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
             profile.getStatements().clear();
             profile.setStatements(tp.getStatements());
             collectionSession.setProfile(profile);

@@ -1,12 +1,13 @@
 package de.mpg.imeji.facet;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
 
-public class Facet
+public class Facet implements Serializable
 {
     private URI uri;
     private String label;

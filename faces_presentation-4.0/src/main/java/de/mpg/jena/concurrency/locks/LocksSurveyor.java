@@ -15,6 +15,7 @@ public class LocksSurveyor extends Thread
 	public void run() 
 	{
 		logger.info("Lock Surveyor started.");
+		Locks.init();
 		while (!signal) 
 		{
 			try
@@ -35,13 +36,17 @@ public class LocksSurveyor extends Thread
 				}
 				Thread.sleep(10000);
 			}
+			catch (NegativeArraySizeException e) 
+			{
+				Locks.init();
+			}
 			catch (Exception e) 
 			{
 				logger.warn("Locks Surveyor encounterd a problem: " + e.getMessage() + " " + e.getCause());
 				e.printStackTrace();
 			}
 		}
-		logger.warn("Lock Surveyor stopped. It should not occurs if application still runnung!");
+		logger.warn("Lock Surveyor stopped. It should not occurs if application is still runnung!");
 	}
 	
 	

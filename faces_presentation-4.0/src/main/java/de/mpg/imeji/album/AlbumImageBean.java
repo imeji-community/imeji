@@ -1,11 +1,13 @@
 package de.mpg.imeji.album;
 
+import java.io.Serializable;
+
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.SingleImageBrowse;
 import de.mpg.imeji.util.BeanHelper;
 
-public class AlbumImageBean extends ImageBean
+public class AlbumImageBean extends ImageBean implements Serializable
 {
     private String albumId;
     private Navigation navigation;

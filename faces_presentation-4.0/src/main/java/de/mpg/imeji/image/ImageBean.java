@@ -1,11 +1,14 @@
 package de.mpg.imeji.image;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
+import org.apache.log4j.Logger;
 
 import thewebsemantic.NotFoundException;
 import de.mpg.imeji.album.AlbumBean;
@@ -18,11 +21,8 @@ import de.mpg.imeji.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ObjectLoader;
-import de.mpg.imeji.util.ProfileHelper;
-import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.controller.AlbumController;
-import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
@@ -31,24 +31,24 @@ import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
-import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.Properties.Status;
+import de.mpg.jena.vo.Statement;
 
-public class ImageBean
+public class ImageBean implements Serializable
 {
     public enum TabType
     {
         VIEW, EDIT, TECHMD;
     }
+    
+    private static Logger logger = Logger.getLogger(ImageBean.class);
 
     private String tab = null;
     private SessionBean sessionBean = null;
     private Image image;
     private String id = null;
     private boolean selected;
-    private ImageController imageController = null;
     private CollectionImeji collection;
-    private CollectionController collectionController;
     private List<String> techMd;
     private Navigation navigation;
     private MetadataProfile profile;
@@ -59,12 +59,12 @@ public class ImageBean
 
     public ImageBean(Image img) throws Exception
     {
-        this.image = img;
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        image = img;
+    	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         prettyLink = "pretty:editImage";
         labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
-        if (sessionBean.getSelected().contains(img.getId()))
+        if (sessionBean.getSelected().contains(image.getId()))
         {
             setSelected(true);
         }
@@ -84,7 +84,6 @@ public class ImageBean
     
     public String getInitPopup() throws Exception
     {
-    	//loadProfile();
     	labels.init(profile);
     	return "";
     } 
@@ -118,15 +117,18 @@ public class ImageBean
     private void sortMetadataAccordingtoProfile()
     {
     	Collection<ImageMetadata> mdSorted = new ArrayList<ImageMetadata>();
-    	for (Statement st : profile.getStatements())
-    	{
-    		for (ImageMetadata md : image.getMetadataSet().getMetadata())
-    		{
-    			if (st.getName().equals(md.getNamespace()))
-    			{
-    				mdSorted.add(md);
-    			}
-    		}
+    	if (profile != null)
+	    {
+    		for (Statement st : profile.getStatements())
+	    	{
+	    		for (ImageMetadata md : image.getMetadataSet().getMetadata())
+	    		{
+	    			if (st.getName().equals(md.getNamespace()))
+	    			{
+	    				mdSorted.add(md);
+	    			}
+	    		}
+	    	}
     	}
     	image.getMetadataSet().setMetadata(mdSorted);
     }
@@ -135,11 +137,11 @@ public class ImageBean
     {
     	try 
         {
-    		imageController = new ImageController(sessionBean.getUser());
-         	if (id != null)	image = imageController.retrieve(id);
+    		image = ObjectLoader.loadImage(ObjectHelper.getURI(Image.class, id), sessionBean.getUser());
  		} 
     	catch (NotFoundException e) 
     	{
+    		image = new Image();
     		BeanHelper.error(sessionBean.getLabel("image") + " " + id + sessionBean.getLabel("not_found"));
 		}
         catch (Exception e) 
@@ -152,8 +154,7 @@ public class ImageBean
     {
     	try 
     	{
-    		collectionController = new CollectionController(sessionBean.getUser());
-    		collection = collectionController.retrieve(this.getImage().getCollection());
+    		collection = ObjectLoader.loadCollection(getImage().getCollection(), sessionBean.getUser());
 		} 
     	catch (Exception e) 
     	{
@@ -166,13 +167,23 @@ public class ImageBean
     {
     	try 
     	{
-    		profile = ProfileHelper.loadProfile(image);
+    		profile = sessionBean.getProfileCached().get(image.getMetadataSet().getProfile());
+    		if (profile == null)
+    		{
+    			profile = ObjectLoader.loadProfile(image.getMetadataSet().getProfile(), sessionBean.getUser());
+    		}
+    		if (profile == null) 
+    		{
+    			profile = new MetadataProfile();
+    		}
 		} 
     	catch (Exception e) 
     	{
 			BeanHelper.error(sessionBean.getMessage("error_profile_load") + " " + image.getMetadataSet().getProfile() + "  " + sessionBean.getLabel("of") + " " + image.getId());
 			BeanHelper.error(e.getMessage());
-			profile = null;
+			profile = new MetadataProfile();
+			logger.error("Error load profile " + image.getMetadataSet().getProfile() + " of image " + image.getId(), e);
+			e.printStackTrace();
 		}
     }
     
@@ -185,31 +196,42 @@ public class ImageBean
     {
     	boolean update = false;
     	Collection<ImageMetadata> mds = new ArrayList<ImageMetadata>();
-    	for (ImageMetadata md : image.getMetadataSet().getMetadata())
+    	try
     	{
-    		boolean isStatement = false;
-    		
-    		for (Statement st : profile.getStatements())
-    		{
-    			if (st.getName().equals(md.getNamespace()))
-    			{
-    				isStatement = true;
-    				if(!st.getType().equals(md.getType().getURI())) isStatement = false;
-    			}
-    		}
-    		if (isStatement) mds.add(md);
-    		else update = true;
+    		for (ImageMetadata md : image.getMetadataSet().getMetadata())
+        	{
+        		boolean isStatement = false;
+        		
+        		for (Statement st : profile.getStatements())
+        		{
+        			if (st.getName().equals(md.getNamespace()))
+        			{
+        				isStatement = true;
+        				if(!st.getType().equals(md.getType().getURI()))
+        				{
+        					isStatement = false;
+        				}
+        			}
+        		}
+        		
+        		if (isStatement) mds.add(md);
+        		else update = true;
+        	}
+        	
+        	if (update)
+        	{
+        		ImageController imageController = new ImageController(sessionBean.getUser());
+        		image.getMetadataSet().setMetadata(mds);
+        		List<Image> l = new ArrayList<Image>();
+        		l.add(image);        		
+        		imageController.update(l);
+        	}
     	}
+    	catch (Exception e) 
+    	{
+			/* this user has not the priviliges to update the image */
+		}
     	
-    	if (update)
-    	{
-    		imageController = new ImageController(sessionBean.getUser());
-    		image.getMetadataSet().setMetadata(mds);
-    		List<Image> l = new ArrayList<Image>();
-    		l.add(image);
-    		imageController.update(l);
-    		
-    	}
     }
     
     /**
@@ -304,7 +326,7 @@ public class ImageBean
     public boolean getSelected()
     {
     	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (sessionBean.getSelected().contains(image.getId())) selected = true;
+        if (image != null && sessionBean.getSelected().contains(image.getId())) selected = true;
         else selected = false;
         return selected;
     }
@@ -456,7 +478,7 @@ public class ImageBean
 	public boolean isEditable() 
 	{
 		Security security = new Security();
-		return security.check(OperationsType.UPDATE, sessionBean.getUser(), image) && !image.getProperties().getStatus().equals(Status.WITHDRAWN);
+		return security.check(OperationsType.UPDATE, sessionBean.getUser(), image) && image != null &&  !image.getProperties().getStatus().equals(Status.WITHDRAWN);
 	}
 	
 	public boolean isVisible() 

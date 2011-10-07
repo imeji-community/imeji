@@ -69,7 +69,7 @@ public class Navigation implements Serializable
     public final Page IMAGES = new Page("Images", "images");
     private SessionBean sessionBean = null;
 
-    public class Page
+    public class Page implements Serializable
     {
         private String name;
         private String file;

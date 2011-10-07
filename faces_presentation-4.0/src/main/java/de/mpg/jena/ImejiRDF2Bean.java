@@ -7,9 +7,16 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import thewebsemantic.NotBoundException;
 import thewebsemantic.RDF2Bean;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Selector;
+import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.jena.readers.ImejiJenaReaders;
 import de.mpg.jena.security.Operations.OperationsType;
@@ -22,7 +29,6 @@ import de.mpg.jena.vo.User;
 public class ImejiRDF2Bean 
 {
 	private RDF2Bean rdf2Bean;
-	private Model model;
 	private static Logger logger = Logger.getLogger(ImejiRDF2Bean.class);
 	
 	public ImejiRDF2Bean(Model model) 
@@ -67,6 +73,13 @@ public class ImejiRDF2Bean
 		{
 			throw e;
 		}
+		catch (NotBoundException e) 
+		{
+			logger.warn(uri + " NOT BOUND! ");
+			//deleteObjects(uri);
+			//logger.warn("...DONE");
+		}
+		return null;
 	}
 
 	/**
@@ -106,7 +119,6 @@ public class ImejiRDF2Bean
 		im.setThumbnailImageUrl(URI.create("private"));
 		im.setWebImageUrl(URI.create("private"));
 		im.setFullImageUrl(URI.create("private"));
-		logger.error("User " + user.getEmail() +  " is not allowed to see image " + im.getId());
 	}
 	
 	private  void sortMetadataAccordingToPosition(Image im)
@@ -119,5 +131,67 @@ public class ImejiRDF2Bean
 		}
     	im.getMetadataSet().setMetadata(mdSorted);
     }
+	
+	private void deleteObjects(String uri)
+	    {
+	        Resource r = rdf2Bean.getModel().getResource(uri);
+	        StmtIterator it = r.listProperties(RDF.type);
+	        while (it.hasNext()) {
+				Resource r1 = it.nextStatement().getResource();
+	        }
+
+	        if (rdf2Bean.getModel().containsResource(r))
+	        {
+	            logger.info("Forced Delete of " + uri);
+	            try{
+		            Selector selector = new SimpleSelector(null, null, r);
+		            StmtIterator iter = rdf2Bean.getModel().listStatements(selector);
+		            while (iter.hasNext())
+		            {
+		                Statement mdToDelete = iter.nextStatement();
+		                Resource sub = mdToDelete.getSubject();
+		                Selector selector2 = new SimpleSelector(null, null, sub);
+		                StmtIterator iter2 = rdf2Bean.getModel().listStatements(selector2);
+		                while (iter2.hasNext())
+		                {
+		                    Statement imageWithMd = iter2.nextStatement();
+		                    Selector selector3 = new SimpleSelector(null, imageWithMd.getPredicate(), (Resource)null);
+		                    StmtIterator iter3 = rdf2Bean.getModel().listStatements(selector3);
+		                    while (iter3.hasNext())
+		                    {
+		                        Statement statementToDelete = iter3.nextStatement();
+		                        if (mdToDelete.getSubject().getId().equals(statementToDelete.getResource().getId()))
+		                        {
+		                            try
+		                            {
+		                            	rdf2Bean.getModel().remove(statementToDelete);
+		                            }
+		                            catch (Exception e) 
+		                            {	
+		                            	logger.warn("Error deleting object" + statementToDelete.getResource().getId());
+		                            }
+		                            iter3 = rdf2Bean.getModel().listStatements(selector3);
+		                        }
+		                    }
+		                }
+		                try
+		                {
+		                	rdf2Bean.getModel().remove(mdToDelete);
+		                }
+		                catch (Exception e) 
+		                {	
+		                	logger.warn("Error deleting object" + mdToDelete.getResource().getId());
+		                }
+		            }
+	            }
+	            catch (Exception e) {
+					logger.error("PROBLEM by Forced delete!" + e.getMessage());
+				}
+	        }
+	        else
+	        {
+	            logger.warn("Error forced Delete of " + uri + ". Resource was not found.");
+	        }
+	    }
 	
 }

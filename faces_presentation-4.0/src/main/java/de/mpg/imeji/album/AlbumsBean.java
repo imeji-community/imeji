@@ -1,5 +1,6 @@
 package de.mpg.imeji.album;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +21,7 @@ import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.Properties.Status;
 
-public class AlbumsBean extends SuperContainerBean<AlbumBean>
+public class AlbumsBean extends SuperContainerBean<AlbumBean> implements Serializable
 {
     private int totalNumberOfRecords;
     private SessionBean sb;

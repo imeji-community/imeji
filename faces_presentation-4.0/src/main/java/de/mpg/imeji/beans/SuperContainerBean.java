@@ -1,5 +1,6 @@
 package de.mpg.imeji.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.User;
 
-public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean<T>
+public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean<T> implements Serializable
 {
     protected String selectedMenu;
     

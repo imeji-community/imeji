@@ -48,6 +48,7 @@
 						</h:panelGroup>
 						
 						
+						
 						<a4j:repeat id="profile" var="statement" value="#{FormularBean.statements}" rowKeyVar="position">
 							<h:panelGroup layout="block" styleClass="free_area0 noTopBorder endline itemLine clear">
 								<b class="xLarge_area0_p8 endline labelLine clear">
@@ -61,8 +62,10 @@
 										<h:selectBooleanCheckbox value="#{statement.multiple}"  valueChangeListener="#{statement.multipleListener}"/>
 									</h:panelGroup>
 									<h:panelGroup styleClass="free_area0">
-										<h:outputLabel styleClass="free_area0" value="#{lbl.use_as_description}"/>
-										<h:selectBooleanCheckbox id="uniqueSelect" value="#{statement.description}" onclick="unSelectUnique(#{position});" valueChangeListener="#{statement.descriptionListener}"/>
+										<h:selectOneRadio styleClass="free_area0" id="radioDescription" readonly="true" value="#{statement.description}" converter="javax.faces.Boolean" onclick="unSelectUnique(#{position});">
+											<f:selectItem id="true" itemLabel="#{lbl.use_as_description}" itemValue="true"/>
+										</h:selectOneRadio>
+										<h:selectBooleanCheckbox styleClass="free_area0" style="visibility:hidden;" id="uniqueSelect" value="#{statement.description}" onclick="unSelectUnique(#{position});" valueChangeListener="#{statement.descriptionListener}"/>
 									</h:panelGroup>
 								</h:panelGroup>	
 								<h:panelGroup class="full_area0 xLarge_marginLExcl endline">
@@ -197,7 +200,18 @@
 					            if (index != i)
 						    	{
 					            	document.getElementById('formular:profile:' + i + ':uniqueSelect').checked= false;
+					            	document.getElementById('formular:profile:' + i + ':radioDescription:0').checked= false;
 						    	}
+					            else if (document.getElementById('formular:profile:' + i + ':uniqueSelect').checked )
+					            {
+					            	document.getElementById('formular:profile:' + i + ':uniqueSelect').checked= false;
+					            	document.getElementById('formular:profile:' + i + ':radioDescription:0').checked= false;
+					            }
+					            else
+					            {
+					            	document.getElementById('formular:profile:' + i + ':uniqueSelect').checked= true;
+					            	document.getElementById('formular:profile:' + i + ':radioDescription:0').checked= true;
+					            }
 					        }
 						}
 				</script>

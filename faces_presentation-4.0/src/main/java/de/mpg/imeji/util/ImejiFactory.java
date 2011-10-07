@@ -6,8 +6,10 @@ import java.util.List;
 
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.album.AlbumBean;
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.image.ImageBean;
+import de.mpg.imeji.image.ThumbnailBean;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.ContainerMetadata;
@@ -83,10 +85,45 @@ public class ImejiFactory
         }
         return beanList;
     }
+    
+    public static List<ThumbnailBean> imageListToThumbList(Collection<Image> imgList)
+    {
+        List<ThumbnailBean> beanList = new ArrayList<ThumbnailBean>();
+        try 
+        {
+			((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
+				.setProfileCached(ProfileHelper.loadProfiles((List<Image>) imgList));
+		} 
+        catch (Exception e1) 
+        {
+			e1.printStackTrace();
+		}
+        for (Image img : imgList)
+        {
+        	try 
+        	{
+        		beanList.add(new ThumbnailBean(img));
+			} 
+        	catch (Exception e) 
+			{
+				e.printStackTrace();
+			} 
+        }
+        return beanList;
+    }
 
     public static List<ImageBean> imageListToBeanList(Collection<Image> imgList)
     {
         List<ImageBean> beanList = new ArrayList<ImageBean>();
+        try 
+        {
+			((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
+				.setProfileCached(ProfileHelper.loadProfiles((List<Image>) imgList));
+		} 
+        catch (Exception e1) 
+        {
+			e1.printStackTrace();
+		}
         for (Image img : imgList)
         {
         	try 

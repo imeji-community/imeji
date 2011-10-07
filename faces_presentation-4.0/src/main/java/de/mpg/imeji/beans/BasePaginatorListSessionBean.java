@@ -29,14 +29,17 @@
 package de.mpg.imeji.beans;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
@@ -60,7 +63,7 @@ import de.mpg.jena.controller.ImejiController;
  * @param <FilterType> The type of filters managed by this bean that are usable for every ListRetriever, eg. sorting of
  *            PubItems.
  */
-public abstract class BasePaginatorListSessionBean<ListElementType>
+public abstract class BasePaginatorListSessionBean<ListElementType> implements Serializable
 {
     protected static Logger logger = Logger.getLogger(BasePaginatorListSessionBean.class);
     /**
@@ -176,11 +179,13 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             {
                 setCurrentPageNumber(1);
             }
-
+            
+           	setGoToPageBottom(Integer.toString(currentPageNumber));
+           	setGoToPageTop(Integer.toString(currentPageNumber));
+            
             previousPartList = new ArrayList<ListElementType>();
             previousPartList.addAll(currentPartList);
             currentPartList = retrieveList(getOffset(), elementsPerPage);
-           
             totalNumberOfElements = getTotalNumberOfRecords();
        	 
        	 	// reset current page and reload list if list is shorter than the given current page number allows
@@ -198,11 +203,11 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             }
             corruptedList = false;
             
-           
         }
         catch (NotBoundException e)
         {
             corruptedList = true;
+            e.printStackTrace();
         }
         catch (Exception e)
         {
@@ -210,6 +215,10 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             e.printStackTrace();
         }
     }
+    
+ 
+
+
 
     public String initCorruptData()
     {
@@ -437,7 +446,8 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         {
             // error(getMessage("paginator_errorGoToPage"));
         }
-        return getPrettyNavigation();
+        //return getPrettyNavigation();
+        return getNavigationString();
     }
 
     /**
@@ -547,7 +557,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      * @author $Author: haarlaender $ (last modification)
      * @version $Revision: 3185 $ $LastChangedDate: 2009-11-20 14:30:15 +0100 (Fri, 20 Nov 2009) $
      */
-    public class PaginatorPage
+    public class PaginatorPage implements Serializable
     {
         /**
          * The page number of the paginator button

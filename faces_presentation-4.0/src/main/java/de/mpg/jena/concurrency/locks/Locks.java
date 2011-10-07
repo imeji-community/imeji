@@ -19,15 +19,19 @@ public class Locks
 	
 	private static Logger logger = Logger.getLogger(Locks.class);
 	
+	public static void init()
+	{
+		userLocks = new HashMap<String, Lock>();
+		sysLocks = new HashMap<String, Lock>();;
+	}
+	
 	public static Map<String, Lock> getUserLocks()
 	{
-		if (userLocks == null) userLocks = new HashMap<String, Lock>();
 		return userLocks;
 	}
 	
 	public static Map<String, Lock> getSystemLocks()
 	{
-		if (sysLocks == null) sysLocks = new HashMap<String, Lock>();
 		return sysLocks;
 	}
 	

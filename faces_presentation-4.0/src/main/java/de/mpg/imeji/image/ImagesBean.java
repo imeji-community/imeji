@@ -1,6 +1,6 @@
 package de.mpg.imeji.image;
 
-import java.net.URI;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +20,6 @@ import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
-import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -34,10 +33,8 @@ import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.MetadataProfile;
-import de.mpg.jena.vo.Properties.Status;
 
-public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
+public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> implements Serializable
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
@@ -51,7 +48,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
   
     private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
     private Collection<Image> images = new ArrayList<Image>();
-    private SearchResult searchResult = null;
     
     private String discardComment;
     
@@ -98,55 +94,54 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     }
 
     @Override
-    public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
+    public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
     {
-    	ImageController controller = new ImageController(sb.getUser());    	
-
         images = new ArrayList<Image>();
+        
         if (facets != null)
         {
         	facets.getFacets().clear(); 
         }
+        
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
        
         initBackPage();
-        try
-        {
-            scList = URLQueryTransformer.transform2SCList(query);
-        }
-        catch (Exception e)
-        {
-        	BeanHelper.error(sb.getMessage("error_search_query"));
-        }
         
-		searchResult = controller.searchImages(scList, sortCriterion, limit, offset);
-		totalNumberOfRecords = searchResult.getNumberOfRecords();
+        scList = URLQueryTransformer.transform2SCList(query);
+        
+        SearchResult searchResult = search(scList, sortCriterion, limit, offset);
+        
+        totalNumberOfRecords = searchResult.getNumberOfRecords();
 		searchResult.setQuery(query);
 		searchResult.setSort(sortCriterion);
-
-        images = controller.loadImages(searchResult.getResults(), limit, offset);
-        
-        return ImejiFactory.imageListToBeanList(images);
+		
+		// load images
+		images = loadImages(searchResult, limit, offset);
+                
+        return ImejiFactory.imageListToThumbList(images);
     }
     
+    public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCriterion, int limit, int offset)
+    {
+        ImageController controller = new ImageController(sb.getUser()); 
+		return  controller.searchImages(scList, sortCriterion, limit, offset);
+    }
+    
+    public Collection<Image> loadImages(SearchResult searchResult, int limit, int offset)
+    {
+    	ImageController controller = new ImageController(sb.getUser()); 
+        return controller.loadImages(searchResult.getResults(), limit, offset);
+    }
+    
+    //for testing purpose
     public String export()
     {
     	Export export = new Export();
-    	String xml = export.export(searchResult);
-    	System.out.println(xml);
+    	//String xml = export.export(searchResult);
+    	//System.out.println(xml);
     	return "";
-    }
-    
-    public boolean reloadPage()
-    {
-    	return searchResult == null 
-    	|| UrlHelper.getParameterBoolean("load")
-    	|| (query != null && !query.equals(searchResult.getQuery())) 
-    	|| searchResult.getSort() == null
-    	|| !(ImejiNamespaces.valueOf(getSelectedSortCriterion()).getNs().equals(searchResult.getSort().getSortingCriterion().getNs())
-    			&& SortOrder.valueOf(getSelectedSortOrder()).equals(searchResult.getSort().getSortOrder()));
     }
     
     public void initBackPage()
@@ -185,18 +180,19 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
         
         int count = 0;
         
-        for (Image im : getImages())
+        for (ThumbnailBean tb : getCurrentPartList())
         {
-        	 if (activeAlbum.getAlbum().getImages().contains(im.getId()))
-             {
-                 BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("image") + " " + im.getFilename() + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("already_in_active_album"));       
-             }
-             else
-             {
-                 activeAlbum.getAlbum().getImages().add(im.getId());
-                 count++;
-             }
+        	if (tb.isInActiveAlbum())
+        	{
+                BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("image") + " " + tb.getFilename() + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("already_in_active_album"));              		
+        	}
+        	else
+        	{
+        		activeAlbum.getAlbum().getImages().add(tb.getId());
+                count++;
+        	}
         }
+        
         try 
         {
         	  ac.update(activeAlbum.getAlbum());
@@ -217,7 +213,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
     	ImageController ic = new ImageController(sb.getUser());
     	CollectionController cc = new CollectionController(sb.getUser());
     	CollectionImeji coll = null;
-
+    	
+    	//SearchResult searchResult = search(scList, null, -1, 0);
+    	
     	if (!images.isEmpty()) coll = cc.retrieve(images.iterator().next().getCollection());
     	int count = 0;
     	for(Image im : images)
@@ -355,14 +353,13 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 		this.filters = filters;
 	}
 	
-	public String selectAll() {
-		for(ImageBean bean: getCurrentPartList())
+	public String selectAll() 
+	{
+		for(ThumbnailBean bean: getCurrentPartList())
 		{
-			bean.setSelected(true);
-			if(!(sb.getSelected().contains(bean.getImage().getId())) 
-					&& !bean.getImage().getProperties().getStatus().equals(Status.WITHDRAWN))
+			if(!(sb.getSelected().contains(bean.getId())))
 			{
-				sb.getSelected().add(bean.getImage().getId());
+				sb.getSelected().add(bean.getId());
 			}
 		}
 		return getNavigationString();
@@ -387,27 +384,43 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	 */
 	public boolean isImageEditable()
 	{
-		Security security = new Security();
-    	for (Image im : getImages())
-    	{
-    		if (security.check(OperationsType.UPDATE, sb.getUser(), im))
-    		{
-    			return true;
-    		}
-    	}
+		
+		for (ThumbnailBean tb : getCurrentPartList())
+		{
+			if (tb.isEditable())
+			{
+				return true;
+			}
+		}
+
+//		Security security = new Security();
+//    	for (Image im : images)
+//    	{
+//    		if (security.check(OperationsType.UPDATE, sb.getUser(), im))
+//    		{
+//    			return true;
+//    		}
+//    	}
     	return false;
 	}
 	
 	public boolean isImageDeletable()
 	{
-		Security security = new Security();
-    	for (Image im : getImages())
-    	{
-    		if (security.check(OperationsType.DELETE, sb.getUser(), im))
-    		{
-    			return true;
-    		}
-    	}
+		for (ThumbnailBean tb : getCurrentPartList())
+		{
+			if (tb.isDeletable())
+			{
+				return true;
+			}
+		}
+//		Security security = new Security();
+//    	for (Image im : images)
+//    	{
+//    		if (security.check(OperationsType.DELETE, sb.getUser(), im))
+//    		{
+//    			return true;
+//    		}
+//    	}
     	return false;
 	}
 	
@@ -424,14 +437,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ImageBean>
 	public boolean isDeletable() 
 	{
 		return false;
-	}
-
-	public SearchResult getSearchResult() {
-		return searchResult;
-	}
-
-	public void setSearchResult(SearchResult searchResult) {
-		this.searchResult = searchResult;
 	}
 
 	public String getDiscardComment() {

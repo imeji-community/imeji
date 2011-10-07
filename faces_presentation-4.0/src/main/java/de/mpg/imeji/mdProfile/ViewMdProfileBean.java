@@ -1,12 +1,14 @@
 package de.mpg.imeji.mdProfile;
 
+import java.io.Serializable;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.Statement;
 
-public class ViewMdProfileBean extends MdProfileBean
+public class ViewMdProfileBean extends MdProfileBean implements Serializable
 {
     private SessionBean session;
     private ProfileController profileController;

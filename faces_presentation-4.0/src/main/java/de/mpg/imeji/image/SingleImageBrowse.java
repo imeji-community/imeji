@@ -1,6 +1,5 @@
 package de.mpg.imeji.image;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;

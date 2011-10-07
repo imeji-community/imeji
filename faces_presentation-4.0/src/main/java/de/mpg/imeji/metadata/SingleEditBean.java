@@ -1,6 +1,7 @@
 package de.mpg.imeji.metadata;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
-public class SingleEditBean 
+public class SingleEditBean implements Serializable
 {
 	private Image image = null;
 	private MetadataProfile profile = null;

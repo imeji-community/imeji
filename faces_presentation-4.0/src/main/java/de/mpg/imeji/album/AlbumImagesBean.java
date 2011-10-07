@@ -1,5 +1,6 @@
 package de.mpg.imeji.album;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.SelectedBean;
+import de.mpg.imeji.image.ThumbnailBean;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
@@ -21,6 +23,7 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.util.ObjectHelper;
@@ -28,7 +31,7 @@ import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 
-public class AlbumImagesBean extends ImagesBean
+public class AlbumImagesBean extends ImagesBean 
 {
     private int totalNumberOfRecords;
     private String id = null;
@@ -80,25 +83,25 @@ public class AlbumImagesBean extends ImagesBean
     }
 
     @Override
-    public List<ImageBean> retrieveList(int offset, int limit) throws Exception
+    public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception
     {
+       
+
+		uri = ObjectHelper.getURI(Album.class, id);
+		SortCriterion sortCriterion = new SortCriterion();
+        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
+        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+        
         ImageController controller = new ImageController(sb.getUser());
-    	//if (reloadPage() || !uri.equals(ObjectHelper.getURI(Album.class, id)))
-    	if (true)
-    	{
-    		uri = ObjectHelper.getURI(Album.class, id);
-    		SortCriterion sortCriterion = new SortCriterion();
- 	        sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
- 	        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
- 	        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
- 	        setSearchResult(controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset));
-           	totalNumberOfRecords = getSearchResult().getNumberOfRecords();
-           	getSearchResult().setQuery(getQuery());
-			getSearchResult().setSort(sortCriterion);
-			deleteNonExistingImages();
-    	}
-    	super.setImages(controller.loadImages(getSearchResult().getResults(), limit, offset));
-        return ImejiFactory.imageListToBeanList(getImages());
+        SearchResult result = controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset);
+       	totalNumberOfRecords = result.getNumberOfRecords();
+       	result.setQuery(getQuery());
+       	result.setSort(sortCriterion);
+		deleteNonExistingImages();
+		
+    	super.setImages(controller.loadImages(result.getResults(), limit, offset));
+        return ImejiFactory.imageListToThumbList(getImages());
     }
     
     /**

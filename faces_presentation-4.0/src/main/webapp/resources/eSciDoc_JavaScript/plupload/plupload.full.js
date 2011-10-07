@@ -498,15 +498,16 @@
 						return false
 					}
 				});
+			
 				if (r.unique_names) {
-					A.bind("UploadFile", function(C, D) {
-						var F = D.name.match(/\.([^.]+)$/), E = "tmp";
-						if (F) {
-							E = F[1]
-						}
+					A.bind("UploadFile", function(C, D) {	
+//						var F = D.name.match(/\.([^.]+)$/), E = "tmp";
+//						if (F) {
+//							E = F[1]
+//						}
 						//D.target_name = D.id + "." + E
-						D.target_name = D.name;
-						alert(D.target_name);
+						alert(D.name);
+						D.target_name = D.name
 					})
 				}
 				A.bind("UploadProgress", function(C, D) {
@@ -3872,8 +3873,7 @@
 															+ ':&quot;&quot;" style="display:none"></iframe>';
 													n = y.firstChild;
 													j.appendChild(n);
-													b
-															.addEvent(
+													b.addEvent(
 																	n,
 																	"load",
 																	function(D) {
@@ -3945,13 +3945,7 @@
 																			.setAttribute(
 																					"action",
 																					y.settings.url);
-																	b
-																			.each(
-																					b
-																							.extend(
-																									{
-																										name : B.target_name
-																												|| B.name
+																	b.each(b.extend({name : B.target_name|| B.name
 																									},
 																									y.settings.multipart_params),
 																					function(

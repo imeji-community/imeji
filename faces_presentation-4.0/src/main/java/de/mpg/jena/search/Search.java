@@ -10,8 +10,7 @@ import org.apache.log4j.Logger;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.SortCriterion;
-import de.mpg.jena.sparql.ImejiSPARQL;
-import de.mpg.jena.sparql.query.SimpleQueryFactory;
+import de.mpg.jena.search.query.SimpleQueryFactory;
 import de.mpg.jena.vo.User;
 
 public class Search 
@@ -85,13 +84,13 @@ public class Search
 	
 	public List<String> searchSimple(SearchCriterion sc, SortCriterion sortCri, User user)
 	{	
-		String sq = SimpleQueryFactory.search(type, sc, sortCri, user, (containerURI != null), getSpecificQuery());
+		String sq = SimpleQueryFactory.getQuery(type, sc, sortCri, user, (containerURI != null), getSpecificQuery());
 		return  ImejiSPARQL.exec(sq);
 	}
 	
 	private LinkedList<String> getAllURIs(SortCriterion sortCri, User user)
 	{
-		String sq = SimpleQueryFactory.search(type, null, sortCri, user, (containerURI != null), getSpecificQuery());
+		String sq = SimpleQueryFactory.getQuery(type, null, sortCri, user, (containerURI != null), getSpecificQuery());
 		return ImejiSPARQL.exec(sq);
 	}
 	

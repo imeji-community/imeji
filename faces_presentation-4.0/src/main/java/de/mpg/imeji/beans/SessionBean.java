@@ -3,6 +3,7 @@ package de.mpg.imeji.beans;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.Navigation.Page;
 import de.mpg.jena.security.Security;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.User;
 
 public class SessionBean implements Serializable
@@ -33,6 +35,7 @@ public class SessionBean implements Serializable
 	private List<URI> selectedCollections;
 	private List<URI> selectedAlbums;
     private AlbumBean activeAlbum;
+    private Map<URI, MetadataProfile> profileCached;
     
     private String selectedImagesContext = null;
 
@@ -41,6 +44,7 @@ public class SessionBean implements Serializable
         selected = new ArrayList<URI>();
         selectedCollections = new ArrayList<URI>();
         selectedAlbums = new ArrayList<URI>();
+        profileCached = new HashMap<URI, MetadataProfile>();
     }
 
 	public String getSelectedImagesContext() {
@@ -218,5 +222,14 @@ public class SessionBean implements Serializable
         return activeAlbum;
     }
 
+	public Map<URI, MetadataProfile> getProfileCached() {
+		return profileCached;
+	}
+
+	public void setProfileCached(Map<URI, MetadataProfile> profileCached) {
+		this.profileCached = profileCached;
+	}
+    
+    
     
 }

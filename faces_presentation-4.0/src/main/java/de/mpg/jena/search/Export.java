@@ -6,7 +6,6 @@ import com.hp.hpl.jena.rdf.model.ModelExtract;
 import com.hp.hpl.jena.shared.JenaException;
 
 import de.mpg.jena.ImejiJena;
-import de.mpg.jena.sparql.ImejiSPARQL;
 
 
 public class Export 

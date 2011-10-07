@@ -1,5 +1,6 @@
 package de.mpg.imeji.collection;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +12,12 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
+import de.mpg.imeji.image.ThumbnailBean;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.imeji.util.ObjectCachedLoader;
 import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -23,13 +26,14 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 
-public class CollectionImagesBean extends ImagesBean 
+public class CollectionImagesBean extends ImagesBean  implements Serializable
 {
 	private int totalNumberOfRecords;
 	private String id = null;
@@ -74,41 +78,33 @@ public class CollectionImagesBean extends ImagesBean
 	}
 
 	@Override
-	public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
+	public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
 	{	
 		ImageController controller = new ImageController(sb.getUser());
 
-		if (this.getFacets() != null)
+		if (getFacets() != null)
 		{
-			this.getFacets().getFacets().clear();
+			getFacets().getFacets().clear();
 		}
 
 		SortCriterion sortCriterion = new SortCriterion();
 		sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));		
 		
-		ProfileController pc = new ProfileController(sb.getUser());
-		((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(pc.retrieve(collection.getProfile()));
-		
 		initBackPage();
 		
-		try 
-		{
-			scList = URLQueryTransformer.transform2SCList(getQuery());
-		} 
-		catch (Exception e) 
-		{
-			BeanHelper.error(sb.getMessage("error_search_query"));
-		}
-		uri = ObjectHelper.getURI(CollectionImeji.class, id);
-		setSearchResult(controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset));
-		totalNumberOfRecords = getSearchResult().getNumberOfRecords();
-		getSearchResult().setQuery(getQuery());
-		getSearchResult().setSort(sortCriterion);
+		scList = URLQueryTransformer.transform2SCList(getQuery());
 		
-		super.setImages(controller.loadImages(getSearchResult().getResults(), limit, offset));
-	        
-		return ImejiFactory.imageListToBeanList(getImages());
+		uri = ObjectHelper.getURI(CollectionImeji.class, id);
+		
+		SearchResult result = controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset);
+		totalNumberOfRecords = result.getNumberOfRecords();
+		result.setQuery(getQuery());
+		result.setSort(sortCriterion);
+		
+		super.setImages(controller.loadImages(result.getResults(), limit, offset));
+
+		return ImejiFactory.imageListToThumbList(getImages());
 	}
 	
 	public String getImageBaseUrl()

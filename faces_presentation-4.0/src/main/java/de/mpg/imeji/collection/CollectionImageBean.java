@@ -1,11 +1,13 @@
 package de.mpg.imeji.collection;
 
+import java.io.Serializable;
+
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.SingleImageBrowse;
 import de.mpg.imeji.util.BeanHelper;
 
-public class CollectionImageBean extends ImageBean
+public class CollectionImageBean extends ImageBean implements Serializable
 {
     private String collectionId;
     private Navigation navigation;

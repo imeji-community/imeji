@@ -5,6 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
 
@@ -19,6 +27,7 @@ public class StaticContentBean
    private boolean about = true;
    private boolean legal = true;
    private boolean blog = true;
+   private static Logger logger = Logger.getLogger(StaticContentBean.class);
     
     public StaticContentBean() throws IOException, URISyntaxException
     {
@@ -36,6 +45,46 @@ public class StaticContentBean
         {
             blog = false;
         }
+       // sessionSize((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false));
+    }
+    public static int sessionSize(HttpSession session)
+    {
+    int total = 0;
+
+    try
+    {
+    java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+    java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(baos);
+    Enumeration enumeration = session.getAttributeNames();
+    List test = new ArrayList();
+
+    while (enumeration.hasMoreElements())
+    {
+	    
+	    try
+	    {
+	    	String name = (String) enumeration.nextElement();
+		    Object obj = session.getAttribute(name);
+    		oos.writeObject(obj);
+	    	int size = baos.size();
+	    	total += size;
+	    	logger.info("The session name: " + name + " and the size is: " + size);
+	    }
+	    catch (Exception e) {
+	    	logger.error("Could not get the session size " + e.getMessage());
+		}
+   
+    }
+
+    logger.info("Total session size is: " + total);
+    }
+    catch (Exception e)
+    {
+    logger.error("Could not get the session size", e);
+    e.printStackTrace();
+    }
+
+    return total;
     }
     
     public String getHeaderLogo()

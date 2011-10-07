@@ -28,6 +28,7 @@
  */
 package de.mpg.imeji.beans;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 import javax.faces.application.FacesMessage;

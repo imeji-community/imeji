@@ -53,7 +53,6 @@ public class CreateCollectionBean extends CollectionBean
             URI profile = profileController.create(mdp);
             collectionController.create(getCollection(), profile);
             BeanHelper.info(sessionBean.getMessage("success_collection_create"));
-            System.out.println("CREATE");
             FacesContext.getCurrentInstance().getExternalContext().redirect(((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getApplicationUrl()+ "collections?q=");
             return "";
         }

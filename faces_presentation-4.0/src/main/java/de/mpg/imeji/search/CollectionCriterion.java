@@ -10,6 +10,7 @@ import javax.faces.event.ValueChangeEvent;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.metadata.util.SuggestBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ObjectCachedLoader;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.MetadataProfile;
@@ -53,10 +54,9 @@ public class CollectionCriterion extends Criterion implements Serializable{
                {
                    	setSelectedCollectionId(collId);
                    	SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-	       			ProfileController pc = new ProfileController(sb.getUser());
 	       			try 
 	       			{
-	       				setSelectedProfile(pc.retrieve(coll.getProfile()));
+	       				setSelectedProfile(ObjectCachedLoader.loadProfile(coll.getProfile()));
 	       				((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(getSelectedProfile());
 	       			} 
 	       			catch (Exception e) 

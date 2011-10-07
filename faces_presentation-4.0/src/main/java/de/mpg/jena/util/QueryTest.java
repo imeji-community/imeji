@@ -17,7 +17,7 @@ import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.jena.ImejiJena;
-import de.mpg.jena.sparql.ImejiSPARQL;
+import de.mpg.jena.search.ImejiSPARQL;
 import de.mpg.jena.vo.Image;
 
 public class QueryTest {

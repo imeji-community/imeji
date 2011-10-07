@@ -1,5 +1,6 @@
 package de.mpg.imeji.history;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,7 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.filter.Filter;
 import de.mpg.imeji.util.BeanHelper;
 
-public class Page 
+public class Page implements Serializable
 {
 	public enum ImejiPages
 	{

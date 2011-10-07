@@ -48,7 +48,7 @@
 	  	
 		<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.header_browse}" rendered="#{HistorySession.currentPage.type.fileName == 'Images.xhtml'}" />
 		
-		<h:outputLink id="lnkCollections" styleClass="free_area0" value="#{Navigation.collectionsUrl}" rendered="#{HistorySession.currentPage.type.fileName != 'Collections.xhtml'}">
+		<h:outputLink id="lnkCollections" styleClass="free_area0" value="#{Navigation.collectionsUrl}?q=" rendered="#{HistorySession.currentPage.type.fileName != 'Collections.xhtml'}">
 			<h:outputText value="#{lbl.header_collections}"></h:outputText>
 		</h:outputLink>
 		<h:outputText id="lnkCollectionsInactive" styleClass="free_area0" value="#{lbl.header_collections}" rendered="#{HistorySession.currentPage.type.fileName == 'Collections.xhtml'}" />

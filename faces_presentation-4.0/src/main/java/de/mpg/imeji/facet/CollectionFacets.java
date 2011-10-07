@@ -10,6 +10,7 @@ import de.mpg.imeji.facet.Facet.FacetType;
 import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ObjectCachedLoader;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.controller.SearchCriterion;
@@ -33,8 +34,7 @@ public class CollectionFacets
 	{
 		this.colURI = col.getId();
 		
-		ProfileController pc = new ProfileController(sb.getUser());
-		MetadataProfile profile = pc.retrieve(col.getProfile());
+		MetadataProfile profile = ObjectCachedLoader.loadProfile(col.getProfile());
 		
 		Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
 		String baseURI = nav.getImagesUrl() + col.getId().getPath() + "?q=";

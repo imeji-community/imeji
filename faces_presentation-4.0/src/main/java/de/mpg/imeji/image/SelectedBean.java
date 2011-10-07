@@ -1,5 +1,6 @@
 package de.mpg.imeji.image;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +25,8 @@ import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.vo.Image;
 
-public class SelectedBean extends ImagesBean {
+public class SelectedBean extends ImagesBean  implements Serializable
+{
 	private int totalNumberOfRecords;
 	private SessionBean sb;
 	private URI currentCollection;
@@ -52,7 +54,7 @@ public class SelectedBean extends ImagesBean {
 	}
 
 	@Override
-	public List<ImageBean> retrieveList(int offset, int limit) throws Exception 
+	public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
 	{
 		ImageController controller = new ImageController(sb.getUser());
 		super.setImages(new ArrayList<Image>());
@@ -60,8 +62,6 @@ public class SelectedBean extends ImagesBean {
 		List<String> uris = new ArrayList<String>();
 		for (URI uri : sb.getSelected()) 
 		{
-			//uris.add(new SearchCriterion(SearchCriterion.Operator.OR,
-				//	ImejiNamespaces.ID_URI, uri.toString(), Filtertype.URI));
 			uris.add(uri.toString());
 		}
 		if (uris.size() != 0) 
@@ -70,7 +70,7 @@ public class SelectedBean extends ImagesBean {
 			super.setImages(controller.loadImages(uris, limit, offset));
 		}
 		
-		return ImejiFactory.imageListToBeanList(super.getImages());
+		return ImejiFactory.imageListToThumbList(super.getImages());
 	}
 	
 	public String getSelectedImagesContext() 

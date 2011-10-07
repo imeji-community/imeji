@@ -1,6 +1,7 @@
 package de.mpg.imeji.metadata;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +40,7 @@ import de.mpg.jena.vo.Statement;
  * @author saquet
  *
  */
-public class EditImageMetadataBean 
+public class EditImageMetadataBean  implements Serializable
 {
 	//objects
 	private ImagesBean imagesBean;
@@ -126,8 +127,7 @@ public class EditImageMetadataBean
 	public void initImagesBean() throws Exception
 	{
 		editType = (String) ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("type");
-		int elementsPerPage = 24;
-		isProfileWithStatements = true;
+		
 		if ("selected".equals(editType))
 		{
 			imagesBean = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
@@ -135,9 +135,11 @@ public class EditImageMetadataBean
 		else if ("all".equals(editType))
 		{
 			imagesBean = (CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class);
-			elementsPerPage = imagesBean.getElementsPerPage();
-			imagesBean.setElementsPerPage(1000000);
 		}
+		
+		int elementsPerPage = imagesBean.getElementsPerPage();
+		imagesBean.setElementsPerPage(1000000);
+		isProfileWithStatements = true;
 		imagesBean.update();
 		imagesBean.setElementsPerPage(elementsPerPage);
 		profiles =  ProfileHelper.loadProfiles((List<Image>) imagesBean.getImages()).values();

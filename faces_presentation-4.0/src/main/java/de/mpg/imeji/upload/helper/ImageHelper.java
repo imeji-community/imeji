@@ -229,6 +229,7 @@ public class ImageHelper{
         client.executeMethod(method);
         String response = method.getResponseBodyAsString();
         InitialContext context = new InitialContext();
+        //TODO remove jbix transformation by something else
         XmlTransforming ctransforming = (XmlTransforming)context.lookup(XmlTransforming.SERVICE_NAME);
         return ctransforming.transformUploadResponseToFileURL(response);
     }

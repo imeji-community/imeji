@@ -1,11 +1,12 @@
 package de.mpg.imeji.history;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.history.Page.ImejiPages;
 
-public class HistorySession 
+public class HistorySession implements Serializable
 {
 	private List<Page> pages = new ArrayList<Page>();
 	private static int HISTORY_SIZE = 10;

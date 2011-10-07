@@ -1,5 +1,6 @@
 package de.mpg.imeji.filter;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import de.mpg.imeji.facet.Facet;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.jena.controller.SearchCriterion;
 
-public class Filter extends Facet
+public class Filter extends Facet implements Serializable
 {
 	//private SearchCriterion filter;
 	private String query ="";

@@ -1,23 +1,37 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.rpc.ServiceException;
+
 import org.apache.log4j.Logger;
 
+import thewebsemantic.NotBoundException;
+
+import de.escidoc.core.common.exceptions.application.invalid.InvalidStatusException;
+import de.escidoc.core.common.exceptions.application.missing.MissingMethodParameterException;
+import de.escidoc.core.common.exceptions.application.notfound.ItemNotFoundException;
+import de.escidoc.core.common.exceptions.application.security.AuthenticationException;
+import de.escidoc.core.common.exceptions.application.security.AuthorizationException;
+import de.escidoc.core.common.exceptions.application.violated.AlreadyPublishedException;
+import de.escidoc.core.common.exceptions.application.violated.LockingException;
+import de.escidoc.core.common.exceptions.system.SystemException;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.util.LoginHelper;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
+import de.mpg.jena.search.ImejiSPARQL;
 import de.mpg.jena.search.Search;
 import de.mpg.jena.search.SearchResult;
-import de.mpg.jena.sparql.ImejiSPARQL;
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
@@ -254,7 +268,16 @@ public class ImageController extends ImejiController
     	if (img != null)
     	{
 	    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-			imejiBean2RDF.delete(imejiBean2RDF.toList(img), user);
+			try 
+			{
+				imejiBean2RDF.delete(imejiBean2RDF.toList(img), user);
+			}
+			catch (NotBoundException e) 
+			{
+				logger.warn(img.getId().toString() + " not bound! Deleting...");
+				deleteObjects(img.getId().toString());
+				logger.warn("... done.");
+			}
 			removeImageFromEscidoc(img.getEscidocId());
     	}
     }
@@ -282,8 +305,6 @@ public class ImageController extends ImejiController
             	img.setEscidocId(null);
         	}
     	}
-    	
-    	
     }
     
     public void removeImageFromEscidoc(String id)
@@ -292,9 +313,14 @@ public class ImageController extends ImejiController
     	{
 			ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(id);
 		} 
+    	catch (ItemNotFoundException e) 
+    	{
+    		/*image exists not anymore im escidoc*/
+		}
     	catch (Exception e) 
     	{
-			throw new RuntimeException("Error removing image from eSciDoc (id: " + id + ") : ", e);
+    		logger.error("Error removing image from eSciDoc (" + id + ")", e);
+			throw new RuntimeException("Error removing image from eSciDoc (" + id + ")", e);
 		}
     }
 

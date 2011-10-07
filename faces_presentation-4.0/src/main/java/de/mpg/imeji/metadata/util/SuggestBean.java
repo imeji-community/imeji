@@ -1,5 +1,6 @@
 package de.mpg.imeji.metadata.util;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import thewebsemantic.LocalizedString;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
 
-public class SuggestBean
+public class SuggestBean implements Serializable
 {
 	private Map<URI, Suggest> suggests = null;
 

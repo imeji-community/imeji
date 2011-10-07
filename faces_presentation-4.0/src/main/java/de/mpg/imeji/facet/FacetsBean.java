@@ -1,5 +1,6 @@
 package de.mpg.imeji.facet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +9,9 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.vo.CollectionImeji;
 
-public class FacetsBean
+public class FacetsBean implements Serializable
 {    
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
-    private  List<List<Facet>> collectionFacets =  new ArrayList<List<Facet>>();
-    private  List<List<Facet>> technicalFacets =  new ArrayList<List<Facet>>();
     
     public FacetsBean(List<SearchCriterion> scList) 
     {
@@ -50,7 +49,4 @@ public class FacetsBean
 		this.facets = facets;
 	}
     
-
-
-
 }

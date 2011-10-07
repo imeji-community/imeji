@@ -18,7 +18,7 @@ public class DoctorBean
 		doc = new DataDoctor(sb.getUser());
 		try 
 		{
-			//report = doc.runDoctor(false);
+			report = doc.runDoctor(false);
 		} 
 		catch (Exception e) 
 		{

@@ -1,5 +1,6 @@
 package de.mpg.imeji.metadata.util;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -18,7 +19,7 @@ import de.mpg.jena.vo.complextypes.Publication;
 import de.mpg.jena.vo.complextypes.Text;
 import de.mpg.jena.vo.complextypes.URI;
 
-public class MetadataHelper 
+public class MetadataHelper implements Serializable
 {
 	private static Logger logger = Logger.getLogger(MetadataHelper.class);
 	

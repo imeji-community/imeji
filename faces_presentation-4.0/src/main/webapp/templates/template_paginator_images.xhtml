@@ -252,31 +252,34 @@
 			<div class="small_area0">&#160;</div>
 			
 			<div class="clear"></div>
-			<a4j:outputPanel id="ajaxList">
+			
+			
 			<ul class="free_area0 fullBrowse small_marginLIncl noTopBorder">
 				<!-- Images -->
-			
+				
+				<a4j:outputPanel id="ajaxList">
+				
 				<h:outputText value="#{msg.no_images_found}!" rendered="#{paginatorListSessionBean.totalNumberOfElements  == 0}" styleClass="free_area0 "/>
 				<a4j:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" rowKeyVar="index">
 					<li class="large_area0 itemTile">
 						
-						<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'}  free_area1 matrixItem #{item.isInActiveAlbum ? 'inAlbum' : ''}">
+						<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'}  free_area1 matrixItem #{item.inActiveAlbum ? 'inAlbum' : ''}">
 							<!-- Image with link to the details view --> 
 							
-							<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.image.id.path}/view">
-								<h:graphicImage alt="#{item.image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrlAsString}"/>
+							<h:outputLink  id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.id.path}/view">
+								<h:graphicImage alt="#{item.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.link}"/>
 							</h:outputLink>
 							
 							<rich:toolTip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="400">
 								<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"></ui:include>
 							</rich:toolTip>
-													
-						</h:panelGroup> 
-						
+							
+										
+						</h:panelGroup> 	
 						<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->						
 						
 						<!-- Album Selected --> 
-						<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null and item.image.properties.status != 'WITHDRAWN'}">
+						<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null}">
 							<span class="free_area0"> 
 								<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
 									<a4j:support event="onchange" ajaxSingle="true" reRender="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu" />
@@ -284,11 +287,9 @@
 							</span>
 						</h:panelGroup> 
 						
-						<h:graphicImage styleClass="tiny_area0" title="Image withdrawn" rendered="#{item.image.properties.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
-						
 						<span class="medium_area0"> 
 							<span class="free_area0_p3 tileControlIconArea"> 
-								<h:outputLabel value="#{item.description}" />
+								<h:outputLabel value="#{item.caption}" />
 							</span> 
 						</span> 
 											
@@ -296,9 +297,9 @@
 					</li>
 				</a4j:repeat>
 				<!-- End images -->
-			
+				</a4j:outputPanel>
 			</ul>
-			</a4j:outputPanel>
+			
 			<h:panelGroup styleClass="fullItem"	rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
 				<ui:insert name="subImagesContent"/>
 			</h:panelGroup>
@@ -366,6 +367,8 @@
 			jQuery('.shiftCheckbox').shiftcheckbox();
 		});
 	</script>
+	
+	
 	</ui:define>
 	
 	

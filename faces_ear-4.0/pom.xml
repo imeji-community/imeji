@@ -65,16 +65,12 @@
 							<groupId>de.mpg.escidoc.services</groupId>
 							<artifactId>citationmanager</artifactId>
 						</ejbModule>-->
-						<jarModule>
+						 <jarModule>
                             <groupId>org.dspace</groupId>
                             <artifactId>cql-java</artifactId>
                             <includeInApplicationXml>true</includeInApplicationXml>
                         </jarModule>
-						<jarModule>
-							<groupId>org.jibx</groupId>
-							<artifactId>jibx-run</artifactId>
-							<includeInApplicationXml>true</includeInApplicationXml>
-						</jarModule>
+						
 						<jarModule>
 							<groupId>stax</groupId>
 							<artifactId>stax</artifactId>
@@ -95,7 +91,7 @@
 							<artifactId>wss4j</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
-						<jarModule>
+						 <jarModule>
 							<groupId>net.sf.saxon</groupId>
 							<artifactId>saxon</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
@@ -137,7 +133,7 @@
 							<artifactId>commons-beanutils</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
-						<jarModule>
+						  <jarModule>
 							<groupId>javabib</groupId>
 							<artifactId>javabib</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
@@ -173,6 +169,12 @@
 								true
 							</includeInApplicationXml>
 						</jarModule>
+						<jarModule>
+							<groupId>org.jibx</groupId>
+							<artifactId>jibx-run</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						
 						 <jarModule>
 							<groupId>xmlbeans</groupId>
 							<artifactId>xbean</artifactId>
@@ -229,7 +231,7 @@
 							<artifactId>iri</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
-						<!-- <jarModule>
+						 <jarModule>
 							<groupId>org.slf4j</groupId>
 							<artifactId>slf4j-api</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
@@ -238,7 +240,7 @@
 							<groupId>org.slf4j</groupId>
 							<artifactId>slf4j-log4j12</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
-						</jarModule>-->
+						</jarModule>
 						<jarModule>
 							 <groupId>thewebsemantic</groupId> 
 		  					 <artifactId>jenabean</artifactId> 
@@ -249,11 +251,11 @@
 		   					<artifactId>jpa4jena</artifactId> 
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>-->
-						<jarModule>
+						<!--  <jarModule>
 							 <groupId>com.ibm.icu</groupId> 
 		   					<artifactId>icu4j</artifactId> 
 							<includeInApplicationXml>true</includeInApplicationXml>
-						</jarModule>
+						</jarModule>-->
 					</modules>
 				</configuration>
 			</plugin>
@@ -353,13 +355,13 @@
 			<version>1.4</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
+		 <dependency>
 			<groupId>wss4j</groupId>
 			<artifactId>wss4j</artifactId>
 			<version>1.5.1</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.1</version>
@@ -370,7 +372,7 @@
 			<artifactId>xmlunit</artifactId>
 			<version>1.0</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>saxon</artifactId>
@@ -421,7 +423,7 @@
 			<version>1.8</version>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
+		 <dependency>
 			<groupId>javabib</groupId>
 			<artifactId>javabib</artifactId>
 			<version>20040801</version>
@@ -437,8 +439,8 @@
 	      <artifactId>dom4j</artifactId>
 	      <version>1.6.1</version>
 	      <scope>compile</scope>
-	    </dependency>
-	    <dependency>
+	    </dependency> 
+	      <dependency>
 			<groupId>org.jibx</groupId>
 			<artifactId>jibx-extras</artifactId>
 			<version>1.1.5</version>
@@ -462,7 +464,7 @@
 	       <version>1.2rc1</version>
 	       <scope>provided</scope>
 	    </dependency> 
-     	<dependency>
+       <dependency>
 	      	<groupId>com.maxmind.geoip</groupId>
 	      	<artifactId>geoip</artifactId>
 	      	<version>1.2.3</version>
@@ -500,7 +502,7 @@
 			<artifactId>prettyfaces-jsf12</artifactId>
 			<version>3.0.1</version>
 		</dependency>
-		<dependency>
+		 <dependency>
 			<groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
 			<version>3.4.4</version>

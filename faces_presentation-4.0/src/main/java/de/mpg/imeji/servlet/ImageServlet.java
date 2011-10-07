@@ -33,6 +33,7 @@ package de.mpg.imeji.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -65,12 +66,20 @@ public class ImageServlet extends HttpServlet
 {
     private static Logger logger = Logger.getLogger(ImageServlet.class);
     private String userHandle;
-
+    private String frameworkUrl;
+    private static int counter = 0;
     @Override
     public void init()
     {
-        logger.info("ImageServlet initialized");
-        //this.appBean = (ApplicationBean)BeanHelper.getApplicationBean(ApplicationBean.class);
+        try 
+        {
+			frameworkUrl = ServiceLocator.getFrameworkUrl();
+			logger.info("ImageServlet initialized");
+		} 
+        catch (Exception e) 
+		{
+			throw new RuntimeException("Image servlet not initialized! " + e);
+		}
     }
     
     /**
@@ -79,7 +88,8 @@ public class ImageServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        String imageUrl = req.getParameter("imageUrl");
+		String imageUrl = req.getParameter("imageUrl");
+	    GetMethod method = null;
         try
         {
 	        if (imageUrl==null)
@@ -88,10 +98,7 @@ public class ImageServlet extends HttpServlet
 	        }
 	        else
 	        {
-	        	String frameworkUrl = ServiceLocator.getFrameworkUrl(); 
-	        		
-	        	byte[] buffer = null;
-	            GetMethod method = new GetMethod(imageUrl);
+	            method = new GetMethod(imageUrl);
 	            method.setFollowRedirects(false);
 	            
 	            if (userHandle == null)
@@ -99,9 +106,11 @@ public class ImageServlet extends HttpServlet
 	                 userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
 	               
 	            }
+	            
 	            method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
 	            method.addRequestHeader("Cache-Control", "public");
 	            method.setRequestHeader("Connection", "close"); 
+	            
 	            // Execute the method with HttpClient.
 	            HttpClient client = new HttpClient();
 	            ProxyHelper.setProxy(client, frameworkUrl);
@@ -132,7 +141,6 @@ public class ImageServlet extends HttpServlet
 	                 
 	                 if (method.getStatusCode() == 302)
 	                 {
-	
 	                     method.releaseConnection();
 	                	 throw new RuntimeException("error code " + method.getStatusCode());
 	                 }
@@ -147,9 +155,8 @@ public class ImageServlet extends HttpServlet
 	                input = method.getResponseBodyAsStream();
 	               
 	            }
-	          
 	            
-	            buffer = new byte[2048];
+	            byte[] buffer = new byte[2048];
 	            int numRead;
 	            long numWritten = 0;
 	            while ((numRead = input.read(buffer)) != -1)
@@ -161,19 +168,16 @@ public class ImageServlet extends HttpServlet
 	            input.close();
 	            
 	            method.releaseConnection();
-	            //out.write(input);
 	            out.flush();
 	            out.close();
 	    	}
         }
         catch(Exception e)
         {
-        	logger.error(e.getMessage());
-        	//throw new ServletException(e);
+        	logger.error(e.getMessage(), e);
+        	if (method != null) method.releaseConnection();
         }
-        
     }
-    
     
 
     /**

@@ -2,9 +2,12 @@ package de.mpg.imeji.util;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.jena.ImejiJena;
+import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -19,7 +22,6 @@ import de.mpg.jena.vo.User;
 
 public class ObjectLoader 
 {
-
 	public static CollectionImeji loadCollection(URI id, User user)
 	{
 		try 
@@ -55,6 +57,7 @@ public class ObjectLoader
 		}
 		return null;
 	}
+	
 	
 	public static Image loadImage(URI id, User user)
 	{

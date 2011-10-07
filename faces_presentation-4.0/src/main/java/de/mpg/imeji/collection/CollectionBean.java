@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import org.apache.log4j.Logger;
+
 import thewebsemantic.NotBoundException;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.image.ImageBean;
@@ -34,6 +36,8 @@ public abstract class CollectionBean
     {
         COLLECTION, PROFILE, HOME;
     }
+    
+    private static Logger logger = Logger.getLogger(CollectionBean.class);
 
     private TabType tab = TabType.HOME;
     private SessionBean sessionBean = null;
@@ -255,8 +259,12 @@ public abstract class CollectionBean
 
     public int getSize()
     {
-    	ImageController ic = new ImageController(sessionBean.getUser());
-    	return ic.countImagesInContainer(getCollection().getId(), null);
+    	if (collection != null && collection.getId() != null)
+    	{
+	    	ImageController ic = new ImageController(sessionBean.getUser());
+	    	return ic.countImagesInContainer(collection.getId(), null);
+    	}
+    	return 0;
         //return collection.getImages().size();
     }
 
@@ -301,6 +309,7 @@ public abstract class CollectionBean
     	{
     		BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
 			BeanHelper.error(e.toString());
+			logger.error("Error delete collection",e);
 		}
     	
     	return "pretty:collections";

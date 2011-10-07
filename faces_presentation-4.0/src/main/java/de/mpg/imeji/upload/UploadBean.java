@@ -1,6 +1,7 @@
 package de.mpg.imeji.upload;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -9,19 +10,23 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.util.Streams;
+
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.collection.CollectionSessionBean;
 import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.escidoc.ItemVO;
 import de.mpg.imeji.upload.deposit.DepositController;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.LoginHelper;
-import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.imeji.util.UrlHelper;
-import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.UserController;
-import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.User;
 
@@ -72,7 +77,7 @@ public class UploadBean
     	}else if (UrlHelper.getParameterBoolean("start")){
     		try {
 				upload();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
     	}else if(UrlHelper.getParameterBoolean("done")){
@@ -85,35 +90,50 @@ public class UploadBean
     	}
 	}
     
-	public void upload() throws IOException
+	public void upload() throws IOException, FileUploadException
 	{
     	HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-    	title = req.getParameter("name");
-        ServletInputStream inputStream = req.getInputStream();
-        StringTokenizer st = new StringTokenizer(title, ".");
-        while (st.hasMoreTokens())
-            format = st.nextToken();
-        mimetype = "image/" + format;
-     
-        // TODO remove static image description
-        description = "";
-        try
-        {
-            UserController uc = new UserController(null);
-            User user = uc.retrieve(getUser().getEmail());
-            try{
-                ItemVO item = DepositController.createImejiItem(inputStream, title, description, mimetype, format, escidocUserHandle, collection.getId().toString(), escidocContext);
-                DepositController.depositImejiItem(item, escidocUserHandle, collection, user, title);
-                sNum += 1;
-                sFiles.add(title);
-            } catch (Exception e){
-            	fNum += 1;
-            	fFiles.add(title);
-                throw new RuntimeException(e);
-            }
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
+    	boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+    	if(isMultipart)
+    	{  
+    		ServletFileUpload upload = new ServletFileUpload();
+    		// Parse the request
+    		FileItemIterator iter = upload.getItemIterator(req);
+    		while (iter.hasNext()) {
+    		    FileItemStream item = iter.next();
+    		    String name = item.getFieldName();
+    		    InputStream stream = item.openStream();
+    		    if (!item.isFormField()) {
+    		    	title =item.getName();
+    		        StringTokenizer st = new StringTokenizer(title, ".");
+    		        while (st.hasMoreTokens())
+    		            format = st.nextToken();
+    		        mimetype = "image/" + format;
+    		     
+    		        // TODO remove static image description
+    		        description = "";
+    		        try
+    		        {
+    		            UserController uc = new UserController(null);
+    		            User user = uc.retrieve(getUser().getEmail());
+    		            try{
+    		                ItemVO itemVO = DepositController.createImejiItem(stream, title, description, mimetype, format, escidocUserHandle, collection.getId().toString(), escidocContext);
+    		                DepositController.depositImejiItem(itemVO, escidocUserHandle, collection, user, title);
+    		                sNum += 1;
+    		                sFiles.add(title);
+    		            } catch (Exception e){
+    		            	fNum += 1;
+    		            	fFiles.add(title);
+    		                throw new RuntimeException(e);
+    		            }
+    		        }catch (Exception e){
+    		            throw new RuntimeException(e);
+    		        }
+
+    		        
+    		    } 
+    		}
+    	}
     }
     
     public String report() throws Exception{

@@ -53,6 +53,7 @@ public class ViewMdProfileBean extends MdProfileBean implements Serializable
     	try 
         {	
     		 profileController.update(this.getProfile());
+    		 session.getProfileCached().clear();
 		} 
     	catch (Exception e) 
 		{

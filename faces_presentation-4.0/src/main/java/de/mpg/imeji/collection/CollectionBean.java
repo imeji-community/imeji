@@ -291,6 +291,7 @@ public abstract class CollectionBean
         {
         	BeanHelper.error(sessionBean.getMessage("error_collection_release"));
 			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
 		}
        
         return "pretty:";
@@ -308,7 +309,6 @@ public abstract class CollectionBean
     	catch (Exception e) 
     	{
     		BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
-			BeanHelper.error(e.toString());
 			logger.error("Error delete collection",e);
 		}
     	
@@ -328,6 +328,7 @@ public abstract class CollectionBean
 		{
     		BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
 			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
 		}
     	
     	return "pretty:";

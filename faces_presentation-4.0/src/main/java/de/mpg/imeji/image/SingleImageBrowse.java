@@ -1,6 +1,6 @@
 package de.mpg.imeji.image;
 
-import java.util.List;
+import java.net.URI;
 
 import javax.faces.context.FacesContext;
 
@@ -26,8 +26,8 @@ public class SingleImageBrowse
 	{
 		String baseUrl = imagesBean.getImageBaseUrl();
 		
-		Image nextImage = getNextImageFromList();
-		Image prevImage = getPreviousImageFromList();
+		URI nextImage = getNextImageFromList();
+		URI prevImage = getPreviousImageFromList();
 		
 		String direction = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nav");
 
@@ -59,53 +59,53 @@ public class SingleImageBrowse
 		
 		if (nextImage != null)
 		{
-			next = baseUrl + nextImage.getId().getPath() + "/view?nav=next";
+			next = baseUrl + nextImage.getPath() + "/view?nav=next";
 		}
 		
 		if (prevImage != null)
 		{
-			previous = baseUrl + prevImage.getId().getPath() + "/view?nav=prev";
+			previous = baseUrl + prevImage.getPath() + "/view?nav=prev";
 		}
 	}
 	
-	public Image getNextImageFromList()
+	public URI getNextImageFromList()
 	{
-		for(int i=0; i < imagesBean.getImages().size() - 1 ; i++)
+		for(int i=0; i < imagesBean.getCurrentPartList().size() - 1 ; i++)
 		{
-			if (((List<Image>)imagesBean.getImages()).get(i).getId().equals(currentImage.getId()))
+			if (imagesBean.getCurrentPartList().get(i).getId().equals(currentImage.getId()))
 			{
-				return ((List<Image>)imagesBean.getImages()).get(i + 1);
+				return imagesBean.getCurrentPartList().get(i + 1).getId();
 			}
 		}
 		return null;
 	}
 	
-	public Image getPreviousImageFromList()
+	public URI getPreviousImageFromList()
 	{
-		for(int i= 1; i < imagesBean.getImages().size() ; i++)
+		for(int i= 1; i < imagesBean.getCurrentPartList().size() ; i++)
 		{
-			if (((List<Image>)imagesBean.getImages()).get(i).getId().equals(currentImage.getId()))
+			if (imagesBean.getCurrentPartList().get(i).getId().equals(currentImage.getId()))
 			{
-				return ((List<Image>)imagesBean.getImages()).get(i - 1);
+				return imagesBean.getCurrentPartList().get(i - 1).getId();
 			}
 		}
 		return null;
 	}
 	
-	public Image getFirstImageOfPage()
+	public URI getFirstImageOfPage()
 	{
-		if (!imagesBean.getImages().isEmpty())
+		if (imagesBean.getCurrentPartList().size() > 0)
 		{
-			return ((List<Image>)imagesBean.getImages()).get(0);
+			return imagesBean.getCurrentPartList().get(0).getId();
 		}
 		return null;
 	}
 	
-	public Image getLastImageOfPage()
+	public URI getLastImageOfPage()
 	{
-		if (!imagesBean.getImages().isEmpty())
+		if (imagesBean.getCurrentPartList().size() > 0) 
 		{
-			return ((List<Image>)imagesBean.getImages()).get(imagesBean.getImages().size() - 1);
+			return imagesBean.getCurrentPartList().get(imagesBean.getCurrentPartList().size() - 1).getId();
 		}
 		return null;
 	}
@@ -147,6 +147,4 @@ public class SingleImageBrowse
 	public void setPrevious(String previous) {
 		this.previous = previous;
 	}
-	
-
 }

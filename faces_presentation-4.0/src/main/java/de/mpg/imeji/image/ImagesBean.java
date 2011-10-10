@@ -29,8 +29,6 @@ import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
 import de.mpg.jena.search.Export;
 import de.mpg.jena.search.SearchResult;
-import de.mpg.jena.security.Operations.OperationsType;
-import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
 
@@ -47,7 +45,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
     private Navigation navigation;
   
     private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-    private Collection<Image> images = new ArrayList<Image>();
     
     private String discardComment;
     
@@ -96,8 +93,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
     @Override
     public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
     {
-        images = new ArrayList<Image>();
-        
         if (facets != null)
         {
         	facets.getFacets().clear(); 
@@ -111,28 +106,28 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
         
         scList = URLQueryTransformer.transform2SCList(query);
         
-        SearchResult searchResult = search(scList, sortCriterion, limit, offset);
+        SearchResult searchResult = search(scList, sortCriterion);
         
         totalNumberOfRecords = searchResult.getNumberOfRecords();
 		searchResult.setQuery(query);
 		searchResult.setSort(sortCriterion);
 		
 		// load images
-		images = loadImages(searchResult, limit, offset);
+		Collection<Image> images = loadImages(searchResult);
                 
         return ImejiFactory.imageListToThumbList(images);
     }
     
-    public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCriterion, int limit, int offset)
+    public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCriterion)
     {
         ImageController controller = new ImageController(sb.getUser()); 
-		return  controller.searchImages(scList, sortCriterion, limit, offset);
+		return  controller.searchImages(scList, sortCriterion, getElementsPerPage(), getOffset());
     }
     
-    public Collection<Image> loadImages(SearchResult searchResult, int limit, int offset)
+    public Collection<Image> loadImages(SearchResult searchResult)
     {
     	ImageController controller = new ImageController(sb.getUser()); 
-        return controller.loadImages(searchResult.getResults(), limit, offset);
+        return controller.loadImages(searchResult.getResults(), getElementsPerPage(), getOffset());
     }
     
     //for testing purpose
@@ -203,6 +198,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
         {
 			BeanHelper.error(e.getMessage());
 			activeAlbum.setAlbum(ac.retrieve(activeAlbum.getAlbum().getId()));
+			e.printStackTrace();
 		}
 
         return "pretty:";
@@ -214,7 +210,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
     	CollectionController cc = new CollectionController(sb.getUser());
     	CollectionImeji coll = null;
     	
-    	//SearchResult searchResult = search(scList, null, -1, 0);
+    	SearchResult searchResult = search(scList, null);
+    	Collection<Image> images = loadImages(searchResult);
     	
     	if (!images.isEmpty()) coll = cc.retrieve(images.iterator().next().getCollection());
     	int count = 0;
@@ -243,8 +240,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
     public String withdrawAll() throws Exception 
     {
     	ImageController ic = new ImageController(sb.getUser());
-    	//update();
+
+    	SearchResult searchResult = search(scList, null);
+    	Collection<Image> images = loadImages(searchResult);
     	int count = 0;
+    	
     	for(Image im : images)
     	{
     		try 
@@ -371,20 +371,19 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 		return getNavigationString();
 	}
     
-	public Collection<Image> getImages() {
-		return images;
-	}
-
-	public void setImages(Collection<Image> images) {
-		this.images = images;
-	}
+//	public Collection<Image> getImages() {
+//		return images;
+//	}
+//
+//	public void setImages(Collection<Image> images) {
+//		this.images = images;
+//	}
 	
 	/**
 	 * Check that at leat one image is editable
 	 */
 	public boolean isImageEditable()
 	{
-		
 		for (ThumbnailBean tb : getCurrentPartList())
 		{
 			if (tb.isEditable())
@@ -392,15 +391,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 				return true;
 			}
 		}
-
-//		Security security = new Security();
-//    	for (Image im : images)
-//    	{
-//    		if (security.check(OperationsType.UPDATE, sb.getUser(), im))
-//    		{
-//    			return true;
-//    		}
-//    	}
     	return false;
 	}
 	
@@ -413,14 +403,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 				return true;
 			}
 		}
-//		Security security = new Security();
-//    	for (Image im : images)
-//    	{
-//    		if (security.check(OperationsType.DELETE, sb.getUser(), im))
-//    		{
-//    			return true;
-//    		}
-//    	}
     	return false;
 	}
 	
@@ -452,4 +434,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
     {
 		discardComment = event.getNewValue().toString();
     }
+
+	public List<SearchCriterion> getScList() {
+		return scList;
+	}
+
+	public void setScList(List<SearchCriterion> scList) {
+		this.scList = scList;
+	}
+	
+	
 }

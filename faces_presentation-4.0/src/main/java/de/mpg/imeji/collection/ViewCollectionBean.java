@@ -58,6 +58,7 @@ public class ViewCollectionBean extends CollectionBean
         catch (Exception e)
         {
         	BeanHelper.error(e.getMessage());
+        	e.printStackTrace();
         }
     }
 

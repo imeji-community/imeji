@@ -58,6 +58,7 @@ public class AlbumImagesBean extends ImagesBean
         catch (Exception e) 
         {
 			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
 		}
        
     }
@@ -85,9 +86,7 @@ public class AlbumImagesBean extends ImagesBean
     @Override
     public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception
     {
-       
-
-		uri = ObjectHelper.getURI(Album.class, id);
+    	uri = ObjectHelper.getURI(Album.class, id);
 		SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
@@ -100,8 +99,7 @@ public class AlbumImagesBean extends ImagesBean
        	result.setSort(sortCriterion);
 		deleteNonExistingImages();
 		
-    	super.setImages(controller.loadImages(result.getResults(), limit, offset));
-        return ImejiFactory.imageListToThumbList(getImages());
+        return ImejiFactory.imageListToThumbList(loadImages(result));
     }
     
     /**

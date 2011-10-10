@@ -45,7 +45,7 @@ public class StaticContentBean
         {
             blog = false;
         }
-       // sessionSize((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false));
+        //sessionSize((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false));
     }
     public static int sessionSize(HttpSession session)
     {

@@ -20,9 +20,13 @@ import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.SearchCriterion;
+import de.mpg.jena.controller.SortCriterion;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.vo.Image;
 
 public class SelectedBean extends ImagesBean  implements Serializable
@@ -56,21 +60,28 @@ public class SelectedBean extends ImagesBean  implements Serializable
 	@Override
 	public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
 	{
-		ImageController controller = new ImageController(sb.getUser());
-		super.setImages(new ArrayList<Image>());
-		//List<SearchCriterion> uris = new ArrayList<SearchCriterion>();
+		SearchResult results = search(null, null);
+
+		totalNumberOfRecords = results.getResults().size();
+		
+		return ImejiFactory.imageListToThumbList(loadImages(results));
+	}
+	
+	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCriterion)
+	{
+		return new SearchResult(getSelectedUris());
+	}
+	
+	public List<String> getSelectedUris()
+	{
 		List<String> uris = new ArrayList<String>();
+		
 		for (URI uri : sb.getSelected()) 
 		{
 			uris.add(uri.toString());
 		}
-		if (uris.size() != 0) 
-		{
-			totalNumberOfRecords = uris.size();
-			super.setImages(controller.loadImages(uris, limit, offset));
-		}
 		
-		return ImejiFactory.imageListToThumbList(super.getImages());
+		return uris;
 	}
 	
 	public String getSelectedImagesContext() 
@@ -104,10 +115,14 @@ public class SelectedBean extends ImagesBean  implements Serializable
 		this.update();
     	AlbumImagesBean bean = (AlbumImagesBean) BeanHelper.getSessionBean(AlbumImagesBean.class);
         AlbumController ac = new AlbumController(sb.getUser());
+        
+        SearchResult results = new SearchResult(getSelectedUris());
+        Collection<Image> images = loadImages(results);
+		
         int count =0;
         if (bean.getAlbum() != null && bean.getAlbum().getAlbum() != null)
         {
-	        for (Image im : getImages())
+	        for (Image im : images)
 	        {
 	        	if (bean.getAlbum().getAlbum().getImages().contains(im.getId()))
 	        	{

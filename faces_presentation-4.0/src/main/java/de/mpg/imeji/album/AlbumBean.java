@@ -93,6 +93,7 @@ public class AlbumBean implements Serializable
             catch (Exception e) 
             {
 				BeanHelper.error(e.getMessage());
+				e.printStackTrace();
 			}
         }
         
@@ -398,6 +399,7 @@ public class AlbumBean implements Serializable
     		{
         		BeanHelper.error(sessionBean.getMessage("error_album_withdraw"));
     			BeanHelper.error(e.getMessage());
+    			e.printStackTrace();
     		}
         	
         	return "pretty:";

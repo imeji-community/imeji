@@ -10,18 +10,14 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.facet.FacetsBean;
-import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.ThumbnailBean;
-import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
-import de.mpg.imeji.util.ObjectCachedLoader;
 import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
-import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
@@ -31,7 +27,6 @@ import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.Image;
 
 public class CollectionImagesBean extends ImagesBean  implements Serializable
 {
@@ -80,8 +75,6 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
 	@Override
 	public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
 	{	
-		ImageController controller = new ImageController(sb.getUser());
-
 		if (getFacets() != null)
 		{
 			getFacets().getFacets().clear();
@@ -97,14 +90,17 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
 		
 		uri = ObjectHelper.getURI(CollectionImeji.class, id);
 		
-		SearchResult result = controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset);
-		totalNumberOfRecords = result.getNumberOfRecords();
-		result.setQuery(getQuery());
-		result.setSort(sortCriterion);
-		
-		super.setImages(controller.loadImages(result.getResults(), limit, offset));
-
-		return ImejiFactory.imageListToThumbList(getImages());
+		SearchResult results = search(scList, sortCriterion);
+		totalNumberOfRecords = results.getNumberOfRecords();
+		results.setQuery(getQuery());
+		results.setSort(sortCriterion);
+		return ImejiFactory.imageListToThumbList(loadImages(results));
+	}
+	
+	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCriterion)
+	{
+		ImageController controller = new ImageController(sb.getUser());
+		return  controller.searchImagesInContainer(uri, scList, sortCriterion, getElementsPerPage(), getOffset());
 	}
 	
 	public String getImageBaseUrl()
@@ -157,6 +153,7 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
         {
         	BeanHelper.error(sb.getMessage("error_collection_release"));
 			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
 		}
        
         return "pretty:";
@@ -175,6 +172,7 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
     	{
     		BeanHelper.error(sb.getMessage("success_collection_delete"));
 			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
 		}
     	
     	return "pretty:collections";
@@ -193,6 +191,7 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
 		{
     		BeanHelper.error(sb.getMessage("error_collection_withdraw"));
 			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
 		}
     	
     	return "pretty:";
@@ -207,31 +206,29 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
 	/**
 	 * Check that at leat one image is editable
 	 */
-	public boolean isImageEditable()
-	{
-		Security security = new Security();
-    	for (Image im : getImages())
-    	{
-    		if (security.check(OperationsType.UPDATE, sb.getUser(), im))
-    		{
-    			return true;
-    		}
-    	}
-    	return false;
-	}
-	
-	public boolean isImageDeletable()
-	{
-		Security security = new Security();
-    	for (Image im : getImages())
-    	{
-    		if (security.check(OperationsType.DELETE, sb.getUser(), im))
-    		{
-    			return true;
-    		}
-    	}
-    	return false;
-	}
+//	public boolean isImageEditable()
+//	{
+//		for (ThumbnailBean tb : getCurrentPartList())
+//		{
+//			if (tb.isEditable())
+//			{
+//				return true;
+//			}
+//		}
+//    	return false;
+//	}
+//	
+//	public boolean isImageDeletable()
+//	{
+//		for (ThumbnailBean tb : getCurrentPartList())
+//		{
+//			if (tb.isDeletable())
+//			{
+//				return true;
+//			}
+//		}
+//    	return false;
+//	}
 
 	public boolean isVisible() 
 	{

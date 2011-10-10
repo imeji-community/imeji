@@ -141,6 +141,21 @@ public class Scripts
 		 return "";
 	 }
 	 
+	 public void clean(User admin)
+	 {
+		 ImageController im = new ImageController(admin);
+		
+		 try 
+		 {
+			 Image img = im.retrieve("2802");
+			 im.delete(img, admin);
+		 } catch (Exception e) {
+			// TODO Auto-generated catch block
+			 e.printStackTrace();
+		 }
+
+	 }
+	 
 	 public void createContentModel() throws Exception
 	 {
 		 String admin = LoginHelper.login("roland", "topor");

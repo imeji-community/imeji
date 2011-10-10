@@ -28,18 +28,14 @@
  */
 package de.mpg.imeji.beans;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
@@ -207,19 +203,15 @@ public abstract class BasePaginatorListSessionBean<ListElementType> implements S
         catch (NotBoundException e)
         {
             corruptedList = true;
-            e.printStackTrace();
+            logger.error("Error paginator list update: not bound exception ", e);
         }
         catch (Exception e)
         {
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error paginator list update ", e);
         }
     }
     
- 
-
-
-
     public String initCorruptData()
     {
         boolean clean = false;

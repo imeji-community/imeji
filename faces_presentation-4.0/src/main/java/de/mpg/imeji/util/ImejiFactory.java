@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.SessionBean;
@@ -21,6 +23,8 @@ import de.mpg.jena.vo.Statement;
 
 public class ImejiFactory
 {
+	private static Logger logger = Logger.getLogger(ImejiFactory.class);
+	
     public static CollectionImeji newCollection()
     {
         CollectionImeji coll = new CollectionImeji();
@@ -94,9 +98,9 @@ public class ImejiFactory
 			((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
 				.setProfileCached(ProfileHelper.loadProfiles((List<Image>) imgList));
 		} 
-        catch (Exception e1) 
+        catch (Exception e) 
         {
-			e1.printStackTrace();
+        	logger.error("Error loading profiles", e);
 		}
         for (Image img : imgList)
         {
@@ -106,7 +110,7 @@ public class ImejiFactory
 			} 
         	catch (Exception e) 
 			{
-				e.printStackTrace();
+        		logger.error("Error creating ThumbnailBean list", e);
 			} 
         }
         return beanList;

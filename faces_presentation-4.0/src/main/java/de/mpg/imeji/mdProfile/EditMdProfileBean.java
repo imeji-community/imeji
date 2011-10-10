@@ -111,6 +111,7 @@ public class EditMdProfileBean extends MdProfileBean implements Serializable
         			getProfile().getStatements().add(wrapper.getAsStatement());
         		}
         		profileController.update(getProfile());
+        		session.getProfileCached().clear();
   			} 
             catch (Exception e) 
   			{

@@ -119,7 +119,7 @@ public class SingleEditBean implements Serializable
 		} 
 		catch (Exception e) 
 		{
-			BeanHelper.error(e.getMessage());
+			BeanHelper.error("Error reload image" + e.getMessage());
 		}
 	}
 

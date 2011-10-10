@@ -11,6 +11,8 @@ import thewebsemantic.NotBoundException;
 import thewebsemantic.RDF2Bean;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.NodeIterator;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Selector;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
@@ -75,13 +77,14 @@ public class ImejiRDF2Bean
 		}
 		catch (NotBoundException e) 
 		{
-			logger.warn(uri + " NOT BOUND! ");
-			//deleteObjects(uri);
+			logger.warn(uri + " NOT BOUND! ", e);
+			//test(uri);
 			//logger.warn("...DONE");
 		}
 		return null;
 	}
 
+	
 	/**
 	 * This method does not check security.
 	 * 
@@ -131,6 +134,145 @@ public class ImejiRDF2Bean
 		}
     	im.getMetadataSet().setMetadata(mdSorted);
     }
+	
+	
+	private void test(String uri)
+	{
+		 Resource r = rdf2Bean.getModel().getResource(uri);
+		 
+		 if (!hasMetadataSet(r))
+		 {
+			 Statement s = findMetadataSetPredicate(r);
+			 
+			 List<Statement> l =  new ArrayList<Statement>();//(s.getResource());
+			 l.add(s);
+			 for(Statement st : l)
+			 {
+				 System.out.println("Will remove " + st);
+				 //System.out.println("with " + find(st.getResource()));
+			 }
+			 System.out.println("Removing... ");
+			 rdf2Bean.getModel().remove(l);
+			 System.out.println("... done!");
+			 
+		 }
+	}
+	
+	private List<Statement> find(Resource r)
+	{
+		Selector selector = new SimpleSelector(r, null, (Resource)null);
+		StmtIterator iter = rdf2Bean.getModel().listStatements(selector);
+		while (iter.hasNext())
+		{
+			try{
+				Statement s1 = iter.nextStatement();
+				System.out.println(s1);
+				find(s1.getResource());
+			 }
+			 catch (Exception e) {/*Do nothing*/}
+		}
+		return null;
+	}
+	
+	private boolean hasMetadataSet(Resource r)
+	{
+		Selector selector = new SimpleSelector(r, null, (Resource)null);
+		StmtIterator iter = rdf2Bean.getModel().listStatements(selector);
+		int limit = 0;
+		boolean hasMdSet = false;
+		while (iter.hasNext() && limit < 500)
+		{
+			limit++;
+			try{
+				Statement s1 = iter.nextStatement();
+				if (!hasMdSet)
+				{
+					hasMdSet = (hasMetadataSet(s1.getResource()) || s1.getResource().toString().equals("http://imeji.mpdl.mpg.de/metadataSet"));
+				}
+			 }
+			 catch (Exception e) {/*Do nothing*/}
+		}
+		return hasMdSet;
+	}
+	
+	private Statement findMetadataSetPredicate(Resource r)
+	{
+		Selector selector = new SimpleSelector(r, null, (Resource)null);
+		StmtIterator iter = rdf2Bean.getModel().listStatements(selector);
+		int limit = 0;
+		
+		while (iter.hasNext() && limit < 500)
+		{
+			limit++;
+			try{
+				Statement s1 = iter.nextStatement();
+				if (s1.getPredicate().toString().equals("http://imeji.mpdl.mpg.de/metadataSet"))
+				{
+					return s1;
+				}
+				Statement st = findMetadataSetPredicate(s1.getResource());
+				if (st != null) return st;
+			 }
+			 catch (Exception e) {/*Do nothing*/}
+		}
+		return null;
+	}
+	
+	private List<Statement> findAllStatements(Resource r)
+	{
+		Selector selector = new SimpleSelector(r, null, (Resource)null);
+		StmtIterator iter = rdf2Bean.getModel().listStatements(selector);
+		int limit = 0;
+		List<Statement> list = new ArrayList<Statement>();
+		while (iter.hasNext() && limit < 500)
+		{
+			limit++;
+			try{
+				Statement s = iter.nextStatement();
+				if (!s.getPredicate().toString().equals("http://imeji.mpdl.mpg.de/profile"))
+				{
+					list.add(s);
+					list.addAll(findAllStatements(s.getResource()));
+				}
+			 }
+			 catch (Exception e) {/*Do nothing*/}
+		}
+		return list;
+	}
+	
+//	private Statement findMetadataSet()
+//	{
+//		Selector selector = new SimpleSelector(r, null, (Resource)null);
+//		StmtIterator iter = rdf2Bean.getModel().listStatements(selector);
+//		int limit = 0;
+//		Resource metadataset = null;
+//		while (iter.hasNext() && limit < 500)
+//		{
+//			limit++;
+//			try{
+//				
+//				 Statement s1 = iter.nextStatement();
+//				 //System.out.println( s1.getPredicate());
+//				 if (s1.getPredicate().getURI().equals("http://imeji.mpdl.mpg.de/metadataSet"))
+//				 {
+//					 metadataset = s1.getResource();
+//				 }
+//				 //System.out.println(s1.getResource().toString());
+//				 if (s1.getResource().toString().equals("http://imeji.mpdl.mpg.de/metadataSet"))
+//				 {
+//					 return state System.out.println("MDSET");
+//				 }
+//				 findMetadataSet(s1.getResource());
+//			 }
+//			 catch (Exception e) {
+//				// if (e.getMessage() != null)
+//				//System.out.println(r.getURI() + " - " + e);
+//				// System.out.println("***************");
+//			}
+//		}
+//		return metadataset;
+//	}
+	
 	
 	private void deleteObjects(String uri)
 	    {

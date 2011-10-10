@@ -146,7 +146,8 @@ public class ImageBean implements Serializable
 		}
         catch (Exception e) 
  		{
- 			BeanHelper.error(sessionBean.getMessage("error_image_load") + ": " + e );
+ 			BeanHelper.error(sessionBean.getMessage("error_image_load"));
+ 			logger.error(sessionBean.getMessage("error_image_load"), e);
  		}
     }
     
@@ -159,6 +160,7 @@ public class ImageBean implements Serializable
     	catch (Exception e) 
     	{
 			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
 			collection = null;
 		}
     }
@@ -183,7 +185,6 @@ public class ImageBean implements Serializable
 			BeanHelper.error(e.getMessage());
 			profile = new MetadataProfile();
 			logger.error("Error load profile " + image.getMetadataSet().getProfile() + " of image " + image.getId(), e);
-			e.printStackTrace();
 		}
     }
     

@@ -17,6 +17,7 @@ import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionImagesBean;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.SelectedBean;
+import de.mpg.imeji.image.ThumbnailBean;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.lang.labelHelper;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
@@ -27,6 +28,8 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
+import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
@@ -77,6 +80,9 @@ public class EditImageMetadataBean  implements Serializable
 		try 
 		{
 			initImagesBean();
+			List<Image> images = searchAndLoadImages();
+			isProfileWithStatements = true;
+			profiles =  ProfileHelper.loadProfiles(images).values();
 			profile = getSelectedProfile();
 			statement = getSelectedStatement();
 			((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
@@ -89,7 +95,9 @@ public class EditImageMetadataBean  implements Serializable
 			if (statement != null)
 			{
 			    metadata = MetadataFactory.newMetadata(statement);
-				editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
+			    
+				editor = new MetadataMultipleEditor(images, getSelectedProfile(), getSelectedStatement());
+				
 				((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 			}
 			else
@@ -105,14 +113,15 @@ public class EditImageMetadataBean  implements Serializable
 		return "";
 	}
 	
-	public String getAjaxInit()
+	public String getAjaxInit() throws Exception
 	{
 		lockImages();
 		profile = getSelectedProfile();
 		statement = getSelectedStatement();
 		if (statement != null)
 		{
-			editor = new MetadataMultipleEditor((List<Image>) imagesBean.getImages(), getSelectedProfile(), getSelectedStatement());
+			editor = new MetadataMultipleEditor(editor.getImages(), getSelectedProfile(), getSelectedStatement());
+			//editor = new MetadataMultipleEditor(searchAndLoadImages(), getSelectedProfile(), getSelectedStatement());
 			modeRadio = new ArrayList<SelectItem>();
 			modeRadio.add(new SelectItem("basic",((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("editor_basic")));
 			if (this.statement.getMaxOccurs().equals("unbounded"))
@@ -123,11 +132,11 @@ public class EditImageMetadataBean  implements Serializable
 		}
 		return "";
 	}
-	
-	public void initImagesBean() throws Exception
+		
+	public void initImagesBean()
 	{
 		editType = (String) ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("type");
-		
+
 		if ("selected".equals(editType))
 		{
 			imagesBean = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
@@ -136,13 +145,16 @@ public class EditImageMetadataBean  implements Serializable
 		{
 			imagesBean = (CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class);
 		}
-		
+	}
+	
+	public List<Image> searchAndLoadImages()
+	{
 		int elementsPerPage = imagesBean.getElementsPerPage();
-		imagesBean.setElementsPerPage(1000000);
-		isProfileWithStatements = true;
-		imagesBean.update();
+		imagesBean.setElementsPerPage(10);
+		SearchResult sr = imagesBean.search(imagesBean.getScList(), null);
+		List<Image> images = (List<Image>) imagesBean.loadImages(sr);
 		imagesBean.setElementsPerPage(elementsPerPage);
-		profiles =  ProfileHelper.loadProfiles((List<Image>) imagesBean.getImages()).values();
+		return images;
 	}
 	
 	public void initMenus()
@@ -170,7 +182,7 @@ public class EditImageMetadataBean  implements Serializable
 	private void lockImages()
 	{
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		for (Image im : imagesBean.getImages())
+		for (ThumbnailBean im : imagesBean.getCurrentPartList())
 		{
 			Locks.lock(new Lock(im.getId().toString(), sb.getUser().getEmail()));
 		}
@@ -179,7 +191,7 @@ public class EditImageMetadataBean  implements Serializable
 	private void unlockImages()
 	{
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		for (Image im : imagesBean.getImages())
+		for (ThumbnailBean im : imagesBean.getCurrentPartList())
 		{
 			Locks.unLock(new Lock(im.getId().toString(), sb.getUser().getEmail()));
 		}

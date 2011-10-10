@@ -26,6 +26,7 @@ import de.escidoc.core.common.exceptions.system.SystemException;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.util.LoginHelper;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
@@ -210,12 +211,19 @@ public class ImageController extends ImejiController
         	{
         		try 
         		{
-        			images.add((Image) reader.load(s, user));
+        			Image image = (Image) reader.load(s, user);
+        			
+        			// if metadataset not bound, then needs to reinit it. 
+        			if (image != null && image.getMetadataSet().getProfile() == null) 
+        			{
+        				image.getMetadataSet().setProfile(ObjectLoader.loadCollection(image.getCollection(), user).getProfile());
+        				update(image);
+        			}
+        			if (image != null) images.add(image);
 				} 
         		catch (Exception e) 
 				{
-					logger.error("Error loading image " + s + ":" + e.getMessage());
-					e.printStackTrace();
+					logger.error("Error loading image " + s + ":", e);
 				}
         	}
          	counter ++;

@@ -2,6 +2,8 @@ package de.mpg.imeji.mdProfile;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.UrlHelper;
@@ -13,7 +15,8 @@ public class ViewMdProfileBean extends MdProfileBean implements Serializable
     private SessionBean session;
     private ProfileController profileController;
     private boolean init = false;
-
+    
+    private static Logger logger = Logger.getLogger(ViewMdProfileBean.class);
     public ViewMdProfileBean()
     {
         super();
@@ -54,12 +57,13 @@ public class ViewMdProfileBean extends MdProfileBean implements Serializable
         {	
     		 profileController.update(this.getProfile());
     		 session.getProfileCached().clear();
+    		 BeanHelper.info(session.getMessage("success_profile_save"));
 		} 
     	catch (Exception e) 
 		{
 			 BeanHelper.error(session.getMessage("error_profile_save"));
+			 logger.error(session.getMessage("error_profile_save"), e);
 		}
-        BeanHelper.info(session.getMessage("success_profile_save"));
         return "pretty:";
     }
 

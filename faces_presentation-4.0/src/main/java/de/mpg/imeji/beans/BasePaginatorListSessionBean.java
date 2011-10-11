@@ -111,6 +111,8 @@ public abstract class BasePaginatorListSessionBean<ListElementType> implements S
     private boolean corruptedList = false;
     
     private boolean ajaxMode = true;
+    
+    private long startRendering;
 
     /**
      * Initializes a new BasePaginatorListSessionBean
@@ -197,8 +199,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> implements S
             {
                 paginatorPageList.add(new PaginatorPage(i + 1));
             }
-            corruptedList = false;
-            
+            corruptedList = false;       
         }
         catch (NotBoundException e)
         {

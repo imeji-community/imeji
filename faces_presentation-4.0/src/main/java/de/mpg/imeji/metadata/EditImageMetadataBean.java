@@ -2,7 +2,6 @@ package de.mpg.imeji.metadata;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,7 +18,6 @@ import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.SelectedBean;
 import de.mpg.imeji.image.ThumbnailBean;
 import de.mpg.imeji.lang.MetadataLabels;
-import de.mpg.imeji.lang.labelHelper;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
@@ -28,7 +26,6 @@ import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
-import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
@@ -150,10 +147,13 @@ public class EditImageMetadataBean  implements Serializable
 	public List<Image> searchAndLoadImages()
 	{
 		int elementsPerPage = imagesBean.getElementsPerPage();
-		imagesBean.setElementsPerPage(10);
+		int currentPageNumber = imagesBean.getCurrentPageNumber();
+		imagesBean.setElementsPerPage(10000);
+		imagesBean.setCurrentPageNumber(1);
 		SearchResult sr = imagesBean.search(imagesBean.getScList(), null);
 		List<Image> images = (List<Image>) imagesBean.loadImages(sr);
 		imagesBean.setElementsPerPage(elementsPerPage);
+		imagesBean.setCurrentPageNumber(currentPageNumber);
 		return images;
 	}
 	
@@ -182,7 +182,7 @@ public class EditImageMetadataBean  implements Serializable
 	private void lockImages()
 	{
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		for (ThumbnailBean im : imagesBean.getCurrentPartList())
+		for (Image im : editor.getImages())
 		{
 			Locks.lock(new Lock(im.getId().toString(), sb.getUser().getEmail()));
 		}
@@ -191,7 +191,7 @@ public class EditImageMetadataBean  implements Serializable
 	private void unlockImages()
 	{
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		for (ThumbnailBean im : imagesBean.getCurrentPartList())
+		for (Image im :  editor.getImages())
 		{
 			Locks.unLock(new Lock(im.getId().toString(), sb.getUser().getEmail()));
 		}

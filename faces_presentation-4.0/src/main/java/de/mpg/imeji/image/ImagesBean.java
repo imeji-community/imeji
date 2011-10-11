@@ -1,6 +1,10 @@
 package de.mpg.imeji.image;
 
 import java.io.Serializable;
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryManagerMXBean;
+import java.lang.management.MemoryPoolMXBean;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -114,8 +118,32 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 		
 		// load images
 		Collection<Image> images = loadImages(searchResult);
-                
+
         return ImejiFactory.imageListToThumbList(images);
+    }
+    
+    // TEST puroposes
+    private void printGC()
+    {
+    	 int sum = 0;
+         for (GarbageCollectorMXBean mb : ManagementFactory.getGarbageCollectorMXBeans()) {
+             sum += mb.getCollectionCount();
+             System.out.println( mb.getCollectionCount());
+             for (String s : mb.getMemoryPoolNames())  System.out.println(s);
+            
+         }
+         System.out.println("gc:" + sum);
+         
+         System.out.println("Heap: current " +  (ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() /1000000));
+         System.out.println("Heap: committed " +  (ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getCommitted()/1000000));
+         System.out.println("Heap: Max " +  (ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax()/1000000));
+         
+         System.out.println("NON Heap: current " +  (ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed()/1000000));
+         System.out.println("NON Heap: committed " +  (ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getCommitted()/1000000));
+         System.out.println("NON Heap: Max " +  (ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getMax()/1000000));
+        
+         
+         System.out.println("threads:" + ManagementFactory.getThreadMXBean().getThreadCount());
     }
     
     public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCriterion)
@@ -213,7 +241,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
     	SearchResult searchResult = search(scList, null);
     	Collection<Image> images = loadImages(searchResult);
     	
-    	if (!images.isEmpty()) coll = cc.retrieve(images.iterator().next().getCollection());
+    	if (images != null && !images.isEmpty()) coll = cc.retrieve(images.iterator().next().getCollection());
     	int count = 0;
     	for(Image im : images)
     	{

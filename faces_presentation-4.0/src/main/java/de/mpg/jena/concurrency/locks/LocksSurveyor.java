@@ -1,5 +1,6 @@
 package de.mpg.jena.concurrency.locks;
 
+import java.lang.management.GarbageCollectorMXBean;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,33 +21,36 @@ public class LocksSurveyor extends Thread
 		{
 			try
 			{
-				List<Lock> list = new ArrayList<Lock>(Locks.getExpiredLocks());
-				if (!Locks.getExpiredLocks().isEmpty())
+				synchronized (logger) 
 				{
-					logger.info("Unlocking dead locks...");
-					for (Lock l :Locks.getExpiredLocks())
+					List<Lock> list = new ArrayList<Lock>(Locks.getExpiredLocks());
+					if (!Locks.getExpiredLocks().isEmpty())
 					{
-						list.add(l);
+						logger.info("Unlocking dead locks...");
+						for (Lock l :Locks.getExpiredLocks())
+						{
+							list.add(l);
+						}
+						for(Lock l : list)
+						{
+							logger.info("on " + l.getUri() + " by " + l.getEmail());
+							Locks.unLock(l);
+						}
 					}
-					for(Lock l : list)
-					{
-						logger.info("on " + l.getUri() + " by " + l.getEmail());
-						Locks.unLock(l);
-					}
-				}
 				Thread.sleep(10000);
+				}
 			}
 			catch (NegativeArraySizeException e) 
 			{
 				Locks.init();
+				logger.error("Locks have been reinitialized. All locks have been released: " ,e);
 			}
 			catch (Exception e) 
 			{
-				logger.warn("Locks Surveyor encounterd a problem: " + e.getMessage() + " " + e.getCause());
-				e.printStackTrace();
+				logger.error("Locks Surveyor encountered a problem: " ,e);
 			}
 		}
-		logger.warn("Lock Surveyor stopped. It should not occurs if application is still runnung!");
+		logger.error("Lock Surveyor stopped. It should not occurs if application is still running!");
 	}
 	
 	

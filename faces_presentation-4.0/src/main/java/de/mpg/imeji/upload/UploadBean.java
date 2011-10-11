@@ -7,16 +7,12 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.util.Streams;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.imeji.beans.SessionBean;

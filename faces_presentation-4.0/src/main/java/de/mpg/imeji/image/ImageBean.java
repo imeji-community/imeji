@@ -182,7 +182,6 @@ public class ImageBean implements Serializable
     	catch (Exception e) 
     	{
 			BeanHelper.error(sessionBean.getMessage("error_profile_load") + " " + image.getMetadataSet().getProfile() + "  " + sessionBean.getLabel("of") + " " + image.getId());
-			BeanHelper.error(e.getMessage());
 			profile = new MetadataProfile();
 			logger.error("Error load profile " + image.getMetadataSet().getProfile() + " of image " + image.getId(), e);
 		}

@@ -110,7 +110,6 @@ public class ImejiBean2RDF
 		{
 			commitModel();
 		}
-		
 		return null;
 	}
 	
@@ -145,7 +144,6 @@ public class ImejiBean2RDF
 	private void commitTransaction(Object bean, User user)
 	{
 		Locks.unLock(new Lock(extractID(bean).toString()));
-		cleanGraph();
 	}
 	
 	/**
@@ -166,6 +164,7 @@ public class ImejiBean2RDF
 	{
 		bean2rdf.getModel().commit();
 		bean2rdf.getModel().leaveCriticalSection();
+		cleanGraph();
 	}
 	
 	private void checkSecurity(Object bean, User user, OperationsType opType)

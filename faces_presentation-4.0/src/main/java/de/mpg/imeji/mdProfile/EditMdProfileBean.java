@@ -6,6 +6,8 @@ import java.io.Serializable;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionSessionBean;
@@ -26,6 +28,8 @@ public class EditMdProfileBean extends MdProfileBean implements Serializable
     private boolean init = false;
     private String colId = null;
     private CollectionImeji collection = null;
+    
+    private static Logger logger = Logger.getLogger(EditMdProfileBean.class);
     
     public EditMdProfileBean()
     {
@@ -112,12 +116,13 @@ public class EditMdProfileBean extends MdProfileBean implements Serializable
         		}
         		profileController.update(getProfile());
         		session.getProfileCached().clear();
+        		 BeanHelper.info(session.getMessage("success_profile_save"));
   			} 
             catch (Exception e) 
   			{
   				 BeanHelper.error(session.getMessage("error_profile_save"));
+  				 logger.error(session.getMessage("error_profile_save"), e);
   			}
-            BeanHelper.info(session.getMessage("success_profile_save"));
             cancel();
         }
 

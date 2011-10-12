@@ -1,15 +1,14 @@
 package de.mpg.imeji.search;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.collection.CollectionsBean;
-import de.mpg.imeji.collection.CollectionsSearchResultBean;
-import de.mpg.imeji.image.ImagesBean;
+import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.SearchCriterion;
 
@@ -18,9 +17,42 @@ public class QuickSearchBean implements Serializable
     private String searchString ="";
     private String selectedSearchType = "images";
 
-    public QuickSearchBean() {
-	}
-
+    public String search() throws IOException 
+    {	
+    	Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    	
+    	if (getSelectedSearchType() == null) setSelectedSearchType("images");
+    	
+        if(getSelectedSearchType().equals("collections"))
+        {
+        	FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getCollectionsUrl() + "?q=" + searchString);
+        }
+        else if (getSelectedSearchType().equals("images"))
+        {
+        	List<SearchCriterion> scl = new ArrayList<SearchCriterion>();
+            try 
+            {
+            	if (searchString.startsWith("\"") && searchString.endsWith("\""))
+            	{
+            		scl.addAll(URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + searchString +"\" )"));
+            	}
+            	else
+            	{
+            		for(String s : searchString.split("\\s"))
+                	{
+                		scl.addAll(URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + s +"\" )"));
+                	}
+            	}
+			} 
+            catch (Exception e) 
+			{
+				throw new RuntimeException("Error creating quicksearch query: " + e);
+			}
+        	FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getImagesUrl() + "?q=" + URLQueryTransformer.transform2URL(scl));
+        }
+        return "";
+    }
+    
     public void setSearchString(String searchString)
     {
         this.searchString = searchString;
@@ -49,47 +81,4 @@ public class QuickSearchBean implements Serializable
     		selectedSearchType = (String) event.getNewValue();
     	}
     }
-    
-    public String search()
-    {
-    	if (getSelectedSearchType() == null) setSelectedSearchType("images");
-    	
-        if(getSelectedSearchType().equals("collections"))
-        {
-            //CollectionsSearchResultBean bean = (CollectionsSearchResultBean)BeanHelper.getSessionBean(CollectionsSearchResultBean.class);
-        	CollectionsBean bean = (CollectionsBean)BeanHelper.getSessionBean(CollectionsBean.class);
-            bean.setQuery(searchString);
-            return "pretty:collections";
-        }
-        else if (getSelectedSearchType().equals("images"))
-        {
-            ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class);
-            //bean.setQuery("( ANY_METADATA=\"" + searchString +"\" )");
-            try 
-            {
-            	List<SearchCriterion> scl = new ArrayList<SearchCriterion>();
-            	if (searchString.startsWith("\"") && searchString.endsWith("\""))
-            	{
-            		scl.addAll(URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + searchString +"\" )"));
-            	}
-            	else
-            	{
-            		for(String s : searchString.split("\\s"))
-                	{
-                		scl.addAll(URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + s +"\" )"));
-                	}
-            	}
-            	
-				//List<SearchCriterion> scl = URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + searchString +"\" )");
-				bean.setQuery(URLQueryTransformer.transform2URL(scl));
-			} catch (Exception e) 
-			{
-				throw new RuntimeException("Error creating quicksearch query: " + e);
-			}
-            return "pretty:images";
-        }
-        return "pretty:";
-    }
-    
-    
 }

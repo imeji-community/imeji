@@ -23,7 +23,6 @@ public class HistorySession implements Serializable
 		{
 			if (type.getFileName().equals(filename))
 			{
-				System.out.println();
 				try
 				{
 					if (ImejiPages.IMAGES.equals(type) && query != null && !"".equals(query))

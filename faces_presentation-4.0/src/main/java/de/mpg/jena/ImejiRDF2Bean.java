@@ -11,8 +11,6 @@ import thewebsemantic.NotBoundException;
 import thewebsemantic.RDF2Bean;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Selector;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
@@ -45,6 +43,7 @@ public class ImejiRDF2Bean
 			Security security = new Security();
 			
 			Object o = rdf2Bean.load(uri);
+
 			if (!security.check(OperationsType.READ, user, o)) 
 			{
 				if (o instanceof Image) 

@@ -181,12 +181,9 @@ public class CollectionController extends ImejiController
 		    		logger.error("Withdraw image error: " + uri + " could not be found");
 				}
 		    }
-		    Security security = new Security();
-	    	System.out.println(security.check(OperationsType.UPDATE, user, ic));
 		    // Withdraw collection
 		    ic.getProperties().setStatus(Status.WITHDRAWN);
 			ic.getProperties().setVersionDate(new Date());
-	    	System.out.println(security.check(OperationsType.UPDATE, user, ic));
 	        this.update(ic);
 	        
 	        // Withdraw profile

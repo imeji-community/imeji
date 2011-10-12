@@ -39,14 +39,14 @@ public class ImejiSPARQL
 		LinkedList<T> beans = new LinkedList<T>();
         try 
         {
-                //m.enterCriticalSection(Lock.READ);
+                m.enterCriticalSection(Lock.READ);
                 ResultSet results = qexec.execSelect();
                // ResultSetFormatter.out(System.out, results) ;
                 for (;results.hasNext();)beans.add(reader.load(c, resource(results).toString()));
                 return beans;
         } finally 
         {
-                //m.leaveCriticalSection();
+                m.leaveCriticalSection();
                 qexec.close();
         }
 	}
@@ -67,13 +67,13 @@ public class ImejiSPARQL
 		LinkedList<T> beans = new LinkedList<T>();
         try 
         {
-                //m.enterCriticalSection(Lock.READ);
+                m.enterCriticalSection(Lock.READ);
                 ResultSet results = qexec.execSelect();
                 for (;results.hasNext();) beans.add(reader.load(c, resource(results).toString()));
                 return beans;
         } finally 
         {
-                //m.leaveCriticalSection();
+                m.leaveCriticalSection();
                 qexec.close();
         }
 	}

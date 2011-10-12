@@ -444,12 +444,17 @@
 				<escidoc.faces.collection.content-model.id>escidoc:194286</escidoc.faces.collection.content-model.id>
 				<!--  <escidoc.faces.collection.content-model.id>escidoc:faces70</escidoc.faces.collection.content-model.id>-->
 				
-				<!-- Number of albums in the album lists -->
-				<escidoc.faces.album.list.size>10</escidoc.faces.album.list.size>
+				<!-- Default number of image in the lists -->
+				<imeji.image.list.size>18</imeji.image.list.size>
 				
-				<!--  UI Config -->				
-				<escidoc.faces.album.list.size.options>10,25,50,75,100</escidoc.faces.album.list.size.options> <!-- User options for the displayed number of albums -->
-				<escidoc.organizationTree.integration>yes</escidoc.organizationTree.integration> <!-- User option, if organization selection should be displayed on create/edit album -->				
+				<!--  Options for number of image in the lists -->				
+				<imeji.image.list.size.options>6,12,18,24,60,90,240</imeji.image.list.size.options>
+				
+				<!-- Default number of container in the lists -->
+				<imeji.container.list.size>10</imeji.container.list.size>
+				
+				<!--  Options for number of container in the lists -->				
+				<imeji.container.list.size.options>5,10,15,20,50</imeji.container.list.size.options>
 				
 				<imeji.i18n.languages>en,de,ja</imeji.i18n.languages>
 				

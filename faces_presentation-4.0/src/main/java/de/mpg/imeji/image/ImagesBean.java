@@ -24,6 +24,7 @@ import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -58,6 +59,26 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         initMenus();
+        try 
+        {
+			setElementsPerPage(Integer.parseInt(PropertyReader.getProperty("imeji.image.list.size")));
+		} 
+        catch (Exception e) 
+		{
+			logger.error("Error loading property imeji.image.list.size", e);
+		}
+        try 
+        {
+			String options = PropertyReader.getProperty("imeji.image.list.size.options");
+			for(String option : options.split(","))
+			{
+				getElementsPerPageSelectItems().add(new SelectItem(option));
+			}
+		} 
+        catch (Exception e) 
+        {
+			logger.error("Error reading property imeji.image.list.size.options", e);
+		}
     }
 
     public String getInitPage()
@@ -111,14 +132,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
         scList = URLQueryTransformer.transform2SCList(query);
         
         SearchResult searchResult = search(scList, sortCriterion);
-        
         totalNumberOfRecords = searchResult.getNumberOfRecords();
 		searchResult.setQuery(query);
 		searchResult.setSort(sortCriterion);
 		
 		// load images
 		Collection<Image> images = loadImages(searchResult);
-
         return ImejiFactory.imageListToThumbList(images);
     }
     

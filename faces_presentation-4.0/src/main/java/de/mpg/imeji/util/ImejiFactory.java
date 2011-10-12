@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import thewebsemantic.LocalizedString;
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.collection.CollectionListItem;
 import de.mpg.imeji.collection.ViewCollectionBean;
 import de.mpg.imeji.image.ImageBean;
 import de.mpg.imeji.image.ThumbnailBean;
@@ -20,6 +21,7 @@ import de.mpg.jena.vo.Organization;
 import de.mpg.jena.vo.Person;
 import de.mpg.jena.vo.Properties;
 import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.User;
 
 public class ImejiFactory
 {
@@ -68,6 +70,16 @@ public class ImejiFactory
         Organization org = new Organization();
         org.setName("");
         return org;
+    }
+    
+    public static List<CollectionListItem> collectionListToListItem(Collection<CollectionImeji> collList, User user)
+    {
+    	List<CollectionListItem> l = new ArrayList<CollectionListItem>();
+    	for(CollectionImeji c : collList)
+    	{
+    		l.add(new CollectionListItem(c, user));
+    	}
+    	return l;
     }
 
     public static List<ViewCollectionBean> collectionListToBeanList(Collection<CollectionImeji> collList)

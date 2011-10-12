@@ -23,12 +23,12 @@ import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Properties.Status;
 
-public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
+public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 {
 	private int totalNumberOfRecords;
     private SessionBean sb;
 	private String query = "";
-
+	
 	public CollectionsBean()
     {
         super();
@@ -48,7 +48,7 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
     }
 
     @Override
-    public List<ViewCollectionBean> retrieveList(int offset, int limit) throws Exception
+    public List<CollectionListItem> retrieveList(int offset, int limit) throws Exception
     {
     	UserController uc = new UserController(sb.getUser());
     	//initMenus();
@@ -101,11 +101,12 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+        
         SearchResult results = controller.search(scList, sortCriterion, limit, offset);
         collections = controller.load(results.getResults(), limit, offset);
         totalNumberOfRecords = results.getNumberOfRecords();
-        
-        return ImejiFactory.collectionListToBeanList(collections);
+       
+        return  ImejiFactory.collectionListToListItem(collections, sb.getUser());
     }
     
     public SessionBean getSb() 
@@ -120,14 +121,14 @@ public class CollectionsBean extends SuperContainerBean<ViewCollectionBean>
 	    
 	public String selectAll() 
 	{
-		for(CollectionBean bean: getCurrentPartList())
+		for(CollectionListItem bean: getCurrentPartList())
 		{
-			if(bean.getCollection().getProperties().getStatus() == Status.PENDING)
+			if(bean.getStatus() == Status.PENDING.toString())
 			{
 				bean.setSelected(true);
-				if(!(sb.getSelectedCollections().contains(bean.getCollection().getId())))
+				if(!(sb.getSelectedCollections().contains(bean.getId())))
 				{
-					sb.getSelectedCollections().add(bean.getCollection().getId());
+					sb.getSelectedCollections().add(bean.getId());
 				}
 			}
 		}

@@ -45,12 +45,13 @@
 			
 		 	<div class="large_area0 small_marginLIncl rangeSelector">
 		 		<h:selectOneMenu id="extSelectTop" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageTop}" onchange="getElementById('formular:btnChangeElementsPerPageTop').click();">
-		 			<f:selectItem itemValue="12" itemLabel="12"></f:selectItem>
+		 			<f:selectItems value="#{paginatorListSessionBean.elementsPerPageSelectItems}"/>
+		 			<!-- <f:selectItem itemValue="12" itemLabel="12"></f:selectItem>
 		 			<f:selectItem itemValue="24" itemLabel="24"></f:selectItem>
 		 			<f:selectItem itemValue="60" itemLabel="60"></f:selectItem>
 		 			<f:selectItem itemValue="90" itemLabel="90"></f:selectItem>
 		 			<f:selectItem itemValue="150" itemLabel="150"></f:selectItem>
-		 			<f:selectItem itemValue="300" itemLabel="300"></f:selectItem>
+		 			<f:selectItem itemValue="300" itemLabel="300"></f:selectItem> -->
 		 		</h:selectOneMenu>
 				<h:commandButton id="btnChangeElementsPerPageTop" title="#{lbl.paginator_go}" styleClass="xTiny_txtBtn paginatorFallbackGoBtn hiddenElementsNumberChangedButton"  value=""  action="#{paginatorListSessionBean.changeElementsPerPageTop}"/>
 		 		<h:outputLabel id="lblItemList_ObjectsPerPage" for="extSelectTop" styleClass="free_label hitsLabel" value=" #{lbl.paginator_objectsPerPage}" />
@@ -63,6 +64,7 @@
 		 		<a4j:commandButton id="btPartListSizeAjax" onclick="setOpacityToImages();" reRender="ajaxPaginatorTop, ajaxPaginatorBottom, ajaxList" styleClass="min_imgBtn skipToFirst" value=" " title="#{lbl.paginator_results} 1 - #{paginatorListSessionBean.partListSize}" disabled="#{paginatorListSessionBean.currentPageNumber == 1}" action="#{paginatorListSessionBean.goToFirstPage}" rendered="#{paginatorListSessionBean.ajaxMode}"/>
 		 		<a4j:commandButton id="btList_lkPreviousAjax" onclick="setOpacityToImages();" reRender="ajaxPaginatorTop, ajaxPaginatorBottom, ajaxList, subHeader" styleClass="backward" value="#{lbl.paginator_previous}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 - paginatorListSessionBean.elementsPerPage} - #{paginatorListSessionBean.offset}" disabled="#{paginatorListSessionBean.currentPageNumber == 1}" action="#{paginatorListSessionBean.goToPreviousPage}" rendered="#{paginatorListSessionBean.ajaxMode}"/>
 		 		<h:panelGroup styleClass="seperator" />
+				
 				
 		 		<a4j:repeat id="paginator" var="paginatorPage" value="#{paginatorListSessionBean.paginatorPages}" first="#{paginatorListSessionBean.firstPaginatorPageNumber - 1}" rows="7">
 		 			<h:commandButton id="btPageNumber1" styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{!paginatorListSessionBean.ajaxMode and !(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}"/>
@@ -105,12 +107,7 @@
  
  	<div class="large_area0 small_marginLIncl rangeSelector">
 		<h:selectOneMenu id="extSelectBottom" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageBottom}" onchange="getElementById('formular:btnChangeElementsPerPageBottom').click();">
- 			<f:selectItem itemValue="12" itemLabel="12"></f:selectItem>
- 			<f:selectItem itemValue="24" itemLabel="24"></f:selectItem>
- 			<f:selectItem itemValue="60" itemLabel="60"></f:selectItem>
- 			<f:selectItem itemValue="90" itemLabel="90"></f:selectItem>
- 			<f:selectItem itemValue="150" itemLabel="150"></f:selectItem>
-		 	<f:selectItem itemValue="300" itemLabel="300"></f:selectItem>
+ 			<f:selectItems value="#{paginatorListSessionBean.elementsPerPageSelectItems}"/>
  		</h:selectOneMenu>
 		<h:commandButton id="btnChangeElementsPerPageBottom" title="#{lbl.paginator_go}" styleClass="xTiny_txtBtn paginatorFallbackGoBtn hiddenElementsNumberChangedButton"  value="#{lbl.paginator_go}"  action="#{paginatorListSessionBean.changeElementsPerPageBottom}"/>
  		<h:outputLabel id="lblItemList_ObjectsPerPageBottom" for="extSelectBottom" styleClass="free_label hitsLabel" value=" #{lbl.paginator_objectsPerPage}" />

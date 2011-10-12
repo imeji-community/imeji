@@ -1,13 +1,18 @@
 package de.mpg.imeji.beans;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
@@ -26,10 +31,11 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     private String selectedFilter;
     
     private SessionBean sb;
-
     
     private List<SelectItem> sortMenu = new ArrayList<SelectItem>();
     protected List<SelectItem> filterMenu = new ArrayList<SelectItem>();
+    
+    private static Logger logger = Logger.getLogger(SuperContainerBean.class);
 
     public SuperContainerBean()
     {
@@ -39,6 +45,27 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         initMenus();
         selectedSortCriterion = ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name();
         selectedSortOrder = SortOrder.DESCENDING.name();
+        
+        try 
+        {
+			setElementsPerPage(Integer.parseInt(PropertyReader.getProperty("imeji.container.list.size")));
+		} 
+        catch (Exception e) 
+		{
+			logger.error("Error loading property imeji.container.list.size", e);
+		}
+        try 
+        {
+			String options = PropertyReader.getProperty("imeji.container.list.size.options");
+			for(String option : options.split(","))
+			{
+				getElementsPerPageSelectItems().add(new SelectItem(option));
+			}
+		} 
+        catch (Exception e) 
+        {
+			logger.error("Error reading property imeji.container.list.size.options", e);
+		}
     }
     
 

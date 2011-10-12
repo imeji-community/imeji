@@ -111,9 +111,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType> implements S
     private boolean corruptedList = false;
     
     private boolean ajaxMode = true;
-    
-    private long startRendering;
-
     /**
      * Initializes a new BasePaginatorListSessionBean
      */
@@ -127,8 +124,10 @@ public abstract class BasePaginatorListSessionBean<ListElementType> implements S
 		} 
         catch (Exception e) 
         {
-			e.printStackTrace();
-		} 
+			logger.error("Error reading property imeji.pagination.ajaxmodus", e);
+		}
+        
+        elementsPerPageSelectItems = new ArrayList<SelectItem>();
     }
 
     // Must be called by PrettyFaces action method
@@ -140,7 +139,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> implements S
 
     // Must be called by PrettyFaces action method
     public String getInit()
-    {
+    {	
         update();
         return "";
     }
@@ -167,8 +166,9 @@ public abstract class BasePaginatorListSessionBean<ListElementType> implements S
      */
     public void update()
     {
+    	
         try
-        {
+        {	
             if (elementsPerPage == 0)
             {
                 setElementsPerPage(24);
@@ -199,7 +199,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> implements S
             {
                 paginatorPageList.add(new PaginatorPage(i + 1));
             }
-            corruptedList = false;       
+            corruptedList = false;
         }
         catch (NotBoundException e)
         {

@@ -264,6 +264,7 @@ public abstract class CollectionBean
 	    	ImageController ic = new ImageController(sessionBean.getUser());
 	    	return ic.countImagesInContainer(collection.getId(), null);
     	}
+    	
     	return 0;
         //return collection.getImages().size();
     }

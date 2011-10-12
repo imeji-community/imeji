@@ -292,23 +292,30 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
     	Collection<Image> images = loadImages(searchResult);
     	int count = 0;
     	
-    	for(Image im : images)
+    	if ("".equals(discardComment.trim()))
     	{
-    		try 
-    		{
-    			im.getProperties().setDiscardComment(discardComment);
-				ic.withdraw(im);
-				count++;
-			} 
-    		catch (Exception e) 
-			{
-				BeanHelper.error(sb.getMessage("error_image_withdraw") + " " + im.getFilename());
-				e.printStackTrace();
-			}
+    		BeanHelper.error(sb.getMessage("error_image_withdraw_discardComment"));
     	}
-    	discardComment = null;
-    	sb.getSelected().clear();
-    	BeanHelper.info(count + " " + sb.getLabel("images_withdraw"));
+    	else
+    	{
+	    	for(Image im : images)
+	    	{
+	    		try 
+	    		{
+	    			im.getProperties().setDiscardComment(discardComment);
+					ic.withdraw(im);
+					count++;
+				} 
+	    		catch (Exception e) 
+				{
+					BeanHelper.error(sb.getMessage("error_image_withdraw") + " " + im.getFilename());
+					e.printStackTrace();
+				}
+	    	}
+	    	discardComment = null;
+	    	sb.getSelected().clear();
+	    	BeanHelper.info(count + " " + sb.getLabel("images_withdraw"));
+    	}
     	return "pretty:";
     }
 

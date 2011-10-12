@@ -298,7 +298,8 @@ public class ImageController extends ImejiController
         	update(img);
     	}
     }
-
+    
+    
     public void withdraw(Image img) throws Exception
     {
     	if (img.getProperties().getStatus().equals(Status.RELEASED))
@@ -312,6 +313,7 @@ public class ImageController extends ImejiController
             	img.setEscidocId(null);
         	}
     	}
+    	else throw new RuntimeException("Only released images can be discarded");
     }
     
     public void removeImageFromEscidoc(String id)

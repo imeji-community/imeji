@@ -46,12 +46,6 @@
 		 	<div class="large_area0 small_marginLIncl rangeSelector">
 		 		<h:selectOneMenu id="extSelectTop" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageTop}" onchange="getElementById('formular:btnChangeElementsPerPageTop').click();">
 		 			<f:selectItems value="#{paginatorListSessionBean.elementsPerPageSelectItems}"/>
-		 			<!-- <f:selectItem itemValue="12" itemLabel="12"></f:selectItem>
-		 			<f:selectItem itemValue="24" itemLabel="24"></f:selectItem>
-		 			<f:selectItem itemValue="60" itemLabel="60"></f:selectItem>
-		 			<f:selectItem itemValue="90" itemLabel="90"></f:selectItem>
-		 			<f:selectItem itemValue="150" itemLabel="150"></f:selectItem>
-		 			<f:selectItem itemValue="300" itemLabel="300"></f:selectItem> -->
 		 		</h:selectOneMenu>
 				<h:commandButton id="btnChangeElementsPerPageTop" title="#{lbl.paginator_go}" styleClass="xTiny_txtBtn paginatorFallbackGoBtn hiddenElementsNumberChangedButton"  value=""  action="#{paginatorListSessionBean.changeElementsPerPageTop}"/>
 		 		<h:outputLabel id="lblItemList_ObjectsPerPage" for="extSelectTop" styleClass="free_label hitsLabel" value=" #{lbl.paginator_objectsPerPage}" />

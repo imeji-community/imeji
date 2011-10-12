@@ -11,24 +11,24 @@ public class SingleImageBrowse
 {
 	private ImagesBean imagesBean = null;
 	private Image currentImage = null;
-	
+
 	private String next = null;
 	private String previous = null;
-		
+
 	public SingleImageBrowse(ImagesBean imagesBean, Image image) 
 	{
 		this.imagesBean = imagesBean;
 		currentImage = image;
 		init();
 	}
-	
+
 	public void init()
 	{
 		String baseUrl = imagesBean.getImageBaseUrl();
-		
+
 		URI nextImage = getNextImageFromList();
 		URI prevImage = getPreviousImageFromList();
-		
+
 		String direction = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nav");
 
 		if (nextImage == null && prevImage == null)
@@ -44,30 +44,30 @@ public class SingleImageBrowse
 			nextImage = getNextImageFromList();
 			prevImage = getPreviousImageFromList();
 		}
-		
+
 		if (nextImage == null && loadNextPage())
 		{
 			nextImage = getFirstImageOfPage();
 			loadPreviousPage();
 		}
-		
+
 		if (prevImage == null && loadPreviousPage()) 
 		{
 			prevImage = getLastImageOfPage();
 			loadNextPage();
 		}
-		
+
 		if (nextImage != null)
 		{
 			next = baseUrl + nextImage.getPath() + "/view?nav=next";
 		}
-		
+
 		if (prevImage != null)
 		{
 			previous = baseUrl + prevImage.getPath() + "/view?nav=prev";
 		}
 	}
-	
+
 	public URI getNextImageFromList()
 	{
 		for(int i=0; i < imagesBean.getCurrentPartList().size() - 1 ; i++)
@@ -79,7 +79,7 @@ public class SingleImageBrowse
 		}
 		return null;
 	}
-	
+
 	public URI getPreviousImageFromList()
 	{
 		for(int i= 1; i < imagesBean.getCurrentPartList().size() ; i++)
@@ -91,7 +91,7 @@ public class SingleImageBrowse
 		}
 		return null;
 	}
-	
+
 	public URI getFirstImageOfPage()
 	{
 		if (imagesBean.getCurrentPartList().size() > 0)
@@ -100,7 +100,7 @@ public class SingleImageBrowse
 		}
 		return null;
 	}
-	
+
 	public URI getLastImageOfPage()
 	{
 		if (imagesBean.getCurrentPartList().size() > 0) 
@@ -109,7 +109,7 @@ public class SingleImageBrowse
 		}
 		return null;
 	}
-	
+
 	public boolean loadNextPage()
 	{
 		if (imagesBean.getCurrentPageNumber() < imagesBean.getPaginatorPageSize())
@@ -120,7 +120,7 @@ public class SingleImageBrowse
 		}
 		return false;
 	}
-	
+
 	public boolean loadPreviousPage()
 	{
 		if(imagesBean.getCurrentPageNumber() > 1)

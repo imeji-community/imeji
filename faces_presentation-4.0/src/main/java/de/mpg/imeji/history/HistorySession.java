@@ -10,11 +10,11 @@ public class HistorySession implements Serializable
 {
 	private List<Page> pages = new ArrayList<Page>();
 	private static int HISTORY_SIZE = 10;
-	
+
 	public HistorySession() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public void add(String filename, String query, String[] id)
 	{
 		Page newPage = null;
@@ -41,7 +41,7 @@ public class HistorySession implements Serializable
 				}
 			}
 		}
-		
+
 		if (newPage != null)
 		{
 			if (id!= null)
@@ -49,12 +49,12 @@ public class HistorySession implements Serializable
 				if (id.length == 2) newPage.setId(id[1]);// newPage.setName(newPage.getName() + " id " + id[1]);
 				if (id.length == 1) newPage.setId(id[0]);// newPage.setName(newPage.getName() + " id " + id[0]);
 			}
-			
-//			if (pages.isEmpty() || !pages.get(pages.size() - 1).getName().equals(newPage.getName()))
-//			{					
-//				pages.add(newPage);
-//			}
-			
+
+			//			if (pages.isEmpty() || !pages.get(pages.size() - 1).getName().equals(newPage.getName()))
+			//			{					
+			//				pages.add(newPage);
+			//			}
+
 			if (!newPage.equals(getCurrentPage()))
 			{
 				pages.add(newPage);
@@ -63,7 +63,7 @@ public class HistorySession implements Serializable
 
 		while (pages.size() > HISTORY_SIZE) pages.remove(0);
 	}
-	
+
 	public void remove(int pos)
 	{
 		for (int i = 0; i < pages.size(); i++) 
@@ -75,7 +75,7 @@ public class HistorySession implements Serializable
 			}
 		}
 	}
-	
+
 	public Page getCurrentPage()
 	{
 		if (!pages.isEmpty())
@@ -84,7 +84,7 @@ public class HistorySession implements Serializable
 		}
 		return null;
 	}
-	
+
 	public Page getPreviousPage()
 	{
 		if (!pages.isEmpty())
@@ -93,7 +93,7 @@ public class HistorySession implements Serializable
 		}
 		return null;
 	}
-		
+
 	public int getHistorySize()
 	{
 		return pages.size();
@@ -102,9 +102,9 @@ public class HistorySession implements Serializable
 	public List<Page> getPages() {
 		return pages;
 	}
-	
+
 	public void setPages(List<Page> pages) {
 		this.pages = pages;
 	}
-	
+
 }

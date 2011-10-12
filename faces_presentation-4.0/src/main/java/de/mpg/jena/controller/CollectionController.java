@@ -310,23 +310,13 @@ public class CollectionController extends ImejiController
 					} 
 	        		catch (Exception e) 
 					{
-						logger.error("Error loading image " + s);
+						logger.error("Error loading image " + s, e);
 					}
 	        	}
 	         	counter ++;
 	        }
 			return cols;
 	    }
-
-	
-//	public Collection<CollectionImeji> searchAdvanced(List<List<SearchCriterion>> scList, SortCriterion sortCri, int limit, int offset) throws Exception
-//    {
-//       
-//        String query = createQuery("SELECT", scList, sortCri, "http://imeji.mpdl.mpg.de/collection", limit, offset);
-//        Collection<CollectionImeji> res = ImejiSPARQL.execAndLoad(ImejiJena.collectionModel,query, CollectionImeji.class);
-//        return res;
-//    }
-
 	
 	
   @Override

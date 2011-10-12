@@ -9,95 +9,95 @@ import de.mpg.imeji.util.BeanHelper;
 
 public class Facet implements Serializable
 {
-    private URI uri;
-    private String label;
-    private int count;
-    private FacetType type;
-    private  URI metadataURI;
-    
-    public enum FacetType
-    {
-    	TECHNICAL, COLLECTION, SEARCH;
-    }
+	private URI uri;
+	private String label;
+	private int count;
+	private FacetType type;
+	private  URI metadataURI;
 
-    public Facet(URI uri, String label, int count, FacetType type, URI metadataURI)
-    {
-        this.count = count;
-        this.label = label;
-        this.uri = uri;
-        this.type = type;
-        this.metadataURI = metadataURI;
-    }
+	public enum FacetType
+	{
+		TECHNICAL, COLLECTION, SEARCH;
+	}
 
-    public URI getUri()
-    {
-        return uri;
-    }
+	public Facet(URI uri, String label, int count, FacetType type, URI metadataURI)
+	{
+		this.count = count;
+		this.label = label;
+		this.uri = uri;
+		this.type = type;
+		this.metadataURI = metadataURI;
+	}
 
-    public void setUri(URI uri)
-    {
-        this.uri = uri;
-    }
-    
-    public String getinternationalizedLabel()
-    {
-    	String s = label;
-    	
-    	if (FacetType.TECHNICAL.name().equals(type.name()))
+	public URI getUri()
+	{
+		return uri;
+	}
+
+	public void setUri(URI uri)
+	{
+		this.uri = uri;
+	}
+
+	public String getinternationalizedLabel()
+	{
+		String s = label;
+
+		if (FacetType.TECHNICAL.name().equals(type.name()))
 		{
-    		s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
+			s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
 		}
-    	else if (FacetType.COLLECTION.name().equals(type.name()))
-    	{
-    		s = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(metadataURI);
-    		if (isNotDefine())
-    		{
-    			s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_not_define");// + " " + s;
-    		}
-    	}
-    	else if (FacetType.SEARCH.name().equals(type.name()))
-    	{
-    		s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("search");
-    	}
-    	
-    	if (s == null || (label != null && s.equals("facet_" + label.toLowerCase())))
-    	{
-    		return label;
-    	}
-    	
-    	return s;
-    }
-    
-    public String getNotDefineType()
-    {
-    	return ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(metadataURI);
-    }
+		else if (FacetType.COLLECTION.name().equals(type.name()))
+		{
+			s = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(metadataURI);
+			if (isNotDefine())
+			{
+				s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_not_define");// + " " + s;
+			}
+		}
+		else if (FacetType.SEARCH.name().equals(type.name()))
+		{
+			s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("search");
+		}
 
-    public boolean isNotDefine()
-    {
-    	if (label == null) return false;
-    	return (label.toLowerCase().startsWith("no "));
-    }
-    
-    public String getLabel()
-    {
-        return label;
-    }
+		if (s == null || (label != null && s.equals("facet_" + label.toLowerCase())))
+		{
+			return label;
+		}
 
-    public void setLabel(String label)
-    {
-        this.label = label;
-    }
+		return s;
+	}
 
-    public int getCount()
-    {
-        return count;
-    }
+	public String getNotDefineType()
+	{
+		return ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(metadataURI);
+	}
 
-    public void setCount(int count)
-    {
-        this.count = count;
-    }
+	public boolean isNotDefine()
+	{
+		if (label == null) return false;
+		return (label.toLowerCase().startsWith("no "));
+	}
+
+	public String getLabel()
+	{
+		return label;
+	}
+
+	public void setLabel(String label)
+	{
+		this.label = label;
+	}
+
+	public int getCount()
+	{
+		return count;
+	}
+
+	public void setCount(int count)
+	{
+		this.count = count;
+	}
 
 	public FacetType getType() {
 		return type;
@@ -114,6 +114,6 @@ public class Facet implements Serializable
 	public void setMetadataURI(URI metadataURI) {
 		this.metadataURI = metadataURI;
 	}
-    
-    
+
+
 }

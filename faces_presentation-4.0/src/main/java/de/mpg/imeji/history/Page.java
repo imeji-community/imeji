@@ -18,48 +18,48 @@ public class Page implements Serializable
 		COLLECTION_HOME("CollectionEntryPage.xhtml", "Collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "Search results"), EDIT("Edit.xhtml", "Edit images"),
 		COLLECTION_IMAGE("CollectionImage.xhtml","history_image"),ALBUM_IMAGES("AlbumBrowse.xhtml", "history_images_album"), ALBUM_HOME("AlbumEntryPage.xhtml", "history_album"),
 		ALBUM_IMAGE("AlbumImage.xhtml","history_image"), HELP("Help.xhtml", "help"), COLLECTION_INFO("CollectionView.xhtml","history_collection_info"), UPLOAD("Upload.xhtml","history_upload");
-		
+
 		private String fileName="";
 		private String label;
-		
+
 		private ImejiPages(String fileName, String label) 
 		{
 			this.fileName = fileName;
 			this.label = label;
 		}
-		
+
 		public String getLabel() {
 			return label;
 		}
-		
+
 		public String getFileName() {
 			return fileName;
 		}
 	}
-	
+
 	private ImejiPages type;
 	private URI uri;
 	private String name;
 	private List<Filter> filters = new ArrayList<Filter>();
 	private String query = "";
 	private String id = null;
-	
+
 	public Page(ImejiPages type, URI uri)
 	{
 		this.uri = uri;
 		this.type = type;
-//		SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-//		this.name = session.getLabel(type.getLabel());
+		//		SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		//		this.name = session.getLabel(type.getLabel());
 		this.name = type.getLabel();
 	}
-	
+
 	public boolean equals(Page page)
 	{
 		if (isNull() && page.isNull()) return true;
 		else if (isNull() || page == null || page.isNull()) return false;
 		else return (type.equals(page.getType()) && uri.equals(page.getUri()));
 	}
-	
+
 	public boolean isNull()
 	{
 		return (type == null && uri == null);
@@ -85,7 +85,7 @@ public class Page implements Serializable
 	{
 		return name;
 	}
-	
+
 	public String getInternationalizedName()
 	{
 		try 
@@ -128,7 +128,7 @@ public class Page implements Serializable
 	public void setId(String id) {
 		this.id = id;
 	}	
-	
-	
+
+
 
 }

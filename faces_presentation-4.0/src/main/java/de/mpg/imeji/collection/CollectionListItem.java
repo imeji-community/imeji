@@ -29,52 +29,60 @@ public class CollectionListItem
 	private String status = Status.PENDING.toString();
 	private URI id = null;
 	private String discardComment = "";
-	
+
 	private boolean selected = false;
-	
+
 	// dates
 	private String creationDate = null;
 	private String lastModificationDate = null;
 	private String versionDate = null;
-	
+
 	// security
 	private boolean visible = false;
 	private boolean deletable = false;
 	private boolean editable = false;
-	
+
 	private static Logger logger = Logger.getLogger(CollectionListItem.class);
-	
+
 	public CollectionListItem(CollectionImeji collection, User user) 
 	{
-		title = collection.getMetadata().getTitle();
-		description = collection.getMetadata().getDescription();
-		if (description.length() > 100)
-        {
-            description = description.substring(0, 100) + "...";
-        }
-		for (Person p : collection.getMetadata().getPersons())
+		try
 		{
-			if (!"".equals(authors)) authors += ", "; 
-			authors += p.getFamilyName()  + " " + p.getGivenName();
-		}
-		id = collection.getId();
-		
-		status = collection.getProperties().getStatus().toString();
+			title = collection.getMetadata().getTitle();
 
-		discardComment = collection.getProperties().getDiscardComment();
-		creationDate = collection.getProperties().getCreationDate().toString();
-		lastModificationDate = collection.getProperties().getLastModificationDate().toString();
-		if (collection.getProperties().getVersionDate() != null)
-		{
-			versionDate = collection.getProperties().getVersionDate().toString();
+			description = collection.getMetadata().getDescription();
+			if (description != null && description.length() > 100)
+			{
+				description = description.substring(0, 100) + "...";
+			}
+			for (Person p : collection.getMetadata().getPersons())
+			{
+				if (!"".equals(authors)) authors += ", "; 
+				authors += p.getFamilyName()  + " " + p.getGivenName();
+			}
+			id = collection.getId();
+
+			status = collection.getProperties().getStatus().toString();
+
+			discardComment = collection.getProperties().getDiscardComment();
+			creationDate = collection.getProperties().getCreationDate().toString();
+			lastModificationDate = collection.getProperties().getLastModificationDate().toString();
+			if (collection.getProperties().getVersionDate() != null)
+			{
+				versionDate = collection.getProperties().getVersionDate().toString();
+			}
+
+			// initializations
+			initSize(user);
+			initSelected();
+			initSecurity(collection, user);
 		}
-		
-		// initializations
-		initSize(user);
-		initSelected();
-		initSecurity(collection, user);
+		catch (Exception e) 
+		{
+			logger.error("Error creating collectionListItem", e);
+		}
 	}
-	
+
 	private void initSecurity(CollectionImeji collection, User user)
 	{
 		Security security = new Security();
@@ -86,13 +94,13 @@ public class CollectionListItem
 	private void initSize(User user)
 	{
 		ImageController ic = new ImageController(user);
-    	size=  ic.countImagesInContainer(id, null);
+		size=  ic.countImagesInContainer(id, null);
 	}
-	
+
 	private void initSelected()
 	{
 		if (((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelectedCollections().contains(id))  selected = true;
-        else selected = false;
+		else selected = false;
 	}
 
 	public String release()
@@ -137,7 +145,7 @@ public class CollectionListItem
 	{
 		SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		CollectionController cc = new CollectionController(sessionBean.getUser());
-		
+
 		if("".equals(discardComment.trim())) 
 		{
 			BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
@@ -160,7 +168,7 @@ public class CollectionListItem
 		}
 		return "pretty:";
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
@@ -248,14 +256,14 @@ public class CollectionListItem
 	public void setSelected(boolean selected) {
 		SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class); 
 		if (selected)
-	    {
+		{
 			if (!(sessionBean.getSelectedCollections().contains(id)))
-	        {
-	          	sessionBean.getSelectedCollections().add(id);
-	        }
-	    }
-	    else sessionBean.getSelectedCollections().remove(id);
-		
+			{
+				sessionBean.getSelectedCollections().add(id);
+			}
+		}
+		else sessionBean.getSelectedCollections().remove(id);
+
 		this.selected = selected;
 	}
 
@@ -282,5 +290,5 @@ public class CollectionListItem
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 	}
-	
+
 }

@@ -48,11 +48,11 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
 	public void init() 
 	{
 		collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, id), sb.getUser());
-		
+
 		List<SelectItem> sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_CREATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_CREATION_DATE.name())));
-        sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
-        setSortMenu(sortMenu);
+		sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_CREATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_CREATION_DATE.name())));
+		sortMenu.add(new SelectItem(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE, sb.getLabel(ImejiNamespaces.PROPERTIES_LAST_MODIFICATION_DATE.name())));
+		setSortMenu(sortMenu);
 	}
 
 	@Override
@@ -83,43 +83,43 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
 		SortCriterion sortCriterion = new SortCriterion();
 		sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));		
-		
+
 		initBackPage();
-		
+
 		scList = URLQueryTransformer.transform2SCList(getQuery());
-		
+
 		uri = ObjectHelper.getURI(CollectionImeji.class, id);
-		
+
 		SearchResult results = search(scList, sortCriterion);
 		totalNumberOfRecords = results.getNumberOfRecords();
 		results.setQuery(getQuery());
 		results.setSort(sortCriterion);
 		return ImejiFactory.imageListToThumbList(loadImages(results));
 	}
-	
+
 	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCriterion)
 	{
 		ImageController controller = new ImageController(sb.getUser());
 		return  controller.searchImagesInContainer(uri, scList, sortCriterion, getElementsPerPage(), getOffset());
 	}
-	
+
 	public String getImageBaseUrl()
-    {
+	{
 		if (collection == null)
 		{
 			return "";
 		}
-        return navigation.getApplicationUri() + collection.getId().getPath();
-    }
-	
+		return navigation.getApplicationUri() + collection.getId().getPath();
+	}
+
 	@Override
 	public String initFacets() throws Exception
-    {
+	{
 		scList = URLQueryTransformer.transform2SCList(getQuery());
 		setFacets(new FacetsBean(collection, scList));
-        return "pretty";
-    }
-	
+		return "pretty";
+	}
+
 	public String getBackUrl() {
 		return navigation.getImagesUrl() + "/collection" + "/" + this.id;
 	}
@@ -139,103 +139,103 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
 	public CollectionImeji getCollection() {
 		return collection;
 	}
-    
-    public String release()
-    {
-        CollectionController cc = new CollectionController(sb.getUser());
-        
-        try 
-        {
-        	 cc.release(collection);
-             BeanHelper.info(sb.getMessage("success_collection_release"));
+
+	public String release()
+	{
+		CollectionController cc = new CollectionController(sb.getUser());
+
+		try 
+		{
+			cc.release(collection);
+			BeanHelper.info(sb.getMessage("success_collection_release"));
 		} 
-        catch (Exception e) 
-        {
-        	BeanHelper.error(sb.getMessage("error_collection_release"));
+		catch (Exception e) 
+		{
+			BeanHelper.error(sb.getMessage("error_collection_release"));
 			BeanHelper.error(e.getMessage());
 			e.printStackTrace();
 		}
-       
-        return "pretty:";
-    }
-    
-    public String delete()
-    {
-    	CollectionController cc = new CollectionController(sb.getUser());
-    	
-    	try 
-    	{
+
+		return "pretty:";
+	}
+
+	public String delete()
+	{
+		CollectionController cc = new CollectionController(sb.getUser());
+
+		try 
+		{
 			cc.delete(collection, sb.getUser());
 			BeanHelper.info(sb.getMessage("success_collection_delete"));
 		} 
-    	catch (Exception e) 
-    	{
-    		BeanHelper.error(sb.getMessage("success_collection_delete"));
-			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
-		}
-    	
-    	return "pretty:collections";
-    }
-    
-    public String withdraw() throws Exception
-    {
-    	CollectionController cc = new CollectionController(sb.getUser());
-    	
-    	try 
-    	{
-    		cc.withdraw(collection);
-        	BeanHelper.info(sb.getMessage("success_collection_withdraw"));
-		} 
-    	catch (Exception e) 
+		catch (Exception e) 
 		{
-    		BeanHelper.error(sb.getMessage("error_collection_withdraw"));
+			BeanHelper.error(sb.getMessage("success_collection_delete"));
 			BeanHelper.error(e.getMessage());
 			e.printStackTrace();
 		}
-    	
-    	return "pretty:";
-    }
-	
+
+		return "pretty:collections";
+	}
+
+	public String withdraw() throws Exception
+	{
+		CollectionController cc = new CollectionController(sb.getUser());
+
+		try 
+		{
+			cc.withdraw(collection);
+			BeanHelper.info(sb.getMessage("success_collection_withdraw"));
+		} 
+		catch (Exception e) 
+		{
+			BeanHelper.error(sb.getMessage("error_collection_withdraw"));
+			BeanHelper.error(e.getMessage());
+			e.printStackTrace();
+		}
+
+		return "pretty:";
+	}
+
 	public boolean isEditable()
-    {
+	{
 		Security security = new Security();
-    	return security.check(OperationsType.UPDATE, sb.getUser(), collection);
-    }
-	
+		return security.check(OperationsType.UPDATE, sb.getUser(), collection);
+	}
+
 	/**
 	 * Check that at leat one image is editable
 	 */
-//	public boolean isImageEditable()
-//	{
-//		for (ThumbnailBean tb : getCurrentPartList())
-//		{
-//			if (tb.isEditable())
-//			{
-//				return true;
-//			}
-//		}
-//    	return false;
-//	}
-//	
-//	public boolean isImageDeletable()
-//	{
-//		for (ThumbnailBean tb : getCurrentPartList())
-//		{
-//			if (tb.isDeletable())
-//			{
-//				return true;
-//			}
-//		}
-//    	return false;
-//	}
+	//	public boolean isImageEditable()
+	//	{
+	//		for (ThumbnailBean tb : getCurrentPartList())
+	//		{
+	//			if (tb.isEditable())
+	//			{
+	//				return true;
+	//			}
+	//		}
+	//    	return false;
+	//	}
+	//	
+	//	public boolean isImageDeletable()
+	//	{
+	//		for (ThumbnailBean tb : getCurrentPartList())
+	//		{
+	//			if (tb.isDeletable())
+	//			{
+	//				return true;
+	//			}
+	//		}
+	//    	return false;
+	//	}
 
 	public boolean isVisible() 
 	{
 		Security security = new Security();
 		return security.check(OperationsType.READ, sb.getUser(), collection);
 	}
-	
+
 	public boolean isDeletable() 
 	{
 		Security security = new Security();

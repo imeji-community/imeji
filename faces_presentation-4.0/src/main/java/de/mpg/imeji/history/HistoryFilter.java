@@ -61,7 +61,7 @@ public class HistoryFilter  implements Filter{
 				hs.remove(Integer.parseInt(h));
 			}
 		}
-		alertForOutOfMemoryError(hs.getCurrentPage().getInternationalizedName());
+		//alertForOutOfMemoryError(hs.getCurrentPage().getInternationalizedName());
 		chain.doFilter(serv, resp);
 	}
 	

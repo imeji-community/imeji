@@ -212,11 +212,12 @@ public class ImageController extends ImejiController
         		try 
         		{
         			Image image = (Image) reader.load(s, user);
-        			// if metadataset not bound, then needs to reinit it. 
+        			
         			if (image != null && image.getMetadataSet().getProfile() == null) 
         			{
         				image.getMetadataSet().setProfile(ObjectLoader.loadCollection(image.getCollection(), user).getProfile());        				
-        				update(image);
+        				//update(image);
+        				logger.error("Error by loading image "  + s + " : No related profile found");
         			}
         			if (image != null) images.add(image);
 				} 

@@ -28,121 +28,121 @@ import de.mpg.jena.vo.User;
 
 public class UploadBean
 {
-    private CollectionImeji collection;
-    private SessionBean sessionBean;
-    private String id;
-    private String escidocContext;
-    private String escidocUserHandle;
-    private User user;
-    private String title;
-    private String format;
-    private String mimetype;
-    private String description;
-    
-    private String totalNum ;
-    private int sNum;
-    private int fNum;
-    private List<String> sFiles;
-    private List<String> fFiles;
-    
-    public UploadBean()
-    {
-    	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        
-        try 
-        {
-        	escidocContext = PropertyReader.getProperty("escidoc.faces.context.id");
+	private CollectionImeji collection;
+	private SessionBean sessionBean;
+	private String id;
+	private String escidocContext;
+	private String escidocUserHandle;
+	private User user;
+	private String title;
+	private String format;
+	private String mimetype;
+	private String description;
+
+	private String totalNum ;
+	private int sNum;
+	private int fNum;
+	private List<String> sFiles;
+	private List<String> fFiles;
+
+	public UploadBean()
+	{
+		sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+
+		try 
+		{
+			escidocContext = PropertyReader.getProperty("escidoc.faces.context.id");
 			logInEscidoc();
 		} 
-        catch (Exception e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
-    }    
-          
-    public void status()
-    {
-    	if(UrlHelper.getParameterBoolean("init")){
+	}    
+
+	public void status()
+	{
+		if(UrlHelper.getParameterBoolean("init")){
 			loadCollection();
-    	    totalNum = "";
-    	    sNum = 0;
-    	    fNum = 0;
-    	    sFiles = new ArrayList<String>();
-    	    fFiles= new ArrayList<String>();
-    		
-    	}else if (UrlHelper.getParameterBoolean("start")){
-    		try {
+			totalNum = "";
+			sNum = 0;
+			fNum = 0;
+			sFiles = new ArrayList<String>();
+			fFiles= new ArrayList<String>();
+
+		}else if (UrlHelper.getParameterBoolean("start")){
+			try {
 				upload();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-    	}else if(UrlHelper.getParameterBoolean("done")){
-    		try {
-    			totalNum = UrlHelper.getParameterValue("totalNum");
+		}else if(UrlHelper.getParameterBoolean("done")){
+			try {
+				totalNum = UrlHelper.getParameterValue("totalNum");
 				report();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-    	}
+		}
 	}
-    
+
 	public void upload() throws IOException, FileUploadException
 	{
-    	HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-    	boolean isMultipart = ServletFileUpload.isMultipartContent(req);
-    	if(isMultipart)
-    	{  
-    		ServletFileUpload upload = new ServletFileUpload();
-    		// Parse the request
-    		FileItemIterator iter = upload.getItemIterator(req);
-    		while (iter.hasNext()) {
-    		    FileItemStream item = iter.next();
-    		    String name = item.getFieldName();
-    		    InputStream stream = item.openStream();
-    		    if (!item.isFormField()) {
-    		    	title =item.getName();
-    		        StringTokenizer st = new StringTokenizer(title, ".");
-    		        while (st.hasMoreTokens())
-    		            format = st.nextToken();
-    		        mimetype = "image/" + format;
-    		     
-    		        // TODO remove static image description
-    		        description = "";
-    		        try
-    		        {
-    		            UserController uc = new UserController(null);
-    		            User user = uc.retrieve(getUser().getEmail());
-    		            try{
-    		                ItemVO itemVO = DepositController.createImejiItem(stream, title, description, mimetype, format, escidocUserHandle, collection.getId().toString(), escidocContext);
-    		                DepositController.depositImejiItem(itemVO, escidocUserHandle, collection, user, title);
-    		                sNum += 1;
-    		                sFiles.add(title);
-    		            } catch (Exception e){
-    		            	fNum += 1;
-    		            	fFiles.add(title);
-    		                throw new RuntimeException(e);
-    		            }
-    		        }catch (Exception e){
-    		            throw new RuntimeException(e);
-    		        }
+		HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+		if(isMultipart)
+		{  
+			ServletFileUpload upload = new ServletFileUpload();
+			// Parse the request
+			FileItemIterator iter = upload.getItemIterator(req);
+			while (iter.hasNext()) {
+				FileItemStream item = iter.next();
+				String name = item.getFieldName();
+				InputStream stream = item.openStream();
+				if (!item.isFormField()) {
+					title =item.getName();
+					StringTokenizer st = new StringTokenizer(title, ".");
+					while (st.hasMoreTokens())
+						format = st.nextToken();
+					mimetype = "image/" + format;
 
-    		        
-    		    } 
-    		}
-    	}
-    }
-    
-    public String report() throws Exception{
-    	setTotalNum(totalNum);
-    	setsNum(sNum);
-    	setsFiles(sFiles);
-    	setfNum(fNum);
-    	setfFiles(fFiles);
-    	return "";
-    }
-    
-    public String getTotalNum() {
-    	System.err.println("totalNum = " +totalNum);
+					// TODO remove static image description
+					description = "";
+					try
+					{
+						UserController uc = new UserController(null);
+						User user = uc.retrieve(getUser().getEmail());
+						try{
+							ItemVO itemVO = DepositController.createImejiItem(stream, title, description, mimetype, format, escidocUserHandle, collection.getId().toString(), escidocContext);
+							DepositController.depositImejiItem(itemVO, escidocUserHandle, collection, user, title);
+							sNum += 1;
+							sFiles.add(title);
+						} catch (Exception e){
+							fNum += 1;
+							fFiles.add(title);
+							throw new RuntimeException(e);
+						}
+					}catch (Exception e){
+						throw new RuntimeException(e);
+					}
+
+
+				} 
+			}
+		}
+	}
+
+	public String report() throws Exception{
+		setTotalNum(totalNum);
+		setsNum(sNum);
+		setsFiles(sFiles);
+		setfNum(fNum);
+		setfFiles(fFiles);
+		return "";
+	}
+
+	public String getTotalNum() {
+		System.err.println("totalNum = " +totalNum);
 		return totalNum;
 	}
 
@@ -184,73 +184,73 @@ public class UploadBean
 
 	public void loadCollection()
 	{
-        if (id != null)
-        {
-        	((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).setId(id);
-        	((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
-        	//collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class,id), sessionBean.getUser());
-        	collection = ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getCollection();
-        }
-        else
-        {
-            BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
-        }
-    }
+		if (id != null)
+		{
+			((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).setId(id);
+			((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
+			//collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class,id), sessionBean.getUser());
+			collection = ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getCollection();
+		}
+		else
+		{
+			BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
+		}
+	}
 
-    public void logInEscidoc() throws Exception
-    {
-        String userName = PropertyReader.getProperty("imeji.escidoc.user");
-        String password = PropertyReader.getProperty("imeji.escidoc.password");
-        escidocUserHandle = LoginHelper.login(userName, password);
-    }
+	public void logInEscidoc() throws Exception
+	{
+		String userName = PropertyReader.getProperty("imeji.escidoc.user");
+		String password = PropertyReader.getProperty("imeji.escidoc.password");
+		escidocUserHandle = LoginHelper.login(userName, password);
+	}
 
-    public CollectionImeji getCollection()
-    {
-        return collection;
-    }
+	public CollectionImeji getCollection()
+	{
+		return collection;
+	}
 
-    public void setCollection(CollectionImeji collection)
-    {
-        this.collection = collection;
-    }
+	public void setCollection(CollectionImeji collection)
+	{
+		this.collection = collection;
+	}
 
-    public String getId()
-    {
-        return id;
-    }
+	public String getId()
+	{
+		return id;
+	}
 
-    public void setId(String id)
-    {
-        this.id = id;
-    }
+	public void setId(String id)
+	{
+		this.id = id;
+	}
 
-    public String getEscidocContext()
-    {
-        return escidocContext;
-    }
+	public String getEscidocContext()
+	{
+		return escidocContext;
+	}
 
-    public void setEscidocContext(String escidocContext)
-    {
-        this.escidocContext = escidocContext;
-    }
+	public void setEscidocContext(String escidocContext)
+	{
+		this.escidocContext = escidocContext;
+	}
 
-    public String getEscidocUserHandle()
-    {
-        return escidocUserHandle;
-    }
+	public String getEscidocUserHandle()
+	{
+		return escidocUserHandle;
+	}
 
-    public void setEscidocUserHandle(String escidocUserHandle)
-    {
-        this.escidocUserHandle = escidocUserHandle;
-    }
+	public void setEscidocUserHandle(String escidocUserHandle)
+	{
+		this.escidocUserHandle = escidocUserHandle;
+	}
 
-    public User getUser()
-    {
-        return sessionBean.getUser();
-    }
+	public User getUser()
+	{
+		return sessionBean.getUser();
+	}
 
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
+	public void setUser(User user)
+	{
+		this.user = user;
+	}
 }

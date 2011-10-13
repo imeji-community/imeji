@@ -2,7 +2,9 @@ package de.mpg.jena.search;
 
 import java.lang.management.MemoryNotificationInfo;
 import java.lang.management.MemoryUsage;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -85,12 +87,13 @@ public class ImejiSPARQL
 	 * @param c
 	 * @return
 	 */
-	public static LinkedList<String> exec(String query)
+	public static List<String> exec(String query)
 	{
 		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
 		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
 		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;
-		LinkedList<String> resultList = new LinkedList<String>();
+		//LinkedList<String> resultList = new LinkedList<String>();
+		List<String> resultList = new ArrayList<String>(1000);
         try 
         {
                 ResultSet results = qexec.execSelect();

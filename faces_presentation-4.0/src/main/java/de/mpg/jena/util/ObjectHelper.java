@@ -7,21 +7,11 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
-
-import com.hp.hpl.jena.enhanced.Implementation;
-import com.hp.hpl.jena.sparql.util.CollectionUtils;
-
-import de.mpg.jena.vo.Album;
-import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.ComplexType.ComplexTypes;
 
 public class ObjectHelper
 {
@@ -89,7 +79,6 @@ public class ObjectHelper
         }
         return obj;
     }
-    
 
     
     

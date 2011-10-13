@@ -53,7 +53,7 @@ public class ImejiRDF2Bean
 				}
 				else
 				{
-					// Log why there is a securityception
+					// Log why there is a security exception
 					URI uriFound = null;
 					if (o != null)
 					{
@@ -75,7 +75,7 @@ public class ImejiRDF2Bean
 			{
 				sortMetadataAccordingToPosition((Image)o);
 			}
-
+			
 			return ObjectHelper.castAllHashSetToList(o);
 		} 
 		catch (thewebsemantic.NotFoundException e) 

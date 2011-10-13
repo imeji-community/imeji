@@ -188,8 +188,9 @@ public class ImageController extends ImejiController
     public int countImages(List<SearchCriterion> scList)
     {
     	Search search = new Search("http://imeji.mpdl.mpg.de/image",null);
-    	List<String> uris = search.searchAdvanced(scList, null, simplifyUser(null));
-    	return uris.size();
+//    	List<String> uris = search.searchAdvanced(scList, null, simplifyUser(null));
+//    	return uris.size();
+    	return search.search(scList, null, simplifyUser(null)).getNumberOfRecords();
     }
     
     public int countImagesInContainer(URI containerUri, List<SearchCriterion> scList)

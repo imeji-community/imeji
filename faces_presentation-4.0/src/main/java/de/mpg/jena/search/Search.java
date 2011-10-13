@@ -1,7 +1,6 @@
 package de.mpg.jena.search;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.collections.ListUtils;
@@ -11,87 +10,127 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Operator;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.search.query.SimpleQueryFactory;
+import de.mpg.jena.util.CollectionUtils;
 import de.mpg.jena.vo.User;
 
 public class Search 
 {
 	private String containerURI = null;
 	private String type = "http://imeji.mpdl.mpg.de/image";
-	
+
 	private static Logger logger = Logger.getLogger(Search.class);
-	
+
 	public Search(String type, String containerURI) 
 	{
 		this.containerURI = containerURI;
+
 		if (type != null)
 		{
 			this.type = type;
 		}
 	}
-	
+
 	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, User user)
 	{
-		return new SearchResult(searchAdvanced(scList, sortCri, user));
+		return new SearchResult(searchAdvanced1(scList, sortCri, user));
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public List<String> searchAdvanced(List<SearchCriterion> scList, SortCriterion sortCri, User user)
 	{
-		LinkedList<String> results = new LinkedList<String>();
-		
+		List<String> results =  new ArrayList<String>();
+
 		if (scList == null) scList = new ArrayList<SearchCriterion>(); 
-		
+
 		if (scList.isEmpty() || containerURI != null)
 		{
-			results = (LinkedList<String>) searchSimple(null, sortCri, user);
+			results = searchSimple(null, sortCri, user);
 		}
 
 		boolean hasAnEmptySubResults = false;
-		
-    	for (SearchCriterion sc : scList) 
-   		{
-    		LinkedList<String> subResults = new LinkedList<String>();
-    		
-    		if (sc.getChildren().isEmpty())
-    		{
-    			subResults = (LinkedList<String>) searchSimple(sc, sortCri, user);
-    		}
-    		else
-    		{
-    			subResults = (LinkedList<String>) searchAdvanced(sc.getChildren(), sortCri, user);
-    		}
-    		
-    		if (subResults.isEmpty()) hasAnEmptySubResults = true;
-    		
-    		if (results.isEmpty() && !hasAnEmptySubResults)
-    		{
-    			results =  new LinkedList<String>(subResults);
-    		}
 
-    		if (Operator.AND.equals(sc.getOperator()) || Operator.NOTAND.equals(sc.getOperator()))
-    		{
-    			List<String> inter = ListUtils.intersection(results, subResults);
-       			results = new LinkedList<String>(inter);
-    		}
-    		else
-    		{
-    			List<String> sum = ListUtils.sum(results, subResults);
-       			results = new LinkedList<String>(sum);
-    		}
-   		}
+		for (SearchCriterion sc : scList) 
+		{
+			List<String> subResults = new ArrayList<String>();
+
+			if (sc.getChildren().isEmpty())
+			{
+				subResults =  searchSimple(sc, sortCri, user);
+			}
+			else
+			{
+				subResults = searchAdvanced(sc.getChildren(), sortCri, user);
+			}
+
+			if (subResults.isEmpty()) hasAnEmptySubResults = true;
+
+			if (results.isEmpty() && !hasAnEmptySubResults)
+			{
+				results =  new ArrayList<String>(subResults);
+			}
+			if (Operator.AND.equals(sc.getOperator()) || Operator.NOTAND.equals(sc.getOperator()))
+			{
+				results = (List<String>) CollectionUtils.intersection(results, subResults);
+			}
+			else
+			{
+				results = ListUtils.sum(results, subResults);
+			}
+		}
 
 		return results;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public List<String> searchAdvanced1(List<SearchCriterion> scList, SortCriterion sortCri, User user)
+	{
+		List<String> results = new ArrayList<String>();
+
+		if (scList == null) scList = new ArrayList<SearchCriterion>(); 
+
+		if (scList.isEmpty() || containerURI != null)
+		{
+			results = searchSimple(null, sortCri, user);
+		}
+
+		boolean hasAnEmptySubResults = false;
+
+		for (SearchCriterion sc : scList) 
+		{
+			List<String> subResults = new ArrayList<String>();
+
+			if (sc.getChildren().isEmpty())
+			{
+				subResults = searchSimple(sc, sortCri, user);
+			}
+			else
+			{
+				subResults = searchAdvanced(sc.getChildren(), sortCri, user);
+			}
+
+			if (subResults.isEmpty()) hasAnEmptySubResults = true;
+
+			if (results.isEmpty() && !hasAnEmptySubResults)
+			{
+				results =  new ArrayList<String>(subResults);
+			}
+			if (Operator.AND.equals(sc.getOperator()) || Operator.NOTAND.equals(sc.getOperator()))
+			{
+				results = (List<String>) CollectionUtils.intersection(results, subResults);
+			}
+			else
+			{    			
+				results = (List<String>) CollectionUtils.union(results, subResults);
+			}
+		}
+
+		return results;
+	}
+
 	public List<String> searchSimple(SearchCriterion sc, SortCriterion sortCri, User user)
 	{	
 		String sq = SimpleQueryFactory.getQuery(type, sc, sortCri, user, (containerURI != null), getSpecificQuery());
 		return  ImejiSPARQL.exec(sq);
-	}
-	
-	private LinkedList<String> getAllURIs(SortCriterion sortCri, User user)
-	{
-		String sq = SimpleQueryFactory.getQuery(type, null, sortCri, user, (containerURI != null), getSpecificQuery());
-		return ImejiSPARQL.exec(sq);
 	}
 	
 	private String getSpecificQuery()

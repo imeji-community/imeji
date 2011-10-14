@@ -1,9 +1,9 @@
 package de.mpg.jena.concurrency.locks;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
@@ -21,8 +21,9 @@ public class Locks
 	
 	public static void init()
 	{
-		userLocks = new HashMap<String, Lock>();
-		sysLocks = new HashMap<String, Lock>();;
+		userLocks = new ConcurrentHashMap<String, Lock>();
+		sysLocks = new ConcurrentHashMap<String, Lock>();
+		
 	}
 	
 	public static Map<String, Lock> getUserLocks()

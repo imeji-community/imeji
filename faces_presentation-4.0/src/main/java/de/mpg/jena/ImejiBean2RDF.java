@@ -59,16 +59,19 @@ public class ImejiBean2RDF
 		return list;
 	}
 	
-	public void create(List<Object> beans, User user) throws Exception
+	public void create(List<Object> objects, User user) throws Exception
 	{
 		try
 		{
 			beginModel();
-			for (Object bean : beans)
+			for (Object o : objects)
 			{
-				beginTransaction(bean, user, OperationsType.CREATE);
-				bean2rdf.saveDeep(bean);
-				commitTransaction(bean, user);
+				beginTransaction(o, user, OperationsType.CREATE);
+				synchronized (o) 
+				{
+					bean2rdf.saveDeep(o);
+				}
+				commitTransaction(o, user);
 			}
 		}
 		finally
@@ -77,15 +80,18 @@ public class ImejiBean2RDF
 		}
 	}
 
-	public void delete(List<Object> beans, User user) throws Exception 
+	public void delete(List<Object> objects, User user) throws Exception 
 		{try
 		{
 			beginModel();
-			for (Object bean : beans)
+			for (Object o : objects)
 			{
-				beginTransaction(bean, user, OperationsType.DELETE);
-				bean2rdf.delete(bean);
-				commitTransaction(bean, user);
+				beginTransaction(o, user, OperationsType.DELETE);
+				synchronized (o) 
+				{
+					bean2rdf.delete(o);
+				}
+				commitTransaction(o, user);
 			}
 		}
 		finally
@@ -94,16 +100,21 @@ public class ImejiBean2RDF
 		}
 	}
 
-	public Resource saveDeep(List<Object> beans, User user) throws Exception
+	public Resource saveDeep(List<Object> objects, User user) throws Exception
 	{
 		try
 		{
 			beginModel();
-			for (Object bean : beans)
+			for (Object o : objects)
 			{
-				beginTransaction(bean, user, OperationsType.UPDATE);
-				bean2rdf.saveDeep(bean);
-				commitTransaction(bean, user);
+				beginTransaction(o, user, OperationsType.UPDATE);
+				
+				// Thread safe operation:Jena allows one edit at once.
+				synchronized (o) 
+				{
+					bean2rdf.saveDeep(o);
+				}
+				commitTransaction(o, user);
 			}
 		}
 		finally
@@ -128,9 +139,9 @@ public class ImejiBean2RDF
 		try
 		{
 			checkSecurity(bean, user, opType);
-			if (optimisticLocking) checkOptimisticLocks(bean);
-			if (pessimisticLocking) checkPessimisticLock(bean, user);
-			Locks.lock(new Lock(extractID(bean).toString()));
+//			if (optimisticLocking) checkOptimisticLocks(bean);
+//			if (pessimisticLocking) checkPessimisticLock(bean, user);
+			//Locks.lock(new Lock(extractID(bean).toString()));
 			setLastModificationDate(bean, user);
 		}
 		catch (Exception e)
@@ -143,7 +154,8 @@ public class ImejiBean2RDF
 	
 	private void commitTransaction(Object bean, User user)
 	{
-		Locks.unLock(new Lock(extractID(bean).toString()));
+		// No technical locks anymore since write is synchronized
+		//Locks.unLock(new Lock(extractID(bean).toString()));
 	}
 	
 	/**
@@ -152,7 +164,7 @@ public class ImejiBean2RDF
 	 */
 	private void beginModel()
 	{
-		bean2rdf.getModel().enterCriticalSection(com.hp.hpl.jena.shared.Lock.WRITE);
+		//bean2rdf.getModel().enterCriticalSection(com.hp.hpl.jena.shared.Lock.WRITE);
 		bean2rdf.getModel().begin();
 	}
 	
@@ -163,7 +175,7 @@ public class ImejiBean2RDF
 	private void commitModel()
 	{
 		bean2rdf.getModel().commit();
-		bean2rdf.getModel().leaveCriticalSection();
+		//bean2rdf.getModel().leaveCriticalSection();
 		cleanGraph();
 	}
 	

@@ -1,227 +1,175 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <parent>
-    <artifactId>faces4</artifactId>
-    <groupId>de.mpg.escidoc.faces4</groupId>
-    <version>4.0</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>de.mpg.escidoc.faces4</groupId>
-  <artifactId>faces_presentation4</artifactId>
-  <name>faces_presentation4</name>
-  <packaging>war</packaging>
-  <version>4.0</version>
-  <scm>
-    <connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_presentation-4.0</connection>
-    <developerConnection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_presentation-4.0</developerConnection>
-    <url>https://zim02.gwdg.de/repos/faces/</url>
-  </scm>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-          <excludes>
-          	<exclude>de/mpg/escidoc/faces/**</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  <dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>faces4</artifactId>
+		<groupId>de.mpg.escidoc.faces4</groupId>
+		<version>4.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.mpg.escidoc.faces4</groupId>
+	<artifactId>faces_presentation4</artifactId>
+	<name>faces_presentation4</name>
+	<packaging>war</packaging>
+	<version>4.0</version>
+	<scm>
+		<connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_presentation-4.0</connection>
+		<developerConnection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_presentation-4.0</developerConnection>
+		<url>https://zim02.gwdg.de/repos/faces/</url>
+	</scm>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+					<excludes>
+						<exclude>de/mpg/escidoc/faces/**</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
 
- 
-  		<dependency>
-    		<groupId>commons-io</groupId>
-    		<artifactId>commons-io</artifactId>
-    		<version>1.4</version>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
 		</dependency>
-  		<dependency>
-    		<groupId>commons-fileupload</groupId>
-    		<artifactId>commons-fileupload</artifactId>
-    		<version>1.2.1</version>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2.1</version>
 		</dependency>
-    <dependency>
-      <groupId>de.mpg.escidoc.services</groupId>
-      <artifactId>common_logic</artifactId>
-      <version>1.1.46</version>
-      <scope>provided</scope>
-    </dependency>
-   <!--   <dependency>
-      <groupId>urlrewrite</groupId>
-      <artifactId>urlrewrite</artifactId>
-      <version>3.2.0</version>
-      <scope>provided</scope>
-    </dependency>
-   
-    <dependency>
-      <groupId>trinidad</groupId>
-      <artifactId>trinidad-api</artifactId>
-      <version>1.2.11</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>trinidad</groupId>
-      <artifactId>trinidad-impl</artifactId>
-      <version>1.2.11</version>
-      <scope>provided</scope>
-    </dependency>
-    -->
-    <dependency>
-    	<groupId>de.mpg.escidoc.services</groupId>
-    	<artifactId>framework_access</artifactId>
-    	<version>1.0.47</version>
-    	<scope>provided</scope>
-    </dependency>
-   <!--   <dependency>
-    	<groupId>de.mpg.escidoc.services</groupId>
-    	<artifactId>exportmanager</artifactId>
-    	<version>1.0.54-SNAPSHOT</version>
-    	<scope>provided</scope>
-    </dependency>-->
-   <dependency>
-      <groupId>xmlbeans</groupId>
-      <artifactId>xbean</artifactId>
-      <version>2.4.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>xmlbeans</groupId>
-      <artifactId>xbean_xpath</artifactId>
-      <version>2.4.0</version>
-      <scope>provided</scope>
-    </dependency>
-   <!--   <dependency>
-      <groupId>xmlbeans</groupId>
-      <artifactId>escidoc-1.1</artifactId>
-      <version>1.1.0</version>
-      <scope>provided</scope>
-    </dependency>-->
-    <dependency>
-       <groupId>xmlbeans</groupId>
-       <artifactId>escidoc-core</artifactId>
-       <version>1.2rc1</version>
-       <scope>provided</scope>
-    </dependency> 
-    <!--  <dependency>
-      <groupId>xmlbeans</groupId>
-      <artifactId>escidoc-generic</artifactId>
-      <version>1.0.0</version>
-       <scope>provided</scope>
-    </dependency>-->
-    <dependency>
-   		<groupId>jsf-facelets</groupId>
-   		<artifactId>jsf-facelets</artifactId>
-   		<version>1.1.13</version>
-   		<scope>provided</scope>
-    </dependency>
-    <!-- Jena TDB -->
-	<!--  <dependency>
-		<groupId>com.hp.hpl.jena</groupId>
-		<artifactId>tdb</artifactId>
-		<version>0.8.7-PATCHED</version>
-		<scope>provided</scope>
-		 <exclusions>
-        		<exclusion>  
-          			<groupId>xerces</groupId>
-         			<artifactId>xercesImpl</artifactId>
-        	</exclusion>
-        </exclusions>
-	</dependency>-->
-	
-	<dependency>
-	  <groupId>com.hp.hpl.jena</groupId>
-	  <artifactId>tdb</artifactId>
-	  <version>0.8.7</version>
-	</dependency>
-	
-	<!-- XercesImpl has to be removed, otherwise this library collides with jboss-internal libraries -->
-	<!--  <dependency>
-		<groupId>com.hp.hpl.jena</groupId>
-		<artifactId>jena</artifactId>
-		<version>2.6.3-PATCHED</version>
-		<scope>provided</scope>
-		<classifier>PATCHED</classifier>
-		 <exclusions>
-        		  <exclusion>  
-          			<groupId>xerces</groupId>
-         			<artifactId>xercesImpl</artifactId>
-        	</exclusion>
-        </exclusions>
-	</dependency>-->
-	
-	<dependency>
-	  <groupId>com.hp.hpl.jena</groupId>
-	  <artifactId>jena</artifactId>
-	  <version>2.6.3</version>
-	</dependency>
-	
-	<!-- XercesImpl has to be removed, otherwise this library collides with jboss-internal libraries -->
-	<!--  <dependency>
-		<groupId>com.hp.hpl.jena</groupId>
-		<artifactId>arq</artifactId>
-		<version>2.8.5-PATCHED</version>
-		<scope>provided</scope>
-		<exclusions>
-        		<exclusion> 
-          			<groupId>xerces</groupId>
-         			<artifactId>xercesImpl</artifactId>
-        	</exclusion>
-        </exclusions>
-	</dependency>-->
-	
-	<dependency>
-	  <groupId>com.hp.hpl.jena</groupId>
-	  <artifactId>arq</artifactId>
-	  <version>2.8.5</version>
-	</dependency>
-	
-   	<dependency>
-		<groupId>org.richfaces.framework</groupId>
-		<artifactId>richfaces-api</artifactId>
-		<version>3.3.3.Final</version>
-		<scope>provided</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.richfaces.framework</groupId>
-		<artifactId>richfaces-impl</artifactId>
-		<version>3.3.3.Final</version>
-		<scope>provided</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.richfaces.ui</groupId>
-		<artifactId>richfaces-ui</artifactId>
-		<version>3.3.3.Final</version>
-		<scope>provided</scope>
-	</dependency>
-	<dependency> 
-	   <groupId>thewebsemantic</groupId> 
-	   <artifactId>jenabean</artifactId> 
-	   <version>1.0.7-Imeji</version> 
-	   <exclusions>
-        		<exclusion>  <!-- declare the exclusion here -->
-          			<groupId>xerces</groupId>
-         			<artifactId>xercesImpl</artifactId>
-        	</exclusion>
-        </exclusions>
-	</dependency>
+		<dependency>
+			<groupId>de.mpg.escidoc.services</groupId>
+			<artifactId>common_logic</artifactId>
+			<version>1.1.46</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- <dependency> <groupId>urlrewrite</groupId> <artifactId>urlrewrite</artifactId> 
+			<version>3.2.0</version> <scope>provided</scope> </dependency> <dependency> 
+			<groupId>trinidad</groupId> <artifactId>trinidad-api</artifactId> <version>1.2.11</version> 
+			<scope>provided</scope> </dependency> <dependency> <groupId>trinidad</groupId> 
+			<artifactId>trinidad-impl</artifactId> <version>1.2.11</version> <scope>provided</scope> 
+			</dependency> -->
+		<dependency>
+			<groupId>de.mpg.escidoc.services</groupId>
+			<artifactId>framework_access</artifactId>
+			<version>1.0.47</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- <dependency> <groupId>de.mpg.escidoc.services</groupId> <artifactId>exportmanager</artifactId> 
+			<version>1.0.54-SNAPSHOT</version> <scope>provided</scope> </dependency> -->
+		<dependency>
+			<groupId>xmlbeans</groupId>
+			<artifactId>xbean</artifactId>
+			<version>2.4.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>xmlbeans</groupId>
+			<artifactId>xbean_xpath</artifactId>
+			<version>2.4.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- <dependency> <groupId>xmlbeans</groupId> <artifactId>escidoc-1.1</artifactId> 
+			<version>1.1.0</version> <scope>provided</scope> </dependency> -->
+		<dependency>
+			<groupId>xmlbeans</groupId>
+			<artifactId>escidoc-core</artifactId>
+			<version>1.2rc1</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- <dependency> <groupId>xmlbeans</groupId> <artifactId>escidoc-generic</artifactId> 
+			<version>1.0.0</version> <scope>provided</scope> </dependency> -->
+		<dependency>
+			<groupId>jsf-facelets</groupId>
+			<artifactId>jsf-facelets</artifactId>
+			<version>1.1.13</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Jena TDB -->
+		<!-- <dependency> <groupId>com.hp.hpl.jena</groupId> <artifactId>tdb</artifactId> 
+			<version>0.8.7-PATCHED</version> <scope>provided</scope> <exclusions> <exclusion> 
+			<groupId>xerces</groupId> <artifactId>xercesImpl</artifactId> </exclusion> 
+			</exclusions> </dependency> -->
 
-	<!--  <dependency> 
-	   <groupId>thewebsemantic</groupId> 
-	   <artifactId>jpa4jena</artifactId> 
-	   <version>0.7</version> 
-	</dependency>-->
-	<dependency>
-		<groupId>com.ocpsoft</groupId>
-		<artifactId>prettyfaces-jsf12</artifactId>
-		<version>3.0.1</version>
-	</dependency>
-	<dependency>
-	  <groupId>log4j</groupId>
-	  <artifactId>log4j</artifactId>
-	  <version>1.2.16</version>
-	</dependency>
-		
-  </dependencies>
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>tdb</artifactId>
+			<version>0.8.7</version>
+		</dependency>
+
+		<!-- XercesImpl has to be removed, otherwise this library collides with 
+			jboss-internal libraries -->
+		<!-- <dependency> <groupId>com.hp.hpl.jena</groupId> <artifactId>jena</artifactId> 
+			<version>2.6.3-PATCHED</version> <scope>provided</scope> <classifier>PATCHED</classifier> 
+			<exclusions> <exclusion> <groupId>xerces</groupId> <artifactId>xercesImpl</artifactId> 
+			</exclusion> </exclusions> </dependency> -->
+
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>jena</artifactId>
+			<version>2.6.3</version>
+		</dependency>
+
+		<!-- XercesImpl has to be removed, otherwise this library collides with 
+			jboss-internal libraries -->
+		<!-- <dependency> <groupId>com.hp.hpl.jena</groupId> <artifactId>arq</artifactId> 
+			<version>2.8.5-PATCHED</version> <scope>provided</scope> <exclusions> <exclusion> 
+			<groupId>xerces</groupId> <artifactId>xercesImpl</artifactId> </exclusion> 
+			</exclusions> </dependency> -->
+
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>arq</artifactId>
+			<version>2.8.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.richfaces.framework</groupId>
+			<artifactId>richfaces-api</artifactId>
+			<version>3.3.3.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.framework</groupId>
+			<artifactId>richfaces-impl</artifactId>
+			<version>3.3.3.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.ui</groupId>
+			<artifactId>richfaces-ui</artifactId>
+			<version>3.3.3.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>thewebsemantic</groupId>
+			<artifactId>jenabean</artifactId>
+			<version>1.0.7-Imeji</version>
+			<exclusions>
+				<exclusion>  <!-- declare the exclusion here -->
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- <dependency> <groupId>thewebsemantic</groupId> <artifactId>jpa4jena</artifactId> 
+			<version>0.7</version> </dependency> -->
+		<dependency>
+			<groupId>com.ocpsoft</groupId>
+			<artifactId>prettyfaces-jsf12</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+
+	</dependencies>
 </project>

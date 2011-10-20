@@ -57,7 +57,8 @@ public class EditMdProfileBean extends MdProfileBean implements Serializable
                     	((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).setId(getColId());
                     	((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
                     	setProfile(((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getProfile());
-//                        this.setProfile(profileController.retrieve(this.getId()));
+                    	
+                    	//this.setProfile(profileController.retrieve(this.getId()));
 //                        collectionSession.setProfile(this.getProfile());
 //                        collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, colId), session.getUser());
                         

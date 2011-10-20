@@ -496,6 +496,9 @@
 				<!-- pagination ajax -->
 				<imeji.pagination.ajaxmodus>true</imeji.pagination.ajaxmodus>
 				
+				<!-- Counter for imeji objects -->
+				<imeji.counter.first.value>3000</imeji.counter.first.value>
+				
 				<!-- License url  -->
 				<!--  <escidoc.faces.picture.license.url>http://creativecommons.org/licenses/by-nc-nd/3.0/de/</escidoc.faces.picture.license.url>-->
 				<escidoc.faces.picture.license.url />

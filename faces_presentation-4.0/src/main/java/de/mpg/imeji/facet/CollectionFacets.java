@@ -44,7 +44,7 @@ public class CollectionFacets
 
 		int sizeAllImages = getCount(scList, null);
 
-		for (Statement st : profile.getStatements()) 
+		for (Statement st : profile.getStatements())
 		{
 			List<Facet> group = new ArrayList<Facet>();
 

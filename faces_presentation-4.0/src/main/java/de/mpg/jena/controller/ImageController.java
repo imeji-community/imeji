@@ -315,7 +315,7 @@ public class ImageController extends ImejiController
             	img.setEscidocId(null);
         	}
     	}
-    	else throw new RuntimeException("Only released images can be discarded");
+    	else throw new RuntimeException("Only released images can be discarded: " + img.getId() + " has status " + img.getProperties().getStatus());
     }
     
     public void removeImageFromEscidoc(String id)

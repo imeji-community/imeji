@@ -13,6 +13,7 @@ import com.hp.hpl.jena.tdb.store.GraphTDB;
 
 import thewebsemantic.NotFoundException;
 import de.mpg.escidoc.services.framework.PropertyReader;
+import de.mpg.imeji.escidoc.EscidocInitializer;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.concurrency.locks.LocksSurveyor;
 import de.mpg.jena.controller.UserController;
@@ -36,7 +37,9 @@ public class InitializerServlet extends HttpServlet
         super.init();
         initModel();
         startLocksSurveyor();
-        createSysadminUser();    
+        createSysadminUser();
+        EscidocInitializer escidocInitializer = new EscidocInitializer();
+		escidocInitializer.run();
     }
 	
 	public void initModel()

@@ -114,10 +114,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 
 	@Override
 	public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
-	{
-		EscidocInitializer escidocInitializer = new EscidocInitializer();
-		escidocInitializer.run();
-		
+	{		
 		if (facets != null)
 		{
 			facets.getFacets().clear(); 

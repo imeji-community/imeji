@@ -70,8 +70,8 @@
 						 <f:facet name="closed">
 						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
 					            
-					            <rich:toggleControl styleClass="free_area0" value="#{lbl.collection_share}" rendered="#{ViewCollectionBean.collection.properties.status=='PENDING' and ViewCollectionBean.admin}" switchToState="open"/>
-					           
+					            <rich:toggleControl styleClass="free_area0" value="#{lbl.collection_share}" rendered="#{ViewCollectionBean.collection.properties.status!='WITHDRAWN' and ViewCollectionBean.admin}" switchToState="open"/>
+					      
 								<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status=='PENDING'}">
 									<h:outputText value="#{lbl.collection_release}"/>
 									<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
@@ -130,7 +130,7 @@
 								<!-- COLLECTION IMAGES -->
 								<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
 									<a4j:repeat var="img" value="#{ViewCollectionBean.images}" rendered="#{img.properties.status != 'WITHDRAWN'}">
-											<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
+										<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
 									</a4j:repeat>
 								</h:outputLink>
 								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>

@@ -39,6 +39,7 @@ public class Authorization
 	
 	public boolean isSysAdmin(User user)
 	{
+		if (user == null) return false;
 		for (Grant g : user.getGrants())
 		{
 			if (GrantType.SYSADMIN.equals(g.getGrantType())) return true;
@@ -52,7 +53,8 @@ public class Authorization
 		{
 			if (GrantType.CONTAINER_ADMIN.equals(g.getGrantType())) return true;
 		}
-		return false;
+
+		return isSysAdmin(user);
 	}
 
 	public boolean isContainerAdmin(User user, Image image) 
@@ -61,7 +63,7 @@ public class Authorization
 		{
 			if (GrantType.CONTAINER_ADMIN.equals(g.getGrantType())) return true;
 		}
-		return false;
+		return isSysAdmin(user);
 	}
 
 	
@@ -71,7 +73,7 @@ public class Authorization
 		{
 			if (GrantType.CONTAINER_EDITOR.equals(g.getGrantType())) return true;
 		}
-		return false;
+		return isSysAdmin(user);
 	}
 	
 	public boolean isContainerEditor(User user, Image image)
@@ -80,7 +82,7 @@ public class Authorization
 		{
 			if (GrantType.CONTAINER_EDITOR.equals(g.getGrantType())) return true;
 		}
-		return false;
+		return isSysAdmin(user);
 	}
 	
 	public boolean isPictureEditor(User user, Container container)
@@ -89,7 +91,7 @@ public class Authorization
 		{
 			if (GrantType.IMAGE_EDITOR.equals(g.getGrantType())) return true;
 		}
-		return false;
+		return isSysAdmin(user);
 	}
 	
 	public boolean isPictureEditor(User user, Image image)
@@ -98,7 +100,7 @@ public class Authorization
 		{
 			if (GrantType.IMAGE_EDITOR.equals(g.getGrantType())) return true;
 		}
-		return false;
+		return isSysAdmin(user);
 	}
 
 	public boolean isViewerFor(User user, Container container)
@@ -107,7 +109,7 @@ public class Authorization
 		{
 			if (GrantType.PRIVILEGED_VIEWER.equals(g.getGrantType())) return true;
 		}
-		return false;
+		return isSysAdmin(user);
 	}
 	
 	public boolean isViewerFor(User user, Image image)
@@ -116,7 +118,7 @@ public class Authorization
 		{
 			if (GrantType.PRIVILEGED_VIEWER.equals(g.getGrantType())) return true;
 		}
-		return false;
+		return isSysAdmin(user);
 	}
 
 	public boolean isUploaderFor(User user, Container container) 
@@ -125,7 +127,7 @@ public class Authorization
 		{
 			if (GrantType.IMAGE_UPLOADER.equals(g.getGrantType())) return true;
 		}
-		return false;
+		return isSysAdmin(user);
 	}
 	
 	private List<Grant> getGrantsForObject(User user, Container container)

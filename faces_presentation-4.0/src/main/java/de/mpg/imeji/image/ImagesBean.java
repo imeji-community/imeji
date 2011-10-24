@@ -13,6 +13,7 @@ import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.escidoc.EscidocInitializer;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.filter.FiltersSession;
@@ -114,6 +115,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 	@Override
 	public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
 	{
+		EscidocInitializer escidocInitializer = new EscidocInitializer();
+		escidocInitializer.run();
+		
 		if (facets != null)
 		{
 			facets.getFacets().clear(); 
@@ -127,9 +131,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 
 		scList = URLQueryTransformer.transform2SCList(query);
 		SearchResult searchResult = search(scList, sortCriterion);
-		totalNumberOfRecords = searchResult.getNumberOfRecords();
 		searchResult.setQuery(query);
 		searchResult.setSort(sortCriterion);
+		FacesContext.getCurrentInstance().renderResponse();
+		totalNumberOfRecords = searchResult.getNumberOfRecords();
+		
 
 		// load images
 		Collection<Image> images = loadImages(searchResult);

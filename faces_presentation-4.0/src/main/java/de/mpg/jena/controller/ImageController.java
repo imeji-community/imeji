@@ -214,13 +214,18 @@ public class ImageController extends ImejiController
         		{
         			Image image = (Image) reader.load(s, user);
         			
-        			if (image != null && image.getMetadataSet().getProfile() == null) 
+        			if (image != null)
         			{
-        				image.getMetadataSet().setProfile(ObjectLoader.loadCollection(image.getCollection(), user).getProfile());        				
-        				//update(image);
-        				logger.error("Error by loading image "  + s + " : No related profile found");
+        			
+        				if( image.getMetadataSet().getProfile() == null) 
+            			{
+        					logger.error("Error by loading image "  + s + " : No related profile found");
+            				image.getMetadataSet().setProfile(ObjectLoader.loadCollection(image.getCollection(), user).getProfile());        				
+            				update(image);
+            				logger.info("Profile added: "  + image.getMetadataSet().getProfile() );
+            			}
+        				images.add(image);
         			}
-        			if (image != null) images.add(image);
 				} 
         		catch (Exception e) 
 				{

@@ -13,6 +13,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.cookie.CookieSpec;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.log4j.Logger;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
@@ -21,6 +22,7 @@ import de.mpg.imeji.beans.SessionBean;
 public class LoginHelper 
 {
 	private static SessionBean sessionBean = null;
+	private static Logger logger = Logger.getLogger(LoginHelper.class);
 	
 	/**
 	 * Get handle of System administrator of eSciDoc instance.
@@ -38,6 +40,7 @@ public class LoginHelper
 		{
 			sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
 			BeanHelper.info(sessionBean.getLabel("error") + ", wrong administrator user. Check config file or FW: " + e);
+			logger.error("Error escidoc admin login", e);
 		}
 		return handle;
 	}

@@ -38,8 +38,8 @@ public class InitializerServlet extends HttpServlet
         initModel();
         startLocksSurveyor();
         createSysadminUser();
-        EscidocInitializer escidocInitializer = new EscidocInitializer();
-		escidocInitializer.run();
+//        EscidocInitializer escidocInitializer = new EscidocInitializer();
+//		escidocInitializer.run();
     }
 	
 	public void initModel()

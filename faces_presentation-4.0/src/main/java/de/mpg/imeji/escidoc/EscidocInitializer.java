@@ -1,20 +1,13 @@
 package de.mpg.imeji.escidoc;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 import javax.naming.InitialContext;
-import javax.xml.rpc.ServiceException;
 
 import org.apache.log4j.Logger;
-import org.apache.xmlbeans.XmlException;
 
 import de.escidoc.schemas.contentmodel.x01.ContentModelDocument;
-import de.escidoc.schemas.contentmodel.x01.ContentModelDocument.ContentModel;
 import de.escidoc.schemas.context.x07.ContextDocument;
-import de.escidoc.www.services.aa.UserAccountHandler;
-import de.escidoc.www.services.adm.AdminHandler;
 import de.escidoc.www.services.cmm.ContentModelHandler;
 import de.escidoc.www.services.om.ContextHandler;
 import de.mpg.escidoc.services.common.XmlTransforming;
@@ -43,7 +36,7 @@ public class EscidocInitializer
 		
 		if (!hasImejiUser()) 
 		{
-			logger.warn("NO IMEJI USER: please create one or use admin user instead");
+			logger.warn("NO IMEJI USER: please create one or use admin user instead, or create one");
 		}
 	}
 	
@@ -101,13 +94,13 @@ public class EscidocInitializer
 	{
 		try 
 		{
-			ContextHandler cmHandler = ServiceLocator.getContextHandler(userHandle);
-			String ctx = cmHandler.retrieve(PropertyReader.getProperty("escidoc.faces.context.id"));
+			ContextHandler handler = ServiceLocator.getContextHandler(userHandle);
+			String ctx = handler.retrieve(PropertyReader.getProperty("escidoc.faces.context.id"));
 			logger.info("CONTEXT FOUND: " + ctx);
 		} 
 		catch (Exception e) 
 		{
-			logger.warn("Error reading content model (might not exist)", e);
+			logger.warn("Error reading context (might not exist)", e);
 			return false;
 		}
 		return true;
@@ -123,7 +116,7 @@ public class EscidocInitializer
 			InitialContext context = new InitialContext();
 			XmlTransforming xmlTr = (XmlTransforming)context.lookup(XmlTransforming.SERVICE_NAME);
 			handler.open(doc.getContext().getObjid(), xmlTr.transformToTaskParam(taskParam));
-			logger.info("Context created: " + doc.getContext().getObjid()) ;
+			logger.info("Context created and opened: " + doc.getContext().getObjid()) ;
 		} 
 		catch (Exception e) 
 		{

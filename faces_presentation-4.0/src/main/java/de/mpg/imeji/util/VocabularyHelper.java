@@ -1,5 +1,6 @@
 package de.mpg.imeji.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
@@ -12,13 +13,21 @@ public class VocabularyHelper
 {
 	private List<SelectItem> vocabularies;
 	private Properties properties;
-	
+
 	public VocabularyHelper() 
 	{
-		loadProperties();
-		initVocabularies();
+		try 
+		{
+			loadProperties();
+			initVocabularies();
+		} 
+		catch (IOException e) 
+		{
+			throw new RuntimeException(e);
+		}
+
 	}
-	
+
 	public void initVocabularies()
 	{
 		vocabularies = new ArrayList<SelectItem>();
@@ -28,21 +37,27 @@ public class VocabularyHelper
 			vocabularies.add(new SelectItem(properties.getProperty(o.toString()), o.toString()));
 		}
 	}
-	
-	public void loadProperties()
+
+	public void loadProperties() throws IOException
 	{
+		InputStream instream = null;
 		try 
 		{
-			InputStream instream = PropertyReader.getInputStream("vocabulary.properties");
+			instream= PropertyReader.getInputStream("vocabulary.properties");
 			properties = new Properties();
 			properties.load(instream);
+
 		} 
 		catch (Exception e) 
 		{
 			throw new RuntimeException(e);
 		}
+		finally
+		{
+			instream.close();
+		}
 	}
-	
+
 	public String getVocabularyName(URI uri)
 	{
 		if (uri == null)
@@ -61,9 +76,9 @@ public class VocabularyHelper
 		}
 		return "unknown";
 	}
-	
-    public List<SelectItem> getVocabularies()
-    {
-    	return vocabularies;
-    }
+
+	public List<SelectItem> getVocabularies()
+	{
+		return vocabularies;
+	}
 }

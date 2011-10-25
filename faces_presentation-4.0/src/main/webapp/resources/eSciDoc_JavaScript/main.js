@@ -68,6 +68,7 @@ function autoSuggestWrite(suggestionBox, index, pos, type) {
 				title = ' ';
 			}
 
+
 		}
 		
 		var baseId = 'formular:statementList:' + pos + ':metadata:' + index + ':MetadataInput:';
@@ -89,6 +90,8 @@ function autoSuggestWrite(suggestionBox, index, pos, type) {
 		setInputTextValue(baseId + 'inputAlternative', alternative);
 		setInputTextValue(baseId + 'inputOrganization', org);
 		setInputTextValue(baseId + 'inputIdentifier', id);
+		setInputTextValue(baseId + 'inputLanguageIdentifier', id);
+		setInputTextValue(baseId + 'inputLanguageName', title)
 		
 		if (title != null) 
 		{
@@ -99,49 +102,6 @@ function autoSuggestWrite(suggestionBox, index, pos, type) {
 			setInputTextValue(baseId + 'inputText', complete);
 		}
 		
-		
-		/*if (type == 'multiple' )
-		{
-			if (index >= 0 )
-			{
-				setInputTextValue('formular:imagesList:' + index + ':metadata:0:MetadataInput:inputFamilyName', familyName);
-				setInputTextValue('formular:imagesList:' + index + ':metadata:0:MetadataInput:inputFirstName', firstName);
-				setInputTextValue('formular:imagesList:' + index + ':metadata:0:MetadataInput:inputAlternative', alternative);
-				setInputTextValue('formular:imagesList:' + index + ':metadata:0:MetadataInput:inputOrganization', org);
-				setInputTextValue('formular:imagesList:' + index + ':metadata:0:MetadataInput:inputIdentifier', id);
-				if (title != null) {
-					setInputTextValue('formular:imagesList:' + index + 'metadata:0:MetadataInput:inputText', title);
-				} else {
-					setInputTextValue('formular:imagesList:' + index + 'metadata:0:MetadataInput:inputText', complete);
-				}
-			}
-			else
-			{
-				setInputTextValue('formular:MetadataInput:inputFamilyName', familyName);
-				setInputTextValue('formular:MetadataInput:inputFirstName', firstName);
-				setInputTextValue('formular:MetadataInput:inputAlternative', alternative);
-				setInputTextValue('formular:MetadataInput:inputOrganization', org);
-				setInputTextValue('formular:MetadataInput:inputIdentifier', id);
-				if (title != null) {
-					setInputTextValue('formular:MetadataInput:inputText', title);
-				} else {
-					setInputTextValue('formular:MetadataInput:inputText', complete);
-				}
-			}
-		}
-		else
-		{
-			setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputFamilyName', familyName);
-			setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputFirstName', firstName);
-			setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputAlternative', alternative);
-			setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputOrganization', org);
-			setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputIdentifier', id);
-			if (title != null) {
-				setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputText', title);
-			} else {
-				setInputTextValue('formular:statementList:' + index + ':metadata:' + index + ':MetadataInput:inputText', complete);
-			}
-		}*/
 	}
 }
 

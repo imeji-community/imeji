@@ -58,7 +58,8 @@ public class MetadataHelper implements Serializable
 		else if (md instanceof URI)
 		{
 			if (((URI) md).getUri() == null || "".equals(((URI) md).getUri().toString())) return true;
-		}	
+		}
+		
 		return false;
 	}
 	

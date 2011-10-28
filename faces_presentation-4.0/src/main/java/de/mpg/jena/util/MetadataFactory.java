@@ -1,11 +1,6 @@
 package de.mpg.jena.util;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
-import com.hp.hpl.jena.datatypes.xsd.impl.XSDDateType;
 
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.ImageMetadata;
@@ -23,50 +18,46 @@ import de.mpg.jena.vo.complextypes.URI;
 import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class MetadataFactory 
-{
+{	
+	/**
+	 * Create new Metadata
+	 * @param type
+	 * @return
+	 */
+	public static ImageMetadata newMetadata(ComplexTypes type)
+	{
+		try 
+		{
+			ImageMetadata md =  type.getClassType().newInstance();
+			md.setType(type);
+			return md;
+		} 
+		catch (Exception e) 
+		{
+			throw new RuntimeException("Error creating new instance of Complextype: " + e);
+		}
+	}
+	
+	/**
+	 * Create a new Metadata
+	 * @param st
+	 * @return
+	 */
 	public static ImageMetadata newMetadata(Statement st)
 	{
-		ImageMetadata md = null;
-		
-		ComplexTypes type = ComplexTypeHelper.getComplexType(st.getType());
-		
-		switch (type) 
-		{
-			case DATE:
-				md = new Date();
-				break;
-			case GEOLOCATION:
-				md = new Geolocation();
-				break;
-			case LICENSE:
-				md = new License();
-				break;
-			case NUMBER:
-				md = new Number();
-				break;
-			case PERSON:
-				md = new ConePerson();
-				break;
-			case PUBLICATION:
-				md = new Publication();
-				break;
-			case URI:
-				md= new URI();
-				break;
-			default:
-				md = new Text();
-				break;
-		}
-		
-		md.setType(type);
+		ImageMetadata md = newMetadata(ComplexTypeHelper.getComplexType(st.getType()));
 		md.setNamespace(st.getName());
-		
 		return md;
 	}
 	
-	public static ImageMetadata newMetadata(ImageMetadata metadata)
+	/**
+	 * Copy metadata to another, and perform some transformation (add search values, format dates, etc.)
+	 * @param metadata
+	 * @return
+	 */
+	public static ImageMetadata copyMetadata(ImageMetadata metadata)
 	{
-		ImageMetadata md = null;
+		ImageMetadata md = newMetadata(metadata.getType());
 		
 		String searchValue="";
 				
@@ -124,11 +115,13 @@ public class MetadataFactory
 				((URI)md).setUri(((URI)metadata).getUri());
 				searchValue += " " +((URI)md).getUri();
 				break;
-			default:
+			case TEXT:
 				md = new Text();
 				((Text)md).setText(((Text)metadata).getText());
 				searchValue += ((Text)md).getText();
 				break;
+			default:
+				throw new RuntimeException("Unknown metadata type " + metadata.getType());
 		}
 		
 		md.setSearchValue(searchValue.replaceAll("null", "").trim());

@@ -6,6 +6,7 @@ import thewebsemantic.Embedded;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfType;
 import de.mpg.jena.vo.ComplexType;
+import de.mpg.jena.vo.ComplexType.ComplexTypes.searchable;
 
 @Namespace("http://imeji.mpdl.mpg.de/metadata/")
 @RdfType("text")
@@ -18,15 +19,8 @@ public class Text extends ComplexType implements Serializable
     {
         super(ComplexTypes.TEXT);
     }
-
-    /*
-     * Do not use constructors with one string parameter, Jenabean has problems with it.
-    public Text(String value)
-    {
-        super(ComplexTypes.TEXT);
-        text = value;
-    }
-*/
+    
+    @searchable
     public String getText()
     {
         return text;

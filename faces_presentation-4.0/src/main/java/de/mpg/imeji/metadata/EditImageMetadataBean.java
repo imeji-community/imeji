@@ -49,7 +49,7 @@ public class EditImageMetadataBean  implements Serializable
 	private Statement statement = null;
 	private ImageMetadata metadata = null;
 	private Collection<MetadataProfile> profiles = new ArrayList<MetadataProfile>();
-	
+
 	// menus
 	private List<SelectItem> statementMenu =null;
 	private List<SelectItem> profileMenu = null;
@@ -57,21 +57,21 @@ public class EditImageMetadataBean  implements Serializable
 	private String selectedProfileName = null;
 	private List<SelectItem> modeRadio = null;
 	private String selectedMode = "basic";
-	
-	
+
+
 	//other
 	private int mdPosition;
 	private int imagePosition;
 	private String editType = "selected";
 	private boolean isProfileWithStatements = true;
-	
+
 	public EditImageMetadataBean() 
 	{
 		statementMenu = new ArrayList<SelectItem>();
 		profileMenu = new ArrayList<SelectItem>();
 		modeRadio = new ArrayList<SelectItem>();
 	}
-	
+
 	public String getInit()
 	{
 		try 
@@ -84,17 +84,17 @@ public class EditImageMetadataBean  implements Serializable
 			statement = getSelectedStatement();
 			((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
 			initMenus();
-			
+
 			if (getSelectedProfile() == null || getSelectedProfile().getStatements().isEmpty()) 
 			{
 				isProfileWithStatements = false;
 			}
 			if (statement != null)
 			{
-			    metadata = MetadataFactory.newMetadata(statement);
-			    
+				metadata = MetadataFactory.newMetadata(statement);
+
 				editor = new MetadataMultipleEditor(images, getSelectedProfile(), getSelectedStatement());
-				
+
 				((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 			}
 			else
@@ -109,7 +109,7 @@ public class EditImageMetadataBean  implements Serializable
 		}
 		return "";
 	}
-	
+
 	public String getAjaxInit() throws Exception
 	{
 		lockImages();
@@ -129,7 +129,7 @@ public class EditImageMetadataBean  implements Serializable
 		}
 		return "";
 	}
-		
+
 	public void initImagesBean()
 	{
 		editType = (String) ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("type");
@@ -143,7 +143,7 @@ public class EditImageMetadataBean  implements Serializable
 			imagesBean = (CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class);
 		}
 	}
-	
+
 	public List<Image> searchAndLoadImages()
 	{
 		int elementsPerPage = imagesBean.getElementsPerPage();
@@ -156,7 +156,7 @@ public class EditImageMetadataBean  implements Serializable
 		imagesBean.setCurrentPageNumber(currentPageNumber);
 		return images;
 	}
-	
+
 	public void initMenus()
 	{
 		statementMenu = new ArrayList<SelectItem>();
@@ -172,13 +172,13 @@ public class EditImageMetadataBean  implements Serializable
 		}
 		selectedMode = "basic";
 	}
-	
+
 	public String cancel()
 	{
 		unlockImages();
 		return "";
 	}
-	
+
 	private void lockImages()
 	{
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
@@ -187,7 +187,7 @@ public class EditImageMetadataBean  implements Serializable
 			Locks.lock(new Lock(im.getId().toString(), sb.getUser().getEmail()));
 		}
 	}
-	
+
 	private void unlockImages()
 	{
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
@@ -196,30 +196,29 @@ public class EditImageMetadataBean  implements Serializable
 			Locks.unLock(new Lock(im.getId().toString(), sb.getUser().getEmail()));
 		}
 	}
-	
+
 	public String addToAll()
 	{
-		ImageMetadata newMD = MetadataFactory.newMetadata(metadata);
 		for (Image im : editor.getImages())
 		{
 			if ("overwrite".equals(selectedMode)) 
 			{
 				im = removeAllMetadata(im);
-				im.getMetadataSet().getMetadata().add(newMD);
+				im.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
 			}
 			else if ("append".equals(selectedMode))
 			{
-				im.getMetadataSet().getMetadata().add(newMD);
+				im.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
 			}
 			else if ("basic".equals(selectedMode))
 			{
-				addMetadataIfNotExists(im, newMD);
+				addMetadataIfNotExists(im, MetadataFactory.copyMetadata(metadata));
 			}
 		}
 		metadata = MetadataFactory.newMetadata(getSelectedStatement());
 		return "";
 	}
-	
+
 	public String addToAllSaveAndRedirect() throws IOException
 	{
 		addToAll();
@@ -227,22 +226,22 @@ public class EditImageMetadataBean  implements Serializable
 		redirectToView();
 		return "";
 	}
-	
+
 	public String saveAndRedirect() throws IOException
 	{
 		editor.save();
 		redirectToView();
 		return "";
 	}
-	
+
 	public void redirectToView() throws IOException
 	{
 		unlockImages();
 		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 		String path = ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class)).getCollection().getId().getPath();
-    	FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + "/images" + path);
+		FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + "/images" + path);
 	}
-	
+
 	public String clearAll()
 	{
 		for (Image im : editor.getImages())
@@ -252,13 +251,13 @@ public class EditImageMetadataBean  implements Serializable
 		metadata = MetadataFactory.newMetadata(statement);
 		return "";
 	}
-	
+
 	public String resetChanges()
 	{
 		getInit();
 		return "";
 	}
-	
+
 	private Image addMetadataIfNotExists(Image im, ImageMetadata metadata)
 	{	
 		boolean hasValue = false;
@@ -267,7 +266,10 @@ public class EditImageMetadataBean  implements Serializable
 		{
 			if (md.getNamespace().equals(metadata.getNamespace()))
 			{
-				if (MetadataHelper.isEmpty(md)) ((List<ImageMetadata>) im.getMetadataSet().getMetadata()).set(i, metadata);
+				if (MetadataHelper.isEmpty(md))
+				{
+					((List<ImageMetadata>) im.getMetadataSet().getMetadata()).set(i, metadata);
+				}
 				hasValue = true;
 			}
 			i++;
@@ -278,8 +280,8 @@ public class EditImageMetadataBean  implements Serializable
 		}
 		return im;
 	}
-	
-	
+
+
 	private Image removeAllMetadata(Image im)
 	{
 		for(int i=0; i<im.getMetadataSet().getMetadata().size(); i++)
@@ -290,11 +292,11 @@ public class EditImageMetadataBean  implements Serializable
 				((List<ImageMetadata>)im.getMetadataSet().getMetadata()).remove(i);
 				i--;
 			}
-				
+
 		}
 		return im;
 	}
-	
+
 	public MetadataProfile getSelectedProfile()
 	{
 		for(MetadataProfile p : profiles)
@@ -303,7 +305,7 @@ public class EditImageMetadataBean  implements Serializable
 		}
 		return getDefaultProfile();
 	}
-	
+
 	public MetadataProfile getDefaultProfile()
 	{
 		if (!profiles.isEmpty())
@@ -312,7 +314,7 @@ public class EditImageMetadataBean  implements Serializable
 		}
 		return null;
 	}
-	
+
 	public Statement getSelectedStatement()
 	{
 		if (profile != null)
@@ -327,7 +329,7 @@ public class EditImageMetadataBean  implements Serializable
 		}
 		return getDefaultStatement();
 	}
-	
+
 	public Statement getDefaultStatement()
 	{
 		if (profile != null &&  profile.getStatements().iterator().hasNext())
@@ -336,7 +338,7 @@ public class EditImageMetadataBean  implements Serializable
 		}
 		return null;
 	}
-	
+
 	public void profileListener(ValueChangeEvent event)
 	{
 		if (event != null && event.getNewValue() != event.getOldValue())
@@ -360,19 +362,19 @@ public class EditImageMetadataBean  implements Serializable
 			editor.setStatement(statement);
 		}
 	}
-	
+
 	public String addMetadata()
-    {
+	{
 		editor.addMetadata(getImagePosition(), getMdPosition());
 		return "";
-    }
-	
+	}
+
 	public String removeMetadata()
 	{
 		editor.removeMetadata(getImagePosition(), getMdPosition());
 		return "";
 	}
-	
+
 	public int getMdPosition() {
 		return mdPosition;
 	}
@@ -492,6 +494,6 @@ public class EditImageMetadataBean  implements Serializable
 	public void setProfileWithStatements(boolean isProfileWithStatements) {
 		this.isProfileWithStatements = isProfileWithStatements;
 	}
-	
-	
+
+
 }

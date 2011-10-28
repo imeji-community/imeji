@@ -1,5 +1,6 @@
 package de.mpg.imeji.image;
 
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,6 +9,8 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
+import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
@@ -22,6 +25,7 @@ import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.PropertyReader;
+import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -136,7 +140,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 
 		// load images
 		Collection<Image> images = loadImages(searchResult);
-		
+
 		return ImejiFactory.imageListToThumbList(images);
 	}
 
@@ -156,8 +160,19 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 	public String export()
 	{
 		Export export = new Export();
-		//String xml = export.export(searchResult);
-		//System.out.println(xml);
+		OutputStream outputStream;
+		
+		Model exportModel = null;
+		
+		for(ThumbnailBean th : getCurrentPartList())
+		{
+			if (exportModel == null)
+				exportModel = ImejiJena.imageModel.read(th.getId().toString());
+			else
+				exportModel = exportModel.union(ImejiJena.imageModel.read(th.getId().toString()));
+		}
+		
+		exportModel.write(System.out);
 		return "";
 	}
 

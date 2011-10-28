@@ -41,7 +41,7 @@
 						
 						<h:panelGroup styleClass="half_area0_p0 huge_marginLExcl">
 								<h:outputLabel for="selStatement" styleClass="full_area0_p0" value="#{lbl.metadata_type_select}"/>
-								<h:selectOneMenu styleClass="huge_area0"  id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" valueChangeListener="#{EditImageMetadataBean.statementListener}" immediate="true">
+								<h:selectOneMenu styleClass="huge_area0" id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" valueChangeListener="#{EditImageMetadataBean.statementListener}" immediate="false">
 									<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
 									<a4j:support event="onchange" reRender="ajaxContent" />
 								</h:selectOneMenu>

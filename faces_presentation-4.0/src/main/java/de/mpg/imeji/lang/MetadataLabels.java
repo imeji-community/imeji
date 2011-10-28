@@ -17,51 +17,47 @@ import de.mpg.jena.vo.Statement;
 public class MetadataLabels implements Serializable
 {
 	private String lang = "en";
-	
+
 	private Map<URI, String> labels;
 	private Map<URI, String> internationalizedLabels;
-	
+
 	private MetadataProfile profile;
 	private List<Image> images;
-	
+
 	public MetadataLabels() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public void init(List<Image> images) throws Exception
 	{
 		this.images = images;
 		this.profile = null;
-		
+
 		labels = new HashMap<URI, String>();
-		internationalizedLabels = new HashMap<URI, String>();
-		
+
 		Map<URI, MetadataProfile> profiles = ProfileHelper.loadProfiles(images);
+		
+		HashMap<URI, String> map = new HashMap<URI, String>();
 		
 		for (MetadataProfile p : profiles.values())
 		{
 			if (p != null)
 			{
-				for (Statement s : p.getStatements())
-				{
-					for (LocalizedString ls : s.getLabels())
-					{
-						if (ls.getLang().equals("en")) labels.put(s.getName(), ls.toString());
-						if (ls.getLang().equals(lang)) internationalizedLabels.put(s.getName(), ls.toString());
-					}
-				}
+				init(p);
+				map.putAll(internationalizedLabels);
 			}
 		}
+		internationalizedLabels = new HashMap<URI, String>(map);
 	}
-	
+
 	public void init(MetadataProfile profile) throws Exception
 	{
 		this.images = null;
 		this.profile = profile;
-		
+
 		labels = new HashMap<URI, String>();
 		internationalizedLabels = new HashMap<URI, String>();
-		
+
 		lang = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLocale().getLanguage();
 
 		if (profile != null)
@@ -70,9 +66,9 @@ public class MetadataLabels implements Serializable
 			{
 				boolean hasInternationalizedLabel = false;
 				boolean hasLabel = false;
-				
+
 				String labelFallBack = null;
-				
+
 				for (LocalizedString ls : s.getLabels())
 				{
 					if (ls.getLang().equals("en"))
@@ -126,6 +122,6 @@ public class MetadataLabels implements Serializable
 	public void setInternationalizedLabels(Map<URI, String> internationalizedLabels) {
 		this.internationalizedLabels = internationalizedLabels;
 	}
-	
-	
+
+
 }

@@ -25,6 +25,7 @@ import de.escidoc.core.common.exceptions.application.violated.LockingException;
 import de.escidoc.core.common.exceptions.system.SystemException;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
+import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.ImejiBean2RDF;
@@ -112,7 +113,7 @@ public class ImageController extends ImejiController
         {
     		for(int i=0; i< img.getMetadataSet().getMetadata().size(); i++)
     		{
-    			((List<ImageMetadata>)img.getMetadataSet().getMetadata()).set(i, MetadataFactory.newMetadata(((List<ImageMetadata>)img.getMetadataSet().getMetadata()).get(i)));
+    			((List<ImageMetadata>)img.getMetadataSet().getMetadata()).set(i, MetadataFactory.copyMetadata(((List<ImageMetadata>)img.getMetadataSet().getMetadata()).get(i)));
     		}
     		imBeans.add(img);
         }

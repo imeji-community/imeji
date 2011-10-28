@@ -1,15 +1,13 @@
 package de.mpg.imeji.metadata.util;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.ComplexType.ComplexTypes;
+import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.complextypes.ConePerson;
 import de.mpg.jena.vo.complextypes.Date;
 import de.mpg.jena.vo.complextypes.Geolocation;

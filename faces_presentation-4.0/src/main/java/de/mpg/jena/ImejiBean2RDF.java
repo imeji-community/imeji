@@ -8,29 +8,17 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import thewebsemantic.Bean2RDF;
-import thewebsemantic.JenaHelper;
 import thewebsemantic.RDF2Bean;
 
-import com.hp.hpl.jena.JenaRuntime;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.shared.LockMRSW;
-import com.hp.hpl.jena.shared.impl.JenaParameters;
-import com.hp.hpl.jena.sparql.util.Symbol;
-import com.hp.hpl.jena.tdb.TDB;
-import com.hp.hpl.jena.tdb.mgt.TDBSystemInfo;
-import com.hp.hpl.jena.tdb.mgt.TDBSystemInfoMBean;
 
-import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.controller.ImejiController;
 import de.mpg.jena.security.Operations.OperationsType;
@@ -166,7 +154,7 @@ public class ImejiBean2RDF
 	 */
 	private void beginModel()
 	{
-		bean2rdf.getModel().enterCriticalSection(com.hp.hpl.jena.shared.Lock.WRITE);
+		// bean2rdf.getModel().enterCriticalSection(com.hp.hpl.jena.shared.Lock.WRITE);
 		bean2rdf.getModel().begin();
 	}
 
@@ -176,7 +164,7 @@ public class ImejiBean2RDF
 	 */
 	private void commitModel()
 	{
-		bean2rdf.getModel().leaveCriticalSection();
+		//bean2rdf.getModel().leaveCriticalSection();
 		cleanGraph();
 		bean2rdf.getModel().commit();
 

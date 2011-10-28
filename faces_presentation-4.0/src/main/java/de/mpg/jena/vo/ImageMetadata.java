@@ -99,6 +99,4 @@ public class ImageMetadata implements Serializable, Comparable<ImageMetadata>
 		this.searchValue = searchValue;
 	}
 	
-	
-	
 }

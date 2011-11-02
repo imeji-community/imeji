@@ -141,7 +141,15 @@ public class SingleEditBean implements Serializable
 		if (security.check(OperationsType.UPDATE, sb.getUser(), image))
 		{
 			this.toggleState = "editMd";
-			Locks.lock(new Lock(image.getId().toString(), sb.getUser().getEmail()));
+			try 
+			{
+				Locks.lock(new Lock(image.getId().toString(), sb.getUser().getEmail()));
+			} 
+			catch (Exception e) 
+			{
+				BeanHelper.error(sb.getMessage("error_editor_image_locked"));
+			}
+			
 			init();
 		}
 		else

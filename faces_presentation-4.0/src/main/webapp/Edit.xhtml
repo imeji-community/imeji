@@ -33,6 +33,9 @@
 						</h:outputLink>	
 					</h:panelGroup>
 					
+					<h:panelGroup rendered="#{EditImageMetadataBean.lockedImages > 0}">
+						<h3><h:outputText value="#{EditImageMetadataBean.lockedImages} #{msg.error_editor_images_locked}!"/></h3>
+					</h:panelGroup>
 					<!-- MAIN FORMULAR -->
 					
 					<h:panelGroup rendered="#{EditImageMetadataBean.profileWithStatements}">
@@ -72,10 +75,7 @@
 								
 							
 							<h:panelGroup rendered="#{EditImageMetadataBean.editType != 'selected'}" styleClass="full_area0">
-								<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton">
-									 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
-									<h:outputText value=" #{lbl.cancel}" />
-								</h:outputLink>	
+								<h:commandButton styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.cancel}"/>
 								<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl"  action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value=" #{lbl.save} ">
 									<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
 								</h:commandButton>			
@@ -95,11 +95,9 @@
 								<h:outputLink value="" rendered="false" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
 									<h:outputText value="#{lbl.reset_changes}" />
 								</h:outputLink>
-								<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
-									 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
-									<h:outputText value=" #{lbl.cancel} " />
-								</h:outputLink>	
 								
+								<h:commandButton styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.cancel}"/>
+							
 								<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
 									<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
 								</h:commandButton>

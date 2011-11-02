@@ -3,10 +3,11 @@ package de.mpg.imeji.collection;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ObjectLoader;
-import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Organization;
@@ -17,6 +18,8 @@ public class ViewCollectionBean extends CollectionBean
 {
     private SessionBean sessionBean = null;
     private List<Person> persons = null;
+    
+    private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
 
     public ViewCollectionBean(CollectionImeji coll)
     {

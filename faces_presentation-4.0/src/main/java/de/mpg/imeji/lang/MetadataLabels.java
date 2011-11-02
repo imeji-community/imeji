@@ -21,18 +21,8 @@ public class MetadataLabels implements Serializable
 	private Map<URI, String> labels;
 	private Map<URI, String> internationalizedLabels;
 
-	private MetadataProfile profile;
-	private List<Image> images;
-
-	public MetadataLabels() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public void init(List<Image> images) throws Exception
 	{
-		this.images = images;
-		this.profile = null;
-
 		labels = new HashMap<URI, String>();
 
 		Map<URI, MetadataProfile> profiles = ProfileHelper.loadProfiles(images);
@@ -52,9 +42,6 @@ public class MetadataLabels implements Serializable
 
 	public void init(MetadataProfile profile) throws Exception
 	{
-		this.images = null;
-		this.profile = profile;
-
 		labels = new HashMap<URI, String>();
 		internationalizedLabels = new HashMap<URI, String>();
 

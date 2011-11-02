@@ -85,6 +85,10 @@ public class Locks
 				getUserLocks().put(lock.getUri(), lock);
 			}
 		}
+		else
+		{
+			throw new RuntimeException(lock.getUri() + " already locked by another user " + lock.getEmail());
+		}
 	}
 	
 	/**

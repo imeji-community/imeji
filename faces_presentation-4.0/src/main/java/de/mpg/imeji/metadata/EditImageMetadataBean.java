@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.CollectionImagesBean;
+import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.SelectedBean;
 import de.mpg.imeji.image.ThumbnailBean;
@@ -27,6 +28,7 @@ import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.search.SearchResult;
+import de.mpg.jena.security.Security;
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
@@ -58,12 +60,12 @@ public class EditImageMetadataBean  implements Serializable
 	private List<SelectItem> modeRadio = null;
 	private String selectedMode = "basic";
 
-
 	//other
 	private int mdPosition;
 	private int imagePosition;
 	private String editType = "selected";
 	private boolean isProfileWithStatements = true;
+	private int lockedImages = 0;
 
 	public EditImageMetadataBean() 
 	{
@@ -100,7 +102,7 @@ public class EditImageMetadataBean  implements Serializable
 			else
 			{
 				BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("profile_empty"));
-			}
+			}			
 		}
 		catch (Exception e) 
 		{
@@ -173,18 +175,30 @@ public class EditImageMetadataBean  implements Serializable
 		selectedMode = "basic";
 	}
 
-	public String cancel()
+	public String cancel() throws IOException
 	{
 		unlockImages();
+		HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
+		FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getPreviousPage().getUri().toString());
 		return "";
 	}
 
 	private void lockImages()
 	{
 		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		for (Image im : editor.getImages())
+		lockedImages = 0;
+		for (int i = 0; i < editor.getImages().size(); i++) 
 		{
-			Locks.lock(new Lock(im.getId().toString(), sb.getUser().getEmail()));
+			try
+			{
+				Locks.lock(new Lock(editor.getImages().get(i).getId().toString(), sb.getUser().getEmail()));
+			}
+			catch (Exception e) 
+			{
+				editor.getImages().remove(i);
+				lockedImages++;
+				i--;
+			}
 		}
 	}
 
@@ -495,5 +509,13 @@ public class EditImageMetadataBean  implements Serializable
 		this.isProfileWithStatements = isProfileWithStatements;
 	}
 
+	public int getLockedImages() {
+		return lockedImages;
+	}
+
+	public void setLockedImages(int lockedImages) {
+		this.lockedImages = lockedImages;
+	}
+	
 
 }

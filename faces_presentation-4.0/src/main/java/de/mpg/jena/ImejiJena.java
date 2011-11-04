@@ -1,8 +1,8 @@
 package de.mpg.jena;
 
-import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.net.URISyntaxException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
 
@@ -13,7 +13,6 @@ import thewebsemantic.RDF2Bean;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.tdb.mgt.TDBSystemInfo;
 import com.hp.hpl.jena.tdb.sys.SystemTDB;
 
 import de.mpg.escidoc.services.framework.PropertyReader;
@@ -34,7 +33,7 @@ public class ImejiJena
 	public static Model userModel;
 	public static Model profileModel;
 	public static Dataset imejiDataSet;
-
+	
 	private static Logger logger = Logger.getLogger(ImejiJena.class);
 
 	public static void init()
@@ -67,7 +66,6 @@ public class ImejiJena
 		
 		System.out.println("Jena file access : " + SystemTDB.fileMode().name());
 		System.out.println("Jena is 64 bit system : " + SystemTDB.is64bitSystem);
-		
 		
 	}
 
@@ -121,4 +119,5 @@ public class ImejiJena
 		bean2RDF.save(c);
 		logger.info("New Counter created");
 	}
+
 }

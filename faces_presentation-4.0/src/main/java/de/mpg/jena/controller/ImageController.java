@@ -1,31 +1,18 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.rpc.ServiceException;
-
 import org.apache.log4j.Logger;
 
 import thewebsemantic.NotBoundException;
-
-import de.escidoc.core.common.exceptions.application.invalid.InvalidStatusException;
-import de.escidoc.core.common.exceptions.application.missing.MissingMethodParameterException;
 import de.escidoc.core.common.exceptions.application.notfound.ItemNotFoundException;
-import de.escidoc.core.common.exceptions.application.security.AuthenticationException;
-import de.escidoc.core.common.exceptions.application.security.AuthorizationException;
-import de.escidoc.core.common.exceptions.application.violated.AlreadyPublishedException;
-import de.escidoc.core.common.exceptions.application.violated.LockingException;
-import de.escidoc.core.common.exceptions.system.SystemException;
 import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.escidoc.services.framework.ServiceLocator;
-import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.ImejiBean2RDF;
@@ -52,7 +39,7 @@ public class ImageController extends ImejiController
 
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
 	private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-    
+
     public ImageController(User user)
     {
         super(user);
@@ -73,7 +60,6 @@ public class ImageController extends ImejiController
         imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
         ic.getImages().add(img.getId());
         cc.update(ic);
-        cleanGraph(ImejiJena.imageModel);
     }
 
     public void create(Collection<Image> images, URI coll) throws Exception
@@ -94,7 +80,6 @@ public class ImageController extends ImejiController
              ic.getImages().add(img.getId());
         }
         cc.update(ic);
-        cleanGraph(ImejiJena.imageModel);
     }
     
 
@@ -117,8 +102,8 @@ public class ImageController extends ImejiController
     		}
     		imBeans.add(img);
         }
+    	
     	imejiBean2RDF.saveDeep(imBeans, user);
-    	cleanGraph(ImejiJena.imageModel);
     }
     
     /**

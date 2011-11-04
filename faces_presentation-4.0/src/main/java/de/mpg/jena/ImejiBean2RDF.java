@@ -1,9 +1,13 @@
 package de.mpg.jena;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+
+import javax.servlet.jsp.tagext.TryCatchFinally;
 
 import org.apache.log4j.Logger;
 
@@ -18,6 +22,7 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.shared.LockMRSW;
 
 import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.controller.ImejiController;
@@ -36,18 +41,16 @@ import de.mpg.jena.vo.User;
  */
 public class ImejiBean2RDF
 {
-	private boolean optimisticLocking = false;
-	private boolean pessimisticLocking = true;
-
 	private static Bean2RDF bean2rdf;
-	private static RDF2Bean rdf2Bean;
 	private Security security;
 	private static Logger logger = Logger.getLogger(ImejiBean2RDF.class);
 
+	private Model model;
+
 	public ImejiBean2RDF(Model model) 
 	{
+		this.model = model;
 		bean2rdf = new Bean2RDF(model);
-		rdf2Bean = new RDF2Bean(model);
 		security = new Security();
 	}
 
@@ -58,61 +61,70 @@ public class ImejiBean2RDF
 		return list;
 	}
 
-	public synchronized void create(List<Object> objects, User user) throws Exception
+	public void create(List<Object> objects, User user) throws Exception
 	{
-		try
+		for (Object o : objects)
 		{
-			beginModel();
-			for (Object o : objects)
+			if (Locks.tryLock())
 			{
-				beginTransaction(o, user, OperationsType.CREATE);
-				bean2rdf.saveDeep(o);
-				commitTransaction(o, user);
+				try 
+				{
+					beginTransaction(o, user, OperationsType.CREATE);
+					bean2rdf.saveDeep(o);
+					commitTransaction(o, user);
+				}
+				finally
+				{
+					Locks.releaseLockForWrite();
+				}
 			}
 		}
-		finally
-		{
-			commitModel();
-		}
+		cleanGraph();
 	}
 
-	public synchronized void delete(List<Object> objects, User user) throws Exception 
+	public void delete(List<Object> objects, User user) throws Exception 
 	{
-		try
+		for (Object o : objects)
 		{
-			beginModel();
-			for (Object o : objects)
+			if (Locks.tryLock())
 			{
-				beginTransaction(o, user, OperationsType.DELETE);
-				bean2rdf.delete(o);
-				commitTransaction(o, user);
+				try 
+				{
+					beginTransaction(o, user, OperationsType.DELETE);
+					bean2rdf.delete(o);
+					commitTransaction(o, user);
+				} 
+				finally
+				{
+					Locks.releaseLockForWrite();
+				}
 			}
 		}
-		finally
-		{
-			commitModel();
-		}
+		cleanGraph();
 	}
 
-	public synchronized Resource saveDeep(List<Object> objects, User user) throws Exception
-	{
-		try
+	public Resource saveDeep(List<Object> objects, User user) throws Exception
+	{		
+		for (Object o : objects)
 		{
-			beginModel();
-			for (Object o : objects)
+			if (Locks.tryLock())
 			{
-				beginTransaction(o, user, OperationsType.UPDATE);
-				// Thread safe operation: Jena allows one edit at once.
-				bean2rdf.saveDeep(o);
-				commitTransaction(o, user);
+				try
+				{
+					beginTransaction(o, user, OperationsType.UPDATE);
+					bean2rdf.saveDeep(o);
+					commitTransaction(o, user);
+				}
+				finally
+				{
+					Locks.releaseLockForWrite();
+				}
 			}
 		}
-		finally
-		{
-			commitModel();
-		}
+		cleanGraph();
 		return null;
 	}
+
 
 	/**
 	 * Begin an Imeji transaction:
@@ -129,10 +141,8 @@ public class ImejiBean2RDF
 		try
 		{
 			checkSecurity(bean, user, opType);
-			//			if (optimisticLocking) checkOptimisticLocks(bean);
-			//			if (pessimisticLocking) checkPessimisticLock(bean, user);
-			//Locks.lock(new Lock(extractID(bean).toString()));
-			setLastModificationDate(bean, user);
+			bean2rdf = new Bean2RDF(model);
+			//bean2rdf.getModel().begin();
 		}
 		catch (Exception e)
 		{
@@ -144,30 +154,7 @@ public class ImejiBean2RDF
 
 	private void commitTransaction(Object bean, User user)
 	{
-		// No technical locks anymore since write is synchronized
-		//Locks.unLock(new Lock(extractID(bean).toString()));
-	}
-
-	/**
-	 * Important to enable synchronisation with model
-	 * to use carefully, kills performance
-	 */
-	private void beginModel()
-	{
-		// bean2rdf.getModel().enterCriticalSection(com.hp.hpl.jena.shared.Lock.WRITE);
-		bean2rdf.getModel().begin();
-	}
-
-	/**
-	 * Start synchronisation with model
-	 * to use carefully, kills performance
-	 */
-	private void commitModel()
-	{
-		//bean2rdf.getModel().leaveCriticalSection();
-		cleanGraph();
-		bean2rdf.getModel().commit();
-
+		//bean2rdf.getModel().commit();
 	}
 
 	private void checkSecurity(Object bean, User user, OperationsType opType)
@@ -178,49 +165,36 @@ public class ImejiBean2RDF
 		}
 	}
 
-	private synchronized void checkOptimisticLocks(Object bean)
-	{
-		Object o1 = rdf2Bean.load(bean.getClass(), extractID(bean));
-		if (!getLastModificationDate(o1).equals(getLastModificationDate(bean)))
-		{
-			throw new RuntimeException(extractID(bean)+ " has been modified previously!");
-		}
-	}
-
-	private void checkPessimisticLock(Object bean, User user)
-	{
-		if (Locks.isLocked(extractID(bean).toString(), user.getEmail()))
-		{
-			throw new RuntimeException("Imeji Locking exception: resource " + extractID(bean) +   " locked!");
-		}
-	}
-
 	public void cleanGraph()
 	{
-		try
+		if (Locks.tryLock())
 		{
-			bean2rdf.getModel().enterCriticalSection(com.hp.hpl.jena.shared.Lock.WRITE);
-			String q = "SELECT DISTINCT ?s WHERE { ?s ?p ?o . OPTIONAL {?s2 ?p2 ?s} . FILTER (isBlank(?s) && !bound(?s2))}";
-			Query queryObject = QueryFactory.create(q);
-			QueryExecution qe = QueryExecutionFactory.create(queryObject, bean2rdf.getModel());
-			ResultSet results = qe.execSelect();
-			while (results.hasNext())
+			try
 			{
-				QuerySolution qs = results.next();
-				Resource s = qs.getResource("?s");
-				s.removeProperties();
+				//bean2rdf.getModel().enterCriticalSection(com.hp.hpl.jena.shared.Lock.WRITE);
+				String q = "SELECT DISTINCT ?s WHERE { ?s ?p ?o . OPTIONAL {?s2 ?p2 ?s} . FILTER (isBlank(?s) && !bound(?s2))}";
+				Query queryObject = QueryFactory.create(q);
+				QueryExecution qe = QueryExecutionFactory.create(queryObject, bean2rdf.getModel());
+				ResultSet results = qe.execSelect();
+				while (results.hasNext())
+				{
+					QuerySolution qs = results.next();
+					Resource s = qs.getResource("?s");
+					s.removeProperties();
+				}
+				qe.close();
 			}
+			catch (Exception e) 
+			{
+				logger.error("Error cleaning graph", e);
+			}
+			finally
+			{
+				Locks.releaseLockForWrite();
+				//bean2rdf.getModel().leaveCriticalSection();
+			}
+		}
 
-			qe.close();
-		}
-		catch (Exception e) 
-		{
-			logger.error("Error cleaning graph", e);
-		}
-		finally
-		{
-			bean2rdf.getModel().leaveCriticalSection();
-		}
 	}
 
 	private void activeLazyList(Object o)

@@ -132,7 +132,7 @@ public class Authorization
 	
 	private List<Grant> getGrantsForObject(User user, Container container)
 	{
-		if (user == null) return new ArrayList<Grant>();
+		if (user == null || container == null) return new ArrayList<Grant>();
 		return getGrantsForURI(user, container.getId());
 	}
 	

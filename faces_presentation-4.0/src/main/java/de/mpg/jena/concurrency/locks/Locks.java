@@ -19,6 +19,8 @@ public class Locks
 	
 	private static Logger logger = Logger.getLogger(Locks.class);
 	
+	private static boolean writeLock = false;
+	
 	public static void init()
 	{
 		userLocks = new ConcurrentHashMap<String, Lock>();
@@ -160,5 +162,31 @@ public class Locks
 			}
 		}
 		return list;
+	}
+	
+	public synchronized static boolean tryLock()
+	{
+		long startLocked = System.currentTimeMillis();
+		while (writeLock)
+		{
+			//wait for lock to be released
+			if ((System.currentTimeMillis() - startLocked) > 10000)
+			{
+				// if a lock is kept more than 10 s, throw exception 
+				throw new RuntimeException("Write lock could not be released in less than 10s. Check if there is no dead locks");
+			}
+		}
+		lockForWrite();
+		return true;
+	}
+
+	public static void lockForWrite() 
+	{
+		writeLock = true;
+	}
+	
+	public static void releaseLockForWrite()
+	{
+		writeLock = false;;
 	}
 }

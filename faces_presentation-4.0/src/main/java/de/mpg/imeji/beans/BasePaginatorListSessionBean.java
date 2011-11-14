@@ -169,6 +169,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> implements S
     	
         try
         {	
+        	long start = System.currentTimeMillis();
             if (elementsPerPage == 0)
             {
                 setElementsPerPage(24);
@@ -200,6 +201,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> implements S
                 paginatorPageList.add(new PaginatorPage(i + 1));
             }
             corruptedList = false;
+            System.out.println("Total = " + (System.currentTimeMillis() - start));
         }
         catch (NotBoundException e)
         {

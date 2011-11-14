@@ -59,7 +59,8 @@ public class TechnicalFacets
 					if (count > 0)	techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, publicImagesSC, "released_images", FacetType.TECHNICAL), "released_images", count, FacetType.TECHNICAL, null));
 				}
 			}
-				
+
+
 			for (ComplexTypes ct : ComplexTypes.values())
 			{
 				if (!fs.isFilter(ct.name()) && !fs.isNoResultFilter(ct.name()))

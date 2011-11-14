@@ -181,7 +181,7 @@ public class ImageController extends ImejiController
     
     public int countImagesInContainer(URI containerUri, List<SearchCriterion> scList)
     {
-    	Search search = new Search("http://imeji.mpdl.mpg.de/image",containerUri.toString());
+    	Search search = new Search("http://imeji.mpdl.mpg.de/image", containerUri.toString());
     	List<String> uris = search.searchAdvanced(scList, null, simplifyUser(containerUri));
     	return uris.size();
     }
@@ -202,7 +202,6 @@ public class ImageController extends ImejiController
         			
         			if (image != null)
         			{
-        			
         				if( image.getMetadataSet().getProfile() == null) 
             			{
         					logger.error("Error by loading image "  + s + " : No related profile found");

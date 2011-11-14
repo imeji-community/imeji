@@ -11,23 +11,23 @@ import de.mpg.jena.vo.User;
 public class SimpleQueryFactory 
 {
 	private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <XXX_SEARCH_TYPE_ELEMENT_XXX> . " +
-			"?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/status> ?status XXX_SPECIFIC_QUERY_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SORT_ELEMENT_XXX} " +
-			"XXX_SORT_QUERY_XXX";
-	
+	"?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/status> ?status XXX_SPECIFIC_QUERY_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SORT_ELEMENT_XXX} " +
+	"XXX_SORT_QUERY_XXX";
+
 	public static String getQuery(String type, SearchCriterion sc, SortCriterion sortCriterion, User user, boolean isCollection, String specificQuery)
 	{
 		return 	PATTERN_SELECT.replaceAll("XXX_SECURITY_FILTER_XXX",  SimpleSecurityQuery.getQuery(user, sc, type, false))
-							  .replaceAll("XXX_SORT_QUERY_XXX",  SortQueryFactory.create(sortCriterion))
-							  .replaceAll("XXX_SEARCH_ELEMENT_XXX", getSearchElement(sc))
-							  .replaceAll("XXX_SEARCH_TYPE_ELEMENT_XXX", type)
-							  .replaceAll("XXX_SORT_ELEMENT_XXX", getSortElement(sortCriterion))
-							  .replaceAll("XXX_SPECIFIC_QUERY_XXX", specificQuery);
+		.replaceAll("XXX_SORT_QUERY_XXX",  SortQueryFactory.create(sortCriterion))
+		.replaceAll("XXX_SEARCH_ELEMENT_XXX", getSearchElement(sc))
+		.replaceAll("XXX_SEARCH_TYPE_ELEMENT_XXX", type)
+		.replaceAll("XXX_SORT_ELEMENT_XXX", getSortElement(sortCriterion))
+		.replaceAll("XXX_SPECIFIC_QUERY_XXX", specificQuery);
 	}
-	
+
 	public static String getSearchElement(SearchCriterion sc)
 	{
 		String searchQuery = "";
-		 
+
 		if(sc == null)
 		{
 			return "";
@@ -38,7 +38,10 @@ public class SimpleQueryFactory
 		}
 		else if (ImejiNamespaces.IMAGE_METADATA_TYPE_URI.equals(sc.getNamespace()))
 		{
+			//slow
 			searchQuery = ". OPTIONAL {?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . OPTIONAL {?mds <http://imeji.mpdl.mpg.de/metadata> ?md .OPTIONAL{ ?md <http://imeji.mpdl.mpg.de/complexTypes> ?type . OPTIONAL {?md <" + sc.getNamespace().getNs() + "> ?el }}}}";
+			//fast (not testet)
+			//searchQuery = ". ?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . ?mds <http://imeji.mpdl.mpg.de/metadata> ?md . ?md <http://imeji.mpdl.mpg.de/complexTypes> ?type .  ?md <" + sc.getNamespace().getNs() + "> ?el ";
 		}
 		else if (ImejiNamespaces.PROPERTIES_STATUS.equals(sc.getNamespace()))
 		{
@@ -78,17 +81,20 @@ public class SimpleQueryFactory
 		}
 		else
 		{
-			searchQuery = ". OPTIONAL {?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . OPTIONAL {?mds <http://imeji.mpdl.mpg.de/metadata> ?md  . OPTIONAL {?md <" + sc.getNamespace().getNs() + "> ?el }}}";
+			//slow
+			//searchQuery = ". OPTIONAL {?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . OPTIONAL {?mds <http://imeji.mpdl.mpg.de/metadata> ?md  . OPTIONAL {?md <" + sc.getNamespace().getNs() + "> ?el }}}";
+			//fast
+			searchQuery = ". ?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . ?mds <http://imeji.mpdl.mpg.de/metadata> ?md  . ?md <" + sc.getNamespace().getNs() + "> ?el ";
 		}
-		
+
 		if (Operator.NOTAND.equals(sc.getOperator()) || Operator.NOTOR.equals(sc.getOperator()))
 		{
 			return ".MINUS{ " + searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(sc,"el") + ")}";
 		}
-		
+
 		return searchQuery + " .FILTER(" + getSimpleFilter(sc,"el") + ")";
 	}
-	
+
 	public static String getSortElement(SortCriterion sc)
 	{
 		if (sc != null)
@@ -116,73 +122,84 @@ public class SimpleQueryFactory
 		}
 		return "";
 	}
-	
+
 	public static String getSimpleFilter(SearchCriterion sc, String variable)
 	{
 		String filter ="";
 		variable = "?" + variable;
-		
+
 		if (sc.getValue() != null)
-        {
-			if (sc.getFilterType().equals(Filtertype.URI) && !sc.getNamespace().equals(ImejiNamespaces.ID_URI))
-            {
-                filter += "str(" + variable + ")='" + sc.getValue() + "'";
-            }
+		{
+			// Lokk for use cases where this kind of string search for uris make sense.
+			// If no cases, then remove it, since it's more performant to search for uri directly like 3. else if
+			if (sc.getFilterType().equals(Filtertype.URI) 
+					/*&& !sc.getNamespace().equals(ImejiNamespaces.ID_URI) 
+					&& !sc.getNamespace().equals(ImejiNamespaces.IMAGE_METADATA_TYPE)
+					&& !sc.getNamespace().equals(ImejiNamespaces.IMAGE_METADATA_NAMESPACE)*/)
+			{
+				// Slow (tested)
+				//filter += "str(" + variable + ")='" + sc.getValue() + "'";
+				// faster (not tested)
+				filter +=  variable + "=<" + sc.getValue() + ">";
+			}
 			else if (sc.getValue().startsWith("\"") && sc.getValue().endsWith("\""))
 			{
 				filter +=  variable + "='" + sc.getValue().replaceAll("\"", "")+ "'";
 			}
-            else if (sc.getFilterType().equals(Filtertype.URI) && sc.getNamespace().equals(ImejiNamespaces.ID_URI))
-            {
-                filter +=  variable + "=<" + sc.getValue() + ">";
-            }
-            else if (sc.getFilterType().equals(Filtertype.REGEX))
-            {
-                filter += "regex(" + variable + ", '"  + sc.getValue() + "', 'i')";
-            }
-            else if (sc.getFilterType().equals(Filtertype.EQUALS))
-            {
-                filter += variable + "='" + sc.getValue()+ "'";
-            }
-            else if (sc.getFilterType().equals(Filtertype.NOT))
-            {
-                filter +=  variable + "!='" + sc.getValue() + "'";
-            }
-            else if (sc.getFilterType().equals(Filtertype.BOUND))
-            {
-                filter += "bound(" + variable + ")=" + sc.getValue() + "";
-            }
-            else if (sc.getFilterType().equals(Filtertype.EQUALS_NUMBER))
-            {	
-            	try{ Double d = Double.valueOf(sc.getValue());
-            	filter += variable + "='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";}
-            	catch (Exception e) {/* Not a double*/}
-            }
-            else if (sc.getFilterType().equals(Filtertype.GREATER_NUMBER))
-            {
-            	try{ Double d = Double.valueOf(sc.getValue());
-            	filter += variable + ">='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";}
-            	catch (Exception e) {/* Not a double*/}
-            }
-            else if (sc.getFilterType().equals(Filtertype.LESSER_NUMBER))
-            {
-            	try{ Double d = Double.valueOf(sc.getValue());
-            	filter += variable + "<='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";}
-            	catch (Exception e) {/* Not a double*/}
-            }
-            else if (sc.getFilterType().equals(Filtertype.EQUALS_DATE))
-            {
-            	filter += variable + "='" + DateFormatter.getTime(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-            }
-            else if (sc.getFilterType().equals(Filtertype.GREATER_DATE))
-            {
+			else if (sc.getFilterType().equals(Filtertype.URI) && 
+					(sc.getNamespace().equals(ImejiNamespaces.ID_URI) 
+							|| sc.getNamespace().equals(ImejiNamespaces.IMAGE_METADATA_TYPE)
+							|| sc.getNamespace().equals(ImejiNamespaces.IMAGE_METADATA_NAMESPACE)))
+			{
+				filter +=  variable + "=<" + sc.getValue() + ">";
+			}
+			else if (sc.getFilterType().equals(Filtertype.REGEX))
+			{
+				filter += "regex(" + variable + ", '"  + sc.getValue() + "', 'i')";
+			}
+			else if (sc.getFilterType().equals(Filtertype.EQUALS))
+			{
+				filter += variable + "='" + sc.getValue()+ "'";
+			}
+			else if (sc.getFilterType().equals(Filtertype.NOT))
+			{
+				filter +=  variable + "!='" + sc.getValue() + "'";
+			}
+			else if (sc.getFilterType().equals(Filtertype.BOUND))
+			{
+				filter += "bound(" + variable + ")=" + sc.getValue() + "";
+			}
+			else if (sc.getFilterType().equals(Filtertype.EQUALS_NUMBER))
+			{	
+				try{ Double d = Double.valueOf(sc.getValue());
+				filter += variable + "='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";}
+				catch (Exception e) {/* Not a double*/}
+			}
+			else if (sc.getFilterType().equals(Filtertype.GREATER_NUMBER))
+			{
+				try{ Double d = Double.valueOf(sc.getValue());
+				filter += variable + ">='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";}
+				catch (Exception e) {/* Not a double*/}
+			}
+			else if (sc.getFilterType().equals(Filtertype.LESSER_NUMBER))
+			{
+				try{ Double d = Double.valueOf(sc.getValue());
+				filter += variable + "<='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";}
+				catch (Exception e) {/* Not a double*/}
+			}
+			else if (sc.getFilterType().equals(Filtertype.EQUALS_DATE))
+			{
+				filter += variable + "='" + DateFormatter.getTime(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+			}
+			else if (sc.getFilterType().equals(Filtertype.GREATER_DATE))
+			{
 				filter += variable + ">='" + DateFormatter.getTime(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-            }
-            else if (sc.getFilterType().equals(Filtertype.LESSER_DATE))
-            {
+			}
+			else if (sc.getFilterType().equals(Filtertype.LESSER_DATE))
+			{
 				filter += variable + "<='" + DateFormatter.getTime(sc.getValue()) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-            }
-        }
+			}
+		}
 		return filter;
 	}
 

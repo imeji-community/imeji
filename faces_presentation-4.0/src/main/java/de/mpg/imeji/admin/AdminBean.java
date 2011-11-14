@@ -21,7 +21,7 @@ public class AdminBean
 	public Item getJenaTDBStats()
 	{
 		StatsCollector sc = new StatsCollector();
-        Item imageStats = StatsCollector.gatherTDB( (GraphTDB) ImejiJena.imageModel.getGraph());
+        Item imageStats = null;// StatsCollector.gatherTDB( (GraphTDB) ImejiJena.imageModel.getGraph());
         return imageStats;
 	}
 	

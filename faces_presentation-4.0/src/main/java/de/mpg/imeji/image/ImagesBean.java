@@ -16,7 +16,6 @@ import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.escidoc.EscidocInitializer;
 import de.mpg.imeji.facet.FacetsBean;
 import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.filter.FiltersSession;

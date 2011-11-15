@@ -122,7 +122,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 		{
 			facets.getFacets().clear(); 
 		}
-
 		SortCriterion sortCriterion = new SortCriterion();
 		sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));

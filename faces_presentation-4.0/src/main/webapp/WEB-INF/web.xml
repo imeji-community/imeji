@@ -55,14 +55,14 @@
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
+		<load-on-startup>2</load-on-startup>
 	</servlet>
 	
 	<!-- Initializer Servlet -->
 	<servlet>
 		<servlet-name>Initializer Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.init.InitializerServlet</servlet-class>
-		<load-on-startup>2</load-on-startup>
+		<load-on-startup>3</load-on-startup>
 	</servlet>
 	
 	<!--<servlet>
@@ -74,7 +74,7 @@
 	<servlet>
 		<servlet-name>Image Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.servlet.ImageServlet</servlet-class>
-		<load-on-startup>2</load-on-startup>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 	<!-- Upload Servlet -->
@@ -170,24 +170,16 @@
 	   <dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 	
-	
-	<!--<servlet-mapping>
-		<servlet-name>Upload Servlet</servlet-name>
-		<url-pattern>/upload</url-pattern>
-	</servlet-mapping>-->
 
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>/jsf/*</url-pattern>
 	</servlet-mapping>
 
-
 	<servlet-mapping>
 		<servlet-name>Image Servlet</servlet-name>
 		<url-pattern>/coreserviceimage</url-pattern>
 	</servlet-mapping>
-	
-
 
 	<welcome-file-list>
 		<welcome-file>jsf/Welcome.xhtml</welcome-file>

@@ -60,12 +60,11 @@ public class TechnicalFacets
 				}
 			}
 
-
 			for (ComplexTypes ct : ComplexTypes.values())
 			{
 				if (!fs.isFilter(ct.name()) && !fs.isNoResultFilter(ct.name()))
 				{
-					SearchCriterion sc = new  SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE, ct.getURI().toString(), Filtertype.URI);
+					SearchCriterion sc = new  SearchCriterion(Operator.AND, ImejiNamespaces.IMAGE_METADATA_TYPE_RDF, ct.getType(), Filtertype.URI);
 					count = getCount(new ArrayList<SearchCriterion>(scList), sc);
 					if (count > 0)
 					{

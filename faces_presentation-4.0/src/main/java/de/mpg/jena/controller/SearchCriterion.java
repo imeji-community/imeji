@@ -41,6 +41,7 @@ public class SearchCriterion {
 		IMAGE_METADATA_NAMESPACE("http://imeji.mpdl.mpg.de/metadata/ns", IMAGE_METADATA),
 		IMAGE_METADATA_SEARCH("http://imeji.mpdl.mpg.de/metadata/searchValue", IMAGE_METADATA),
 		IMAGE_METADATA_NAME("http://imeji.mpdl.mpg.de/metadata/name", IMAGE_METADATA),
+		IMAGE_METADATA_TYPE_RDF("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", IMAGE_METADATA),
 		IMAGE_METADATA_TYPE("http://imeji.mpdl.mpg.de/complexTypes", IMAGE_METADATA),
 		IMAGE_METADATA_TYPE_URI("http://imeji.mpdl.mpg.de/complexTypes/URI", IMAGE_METADATA_TYPE),
 		IMAGE_METADATA_PERSON("http://imeji.mpdl.mpg.de/metadata/person", IMAGE_METADATA),

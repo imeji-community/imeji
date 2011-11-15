@@ -47,6 +47,13 @@ public abstract class ComplexType extends ImageMetadata
 					+ rdfTypeAnn.toString().split("@thewebsemantic.RdfType\\(value=")[1].split("\\)")[0].toUpperCase());
 			return uri;
 		}
+		
+		public String getType()
+		{
+			Annotation rdfTypeAnn = this.getClassType().getAnnotation(thewebsemantic.RdfType.class);
+			String uri = "http://imeji.mpdl.mpg.de/metadata/"+ rdfTypeAnn.toString().split("@thewebsemantic.RdfType\\(value=")[1].split("\\)")[0].toLowerCase();
+			return uri;
+		}
 	}
 
 

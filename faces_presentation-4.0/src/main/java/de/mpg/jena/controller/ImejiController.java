@@ -34,7 +34,7 @@ import com.hp.hpl.jena.shared.Lock;
 import com.hp.hpl.jena.tdb.TDBLoader;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;

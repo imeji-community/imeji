@@ -16,8 +16,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.imeji.util.LoginHelper;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.jena.vo.Image;
 
 public class BasicExtractor {

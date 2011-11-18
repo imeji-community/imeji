@@ -15,7 +15,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.tdb.sys.SystemTDB;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.jena.util.Counter;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;

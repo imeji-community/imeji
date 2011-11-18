@@ -32,9 +32,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.URISyntaxException;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
-import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.imeji.util.UrlHelper;
 
 public class Navigation implements Serializable
@@ -104,7 +103,7 @@ public class Navigation implements Serializable
 
     public Navigation() throws Exception
     {
-        frameworkUrl = ServiceLocator.getFrameworkUrl();
+        frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.ur");
         applicationUrl = PropertyReader.getProperty("escidoc.faces.instance.url");
     }
 

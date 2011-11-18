@@ -25,15 +25,6 @@ import org.apache.commons.httpclient.cookie.CookieSpec;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
-import de.escidoc.core.common.exceptions.EscidocException;
-import de.escidoc.schemas.commontypes.x04.LinkForCreate;
-import de.escidoc.schemas.components.x09.ComponentDocument.Component;
-import de.escidoc.schemas.contentmodel.x01.ContentModelDocument;
-import de.escidoc.schemas.item.x09.ItemDocument;
-import de.mpg.escidoc.services.framework.PropertyReader;
-import de.mpg.escidoc.services.framework.ProxyHelper;
-import de.mpg.escidoc.services.framework.ServiceLocator;
-import de.mpg.imeji.escidoc.ItemVO;
 import de.mpg.imeji.upload.deposit.DepositController;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
@@ -53,91 +44,91 @@ import de.mpg.jena.vo.User;
 
 public class Scripts 
 {
-	 public String copyDataFromCoreToCore(User admin) throws IOException, URISyntaxException, Exception
+	 public String copyDataFromCoreToCore(User admin)
 	 {
-		 String oldCoreserviceUrl = "http://vm45.mpdl.mpg.de:80";
-
-		 ImageController ic = new ImageController(admin);
-		 
-		 String userHandleOldFW = login(oldCoreserviceUrl, "faces_user", "escidoc");
-		 
-		 String userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
-		 
-		 int counter = 0;
-		 
-		 for (Image image : ic.retrieveAll())
-		 {
-			 image = (Image) ObjectHelper.castAllHashSetToList(image);
-			
-			 if (!image.getFullImageUrl().toString().contains(ServiceLocator.getFrameworkUrl()))
-			 {
-				 counter++;
-				 try
-				 {
-					 GetMethod getImage = loadImage(oldCoreserviceUrl, image.getFullImageUrl().toString().replace("http://dev-coreservice.mpdl.mpg.de:80", oldCoreserviceUrl), userHandleOldFW);
-					 
-					 if (getImage.getStatusCode() == HttpServletResponse.SC_OK)
-					 {
-						 // Create ImteVO
-						 String mimeType = getImage.getResponseHeaders("Content-Type")[0].getValue();
-						 String format =   mimeType.replace("image/", "");
-						 ItemVO item = DepositController.createImejiItem(getImage.getResponseBodyAsStream(), image.getFilename()
-								, "", mimeType, format, userHandle, null, PropertyReader.getProperty("escidoc.faces.context.id"));
-						 					
-						 // Create on new Coreservice
-						  String itemXml = ServiceLocator.getItemHandler(userHandle).create(item.getItemDocument().xmlText().replaceAll("escidoc:faces40", PropertyReader.getProperty("escidoc.faces.content-model.id")));
-						 //System.out.println(itemXml);
-						  
-						  
-						 // Parse Response
-						 item.setItem(ItemDocument.Factory.parse(itemXml));
-					     
-						 for (Component c : item.getItemDocument().getItem().getComponents().getComponentArray())
-						 {
-							 if (c.getProperties().getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.original-resolution")))
-							 {
-								 image.setFullImageUrl(URI.create(ServiceLocator.getFrameworkUrl() + c.getContent().getHref()));
-							 }
-							 if (c.getProperties().getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.thumbnail")))
-							 {
-								 image.setThumbnailImageUrl(URI.create(ServiceLocator.getFrameworkUrl() + c.getContent().getHref()));
-							 }
-							 if (c.getProperties().getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.web-resolution")))
-							 {
-								 image.setWebImageUrl(URI.create(ServiceLocator.getFrameworkUrl() + c.getContent().getHref()));
-							 }
-						 }
-					 
-						 // Update image
-						 image.setEscidocId(item.getItemDocument().getItem().getObjid());
-						 System.out.println("updating " + image.getId() + " (" + image.getEscidocId() + ")...");
-						 ic.update(image);
-						 System.out.println("...done");
-					}
-					else
-					{
-						System.out.println(getImage.getStatusText());
-						if (getImage.getResponseHeaders("eSciDocException").length > 0)
-						{
-							System.out.println(getImage.getResponseHeaders("eSciDocException")[0].getValue());
-						}
-					}
-				 
-				 }
-				 catch (Exception e) 
-				 {
-					System.out.println(e.getMessage());
-				 }
-			 }
-			 else
-			 {
-				 System.out.println("Image already transformed : " + image.getFullImageUrl());
-			 }
-			 
-			 if (counter > 10000) break;
-			
-		 }
-	    		
+//		 String oldCoreserviceUrl = "http://vm45.mpdl.mpg.de:80";
+//
+//		 ImageController ic = new ImageController(admin);
+//		 
+//		 String userHandleOldFW = login(oldCoreserviceUrl, "faces_user", "escidoc");
+//		 
+//		 String userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
+//		 
+//		 int counter = 0;
+//		 
+//		 for (Image image : ic.retrieveAll())
+//		 {
+//			 image = (Image) ObjectHelper.castAllHashSetToList(image);
+//			
+//			 if (!image.getFullImageUrl().toString().contains(ServiceLocator.getFrameworkUrl()))
+//			 {
+//				 counter++;
+//				 try
+//				 {
+//					 GetMethod getImage = loadImage(oldCoreserviceUrl, image.getFullImageUrl().toString().replace("http://dev-coreservice.mpdl.mpg.de:80", oldCoreserviceUrl), userHandleOldFW);
+//					 
+//					 if (getImage.getStatusCode() == HttpServletResponse.SC_OK)
+//					 {
+//						 // Create ImteVO
+//						 String mimeType = getImage.getResponseHeaders("Content-Type")[0].getValue();
+//						 String format =   mimeType.replace("image/", "");
+//						 ItemVO item = DepositController.createImejiItem(getImage.getResponseBodyAsStream(), image.getFilename()
+//								, "", mimeType, format, userHandle, null, PropertyReader.getProperty("escidoc.faces.context.id"));
+//						 					
+//						 // Create on new Coreservice
+//						  String itemXml = ServiceLocator.getItemHandler(userHandle).create(item.getItemDocument().xmlText().replaceAll("escidoc:faces40", PropertyReader.getProperty("escidoc.faces.content-model.id")));
+//						 //System.out.println(itemXml);
+//						  
+//						  
+//						 // Parse Response
+//						 item.setItem(ItemDocument.Factory.parse(itemXml));
+//					     
+//						 for (Component c : item.getItemDocument().getItem().getComponents().getComponentArray())
+//						 {
+//							 if (c.getProperties().getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.original-resolution")))
+//							 {
+//								 image.setFullImageUrl(URI.create(ServiceLocator.getFrameworkUrl() + c.getContent().getHref()));
+//							 }
+//							 if (c.getProperties().getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.thumbnail")))
+//							 {
+//								 image.setThumbnailImageUrl(URI.create(ServiceLocator.getFrameworkUrl() + c.getContent().getHref()));
+//							 }
+//							 if (c.getProperties().getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.web-resolution")))
+//							 {
+//								 image.setWebImageUrl(URI.create(ServiceLocator.getFrameworkUrl() + c.getContent().getHref()));
+//							 }
+//						 }
+//					 
+//						 // Update image
+//						 image.setEscidocId(item.getItemDocument().getItem().getObjid());
+//						 System.out.println("updating " + image.getId() + " (" + image.getEscidocId() + ")...");
+//						 ic.update(image);
+//						 System.out.println("...done");
+//					}
+//					else
+//					{
+//						System.out.println(getImage.getStatusText());
+//						if (getImage.getResponseHeaders("eSciDocException").length > 0)
+//						{
+//							System.out.println(getImage.getResponseHeaders("eSciDocException")[0].getValue());
+//						}
+//					}
+//				 
+//				 }
+//				 catch (Exception e) 
+//				 {
+//					System.out.println(e.getMessage());
+//				 }
+//			 }
+//			 else
+//			 {
+//				 System.out.println("Image already transformed : " + image.getFullImageUrl());
+//			 }
+//			 
+//			 if (counter > 10000) break;
+//			
+//		 }
+//	    		
 		 return "";
 	 }
 	 
@@ -160,9 +151,9 @@ public class Scripts
 	 {
 		 String admin = LoginHelper.login("roland", "topor");
 		 
-		 ContentModelDocument cmd = ContentModelDocument.Factory.parse(new File("C:\\Users\\saquet\\faces40.xml"));
-		 String response = ServiceLocator.getContentModelHandler(admin).create(cmd.xmlText());
-		 System.out.println(response);
+//		 ContentModelDocument cmd = ContentModelDocument.Factory.parse(new File("C:\\Users\\saquet\\faces40.xml"));
+//		 String response = ServiceLocator.getContentModelHandler(admin).create(cmd.xmlText());
+//		 System.out.println(response);
 	 }
 	 
 	 

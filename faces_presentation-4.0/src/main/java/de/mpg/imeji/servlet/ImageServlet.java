@@ -51,10 +51,9 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.log4j.Logger;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
-import de.mpg.escidoc.services.framework.ProxyHelper;
-import de.mpg.escidoc.services.framework.ServiceLocator;
 import de.mpg.imeji.util.LoginHelper;
+import de.mpg.imeji.util.PropertyReader;
+import de.mpg.imeji.util.ProxyHelper;
 
 /**
  * A servlet for retrieving and redirecting the content objects urls.
@@ -79,7 +78,7 @@ public class ImageServlet extends HttpServlet
 	{
 		try 
 		{
-			frameworkUrl = ServiceLocator.getFrameworkUrl();
+			frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.url");
 			logger.info("ImageServlet initialized");
 		} 
 		catch (Exception e) 
@@ -112,7 +111,7 @@ public class ImageServlet extends HttpServlet
 					userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
 
 				}
-				
+
 				method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
 				method.addRequestHeader("Cache-Control", "public");
 				method.setRequestHeader("Connection", "close"); 
@@ -130,7 +129,7 @@ public class ImageServlet extends HttpServlet
 					//try again
 					logger.info("try load image again");
 					method.releaseConnection();
-					userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
+					userHandle = LoginHelper.login(de.mpg.imeji.util.PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
 					method = new GetMethod(imageUrl);
 					method.setFollowRedirects(true);
 					method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);

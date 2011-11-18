@@ -5,8 +5,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
 import de.mpg.imeji.history.Page.ImejiPages;
+import de.mpg.imeji.util.PropertyReader;
 
 public class PageURIHelper 
 {

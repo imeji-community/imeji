@@ -15,8 +15,7 @@ import org.apache.commons.httpclient.cookie.CookieSpec;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
-import de.mpg.escidoc.services.framework.ServiceLocator;
+
 import de.mpg.imeji.beans.SessionBean;
 
 public class LoginHelper 
@@ -47,7 +46,7 @@ public class LoginHelper
 	
 	public static String login(String userName, String password) throws Exception
 	{
-		String frameworkUrl = ServiceLocator.getFrameworkUrl();
+		String frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.url");
         StringTokenizer tokens = new StringTokenizer( frameworkUrl, "//" );
                 
         tokens.nextToken();

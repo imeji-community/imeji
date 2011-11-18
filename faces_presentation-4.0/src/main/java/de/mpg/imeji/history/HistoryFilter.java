@@ -35,7 +35,7 @@ public class HistoryFilter  implements Filter{
 
 	public void doFilter(ServletRequest serv, ServletResponse resp,
 			FilterChain chain) throws IOException, ServletException 
-			{
+	{
 		HttpServletRequest request = (HttpServletRequest) serv;
 		servletContext = request.getSession().getServletContext();
 
@@ -60,7 +60,7 @@ public class HistoryFilter  implements Filter{
 		}
 		//alertForOutOfMemoryError(hs.getCurrentPage().getInternationalizedName());
 		chain.doFilter(serv, resp);
-			}
+	}
 
 	private void alertForOutOfMemoryError(String page)
 	{

@@ -12,8 +12,7 @@ import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
 import com.hp.hpl.jena.tdb.store.GraphTDB;
 
 import thewebsemantic.NotFoundException;
-import de.mpg.escidoc.services.framework.PropertyReader;
-import de.mpg.imeji.escidoc.EscidocInitializer;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.concurrency.locks.LocksSurveyor;
 import de.mpg.jena.controller.UserController;

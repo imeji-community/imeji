@@ -1,6 +1,7 @@
 package de.mpg.jena.controller;
 
 import java.net.URI;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,11 +11,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import thewebsemantic.NotBoundException;
-import de.escidoc.core.common.exceptions.application.notfound.ItemNotFoundException;
-import de.mpg.escidoc.services.framework.PropertyReader;
-import de.mpg.escidoc.services.framework.ServiceLocator;
+import de.escidoc.core.client.Authentication;
+import de.escidoc.core.client.ItemHandlerClient;
 import de.mpg.imeji.util.LoginHelper;
 import de.mpg.imeji.util.ObjectLoader;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
@@ -312,12 +313,13 @@ public class ImageController extends ImejiController
     {
     	try 
     	{
-			ServiceLocator.getItemHandler(getEscidocUserHandle()).delete(id);
+    		String username = PropertyReader.getProperty("imeji.escidoc.user");
+    	    String password = PropertyReader.getProperty("imeji.escidoc.password");
+    		Authentication auth = new Authentication(new URL(PropertyReader.getProperty("escidoc.framework_access.framework.url")), username, password);
+    		ItemHandlerClient handler = new ItemHandlerClient(auth.getServiceAddress());
+    		handler.setHandle(auth.getHandle());
+    		handler.delete(id);
 		} 
-    	catch (ItemNotFoundException e) 
-    	{
-    		/*image exists not anymore im escidoc*/
-		}
     	catch (Exception e) 
     	{
     		logger.error("Error removing image from eSciDoc (" + id + ")", e);

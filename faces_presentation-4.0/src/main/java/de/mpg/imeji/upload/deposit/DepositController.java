@@ -1,15 +1,12 @@
 package de.mpg.imeji.upload.deposit;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collection;
 
-import de.escidoc.schemas.item.x09.ItemDocument;
-import de.mpg.escidoc.services.framework.ServiceLocator;
-import de.mpg.imeji.escidoc.ItemVO;
-import de.mpg.imeji.upload.helper.ImageHelper;
+import de.escidoc.core.client.Authentication;
+import de.escidoc.core.resources.om.item.Item;
+import de.mpg.imeji.escidoc.EscidocHelper;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
@@ -22,43 +19,65 @@ import de.mpg.jena.vo.User;
  */
 public class DepositController
 {
-    public static ItemVO createImejiItem(InputStream inputStream, String title, String description,
-            String mimetype, String format, String userHandle, String collection, String context) throws IOException, URISyntaxException
+  
+    /**
+     * Create the escidoc item with the images as components (for version from 1.3)
+     * 
+     * @param inputStream
+     * @param title
+     * @param mimetype
+     * @param format
+     * @return
+     * @throws Exception
+     */
+    public Item createEscidocItem(InputStream inputStream, String title, String mimetype, String format) throws Exception
     {
-        ItemVO imejiItem = new ItemVO(title, description, context);
-        try
-        {
-            imejiItem.attachFile(inputStream, title, mimetype, format, userHandle);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-        return imejiItem;
-    }
-
-    public static String depositImejiItem(ItemVO item, String userHandle, CollectionImeji collection, User user, String title) throws Exception
-    {
-        String itemXml = ServiceLocator.getItemHandler(userHandle).create(item.getItemDocument().xmlText());
-        item.setItem(ItemDocument.Factory.parse(itemXml));
-        
-        ImageController imageController = new ImageController(user);
-        Image img = new Image();        
-        img.setCollection(collection.getId());
-        img.setFullImageUrl(URI.create(ImageHelper.getOriginalResolution(item)));
-        img.setThumbnailImageUrl(URI.create(ImageHelper.getThumbnailUrl(item)));
-        img.setWebImageUrl(URI.create(ImageHelper.getWebResolutionUrl(item)));
-        img.setVisibility(Visibility.PUBLIC);
-        img.setFilename(title);
-        img.setEscidocId(item.getItemDocument().getItem().getObjid());
-        if(collection.getProperties().getStatus() == Status.RELEASED)
-        	img.getProperties().setStatus(Status.RELEASED);
-        imageController.create(img, collection.getId());
-
-        return itemXml;
+    	EscidocHelper escidocHelper = new EscidocHelper();
+    	Authentication auth = escidocHelper.login();
+    	
+    	Item item = escidocHelper.initNewItem(PropertyReader.getProperty("escidoc.faces.content-model.id")
+    			, PropertyReader.getProperty("escidoc.faces.context.id"));
+    	
+    	item = escidocHelper.loadFiles(item, inputStream, title, mimetype, format, auth);
+    	
+    	return escidocHelper.createItem(item, auth);
     }
     
-    public static void main(String[] args) throws Exception {
-		URI uri = new URI("");
-	}
+    /**
+     * Create the {@link Image} in Jena.
+     * 
+     * @param collection
+     * @param user
+     * @param escidocId (if created in eSciDoc)
+     * @param title
+     * @param fullImageURL
+     * @param thumbnailURL
+     * @param webURL
+     * @return
+     * @throws Exception 
+     */
+    public Image createImejiImage(CollectionImeji collection, User user, String escidocId, String title, URI fullImageURI, URI thumbnailURI, URI webURI) throws Exception
+    {
+    	ImageController imageController = new ImageController(user);
+        Image img = new Image();        
+        img.setCollection(collection.getId());
+        img.setFullImageUrl(fullImageURI);
+        img.setThumbnailImageUrl(thumbnailURI);
+        img.setWebImageUrl(webURI);
+        img.setVisibility(Visibility.PUBLIC);
+        img.setFilename(title);
+        
+        if (escidocId != null)
+        {
+        	  img.setEscidocId(escidocId);
+        }
+        if(collection.getProperties().getStatus() == Status.RELEASED)
+        {
+        	img.getProperties().setStatus(Status.RELEASED);
+        }
+        
+        imageController.create(img, collection.getId());
+        
+        return img;
+    }
 }

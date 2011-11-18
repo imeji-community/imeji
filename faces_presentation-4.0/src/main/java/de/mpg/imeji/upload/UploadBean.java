@@ -2,6 +2,7 @@ package de.mpg.imeji.upload;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -13,14 +14,16 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.opensaml.ws.transport.http.HttpServletRequestAdapter;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
+import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.collection.ViewCollectionBean;
-import de.mpg.imeji.escidoc.ItemVO;
+import de.mpg.imeji.escidoc.EscidocHelper;
 import de.mpg.imeji.upload.deposit.DepositController;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.LoginHelper;
+import de.mpg.imeji.util.PropertyReader;
 import de.mpg.imeji.util.UrlHelper;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.vo.CollectionImeji;
@@ -62,7 +65,8 @@ public class UploadBean
 
 	public void status()
 	{
-		if(UrlHelper.getParameterBoolean("init")){
+		if(UrlHelper.getParameterBoolean("init"))
+		{
 			loadCollection();
 			totalNum = "";
 			sNum = 0;
@@ -70,21 +74,32 @@ public class UploadBean
 			sFiles = new ArrayList<String>();
 			fFiles= new ArrayList<String>();
 
-		}else if (UrlHelper.getParameterBoolean("start")){
-			try {
+		}
+		else if (UrlHelper.getParameterBoolean("start"))
+		{
+			try 
+			{
 				upload();
-			} catch (Exception e) {
+			} 
+			catch (Exception e) 
+			{
 				e.printStackTrace();
 			}
-		}else if(UrlHelper.getParameterBoolean("done")){
-			try {
+		}
+		else if(UrlHelper.getParameterBoolean("done"))
+		{
+			try 
+			{
 				totalNum = UrlHelper.getParameterValue("totalNum");
 				report();
-			} catch (Exception e) {
+			} 
+			catch (Exception e) 
+			{
 				e.printStackTrace();
 			}
 		}
 	}
+
 
 	public void upload() throws IOException, FileUploadException
 	{
@@ -95,15 +110,19 @@ public class UploadBean
 			ServletFileUpload upload = new ServletFileUpload();
 			// Parse the request
 			FileItemIterator iter = upload.getItemIterator(req);
-			while (iter.hasNext()) {
+			while (iter.hasNext()) 
+			{
 				FileItemStream item = iter.next();
 				String name = item.getFieldName();
 				InputStream stream = item.openStream();
-				if (!item.isFormField()) {
+				if (!item.isFormField()) 
+				{
 					title =item.getName();
 					StringTokenizer st = new StringTokenizer(title, ".");
 					while (st.hasMoreTokens())
+					{
 						format = st.nextToken();
+					}
 					mimetype = "image/" + format;
 
 					// TODO remove static image description
@@ -112,21 +131,28 @@ public class UploadBean
 					{
 						UserController uc = new UserController(null);
 						User user = uc.retrieve(getUser().getEmail());
-						try{
-							ItemVO itemVO = DepositController.createImejiItem(stream, title, description, mimetype, format, escidocUserHandle, collection.getId().toString(), escidocContext);
-							DepositController.depositImejiItem(itemVO, escidocUserHandle, collection, user, title);
+						try
+						{
+							DepositController controller = new DepositController();
+							Item escidocItem = controller.createEscidocItem(stream, title, mimetype, format);
+							controller.createImejiImage(collection, user, escidocItem.getOriginObjid(), title
+									, URI.create(EscidocHelper.getOriginalResolution(escidocItem))
+									, URI.create(EscidocHelper.getThumbnailUrl(escidocItem))
+									, URI.create(EscidocHelper.getWebResolutionUrl(escidocItem)));
 							sNum += 1;
 							sFiles.add(title);
-						} catch (Exception e){
+						} 
+						catch (Exception e)
+						{
 							fNum += 1;
 							fFiles.add(title);
 							throw new RuntimeException(e);
 						}
-					}catch (Exception e){
+					}
+					catch (Exception e)
+					{
 						throw new RuntimeException(e);
 					}
-
-
 				} 
 			}
 		}

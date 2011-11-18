@@ -1,6 +1,7 @@
 package de.mpg.imeji.beans;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
+import de.mpg.imeji.util.PropertyReader;
+
 
 public class BlogBean
 {

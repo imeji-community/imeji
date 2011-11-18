@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
-import de.mpg.imeji.escidoc.ItemVO;
+import de.escidoc.core.resources.om.item.Item;
 import de.mpg.jena.vo.CollectionImeji;
 
 /**
@@ -15,7 +14,7 @@ import de.mpg.jena.vo.CollectionImeji;
  */
 public class Upload 
 {
-	private List<ItemVO> items = null;
+	private List<Item> items = null;
 	private String contentModelId = null;
 	private CollectionImeji collection = null;
 	private Date startDate = null;
@@ -23,16 +22,16 @@ public class Upload
 		
 	public Upload(String contentModelId) 
 	{
-		items = new ArrayList<ItemVO>();
+		items = new ArrayList<Item>();
 		this.contentModelId = contentModelId;
 	}
 
-	public List<ItemVO> getItems() 
+	public List<Item> getItems() 
 	{
 		return items;
 	}
 
-	public void setItems(List<ItemVO> items) 
+	public void setItems(List<Item> items) 
 	{
 		this.items = items;
 	}

@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.escidoc.services.framework.PropertyReader;
+import de.mpg.imeji.util.PropertyReader;
+
 
 /**
  *  JavaBean for static content of the Faces solution.

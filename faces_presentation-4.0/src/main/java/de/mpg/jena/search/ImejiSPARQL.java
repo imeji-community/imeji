@@ -43,7 +43,7 @@ public class ImejiSPARQL
         {
                	//m.enterCriticalSection(Lock.READ);
                 ResultSet results = qexec.execSelect();
-               // ResultSetFormatter.out(System.out, results) ;
+                ResultSetFormatter.out(System.out, results) ;
                 for (;results.hasNext();)beans.add(reader.load(c, resource(results).toString()));
                 return beans;
         } finally 

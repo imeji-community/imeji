@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.beans.Navigation;
@@ -22,11 +23,13 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
+import de.mpg.jena.export.ExportManager;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.Image;
 
 public class CollectionImagesBean extends ImagesBean  implements Serializable
 {
@@ -94,6 +97,7 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
 		totalNumberOfRecords = results.getNumberOfRecords();
 		results.setQuery(getQuery());
 		results.setSort(sortCriterion);
+				
 		return ImejiFactory.imageListToThumbList(loadImages(results));
 	}
 

@@ -145,7 +145,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCriterion)
 	{
 		ImageController controller = new ImageController(sb.getUser()); 
-		return  controller.searchImages(scList, sortCriterion, getElementsPerPage(), getOffset());
+		return  controller.searchImages(scList, sortCriterion);
 	}
 
 	public Collection<Image> loadImages(SearchResult searchResult)

@@ -99,7 +99,6 @@ public class FacesMessagesPhaseListener implements PhaseListener
      */
     private void removeFromCache(FacesContext context)
     {
-        
         getMessageCache(context).clear();
         logger.trace("Message Cache cleared");
     }

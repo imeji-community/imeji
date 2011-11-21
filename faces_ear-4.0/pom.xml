@@ -65,6 +65,7 @@
 							<artifactId>saxon</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>-->
+						<!--  
 						<jarModule>
 							<groupId>org.richfaces.framework</groupId>
 							<artifactId>richfaces-api</artifactId>
@@ -78,40 +79,6 @@
 						<jarModule>
 							<groupId>org.richfaces.ui</groupId>
 							<artifactId>richfaces-ui</artifactId>
-							<includeInApplicationXml>true</includeInApplicationXml>
-						</jarModule>
-						<jarModule>
-							<groupId>commons-digester</groupId>
-							<artifactId>commons-digester</artifactId>
-							<includeInApplicationXml>true</includeInApplicationXml>
-						</jarModule>
-						<jarModule>
-							<groupId>commons-beanutils</groupId>
-							<artifactId>commons-beanutils</artifactId>
-							<includeInApplicationXml>true</includeInApplicationXml>
-						</jarModule>
-						<!-- <jarModule>
-							<groupId>javabib</groupId>
-							<artifactId>javabib</artifactId>
-							<includeInApplicationXml>true</includeInApplicationXml>
-						</jarModule>
-						 <jarModule>
-							<groupId>org.apache.ant</groupId>
-							<artifactId>ant</artifactId>
-							<includeInApplicationXml>
-								true
-							</includeInApplicationXml>
-						</jarModule>
-						<jarModule>
-							<groupId>dom4j</groupId>
-							<artifactId>dom4j</artifactId>
-							<includeInApplicationXml>
-								true
-							</includeInApplicationXml>
-						</jarModule>-->
-						<jarModule>
-							<groupId>com.maxmind.geoip</groupId>
-							<artifactId>geoip</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
 						<jarModule>
@@ -139,6 +106,44 @@
 							<artifactId>iri</artifactId>
 							<includeInApplicationXml>true</includeInApplicationXml>
 						</jarModule>
+						-->
+						<jarModule>
+							<groupId>commons-digester</groupId>
+							<artifactId>commons-digester</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							<groupId>commons-beanutils</groupId>
+							<artifactId>commons-beanutils</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						<!-- 
+						<jarModule>
+							<groupId>javabib</groupId>
+							<artifactId>javabib</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						 <jarModule>
+							<groupId>org.apache.ant</groupId>
+							<artifactId>ant</artifactId>
+							<includeInApplicationXml>
+								true
+							</includeInApplicationXml>
+						</jarModule>
+						<jarModule>
+							<groupId>dom4j</groupId>
+							<artifactId>dom4j</artifactId>
+							<includeInApplicationXml>
+								true
+							</includeInApplicationXml>
+						</jarModule>
+						-->
+						<jarModule>
+							<groupId>com.maxmind.geoip</groupId>
+							<artifactId>geoip</artifactId>
+							<includeInApplicationXml>true</includeInApplicationXml>
+						</jarModule>
+						
 						<!-- <jarModule>
 							<groupId>org.slf4j</groupId>
 							<artifactId>slf4j-api</artifactId>

@@ -160,7 +160,7 @@ public class ImageController extends ImejiController
     	return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.mpdl.mpg.de/image>} ");
     }
     
-    public SearchResult searchImages(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+    public SearchResult searchImages(List<SearchCriterion> scList, SortCriterion sortCri)
     {
     	Search search = new Search("http://imeji.mpdl.mpg.de/image", null);
     	return search.search(scList, sortCri, simplifyUser(null));

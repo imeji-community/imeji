@@ -11,7 +11,7 @@ public class AdminController extends ImejiController
     
     public void cleanGraph()
     {
-        super.cleanGraph();
+        //super.cleanGraph();
     }
 
     @Override

@@ -67,7 +67,7 @@ public class DataDoctor
     public void runCollectionDoctor(boolean proceed) throws Exception
     {
     	UserController uc = new UserController(user);
-    	uc.cleanGraph();
+    	//uc.cleanGraph();
     	// Compare Status of profile and collection: should be same
     	CollectionController cc = new CollectionController(user);
     	Collection<CollectionImeji> cols = cc.retrieveAll();

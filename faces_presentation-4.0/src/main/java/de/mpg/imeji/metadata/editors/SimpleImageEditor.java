@@ -1,23 +1,16 @@
 package de.mpg.imeji.metadata.editors;
 
-import java.net.URI;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.jena.util.MetadataFactory;
-import de.mpg.jena.vo.ComplexType.ComplexTypes;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Statement;
-import de.mpg.jena.vo.complextypes.ConePerson;
 
 public class SimpleImageEditor extends MetadataEditor
 {
-	
-	
 	public SimpleImageEditor(List<Image> images, MetadataProfile profile, Statement statement) 
 	{
 		super(images, profile, statement);

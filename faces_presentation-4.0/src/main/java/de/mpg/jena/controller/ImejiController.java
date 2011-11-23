@@ -242,31 +242,31 @@ public abstract class ImejiController
     /**
      * Removes lost, anonymous nodes from graph. They are produces during updates of lists/collections. Bug of JenaBean.
      */
-    public synchronized void cleanGraph()
-    {
-        if (base != null)
-        {
-	    	try
-	        {
-	            base.enterCriticalSection(Lock.WRITE);
-	            String q = "SELECT DISTINCT ?s WHERE { ?s ?p ?o . OPTIONAL {?s2 ?p2 ?s} . FILTER (isBlank(?s) && !bound(?s2))}";
-	            Query queryObject = QueryFactory.create(q);
-	            QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
-	            ResultSet results = qe.execSelect();
-	            while (results.hasNext())
-	            {
-	                QuerySolution qs = results.next();
-	                Resource s = qs.getResource("?s");
-	                s.removeProperties();
-	            }
-	            qe.close();
-	        }
-	        finally
-	        {
-	            base.leaveCriticalSection();
-	        }
-        }
-    }
+//    public synchronized void cleanGraph()
+//    {
+//        if (base != null)
+//        {
+//	    	try
+//	        {
+//	            base.enterCriticalSection(Lock.WRITE);
+//	            String q = "SELECT DISTINCT ?s WHERE { ?s ?p ?o . OPTIONAL {?s2 ?p2 ?s} . FILTER (isBlank(?s) && !bound(?s2))}";
+//	            Query queryObject = QueryFactory.create(q);
+//	            QueryExecution qe = QueryExecutionFactory.create(queryObject, base);
+//	            ResultSet results = qe.execSelect();
+//	            while (results.hasNext())
+//	            {
+//	                QuerySolution qs = results.next();
+//	                Resource s = qs.getResource("?s");
+//	                s.removeProperties();
+//	            }
+//	            qe.close();
+//	        }
+//	        finally
+//	        {
+//	            base.leaveCriticalSection();
+//	        }
+//        }
+//    }
 
     @Deprecated
     public synchronized void cleanGraph(Model graph)

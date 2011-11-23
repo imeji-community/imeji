@@ -1,16 +1,9 @@
 package de.mpg.jena.export;
 
 
+import java.io.IOException;
 import java.io.OutputStream;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.tdb.TDBFactory;
-
-import de.mpg.jena.ImejiJena;
-import de.mpg.jena.export.format.RDFExport;
 import de.mpg.jena.search.SearchResult;
 
 public class ExportManager 
@@ -24,61 +17,23 @@ public class ExportManager
 	
 	public void export(SearchResult sr, String format)
 	{
-		if("rdf".equals(format))
+		Export export = Export.factory(format);
+		
+		if (export != null)
 		{
-			RDFExport rdfExport = new RDFExport();
-			rdfExport.export(out, sr);
+			export.export(out, sr);
 		}
 		else
 		{
-			// Default, copy only what is stored in Jena
-			Model m = exportIntoModel(sr);
-			m.write(out,"RDF/XML-ABBREV");
-		}
-	}
-	
-	private Model exportIntoModel(SearchResult sr)
-	{
-		Model exportModel = TDBFactory.createModel();
-
-		for (String s : sr.getResults())
-		{
 			try 
 			{
-				Resource resource = ImejiJena.imageModel.getResource(s);
-
-				exportResource(resource, exportModel);
-
+				out.write("Unknown format".getBytes());
 			} 
-			catch (Exception e) 
+			catch (IOException e) 
 			{
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
-		return exportModel;
-	}
-
-	private Model exportResource(Resource r, Model m)
-	{
-		for (StmtIterator iterator = r.listProperties(); iterator.hasNext();) 
-		{
-			Statement st = iterator.next();
-
-			try
-			{
-				if (st.getResource().getURI() == null)
-				{				
-					exportResource(st.getResource(), m);
-				}
-			}
-			catch (Exception e) 
-			{
-				// Not to be handle
-			}
-
-			m.add(st);
-
-		}
-		return m;
+		
 	}
 }

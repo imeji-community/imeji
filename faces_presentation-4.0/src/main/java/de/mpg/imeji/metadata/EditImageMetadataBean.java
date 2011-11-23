@@ -17,7 +17,6 @@ import de.mpg.imeji.collection.CollectionImagesBean;
 import de.mpg.imeji.history.HistorySession;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.image.SelectedBean;
-import de.mpg.imeji.image.ThumbnailBean;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.metadata.editors.MetadataEditor;
 import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
@@ -28,7 +27,6 @@ import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.search.SearchResult;
-import de.mpg.jena.security.Security;
 import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
@@ -306,7 +304,6 @@ public class EditImageMetadataBean  implements Serializable
 				((List<ImageMetadata>)im.getMetadataSet().getMetadata()).remove(i);
 				i--;
 			}
-
 		}
 		return im;
 	}
@@ -516,6 +513,6 @@ public class EditImageMetadataBean  implements Serializable
 	public void setLockedImages(int lockedImages) {
 		this.lockedImages = lockedImages;
 	}
-	
+
 
 }

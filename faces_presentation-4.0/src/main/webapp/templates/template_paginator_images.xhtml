@@ -264,7 +264,7 @@
 						<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'}  free_area1 matrixItem #{item.inActiveAlbum ? 'inAlbum' : ''}">
 							<!-- Image with link to the details view --> 
 							
-							<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.id.path}/view">
+							<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}#{item.id.path}">
 								<h:graphicImage alt="#{item.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.link}"/>
 							</h:outputLink>
 							

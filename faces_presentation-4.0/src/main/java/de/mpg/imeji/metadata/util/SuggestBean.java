@@ -83,7 +83,6 @@ public class SuggestBean implements Serializable
 						client.executeMethod(getMethod);
 						String responseString = getMethod.getResponseBodyAsString().trim();
 						JSONCollection jsc = new JSONCollection(formatResultString(responseString));
-						System.out.println("geo:" + Arrays.asList(jsc.toArray()));
 						return Arrays.asList(jsc.toArray());
 					}
 					catch (Exception e)

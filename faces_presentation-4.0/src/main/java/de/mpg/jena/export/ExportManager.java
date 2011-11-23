@@ -9,16 +9,16 @@ import de.mpg.jena.search.SearchResult;
 public class ExportManager 
 {
 	private OutputStream out;
+	private Export export;
 	
-	public ExportManager(OutputStream out) 
+	public ExportManager(OutputStream out, String format) 
 	{
 		this.out = out;
+		export = Export.factory(format);
 	}
 	
-	public void export(SearchResult sr, String format)
+	public void export(SearchResult sr)
 	{
-		Export export = Export.factory(format);
-		
 		if (export != null)
 		{
 			export.export(out, sr);
@@ -35,5 +35,10 @@ public class ExportManager
 			}
 		}
 		
+	}
+	
+	public String getContentType()
+	{
+		return export.getContentType();
 	}
 }

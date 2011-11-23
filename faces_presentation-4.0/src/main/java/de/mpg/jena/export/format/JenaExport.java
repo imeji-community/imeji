@@ -25,6 +25,11 @@ public class JenaExport extends Export
 		Model m = exportIntoModel(sr);
 		m.write(out,"RDF/XML");
 	}
+	
+	public String getContentType()
+	{
+		return "application/xml";
+	}
 
 	/**
 	 * Create a model with all Search results

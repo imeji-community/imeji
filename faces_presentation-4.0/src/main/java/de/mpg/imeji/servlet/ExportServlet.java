@@ -80,8 +80,13 @@ public class ExportServlet extends HttpServlet
 			result.setResults(result.getResults().subList(0, maximumNumberOfRecords));
 		}
 		
-		ExportManager exportManager = new ExportManager(resp.getOutputStream());
-		exportManager.export(result, format);
+		ExportManager exportManager = new ExportManager(resp.getOutputStream(), format);
+		
+		resp.setHeader("Connection", "close");
+		resp.setHeader("Content-Type", exportManager.getContentType());
+		
+		exportManager.export(result);
+		
 	}
 
 	private SessionBean getSessionBean(HttpServletRequest req, HttpServletResponse resp)

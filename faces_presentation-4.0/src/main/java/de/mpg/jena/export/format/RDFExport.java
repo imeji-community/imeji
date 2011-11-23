@@ -33,13 +33,15 @@ public class RDFExport extends Export
 	
 	private Map<String, String> namespaces;
 
-	private String indentatation = "";
-	private String indetationPattern = "  ";
-
 	public void export(OutputStream out, SearchResult sr)
 	{
 		initNamespaces();
 		exportIntoOut(sr, out);
+	}
+	
+	public String getContentType()
+	{
+		return "application/xml";
 	}
 	
 	private void initNamespaces()
@@ -69,12 +71,10 @@ public class RDFExport extends Export
 		for (String s : sr.getResults())
 		{
 			Resource resource = ImejiJena.imageModel.getResource(s);
-			indent();
 			newLine(writer);
 			writer.append(openTagImage(s));
 			writer.append(exportResource(resource).getBuffer());
 			writer.append(closeTagImage());
-			unIndent();
 		}
 		newLine(writer);
 		writer.append("</rdf:RDF>");
@@ -100,37 +100,34 @@ public class RDFExport extends Export
 
 			if (!isFiltered(st))
 			{
-				writer.append(openTag(st));
-				boolean hasIndentation = true;
 				try
 				{
+					writer.append(openTag(st, st.getResource().getURI()));
+					
 					if (st.getResource().getURI() == null)
 					{				
 						writer.append(exportResource(st.getResource()).getBuffer());
-						hasIndentation = true;
 					}
-					else
+				}
+				catch (Exception e) 
+				{
+					/*Not a resource*/
+				}
+				
+				try
+				{
+					if (st.getLiteral().toString() != null)
 					{
-						writer.append(tagValue(st));
-						hasIndentation = false;
+						writer.append(openTag(st, null));
+						writer.append(st.getLiteral().getString());
 					}
 				}
 				catch (Exception e) 
 				{
-					/* is not a resource*/
+					/*Not a literal*/
 				}
-
-				try 
-				{
-					writer.append(st.getLiteral().getString());
-					hasIndentation = false;
-				} 
-				catch (Exception e) 
-				{
-					/* is not a literal*/
-				}
-
-				writer.append(closeTag(st, hasIndentation));
+				
+				writer.append(closeTag(st));
 				newLine(writer);
 			}
 		}
@@ -147,22 +144,23 @@ public class RDFExport extends Export
 		return "</imeji:image>";
 	}
 
-	private String openTag(Statement st)
+	private String openTag(Statement st, String resourceURI)
 	{
-		indent();
-		return indentatation + "<" + getNamespace(st.getPredicate().getNameSpace()) + ":"+ st.getPredicate().getLocalName() + ">";
+		String tag = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":"+ st.getPredicate().getLocalName();
+		
+		if (resourceURI != null) 
+		{
+			tag += " rdf:resource=\"" + resourceURI + "\"";
+		}
+		
+		tag += ">";
+			
+		return tag;
 	}
 
-	private String closeTag(Statement st, boolean hasIndentation)
+	private String closeTag(Statement st)
 	{
-		String tag = "</" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName() + ">";
-		
-		if (hasIndentation)
-		{
-			tag  = indentatation + tag;
-		}
-		unIndent();
-		return tag;
+		return "</" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName() + ">";
 	}
 	
 	private String tagValue(Statement st)
@@ -193,16 +191,6 @@ public class RDFExport extends Export
 	private void newLine(StringWriter writer)
 	{
 		writer.append("\n");
-	}
-
-	private void indent()
-	{
-		indentatation += indetationPattern;
-	}
-
-	private void unIndent()
-	{
-		indentatation = indentatation.substring(0, indentatation.length() - indetationPattern.length());
 	}
 
 	private boolean isFiltered(Statement st)

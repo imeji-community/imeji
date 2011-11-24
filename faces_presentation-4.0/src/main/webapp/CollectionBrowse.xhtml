@@ -90,6 +90,10 @@
 					<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
 				</h:outputLink>
 				
+				<h:outputLink value="#{Navigation.applicationUrl}/export?format=rdf&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
+					<h:outputText value="#{lbl.export_metadata}"/>
+				</h:outputLink>
+				
 				<ui:include src="confirmationPages/ContainerRelease.xhtml">
 					<ui:param name="bean" value="#{CollectionImagesBean}"/>
 				</ui:include>
@@ -100,7 +104,7 @@
 					<ui:param name="bean" value="#{CollectionImagesBean}"/>
 					<ui:param name="discardComment" value="#{CollectionImagesBean.collection.properties.discardComment}"/>
 				</ui:include>
-			
+				
 			</ui:define>
 	</ui:composition>
 

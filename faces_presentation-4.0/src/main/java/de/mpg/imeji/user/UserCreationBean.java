@@ -1,7 +1,6 @@
 package de.mpg.imeji.user;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,7 +8,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import thewebsemantic.LocalizedString;
 import thewebsemantic.NotFoundException;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
@@ -18,19 +16,14 @@ import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.ImageController;
-import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Authorization;
-import de.mpg.jena.util.DataDoctor;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Grant;
-import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.Grant.GrantType;
 import de.mpg.jena.vo.Image;
-import de.mpg.jena.vo.Properties.Status;
-import de.mpg.jena.vo.Statement;
 import de.mpg.jena.vo.User;
 
 public class UserCreationBean

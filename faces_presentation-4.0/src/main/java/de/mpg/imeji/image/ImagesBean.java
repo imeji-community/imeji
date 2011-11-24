@@ -135,7 +135,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 		FacesContext.getCurrentInstance().renderResponse();
 		totalNumberOfRecords = searchResult.getNumberOfRecords();
 		
-
 		// load images
 		Collection<Image> images = loadImages(searchResult);
 

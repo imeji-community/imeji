@@ -28,7 +28,8 @@ public class RDFExport extends Export
 			"http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
 			"http://imeji.mpdl.mpg.de/metadata/id",
 			"http://imeji.mpdl.mpg.de/id",
-			"http://imeji.mpdl.mpg.de/metadata/searchValue"
+			"http://imeji.mpdl.mpg.de/metadata/searchValue",
+			"http://purl.org/escidoc/metadata/profiles/0.1/pos"
 	};
 	
 	private Map<String, String> namespaces;

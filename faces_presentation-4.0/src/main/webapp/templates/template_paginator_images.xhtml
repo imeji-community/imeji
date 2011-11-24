@@ -40,19 +40,6 @@
 <body>
 <ui:composition template="template_paginator.xhtml">
 
-	<ui:define name="actionsMenu">
-		<h:panelGroup>
-			<!-- SORTING content menu lower line starts here -->
-			<h:outputText id="txtSort" value="#{paginatorListSessionBean.initPage}#{lbl.sort_by}" styleClass="free_area0" style="margin-top:0.18em;" />
-			<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
-				<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}" />
-			</h:selectOneMenu>
-			<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-			<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-			<h:outputText styleClass="seperator void" />
-			<!-- SORTING content menu lower line ends here -->
-		</h:panelGroup>
-	</ui:define>
 	<ui:define name="prelistHeaderTest">
 		<div id="preListHeader" class="full_area0">
 			
@@ -77,10 +64,6 @@
 				
 				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
 					<h:outputText value="#{lbl.add_to_album}" styleClass="free_area0"/>
-				</a4j:commandLink>
-								
-				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.export}" rendered="false">
-					<h:outputText value="#{lbl.export}" styleClass="free_area0"/>
 				</a4j:commandLink>
 				
 				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:collectionImages' and paginatorListSessionBean.collection != null}">
@@ -143,9 +126,11 @@
 				<h:panelGroup id="preListHeaderSelected">
 					<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}&#160;" styleClass="free_area0"/>
 				</h:panelGroup>
+				
 				<a4j:commandLink styleClass="free_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
 					<h:outputText styleClass="free_area0" value="#{lbl.add_to_album}"/>
 				</a4j:commandLink>
+			
 				<h:panelGroup styleClass="free_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionImages' and paginatorListSessionBean.collection != null}">
 					
 					<div type="button" class="min_imgBtn checkboxSelectButton">&#160;</div>

@@ -179,7 +179,26 @@
 		<managed-bean-class>de.mpg.imeji.album.AlbumImageBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	
+	<!-- Users bean -->
+	<managed-bean>
+		<managed-bean-name>UsersBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.user.UsersBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>UserBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.user.UserBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
+	<managed-bean>
+		<managed-bean-name>UserCreationBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.user.UserCreationBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
 	<!-- Other Beans -->
 	<managed-bean>
 		<managed-bean-name>LoginBean</managed-bean-name>
@@ -233,12 +252,6 @@
 		<managed-bean-name>SessionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.beans.SessionBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	
-	<managed-bean>
-		<managed-bean-name>UserCreationBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.user.UserCreationBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>

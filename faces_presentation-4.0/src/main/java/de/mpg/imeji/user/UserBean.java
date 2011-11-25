@@ -20,16 +20,27 @@ public class UserBean
 	private String repeatedPassword = null;
 	private boolean isAdmin;
 	private SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+	private String id;
+
+	public UserBean() 
+	{
+		// TODO Auto-generated constructor stub
+	}
+	public UserBean(String email) 
+	{
+		id = email;
+		retrieveUser();
+	}
 
 	public String getInit()
 	{
+		id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
 		retrieveUser();
 		return "";
 	}
 
 	public void retrieveUser()
 	{
-		String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
 		if (id != null)
 		{
 			UserController controller = new UserController(session.getUser());
@@ -78,7 +89,7 @@ public class UserBean
 		reloadPage();
 	}
 
-	private void updateUser()
+	public void updateUser()
 	{
 		UserController controller = new UserController(session.getUser());
 		try 

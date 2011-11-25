@@ -3,34 +3,28 @@ package de.mpg.imeji.user;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import thewebsemantic.NotFoundException;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.user.util.EmailClient;
+import de.mpg.imeji.user.util.PasswordGenerator;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.Scripts;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
-import de.mpg.jena.controller.GrantController;
 import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.UserController;
-import de.mpg.jena.security.Authorization;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
-import de.mpg.jena.vo.Grant;
-import de.mpg.jena.vo.Grant.GrantType;
-import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.User;
 
 public class UserCreationBean
 {
     private User user;
-    private String password;
-    private String repeatedPassword;
     private SessionBean sb;
     
     private Logger logger = Logger.getLogger(UserCreationBean.class);
@@ -50,10 +44,6 @@ public class UserCreationBean
         {
             BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
         }
-        else if(!getPassword().equals(getRepeatedPassword()))
-        {
-        	BeanHelper.error(sb.getMessage("error_user_repeat_password"));
-        }
         else
         {
             try
@@ -65,8 +55,15 @@ public class UserCreationBean
             }
             catch (NotFoundException e) 
             {
-            	user.setEncryptedPassword(UserController.convertToMD5(getPassword()));
+            	PasswordGenerator generator = new PasswordGenerator();
+            	String password = generator.generatePassword();
+            	
+            	user.setEncryptedPassword(UserController.convertToMD5(password));
                 uc.create(user);
+                
+                EmailClient emailClient = new EmailClient();
+                emailClient.sendMailForNewPassword(user.getEmail(), password);
+                
                 logger.info("USER email created: " + user.getEmail());
                 BeanHelper.info(sb.getMessage("success_user_create"));
 			}
@@ -124,20 +121,7 @@ public class UserCreationBean
 		catch (Exception e) { return 0; }
     }
     
-    public String transformMd() throws Exception
-    {
-    	ImageController ic = new ImageController(sb.getUser());
-    	CollectionController cc = new CollectionController(sb.getUser());
-    	Collection<Image> allImages = ic.retrieveAll();
-    	for(Image im : allImages) {
-    		ObjectHelper.castAllHashSetToList(im);
-    		CollectionImeji col = cc.retrieve(im.getCollection());
-    		im.getProperties().setStatus(col.getProperties().getStatus());
-    	}
-    	ic.update(allImages);
-    	return "";
-    }
-    
+    // For testing purpose
     public String copyDataFromCoreToCore() throws IOException, URISyntaxException, Exception
     {
     	Scripts scripts = new Scripts();
@@ -147,69 +131,6 @@ public class UserCreationBean
     	return "";
     }
     
-
-    public String reInitializeUserRights() throws Exception
-    {
-    	List<CollectionImeji> allColls = getAllcollections();
-    	List<Album> allAlbs = getAllAlbums();
-    	UserController uc = new UserController(sb.getUser());
-    	Authorization authorization = new Authorization();
-    	GrantController gc = new GrantController(sb.getUser());
-    	List<User> allUsers = getAllUsers();
-    	for (User u : allUsers)
-    	{
-    		if (!authorization.isSysAdmin(u))
-    		{
-	    		List<Grant> grants = new ArrayList<Grant>();
-	    		grants.addAll(u.getGrants());
-    			for (Grant g: grants)
-	    		{
-	    			gc.removeGrant(u, g);
-	    		}
-	    		for (CollectionImeji c : allColls)
-	    		{
-	    			String creatorEMail= uc.retrieve(c.getProperties().getCreatedBy()).getEmail();
-	    			if (u.getEmail().equals(creatorEMail))
-	    			{
-	    				gc.addGrant(u, new Grant(GrantType.CONTAINER_ADMIN, c.getId()));
-	    				gc.addGrant(u, new Grant(GrantType.PROFILE_ADMIN, c.getProfile()));
-	    			}
-	    		}
-	    		for (Album a : allAlbs)
-	    		{
-	    			String creatorEMail= uc.retrieve(a.getProperties().getCreatedBy()).getEmail();
-	    			if (u.getEmail().equals(creatorEMail))
-	    			{
-	    				gc.addGrant(u, new Grant(GrantType.CONTAINER_ADMIN, a.getId()));
-	    			}
-	    		}
-    		}
-    	}
-    	logger.info("All Users grants reniitialized");
-    	return "pretty:";
-    }
-    
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setRepeatedPassword(String repeatedPassword)
-    {
-        this.repeatedPassword = repeatedPassword;
-    }
-
-    public String getRepeatedPassword()
-    {
-        return repeatedPassword;
-    }
-
     public void setUser(User user)
     {
         this.user = user;

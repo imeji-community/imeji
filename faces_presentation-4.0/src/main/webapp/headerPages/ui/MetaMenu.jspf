@@ -65,7 +65,7 @@
 
 	<h:panelGroup styleClass="seperator"></h:panelGroup>
 
-	<h:outputLink id="txtAccountUserName" styleClass="free_area0_p8 endline" value="#{Navigation.applicationUrl}/jsf/User.xhtml?id=#{SessionBean.user.email}" rendered="#{SessionBean.user != null}">
+	<h:outputLink id="txtAccountUserName" styleClass="free_area0_p8 endline" value="#{Navigation.applicationUrl}user?id=#{SessionBean.user.email}" rendered="#{SessionBean.user != null}">
 		<h:outputText  value="#{SessionBean.user.name}"/>
 	</h:outputLink>
 	

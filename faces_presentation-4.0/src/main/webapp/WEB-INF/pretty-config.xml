@@ -225,10 +225,15 @@
 		<view-id>/jsf/CollectionsSearchResults.xhtml</view-id>
 	</url-mapping>
 	
-	
 	<url-mapping id="help">
 		<pattern value="/help"></pattern>
 		<view-id>/jsf/Help.xhtml</view-id>
 	</url-mapping>
+	
+	<url-mapping id="userPage">
+		<pattern value="/user"></pattern>
+		<view-id>/jsf/User.xhtml</view-id>
+	</url-mapping>
+	
 
 </pretty-config>

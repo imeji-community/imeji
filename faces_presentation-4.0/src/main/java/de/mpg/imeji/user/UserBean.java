@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import javax.faces.context.FacesContext;
 
+import de.mpg.imeji.beans.LoginBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
@@ -35,18 +36,26 @@ public class UserBean
 	public String getInit()
 	{
 		id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
+		newPassword = null;
+		repeatedPassword = null;
 		retrieveUser();
 		return "";
 	}
 
 	public void retrieveUser()
 	{
-		if (id != null)
+		
+		if (id != null && session.getUser() != null)
 		{
 			UserController controller = new UserController(session.getUser());
 			user = controller.retrieve(id);
 
 			isAdmin = (session.isAdmin() || (user.getEmail().equals(session.getUser().getEmail())));
+		}
+		else if (id != null && session.getUser() == null) 
+		{
+			LoginBean loginBean = (LoginBean) BeanHelper.getRequestBean(LoginBean.class);
+			loginBean.setLogin(id);
 		}
 	}
 

@@ -62,7 +62,7 @@ public class UsersBean
 		userBean.updateUser();
 
 		EmailClient emailHelper = new EmailClient();
-		emailHelper.sendMailForNewPassword(email, newPassword);
+		emailHelper.sendMailForPassword(email, newPassword, userBean.getUser().getName(), false);
 		return "";
 	}
 

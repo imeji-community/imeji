@@ -36,15 +36,13 @@
 </ui:remove>
 	<body>
 		<ui:composition template="templates/template.xhtml">
-		
-		<ui:define name="mainContent">
-			<h1><h:outputText value="Imeji Users administration"/></h1>
+			<ui:param name="headline" value="Imeji Administration"/>
+			<ui:define name="mainContent">
 			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!UserCreationBean.sysAdmin}">
-				<h2><h:outputText value="No sufficient privileges!"/></h2>
+				<h2><h:outputText value="You are not allowed to view this page"/></h2>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{UserCreationBean.sysAdmin}">
 			
-				
 				<h:panelGroup layout="block" styleClass="full_area0 endline">
 					<h2>
 					<h:outputLink styleClass="medium_area0" value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml">

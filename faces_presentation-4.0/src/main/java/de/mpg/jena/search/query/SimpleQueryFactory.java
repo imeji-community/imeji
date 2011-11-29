@@ -79,6 +79,10 @@ public class SimpleQueryFactory
 		{
 			searchQuery = " .OPTIONAL {?s <http://imeji.mpdl.mpg.de/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit> ?org .OPTIONAL{?org <http://purl.org/dc/elements/1.1/title> ?el}}}}";
 		}
+		else if (ImejiNamespaces.COLLECTION_PROFILE.equals(sc.getNamespace()))
+		{
+			searchQuery = " .?s <http://imeji.mpdl.mpg.de/mdprofile> ?el";
+		}
 		else
 		{
 			//slow

@@ -32,57 +32,11 @@ public class Search
 
 	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, User user)
 	{
-		return new SearchResult(searchAdvanced1(scList, sortCri, user));
+		return new SearchResult(searchAdvanced(scList, sortCri, user));
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<String> searchAdvanced(List<SearchCriterion> scList, SortCriterion sortCri, User user)
-	{
-		List<String> results =  new ArrayList<String>();
-
-		if (scList == null) scList = new ArrayList<SearchCriterion>(); 
-
-		if (scList.isEmpty() || containerURI != null)
-		{
-			results = searchSimple(null, sortCri, user);
-		}
-
-		boolean hasAnEmptySubResults = false;
-
-		for (SearchCriterion sc : scList) 
-		{
-			List<String> subResults = new ArrayList<String>();
-
-			if (sc.getChildren().isEmpty())
-			{
-				subResults =  searchSimple(sc, sortCri, user);
-			}
-			else
-			{
-				subResults = searchAdvanced(sc.getChildren(), sortCri, user);
-			}
-
-			if (subResults.isEmpty()) hasAnEmptySubResults = true;
-
-			if (results.isEmpty() && !hasAnEmptySubResults)
-			{
-				results =  new ArrayList<String>(subResults);
-			}
-			if (Operator.AND.equals(sc.getOperator()) || Operator.NOTAND.equals(sc.getOperator()))
-			{
-				results = (List<String>) CollectionUtils.intersection(results, subResults);
-			}
-			else
-			{
-				results = ListUtils.sum(results, subResults);
-			}
-		}
-
-		return results;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<String> searchAdvanced1(List<SearchCriterion> scList, SortCriterion sortCri, User user)
 	{
 		List<String> results = new ArrayList<String>();
 

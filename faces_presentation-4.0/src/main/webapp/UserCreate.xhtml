@@ -36,9 +36,12 @@
 </ui:remove>
 	<body>
 		<ui:composition template="templates/template.xhtml">
-		
-		<ui:define name="mainContent">
-			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
+			<ui:param name="headline" value="Create new user"/>
+			<ui:define name="mainContent">
+			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!SessionBean.admin}">
+				<h2><h:outputText value="You are not allowed to view this page"/></h2>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{SessionBean.admin}">
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 					<h3 class="xLarge_area0_p8 endline blockHeader">
 						<h:outputText value="User Information"/>
@@ -76,13 +79,14 @@
 						</h:panelGroup>
 					</div>
 				</h:panelGroup>
-			</h:panelGroup>
-			<div class="full_area0 formButtonArea">
+				<div class="full_area0 formButtonArea">
 					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" >
 						<h:outputText value="#{lbl.cancel}" />
 					</h:outputLink>
 					<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
 			</div>
+			</h:panelGroup>
+			
 		
 		</ui:define>
 		</ui:composition>

@@ -201,19 +201,11 @@ public class AlbumController extends ImejiController
 	 * @param scList
 	 * @return
 	 */
-	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
 	{
 	    Search search = new Search("http://imeji.mpdl.mpg.de/album", null);
 	    return search.search(scList, sortCri, user);
 	}
-	
-//	@Deprecated
-//	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
-//    {
-//        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-//        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/album", "", "", -1, 0, user, false);
-//    	return ImejiSPARQL.execCount(query);
-//    }
 	
 	public Collection<Album> load(List<String> uris, int limit, int offset)
     {

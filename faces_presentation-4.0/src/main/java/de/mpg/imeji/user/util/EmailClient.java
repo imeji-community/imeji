@@ -21,6 +21,7 @@ import javax.mail.internet.MimeMultipart;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.beans.Navigation;
+import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.PropertyReader;
 
@@ -33,32 +34,63 @@ public class EmailClient
 		// TODO Auto-generated constructor stub
 	}
 	
-	public String getEmailMessage(String password, String email)
+	public String getEmailMessage(String password, String email, String username, boolean newAccount)
 	{
 		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+		SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		String userPage = navigation.getApplicationUrl() + "user?id=" + email;
+
+		String emailMessage = "";
 		
-		String emailMessage =  "Dear user," +
-		"\n\nHere is an automatically generated password: " + password  +
-		"\n\nPlease change this password on this page: " + userPage +
-		"\n\nThanks for using Imeji," +
-		"\nThe Imeji team.";
+		if (newAccount)
+		{
+			emailMessage = session.getMessage("email_new_user");
+			emailMessage = emailMessage.replace("XXX_LINK_TO_APPLICATION_XXX", navigation.getApplicationUrl());
+		}
+		else
+		{
+			emailMessage = session.getMessage("email_new_password");
+		}
+		
+		emailMessage = emailMessage
+					.replace("XXX_USER_NAME_XXX,", username)
+					.replace("XXX_LOGIN_XXX", email)
+					.replace("XXX_PASSWORD_XXX", password)
+					.replace("XXX_LINK_TO_USER_PAGE_XXX", userPage);
+			
 		
 		return emailMessage;
 	}
-
-	public void sendMailForNewPassword(String email, String newPassword) throws IOException, URISyntaxException
+	
+	public String getEmailSubject(boolean newAccount)
 	{
-		String emailSubject = "Your new Imeji Password";
-		String username = PropertyReader.getProperty("imeji.email.user");
+		SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		String emailsubject = "";
+		
+		if (newAccount)
+		{
+			emailsubject = session.getMessage("email_new_user_subject");
+		}
+		else
+		{
+			emailsubject = session.getMessage("email_new_password_subject");
+		}
+		
+		return emailsubject;
+	}
+
+	public void sendMailForPassword(String email, String newPassword, String username, boolean newAccount) throws IOException, URISyntaxException
+	{
+		String emailSubject = getEmailSubject(newAccount);
+		String emailUser = PropertyReader.getProperty("imeji.email.user");
 		String password = PropertyReader.getProperty("imeji.email.password");
 		String server = PropertyReader.getProperty("imeji.email.server.smtp");
 		String auth = PropertyReader.getProperty("imeji.email.auth");
 		String sender = PropertyReader.getProperty("imeji.email.sender");
 		String[] recipientsAdress = {email};
 		
-		sendMail(server, auth, username, password, sender
-				, recipientsAdress, null, null, null, emailSubject, getEmailMessage(newPassword, email));
+		sendMail(server, auth, emailUser, password, sender
+				, recipientsAdress, null, null, null, emailSubject, getEmailMessage(newPassword, email, username, newAccount));
 	}
 	
 	public String sendMail(String smtpHost, String withAuth, String usr,String pwd,

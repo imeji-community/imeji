@@ -20,12 +20,20 @@ import de.mpg.jena.search.SearchResult;
  */
 public class JenaExport extends Export
 {
+	@Override
+	public void init() 
+	{
+		// Not initialization so far
+	}
+	
+	@Override
 	public void export(OutputStream out, SearchResult sr)
 	{
 		Model m = exportIntoModel(sr);
 		m.write(out,"RDF/XML");
 	}
 	
+	@Override
 	public String getContentType()
 	{
 		return "application/xml";

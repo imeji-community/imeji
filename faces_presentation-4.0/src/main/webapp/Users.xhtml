@@ -36,34 +36,34 @@
 </ui:remove>
 	<body>
 		<ui:composition template="templates/template.xhtml">
-		
-		<ui:define name="mainContent">
-			<h1><h:outputText value="Imeji Users"/></h1>
-			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!UsersBean.sysAdmin}">
-				<h2><h:outputText value="No sufficient privileges!"/></h2>
-			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{UsersBean.sysAdmin}">
-				<a4j:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0" rowKeyVar="index">
-					<h:panelGroup layout="block" styleClass="huge_area0_p4">
-						<h:outputText styleClass="huge_area0_p1" value="#{user.name} (#{user.email})"/>
-						<h:outputLink styleClass="huge_area0_p1" value="#{Navigation.applicationUrl}/jsf/User.xhtml?id=#{user.email}">
-							<h:outputText value="Edit"/>
-						</h:outputLink>
-						<h:commandLink styleClass="huge_area0_p1" action="#{UsersBean.sendPassword}" value="Send new password">
-							<f:param name="email" value="#{user.email}"/>
-						</h:commandLink>
+			<ui:param name="headline" value="Imeji Users"/>
+			<ui:define name="mainContent">
+				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!UsersBean.sysAdmin}">
+					<h2><h:outputText value="You are not allowed to view this page"/></h2>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{UsersBean.sysAdmin}">
+					<a4j:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0" rowKeyVar="index">
+					<h:panelGroup layout="block" styleClass="full_area0_p4 listItem noTopBorder">
+						<h:panelGroup layout="block" styleClass="huge_area0_p4">
+							<h:outputText styleClass="huge_area0_p1" value="#{user.name} (#{user.email})"/>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="quad_area0_p1">
+							<a4j:repeat id="grantList" var="grant" value="#{user.grants}" rows="0" >
+								<h:outputText  styleClass="xHuge_area0_p0" value="#{grant.grantType} for #{grant.grantFor}"/>
+							</a4j:repeat>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="large_area0_p0">
+							<h:outputLink styleClass="huge_area0_p1" value="#{Navigation.applicationUrl}user?id=#{user.email}">
+								<h:outputText value="Edit"/>
+							</h:outputLink>
+							<h:commandLink styleClass="huge_area0_p1" action="#{UsersBean.sendPassword}" value="Send new password" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
+								<f:param name="email" value="#{user.email}"/>
+							</h:commandLink>
+						</h:panelGroup>
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="xHuge_area0_p0 itemLin">
-						<a4j:repeat id="grantList" var="grant" value="#{user.grants}" rows="0" >
-							<h:outputText  styleClass="xHuge_area0_p0" value="#{grant.grantType} for #{grant.grantFor}"/>
-							<br/>
-						</a4j:repeat>
-						<br/>
-					</h:panelGroup>
-					<br/><br/><br/><br/>
-				</a4j:repeat>
-			</h:panelGroup>
-		</ui:define>
+					</a4j:repeat>
+				</h:panelGroup>
+			</ui:define>
 		</ui:composition>
 	</body>
 </html>

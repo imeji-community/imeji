@@ -139,7 +139,6 @@
 	<url-mapping id="viewProfile">
 		<pattern value="/mdprofile/#{ViewMdProfileBean.id}"/>
 		<view-id>/jsf/ProfileView.xhtml</view-id>
-		<action>#{ViewMdProfileBean.init}</action>
 	</url-mapping>
 	
 	<url-mapping id="createAlbum">

@@ -31,20 +31,27 @@ public class RDFExport extends Export
 			"http://imeji.mpdl.mpg.de/metadata/searchValue",
 			"http://purl.org/escidoc/metadata/profiles/0.1/pos"
 	};
-	
+
 	private Map<String, String> namespaces;
 
+	@Override
+	public void init() 
+	{
+		// Not initialization so far
+	}
+
+	@Override
 	public void export(OutputStream out, SearchResult sr)
 	{
 		initNamespaces();
 		exportIntoOut(sr, out);
 	}
-	
+	@Override
 	public String getContentType()
 	{
 		return "application/xml";
 	}
-	
+
 	private void initNamespaces()
 	{
 		namespaces = new HashMap<String, String>();
@@ -61,12 +68,12 @@ public class RDFExport extends Export
 
 		writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		writer.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"");
-		
+
 		for (String key : namespaces.keySet())
 		{
 			writer.append(" xmlns:" + namespaces.get(key) + "=\"" + key  + "\"");
 		}
-		
+
 		writer.append(">");
 
 		for (String s : sr.getResults())
@@ -93,7 +100,7 @@ public class RDFExport extends Export
 	private StringWriter exportResource(Resource r) 
 	{
 		StringWriter writer = new StringWriter();
-		
+
 		newLine(writer);
 		for (StmtIterator iterator = r.listProperties(); iterator.hasNext();) 
 		{
@@ -104,7 +111,7 @@ public class RDFExport extends Export
 				try
 				{
 					writer.append(openTag(st, st.getResource().getURI()));
-					
+
 					if (st.getResource().getURI() == null)
 					{				
 						writer.append(exportResource(st.getResource()).getBuffer());
@@ -114,7 +121,7 @@ public class RDFExport extends Export
 				{
 					/*Not a resource*/
 				}
-				
+
 				try
 				{
 					if (st.getLiteral().toString() != null)
@@ -127,7 +134,7 @@ public class RDFExport extends Export
 				{
 					/*Not a literal*/
 				}
-				
+
 				writer.append(closeTag(st));
 				newLine(writer);
 			}
@@ -148,14 +155,14 @@ public class RDFExport extends Export
 	private String openTag(Statement st, String resourceURI)
 	{
 		String tag = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":"+ st.getPredicate().getLocalName();
-		
+
 		if (resourceURI != null) 
 		{
 			tag += " rdf:resource=\"" + resourceURI + "\"";
 		}
-		
+
 		tag += ">";
-			
+
 		return tag;
 	}
 
@@ -163,7 +170,7 @@ public class RDFExport extends Export
 	{
 		return "</" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName() + ">";
 	}
-	
+
 	private String tagValue(Statement st)
 	{
 		String s ="";
@@ -177,11 +184,11 @@ public class RDFExport extends Export
 		}
 		return s;
 	}
-	
+
 	private String getNamespace(String ns)
 	{
 		String ns1 = namespaces.get(ns);
-		
+
 		if (ns1 != null)
 		{
 			return ns1;
@@ -205,4 +212,5 @@ public class RDFExport extends Export
 		}
 		return false;
 	}
+
 }

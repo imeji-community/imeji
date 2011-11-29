@@ -62,7 +62,7 @@ public class UserCreationBean
                 uc.create(user);
                 
                 EmailClient emailClient = new EmailClient();
-                emailClient.sendMailForNewPassword(user.getEmail(), password);
+                emailClient.sendMailForPassword(user.getEmail(), password, user.getName(), true);
                 
                 logger.info("USER email created: " + user.getEmail());
                 BeanHelper.info(sb.getMessage("success_user_create"));

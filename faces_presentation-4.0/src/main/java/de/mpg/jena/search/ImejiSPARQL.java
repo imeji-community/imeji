@@ -92,7 +92,6 @@ public class ImejiSPARQL
 		Query q = QueryFactory.create(query, Syntax.syntaxARQ);
 		QueryExecution qexec  = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
 		qexec.getContext().set(TDB.symUnionDefaultGraph, true) ;
-		//LinkedList<String> resultList = new LinkedList<String>();
 		List<String> resultList = new ArrayList<String>(1000);
         try 
         {

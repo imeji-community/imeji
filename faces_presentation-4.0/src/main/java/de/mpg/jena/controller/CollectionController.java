@@ -254,19 +254,12 @@ public class CollectionController extends ImejiController
 	 * @param scList
 	 * @return
 	 */
-	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset) throws Exception
+	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
 	{
 		Search search = new Search("http://imeji.mpdl.mpg.de/collection", null);
-		//		return search.search(scList, sortCri, user);
 		return search.search(scList, sortCri, simplifyUser());
 	}
 
-	//	public int getNumberOfResults(List<SearchCriterion> scList) throws Exception
-	//    {
-	//        QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-	//        String query = querySPARQL.createCountQuery(scList, null, "http://imeji.mpdl.mpg.de/collection", "", "", -1, 0, user, false);
-	//    	return ImejiSPARQL.execCount(query);
-	//    }
 
 	/**
 	 * Increase performance by restricting grants to the only grants needed

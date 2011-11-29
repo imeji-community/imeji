@@ -31,31 +31,23 @@
 -->
 	</ui:remove>
 	<body>
-		<ui:composition template="templates/template_collection.xhtml">
+		<ui:composition template="templates/template.xhtml">
 			<ui:define name="headline">
 				<h1>
-					<h:outputText value="#{ViewMdProfileBean.profile.title}"/> 
+					<h:outputText value="#{ViewMdProfileBean.init}#{ViewMdProfileBean.profile.title}"/> 
 				</h1>
 			</ui:define>
 			
 			<ui:define name="contentMenu">
-				<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="#{Navigation.applicationUrl}search/collections/result?q=#{ViewMdProfileBean.encodedId}">
+				<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="#{Navigation.applicationUrl}collections?q=#{ViewMdProfileBean.encodedId}">
 					<h:outputText value="#{lbl.profile_related_collection}"></h:outputText>
 				</h:outputLink>
 			</ui:define>			
 		
 	
-			<ui:define name="actionsMenu">
-				<h:panelGroup>
-					<h:outputLink id="lnkEditProfile" styleClass="free_area0" value="#{Navigation.applicationUrl}edit#{ViewMdProfileBean.profile.id.path}?init=1" rendered="#{ViewMdProfileBean.editable}">
-						<h:outputText value="#{lbl.profile_edit}"></h:outputText>
-					</h:outputLink>
-				</h:panelGroup>
-			</ui:define>
-			
 			
 			<ui:define name="mainContent">
-				<h:panelGroup layout="block" styleClass="full_area0" >
+				<h:panelGroup layout="block" styleClass="full_area0">
 					
 					<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!ViewMdProfileBean.visible}">
 						<h2><h:outputText value="You are not allow to see this profile"/></h2>

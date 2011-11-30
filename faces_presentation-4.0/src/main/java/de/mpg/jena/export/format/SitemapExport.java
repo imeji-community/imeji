@@ -18,7 +18,7 @@ import de.mpg.jena.search.SearchResult;
 public class SitemapExport extends Export
 {
 	private double priority = 0.5;
-	
+
 	@Override
 	public void init() 
 	{
@@ -29,9 +29,12 @@ public class SitemapExport extends Export
 	public void export(OutputStream out, SearchResult sr) 
 	{
 		StringWriter writer = new StringWriter();
-		
+
 		writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		writer.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+		writer.append("<urlset xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+		+ " xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\""
+		+ " xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+		
 		writeURLs(writer, sr);
 		writer.append("</urlset>");
 		try 
@@ -49,7 +52,7 @@ public class SitemapExport extends Export
 	{
 		return "application/xml";
 	}
-	
+
 	private void writeURLs(StringWriter writer, SearchResult sr)
 	{
 		if (sr != null)
@@ -60,7 +63,7 @@ public class SitemapExport extends Export
 			}
 		}
 	}
-	
+
 	private void writeURL(StringWriter writer, String url)
 	{
 		writer.append("<url>");
@@ -77,12 +80,12 @@ public class SitemapExport extends Export
 			priority = Double.parseDouble(p);
 		}
 	}
-	
+
 	private String getReaUrl(String url)
 	{
 		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 		URI uri = URI.create(url);
-		
+
 		return navigation.getApplicationUri() + uri.getPath();
 	}
 

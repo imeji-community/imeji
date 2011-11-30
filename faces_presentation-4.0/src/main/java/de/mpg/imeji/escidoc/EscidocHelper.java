@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -42,6 +43,8 @@ import de.mpg.imeji.util.PropertyReader;
 
 public class EscidocHelper 
 {
+	private Logger logger = Logger.getLogger(EscidocHelper.class);
+	
 	public Item initNewItem(String contentModel, String context) throws IOException, URISyntaxException, ParserConfigurationException
 	{
 		Item item = new Item();
@@ -128,6 +131,7 @@ public class EscidocHelper
 			try
 			{
 				bufferedImage= ImageIO.read( new ByteArrayInputStream(imageStream));
+
 				if(bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))
 						|| bufferedImage.getHeight() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")))
 				{
@@ -141,7 +145,7 @@ public class EscidocHelper
 			}
 			catch(Exception e)
 			{
-				System.err.println("Error transforming image: " + e.getMessage());
+				logger.error("Error transforming image", e);
 				Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
 				String test = navigation.getApplicationUrl() + "resources/icon/defaultThumb.gif";
 				URL noThumbUrl = new URL(test);

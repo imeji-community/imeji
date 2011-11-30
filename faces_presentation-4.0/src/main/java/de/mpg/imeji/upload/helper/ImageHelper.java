@@ -87,15 +87,18 @@ public class ImageHelper
 	}
 
 
-	public static String getThumb() throws IOException, URISyntaxException{
+	public static String getThumb() throws IOException, URISyntaxException
+	{
 		return PropertyReader.getProperty("xsd.metadata.content-category.thumbnail");
 	}
 
-	public static String getWeb() throws IOException, URISyntaxException{
+	public static String getWeb() throws IOException, URISyntaxException
+	{
 		return PropertyReader.getProperty("xsd.metadata.content-category.web-resolution");
 	}
 
-	public static String getOrig() throws IOException, URISyntaxException{
+	public static String getOrig() throws IOException, URISyntaxException
+	{
 		return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
 	}
 

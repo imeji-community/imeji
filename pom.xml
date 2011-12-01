@@ -389,22 +389,9 @@
 				<!-- the ears are deployed to this server using jboss:harddeploy -->
 				<!-- <jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir>-->
 
-				<!-- Flag to disable the GUI-entry points for UC_PM_SR_03 do advanced search -->
-				<escidoc.pubman_presentation.disable.advanced_search>false</escidoc.pubman_presentation.disable.advanced_search>
-				<escidoc.pubman_presentation.disable.export>false</escidoc.pubman_presentation.disable.export>
-				<escidoc.pubman_presentation.disable.modify>false</escidoc.pubman_presentation.disable.modify>
-				<escidoc.pubman_presentation.disable.new_revision>false</escidoc.pubman_presentation.disable.new_revision>
-				<escidoc.pubman_presentation.disable.view_statistics>false</escidoc.pubman_presentation.disable.view_statistics>
-				<escidoc.pubman_presentation.disable.view_revisions>false</escidoc.pubman_presentation.disable.view_revisions>
-
 				<!-- URL of this Faces instance -->
 				<escidoc.faces.instance.url>http://localhost/faces/</escidoc.faces.instance.url>
-				<escidoc.faces.item.pattern>viewItemFullPage.jsp?itemId=$1</escidoc.faces.item.pattern>
-				<escidoc.faces.component.pattern>/viewComponentPage.jsp?componentId=$1</escidoc.faces.component.pattern>
-				
-				<escidoc.faces.instance.id>de.mpg.escidoc.faces.test</escidoc.faces.instance.id>
-			      				
-				
+								
 				<!--  Identifier of the content model "FACES" in the current framework instance -->
 				<!-- FACES -->
 				<!--  <escidoc.faces.content-model.id>escidoc:faces40</escidoc.faces.content-model.id>-->
@@ -412,10 +399,6 @@
 				<!--  <escidoc.faces.content-model.id>escidoc:312894</escidoc.faces.content-model.id>-->
 				<!-- latest -->
 				<escidoc.faces.content-model.id>escidoc:14001</escidoc.faces.content-model.id>
-				<!-- DEV - Bretagne -->
-				<!--<escidoc.faces.content-model.id>escidoc:139003</escidoc.faces.content-model.id>-->
-				<!-- DEV Diamonds -->
-				<!--<escidoc.faces.content-model.id>escidoc:diamonds1</escidoc.faces.content-model.id>-->
 				
 				<!-- QA Diamonds -->
 				<!--<escidoc.faces.content-model.id>escidoc:259623</escidoc.faces.content-model.id>-->
@@ -429,10 +412,6 @@
 				<escidoc.faces.context.id>escidoc:13001</escidoc.faces.context.id>
 				<!-- QA - FACES -->
 				<!--  <escidoc.faces.context.id>escidoc:40001</escidoc.faces.context.id>-->
-				<!-- DEV - Bretagne -->
-				<!--  <escidoc.faces.context.id>escidoc:album1</escidoc.faces.context.id>-->
-				<!-- Dev- Diamonds -->				
-				<!--<escidoc.faces.context.id>escidoc:200327</escidoc.faces.context.id>-->
 				<!-- QA- Diamonds -->	
 				<!--<escidoc.faces.context.id>escidoc:250191</escidoc.faces.context.id>-->
 				
@@ -496,7 +475,7 @@
 				<imeji.pagination.ajaxmodus>true</imeji.pagination.ajaxmodus>
 				
 				<!-- Counter for imeji objects -->
-				<imeji.counter.first.value>3000</imeji.counter.first.value>
+				<imeji.counter.first.value>0</imeji.counter.first.value>
 				
 				<!-- License url  -->
 				<!--  <escidoc.faces.picture.license.url>http://creativecommons.org/licenses/by-nc-nd/3.0/de/</escidoc.faces.picture.license.url>-->
@@ -505,13 +484,7 @@
 				<!-- License image  -->
 				<!-- <escidoc.faces.picture.license.image>http://i.creativecommons.org/l/by-nc-nd/3.0/80x15.png </escidoc.faces.picture.license.image>-->
 				<escidoc.faces.picture.license.image />
-				
-				<!-- FACES Collection file path -->
-				<escidoc.faces.collection.file.path>C:/Dokumente und Einstellungen/saquet/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA/server/default/data/Faces-collection.zip</escidoc.faces.collection.file.path>
-				
-				<!-- Faces statistics user -->
-				<escidoc.faces.statistics.password>escidoc</escidoc.faces.statistics.password>
-				<escidoc.faces.statistics.username>faces_statistics_user</escidoc.faces.statistics.username>
+
 				<!--<escidoc.faces.statistics.username>faces_statistics_editor</escidoc.faces.statistics.username>-->
 				
 				<!--  Due to a historical defect, QName was released with multiple 
@@ -522,67 +495,10 @@
 					compatibility value you have to set the following property to "1.0". -->
 				<com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>1.0</com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>
 
-				<!-- RE Pattern for retrieving determinators from item xml -->
-				<escidoc.content.model.pattern>:content-model objid=\"([^\"]*)\"</escidoc.content.model.pattern>
-				<escidoc.context.pattern>:context objid=\"([^\"]*)\"</escidoc.context.pattern>
-				
 				 <!-- Current XSD Schema versions -->
-				<!-- Current XSD Schema versions -->
-				<xsd.soap.common.prop>http://escidoc.de/core/01/properties/</xsd.soap.common.prop>
-				<xsd.soap.common.srel>http://escidoc.de/core/01/structural-relations/</xsd.soap.common.srel>
-				<xsd.soap.common.version>http://escidoc.de/core/01/properties/version/</xsd.soap.common.version>
-				<xsd.soap.common.release>http://escidoc.de/core/01/properties/release/</xsd.soap.common.release>
-				<xsd.soap.item.item>http://www.escidoc.de/schemas/item/0.9</xsd.soap.item.item>
-				<xsd.soap.context.context>http://www.escidoc.de/schemas/context/0.7</xsd.soap.context.context>
-				<xsd.soap.item.components>http://www.escidoc.de/schemas/components/0.9</xsd.soap.item.components>
-				<xsd.soap.context.contextlist>http://www.escidoc.de/schemas/contextlist/0.7</xsd.soap.context.contextlist>
-				<xsd.soap.item.itemlist>http://www.escidoc.de/schemas/itemlist/0.9</xsd.soap.item.itemlist>
-				<xsd.soap.common.mdrecords>http://www.escidoc.de/schemas/metadatarecords/0.5</xsd.soap.common.mdrecords>
-				<xsd.soap.common.relations>http://www.escidoc.de/schemas/relations/0.3</xsd.soap.common.relations>
-				<xsd.soap.searchresult.searchresult>http://www.escidoc.de/schemas/searchresult/0.8</xsd.soap.searchresult.searchresult>
-				<xsd.soap.useraccount.useraccount>http://www.escidoc.de/schemas/useraccount/0.7</xsd.soap.useraccount.useraccount>
-				<xsd.soap.useraccount.useraccountlist>http://www.escidoc.de/schemas/useraccountlist/0.7</xsd.soap.useraccount.useraccountlist>
-				<xsd.soap.usergroup.usergroup>http://www.escidoc.de/schemas/usergroup/0.6</xsd.soap.usergroup.usergroup>
-				<xsd.soap.usergroup.usergrouplist>http://www.escidoc.de/schemas/usergrouplist/0.6</xsd.soap.usergroup.usergrouplist>
-				<xsd.soap.ou.oupathlist>http://www.escidoc.de/schemas/organizationalunitpathlist/0.4</xsd.soap.ou.oupathlist>
-				<xsd.soap.ou.ou>http://www.escidoc.de/schemas/organizationalunit/0.8</xsd.soap.ou.ou>
-				<xsd.soap.ou.oulist>http://www.escidoc.de/schemas/organizationalunitlist/0.8</xsd.soap.ou.oulist>
-				<xsd.soap.ou.ousuccessors>http://www.escidoc.de/schemas/organizationalunitsuccessors/0.7</xsd.soap.ou.ousuccessors>
-				<xsd.soap.ou.ouref>http://www.escidoc.de/schemas/organizationalunitref/0.4</xsd.soap.ou.ouref>
-				<xsd.rest.stagingfile.stagingfile>http://www.escidoc.de/schemas/stagingfile/0.3</xsd.rest.stagingfile.stagingfile>
-				<xsd.soap.common.commontypes>http://www.escidoc.de/schemas/commontypes/0.4</xsd.soap.common.commontypes>
-				<xsd.soap.useraccount.grants>http://www.escidoc.de/schemas/grants/0.5</xsd.soap.useraccount.grants>
-				<xsd.soap.common.versionhistory>http://www.escidoc.de/schemas/versionhistory/0.3</xsd.soap.common.versionhistory>
-				<xsd.soap.common.memberlist>http://www.escidoc.de/schemas/memberlist/0.9</xsd.soap.common.memberlist>
-				<xsd.soap.container.container>http://www.escidoc.de/schemas/container/0.8</xsd.soap.container.container>
-				<xsd.soap.container.structmap>http://www.escidoc.de/schemas/structmap/0.4</xsd.soap.container.structmap>
-				<xsd.soap.container.containerlist>http://www.escidoc.de/schemas/containerlist/0.8</xsd.soap.container.containerlist>
-				<xsd.core.properties>http://escidoc.de/core/01/properties/</xsd.core.properties>
-				<xsd.soap.common.metadatarecords>http://www.escidoc.de/schemas/metadatarecords/0.5</xsd.soap.common.metadatarecords>
-				<xsd.soap.statistic.report>http://www.escidoc.de/schemas/report/0.3</xsd.soap.statistic.report>
-				<xsd.soap.statistic.reportparameters>http://www.escidoc.de/schemas/reportparameters/0.3</xsd.soap.statistic.reportparameters>
-				<xsd.soap.statistic.reportdefinitionlist>http://www.escidoc.de/schemas/reportdefinitionlist/0.3</xsd.soap.statistic.reportdefinitionlist>
-				<xsd.soap.statistic.reportdefinition>http://www.escidoc.de/schemas/reportdefinition/0.3</xsd.soap.statistic.reportdefinition>
 
 				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
 				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
-
-				<xsd.soap.toc.toc>http://www.escidoc.de/schemas/toc/0.6</xsd.soap.toc.toc>
-				<xsd.soap.toc.table-of-content>http://www.escidoc.de/schemas/tableofcontent/0.1</xsd.soap.toc.table-of-content>
-				<xsd.soap.result.result>http://www.escidoc.de/schemas/result/0.1</xsd.soap.result.result>
-
-				<xsd.metadata.organization>http://purl.org/escidoc/metadata/profiles/0.1/organization</xsd.metadata.organization>
-				<xsd.metadata.organizationalunit>http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit</xsd.metadata.organizationalunit>
-				<xsd.metadata.file>http://purl.org/escidoc/metadata/profiles/0.1/file</xsd.metadata.file>
-				<xsd.metadata.publication>http://purl.org/escidoc/metadata/profiles/0.1/publication</xsd.metadata.publication>
-				<xsd.metadata.face>http://purl.org/escidoc/metadata/profiles/0.1/face</xsd.metadata.face>
-				<xsd.metadata.escidocprofile>http://escidoc.mpg.de/metadataprofile/schema/0.1/</xsd.metadata.escidocprofile>
-				<xsd.metadata.escidocprofile.types>http://purl.org/escidoc/metadata/terms/0.1/</xsd.metadata.escidocprofile.types>
-				<xsd.metadata.terms>http://purl.org/escidoc/metadata/terms/0.1/</xsd.metadata.terms>
-				<xsd.metadata.escidocprofile.idtypes>http://purl.org/escidoc/metadata/terms/0.1/idtypes/</xsd.metadata.escidocprofile.idtypes>
-				<xsd.metadata.source>http://purl.org/escidoc/metadata/profiles/0.1/source</xsd.metadata.source>
-				<xsd.metadata.event>http://purl.org/escidoc/metadata/profiles/0.1/event</xsd.metadata.event>
-				<xsd.metadata.person>http://purl.org/escidoc/metadata/profiles/0.1/person</xsd.metadata.person>
                 
                 <xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
                 <xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>

@@ -40,32 +40,34 @@
 			</ui:define>
 			
 			<ui:define name="contentMenu">
-				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}" rendered="#{prettyContext.currentMapping.id != 'homeCollection'}">
-					<h:outputText value="#{lbl.collection_home}"/>
-				</h:outputLink>			
-				<h:outputText styleClass="free_area0" value="#{lbl.collection_home}" rendered="#{prettyContext.currentMapping.id == 'homeCollection'}" />
-				
-				<h:outputText styleClass="seperator void" />
-				
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{ViewCollectionBean.collection.id.path}?q=" rendered="#{ViewCollectionBean.size > 0}">
-					<h:outputText value="#{lbl.view_images}"/>
-				</h:outputLink>
-				
-				<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
-				
-				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}/details?init=1" rendered="true">
-					<h:outputText value="#{lbl.collection_metadata}"/>
-				</h:outputLink>
-				
-				<h:outputText styleClass="seperator void" />
-				
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
-					<h:outputText value="#{lbl.upload_images}"></h:outputText>
-				</h:outputLink>
+				<h:panelGroup rendered="#{ViewCollectionBean.visible}">
+					<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}" rendered="#{prettyContext.currentMapping.id != 'homeCollection'}">
+						<h:outputText value="#{lbl.collection_home}"/>
+					</h:outputLink>			
+					<h:outputText styleClass="free_area0" value="#{lbl.collection_home}" rendered="#{prettyContext.currentMapping.id == 'homeCollection'}" />
+					
+					<h:outputText styleClass="seperator void" />
+					
+					<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{ViewCollectionBean.collection.id.path}?q=" rendered="#{ViewCollectionBean.size > 0}">
+						<h:outputText value="#{lbl.view_images}"/>
+					</h:outputLink>
+					
+					<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
+					
+					<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}/details?init=1" rendered="true">
+						<h:outputText value="#{lbl.collection_metadata}"/>
+					</h:outputLink>
+					
+					<h:outputText styleClass="seperator void" />
+					
+					<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
+						<h:outputText value="#{lbl.upload_images}"></h:outputText>
+					</h:outputLink>
+				</h:panelGroup>
 			</ui:define>
 					
 			<ui:define name="actionsMenu">
-				<h:panelGroup>
+				<h:panelGroup rendered="#{ViewCollectionBean.visible}">
 					<rich:togglePanel  value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{ViewCollectionBean.editable}">
 						 <f:facet name="closed">
 						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
@@ -97,8 +99,9 @@
           							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
 											<f:selectItems value="#{SharingBean.grantsMenu}"/>
 									</h:selectOneMenu>
-					        		<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}">
+					        		<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}" onclick="if (confirm('Do you really want to share the collection (An email will be sent to the user)')) return true; return false;">
 										<f:attribute name="collectionId" value="#{ViewCollectionBean.collection.id}"/>
+										<f:attribute name="name" value="#{ViewCollectionBean.collection.metadata.title}"/>
 					           		</h:commandLink>
 					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}"><h:outputText value="Cancel"/></h:outputLink>
 								</h:panelGrid>
@@ -116,7 +119,11 @@
 					 </h:panelGroup>
 				</div>
 				
-				<h:panelGroup layout="block" styleClass="full_area0">
+				<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!ViewCollectionBean.visible}">
+				 	<ui:include src="./include/LoginFormular.xhtml" />
+				 </h:panelGroup>
+				
+				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{ViewCollectionBean.visible}">
 					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 							<ui:remove>
@@ -146,14 +153,6 @@
 								<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
 									<h1>
 										<h:outputText styleClass="full_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
-										<!--  <h:outputLabel>(</h:outputLabel>
-										<h:outputLabel rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}">
-											<h:outputText value="#{lbl.private}" />
-										</h:outputLabel>
-										<h:outputLabel  rendered="#{ViewCollectionBean.collection.properties.status == 'RELEASED'}">
-											<h:outputText value="#{lbl.published}" />
-										</h:outputLabel>
-										<h:outputLabel>)</h:outputLabel>-->
 									</h1>
 							
 							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{ViewCollectionBean.collection.properties.discardComment != null and ViewCollectionBean.collection.properties.discardComment != ''}">

@@ -21,7 +21,7 @@ public class Security
 		{
 			if (isSysAdmin(user)) return true;
 
-			if (object == null) return true;
+			if (object == null) return false;
 
 			// TODO no rules for users defined so far
 			if(object instanceof User) return true;

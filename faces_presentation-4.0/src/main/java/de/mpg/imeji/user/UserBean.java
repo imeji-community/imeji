@@ -10,6 +10,7 @@ import de.mpg.imeji.beans.LoginBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.User;
@@ -44,11 +45,9 @@ public class UserBean
 
 	public void retrieveUser()
 	{
-		
 		if (id != null && session.getUser() != null)
 		{
-			UserController controller = new UserController(session.getUser());
-			user = controller.retrieve(id);
+			user = ObjectLoader.loadUser(id, session.getUser());
 
 			isAdmin = (session.isAdmin() || (user.getEmail().equals(session.getUser().getEmail())));
 		}
@@ -58,7 +57,7 @@ public class UserBean
 			loginBean.setLogin(id);
 		}
 	}
-
+	
 	public void changePassword() throws Exception
 	{
 		if (user != null && newPassword != null && !"".equals(newPassword))
@@ -100,15 +99,19 @@ public class UserBean
 
 	public void updateUser()
 	{
-		UserController controller = new UserController(session.getUser());
-		try 
+		if (user != null)
 		{
-			controller.update(user);
-		} 
-		catch (Exception e) 
-		{
-			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
+			UserController controller = new UserController(session.getUser());
+		
+			try 
+			{
+				controller.update(user);
+			} 
+			catch (Exception e) 
+			{
+				BeanHelper.error(e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 

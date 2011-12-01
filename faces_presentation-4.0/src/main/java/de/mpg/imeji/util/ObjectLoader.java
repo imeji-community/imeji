@@ -2,14 +2,11 @@ package de.mpg.imeji.util;
 
 import java.net.URI;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.jena.ImejiJena;
-import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -25,6 +22,7 @@ import de.mpg.jena.vo.User;
 public class ObjectLoader 
 {
 	private static Logger logger = Logger.getLogger(ObjectLoader.class);
+	
 	public static CollectionImeji loadCollection(URI id, User user)
 	{
 		try 
@@ -126,7 +124,6 @@ public class ObjectLoader
 	
 	private static void writeException(Exception e, String id)
 	{
-		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " );
 		logger.error("Error Object loader for " + id, e);
 	}
 	

@@ -2,19 +2,16 @@ package de.mpg.imeji.user;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.faces.context.FacesContext;
-import javax.mail.Authenticator;
-import javax.mail.PasswordAuthentication;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.user.util.EmailClient;
+import de.mpg.imeji.user.util.EmailMessages;
 import de.mpg.imeji.user.util.PasswordGenerator;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.util.PropertyReader;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.User;
@@ -52,18 +49,34 @@ public class UsersBean
 	public String sendPassword() throws Exception
 	{
 		String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("email");
-		
+
 		PasswordGenerator generator = new PasswordGenerator();
-		
 		String newPassword = generator.generatePassword();
 
 		UserBean userBean = new UserBean(email);
 		userBean.getUser().setEncryptedPassword(UserController.convertToMD5(newPassword));
 		userBean.updateUser();
 
-		EmailClient emailHelper = new EmailClient();
-		emailHelper.sendMailForPassword(email, newPassword, userBean.getUser().getName(), false);
+		sendEmail(email, newPassword, userBean.getUser().getName());
+		
 		return "";
+	}
+
+	public void sendEmail(String email, String password, String username)
+	{
+		EmailClient emailClient = new EmailClient();
+		EmailMessages emailMessages = new EmailMessages();
+
+		try 
+		{
+			emailClient.sendMail(email, null, session.getMessage("email_new_password_subject")
+					, emailMessages.getNewPasswordMessage(password, email, username));
+		} 
+		catch (Exception e) 
+		{
+			logger.error("Error sending email", e);
+			BeanHelper.error(session.getMessage("error") + ": Email not sent");
+		} 
 	}
 
 
@@ -86,22 +99,4 @@ public class UsersBean
 	{
 		this.sysAdmin = sysAdmin;
 	}
-
-	public class SMTPAuthenticator extends Authenticator 
-	{  
-		private String username;
-		private String password;
-
-		public SMTPAuthenticator(String username, String password) 
-		{
-			super();
-			this.username = username;
-			this.password = password;
-		}
-
-		protected PasswordAuthentication getPasswordAuthentication() 
-		{  
-			return new PasswordAuthentication(username, password);  
-		}  
-	}  
 }

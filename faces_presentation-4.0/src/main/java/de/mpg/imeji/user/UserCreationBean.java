@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import thewebsemantic.NotFoundException;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.user.util.EmailClient;
+import de.mpg.imeji.user.util.EmailMessages;
 import de.mpg.imeji.user.util.PasswordGenerator;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.Scripts;
@@ -61,10 +62,9 @@ public class UserCreationBean
             	user.setEncryptedPassword(UserController.convertToMD5(password));
                 uc.create(user);
                 
-                EmailClient emailClient = new EmailClient();
-                emailClient.sendMailForPassword(user.getEmail(), password, user.getName(), true);
+                sendNewAccountEmail(password);
                 
-                logger.info("USER email created: " + user.getEmail());
+                logger.info("New user created: " + user.getEmail());
                 BeanHelper.info(sb.getMessage("success_user_create"));
 			}
             catch (Exception e) 
@@ -74,6 +74,24 @@ public class UserCreationBean
         }
         return "pretty:";
     }
+    
+    public void sendNewAccountEmail(String password)
+    {
+    	EmailClient emailClient = new EmailClient();
+    	EmailMessages emailMessages = new EmailMessages();
+    	
+        try 
+        {
+			emailClient.sendMail(user.getEmail(), user.getEmail(), sb.getMessage("email_new_user_subject")
+					, emailMessages.getNewAccountMessage(user.getEmail(), password, user.getName()));
+		} 
+        catch (Exception e) 
+		{
+        	logger.error("Error sending email", e);
+        	BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+		} 
+    }
+    
     
     public List<User> getAllUsers() throws IllegalArgumentException, IllegalAccessException
     {

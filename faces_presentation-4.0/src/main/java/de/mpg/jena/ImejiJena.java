@@ -42,13 +42,12 @@ public class ImejiJena
 		try 
 		{
 			tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-			//FOR TESTING: SHOULD BE OUTCOMMENTED FOR DEPLOYMENT
-			//tdbPath = "R://imeji_tdb//imeji_data";
 		} 
 		catch (Exception e) 
 		{
 			throw new RuntimeException("Error reading property imeji.tdb.path", e);
 		}
+		
 		imejiDataSet = TDBFactory.createDataset(tdbPath);
 
 		collectionModel = ImejiJena.initModel(getModelName(CollectionImeji.class));
@@ -64,15 +63,12 @@ public class ImejiJena
 		initCounter();
 		logger.info("... done!");
 		
-		System.out.println("Jena file access : " + SystemTDB.fileMode().name());
-		System.out.println("Jena is 64 bit system : " + SystemTDB.is64bitSystem);
-		
+		logger.info("Jena file access : " + SystemTDB.fileMode().name());
+		logger.info("Jena is 64 bit system : " + SystemTDB.is64bitSystem);
 	}
 
 	private static Model initModel(String name)
 	{
-		//String filename = tdbPath + "/" + name;
-		//(new File(filename)).mkdirs();
 		TDBFactory.createNamedModel(name, tdbPath);
 		Model m = imejiDataSet.getNamedModel(name);
 		ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(m);

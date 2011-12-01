@@ -44,13 +44,35 @@
 				<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 						<h:panelGroup styleClass="small_marginLExcl full_area0" rendered="#{UserBean.admin}">
-							<h:panelGroup styleClass="xHuge_area0" rendered="#{UserBean.admin}">
-								<h:outputText styleClass="double_area0_p4" value="Email:"/>
-								<h:outputText styleClass="huge_area0_p4" value="#{UserBean.user.email}"/>
-								<h:outputText styleClass="double_area0_p4" value="Name:"/>
-								<h:outputText styleClass="huge_area0_p4" value="#{UserBean.user.name}"/>
-								<h:outputText styleClass="double_area0_p4" value="NickName:"/>
-								<h:outputText styleClass="huge_area0_p4" value="#{UserBean.user.nick}"/>
+							<h:panelGroup styleClass="full_area0" rendered="#{UserBean.admin}">
+								<h:panelGroup styleClass="full_area0">
+									<h:outputText styleClass="double_area0_p4" value="Email:"/>
+									<h:outputText styleClass="half_area0_p4 endLine" value="#{UserBean.user.email}"/>
+								</h:panelGroup>
+								<h:panelGroup styleClass="full_area0">
+									<h:outputText styleClass="double_area0_p4" value="Name:"/>
+									<h:outputText styleClass="free_area0_p4" value="#{UserBean.user.name}"/>
+									<h:outputLink id="lnkEditName" value="#" onclick="document.getElementById('formular:pnlEditName').style.display = 'block';document.getElementById('formular:lnkEditNick').style.display = 'none';; this.style.visibility ='hidden';">
+										<h:outputText styleClass="double_area0_p4" value="edit"/>
+									</h:outputLink>
+									<h:panelGroup styleClass="full_area0_p4" id="pnlEditName" style="display:none;">
+										 <h:outputText styleClass="double_area0_p4" value=" " />
+						                 <h:inputText styleClass="free_txtInput"  value="#{UserBean.user.name}" />
+						                 <h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="free_area0" />
+									</h:panelGroup>
+					            </h:panelGroup>
+					            <h:panelGroup styleClass="full_area0">
+									<h:outputText styleClass="double_area0_p4" value="NickName:"/>
+									<h:outputText styleClass="free_area0_p4" value="#{UserBean.user.nick}"/>
+									<h:outputLink id="lnkEditNick" value="#" onclick="document.getElementById('formular:pnlEditNick').style.display = 'block'; document.getElementById('formular:lnkEditName').style.display = 'none'; this.style.visibility ='hidden';">
+										<h:outputText styleClass="double_area0_p4" value="edit"/>
+									</h:outputLink>
+									<h:panelGroup styleClass="full_area0_p4" id="pnlEditNick" style="display:none;">
+										 <h:outputText styleClass="double_area0_p4" value=" " />
+						                 <h:inputText styleClass="free_txtInput"  value="#{UserBean.user.nick}" />
+						                 <h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="free_area0" />
+									</h:panelGroup>
+					          </h:panelGroup>
 							</h:panelGroup>
 							
 							<h:panelGroup styleClass="half_area0">
@@ -84,21 +106,8 @@
 								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
-						<h:panelGroup styleClass="small_marginLExcl quad_area0_p8" rendered="#{!UserBean.admin and SessionBean.user == null}">
-							<h3><h:outputText styleClass="free_area0_p8" value="To view this page you need to login!"/></h3>
-							<h:panelGroup styleClass="full_area0_p8">
-								<h:panelGroup styleClass="double_area0">
-									<h:outputLabel for="inputEmail" styleClass="free_label" value="Email"/>
-									<h:inputText id="inputEmail" styleClass="double_txtInput" value="#{LoginBean.login}"/>
-								</h:panelGroup>
-								<h:panelGroup styleClass="double_area0 tiny_marginLExcl">
-									<h:outputLabel for="inputPasswd" styleClass="free_label " value="Password"/>
-									<h:inputSecret id="inputPasswd" styleClass="double_txtInput" value="#{LoginBean.passwd}" onkeypress="return loginOnEnter(event)"/>
-								</h:panelGroup>
-							</h:panelGroup>
-							<h:panelGroup styleClass="quad_area0_p8">
-								<h:commandLink id="lnkLogin" styleClass="small_area1_p8 activeButton" value="#{lbl.login}" action ="#{LoginBean.login}"/>
-							</h:panelGroup>
+						<h:panelGroup rendered="#{!UserBean.admin and SessionBean.user == null}">
+							<ui:include src="./include/LoginFormular.xhtml" />
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>		

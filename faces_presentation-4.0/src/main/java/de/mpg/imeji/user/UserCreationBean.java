@@ -82,8 +82,8 @@ public class UserCreationBean
     	
         try 
         {
-			emailClient.sendMail(user.getEmail(), user.getEmail(), sb.getMessage("email_new_user_subject")
-					, emailMessages.getNewAccountMessage(user.getEmail(), password, user.getName()));
+			emailClient.sendMail(user.getEmail(), null, sb.getMessage("email_new_user_subject")
+					, emailMessages.getNewAccountMessage(password, user.getEmail(), user.getName()));
 		} 
         catch (Exception e) 
 		{

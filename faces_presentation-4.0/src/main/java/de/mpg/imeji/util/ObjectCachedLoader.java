@@ -23,7 +23,5 @@ public class ObjectCachedLoader
 		}
 		return profile;
 	}
-
-	
 	
 }

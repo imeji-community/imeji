@@ -1,12 +1,10 @@
 package de.mpg.imeji.util;
 
-import java.io.StringWriter;
 import java.net.URI;
 import java.net.URLEncoder;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
 
 import de.mpg.jena.vo.complextypes.Publication;
 

@@ -91,7 +91,7 @@
 								<h:outputText styleClass="double_area0_p0" value="#{UserBean.user.name} has following grants:"/>
 								<h:panelGroup styleClass="xHuge_area0">
 									<a4j:repeat id="grantList" var="grant" value="#{UserBean.user.grants}" rows="0">
-									<h:panelGroup styleClass="full_area0">
+									<h:panelGroup styleClass="full_area0" rendered="#{grant.grantFor != null}">
 										<h:outputText value="#{grant.grantType}" styleClass="large_area0"/>
 										<h:outputText value="for" styleClass="xSmall_area0"/>
 										<h:outputLink value="#{Navigation.applicationUri}#{grant.grantFor.path}" styleClass="large_area0">

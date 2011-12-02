@@ -16,10 +16,8 @@ import com.hp.hpl.jena.rdf.model.Selector;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.shared.LockMRSW;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.readers.ImejiJenaReaders;
 import de.mpg.jena.security.Operations.OperationsType;
 import de.mpg.jena.security.Security;

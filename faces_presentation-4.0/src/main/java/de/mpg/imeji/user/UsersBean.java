@@ -12,13 +12,15 @@ import de.mpg.imeji.user.util.EmailClient;
 import de.mpg.imeji.user.util.EmailMessages;
 import de.mpg.imeji.user.util.PasswordGenerator;
 import de.mpg.imeji.util.BeanHelper;
+import de.mpg.imeji.util.ObjectLoader;
+import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.UserController;
 import de.mpg.jena.security.Security;
 import de.mpg.jena.vo.User;
 
 public class UsersBean 
 {
-	private List<User> users = new ArrayList<User>();
+	private List<User> users;
 	private SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 	private boolean sysAdmin = false;
 	private static Logger logger = Logger.getLogger(UserBean.class);
@@ -36,7 +38,8 @@ public class UsersBean
 	{
 		UserController controller = new UserController(session.getUser());
 		Security security = new Security();
-
+		
+		users = new ArrayList<User>();
 		for (User user : controller.retrieveAll())
 		{
 			if (!security.isSysAdmin(user))
@@ -77,6 +80,27 @@ public class UsersBean
 			logger.error("Error sending email", e);
 			BeanHelper.error(session.getMessage("error") + ": Email not sent");
 		} 
+	}
+	
+	public String deleteUser()
+	{
+		String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("email");
+
+		UserController controller = new UserController( session.getUser());
+		
+		try 
+		{
+			controller.delete(ObjectLoader.loadUser(email, session.getUser()));
+		} 
+		catch (Exception e) 
+		{
+			BeanHelper.error("Error Deleting user");
+			logger.error("Error Deleting user", e);
+		}
+		
+		retrieveUsers();
+		
+		return "";
 	}
 
 

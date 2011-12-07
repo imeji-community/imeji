@@ -58,7 +58,7 @@ import org.apache.log4j.Logger;
  */
 public class FacesMessagesPhaseListener implements PhaseListener
 {
-    private Logger logger = Logger.getLogger(FacesMessagesPhaseListener.class);
+    private static Logger logger = Logger.getLogger(FacesMessagesPhaseListener.class);
     
     private static final String sessionToken = "REDIRECT_MESSAGES_SUPPORT";
     

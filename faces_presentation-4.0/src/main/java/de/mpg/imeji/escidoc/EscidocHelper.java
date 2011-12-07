@@ -43,7 +43,7 @@ import de.mpg.imeji.util.PropertyReader;
 
 public class EscidocHelper 
 {
-	private Logger logger = Logger.getLogger(EscidocHelper.class);
+	private static Logger logger = Logger.getLogger(EscidocHelper.class);
 	
 	public Item initNewItem(String contentModel, String context) throws IOException, URISyntaxException, ParserConfigurationException
 	{

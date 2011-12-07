@@ -21,7 +21,7 @@ public class LoginBean implements Serializable
     private String passwd;
     private SessionBean sb;
     
-    private Logger logger = Logger.getLogger(LoginBean.class);
+    private static Logger logger = Logger.getLogger(LoginBean.class);
 
     public LoginBean()
     {

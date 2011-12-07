@@ -24,7 +24,7 @@ import de.mpg.imeji.util.PropertyReader;
 
 public class EmailClient 
 {
-	private Logger logger = Logger.getLogger(EmailClient.class);
+	private static Logger logger = Logger.getLogger(EmailClient.class);
 	
 	public void sendMail(String to, String from, String subject, String message) throws IOException, URISyntaxException
 	{

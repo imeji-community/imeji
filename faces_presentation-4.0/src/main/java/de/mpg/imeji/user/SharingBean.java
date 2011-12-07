@@ -30,7 +30,7 @@ public class SharingBean
 	private GrantType selectedGrant = GrantType.PRIVILEGED_VIEWER;
 	private String status = "closed";
 	private String colId = null;
-	private Logger logger = Logger.getLogger(SharingBean.class);
+	private static Logger logger = Logger.getLogger(SharingBean.class);
 
 	public SharingBean() 
 	{

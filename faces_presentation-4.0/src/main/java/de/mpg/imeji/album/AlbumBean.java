@@ -41,7 +41,7 @@ public class AlbumBean implements Serializable
 	private boolean active;
 	private boolean save;
 	private boolean selected;
-	private Logger logger = Logger.getLogger(AlbumBean.class);
+	private static Logger logger = Logger.getLogger(AlbumBean.class);
 
 	public AlbumBean(Album album)
 	{

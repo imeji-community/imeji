@@ -28,7 +28,7 @@ public class UserCreationBean
     private User user;
     private SessionBean sb;
     
-    private Logger logger = Logger.getLogger(UserCreationBean.class);
+    private static Logger logger = Logger.getLogger(UserCreationBean.class);
     
     public UserCreationBean()
     {

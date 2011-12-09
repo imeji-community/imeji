@@ -77,9 +77,21 @@
 								<h:inputText id="inputNickText" styleClass="quad_txtInput" value="#{UserCreationBean.user.nick}" required="true"/>
 							</span>
 						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+							<b class="xLarge_area0_p8 endline labelLine clear">
+								<h:outputText value="Send an email"/>
+								<span class="noDisplay">: </span>
+							</b>
+							<span class="xHuge_area0 xTiny_marginLExcl endline">
+								<h:selectBooleanCheckbox value="#{UserCreationBean.sendEmail}"/>
+							</span>
+						</h:panelGroup>
+						
 					</div>
 				</h:panelGroup>
 				<div class="full_area0 formButtonArea">
+					
 					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" >
 						<h:outputText value="#{lbl.cancel}" />
 					</h:outputLink>

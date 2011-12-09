@@ -1,7 +1,5 @@
 package de.mpg.imeji.user;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,6 @@ import de.mpg.imeji.user.util.EmailClient;
 import de.mpg.imeji.user.util.EmailMessages;
 import de.mpg.imeji.user.util.PasswordGenerator;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.util.Scripts;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -27,6 +24,7 @@ public class UserCreationBean
 {
     private User user;
     private SessionBean sb;
+    private boolean sendEmail = false;
     
     private static Logger logger = Logger.getLogger(UserCreationBean.class);
     
@@ -62,7 +60,10 @@ public class UserCreationBean
             	user.setEncryptedPassword(UserController.convertToMD5(password));
                 uc.create(user);
                 
-                sendNewAccountEmail(password);
+                if (sendEmail) 
+                {	
+                	 sendNewAccountEmail(password);
+				}
                 
                 logger.info("New user created: " + user.getEmail());
                 BeanHelper.info(sb.getMessage("success_user_create"));
@@ -139,15 +140,6 @@ public class UserCreationBean
 		catch (Exception e) { return 0; }
     }
     
-    // For testing purpose
-    public String copyDataFromCoreToCore() throws IOException, URISyntaxException, Exception
-    {
-    	Scripts scripts = new Scripts();
-    	
-    	scripts.copyDataFromCoreToCore(sb.getUser());
-    	
-    	return "";
-    }
     
     public void setUser(User user)
     {
@@ -163,4 +155,15 @@ public class UserCreationBean
     {
     	return sb.isAdmin();
     }
+
+	public boolean isSendEmail() 
+	{
+		return sendEmail;
+	}
+
+	public void setSendEmail(boolean sendEmail) 
+	{
+		this.sendEmail = sendEmail;
+	}
+    
 }

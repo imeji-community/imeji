@@ -290,15 +290,9 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
-	<!-- <managed-bean>
-		<managed-bean-name>ApplicationBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.beans.ApplicationBean</managed-bean-class>
-		<managed-bean-scope>application</managed-bean-scope>
-	</managed-bean> -->
-	
 	<converter>
-	    <converter-id>ProfileConverter</converter-id>
-	    <converter-class>de.mpg.imeji.mdProfile.util.ProfileConverter</converter-class>
+	    <converter-id>DoubleConverter</converter-id>
+	    <converter-class>de.mpg.imeji.converter.DoubleConverter</converter-class>
 	</converter>
 	
 

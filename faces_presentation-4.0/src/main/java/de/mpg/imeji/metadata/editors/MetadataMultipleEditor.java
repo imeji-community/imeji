@@ -17,7 +17,7 @@ public class MetadataMultipleEditor extends MetadataEditor
 	}
 
 	@Override
-	public void initialize(List<Image> images) 
+	public void initialize() 
 	{
 		boolean hasStatement = (statement != null);
 		for (Image im : images) 
@@ -32,8 +32,10 @@ public class MetadataMultipleEditor extends MetadataEditor
 						empty = false;
 					}
 				}
-				if (empty && hasStatement) addMetadata(im, 0);
-				this.images.add(im);
+				if (empty && hasStatement)
+				{
+					addMetadata(im, 0);
+				}
 			}
 		}
 	}

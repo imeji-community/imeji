@@ -19,13 +19,19 @@
 		<h:panelGroup layout="block" styleClass="full_area0 itemList">
 		 	<ui:include src="./include/History.xhtml"></ui:include>
 		 </h:panelGroup>
-		<h:outputText value="#{EditImageMetadataBean.init}"/>
+		
+		
 		<h:panelGroup styleClass="full_area0 itemList " >	
 			<br/>
-			<h:panelGroup id="editor" styleClass="full_area0 small_marginLExcl" rendered="#{SessionBean.user != null}">
-				<a4j:outputPanel id="ajaxContent">
-					<h:outputLabel value="#{EditImageMetadataBean.ajaxInit}"/>
-				
+			
+			<a4j:outputPanel id="NonAjaxContent">
+				<h:outputText value="#{EditImageMetadataBean.init}"/>
+			</a4j:outputPanel>
+			
+			<a4j:outputPanel id="ajaxContent">
+			
+				<h:panelGroup id="editor" styleClass="full_area0 small_marginLExcl" rendered="#{SessionBean.user != null}">
+							
 					<h:panelGroup rendered="#{!EditImageMetadataBean.profileWithStatements}">
 						<h2><h:outputText value="#{lbl.profile_empty}"/></h2>
 						<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8">
@@ -38,17 +44,16 @@
 					</h:panelGroup>
 					<!-- MAIN FORMULAR -->
 					
+					<h:panelGroup styleClass="half_area0_p0 huge_marginLExcl">
+						<h:outputLabel for="selStatement" styleClass="full_area0_p0" value="#{lbl.metadata_type_select}"/>
+						<h:selectOneMenu styleClass="huge_area0" id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}">
+							<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
+							<a4j:support event="onchange" ajaxSingle="true" reRender="ajaxContent" action="#{EditImageMetadataBean.changeStatement}"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
 					<h:panelGroup rendered="#{EditImageMetadataBean.profileWithStatements}">
 					
-						<!-- Selectors -->
 						
-						<h:panelGroup styleClass="half_area0_p0 huge_marginLExcl">
-								<h:outputLabel for="selStatement" styleClass="full_area0_p0" value="#{lbl.metadata_type_select}"/>
-								<h:selectOneMenu styleClass="huge_area0" id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" valueChangeListener="#{EditImageMetadataBean.statementListener}" immediate="false">
-									<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
-									<a4j:support event="onchange" reRender="ajaxContent" />
-								</h:selectOneMenu>
-						</h:panelGroup>
 						<h:panelGroup styleClass="full_area0_p8">
 						</h:panelGroup>
 						<!-- COMMON METADATA -->
@@ -166,10 +171,9 @@
 								<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
 							</h:commandButton>
 						</h:panelGroup>
-					</h:panelGroup>	
-
-	        	</a4j:outputPanel> 
-			</h:panelGroup>
+					</h:panelGroup>		        	
+				</h:panelGroup>
+			</a4j:outputPanel> 
 		</h:panelGroup>
 		
 		<rich:modalPanel id="panelSaveWait" width="390" height="100" style="background-color:#434343" domElementAttachment="form">

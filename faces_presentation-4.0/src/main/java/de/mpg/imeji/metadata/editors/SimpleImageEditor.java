@@ -18,7 +18,7 @@ public class SimpleImageEditor extends MetadataEditor
 	}
 
 	@Override
-	public void initialize(List<Image> images) 
+	public void initialize() 
 	{
 	}
 	

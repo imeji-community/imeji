@@ -1,21 +1,14 @@
 package de.mpg.imeji.metadata.editors;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
-import org.richfaces.json.JSONCollection;
-import org.richfaces.json.JSONException;
 
-import thewebsemantic.LocalizedString;
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ProfileHelper;
 import de.mpg.jena.controller.ImageController;
-//import de.mpg.jena.util.MetadataFactory;
 import de.mpg.jena.vo.Image;
 import de.mpg.jena.vo.ImageMetadata;
 import de.mpg.jena.vo.MetadataProfile;
@@ -40,7 +33,8 @@ public abstract class  MetadataEditor
 	{
 		this.statement = statement;
 		this.profile = profile;
-		initialize(images);
+		this.images = images;
+		initialize();
 	}
 	
 	public void save()
@@ -100,7 +94,7 @@ public abstract class  MetadataEditor
 		}
 	}
 
-	public abstract void initialize(List<Image> images);
+	public abstract void initialize();
 	
 	public abstract boolean prepareUpdate();
 	
@@ -140,7 +134,8 @@ public abstract class  MetadataEditor
 		return images;
 	}
 
-	public void setImages(List<Image> images) {
+	public void setImages(List<Image> images) 
+	{
 		this.images = images;
 	}
 

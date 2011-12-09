@@ -18,7 +18,7 @@ public class MetadataBatchEditor extends MetadataEditor
 	}
 
 	@Override
-	public void initialize(List<Image> images) 
+	public void initialize() 
 	{
 		originalImages = images;
 		this.images = new ArrayList<Image>();

@@ -209,12 +209,7 @@
 	<!-- Search Pages -->
 	<url-mapping id="forImages">
 		<pattern value="/search"></pattern>
-		<view-id>/jsf/SearchPictures.xhtml</view-id>
-	</url-mapping>
-	
-	<url-mapping id="forContainers">
-		<pattern value="/search/collections"></pattern>
-		<view-id>/jsf/SearchCollections.xhtml</view-id>
+		<view-id>/jsf/SearchAdvanced.xhtml</view-id>
 	</url-mapping>
 	
 

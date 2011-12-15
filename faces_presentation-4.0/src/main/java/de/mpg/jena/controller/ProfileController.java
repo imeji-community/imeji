@@ -13,6 +13,8 @@ import de.mpg.jena.ImejiBean2RDF;
 import de.mpg.jena.ImejiJena;
 import de.mpg.jena.ImejiRDF2Bean;
 import de.mpg.jena.search.ImejiSPARQL;
+import de.mpg.jena.search.Search;
+import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Grant;
 import de.mpg.jena.vo.Grant.GrantType;
@@ -115,6 +117,12 @@ public class ProfileController extends ImejiController
     	return (List<MetadataProfile>)rdf2Bean.load(MetadataProfile.class);
     }
     
+    /**
+     * To be replaced, with a more generic method
+     * 
+     * @return
+     * @deprecated
+     */
     public  List<MetadataProfile> search()
     {
     	String q = "SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/mdprofile> . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/status> ?status " +
@@ -123,7 +131,8 @@ public class ProfileController extends ImejiController
     	q += "?status=<http://imeji.mpdl.mpg.de/status/RELEASED> || (?status!=<http://imeji.mpdl.mpg.de/status/WITHDRAWN> && (";
     	
     	int i=0;
-    	for(Grant g : user.getGrants())
+
+		for(Grant g : user.getGrants())
     	{
     		if (GrantType.SYSADMIN.equals(g.getGrantType()))
     		{
@@ -138,11 +147,11 @@ public class ProfileController extends ImejiController
     			i++;
     		}
     	}
-    	
     	q += " )))}";
     	
     	return ImejiSPARQL.execAndLoad(q, MetadataProfile.class);
     }
+    
     
     public MetadataProfile retrieve(String id) throws Exception
     {

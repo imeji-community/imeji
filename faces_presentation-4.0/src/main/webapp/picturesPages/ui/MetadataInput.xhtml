@@ -39,7 +39,7 @@
 
 	<h:panelGroup layout="block" styleClass="free_area0">
 		
-		<h:outputLabel value="#{MetadataLabels.internationalizedLabels[metadata.namespace]} (#{MetadataLabels.lang})" styleClass="huge_label"/>
+		<h:outputLabel value="#{MetadataLabels.internationalizedLabels[metadata.namespace]} (#{MetadataLabels.lang})" rendered="#{hideLabel != true}" styleClass="huge_label"/>
 		
 		<!-- METADATA TYPE TEXT -->
 		<h:inputTextarea id="inputText" name="inputText" styleClass="#{areaClass} inputTxtArea" immediate="false" value="#{metadata.text}" rendered="#{metadata.type =='TEXT'  and !SuggestBean.suggests[metadata.namespace].hasRestrictedValues}">

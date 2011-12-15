@@ -98,14 +98,9 @@
 	
 	<!-- Search Bean -->
 	<managed-bean>
-		<managed-bean-name>AnyFieldCriterionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.search.beans.AnyFieldCriterionBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>AdvancedSearchController</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.search.AdvancedSearchController</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-name>AdvancedSearchBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.search.AdvancedSearchBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<!-- Profiles bean -->

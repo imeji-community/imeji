@@ -1,7 +1,12 @@
 package de.mpg.jena.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.mpg.jena.vo.ComplexType;
+import de.mpg.jena.vo.Statement;
+import de.mpg.jena.vo.complextypes.util.ComplexTypeHelper;
 
 public class SearchCriterion {
 
@@ -13,27 +18,27 @@ public class SearchCriterion {
 
 	public enum Filtertype
 	{
-	    REGEX, URI, EQUALS, BOUND, EQUALS_NUMBER, GREATER_NUMBER, LESSER_NUMBER, EQUALS_DATE, GREATER_DATE, LESSER_DATE, NOT;
+		REGEX, URI, EQUALS, BOUND, EQUALS_NUMBER, GREATER_NUMBER, LESSER_NUMBER, EQUALS_DATE, GREATER_DATE, LESSER_DATE, NOT;
 	}
 
 	public enum ImejiNamespaces {
 
-	    ID_URI("http://imeji.mpdl.mpg.de/id"),
-	    
-	    MY_IMAGES("http://imeji.mpdl.mpg.de/"),
-	    
-	    PROPERTIES("http://imeji.mpdl.mpg.de/properties"),
-		
+		ID_URI("http://imeji.mpdl.mpg.de/id"),
+
+		MY_IMAGES("http://imeji.mpdl.mpg.de/"),
+
+		PROPERTIES("http://imeji.mpdl.mpg.de/properties"),
+
 		PROPERTIES_CREATED_BY("http://imeji.mpdl.mpg.de/createdBy", PROPERTIES),
 		PROPERTIES_CREATED_BY_USER_GRANT("http://xmlns.com/foaf/0.1/grants", PROPERTIES_CREATED_BY),
 		PROPERTIES_CREATED_BY_USER_GRANT_TYPE("http://imeji.mpdl.mpg.de/grantType", PROPERTIES_CREATED_BY_USER_GRANT),
 		PROPERTIES_CREATED_BY_USER_GRANT_FOR("http://imeji.mpdl.mpg.de/grantFor", PROPERTIES_CREATED_BY_USER_GRANT),
-		
+
 		PROPERTIES_MODIFIED_BY("http://imeji.mpdl.mpg.de/modifiedBy", PROPERTIES),
 		PROPERTIES_CREATION_DATE("http://imeji.mpdl.mpg.de/creationDate", PROPERTIES),
 		PROPERTIES_LAST_MODIFICATION_DATE("http://imeji.mpdl.mpg.de/lastModificationDate", PROPERTIES),
 		PROPERTIES_STATUS("http://imeji.mpdl.mpg.de/status", PROPERTIES),
-		
+
 		IMAGE_FILENAME("http://imeji.mpdl.mpg.de/filename"),
 		IMAGE_VISIBILITY("http://imeji.mpdl.mpg.de/visibility"),
 		IMAGE_METADATA_SET("http://imeji.mpdl.mpg.de/metadataSet"),
@@ -54,7 +59,7 @@ public class SearchCriterion {
 		IMAGE_METADATA_TEXT("http://imeji.mpdl.mpg.de/metadata/text", IMAGE_METADATA),
 		IMAGE_METADATA_DATE("http://imeji.mpdl.mpg.de/metadata/dateTime", IMAGE_METADATA),
 		IMAGE_METADATA_NUMBER("http://imeji.mpdl.mpg.de/metadata/number", IMAGE_METADATA),
-	    
+
 		IMAGE_COLLECTION("http://imeji.mpdl.mpg.de/collection"),
 		IMAGE_COLLECTION_PROFILE("http://imeji.mpdl.mpg.de/mdprofile", IMAGE_COLLECTION),
 
@@ -68,36 +73,36 @@ public class SearchCriterion {
 		CONTAINER_METADATA_PERSON_ORGANIZATION("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit", CONTAINER_METADATA_PERSON, true),
 		CONTAINER_METADATA_PERSON_ORGANIZATION_NAME("http://purl.org/dc/elements/1.1/title", CONTAINER_METADATA_PERSON_ORGANIZATION),
 		COLLECTION_PROFILE("http://imeji.mpdl.mpg.de/mdprofile");
-		
+
 
 		private String ns;
 		private ImejiNamespaces parent;
 		private List<ImejiNamespaces> children = new ArrayList<ImejiNamespaces>();
 		private boolean listType = false;;
-		
+
 		private ImejiNamespaces(String ns) {
 			this.ns = ns;
 		}
-		
+
 		private ImejiNamespaces(String ns, ImejiNamespaces parent) {
 			this.ns = ns;
 			this.parent = parent;
 			if(parent!=null && !parent.getChildren().contains(this))
 			{
-			    parent.getChildren().add(this);
+				parent.getChildren().add(this);
 			}
 		}
-		
+
 		private ImejiNamespaces(String ns, ImejiNamespaces parent, boolean listType) {
-            this.ns = ns;
-            this.parent = parent;
-            this.setListType(listType);
-            if(parent!=null && !parent.getChildren().contains(this))
-            {
-                parent.getChildren().add(this);
-            }
-        }
-		
+			this.ns = ns;
+			this.parent = parent;
+			this.setListType(listType);
+			if(parent!=null && !parent.getChildren().contains(this))
+			{
+				parent.getChildren().add(this);
+			}
+		}
+
 		public void setNs(String ns) {
 			this.ns = ns;
 		}
@@ -114,28 +119,28 @@ public class SearchCriterion {
 			this.parent = parent;
 		}
 
-        public void setChildren(List<ImejiNamespaces> children)
-        {
-            this.children = children;
-        }
+		public void setChildren(List<ImejiNamespaces> children)
+		{
+			this.children = children;
+		}
 
-        public List<ImejiNamespaces> getChildren()
-        {
-            return children;
-        }
+		public List<ImejiNamespaces> getChildren()
+		{
+			return children;
+		}
 
-        public void setListType(boolean listType)
-        {
-            this.listType = listType;
-        }
+		public void setListType(boolean listType)
+		{
+			this.listType = listType;
+		}
 
-        public boolean isListType()
-        {
-            return listType;
-        }
-       
+		public boolean isListType()
+		{
+			return listType;
+		}
+
 	}
-	
+
 	private ImejiNamespaces namespace;
 	private String value;
 	private Operator operator = Operator.AND;	
@@ -144,35 +149,31 @@ public class SearchCriterion {
 	private SearchCriterion parent;
 	private boolean inverse = false;
 	private boolean bound = false;
-	
+
 	public SearchCriterion()
 	{
-	    
+
 	}
-	
-	
+
 	public SearchCriterion(ImejiNamespaces namespace, String value)
 	{
 		this.namespace = namespace;
 		this.value = value;
-		
 	}
-	
+
 	public SearchCriterion(Operator op, ImejiNamespaces namespace, String value, Filtertype filterType)
 	{
 		this.namespace = namespace;
 		this.value = value;
 		this.operator = op;
 		this.filterType = filterType;
-		
 	}
-	
+
 	public SearchCriterion(Operator op,  List<SearchCriterion> children)
 	{
-        this.operator = op;
-	    this.children = children;
-        
-    }
+		this.operator = op;
+		this.children = children;
+	}
 
 	public ImejiNamespaces getNamespace() {
 		return namespace;
@@ -198,58 +199,51 @@ public class SearchCriterion {
 		this.operator = operator;
 	}
 
-  
+	public void setFilterType(Filtertype filterType)
+	{
+		this.filterType = filterType;
+	}
 
-    public void setFilterType(Filtertype filterType)
-    {
-        this.filterType = filterType;
-    }
+	public Filtertype getFilterType()
+	{
+		return filterType;
+	}
 
-    public Filtertype getFilterType()
-    {
-        return filterType;
-    }
+	public void setChildren(List<SearchCriterion> children)
+	{
+		this.children = children;
+	}
 
-    public void setChildren(List<SearchCriterion> children)
-    {
-        this.children = children;
-    }
+	public List<SearchCriterion> getChildren()
+	{
+		return children;
+	}
 
-    public List<SearchCriterion> getChildren()
-    {
-        return children;
-    }
+	public void setInverse(boolean inverse)
+	{
+		this.inverse = inverse;
+	}
 
-    public void setInverse(boolean inverse)
-    {
-        this.inverse = inverse;
-    }
+	public boolean isInverse()
+	{
+		return inverse;
+	}
 
-    public boolean isInverse()
-    {
-        return inverse;
-    }
+	public void setParent(SearchCriterion parent)
+	{
+		this.parent = parent;
+	}
 
-
-    public void setParent(SearchCriterion parent)
-    {
-        this.parent = parent;
-    }
-
-
-    public SearchCriterion getParent()
-    {
-        return parent;
-    }
-
+	public SearchCriterion getParent()
+	{
+		return parent;
+	}
 
 	public boolean isBound() {
 		return bound;
 	}
 
-
 	public void setBound(boolean bound) {
 		this.bound = bound;
 	}
-    
 }

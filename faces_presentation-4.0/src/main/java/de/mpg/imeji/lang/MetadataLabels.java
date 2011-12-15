@@ -2,6 +2,7 @@ package de.mpg.imeji.lang;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,13 @@ public class MetadataLabels implements Serializable
 
 		Map<URI, MetadataProfile> profiles = ProfileHelper.loadProfiles(images);
 		
+		init1(new ArrayList<MetadataProfile>(profiles.values()));
+	}
+	
+	public void init1(List<MetadataProfile> profiles) throws Exception
+	{
 		HashMap<URI, String> map = new HashMap<URI, String>();
-		
-		for (MetadataProfile p : profiles.values())
+		for (MetadataProfile p : profiles)
 		{
 			if (p != null)
 			{

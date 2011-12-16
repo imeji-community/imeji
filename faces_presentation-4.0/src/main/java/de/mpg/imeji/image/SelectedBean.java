@@ -15,15 +15,9 @@ import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.album.AlbumImagesBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
-import de.mpg.imeji.collection.CollectionImagesBean;
-import de.mpg.imeji.history.HistorySession;
-import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
-import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.controller.AlbumController;
-import de.mpg.jena.controller.CollectionController;
-import de.mpg.jena.controller.ImageController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.search.SearchResult;
@@ -44,7 +38,12 @@ public class SelectedBean extends ImagesBean  implements Serializable
 		this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 		backUrl = navigation.getImagesUrl();
-		
+	}
+	
+	public String getInitComment()
+	{
+		setDiscardComment("");
+		return "";
 	}
 
 	@Override

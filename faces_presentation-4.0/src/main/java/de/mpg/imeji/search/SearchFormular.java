@@ -1,23 +1,16 @@
 package de.mpg.imeji.search;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.model.SelectItem;
-
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.lang.MetadataLabels;
-import de.mpg.imeji.util.BeanHelper;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Operator;
-import de.mpg.jena.search.Search;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.MetadataProfile;
-import de.mpg.jena.vo.Statement;
 
 public class SearchFormular 
 {
@@ -40,8 +33,6 @@ public class SearchFormular
 		this.collectionsMap = collectionsMap;
 		this.profilesMap = profilesMap;
 		
-		
-		
 		for (SearchCriterion sc : scList)
 		{
 			String collectionId = SearchFormularHelper.getCollectionId(sc.getChildren());
@@ -56,7 +47,11 @@ public class SearchFormular
 
 		for (FormularGroup g : groups)
 		{
-			scList.add(new SearchCriterion(Operator.AND, g.getAsSCList()));
+			List<SearchCriterion> subList = g.getAsSCList();
+			if (subList.size() > 0)
+			{
+				scList.add(new SearchCriterion(Operator.AND, g.getAsSCList()));
+			}
 		}
 
 		return scList;
@@ -104,7 +99,7 @@ public class SearchFormular
 		String namespace =  (String) group.getStatementMenu().get(0).getValue();
 
 		fe.setNamespace(namespace);
-		fe.initStatementType(profilesMap.get(group.getCollectionId()), namespace);
+		fe.initStatement(profilesMap.get(group.getCollectionId()), namespace);
 		fe.initFiltersMenu();
 		
 		if (elPos >= group.getElements().size())
@@ -123,14 +118,19 @@ public class SearchFormular
 	 * @param groupPos
 	 * @param elPos
 	 */
-	public void changeElement(int groupPos, int elPos)
+	public void changeElement(int groupPos, int elPos, boolean keepValue)
 	{
 		FormularGroup group = groups.get(groupPos);
 		FormularElement fe = group.getElements().get(elPos);
 		String collectionId = group.getCollectionId();
 		String namespace = fe.getNamespace();
-		fe.initStatementType(profilesMap.get(collectionId), namespace);
+		fe.initStatement(profilesMap.get(collectionId), namespace);
 		fe.initFiltersMenu();
+		if (!keepValue) 
+		{
+			fe.setSearchValue("");
+		}
+		
 	}
 
 	public void removeElement(int groupPos, int elPos)

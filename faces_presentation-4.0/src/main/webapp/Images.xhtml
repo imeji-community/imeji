@@ -56,9 +56,18 @@
 						<h:outputText value="#{lbl.export_metadata}"/>
 					</h:outputLink>
 				</h:panelGroup>
-				
-				
 			</ui:define>
+			<ui:define name="searchQuery">
+				<h:panelGroup styleClass="full_area0 small_marginLExcl">
+					<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p2"/>
+					<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl">
+						<h:outputText value="#{ImagesBean.simpleQuery}" styleClass="free_area0_p2"/>
+	               		<h:outputLink value="#{Navigation.searchUrl}?q=#{paginatorListSessionBean.query}" rendered="#{paginatorListSessionBean.query != null}" styleClass="free_area0 ">
+							<h:outputText value="#{lbl.search_revise}" styleClass="xTiny_marginLExcl free_area0_p2 "/>
+						</h:outputLink>
+					</h:panelGroup>
+           		</h:panelGroup>
+            </ui:define>
 	</ui:composition>
 
 </body>

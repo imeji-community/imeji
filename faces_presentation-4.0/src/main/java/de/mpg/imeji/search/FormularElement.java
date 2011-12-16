@@ -1,6 +1,5 @@
 package de.mpg.imeji.search;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import thewebsemantic.LocalizedString;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
@@ -22,8 +22,9 @@ public class FormularElement
 	private Filtertype filter;
 	private Operator operator;
 	private String namespace;
-	private URI statementType;
 	private List<SelectItem> filtersMenu;
+	private List<SelectItem> predefinedValues;
+	private Statement statement;
 	
 	private Logger logger = Logger.getLogger(FormularElement.class);
 
@@ -50,14 +51,14 @@ public class FormularElement
 			}
 		}
 		
-		initStatementType(profile, namespace);
+		initStatement(profile, namespace);
 		initFiltersMenu();
 	}
 
 	public void initFiltersMenu()
 	{
 		filtersMenu = new ArrayList<SelectItem>();
-		switch (ComplexTypeHelper.getComplexType(statementType)) 
+		switch (ComplexTypeHelper.getComplexType(statement.getType())) 
 		{
 		case DATE:
 			filtersMenu.add(new SelectItem(Filtertype.EQUALS_DATE, "="));
@@ -74,6 +75,31 @@ public class FormularElement
 			filtersMenu = null;
 		}
 	}
+	
+	public void initStatement(MetadataProfile p, String namespace)
+	{
+		for (Statement st : p.getStatements())
+		{
+			if (st.getName().toString().equals(namespace))
+			{
+				statement = st;
+			}
+		}
+		initPredefinedValues(p);
+	}
+	
+	public void initPredefinedValues(MetadataProfile profile)
+	{
+		if (statement.getLiteralConstraints().size() > 0)
+		{	
+			predefinedValues = new ArrayList<SelectItem>();
+			for (LocalizedString s :statement.getLiteralConstraints())
+			{
+				predefinedValues.add(new SelectItem(s, s.toString()));
+			}
+		}
+		else predefinedValues = null;
+	}
 
 	public List<SearchCriterion> getAsSCList()
 	{
@@ -83,10 +109,8 @@ public class FormularElement
 		{
 			return scList;
 		}
-		
-		if(statementType == null) throw new RuntimeException("Statement Type of formular element " + namespace + " is null!");
 
-		switch (ComplexTypeHelper.getComplexType(statementType)) 
+		switch (ComplexTypeHelper.getComplexType(statement.getType())) 
 		{
 		case DATE:
 			SearchCriterion scDate = new SearchCriterion(operator,ImejiNamespaces.IMAGE_METADATA_DATE, searchValue, filter);
@@ -132,18 +156,6 @@ public class FormularElement
 
 		return scList;
 	}
-	
-	public void initStatementType(MetadataProfile p, String namespace)
-	{
-		for (Statement st : p.getStatements())
-		{
-			if (st.getName().toString().equals(namespace))
-			{
-				statementType = st.getType();
-			}
-		}
-	}
-
 
 	public String getSearchValue()
 	{
@@ -164,15 +176,15 @@ public class FormularElement
 		this.namespace = namespace;
 	}
 
-	public URI getStatementType() 
-	{
-		return statementType;
-	}
-
-	public void setStatementType(URI statementType) 
-	{
-		this.statementType = statementType;
-	}
+//	public URI getStatementType() 
+//	{
+//		return statementType;
+//	}
+//
+//	public void setStatementType(URI statementType) 
+//	{
+//		this.statementType = statementType;
+//	}
 
 	public Operator getOperator() {
 		return operator;
@@ -198,6 +210,15 @@ public class FormularElement
 		this.filtersMenu = filtersMenu;
 	}
 
+	public List<SelectItem> getPredefinedValues() {
+		return predefinedValues;
+	}
+
+	public void setPredefinedValues(List<SelectItem> predefinedValues) {
+		this.predefinedValues = predefinedValues;
+	}
+
+	
 
 
 }

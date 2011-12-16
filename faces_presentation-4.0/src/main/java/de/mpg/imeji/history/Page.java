@@ -13,7 +13,7 @@ public class Page implements Serializable
 {
 	public enum ImejiPages
 	{
-		IMAGES("Images.xhtml", "history_images"), COLLECTION_IMAGES("CollectionBrowse.xhtml", "history_images_collection"), SEARCH("SearchPictures.xhtml", "history_advanced_search"),
+		IMAGES("Images.xhtml", "history_images"), COLLECTION_IMAGES("CollectionBrowse.xhtml", "history_images_collection"), SEARCH("AdvancedSearch.xhtml", "history_advanced_search"),
 		HOME("Welcome.xhtml", "history_home"), IMAGE("Image.xhtml", "history_image"), COLLECTIONS("Collections.xhtml", "history_collections"), ALBUMS("Albums.xhtml", "history_albums"),
 		COLLECTION_HOME("CollectionEntryPage.xhtml", "Collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "Search results"), EDIT("Edit.xhtml", "Edit images"),
 		COLLECTION_IMAGE("CollectionImage.xhtml","history_image"),ALBUM_IMAGES("AlbumBrowse.xhtml", "history_images_album"), ALBUM_HOME("AlbumEntryPage.xhtml", "history_album"),

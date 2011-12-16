@@ -57,9 +57,6 @@
 					<h:outputLink value="#{Navigation.imagesUrl}/collection/#{paginatorListSessionBean.id}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}" styleClass="free_area0 ">
 						<h:outputText value="[x]" styleClass="free_area0 "/>
 					</h:outputLink>
-					<h:outputLink value="#{Navigation.searchUrl}?revise=#{paginatorListSessionBean.query}" rendered="#{paginatorListSessionBean.query != null}" styleClass="free_area0 ">
-						<h:outputText value="#{lbl.revise}" styleClass="free_area0 "/>
-					</h:outputLink>
 					<span style="padding-left: 1px" />
 				</a4j:repeat>
 				

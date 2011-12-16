@@ -153,26 +153,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 		return controller.loadImages(searchResult.getResults(), getElementsPerPage(), getOffset());
 	}
 
-	//for testing purpose
-	public String export()
+	public String getSimpleQuery()
 	{
-		Export export = new Export();
-		OutputStream outputStream;
-		
-		Model exportModel = null;
-		
-		for(ThumbnailBean th : getCurrentPartList())
-		{
-			if (exportModel == null)
-				exportModel = ImejiJena.imageModel.read(th.getId().toString());
-			else
-				exportModel = exportModel.union(ImejiJena.imageModel.read(th.getId().toString()));
-		}
-		
-		exportModel.write(System.out);
-		return "";
+		return URLQueryTransformer.transform2SimpleQuery(scList);
 	}
-
+	
 	public void initBackPage()
 	{
 		HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
@@ -412,14 +397,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 		return getNavigationString();
 	}
 
-	//	public Collection<Image> getImages() {
-		//		return images;
-	//	}
-	//
-	//	public void setImages(Collection<Image> images) {
-	//		this.images = images;
-	//	}
-
 	/**
 	 * Check that at leat one image is editable
 	 */
@@ -467,7 +444,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 	}
 
 	public void setDiscardComment(String discardComment) {
-		if (discardComment != "")
+		//if (discardComment != "")
 			this.discardComment = discardComment;
 	}
 

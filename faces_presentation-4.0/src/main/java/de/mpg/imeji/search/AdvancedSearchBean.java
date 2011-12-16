@@ -34,6 +34,7 @@ public class AdvancedSearchBean implements Serializable
 
 	private SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 	private static Logger logger = Logger.getLogger(AdvancedSearchBean.class);
+	
 
 	public AdvancedSearchBean() 
 	{
@@ -62,6 +63,7 @@ public class AdvancedSearchBean implements Serializable
 		Map<String, CollectionImeji> cols = loadCollections();
 		Map<String, MetadataProfile> profs = loadProfiles(cols.values());
 		((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init1((new ArrayList<MetadataProfile>(profs.values())));
+
 		formular = new SearchFormular(scList, cols, profs);
 		if (formular.getGroups().size() == 0)
 		{
@@ -111,8 +113,11 @@ public class AdvancedSearchBean implements Serializable
 
 	public String search()
 	{
-		ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class); 
-		bean.setQuery(URLQueryTransformer.transform2URL(formular.getFormularAsSCList()));
+		ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class);
+		List<SearchCriterion> scList = formular.getFormularAsSCList();
+		bean.setQuery(URLQueryTransformer.transform2URL(scList));
+		bean.setScList(scList);
+		bean.getFacets().getFacets().clear();
 		
 		if (bean.getQuery() == null || "".equals(bean.getQuery().trim()))
 		{
@@ -148,7 +153,14 @@ public class AdvancedSearchBean implements Serializable
 	{
 		int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("gPos"));
 		int elPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("elPos"));
-		formular.changeElement(gPos, elPos);
+		formular.changeElement(gPos, elPos, false);
+	}
+	
+	public void updateElement()
+	{
+		int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("gPos"));
+		int elPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("elPos"));
+		formular.changeElement(gPos, elPos, true);
 	}
 
 	public void addElement()
@@ -171,6 +183,11 @@ public class AdvancedSearchBean implements Serializable
 		}
 	}
 
+	public String getSimpleQuery()
+	{
+		return URLQueryTransformer.transform2SimpleQuery(formular.getFormularAsSCList());
+	}
+	
 	public List<SelectItem> getCollectionsMenu() {
 		return collectionsMenu;
 	}

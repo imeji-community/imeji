@@ -2,6 +2,7 @@ package de.mpg.imeji.search;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.Filtertype;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SearchCriterion.Operator;
+import de.mpg.jena.util.ObjectHelper;
 
 public class URLQueryTransformer 
 {
@@ -143,6 +145,118 @@ public class URLQueryTransformer
     		}
 		}
 		return query;
+	}
+	
+	public static String transform2SimpleQuery(List<SearchCriterion> scList)
+	{
+		String query ="";
+		
+		String metadataNamespace = null;
+		String metadataValue = null;
+		String filename = null;
+		Filtertype filter = Filtertype.EQUALS;
+		
+		for (SearchCriterion sc : scList) 
+		{
+			if (!"".equals(query) 
+					|| Operator.NOTAND.equals(sc.getOperator())
+					|| Operator.NOTOR.equals(sc.getOperator()))
+    		{
+				query += " " + sc.getOperator().name() + " ";
+    		}
+			if (sc.getChildren().size() > 0) 
+    		{
+				String subquery = transform2SimpleQuery(sc.getChildren());
+				if (subquery.contains("OR") || subquery.contains("AND"))
+				{
+					query += " ( ";
+				}
+    			query +=  subquery;
+    			if (subquery.contains("OR") || subquery.contains("AND"))
+				{
+    				query += " ) ";
+				}
+			}
+    		else
+    		{
+    			String value = "";
+    			if (sc.getValue() != null) value = sc.getValue();
+    			if (sc.getNamespace() != null)
+    			{
+    				if (sc.getNamespace().name().contains(ImejiNamespaces.IMAGE_METADATA.name()))
+    				{
+    					if (sc.getNamespace().equals(ImejiNamespaces.IMAGE_METADATA_NAMESPACE))
+    					{
+    						metadataNamespace = value;
+    					}
+    					else
+    					{
+    						metadataValue = value;
+    						filter = sc.getFilterType();
+    					}
+    				}
+    				else if(sc.getNamespace().equals(ImejiNamespaces.IMAGE_FILENAME))
+    				{
+    					filename = value;
+    				}
+    				else
+    				{
+    					query += " " + getNamespaceAsLabel(sc.getNamespace().getNs()) + getFilterAsLabel(sc.getFilterType()) + getIdAsLabel(value) + "  ";
+    				}
+    				
+    				if(metadataNamespace != null && metadataValue != null)
+    				{
+    					query += " " + getNamespaceAsLabel(metadataNamespace) + getFilterAsLabel(filter) + metadataValue;
+    				}
+    				if (filename != null && metadataValue != null)
+    				{
+    					query += " Simple search for: ' " + value + " '";
+    				}
+    			}
+    		}
+		}
+		return query;
+	}
+	
+	public static String getNamespaceAsLabel(String namespace)
+	{
+		String s[] =  namespace.split("/");
+		if (s.length > 0)
+		{
+			return namespace.split("/")[s.length -1];
+		}
+		return namespace;
+	}
+	
+	public static String getIdAsLabel(String uri)
+	{
+		if(URI.create(uri).isAbsolute())
+		{
+			String id = ObjectHelper.getId(URI.create(uri));
+			
+			if (id != null)
+			{
+				return "id " + id;
+			}
+		}
+		return uri;
+	}
+	
+	public static String getFilterAsLabel(Filtertype filter)
+	{
+		switch (filter) 
+		{
+		case GREATER_DATE:
+			return " >= ";
+		case GREATER_NUMBER:
+			return " >= ";
+		case LESSER_DATE:
+			return " =< ";
+		case LESSER_NUMBER:
+			return " =< ";
+		default:
+			return " = ";
+		}
 	}
 	
 }

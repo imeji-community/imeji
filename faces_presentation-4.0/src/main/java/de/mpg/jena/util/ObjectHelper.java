@@ -41,7 +41,7 @@ public class ObjectHelper
 
     public static String getId(URI uri)
     {
-        return uri.toString().substring(uri.toString().lastIndexOf("/"), uri.toString().length());
+        return uri.toString().substring(uri.toString().lastIndexOf("/"), uri.toString().length()).replace("/", "");
     }
 
     /**

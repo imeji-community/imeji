@@ -19,7 +19,6 @@ public abstract class  MetadataEditor
 	protected List<Image> images = new ArrayList<Image>();
 	protected Statement statement;
 	protected MetadataProfile profile;
-	protected boolean erase = false;
 	//protected Validator validator;
 	
 	private static Logger logger = Logger.getLogger(MetadataEditor.class);
@@ -120,15 +119,6 @@ public abstract class  MetadataEditor
 		}
 		return null;
 	}
-	
-	protected boolean hasProfile(Image image)
-	{
-		if (profile != null && profile.getId().equals(ProfileHelper.loadProfile(image).getId()))
-		{
-			return true;
-		}
-		return false;
-	}
 
 	public List<Image> getImages() {
 		return images;
@@ -145,14 +135,6 @@ public abstract class  MetadataEditor
 
 	public void setStatement(Statement statement) {
 		this.statement = statement;
-	}
-
-	public boolean isErase() {
-		return erase;
-	}
-
-	public void setErase(boolean erase) {
-		this.erase = erase;
 	}
 
 	public MetadataProfile getProfile() {

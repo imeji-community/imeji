@@ -120,6 +120,8 @@ public class ObjectLoader
 	{
 		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel(objectType) + " " + id + " "
 				+ ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("not_found"));
+		logger.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel(objectType) + " " + id + " "
+				+ ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("not_found"));
 	}
 	
 	private static void writeException(Exception e, String id)

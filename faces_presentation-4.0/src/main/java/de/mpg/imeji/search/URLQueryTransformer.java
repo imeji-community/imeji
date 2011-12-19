@@ -99,23 +99,23 @@ public class URLQueryTransformer
 		
 		return scList;
 	}
-		
-	/**
-	 * Use transform2URL
-	 * @param scList
-	 * @return
-	 */
-	@Deprecated
-	public static String transform2URLAdvanced(List<List<SearchCriterion>> scList)
-	{
-		String query ="";
-		for (List<SearchCriterion> l : scList) 
-		{
-			query += transform2URL(l);
-		}
-		return query;
-	}
 	
+	public static boolean isSimpleSearch(List<SearchCriterion> scList)
+	{
+		for (SearchCriterion sc : scList) 
+		{			
+			if (sc.getChildren().size()> 0)
+			{
+				return isSimpleSearch(sc.getChildren());
+			}
+			if(ImejiNamespaces.IMAGE_METADATA_SEARCH.equals(sc.getNamespace()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static String transform2URL(List<SearchCriterion> scList)
 	{
 		String query ="";
@@ -208,9 +208,10 @@ public class URLQueryTransformer
     				{
     					query += " " + getNamespaceAsLabel(metadataNamespace) + getFilterAsLabel(filter) + metadataValue;
     				}
+    				
     				if (filename != null && metadataValue != null)
     				{
-    					query += " Simple search for: ' " + value + " '";
+    					query += value;
     				}
     			}
     		}

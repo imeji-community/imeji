@@ -1,6 +1,5 @@
 package de.mpg.imeji.image;
 
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,13 +9,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import com.hp.hpl.jena.rdf.model.Model;
-
 import de.mpg.imeji.album.AlbumBean;
 import de.mpg.imeji.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.beans.Navigation;
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.facet.Facet;
+import de.mpg.imeji.facet.Facet.FacetType;
 import de.mpg.imeji.facet.FacetsBean;
+import de.mpg.imeji.filter.Filter;
 import de.mpg.imeji.filter.FiltersBean;
 import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.history.HistorySession;
@@ -24,7 +24,6 @@ import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.imeji.util.BeanHelper;
 import de.mpg.imeji.util.ImejiFactory;
 import de.mpg.imeji.util.PropertyReader;
-import de.mpg.jena.ImejiJena;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -32,7 +31,6 @@ import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;
 import de.mpg.jena.controller.SortCriterion;
 import de.mpg.jena.controller.SortCriterion.SortOrder;
-import de.mpg.jena.search.Export;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.vo.CollectionImeji;
 import de.mpg.jena.vo.Image;
@@ -48,7 +46,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 	protected FiltersBean filters;
 	private String query;
 	private Navigation navigation;
-
+	private Filter searchFilter;
+	private boolean isSimpleSearch;
+	
 	private List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
 
 	private String discardComment;
@@ -58,6 +58,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 		super();
 		sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
 		navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+		filters = new FiltersBean();
 		initMenus();
 		try 
 		{
@@ -84,6 +85,34 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 	public String getInitPage()
 	{
 		initMenus();
+		
+		if (facets != null)
+		{
+			facets.getFacets().clear(); 
+		}
+	
+		initBackPage();
+
+		try 
+		{
+			scList = URLQueryTransformer.transform2SCList(query);
+		} 
+		catch (Exception e) 
+		{
+			BeanHelper.error("Error parsing query");
+			logger.error("Error parsing query", e);
+		}
+		
+		for (Filter f : filters.getSession().getFilters())
+		{
+			if (FacetType.SEARCH.equals(f.getType()))
+			{
+				searchFilter = f;
+			}
+		}
+		
+		isSimpleSearch = URLQueryTransformer.isSimpleSearch(scList);
+		
 		return "";
 	}
 
@@ -116,23 +145,16 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 	}
 
 	@Override
-	public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
+	public List<ThumbnailBean> retrieveList(int offset, int limit)
 	{		
-		if (facets != null)
-		{
-			facets.getFacets().clear(); 
-		}
 		SortCriterion sortCriterion = new SortCriterion();
 		sortCriterion.setSortingCriterion(ImejiNamespaces.valueOf(getSelectedSortCriterion()));
 		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-
-		initBackPage();
-
-		scList = URLQueryTransformer.transform2SCList(query);
+		
 		SearchResult searchResult = search(scList, sortCriterion);
 		searchResult.setQuery(query);
 		searchResult.setSort(sortCriterion);
-		FacesContext.getCurrentInstance().renderResponse();
+
 		totalNumberOfRecords = searchResult.getNumberOfRecords();
 		
 		// load images
@@ -155,7 +177,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 
 	public String getSimpleQuery()
 	{
-		return URLQueryTransformer.transform2SimpleQuery(scList);
+		if (searchFilter != null)
+		{
+			return URLQueryTransformer.transform2SimpleQuery(searchFilter.getScList());
+		}
+		return "";
 	}
 	
 	public void initBackPage()
@@ -443,9 +469,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 		return discardComment;
 	}
 
-	public void setDiscardComment(String discardComment) {
-		//if (discardComment != "")
-			this.discardComment = discardComment;
+	public void setDiscardComment(String discardComment) 
+	{
+		this.discardComment = discardComment;
 	}
 
 	public void discardCommentListener(ValueChangeEvent event) throws Exception
@@ -461,5 +487,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean> impl
 		this.scList = scList;
 	}
 
+	public boolean isSimpleSearch() {
+		return isSimpleSearch;
+	}
 
+	public void setSimpleSearch(boolean isSimpleSearch) {
+		this.isSimpleSearch = isSimpleSearch;
+	}
 }

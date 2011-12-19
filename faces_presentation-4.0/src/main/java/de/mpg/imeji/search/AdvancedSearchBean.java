@@ -117,7 +117,10 @@ public class AdvancedSearchBean implements Serializable
 		List<SearchCriterion> scList = formular.getFormularAsSCList();
 		bean.setQuery(URLQueryTransformer.transform2URL(scList));
 		bean.setScList(scList);
-		bean.getFacets().getFacets().clear();
+		if (bean.getFacets() != null)
+		{
+			bean.getFacets().getFacets().clear();
+		}
 		
 		if (bean.getQuery() == null || "".equals(bean.getQuery().trim()))
 		{

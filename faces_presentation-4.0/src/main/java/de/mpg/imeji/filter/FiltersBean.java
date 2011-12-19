@@ -15,6 +15,11 @@ public class FiltersBean
 	
 	private int count = 0;
 	
+	public FiltersBean()
+	{
+		
+	}
+	
 	public FiltersBean(String query, int count) 
 	{	
 		this.count = count;
@@ -72,6 +77,11 @@ public class FiltersBean
 			f.setRemoveQuery(q.replace(f.getQuery(), "") + "&f=" + f.getLabel());
 		}
 		return filters;
+	}
+	
+	public FiltersSession getSession()
+	{
+		return fs;
 	}
 	
 }

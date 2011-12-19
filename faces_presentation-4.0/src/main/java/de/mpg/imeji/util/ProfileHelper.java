@@ -47,39 +47,22 @@ public class ProfileHelper
     public static Map<URI, CollectionImeji> loadCollections(List<Image> imgs) throws Exception
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        CollectionController c = new CollectionController(sb.getUser());
         Map<URI, CollectionImeji> pMap = new HashMap<URI, CollectionImeji>();
         for (Image im : imgs)
         {
             if (!pMap.containsKey(im.getCollection()))
             {
-                CollectionImeji coll = c.retrieve(im.getCollection());
+            	CollectionImeji coll = ObjectLoader.loadCollection(im.getCollection(), sb.getUser());
                 pMap.put(coll.getId(), coll);
             }
         }
         return pMap;
     }
 
-    public static MetadataProfile loadProfile(Image image)
-    {
-        MetadataProfile profile = new MetadataProfile();
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        ProfileController pc = new ProfileController(sb.getUser());
-        try 
-        {
-			profile = pc.retrieve(image.getMetadataSet().getProfile());
-		} 
-        catch (Exception e) 
-		{
-			throw new RuntimeException(e);
-		}
-		Collections.sort((List<Statement>) profile.getStatements());
-        return profile;
-    }
-    
     public static Statement loadStatement(Image image, String statementName)
     {
-    	MetadataProfile profile = loadProfile(image);
+    	SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    	MetadataProfile profile = ObjectLoader.loadProfile(image.getMetadataSet().getProfile(), sb.getUser());
     	for (Statement st : profile.getStatements()) 
     	{
     		if (statementName.equals(st.getName())) 
@@ -89,18 +72,4 @@ public class ProfileHelper
 		}
     	return null;
     }
-
-//    public static List<ComplexType> getComplextTypes(Map<URI, MetadataProfile> pMap)
-//    {
-//        List<ComplexType> cts = new ArrayList<ComplexType>();
-//        for (MetadataProfile mdp : pMap.values())
-//        {
-//            for (Statement s : mdp.getStatements())
-//            {
-//                cts.add(ComplexTypeHelper.newComplexType(s.getType()));
-//            }
-//        }
-//        return cts;
-//    }
-
 }

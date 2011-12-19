@@ -58,12 +58,13 @@
 				</h:panelGroup>
 			</ui:define>
 			<ui:define name="searchQuery">
-				<h:panelGroup styleClass="full_area0 small_marginLExcl">
+				<h:panelGroup styleClass="full_area0 small_marginLExcl" rendered="#{paginatorListSessionBean.query != ''}">
 					<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p2"/>
-					<h:panelGroup styleClass="xHuge_area0 xTiny_marginLExcl">
+					<h:panelGroup styleClass="xHuge_area0">
+						<h:outputText value="#{lbl.search_for}" styleClass="free_area0_p2" rendered="#{paginatorListSessionBean.simpleSearch}"/>
 						<h:outputText value="#{ImagesBean.simpleQuery}" styleClass="free_area0_p2"/>
-	               		<h:outputLink value="#{Navigation.searchUrl}?q=#{paginatorListSessionBean.query}" rendered="#{paginatorListSessionBean.query != null}" styleClass="free_area0 ">
-							<h:outputText value="#{lbl.search_revise}" styleClass="xTiny_marginLExcl free_area0_p2 "/>
+	               		<h:outputLink value="#{Navigation.searchUrl}?q=#{paginatorListSessionBean.query}" rendered="#{!paginatorListSessionBean.simpleSearch}" styleClass="free_area0_p2 ">
+							<h:outputText value="#{lbl.search_revise}"/>
 						</h:outputLink>
 					</h:panelGroup>
            		</h:panelGroup>

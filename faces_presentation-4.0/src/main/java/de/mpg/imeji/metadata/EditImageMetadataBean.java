@@ -23,7 +23,7 @@ import de.mpg.imeji.metadata.editors.MetadataMultipleEditor;
 import de.mpg.imeji.metadata.util.MetadataHelper;
 import de.mpg.imeji.metadata.util.SuggestBean;
 import de.mpg.imeji.util.BeanHelper;
-import de.mpg.imeji.util.ProfileHelper;
+import de.mpg.imeji.util.ObjectLoader;
 import de.mpg.jena.concurrency.locks.Lock;
 import de.mpg.jena.concurrency.locks.Locks;
 import de.mpg.jena.search.SearchResult;
@@ -61,6 +61,7 @@ public class EditImageMetadataBean  implements Serializable
 	private String editType = "selected";
 	private boolean isProfileWithStatements = true;
 	private int lockedImages = 0;
+	private SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 
 	private static Logger logger = Logger.getLogger(EditImageMetadataBean.class);
 
@@ -104,9 +105,9 @@ public class EditImageMetadataBean  implements Serializable
 	
 	private void initProfileAndStatement(List<Image> images)
 	{
-		if (images.size() > 0)
+		if (images != null && images.size() > 0)
 		{
-			profile = ProfileHelper.loadProfile(images.get(0));
+			profile = ObjectLoader.loadProfile(images.get(0).getMetadataSet().getProfile(), session.getUser());
 		}
 		
 		statement = getSelectedStatement();
@@ -239,13 +240,12 @@ public class EditImageMetadataBean  implements Serializable
 
 	private void lockImages(List<Image> images)
 	{
-		SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		lockedImages = 0;
 		for (int i = 0; i < images.size(); i++) 
 		{
 			try
 			{
-				Locks.lock(new Lock(images.get(i).getId().toString(), sb.getUser().getEmail()));
+				Locks.lock(new Lock(images.get(i).getId().toString(), session.getUser().getEmail()));
 			}
 			catch (Exception e) 
 			{
@@ -343,7 +343,7 @@ public class EditImageMetadataBean  implements Serializable
 	 */
 	private Image removeAllMetadata(Image im)
 	{
-		for(int i=0; i<im.getMetadataSet().getMetadata().size(); i++)
+		for(int i=0; i < im.getMetadataSet().getMetadata().size(); i++)
 		{
 			if (((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i).getNamespace() == null ||
 					((List<ImageMetadata>)im.getMetadataSet().getMetadata()).get(i).getNamespace().equals(metadata.getNamespace()))
@@ -352,7 +352,6 @@ public class EditImageMetadataBean  implements Serializable
 				i--;
 			}
 		}
-		im.getMetadataSet().getMetadata().add(metadata);
 		return im;
 	}
 

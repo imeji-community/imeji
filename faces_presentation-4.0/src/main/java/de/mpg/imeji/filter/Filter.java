@@ -16,22 +16,7 @@ public class Filter extends Facet implements Serializable
 	private String label = "Search";
 	private int count = 0;
 	private String removeQuery = "";
-	
-	
-//	public Filter(String label, SearchCriterion filter, URI collectionId) 
-//	{
-//		this.filter = filter;
-//		if (label != null) this.label = label;
-//		this.collectionID = collectionId;
-//	}
-	
-//	public Filter(String label, URI collectionId, int count) 
-//	{
-//		this.count = count;
-//		if (label != null) this.label = label;
-//		this.collectionID = collectionId;
-//		init();
-//	}
+	private List<SearchCriterion> scList;
 	
 	public Filter(String label, String query, int count, FacetType type, URI metadataURI) 
 	{
@@ -48,7 +33,7 @@ public class Filter extends Facet implements Serializable
 		 
 		try 
 		{
-			List<SearchCriterion> scList = URLQueryTransformer.transform2SCList(query);
+			scList = URLQueryTransformer.transform2SCList(query);
 			if (scList.size() == 1 && scList.get(0).getValue() != null) 
 			{
 				this.setMetadataURI(URI.create(scList.get(0).getValue()));
@@ -60,19 +45,6 @@ public class Filter extends Facet implements Serializable
 			e.printStackTrace();
 		}
 	}
-
-//	public SearchCriterion getFilter() {
-//		return filter;
-//	}
-//
-//	public void setFilter(SearchCriterion filter) {
-//		this.filter = filter;
-//	}
-
-//	 public String getinternationalizedLabel()
-//    {
-//    	return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
-//    }
 	
 	public String getLabel() {
 		return label;
@@ -114,6 +86,13 @@ public class Filter extends Facet implements Serializable
 		this.removeQuery = removeQuery;
 	}
 
-	
+	public List<SearchCriterion> getScList() {
+		return scList;
+	}
+
+	public void setScList(List<SearchCriterion> scList) {
+		this.scList = scList;
+	}
+
 	
 }

@@ -22,20 +22,17 @@ public class MetadataMultipleEditor extends MetadataEditor
 		boolean hasStatement = (statement != null);
 		for (Image im : images) 
 		{
-			if (hasProfile(im)) 
+			boolean empty = true;
+			for(ImageMetadata md : im.getMetadataSet().getMetadata())
 			{
-				boolean empty = true;
-				for(ImageMetadata md : im.getMetadataSet().getMetadata())
+				if (hasStatement && md.getNamespace()!= null && md.getNamespace().equals(statement.getName()))
 				{
-					if (hasStatement && md.getNamespace()!= null && md.getNamespace().equals(statement.getName()))
-					{
-						empty = false;
-					}
+					empty = false;
 				}
-				if (empty && hasStatement)
-				{
-					addMetadata(im, 0);
-				}
+			}
+			if (empty && hasStatement)
+			{
+				addMetadata(im, 0);
 			}
 		}
 	}

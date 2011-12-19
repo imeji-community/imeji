@@ -84,7 +84,7 @@ public class AlbumImagesBean extends ImagesBean
     }
 
     @Override
-    public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception
+    public List<ThumbnailBean> retrieveList(int offset, int limit)
     {
     	uri = ObjectHelper.getURI(Album.class, id);
 		SortCriterion sortCriterion = new SortCriterion();
@@ -97,40 +97,7 @@ public class AlbumImagesBean extends ImagesBean
        	totalNumberOfRecords = result.getNumberOfRecords();
        	result.setQuery(getQuery());
        	result.setSort(sortCriterion);
-		deleteNonExistingImages();
-		
         return ImejiFactory.imageListToThumbList(loadImages(result));
-    }
-    
-    /**
-     * Since an album only reference images, this images could have been deleted in Jena but not in albums
-     * ATTENTION: BAD IDEA: SOME IMAGES MIGHT NOT BE FOUND ACCORDING TO USER PRIVILIGES
-     * @throws Exception 
-     */
-    public void deleteNonExistingImages() throws Exception
-    {
-//    	if (album.getAlbum().getImages().size() != totalNumberOfRecords)
-//    	{
-//    		ImageController controller = new ImageController(sb.getUser());
-//    		for (int i=0 ; i < album.getAlbum().getImages().size(); i++)
-//    		{
-//    			try 
-//    			{
-//					controller.retrieve(((List<URI>) album.getAlbum().getImages()).get(i));
-//				} 
-//    			catch (NotFoundException e) 
-//				{
-//    				((List<URI>) album.getAlbum().getImages()).remove(i);
-//    				i--;
-//				}     			
-//    		}
-//    		AlbumController albumController = new AlbumController(sb.getUser());
-//    		albumController.update(album.getAlbum());
-//    	}
-//    	if (album.getAlbum().getImages().size() != totalNumberOfRecords)
-//    	{
-//    		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("album_not_allowed_see_all"));
-//    	}
     }
     
     @Override

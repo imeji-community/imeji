@@ -57,7 +57,7 @@ public class SelectedBean extends ImagesBean  implements Serializable
 	}
 
 	@Override
-	public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
+	public List<ThumbnailBean> retrieveList(int offset, int limit)
 	{
 		SearchResult results = search(null, null);
 

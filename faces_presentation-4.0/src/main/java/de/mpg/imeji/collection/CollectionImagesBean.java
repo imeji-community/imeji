@@ -76,7 +76,7 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
 	}
 
 	@Override
-	public List<ThumbnailBean> retrieveList(int offset, int limit) throws Exception 
+	public List<ThumbnailBean> retrieveList(int offset, int limit) 
 	{	
 		if (getFacets() != null)
 		{
@@ -89,7 +89,12 @@ public class CollectionImagesBean extends ImagesBean  implements Serializable
 
 		initBackPage();
 
-		scList = URLQueryTransformer.transform2SCList(getQuery());
+		try {
+			scList = URLQueryTransformer.transform2SCList(getQuery());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		uri = ObjectHelper.getURI(CollectionImeji.class, id);
 

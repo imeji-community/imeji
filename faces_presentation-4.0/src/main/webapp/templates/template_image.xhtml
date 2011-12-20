@@ -64,14 +64,18 @@
 							</h:outputLink>			
 						</span>
 					</h:panelGroup>
-					<h:panelGroup id="image" layout="block">
+					<h:panelGroup styleClass="free_area0 xSmall_marginLIncl" style="color:red;" rendered="#{imageBean.image.properties.status == 'WITHDRAWN'}">
+						<h:outputText styleClass="free_area0_p8 xDouble_marginLIncl" value="#{lbl.withdraw_image_content}" /> 
+					</h:panelGroup>
+					<h:panelGroup id="image" layout="block" rendered="#{imageBean.image.properties.status != 'WITHDRAWN'}">
 						<h:outputText styleClass="small_label huge_marginLIncl" value="Image in " rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}"/>
 						<h:outputLink styleClass="free_area0  xLarge_marginRExcl" value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.album.id.path}" rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
 							<h:outputText value="active album"/>
 						</h:outputLink>
 						<h:commandLink styleClass="free_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
-							<h:outputText value="#{lbl.add_to_album}"/>
+							<h:outputText value="#{lbl.add_to_album}" />
 						</h:commandLink>
+						<h:outputText value=":" styleClass="free_label huge_marginLIncl huge_marginLExcl" style="visibility:hidden;" rendered="#{SessionBean.activeAlbum == null}"/>
 						<h:selectBooleanCheckbox styleClass="tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" onchange="getElementById('formular:selectBtn').click();" rendered="#{SessionBean.user != null}"/>
 						<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{imageBean.selected}" action="#{imageBean.select}" style="visibility:hidden;" reRender="preListHeader" rendered="#{SessionBean.user != null}"/>
 						<h:outputText styleClass="small_label" value="#{lbl.selected}" rendered="#{SessionBean.user != null}"/>

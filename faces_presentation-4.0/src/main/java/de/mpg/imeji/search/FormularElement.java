@@ -26,7 +26,7 @@ public class FormularElement
 	private List<SelectItem> predefinedValues;
 	private Statement statement;
 	
-	private Logger logger = Logger.getLogger(FormularElement.class);
+	private static Logger logger = Logger.getLogger(FormularElement.class);
 
 	public FormularElement() 
 	{
@@ -43,6 +43,11 @@ public class FormularElement
 			if (ImejiNamespaces.IMAGE_METADATA_NAMESPACE.equals(sc.getNamespace()))
 			{
 				this.namespace = sc.getValue();
+			}
+			else if (sc.getValue() == null && sc.getChildren() != null && sc.getChildren().size() > 0)
+			{
+				this.searchValue  = sc.getChildren().get(0).getValue();
+				this.filter = sc.getFilterType();
 			}
 			else
 			{
@@ -93,6 +98,7 @@ public class FormularElement
 		if (statement.getLiteralConstraints().size() > 0)
 		{	
 			predefinedValues = new ArrayList<SelectItem>();
+			predefinedValues.add(new SelectItem(null,"Select"));
 			for (LocalizedString s :statement.getLiteralConstraints())
 			{
 				predefinedValues.add(new SelectItem(s, s.toString()));
@@ -113,42 +119,36 @@ public class FormularElement
 		switch (ComplexTypeHelper.getComplexType(statement.getType())) 
 		{
 		case DATE:
-			SearchCriterion scDate = new SearchCriterion(operator,ImejiNamespaces.IMAGE_METADATA_DATE, searchValue, filter);
-			scList.add(scDate);
+			scList.add( new SearchCriterion(operator,ImejiNamespaces.IMAGE_METADATA_DATE, searchValue, filter));
 			break;
 		case GEOLOCATION:
+			//TODO can not work, should find a solution for searching in geolocation
 			SearchCriterion scLat = new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_GEOLOCATION_LATITUDE, searchValue, filter);
 			SearchCriterion scLong = new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_GEOLOCATION_LONGITUDE, searchValue, filter);
 			scList.add(scLat);
 			scList.add(scLong);
 			break;
 		case LICENSE:
-			SearchCriterion scLic = new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_TYPE_URI, searchValue, filter);
-			scList.add(scLic);
+			scList.add(new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_TYPE_URI, searchValue, filter));
 			break;
 		case NUMBER:
-			SearchCriterion scNum = new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_NUMBER, searchValue, filter);
-			scList.add(scNum);
+			scList.add(new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_NUMBER, searchValue, filter));
 			break;
 		case PERSON:
-			SearchCriterion scFam = new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME, searchValue, filter);
-			SearchCriterion scGiv = new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_PERSON_GIVEN_NAME, searchValue, filter);
-			SearchCriterion scOrg = new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME, searchValue, filter);
-			scList.add(scFam);
-			scList.add(scGiv);
-			scList.add(scOrg);
+			List<SearchCriterion> subList = new ArrayList<SearchCriterion>();
+			subList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME, searchValue, filter));
+			subList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_GIVEN_NAME, searchValue, filter));
+			subList.add(new SearchCriterion(Operator.OR, ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME, searchValue, filter));
+			scList.add(new SearchCriterion(Operator.AND, subList));
 			break;
 		case PUBLICATION:
-			SearchCriterion scPub = new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_TYPE_URI, searchValue, filter);
-			scList.add(scPub);
+			scList.add(new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_TYPE_URI, searchValue, filter));
 			break;
 		case TEXT:
-			SearchCriterion scText = new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_TEXT, searchValue, filter);
-			scList.add(scText);
+			scList.add(new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_TEXT, searchValue, filter));
 			break;
 		case URI:
-			SearchCriterion scURI = new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_TYPE_URI, searchValue, filter);
-			scList.add(scURI);
+			scList.add(new SearchCriterion(operator, ImejiNamespaces.IMAGE_METADATA_TYPE_URI, searchValue, filter));
 			break;
 		}
 		
@@ -161,6 +161,7 @@ public class FormularElement
 	{
 		return searchValue;
 	}
+	
 	public void setSearchValue(String searchValue) 
 	{
 		this.searchValue = searchValue;

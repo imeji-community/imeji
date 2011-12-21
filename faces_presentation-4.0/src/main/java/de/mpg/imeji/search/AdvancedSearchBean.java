@@ -14,6 +14,7 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.beans.SessionBean;
+import de.mpg.imeji.filter.FiltersSession;
 import de.mpg.imeji.image.ImagesBean;
 import de.mpg.imeji.lang.MetadataLabels;
 import de.mpg.imeji.util.BeanHelper;
@@ -113,10 +114,15 @@ public class AdvancedSearchBean implements Serializable
 
 	public String search()
 	{
+		FiltersSession filtersSession = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
+		filtersSession.getFilters().clear();
+		
 		ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class);
+		
 		List<SearchCriterion> scList = formular.getFormularAsSCList();
 		bean.setQuery(URLQueryTransformer.transform2URL(scList));
 		bean.setScList(scList);
+		
 		if (bean.getFacets() != null)
 		{
 			bean.getFacets().getFacets().clear();

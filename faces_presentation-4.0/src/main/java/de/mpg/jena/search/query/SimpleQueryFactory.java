@@ -83,11 +83,17 @@ public class SimpleQueryFactory
 		{
 			searchQuery = " .?s <http://imeji.mpdl.mpg.de/mdprofile> ?el";
 		}
+		else if(ImejiNamespaces.IMAGE_METADATA_PERSON_FAMILY_NAME.equals(sc.getNamespace()) 
+				|| ImejiNamespaces.IMAGE_METADATA_PERSON_GIVEN_NAME.equals(sc.getNamespace())
+				|| ImejiNamespaces.IMAGE_METADATA_PERSON_ORGANIZATION_NAME.equals(sc.getNamespace()))
+		{
+			searchQuery += ". ?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . ?mds <http://imeji.mpdl.mpg.de/metadata> ?md  . ?md <http://imeji.mpdl.mpg.de/metadata/person> ?p . ?p  <" +  sc.getNamespace().getNs() + "> ?el ";
+		}
 		else
 		{
 			//slow
 			//searchQuery = ". OPTIONAL {?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . OPTIONAL {?mds <http://imeji.mpdl.mpg.de/metadata> ?md  . OPTIONAL {?md <" + sc.getNamespace().getNs() + "> ?el }}}";
-			//fast
+			//fast for simple metadata search
 			searchQuery = ". ?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . ?mds <http://imeji.mpdl.mpg.de/metadata> ?md  . ?md <" + sc.getNamespace().getNs() + "> ?el ";
 		}
 

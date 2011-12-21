@@ -84,6 +84,8 @@ public class Search
 	public List<String> searchSimple(SearchCriterion sc, SortCriterion sortCri, User user)
 	{	
 		String sq = SimpleQueryFactory.getQuery(type, sc, sortCri, user, (containerURI != null), getSpecificQuery());
+		//logger.info(ImejiSPARQL.exec(sq).size() + sq);
+		//sq = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/image> . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/status> ?status . ?s <http://imeji.mpdl.mpg.de/collection> ?c  . ?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . ?mds <http://imeji.mpdl.mpg.de/metadata> ?md  . ?md <http://imeji.mpdl.mpg.de/metadata/person> ?p . ?p <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?el  .FILTER(regex(?el, 'TODOROKI', 'i')) . ?props <http://imeji.mpdl.mpg.de/creationDate> ?sort0}  ORDER BY DESC(?sort0)";
 		return  ImejiSPARQL.exec(sq);
 	}
 	

@@ -38,7 +38,6 @@ public class ImejiJena
 
 	public static void init()
 	{
-		logger.info("Initializing Jena models...");
 		try 
 		{
 			tdbPath = PropertyReader.getProperty("imeji.tdb.path");
@@ -47,6 +46,13 @@ public class ImejiJena
 		{
 			throw new RuntimeException("Error reading property imeji.tdb.path", e);
 		}
+		init(tdbPath);
+	}
+	
+	public static void init(String path)
+	{
+		logger.info("Initializing Jena models...");
+		tdbPath = path;
 		
 		imejiDataSet = TDBFactory.createDataset(tdbPath);
 
@@ -91,7 +97,7 @@ public class ImejiJena
 		} 
 		catch (Exception e) 
 		{
-			logger.warn("Property imeji.counter.first.value not found ", e);
+			logger.warn("Property imeji.counter.first.value not found!!! Add property to your property file. (IGNORE BY UNIT TESTS)");
 		} 
 
 		Counter c = new Counter();
@@ -103,7 +109,7 @@ public class ImejiJena
 		}
 		catch (NotFoundException e)
 		{
-			logger.warn("Counter not found", e);
+			logger.warn("Counter not found, creating a new one...");
 			createNewCouter(c, counterFirstValue);
 		}
 	}

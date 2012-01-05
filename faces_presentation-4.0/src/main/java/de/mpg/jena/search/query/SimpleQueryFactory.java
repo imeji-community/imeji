@@ -27,6 +27,7 @@ public class SimpleQueryFactory
 	public static String getSearchElement(SearchCriterion sc)
 	{
 		String searchQuery = "";
+		String variable="el";
 
 		if(sc == null)
 		{
@@ -36,11 +37,16 @@ public class SimpleQueryFactory
 		{
 			searchQuery = ". ?s <" + sc.getNamespace().getNs() + "> ?el";
 		}
+		else if (ImejiNamespaces.ID_URI.equals(sc.getNamespace()))
+		{
+			searchQuery = "";
+			variable ="s";
+		}
 		else if (ImejiNamespaces.IMAGE_METADATA_TYPE_URI.equals(sc.getNamespace()))
 		{
 			//slow
 			searchQuery = ". OPTIONAL {?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . OPTIONAL {?mds <http://imeji.mpdl.mpg.de/metadata> ?md .OPTIONAL{ ?md <http://imeji.mpdl.mpg.de/complexTypes> ?type . OPTIONAL {?md <" + sc.getNamespace().getNs() + "> ?el }}}}";
-			//fast (not testet)
+			//fast (not tested)
 			//searchQuery = ". ?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . ?mds <http://imeji.mpdl.mpg.de/metadata> ?md . ?md <http://imeji.mpdl.mpg.de/complexTypes> ?type .  ?md <" + sc.getNamespace().getNs() + "> ?el ";
 		}
 		else if (ImejiNamespaces.PROPERTIES_STATUS.equals(sc.getNamespace()))
@@ -97,12 +103,13 @@ public class SimpleQueryFactory
 			searchQuery = ". ?s <http://imeji.mpdl.mpg.de/metadataSet> ?mds . ?mds <http://imeji.mpdl.mpg.de/metadata> ?md  . ?md <" + sc.getNamespace().getNs() + "> ?el ";
 		}
 
+		
 		if (Operator.NOTAND.equals(sc.getOperator()) || Operator.NOTOR.equals(sc.getOperator()))
 		{
-			return ".MINUS{ " + searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(sc,"el") + ")}";
+			return ".MINUS{ " + searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(sc,variable) + ")}";
 		}
 
-		return searchQuery + " .FILTER(" + getSimpleFilter(sc,"el") + ")";
+		return searchQuery + " .FILTER(" + getSimpleFilter(sc,variable) + ")";
 	}
 
 	public static String getSortElement(SortCriterion sc)
@@ -140,7 +147,7 @@ public class SimpleQueryFactory
 
 		if (sc.getValue() != null)
 		{
-			// Lokk for use cases where this kind of string search for uris make sense.
+			// Lok for use cases where this kind of string search for uris make sense.
 			// If no cases, then remove it, since it's more performant to search for uri directly like 3. else if
 			if (sc.getFilterType().equals(Filtertype.URI) 
 					/*&& !sc.getNamespace().equals(ImejiNamespaces.ID_URI) 

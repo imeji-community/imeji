@@ -24,9 +24,24 @@
 					<source>1.5</source>
 					<target>1.5</target>
 					<excludes>
-						<exclude>de/mpg/escidoc/faces/**</exclude>
+						<exclude>de/mpg/test/*</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>false</skip>
+							<test>Initializer</test>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -114,6 +129,11 @@
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.0.1</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+		  <groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <version>4.8.2</version>
 		</dependency>
 	</dependencies>
 </project>

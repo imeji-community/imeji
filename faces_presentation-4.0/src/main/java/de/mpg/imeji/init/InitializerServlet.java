@@ -45,9 +45,7 @@ public class InitializerServlet extends HttpServlet
 	{
 		try
 		{
-			ImejiJena.init();            
-			//			String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-			//            Model base = DataFactory.model(tdbPath);
+			ImejiJena.init();
 		}
 		catch (Exception e)
 		{

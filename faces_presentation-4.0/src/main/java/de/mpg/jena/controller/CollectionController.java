@@ -51,7 +51,10 @@ public class CollectionController extends ImejiController
 	 * @param user
 	 */
 	public URI create(CollectionImeji ic, URI profile) throws Exception
-	{			
+	{	
+		ProfileController pc = new ProfileController(user);
+		pc.retrieve(profile); // If doesn't exists, throw not found exception
+		
 		writeCreateProperties(ic.getProperties(), user);
 		ic.getProperties().setStatus(Status.PENDING); 
 		ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
@@ -59,7 +62,6 @@ public class CollectionController extends ImejiController
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
 		imejiBean2RDF.create(imejiBean2RDF.toList(ic), user);
 		user = addCreatorGrant(ic, user);
-		cleanGraph(ImejiJena.collectionModel);
 		return ic.getId();
 	}
 
@@ -82,7 +84,6 @@ public class CollectionController extends ImejiController
 		writeUpdateProperties(ic.getProperties(), user);
 		imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
 		imejiBean2RDF.saveDeep(imejiBean2RDF.toList(ic), user);
-		cleanGraph(ImejiJena.collectionModel);
 	}
 
 	public void release(CollectionImeji ic) throws Exception
@@ -92,28 +93,29 @@ public class CollectionController extends ImejiController
 			throw new RuntimeException("Collection has at least one image locked by another user.");
 		}
 		else
-		{	ic.getProperties().setStatus(Status.RELEASED);
-		ic.getProperties().setVersionDate(new Date());
+		{	
+			ic.getProperties().setStatus(Status.RELEASED);
+			ic.getProperties().setVersionDate(new Date());
 
-		ImageController imageController = new ImageController(user);
+			ImageController imageController = new ImageController(user);
 
-		for(URI uri: ic.getImages())
-		{
-			try 
+			for(URI uri: ic.getImages())
 			{
-				imageController.release(imageController.retrieve(uri));
-			} 
-			catch (NotFoundException e) 
-			{
-				logger.error("Release image error: " + uri + " could not be found");
+				try 
+				{
+					imageController.release(imageController.retrieve(uri));
+				} 
+				catch (NotFoundException e) 
+				{
+					logger.error("Release image error: " + uri + " could not be found");
+				}
 			}
-		}
 
-		update(ic);
+			update(ic);
 
-		ProfileController pc = new ProfileController(user);
-		pc.retrieve(ic.getProfile());
-		pc.release(pc.retrieve(ic.getProfile()));
+			ProfileController pc = new ProfileController(user);
+			pc.retrieve(ic.getProfile());
+			pc.release(pc.retrieve(ic.getProfile()));
 		}
 	}
 

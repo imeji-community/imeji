@@ -53,7 +53,12 @@ public class LoginHelper
         StringTokenizer hostPort = new StringTokenizer(tokens.nextToken(), ":");
         
         String host = hostPort.nextToken();
-        int port = Integer.parseInt( hostPort.nextToken() );
+        
+        int port = 80;
+        if (hostPort.hasMoreTokens())
+        {
+        	port = Integer.parseInt( hostPort.nextToken() );
+        }
         
         HttpClient client = new HttpClient();
         client.getHttpConnectionManager().closeIdleConnections(1000);

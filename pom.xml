@@ -7,8 +7,7 @@
 	<name>faces4</name>
 	<url>http://escidoc1.escidoc.mpg.de/projects/faces</url>
 	<description>
-		FACES is a lifespan database of adult emotional facial stimuli. 
-		It contains a set of images of naturalistic faces of 171 persons, separated in three different age groups (young, middle-aged and old) displaying each of 6 facial expressions: neutrality, sadness, disgust, fear, anger, and happiness.
+		http://colab.mpdl.mpg.de/mediawiki/Imeji
 	</description>
 	<licenses>
 		<license>
@@ -25,7 +24,7 @@
 
 	<issueManagement>
 		<system>Jira</system>
-		<url>http://zim01.gwdg.de:8080/BrowseProject.jspa?id=10041</url>
+		<url>http://jira.mpdl.mpg.de</url>
 	</issueManagement>
 
 	<developers>
@@ -45,7 +44,7 @@
 			<name>Natasa Bulatovic</name>
 			<email>bulatovic@mpdl.mpg.de</email>
 			<roles>
-				<role>Software development manager</role>
+				<role>Architecture development</role>
 				<role>Architect</role>
 			</roles>
 			<organization>Max Planck Digital Library</organization>
@@ -62,9 +61,9 @@
 			<timezone>+2</timezone>
 		</developer>
 		<developer>
-			<id>kbuechner</id>
-			<name>Kristina Büchner</name>
-			<email>buechner@mpdl.mpg.de</email>
+			<id>kkoller</id>
+			<name>Kristina Koller</name>
+			<email>koller@mpdl.mpg.de</email>
 			<roles>
 				<role>Service management</role>
 			</roles>
@@ -82,31 +81,11 @@
             <timezone>+2</timezone>
         </developer>
         <developer>
-          <id>haarlaender</id>
-            <name>Markus Haarlaender</name>
-            <email>haarlaender@mpdl.mpg.de</email>
-            <roles>
-                <role>Software developer</role>
-            </roles>
-            <organization>Max Planck Digital Library</organization>
-            <timezone>+2</timezone>
-        </developer>
-        <developer>
-          <id>tendres</id>
-            <name>Thomas Endres</name>
-            <email>endres@mpdl.mpg.de</email>
-            <roles>
-                <role>Software developer</role>
-            </roles>
-            <organization>Max Planck Digital Library</organization>
-            <timezone>+2</timezone>
-        </developer>
-        <developer>
             <id>mfranke</id>
             <name>Michael Franke</name>
             <email>franke@mpdl.mpg.de</email>
             <roles>
-                <role>Software developer</role>
+                <role>Architecture development</role>
             </roles>
             <organization>Max Planck Digital Library</organization>
             <timezone>+2</timezone>
@@ -116,7 +95,7 @@
             <name>Wilhelm Frank</name>
             <email>frank@mpdl.mpg.de</email>
             <roles>
-                <role>Software developer</role>
+                <role>Architecture development</role>
             </roles>
             <organization>Max Planck Digital Library</organization>
             <timezone>+2</timezone>
@@ -275,30 +254,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>taglist-maven-plugin</artifactId>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>org.apache.maven.plugins</groupId>-->
-<!--				<artifactId>maven-changes-plugin</artifactId>-->
-<!--				<configuration>-->
-<!--					<smtpHost>${changes.smtphost}</smtpHost>-->
-<!--					<smtpPort implementation="java.lang.Integer">25</smtpPort>-->
-<!--					<fromDeveloperId>${changes.developerid}</fromDeveloperId>-->
-<!--					<toAddresses>-->
-<!--						<toAddress implementation="java.lang.String">${changes.recipient.address}</toAddress>-->
-<!--					</toAddresses>-->
-<!--					<jiraUser>${changes.jira.user}</jiraUser>-->
-<!--					<jiraPassword>${changes.jira.password}</jiraPassword>-->
-<!--				    <onlyCurrentVersion>true</onlyCurrentVersion>-->
-<!--					<priorityIds>Blocker,Critical,Major,Minor,Trivial</priorityIds>-->
-<!--				</configuration>-->
-<!--				<reportSets>-->
-<!--					<reportSet>-->
-<!--						<reports>-->
-<!--							<report>jira-report</report>-->
-<!--							<report>changes-report</report>-->
-<!--						</reports>-->
-<!--					</reportSet>-->
-<!--				</reportSets>-->
-<!--			</plugin>-->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
@@ -313,24 +269,24 @@
                 <artifactId>changelog-maven-plugin</artifactId>
             </plugin>
 			<plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <configuration>
-                <configLocation>http://escidoc1.escidoc.mpg.de/resources/checkstyle/checkstyle.xml</configLocation>
-            </configuration>
-        </plugin>
-        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-checkstyle-plugin</artifactId>
+	            <configuration>
+	                <configLocation>http://escidoc1.escidoc.mpg.de/resources/checkstyle/checkstyle.xml</configLocation>
+	            </configuration>
+       	 	</plugin>
+        	<plugin>
                 <!-- JavaNCSS - A Source Measurement Suite for Java
                     http://www.kclee.de/clemens/java/javancss/ -->
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>javancss-maven-plugin</artifactId>
-        </plugin>
-        <plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>javancss-maven-plugin</artifactId>
+        	</plugin>
+        	<plugin>
                 <!-- A Java package dependency analyzer that generates
                       design quality metrics http://clarkware.com/software/JDepend.html -->
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>jdepend-maven-plugin</artifactId>
-        </plugin>
+           	 	<groupId>org.codehaus.mojo</groupId>
+            	<artifactId>jdepend-maven-plugin</artifactId>
+        	</plugin>
 		</plugins>
 	</reporting>
 
@@ -390,7 +346,7 @@
 				<!-- <jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir>-->
 
 				<!-- URL of this Faces instance -->
-				<escidoc.faces.instance.url>http://localhost/faces/</escidoc.faces.instance.url>
+				<escidoc.faces.instance.url>http://localhost:8080/faces/</escidoc.faces.instance.url>
 								
 				<!--  Identifier of the content model "FACES" in the current framework instance -->
 				<!-- FACES -->
@@ -509,6 +465,8 @@
                 <!-- Cone -->
                 <escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
 				
+				<!-- oai -->
+				<Identify.repositoryName>Imeji</Identify.repositoryName>
 			</properties>
 			<distributionManagement>
 				<site>

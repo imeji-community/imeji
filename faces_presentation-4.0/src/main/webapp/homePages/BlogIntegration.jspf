@@ -38,7 +38,7 @@
     <script type="text/javascript">
 	    google.load("feeds", "1");
 		
-		function facesBlogInitialize(){  	
+		function blogInitialize(){  	
 			var feedControl = new google.feeds.FeedControl();
 		
 			feedControl.addFeed(document.getElementById("formular:rssFeedUrl").value, "<h:outputText value="#{lbl.blog_title}"/>");
@@ -46,7 +46,7 @@
 			feedControl.setLinkTarget(google.feeds.LINK_TARGET_BLANK); 
 			feedControl.draw(document.getElementById("feedControl"));
 		}
-		google.setOnLoadCallback(facesBlogInitialize);
+		google.setOnLoadCallback(blogInitialize);
     </script>
 
 	<h2>

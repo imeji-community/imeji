@@ -18,7 +18,7 @@ public class BlogBean
     {
         try
         {
-            rssFeedUrl = PropertyReader.getProperty("escidoc.faces.blog.rss.url");
+            rssFeedUrl = PropertyReader.getProperty("escidoc.imeji.blog.rss.url");
         }
         catch (Exception e)
         {
@@ -37,7 +37,7 @@ public class BlogBean
     {
         try
         {
-            blogUrl = PropertyReader.getProperty("escidoc.faces.blog.url");
+            blogUrl = PropertyReader.getProperty("escidoc.imeji.blog.url");
         }
         catch (Exception e)
         {
@@ -55,7 +55,7 @@ public class BlogBean
     {
         try
         {
-            googleKey = PropertyReader.getProperty("escidoc.faces.blog.rss.google.key");
+            googleKey = PropertyReader.getProperty("escidoc.imeji.blog.rss.google.key");
 
         }
         catch (Exception e)

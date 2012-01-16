@@ -35,8 +35,8 @@ public class DepositController
     	EscidocHelper escidocHelper = new EscidocHelper();
     	Authentication auth = escidocHelper.login();
     	
-    	Item item = escidocHelper.initNewItem(PropertyReader.getProperty("escidoc.faces.content-model.id")
-    			, PropertyReader.getProperty("escidoc.faces.context.id"));
+    	Item item = escidocHelper.initNewItem(PropertyReader.getProperty("escidoc.imeji.content-model.id")
+    			, PropertyReader.getProperty("escidoc.imeji.context.id"));
     	
     	item = escidocHelper.loadFiles(item, inputStream, title, mimetype, format, auth);
     	

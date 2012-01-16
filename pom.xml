@@ -349,27 +349,26 @@
 				<!-- local intallation of the jboss for integration-tests -->
 				<!-- <cargo.jboss.install.dir>//${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir>-->
 
-				<!-- deploy the pubman ear to this server and port via jmx /goal: jboss:deploy -->
+				<!-- deploy the imeji ear to this server and port via jmx /goal: jboss:deploy -->
 				<jboss.deploy.host>localhost</jboss.deploy.host>
 				<jboss.deploy.port>8080</jboss.deploy.port>
 				<!-- the ears are deployed to this server using jboss:harddeploy -->
 				<!-- <jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir>-->
 
-				<!-- URL of this Faces instance -->
-				<escidoc.faces.instance.url>http://localhost:8080/faces/</escidoc.faces.instance.url>
+				<!-- URL of this Imeji instance -->
+				<escidoc.imeji.instance.url>http://localhost:8080/imeji/</escidoc.imeji.instance.url>
 								
-				<!--  Identifier of the content model "FACES" in the current framework instance -->
-				<escidoc.faces.content-model.id>escidoc:14001</escidoc.faces.content-model.id>
+				<!--  Identifier of the content model "Imeji" in the current framework instance -->
+				<escidoc.imeji.content-model.id>escidoc:14001</escidoc.imeji.content-model.id>
 				
-				<!-- Identifier of the context of "FACES" in the current framework instance -->
-				<escidoc.faces.context.id>escidoc:13001</escidoc.faces.context.id>
+				<!-- Identifier of the context of "Imeji" in the current framework instance -->
+				<escidoc.imeji.context.id>escidoc:13001</escidoc.imeji.context.id>
 				
-				<!--  Identifier of the content model " Faces Container Content Model" in the current framework instance -->
-				<escidoc.faces.container.content-model.id>escidoc:faces60</escidoc.faces.container.content-model.id>
+				<!--  Identifier of the content model " Imeji Container Content Model" in the current framework instance -->
+				<escidoc.imeji.container.content-model.id>escidoc:faces60</escidoc.imeji.container.content-model.id>
 				
-				<!-- Indentifier of the content model "Faces collection content model": Not persistent, created only on dev so far -->
-				<escidoc.faces.collection.content-model.id>escidoc:194286</escidoc.faces.collection.content-model.id>
-				<!--  <escidoc.faces.collection.content-model.id>escidoc:faces70</escidoc.faces.collection.content-model.id>-->
+				<!-- Indentifier of the content model "Imeji collection content model": Not persistent, created only on dev so far -->
+				<escidoc.imeji.collection.content-model.id>escidoc:194286</escidoc.imeji.collection.content-model.id>
 				
 				<!-- Default number of image in the lists -->
 				<imeji.image.list.size>18</imeji.image.list.size>
@@ -388,53 +387,20 @@
 				<escidoc.cone.isos639_1.all>http://pubman.mpdl.mpg.de/cone/iso639-1/all</escidoc.cone.isos639_1.all>
 						
 				<!-- Blog's URL -->
-				<!--<escidoc.faces.blog.url>http://faces.blogs.mpdl.mpg.de</escidoc.faces.blog.url>-->
-				<escidoc.faces.blog.url />
+				<escidoc.imeji.blog.url />
 				
 				<!-- Blog's RSS feed URL -->
-				<escidoc.faces.blog.rss.url>http://www.nims.go.jp/eng/news/nims.xml</escidoc.faces.blog.rss.url>
-				<!--<escidoc.faces.blog.rss.url>http://faces.blogs.mpdl.mpg.de/feed/</escidoc.faces.blog.rss.url>-->
-				
-				<escidoc.faces.impressum.url>http://colab.mpdl.mpg.de/mediawiki/Diamonds_Disclaimer_and_Copyright</escidoc.faces.impressum.url>
-				
-				<!--<escidoc.faces.impressum.url>http://colab.mpdl.mpg.de/mediawiki/Faces_Disclaimer_and_Copyright</escidoc.faces.impressum.url>-->
-				
-				<!-- Home URL -->
-				<escidoc.faces.home.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/diamonds/home.html</escidoc.faces.home.url>
-				
-				<!-- Logo Url -->
-				<escidoc.faces.logo.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/mpi_hd.png</escidoc.faces.logo.url>
-				
-				<!-- Logo Link Url -->
-				<escidoc.faces.logo.link.url>http://www.nims.go.jp/eng/index.html</escidoc.faces.logo.link.url>
+				<escidoc.imeji.blog.rss.url>http://www.nims.go.jp/eng/news/nims.xml</escidoc.imeji.blog.rss.url>
 				
 				<!-- Help URL -->
-				<escidoc.faces.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.faces.help.url>
-				
-				<!-- About URL -->
-				<escidoc.faces.about.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_about.html</escidoc.faces.about.url>
-				
-				<!-- Legal URL -->
-				<escidoc.faces.legal.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_legal.html</escidoc.faces.legal.url>
-				
-				<!-- Confirmation URL -->
-				<escidoc.faces.confirmation.url />
+				<escidoc.imeji.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.imeji.help.url>
 				
 				<!-- pagination ajax -->
 				<imeji.pagination.ajaxmodus>true</imeji.pagination.ajaxmodus>
 				
 				<!-- Counter for imeji objects -->
 				<imeji.counter.first.value>0</imeji.counter.first.value>
-				
-				<!-- License url  -->
-				<!--  <escidoc.faces.picture.license.url>http://creativecommons.org/licenses/by-nc-nd/3.0/de/</escidoc.faces.picture.license.url>-->
-				<escidoc.faces.picture.license.url />
 
-				<!-- License image  -->
-				<!-- <escidoc.faces.picture.license.image>http://i.creativecommons.org/l/by-nc-nd/3.0/80x15.png </escidoc.faces.picture.license.image>-->
-				<escidoc.faces.picture.license.image />
-
-				<!--<escidoc.faces.statistics.username>faces_statistics_editor</escidoc.faces.statistics.username>-->
 				
 				<!--  Due to a historical defect, QName was released with multiple 
 					serialVersionUID values even though its serialization was the
@@ -444,8 +410,7 @@
 					compatibility value you have to set the following property to "1.0". -->
 				<com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>1.0</com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>
 
-				 <!-- Current XSD Schema versions -->
-
+				<!-- Current XSD Schema versions -->
 				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
 				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
                 
@@ -466,6 +431,7 @@
 				</site>
 			</distributionManagement>		
 		</profile>
+		<!-- Profile for automated deploy -->
 		<profile>
 			<id>env-testing-continuum</id>
 			<activation>
@@ -504,73 +470,61 @@
 				<escidoc.pubman_presentation.disable.view_revisions>false</escidoc.pubman_presentation.disable.view_revisions>
 
 				<!-- URL of this Faces instance -->
-				<escidoc.faces.instance.url>http://dev-faces.mpdl.mpg.de/</escidoc.faces.instance.url>
-				<escidoc.faces.item.pattern>viewItemFullPage.jsp?itemId=$1</escidoc.faces.item.pattern>
-				<escidoc.faces.component.pattern>/viewComponentPage.jsp?componentId=$1</escidoc.faces.component.pattern>
+				<escidoc.imeji.instance.url>http://dev-faces.mpdl.mpg.de/</escidoc.imeji.instance.url>
+				<escidoc.imeji.item.pattern>viewItemFullPage.jsp?itemId=$1</escidoc.imeji.item.pattern>
+				<escidoc.imeji.component.pattern>/viewComponentPage.jsp?componentId=$1</escidoc.imeji.component.pattern>
 
-				<escidoc.faces.instance.id>de.mpg.escidoc.faces</escidoc.faces.instance.id>
+				<escidoc.imeji.instance.id>de.mpg.escidoc.faces</escidoc.imeji.instance.id>
 						
 				<!-- URL of the FIZ framework instance -->
 				<escidoc.framework_access.framework.url>http://dev-coreservice.mpdl.mpg.de:8080</escidoc.framework_access.framework.url>
 								    
 				<!--  Identifier of the content model "FACES" in the current framework instance -->
-				<escidoc.faces.content-model.id>escidoc:faces40</escidoc.faces.content-model.id>
+				<escidoc.imeji.content-model.id>escidoc:faces40</escidoc.imeji.content-model.id>
 				
 				<!-- Identifier of the context of "FACES" in the current framework instance -->
-				<escidoc.faces.context.id>escidoc:108013</escidoc.faces.context.id>
+				<escidoc.imeji.context.id>escidoc:108013</escidoc.imeji.context.id>
 				
 				<!--  Identifier of the content model " Faces Container Content Model" in the current framework instance -->
-				<escidoc.faces.container.content-model.id>escidoc:faces60</escidoc.faces.container.content-model.id>
+				<escidoc.imeji.container.content-model.id>escidoc:faces60</escidoc.imeji.container.content-model.id>
 				
 				<!-- Number of albums in the album lists -->
-				<escidoc.faces.album.list.size>10</escidoc.faces.album.list.size>
+				<escidoc.imeji.album.list.size>10</escidoc.imeji.album.list.size>
 				
 				
 				<!--  UI Config -->				
-				<escidoc.faces.album.list.size.options>10,25,50,75,100</escidoc.faces.album.list.size.options> <!-- User options for the displayed number of albums -->
+				<escidoc.imeji.album.list.size.options>10,25,50,75,100</escidoc.imeji.album.list.size.options> <!-- User options for the displayed number of albums -->
 				<escidoc.organizationTree.integration>yes</escidoc.organizationTree.integration> <!-- User option, if organization selection should be displayed on create/edit album -->				
 				
 				<imeji.i18n.languages>en-english,de-deutsch</imeji.i18n.languages>
 				
 				<!-- Blog's URL -->
-				<escidoc.faces.blog.url>http://faces.blogs.mpdl.mpg.de</escidoc.faces.blog.url>
+				<escidoc.imeji.blog.url>http://faces.blogs.mpdl.mpg.de</escidoc.imeji.blog.url>
 				
 				<!-- Blog's RSS feed URL -->
-				<escidoc.faces.blog.rss.url>http://faces.blogs.mpdl.mpg.de/feed/</escidoc.faces.blog.rss.url>
+				<escidoc.imeji.blog.rss.url>http://faces.blogs.mpdl.mpg.de/feed/</escidoc.imeji.blog.rss.url>
 				
 				<!-- Home URL -->
-				<escidoc.faces.home.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_home.html</escidoc.faces.home.url>
+				<escidoc.imeji.home.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_home.html</escidoc.imeji.home.url>
 				
 				<!-- Help URL -->
-				<escidoc.faces.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.faces.help.url>
+				<escidoc.imeji.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.imeji.help.url>
 				
 				<!-- About URL -->
-				<escidoc.faces.about.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_about.html</escidoc.faces.about.url>
-				
-				<!-- Legal URL -->
-				<escidoc.faces.legal.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_legal.html</escidoc.faces.legal.url>
-				
-				<!-- Confirmation URL -->
-				<escidoc.faces.confirmation.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_export_confirmation.html</escidoc.faces.confirmation.url>
-				
-				<!-- Impressum URL -->
-				<escidoc.faces.impressum.url>http://colab.mpdl.mpg.de/mediawiki/Faces_Disclaimer_and_Copyright</escidoc.faces.impressum.url>
-				
-				<!-- Logo Link Url -->
-				<escidoc.faces.logo.link.url>http://www.mpib-berlin.mpg.de/</escidoc.faces.logo.link.url>
+				<escidoc.imeji.about.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_about.html</escidoc.imeji.about.url>
 				
 				<!-- Logo Url -->
-				<escidoc.faces.logo.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/mpi_hd.png</escidoc.faces.logo.url>
+				<escidoc.imeji.logo.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/mpi_hd.png</escidoc.imeji.logo.url>
 				
 				<!-- FACES Collection id -->
 				<escidoc.faces.collection.id>escidoc:113634</escidoc.faces.collection.id>
 				
 				<!-- FACES Collection file path -->
-				<escidoc.faces.collection.file.path>C://Dokumente und Einstellungen/saquet/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA/server/default/data/Faces-collection.zip</escidoc.faces.collection.file.path>
+				<escidoc.imeji.collection.file.path>C://Dokumente und Einstellungen/saquet/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA/server/default/data/Faces-collection.zip</escidoc.imeji.collection.file.path>
 				
 				<!-- Faces statistics user -->
-				<escidoc.faces.statistics.password>escidoc</escidoc.faces.statistics.password>
-				<escidoc.faces.statistics.username>faces_statistics_user</escidoc.faces.statistics.username>
+				<escidoc.imeji.statistics.password>escidoc</escidoc.imeji.statistics.password>
+				<escidoc.imeji.statistics.username>faces_statistics_user</escidoc.imeji.statistics.username>
 				
 				<!--  Due to a historical defect, QName was released with multiple 
 					serialVersionUID values even though its serialization was the

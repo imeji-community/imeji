@@ -12,7 +12,7 @@ public class PageURIHelper
 {
 	public static URI getPageURI(ImejiPages pageType, String q, String[] id) throws IOException, URISyntaxException
 	{
-		String baseURL = PropertyReader.getProperty("escidoc.faces.instance.url");
+		String baseURL = PropertyReader.getProperty("escidoc.imeji.instance.url");
 		switch (pageType) 
 		{
 		case IMAGES: return URI.create(baseURL + "images?h=");

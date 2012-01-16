@@ -33,7 +33,7 @@
 						<webModule>
 							<groupId>de.mpg.escidoc.faces4</groupId>
 							<artifactId>faces_presentation4</artifactId>
-							<contextRoot>/faces</contextRoot>
+							<contextRoot>/imeji</contextRoot>
 						</webModule>
 						<webModule>
 							<groupId>de.mpg.escidoc.services</groupId>
@@ -171,7 +171,7 @@
 										</copy>
 										<!-- copy over the configuration file -->
 										<copy overwrite="true"
-											file="${project.build.directory}/classes/faces.properties"
+											file="${project.build.directory}/classes/imeji.properties"
 											todir="${project.build.directory}/jboss/server/conf">
 										</copy>
 										<!-- copy over the descriptio set template file -->
@@ -201,7 +201,7 @@
 										</copy>
 										<!-- copy over the configuration file -->
 										<copy overwrite="true"
-											file="${project.build.directory}/classes/faces.properties"
+											file="${project.build.directory}/classes/imeji.properties"
 											todir="${jboss.install.dir}/server/default/conf">
 										</copy>
 										<!-- copy over the screen config file file -->

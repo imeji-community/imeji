@@ -54,7 +54,7 @@ public class UploadBean
 
 		try 
 		{
-			escidocContext = PropertyReader.getProperty("escidoc.faces.context.id");
+			escidocContext = PropertyReader.getProperty("escidoc.imeji.context.id");
 			logInEscidoc();
 		} 
 		catch (Exception e) 

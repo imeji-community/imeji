@@ -17,7 +17,7 @@ import de.mpg.imeji.util.PropertyReader;
 
 
 /**
- *  JavaBean for static content of the Faces solution.
+ *  JavaBean for static content of the Imeji solution.
  * @author saquet
  *
  */
@@ -31,17 +31,17 @@ public class StaticContentBean
     
     public StaticContentBean() throws IOException, URISyntaxException
     {
-        if ("".equals(PropertyReader.getProperty("escidoc.faces.about.url")))
+        if ("".equals(PropertyReader.getProperty("escidoc.imeji.about.url")))
         {
             about = false;
         }
         
-        if ("".equals(PropertyReader.getProperty("escidoc.faces.legal.url")))
+        if ("".equals(PropertyReader.getProperty("escidoc.imeji.legal.url")))
         {
             legal = false;
         }
         
-        if ("".equals(PropertyReader.getProperty("escidoc.faces.blog.url")))
+        if ("".equals(PropertyReader.getProperty("escidoc.imeji.blog.url")))
         {
             blog = false;
         }
@@ -91,7 +91,7 @@ public class StaticContentBean
     {
         try
         {
-            String html = "background-image: url( " + PropertyReader.getProperty("escidoc.faces.logo.url") + ");";
+            String html = "background-image: url( " + PropertyReader.getProperty("escidoc.imeji.logo.url") + ");";
             
             return html;
         }
@@ -105,7 +105,7 @@ public class StaticContentBean
     {
         try
         {            
-            return PropertyReader.getProperty("escidoc.faces.logo.link.url");
+            return PropertyReader.getProperty("escidoc.imeji.logo.link.url");
         }
         catch (Exception e)
         {
@@ -126,12 +126,12 @@ public class StaticContentBean
         
         try
         {
-            String helpProp = PropertyReader.getProperty("escidoc.faces.help.url");
+            String helpProp = PropertyReader.getProperty("escidoc.imeji.help.url");
             html = getContent(new URL(helpProp));
         }
         catch (Exception e)
         {
-            html = PropertyReader.getProperty("escidoc.faces.help.url") + " couldn't be loaded. Url might be either wrong or protected."
+            html = PropertyReader.getProperty("escidoc.imeji.help.url") + " couldn't be loaded. Url might be either wrong or protected."
                     + "<br/><br/>"
                     + "Error message:"
                     + "<br/><br/>"
@@ -154,11 +154,11 @@ public class StaticContentBean
        
         try
         {
-            html = getContent(new URL(PropertyReader.getProperty("escidoc.faces.home.url")));
+            html = getContent(new URL(PropertyReader.getProperty("escidoc.imeji.home.url")));
         }
         catch (Exception e)
         {
-            html = PropertyReader.getProperty("escidoc.faces.help.url") + " couldn't be loaded. Url might be either wrong or protected."
+            html = PropertyReader.getProperty("escidoc.imeji.help.url") + " couldn't be loaded. Url might be either wrong or protected."
                 + "<br/><br/>"
                 + "Error message:"
                 + "<br/><br/>"
@@ -181,11 +181,11 @@ public class StaticContentBean
         
         try
         {
-            html = getContent(new URL(PropertyReader.getProperty("escidoc.faces.about.url")));
+            html = getContent(new URL(PropertyReader.getProperty("escidoc.imeji.about.url")));
         }
         catch (Exception e)
         {
-            html = PropertyReader.getProperty("escidoc.faces.help.url") + " couldn't be loaded. Url might be either wrong or protected."
+            html = PropertyReader.getProperty("escidoc.imeji.help.url") + " couldn't be loaded. Url might be either wrong or protected."
                 + "<br/><br/>"
                 + "Error message:"
                 + "<br/><br/>"
@@ -208,11 +208,11 @@ public class StaticContentBean
         
         try
         {
-            html = getContent(new URL(PropertyReader.getProperty("escidoc.faces.legal.url")));
+            html = getContent(new URL(PropertyReader.getProperty("escidoc.imeji.legal.url")));
         }
         catch (Exception e)
         {
-            html = PropertyReader.getProperty("escidoc.faces.help.url") + " couldn't be loaded. Url might be either wrong or protected."
+            html = PropertyReader.getProperty("escidoc.imeji.help.url") + " couldn't be loaded. Url might be either wrong or protected."
                 + "<br/><br/>"
                 + "Error message:"
                 + "<br/><br/>"
@@ -228,11 +228,11 @@ public class StaticContentBean
         
         try
         {
-            html = getContent(new URL(PropertyReader.getProperty("escidoc.faces.confirmation.url")));
+            html = getContent(new URL(PropertyReader.getProperty("escidoc.imeji.confirmation.url")));
         }
         catch (Exception e)
         {
-            html = PropertyReader.getProperty("escidoc.faces.confirmation.url") + " couldn't be loaded. Url might be either wrong or protected."
+            html = PropertyReader.getProperty("escidoc.imeji.confirmation.url") + " couldn't be loaded. Url might be either wrong or protected."
                     + "<br/><br/>"
                     + "Error message:"
                     + "<br/><br/>"

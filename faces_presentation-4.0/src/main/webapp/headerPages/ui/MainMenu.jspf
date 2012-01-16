@@ -42,7 +42,7 @@
 		</h:outputLink>
 		<h:outputText id="txtHomeInactive" styleClass="free_area0" value="#{lbl.home}" rendered="#{HistorySession.currentPage.type.fileName == 'Welcome.xhtml'}" />
 	
-		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="/faces/images?q=" rendered="#{HistorySession.currentPage.type.fileName != 'Images.xhtml'}">
+		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="/imeji/images?q=" rendered="#{HistorySession.currentPage.type.fileName != 'Images.xhtml'}">
 	  		<h:outputText value="#{lbl.header_browse}"/>
 	  	</h:outputLink>
 	  	

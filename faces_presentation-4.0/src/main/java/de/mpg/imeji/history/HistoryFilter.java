@@ -139,7 +139,7 @@ public class HistoryFilter  implements Filter{
 		 InnerFacesContext.setFacesContextAsCurrentInstance(facesContext);
 
 		 // set a new viewRoot, otherwise context.getViewRoot returns null
-		 UIViewRoot view = facesContext.getApplication().getViewHandler().createView(facesContext, "faces");
+		 UIViewRoot view = facesContext.getApplication().getViewHandler().createView(facesContext, "imeji");
 		 facesContext.setViewRoot(view);
 
 		 return facesContext;

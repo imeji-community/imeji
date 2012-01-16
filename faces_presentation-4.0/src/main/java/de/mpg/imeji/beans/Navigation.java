@@ -45,7 +45,7 @@ public class Navigation implements Serializable
     public final String frameworkUrl;
     // Url of the application
     public final String applicationUrl;
-    // Pages of Faces
+    // Pages of Imeji
     public final Page HOME_PAGE = new Page("HomePage", "pictures");
     public final Page ABOUT = new Page("About", "about");
     public final Page LEGAL = new Page("Legal", "legal");
@@ -104,12 +104,12 @@ public class Navigation implements Serializable
     public Navigation() throws Exception
     {
         frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.ur");
-        applicationUrl = PropertyReader.getProperty("escidoc.faces.instance.url");
+        applicationUrl = PropertyReader.getProperty("escidoc.imeji.instance.url");
     }
 
     public String getDomain()
     {
-    	return applicationUrl.replaceAll("faces/", "");
+    	return applicationUrl.replaceAll("imeji/", "");
     }
     
     public String getAboutUrl()
@@ -239,12 +239,12 @@ public class Navigation implements Serializable
 
     public String getBlogUrl() throws IOException, URISyntaxException
     {
-        return PropertyReader.getProperty("escidoc.faces.blog.url");
+        return PropertyReader.getProperty("escidoc.imeji.blog.url");
     }
 
     public String getImpressumUrl() throws IOException, URISyntaxException
     {
-        return PropertyReader.getProperty("escidoc.faces.impressum.url");
+        return PropertyReader.getProperty("escidoc.imeji.impressum.url");
     }
 
     public String getAlbumInterfaceUrl()

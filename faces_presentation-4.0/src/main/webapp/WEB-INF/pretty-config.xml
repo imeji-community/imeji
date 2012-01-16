@@ -17,7 +17,6 @@
 		<view-id>/jsf/Welcome.xhtml</view-id>
 	</url-mapping>
 	
-	
 	<url-mapping id="albums">
 		<pattern value="/albums" />
 		<view-id>/jsf/Albums.xhtml</view-id>

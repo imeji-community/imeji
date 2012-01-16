@@ -133,8 +133,8 @@ public class ImageServlet extends HttpServlet
 				}
 				if (method.getStatusCode() != 200)
 				{
-					ProxyHelper.setProxy(client, PropertyReader.getProperty("escidoc.faces.instance.url"));
-					method = new GetMethod(PropertyReader.getProperty("escidoc.faces.instance.url") + "/resources/icon/defaultThumb.gif");
+					ProxyHelper.setProxy(client, PropertyReader.getProperty("escidoc.imeji.instance.url"));
+					method = new GetMethod(PropertyReader.getProperty("escidoc.imeji.instance.url") + "/resources/icon/defaultThumb.gif");
 					client.executeMethod(method);
 
 					//out = resp.getOutputStream();

@@ -1,3 +1,7 @@
+/**
+ * License: src/main/resources/license/escidoc.license
+ */
+
 package de.mpg.imeji.filter;
 
 import java.util.ArrayList;

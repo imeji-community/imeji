@@ -1,3 +1,7 @@
+/**
+ * License: src/main/resources/license/escidoc.license
+ */
+
 package de.mpg.jena.search.query;
 
 import de.mpg.jena.controller.SearchCriterion.ImejiNamespaces;

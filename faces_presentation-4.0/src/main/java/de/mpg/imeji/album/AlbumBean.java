@@ -1,3 +1,7 @@
+/**
+ * License: src/main/resources/license/escidoc.license
+ */
+
 package de.mpg.imeji.album;
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,3 +1,7 @@
+/**
+ * License: src/main/resources/license/escidoc.license
+ */
+
 package de.mpg.jena.controller;
 
 import de.mpg.jena.vo.User;

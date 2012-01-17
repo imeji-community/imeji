@@ -1,3 +1,7 @@
+/**
+ * License: src/main/resources/license/escidoc.license
+ */
+
 package de.mpg.imeji.util;
 
 import java.util.StringTokenizer;

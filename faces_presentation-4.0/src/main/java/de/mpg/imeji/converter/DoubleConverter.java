@@ -1,3 +1,7 @@
+/**
+ * License: src/main/resources/license/escidoc.license
+ */
+
 package de.mpg.imeji.converter;
 
 import javax.faces.component.UIComponent;

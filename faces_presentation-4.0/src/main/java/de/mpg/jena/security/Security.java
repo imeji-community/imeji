@@ -1,3 +1,7 @@
+/**
+ * License: src/main/resources/license/escidoc.license
+ */
+
 package de.mpg.jena.security;
 
 import org.apache.log4j.Logger;

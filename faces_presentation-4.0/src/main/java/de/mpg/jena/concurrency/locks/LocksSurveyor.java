@@ -1,3 +1,7 @@
+/**
+ * License: src/main/resources/license/escidoc.license
+ */
+
 package de.mpg.jena.concurrency.locks;
 
 import java.lang.management.GarbageCollectorMXBean;

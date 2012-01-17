@@ -19,31 +19,28 @@ import de.mpg.jena.export.Export;
 import de.mpg.jena.search.SearchResult;
 
 /**
- * Export in a pretty RDF (without technical triples)
+ * Export in a pretty RDF (without technical triples) of collections
  * 
- * @author saquet
+ * @author Friederike Kleinfercher
  *
  */
-public class RDFExport extends Export
+public class RDFCollectionExport extends Export
 {
 	private String[] filteredTriples = 
 	{
-			"http://imeji.mpdl.mpg.de/metadata/pos", 
 			"http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-			"http://imeji.mpdl.mpg.de/metadata/id",
+			"http://purl.org/escidoc/metadata/profiles/0.1/pos",
 			"http://imeji.mpdl.mpg.de/id",
-			"http://imeji.mpdl.mpg.de/metadata/searchValue",
-			"http://purl.org/escidoc/metadata/profiles/0.1/pos"
+			"http://imeji.mpdl.mpg.de/metadata/id"
 	};
 
 	private Map<String, String> namespaces;
-
+	
 	@Override
 	public void init() 
 	{
-		// Not initialization so far
+		// No initialization so far
 	}
-
 	@Override
 	public void export(OutputStream out, SearchResult sr)
 	{
@@ -60,7 +57,7 @@ public class RDFExport extends Export
 	{
 		namespaces = new HashMap<String, String>();
 		namespaces.put("http://imeji.mpdl.mpg.de/", "imeji");
-		namespaces.put("http://imeji.mpdl.mpg.de/metadata/", "imeji-metadata");
+		namespaces.put("http://imeji.mpdl.mpg.de/container/", "imeji-metadata");
 		namespaces.put("http://purl.org/escidoc/metadata/terms/0.1/", "eterms");
 		namespaces.put("http://purl.org/dc/elements/1.1/", "dcterms");
 		namespaces.put("http://purl.org/escidoc/metadata/profiles/0.1/", "eprofiles");
@@ -82,11 +79,11 @@ public class RDFExport extends Export
 
 		for (String s : sr.getResults())
 		{
-			Resource resource = ImejiJena.imageModel.getResource(s);
+			Resource resource = ImejiJena.collectionModel.getResource(s);
 			newLine(writer);
-			writer.append(openTagImage(s));
+			writer.append(openTagCollection(s));
 			writer.append(exportResource(resource).getBuffer());
-			writer.append(closeTagImage());
+			writer.append(closeTagCollection());
 		}
 		newLine(writer);
 		writer.append("</rdf:RDF>");
@@ -146,14 +143,14 @@ public class RDFExport extends Export
 		return writer;
 	}
 
-	private String openTagImage(String uri)
+	private String openTagCollection(String uri)
 	{
-		return "<imeji:image rdf:about=\"" + uri +"\">";
+		return "<imeji:collection rdf:about=\"" + uri +"\">";
 	}
 
-	private String closeTagImage()
+	private String closeTagCollection()
 	{
-		return "</imeji:image>";
+		return "</imeji:collection>";
 	}
 
 	private String openTag(Statement st, String resourceURI)

@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.client.HttpResponseException;
+
 import de.mpg.imeji.beans.SessionBean;
 import de.mpg.imeji.search.URLQueryTransformer;
 import de.mpg.jena.controller.SearchCriterion;
@@ -33,7 +35,7 @@ public class ExportServlet extends HttpServlet
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
 	{		
 		String query = req.getParameter("q");
 
@@ -44,20 +46,22 @@ public class ExportServlet extends HttpServlet
 		try 
 		{
 			scList = URLQueryTransformer.transform2SCList(query);
+			ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap());
+			resp.setHeader("Connection", "close");
+			resp.setHeader("Content-Type", exportManager.getContentType());
+			
+			SearchResult result = exportManager.search(scList);
+			exportManager.export(result);
 		} 
-		catch (Exception e) 
-		{
-			throw new RuntimeException(e);
-		}
 
-		ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap());
-		
-		resp.setHeader("Connection", "close");
-		resp.setHeader("Content-Type", exportManager.getContentType());
-		
-		SearchResult result = exportManager.search(scList);
-		exportManager.export(result);
-		
+		catch (HttpResponseException he) 
+		{
+			resp.sendError(he.getStatusCode(), he.getMessage());
+		}
+		catch (IOException e) 
+		{
+			resp.sendError(500, e.getMessage());
+		}
 	}
 
 	private SessionBean getSessionBean(HttpServletRequest req, HttpServletResponse resp)

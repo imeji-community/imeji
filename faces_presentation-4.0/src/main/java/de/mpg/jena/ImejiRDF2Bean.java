@@ -197,7 +197,8 @@ public class ImejiRDF2Bean
 				Statement s1 = iter.nextStatement();
 				if (!hasMdSet)
 				{
-					hasMdSet = (hasMetadataSet(s1.getResource()) || s1.getResource().toString().equals("http://imeji.mpdl.mpg.de/metadataSet"));
+					hasMdSet = (hasMetadataSet(s1.getResource()) || s1.getResource().toString().equals("http://imeji.mpdl.mpg.de/metadataSet")
+							|| s1.getResource().toString().equals("http://imeji.mpdl.mpg.de/container/:metadata")); //TOCHECK
 				}
 			}
 			catch (Exception e) {/*Do nothing*/}

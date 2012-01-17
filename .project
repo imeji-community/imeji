@@ -3,6 +3,9 @@
 	<name>faces4</name>
 	<comment></comment>
 	<projects>
+		<project>fledgeddata</project>
+		<project>fledgeddata_ear</project>
+		<project>fledgeddata_presentation</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

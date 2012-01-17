@@ -19,7 +19,7 @@ import de.mpg.jena.util.ObjectHelper;
 public class URLQueryTransformer 
 {
 
-	public static List<SearchCriterion> transform2SCList(String query) throws Exception
+	public static List<SearchCriterion> transform2SCList(String query) throws IOException
 	{
 		List<SearchCriterion> scList = parseQuery(query, Operator.AND);
 		return scList;

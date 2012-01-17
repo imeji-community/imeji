@@ -7,8 +7,12 @@ package de.mpg.jena.export;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.apache.http.client.HttpResponseException;
+
 import de.mpg.jena.export.format.JenaExport;
-import de.mpg.jena.export.format.RDFExport;
+import de.mpg.jena.export.format.RDFAlbumExport;
+import de.mpg.jena.export.format.RDFCollectionExport;
+import de.mpg.jena.export.format.RDFImageExport;
 import de.mpg.jena.export.format.SitemapExport;
 import de.mpg.jena.search.SearchResult;
 
@@ -20,23 +24,66 @@ public abstract class Export
 	public abstract String getContentType();
 	public abstract void init();
 
-	public static Export factory(Map<String, String[]> params)
+	public static Export factory(Map<String, String[]> params) throws HttpResponseException
 	{
 		Export export = null; 
+		boolean supportedFormat = false;
+		boolean supportedType = false;
 		
 		String format = getParam(params, "format");
+		String type = getParam(params, "type");
+		
+		if (format == null || format.equals(""))
+		{
+			throw new HttpResponseException(400, "Required parameter 'format' is missing.");
+		}
 
 		if("rdf".equals(format))
-		{
-			export = new RDFExport();
+		{	supportedFormat = true;
+			
+			if (type == null || type.equals(""))
+			{
+				throw new HttpResponseException(400, "Required parameter 'type' is missing.");
+			}
+			
+			if (type.equalsIgnoreCase("image"))
+			{
+				supportedType = true;
+				export = new RDFImageExport();
+			}
+			else if (type.equalsIgnoreCase("collection"))
+			{
+				supportedType = true;
+				export = new RDFCollectionExport();
+			}		
+			else if (type.equalsIgnoreCase("album"))
+			{
+				supportedType = true;
+				export = new RDFAlbumExport();
+			}
 		}
+		
 		else if ("jena".equals(format) || format == null)
-		{
+		{	supportedFormat = true;
+			supportedType = true; //default, no type necessary here
+			
 			export = new JenaExport();
 		}
+		
 		else if("sitemap".equals(format))
-		{
+		{	supportedFormat = true;
+			supportedType = true;//default, no type necessary here
+			
 			export = new SitemapExport();
+		}
+		
+		if (!supportedFormat)
+		{
+			throw new HttpResponseException(400, "Format "+format+" is not supported.");
+		}
+		if (!supportedType)
+		{
+			throw new HttpResponseException(400, "Type "+type+" is not supported.");
 		}
 		
 		export.setParams(params);

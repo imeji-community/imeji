@@ -17,6 +17,7 @@ public class CollectionImeji extends Container implements Serializable{
 
     
     private URI profile = null;
+    private MetadataSet metadataSet = new MetadataSet();
 
     @RdfProperty("http://imeji.mpdl.mpg.de/mdprofile")
 	public URI getProfile() {
@@ -27,7 +28,15 @@ public class CollectionImeji extends Container implements Serializable{
 		this.profile = profile;
 	}
     
-    
+    public MetadataSet getMetadataSet() 
+    {
+		return metadataSet;
+	}
+
+	public void setMetadataSet(MetadataSet metadataSet) 
+	{
+		this.metadataSet = metadataSet;
+	}
 
     
    

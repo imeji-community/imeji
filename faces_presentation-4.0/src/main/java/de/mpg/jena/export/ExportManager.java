@@ -10,6 +10,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.HttpResponseException;
+
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
@@ -25,7 +27,8 @@ public class ExportManager
 	private OutputStream out;
 	private Export export;
 	private User user;
-	public ExportManager(OutputStream out, User user, Map<String, String[]> params) 
+	
+	public ExportManager(OutputStream out, User user, Map<String, String[]> params) throws HttpResponseException 
 	{
 		this.out = out;
 		this.user = user;

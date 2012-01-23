@@ -355,9 +355,7 @@
 				<!-- the ears are deployed to this server using jboss:harddeploy -->
 				<!-- <jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir>-->
 
-				<!-- URL of this Imeji instance -->
-				<escidoc.imeji.instance.url>http://localhost:8080/imeji/</escidoc.imeji.instance.url>
-								
+											
 				<!--  Identifier of the content model "Imeji" in the current framework instance -->
 				<escidoc.imeji.content-model.id>escidoc:14001</escidoc.imeji.content-model.id>
 				
@@ -449,11 +447,11 @@
 					-Dcom.sun.xml.namespace.QName.useCompatibleSerialVersionUID=1.0 -Dpubman.properties.file=./pubman.properties
 				</cargo.jvmargs>
 				<!-- this path is used as root for all jboss installations -->
-				<cargo.install.dir>${user.home}/jboss</cargo.install.dir>
+				<!--  <cargo.install.dir>${user.home}/jboss</cargo.install.dir>-->
 				<!-- fetch the jboss from this url -->
 				<cargo.jboss.url>http://heanet.dl.sourceforge.net/sourceforge/jboss/jboss-4.2.2.GA.zip</cargo.jboss.url>
 				<!-- local intallation of the jboss for integration-tests -->
-				<cargo.jboss.install.dir>${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir>
+				<!-- <cargo.jboss.install.dir>${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir>-->
 
 				<!-- deploy the pubman ear to this server and port via jmx -->
 				<jboss.deploy.host>localhost</jboss.deploy.host>

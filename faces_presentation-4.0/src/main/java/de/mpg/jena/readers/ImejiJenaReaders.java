@@ -21,7 +21,6 @@ public class ImejiJenaReaders
 	
 	public static RDF2Bean getReader(Model m)
 	{
-		
 		if (ImejiJena.imageModel.equals(m))
 		{
 			return imageReader;

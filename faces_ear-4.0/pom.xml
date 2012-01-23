@@ -159,11 +159,6 @@
 										<copy todir="${project.build.directory}">
 											<fileset dir="src/jboss/configuration42x" />
 										</copy>
-										<!-- copy over the validation datasource descriptor -->
-										<copy overwrite="true"
-											file="${project.build.directory}/classes/validation-ds.xml"
-											todir="${project.build.directory}/jboss/server/deploy">
-										</copy>
 										<!-- copy over the jboss service descriptor -->
 										<copy overwrite="true"
 											file="${project.build.directory}/classes/jboss-service.xml"
@@ -191,14 +186,9 @@
 								<configuration>
 									<tasks>
 
-										<echo message="${project.build.directory}" />
+										<echo message="Deploy files from ${project.build.directory} to ${jboss.install.dir}" />
 
 										<!-- configuration for the deploy jboss server -->
-										<!-- copy over the validation datasource descriptor -->
-										<copy overwrite="true"
-											file="${project.build.directory}/classes/validation-ds.xml"
-											todir="${jboss.install.dir}/server/default/deploy">
-										</copy>
 										<!-- copy over the configuration file -->
 										<copy overwrite="true"
 											file="${project.build.directory}/classes/imeji.properties"
@@ -210,12 +200,6 @@
 											todir="${jboss.install.dir}/server/default/conf">
 										</copy>
 
-										<!-- configuration for the runtime server jboss server -->
-										<!-- <xslt processor="trax" in="${jboss.install.dir}/server/default/deploy/properties-service.xml" 
-											style="${project.build.directory}/classes/properties-service-transform.xsl" 
-											out="${project.build.directory}/properties-service.temp" /> <copy overwrite="true" 
-											file="${project.build.directory}/properties-service.temp" toFile="${jboss.install.dir}/server/default/deploy/properties-service.xml"> 
-											</copy> -->
 
 									</tasks>
 								</configuration>

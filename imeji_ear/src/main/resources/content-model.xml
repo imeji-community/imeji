@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<escidocContentModel:content-model
+	xmlns:escidocContentStreams="http://www.escidoc.de/schemas/contentstreams/0.7"
+	xmlns:version="http://escidoc.de/core/01/properties/version/"
+	xmlns:release="http://escidoc.de/core/01/properties/release/"
+	xmlns:escidocContentModel="http://www.escidoc.de/schemas/contentmodel/0.1"
+	xmlns:prop="http://escidoc.de/core/01/properties/" 
+	xmlns:srel="http://escidoc.de/core/01/structural-relations/"
+	xmlns:xlink="http://www.w3.org/1999/xlink" >
+	<escidocContentModel:properties>
+		<prop:name>Imeji Content Model</prop:name>
+		<prop:description>Model for Imeji</prop:description>
+	</escidocContentModel:properties>
+</escidocContentModel:content-model>
+

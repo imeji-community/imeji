@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /
+
+Sitemap: /export?format=sitemap&n=10000&type=image&priority=0.5&q=
+Sitemap: /export?format=sitemap&n=10000&type=collection&priority=1&q=
+Sitemap: /export?format=sitemap&n=10000&type=album&priority=0.7&q=

@@ -1,0 +1,24 @@
+@prefix tdb:     <http://jena.hpl.hp.com/2008/tdb#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+
+[] ja:loadClass "com.hp.hpl.jena.tdb.TDB" .
+tdb:DatasetTDB rdfs:subClassOf ja:RDFDataset .
+tdb:GraphTDB rdfs:subClassOf ja:Model .
+<#dataset> rdf:type ja:RDFDataset ;
+    ja:defaultGraph <#items> ;
+    ja:namedGraph [ 
+        ja:graphName <http://dev-coreservice.mpdl.mpg.de/metastore/metadata/faces> ;
+        ja:graph <#meta> 
+    ] ;
+. 
+
+<#items> rdf:type tdb:GraphTDB ;
+    tdb:location "/home/frank/TDB/items" ;
+.
+
+<#meta> rdf:type tdb:GraphTDB ;
+    tdb:location "/home/frank/TDB/md_faces" ;
+.
+

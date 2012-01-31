@@ -1,11 +1,10 @@
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.mpg.escidoc.imeji</groupId>
-	<artifactId>imeji</artifactId>
+	<groupId>de.mpg.escidoc.faces4</groupId>
+	<artifactId>faces4</artifactId>
 	<packaging>pom</packaging>
-	<version>0.1</version>
-	<name>imeji</name>
+	<version>4.0</version>
+	<name>faces4</name>
 	<url>http://escidoc1.escidoc.mpg.de/projects/faces</url>
 	<description>
 		http://colab.mpdl.mpg.de/mediawiki/Imeji
@@ -17,17 +16,17 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
 	<organization>
 		<name>Max Planck Digital Library</name>
 		<url>http://www.mpdl.mpg.de/</url>
 	</organization>
-	
+
 	<issueManagement>
 		<system>Jira</system>
 		<url>http://jira.mpdl.mpg.de</url>
 	</issueManagement>
-	
+
 	<developers>
 		<developer>
 			<id>mdreyer</id>
@@ -72,47 +71,47 @@
 			<timezone>+2</timezone>
 		</developer>
 		<developer>
-			<id>kleinfercher</id>
-			<name>Friederike Kleinfercher</name>
-			<email>kleinfercher@mpdl.mpg.de</email>
-			<roles>
-				<role>Software developer</role>
-			</roles>
-			<organization>Max Planck Digital Library</organization>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
-			<id>LuYu</id>
-			<name>Lu Yu</name>
-			<email>yu@mpdl.mpg.de</email>
-			<roles>
-				<role>Software developer</role>
-			</roles>
-			<organization>Max Planck Digital Library</organization>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
-			<id>mfranke</id>
-			<name>Michael Franke</name>
-			<email>franke@mpdl.mpg.de</email>
-			<roles>
-				<role>Architecture development</role>
-			</roles>
-			<organization>Max Planck Digital Library</organization>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
-			<id>wfrank</id>
-			<name>Wilhelm Frank</name>
-			<email>frank@mpdl.mpg.de</email>
-			<roles>
-				<role>Architecture development</role>
-			</roles>
-			<organization>Max Planck Digital Library</organization>
-			<timezone>+2</timezone>
-		</developer>
+            <id>kleinfercher</id>
+            <name>Friederike Kleinfercher</name>
+            <email>kleinfercher@mpdl.mpg.de</email>
+            <roles>
+                <role>Software developer</role>
+            </roles>
+            <organization>Max Planck Digital Library</organization>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>LuYu</id>
+            <name>Lu Yu</name>
+            <email>yu@mpdl.mpg.de</email>
+            <roles>
+                <role>Software developer</role>
+            </roles>
+            <organization>Max Planck Digital Library</organization>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>mfranke</id>
+            <name>Michael Franke</name>
+            <email>franke@mpdl.mpg.de</email>
+            <roles>
+                <role>Architecture development</role>
+            </roles>
+            <organization>Max Planck Digital Library</organization>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>wfrank</id>
+            <name>Wilhelm Frank</name>
+            <email>frank@mpdl.mpg.de</email>
+            <roles>
+                <role>Architecture development</role>
+            </roles>
+            <organization>Max Planck Digital Library</organization>
+            <timezone>+2</timezone>
+        </developer>
 	</developers>
-	
+
 	<mailingLists>
 		<mailingList>
 			<name>Infolist about build-failures, source-code changes etc.</name>
@@ -124,7 +123,7 @@
 			</archive>
 		</mailingList>
 	</mailingLists>
-	
+
 	<ciManagement>
 		<system>Continuum</system>
 		<url>http://continuum.mpdl.mpg.de/continuum</url>
@@ -137,66 +136,66 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
-	
+
 	<modules>
 		<module>faces_presentation-4.0</module>
 		<module>faces_ear-4.0</module>
 	</modules>
-	
+
 	<scm>
 		<connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0</connection>
 		<developerConnection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0</developerConnection>
 		<url>https://zim02.gwdg.de/repos/faces/</url>
 	</scm>
 
-	
+
 	<repositories>
 		<repository>
-			<id>central</id>
-			<url>http://central</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+		    <id>central</id>
+		    <url>http://central</url>
+		    <releases>
+		        <enabled>true</enabled>
+		    </releases>
+		    <snapshots>
+		        <enabled>true</enabled>
+		    </snapshots>
 		</repository>
-		
-		<repository>
-			<id>prime-repo</id>
-			<name>Prime Technology Maven Repository</name>
-			<url>http://repository.prime.com.tr</url>
-			<layout>default</layout>
-		</repository>
+	
+		<repository>  
+			<id>prime-repo</id>  
+			<name>Prime Technology Maven Repository</name>  
+			<url>http://repository.prime.com.tr</url>  
+			<layout>default</layout>  
+		</repository>  
 	</repositories>
 
-	
+
 	<distributionManagement>
 		<repository>
-			<id>releases</id>
-			<name>Nexus Managed Releases</name>
-			<url>http://rd.mpdl.mpg.de/nexus/content/repositories/releases</url>
+		    <id>releases</id>
+		    <name>Nexus Managed Releases</name>
+		    <url>http://rd.mpdl.mpg.de/nexus/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Nexus Managed Snapshots</name>
-			<url>http://rd.mpdl.mpg.de/nexus/content/repositories/snapshots</url>
+		    <id>snapshots</id>
+		    <name>Nexus Managed Snapshots</name>
+		    <url>http://rd.mpdl.mpg.de/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
+
 	<pluginRepositories>
 		<pluginRepository>
-			<id>central</id>
-			<url>http://central</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+		    <id>central</id>
+		    <url>http://central</url>
+		    <releases>
+			<enabled>true</enabled>
+		    </releases>
+		    <snapshots>
+			<enabled>true</enabled>
+		    </snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-	
+
 	<build>
 		<resources>
 			<resource>
@@ -251,7 +250,7 @@
 <!--			</plugin>-->
 		</plugins>
 	</build>
-	
+
 	<reporting>
 		<plugins>
 			<plugin>
@@ -265,7 +264,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>taglist-maven-plugin</artifactId>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
@@ -276,51 +275,51 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>changelog-maven-plugin</artifactId>
-			</plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>changelog-maven-plugin</artifactId>
+            </plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<configuration>
-					<configLocation>http://escidoc1.escidoc.mpg.de/resources/checkstyle/checkstyle.xml</configLocation>
-				</configuration>
-			</plugin>
-			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-checkstyle-plugin</artifactId>
+	            <configuration>
+	                <configLocation>http://escidoc1.escidoc.mpg.de/resources/checkstyle/checkstyle.xml</configLocation>
+	            </configuration>
+       	 	</plugin>
+        	<plugin>
                 <!-- JavaNCSS - A Source Measurement Suite for Java
                     http://www.kclee.de/clemens/java/javancss/ -->
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>javancss-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>javancss-maven-plugin</artifactId>
+        	</plugin>
+        	<plugin>
                 <!-- A Java package dependency analyzer that generates
                       design quality metrics http://clarkware.com/software/JDepend.html -->
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jdepend-maven-plugin</artifactId>
-			</plugin>
+           	 	<groupId>org.codehaus.mojo</groupId>
+            	<artifactId>jdepend-maven-plugin</artifactId>
+        	</plugin>
 		</plugins>
 	</reporting>
 
 	<!-- properties valid for all profiles -->
-	
+
 	<profiles>
 		<!-- this profile is used by developers -->
 		<profile>
 			<id>env-development</id>
 			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.zeroturnaround</groupId>
-						<artifactId>javarebel-maven-plugin</artifactId>
-						<executions>
-							<execution>
+			   	<plugins>
+				 	 <plugin>
+						 <groupId>org.zeroturnaround</groupId>
+						 <artifactId>javarebel-maven-plugin</artifactId>
+						 <executions>
+							 <execution>
 								<id>generate-rebel-xml</id>
 								<phase>process-resources</phase>
 								<goals>
 									<goal>generate</goal>
 								</goals>
-							</execution>
-						</executions>
+							 </execution>
+						 </executions>
 						<dependencies>
 							<dependency>
 								<groupId>org.codehaus.plexus</groupId>
@@ -328,10 +327,10 @@
 								<version>1.4.1</version>
 								<scope>runtime</scope>
 							</dependency>
-						</dependencies>
-					</plugin>
-				</plugins>
-			</build>
+						</dependencies>	
+					 </plugin>
+			      </plugins>
+		        </build> 
 			<properties>
 				<!-- the jdk version to use -->
 				<jdk.version>1.5</jdk.version>
@@ -372,13 +371,13 @@
 				<!-- Default number of image in the lists -->
 				<imeji.image.list.size>18</imeji.image.list.size>
 				
-				<!--  Options for number of image in the lists -->
+				<!--  Options for number of image in the lists -->				
 				<imeji.image.list.size.options>6,12,18,24,60,90,240</imeji.image.list.size.options>
 				
 				<!-- Default number of container in the lists -->
 				<imeji.container.list.size>10</imeji.container.list.size>
 				
-				<!--  Options for number of container in the lists -->
+				<!--  Options for number of container in the lists -->				
 				<imeji.container.list.size.options>5,10,15,20,50</imeji.container.list.size.options>
 				
 				<imeji.i18n.languages>en,de,ja</imeji.i18n.languages>
@@ -412,23 +411,23 @@
 				<!-- Current XSD Schema versions -->
 				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
 				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
-
-				<xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
-				<xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
-				<xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
-				<xsd.resolution.thumbnail>103</xsd.resolution.thumbnail>
-				<xsd.resolution.web>357</xsd.resolution.web>
+                
+                <xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
+                <xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
+                <xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
+                <xsd.resolution.thumbnail>103</xsd.resolution.thumbnail>
+                <xsd.resolution.web>357</xsd.resolution.web>
                 
                 <!-- Cone -->
-				<escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
-			
+                <escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
+
 			</properties>
 			<distributionManagement>
 				<site>
 					<id>website</id>
 					<url>scp://escidoc1.escidoc.mpg.de:/srv/www/staging/projects/faces</url>
 				</site>
-			</distributionManagement>
+			</distributionManagement>		
 		</profile>
 		<!-- Profile for automated deploy -->
 		<profile>
@@ -472,7 +471,7 @@
 				<escidoc.imeji.instance.url>http://dev-faces.mpdl.mpg.de/</escidoc.imeji.instance.url>
 				<escidoc.imeji.item.pattern>viewItemFullPage.jsp?itemId=$1</escidoc.imeji.item.pattern>
 				<escidoc.imeji.component.pattern>/viewComponentPage.jsp?componentId=$1</escidoc.imeji.component.pattern>
-				
+
 				<escidoc.imeji.instance.id>de.mpg.escidoc.faces</escidoc.imeji.instance.id>
 						
 				<!-- URL of the FIZ framework instance -->
@@ -491,9 +490,9 @@
 				<escidoc.imeji.album.list.size>10</escidoc.imeji.album.list.size>
 				
 				
-				<!--  UI Config -->
+				<!--  UI Config -->				
 				<escidoc.imeji.album.list.size.options>10,25,50,75,100</escidoc.imeji.album.list.size.options> <!-- User options for the displayed number of albums -->
-				<escidoc.organizationTree.integration>yes</escidoc.organizationTree.integration> <!-- User option, if organization selection should be displayed on create/edit album -->
+				<escidoc.organizationTree.integration>yes</escidoc.organizationTree.integration> <!-- User option, if organization selection should be displayed on create/edit album -->				
 				
 				<imeji.i18n.languages>en-english,de-deutsch</imeji.i18n.languages>
 				
@@ -581,37 +580,37 @@
 				<xsd.soap.statistic.reportdefinition>http://www.escidoc.de/schemas/reportdefinition/0.3</xsd.soap.statistic.reportdefinition>
 				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
 				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
-				
+		
 				<xsd.soap.toc.toc>http://www.escidoc.de/schemas/toc/0.6</xsd.soap.toc.toc>
 				<xsd.soap.toc.table-of-content>http://www.escidoc.de/schemas/tableofcontent/0.1</xsd.soap.toc.table-of-content>
 				<xsd.soap.result.result>http://www.escidoc.de/schemas/result/0.1</xsd.soap.result.result>
 				
 				<xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
-				<xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
-				<xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
+                <xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
+                <xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
                 
 				<!-- Cone -->
-				<escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
-			
+                <escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
+
 			</properties>
 			<distributionManagement>
 				<site>
 					<id>website</id>
 					<url>scp://escidoc1.escidoc.mpg.de:/srv/www/staging/projects/faces</url>
 				</site>
-			</distributionManagement>
+			</distributionManagement>		
 		</profile>
 		<profile>
 			<id>env-production-escidoc2</id>
-		
+
 		</profile>
 		<profile>
 			<id>env-production-escidoc3</id>
-		
+
 		</profile>
 		<profile>
 			<id>env-production-escidoc4</id>
-		
+
 		</profile>
 		<profile>
 			<!-- this profile gets activated if os is windows -->

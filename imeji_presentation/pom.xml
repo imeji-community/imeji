@@ -1,8 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>imeji</artifactId>
-		<groupId>de.mpg.escidoc.imeji</groupId>
+		<groupId>de.mpg.mpdl.imeji</groupId>
 		<version>0.1</version>
 	</parent>
 	<modelVersion>0.1</modelVersion>
@@ -10,11 +10,11 @@
 	<artifactId>imeji_presentation</artifactId>
 	<name>imeji_presentation</name>
 	<packaging>war</packaging>
-	<version>0.1</version>
+	<version>0.1</version>	
 	<scm>
-		<connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_presentation-4.0</connection>
-		<developerConnection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_presentation-4.0</developerConnection>
-		<url>https://zim02.gwdg.de/repos/faces/</url>
+		<connection>scm:git@github.com:bastienMPDL/Imeji.git</connection>
+		<developerConnection>scm:git@github.com:bastienMPDL/Imeji.git</developerConnection>
+		<url>https://bastienMPDL@github.com/bastienMPDL/Imeji.git</url>
 	</scm>
 	<build>
 		<plugins>
@@ -131,9 +131,9 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-		  <groupId>junit</groupId>
-		  <artifactId>junit</artifactId>
-		  <version>4.8.2</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
 		</dependency>
 	</dependencies>
 </project>

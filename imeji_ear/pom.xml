@@ -1,38 +1,37 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<artifactId>faces4</artifactId>
-		<groupId>de.mpg.escidoc.faces4</groupId>
+		<artifactId>imeji</artifactId>
+		<groupId>de.mpg.mpdl.imeji</groupId>
 		<version>4.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.mpg.escidoc.faces4</groupId>
-	<artifactId>faces_ear4</artifactId>
-	<name>faces_ear4</name>
+	<groupId>de.mpg.mdpl.imeji</groupId>
+	<artifactId>imeji_ear</artifactId>
+	<name>imeji_ear</name>
 	<packaging>ear</packaging>
-	<version>4.0</version>
-
+	<version>0.1</version>
+	
 	<scm>
-		<connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_ear-4.0</connection>
-		<developerConnection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0/faces_ear-4.0</developerConnection>
-		<url>https://zim02.gwdg.de/repos/faces/</url>
+		<connection>scm:git@github.com:bastienMPDL/Imeji.git</connection>
+		<developerConnection>scm:git@github.com:bastienMPDL/Imeji.git</developerConnection>
+		<url>https://bastienMPDL@github.com/bastienMPDL/Imeji.git</url>
 	</scm>
-
-
+	
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-ear-plugin</artifactId>
 				<configuration>
-					<displayName>faces4</displayName>
-					<description>faces4</description>
+					<displayName>imeji</displayName>
+					<description>imeji</description>
 					<resourcesDir>target/classes/in_ear</resourcesDir>
 					<version>5</version>
 					<modules>
 						<webModule>
-							<groupId>de.mpg.escidoc.faces4</groupId>
-							<artifactId>faces_presentation4</artifactId>
+							<groupId>de.mpg.mpdl.imeji</groupId>
+							<artifactId>imeji</artifactId>
 							<contextRoot>/imeji</contextRoot>
 						</webModule>
 						<webModule>
@@ -103,12 +102,12 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	
 	<dependencies>
 		<dependency>
-			<groupId>de.mpg.escidoc.faces4</groupId>
-			<artifactId>faces_presentation4</artifactId>
-			<version>4.0</version>
+			<groupId>de.mpg.nmpdl.imeji</groupId>
+			<artifactId>imeji_presentation</artifactId>
+			<version>0.1</version>
 			<scope>compile</scope>
 			<type>war</type>
 		</dependency>
@@ -128,7 +127,7 @@
 		</dependency>
 	</dependencies>
 
-
+	
 	<profiles>
 		<profile>
 			<id>jboss42</id>
@@ -160,20 +159,11 @@
 											<fileset dir="src/jboss/configuration42x" />
 										</copy>
 										<!-- copy over the jboss service descriptor -->
-										<copy overwrite="true"
-											file="${project.build.directory}/classes/jboss-service.xml"
-											todir="${project.build.directory}/jboss/server/conf">
-										</copy>
+										<copy overwrite="true" file="${project.build.directory}/classes/jboss-service.xml" todir="${project.build.directory}/jboss/server/conf"></copy>
 										<!-- copy over the configuration file -->
-										<copy overwrite="true"
-											file="${project.build.directory}/classes/imeji.properties"
-											todir="${project.build.directory}/jboss/server/conf">
-										</copy>
+										<copy overwrite="true" file="${project.build.directory}/classes/imeji.properties" todir="${project.build.directory}/jboss/server/conf"></copy>
 										<!-- copy over the descriptio set template file -->
-										<copy overwrite="true"
-											file="${project.build.directory}/classes/vocabulary.properties"
-											todir="${project.build.directory}/jboss/server/conf">
-										</copy>
+										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${project.build.directory}/jboss/server/conf"></copy>
 									</tasks>
 								</configuration>
 							</execution>
@@ -185,22 +175,16 @@
 								</goals>
 								<configuration>
 									<tasks>
-
+										
 										<echo message="Deploy files from ${project.build.directory} to ${jboss.install.dir}" />
 
 										<!-- configuration for the deploy jboss server -->
 										<!-- copy over the configuration file -->
-										<copy overwrite="true"
-											file="${project.build.directory}/classes/imeji.properties"
-											todir="${jboss.install.dir}/server/default/conf">
-										</copy>
+										<copy overwrite="true" file="${project.build.directory}/classes/imeji.properties" todir="${jboss.install.dir}/server/default/conf"></copy>
 										<!-- copy over the screen config file file -->
-										<copy overwrite="true"
-											file="${project.build.directory}/classes/vocabulary.properties"
-											todir="${jboss.install.dir}/server/default/conf">
-										</copy>
+										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${jboss.install.dir}/server/default/conf"></copy>
 
-
+									
 									</tasks>
 								</configuration>
 							</execution>
@@ -211,7 +195,7 @@
 								<artifactId>ant-trax</artifactId>
 								<version>1.6.5</version>
 							</dependency>
-							
+						
 						</dependencies>
 					</plugin>
 				</plugins>

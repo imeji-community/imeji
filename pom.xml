@@ -1,12 +1,12 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.mpg.escidoc.imeji</groupId>
+	<groupId>de.mpg.mpdl.imeji</groupId>
 	<artifactId>imeji</artifactId>
 	<packaging>pom</packaging>
 	<version>0.1</version>
 	<name>imeji</name>
-	<url>http://escidoc1.escidoc.mpg.de/projects/faces</url>
+	<url>http://imeji.org</url>
 	<description>
 		http://colab.mpdl.mpg.de/mediawiki/Imeji
 	</description>
@@ -35,18 +35,6 @@
 			<email>dreyer@mpdl.mpg.de</email>
 			<roles>
 				<role>Project manager</role>
-				<role>Architect</role>
-			</roles>
-			<organization>Max Planck Digital Library</organization>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
-			<id>nab</id>
-			<name>Natasa Bulatovic</name>
-			<email>bulatovic@mpdl.mpg.de</email>
-			<roles>
-				<role>Architecture development</role>
-				<role>Architect</role>
 			</roles>
 			<organization>Max Planck Digital Library</organization>
 			<timezone>+2</timezone>
@@ -92,21 +80,11 @@
 			<timezone>+2</timezone>
 		</developer>
 		<developer>
-			<id>mfranke</id>
-			<name>Michael Franke</name>
-			<email>franke@mpdl.mpg.de</email>
-			<roles>
-				<role>Architecture development</role>
-			</roles>
-			<organization>Max Planck Digital Library</organization>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
 			<id>wfrank</id>
 			<name>Wilhelm Frank</name>
 			<email>frank@mpdl.mpg.de</email>
 			<roles>
-				<role>Architecture development</role>
+				<role>developer</role>
 			</roles>
 			<organization>Max Planck Digital Library</organization>
 			<timezone>+2</timezone>
@@ -115,12 +93,12 @@
 	
 	<mailingLists>
 		<mailingList>
-			<name>Infolist about build-failures, source-code changes etc.</name>
-			<subscribe>https://listserv.gwdg.de/mailman/listinfo/escidoc-code</subscribe>
-			<unsubscribe>https://listserv.gwdg.de/mailman/listinfo/escidoc-code</unsubscribe>
-			<post>escidoc-code@gwdg.de</post>
+			<name>Support for developeres and users</name>
+			<subscribe>https://listserv.gwdg.de/mailman/listinfo/imeji-support</subscribe>
+			<unsubscribe>https://listserv.gwdg.de/mailman/listinfo/imeji-support</unsubscribe>
+			<post>imeji-support@gwdg.de</post>
 			<archive>
-				https://listserv.gwdg.de/mailman/private/escidoc-code/
+				https://listserv.gwdg.de/mailman/private/imeji-support/
 			</archive>
 		</mailingList>
 	</mailingLists>
@@ -139,16 +117,15 @@
 	</ciManagement>
 	
 	<modules>
-		<module>faces_presentation-4.0</module>
-		<module>faces_ear-4.0</module>
+		<module>imeji_presentation</module>
+		<module>imeji_ear</module>
 	</modules>
 	
 	<scm>
-		<connection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0</connection>
-		<developerConnection>scm:svn:https://zim02.gwdg.de/repos/faces/trunk/faces-4.0</developerConnection>
-		<url>https://zim02.gwdg.de/repos/faces/</url>
+		<connection>scm:git@github.com:bastienMPDL/Imeji.git</connection>
+		<developerConnection>scm:git@github.com:bastienMPDL/Imeji.git</developerConnection>
+		<url>https://bastienMPDL@github.com/bastienMPDL/Imeji.git</url>
 	</scm>
-
 	
 	<repositories>
 		<repository>
@@ -169,7 +146,7 @@
 			<layout>default</layout>
 		</repository>
 	</repositories>
-
+	
 	
 	<distributionManagement>
 		<repository>
@@ -412,7 +389,7 @@
 				<!-- Current XSD Schema versions -->
 				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
 				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
-
+				
 				<xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
 				<xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
 				<xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
@@ -460,20 +437,11 @@
 				<!-- the ears are deployed to this server using jboss:harddeploy -->
 				<jboss.install.dir>/mnt/jboss/dev-faces</jboss.install.dir>
 
-				<!-- Flag to disable the GUI-entry points for UC_PM_SR_03 do advanced search -->
-				<escidoc.pubman_presentation.disable.advanced_search>false</escidoc.pubman_presentation.disable.advanced_search>
-				<escidoc.pubman_presentation.disable.export>false</escidoc.pubman_presentation.disable.export>
-				<escidoc.pubman_presentation.disable.modify>false</escidoc.pubman_presentation.disable.modify>
-				<escidoc.pubman_presentation.disable.new_revision>false</escidoc.pubman_presentation.disable.new_revision>
-				<escidoc.pubman_presentation.disable.view_statistics>false</escidoc.pubman_presentation.disable.view_statistics>
-				<escidoc.pubman_presentation.disable.view_revisions>false</escidoc.pubman_presentation.disable.view_revisions>
-
 				<!-- URL of this Faces instance -->
 				<escidoc.imeji.instance.url>http://dev-faces.mpdl.mpg.de/</escidoc.imeji.instance.url>
 				<escidoc.imeji.item.pattern>viewItemFullPage.jsp?itemId=$1</escidoc.imeji.item.pattern>
 				<escidoc.imeji.component.pattern>/viewComponentPage.jsp?componentId=$1</escidoc.imeji.component.pattern>
-				
-				<escidoc.imeji.instance.id>de.mpg.escidoc.faces</escidoc.imeji.instance.id>
+
 						
 				<!-- URL of the FIZ framework instance -->
 				<escidoc.framework_access.framework.url>http://dev-coreservice.mpdl.mpg.de:8080</escidoc.framework_access.framework.url>
@@ -515,15 +483,7 @@
 				<!-- Logo Url -->
 				<escidoc.imeji.logo.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/mpi_hd.png</escidoc.imeji.logo.url>
 				
-				<!-- FACES Collection id -->
-				<escidoc.faces.collection.id>escidoc:113634</escidoc.faces.collection.id>
 				
-				<!-- FACES Collection file path -->
-				<escidoc.imeji.collection.file.path>C://Dokumente und Einstellungen/saquet/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA/server/default/data/Faces-collection.zip</escidoc.imeji.collection.file.path>
-				
-				<!-- Faces statistics user -->
-				<escidoc.imeji.statistics.password>escidoc</escidoc.imeji.statistics.password>
-				<escidoc.imeji.statistics.username>faces_statistics_user</escidoc.imeji.statistics.username>
 				
 				<!--  Due to a historical defect, QName was released with multiple 
 					serialVersionUID values even though its serialization was the

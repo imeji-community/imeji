@@ -51,6 +51,7 @@ public class ExportServlet extends HttpServlet
 			resp.setHeader("Content-Type", exportManager.getContentType());
 			
 			SearchResult result = exportManager.search(scList);
+			System.out.println(result.getResults());
 			exportManager.export(result);
 		} 
 

@@ -5,16 +5,16 @@
 		<version>0.1</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.mpg.mdpl.imeji</groupId>
+	<groupId>de.mpg.mpdl.imeji</groupId>
 	<artifactId>imeji_ear</artifactId>
 	<name>imeji_ear</name>
 	<packaging>ear</packaging>
 	<version>0.1</version>
 	
 	<scm>
-		<connection>scm:git@github.com:bastienMPDL/Imeji.git</connection>
-		<developerConnection>scm:git@github.com:bastienMPDL/Imeji.git</developerConnection>
-		<url>https://bastienMPDL@github.com/bastienMPDL/Imeji.git</url>
+		<connection>scm:git:git@github.com:MPDL/Imeji.git</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/Imeji.git</developerConnection>
+		<url>https://bastienMPDL@github.com/MPDL/Imeji.git</url>
 	</scm>
 	
 	<build>
@@ -30,7 +30,7 @@
 					<modules>
 						<webModule>
 							<groupId>de.mpg.mpdl.imeji</groupId>
-							<artifactId>imeji</artifactId>
+							<artifactId>imeji_presentation</artifactId>
 							<contextRoot>/imeji</contextRoot>
 						</webModule>
 						<webModule>
@@ -81,7 +81,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
+			<!--  <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
 				<executions>
@@ -98,13 +98,13 @@
 						<item>timestamp</item>
 					</items>
 				</configuration>
-			</plugin>
+			</plugin>-->
 		</plugins>
 	</build>
 	
 	<dependencies>
 		<dependency>
-			<groupId>de.mpg.nmpdl.imeji</groupId>
+			<groupId>de.mpg.mpdl.imeji</groupId>
 			<artifactId>imeji_presentation</artifactId>
 			<version>0.1</version>
 			<scope>compile</scope>

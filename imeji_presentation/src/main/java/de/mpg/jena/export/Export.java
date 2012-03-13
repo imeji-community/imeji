@@ -13,9 +13,16 @@ import de.mpg.jena.export.format.JenaExport;
 import de.mpg.jena.export.format.RDFAlbumExport;
 import de.mpg.jena.export.format.RDFCollectionExport;
 import de.mpg.jena.export.format.RDFImageExport;
+import de.mpg.jena.export.format.RDFProfileExport;
 import de.mpg.jena.export.format.SitemapExport;
 import de.mpg.jena.search.SearchResult;
 
+/**
+ * Export in a pretty RDF (without technical triples)
+ * 
+ * @author saquet
+ *
+ */
 public abstract class Export 
 {
 	private Map<String, String[]> params;
@@ -60,6 +67,11 @@ public abstract class Export
 			{
 				supportedType = true;
 				export = new RDFAlbumExport();
+			}
+			else if (type.equals("profile"))
+			{
+				supportedType = true;
+				export = new RDFProfileExport();
 			}
 		}
 		

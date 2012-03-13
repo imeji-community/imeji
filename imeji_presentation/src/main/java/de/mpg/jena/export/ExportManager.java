@@ -7,6 +7,7 @@ package de.mpg.jena.export;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,11 +16,13 @@ import org.apache.http.client.HttpResponseException;
 import de.mpg.jena.controller.AlbumController;
 import de.mpg.jena.controller.CollectionController;
 import de.mpg.jena.controller.ImageController;
+import de.mpg.jena.controller.ProfileController;
 import de.mpg.jena.controller.SearchCriterion;
 import de.mpg.jena.search.SearchResult;
 import de.mpg.jena.util.ObjectHelper;
 import de.mpg.jena.vo.Album;
 import de.mpg.jena.vo.CollectionImeji;
+import de.mpg.jena.vo.MetadataProfile;
 import de.mpg.jena.vo.User;
 
 public class ExportManager 
@@ -87,7 +90,18 @@ public class ExportManager
 			AlbumController albumController = new AlbumController(user);
 			result = albumController.search(scList, null, maximumNumberOfRecords, 0);
 		}
-		else
+		else if ("profile".equals(searchType))
+		{
+			//TODO Change the search for profiles!!!!!!!!!!!!
+			ProfileController pc = new ProfileController(user);
+			List<String> uris = new ArrayList<String>();
+			for (MetadataProfile mdp : pc.search())
+			{
+				uris.add(mdp.getId().toString());
+			}
+			result = new SearchResult(uris);
+		}
+		else if ("image".equals(searchType))
 		{
 			ImageController imageController = new ImageController(user);
 			

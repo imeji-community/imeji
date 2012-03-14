@@ -132,26 +132,31 @@ public class ProfileController extends ImejiController
     	String q = "SELECT DISTINCT ?s WHERE {?s a <http://imeji.mpdl.mpg.de/mdprofile> . ?s <http://imeji.mpdl.mpg.de/properties> ?props . ?props <http://imeji.mpdl.mpg.de/status> ?status " +
     			".FILTER( ";
     	
-    	q += "?status=<http://imeji.mpdl.mpg.de/status/RELEASED> || (?status!=<http://imeji.mpdl.mpg.de/status/WITHDRAWN> && (";
+    	q += "?status=<http://imeji.mpdl.mpg.de/status/RELEASED> || (?status!=<http://imeji.mpdl.mpg.de/status/WITHDRAWN> ";
     	
     	int i=0;
-
-		for(Grant g : user.getGrants())
+    	
+    	if (user != null && user.getGrants().size() >0)
     	{
-    		if (GrantType.SYSADMIN.equals(g.getGrantType()))
-    		{
-    			if (i > 0) q+= " || ";
-    			q += " true ";
-    			i++;
-    		}
-    		else if (GrantType.PROFILE_EDITOR.equals(g.getGrantType())|| GrantType.PROFILE_ADMIN.equals(g.getGrantType()))
-    		{
-    			if (i > 0) q+= " || ";
-    			q += " ?s=<" + g.getGrantFor() +"> ";
-    			i++;
-    		}
+    		q += "&& (";
+			for(Grant g : user.getGrants())
+	    	{
+	    		if (GrantType.SYSADMIN.equals(g.getGrantType()))
+	    		{
+	    			if (i > 0) q+= " || ";
+	    			q += " true ";
+	    			i++;
+	    		}
+	    		else if (GrantType.PROFILE_EDITOR.equals(g.getGrantType())|| GrantType.PROFILE_ADMIN.equals(g.getGrantType()))
+	    		{
+	    			if (i > 0) q+= " || ";
+	    			q += " ?s=<" + g.getGrantFor() +"> ";
+	    			i++;
+	    		}
+	    	}
+			q += ")";
     	}
-    	q += " )))}";
+    	q += " ))}";
     	
     	return ImejiSPARQL.execAndLoad(q, MetadataProfile.class);
     }

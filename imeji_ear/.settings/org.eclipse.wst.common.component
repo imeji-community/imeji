@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="imeji_ear">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/ear-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/application" tag="defaultRootSource"/>
+        <dependent-module archiveName="imeji_presentation-0.1.war" deploy-path="/" handle="module:/resource/imeji_presentation/imeji_presentation">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="common_presentation-1.0.45-SNAPSHOT.war" deploy-path="/" handle="module:/resource/common_presentation/common_presentation">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fledgeddata_presentation-1.0.0-SNAPSHOT.war" deploy-path="/" handle="module:/classpath/var/M2_REPO/de/mpg/escidoc/services/fledgeddata_presentation/1.0.0-SNAPSHOT/fledgeddata_presentation-1.0.0-SNAPSHOT.war">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>

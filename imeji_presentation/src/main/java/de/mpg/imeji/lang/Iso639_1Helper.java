@@ -11,11 +11,13 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.log4j.Logger;
 
 import de.mpg.imeji.util.PropertyReader;
 
 public class Iso639_1Helper 
 {	
+	private static Logger logger = Logger.getLogger(Iso639_1Helper.class);
 	private List<SelectItem> list = null;
 	
 	public Iso639_1Helper() 
@@ -25,6 +27,7 @@ public class Iso639_1Helper
 		parseVocabularyString(getVocabularyString());
 	}
 	
+
 	private String getVocabularyString()
 	{
         try 
@@ -36,7 +39,8 @@ public class Iso639_1Helper
 		} 
         catch (Exception e) 
         {
-			throw new RuntimeException(e);
+        	logger.error("Couldn't read ISO639_1 vocabulary, will use default one! Error: " + e);
+        	return "en|en - English\nde|de - German";
 		}
 	}
 	

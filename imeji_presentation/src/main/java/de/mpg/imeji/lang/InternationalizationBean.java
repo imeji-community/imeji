@@ -42,7 +42,15 @@ public class InternationalizationBean implements Serializable
 			
 			isolanguages = iso639_1Helper.getList();
 			
-			String supportedLanguages = PropertyReader.getProperty("imeji.i18n.languages");
+			String supportedLanguages = null;
+			try 
+			{
+				supportedLanguages = PropertyReader.getProperty("imeji.i18n.languages");
+			}
+			catch (Exception e) 
+			{
+				throw new RuntimeException("Error reading property imeji.i18n.languages. Check Propety file: " + e);
+			}
 						
 			// Add first languages out of properties
 			for (SelectItem iso : isolanguages)
@@ -72,7 +80,7 @@ public class InternationalizationBean implements Serializable
 		} 
 		catch (Exception e) 
 		{
-			throw new RuntimeException("Error reading property imeji.i18n.languages. Check Propety file: " + e);
+			throw new RuntimeException(e);
 		}
 	}
 	

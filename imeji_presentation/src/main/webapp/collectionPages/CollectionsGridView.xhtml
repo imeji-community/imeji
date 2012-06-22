@@ -102,7 +102,7 @@
 						      	<span class="seperator status"></span>
 						      	
 						      	<span class="free_area0_p6 endline itemHeadline">
-									<h:outputLink value="#{Navigation.applicationUri}#{container.id.path}">
+									<h:outputLink value="#{Navigation.collectionHome}/#{container.id}">
 						      				<b><h:outputText value="#{container.title}" /></b>
 						      		</h:outputLink>				
 								</span>
@@ -137,14 +137,14 @@
 										</span>
 										<span class="third_area0_p8 endline">
 											<h:outputText value="#{container.size}" styleClass="free_area0"/>
-											<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUrl}images#{container.id.path}?q=" rendered="#{container.size > 0}">
+											<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.collectionImages}/#{container.id}?q=" rendered="#{container.size > 0}">
 							      				<h:outputText value="#{lbl.view_images}"/>
 							      			</h:outputLink>
-							      			<h:outputLink id="lnkUploadImages" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUrl}upload#{container.id.path}?init=1" rendered="#{container.editable and container.status != 'WITHDRAWN'}">
+							      			<h:outputLink id="lnkUploadImages" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.collectionUpload}/#{container.id}?init=1" rendered="#{container.editable and container.status != 'WITHDRAWN'}">
 												<h:outputText value="#{lbl.upload_images}"></h:outputText>
 											</h:outputLink>
 											
-											<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.applicationUri}#{container.id.path}/details?init=1">
+											<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.collectionHome}/#{container.id}/details?init=1">
 												<h:outputText value="#{lbl.view_md}"/>
 											</h:outputLink>
 											

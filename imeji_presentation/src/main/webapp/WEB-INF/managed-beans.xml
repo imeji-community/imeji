@@ -26,17 +26,17 @@
 	<!-- new form old -->
 	<managed-bean>
 		<managed-bean-name>Navigation</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.beans.Navigation</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.Navigation</managed-bean-class>
 		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>StaticContent</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.beans.StaticContentBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.StaticContentBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>BlogBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.beans.BlogBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.BlogBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
@@ -49,245 +49,245 @@
 	<!-- Album Beans -->
 	<managed-bean>
 		<managed-bean-name>AlbumBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.album.AlbumBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 
 	<!-- Collections Bean -->
 	<managed-bean>
 		<managed-bean-name>CollectionSession</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.collection.CollectionSessionBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionSessionBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>CreateCollectionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.collection.CreateCollectionBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.CreateCollectionBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>EditCollectionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.collection.EditCollectionBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.EditCollectionBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ViewCollectionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.collection.ViewCollectionBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.ViewCollectionBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope> 
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>UploadBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.upload.UploadBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.upload.UploadBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope> 
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>CollectionImagesBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.collection.CollectionImagesBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionImagesBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope> 
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>CollectionImageBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.collection.CollectionImageBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionImageBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope> 
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>CollectionsSearchResultBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.collection.CollectionsSearchResultBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionsSearchResultBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<!-- Search Bean -->
 	<managed-bean>
 		<managed-bean-name>AdvancedSearchBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.search.AdvancedSearchBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.search.AdvancedSearchBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<!-- Profiles bean -->
 	<managed-bean>
 		<managed-bean-name>MdProfileBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.mdProfile.MdProfileBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.mdProfile.MdProfileBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ViewMdProfileBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.mdProfile.ViewMdProfileBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.mdProfile.ViewMdProfileBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>CreateMdProfileBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.mdProfile.CreateMdProfileBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.mdProfile.CreateMdProfileBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>EditMdProfileBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.mdProfile.EditMdProfileBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.mdProfile.EditMdProfileBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
 	<!-- Images Beans -->
 	<managed-bean>
 		<managed-bean-name>ImageBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.image.ImageBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.image.ImageBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>ImagesBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.image.ImagesBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.image.ImagesBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>SelectedBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.image.SelectedBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.image.SelectedBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>EditImageMetadataBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.metadata.EditImageMetadataBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.metadata.EditImageMetadataBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>SingleEditBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.metadata.SingleEditBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.metadata.SingleEditBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 
 	<!-- Album Beans -->
 	<managed-bean>
 		<managed-bean-name>AlbumsBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.album.AlbumsBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>AlbumImagesBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.album.AlbumImagesBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumImagesBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>AlbumImageBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.album.AlbumImageBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumImageBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<!-- Users bean -->
 	<managed-bean>
 		<managed-bean-name>UsersBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.user.UsersBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.user.UsersBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>UserBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.user.UserBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.user.UserBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>UserCreationBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.user.UserCreationBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.user.UserCreationBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
 	<!-- Other Beans -->
 	<managed-bean>
 		<managed-bean-name>LoginBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.beans.LoginBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.LoginBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>MessagesBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.beans.MessagesBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.MessagesBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>CollectionsBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.collection.CollectionsBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>SharingBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.user.SharingBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.user.SharingBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>FiltersBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.filter.FiltersBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.filter.FiltersBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>Filter</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.filter.Filter</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.filter.Filter</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>MetadataLabels</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.lang.MetadataLabels</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.lang.MetadataLabels</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>FiltersSession</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.filter.FiltersSession</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.filter.FiltersSession</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>HistorySession</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.history.HistorySession</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.history.HistorySession</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
 
 	<managed-bean>
 		<managed-bean-name>SessionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.beans.SessionBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.SessionBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>QuickSearchBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.search.QuickSearchBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.search.QuickSearchBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>AdminInterfaceBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.beans.AdminInterfaceBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.AdminInterfaceBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>AdminBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.admin.AdminBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.admin.AdminBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>SuggestBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.metadata.util.SuggestBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.metadata.util.SuggestBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>Internationalization</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.lang.InternationalizationBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.lang.InternationalizationBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
 		<managed-bean-name>DoctorBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.beans.DoctorBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.DoctorBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
 	<converter>
 	    <converter-id>DoubleConverter</converter-id>
-	    <converter-class>de.mpg.imeji.converter.DoubleConverter</converter-class>
+	    <converter-class>de.mpg.imeji.presentation.converter.DoubleConverter</converter-class>
 	</converter>
 	
 

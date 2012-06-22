@@ -41,26 +41,24 @@
 			
 			<ui:define name="contentMenu">
 				<h:panelGroup rendered="#{ViewCollectionBean.visible}">
-					<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}" rendered="#{prettyContext.currentMapping.id != 'homeCollection'}">
-						<h:outputText value="#{lbl.collection_home}"/>
-					</h:outputLink>			
-					<h:outputText styleClass="free_area0" value="#{lbl.collection_home}" rendered="#{prettyContext.currentMapping.id == 'homeCollection'}" />
+					
+					<h:outputText styleClass="free_area0" value="#{lbl.collection_home}"/>
 					
 					<h:outputText styleClass="seperator void" />
 					
-					<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{ViewCollectionBean.collection.id.path}?q=" rendered="#{ViewCollectionBean.size > 0}">
+					<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.collectionImages}/#{ViewCollectionBean.id}?q=" rendered="#{ViewCollectionBean.size > 0}">
 						<h:outputText value="#{lbl.view_images}"/>
 					</h:outputLink>
 					
 					<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
 					
-					<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}/details?init=1" rendered="true">
+					<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.collectionHome}/#{ViewCollectionBean.id}/details?init=1" rendered="true">
 						<h:outputText value="#{lbl.collection_metadata}"/>
 					</h:outputLink>
 					
 					<h:outputText styleClass="seperator void" />
 					
-					<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
+					<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUpload}/#{ViewCollectionBean.id}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
 						<h:outputText value="#{lbl.upload_images}"></h:outputText>
 					</h:outputLink>
 				</h:panelGroup>
@@ -100,10 +98,10 @@
 											<f:selectItems value="#{SharingBean.grantsMenu}"/>
 									</h:selectOneMenu>
 					        		<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}" onclick="if (confirm('Do you really want to share the collection (An email will be sent to the user)')) return true; return false;">
-										<f:attribute name="collectionId" value="#{ViewCollectionBean.collection.id}"/>
+										<f:attribute name="collectionId" value="#{ViewCollectionBean.id}"/>
 										<f:attribute name="name" value="#{ViewCollectionBean.collection.metadata.title}"/>
 					           		</h:commandLink>
-					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}"><h:outputText value="Cancel"/></h:outputLink>
+					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.id}"><h:outputText value="Cancel"/></h:outputLink>
 								</h:panelGrid>
 						 </f:facet>   
 					</rich:togglePanel>
@@ -135,14 +133,14 @@
 							
 							<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 								<!-- COLLECTION IMAGES -->
-								<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
+								<h:outputLink value="#{Navigation.collectionImages}/#{ViewCollectionBean.id}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
 									<a4j:repeat var="img" value="#{ViewCollectionBean.images}" rendered="#{img.properties.status != 'WITHDRAWN'}">
 										<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
 									</a4j:repeat>
 								</h:outputLink>
 								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
 								<h2>
-									<h:outputLink value="#{Navigation.imagesUrl}#{ViewCollectionBean.collection.id.path}?q=" rendered="#{ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
+									<h:outputLink value="#{Navigation.collectionImages}/#{ViewCollectionBean.id}?q=" rendered="#{ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
 										<h:outputText value ="#{lbl.collection_view_all_images}"/>
 									</h:outputLink>
 									<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}"/>

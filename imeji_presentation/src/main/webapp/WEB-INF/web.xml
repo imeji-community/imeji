@@ -24,17 +24,17 @@
 	</servlet>
 	<servlet>
 		<servlet-name>Initializer Servlet</servlet-name>
-		<servlet-class>de.mpg.imeji.init.InitializerServlet</servlet-class>
+		<servlet-class>de.mpg.imeji.presentation.init.InitializerServlet</servlet-class>
 		<load-on-startup>4</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>Image Servlet</servlet-name>
-		<servlet-class>de.mpg.imeji.servlet.ImageServlet</servlet-class>
+		<servlet-class>de.mpg.imeji.presentation.servlet.ImageServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>Export Servlet</servlet-name>
-		<servlet-class>de.mpg.imeji.servlet.ExportServlet</servlet-class>
+		<servlet-class>de.mpg.imeji.presentation.servlet.ExportServlet</servlet-class>
 		<load-on-startup>3</load-on-startup>
 	</servlet>
 	<!-- Filters -->
@@ -44,7 +44,7 @@
 	</filter>
 	<filter>
 		<filter-name>History Filter</filter-name>
-		<filter-class>de.mpg.imeji.history.HistoryFilter</filter-class>
+		<filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
 	</filter>
 	<filter>
 		<display-name>RichFaces Filter</display-name>

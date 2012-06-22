@@ -42,24 +42,24 @@
 	<ui:param name="headline" value="#{lbl.details}" />
 	
 	<ui:define name="contentMenu">
-		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.id.path}" rendered="true">
+		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.collectionHome}/#{CollectionImagesBean.id}" rendered="true">
 			<h:outputText value="#{lbl.collection_home}"/>
 		</h:outputLink>			
 		
 		<h:outputText styleClass="seperator void" />
-		<h:outputLink value="#{Navigation.applicationUrl}images/collection/#{CollectionImageBean.collectionId}?q=" styleClass="free_area0">
+		<h:outputLink value="#{Navigation.collectionImages}/#{CollectionImageBean.collectionId}?q=" styleClass="free_area0">
 			<h:outputText value="#{lbl.view_images}"/>
 		</h:outputLink>
 		
 		<h:outputText styleClass="seperator void" />
 		
-		<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.id.path}/details?init=1" rendered="true">
+		<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.collectionHome}/#{CollectionImagesBean.id}/details?init=1" rendered="true">
 			<h:outputText value="#{lbl.collection_metadata}"/>
 		</h:outputLink>
 		
 		<h:outputText styleClass="seperator void" />
 		
-		<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{CollectionImagesBean.collection.id.path}?init=1" rendered="#{CollectionImagesBean.editable}">
+		<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUpload}/#{CollectionImagesBean.id}?init=1" rendered="#{CollectionImagesBean.editable}">
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
 		</h:outputLink>
 	</ui:define>
@@ -68,7 +68,7 @@
 		
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 			<ui:include src="./include/History.xhtml"></ui:include><br/>
-			<h:outputLink value="#{Navigation.applicationUrl}images/collection/#{CollectionImageBean.collectionId}" styleClass="free_area1_p6 small_marginLIncl">
+			<h:outputLink value="#{Navigation.collectionImages}/#{CollectionImageBean.collectionId}" styleClass="free_area1_p6 small_marginLIncl">
 				<h:outputText value="#{lbl.collection_back_to_images}"/>
 			</h:outputLink>
 			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})"  styleClass="free_area2_p6 xHuge_marginLIncl"/>

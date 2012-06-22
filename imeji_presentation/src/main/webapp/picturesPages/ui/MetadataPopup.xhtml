@@ -42,13 +42,13 @@
 	
 	<h:panelGroup layout="block" class="free_area0_p8 medium_marginRExcl" style="float:right">
 		<h:panelGroup styleClass="viewFileIcon">
-			<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}#{item.id.path}">
+			<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}/item/#{item.id}">
 				<h:outputText value="#{lbl.view_detail}"/>
 			</h:outputLink>
 		</h:panelGroup>
 		
 		<h:panelGroup styleClass="editFileIcon xTiny_marginLExcl" rendered="#{item.editable}">
-			<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}#{item.id.path}?edit=1">
+			<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}/item/#{item.id}?edit=1">
 				<h:outputText value="#{lbl.metadata_edit}"/>
 			</h:outputLink>
 		</h:panelGroup>
@@ -75,19 +75,19 @@
 	<a4j:repeat var="statement" value="#{item.statements}" rows="0">
 		
 		<a4j:repeat var="md" value="#{item.metadata}" rows="0">
-			<h:panelGroup  rendered="#{md.namespace == statement.name}" styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
-				<h:outputText value="#{MetadataLabels.internationalizedLabels[statement.name]}"/>
+			<h:panelGroup  rendered="#{md.statement == statement.id}" styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
+				<h:outputText value="#{MetadataLabels.internationalizedLabels[statement.id]}"/>
 			</h:panelGroup>
 			
-			<h:panelGroup rendered="#{md.namespace == statement.name}" layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">
-				<h:outputText value="#{md.text}" rendered="#{md.type == 'TEXT'}"/>
-				<h:outputText value="#{md.number}" rendered="#{md.type == 'NUMBER'}"/>
-				<h:outputText value="#{md.date}" rendered="#{md.type == 'DATE'}"/>
-				<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.type == 'PUBLICATION' or md.type == 'URI'}">
+			<h:panelGroup rendered="#{md.statement == statement.id}" layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">
+				<h:outputText value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}"/>
+				<h:outputText value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}"/>
+				<h:outputText value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'}"/>
+				<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication' or md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
 					<h:outputText value="Link" />
 				</h:outputLink>
-				<h:outputText value="#{md.license}" rendered="#{md.type == 'LICENSE'}"/>
-				<h:panelGroup rendered="#{md.type == 'PERSON'}">
+				<h:outputText value="#{md.license}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}"/>
+				<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
 					<h:outputText value="#{md.person.familyName}, #{md.person.givenName} ("/>
 					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
 						<h:outputText value="#{orga.name}"/>
@@ -95,10 +95,10 @@
 					<h:outputText value=")" />
 				</h:panelGroup>
 				
-				<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank" rendered="#{md.type == 'GEOLOCATION'}">
-					<h:outputText value="#{md.name} (" rendered="#{md.type == 'GEOLOCATION' and md.name != null}"/>
-					<h:outputText  value="#{md.longitude}/#{md.latitude}" rendered="#{md.type == 'GEOLOCATION'}"/>
-					<h:outputText value=")" rendered="#{md.type == 'GEOLOCATION' and md.name != null}"/>
+				<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">
+					<h:outputText value="#{md.name} (" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}"/>
+					<h:outputText  value="#{md.longitude}/#{md.latitude}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}"/>
+					<h:outputText value=")" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}"/>
 				</h:outputLink>
 				<br/>
 			</h:panelGroup>

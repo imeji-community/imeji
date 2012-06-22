@@ -46,12 +46,12 @@
 
 	</application>
 	<lifecycle>
-		<phase-listener id="facesMessagesListener">de.mpg.imeji.util.FacesMessagesPhaseListener</phase-listener>
+		<phase-listener id="facesMessagesListener">de.mpg.imeji.presentation.util.FacesMessagesPhaseListener</phase-listener>
 	</lifecycle>
 	
 	<converter>
 		<converter-id>URIConverter</converter-id>
-		<converter-class>de.mpg.imeji.converter.URIConverter</converter-class>
+		<converter-class>de.mpg.imeji.presentation.converter.URIConverter</converter-class>
 	</converter>
 	
 	<!-- 

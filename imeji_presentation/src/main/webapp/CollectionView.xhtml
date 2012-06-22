@@ -40,26 +40,24 @@
 			</ui:define>
 			
 			<ui:define name="contentMenu">
-				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}" rendered="true">
+				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.collectionHome}/#{ViewCollectionBean.id}" rendered="true">
 					<h:outputText value="#{lbl.collection_home}"/>
 				</h:outputLink>			
 				
 				<h:outputText styleClass="seperator void" />
 				
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{ViewCollectionBean.collection.id.path}?q=" rendered="#{ViewCollectionBean.size > 0}">
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.collectionImages}/#{ViewCollectionBean.id}?q=" rendered="#{ViewCollectionBean.size > 0}">
 					<h:outputText value="#{lbl.view_images}"/>
 				</h:outputLink>
 				
 				<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
 				
-				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}/details?init=1" rendered="#{prettyContext.currentMapping.id != 'viewCollection'}">
-					<h:outputText value="#{lbl.collection_metadata}"/>
-				</h:outputLink>
+				
 				<h:outputText styleClass="free_area0" value="#{lbl.collection_metadata}" rendered="#{prettyContext.currentMapping.id == 'viewCollection'}"/>
 				
 				<h:outputText styleClass="seperator void" />
 
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
+				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUpload}/#{ViewCollectionBean.id}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
 			</ui:define>
@@ -76,7 +74,7 @@
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.collection_basics}"/>
-								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.applicationUrl}edit#{ViewCollectionBean.collection.id.path}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
+								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.applicationUrl}edit/collection/#{ViewCollectionBean.id}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.edit}"/>
 								</h:outputLink>
 							</h3>
@@ -182,7 +180,7 @@
 													
 													<span class="xHuge_area0 xTiny_marginLExcl endline">
 														<h:outputLabel value="#{lbl.name} :   "/>
-														<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{statement.name}"/>
+														<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{statement.id}"/>
 													</span>
 													
 													<b class="xLarge_area0_p8 endline labelLine clear">
@@ -205,7 +203,7 @@
 															<h:panelGroup styleClass="endline">
 																<span class="endline">
 																	<h:outputText value=", " rendered="#{indexO > 0}"/>
-																	<h:outputText value="#{label}"/>
+																	<h:outputText value="#{label.string}"/>
 																	<h:outputText value=" (#{label.lang})"/>
 																</span>
 															</h:panelGroup>

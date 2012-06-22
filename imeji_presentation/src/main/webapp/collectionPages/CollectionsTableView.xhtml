@@ -193,7 +193,7 @@
 					      	<td class="free_area0 endline">
 					      		<span class="seperator"></span>
 					      		<span class="free_area0_p8 itemHeadline">
-					      			<h:outputLink value="#{Navigation.applicationUri}#{container.collection.id.path}">
+					      			<h:outputLink value="#{Navigation.collectionHome}/#{container.id}">
 					      				<b><h:outputText value="#{container.collection.metadata.title}" /></b>
 					      			</h:outputLink>								
 					      		</span>
@@ -227,7 +227,7 @@
 					      	<td class="free_area0 endline">
 					      		<span class="seperator"></span>
 					      		<span class="medium_area0_p8">
-					      			<h:outputLink value="#{Navigation.applicationUrl}images#{container.collection.id.path}?q=">
+					      			<h:outputLink value="#{Navigation.collectionImages}/#{container.id}?q=">
 					      				<h:outputText value="#{lbl.to_images}"/>
 					      			</h:outputLink>
 					       		</span>

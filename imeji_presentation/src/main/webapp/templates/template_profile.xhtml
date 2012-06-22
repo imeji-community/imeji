@@ -71,7 +71,8 @@
 								<h:panelGroup class="full_area0 xLarge_marginLExcl endline">
 									<h:panelGroup styleClass="medium_area0 clear">
 										<h:outputLabel styleClass="medium_label" value="#{lbl.type}"/>										
-										<h:selectOneMenu  requiredMessage="Please choose a type!"  id="selStatementType" styleClass="medium_select" value="#{statement.typeString}" valueChangeListener="#{statement.typeListener}">
+										<h:selectOneMenu  requiredMessage="Please choose a type!"  id="selStatementType" styleClass="medium_select" value="#{statement.statement.type}" valueChangeListener="#{statement.typeListener}">
+											<f:converter converterId="URIConverter" />
 											<f:selectItems value="#{FormularBean.mdTypesMenu}"/>
 										</h:selectOneMenu>
 										<h:message for="selStatementType" styleClass="xLarge_label endline clean" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" globalOnly="false" showDetail="false" showSummary="true"/>
@@ -83,7 +84,6 @@
 									
 										<a4j:repeat id="labels" var="label" value="#{statement.labels}" rowKeyVar="labelPosition">
 											<h:panelGroup styleClass="free_area0 xSmall_marginRIncl">
-												
 												<h:inputText id="inputLabel" value="#{label.string}" styleClass="xLarge_txtInput"/>
 												
 												<h:commandButton styleClass="min_imgBtn remove" shortDesc="#{lbl.label_remove}" action="#{FormularBean.removeLabel}" >

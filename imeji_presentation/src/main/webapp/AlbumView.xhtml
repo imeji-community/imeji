@@ -41,13 +41,13 @@
 			
 			<ui:define name="contentMenu">
 			
-				<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumBean.album.id.path}" rendered="true">
+				<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumBean.id}" rendered="true">
 					<h:outputText value="#{lbl.album_home}"/>
 				</h:outputLink>
 				
 				<h:outputText styleClass="seperator void" />
 				
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{AlbumBean.album.id.path}?q=" rendered="#{AlbumBean.size > 0}">
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{AlbumBean.id}?q=" rendered="#{AlbumBean.size > 0}">
 					<h:outputText value="#{lbl.view_images}"/>
 				</h:outputLink>
 				
@@ -68,7 +68,7 @@
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.metadata}"/>
-								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.applicationUrl}edit#{AlbumBean.album.id.path}?init=1" rendered="#{AlbumBean.editable and AlbumBean.album.properties.status != 'WITHDRAWN'}">
+								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.applicationUrl}edit#{AlbumBean.id}?init=1" rendered="#{AlbumBean.editable and AlbumBean.album.properties.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.edit}"/>
 								</h:outputLink>
 							</h3>

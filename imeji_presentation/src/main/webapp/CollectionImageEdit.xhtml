@@ -41,13 +41,13 @@
 		<ui:param name="headline" value="#{lbl.edit} #{ImageBean.image.filename}"/>
 		
 		<ui:define name="contentMenu">
-			<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.id.path}" rendered="true">
+			<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.id}" rendered="true">
 				<h:outputText value="#{lbl.collection_home}"/>
 			</h:outputLink>			
 			
 			<h:outputText styleClass="seperator void" />
 			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.id.path}/details?init=1" rendered="true">
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.id}/details?init=1" rendered="true">
 				<h:outputText value="#{lbl.collection_metadata}"/>
 			</h:outputLink>
 			
@@ -59,7 +59,7 @@
 			
 			<h:outputText styleClass="seperator void" />
 			
-			<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{CollectionImagesBean.collection.id.path}?init=1" rendered="true">
+			<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{CollectionImagesBean.id}?init=1" rendered="true">
 				<h:outputText value="#{lbl.upload_images}"></h:outputText>
 			</h:outputLink>
 		</ui:define>
@@ -70,7 +70,7 @@
 		
 		<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-			<h:outputLink value="#{Navigation.applicationUrl}images/collection/#{CollectionImageBean.collectionId}?q=" styleClass="free_area1_p6">
+			<h:outputLink value="#{Navigation.collectionImages}/#{CollectionImageBean.collectionId}?q=" styleClass="free_area1_p6">
 				<h:outputText value="#{lbl.collection_back_to_images}"/>
 			</h:outputLink>
 			<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">

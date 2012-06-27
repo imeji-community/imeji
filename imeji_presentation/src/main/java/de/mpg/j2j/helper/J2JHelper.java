@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -68,6 +69,15 @@ public class J2JHelper
             }
         }
         return o;
+    }
+
+    public static String getType(Object o)
+    {
+        if (hasDataType(o))
+        {
+            return o.getClass().getAnnotation(j2jDataType.class).value();
+        }
+        return null;
     }
 
     public static String getNamespace(Object o, Field f)
@@ -185,6 +195,11 @@ public class J2JHelper
     public static boolean isList(Field f)
     {
         return f != null && f.getAnnotation(j2jList.class) != null;
+    }
+
+    public static boolean hasDataType(Object o)
+    {
+        return o.getClass().getAnnotation(j2jDataType.class) != null;
     }
 
     public static Object getFieldAsJavaObject(Field f, Object o)

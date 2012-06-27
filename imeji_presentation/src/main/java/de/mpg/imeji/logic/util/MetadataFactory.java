@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
+import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jResource;
 
 public class MetadataFactory
@@ -65,7 +66,7 @@ public class MetadataFactory
 
     public static Metadata createMetadata(Metadata.Types type)
     {
-        return createMetadata(type.getClazz().getAnnotation(j2jResource.class).value());
+        return createMetadata(type.getClazz().getAnnotation(j2jDataType.class).value());
     }
 
     public static Metadata createMetadata(Statement s)

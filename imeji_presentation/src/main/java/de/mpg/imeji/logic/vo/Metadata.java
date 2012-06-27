@@ -13,18 +13,20 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
+import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/metadata")
+@j2jDataType("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public abstract class Metadata
+public class Metadata
 {
     private URI id;
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
-    @j2jLiteral("http://imeji.org/terms/searchValue")
+    // Not written
     private String searchValue;
     private int pos = 0;
 
@@ -46,7 +48,7 @@ public abstract class Metadata
 
         public String getClazzNamespace()
         {
-            return clazz.getAnnotation(j2jResource.class).value();
+            return clazz.getAnnotation(j2jDataType.class).value();
         }
     }
 
@@ -67,7 +69,7 @@ public abstract class Metadata
 
     public String getTypeNamespace()
     {
-        return this.getClass().getAnnotation(j2jResource.class).value();
+        return this.getClass().getAnnotation(j2jDataType.class).value();
     }
 
     public int compareTo(Metadata imd)
@@ -80,13 +82,23 @@ public abstract class Metadata
             return 1;
     }
 
-    public abstract void init();
+    public void init()
+    {
+    }
 
-    public abstract void copy(Metadata metadata);
+    public void copy(Metadata metadata)
+    {
+    }
 
-    public abstract URI getStatement();
+    public URI getStatement()
+    {
+        return statement;
+    }
 
-    public abstract void setStatement(URI namespace);
+    public void setStatement(URI namespace)
+    {
+        this.statement = namespace;
+    }
 
     protected void copyMetadata(Metadata metadata)
     {

@@ -7,11 +7,13 @@ import java.net.URI;
 
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
-@j2jResource("http://imeji.org/terms/metadata#date")
+@j2jResource("http://imeji.org/terms/metadata")
+@j2jDataType("http://imeji.org/terms/metadata#date")
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class Date extends Metadata
 {

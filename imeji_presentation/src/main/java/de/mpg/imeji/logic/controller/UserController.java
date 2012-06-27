@@ -43,6 +43,7 @@ public class UserController extends ImejiController
     public User retrieve(String email) throws NotFoundException
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
+        ImejiJena.imejiDataSet.getNamedModel(ImejiJena.userModel).write(System.out, "RDF/XML-ABBREV");
         User u = new User();
         u.setEmail(email);
         return (User)imejiRDF2Bean.load(u.getId().toString(), user, u);

@@ -52,6 +52,7 @@ public class Java2Jena
         }
         Resource type = model.createResource(J2JHelper.getResourceNamespace(o).toString(), RDFS.Class);
         Resource r = model.createResource(J2JHelper.getId(o).toString(), type);
+        //Resource r = createResource(o);
         addProperties2Resource(r, o);
     }
 
@@ -66,7 +67,8 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-        Resource r = model.getResource(J2JHelper.getId(o).toString());
+        //Resource r = model.getResource(J2JHelper.getId(o).toString());
+        Resource r = createResource(o);
         r.removeProperties();
         for (Resource e : getEmbeddedResources(r, o))
         {
@@ -86,7 +88,8 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-        Resource r = model.createResource(J2JHelper.getId(o).toString());
+        //Resource r = model.createResource(J2JHelper.getId(o).toString());
+        Resource r = createResource(o);
         model.removeAll(r, null, null);
         for (Resource e : getEmbeddedResources(r, o))
         {
@@ -106,8 +109,22 @@ public class Java2Jena
         {
             return false;
         }
-        Resource r = ResourceFactory.createResource(J2JHelper.getId(o).toString());
+        //Resource r = ResourceFactory.createResource(J2JHelper.getId(o).toString());
+        Resource r = createResource(o);
         return model.contains(r, null);
+    }
+
+    private Resource createResource(Object o)
+    {
+        if (J2JHelper.hasDataType(o))
+        {
+            Resource type = model.createResource(J2JHelper.getType(o));
+            return model.createResource(J2JHelper.getId(o).toString(), type);
+        }
+        else
+        {
+            return model.createResource(J2JHelper.getId(o).toString());
+        }
     }
 
     /**
@@ -211,7 +228,7 @@ public class Java2Jena
         if (J2JHelper.getId(resourceObject) != null)
         {
             Property p = model.createProperty(J2JHelper.getResourceNamespace(resourceObject));
-            Resource o = model.createResource(J2JHelper.getId(resourceObject).toString());
+            Resource o = createResource(resourceObject);//model.createResource(J2JHelper.getId(resourceObject).toString());
             model.add(s, p, o);
             addProperties2Resource(o, resourceObject);
         }

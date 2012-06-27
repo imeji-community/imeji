@@ -73,7 +73,7 @@ public class MdProfileBean implements Serializable
         mdTypesMenu.add(new SelectItem(null, "--"));
         for (Metadata.Types t : Metadata.Types.values())
         {
-            mdTypesMenu.add(new SelectItem(t.getClazz().getAnnotation(j2jResource.class).value(), ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
+            mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
                     .getLabel("facet_" + t.name().toLowerCase())));
         }
     }

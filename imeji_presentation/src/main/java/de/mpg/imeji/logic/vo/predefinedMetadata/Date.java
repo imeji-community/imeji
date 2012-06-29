@@ -77,7 +77,7 @@ public class Date extends Metadata
         {
             this.date = ((Date)metadata).getDate();
             this.dateTime = ((Date)metadata).getDateTime();
-            copyMetadata(metadata);
+            this.statement = metadata.getStatement();
         }
     }
 }

@@ -64,7 +64,7 @@ public class Number extends Metadata
         if (metadata instanceof Number)
         {
             this.number = ((Number)metadata).getNumber();
-            copyMetadata(metadata);
+            this.statement = metadata.getStatement();
         }
         
     }

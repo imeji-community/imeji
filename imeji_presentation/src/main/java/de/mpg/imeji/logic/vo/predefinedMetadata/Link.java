@@ -71,7 +71,7 @@ public class Link extends Metadata
         {
             this.label = ((Link)metadata).getLabel();
             this.uri = ((Link)metadata).getUri();
-            copyMetadata(metadata);
+            this.statement = metadata.getStatement();
         }
     }
 }

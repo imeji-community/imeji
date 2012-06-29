@@ -59,7 +59,7 @@ public class Text extends Metadata
         if (metadata instanceof Text)
         {
             this.text = ((Text)metadata).getText();
-            copyMetadata(metadata);
+            this.statement = metadata.getStatement();
         }        
     }
 }

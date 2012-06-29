@@ -86,7 +86,7 @@ public class ConePerson extends Metadata
         {
             this.person = ((ConePerson)metadata).getPerson();
             this.coneId = ((ConePerson)metadata).getConeId();
-            copyMetadata(metadata);
+            this.statement = metadata.getStatement();
         }
     }
 }

@@ -89,7 +89,7 @@ public class Geolocation extends Metadata
             this.latitude = ((Geolocation)metadata).getLatitude();
             this.longitude = ((Geolocation)metadata).getLongitude();
             this.name = ((Geolocation)metadata).getName();
-            copyMetadata(metadata);
+            this.statement = metadata.getStatement();
         }
     }
 }

@@ -14,8 +14,8 @@ import de.mpg.j2j.persistence.Java2Jena;
 import de.mpg.j2j.persistence.Jena2Java;
 
 /**
- * Controller for {@link RDFResource} Attention: Non transactional!!!!
- * Don't use directly, use {@link ImejiBean2RDF} of {@link ImejiRDF2Bean} instead
+ * Controller for {@link RDFResource} Attention: Non transactional!!!! Don't use directly, use {@link ImejiBean2RDF} of
+ * {@link ImejiRDF2Bean} instead
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)

@@ -113,11 +113,6 @@ public class ItemController extends ImejiController
         List<Object> imBeans = new ArrayList<Object>();
         for (Item item : items)
         {
-            // for (int i = 0; i < item.getMetadataSet().getMetadata().size(); i++)
-            // {
-            // ((List<Metadata>)item.getMetadataSet().getMetadata()).set(i,
-            // MetadataFactory.copyMetadata(((List<Metadata>)item.getMetadataSet().getMetadata()).get(i)));
-            // }
             imBeans.add(initAllMetadata(item));
         }
         imejiBean2RDF.update(imBeans, user);

@@ -4,6 +4,7 @@
 package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
+import java.util.UUID;
 
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
@@ -19,13 +20,10 @@ import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/metadata")
-@j2jDataType("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public class Metadata
+public abstract class Metadata
 {
-    private URI id;
-    @j2jResource("http://imeji.org/terms/statement")
-    private URI statement;
+    private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
     // Not written
     private String searchValue;
     private int pos = 0;
@@ -56,17 +54,6 @@ public class Metadata
     {
     }
 
-    public Metadata(URI statement)
-    {
-        this();
-        this.statement = statement;
-    }
-
-    public Metadata(String namespace)
-    {
-        this(java.net.URI.create(namespace));
-    }
-
     public String getTypeNamespace()
     {
         return this.getClass().getAnnotation(j2jDataType.class).value();
@@ -82,29 +69,18 @@ public class Metadata
             return 1;
     }
 
-    public void init()
-    {
-    }
+    public abstract void init();
 
-    public void copy(Metadata metadata)
-    {
-    }
+    public abstract void copy(Metadata metadata);
 
-    public URI getStatement()
-    {
-        return statement;
-    }
+    public abstract URI getStatement();
 
-    public void setStatement(URI namespace)
-    {
-        this.statement = namespace;
-    }
+    public abstract void setStatement(URI namespace);
 
     protected void copyMetadata(Metadata metadata)
     {
         this.id = metadata.getId();
         this.searchValue = metadata.searchValue;
-        this.statement = metadata.getStatement();
     }
 
     public URI getId()

@@ -73,7 +73,7 @@ public class License extends Metadata
         if (metadata instanceof License)
         {
             this.license = ((License)metadata).getLicense();
-            copyMetadata(metadata);
+            this.statement = metadata.getStatement();
         }
     }
 }

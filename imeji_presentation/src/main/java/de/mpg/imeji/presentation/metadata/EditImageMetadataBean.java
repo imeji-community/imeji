@@ -316,7 +316,7 @@ public class EditImageMetadataBean implements Serializable
         int i = 0;
         for (Metadata md : im.getMetadataSet().getMetadata())
         {
-            if (md.getStatement().equals(metadata.getStatement()))
+            if (md.getStatement().toString().equals(metadata.getStatement().toString()))
             {
                 if (MetadataHelper.isEmpty(md))
                 {
@@ -344,8 +344,8 @@ public class EditImageMetadataBean implements Serializable
         for (int i = 0; i < im.getMetadataSet().getMetadata().size(); i++)
         {
             if (((List<Metadata>)im.getMetadataSet().getMetadata()).get(i).getStatement() == null
-                    || ((List<Metadata>)im.getMetadataSet().getMetadata()).get(i).getStatement()
-                            .equals(metadata.getStatement()))
+                    || ((List<Metadata>)im.getMetadataSet().getMetadata()).get(i).getStatement().toString()
+                            .equals(metadata.getStatement().toString()))
             {
                 ((List<Metadata>)im.getMetadataSet().getMetadata()).remove(i);
                 i--;

@@ -12,6 +12,9 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 import de.escidoc.core.resources.ResourceType;
@@ -52,7 +55,7 @@ public class Java2Jena
         }
         Resource type = model.createResource(J2JHelper.getResourceNamespace(o).toString(), RDFS.Class);
         Resource r = model.createResource(J2JHelper.getId(o).toString(), type);
-        //Resource r = createResource(o);
+        // Resource r = createResource(o);
         addProperties2Resource(r, o);
     }
 
@@ -67,13 +70,14 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-        //Resource r = model.getResource(J2JHelper.getId(o).toString());
-        Resource r = createResource(o);
-        r.removeProperties();
-        for (Resource e : getEmbeddedResources(r, o))
-        {
-            e.removeProperties();
-        }
+        // Resource r = model.getResource(J2JHelper.getId(o).toString());
+        // Resource r = createResource(o);
+        // r.removeProperties();
+        // for (Resource e : getEmbeddedResources(r, o))
+        // {
+        // //e.removeProperties();
+        // }
+        remove(o);
         write(o);
     }
 
@@ -88,12 +92,13 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-        //Resource r = model.createResource(J2JHelper.getId(o).toString());
+        // Resource r = model.createResource(J2JHelper.getId(o).toString());
         Resource r = createResource(o);
         model.removeAll(r, null, null);
         for (Resource e : getEmbeddedResources(r, o))
         {
             model.removeAll(e, null, null);
+            // model.removeAll(null, null, e);
         }
     }
 
@@ -109,7 +114,7 @@ public class Java2Jena
         {
             return false;
         }
-        //Resource r = ResourceFactory.createResource(J2JHelper.getId(o).toString());
+        // Resource r = ResourceFactory.createResource(J2JHelper.getId(o).toString());
         Resource r = createResource(o);
         return model.contains(r, null);
     }
@@ -119,6 +124,7 @@ public class Java2Jena
         if (J2JHelper.hasDataType(o))
         {
             Resource type = model.createResource(J2JHelper.getType(o));
+            type.addProperty(RDF.type, o.getClass().getName());
             return model.createResource(J2JHelper.getId(o).toString(), type);
         }
         else
@@ -228,7 +234,7 @@ public class Java2Jena
         if (J2JHelper.getId(resourceObject) != null)
         {
             Property p = model.createProperty(J2JHelper.getResourceNamespace(resourceObject));
-            Resource o = createResource(resourceObject);//model.createResource(J2JHelper.getId(resourceObject).toString());
+            Resource o = createResource(resourceObject);// model.createResource(J2JHelper.getId(resourceObject).toString());
             model.add(s, p, o);
             addProperties2Resource(o, resourceObject);
         }
@@ -311,12 +317,21 @@ public class Java2Jena
                 }
                 else if (r2 instanceof ArrayList<?>)
                 {
+                    String predicate = J2JHelper.getNamespace(r2, f);
+                    Resource resource = model.getResource(J2JHelper.getId(r).toString());
+                    l.add(resource);
+                    //delete all properties for this predicate
+                    for (StmtIterator iterator = resource.listProperties(model.createProperty(predicate)); iterator
+                            .hasNext();)
+                    {
+                        Statement st = iterator.next();
+                        l.add(st.getResource());
+                    }
+                    // Search for other objects
                     for (Object o : ((ArrayList<?>)r2))
                     {
                         if (J2JHelper.isResource(o) && exists(o))
                         {
-                            Resource ro = model.getResource(J2JHelper.getId(o).toString());
-                            l.add(ro);
                             l.addAll(getEmbeddedResources(s, o));
                         }
                     }

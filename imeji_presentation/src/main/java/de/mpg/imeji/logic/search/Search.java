@@ -82,7 +82,7 @@ public class Search
     public List<String> searchSimple(SearchCriterion sc, SortCriterion sortCri, User user)
     {
         String sq = SimpleQueryFactory.getQuery(type, sc, sortCri, user, (containerURI != null), getSpecificQuery());
-        // logger.info(sq);
+        //logger.info(sq);
         return ImejiSPARQL.exec(sq);
     }
 
@@ -100,7 +100,7 @@ public class Search
         }
         if (containerURI != null)
         {
-            specificQuery += " . <" + containerURI + "> <http://imeji.org/terms/item> ?s";
+            //specificQuery += " . <" + containerURI + "> <http://imeji.org/terms/item> ?s";
         }
         return specificQuery;
     }

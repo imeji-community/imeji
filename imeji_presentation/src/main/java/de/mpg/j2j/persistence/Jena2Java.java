@@ -7,14 +7,17 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
+import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.j2j.annotations.j2jId;
@@ -66,6 +69,10 @@ public class Jena2Java
     private Object loadResourceFields(Object javaObject)
     {
         Resource subject = model.getResource(J2JHelper.getId(javaObject).toString());
+        if (J2JHelper.hasDataType(javaObject) && isTypedResource(subject))
+        {
+            javaObject = createJavaObjectFromDataType(subject);
+        }
         for (Field f : J2JHelper.getAllObjectFields(javaObject.getClass()))
         {
             Object object = J2JHelper.getFieldAsJavaObject(f, javaObject);
@@ -233,7 +240,15 @@ public class Jena2Java
         for (StmtIterator iterator = subject.listProperties(model.createProperty(predicate)); iterator.hasNext();)
         {
             Statement st = iterator.next();
-            Object listObject = getListElement(f);
+            Object listObject = null;
+            if (st.getObject().isResource() && isTypedResource(st.getResource()))
+            {
+                listObject = createJavaObjectFromDataType(st.getResource());
+            }
+            else
+            {
+                listObject = createJavaObjectForListElements(f);
+            }
             if (listObject != null)
             {
                 Object o = loadObject(st.getSubject(), f, listObject, count);
@@ -242,6 +257,28 @@ public class Jena2Java
             }
         }
         return object;
+    }
+
+    public boolean isTypedResource(Resource r)
+    {
+        return r.getProperty(RDF.type) != null;
+    }
+
+    public Object createJavaObjectFromDataType(Resource r)
+    {
+        Statement statementType = r.getProperty(RDF.type);
+        String clazz = statementType.getResource().getProperty(RDF.type).getString();
+        try
+        {
+            Object o = this.getClass().getClassLoader().loadClass(clazz).newInstance();
+            J2JHelper.setId(o, URI.create(r.getURI()));
+            return o;
+        }
+        catch (Exception e)
+        {
+            new RuntimeException("Error initializing resource with a datatype: ", e);
+        }
+        return null;
     }
 
     /**
@@ -274,7 +311,7 @@ public class Jena2Java
      * @param f
      * @return
      */
-    private Object getListElement(Field f)
+    private Object createJavaObjectForListElements(Field f)
     {
         Type genericFieldType = f.getGenericType();
         if (genericFieldType instanceof ParameterizedType)

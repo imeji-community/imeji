@@ -85,7 +85,7 @@ public class Publication extends Metadata
             this.citation = ((Publication)metadata).getCitation();
             this.exportFormat = ((Publication)metadata).getExportFormat();
             this.uri = ((Publication)metadata).getUri();
-            copyMetadata(metadata);
+            this.statement = metadata.getStatement();
         }
     }
 }

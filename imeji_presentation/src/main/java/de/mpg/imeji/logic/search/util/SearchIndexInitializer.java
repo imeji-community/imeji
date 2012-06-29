@@ -19,7 +19,7 @@ public class SearchIndexInitializer
         indexes.putAll(initMetadataIndexes());
         for (Entry<String, SearchIndex> e :indexes.entrySet())
         {
-            System.out.println(e.getKey() + " : " + e.getValue().getNamespace());
+           // System.out.println(e.getKey() + " : " + e.getValue().getNamespace());
         }
         return indexes;
     }

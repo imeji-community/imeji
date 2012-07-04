@@ -70,14 +70,13 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-        // Resource r = model.getResource(J2JHelper.getId(o).toString());
-        // Resource r = createResource(o);
-        // r.removeProperties();
-        // for (Resource e : getEmbeddedResources(r, o))
-        // {
-        // //e.removeProperties();
-        // }
-        remove(o);
+//        Resource r = model.getResource(J2JHelper.getId(o).toString());
+//        r.removeProperties();
+//        for (Resource e : getEmbeddedResources(r, o))
+//        {
+//            e.removeProperties();
+//        }
+         remove(o);
         write(o);
     }
 
@@ -211,11 +210,11 @@ public class Java2Jena
             {
                 addLabel(s, (LocalizedString)obj);
             }
-            else
-            {
-                logger.debug(f + " not added to " + s);
-                logger.info(f + " not added to " + s);
-            }
+            // else if(!f.toString().contains(".id"))
+            // {
+            // // logger.debug(f + " not added to " + s);
+            // // logger.info(f + " not added to " + s);
+            // }
         }
         catch (Exception e)
         {
@@ -320,12 +319,15 @@ public class Java2Jena
                     String predicate = J2JHelper.getNamespace(r2, f);
                     Resource resource = model.getResource(J2JHelper.getId(r).toString());
                     l.add(resource);
-                    //delete all properties for this predicate
+                    // delete all properties for this predicate
                     for (StmtIterator iterator = resource.listProperties(model.createProperty(predicate)); iterator
                             .hasNext();)
                     {
                         Statement st = iterator.next();
-                        l.add(st.getResource());
+                        if (st.getObject().isResource())
+                        {
+                            l.add(st.getResource());
+                        }
                     }
                     // Search for other objects
                     for (Object o : ((ArrayList<?>)r2))

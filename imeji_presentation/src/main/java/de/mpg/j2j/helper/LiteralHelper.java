@@ -55,7 +55,7 @@ public class LiteralHelper
         {
             Literal l = null;
             if (o instanceof Calendar || o instanceof Boolean || o instanceof Character || o instanceof Float
-                    || o instanceof Integer || o instanceof Long || o instanceof String)
+                    || o instanceof Integer || o instanceof Long || o instanceof String || o instanceof Double)
             {
                 l = model.createTypedLiteral(o);
             }

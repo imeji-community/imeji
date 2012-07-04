@@ -109,7 +109,7 @@ public class SingleEditBean implements Serializable
 
     private void reloadPage() throws IOException
     {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(pageUrl + "/view?init=1");
+        FacesContext.getCurrentInstance().getExternalContext().redirect(pageUrl + "?init=1");
     }
 
     private void reloadImage()

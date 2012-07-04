@@ -36,6 +36,7 @@ public class License extends Metadata
 
     public String getDateString()
     {
+        if (date.isLenient()) return "";
         return date.format(date);
     }
 

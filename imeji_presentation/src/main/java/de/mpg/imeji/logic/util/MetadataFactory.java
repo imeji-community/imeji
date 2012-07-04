@@ -45,7 +45,7 @@ public class MetadataFactory
         {
             md = new ConePerson();
         }
-        else if ("http://imeji.org/terms/metadata#Date".equals(typeNamespace))
+        else if ("http://imeji.org/terms/metadata#date".equals(typeNamespace))
         {
             md = new Date();
         }
@@ -60,6 +60,10 @@ public class MetadataFactory
         else if ("http://imeji.org/terms/metadata#license".equals(typeNamespace))
         {
             md = new License();
+        }
+        else
+        {
+            throw new RuntimeException("MetadataFactory: Error creating new Metadata. Unknown type: " + typeNamespace);
         }
         return md;
     }

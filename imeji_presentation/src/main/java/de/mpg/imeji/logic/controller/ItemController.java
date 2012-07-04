@@ -115,7 +115,10 @@ public class ItemController extends ImejiController
         {
             imBeans.add(initAllMetadata(item));
         }
+        long before = System.currentTimeMillis();
         imejiBean2RDF.update(imBeans, user);
+        long after = System.currentTimeMillis();
+        System.out.println("item controller update = " + Long.valueOf(after - before));
     }
 
     private Item initAllMetadata(Item item)

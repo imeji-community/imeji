@@ -26,6 +26,11 @@ public class Organization
     @j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/country")
     private String country;
     private int pos = 0;
+    
+    public Organization()
+    {
+        // TODO Auto-generated constructor stub
+    }
 
     public String getName()
     {

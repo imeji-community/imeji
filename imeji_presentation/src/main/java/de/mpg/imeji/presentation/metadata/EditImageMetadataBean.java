@@ -208,8 +208,11 @@ public class EditImageMetadataBean implements Serializable
     public String addToAllSaveAndRedirect() throws IOException
     {
         addToAll();
+        long before = System.currentTimeMillis();
         editor.save();
+        long after = System.currentTimeMillis();
         redirectToView();
+        System.out.println("saving = " + Long.valueOf(after - before));
         return "";
     }
 
@@ -221,8 +224,11 @@ public class EditImageMetadataBean implements Serializable
      */
     public String saveAndRedirect() throws IOException
     {
+        long before = System.currentTimeMillis();
         editor.save();
+        long after = System.currentTimeMillis();
         redirectToView();
+        System.out.println("saving = " + Long.valueOf(after - before));
         return "";
     }
 

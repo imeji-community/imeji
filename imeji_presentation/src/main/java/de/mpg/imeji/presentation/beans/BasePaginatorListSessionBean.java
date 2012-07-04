@@ -33,7 +33,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @param <FilterType> The type of filters managed by this bean that are usable for every ListRetriever, eg. sorting of
  *            PubItems.
  */
-public abstract class BasePaginatorListSessionBean<ListElementType> implements Serializable
+public abstract class BasePaginatorListSessionBean<ListElementType>
 {
     protected static Logger logger = Logger.getLogger(BasePaginatorListSessionBean.class);
     /**

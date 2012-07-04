@@ -17,7 +17,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class Person
 {
-    private URI id  = URI.create("http://imeji.org/person/" + UUID.randomUUID());
+    private URI id = URI.create("http://imeji.org/person/" + UUID.randomUUID());
     @j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/family-name")
     private String familyName;
     @j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/given-name")
@@ -31,8 +31,14 @@ public class Person
     @j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/role")
     private URI role;
     private int pos = 0;
-    @j2jList("http://imeji.org/terms/organization")
+    @j2jList("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
     protected Collection<Organization> organizations = new LinkedList<Organization>();
+
+    public Person()
+    {
+        Organization o = new Organization();
+        this.getOrganizations().add(o);
+    }
 
     public String getFamilyName()
     {

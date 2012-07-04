@@ -40,7 +40,7 @@ public class CollectionImageBean extends ImageBean implements Serializable
 
     public String getPageUrl()
     {
-        return navigation.getApplicationUrl() + "collection/" + collectionId + "/image/" + this.getId();
+        return navigation.getCollectionUrl() + "/" + collectionId + "/" + "item" + "/" + this.getId();
     }
 
     public String getNavigationString()

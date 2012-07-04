@@ -112,7 +112,7 @@
 		
 		<!-- METADATA TYPE NUMBER -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#number'}">
-			<h:inputText immediate="true" onfocus="this.select();" styleClass="huge_txtInput" value="#{metadata.number}" rendered="#{metadata.typeNamespace=='NUMBER' and !SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
+			<h:inputText immediate="true" onfocus="this.select();" styleClass="huge_txtInput" value="#{metadata.number}" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
 				<f:converter converterId="DoubleConverter" />
 			</h:inputText>
 				

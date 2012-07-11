@@ -18,7 +18,7 @@ import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -190,11 +190,17 @@ public class AlbumController extends ImejiController
      * @param scList
      * @return
      */
-    public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+    public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset)
     {
         Search search = new Search("http://imeji.org/terms/album", null);
-        return search.search(scList, sortCri, user);
+        return search.search(searchQuery, sortCri, user);
     }
+    
+//    public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+//    {
+//        Search search = new Search("http://imeji.org/terms/album", null);
+//        return search.search(scList, sortCri, user);
+//    }
 
     public Collection<Album> load(List<String> uris, int limit, int offset)
     {
@@ -233,12 +239,12 @@ public class AlbumController extends ImejiController
         String filter = "(";
         if (user == null)
         {
-            filter += "?status = <http://imeji.org/terms/status/RELEASED>";
+            filter += "?status = <<http://imeji.org/terms/status#RELEASED>";
         }
         else
         {
             String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
-            filter += "?status = <http://imeji.org/terms/status/RELEASED> || ?createdBy=<" + userUri + ">";
+            filter += "?status = <<http://imeji.org/terms/status#RELEASED> || ?createdBy=<" + userUri + ">";
             for (Grant grant : user.getGrants())
             {
                 switch (grant.asGrantType())

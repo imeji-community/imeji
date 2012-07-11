@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.album;
 
 import java.net.URI;
@@ -10,9 +9,10 @@ import java.util.List;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndexes;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.security.Security;
@@ -28,7 +28,7 @@ import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 
-public class AlbumImagesBean extends ImagesBean 
+public class AlbumImagesBean extends ImagesBean
 {
     private int totalNumberOfRecords;
     private String id = null;
@@ -48,29 +48,30 @@ public class AlbumImagesBean extends ImagesBean
     public void init()
     {
         AlbumController ac = new AlbumController(sb.getUser());
-        try 
+        try
         {
-        	 this.setAlbum(new AlbumBean(ac.retrieve(id)));
-		} 
-        catch (Exception e) 
+            this.setAlbum(new AlbumBean(ac.retrieve(id)));
+        }
+        catch (Exception e)
         {
-			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
-		}
-       
+            BeanHelper.error(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
     public String getNavigationString()
     {
-    	if (album != null)
-		{
-			if(sb.getSelectedImagesContext()!=null && !(sb.getSelectedImagesContext().equals("pretty:albumImages" + album.getAlbum().getId().toString())))
-			{
-				sb.getSelected().clear();
-			}
-			sb.setSelectedImagesContext("pretty:albumImages" +  album.getAlbum().getId().toString());
-		}
+        if (album != null)
+        {
+            if (sb.getSelectedImagesContext() != null
+                    && !(sb.getSelectedImagesContext().equals("pretty:albumImages"
+                            + album.getAlbum().getId().toString())))
+            {
+                sb.getSelected().clear();
+            }
+            sb.setSelectedImagesContext("pretty:albumImages" + album.getAlbum().getId().toString());
+        }
         return "pretty:albumImages";
     }
 
@@ -83,27 +84,25 @@ public class AlbumImagesBean extends ImagesBean
     @Override
     public List<ThumbnailBean> retrieveList(int offset, int limit)
     {
-    	uri = ObjectHelper.getURI(Album.class, id);
-		SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setSortingCriterion(SearchIndexes.valueOf(getSelectedSortCriterion()));
+        uri = ObjectHelper.getURI(Album.class, id);
+        SortCriterion sortCriterion = new SortCriterion();
+        sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
-        
         ItemController controller = new ItemController(sb.getUser());
-        SearchResult result = controller.searchImagesInContainer(uri, scList, sortCriterion, limit, offset);
-       	totalNumberOfRecords = result.getNumberOfRecords();
-       	result.setQuery(getQuery());
-       	result.setSort(sortCriterion);
+        SearchResult result = controller.searchImagesInContainer(uri, new SearchQuery(), sortCriterion, limit, offset);
+        totalNumberOfRecords = result.getNumberOfRecords();
+        result.setQuery(getQuery());
+        result.setSort(sortCriterion);
         return ImejiFactory.imageListToThumbList(loadImages(result));
     }
-    
+
     @Override
-	public String initFacets() throws Exception
+    public String initFacets() throws Exception
     {
-    	// NO FACETs FOR ALBUMS
+        // NO FACETs FOR ALBUMS
         return "pretty";
     }
-    
+
     public String removeFromAlbum() throws Exception
     {
         AlbumController ac = new AlbumController(sb.getUser());
@@ -111,65 +110,66 @@ public class AlbumImagesBean extends ImagesBean
         album.getAlbum().getImages().clear();
         ac.update(album.getAlbum());
         AlbumBean activeAlbum = sb.getActiveAlbum();
-        if (activeAlbum != null && activeAlbum.getAlbum().getId().toString().equals(album.getAlbum().getId().toString()))
+        if (activeAlbum != null
+                && activeAlbum.getAlbum().getId().toString().equals(album.getAlbum().getId().toString()))
         {
-        	sb.setActiveAlbum(album);
+            sb.setActiveAlbum(album);
         }
-        SelectedBean sb = (SelectedBean) BeanHelper.getSessionBean(SelectedBean.class);
+        SelectedBean sb = (SelectedBean)BeanHelper.getSessionBean(SelectedBean.class);
         sb.clearAll();
         return "pretty:";
     }
-    
+
     public String getImageBaseUrl()
     {
-		if (album.getAlbum() == null) return "";
+        if (album.getAlbum() == null)
+            return "";
         return navigation.getApplicationUri() + album.getAlbum().getId().getPath();
     }
 
-    
-    public String getBackUrl() 
+    public String getBackUrl()
     {
-		return navigation.getImagesUrl() + "/album" + "/" + this.id;
-	}
-    
-    public String release() 
+        return navigation.getImagesUrl() + "/album" + "/" + this.id;
+    }
+
+    public String release()
     {
-    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
-    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).release();
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).release();
         return "pretty:";
     }
-    
+
     public String delete()
     {
-    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
-    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).delete();
-    	return "pretty:albums";
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).delete();
+        return "pretty:albums";
     }
-    
+
     public String withdraw() throws Exception
     {
-    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
-    	String dc = getAlbum().getAlbum().getProperties().getDiscardComment();
-    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).getAlbum().getProperties().setDiscardComment(dc);
-    	((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
-    	return "pretty:";
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+        String dc = getAlbum().getAlbum().getProperties().getDiscardComment();
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).getAlbum().getProperties().setDiscardComment(dc);
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
+        return "pretty:";
     }
-    
+
     public boolean isEditable()
     {
-		Security security = new Security();
-    	return security.check(OperationsType.UPDATE, sb.getUser(), album.getAlbum());
+        Security security = new Security();
+        return security.check(OperationsType.UPDATE, sb.getUser(), album.getAlbum());
     }
-    
-    public boolean isDeletable() 
-	{
-		Security security = new Security();
-		return security.check(OperationsType.DELETE, sb.getUser(), album.getAlbum());
-	}
-    
+
+    public boolean isDeletable()
+    {
+        Security security = new Security();
+        return security.check(OperationsType.DELETE, sb.getUser(), album.getAlbum());
+    }
+
     public String getId()
     {
         return id;

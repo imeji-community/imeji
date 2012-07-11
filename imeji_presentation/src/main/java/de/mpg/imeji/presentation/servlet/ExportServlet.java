@@ -5,6 +5,7 @@
 package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.FactoryFinder;
@@ -24,7 +25,7 @@ import org.apache.http.client.HttpResponseException;
 
 import de.mpg.imeji.logic.export.ExportManager;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
@@ -40,17 +41,16 @@ public class ExportServlet extends HttpServlet
 		String query = req.getParameter("q");
 
 		User user = getSessionBean(req, resp).getUser();
-		
-		List<SearchCriterion> scList;
+		SearchQuery searchQuery = new SearchQuery();
 		
 		try 
 		{
-			scList = URLQueryTransformer.transform2SCList(query);
+		    searchQuery = URLQueryTransformer.parseStringQuery(query);
 			ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap());
 			resp.setHeader("Connection", "close");
 			resp.setHeader("Content-Type", exportManager.getContentType());
 			
-			SearchResult result = exportManager.search(scList);
+			SearchResult result = exportManager.search(searchQuery);
 			System.out.println(result.getResults());
 			exportManager.export(result);
 		} 

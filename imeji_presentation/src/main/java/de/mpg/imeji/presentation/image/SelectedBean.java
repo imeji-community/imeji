@@ -17,7 +17,7 @@ import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.album.AlbumBean;
@@ -63,14 +63,14 @@ public class SelectedBean extends ImagesBean  implements Serializable
 	@Override
 	public List<ThumbnailBean> retrieveList(int offset, int limit)
 	{
-		SearchResult results = search(null, null);
+		SearchResult results = search(new SearchQuery(), null);
 
 		totalNumberOfRecords = results.getResults().size();
 		
 		return ImejiFactory.imageListToThumbList(loadImages(results));
 	}
 	
-	public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCriterion)
+	public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
 	{
 		return new SearchResult(getSelectedUris());
 	}

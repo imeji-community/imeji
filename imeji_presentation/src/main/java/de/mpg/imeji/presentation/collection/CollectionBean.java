@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
@@ -264,7 +265,7 @@ public abstract class CollectionBean
         if (collection != null && collection.getId() != null)
         {
             ItemController ic = new ItemController(sessionBean.getUser());
-            return ic.countImagesInContainer(collection.getId(), null);
+            return ic.countImagesInContainer(collection.getId(), new SearchQuery());
         }
         return 0;
         // return collection.getImages().size();
@@ -337,7 +338,7 @@ public abstract class CollectionBean
             return null;
         try
         {
-            SearchResult res = ic.searchImagesInContainer(collection.getId(), null, null, 5, 0);
+            SearchResult res = ic.searchImagesInContainer(collection.getId(), new SearchQuery(), null, 5, 0);
             return ImejiFactory.imageListToBeanList(ic.loadImages(res.getResults(), 5, 0));
         }
         catch (Exception e)

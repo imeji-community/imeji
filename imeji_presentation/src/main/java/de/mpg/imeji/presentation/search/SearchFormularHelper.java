@@ -1,26 +1,36 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.search;
 
-import java.util.List;
+import de.mpg.imeji.logic.search.vo.SearchElement;
+import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
+import de.mpg.imeji.logic.search.vo.SearchGroup;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 
-import de.mpg.imeji.logic.search.vo.SearchIndexes;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
-
-public class SearchFormularHelper 
+public class SearchFormularHelper
 {
-	
-	public static String getCollectionId(List<SearchCriterion> scList)
-	{
-		for (SearchCriterion sc : scList)
-		{
-			if (SearchIndexes.IMAGE_COLLECTION.equals(sc.getNamespace()))
-			{
-				return sc.getValue();
-			}
-		}
-		return null;
-	}
+    public static String getCollectionId(SearchGroup searchGroup)
+    {
+        String id = null;
+        for (SearchElement se : searchGroup.getElements())
+        {
+            if (se.getType().equals(SEARCH_ELEMENTS.PAIR)
+                    && SearchIndex.names.IMAGE_COLLECTION.name().equals(((SearchPair)se).getIndex().getName()))
+            {
+                System.out.println(((SearchPair)se).getValue());
+                return ((SearchPair)se).getValue();
+            }
+            else if (se.getType().equals(SEARCH_ELEMENTS.GROUP))
+            {
+                id = getCollectionId((SearchGroup)se);
+                if (id != null)
+                {
+                    return id;
+                }
+            }
+        }
+        return id;
+    }
 }

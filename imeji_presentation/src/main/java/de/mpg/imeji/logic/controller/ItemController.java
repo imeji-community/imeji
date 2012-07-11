@@ -21,7 +21,7 @@ import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.search.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -194,31 +194,57 @@ public class ItemController extends ImejiController
         return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item>} ");
     }
 
-    public SearchResult searchImages(List<SearchCriterion> scList, SortCriterion sortCri)
+    public SearchResult searchImages(SearchQuery searchQuery, SortCriterion sortCri)
     {
         Search search = new Search("http://imeji.org/terms/item", null);
-        return search.search(scList, sortCri, simplifyUser(null));
+        return search.search(searchQuery, sortCri, simplifyUser(null));
     }
 
-    public SearchResult searchImagesInContainer(URI containerUri, List<SearchCriterion> scList, SortCriterion sortCri,
+    public SearchResult searchImagesInContainer(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri,
             int limit, int offset)
     {
         Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
-        return search.search(scList, sortCri, simplifyUser(containerUri));
+        return search.search(searchQuery, sortCri, simplifyUser(containerUri));
     }
 
-    public int countImages(List<SearchCriterion> scList)
+    public int countImages(SearchQuery searchQuery)
     {
         Search search = new Search("http://imeji.org/terms/item", null);
-        // List<String> uris = search.searchAdvanced(scList, null, simplifyUser(null));
-        // return uris.size();
-        return search.search(scList, null, simplifyUser(null)).getNumberOfRecords();
+        return search.search(searchQuery, null, simplifyUser(null)).getNumberOfRecords();
     }
 
-    public int countImagesInContainer(URI containerUri, List<SearchCriterion> scList)
+//    public SearchResult searchImages(List<SearchCriterion> scList, SortCriterion sortCri)
+//    {
+//        Search search = new Search("http://imeji.org/terms/item", null);
+//        return search.search(scList, sortCri, simplifyUser(null));
+//    }
+//
+//    public SearchResult searchImagesInContainer(URI containerUri, List<SearchCriterion> scList, SortCriterion sortCri,
+//            int limit, int offset)
+//    {
+//        Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
+//        return search.search(scList, sortCri, simplifyUser(containerUri));
+//    }
+//
+//    public int countImages(List<SearchCriterion> scList)
+//    {
+//        Search search = new Search("http://imeji.org/terms/item", null);
+//        // List<String> uris = search.searchAdvanced(scList, null, simplifyUser(null));
+//        // return uris.size();
+//        return search.search(scList, null, simplifyUser(null)).getNumberOfRecords();
+//    }
+
+    public int countImagesInContainer(URI containerUri, SearchQuery searchQuery)
     {
         Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
-        List<String> uris = search.searchAdvanced(scList, null, simplifyUser(containerUri));
+        List<String> uris = search.advanced(searchQuery, null, simplifyUser(containerUri));
+        return uris.size();
+    }
+    
+    public int countImagesInContainer(URI containerUri, SearchQuery searchQuery, List<String> containerImages)
+    {
+        Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
+        List<String> uris = search.advanced(containerImages, searchQuery, null, simplifyUser(containerUri));
         return uris.size();
     }
 
@@ -371,12 +397,12 @@ public class ItemController extends ImejiController
         String filter = "(";
         if (user == null)
         {
-            filter += "?collStatus = <http://imeji.org/terms/status/RELEASED> && ?visibility = <http://imeji.org/terms/item/visibility/PUBLIC>";
+            filter += "?collStatus = <<http://imeji.org/terms/status#RELEASED> && ?visibility = <http://imeji.org/terms/item/visibility/PUBLIC>";
         }
         else
         {
             String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
-            filter += "(?collStatus = <http://imeji.org/terms/status/RELEASED> && ?visibility = <http://imeji.org/terms/item/visibility/PUBLIC>)";
+            filter += "(?collStatus = <<http://imeji.org/terms/status#RELEASED> && ?visibility = <http://imeji.org/terms/item/visibility/PUBLIC>)";
             filter += " || ?collCreatedBy=<" + userUri + ">";
             for (Grant grant : user.getGrants())
             {

@@ -10,10 +10,14 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.search.vo.SearchIndexes;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
-import de.mpg.imeji.logic.search.vo.SearchCriterion.Filtertype;
-import de.mpg.imeji.logic.search.vo.SearchCriterion.Operator;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.vo.SearchElement;
+import de.mpg.imeji.logic.search.vo.SearchGroup;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
@@ -22,8 +26,9 @@ import de.mpg.j2j.misc.LocalizedString;
 public class FormularElement
 {
     private String searchValue;
-    private Filtertype filter;
-    private Operator operator;
+    private SearchOperators operator;
+    private LOGICAL_RELATIONS logicalRelation;
+    private boolean not = false;
     private String namespace;
     private List<SelectItem> filtersMenu;
     private List<SelectItem> predefinedValues;
@@ -32,28 +37,33 @@ public class FormularElement
 
     public FormularElement()
     {
-        this.operator = Operator.OR;
-        this.filter = Filtertype.EQUALS;
+        this.logicalRelation = LOGICAL_RELATIONS.OR;
+        this.operator = SearchOperators.EQUALS;
     }
 
-    public FormularElement(List<SearchCriterion> scList, MetadataProfile profile)
+    public FormularElement(SearchGroup searchGroup, MetadataProfile profile)
     {
         this();
-        for (SearchCriterion sc : scList)
+        for (SearchElement se : searchGroup.getElements())
         {
-            if (SearchIndexes.IMAGE_METADATA_STATEMENT.equals(sc.getNamespace()))
+            switch (se.getType())
             {
-                this.namespace = sc.getValue();
-            }
-            else if (sc.getValue() == null && sc.getChildren() != null && sc.getChildren().size() > 0)
-            {
-                this.searchValue = sc.getChildren().get(0).getValue();
-                this.filter = sc.getFilterType();
-            }
-            else
-            {
-                this.searchValue = sc.getValue();
-                this.filter = sc.getFilterType();
+                case PAIR:
+                    if (SearchIndex.names.IMAGE_METADATA_STATEMENT.name().equals(((SearchPair)se).getIndex().getName()))
+                    {
+                        this.namespace = ((SearchPair)se).getValue();
+                    }
+                    else
+                    {
+                        this.searchValue = ((SearchPair)se).getValue();
+                    }
+                    operator = ((SearchPair)se).getOperator();
+                    break;
+                case LOGICAL_RELATIONS:
+                    logicalRelation = ((SearchLogicalRelation)se).getLogicalRelation();
+                    break;
+                default:
+                    break;
             }
         }
         initStatement(profile, namespace);
@@ -66,17 +76,17 @@ public class FormularElement
         switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
         {
             case DATE:
-                filtersMenu.add(new SelectItem(Filtertype.EQUALS_DATE, "="));
-                filtersMenu.add(new SelectItem(Filtertype.GREATER_DATE, ">="));
-                filtersMenu.add(new SelectItem(Filtertype.LESSER_DATE, "<="));
+                filtersMenu.add(new SelectItem(SearchOperators.EQUALS_DATE, "="));
+                filtersMenu.add(new SelectItem(SearchOperators.GREATER_DATE, ">="));
+                filtersMenu.add(new SelectItem(SearchOperators.LESSER_DATE, "<="));
                 break;
             case NUMBER:
-                filtersMenu.add(new SelectItem(Filtertype.EQUALS_NUMBER, "="));
-                filtersMenu.add(new SelectItem(Filtertype.GREATER_NUMBER, ">="));
-                filtersMenu.add(new SelectItem(Filtertype.LESSER_NUMBER, "<="));
+                filtersMenu.add(new SelectItem(SearchOperators.EQUALS_NUMBER, "="));
+                filtersMenu.add(new SelectItem(SearchOperators.GREATER_NUMBER, ">="));
+                filtersMenu.add(new SelectItem(SearchOperators.LESSER_NUMBER, "<="));
                 break;
             default:
-                filter = Filtertype.REGEX;
+                operator = SearchOperators.REGEX;
                 filtersMenu = null;
         }
     }
@@ -108,56 +118,60 @@ public class FormularElement
             predefinedValues = null;
     }
 
-    public List<SearchCriterion> getAsSCList()
+    public SearchGroup getAsSearchGroup()
     {
-        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+        SearchGroup group = new SearchGroup();
         if (searchValue == null || "".equals(searchValue.trim()))
         {
-            return scList;
+            return group;
         }
         switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
         {
             case DATE:
-                scList.add(new SearchCriterion(operator, SearchIndexes.IMAGE_METADATA_DATE, searchValue, filter));
+                group.addPair(new SearchPair(Search.getIndex("METADATA_DATE_DATE"), operator, searchValue, not));
                 break;
             case GEOLOCATION:
-                // TODO can not work, should find a solution for searching in geolocation
-                SearchCriterion scLat = new SearchCriterion(operator,
-                        SearchIndexes.IMAGE_METADATA_GEOLOCATION_LATITUDE, searchValue, filter);
-                SearchCriterion scLong = new SearchCriterion(operator,
-                        SearchIndexes.IMAGE_METADATA_GEOLOCATION_LONGITUDE, searchValue, filter);
-                scList.add(scLat);
-                scList.add(scLong);
+                SearchGroup geoGroup = new SearchGroup();
+                geoGroup.setNot(not);
+                geoGroup.addPair(new SearchPair(Search.getIndex("METADATA_GEOLOCATION_LATITUDE"), operator, searchValue));
+                geoGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                geoGroup.addPair(new SearchPair(Search.getIndex("METADATA_GEOLOCATION_LONGITUDE"), operator,
+                        searchValue));
+                group.addGroup(geoGroup);
                 break;
             case LICENSE:
-                scList.add(new SearchCriterion(operator, SearchIndexes.IMAGE_METADATA_TYPE_URI, searchValue, filter));
+                group.addPair(new SearchPair(Search.getIndex("METADATA_LICENSE_LICENSE"), operator, searchValue, not));
                 break;
             case NUMBER:
-                scList.add(new SearchCriterion(operator, SearchIndexes.IMAGE_METADATA_NUMBER, searchValue, filter));
+                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_NUMBER"), operator, searchValue, not));
                 break;
             case CONE_PERSON:
-                List<SearchCriterion> subList = new ArrayList<SearchCriterion>();
-                subList.add(new SearchCriterion(Operator.OR, SearchIndexes.IMAGE_METADATA_PERSON_FAMILY_NAME,
-                        searchValue, filter));
-                subList.add(new SearchCriterion(Operator.OR, SearchIndexes.IMAGE_METADATA_PERSON_GIVEN_NAME,
-                        searchValue, filter));
-                subList.add(new SearchCriterion(Operator.OR, SearchIndexes.IMAGE_METADATA_PERSON_ORGANIZATION_NAME,
-                        searchValue, filter));
-                scList.add(new SearchCriterion(Operator.AND, subList));
+                SearchGroup personGroup = new SearchGroup();
+                group.setNot(not);
+                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_FAMILY_NAME"), operator,
+                        searchValue));
+                personGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_GIVEN_NAME"), operator,
+                        searchValue));
+                personGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_ORGANIZATION_NAME"),
+                        operator, searchValue));
+                group.addGroup(personGroup);
                 break;
             case PUBLICATION:
-                scList.add(new SearchCriterion(operator, SearchIndexes.IMAGE_METADATA_TYPE_URI, searchValue, filter));
+                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PUBLICATION"), operator, searchValue, not));
                 break;
             case TEXT:
-                scList.add(new SearchCriterion(operator, SearchIndexes.IMAGE_METADATA_TEXT, searchValue, filter));
+                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_TEXT"), operator, searchValue, not));
                 break;
             case LINK:
-                scList.add(new SearchCriterion(operator, SearchIndexes.IMAGE_METADATA_TYPE_URI, searchValue, filter));
+                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_URI"), operator, searchValue, not));
                 break;
         }
-        scList.add(new SearchCriterion(Operator.AND, SearchIndexes.IMAGE_METADATA_STATEMENT, namespace,
-                Filtertype.URI));
-        return scList;
+        group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+        group.addPair(new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_METADATA_STATEMENT), SearchOperators.URI,
+                this.namespace, false));
+        return group;
     }
 
     public String getSearchValue()
@@ -180,33 +194,24 @@ public class FormularElement
         this.namespace = namespace;
     }
 
-    // public URI getStatementType()
-    // {
-    // return statementType;
-    // }
-    //
-    // public void setStatementType(URI statementType)
-    // {
-    // this.statementType = statementType;
-    // }
-    public Operator getOperator()
+    public LOGICAL_RELATIONS getLogicalRelation()
+    {
+        return logicalRelation;
+    }
+
+    public void setLogicalRelation(LOGICAL_RELATIONS lr)
+    {
+        this.logicalRelation = lr;
+    }
+
+    public SearchOperators getFilter()
     {
         return operator;
     }
 
-    public void setOperator(Operator operator)
+    public void setFilter(SearchOperators op)
     {
-        this.operator = operator;
-    }
-
-    public Filtertype getFilter()
-    {
-        return filter;
-    }
-
-    public void setFilter(Filtertype filter)
-    {
-        this.filter = filter;
+        this.operator = op;
     }
 
     public List<SelectItem> getFiltersMenu()
@@ -227,5 +232,15 @@ public class FormularElement
     public void setPredefinedValues(List<SelectItem> predefinedValues)
     {
         this.predefinedValues = predefinedValues;
+    }
+
+    public void setInverse(String str)
+    {
+        this.not = str.equals("true");
+    }
+
+    public String getInverse()
+    {
+        return Boolean.toString(not);
     }
 }

@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.vo.SearchIndexes;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
-import de.mpg.imeji.logic.search.vo.SearchCriterion.Filtertype;
-import de.mpg.imeji.logic.search.vo.SearchCriterion.Operator;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -30,40 +33,42 @@ public class CollectionFacets
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
     private URI colURI = null;
 
-    public CollectionFacets(CollectionImeji col, List<SearchCriterion> scList) throws Exception
+    public CollectionFacets(CollectionImeji col, SearchQuery searchQuery) throws Exception
     {
+        long before = System.currentTimeMillis();
         this.colURI = col.getId();
         MetadataProfile profile = ObjectCachedLoader.loadProfile(col.getProfile());
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         String baseURI = nav.getImagesUrl() + col.getId().getPath() + "?q=";
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
-        FacetURIFactory uriFactory = new FacetURIFactory(scList);
+        FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
         int count = 0;
-        int sizeAllImages = getCount(scList, null);
+        SearchResult allImages = retrieveAllImages(searchQuery);
+        int sizeAllImages = allImages.getNumberOfRecords();
         for (Statement st : profile.getStatements())
         {
             List<Facet> group = new ArrayList<Facet>();
-            if (!fs.isFilter(getName(st.getId())) || !fs.isFilter("No " + getName(st.getId())))
+            if (!fs.isFilter(getName(st.getId())))
             {
-                SearchCriterion sc = new SearchCriterion(Operator.AND, SearchIndexes.IMAGE_METADATA_STATEMENT, st
-                        .getId().toString(), Filtertype.URI);
-                count = getCount(new ArrayList<SearchCriterion>(scList), sc);
+                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_METADATA_STATEMENT),
+                        SearchOperators.URI, st.getId().toString());
+                count = getCount(searchQuery, pair, allImages.getResults());
                 if (count > 0 || true)
                 {
-                    group.add(new Facet(uriFactory.createFacetURI(baseURI, sc, getName(st.getId()),
+                    group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, getName(st.getId()),
                             FacetType.COLLECTION), getName(st.getId()), count, FacetType.COLLECTION, st.getId()));
                 }
-                if (count < sizeAllImages || true)
+                if (count < sizeAllImages)
                 {
-                    sc = new SearchCriterion(Operator.NOTAND, SearchIndexes.IMAGE_METADATA_STATEMENT, st.getId()
-                            .toString(), Filtertype.URI);
-                    group.add(new Facet(uriFactory.createFacetURI(baseURI, sc, "No " + getName(st.getId()),
+                    pair.setNot(true);
+                    group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, "No " + getName(st.getId()),
                             FacetType.COLLECTION), "No " + getName(st.getId()), sizeAllImages - count,
                             FacetType.COLLECTION, st.getId()));
                 }
             }
             facets.add(group);
         }
+        System.out.println("collection facets: " + Long.valueOf(System.currentTimeMillis() - before));
     }
 
     public String getName(URI uri)
@@ -73,12 +78,22 @@ public class CollectionFacets
         return name;
     }
 
-    public int getCount(List<SearchCriterion> scList, SearchCriterion sc)
+    public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> collectionImages)
     {
         ItemController ic = new ItemController(sb.getUser());
-        if (sc != null)
-            scList.add(sc);
-        return ic.countImagesInContainer(colURI, scList);
+        SearchQuery sq = new SearchQuery(searchQuery.getElements());
+        if (pair != null)
+        {
+            sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
+            sq.addPair(pair);
+        }
+        return ic.countImagesInContainer(colURI, sq, collectionImages);
+    }
+
+    public SearchResult retrieveAllImages(SearchQuery searchQuery)
+    {
+        ItemController ic = new ItemController(sb.getUser());
+        return ic.searchImagesInContainer(colURI, searchQuery, null, 0, 0);
     }
 
     public List<List<Facet>> getFacets()

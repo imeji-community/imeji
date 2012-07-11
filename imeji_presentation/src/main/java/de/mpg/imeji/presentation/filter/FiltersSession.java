@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FiltersSession implements Serializable
+public class FiltersSession
 {
 	private List<Filter> filters = new ArrayList<Filter>();
 	private String wholeQuery = "";

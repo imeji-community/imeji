@@ -4,7 +4,6 @@
 
 package de.mpg.imeji.presentation.search;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,8 +17,8 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
-import de.mpg.imeji.logic.search.vo.SearchCriterion.Operator;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.beans.SessionBean;
@@ -29,7 +28,7 @@ import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
-public class AdvancedSearchBean implements Serializable
+public class AdvancedSearchBean 
 {
 	private SearchFormular formular = null;
 
@@ -43,9 +42,8 @@ public class AdvancedSearchBean implements Serializable
 
 	public AdvancedSearchBean() 
 	{
-		operatorsMenu.add(new SelectItem(Operator.AND, session.getLabel("and")));
-		operatorsMenu.add(new SelectItem(Operator.OR, session.getLabel("or")));
-		operatorsMenu.add(new SelectItem(Operator.NOTOR, session.getLabel("not")));
+		operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND, session.getLabel("and")));
+		operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session.getLabel("or")));
 	}
 
 	public String getNewSearch()
@@ -53,7 +51,7 @@ public class AdvancedSearchBean implements Serializable
 		try 
 		{
 			String query = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("q");
-			initFormular(URLQueryTransformer.transform2SCList(query));
+			initFormular(URLQueryTransformer.parseStringQuery(query));
 		} 
 		catch (Exception e) 
 		{
@@ -63,13 +61,13 @@ public class AdvancedSearchBean implements Serializable
 		return "";
 	}
 
-	public void initFormular(List<SearchCriterion> scList) throws Exception
+	public void initFormular(SearchQuery searchQuery) throws Exception
 	{
 		Map<String, CollectionImeji> cols = loadCollections();
 		Map<String, MetadataProfile> profs = loadProfiles(cols.values());
 		((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init1((new ArrayList<MetadataProfile>(profs.values())));
 
-		formular = new SearchFormular(scList, cols, profs);
+		formular = new SearchFormular(searchQuery, cols, profs);
 		if (formular.getGroups().size() == 0)
 		{
 			formular.addSearchGroup(0);
@@ -78,7 +76,7 @@ public class AdvancedSearchBean implements Serializable
 	
 	public void initFormular() throws Exception
 	{
-		initFormular(new ArrayList<SearchCriterion>());
+		initFormular(new SearchQuery());
 	}
 
 	private Map<String, CollectionImeji> loadCollections()
@@ -86,7 +84,7 @@ public class AdvancedSearchBean implements Serializable
 		CollectionController cc = new CollectionController(session.getUser());
 		Map<String, CollectionImeji> map = new HashMap<String, CollectionImeji>();
 
-		for (String uri : cc.search(new ArrayList<SearchCriterion>(), null, -1, 0).getResults())
+		for (String uri : cc.search(new SearchQuery(), null, -1, 0).getResults())
 		{
 			CollectionImeji c = ObjectLoader.loadCollection(URI.create(uri), session.getUser());
 			
@@ -123,9 +121,9 @@ public class AdvancedSearchBean implements Serializable
 		
 		ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class);
 		
-		List<SearchCriterion> scList = formular.getFormularAsSCList();
-		bean.setQuery(URLQueryTransformer.transform2URL(scList));
-		bean.setScList(scList);
+		SearchQuery searchQuery = formular.getFormularAsSearchQuery();
+		bean.setQuery(URLQueryTransformer.transform2URL(searchQuery));
+		bean.setSearchQuery(searchQuery);
 		
 		if (bean.getFacets() != null)
 		{
@@ -198,7 +196,8 @@ public class AdvancedSearchBean implements Serializable
 
 	public String getSimpleQuery()
 	{
-		return URLQueryTransformer.transform2SimpleQuery(formular.getFormularAsSCList());
+		//return URLQueryTransformer.transform2SimpleQuery(formular.getFormularAsSearchQuery());
+		return URLQueryTransformer.transform2URL(formular.getFormularAsSearchQuery());
 	}
 	
 	public List<SelectItem> getCollectionsMenu() {

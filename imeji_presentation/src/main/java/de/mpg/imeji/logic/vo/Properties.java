@@ -30,7 +30,7 @@ public class Properties implements Serializable
     // @j2jLiteral("http://imeji.org/terms/status")
     // private Status status = Status.PENDING;
     @j2jResource("http://imeji.org/terms/status")
-    private URI status = URI.create("http://imeji.org/status#" + Status.PENDING.name());
+    private URI status = URI.create("http://imeji.org/terms/status#" + Status.PENDING.name());
     @j2jLiteral("http://imeji.org/terms/versionNumber")
     private int version = 0;
     @j2jLiteral("http://imeji.org/terms/discardComment")

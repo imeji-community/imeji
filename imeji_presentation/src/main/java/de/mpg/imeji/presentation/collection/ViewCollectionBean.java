@@ -41,7 +41,6 @@ public class ViewCollectionBean extends CollectionBean
     {
         //ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel).removeAll();
         ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel).write(System.out, "RDF/XML-ABBREV");
-        SearchIndexInitializer.init();
         try
         {
             User user = sessionBean.getUser();

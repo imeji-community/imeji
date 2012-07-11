@@ -54,7 +54,7 @@ package de.mpg.imeji.logic.util;
 //		{
 //			System.out.println(names.next());
 //		}
-//		String query = "SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/item> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?coll .FILTER(?status=<http://imeji.org/terms/status/RELEASED>) . ?props <http://imeji.org/terms/creationDate> ?sort0}  ORDER BY DESC(?sort0)  LIMIT 10";
+//		String query = "SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/item> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?coll .FILTER(?status=<<http://imeji.org/terms/status#RELEASED>) . ?props <http://imeji.org/terms/creationDate> ?sort0}  ORDER BY DESC(?sort0)  LIMIT 10";
 //		QueryExecution qexec = QueryExecutionFactory.create(query, set);
 //		qexec.getContext().set(TDB.symUnionDefaultGraph, true);
 //		ResultSet rs = qexec.execSelect();

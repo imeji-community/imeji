@@ -8,9 +8,11 @@ import java.util.List;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
-import de.mpg.imeji.logic.search.vo.SearchIndexes;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -52,14 +54,15 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
         }
         AlbumController controller = new AlbumController(sb.getUser());
         SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setSortingCriterion(SearchIndexes.valueOf(getSelectedSortCriterion()));
+        sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        List<SearchCriterion> scList = new ArrayList<SearchCriterion>();
+        SearchQuery searchQuery = new SearchQuery();
         if (getFilter() != null)
         {
-            scList.add(getFilter());
+            searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
+            searchQuery.addPair(getFilter());
         }
-        SearchResult searchResult = controller.search(scList, sortCriterion, limit, offset);
+        SearchResult searchResult = controller.search(searchQuery, sortCriterion, limit, offset);
         totalNumberOfRecords = searchResult.getNumberOfRecords();
         return ImejiFactory.albumListToBeanList(controller.load(searchResult.getResults(), limit, offset));
     }

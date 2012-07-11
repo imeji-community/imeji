@@ -192,7 +192,7 @@ public class EditImageMetadataBean implements Serializable
         int currentPageNumber = imagesBean.getCurrentPageNumber();
         imagesBean.setElementsPerPage(10000);
         imagesBean.setCurrentPageNumber(1);
-        SearchResult sr = imagesBean.search(imagesBean.getScList(), null);
+        SearchResult sr = imagesBean.search(imagesBean.getSearchQuery(), null);
         List<Item> items = (List<Item>)imagesBean.loadImages(sr);
         imagesBean.setElementsPerPage(elementsPerPage);
         imagesBean.setCurrentPageNumber(currentPageNumber);

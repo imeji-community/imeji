@@ -1,31 +1,30 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.logic.search.vo;
-
 
 public class SortCriterion
 {
-    public enum SortOrder {
+    public enum SortOrder
+    {
         ASCENDING, DESCENDING;
     }
-    
-    private SearchIndexes sortingCriterion;
-    
+
+    private SearchIndex index;
+    // private SearchIndexes sortingCriterion;
     private SortOrder sortOrder;
 
-    public SortCriterion(SearchIndexes sc, SortOrder so)
+    public SortCriterion(SearchIndex index, SortOrder so)
     {
-        this.sortingCriterion = sc;
+        this.index = index;
         this.sortOrder = so;
     }
-    
+
     public SortCriterion()
     {
         this.sortOrder = SortOrder.ASCENDING;
     }
-    
+
     public void setSortOrder(SortOrder sortOrder)
     {
         this.sortOrder = sortOrder;
@@ -36,14 +35,22 @@ public class SortCriterion
         return sortOrder;
     }
 
-    public void setSortingCriterion(SearchIndexes sortingCriterion)
+    // public void setSortingCriterion(SearchIndexes sortingCriterion)
+    // {
+    // this.sortingCriterion = sortingCriterion;
+    // }
+    //
+    // public SearchIndexes getSortingCriterion()
+    // {
+    // return sortingCriterion;
+    // }
+    public void setIndex(SearchIndex index)
     {
-        this.sortingCriterion = sortingCriterion;
+        this.index = index;
     }
 
-    public SearchIndexes getSortingCriterion()
+    public SearchIndex getIndex()
     {
-        return sortingCriterion;
+        return index;
     }
-    
 }

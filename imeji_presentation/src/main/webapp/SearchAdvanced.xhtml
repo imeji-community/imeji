@@ -50,6 +50,7 @@
 		</ui:define>
 		
 		<ui:define name="mainContent">
+		<h:messages/>
 		
 		<div id="advancedSearch">
 			<h:panelGroup layout="block" styleClass="full_area0">
@@ -88,7 +89,7 @@
 								<a4j:repeat id="els" var="el" value="#{g.elements}" rows="0" rowKeyVar="elIndex">
 									
 									<h:panelGroup styleClass="full_area0_p8" rendered="#{elIndex > 0}">
-										<h:selectOneMenu value="#{el.operator}" styleClass="tiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+										<h:selectOneMenu value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
 											<f:selectItems value="#{AdvancedSearchBean.operatorsMenu}"/>
 										</h:selectOneMenu>
 									</h:panelGroup>
@@ -110,8 +111,15 @@
 											<f:param name="elPos" value="#{elIndex}"/>
 										</a4j:commandButton>
 										
+										<h:panelGroup styleClass="free_area0">
+											<h:selectOneMenu value="#{el.inverse}" styleClass="xTiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+												<f:selectItem itemValue="false" itemLabel="#{lbl.is}"/>
+												<f:selectItem itemValue="true" itemLabel="#{lbl.is} #{lbl.NOT}"/>
+											</h:selectOneMenu>
+										</h:panelGroup>
+										
 										<h:panelGroup styleClass="medium_are0">
-											<h:panelGroup rendered="#{el.filtersMenu == null}" styleClass="tiny_marginLExcl small_area0">
+											<h:panelGroup rendered="#{el.filtersMenu == null}" styleClass="xTiny_marginLExcl small_area0">
 												<h:outputText value=" = " style="visibility:hidden;"/>
 											</h:panelGroup>
 											

@@ -13,10 +13,11 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.j2j.exceptions.AlreadyExistsException;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
@@ -88,7 +89,14 @@ public class InitializerServlet extends HttpServlet
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error initializing Admin user! " + e);
+            if (e.getCause() instanceof AlreadyExistsException)
+            {
+                logger.info("sysadmin already exists");
+            }
+            else
+            {
+                throw new RuntimeException("Error initializing Admin user! ", e);
+            }
         }
     }
 

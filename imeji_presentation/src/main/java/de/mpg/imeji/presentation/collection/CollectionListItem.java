@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -93,7 +94,7 @@ public class CollectionListItem
     private void initSize(User user)
     {
         ItemController ic = new ItemController(user);
-        size = ic.countImagesInContainer(uri, null);
+        size = ic.countImagesInContainer(uri, new SearchQuery());
     }
 
     private void initSelected()

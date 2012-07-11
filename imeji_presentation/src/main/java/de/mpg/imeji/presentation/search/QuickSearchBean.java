@@ -12,11 +12,10 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
-public class QuickSearchBean implements Serializable
+public class QuickSearchBean
 { 
     private String searchString ="";
     private String selectedSearchType = "images";
@@ -33,18 +32,18 @@ public class QuickSearchBean implements Serializable
         }
         else if (getSelectedSearchType().equals("images"))
         {
-        	List<SearchCriterion> scl = new ArrayList<SearchCriterion>();
+        //	List<SearchCriterion> scl = new ArrayList<SearchCriterion>();
             try 
             {
             	if (searchString.startsWith("\"") && searchString.endsWith("\""))
             	{
-            		scl.addAll(URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + searchString +"\" )"));
+            		//scl.addAll(URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + searchString +"\" )"));
             	}
             	else
             	{
             		for(String s : searchString.split("\\s"))
                 	{
-                		scl.addAll(URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + s +"\" )"));
+                		//scl.addAll(URLQueryTransformer.transform2SCList("( ANY_METADATA=\"" + s +"\" )"));
                 	}
             	}
 			} 
@@ -52,7 +51,7 @@ public class QuickSearchBean implements Serializable
 			{
 				throw new RuntimeException("Error creating quicksearch query: " + e);
 			}
-        	FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getImagesUrl() + "?q=" + URLQueryTransformer.transform2URL(scl));
+        	//FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getImagesUrl() + "?q=" + URLQueryTransformer.transform2URL(scl));
         }
         return "";
     }

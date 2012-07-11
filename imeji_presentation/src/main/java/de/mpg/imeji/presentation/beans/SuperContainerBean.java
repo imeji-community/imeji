@@ -3,9 +3,6 @@
  */
 package de.mpg.imeji.presentation.beans;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +11,9 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.search.vo.SearchIndexes;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
-import de.mpg.imeji.logic.search.vo.SearchCriterion.Filtertype;
-import de.mpg.imeji.logic.search.vo.SearchCriterion.Operator;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -41,7 +37,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         selectedFilter = "all";
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         initMenus();
-        selectedSortCriterion = SearchIndexes.PROPERTIES_LAST_MODIFICATION_DATE.name();
+        selectedSortCriterion = Search.getIndex("PROPERTIES_LAST_MODIFICATION_DATE").getName();
         selectedSortOrder = SortOrder.DESCENDING.name();
         try
         {
@@ -68,12 +64,12 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     protected void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(SearchIndexes.PROPERTIES_STATUS,
-                sb.getLabel(SearchIndexes.PROPERTIES_STATUS.name())));
-        sortMenu.add(new SelectItem(SearchIndexes.CONTAINER_METADATA_TITLE, sb
-                .getLabel(SearchIndexes.CONTAINER_METADATA_TITLE.name())));
-        sortMenu.add(new SelectItem(SearchIndexes.PROPERTIES_LAST_MODIFICATION_DATE, sb
-                .getLabel(SearchIndexes.PROPERTIES_LAST_MODIFICATION_DATE.name())));
+        sortMenu.add(new SelectItem(Search.getIndex("PROPERTIES_STATUS"), sb.getLabel(Search.getIndex(
+                "PROPERTIES_STATUS").getName())));
+        sortMenu.add(new SelectItem(Search.getIndex("CONTAINER_METADATA_TITLE"), sb.getLabel(Search.getIndex(
+                "CONTAINER_METADATA_TITLE").getName())));
+        sortMenu.add(new SelectItem(Search.getIndex("PROPERTIES_LAST_MODIFICATION_DATE"), sb.getLabel(Search.indexes
+                .get("PROPERTIES_LAST_MODIFICATION_DATE").getName())));
         filterMenu = new ArrayList<SelectItem>();
         filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
         if (sb.getUser() != null)
@@ -97,30 +93,55 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         initMenus();
     }
 
-    public SearchCriterion getFilter()
+    // public SearchCriterion getFilterOld()
+    // {
+    // SearchCriterion sc = null;
+    // if ("my".equals(selectedFilter))
+    // {
+    // sc = new SearchCriterion(Operator.AND, SearchIndexes.MY_IMAGES, ObjectHelper.getURI(User.class,
+    // sb.getUser().getEmail()).toString(), Filtertype.URI);
+    // }
+    // else if ("private".equals(selectedFilter))
+    // {
+    // sc = new SearchCriterion(Operator.AND, SearchIndexes.PROPERTIES_STATUS,
+    // "<http://imeji.org/terms/status#PENDING", Filtertype.URI);
+    // }
+    // else if ("public".equals(selectedFilter))
+    // {
+    // sc = new SearchCriterion(Operator.AND, SearchIndexes.PROPERTIES_STATUS,
+    // "<http://imeji.org/terms/status#RELEASED", Filtertype.URI);
+    // }
+    // else if ("withdrawn".equals(selectedFilter))
+    // {
+    // sc = new SearchCriterion(Operator.AND, SearchIndexes.PROPERTIES_STATUS,
+    // "<http://imeji.org/terms/status#WITHDRAWN", Filtertype.URI);
+    // }
+    // return sc;
+    // }
+    public SearchPair getFilter()
     {
-        SearchCriterion sc = null;
+        SearchPair pair = null;
         if ("my".equals(selectedFilter))
         {
-            sc = new SearchCriterion(Operator.AND, SearchIndexes.MY_IMAGES, ObjectHelper.getURI(User.class,
-                    sb.getUser().getEmail()).toString(), Filtertype.URI);
+            pair = new SearchPair(Search.getIndex("MY_IMAGES"), SearchOperators.URI, ObjectHelper.getURI(User.class,
+                    sb.getUser().getEmail()).toString());
         }
         else if ("private".equals(selectedFilter))
         {
-            sc = new SearchCriterion(Operator.AND, SearchIndexes.PROPERTIES_STATUS,
-                    "http://imeji.org/terms/status/PENDING", Filtertype.URI);
+            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.URI,
+                    "<http://imeji.org/terms/status#PENDING");
         }
         else if ("public".equals(selectedFilter))
         {
-            sc = new SearchCriterion(Operator.AND, SearchIndexes.PROPERTIES_STATUS,
-                    "http://imeji.org/terms/status/RELEASED", Filtertype.URI);
+            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.URI,
+                    "<http://imeji.org/terms/status#RELEASED");
         }
         else if ("withdrawn".equals(selectedFilter))
         {
-            sc = new SearchCriterion(Operator.AND, SearchIndexes.PROPERTIES_STATUS,
-                    "http://imeji.org/terms/status/WITHDRAWN", Filtertype.URI);
+            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.URI,
+                    "<http://imeji.org/terms/status#WITHDRAWN");
         }
-        return sc;
+        return pair;
     }
 
     public void setSelectedMenu(String selectedMenu)

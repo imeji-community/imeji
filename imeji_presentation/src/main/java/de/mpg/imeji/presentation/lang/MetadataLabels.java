@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.lang;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.j2j.misc.LocalizedString;
 
-public class MetadataLabels implements Serializable
+public class MetadataLabels
 {
     private String lang = "en";
     private Map<URI, String> labels;

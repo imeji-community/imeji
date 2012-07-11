@@ -4,7 +4,7 @@
 
 package de.mpg.imeji.logic.search.query;
 
-import de.mpg.imeji.logic.search.vo.SearchIndexes;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 
@@ -27,9 +27,11 @@ public class SortQueryFactory
 		return q;
 	}
 	
+
+	
 	private static String lowerCasePrefix(SortCriterion sortCriterion, String name)
 	{
-		if (SearchIndexes.CONTAINER_METADATA_TITLE.equals(sortCriterion.getSortingCriterion()))
+		if (SearchIndex.names.CONTAINER_METADATA_TITLE.name().equals(sortCriterion.getIndex().getName()))
 		{
 			return "fn:lower-case(?" + name + ")";
 		}

@@ -19,7 +19,7 @@ import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.search.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -241,10 +241,16 @@ public class CollectionController extends ImejiController
      * @param scList
      * @return
      */
-    public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+    // public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+    // {
+    // Search search = new Search("http://imeji.org/terms/collection", null);
+    // return search.search(scList, sortCri, simplifyUser());
+    // }
+    
+    public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset)
     {
         Search search = new Search("http://imeji.org/terms/collection", null);
-        return search.search(scList, sortCri, simplifyUser());
+        return search.search(searchQuery, sortCri, simplifyUser());
     }
 
     /**
@@ -311,16 +317,16 @@ public class CollectionController extends ImejiController
         Security security = new Security();
         if (user == null)
         {
-            filter += "?status = <http://imeji.org/terms/status/RELEASED>";
+            filter += "?status = <<http://imeji.org/terms/status#RELEASED>";
         }
         else if (security.isSysAdmin(user))
         {
-            filter += "?status = <http://imeji.org/terms/status/RELEASED> || ?status = <http://imeji.org/terms/status/PENDING>";
+            filter += "?status = <<http://imeji.org/terms/status#RELEASED> || ?status = <<http://imeji.org/terms/status#PENDING>";
         }
         else
         {
             String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
-            filter += "?status = <http://imeji.org/terms/status/RELEASED> || ?createdBy=<" + userUri + ">";
+            filter += "?status = <<http://imeji.org/terms/status#RELEASED> || ?createdBy=<" + userUri + ">";
             for (Grant grant : user.getGrants())
             {
                 switch (grant.asGrantType())

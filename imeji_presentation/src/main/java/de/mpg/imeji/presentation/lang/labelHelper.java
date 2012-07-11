@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import de.mpg.j2j.misc.LocalizedString;
 
-public class labelHelper
+public class LabelHelper
 {
     public static String getDefaultLabel(Iterator<LocalizedString> labels)
     {

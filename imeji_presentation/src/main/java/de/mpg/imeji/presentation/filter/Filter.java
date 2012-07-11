@@ -1,102 +1,111 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.filter;
 
-import java.io.Serializable;
 import java.net.URI;
-import java.util.List;
 
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
+import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
+import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.presentation.facet.Facet;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 
-public class Filter extends Facet implements Serializable
+public class Filter extends Facet
 {
-	//private SearchCriterion filter;
-	private String query ="";
-	private URI collectionID;
-	private String label = "Search";
-	private int count = 0;
-	private String removeQuery = "";
-	private List<SearchCriterion> scList;
-	
-	public Filter(String label, String query, int count, FacetType type, URI metadataURI) 
-	{
-		super(null, label, count, type, metadataURI);
-		this.label = label; 
-		this.query = query;
-		this.count = count;
-		init();
-	}
-	
-	public void init()
-	{
-		if (label == null) label = "Search";
-		 
-		try 
-		{
-			scList = URLQueryTransformer.transform2SCList(query);
-			if (scList.size() == 1 && scList.get(0).getValue() != null) 
-			{
-				this.setMetadataURI(URI.create(scList.get(0).getValue()));
-			}
-		} 
-		catch (Exception e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public String getLabel() {
-		return label;
-	}
+    // private SearchCriterion filter;
+    private String query = "";
+    private URI collectionID;
+    private String label = "Search";
+    private int count = 0;
+    private String removeQuery = "";
+    private SearchQuery searchQuery;
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
+    public Filter(String label, String query, int count, FacetType type, URI metadataURI)
+    {
+        super(null, label, count, type, metadataURI);
+        this.label = label;
+        this.query = query;
+        this.count = count;
+        init();
+    }
 
-	public URI getCollectionID() {
-		return collectionID;
-	}
+    public void init()
+    {
+        if (label == null)
+            label = "Search";
+        try
+        {
+            searchQuery = URLQueryTransformer.parseStringQuery(query);
+            if (!searchQuery.isEmpty() && SEARCH_ELEMENTS.PAIR.equals(searchQuery.getElements().get(0).getType()))
+            {
+                this.setMetadataURI(URI.create(((SearchPair)searchQuery.getElements().get(0)).getValue()));
+            }
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-	public void setCollectionID(URI collectionID) {
-		this.collectionID = collectionID;
-	}
+    public String getLabel()
+    {
+        return label;
+    }
 
-	public int getCount() {
-		return count;
-	}
+    public void setLabel(String label)
+    {
+        this.label = label;
+    }
 
-	public void setCount(int count) {
-		this.count = count;
-	}
+    public URI getCollectionID()
+    {
+        return collectionID;
+    }
 
-	public String getQuery() {
-		return query;
-	}
+    public void setCollectionID(URI collectionID)
+    {
+        this.collectionID = collectionID;
+    }
 
-	public void setQuery(String query) {
-		this.query = query;
-	}
+    public int getCount()
+    {
+        return count;
+    }
 
-	public String getRemoveQuery() {
-		return removeQuery;
-	}
+    public void setCount(int count)
+    {
+        this.count = count;
+    }
 
-	public void setRemoveQuery(String removeQuery) {
-		this.removeQuery = removeQuery;
-	}
+    public String getQuery()
+    {
+        return query;
+    }
 
-	public List<SearchCriterion> getScList() {
-		return scList;
-	}
+    public void setQuery(String query)
+    {
+        this.query = query;
+    }
 
-	public void setScList(List<SearchCriterion> scList) {
-		this.scList = scList;
-	}
+    public String getRemoveQuery()
+    {
+        return removeQuery;
+    }
 
-	
+    public void setRemoveQuery(String removeQuery)
+    {
+        this.removeQuery = removeQuery;
+    }
+
+    public SearchQuery getSearchQuery()
+    {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(SearchQuery searchQuery)
+    {
+        this.searchQuery = searchQuery;
+    }
 }

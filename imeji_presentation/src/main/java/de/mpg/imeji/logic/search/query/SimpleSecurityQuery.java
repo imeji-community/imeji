@@ -3,18 +3,17 @@
  */
 package de.mpg.imeji.logic.search.query;
 
-import de.mpg.imeji.logic.search.vo.SearchIndexes;
-import de.mpg.imeji.logic.search.vo.SearchCriterion;
-import de.mpg.imeji.logic.search.vo.SearchCriterion.Operator;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.User;
 
 public class SimpleSecurityQuery
 {
-    public static String getQuery(User user, SearchCriterion sc, String type, boolean includeWithdrawn)
+    public static String getQuery(User user, SearchPair pair, String type, boolean includeWithdrawn)
     {
-        String f = "?status!=<http://imeji.org/terms/status/WITHDRAWN> && (";
+        String f = "?status!=<http://imeji.org/terms/status#WITHDRAWN> && (";
         if (includeWithdrawn)
         {
             f = "(";
@@ -23,28 +22,31 @@ public class SimpleSecurityQuery
         if (user == null || user.getGrants().isEmpty())
         {
             if (includeWithdrawn)
-                return " .FILTER(?status!=<http://imeji.org/terms/status/PENDING>)";
-            return " .FILTER(?status=<http://imeji.org/terms/status/RELEASED>)";
+            {
+                return " .FILTER(?status!=<http://imeji.org/terms/status#PENDING>)";
+            }
+            return " .FILTER(?status=<http://imeji.org/terms/status#RELEASED>)";
         }
-        if (sc != null && SearchIndexes.PROPERTIES_STATUS.equals(sc.getNamespace()))
+        if (pair != null && SearchIndex.names.PROPERTIES_STATUS.name().equals(pair.getIndex().getName()))
         {
-            f = "?status=<" + sc.getValue() + ">";
-            if (Operator.AND.equals(sc.getOperator()))
-            {
-                op = " && (";
-            }
-            else
-            {
-                op = " || (";
-            }
+            f = "?status=<" + pair.getValue() + ">";
+            op = " && (";
+            // if (AND.equals(pair.getOperator()))
+            // {
+            // op = " && (";
+            // }
+            // else
+            // {
+            // op = " || (";
+            // }
         }
         String uf = "";
         String imageCollection = null;
-        if (sc != null && SearchIndexes.IMAGE_COLLECTION.equals(sc.getNamespace()))
+        if (pair != null && SearchIndex.names.IMAGE_COLLECTION.equals(pair.getIndex().getName()))
         {
-            imageCollection = sc.getValue();
+            imageCollection = pair.getValue();
         }
-        boolean myImages = sc != null && SearchIndexes.MY_IMAGES.equals(sc.getNamespace());
+        boolean myImages = (pair != null && SearchIndex.names.MY_IMAGES.equals(pair.getIndex().getName()));
         boolean hasGrantForCollection = false;
         if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
         {
@@ -90,7 +92,7 @@ public class SimpleSecurityQuery
         }
         if (imageCollection != null && !hasGrantForCollection)
         {
-            uf += "?c=<" + imageCollection + "> && ?status=<http://imeji.org/terms/status/RELEASED>";
+            uf += "?c=<" + imageCollection + "> && ?status=<http://imeji.org/terms/status#RELEASED>";
         }
         else if (user != null && user.getGrants() != null && user.getGrants().isEmpty() && myImages)
         {
@@ -100,9 +102,9 @@ public class SimpleSecurityQuery
         if (!"".equals(uf.trim()))
         {
             f = " .FILTER(" + f + op + "(";
-            if (sc == null || (sc != null && !SearchIndexes.MY_IMAGES.equals(sc.getNamespace())))
+            if (pair == null || (pair != null && !SearchIndex.names.MY_IMAGES.equals(pair.getIndex().getName())))
             {
-                f += "?status=<http://imeji.org/terms/status/RELEASED> || ";
+                f += "?status=<http://imeji.org/terms/status#RELEASED> || ";
             }
             f += uf + "))";
         }
@@ -112,7 +114,7 @@ public class SimpleSecurityQuery
         }
         else if ("".equals(f))
         {
-            f = " .FILTER(?status=<http://imeji.org/terms/status/RELEASED>)";
+            f = " .FILTER(?status=<http://imeji.org/terms/status#RELEASED>)";
         }
         return f;
     }

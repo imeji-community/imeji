@@ -20,7 +20,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
-public class MetadataHelper implements Serializable
+public class MetadataHelper
 {
 	private static Logger logger = Logger.getLogger(MetadataHelper.class);
 	
@@ -32,7 +32,7 @@ public class MetadataHelper implements Serializable
 		}
 		else if (md instanceof Date)
 		{
-			if (((Date) md).getDate() == null || "".equals(((Date) md).getDate()) || Double.isNaN(((Date) md).getDateTime())) return true;
+			if (((Date) md).getDate() == null || "".equals(((Date) md).getDate()) || Double.isNaN(((Date) md).getTime())) return true;
 		}
 		else if (md instanceof Geolocation)
 		{

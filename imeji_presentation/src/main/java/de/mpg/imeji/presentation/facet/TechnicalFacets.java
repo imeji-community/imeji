@@ -9,19 +9,18 @@ import java.util.List;
 
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.vo.SearchElement;
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersSession;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class TechnicalFacets
@@ -38,16 +37,20 @@ public class TechnicalFacets
         List<Facet> techFacets = new ArrayList<Facet>();
         try
         {
+            
+            SearchResult allImages = retrieveAllImages(searchQuery);
             int count = 0;
-            if (sb.getUser() != null)
+            int sizeAllImages = allImages.getNumberOfRecords();
+            if (sb.getUser() != null && sizeAllImages > 0)
             {
                 if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                 {
                     SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.MY_IMAGES),
                             SearchOperators.EQUALS, "my");
-                    count = getCount(searchQuery, myImageSearchPair);
+                    count = getCount(searchQuery, myImageSearchPair,allImages.getResults());
                     if (count > 0)
-                    {   techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, myImageSearchPair, "my_images",
+                    {
+                        techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, myImageSearchPair, "my_images",
                                 FacetType.TECHNICAL), "my_images", count, FacetType.TECHNICAL, null));
                     }
                     else
@@ -59,9 +62,10 @@ public class TechnicalFacets
                 {
                     SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
                             SearchOperators.URI, "http://imeji.org/terms/status#PENDING");
-                    count = getCount(searchQuery, privatePair);
+                    count = getCount(searchQuery, privatePair, allImages.getResults());
                     if (count > 0)
-                    {    techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, privatePair, "pending_images",
+                    {
+                        techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, privatePair, "pending_images",
                                 FacetType.TECHNICAL), "pending_images", count, FacetType.TECHNICAL, null));
                     }
                 }
@@ -69,9 +73,10 @@ public class TechnicalFacets
                 {
                     SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
                             SearchOperators.URI, "http://imeji.org/terms/status#RELEASED");
-                    count = getCount(searchQuery, publicPair);
+                    count = getCount(searchQuery, publicPair, allImages.getResults());
                     if (count > 0)
-                    {   techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, publicPair, "released_images",
+                    {
+                        techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, publicPair, "released_images",
                                 FacetType.TECHNICAL), "released_images", count, FacetType.TECHNICAL, null));
                     }
                 }
@@ -82,7 +87,7 @@ public class TechnicalFacets
                 {
                     SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_METADATA_TYPE_RDF),
                             SearchOperators.URI, t.getClazzNamespace());
-                    count = getCount(searchQuery, pair);
+                    count = getCount(searchQuery, pair, allImages.getResults());
                     if (count > 0)
                     {
                         techFacets.add(new Facet(
@@ -104,13 +109,22 @@ public class TechnicalFacets
         }
     }
 
-    public int getCount(SearchQuery searchQuery, SearchPair pair)
+    public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
         ItemController ic = new ItemController(sb.getUser());
-        SearchQuery sq = new SearchQuery(searchQuery.getElements());
-        sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
+        return ic.searchImages(searchQuery, null);
+    }
+
+    public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages)
+    {
+        ItemController ic = new ItemController(sb.getUser());
+//        SearchQuery sq = new SearchQuery(searchQuery.getElements());
+//        sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
+//        sq.addPair(pair);
+        
+        SearchQuery sq  = new SearchQuery();
         sq.addPair(pair);
-        return ic.countImages(sq);
+        return ic.countImages(sq, allImages);
     }
 
     public List<List<Facet>> getFacets()

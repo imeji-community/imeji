@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.image;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,9 +26,8 @@ import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
-import de.mpg.imeji.presentation.facet.Facet;
-import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
+import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersBean;
 import de.mpg.imeji.presentation.filter.FiltersSession;

@@ -236,6 +236,8 @@ public class Jena2Java
     {
         List<Object> object = new ArrayList<Object>();
         String predicate = J2JHelper.getListNamespace(f);
+        if (predicate == null)
+            return object;
         int count = 0;
         for (StmtIterator iterator = subject.listProperties(model.createProperty(predicate)); iterator.hasNext();)
         {

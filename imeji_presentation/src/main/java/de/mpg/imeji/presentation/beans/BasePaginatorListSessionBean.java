@@ -82,7 +82,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      * BaseListRetrieverRequestBean.
      */
     private int totalNumberOfElements = 0;
-    private boolean corruptedList = false;
     private boolean ajaxMode = true;
 
     /**
@@ -169,7 +168,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             {
                 paginatorPageList.add(new PaginatorPage(i + 1));
             }
-            corruptedList = false;
         }
         catch (Exception e)
         {
@@ -178,33 +176,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         }
     }
 
-    public String initCorruptData()
-    {
-        boolean clean = false;
-        while (!clean)
-        {
-            try
-            {
-                retrieveList(getOffset(), this.elementsPerPage);
-                clean = true;
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-        return getPrettyNavigation();
-    }
 
-    public boolean isCorruptedList()
-    {
-        return corruptedList;
-    }
-
-    public void setCorruptedList(boolean corruptedList)
-    {
-        this.corruptedList = corruptedList;
-    }
 
     public String getListElementTypeId(ListElementType el)
     {

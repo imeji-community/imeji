@@ -34,7 +34,6 @@ public class Search
         SearchIndex index = indexes.get(indexName);
         if (index == null)
         {
-            SearchIndexInitializer.init();
             logger.error("Unknown index: " + indexName);
             throw new RuntimeException("Unknown index: " + indexName);
         }
@@ -55,10 +54,11 @@ public class Search
         }
     }
 
-    // public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, User user)
-    // {
-    // return new SearchResult(searchAdvanced(scList, sortCri, user));
-    // }
+    public SearchResult search(List<String> results, SearchQuery sq, SortCriterion sortCri, User user)
+    {
+        return new SearchResult(advanced(results, sq, sortCri, user));
+    }
+
     public SearchResult search(SearchQuery sq, SortCriterion sortCri, User user)
     {
         return new SearchResult(advanced(sq, sortCri, user));
@@ -75,10 +75,11 @@ public class Search
         {
             results = simple(null, sortCri, user);
         }
+        boolean isFirstResult = results.isEmpty();
+        LOGICAL_RELATIONS logic = LOGICAL_RELATIONS.AND;
         for (SearchElement se : sq.getElements())
         {
             List<String> subResults = new ArrayList<String>();
-            LOGICAL_RELATIONS logic = LOGICAL_RELATIONS.AND;
             switch (se.getType())
             {
                 case GROUP:
@@ -94,82 +95,55 @@ public class Search
                     logic = ((SearchLogicalRelation)se).getLogicalRelation();
                     break;
             }
+            if (isFirstResult)
+            {
+                results = new ArrayList<String>(subResults);
+            }
+            isFirstResult = false;
         }
         return results;
     }
 
     private List<String> doLogicalOperation(List<String> l1, LOGICAL_RELATIONS logic, List<String> l2)
     {
-        if (!l2.isEmpty() && l1.isEmpty())
-        {
-            l1 = new ArrayList<String>(l2);
-        }
         switch (logic)
         {
             case AND:
+                long beforeInter = System.currentTimeMillis();
                 l1 = (List<String>)CollectionUtils.intersection(l1, l2);
+                long afterInter = System.currentTimeMillis();
+                //logger.info("Intersection: " + Long.valueOf(afterInter - beforeInter));
                 break;
             case OR:
+                long beforeUnion = System.currentTimeMillis();
                 l1 = (List<String>)CollectionUtils.union(l1, l2);
+                long afterUnion = System.currentTimeMillis();
+                //logger.info("Union: " + Long.valueOf(afterUnion - beforeUnion));
                 break;
         }
         return l1;
     }
 
-    @SuppressWarnings("unchecked")
-    // public List<String> searchAdvanced(List<SearchCriterion> scList, SortCriterion sortCri, User user)
-    // {
-    // List<String> results = new ArrayList<String>();
-    // if (scList == null)
-    // scList = new ArrayList<SearchCriterion>();
-    // if (scList.isEmpty() || containerURI != null)
-    // {
-    // results = searchSimple(null, sortCri, user);
-    // }
-    // boolean hasAnEmptySubResults = false;
-    // for (SearchCriterion sc : scList)
-    // {
-    // List<String> subResults = new ArrayList<String>();
-    // if (sc.getChildren().isEmpty())
-    // {
-    // subResults = searchSimple(sc, sortCri, user);
-    // }
-    // else
-    // {
-    // subResults = searchAdvanced(sc.getChildren(), sortCri, user);
-    // }
-    // if (subResults.isEmpty())
-    // hasAnEmptySubResults = true;
-    // if (results.isEmpty() && !hasAnEmptySubResults)
-    // {
-    // results = new ArrayList<String>(subResults);
-    // }
-    // if (Operator.AND.equals(sc.getOperator()) || Operator.NOTAND.equals(sc.getOperator()))
-    // {
-    // results = (List<String>)CollectionUtils.intersection(results, subResults);
-    // }
-    // else
-    // {
-    // results = (List<String>)CollectionUtils.union(results, subResults);
-    // }
-    // }
-    // return results;
-    // }
     private List<String> simple(SearchPair pair, SortCriterion sortCri, User user)
     {
         String sparqlQuery = SimpleQueryFactory.getQuery(type, pair, sortCri, user, (containerURI != null),
                 getSpecificQuery());
-        // sparqlQuery="PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/item> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c  . <http://imeji.org/collection/3> <http://imeji.org/terms/item> ?s  .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN> && ( (?status=<http://imeji.org/terms/status#RELEASED> || ?c=<http://imeji.org/collection/3>))) . ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md <http://imeji.org/terms/statement> ?el  .FILTER(?el=<http://imeji.org/statement/58d7d957-e311-44e3-a151-0336b5f78e4e>) }";
-        logger.info(sparqlQuery);
-        return ImejiSPARQL.exec(sparqlQuery);
+         //sparqlQuery="PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/item> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN> && ( (?status=<http://imeji.org/terms/status#RELEASED> || ?c=<http://imeji.org/collection/13>)))  . ?props <http://purl.org/dc/terms/created> ?sort0}  ORDER BY DESC(?sort0)";
+        // logger.info(sparqlQuery);
+        long beforeSelect = System.currentTimeMillis();
+        List<String> l = ImejiSPARQL.exec(sparqlQuery);
+        long afterSelect = System.currentTimeMillis();
+        System.out.println("Select Query: " + Long.valueOf(afterSelect - beforeSelect));
+        return l;
     }
 
-    // public List<String> searchSimple(SearchCriterion sc, SortCriterion sortCri, User user)
-    // {
-    // String sq = SimpleQueryFactory.getQuery(type, sc, sortCri, user, (containerURI != null), getSpecificQuery());
-    // // logger.info(sq);
-    // return ImejiSPARQL.exec(sq);
-    // }
+    private int simpleCount(SearchPair pair, SortCriterion sortCri, User user)
+    {
+        String sparqlQuery = SimpleQueryFactory.getQuery(type, pair, sortCri, user, (containerURI != null),
+                getSpecificQuery());
+        return ImejiSPARQL.execCount(sparqlQuery);
+    }
+
     public List<String> searchSimpleForQuery(String query)
     {
         return ImejiSPARQL.exec(query);

@@ -213,26 +213,11 @@ public class ItemController extends ImejiController
         return search.search(searchQuery, null, simplifyUser(null)).getNumberOfRecords();
     }
 
-//    public SearchResult searchImages(List<SearchCriterion> scList, SortCriterion sortCri)
-//    {
-//        Search search = new Search("http://imeji.org/terms/item", null);
-//        return search.search(scList, sortCri, simplifyUser(null));
-//    }
-//
-//    public SearchResult searchImagesInContainer(URI containerUri, List<SearchCriterion> scList, SortCriterion sortCri,
-//            int limit, int offset)
-//    {
-//        Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
-//        return search.search(scList, sortCri, simplifyUser(containerUri));
-//    }
-//
-//    public int countImages(List<SearchCriterion> scList)
-//    {
-//        Search search = new Search("http://imeji.org/terms/item", null);
-//        // List<String> uris = search.searchAdvanced(scList, null, simplifyUser(null));
-//        // return uris.size();
-//        return search.search(scList, null, simplifyUser(null)).getNumberOfRecords();
-//    }
+    public int countImages(SearchQuery searchQuery, List<String> allImages)
+    {
+        Search search = new Search("http://imeji.org/terms/item", null);
+        return search.search(allImages, searchQuery, null, simplifyUser(null)).getNumberOfRecords();
+    }
 
     public int countImagesInContainer(URI containerUri, SearchQuery searchQuery)
     {
@@ -240,7 +225,7 @@ public class ItemController extends ImejiController
         List<String> uris = search.advanced(searchQuery, null, simplifyUser(containerUri));
         return uris.size();
     }
-    
+
     public int countImagesInContainer(URI containerUri, SearchQuery searchQuery, List<String> containerImages)
     {
         Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
@@ -250,6 +235,7 @@ public class ItemController extends ImejiController
 
     public Collection<Item> loadImages(List<String> uris, int limit, int offset)
     {
+        long beforeLoad = System.currentTimeMillis();
         LinkedList<Item> items = new LinkedList<Item>();
         ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.imageModel);
         int counter = 0;
@@ -280,6 +266,8 @@ public class ItemController extends ImejiController
             }
             counter++;
         }
+        long afterLoad = System.currentTimeMillis();
+        logger.info("Load items: " + Long.valueOf(afterLoad - beforeLoad));
         return items;
     }
 

@@ -55,18 +55,6 @@ public class SimpleQueryFactory
             searchQuery = "";
             variable = "s";
         }
-        // else if (SearchIndex.names.IMAGE_METADATA_TYPE_URI..name().equals(pair.getIndex().getNamespace()))
-        // {
-        // // slow
-        // searchQuery =
-        // ". OPTIONAL {?s <http://imeji.org/terms/metadataSet> ?mds . OPTIONAL {?mds <http://imeji.org/terms/metadata> ?md .OPTIONAL{ ?md <http://imeji.org/terms/complexTypes> ?type . OPTIONAL {?md <"
-        // + pair.getIndex().getNamespace() + "> ?el }}}}";
-        // // fast (not tested)
-        // // searchQuery =
-        // //
-        // ". ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md . ?md <http://imeji.org/terms/complexTypes> ?type .  ?md <"
-        // // + sc.getNamespace().getNs() + "> ?el ";
-        // }
         else if (SearchIndex.names.PROPERTIES_STATUS.name().equals(pair.getIndex().getName()))
         {
             return "";
@@ -112,28 +100,27 @@ public class SimpleQueryFactory
             return ". ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md a <"
                     + pair.getValue() + ">";
         }
-        // else if (SearchIndex.names.IMAGE_METADATA_PERSON_FAMILY_NAME.equals(pair.getIndex().getNamespace())
-        // || SearchIndex.names.IMAGE_METADATA_PERSON_GIVEN_NAME.equals(pair.getIndex().getNamespace())
-        // || SearchIndex.names.IMAGE_METADATA_PERSON_ORGANIZATION_NAME.equals(pair.getIndex().getNamespace()))
-        // {
-        // searchQuery +=
-        // ". ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md <http://imeji.org/terms/metadata/person> ?p . ?p  <"
-        // + pair.getIndex().getNamespace() + "> ?el ";
-        // }
         else
         {
-            searchQuery = ". ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md <"
-                    + pair.getIndex().getNamespace() + "> ?el ";
+            searchQuery = ". ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md "
+                    + getSearchElementsParent(pair.getIndex(), 0) + " <" + pair.getIndex().getNamespace() + "> ?el ";
         }
-        // if (Operator.NOTAND.equals(sc.getOperator()) || Operator.NOTOR.equals(sc.getOperator()))
-        // {
-        // return ".MINUS{ " + searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(sc,variable) + ")}";
-        // }
         if (pair.isNot())
         {
             return ".MINUS{ " + searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(pair, variable) + ")}";
         }
         return searchQuery + " .FILTER(" + getSimpleFilter(pair, variable) + ")";
+    }
+
+    private static String getSearchElementsParent(SearchIndex index, int parentNumber)
+    {
+        String q = "";
+        if (index.getParent() != null)
+        {
+            q += getSearchElementsParent(index.getParent(), parentNumber + 1) + " <" + index.getParent().getNamespace()
+                    + "> ?p" + parentNumber + " . ?p" + parentNumber;
+        }
+        return q;
     }
 
     // public static String getSearchElement(SearchCriterion sc)

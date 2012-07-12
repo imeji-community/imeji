@@ -37,7 +37,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.j2j.exceptions.NotFoundException;
 
-public class ImageBean implements Serializable
+public class ImageBean
 {
     public enum TabType
     {

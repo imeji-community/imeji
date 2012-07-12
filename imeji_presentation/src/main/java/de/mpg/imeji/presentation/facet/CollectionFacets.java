@@ -81,7 +81,8 @@ public class CollectionFacets
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> collectionImages)
     {
         ItemController ic = new ItemController(sb.getUser());
-        SearchQuery sq = new SearchQuery(searchQuery.getElements());
+       // SearchQuery sq = new SearchQuery(searchQuery.getElements());
+        SearchQuery sq = new SearchQuery();
         if (pair != null)
         {
             sq.addLogicalRelation(LOGICAL_RELATIONS.AND);

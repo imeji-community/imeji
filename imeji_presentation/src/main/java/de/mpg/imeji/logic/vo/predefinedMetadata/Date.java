@@ -17,10 +17,10 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class Date extends Metadata
 {
-    @j2jLiteral("http://imeji.org/terms/dateString")
+    @j2jLiteral("http://imeji.org/terms/date")
     private String date;
-    @j2jLiteral("http://imeji.org/terms/dateTime")
-    private long dateTime;
+    @j2jLiteral("http://imeji.org/terms/time")
+    private long time;
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
 
@@ -38,14 +38,14 @@ public class Date extends Metadata
         this.date = date;
     }
 
-    public long getDateTime()
+    public long getTime()
     {
-        return dateTime;
+        return time;
     }
 
-    public void setDateTime(long dateTime)
+    public void setTime(long dateTime)
     {
-        this.dateTime = dateTime;
+        this.time = dateTime;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Date extends Metadata
     {
         if (date != null)
         {
-            dateTime = DateFormatter.getTime(date);
+            time = DateFormatter.getTime(date);
         }
         setSearchValue(date);
     }
@@ -76,7 +76,7 @@ public class Date extends Metadata
         if (metadata instanceof Date)
         {
             this.date = ((Date)metadata).getDate();
-            this.dateTime = ((Date)metadata).getDateTime();
+            this.time = ((Date)metadata).getTime();
             this.statement = metadata.getStatement();
         }
     }

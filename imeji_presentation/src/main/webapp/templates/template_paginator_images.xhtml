@@ -203,16 +203,8 @@
 		<ui:include src="../confirmationPages/SelectedDeleteWithdraw.xhtml">
 			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
 		</ui:include>	   
-		
-		<h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{paginatorListSessionBean.corruptedList}">
-			<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2>
-			<h:outputText styleClass="messageFatal" value="A fatal error occured! There are images with corrupted data."/>
-			<br/>
-			<h:outputText styleClass="messageFatal free_area0" value="To reinitialize this data, please click on:"/>
-			<a4j:commandLink value="Reinitialize corrupted data" action="#{paginatorListSessionBean.initCorruptData}" styleClass="free_area0 xTiny_marginLIncl" />
-		</h:panelGroup>
 
-		<h:panelGroup layout="block" styleClass="full_area0 noTopBorder"  rendered="#{!paginatorListSessionBean.corruptedList}">
+		<h:panelGroup layout="block" styleClass="full_area0 noTopBorder">
 			<h:panelGroup layout="block"  styleClass="full_area0 itemList" rendered="#{SessionBean.user != null}">
 				<div class="full_area0 listHeader">
 					<span class="small_area0">&#160;</span>

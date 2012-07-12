@@ -134,6 +134,7 @@ public class ImejiSPARQL
      */
     public static int execCount(String query)
     {
+        query = query.replace("SELECT DISTINCT ?s WHERE ", "SELECT DISTINCT (count(*)) WHERE ");
         Query q = QueryFactory.create(query, Syntax.syntaxARQ);
         QueryExecution qexec = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
         qexec.getContext().set(TDB.symUnionDefaultGraph, true);

@@ -128,7 +128,7 @@ public class FormularElement
         switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
         {
             case DATE:
-                group.addPair(new SearchPair(Search.getIndex("METADATA_DATE_DATE"), operator, searchValue, not));
+                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_TIME"), operator, searchValue, not));
                 break;
             case GEOLOCATION:
                 SearchGroup geoGroup = new SearchGroup();
@@ -140,7 +140,7 @@ public class FormularElement
                 group.addGroup(geoGroup);
                 break;
             case LICENSE:
-                group.addPair(new SearchPair(Search.getIndex("METADATA_LICENSE_LICENSE"), operator, searchValue, not));
+                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_LICENSE"), operator, searchValue, not));
                 break;
             case NUMBER:
                 group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_NUMBER"), operator, searchValue, not));
@@ -148,13 +148,13 @@ public class FormularElement
             case CONE_PERSON:
                 SearchGroup personGroup = new SearchGroup();
                 group.setNot(not);
-                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_FAMILY_NAME"), operator,
+                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_FAMLILYNAME"), operator,
                         searchValue));
-                personGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
-                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_GIVEN_NAME"), operator,
+                personGroup.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_GIVENNAME"), operator,
                         searchValue));
-                personGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
-                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_ORGANIZATION_NAME"),
+                personGroup.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_ORGANIZATION_TITLE"),
                         operator, searchValue));
                 group.addGroup(personGroup);
                 break;

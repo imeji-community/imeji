@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -19,7 +20,7 @@ public class Container
     private URI id;
     @j2jResource("http://imeji.org/terms/properties")
     private Properties properties = new Properties();
-    @j2jList("http://imeji.org/terms/item")
+    @j2jLazyList("http://imeji.org/terms/item")
     private Collection<URI> images = new ArrayList<URI>();
     @j2jResource("http://imeji.org/terms/container/metadata")
     private ContainerMetadata metadata = new ContainerMetadata();
@@ -61,6 +62,7 @@ public class Container
 
     public Collection<URI> getImages()
     {
+        System.out.println("Container.getImages!!!!!");
         return images;
     }
 }

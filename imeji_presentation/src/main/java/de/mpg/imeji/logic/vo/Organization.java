@@ -15,11 +15,11 @@ import de.mpg.j2j.annotations.j2jResource;
 public class Organization
 {
     private URI id;
-    @j2jLiteral("http://purl.org/dc/elements/1.1/title")
+    @j2jLiteral("http://purl.org/dc/terms/title")
     private String name;
-    @j2jLiteral("http://purl.org/dc/elements/1.1/description")
+    @j2jLiteral("http://purl.org/dc/terms/description")
     private String description;
-    @j2jLiteral("http://purl.org/dc/elements/1.1/identifier")
+    @j2jLiteral("http://purl.org/dc/terms/identifier")
     private String identifier;
     @j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/city")
     private String city;

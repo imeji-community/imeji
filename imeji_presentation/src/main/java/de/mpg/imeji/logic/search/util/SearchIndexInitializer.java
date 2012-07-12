@@ -1,6 +1,5 @@
 package de.mpg.imeji.logic.search.util;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -8,8 +7,6 @@ import java.util.Map.Entry;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.j2j.helper.J2JHelper;
 
 public class SearchIndexInitializer
 {
@@ -95,17 +92,29 @@ public class SearchIndexInitializer
         
         indexes = put(indexes, new SearchIndex("IMAGE_METADATA_TEXT", "http://imeji.org/terms/text", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
         indexes = put(indexes, new SearchIndex("IMAGE_METADATA_NUMBER", "http://imeji.org/terms/number", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_DATE", "http://imeji.org/terms/date", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_TIME", "http://imeji.org/terms/time", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_TITLE", "http://imeji.org/terms/title", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_LONGITUDE", "http://imeji.org/terms/longitude", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_LATITUTE", "http://imeji.org/terms/latitude", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_LICENSE", "http://imeji.org/terms/license", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_URI", "http://imeji.org/terms/uri", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_LABEL", "http://www.w3.org/2000/01/rdf-schema#label", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_CITATION", "http://imeji.org/terms/citation", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_CITATIONSTYLE", "http://imeji.org/terms/citationStyle", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_CONEID", "http://imeji.org/terms/coneId", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON", "http://xmlns.com/foaf/0.1/person", indexes.get(SearchIndex.names.IMAGE_METADATA.name())));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON_FAMLILYNAME", "http://purl.org/escidoc/metadata/terms/0.1/family-name", indexes.get("IMAGE_METADATA_PERSON")));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON_GIVENNAME", "http://purl.org/escidoc/metadata/terms/0.1/given-name", indexes.get("IMAGE_METADATA_PERSON")));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON_IDENTIFIER", "http://purl.org/dc/elements/1.1/identifier", indexes.get("IMAGE_METADATA_PERSON")));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON_ROLE", "http://purl.org/escidoc/metadata/terms/0.1/role", indexes.get("IMAGE_METADATA_PERSON")));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON_ORGANIZATION", "http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit", indexes.get("IMAGE_METADATA_PERSON")));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON_ORGANIZATION_TITLE", "http://purl.org/dc/terms/title", indexes.get("IMAGE_METADATA_PERSON_ORGANIZATION")));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON_ORGANIZATION_IDENTIFIER", "http://purl.org/dc/terms/identifier", indexes.get("IMAGE_METADATA_PERSON_ORGANIZATION")));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON_ORGANIZATION_DESCRIPTION", "http://purl.org/dc/terms/description", indexes.get("IMAGE_METADATA_PERSON_ORGANIZATION")));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON_ORGANIZATION_CITY", "http://purl.org/escidoc/metadata/terms/0.1/city", indexes.get("IMAGE_METADATA_PERSON_ORGANIZATION")));
+        indexes = put(indexes, new SearchIndex("IMAGE_METADATA_PERSON_ORGANIZATION_COUNTRY", "http://purl.org/escidoc/metadata/terms/0.1/country", indexes.get("IMAGE_METADATA_PERSON_ORGANIZATION")));
 
-        for (Metadata.Types t : Metadata.Types.values())
-        {
-            indexes = put(indexes, new SearchIndex("METADATA_" + t.name(), t.getClazzNamespace()));
-            for (Field f : J2JHelper.getAllObjectFields(t.getClazz()))
-            {
-                String namespace = J2JHelper.getNamespace(f);
-                indexes = put(indexes,
-                        new SearchIndex("METADATA_" + t.name() + "_" + f.getName().toUpperCase(), namespace, indexes.get(t.name())));
-            }
-        }
         return indexes;
     }
 

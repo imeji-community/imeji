@@ -13,19 +13,8 @@ public class SimpleQueryFactory
 {
     private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <XXX_SEARCH_TYPE_ELEMENT_XXX> . "
             + "?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status XXX_SPECIFIC_QUERY_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SORT_ELEMENT_XXX} "
-            + "XXX_SORT_QUERY_XXX";
+            + "XXX_SORT_QUERY_XXX ";
 
-    // public static String getQuery(String type, SearchCriterion sc, SortCriterion sortCriterion, User user,
-    // boolean isCollection, String specificQuery)
-    // {
-    // return PATTERN_SELECT
-    // .replaceAll("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.getQuery(user, sc, type, false))
-    // .replaceAll("XXX_SORT_QUERY_XXX", SortQueryFactory.create(sortCriterion))
-    // .replaceAll("XXX_SEARCH_ELEMENT_XXX", getSearchElement(sc))
-    // .replaceAll("XXX_SEARCH_TYPE_ELEMENT_XXX", type)
-    // .replaceAll("XXX_SORT_ELEMENT_XXX", getSortElement(sortCriterion))
-    // .replaceAll("XXX_SPECIFIC_QUERY_XXX", specificQuery);
-    // }
     public static String getQuery(String type, SearchPair pair, SortCriterion sortCriterion, User user,
             boolean isCollection, String specificQuery)
     {

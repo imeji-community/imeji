@@ -111,14 +111,18 @@ public class ItemController extends ImejiController
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
         List<Object> imBeans = new ArrayList<Object>();
+        logger.info("before init");
+        long beforeinit = System.currentTimeMillis();
         for (Item item : items)
         {
             imBeans.add(initAllMetadata(item));
         }
+        long afterinit = System.currentTimeMillis();
+        logger.info("upadate item initialized = " + Long.valueOf(afterinit - beforeinit));
         long before = System.currentTimeMillis();
         imejiBean2RDF.update(imBeans, user);
         long after = System.currentTimeMillis();
-        System.out.println("item controller update = " + Long.valueOf(after - before));
+        logger.info("item controller update = " + Long.valueOf(after - before));
     }
 
     private Item initAllMetadata(Item item)
@@ -235,10 +239,11 @@ public class ItemController extends ImejiController
 
     public Collection<Item> loadImages(List<String> uris, int limit, int offset)
     {
-        long beforeLoad = System.currentTimeMillis();
+        long before = System.currentTimeMillis();
         LinkedList<Item> items = new LinkedList<Item>();
         ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.imageModel);
         int counter = 0;
+       
         for (String s : uris)
         {
             if (offset <= counter && (counter < (limit + offset) || limit == -1))
@@ -248,14 +253,6 @@ public class ItemController extends ImejiController
                     Item item = (Item)reader.load(s, user, new Item());
                     if (item != null)
                     {
-                        // if (item.getMetadataSet().getProfile() == null)
-                        // {
-                        // logger.error("Error by loading image " + s + " : No related profile found");
-                        // item.getMetadataSet().setProfile(
-                        // ObjectLoader.loadCollection(item.getCollection(), user).getProfile());
-                        // update(item);
-                        // logger.info("Profile added: " + item.getMetadataSet().getProfile());
-                        // }
                         items.add(item);
                     }
                 }
@@ -266,8 +263,8 @@ public class ItemController extends ImejiController
             }
             counter++;
         }
-        long afterLoad = System.currentTimeMillis();
-        logger.info("Load items: " + Long.valueOf(afterLoad - beforeLoad));
+        long after = System.currentTimeMillis();
+        logger.info("Load items: " + Long.valueOf(after - before));
         return items;
     }
 

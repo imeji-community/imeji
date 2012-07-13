@@ -10,7 +10,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
+import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.ImejiController;
@@ -29,6 +31,7 @@ import de.mpg.j2j.controler.ResourceController;
  */
 public class ImejiBean2RDF
 {
+    private Dataset dataset;
     private static ResourceController rc;
     private Security security;
     private static Logger logger = Logger.getLogger(ImejiBean2RDF.class);
@@ -57,6 +60,10 @@ public class ImejiBean2RDF
                     abortTransaction();
                     throw new RuntimeException("Fatal error! Transaction aborted", e);
                 }
+                finally
+                {
+                    dataset.end();
+                }
             }
         }
     }
@@ -78,6 +85,10 @@ public class ImejiBean2RDF
                     abortTransaction();
                     throw new RuntimeException("Fatal error! Transaction aborted", e);
                 }
+                finally
+                {
+                    dataset.end();
+                }
             }
         }
     }
@@ -90,14 +101,21 @@ public class ImejiBean2RDF
             {
                 try
                 {
+                    long before = System.currentTimeMillis();
                     beginTransaction(o, user, OperationsType.UPDATE);
                     rc.update(o);
                     commitTransaction(o, user);
+                    long after = System.currentTimeMillis();
+                    logger.info("update with transcation: " + Long.valueOf(after - before));
                 }
                 catch (Exception e)
                 {
                     abortTransaction();
                     throw new RuntimeException("Fatal error! Transaction aborted", e);
+                }
+                finally
+                {
+                    dataset.end();
                 }
             }
         }
@@ -115,11 +133,12 @@ public class ImejiBean2RDF
      */
     private void beginTransaction(Object bean, User user, OperationsType opType) throws Exception
     {
-        ImejiJena.imejiDataSet.begin(ReadWrite.WRITE);
+        dataset = TDBFactory.createDataset(ImejiJena.tdbPath);
+        dataset.begin(ReadWrite.WRITE);
         try
         {
             checkSecurity(bean, user, opType);
-            rc = new ResourceController(modelURI);
+            rc = new ResourceController(dataset.getNamedModel(modelURI));
         }
         catch (Exception e)
         {
@@ -131,14 +150,26 @@ public class ImejiBean2RDF
 
     private void abortTransaction()
     {
-        ImejiJena.imejiDataSet.abort();
-        Locks.releaseLockForWrite();
+        try
+        {
+            dataset.abort();
+        }
+        finally
+        {
+            Locks.releaseLockForWrite();
+        }
     }
 
     private void commitTransaction(Object bean, User user)
     {
-        ImejiJena.imejiDataSet.commit();
-        Locks.releaseLockForWrite();
+        try
+        {
+            dataset.commit();
+        }
+        finally
+        {
+            Locks.releaseLockForWrite();
+        }
     }
 
     private void checkSecurity(Object bean, User user, OperationsType opType)

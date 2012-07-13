@@ -43,15 +43,19 @@ public abstract class MetadataEditor
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         ItemController ic = new ItemController(sb.getUser());
+        logger.info("Start Save update");
         try
         {
             if (prepareUpdate())
             {
+                logger.info("update prepared");
                 if (validateMetadataofImages())
                 {
+                    logger.info("update validate");
                     try
                     {
                         addPositionToMetadata();
+                        logger.info("update position md added");
                         ic.update(items);
                         BeanHelper.info(sb.getMessage("success_editor_edit"));
                         String str = items.size() + " " + sb.getMessage("success_editor_images");

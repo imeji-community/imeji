@@ -89,7 +89,7 @@ All rights reserved. Use is subject to license terms.
                                 </ui:insert>
                                	<div class="subHeader">
                                     <!-- Subheadline starts here -->
-                                    <a4j:outputPanel id="subHeader" rendered="false">
+                                    <a4j:outputPanel id="subHeader">
                                     <h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
                                     <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
                                         <h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>

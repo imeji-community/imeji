@@ -98,10 +98,10 @@
 											<f:selectItems value="#{SharingBean.grantsMenu}"/>
 									</h:selectOneMenu>
 					        		<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}" onclick="if (confirm('Do you really want to share the collection (An email will be sent to the user)')) return true; return false;">
-										<f:attribute name="collectionId" value="#{ViewCollectionBean.id}"/>
+										<f:attribute name="collectionId" value="#{ViewCollectionBean.collection.id}"/>
 										<f:attribute name="name" value="#{ViewCollectionBean.collection.metadata.title}"/>
 					           		</h:commandLink>
-					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.id}"><h:outputText value="Cancel"/></h:outputLink>
+					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id}"><h:outputText value="Cancel"/></h:outputLink>
 								</h:panelGrid>
 						 </f:facet>   
 					</rich:togglePanel>

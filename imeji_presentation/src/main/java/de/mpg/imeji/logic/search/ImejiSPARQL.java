@@ -14,6 +14,7 @@ import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.Syntax;
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.tdb.TDB;
@@ -105,13 +106,37 @@ public class ImejiSPARQL
             qexec.close();
         }
     }
+    
+    public static List<String> execNew(String query)
+    {
+        Query q = QueryFactory.create(query, Syntax.syntaxARQ);
+        QueryExecution qexec = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
+        qexec.getContext().set(TDB.symUnionDefaultGraph, true);
+        List<String> resultList = new ArrayList<String>(1000);
+        try
+        {
+            ResultSet results = qexec.execSelect();
+            for (; results.hasNext();)
+            {
+                Literal r = results.nextSolution().getLiteral("?counter");
+                //Resource counter = results.nextSolution().getResource("counter");
+                if (r != null);
+                    resultList.add(r.toString());
+            }
+            return resultList;
+        }
+        finally
+        {
+            qexec.close();
+        }
+    }
 
     public static String export(String query)
     {
         Query q = QueryFactory.create(query, Syntax.syntaxARQ);
         QueryExecution qexec = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
         qexec.getContext().set(TDB.symUnionDefaultGraph, true);
-        ImejiJena.imejiDataSet.begin(ReadWrite.READ);
+        //ImejiJena.imejiDataSet.begin(ReadWrite.READ);
         try
         {
             ResultSet results = qexec.execSelect();
@@ -121,7 +146,7 @@ public class ImejiSPARQL
         finally
         {
             qexec.close();
-            ImejiJena.imejiDataSet.commit();
+           // ImejiJena.imejiDataSet.commit();
         }
     }
 
@@ -138,7 +163,7 @@ public class ImejiSPARQL
         Query q = QueryFactory.create(query, Syntax.syntaxARQ);
         QueryExecution qexec = QueryExecutionFactory.create(q, ImejiJena.imejiDataSet);
         qexec.getContext().set(TDB.symUnionDefaultGraph, true);
-        ImejiJena.imejiDataSet.begin(ReadWrite.READ);
+       // ImejiJena.imejiDataSet.begin(ReadWrite.READ);
         try
         {
             
@@ -153,7 +178,7 @@ public class ImejiSPARQL
         }
         finally
         {
-            ImejiJena.imejiDataSet.commit();
+            //ImejiJena.imejiDataSet.commit();
         }
     }
 

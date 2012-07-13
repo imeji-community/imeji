@@ -66,7 +66,7 @@ public abstract class SearchElement
         }
     }
 
-    private SEARCH_ELEMENTS getTypeOfLastElement()
+    public SEARCH_ELEMENTS getTypeOfLastElement()
     {
         SearchElement se = getLastElement();
         if (se == null)

@@ -40,9 +40,11 @@ public class ImejiRDF2Bean
 
     public Object load(String uri, User user, Object o) throws NotFoundException
     {
-        ImejiJena.imejiDataSet.begin(ReadWrite.READ);
+        long beforeCommit = System.currentTimeMillis();
+        //ImejiJena.imejiDataSet.begin(ReadWrite.READ);
         try
         {
+            long before = System.currentTimeMillis();
             Security security = new Security();
             resourceController = new ResourceController(modelURI);
             o = resourceController.read(URI.create(uri), o);
@@ -70,6 +72,8 @@ public class ImejiRDF2Bean
                 sortMetadataAccordingToPosition((Item)o);
             }
             // return ObjectHelper.castAllHashSetToList(o);
+            long after = System.currentTimeMillis();
+            logger.info("Load " + uri + " : " + Long.valueOf(after - before));
             return o;
         }
         catch (NotFoundException e)
@@ -78,7 +82,9 @@ public class ImejiRDF2Bean
         }
         finally
         {
-            ImejiJena.imejiDataSet.commit();
+            //ImejiJena.imejiDataSet.commit();
+            long afterCommit = System.currentTimeMillis();
+            logger.info("Load with commit " + uri + " : " + Long.valueOf(afterCommit - beforeCommit));
         }
     }
 

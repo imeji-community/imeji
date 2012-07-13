@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -87,6 +88,7 @@ public class CollectionImagesBean extends ImagesBean
         {
             getFacets().getFacets().clear();
         }
+        //Locks.releaseLockForWrite();
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));

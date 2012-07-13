@@ -2,6 +2,8 @@ package de.mpg.j2j.controler;
 
 import java.net.URI;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
@@ -26,6 +28,7 @@ public class ResourceController
     private Model model = null;
     private Java2Jena java2rdf;
     private Jena2Java rdf2Java;
+    private static Logger logger = Logger.getLogger(ResourceController.class);
 
     public ResourceController(String modelURI)
     {
@@ -37,6 +40,17 @@ public class ResourceController
         {
             model = ImejiJena.imejiDataSet.getDefaultModel();
         }
+        this.java2rdf = new Java2Jena(model);
+        this.rdf2Java = new Jena2Java(model);
+    }
+    
+    public ResourceController(Model model)
+    {
+        if (model == null)
+        {
+            throw new NullPointerException("Fatal error: Model is null");
+        }
+        this.model = model;
         this.java2rdf = new Java2Jena(model);
         this.rdf2Java = new Jena2Java(model);
     }
@@ -77,7 +91,10 @@ public class ResourceController
         {
             throw new NotFoundException("Resource " + J2JHelper.getId(o) + " not found!");
         }
+        long before = System.currentTimeMillis();
         o = rdf2Java.loadResource(o);
+        long after = System.currentTimeMillis();
+        //logger.info("read " + J2JHelper.getId(o) + " :" + Long.valueOf(after- before));
         return o;
     }
 

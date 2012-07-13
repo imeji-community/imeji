@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.search.vo.SearchElement;
+import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
@@ -112,13 +113,13 @@ public class Search
                 long beforeInter = System.currentTimeMillis();
                 l1 = (List<String>)CollectionUtils.intersection(l1, l2);
                 long afterInter = System.currentTimeMillis();
-                //logger.info("Intersection: " + Long.valueOf(afterInter - beforeInter));
+                // logger.info("Intersection: " + Long.valueOf(afterInter - beforeInter));
                 break;
             case OR:
                 long beforeUnion = System.currentTimeMillis();
                 l1 = (List<String>)CollectionUtils.union(l1, l2);
                 long afterUnion = System.currentTimeMillis();
-                //logger.info("Union: " + Long.valueOf(afterUnion - beforeUnion));
+                // logger.info("Union: " + Long.valueOf(afterUnion - beforeUnion));
                 break;
         }
         return l1;
@@ -128,7 +129,7 @@ public class Search
     {
         String sparqlQuery = SimpleQueryFactory.getQuery(type, pair, sortCri, user, (containerURI != null),
                 getSpecificQuery());
-         //sparqlQuery="PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/item> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN> && ( (?status=<http://imeji.org/terms/status#RELEASED> || ?c=<http://imeji.org/collection/13>)))  . ?props <http://purl.org/dc/terms/created> ?sort0}  ORDER BY DESC(?sort0)";
+        // sparqlQuery="PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/item> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN> && ( (?status=<http://imeji.org/terms/status#RELEASED> || ?c=<http://imeji.org/collection/13>)))  . ?props <http://purl.org/dc/terms/created> ?sort0}  ORDER BY DESC(?sort0)";
         // logger.info(sparqlQuery);
         long beforeSelect = System.currentTimeMillis();
         List<String> l = ImejiSPARQL.exec(sparqlQuery);

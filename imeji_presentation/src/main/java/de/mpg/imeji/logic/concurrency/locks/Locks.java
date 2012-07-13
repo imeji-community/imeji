@@ -19,7 +19,8 @@ public class Locks
 	// Locks on System event
 	private static Map<String, Lock> sysLocks; 
 	// Life time for a lock. After that limit, the lock is destroyed.
-	private static final long LOCK_MAX_TIME = 900000;// 900s = 15min 
+	//private static final long LOCK_MAX_TIME = 900000;// 900s = 15min
+	private static final long LOCK_MAX_TIME = 60000;// 60s = 1min
 	
 	private static Logger logger = Logger.getLogger(Locks.class);
 	

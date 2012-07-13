@@ -56,7 +56,7 @@ public class JenaExport extends Export
         {
             try
             {
-                ImejiJena.imejiDataSet.begin(ReadWrite.READ);
+                //ImejiJena.imejiDataSet.begin(ReadWrite.READ);
                 Model m = ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel);
                 Resource resource = m.getResource(s);
                 exportResource(resource, exportModel);
@@ -67,7 +67,7 @@ public class JenaExport extends Export
             }
             finally
             {
-                ImejiJena.imejiDataSet.commit();
+                //ImejiJena.imejiDataSet.commit();
             }
         }
         return exportModel;

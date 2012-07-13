@@ -4,7 +4,6 @@
 
 package de.mpg.imeji.logic.concurrency.locks;
 
-import java.lang.management.GarbageCollectorMXBean;
 import java.util.ArrayList;
 import java.util.List;
 

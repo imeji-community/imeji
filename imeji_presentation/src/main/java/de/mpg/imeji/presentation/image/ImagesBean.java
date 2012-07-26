@@ -169,7 +169,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public Collection<Item> loadImages(SearchResult searchResult)
     {
         ItemController controller = new ItemController(sb.getUser());
-        return controller.loadImages(searchResult.getResults(), getElementsPerPage(), getOffset());
+        try
+        {
+            return controller.loadItems(searchResult.getResults(), getElementsPerPage(), getOffset());
+        }
+        catch (Exception e)
+        {
+           throw new RuntimeException(e);
+        }
     }
 
     public String getSimpleQuery()
@@ -249,6 +256,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         ItemController ic = new ItemController(sb.getUser());
         CollectionController cc = new CollectionController(sb.getUser());
         CollectionImeji coll = null;
+        super.setCurrentPageNumber(1);
+        super.setElementsPerPage(10000);
         SearchResult searchResult = search(searchQuery, null);
         Collection<Item> items = loadImages(searchResult);
         if (items != null && !items.isEmpty())

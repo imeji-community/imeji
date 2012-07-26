@@ -282,7 +282,7 @@ public class AlbumBean
         if (getAlbum() != null)
         {
             SearchResult r = ic.searchImagesInContainer(getAlbum().getId(), null, null, 5, 0);
-            return ImejiFactory.imageListToBeanList(ic.loadImages(r.getResults(), 5, 0));
+            return ImejiFactory.imageListToBeanList(ic.loadItems(r.getResults(), 5, 0));
         }
         return null;
     }

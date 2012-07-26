@@ -9,6 +9,8 @@ import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Collection;
 
+import javax.servlet.jsp.tagext.TryCatchFinally;
+
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -30,8 +32,8 @@ public abstract class ImejiController
 {
     private static Logger logger = Logger.getLogger(ImejiController.class);
     protected User user;
-    private static Model base = null;
 
+    // private static Model base = null;
     public ImejiController(User user2)
     {
         this.user = user2;
@@ -67,25 +69,37 @@ public abstract class ImejiController
         return false;
     }
 
-    public static int getUniqueId()
+    public synchronized static int getUniqueId()
     {
         Counter c = new Counter();
-        try
+        if (Locks.tryLockCounter())
         {
-            ImejiRDF2Bean rdf2Bean = new ImejiRDF2Bean(null);
-            c = (Counter)rdf2Bean.load(c.getId().toString(), ImejiJena.adminUser, c);
+            try
+            {
+                ImejiRDF2Bean rdf2Bean = new ImejiRDF2Bean(null);
+                c = (Counter)rdf2Bean.load(c.getId().toString(), ImejiJena.adminUser, c);
+                int id = c.getCounter();
+                logger.info("Counter : Requested id : " + id);
+                incrementCounter(c);
+                return id;
+            }
+            catch (NotFoundException e)
+            {
+                throw new RuntimeException("Fatal error: Counter not found. Please restart your server. ", e);
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+            finally
+            {
+                Locks.releaseCounter();
+            }
         }
-        catch (NotFoundException e)
-        {
-            throw new RuntimeException("Fatal error: Counter not found. Please restart your server. ", e);
-        }
-        int id = c.getCounter();
-        logger.info("Counter : Requested id : " + id);
-        incrementCounter(c);
-        return id;
+        throw new RuntimeException("Counter locked, couldn't create new id");
     }
 
-    private static void incrementCounter(Counter c)
+    private synchronized static void incrementCounter(Counter c)
     {
         c.setCounter(c.getCounter() + 1);
         ImejiBean2RDF bean2rdf = new ImejiBean2RDF(null);
@@ -99,32 +113,31 @@ public abstract class ImejiController
         }
     }
 
-    protected Model getModel()
-    {
-        try
-        {
-            String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-            base = DataFactory.model(tdbPath);
-            return base;
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (URISyntaxException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    protected void closeModel()
-    {
-        base.close();
-    }
-
+    // protected Model getModel()
+    // {
+    // try
+    // {
+    // String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
+    // base = DataFactory.model(tdbPath);
+    // return base;
+    // }
+    // catch (IOException e)
+    // {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
+    // catch (URISyntaxException e)
+    // {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
+    // return null;
+    // }
+    //
+    // protected void closeModel()
+    // {
+    // base.close();
+    // }
     protected abstract String getSpecificQuery() throws Exception;
 
     protected abstract String getSpecificFilter() throws Exception;

@@ -5,34 +5,28 @@ package de.mpg.imeji.logic;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.query.Dataset;
-import com.hp.hpl.jena.query.ReadWrite;
-import com.hp.hpl.jena.tdb.TDBFactory;
 
-import de.mpg.imeji.logic.concurrency.locks.Locks;
-import de.mpg.imeji.logic.controller.ImejiController;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.controler.ResourceController;
+import de.mpg.j2j.transaction.CRUDTransaction;
+import de.mpg.j2j.transaction.Transaction;
 
 /**
- * Interface for create/delete/update in Jena. Supports transactions, locking and security.
+ * Interface for create/delete/update in Jena. Implements transactions and security.
  * 
  * @author saquet
  */
 public class ImejiBean2RDF
 {
-    private Dataset dataset;
-    private static ResourceController rc;
     private Security security;
     private static Logger logger = Logger.getLogger(ImejiBean2RDF.class);
     private String modelURI;
@@ -43,141 +37,41 @@ public class ImejiBean2RDF
         this.modelURI = modelURI;
     }
 
+    private void runTransaction(List<Object> objects, OperationsType type) throws Exception
+    {
+        Transaction transaction = new CRUDTransaction(objects, type, modelURI, false);
+        transaction.start();
+        transaction.waitForEnd();
+        transaction.throwException();
+    }
+
     public void create(List<Object> objects, User user) throws Exception
     {
-        for (Object o : objects)
-        {
-            if (Locks.tryLock())
-            {
-                try
-                {
-                    beginTransaction(o, user, OperationsType.CREATE);
-                    rc.create(o);
-                    commitTransaction(o, user);
-                }
-                catch (Exception e)
-                {
-                    abortTransaction();
-                    throw new RuntimeException("Fatal error! Transaction aborted", e);
-                }
-                finally
-                {
-                    dataset.end();
-                }
-            }
-        }
+        checkSecurity(objects, user, OperationsType.CREATE);
+        runTransaction(objects, OperationsType.CREATE);
     }
 
     public void delete(List<Object> objects, User user) throws Exception
     {
-        for (Object o : objects)
-        {
-            if (Locks.tryLock())
-            {
-                try
-                {
-                    beginTransaction(o, user, OperationsType.DELETE);
-                    rc.delete(o);
-                    commitTransaction(o, user);
-                }
-                catch (Exception e)
-                {
-                    abortTransaction();
-                    throw new RuntimeException("Fatal error! Transaction aborted", e);
-                }
-                finally
-                {
-                    dataset.end();
-                }
-            }
-        }
+        checkSecurity(objects, user, OperationsType.DELETE);
+        runTransaction(objects, OperationsType.DELETE);
     }
 
     public void update(List<Object> objects, User user) throws Exception
     {
-        for (Object o : objects)
+        checkSecurity(objects, user, OperationsType.UPDATE);
+        runTransaction(objects, OperationsType.UPDATE);
+    }
+
+    private void checkSecurity(List<Object> list, User user, OperationsType opType)
+    {
+        for (Object o : list)
         {
-            if (Locks.tryLock())
+            if (!security.check(opType, user, o))
             {
-                try
-                {
-                    long before = System.currentTimeMillis();
-                    beginTransaction(o, user, OperationsType.UPDATE);
-                    rc.update(o);
-                    commitTransaction(o, user);
-                    long after = System.currentTimeMillis();
-                    logger.info("update with transcation: " + Long.valueOf(after - before));
-                }
-                catch (Exception e)
-                {
-                    abortTransaction();
-                    throw new RuntimeException("Fatal error! Transaction aborted", e);
-                }
-                finally
-                {
-                    dataset.end();
-                }
+                throw new RuntimeException("Imeji Security exception: " + user.getEmail() + " not allowed to "
+                        + opType.name() + " " + extractID(o));
             }
-        }
-    }
-
-    /**
-     * Begin an imeji transaction: <br/>
-     * Check Security. <br/>
-     * Check lockings (optimistic and pessimistic) <br/>
-     * Lock bean
-     * 
-     * @param bean
-     * @param user
-     * @throws Exception
-     */
-    private void beginTransaction(Object bean, User user, OperationsType opType) throws Exception
-    {
-        dataset = TDBFactory.createDataset(ImejiJena.tdbPath);
-        dataset.begin(ReadWrite.WRITE);
-        try
-        {
-            checkSecurity(bean, user, opType);
-            rc = new ResourceController(dataset.getNamedModel(modelURI));
-        }
-        catch (Exception e)
-        {
-            abortTransaction();
-            logger.error(e);
-            throw e;
-        }
-    }
-
-    private void abortTransaction()
-    {
-        try
-        {
-            dataset.abort();
-        }
-        finally
-        {
-            Locks.releaseLockForWrite();
-        }
-    }
-
-    private void commitTransaction(Object bean, User user)
-    {
-        try
-        {
-            dataset.commit();
-        }
-        finally
-        {
-            Locks.releaseLockForWrite();
-        }
-    }
-
-    private void checkSecurity(Object bean, User user, OperationsType opType)
-    {
-        if (!security.check(opType, user, bean))
-        {
-            throw new RuntimeException("Imeji Security exception: " + user.getEmail() + " not allowed to "
-                    + opType.name() + " " + extractID(bean));
         }
     }
 
@@ -188,31 +82,32 @@ public class ImejiBean2RDF
         return list;
     }
 
-    private void setLastModificationDate(Object o, User user)
-    {
-        if (o instanceof Item)
-        {
-            ImejiController.writeUpdateProperties(((Item)o).getProperties(), user);
-        }
-        else if (o instanceof Container)
-        {
-            ImejiController.writeUpdateProperties(((Container)o).getProperties(), user);
-        }
-    }
 
-    private Calendar getLastModificationDate(Object o)
-    {
-        if (o instanceof Item)
-        {
-            return ((Item)o).getProperties().getCreated();
-        }
-        else if (o instanceof Container)
-        {
-            return ((Container)o).getProperties().getCreated();
-        }
-        return null;
-    }
 
+    // private void setLastModificationDate(Object o, User user)
+    // {
+    // if (o instanceof Item)
+    // {
+    // ImejiController.writeUpdateProperties(((Item)o).getProperties(), user);
+    // }
+    // else if (o instanceof Container)
+    // {
+    // ImejiController.writeUpdateProperties(((Container)o).getProperties(), user);
+    // }
+    // }
+    //
+    // private Calendar getLastModificationDate(Object o)
+    // {
+    // if (o instanceof Item)
+    // {
+    // return ((Item)o).getProperties().getCreated();
+    // }
+    // else if (o instanceof Container)
+    // {
+    // return ((Container)o).getProperties().getCreated();
+    // }
+    // return null;
+    // }
     private URI extractID(Object o)
     {
         if (o instanceof Item)

@@ -54,7 +54,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     {
         UserController uc = new UserController(sb.getUser());
         // ImejiJena.printModel(ImejiJena.imageModel);
-        // initMenus();
+        initMenus();
         if (sb.getUser() != null)
         {
             sb.setUser(uc.retrieve(sb.getUser().getEmail()));
@@ -73,43 +73,43 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         }
         if (!"".equals(query))
         {
-//            if (query.startsWith("\"") && query.endsWith("\""))
-//            {
-//                scList.add(new SearchCriterion(SearchIndexes.CONTAINER_METADATA_TITLE, query));
-//                scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_DESCRIPTION, query,
-//                        Filtertype.REGEX));
-//                scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_FAMILY_NAME, query,
-//                        Filtertype.REGEX));
-//                scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_GIVEN_NAME, query,
-//                        Filtertype.REGEX));
-//                scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_COMPLETE_NAME,
-//                        query, Filtertype.REGEX));
-//                scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME,
-//                        query, Filtertype.REGEX));
-//                scList.add(new SearchCriterion(Operator.OR, SearchIndexes.COLLECTION_PROFILE, query, Filtertype.URI));
-//            }
-//            else
-//            {
-//                for (String s : query.split("\\s"))
-//                {
-//                    scList.add(new SearchCriterion(SearchIndexes.CONTAINER_METADATA_TITLE, s));
-//                    scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_DESCRIPTION, s,
-//                            Filtertype.REGEX));
-//                    scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_FAMILY_NAME, s,
-//                            Filtertype.REGEX));
-//                    scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_GIVEN_NAME, s,
-//                            Filtertype.REGEX));
-//                    scList.add(new SearchCriterion(Operator.OR,
-//                            SearchIndexes.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, s, Filtertype.REGEX));
-//                    scList.add(new SearchCriterion(Operator.OR, SearchIndexes.COLLECTION_PROFILE, s, Filtertype.URI));
-//                }
-//            }
+            // if (query.startsWith("\"") && query.endsWith("\""))
+            // {
+            // scList.add(new SearchCriterion(SearchIndexes.CONTAINER_METADATA_TITLE, query));
+            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_DESCRIPTION, query,
+            // Filtertype.REGEX));
+            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_FAMILY_NAME, query,
+            // Filtertype.REGEX));
+            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_GIVEN_NAME, query,
+            // Filtertype.REGEX));
+            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_COMPLETE_NAME,
+            // query, Filtertype.REGEX));
+            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME,
+            // query, Filtertype.REGEX));
+            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.COLLECTION_PROFILE, query, Filtertype.URI));
+            // }
+            // else
+            // {
+            // for (String s : query.split("\\s"))
+            // {
+            // scList.add(new SearchCriterion(SearchIndexes.CONTAINER_METADATA_TITLE, s));
+            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_DESCRIPTION, s,
+            // Filtertype.REGEX));
+            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_FAMILY_NAME, s,
+            // Filtertype.REGEX));
+            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_GIVEN_NAME, s,
+            // Filtertype.REGEX));
+            // scList.add(new SearchCriterion(Operator.OR,
+            // SearchIndexes.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, s, Filtertype.REGEX));
+            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.COLLECTION_PROFILE, s, Filtertype.URI));
+            // }
+            // }
         }
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset);
-        collections = controller.load(results.getResults(), limit, offset);
+        collections = controller.loadLazy(results.getResults(), limit, offset);
         totalNumberOfRecords = results.getNumberOfRecords();
         return ImejiFactory.collectionListToListItem(collections, sb.getUser());
     }

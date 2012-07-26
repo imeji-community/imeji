@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -46,6 +47,24 @@ public class ObjectLoader
 		return null;
 	}
 	
+	public static CollectionImeji loadCollectionLazy(URI id, User user)
+    {
+        try 
+        {
+            CollectionController cl = new CollectionController(user);
+            return cl.retrieveLazy(id);
+        } 
+        catch (NotFoundException e) 
+        {
+            writeErrorNotFound("collection", id);
+        }
+        catch (Exception e) 
+        {
+            writeException(e, id.toString());
+        }
+        return null;
+    }
+	
 	public static Album loadAlbum(URI id, User user)
 	{
         try 
@@ -63,6 +82,24 @@ public class ObjectLoader
 		}
 		return null;
 	}
+	
+	public static Album loadAlbumLazy(URI id, User user)
+    {
+        try 
+        {
+            AlbumController ac = new AlbumController(user); 
+            return ac.retrieveLazy(id);
+        } 
+        catch (NotFoundException e) 
+        {
+            writeErrorNotFound("album", id);
+        }
+        catch (Exception e) 
+        {
+            writeException(e, id.toString());
+        }
+        return null;
+    }
 	
 	
 	public static Item loadImage(URI id, User user)

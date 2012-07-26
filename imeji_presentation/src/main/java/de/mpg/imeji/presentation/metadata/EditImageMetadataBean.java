@@ -4,8 +4,6 @@
 package de.mpg.imeji.presentation.metadata;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +40,10 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  * 
  * @author saquet
  */
-public class EditImageMetadataBean implements Serializable
+public class EditImageMetadataBean
 {
     // objects
+    private List<Item> allItems;
     private ImagesBean imagesBean;
     private MetadataEditor editor = null;
     private MetadataProfile profile = null;
@@ -82,10 +81,10 @@ public class EditImageMetadataBean implements Serializable
     {
         try
         {
-            List<Item> items = initImages();
-            initProfileAndStatement(items);
+            allItems = initImages();
+            initProfileAndStatement(allItems);
             initStatementsMenu();
-            initEditor(items);
+            initEditor(new ArrayList<Item>(allItems));
             ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
         }
         catch (Exception e)
@@ -182,7 +181,7 @@ public class EditImageMetadataBean implements Serializable
     {
         statement = getSelectedStatement();
         // Reload the images
-        initEditor(initImages());
+        initEditor(new ArrayList<Item>(allItems));
         return "";
     }
 
@@ -190,13 +189,19 @@ public class EditImageMetadataBean implements Serializable
     {
         int elementsPerPage = imagesBean.getElementsPerPage();
         int currentPageNumber = imagesBean.getCurrentPageNumber();
-        imagesBean.setElementsPerPage(10000);
-        imagesBean.setCurrentPageNumber(1);
-        SearchResult sr = imagesBean.search(imagesBean.getSearchQuery(), null);
-        List<Item> items = (List<Item>)imagesBean.loadImages(sr);
-        imagesBean.setElementsPerPage(elementsPerPage);
-        imagesBean.setCurrentPageNumber(currentPageNumber);
-        return items;
+        try
+        {
+            imagesBean.setElementsPerPage(10000);
+            imagesBean.setCurrentPageNumber(1);
+            SearchResult sr = imagesBean.search(imagesBean.getSearchQuery(), null);
+            List<Item> items = (List<Item>)imagesBean.loadImages(sr);
+            return items;
+        }
+        finally
+        {
+            imagesBean.setElementsPerPage(elementsPerPage);
+            imagesBean.setCurrentPageNumber(currentPageNumber);
+        }
     }
 
     /**
@@ -211,8 +216,8 @@ public class EditImageMetadataBean implements Serializable
         long before = System.currentTimeMillis();
         editor.save();
         long after = System.currentTimeMillis();
+        logger.info("saving = " + Long.valueOf(after - before));
         redirectToView();
-        System.out.println("saving = " + Long.valueOf(after - before));
         return "";
     }
 
@@ -227,8 +232,8 @@ public class EditImageMetadataBean implements Serializable
         long before = System.currentTimeMillis();
         editor.save();
         long after = System.currentTimeMillis();
+        logger.info("saving = " + Long.valueOf(after - before));
         redirectToView();
-        System.out.println("saving = " + Long.valueOf(after - before));
         return "";
     }
 
@@ -335,6 +340,10 @@ public class EditImageMetadataBean implements Serializable
         if (!hasValue)
         {
             im.getMetadataSet().getMetadata().add(metadata);
+        }
+        else
+        {
+            System.out.println("not empty " + im.getFilename());
         }
         return im;
     }

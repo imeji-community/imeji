@@ -70,13 +70,13 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-//        Resource r = model.getResource(J2JHelper.getId(o).toString());
-//        r.removeProperties();
-//        for (Resource e : getEmbeddedResources(r, o))
-//        {
-//            e.removeProperties();
-//        }
-         remove(o);
+        // Resource r = model.getResource(J2JHelper.getId(o).toString());
+        // r.removeProperties();
+        // for (Resource e : getEmbeddedResources(r, o))
+        // {
+        // e.removeProperties();
+        // }
+        remove(o);
         write(o);
     }
 

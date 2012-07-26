@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.query.Dataset;
+
 import de.escidoc.core.client.Authentication;
 import de.escidoc.core.client.ItemHandlerClient;
 import de.mpg.imeji.logic.ImejiBean2RDF;
@@ -35,6 +37,9 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.LoginHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.j2j.controler.ResourceController;
+import de.mpg.j2j.helper.J2JHelper;
+import de.mpg.j2j.transaction.Transaction;
 
 public class ItemController extends ImejiController
 {
@@ -67,6 +72,8 @@ public class ItemController extends ImejiController
         cc.update(ic);
     }
 
+
+
     public void createTest(Item img, URI coll) throws Exception
     {
         writeCreateProperties(img.getProperties(), user);
@@ -94,9 +101,10 @@ public class ItemController extends ImejiController
             img.setCollection(coll);
             img.setId(ObjectHelper.getURI(Item.class, Integer.toString(getUniqueId())));
             img.getMetadataSet().setProfile(ic.getProfile());
-            imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
+            // imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
             ic.getImages().add(img.getId());
         }
+        imejiBean2RDF.create(J2JHelper.cast2ObjectList((List<?>)items), user);
         cc.update(ic);
     }
 
@@ -237,35 +245,36 @@ public class ItemController extends ImejiController
         return uris.size();
     }
 
-    public Collection<Item> loadImages(List<String> uris, int limit, int offset)
+    public Collection<Item> loadItems(List<String> uris, int limit, int offset)
     {
         long before = System.currentTimeMillis();
-        LinkedList<Item> items = new LinkedList<Item>();
         ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.imageModel);
         int counter = 0;
-       
+        List<Object> l = new ArrayList<Object>();
         for (String s : uris)
         {
             if (offset <= counter && (counter < (limit + offset) || limit == -1))
             {
-                try
-                {
-                    Item item = (Item)reader.load(s, user, new Item());
-                    if (item != null)
-                    {
-                        items.add(item);
-                    }
-                }
-                catch (Exception e)
-                {
-                    logger.error("Error loading image " + s + ":", e);
-                }
+                l.add(J2JHelper.setId(new Item(), URI.create(s)));
             }
             counter++;
         }
-        long after = System.currentTimeMillis();
-        logger.info("Load items: " + Long.valueOf(after - before));
-        return items;
+        try
+        {
+            l = reader.load(l, user);
+            List<Item> items = new ArrayList<Item>();
+            for (Object o : l)
+            {
+                items.add((Item)o);
+            }
+            long after = System.currentTimeMillis();
+            logger.info("Load items: " + Long.valueOf(after - before));
+            return items;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error loading images:", e);
+        }
     }
 
     /**

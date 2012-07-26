@@ -8,6 +8,7 @@ import java.util.List;
 
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
@@ -57,8 +58,6 @@ public class J2JHelper
         {
             try
             {
-                // Method m = o.getClass().getMethod(ano.setMethod(), URI.class);
-                // m.invoke(o, args);
                 o.getClass().getMethod(ano.setMethod(), URI.class).invoke(o, args);
             }
             catch (Exception e)
@@ -67,6 +66,16 @@ public class J2JHelper
             }
         }
         return o;
+    }
+    
+    public static List<Object> cast2ObjectList(List<?> l)
+    {
+        List<Object> list = new ArrayList<Object>();
+        for (int i = 0; i < l.size(); i++)
+        {
+            list.add(l.get(i));
+        }
+        return list;
     }
 
     public static String getType(Object o)
@@ -88,6 +97,8 @@ public class J2JHelper
             return getURIResourceNamespace(o, f);
         else if (isList(f))
             return getListNamespace(f);
+        else if (isLazyList(f))
+            return getLazyListNamespace(f);
         return null;
     }
 
@@ -118,7 +129,6 @@ public class J2JHelper
     {
         if (isResource(o))
             return o.getClass().getAnnotation(j2jResource.class).value();
-        // return o.getClass().getAnnotation(j2jResource.class).value().split("#")[0];
         else
             return null;
     }
@@ -141,6 +151,10 @@ public class J2JHelper
             else if (f.getAnnotation(j2jList.class) != null)
             {
                 return f.getAnnotation(j2jList.class).value();
+            }
+            else if (isLazyList(f))
+            {
+                return f.getAnnotation(j2jLazyList.class).value();
             }
         }
         return null;
@@ -168,6 +182,14 @@ public class J2JHelper
             return null;
     }
 
+    public static String getLazyListNamespace(Field f)
+    {
+        if (isLazyList(f))
+            return f.getAnnotation(j2jLazyList.class).value();
+        else
+            return null;
+    }
+
     public static boolean isResource(Object o)
     {
         return o != null && o.getClass().getAnnotation(j2jResource.class) != null;
@@ -181,8 +203,7 @@ public class J2JHelper
     public static boolean isURIResource(Object o, Field f)
     {
         return f != null
-                && (f.getType().equals(URI.class) && f.getAnnotation(j2jResource.class) != null || (o != null
-                        && f.getAnnotation(j2jList.class) != null && o instanceof URI));
+                && (f.getType().equals(URI.class) && f.getAnnotation(j2jResource.class) != null || ((isList(f) || isLazyList(f)) && o instanceof URI));
     }
 
     public static boolean isLiteral(Field f)
@@ -193,6 +214,11 @@ public class J2JHelper
     public static boolean isList(Field f)
     {
         return f != null && f.getAnnotation(j2jList.class) != null;
+    }
+
+    public static boolean isLazyList(Field f)
+    {
+        return f != null && f.getAnnotation(j2jLazyList.class) != null;
     }
 
     public static boolean hasDataType(Object o)

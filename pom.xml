@@ -1,5 +1,6 @@
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.mpg.mpdl.imeji</groupId>
 	<artifactId>imeji</artifactId>
@@ -17,17 +18,17 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
 	<organization>
 		<name>Max Planck Digital Library</name>
 		<url>http://www.mpdl.mpg.de/</url>
 	</organization>
-	
+
 	<issueManagement>
 		<system>Jira</system>
 		<url>http://jira.mpdl.mpg.de</url>
 	</issueManagement>
-	
+
 	<developers>
 		<developer>
 			<id>mdreyer</id>
@@ -90,10 +91,10 @@
 			<timezone>+2</timezone>
 		</developer>
 	</developers>
-	
+
 	<mailingLists>
 		<mailingList>
-			<name>Support for developeres and users</name>
+			<name>Support for developers and users</name>
 			<subscribe>https://listserv.gwdg.de/mailman/listinfo/imeji-support</subscribe>
 			<unsubscribe>https://listserv.gwdg.de/mailman/listinfo/imeji-support</unsubscribe>
 			<post>imeji-support@gwdg.de</post>
@@ -102,7 +103,7 @@
 			</archive>
 		</mailingList>
 	</mailingLists>
-	
+
 	<ciManagement>
 		<system>Continuum</system>
 		<url>http://continuum.mpdl.mpg.de/continuum</url>
@@ -115,18 +116,18 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
-	
+
 	<modules>
 		<module>imeji_presentation</module>
 		<module>imeji_ear</module>
 	</modules>
-	
+
 	<scm>
 		<connection>scm:git@github.com:bastienMPDL/Imeji.git</connection>
 		<developerConnection>scm:git@github.com:bastienMPDL/Imeji.git</developerConnection>
 		<url>https://bastienMPDL@github.com/bastienMPDL/Imeji.git</url>
 	</scm>
-	
+
 	<repositories>
 		<repository>
 			<id>central</id>
@@ -138,16 +139,27 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-		
+
 		<repository>
 			<id>prime-repo</id>
 			<name>Prime Technology Maven Repository</name>
 			<url>http://repository.prime.com.tr</url>
 			<layout>default</layout>
 		</repository>
+		
+		<repository>
+			<id>apache-repo-snapshots</id>
+			<url>https://repository.apache.org/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
-	
-	
+
+
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
@@ -160,7 +172,7 @@
 			<url>http://rd.mpdl.mpg.de/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>central</id>
@@ -173,7 +185,7 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-	
+
 	<build>
 		<resources>
 			<resource>
@@ -200,9 +212,9 @@
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<configuration>
-						 <!--  if there are no tests, don't bail out -->
+						<!-- if there are no tests, don't bail out -->
 						<failIfNoTests>false</failIfNoTests>
-						<!-- avoid the outofmemory exception thrown in some test scenarios-->
+						<!-- avoid the outofmemory exception thrown in some test scenarios -->
 						<argLine>-Xmx1000M</argLine>
 					</configuration>
 				</plugin>
@@ -214,21 +226,21 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>
 					<!-- send an announcement email on release -->
-					<!--  <preparationGoals>changes:announcement-mail</preparationGoals> -->
+					<!-- <preparationGoals>changes:announcement-mail</preparationGoals> -->
 					<!-- all the submodules inherit the version of the project -->
 					<autoVersionSubmodules>false</autoVersionSubmodules>
 					<!-- snaphots identified by timestamp are allowed -->
 					<allowTimestampedSnapshots>true</allowTimestampedSnapshots>
 				</configuration>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>org.apache.maven.plugins</groupId>-->
-<!--				<artifactId>maven-changes-plugin</artifactId>-->
-<!--				<version>2.0-20080211.215359-1</version>-->
-<!--			</plugin>-->
+			<!-- <plugin> -->
+			<!-- <groupId>org.apache.maven.plugins</groupId> -->
+			<!-- <artifactId>maven-changes-plugin</artifactId> -->
+			<!-- <version>2.0-20080211.215359-1</version> -->
+			<!-- </plugin> -->
 		</plugins>
 	</build>
-	
+
 	<reporting>
 		<plugins>
 			<plugin>
@@ -242,7 +254,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>taglist-maven-plugin</artifactId>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
@@ -264,14 +276,13 @@
 				</configuration>
 			</plugin>
 			<plugin>
-                <!-- JavaNCSS - A Source Measurement Suite for Java
-                    http://www.kclee.de/clemens/java/javancss/ -->
+				<!-- JavaNCSS - A Source Measurement Suite for Java http://www.kclee.de/clemens/java/javancss/ -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>javancss-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-                <!-- A Java package dependency analyzer that generates
-                      design quality metrics http://clarkware.com/software/JDepend.html -->
+				<!-- A Java package dependency analyzer that generates design quality 
+					metrics http://clarkware.com/software/JDepend.html -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jdepend-maven-plugin</artifactId>
 			</plugin>
@@ -279,7 +290,7 @@
 	</reporting>
 
 	<!-- properties valid for all profiles -->
-	
+
 	<profiles>
 		<!-- this profile is used by developers -->
 		<profile>
@@ -313,92 +324,96 @@
 				<!-- the jdk version to use -->
 				<jdk.version>1.5</jdk.version>
 
-				<!-- used by the cargo plugin to run a jboss server for integration-testing /goal: cargo:start-->
+				<!-- used by the cargo plugin to run a jboss server for integration-testing 
+					/goal: cargo:start -->
 				<cargo.port>8080</cargo.port>
 				<cargo.rmi.port>1099</cargo.rmi.port>
 				<cargo.log>high</cargo.log>
 				<cargo.jvmargs>
-					-Dcom.sun.xml.namespace.QName.useCompatibleSerialVersionUID=1.0 -Dpubman.properties.file=./pubman.properties
+					-Dcom.sun.xml.namespace.QName.useCompatibleSerialVersionUID=1.0
+					-Dpubman.properties.file=./pubman.properties
 				</cargo.jvmargs>
 				<!-- this path is used as root for all jboss installations -->
-				<!--  <cargo.install.dir>${user.home}/jboss</cargo.install.dir>-->
+				<!-- <cargo.install.dir>${user.home}/jboss</cargo.install.dir> -->
 				<!-- fetch the jboss from this url -->
 				<cargo.jboss.url>http://heanet.dl.sourceforge.net/sourceforge/jboss/jboss-4.2.2.GA.zip</cargo.jboss.url>
 				<!-- local intallation of the jboss for integration-tests -->
-				<!-- <cargo.jboss.install.dir>//${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir>-->
+				<!-- <cargo.jboss.install.dir>//${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir> -->
 
 				<!-- deploy the imeji ear to this server and port via jmx /goal: jboss:deploy -->
 				<jboss.deploy.host>localhost</jboss.deploy.host>
 				<jboss.deploy.port>8080</jboss.deploy.port>
 				<!-- the ears are deployed to this server using jboss:harddeploy -->
-				<!-- <jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir>-->
+				<!-- <jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir> -->
 
-											
-				<!--  Identifier of the content model "Imeji" in the current framework instance -->
+
+				<!-- Identifier of the content model "Imeji" in the current framework 
+					instance -->
 				<escidoc.imeji.content-model.id>escidoc:14001</escidoc.imeji.content-model.id>
-				
+
 				<!-- Identifier of the context of "Imeji" in the current framework instance -->
 				<escidoc.imeji.context.id>escidoc:13001</escidoc.imeji.context.id>
-				
-				<!--  Identifier of the content model " Imeji Container Content Model" in the current framework instance -->
+
+				<!-- Identifier of the content model " Imeji Container Content Model" 
+					in the current framework instance -->
 				<escidoc.imeji.container.content-model.id>escidoc:faces60</escidoc.imeji.container.content-model.id>
-				
-				<!-- Indentifier of the content model "Imeji collection content model": Not persistent, created only on dev so far -->
+
+				<!-- Indentifier of the content model "Imeji collection content model": 
+					Not persistent, created only on dev so far -->
 				<escidoc.imeji.collection.content-model.id>escidoc:194286</escidoc.imeji.collection.content-model.id>
-				
+
 				<!-- Default number of image in the lists -->
 				<imeji.image.list.size>18</imeji.image.list.size>
-				
-				<!--  Options for number of image in the lists -->
+
+				<!-- Options for number of image in the lists -->
 				<imeji.image.list.size.options>6,12,18,24,60,90,240</imeji.image.list.size.options>
-				
+
 				<!-- Default number of container in the lists -->
 				<imeji.container.list.size>10</imeji.container.list.size>
-				
-				<!--  Options for number of container in the lists -->
+
+				<!-- Options for number of container in the lists -->
 				<imeji.container.list.size.options>5,10,15,20,50</imeji.container.list.size.options>
-				
+
 				<imeji.i18n.languages>en,de,ja</imeji.i18n.languages>
-				
+
 				<escidoc.cone.isos639_1.all>http://pubman.mpdl.mpg.de/cone/iso639-1/all</escidoc.cone.isos639_1.all>
-						
+
 				<!-- Blog's URL -->
 				<escidoc.imeji.blog.url />
-				
+
 				<!-- Blog's RSS feed URL -->
 				<escidoc.imeji.blog.rss.url>http://www.nims.go.jp/eng/news/nims.xml</escidoc.imeji.blog.rss.url>
-				
+
 				<!-- Help URL -->
 				<escidoc.imeji.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.imeji.help.url>
-				
+
 				<!-- pagination ajax -->
 				<imeji.pagination.ajaxmodus>true</imeji.pagination.ajaxmodus>
-				
+
 				<!-- Counter for imeji objects -->
 				<imeji.counter.first.value>0</imeji.counter.first.value>
 
-				
-				<!--  Due to a historical defect, QName was released with multiple 
-					serialVersionUID values even though its serialization was the
-					same.
-					To workaround this issue, serialVersionUID is set with either
-					a default value or a compatibility value.  To use the
-					compatibility value you have to set the following property to "1.0". -->
+
+				<!-- Due to a historical defect, QName was released with multiple serialVersionUID 
+					values even though its serialization was the same. To workaround this issue, 
+					serialVersionUID is set with either a default value or a compatibility value. 
+					To use the compatibility value you have to set the following property to 
+					"1.0". -->
 				<com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>1.0</com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>
 
 				<!-- Current XSD Schema versions -->
 				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
 				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
-				
+
 				<xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
 				<xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
 				<xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
 				<xsd.resolution.thumbnail>103</xsd.resolution.thumbnail>
 				<xsd.resolution.web>357</xsd.resolution.web>
-                
-                <!-- Cone -->
+
+				<!-- Cone -->
 				<escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
-			
+
 			</properties>
 			<distributionManagement>
 				<site>
@@ -422,14 +437,15 @@
 				<cargo.rmi.port>1099</cargo.rmi.port>
 				<cargo.log>high</cargo.log>
 				<cargo.jvmargs>
-					-Dcom.sun.xml.namespace.QName.useCompatibleSerialVersionUID=1.0 -Dpubman.properties.file=./pubman.properties
+					-Dcom.sun.xml.namespace.QName.useCompatibleSerialVersionUID=1.0
+					-Dpubman.properties.file=./pubman.properties
 				</cargo.jvmargs>
 				<!-- this path is used as root for all jboss installations -->
-				<!--  <cargo.install.dir>${user.home}/jboss</cargo.install.dir>-->
+				<!-- <cargo.install.dir>${user.home}/jboss</cargo.install.dir> -->
 				<!-- fetch the jboss from this url -->
 				<cargo.jboss.url>http://heanet.dl.sourceforge.net/sourceforge/jboss/jboss-4.2.2.GA.zip</cargo.jboss.url>
 				<!-- local intallation of the jboss for integration-tests -->
-				<!-- <cargo.jboss.install.dir>${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir>-->
+				<!-- <cargo.jboss.install.dir>${user.home}/jboss/jboss-4.2.2.GA/jboss-4.2.2.GA</cargo.jboss.install.dir> -->
 
 				<!-- deploy the pubman ear to this server and port via jmx -->
 				<jboss.deploy.host>localhost</jboss.deploy.host>
@@ -442,62 +458,64 @@
 				<escidoc.imeji.item.pattern>viewItemFullPage.jsp?itemId=$1</escidoc.imeji.item.pattern>
 				<escidoc.imeji.component.pattern>/viewComponentPage.jsp?componentId=$1</escidoc.imeji.component.pattern>
 
-						
+
 				<!-- URL of the FIZ framework instance -->
 				<escidoc.framework_access.framework.url>http://dev-coreservice.mpdl.mpg.de:8080</escidoc.framework_access.framework.url>
-								    
-				<!--  Identifier of the content model "FACES" in the current framework instance -->
+
+				<!-- Identifier of the content model "FACES" in the current framework 
+					instance -->
 				<escidoc.imeji.content-model.id>escidoc:faces40</escidoc.imeji.content-model.id>
-				
+
 				<!-- Identifier of the context of "FACES" in the current framework instance -->
 				<escidoc.imeji.context.id>escidoc:108013</escidoc.imeji.context.id>
-				
-				<!--  Identifier of the content model " Faces Container Content Model" in the current framework instance -->
+
+				<!-- Identifier of the content model " Faces Container Content Model" 
+					in the current framework instance -->
 				<escidoc.imeji.container.content-model.id>escidoc:faces60</escidoc.imeji.container.content-model.id>
-				
+
 				<!-- Number of albums in the album lists -->
 				<escidoc.imeji.album.list.size>10</escidoc.imeji.album.list.size>
-				
-				
-				<!--  UI Config -->
+
+
+				<!-- UI Config -->
 				<escidoc.imeji.album.list.size.options>10,25,50,75,100</escidoc.imeji.album.list.size.options> <!-- User options for the displayed number of albums -->
-				<escidoc.organizationTree.integration>yes</escidoc.organizationTree.integration> <!-- User option, if organization selection should be displayed on create/edit album -->
-				
+				<escidoc.organizationTree.integration>yes</escidoc.organizationTree.integration> <!-- User option, if organization selection should be displayed on create/edit 
+					album -->
+
 				<imeji.i18n.languages>en-english,de-deutsch</imeji.i18n.languages>
-				
+
 				<!-- Blog's URL -->
 				<escidoc.imeji.blog.url>http://faces.blogs.mpdl.mpg.de</escidoc.imeji.blog.url>
-				
+
 				<!-- Blog's RSS feed URL -->
 				<escidoc.imeji.blog.rss.url>http://faces.blogs.mpdl.mpg.de/feed/</escidoc.imeji.blog.rss.url>
-				
+
 				<!-- Home URL -->
 				<escidoc.imeji.home.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_home.html</escidoc.imeji.home.url>
-				
+
 				<!-- Help URL -->
 				<escidoc.imeji.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.imeji.help.url>
-				
+
 				<!-- About URL -->
 				<escidoc.imeji.about.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_about.html</escidoc.imeji.about.url>
-				
+
 				<!-- Logo Url -->
 				<escidoc.imeji.logo.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/mpi_hd.png</escidoc.imeji.logo.url>
-				
-				
-				
-				<!--  Due to a historical defect, QName was released with multiple 
-					serialVersionUID values even though its serialization was the
-					same.
-					To workaround this issue, serialVersionUID is set with either
-					a default value or a compatibility value.  To use the
-					compatibility value you have to set the following property to "1.0". -->
+
+
+
+				<!-- Due to a historical defect, QName was released with multiple serialVersionUID 
+					values even though its serialization was the same. To workaround this issue, 
+					serialVersionUID is set with either a default value or a compatibility value. 
+					To use the compatibility value you have to set the following property to 
+					"1.0". -->
 				<com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>1.0</com.sun.xml.namespace.QName.useCompatibleSerialVersionUID>
 
 				<!-- RE Pattern for retrieving determinators from item xml -->
 				<escidoc.content.model.pattern>:content-model objid=\"([^\"]*)\"</escidoc.content.model.pattern>
 				<escidoc.context.pattern>:context objid=\"([^\"]*)\"</escidoc.context.pattern>
-				
-				 <!-- Current XSD Schema versions -->
+
+				<!-- Current XSD Schema versions -->
 				<xsd.soap.common.prop>http://escidoc.de/core/01/properties/</xsd.soap.common.prop>
 				<xsd.soap.common.srel>http://escidoc.de/core/01/structural-relations/</xsd.soap.common.srel>
 				<xsd.soap.common.version>http://escidoc.de/core/01/properties/version/</xsd.soap.common.version>
@@ -541,18 +559,18 @@
 				<xsd.soap.statistic.reportdefinition>http://www.escidoc.de/schemas/reportdefinition/0.3</xsd.soap.statistic.reportdefinition>
 				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
 				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
-				
+
 				<xsd.soap.toc.toc>http://www.escidoc.de/schemas/toc/0.6</xsd.soap.toc.toc>
 				<xsd.soap.toc.table-of-content>http://www.escidoc.de/schemas/tableofcontent/0.1</xsd.soap.toc.table-of-content>
 				<xsd.soap.result.result>http://www.escidoc.de/schemas/result/0.1</xsd.soap.result.result>
-				
+
 				<xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
 				<xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
 				<xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
-                
+
 				<!-- Cone -->
 				<escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
-			
+
 			</properties>
 			<distributionManagement>
 				<site>
@@ -563,15 +581,15 @@
 		</profile>
 		<profile>
 			<id>env-production-escidoc2</id>
-		
+
 		</profile>
 		<profile>
 			<id>env-production-escidoc3</id>
-		
+
 		</profile>
 		<profile>
 			<id>env-production-escidoc4</id>
-		
+
 		</profile>
 		<profile>
 			<!-- this profile gets activated if os is windows -->
@@ -602,4 +620,4 @@
 		</profile>
 	</profiles>
 </project>
-<!-- Changes Bastien 4.4.2012-->
+<!-- Changes Bastien 4.4.2012 -->

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jList;
@@ -62,7 +63,6 @@ public class Container
 
     public Collection<URI> getImages()
     {
-        System.out.println("Container.getImages!!!!!");
         return images;
     }
 }

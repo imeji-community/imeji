@@ -31,6 +31,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
+import de.mpg.j2j.helper.J2JHelper;
 
 public class CollectionController extends ImejiController
 {
@@ -192,22 +193,21 @@ public class CollectionController extends ImejiController
         }
     }
 
-    public CollectionImeji retrieve(String id) throws Exception
-    {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
-        return (CollectionImeji)imejiRDF2Bean.load(ObjectHelper.getURI(CollectionImeji.class, id).toString(), user,
-                new CollectionImeji());
-    }
-
     public CollectionImeji retrieve(URI uri) throws Exception
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
         return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user, new CollectionImeji());
     }
 
+    public CollectionImeji retrieveLazy(URI uri) throws Exception
+    {
+        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        return (CollectionImeji)imejiRDF2Bean.loadLazy(uri.toString(), user, new CollectionImeji());
+    }
+
     public int countAllCollections()
     {
-        return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/collection>}");
+        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/collection>}");
     }
 
     public int getCollectionSize(String uri)
@@ -215,6 +215,13 @@ public class CollectionController extends ImejiController
         String query = "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item> .<" + uri
                 + "> <http://imeji.org/terms/item> ?s }";
         return ImejiSPARQL.execCount(query);
+    }
+
+    public SearchResult getCollectionItems(String uri)
+    {
+        String query = "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item> .<" + uri
+                + "> <http://imeji.org/terms/item> ?s }";
+        return new SearchResult(ImejiSPARQL.exec(query));
     }
 
     /**
@@ -246,7 +253,6 @@ public class CollectionController extends ImejiController
     // Search search = new Search("http://imeji.org/terms/collection", null);
     // return search.search(scList, sortCri, simplifyUser());
     // }
-    
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset)
     {
         Search search = new Search("http://imeji.org/terms/collection", null);
@@ -280,7 +286,7 @@ public class CollectionController extends ImejiController
         return simplifiedUser;
     }
 
-    public Collection<CollectionImeji> load(List<String> uris, int limit, int offset)
+    public Collection<CollectionImeji> loadLazy(List<String> uris, int limit, int offset)
     {
         LinkedList<CollectionImeji> cols = new LinkedList<CollectionImeji>();
         ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.collectionModel);
@@ -291,7 +297,7 @@ public class CollectionController extends ImejiController
             {
                 try
                 {
-                    cols.add((CollectionImeji)reader.load(s, user, new CollectionImeji()));
+                    cols.add((CollectionImeji)J2JHelper.setId(new CollectionImeji(), URI.create(s)));
                 }
                 catch (Exception e)
                 {
@@ -299,6 +305,14 @@ public class CollectionController extends ImejiController
                 }
             }
             counter++;
+        }
+        try
+        {
+            reader.loadLazy(J2JHelper.cast2ObjectList(cols), user);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
         return cols;
     }

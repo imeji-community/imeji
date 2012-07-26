@@ -40,7 +40,7 @@ public class UserController extends ImejiController
         imejiBean2RDF.delete(imejiBean2RDF.toList(user), this.user);
     }
 
-    public User retrieve(String email) throws NotFoundException
+    public User retrieve(String email) throws Exception
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
         User u = new User();
@@ -48,7 +48,7 @@ public class UserController extends ImejiController
         return (User)imejiRDF2Bean.load(u.getId().toString(), user, u);
     }
 
-    public User retrieve(URI id) throws NotFoundException
+    public User retrieve(URI id) throws Exception
     {
         String email = id.getPath().split("/Person/")[1];
         if (email != null)
@@ -83,6 +83,10 @@ public class UserController extends ImejiController
             catch (NotFoundException e)
             {
                 throw new RuntimeException("User " + uri + " not found", e);
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
             }
         }
         return users;

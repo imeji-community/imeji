@@ -6,6 +6,8 @@ package de.mpg.imeji.presentation.upload.deposit;
 import java.io.InputStream;
 import java.net.URI;
 
+import com.hp.hpl.jena.query.Dataset;
+
 import de.escidoc.core.client.Authentication;
 import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -62,6 +64,10 @@ public class DepositController
     {
         ItemController itemController = new ItemController(user);
         de.mpg.imeji.logic.vo.Item item = ItemFactory.create(collection);
+        if (collection == null || collection.getId() == null)
+        {
+            throw new RuntimeException("Can not create item with a collection null");
+        }
         item.setCollection(collection.getId());
         item.setFullImageUrl(fullImageURI);
         item.setThumbnailImageUrl(thumbnailURI);

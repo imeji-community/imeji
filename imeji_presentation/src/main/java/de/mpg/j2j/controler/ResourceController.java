@@ -1,14 +1,18 @@
 package de.mpg.j2j.controler;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.util.Counter;
+import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.exceptions.AlreadyExistsException;
 import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.J2JHelper;
@@ -32,6 +36,17 @@ public class ResourceController
 
     public ResourceController(String modelURI)
     {
+        this(modelURI, false);
+    }
+
+    /**
+     * Use only without transaction
+     * 
+     * @param modelURI
+     * @param lazy
+     */
+    public ResourceController(String modelURI, boolean lazy)
+    {
         if (modelURI != null)
         {
             model = ImejiJena.imejiDataSet.getNamedModel(modelURI);
@@ -41,10 +56,16 @@ public class ResourceController
             model = ImejiJena.imejiDataSet.getDefaultModel();
         }
         this.java2rdf = new Java2Jena(model);
-        this.rdf2Java = new Jena2Java(model);
+        this.rdf2Java = new Jena2Java(model, lazy);
     }
-    
-    public ResourceController(Model model)
+
+    /**
+     * Use for transaction. The model must have been created/retrieved within the transaction
+     * 
+     * @param model
+     * @param lazy
+     */
+    public ResourceController(Model model, boolean lazy)
     {
         if (model == null)
         {
@@ -52,7 +73,7 @@ public class ResourceController
         }
         this.model = model;
         this.java2rdf = new Java2Jena(model);
-        this.rdf2Java = new Jena2Java(model);
+        this.rdf2Java = new Jena2Java(model, lazy);
     }
 
     /**
@@ -85,16 +106,20 @@ public class ResourceController
         return read(o);
     }
 
+    /**
+     * read a {@link Object} if it has an id defined by a {@link j2jId}
+     * 
+     * @param o
+     * @return
+     * @throws NotFoundException
+     */
     public Object read(Object o) throws NotFoundException
     {
         if (!java2rdf.exists(o))
         {
             throw new NotFoundException("Resource " + J2JHelper.getId(o) + " not found!");
         }
-        long before = System.currentTimeMillis();
         o = rdf2Java.loadResource(o);
-        long after = System.currentTimeMillis();
-        //logger.info("read " + J2JHelper.getId(o) + " :" + Long.valueOf(after- before));
         return o;
     }
 
@@ -128,4 +153,16 @@ public class ResourceController
         }
         java2rdf.remove(o);
     }
+
+    public Model getModel()
+    {
+        return model;
+    }
+
+    public void setModel(Model model)
+    {
+        this.model = model;
+    }
+
+
 }

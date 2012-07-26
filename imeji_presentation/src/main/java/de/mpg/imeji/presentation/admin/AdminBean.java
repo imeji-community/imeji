@@ -4,17 +4,8 @@
 
 package de.mpg.imeji.presentation.admin;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import com.hp.hpl.jena.sparql.sse.Item;
-import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.solver.stats.StatsCollector;
-import com.hp.hpl.jena.tdb.store.GraphTDB;
-
-import de.mpg.imeji.logic.ImejiJena;
 
 public class AdminBean 
 {

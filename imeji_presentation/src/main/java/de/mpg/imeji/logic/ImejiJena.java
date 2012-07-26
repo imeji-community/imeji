@@ -14,6 +14,7 @@ import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.tdb.sys.SystemTDB;
+import com.hp.hpl.jena.tdb.transaction.Transaction;
 
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.Counter;
@@ -49,7 +50,6 @@ public class ImejiJena
         {
             // tdbPath = PropertyReader.getProperty("imeji.tdb.path");
             tdbPath = "C:\\Projects\\Imeji\\tdb\\test";
-            ;
         }
         catch (Exception e)
         {
@@ -80,7 +80,6 @@ public class ImejiJena
         System.out.println(ImejiJena.imejiDataSet.isInTransaction());
         initadminUser();
         initCounter();
-       
         logger.info("... done!");
         logger.info("Jena file access : " + SystemTDB.fileMode().name());
         logger.info("Jena is 64 bit system : " + SystemTDB.is64bitSystem);
@@ -148,6 +147,10 @@ public class ImejiJena
             logger.warn("Counter not found, creating a new one...");
             createNewCouter(c, counterFirstValue);
         }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void createNewCouter(Counter c, int counterFirstValue)
@@ -164,9 +167,18 @@ public class ImejiJena
         }
         logger.info("New Counter created");
     }
-    
+
     public static void printModel(String name)
     {
-        imejiDataSet.getNamedModel(name).write(System.out, "RDF/XML-ABBREV");
+        try
+        {
+            imejiDataSet.begin(ReadWrite.READ);
+            imejiDataSet.getNamedModel(name).write(System.out, "RDF/XML-ABBREV");
+            imejiDataSet.commit();
+        }
+        finally
+        {
+            imejiDataSet.end();
+        }
     }
 }

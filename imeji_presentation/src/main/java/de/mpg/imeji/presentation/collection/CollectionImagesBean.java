@@ -52,7 +52,7 @@ public class CollectionImagesBean extends ImagesBean
 
     public void init()
     {
-        collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, id), sb.getUser());
+        collection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), sb.getUser());
         List<SelectItem> sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_CREATION_DATE, sb
                 .getLabel(SearchIndex.names.PROPERTIES_CREATION_DATE.name())));
@@ -69,7 +69,9 @@ public class CollectionImagesBean extends ImagesBean
             if (sb.getSelectedImagesContext() != null
                     && !(sb.getSelectedImagesContext()
                             .equals("pretty:collectionImages" + collection.getId().toString())))
+            {
                 sb.getSelected().clear();
+            }
             sb.setSelectedImagesContext("pretty:collectionImages" + collection.getId().toString());
         }
         return "pretty:collectionImages";
@@ -88,7 +90,7 @@ public class CollectionImagesBean extends ImagesBean
         {
             getFacets().getFacets().clear();
         }
-        //Locks.releaseLockForWrite();
+
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));

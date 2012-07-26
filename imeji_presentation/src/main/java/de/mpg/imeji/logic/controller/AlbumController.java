@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.search.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
@@ -103,6 +104,17 @@ public class AlbumController extends ImejiController
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
         return (Album)imejiRDF2Bean.load(selectedAlbumId.toString(), user, new Album());
     }
+    
+    public Album retrieveLazy(URI selectedAlbumId) throws Exception
+    {
+        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
+        return (Album)imejiRDF2Bean.loadLazy(selectedAlbumId.toString(), user, new Album());
+    }
+    
+    public int countAllAlbums()
+    {
+        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/album>}");
+    }
 
     @Deprecated
     public Collection<Album> retrieveAll()
@@ -157,6 +169,13 @@ public class AlbumController extends ImejiController
             }
             update(album);
         }
+    }
+    
+    public SearchResult getAlbumItems(String uri)
+    {
+        String query = "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item> .<" + uri
+                + "> <http://imeji.org/terms/item> ?s }";
+        return new SearchResult(ImejiSPARQL.exec(query));
     }
 
     public boolean hasPendingImage(Collection<URI> images) throws Exception

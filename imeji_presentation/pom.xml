@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>imeji</artifactId>
 		<groupId>de.mpg.mpdl.imeji</groupId>
@@ -9,12 +10,13 @@
 	<artifactId>imeji_presentation</artifactId>
 	<name>imeji_presentation</name>
 	<packaging>war</packaging>
-	<version>0.1</version>	
+	<version>0.1</version>
 	<scm>
 		<connection>scm:git@github.com:bastienMPDL/Imeji.git</connection>
 		<developerConnection>scm:git@github.com:bastienMPDL/Imeji.git</developerConnection>
 		<url>https://bastienMPDL@github.com/bastienMPDL/Imeji.git</url>
 	</scm>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -76,9 +78,9 @@
 			<version>3.3.3.Final</version>
 		</dependency>
 		<dependency>
-		  <groupId>org.apache.jena</groupId>
-		  <artifactId>jena-tdb</artifactId>
-		  <version>0.9.0-incubating</version>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-tdb</artifactId>
+			<version>0.9.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.escidoc.core</groupId>

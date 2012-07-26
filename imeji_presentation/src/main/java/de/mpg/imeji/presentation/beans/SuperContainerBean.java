@@ -64,12 +64,11 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     protected void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(Search.getIndex("PROPERTIES_STATUS"), sb.getLabel(Search.getIndex(
-                "PROPERTIES_STATUS").getName())));
-        sortMenu.add(new SelectItem(Search.getIndex("CONTAINER_METADATA_TITLE"), sb.getLabel(Search.getIndex(
-                "CONTAINER_METADATA_TITLE").getName())));
-        sortMenu.add(new SelectItem(Search.getIndex("PROPERTIES_LAST_MODIFICATION_DATE"), sb.getLabel(Search.indexes
-                .get("PROPERTIES_LAST_MODIFICATION_DATE").getName())));
+        sortMenu.add(new SelectItem("PROPERTIES_STATUS", sb.getLabel(Search.getIndex("PROPERTIES_STATUS").getName())));
+        sortMenu.add(new SelectItem("CONTAINER_METADATA_TITLE", sb.getLabel(Search.getIndex("CONTAINER_METADATA_TITLE")
+                .getName())));
+        sortMenu.add(new SelectItem("PROPERTIES_LAST_MODIFICATION_DATE", sb.getLabel(Search.indexes.get(
+                "PROPERTIES_LAST_MODIFICATION_DATE").getName())));
         filterMenu = new ArrayList<SelectItem>();
         filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
         if (sb.getUser() != null)

@@ -36,10 +36,17 @@ import de.mpg.j2j.misc.LocalizedString;
 public class Jena2Java
 {
     private Model model;
+    private boolean lazy = false;
 
     public Jena2Java(Model model)
     {
         this.model = model;
+    }
+    
+    public Jena2Java(Model model, boolean lazy)
+    {
+        this.model = model;
+        this.lazy = lazy;
     }
 
     /**
@@ -236,12 +243,18 @@ public class Jena2Java
     {
         List<Object> object = new ArrayList<Object>();
         String predicate = J2JHelper.getListNamespace(f);
+        if (predicate == null && !lazy)
+        {
+            predicate = J2JHelper.getLazyListNamespace(f);
+        }
         if (predicate == null)
+        {
             return object;
+        }
         int count = 0;
         for (StmtIterator iterator = subject.listProperties(model.createProperty(predicate)); iterator.hasNext();)
         {
-            Statement st = iterator.next();
+            Statement st = iterator.nextStatement();
             Object listObject = null;
             if (st.getObject().isResource() && isTypedResource(st.getResource()))
             {

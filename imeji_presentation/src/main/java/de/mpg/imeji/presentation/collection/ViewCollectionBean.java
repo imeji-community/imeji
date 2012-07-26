@@ -3,15 +3,18 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.ImejiJena;
-import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.factory.ItemFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
@@ -37,15 +40,42 @@ public class ViewCollectionBean extends CollectionBean
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
+    public void createBigCollection()
+    {
+        List<Item> l = new ArrayList<Item>();
+        for (int i = 0; i < 0; i++)
+        {
+            de.mpg.imeji.logic.vo.Item item = ItemFactory.create(this.getCollection());
+            item.setCollection(this.getCollection().getId());
+            item.setFullImageUrl(URI.create("http://imeji.org/item/test"));
+            item.setThumbnailImageUrl(URI.create("http://imeji.org/item/test"));
+            item.setWebImageUrl(URI.create("http://imeji.org/item/test"));
+            item.setVisibility(Visibility.PUBLIC);
+            item.setFilename("Test image");
+            l.add(item);
+        }
+        ItemController itemController = new ItemController(sessionBean.getUser());
+        try
+        {
+            itemController.create(l, getCollection().getId());
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     public void init()
     {
-        //ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel).removeAll();
-        //ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel).write(System.out, "RDF/XML-ABBREV");
+        // ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel).removeAll();
+        // ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel).write(System.out, "RDF/XML-ABBREV");
+       
         try
         {
             User user = sessionBean.getUser();
             String id = super.getId();
-            setCollection(ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, id), user));
+            setCollection(ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user));
             if (getCollection() != null)
             {
                 setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
@@ -69,6 +99,9 @@ public class ViewCollectionBean extends CollectionBean
             BeanHelper.error(e.getMessage());
             logger.error("Error init of collection home page", e);
         }
+        long before = System.currentTimeMillis();
+        //createBigCollection();
+        logger.info("Big collection created in : " + Long.valueOf(System.currentTimeMillis() - before));
     }
 
     public List<Person> getPersons()

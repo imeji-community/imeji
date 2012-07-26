@@ -339,7 +339,7 @@ public abstract class CollectionBean
         try
         {
             SearchResult res = ic.searchImagesInContainer(collection.getId(), new SearchQuery(), null, 5, 0);
-            return ImejiFactory.imageListToBeanList(ic.loadImages(res.getResults(), 5, 0));
+            return ImejiFactory.imageListToBeanList(ic.loadItems(res.getResults(), 5, 0));
         }
         catch (Exception e)
         {

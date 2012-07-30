@@ -27,7 +27,6 @@ public abstract class Transaction extends Thread
     public synchronized void start()
     {
         running = true;
-        logger.info("Start: " + this.getId() + " " + getLockType());
         super.start();
     }
 

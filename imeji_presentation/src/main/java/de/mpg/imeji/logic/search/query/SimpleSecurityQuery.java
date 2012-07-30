@@ -31,14 +31,6 @@ public class SimpleSecurityQuery
         {
             f = "?status=<" + pair.getValue() + ">";
             op = " && (";
-            // if (AND.equals(pair.getOperator()))
-            // {
-            // op = " && (";
-            // }
-            // else
-            // {
-            // op = " || (";
-            // }
         }
         String uf = "";
         String imageCollection = null;

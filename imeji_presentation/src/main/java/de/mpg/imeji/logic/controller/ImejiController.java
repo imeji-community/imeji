@@ -3,17 +3,11 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Collection;
 
-import javax.servlet.jsp.tagext.TryCatchFinally;
-
 import org.apache.log4j.Logger;
-
-import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
@@ -24,7 +18,6 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
 
@@ -41,7 +34,7 @@ public abstract class ImejiController
 
     protected static void writeCreateProperties(Properties properties, User user)
     {
-        properties.setId(ObjectHelper.getURI(Properties.class, Integer.toString(getUniqueId())));
+        //properties.setId(ObjectHelper.getURI(Properties.class, Integer.toString(getUniqueId())));
         Calendar now = DateHelper.getCurrentDate();
         properties.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail()));
         properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
@@ -101,10 +94,10 @@ public abstract class ImejiController
 
     private synchronized static void incrementCounter(Counter c)
     {
-        c.setCounter(c.getCounter() + 1);
-        ImejiBean2RDF bean2rdf = new ImejiBean2RDF(null);
         try
         {
+            c.setCounter(c.getCounter() + 1 );
+            ImejiBean2RDF bean2rdf = new ImejiBean2RDF(null);
             bean2rdf.update(bean2rdf.toList(c), ImejiJena.adminUser);
         }
         catch (Exception e)

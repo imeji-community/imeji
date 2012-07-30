@@ -341,10 +341,6 @@ public class EditImageMetadataBean
         {
             im.getMetadataSet().getMetadata().add(metadata);
         }
-        else
-        {
-            System.out.println("not empty " + im.getFilename());
-        }
         return im;
     }
 

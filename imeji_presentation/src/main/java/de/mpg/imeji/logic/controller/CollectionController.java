@@ -56,8 +56,8 @@ public class CollectionController extends ImejiController
     {
         ProfileController pc = new ProfileController(user);
         pc.retrieve(profile); // If doesn't exists, throw not found exception
-        writeCreateProperties(ic.getProperties(), user);
-        ic.getProperties().setStatus(Status.PENDING);
+        writeCreateProperties(ic, user);
+        ic.setStatus(Status.PENDING);
         ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
         ic.setProfile(profile);
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
@@ -83,7 +83,7 @@ public class CollectionController extends ImejiController
      */
     public void update(CollectionImeji ic) throws Exception
     {
-        writeUpdateProperties(ic.getProperties(), user);
+        writeUpdateProperties(ic, user);
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
     }
@@ -96,8 +96,8 @@ public class CollectionController extends ImejiController
         }
         else
         {
-            ic.getProperties().setStatus(Status.RELEASED);
-            ic.getProperties().setVersionDate(DateHelper.getCurrentDate());
+            ic.setStatus(Status.RELEASED);
+            ic.setVersionDate(DateHelper.getCurrentDate());
             ItemController itemController = new ItemController(user);
             for (URI uri : ic.getImages())
             {
@@ -168,9 +168,9 @@ public class CollectionController extends ImejiController
                 try
                 {
                     Item im = itemController.retrieve(uri);
-                    if (!Status.WITHDRAWN.equals(im.getProperties().getStatus()))
+                    if (!Status.WITHDRAWN.equals(im.getStatus()))
                     {
-                        im.getProperties().setDiscardComment(ic.getProperties().getDiscardComment());
+                        im.setDiscardComment(ic.getDiscardComment());
                         itemController.withdraw(im);
                     }
                 }
@@ -180,8 +180,8 @@ public class CollectionController extends ImejiController
                 }
             }
             // Withdraw collection
-            ic.getProperties().setStatus(Status.WITHDRAWN);
-            ic.getProperties().setVersionDate(DateHelper.getCurrentDate());
+            ic.setStatus(Status.WITHDRAWN);
+            ic.setVersionDate(DateHelper.getCurrentDate());
             this.update(ic);
             // Withdraw profile
             ProfileController pc = new ProfileController(user);
@@ -207,21 +207,20 @@ public class CollectionController extends ImejiController
 
     public int countAllCollections()
     {
-        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/collection>}");
+        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/collection>}",
+                ImejiJena.collectionModel);
     }
 
     public int getCollectionSize(String uri)
     {
-        String query = "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item> .<" + uri
-                + "> <http://imeji.org/terms/item> ?s }";
-        return ImejiSPARQL.execCount(query);
+        String query = "SELECT ?s count(DISTINCT ?s) WHERE {<" + uri + "> <http://imeji.org/terms/item> ?s }";
+        return ImejiSPARQL.execCount(query, ImejiJena.imageModel);
     }
 
     public SearchResult getCollectionItems(String uri)
     {
-        String query = "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item> .<" + uri
-                + "> <http://imeji.org/terms/item> ?s }";
-        return new SearchResult(ImejiSPARQL.exec(query));
+        String query = "SELECT ?s count(DISTINCT ?s) WHERE {<" + uri + "> <http://imeji.org/terms/item> ?s }";
+        return new SearchResult(ImejiSPARQL.exec(query, ImejiJena.imageModel));
     }
 
     /**

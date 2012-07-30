@@ -300,7 +300,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
             {
                 try
                 {
-                    im.getProperties().setDiscardComment(discardComment);
+                    im.setDiscardComment(discardComment);
                     ic.withdraw(im);
                     count++;
                 }

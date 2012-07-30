@@ -75,12 +75,12 @@
 					<!-- SORTING content menu lower line ends here -->
 				</h:panelGroup>
 				
-				 <h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.properties.status=='PENDING'}">
+				 <h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
 					<h:outputText value="#{lbl.collection_release}"/>
 					<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
 				</h:outputLink>
 				
-				<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.properties.status=='RELEASED'}">
+				<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
 					<h:outputText value="#{lbl.withdraw}"/>
 					<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
 				</h:outputLink>
@@ -102,7 +102,7 @@
 				</ui:include>
 				<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
 					<ui:param name="bean" value="#{CollectionImagesBean}"/>
-					<ui:param name="discardComment" value="#{CollectionImagesBean.collection.properties.discardComment}"/>
+					<ui:param name="discardComment" value="#{CollectionImagesBean.collection.discardComment}"/>
 				</ui:include>
 				
 			</ui:define>

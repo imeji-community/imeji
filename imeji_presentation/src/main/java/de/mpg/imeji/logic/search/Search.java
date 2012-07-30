@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.search.vo.SearchElement;
@@ -125,33 +126,55 @@ public class Search
                 getSpecificQuery());
         // sparqlQuery="PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/item> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN> && ( (?status=<http://imeji.org/terms/status#RELEASED> || ?c=<http://imeji.org/collection/13>)))  . ?props <http://purl.org/dc/terms/created> ?sort0}  ORDER BY DESC(?sort0)";
         // logger.info(sparqlQuery);
-        List<String> l = ImejiSPARQL.exec(sparqlQuery);
+        List<String> l = ImejiSPARQL.exec(sparqlQuery, getModelName(type));
         return l;
     }
 
-    private int simpleCount(SearchPair pair, SortCriterion sortCri, User user)
+    public int simpleCount(SearchPair pair, User user)
     {
-        String sparqlQuery = SimpleQueryFactory.getQuery(type, pair, sortCri, user, (containerURI != null),
+        String sparqlQuery = SimpleQueryFactory.getQuery(type, pair, null, user, (containerURI != null),
                 getSpecificQuery());
-        return ImejiSPARQL.execCount(sparqlQuery);
+        return ImejiSPARQL.execCount(sparqlQuery, getModelName(type));
+    }
+
+    public int simpleCount(String query)
+    {
+        return ImejiSPARQL.execCount(query, getModelName(type));
     }
 
     public List<String> searchSimpleForQuery(String query)
     {
-        return ImejiSPARQL.exec(query);
+        return ImejiSPARQL.exec(query, getModelName(type));
     }
 
     private String getSpecificQuery()
     {
         String specificQuery = "";
-        if ("http://imeji.org/terms/item".equals(type))
-        {
-            specificQuery += ". ?s <http://imeji.org/terms/collection> ?c ";
-        }
         if (containerURI != null)
         {
-            specificQuery += " . <" + containerURI + "> <http://imeji.org/terms/item> ?s";
+            specificQuery = " <" + containerURI + "> <http://imeji.org/terms/item> ?s . ";
+            specificQuery = " ?s <http://imeji.org/terms/collection> <" + containerURI + "> . ";
+        }
+        if ("http://imeji.org/terms/item".equals(type))
+        {
+            specificQuery += " ?s <http://imeji.org/terms/collection> ?c . ";
         }
         return specificQuery;
+    }
+
+    private String getModelName(String type)
+    {
+        if ("http://imeji.org/terms/collection".equals(type))
+        {
+            return ImejiJena.collectionModel;
+        }
+        else if ("http://imeji.org/terms/album".equals(type))
+        {
+            return ImejiJena.albumModel;
+        }
+        else
+        {
+            return ImejiJena.imageModel;
+        }
     }
 }

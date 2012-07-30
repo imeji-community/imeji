@@ -16,11 +16,11 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/mdprofile")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @j2jModel("metadataProfile")
-public class MetadataProfile
+public class MetadataProfile extends Properties
 {
     private URI id;
-    @j2jResource("http://imeji.org/terms/properties")
-    private Properties properties = new Properties();
+//    @j2jResource("http://imeji.org/terms/properties")
+//    private Properties properties = new Properties();
     @j2jLiteral("http://purl.org/dc/elements/1.1/title")
     private String title;
     @j2jLiteral("http://purl.org/dc/elements/1.1/description")
@@ -68,13 +68,13 @@ public class MetadataProfile
         this.statements = statements;
     }
 
-    public void setProperties(Properties properties)
-    {
-        this.properties = properties;
-    }
-
-    public Properties getProperties()
-    {
-        return properties;
-    }
+//    public void setProperties(Properties properties)
+//    {
+//        this.properties = properties;
+//    }
+//
+//    public Properties getProperties()
+//    {
+//        return properties;
+//    }
 }

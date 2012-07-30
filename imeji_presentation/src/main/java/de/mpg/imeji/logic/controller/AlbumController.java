@@ -53,8 +53,8 @@ public class AlbumController extends ImejiController
      */
     public void create(Album ic) throws Exception
     {
-        writeCreateProperties(ic.getProperties(), user);
-        ic.getProperties().setStatus(Status.PENDING);
+        writeCreateProperties(ic, user);
+        ic.setStatus(Status.PENDING);
         ic.setId(new URI("http://imeji.org/terms/album/" + getUniqueId()));
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
         imejiBean2RDF.create(imejiBean2RDF.toList(ic), user);
@@ -82,7 +82,7 @@ public class AlbumController extends ImejiController
     public void update(Album ic) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-        writeUpdateProperties(ic.getProperties(), user);
+        writeUpdateProperties(ic, user);
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
     }
 
@@ -104,16 +104,17 @@ public class AlbumController extends ImejiController
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
         return (Album)imejiRDF2Bean.load(selectedAlbumId.toString(), user, new Album());
     }
-    
+
     public Album retrieveLazy(URI selectedAlbumId) throws Exception
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
         return (Album)imejiRDF2Bean.loadLazy(selectedAlbumId.toString(), user, new Album());
     }
-    
+
     public int countAllAlbums()
     {
-        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/album>}");
+        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/album>}",
+                ImejiJena.albumModel);
     }
 
     @Deprecated
@@ -149,8 +150,8 @@ public class AlbumController extends ImejiController
         }
         else
         {
-            album.getProperties().setStatus(Status.RELEASED);
-            album.getProperties().setVersionDate(DateHelper.getCurrentDate());
+            album.setStatus(Status.RELEASED);
+            album.setVersionDate(DateHelper.getCurrentDate());
             ItemController itemController = new ItemController(user);
             for (URI uri : album.getImages())
             {
@@ -170,12 +171,11 @@ public class AlbumController extends ImejiController
             update(album);
         }
     }
-    
+
     public SearchResult getAlbumItems(String uri)
     {
-        String query = "SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item> .<" + uri
-                + "> <http://imeji.org/terms/item> ?s }";
-        return new SearchResult(ImejiSPARQL.exec(query));
+        String query = "SELECT ?s count(DISTINCT ?s) WHERE {<" + uri + "> <http://imeji.org/terms/item> ?s }";
+        return new SearchResult(ImejiSPARQL.exec(query, ImejiJena.imageModel));
     }
 
     public boolean hasPendingImage(Collection<URI> images) throws Exception
@@ -184,7 +184,7 @@ public class AlbumController extends ImejiController
         for (URI im : images)
         {
             Item vo = c.retrieve(im);
-            if (Status.PENDING.equals(vo.getProperties().getStatus()))
+            if (Status.PENDING.equals(vo.getStatus()))
             {
                 return true;
             }
@@ -194,8 +194,8 @@ public class AlbumController extends ImejiController
 
     public void withdraw(Album album) throws Exception
     {
-        album.getProperties().setStatus(Status.WITHDRAWN);
-        album.getProperties().setVersionDate(DateHelper.getCurrentDate());
+        album.setStatus(Status.WITHDRAWN);
+        album.setVersionDate(DateHelper.getCurrentDate());
         album.getImages().clear();
         update(album);
     }
@@ -214,13 +214,12 @@ public class AlbumController extends ImejiController
         Search search = new Search("http://imeji.org/terms/album", null);
         return search.search(searchQuery, sortCri, user);
     }
-    
-//    public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
-//    {
-//        Search search = new Search("http://imeji.org/terms/album", null);
-//        return search.search(scList, sortCri, user);
-//    }
 
+    // public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
+    // {
+    // Search search = new Search("http://imeji.org/terms/album", null);
+    // return search.search(scList, sortCri, user);
+    // }
     public Collection<Album> load(List<String> uris, int limit, int offset)
     {
         LinkedList<Album> albs = new LinkedList<Album>();

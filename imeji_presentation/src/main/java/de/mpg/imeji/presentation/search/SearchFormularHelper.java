@@ -19,7 +19,6 @@ public class SearchFormularHelper
             if (se.getType().equals(SEARCH_ELEMENTS.PAIR)
                     && SearchIndex.names.IMAGE_COLLECTION.name().equals(((SearchPair)se).getIndex().getName()))
             {
-                System.out.println(((SearchPair)se).getValue());
                 return ((SearchPair)se).getValue();
             }
             else if (se.getType().equals(SEARCH_ELEMENTS.GROUP))

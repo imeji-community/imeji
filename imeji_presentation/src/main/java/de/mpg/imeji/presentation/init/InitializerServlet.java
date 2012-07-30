@@ -86,11 +86,15 @@ public class InitializerServlet extends HttpServlet
             uc.create(ImejiJena.adminUser);
             logger.info("Created sysadmin successfully");
         }
+        catch (AlreadyExistsException e)
+        {
+            logger.info("sysadmin already exists 1");
+        }
         catch (Exception e)
         {
             if (e.getCause() instanceof AlreadyExistsException)
             {
-                logger.info("sysadmin already exists");
+                logger.info("sysadmin already exists 2");
             }
             else
             {

@@ -3,13 +3,6 @@
  */
 package de.mpg.imeji.logic.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
@@ -22,7 +15,6 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
 import de.mpg.j2j.annotations.j2jDataType;
-import de.mpg.j2j.annotations.j2jResource;
 
 public class MetadataFactory
 {

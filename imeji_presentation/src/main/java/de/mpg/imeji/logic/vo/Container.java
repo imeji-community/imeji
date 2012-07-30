@@ -6,21 +6,18 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLazyList;
-import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/container")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public class Container
+public class Container extends Properties
 {
     private URI id;
-    @j2jResource("http://imeji.org/terms/properties")
-    private Properties properties = new Properties();
+//    @j2jResource("http://imeji.org/terms/properties")
+//    private Properties properties = new Properties();
     @j2jLazyList("http://imeji.org/terms/item")
     private Collection<URI> images = new ArrayList<URI>();
     @j2jResource("http://imeji.org/terms/container/metadata")
@@ -46,15 +43,15 @@ public class Container
         return metadata;
     }
 
-    public void setProperties(Properties properties)
-    {
-        this.properties = properties;
-    }
-
-    public Properties getProperties()
-    {
-        return properties;
-    }
+//    public void setProperties(Properties properties)
+//    {
+//        this.properties = properties;
+//    }
+//
+//    public Properties getProperties()
+//    {
+//        return properties;
+//    }
 
     public void setImages(Collection<URI> images)
     {

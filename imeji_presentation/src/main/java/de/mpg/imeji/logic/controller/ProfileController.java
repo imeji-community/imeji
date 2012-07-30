@@ -46,8 +46,8 @@ public class ProfileController extends ImejiController
     public URI create(MetadataProfile mdp) throws Exception
     {
      	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
-    	writeCreateProperties(mdp.getProperties(), user);
-        mdp.getProperties().setStatus(Status.PENDING);
+    	writeCreateProperties(mdp, user);
+        mdp.setStatus(Status.PENDING);
         if (mdp.getId() == null)
         {
 	        URI uri = ObjectHelper.getURI(MetadataProfile.class, Integer.toString(getUniqueId()));
@@ -79,14 +79,14 @@ public class ProfileController extends ImejiController
     public void update(MetadataProfile mdp) throws Exception
     {
     	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
-    	writeUpdateProperties(mdp.getProperties(), user);
+    	writeUpdateProperties(mdp, user);
         imejiBean2RDF.update(imejiBean2RDF.toList(mdp), user);
     }
     
     public void release(MetadataProfile mdp) throws Exception
     {
-    	mdp.getProperties().setStatus(Status.RELEASED);
-    	mdp.getProperties().setVersionDate(DateHelper.getCurrentDate());
+    	mdp.setStatus(Status.RELEASED);
+    	mdp.setVersionDate(DateHelper.getCurrentDate());
     	update(mdp);
     }
     
@@ -100,14 +100,14 @@ public class ProfileController extends ImejiController
     
     public void withdraw(MetadataProfile mdp, User user) throws Exception
     {
-    	mdp.getProperties().setStatus(Status.WITHDRAWN);
-    	mdp.getProperties().setVersionDate(DateHelper.getCurrentDate());
+    	mdp.setStatus(Status.WITHDRAWN);
+    	mdp.setVersionDate(DateHelper.getCurrentDate());
     	update(mdp);
     }
     
     public int countAllProfiles()
     {
-		return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/profile>}");
+		return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/profile>}", ImejiJena.profileModel);
     }
     
     /**

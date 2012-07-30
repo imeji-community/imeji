@@ -13,17 +13,17 @@ public class SortQueryFactory
 	public static String create(SortCriterion sortCriterion)
 	{
 		String q = "";
-        if (sortCriterion != null)
-        {
-	        if (sortCriterion.getSortOrder().equals(SortOrder.DESCENDING))
-	        {
-	        	q = " ORDER BY DESC(" + lowerCasePrefix(sortCriterion, "sort0") + ") ";
-	        }
-	        else
-	        {
-	            q = " ORDER BY " + lowerCasePrefix(sortCriterion, "sort0") + " ";
-	        }
-        }
+//        if (sortCriterion != null)
+//        {
+//	        if (sortCriterion.getSortOrder().equals(SortOrder.DESCENDING))
+//	        {
+//	        	q = " ORDER BY DESC(" + lowerCasePrefix(sortCriterion, "sort0") + ") ";
+//	        }
+//	        else
+//	        {
+//	            q = " ORDER BY " + lowerCasePrefix(sortCriterion, "sort0") + " ";
+//	        }
+//        }
 		return q;
 	}
 	

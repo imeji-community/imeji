@@ -17,7 +17,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/item")
 @j2jModel("item")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public class Item
+public class Item extends Properties
 {
     public enum Visibility
     {
@@ -25,8 +25,8 @@ public class Item
     }
 
     private URI id;
-    @j2jResource("http://imeji.org/terms/properties")
-    private Properties properties = new Properties();
+//    @j2jResource("http://imeji.org/terms/properties")
+//    private Properties properties = new Properties();
     @j2jResource("http://imeji.org/terms/collection")
     private URI collection;
     @j2jList("http://imeji.org/terms/metadataSet")
@@ -120,15 +120,15 @@ public class Item
         return id;
     }
 
-    public void setProperties(Properties properties)
-    {
-        this.properties = properties;
-    }
-
-    public Properties getProperties()
-    {
-        return properties;
-    }
+//    public void setProperties(Properties properties)
+//    {
+//        this.properties = properties;
+//    }
+//
+//    public Properties getProperties()
+//    {
+//        return properties;
+//    }
 
     public void setCollection(URI collection)
     {

@@ -57,7 +57,7 @@
 				
 				<h:outputText styleClass="seperator void" />
 
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUpload}/#{ViewCollectionBean.id}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
+				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUpload}/#{ViewCollectionBean.id}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
 			</ui:define>
@@ -74,7 +74,7 @@
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.collection_basics}"/>
-								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.applicationUrl}edit/collection/#{ViewCollectionBean.id}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
+								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.applicationUrl}edit/collection/#{ViewCollectionBean.id}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.edit}"/>
 								</h:outputLink>
 							</h3>
@@ -88,13 +88,13 @@
 											<span class="noDisplay">: </span>
 										</b>
 										<h:panelGroup layout="block" styleClass="small_area0 medium_marginLExcl statusIconArea">
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}"/>
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewCollectionBean.collection.properties.status == 'RELEASED'}"/>
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}"/>
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 											<h:panelGroup layout="block" styleClass="small_area0">
-												<h:outputText value="#{lbl.private}" rendered="#{ViewCollectionBean.collection.properties.status == 'PENDING'}"/>
-												<h:outputText value="#{lbl.published}" rendered="#{ViewCollectionBean.collection.properties.status == 'RELEASED'}"/>
-												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}"/>
+												<h:outputText value="#{lbl.private}" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
+												<h:outputText value="#{lbl.published}" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
+												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>
@@ -155,7 +155,7 @@
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.collection_profile}"/>
-								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.applicationUri}/edit#{ViewCollectionBean.collection.profile.path}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.profileEditor and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
+								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.applicationUri}/edit#{ViewCollectionBean.collection.profile.path}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.profileEditor and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.edit}"></h:outputText>
 								</h:outputLink>
 							</h3>

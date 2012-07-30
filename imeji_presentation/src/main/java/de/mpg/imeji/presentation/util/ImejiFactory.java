@@ -35,7 +35,6 @@ public class ImejiFactory
     {
         CollectionImeji coll = new CollectionImeji();
         coll.setMetadata(newContainerMetadata());
-        coll.setProperties(newProperties());
         return coll;
     }
 
@@ -45,11 +44,11 @@ public class ImejiFactory
         return cm;
     }
 
-    public static Properties newProperties()
-    {
-        Properties props = new Properties();
-        return props;
-    }
+//    public static Properties newProperties()
+//    {
+//        Properties props = new Properties();
+//        return props;
+//    }
 
     public static Statement newStatement()
     {

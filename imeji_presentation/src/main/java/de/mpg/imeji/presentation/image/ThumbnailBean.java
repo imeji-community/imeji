@@ -77,7 +77,7 @@ public class ThumbnailBean
     {
         Security security = new Security();
         editable = security.check(OperationsType.UPDATE, sessionBean.getUser(), item) && item != null
-                && !item.getProperties().getStatus().equals(Status.WITHDRAWN);
+                && !item.getStatus().equals(Status.WITHDRAWN);
         visible = security.check(OperationsType.READ, sessionBean.getUser(), item);
         deletable = security.check(OperationsType.DELETE, sessionBean.getUser(), item);
     }

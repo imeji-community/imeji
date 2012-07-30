@@ -81,7 +81,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
     {
         for (AlbumBean bean : getCurrentPartList())
         {
-            if (bean.getAlbum().getProperties().getStatus() == Status.PENDING)
+            if (bean.getAlbum().getStatus() == Status.PENDING)
             {
                 bean.setSelected(true);
                 if (!(sb.getSelectedAlbums().contains(bean.getAlbum().getId())))

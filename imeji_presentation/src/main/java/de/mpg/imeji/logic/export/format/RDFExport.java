@@ -25,7 +25,6 @@ public abstract class RDFExport extends Export
     public void export(OutputStream out, SearchResult sr)
     {
         initNamespaces();
-        System.out.println(namespaces);
         exportIntoOut(sr, out);
     }
 

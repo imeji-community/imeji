@@ -17,6 +17,8 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.log4j.Logger;
+
 import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -47,6 +49,7 @@ public class UploadBean
     private int fNum;
     private List<String> sFiles;
     private List<String> fFiles;
+    private static Logger logger = Logger.getLogger(Upload.class);
 
     public UploadBean()
     {
@@ -108,7 +111,6 @@ public class UploadBean
             ServletFileUpload upload = new ServletFileUpload();
             // Parse the request
             FileItemIterator iter = upload.getItemIterator(req);
-           
             while (iter.hasNext())
             {
                 FileItemStream item = iter.next();
@@ -132,11 +134,14 @@ public class UploadBean
                         try
                         {
                             DepositController controller = new DepositController();
-                            Item escidocItem = controller.createEscidocItem(stream, title, mimetype, format);
-                            controller.createImejiImage(collection, user, escidocItem.getOriginObjid(), title,
-                                    URI.create(EscidocHelper.getOriginalResolution(escidocItem)),
-                                    URI.create(EscidocHelper.getThumbnailUrl(escidocItem)),
-                                    URI.create(EscidocHelper.getWebResolutionUrl(escidocItem)));
+                            // Item escidocItem = controller.createEscidocItem(stream, title, mimetype, format);
+                            // controller.createImejiImage(collection, user, escidocItem.getOriginObjid(), title,
+                            // URI.create(EscidocHelper.getOriginalResolution(escidocItem)),
+                            // URI.create(EscidocHelper.getThumbnailUrl(escidocItem)),
+                            // URI.create(EscidocHelper.getWebResolutionUrl(escidocItem)));
+                            controller.createImejiImage(collection, user, "escidoc:123", title,
+                                    URI.create("http://imeji.org/test"), URI.create("http://imeji.org/test"),
+                                    URI.create("http://imeji.org/test"));
                             sNum += 1;
                             sFiles.add(title);
                         }
@@ -144,7 +149,8 @@ public class UploadBean
                         {
                             fNum += 1;
                             fFiles.add(title);
-                            throw new RuntimeException(e);
+                            logger.error("Error uploading image: ", e);
+                            // throw new RuntimeException(e);
                         }
                     }
                     catch (Exception e)
@@ -153,6 +159,7 @@ public class UploadBean
                     }
                 }
             }
+            logger.info("Upload finished");
         }
     }
 

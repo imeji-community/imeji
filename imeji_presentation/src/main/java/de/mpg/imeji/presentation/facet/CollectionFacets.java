@@ -35,7 +35,6 @@ public class CollectionFacets
 
     public CollectionFacets(CollectionImeji col, SearchQuery searchQuery) throws Exception
     {
-        long before = System.currentTimeMillis();
         this.colURI = col.getId();
         MetadataProfile profile = ObjectCachedLoader.loadProfile(col.getProfile());
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
@@ -68,7 +67,6 @@ public class CollectionFacets
             }
             facets.add(group);
         }
-        System.out.println("collection facets: " + Long.valueOf(System.currentTimeMillis() - before));
     }
 
     public String getName(URI uri)

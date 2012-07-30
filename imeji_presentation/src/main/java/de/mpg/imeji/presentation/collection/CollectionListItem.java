@@ -64,13 +64,13 @@ public class CollectionListItem
             }
             uri = collection.getId();
             setId(ObjectHelper.getId(uri));
-            status = collection.getProperties().getStatus().toString();
-            discardComment = collection.getProperties().getDiscardComment();
-            creationDate = collection.getProperties().getCreated().toString();
-            lastModificationDate = collection.getProperties().getModified().toString();
-            if (collection.getProperties().getVersionDate() != null)
+            status = collection.getStatus().toString();
+            discardComment = collection.getDiscardComment();
+            creationDate = collection.getCreated().toString();
+            lastModificationDate = collection.getModified().toString();
+            if (collection.getVersionDate() != null)
             {
-                versionDate = collection.getProperties().getVersionDate().toString();
+                versionDate = collection.getVersionDate().toString();
             }
             // initializations
             initSize(user);
@@ -153,7 +153,7 @@ public class CollectionListItem
             try
             {
                 CollectionImeji c = cc.retrieve(uri);
-                c.getProperties().setDiscardComment(discardComment);
+                c.setDiscardComment(discardComment);
                 cc.withdraw(c);
                 BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
             }

@@ -100,7 +100,7 @@ public class ViewCollectionBean extends CollectionBean
             logger.error("Error init of collection home page", e);
         }
         long before = System.currentTimeMillis();
-        //createBigCollection();
+        createBigCollection();
         logger.info("Big collection created in : " + Long.valueOf(System.currentTimeMillis() - before));
     }
 

@@ -4,22 +4,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 
 public class SearchIndexInitializer
 {
+    private static Logger logger = Logger.getLogger(SearchIndexInitializer.class);
 
     public static Map<String, SearchIndex> init()
     {
-        System.out.println("Initializing indexes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        logger.info("Initializing indexes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         Map<String, SearchIndex> indexes = new HashMap<String, SearchIndex>();
         indexes.putAll(initBasisIndexes());
         indexes.putAll(initMetadataIndexes());
         for (Entry<String, SearchIndex> e : indexes.entrySet())
         {
-             System.out.println(e.getKey() + " : " + e.getValue().getNamespace());
+             logger.info(e.getKey() + " : " + e.getValue().getNamespace());
         }
         return indexes;
     }
@@ -32,12 +35,18 @@ public class SearchIndexInitializer
         /**
          * Properties indexes
          */
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES.name(), "http://imeji.org/terms/properties"));
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_CREATED_BY.name(), "http://imeji.org/terms/createdBy", indexes.get(SearchIndex.names.PROPERTIES.name())));
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_MODIFIED_BY.name(), "http://imeji.org/terms/modifiedBy", indexes.get(SearchIndex.names.PROPERTIES.name())));
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_CREATION_DATE.name(), "http://purl.org/dc/terms/created", indexes.get(SearchIndex.names.PROPERTIES.name())));
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name(), "http://purl.org/dc/terms/modified", indexes.get(SearchIndex.names.PROPERTIES.name())));
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_STATUS.name(), "http://imeji.org/terms/status", indexes.get(SearchIndex.names.PROPERTIES.name())));
+        //indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES.name(), "http://imeji.org/terms/properties"));
+//        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_CREATED_BY.name(), "http://imeji.org/terms/createdBy", indexes.get(SearchIndex.names.PROPERTIES.name())));
+//        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_MODIFIED_BY.name(), "http://imeji.org/terms/modifiedBy", indexes.get(SearchIndex.names.PROPERTIES.name())));
+//        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_CREATION_DATE.name(), "http://purl.org/dc/terms/created", indexes.get(SearchIndex.names.PROPERTIES.name())));
+//        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name(), "http://purl.org/dc/terms/modified", indexes.get(SearchIndex.names.PROPERTIES.name())));
+//        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_STATUS.name(), "http://imeji.org/terms/status", indexes.get(SearchIndex.names.PROPERTIES.name())));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_CREATED_BY.name(), "http://imeji.org/terms/createdBy"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_MODIFIED_BY.name(), "http://imeji.org/terms/modifiedBy"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_CREATION_DATE.name(), "http://purl.org/dc/terms/created"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name(), "http://purl.org/dc/terms/modified"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES_STATUS.name(), "http://imeji.org/terms/status"));
+        
         /**
          * Grant indexes
          */

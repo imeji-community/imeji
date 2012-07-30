@@ -3,32 +3,37 @@
  */
 package de.mpg.imeji.logic;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 
+import tdb.tdbbackup;
+import tdb.tdbclean;
+import tdb.tdbrecovery;
+import tdb.tdbstats;
+
+import com.hp.hpl.jena.query.ARQ;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.tdb.TDB;
+import com.hp.hpl.jena.tdb.TDBBackup;
 import com.hp.hpl.jena.tdb.TDBFactory;
+import com.hp.hpl.jena.tdb.TDBLoader;
 import com.hp.hpl.jena.tdb.sys.SystemTDB;
-import com.hp.hpl.jena.tdb.transaction.Transaction;
+import com.hp.hpl.jena.tdb.sys.TDBInternal;
 
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.Counter;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jModel;
-import de.mpg.j2j.controler.ResourceController;
-import de.mpg.j2j.exceptions.AlreadyExistsException;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 public class ImejiJena
@@ -76,11 +81,13 @@ public class ImejiJena
         ImejiJena.initModel(profileModel);
         logger.info("... done!");
         // Counter init
-        logger.info("Initializing counter...");
-        System.out.println(ImejiJena.imejiDataSet.isInTransaction());
+        logger.info("Initializing Admin user...");
         initadminUser();
+        logger.info("... done!");
+        logger.info("Initializing counter...");
         initCounter();
         logger.info("... done!");
+        tdbstats.init();
         logger.info("Jena file access : " + SystemTDB.fileMode().name());
         logger.info("Jena is 64 bit system : " + SystemTDB.is64bitSystem);
     }
@@ -140,11 +147,11 @@ public class ImejiJena
             {
                 createNewCouter(c, counterFirstValue);
             }
-            logger.info("Counter found with value : " + c.getCounter());
+            logger.info("IMPORTANT: Counter found with value : " + c.getCounter());
         }
         catch (NotFoundException e)
         {
-            logger.warn("Counter not found, creating a new one...");
+            logger.warn("IMPORTANT: Counter not found, creating a new one...");
             createNewCouter(c, counterFirstValue);
         }
         catch (Exception e)
@@ -160,12 +167,12 @@ public class ImejiJena
         try
         {
             bean2rdf.create(bean2rdf.toList(c), adminUser);
+            logger.warn("IMPORTANT: New Counter created with value " + c.getCounter());
         }
         catch (Exception e)
         {
             throw new RuntimeException(e);
         }
-        logger.info("New Counter created");
     }
 
     public static void printModel(String name)

@@ -269,7 +269,7 @@ public class AlbumBean
     {
         if (sessionBean.getUser() != null)
         {
-            return getAlbum().getProperties().getCreatedBy()
+            return getAlbum().getCreatedBy()
                     .equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
         }
         else

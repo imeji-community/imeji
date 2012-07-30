@@ -273,9 +273,9 @@ public abstract class CollectionBean
 
     public boolean getIsOwner()
     {
-        if (collection != null && collection.getProperties().getCreatedBy() != null && sessionBean.getUser() != null)
+        if (collection != null && collection.getCreatedBy() != null && sessionBean.getUser() != null)
         {
-            return collection.getProperties().getCreatedBy()
+            return collection.getCreatedBy()
                     .equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
         }
         return false;

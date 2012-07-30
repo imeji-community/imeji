@@ -57,7 +57,7 @@ public class OperationsImage implements Operations
 	 */
 	public boolean update(User user, Object object) 
 	{	
-		return ( //!Status.WITHDRAWN.equals(((Image)object).getProperties().getStatus()) &&
+		return ( //!Status.WITHDRAWN.equals(((Image)object).getStatus()) &&
 				(
 					auth.isPictureEditor(user, (Item) object)
 					|| auth.isContainerEditor(user, ((Item)object))
@@ -74,7 +74,7 @@ public class OperationsImage implements Operations
 		return ((auth.isPictureEditor(user, (Item) object)
 				|| auth.isContainerEditor(user, ((Item)object))
 				|| auth.isContainerAdmin(user, ((Item)object)))
-				&& Status.PENDING.equals(((Item)object).getProperties().getStatus()));
+				&& Status.PENDING.equals(((Item)object).getStatus()));
 	}
 
 

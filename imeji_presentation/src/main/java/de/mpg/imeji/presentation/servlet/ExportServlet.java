@@ -5,8 +5,6 @@
 package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
@@ -14,7 +12,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
@@ -51,7 +48,6 @@ public class ExportServlet extends HttpServlet
 			resp.setHeader("Content-Type", exportManager.getContentType());
 			
 			SearchResult result = exportManager.search(searchQuery);
-			System.out.println(result.getResults());
 			exportManager.export(result);
 		} 
 

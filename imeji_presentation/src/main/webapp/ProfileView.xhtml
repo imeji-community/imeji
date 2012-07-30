@@ -69,13 +69,13 @@
 											<span class="noDisplay">: </span>
 										</b>
 										<h:panelGroup layout="block" styleClass="small_area0 medium_marginLExcl statusIconArea">
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{ViewMdProfileBean.profile.properties.status == 'PENDING'}"/>
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewMdProfileBean.profile.properties.status == 'RELEASED'}"/>
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewMdProfileBean.profile.properties.status == 'WITHDRAWN'}"/>
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{ViewMdProfileBean.profile.status == 'PENDING'}"/>
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewMdProfileBean.profile.status == 'RELEASED'}"/>
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewMdProfileBean.profile.status == 'WITHDRAWN'}"/>
 											<h:panelGroup layout="block" styleClass="small_area0">
-												<h:outputText value="#{lbl.private}" rendered="#{ViewMdProfileBean.profile.properties.status == 'PENDING'}"/>
-												<h:outputText value="#{lbl.published}" rendered="#{ViewMdProfileBean.profile.properties.status == 'RELEASED'}"/>
-												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewMdProfileBean.profile.properties.status == 'WITHDRAWN'}"/>
+												<h:outputText value="#{lbl.private}" rendered="#{ViewMdProfileBean.profile.status == 'PENDING'}"/>
+												<h:outputText value="#{lbl.published}" rendered="#{ViewMdProfileBean.profile.status == 'RELEASED'}"/>
+												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewMdProfileBean.profile.status == 'WITHDRAWN'}"/>
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>

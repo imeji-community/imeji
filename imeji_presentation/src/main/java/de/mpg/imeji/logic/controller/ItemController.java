@@ -58,8 +58,8 @@ public class ItemController extends ImejiController
     {
         CollectionController cc = new CollectionController(user);
         CollectionImeji ic = cc.retrieve(coll);
-        writeCreateProperties(img.getProperties(), user);
-        if (Status.PENDING.equals(ic.getProperties().getStatus()))
+        writeCreateProperties(img, user);
+        if (Status.PENDING.equals(ic.getStatus()))
             img.setVisibility(Visibility.PRIVATE);
         else
             img.setVisibility(Visibility.PUBLIC);
@@ -72,11 +72,9 @@ public class ItemController extends ImejiController
         cc.update(ic);
     }
 
-
-
     public void createTest(Item img, URI coll) throws Exception
     {
-        writeCreateProperties(img.getProperties(), user);
+        writeCreateProperties(img, user);
         img.setVisibility(Visibility.PUBLIC);
         img.setCollection(coll);
         img.setId(ObjectHelper.getURI(Item.class, Integer.toString(getUniqueId())));
@@ -93,8 +91,8 @@ public class ItemController extends ImejiController
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
         for (Item img : items)
         {
-            writeCreateProperties(img.getProperties(), user);
-            if (Status.PENDING.equals(ic.getProperties().getStatus()))
+            writeCreateProperties(img, user);
+            if (Status.PENDING.equals(ic.getStatus()))
                 img.setVisibility(Visibility.PRIVATE);
             else
                 img.setVisibility(Visibility.PUBLIC);
@@ -203,7 +201,8 @@ public class ItemController extends ImejiController
      */
     public int allImagesSize()
     {
-        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item>} ");
+        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item>}",
+                ImejiJena.imageModel);
     }
 
     public SearchResult searchImages(SearchQuery searchQuery, SortCriterion sortCri)
@@ -234,6 +233,8 @@ public class ItemController extends ImejiController
     public int countImagesInContainer(URI containerUri, SearchQuery searchQuery)
     {
         Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
+//        int size=  search.simpleCount("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT count(?s) WHERE { ?s <http://imeji.org/terms/collection> <http://imeji.org/collection/1> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN>) }");
+//        return size;
         List<String> uris = search.advanced(searchQuery, null, simplifyUser(containerUri));
         return uris.size();
     }
@@ -331,9 +332,9 @@ public class ItemController extends ImejiController
 
     public void release(Item img) throws Exception
     {
-        if (Status.PENDING.equals(img.getProperties().getStatus()))
+        if (Status.PENDING.equals(img.getStatus()))
         {
-            img.getProperties().setStatus(Status.RELEASED);
+            img.setStatus(Status.RELEASED);
             img.setVisibility(Visibility.PUBLIC);
             update(img);
         }
@@ -341,9 +342,9 @@ public class ItemController extends ImejiController
 
     public void withdraw(Item img) throws Exception
     {
-        if (img.getProperties().getStatus().equals(Status.RELEASED))
+        if (img.getStatus().equals(Status.RELEASED))
         {
-            img.getProperties().setStatus(Status.WITHDRAWN);
+            img.setStatus(Status.WITHDRAWN);
             img.setVisibility(Visibility.PUBLIC);
             update(img);
             if (img.getEscidocId() != null)
@@ -354,7 +355,7 @@ public class ItemController extends ImejiController
         }
         else
             throw new RuntimeException("Only released images can be discarded: " + img.getId() + " has status "
-                    + img.getProperties().getStatus());
+                    + img.getStatus());
     }
 
     public void removeImageFromEscidoc(String id)

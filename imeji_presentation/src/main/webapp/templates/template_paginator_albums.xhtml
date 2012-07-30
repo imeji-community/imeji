@@ -213,7 +213,7 @@
 				      	
 				      	<td class="free_area0 endline">
 				      		<span class="free_area0_p8 endline itemSelectArea">
-								<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" value="#{container.selected}" rendered="#{container.deletable}" disabled="#{container.album.properties.status=='RELEASED'}">
+								<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" value="#{container.selected}" rendered="#{container.deletable}" disabled="#{container.album.status=='RELEASED'}">
 									<a4j:support event="onchange"/>
 								</h:selectBooleanCheckbox>
 								&#160;
@@ -223,16 +223,16 @@
 				      	<td class="free_area0 endline status">
 				      		<span class="seperator"></span>
 				      		<span class="free_area0_p8 endline statusArea">
-								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.album.properties.status == 'WITHDRAWN'}" />
-								<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.album.properties.status == 'PENDING'}" />
-								<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.album.properties.status == 'RELEASED'}" />
-								<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.properties.status == 'PENDING'}">
+								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.album.status == 'WITHDRAWN'}" />
+								<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.album.status == 'PENDING'}" />
+								<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.album.status == 'RELEASED'}" />
+								<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'PENDING'}">
 									<h:outputText value="#{lbl.private}" />
 								</h:outputLabel>
-								<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.properties.status == 'RELEASED'}">
+								<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'RELEASED'}">
 									<h:outputText value="#{lbl.published}" />
 								</h:outputLabel>
-								<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.properties.status == 'WITHDRAWN'}">
+								<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.withdrawn}" />
 								</h:outputLabel>
 							</span>
@@ -269,14 +269,14 @@
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="medium_area0_p8">
-				      			<h:outputText value="#{container.album.properties.lastModificationDate}"/>&#160;
+				      			<h:outputText value="#{container.album.lastModificationDate}"/>&#160;
 				      		</span>
 				      	</td>
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="medium_area0_p8">
-				      			<h:commandLink value="#{lbl.make_active}" action="#{container.makeActive}" rendered="#{!container.active and container.album.properties.status=='PENDING' and container.editable}"/>
-				      			<h:outputText value="Only View allowed" rendered="#{!container.active and container.album.properties.status=='PENDING' and !container.editable}"/>
+				      			<h:commandLink value="#{lbl.make_active}" action="#{container.makeActive}" rendered="#{!container.active and container.album.status=='PENDING' and container.editable}"/>
+				      			<h:outputText value="Only View allowed" rendered="#{!container.active and container.album.status=='PENDING' and !container.editable}"/>
 				      			<h:commandLink value="#{lbl.make_inactive}" action="#{container.makeInactive}" rendered="#{container.active}"/>
 				      		</span>
 				      	</td>

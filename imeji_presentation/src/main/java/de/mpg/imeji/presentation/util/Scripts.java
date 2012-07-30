@@ -89,15 +89,15 @@ public class Scripts
 //					     
 //						 for (Component c : item.getItemDocument().getItem().getComponents().getComponentArray())
 //						 {
-//							 if (c.getProperties().getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.original-resolution")))
+//							 if (c.getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.original-resolution")))
 //							 {
 //								 image.setFullImageUrl(URI.create(ServiceLocator.getFrameworkUrl() + c.getContent().getHref()));
 //							 }
-//							 if (c.getProperties().getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.thumbnail")))
+//							 if (c.getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.thumbnail")))
 //							 {
 //								 image.setThumbnailImageUrl(URI.create(ServiceLocator.getFrameworkUrl() + c.getContent().getHref()));
 //							 }
-//							 if (c.getProperties().getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.web-resolution")))
+//							 if (c.getContentCategory().equals(PropertyReader.getProperty("xsd.metadata.content-category.web-resolution")))
 //							 {
 //								 image.setWebImageUrl(URI.create(ServiceLocator.getFrameworkUrl() + c.getContent().getHref()));
 //							 }

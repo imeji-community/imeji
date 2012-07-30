@@ -3,18 +3,16 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.Calendar;
-import java.util.Date;
 
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/properties")
-@j2jId(getMethod = "getId", setMethod = "setId")
-public class Properties implements Serializable
+//@j2jId(getMethod = "getId", setMethod = "setId")
+public class Properties 
 {
     private URI id;
     @j2jResource("http://purl.org/dc/terms/creator")

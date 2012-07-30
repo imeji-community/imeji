@@ -88,11 +88,11 @@ public class ImejiBean2RDF
     // {
     // if (o instanceof Item)
     // {
-    // ImejiController.writeUpdateProperties(((Item)o).getProperties(), user);
+    // ImejiController.writeUpdateProperties(((Item)o), user);
     // }
     // else if (o instanceof Container)
     // {
-    // ImejiController.writeUpdateProperties(((Container)o).getProperties(), user);
+    // ImejiController.writeUpdateProperties(((Container)o), user);
     // }
     // }
     //
@@ -100,11 +100,11 @@ public class ImejiBean2RDF
     // {
     // if (o instanceof Item)
     // {
-    // return ((Item)o).getProperties().getCreated();
+    // return ((Item)o).getCreated();
     // }
     // else if (o instanceof Container)
     // {
-    // return ((Container)o).getProperties().getCreated();
+    // return ((Container)o).getCreated();
     // }
     // return null;
     // }

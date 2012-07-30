@@ -58,7 +58,7 @@
 					
 					<h:outputText styleClass="seperator void" />
 					
-					<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUpload}/#{ViewCollectionBean.id}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
+					<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUpload}/#{ViewCollectionBean.id}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 						<h:outputText value="#{lbl.upload_images}"></h:outputText>
 					</h:outputLink>
 				</h:panelGroup>
@@ -70,14 +70,14 @@
 						 <f:facet name="closed">
 						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
 					            
-					            <rich:toggleControl styleClass="free_area0" value="#{lbl.collection_share}" rendered="#{ViewCollectionBean.collection.properties.status!='WITHDRAWN' and ViewCollectionBean.admin}" switchToState="open"/>
+					            <rich:toggleControl styleClass="free_area0" value="#{lbl.collection_share}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" switchToState="open"/>
 					      
-								<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status=='PENDING'}">
+								<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='PENDING'}">
 									<h:outputText value="#{lbl.collection_release}"/>
 									<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
 								</h:outputLink>
 								
-								<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.properties.status=='RELEASED'}">
+								<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='RELEASED'}">
 									<h:outputText value="#{lbl.withdraw}"/>
 									<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
 								</h:outputLink>
@@ -134,16 +134,16 @@
 							<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 								<!-- COLLECTION IMAGES -->
 								<h:outputLink value="#{Navigation.collectionImages}/#{ViewCollectionBean.id}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
-									<a4j:repeat var="img" value="#{ViewCollectionBean.images}" rendered="#{img.properties.status != 'WITHDRAWN'}">
+									<a4j:repeat var="img" value="#{ViewCollectionBean.images}" rendered="#{img.status != 'WITHDRAWN'}">
 										<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
 									</a4j:repeat>
 								</h:outputLink>
-								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
+								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
 								<h2>
-									<h:outputLink value="#{Navigation.collectionImages}/#{ViewCollectionBean.id}?q=" rendered="#{ViewCollectionBean.collection.properties.status != 'WITHDRAWN'}">
+									<h:outputLink value="#{Navigation.collectionImages}/#{ViewCollectionBean.id}?q=" rendered="#{ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 										<h:outputText value ="#{lbl.collection_view_all_images}"/>
 									</h:outputLink>
-									<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.properties.status == 'WITHDRAWN'}"/>
+									<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 								</h2>
 							</h:panelGroup>	<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
 							
@@ -153,9 +153,9 @@
 										<h:outputText styleClass="full_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
 									</h1>
 							
-							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{ViewCollectionBean.collection.properties.discardComment != null and ViewCollectionBean.collection.properties.discardComment != ''}">
+							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{ViewCollectionBean.collection.discardComment != null and ViewCollectionBean.collection.discardComment != ''}">
 								<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
-								<h:outputText styleClass="free_area0"  value=" #{ViewCollectionBean.collection.properties.discardComment}"/>
+								<h:outputText styleClass="free_area0"  value=" #{ViewCollectionBean.collection.discardComment}"/>
 							</h:panelGroup>
 							
 							<h:panelGroup styleClass="full_area0">
@@ -176,7 +176,7 @@
 		</ui:include>
 		<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
 			<ui:param name="bean" value="#{ViewCollectionBean}"/>
-			<ui:param name="status" value="#{ViewCollectionBean.collection.properties.status}"/>
+			<ui:param name="status" value="#{ViewCollectionBean.collection.status}"/>
 		</ui:include>
 		
 	</ui:define>

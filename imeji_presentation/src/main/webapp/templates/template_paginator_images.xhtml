@@ -85,11 +85,11 @@
 							<span class="xLarge_area0_p8"><h:outputText value="#{lbl.edit_all}"/></span>
 						</h:outputLink>
 						<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
-							<h:outputLink value="#" rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.properties.status == 'PENDING'}">
+							<h:outputLink value="#" rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
 								<span class="xLarge_area0_p8"><h:outputText value="#{lbl.delete_all}"/></span>
 								<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
 							</h:outputLink>
-							<h:outputLink value="#" rendered="#{paginatorListSessionBean.imageEditable  and paginatorListSessionBean.collection.properties.status == 'RELEASED'}">
+							<h:outputLink value="#" rendered="#{paginatorListSessionBean.imageEditable  and paginatorListSessionBean.collection.status == 'RELEASED'}">
 								<span class="xLarge_area0_p8"><h:outputText value="#{lbl.withdraw_all}"/></span>
 								<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
 							</h:outputLink>
@@ -154,11 +154,11 @@
 									<span class="xLarge_area0_p8"><h:outputText value="#{lbl.selected_edit}"/></span>
 								</h:outputLink>
 								<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
-									<h:outputLink styleClass="xLarge_area0" value="#"  rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.properties.status == 'PENDING'}">
+									<h:outputLink styleClass="xLarge_area0" value="#"  rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
 										<span class="xLarge_area0_p8"><h:outputText value="#{lbl.delete_selectedImages}"/></span>
 										<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
 									</h:outputLink>
-									<h:outputLink styleClass="xLarge_area0" value="#" rendered="#{paginatorListSessionBean.imageEditable and paginatorListSessionBean.collection.properties.status == 'RELEASED'}">
+									<h:outputLink styleClass="xLarge_area0" value="#" rendered="#{paginatorListSessionBean.imageEditable and paginatorListSessionBean.collection.status == 'RELEASED'}">
 										<span class="xLarge_area0_p8"><h:outputText value="#{lbl.withdraw_selected}"/></span>
 										<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
 									</h:outputLink>

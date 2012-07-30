@@ -152,8 +152,8 @@ public class AlbumImagesBean extends ImagesBean
     {
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
-        String dc = getAlbum().getAlbum().getProperties().getDiscardComment();
-        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).getAlbum().getProperties().setDiscardComment(dc);
+        String dc = getAlbum().getAlbum().getDiscardComment();
+        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).getAlbum().setDiscardComment(dc);
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
         return "pretty:";
     }

@@ -78,9 +78,9 @@ public class DepositController
         {
             item.setEscidocId(escidocId);
         }
-        if (collection.getProperties().getStatus() == Status.RELEASED)
+        if (collection.getStatus() == Status.RELEASED)
         {
-            item.getProperties().setStatus(Status.RELEASED);
+            item.setStatus(Status.RELEASED);
         }
         itemController.create(item, collection.getId());
         return item;

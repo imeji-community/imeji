@@ -3,14 +3,12 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -54,6 +52,7 @@ public class CollectionImagesBean extends ImagesBean
     {
         collection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), sb.getUser());
         List<SelectItem> sortMenu = new ArrayList<SelectItem>();
+        sortMenu.add(new SelectItem(null, sb.getLabel("default")));
         sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_CREATION_DATE, sb
                 .getLabel(SearchIndex.names.PROPERTIES_CREATION_DATE.name())));
         sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE, sb
@@ -91,9 +90,7 @@ public class CollectionImagesBean extends ImagesBean
             getFacets().getFacets().clear();
         }
 
-        SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
-        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+        SortCriterion sortCriterion = initSortCriterion();
         initBackPage();
         try
         {

@@ -151,7 +151,7 @@ public class SharingBean
 
 	public CollectionImeji retrieveCollection(String id)
 	{
-		return ObjectLoader.loadCollection(URI.create(id), sb.getUser());
+		return ObjectLoader.loadCollectionLazy(URI.create(id), sb.getUser());
 	}
 
 	public MetadataProfile retrieveProfile(String collId)

@@ -39,6 +39,13 @@ public abstract class MetadataEditor
         initialize();
     }
 
+    public void reset()
+    {
+        items = new ArrayList<Item>();
+        statement = null;
+        profile = null;
+    }
+
     public void save()
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);

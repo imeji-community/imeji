@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.factory.ItemFactory;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -76,6 +77,11 @@ public class ViewCollectionBean extends CollectionBean
             User user = sessionBean.getUser();
             String id = super.getId();
             setCollection(ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user));
+            if (getCollection() != null && getCollection().getId() != null)
+              {
+                  ItemController ic = new ItemController(sessionBean.getUser());
+                  setSize(ic.countImagesInContainer(getCollection().getId(), new SearchQuery()));
+              }
             if (getCollection() != null)
             {
                 setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
@@ -100,7 +106,7 @@ public class ViewCollectionBean extends CollectionBean
             logger.error("Error init of collection home page", e);
         }
         long before = System.currentTimeMillis();
-        createBigCollection();
+        //createBigCollection();
         logger.info("Big collection created in : " + Long.valueOf(System.currentTimeMillis() - before));
     }
 

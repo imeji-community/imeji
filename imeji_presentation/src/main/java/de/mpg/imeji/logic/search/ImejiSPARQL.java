@@ -6,6 +6,7 @@ package de.mpg.imeji.logic.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.search.vo.ComparableSearchResult;
 import de.mpg.j2j.transaction.SearchTransaction;
 
 public class ImejiSPARQL

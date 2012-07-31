@@ -31,6 +31,7 @@ public class ImejiRDF2Bean
     private static Logger logger = Logger.getLogger(ImejiRDF2Bean.class);
     private String modelURI;
     private boolean lazy = false;
+    private boolean asynchrone = false;
     private Security security = null;
 
     public ImejiRDF2Bean(String modelURI)

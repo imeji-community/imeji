@@ -53,7 +53,7 @@ public class ProfileHelper
         {
             if (!pMap.containsKey(im.getCollection()))
             {
-            	CollectionImeji coll = ObjectLoader.loadCollection(im.getCollection(), sb.getUser());
+            	CollectionImeji coll = ObjectLoader.loadCollectionLazy(im.getCollection(), sb.getUser());
                 pMap.put(coll.getId(), coll);
             }
         }

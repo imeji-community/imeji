@@ -60,6 +60,7 @@ public class EditImageMetadataBean
     private String editType = "selected";
     private boolean isProfileWithStatements = true;
     private int lockedImages = 0;
+    private boolean initialized = false;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private static Logger logger = Logger.getLogger(EditImageMetadataBean.class);
 
@@ -72,6 +73,35 @@ public class EditImageMetadataBean
         modeRadio = new ArrayList<SelectItem>();
     }
 
+    public void init()
+    {
+        reset();
+        try
+        {
+            System.out.println("[EDITIMAGEMETADATABEAN] initialized: " +initialized);
+            allItems = initImages();
+            initProfileAndStatement(allItems);
+            initStatementsMenu();
+            initEditor(new ArrayList<Item>(allItems));
+            ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
+            initialized = true;
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
+            logger.error("Error init Edit page", e);
+        }
+    }
+
+    public void reset()
+    {
+        initialized = false;
+        statementMenu = new ArrayList<SelectItem>();
+        modeRadio = new ArrayList<SelectItem>();
+        editor.reset();
+        statement = null;
+    }
+
     /**
      * Initialize the complete page
      * 
@@ -79,19 +109,20 @@ public class EditImageMetadataBean
      */
     public String getInit()
     {
-        try
-        {
-            allItems = initImages();
-            initProfileAndStatement(allItems);
-            initStatementsMenu();
-            initEditor(new ArrayList<Item>(allItems));
-            ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
-            logger.error("Error init Edit page", e);
-        }
+        reset();
+        // try
+        // {
+        // allItems = initImages();
+        // initProfileAndStatement(allItems);
+        // initStatementsMenu();
+        // initEditor(new ArrayList<Item>(allItems));
+        // ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
+        // }
+        // catch (Exception e)
+        // {
+        // BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
+        // logger.error("Error init Edit page", e);
+        // }
         return "";
     }
 
@@ -191,7 +222,7 @@ public class EditImageMetadataBean
         int currentPageNumber = imagesBean.getCurrentPageNumber();
         try
         {
-            imagesBean.setElementsPerPage(10000);
+            imagesBean.setElementsPerPage(1000000);
             imagesBean.setCurrentPageNumber(1);
             SearchResult sr = imagesBean.search(imagesBean.getSearchQuery(), null);
             List<Item> items = (List<Item>)imagesBean.loadImages(sr);
@@ -240,7 +271,7 @@ public class EditImageMetadataBean
     public String cancel() throws IOException
     {
         unlockImages();
-        editor.getImages().clear();
+        reset();
         HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
         FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getPreviousPage().getUri().toString());
         return "";
@@ -539,5 +570,15 @@ public class EditImageMetadataBean
     public void setLockedImages(int lockedImages)
     {
         this.lockedImages = lockedImages;
+    }
+
+    public void setInitialized(boolean initialized)
+    {
+        this.initialized = initialized;
+    }
+
+    public boolean isInitialized()
+    {
+        return initialized;
     }
 }

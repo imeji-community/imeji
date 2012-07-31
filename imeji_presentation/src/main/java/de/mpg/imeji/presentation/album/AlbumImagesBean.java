@@ -85,9 +85,7 @@ public class AlbumImagesBean extends ImagesBean
     public List<ThumbnailBean> retrieveList(int offset, int limit)
     {
         uri = ObjectHelper.getURI(Album.class, id);
-        SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
-        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+        SortCriterion sortCriterion = initSortCriterion();
         ItemController controller = new ItemController(sb.getUser());
         SearchResult result = controller.searchImagesInContainer(uri, new SearchQuery(), sortCriterion, limit, offset);
         totalNumberOfRecords = result.getNumberOfRecords();

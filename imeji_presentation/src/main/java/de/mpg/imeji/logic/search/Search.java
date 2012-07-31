@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
+import de.mpg.imeji.logic.search.util.CollectionUtils;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
@@ -20,7 +21,6 @@ import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.util.CollectionUtils;
 import de.mpg.imeji.logic.vo.User;
 
 public class Search
@@ -70,8 +70,9 @@ public class Search
         return advanced(new ArrayList<String>(), sq, sortCri, user);
     }
 
-    public List<String> advanced(List<String> results, SearchQuery sq, SortCriterion sortCri, User user)
+    public List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
     {
+        List<String> results = setSortValueToList(previousResults, sortCri);
         if (sq.isEmpty() || (containerURI != null && results.isEmpty()))
         {
             results = simple(null, sortCri, user);
@@ -126,8 +127,7 @@ public class Search
                 getSpecificQuery());
         // sparqlQuery="PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/item> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN> && ( (?status=<http://imeji.org/terms/status#RELEASED> || ?c=<http://imeji.org/collection/13>)))  . ?props <http://purl.org/dc/terms/created> ?sort0}  ORDER BY DESC(?sort0)";
         // logger.info(sparqlQuery);
-        List<String> l = ImejiSPARQL.exec(sparqlQuery, getModelName(type));
-        return l;
+        return ImejiSPARQL.exec(sparqlQuery, getModelName(type));
     }
 
     public int simpleCount(SearchPair pair, User user)
@@ -144,7 +144,9 @@ public class Search
 
     public List<String> searchSimpleForQuery(String query)
     {
-        return ImejiSPARQL.exec(query, getModelName(type));
+        SearchResult sr = new SearchResult(ImejiSPARQL.exec(query, getModelName(type)));
+        
+        return sr.getResults();
     }
 
     private String getSpecificQuery()
@@ -174,7 +176,23 @@ public class Search
         }
         else
         {
-            return ImejiJena.imageModel;
+            return null;
         }
+    }
+
+    private List<String> setSortValueToList(List<String> l, SortCriterion sortCri)
+    {
+        List<String> lWithSortValue = new ArrayList<String>(l.size());
+        long a = System.currentTimeMillis();
+        for (int i = 0; i < l.size(); i++)
+        {
+            String s = l.get(i) + "?sortValue=";
+            if (sortCri != null && sortCri.getIndex() != null && sortCri.getIndex().getNamespace() != null)
+            {
+                s += sortCri.getIndex().getNamespace();
+            }
+            lWithSortValue.add(s);
+        }
+        return lWithSortValue;
     }
 }

@@ -18,8 +18,8 @@ public class SimpleQueryFactory
     public static String getQuery(String type, SearchPair pair, SortCriterion sortCriterion, User user,
             boolean isCollection, String specificQuery)
     {
-        PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SPECIFIC_QUERY_XXX "
-                + "?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX}";
+        PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
+                + " ?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
         return PATTERN_SELECT
                 .replaceAll("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.getQuery(user, pair, type, false))
                 .replaceAll("XXX_SORT_QUERY_XXX", SortQueryFactory.create(sortCriterion))
@@ -39,7 +39,7 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.IMAGE_FILENAME.name().equals(pair.getIndex().getName()))
         {
-            searchQuery = ". ?s <" + pair.getIndex().getNamespace() + "> ?el";
+            searchQuery = " ?s <" + pair.getIndex().getNamespace() + "> ?el";
         }
         else if (SearchIndex.names.ID_URI.name().equals(pair.getIndex().getName()))
         {
@@ -88,19 +88,19 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.IMAGE_METADATA_TYPE_RDF.name().equals(pair.getIndex().getName()))
         {
-            return ". ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md a <"
-                    + pair.getValue() + ">";
+            return "?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md a <"
+                    + pair.getValue() + "> .";
         }
         else
         {
-            searchQuery = ". ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md "
+            searchQuery = " ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md "
                     + getSearchElementsParent(pair.getIndex(), 0) + " <" + pair.getIndex().getNamespace() + "> ?el ";
         }
         if (pair.isNot())
         {
-            return ".MINUS{ " + searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(pair, variable) + ")}";
+            return " MINUS{ " + searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(pair, variable) + ")} .";
         }
-        return searchQuery + " .FILTER(" + getSimpleFilter(pair, variable) + ")";
+        return searchQuery + " .FILTER(" + getSimpleFilter(pair, variable) + ") .";
     }
 
     private static String getSearchElementsParent(SearchIndex index, int parentNumber)
@@ -120,24 +120,16 @@ public class SimpleQueryFactory
         {
             if (SearchIndex.names.PROPERTIES_CREATION_DATE.name().equals(sortCriterion.getIndex().getName()))
             {
-                return ". ?props <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
+                return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
             else if (SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name().equals(
                     sortCriterion.getIndex().getName()))
             {
-                return ". ?props <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
+                return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
             else if (SearchIndex.names.PROPERTIES_STATUS.name().equals(sortCriterion.getIndex().getName()))
             {
-                return ". ?props <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
-            }
-            else if (SearchIndex.names.IMAGE_COLLECTION.name().equals(sortCriterion.getIndex().getName()))
-            {
-                return ". ?c <http://imeji.org/terms/container/metadata> ?cmd . ?cmd <http://purl.org/dc/elements/1.1/title> ?sort0";
-            }
-            else if (SearchIndex.names.CONTAINER_METADATA_TITLE.name().equals(sortCriterion.getIndex().getName()))
-            {
-                return ". ?s <http://imeji.org/terms/container/metadata> ?cmd . ?cmd <http://purl.org/dc/elements/1.1/title> ?sort0";
+                return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
         }
         return "";

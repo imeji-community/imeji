@@ -44,8 +44,8 @@
 				<h:panelGroup>
 					<!-- SORTING content menu lower line starts here -->
 					<h:outputText id="txtSort" value="#{paginatorListSessionBean.initPage}#{lbl.sort_by}" styleClass="free_area0" style="margin-top:0.18em;" />
-					<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
-						<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}" />
+					<h:selectOneMenu id="selSort" value="#{ImagesBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
+						<f:selectItems id="sortItem" value="#{ImagesBean.sortMenu}" />
 					</h:selectOneMenu>
 					<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
 					<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>

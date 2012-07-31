@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.security.Authorization;
@@ -47,11 +48,12 @@ public abstract class CollectionBean
     private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
     private boolean selected;
+    private int size = 0;
 
     public CollectionBean(CollectionImeji coll)
     {
         this.collection = coll;
-        //setId(ObjectHelper.getId(coll.getId()));
+        // setId(ObjectHelper.getId(coll.getId()));
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
@@ -260,23 +262,21 @@ public abstract class CollectionBean
         this.selected = selected;
     }
 
+    public void setSize(int size)
+    {
+        this.size = size;
+    }
+
     public int getSize()
     {
-        if (collection != null && collection.getId() != null)
-        {
-            ItemController ic = new ItemController(sessionBean.getUser());
-            return ic.countImagesInContainer(collection.getId(), new SearchQuery());
-        }
-        return 0;
-        // return collection.getImages().size();
+        return size;
     }
 
     public boolean getIsOwner()
     {
         if (collection != null && collection.getCreatedBy() != null && sessionBean.getUser() != null)
         {
-            return collection.getCreatedBy()
-                    .equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
+            return collection.getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
         }
         return false;
     }
@@ -338,8 +338,12 @@ public abstract class CollectionBean
             return null;
         try
         {
-            SearchResult res = ic.searchImagesInContainer(collection.getId(), new SearchQuery(), null, 5, 0);
-            return ImejiFactory.imageListToBeanList(ic.loadItems(res.getResults(), 5, 0));
+            Search search = new Search(null, collection.getId().toString());
+            List<String> uris = search
+                    .searchSimpleForQuery("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
+                            + collection.getId().toString()
+                            + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT 5");
+            return ImejiFactory.imageListToBeanList(ic.loadItems(uris, 5, 0));
         }
         catch (Exception e)
         {

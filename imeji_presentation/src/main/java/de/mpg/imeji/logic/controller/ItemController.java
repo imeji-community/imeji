@@ -8,12 +8,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-
-import com.hp.hpl.jena.query.Dataset;
 
 import de.escidoc.core.client.Authentication;
 import de.escidoc.core.client.ItemHandlerClient;
@@ -37,9 +34,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.LoginHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.j2j.controler.ResourceController;
 import de.mpg.j2j.helper.J2JHelper;
-import de.mpg.j2j.transaction.Transaction;
 
 public class ItemController extends ImejiController
 {
@@ -121,6 +116,7 @@ public class ItemController extends ImejiController
         long beforeinit = System.currentTimeMillis();
         for (Item item : items)
         {
+            writeUpdateProperties(item, user);
             imBeans.add(initAllMetadata(item));
         }
         long afterinit = System.currentTimeMillis();
@@ -233,10 +229,21 @@ public class ItemController extends ImejiController
     public int countImagesInContainer(URI containerUri, SearchQuery searchQuery)
     {
         Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
-//        int size=  search.simpleCount("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT count(?s) WHERE { ?s <http://imeji.org/terms/collection> <http://imeji.org/collection/1> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN>) }");
-//        return size;
-        List<String> uris = search.advanced(searchQuery, null, simplifyUser(containerUri));
-        return uris.size();
+        int size = 0;
+        if (searchQuery.isEmpty())
+        {
+            size = search
+                    .searchSimpleForQuery(
+                            "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
+                                    + containerUri
+                                    + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN>) }")
+                    .size();
+        }
+        else
+        {
+            size = search.advanced(searchQuery, null, simplifyUser(containerUri)).size();
+        }
+        return size;
     }
 
     public int countImagesInContainer(URI containerUri, SearchQuery searchQuery, List<String> containerImages)
@@ -269,7 +276,7 @@ public class ItemController extends ImejiController
                 items.add((Item)o);
             }
             long after = System.currentTimeMillis();
-            logger.info("Load items: " + Long.valueOf(after - before));
+            logger.info(items.size() + " items loaded in " + Long.valueOf(after - before));
             return items;
         }
         catch (Exception e)

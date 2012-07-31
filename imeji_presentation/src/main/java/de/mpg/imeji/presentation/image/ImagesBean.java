@@ -20,6 +20,7 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.album.AlbumBean;
@@ -35,6 +36,7 @@ import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
@@ -60,6 +62,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         filters = new FiltersBean();
         initMenus();
+        selectedSortCriterion = null;
         try
         {
             setElementsPerPage(Integer.parseInt(PropertyReader.getProperty("imeji.image.list.size")));
@@ -113,13 +116,13 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
+        sortMenu.add(new SelectItem(null, sb.getLabel("default")));
         sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_CREATION_DATE, sb
                 .getLabel(SearchIndex.names.PROPERTIES_CREATION_DATE.name())));
         sortMenu.add(new SelectItem(SearchIndex.names.IMAGE_COLLECTION, sb.getLabel(SearchIndex.names.IMAGE_COLLECTION
                 .name())));
         sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE, sb
                 .getLabel(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name())));
-        selectedSortCriterion = SearchIndex.names.PROPERTIES_CREATION_DATE.name();
         selectedSortOrder = SortOrder.DESCENDING.name();
     }
 
@@ -140,12 +143,25 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return totalNumberOfRecords;
     }
 
+    public SortCriterion initSortCriterion()
+    {
+        SortCriterion sortCriterion = new SortCriterion();
+        if (getSelectedSortCriterion() != null)
+        {
+            sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
+            sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+        }
+        else
+        {
+            sortCriterion.setIndex(null);
+        }
+        return sortCriterion;
+    }
+
     @Override
     public List<ThumbnailBean> retrieveList(int offset, int limit)
     {
-        SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
-        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+        SortCriterion sortCriterion = initSortCriterion();
         SearchResult searchResult = search(searchQuery, sortCriterion);
         searchResult.setQuery(query);
         searchResult.setSort(sortCriterion);
@@ -175,7 +191,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
         catch (Exception e)
         {
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 

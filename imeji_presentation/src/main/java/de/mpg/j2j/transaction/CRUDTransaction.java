@@ -39,17 +39,13 @@ public class CRUDTransaction extends Transaction
         switch (type)
         {
             case CREATE:
-                logger.info("Create " + this.getId());
                 rc.create(o);
-                logger.info("Created " + this.getId());
                 break;
             case READ:
                 o = rc.read(o);
                 break;
             case UPDATE:
-                logger.info("Update " + this.getId());
                 rc.update(o);
-                logger.info("Updated " + this.getId());
                 break;
             case DELETE:
                 rc.delete(o);

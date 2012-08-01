@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
@@ -340,9 +341,11 @@ public abstract class CollectionBean
         {
             Search search = new Search(null, collection.getId().toString());
             List<String> uris = search
-                    .searchSimpleForQuery("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
-                            + collection.getId().toString()
-                            + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT 5");
+                    .searchSimpleForQuery(
+                            "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
+                                    + collection.getId().toString()
+                                    + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT 5",
+                            new SortCriterion());
             return ImejiFactory.imageListToBeanList(ic.loadItems(uris, 5, 0));
         }
         catch (Exception e)

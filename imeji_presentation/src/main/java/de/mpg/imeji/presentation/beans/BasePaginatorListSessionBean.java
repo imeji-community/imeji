@@ -154,7 +154,9 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             setGoToPageTop(Integer.toString(currentPageNumber));
             previousPartList = new ArrayList<ListElementType>();
             previousPartList.addAll(currentPartList);
+            long a = System.currentTimeMillis();
             currentPartList = retrieveList(getOffset(), elementsPerPage);
+            System.out.println("BasePaginatorListSession - retrieveList: " + Long.valueOf(System.currentTimeMillis() - a));
             totalNumberOfElements = getTotalNumberOfRecords();
             // reset current page and reload list if list is shorter than the given current page number allows
             if (getTotalNumberOfElements() <= getOffset())

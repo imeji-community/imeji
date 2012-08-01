@@ -35,15 +35,6 @@ public class SortCriterion
         return sortOrder;
     }
 
-    // public void setSortingCriterion(SearchIndexes sortingCriterion)
-    // {
-    // this.sortingCriterion = sortingCriterion;
-    // }
-    //
-    // public SearchIndexes getSortingCriterion()
-    // {
-    // return sortingCriterion;
-    // }
     public void setIndex(SearchIndex index)
     {
         this.index = index;

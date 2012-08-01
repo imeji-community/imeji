@@ -30,23 +30,23 @@ public class LoginHelper
      * 
      * @return
      */
-    public static String loginSystemAdmin()
-    {
-        String handle = null;
-        try
-        {
-            handle = login(PropertyReader.getProperty("framework.admin.username"),
-                    PropertyReader.getProperty("framework.admin.password"));
-        }
-        catch (Exception e)
-        {
-            sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-            BeanHelper
-                    .info(sessionBean.getLabel("error") + ", wrong administrator user. Check config file or FW: " + e);
-            logger.error("Error escidoc admin login", e);
-        }
-        return handle;
-    }
+//    public static String loginSystemAdmin()
+//    {
+//        String handle = null;
+//        try
+//        {
+//            handle = login(PropertyReader.getProperty("framework.admin.username"),
+//                    PropertyReader.getProperty("framework.admin.password"));
+//        }
+//        catch (Exception e)
+//        {
+//            sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+//            BeanHelper
+//                    .info(sessionBean.getLabel("error") + ", wrong administrator user. Check config file or FW: " + e);
+//            logger.error("Error escidoc admin login", e);
+//        }
+//        return handle;
+//    }
 
     public static String login(String userName, String password) throws Exception
     {

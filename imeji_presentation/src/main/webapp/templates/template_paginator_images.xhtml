@@ -81,7 +81,7 @@
 						<a4j:commandLink action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 							<span class="xLarge_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 						</a4j:commandLink>
-						<h:outputLink value="#{Navigation.applicationUrl}edit?type=all" id="lnkSelectEdit2" rendered="#{paginatorListSessionBean.imageEditable}">
+						<h:outputLink value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit2" rendered="#{paginatorListSessionBean.imageEditable}">
 							<span class="xLarge_area0_p8"><h:outputText value="#{lbl.edit_all}"/></span>
 						</h:outputLink>
 						<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">

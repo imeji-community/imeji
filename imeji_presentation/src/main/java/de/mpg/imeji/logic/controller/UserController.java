@@ -15,6 +15,7 @@ import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.search.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.exceptions.NotFoundException;
 
@@ -73,7 +74,9 @@ public class UserController extends ImejiController
         Collection<User> users = new ArrayList<User>();
         Search search = new Search("http://imeji.org/terms/user", null);
         List<String> uris = search
-                .searchSimpleForQuery("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> }");
+                .searchSimpleForQuery(
+                        "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> }",
+                        new SortCriterion());
         for (String uri : uris)
         {
             try

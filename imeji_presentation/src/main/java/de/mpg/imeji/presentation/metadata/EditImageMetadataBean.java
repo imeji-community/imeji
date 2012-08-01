@@ -4,18 +4,21 @@
 package de.mpg.imeji.presentation.metadata;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.SealedObject;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -25,15 +28,16 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.collection.CollectionImagesBean;
 import de.mpg.imeji.presentation.history.HistorySession;
-import de.mpg.imeji.presentation.image.ImagesBean;
 import de.mpg.imeji.presentation.image.SelectedBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.editors.MetadataEditor;
 import de.mpg.imeji.presentation.metadata.editors.MetadataMultipleEditor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
+import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Bean for batch and multiple metadata editor
@@ -44,7 +48,6 @@ public class EditImageMetadataBean
 {
     // objects
     private List<Item> allItems;
-    private ImagesBean imagesBean;
     private MetadataEditor editor = null;
     private MetadataProfile profile = null;
     private Statement statement = null;
@@ -57,7 +60,7 @@ public class EditImageMetadataBean
     // other
     private int mdPosition;
     private int imagePosition;
-    private String editType = "selected";
+    private String editType = "all";
     private boolean isProfileWithStatements = true;
     private int lockedImages = 0;
     private boolean initialized = false;
@@ -78,7 +81,7 @@ public class EditImageMetadataBean
         reset();
         try
         {
-            System.out.println("[EDITIMAGEMETADATABEAN] initialized: " +initialized);
+            editType = UrlHelper.getParameterValue("type");
             allItems = initImages();
             initProfileAndStatement(allItems);
             initStatementsMenu();
@@ -95,10 +98,14 @@ public class EditImageMetadataBean
 
     public void reset()
     {
+        editType = "all";
         initialized = false;
         statementMenu = new ArrayList<SelectItem>();
         modeRadio = new ArrayList<SelectItem>();
-        editor.reset();
+        if (editor != null)
+        {
+            editor.reset();
+        }
         statement = null;
     }
 
@@ -109,27 +116,22 @@ public class EditImageMetadataBean
      */
     public String getInit()
     {
-        reset();
-        // try
-        // {
-        // allItems = initImages();
-        // initProfileAndStatement(allItems);
-        // initStatementsMenu();
-        // initEditor(new ArrayList<Item>(allItems));
-        // ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
-        // }
-        // catch (Exception e)
-        // {
-        // BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
-        // logger.error("Error init Edit page", e);
-        // }
+        init();
         return "";
     }
 
-    private List<Item> initImages()
+    private List<Item> initImages() throws IOException
     {
-        initImagesBean();
-        return searchAndLoadImages();
+        List<String> uris = new ArrayList<String>();
+        if ("selected".equals(editType))
+        {
+            uris = getSelectedItems();
+        }
+        else if ("all".equals(editType))
+        {
+            uris = searchItems();
+        }
+        return loaditems(uris);
     }
 
     private void initProfileAndStatement(List<Item> items)
@@ -169,20 +171,6 @@ public class EditImageMetadataBean
         return "";
     }
 
-    private void initImagesBean()
-    {
-        editType = (String)((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest())
-                .getParameter("type");
-        if ("selected".equals(editType))
-        {
-            imagesBean = (SelectedBean)BeanHelper.getSessionBean(SelectedBean.class);
-        }
-        else if ("all".equals(editType))
-        {
-            imagesBean = (CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class);
-        }
-    }
-
     private void initModeMenu()
     {
         selectedMode = "basic";
@@ -216,23 +204,30 @@ public class EditImageMetadataBean
         return "";
     }
 
-    public List<Item> searchAndLoadImages()
+    public List<Item> loaditems(List<String> uris)
     {
-        int elementsPerPage = imagesBean.getElementsPerPage();
-        int currentPageNumber = imagesBean.getCurrentPageNumber();
-        try
+        ItemController itemController = new ItemController(session.getUser());
+        return (List<Item>)itemController.loadItems(uris, -1, 0);
+    }
+
+    public List<String> getSelectedItems()
+    {
+        List<String> l = new ArrayList<String>(session.getSelected().size());
+        for (URI uri : session.getSelected())
         {
-            imagesBean.setElementsPerPage(1000000);
-            imagesBean.setCurrentPageNumber(1);
-            SearchResult sr = imagesBean.search(imagesBean.getSearchQuery(), null);
-            List<Item> items = (List<Item>)imagesBean.loadImages(sr);
-            return items;
+            l.add(uri.toString());
         }
-        finally
-        {
-            imagesBean.setElementsPerPage(elementsPerPage);
-            imagesBean.setCurrentPageNumber(currentPageNumber);
-        }
+        return l;
+    }
+
+    public List<String> searchItems() throws IOException
+    {
+        String query = UrlHelper.getParameterValue("q");
+        String collectionId = UrlHelper.getParameterValue("c");
+        SearchQuery sq = URLQueryTransformer.parseStringQuery(query);
+        ItemController itemController = new ItemController(session.getUser());
+        SearchResult sr = itemController.searchImagesInContainer(URI.create(collectionId), sq, null, -1, 0);
+        return sr.getResults();
     }
 
     /**
@@ -462,16 +457,15 @@ public class EditImageMetadataBean
         this.editor = editor;
     }
 
-    public ImagesBean getImagesBean()
-    {
-        return imagesBean;
-    }
-
-    public void setImagesBean(ImagesBean imagesBean)
-    {
-        this.imagesBean = imagesBean;
-    }
-
+    // public ImagesBean getImagesBean()
+    // {
+    // return imagesBean;
+    // }
+    //
+    // public void setImagesBean(ImagesBean imagesBean)
+    // {
+    // this.imagesBean = imagesBean;
+    // }
     public List<SelectItem> getStatementMenu()
     {
         return statementMenu;

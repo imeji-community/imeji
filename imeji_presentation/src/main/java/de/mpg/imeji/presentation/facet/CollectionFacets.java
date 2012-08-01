@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.richfaces.model.SortOrder;
+
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -15,6 +17,7 @@ import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -92,7 +95,7 @@ public class CollectionFacets
     public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
         ItemController ic = new ItemController(sb.getUser());
-        return ic.searchImagesInContainer(colURI, searchQuery, null, 0, 0);
+        return ic.searchImagesInContainer(colURI, searchQuery, new SortCriterion(), 0, 0);
     }
 
     public List<List<Facet>> getFacets()

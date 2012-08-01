@@ -236,12 +236,12 @@ public class ItemController extends ImejiController
                     .searchSimpleForQuery(
                             "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
                                     + containerUri
-                                    + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN>) }")
-                    .size();
+                                    + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN>) }",
+                            new SortCriterion()).size();
         }
         else
         {
-            size = search.advanced(searchQuery, null, simplifyUser(containerUri)).size();
+            size = search.search(searchQuery, new SortCriterion(), simplifyUser(containerUri)).getNumberOfRecords();
         }
         return size;
     }
@@ -249,8 +249,7 @@ public class ItemController extends ImejiController
     public int countImagesInContainer(URI containerUri, SearchQuery searchQuery, List<String> containerImages)
     {
         Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
-        List<String> uris = search.advanced(containerImages, searchQuery, null, simplifyUser(containerUri));
-        return uris.size();
+        return search.search(containerImages, searchQuery, new SortCriterion(), simplifyUser(containerUri)).getNumberOfRecords();
     }
 
     public Collection<Item> loadItems(List<String> uris, int limit, int offset)

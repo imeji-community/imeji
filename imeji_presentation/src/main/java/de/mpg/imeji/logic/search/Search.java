@@ -9,10 +9,13 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.query.Syntax;
+
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
+import de.mpg.imeji.logic.search.util.SortHelper;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
@@ -30,22 +33,6 @@ public class Search
     private static Logger logger = Logger.getLogger(Search.class);
     public static Map<String, SearchIndex> indexes = SearchIndexInitializer.init();
 
-    public static SearchIndex getIndex(String indexName)
-    {
-        SearchIndex index = indexes.get(indexName);
-        if (index == null)
-        {
-            logger.error("Unknown index: " + indexName);
-            throw new RuntimeException("Unknown index: " + indexName);
-        }
-        return index;
-    }
-
-    public static SearchIndex getIndex(SearchIndex.names indexname)
-    {
-        return getIndex(indexname.name());
-    }
-
     public Search(String type, String containerURI)
     {
         this.containerURI = containerURI;
@@ -55,25 +42,57 @@ public class Search
         }
     }
 
-    public SearchResult search(List<String> results, SearchQuery sq, SortCriterion sortCri, User user)
-    {
-        return new SearchResult(advanced(results, sq, sortCri, user));
-    }
-
+    /**
+     * Search for {@link SearchQuery} according to {@link User} permissions
+     * @param sq
+     * @param sortCri
+     * @param user
+     * @return
+     */
     public SearchResult search(SearchQuery sq, SortCriterion sortCri, User user)
     {
-        return new SearchResult(advanced(sq, sortCri, user));
+        if (sortCri == null)
+            sortCri = new SortCriterion();
+        return new SearchResult(advanced(sq, sortCri, user), sortCri);
     }
 
-    public List<String> advanced(SearchQuery sq, SortCriterion sortCri, User user)
+    /**
+     * Search for {@link SearchQuery} according to {@link User} permissions, within a set of possible results
+     * @param previousResults
+     * @param sq
+     * @param sortCri
+     * @param user
+     * @return
+     */
+    public SearchResult search(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
+    {
+        if (sortCri == null)
+            sortCri = new SortCriterion();
+        return new SearchResult(advanced(previousResults, sq, sortCri, user), sortCri);
+    }
+
+    /**
+     * Search for with query following spaql syntax
+     * @param sparqlQuery
+     * @param sortCri
+     * @return
+     */
+    public List<String> searchSimpleForQuery(String sparqlQuery, SortCriterion sortCri)
+    {
+        SearchResult sr = new SearchResult(ImejiSPARQL.exec(sparqlQuery, getModelName(type)), sortCri);
+        return sr.getResults();
+    }
+
+    private List<String> advanced(SearchQuery sq, SortCriterion sortCri, User user)
     {
         return advanced(new ArrayList<String>(), sq, sortCri, user);
     }
 
-    public List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
+    private List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
     {
-        List<String> results = setSortValueToList(previousResults, sortCri);
-        if (sq.isEmpty() || (containerURI != null && results.isEmpty()))
+        List<String> results = new ArrayList<String>(previousResults);
+        // second case is useless so far, since all query within a container are container specific.
+        if (sq.isEmpty() || (containerURI != null && results.isEmpty() && false))
         {
             results = simple(null, sortCri, user);
         }
@@ -87,11 +106,13 @@ public class Search
                 case GROUP:
                     subResults = new ArrayList<String>(advanced(new SearchQuery(((SearchGroup)se).getGroup()), sortCri,
                             user));
-                    results = doLogicalOperation(results, logic, subResults);
+                    results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
+                            SortHelper.removeSortValue(subResults));
                     break;
                 case PAIR:
                     subResults = new ArrayList<String>(simple((SearchPair)se, sortCri, user));
-                    results = doLogicalOperation(results, logic, subResults);
+                    results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
+                            SortHelper.removeSortValue(subResults));
                     break;
                 case LOGICAL_RELATIONS:
                     logic = ((SearchLogicalRelation)se).getLogicalRelation();
@@ -130,25 +151,6 @@ public class Search
         return ImejiSPARQL.exec(sparqlQuery, getModelName(type));
     }
 
-    public int simpleCount(SearchPair pair, User user)
-    {
-        String sparqlQuery = SimpleQueryFactory.getQuery(type, pair, null, user, (containerURI != null),
-                getSpecificQuery());
-        return ImejiSPARQL.execCount(sparqlQuery, getModelName(type));
-    }
-
-    public int simpleCount(String query)
-    {
-        return ImejiSPARQL.execCount(query, getModelName(type));
-    }
-
-    public List<String> searchSimpleForQuery(String query)
-    {
-        SearchResult sr = new SearchResult(ImejiSPARQL.exec(query, getModelName(type)));
-        
-        return sr.getResults();
-    }
-
     private String getSpecificQuery()
     {
         String specificQuery = "";
@@ -180,19 +182,19 @@ public class Search
         }
     }
 
-    private List<String> setSortValueToList(List<String> l, SortCriterion sortCri)
+    public static SearchIndex getIndex(String indexName)
     {
-        List<String> lWithSortValue = new ArrayList<String>(l.size());
-        long a = System.currentTimeMillis();
-        for (int i = 0; i < l.size(); i++)
+        SearchIndex index = indexes.get(indexName);
+        if (index == null)
         {
-            String s = l.get(i) + "?sortValue=";
-            if (sortCri != null && sortCri.getIndex() != null && sortCri.getIndex().getNamespace() != null)
-            {
-                s += sortCri.getIndex().getNamespace();
-            }
-            lWithSortValue.add(s);
+            logger.error("Unknown index: " + indexName);
+            throw new RuntimeException("Unknown index: " + indexName);
         }
-        return lWithSortValue;
+        return index;
+    }
+
+    public static SearchIndex getIndex(SearchIndex.names indexname)
+    {
+        return getIndex(indexname.name());
     }
 }

@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -85,7 +86,7 @@ public class ExportManager
             {
                 uris.add(mdp.getId().toString());
             }
-            result = new SearchResult(uris);
+            result = new SearchResult(uris, new SortCriterion());
         }
         else if ("image".equals(searchType))
         {

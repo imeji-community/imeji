@@ -175,7 +175,7 @@ public class AlbumController extends ImejiController
     public SearchResult getAlbumItems(String uri)
     {
         String query = "SELECT ?s count(DISTINCT ?s) WHERE {<" + uri + "> <http://imeji.org/terms/item> ?s }";
-        return new SearchResult(ImejiSPARQL.exec(query, ImejiJena.imageModel));
+        return new SearchResult(ImejiSPARQL.exec(query, ImejiJena.imageModel), new SortCriterion());
     }
 
     public boolean hasPendingImage(Collection<URI> images) throws Exception

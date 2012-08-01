@@ -220,7 +220,7 @@ public class CollectionController extends ImejiController
     public SearchResult getCollectionItems(String uri)
     {
         String query = "SELECT ?s count(DISTINCT ?s) WHERE {<" + uri + "> <http://imeji.org/terms/item> ?s }";
-        return new SearchResult(ImejiSPARQL.exec(query, ImejiJena.imageModel));
+        return new SearchResult(ImejiSPARQL.exec(query, ImejiJena.imageModel), new SortCriterion());
     }
 
     /**

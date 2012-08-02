@@ -265,10 +265,7 @@ public class EditImageMetadataBean
 
     public String cancel() throws IOException
     {
-        unlockImages();
-        reset();
-        HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
-        FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getPreviousPage().getUri().toString());
+        redirectToView();
         return "";
     }
 
@@ -323,12 +320,10 @@ public class EditImageMetadataBean
 
     public void redirectToView() throws IOException
     {
+        initialized = false;
         unlockImages();
-        Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        String path = ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class)).getCollection()
-                .getId().getPath();
-        FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(navigation.getApplicationUri() + "/images" + path);
+        HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getPreviousPage().getUri().toString());
     }
 
     public String clearAll()

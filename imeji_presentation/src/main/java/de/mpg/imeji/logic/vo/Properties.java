@@ -6,15 +6,12 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.Calendar;
 
-import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/properties")
-//@j2jId(getMethod = "getId", setMethod = "setId")
-public class Properties 
+public class Properties
 {
-    private URI id;
     @j2jResource("http://purl.org/dc/terms/creator")
     private URI createdBy;
     @j2jResource("http://imeji.org/terms/modifiedBy")
@@ -25,10 +22,8 @@ public class Properties
     private Calendar modified;
     @j2jLiteral("http://purl.org/dc/terms/issued")
     private Calendar versionDate;
-    // @j2jLiteral("http://imeji.org/terms/status")
-    // private Status status = Status.PENDING;
     @j2jResource("http://imeji.org/terms/status")
-    private URI status = URI.create("http://imeji.org/terms/status#" + Status.PENDING.name());
+    private URI status = Status.PENDING.getUri();
     @j2jLiteral("http://imeji.org/terms/versionNumber")
     private int version = 0;
     @j2jLiteral("http://imeji.org/terms/discardComment")
@@ -36,7 +31,19 @@ public class Properties
 
     public enum Status
     {
-        PENDING, RELEASED, WITHDRAWN;
+        PENDING("http://imeji.org/terms/status#PENDING"), RELEASED("http://imeji.org/terms/status#RELEASED"), WITHDRAWN(
+                "http://imeji.org/terms/status#WITHDRAWN");
+        private URI uri;
+
+        private Status(String uri)
+        {
+            this.uri = URI.create(uri);
+        }
+
+        public URI getUri()
+        {
+            return uri;
+        }
     }
 
     public Properties()
@@ -66,7 +73,7 @@ public class Properties
 
     public void setStatus(Status status)
     {
-        this.status = URI.create("http://imeji.org/status#" + status.name());
+        this.status = status.getUri();
     }
 
     public Status getStatus()
@@ -92,16 +99,6 @@ public class Properties
     public void setDiscardComment(String discardComment)
     {
         this.discardComment = discardComment;
-    }
-
-    public void setId(URI id)
-    {
-        this.id = id;
-    }
-
-    public URI getId()
-    {
-        return id;
     }
 
     public Calendar getCreated()

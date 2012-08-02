@@ -19,6 +19,7 @@ import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.facet.FacetsBean;
@@ -104,7 +105,8 @@ public class CollectionImagesBean extends ImagesBean
         totalNumberOfRecords = results.getNumberOfRecords();
         results.setQuery(getQuery());
         results.setSort(sortCriterion);
-        return ImejiFactory.imageListToThumbList(loadImages(results));
+        List<Item> items = (List<Item>)loadImages(results);
+        return ImejiFactory.imageListToThumbList(items);
     }
 
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
@@ -160,7 +162,7 @@ public class CollectionImagesBean extends ImagesBean
         CollectionController cc = new CollectionController(sb.getUser());
         try
         {
-            cc.release(collection);
+            cc.release(collection, sb.getUser());
             BeanHelper.info(sb.getMessage("success_collection_release"));
         }
         catch (Exception e)

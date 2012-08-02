@@ -66,11 +66,11 @@ public class CollectionListItem
             setId(ObjectHelper.getId(uri));
             status = collection.getStatus().toString();
             discardComment = collection.getDiscardComment();
-            creationDate = collection.getCreated().toString();
-            lastModificationDate = collection.getModified().toString();
+            creationDate = collection.getCreated().getTime().toString();
+            lastModificationDate = collection.getModified().getTime().toString();
             if (collection.getVersionDate() != null)
             {
-                versionDate = collection.getVersionDate().toString();
+                versionDate = collection.getVersionDate().getTime().toString();
             }
             // initializations
             initSize(user);
@@ -111,7 +111,7 @@ public class CollectionListItem
         CollectionController cc = new CollectionController(sessionBean.getUser());
         try
         {
-            cc.release(cc.retrieve(uri));
+            cc.release(cc.retrieve(uri), sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_release"));
         }
         catch (Exception e)

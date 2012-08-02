@@ -14,13 +14,14 @@ public class SearchResult
     private int numberOfRecords = 0;
     private List<String> results = new ArrayList<String>();
     private String query = null;
-    private SortCriterion sort = null;
+    private SortCriterion sort = new SortCriterion();
 
     public SearchResult(List<String> unsortedResults, SortCriterion sort)
     {
         numberOfRecords = unsortedResults.size();
-        this.sort = sort;
-        results = SortHelper.sort(unsortedResults, sort.getSortOrder());
+        if (sort != null)
+            this.sort = sort;
+        results = SortHelper.sort(unsortedResults, this.sort.getSortOrder());
     }
 
     public int getNumberOfRecords()

@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
@@ -37,7 +38,6 @@ public class TechnicalFacets
         List<Facet> techFacets = new ArrayList<Facet>();
         try
         {
-            
             SearchResult allImages = retrieveAllImages(searchQuery);
             int count = 0;
             int sizeAllImages = allImages.getNumberOfRecords();
@@ -47,7 +47,7 @@ public class TechnicalFacets
                 {
                     SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.MY_IMAGES),
                             SearchOperators.EQUALS, "my");
-                    count = getCount(searchQuery, myImageSearchPair,allImages.getResults());
+                    count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
                     if (count > 0)
                     {
                         techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, myImageSearchPair, "my_images",
@@ -61,7 +61,7 @@ public class TechnicalFacets
                 if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                 {
                     SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
-                            SearchOperators.URI, "http://imeji.org/terms/status#PENDING");
+                            SearchOperators.URI, Status.PENDING.getUri().toString());
                     count = getCount(searchQuery, privatePair, allImages.getResults());
                     if (count > 0)
                     {
@@ -72,7 +72,7 @@ public class TechnicalFacets
                 if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
                 {
                     SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
-                            SearchOperators.URI, "http://imeji.org/terms/status#RELEASED");
+                            SearchOperators.URI, Status.RELEASED.getUri().toString());
                     count = getCount(searchQuery, publicPair, allImages.getResults());
                     if (count > 0)
                     {
@@ -118,11 +118,10 @@ public class TechnicalFacets
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages)
     {
         ItemController ic = new ItemController(sb.getUser());
-//        SearchQuery sq = new SearchQuery(searchQuery.getElements());
-//        sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
-//        sq.addPair(pair);
-        
-        SearchQuery sq  = new SearchQuery();
+        // SearchQuery sq = new SearchQuery(searchQuery.getElements());
+        // sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
+        // sq.addPair(pair);
+        SearchQuery sq = new SearchQuery();
         sq.addPair(pair);
         return ic.countImages(sq, allImages);
     }

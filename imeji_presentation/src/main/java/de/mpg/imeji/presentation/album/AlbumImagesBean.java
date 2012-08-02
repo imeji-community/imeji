@@ -50,7 +50,7 @@ public class AlbumImagesBean extends ImagesBean
         AlbumController ac = new AlbumController(sb.getUser());
         try
         {
-            this.setAlbum(new AlbumBean(ac.retrieve(id)));
+            this.setAlbum(new AlbumBean(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id))));
         }
         catch (Exception e)
         {

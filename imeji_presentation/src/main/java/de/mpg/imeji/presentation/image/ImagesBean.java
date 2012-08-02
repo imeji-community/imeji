@@ -175,22 +175,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return controller.searchImages(searchQuery, sortCriterion);
     }
 
-    // public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCriterion)
-    // {
-    // ItemController controller = new ItemController(sb.getUser());
-    // return controller.searchImages(scList, sortCriterion);
-    // }
     public Collection<Item> loadImages(SearchResult searchResult)
     {
         ItemController controller = new ItemController(sb.getUser());
-        try
-        {
-            return controller.loadItems(searchResult.getResults(), getElementsPerPage(), getOffset());
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+        return controller.loadItems(searchResult.getResults(), getElementsPerPage(), getOffset());
     }
 
     public String getSimpleQuery()
@@ -267,33 +255,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 
     public String deleteAll() throws Exception
     {
+        Collection<Item> items = loadImages(search(searchQuery, null));
         ItemController ic = new ItemController(sb.getUser());
-        CollectionController cc = new CollectionController(sb.getUser());
-        CollectionImeji coll = null;
-        super.setCurrentPageNumber(1);
-        super.setElementsPerPage(10000);
-        SearchResult searchResult = search(searchQuery, null);
-        Collection<Item> items = loadImages(searchResult);
-        if (items != null && !items.isEmpty())
-            coll = cc.retrieve(items.iterator().next().getCollection());
-        int count = 0;
-        for (Item im : items)
-        {
-            try
-            {
-                ic.delete(im, sb.getUser());
-                if (coll.getImages().contains(im.getId()))
-                    coll.getImages().remove(im.getId());
-                count++;
-            }
-            catch (Exception e)
-            {
-                BeanHelper.error(sb.getMessage("error_image_delete") + " " + im.getFilename());
-                e.printStackTrace();
-            }
-        }
+        int count = ic.delete((List<Item>)items, sb.getUser());
         BeanHelper.info(count + " " + sb.getLabel("images_deleted"));
-        cc.update(coll);
         sb.getSelected().clear();
         return "pretty:";
     }
@@ -301,8 +266,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public String withdrawAll() throws Exception
     {
         ItemController ic = new ItemController(sb.getUser());
-        SearchResult searchResult = search(searchQuery, null);
-        Collection<Item> items = loadImages(searchResult);
+        Collection<Item> items = loadImages(search(searchQuery, null));
         int count = 0;
         if ("".equals(discardComment.trim()))
         {
@@ -310,20 +274,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
         else
         {
-            for (Item im : items)
-            {
-                try
-                {
-                    im.setDiscardComment(discardComment);
-                    ic.withdraw(im);
-                    count++;
-                }
-                catch (Exception e)
-                {
-                    BeanHelper.error(sb.getMessage("error_image_withdraw") + " " + im.getFilename());
-                    e.printStackTrace();
-                }
-            }
+            ic.withdraw((List<Item>)items, discardComment);
             discardComment = null;
             sb.getSelected().clear();
             BeanHelper.info(count + " " + sb.getLabel("images_withdraw"));

@@ -18,6 +18,7 @@ import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.search.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -60,16 +61,7 @@ public class AlbumController extends ImejiController
         imejiBean2RDF.create(imejiBean2RDF.toList(ic), user);
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
         // ic = (Album) imejiRDF2Bean.load(ic.getId().toString(), user);
-        user = addCreatorGrant(ic, user);
-    }
-
-    public User addCreatorGrant(Album alb, User user) throws Exception
-    {
-        GrantController gc = new GrantController(user);
-        Grant grant = new Grant(GrantType.CONTAINER_ADMIN, alb.getId());
-        gc.addGrant(user, grant);
-        UserController uc = new UserController(user);
-        return uc.retrieve(user.getEmail());
+        user = addCreatorGrant(ic.getId(), user);
     }
 
     /**
@@ -86,19 +78,6 @@ public class AlbumController extends ImejiController
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
     }
 
-    /**
-     * Updates a collection -Logged in users: --User is collection owner --OR user is collection editor
-     * 
-     * @param ic
-     * @param user
-     * @throws Exception
-     */
-    public Album retrieve(String id) throws Exception
-    {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
-        return (Album)imejiRDF2Bean.load(ObjectHelper.getURI(Album.class, id).toString(), user, new Album());
-    }
-
     public Album retrieve(URI selectedAlbumId) throws Exception
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
@@ -111,24 +90,6 @@ public class AlbumController extends ImejiController
         return (Album)imejiRDF2Bean.loadLazy(selectedAlbumId.toString(), user, new Album());
     }
 
-    public int countAllAlbums()
-    {
-        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/album>}",
-                ImejiJena.albumModel);
-    }
-
-    @Deprecated
-    public Collection<Album> retrieveAll()
-    {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
-        Security security = new Security();
-        // if (security.isSysAdmin(user))
-        // {
-        // return imejiRDF2Bean.load(Album.class);
-        // }
-        return new ArrayList<Album>();
-    }
-
     public void delete(Album album, User user) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
@@ -139,52 +100,34 @@ public class AlbumController extends ImejiController
 
     public void release(Album album) throws Exception
     {
-        if (hasImageLocked(album.getImages(), user))
+        ItemController ic = new ItemController(user);
+        List<String> itemUris = ic.searchImagesInContainer(album.getId(), null, null, -1, 0).getResults();
+        if (itemUris.isEmpty())
+        {
+            throw new RuntimeException("An empty album can not be released!");
+        }
+        else if (hasImageLocked(itemUris, user))
         {
             throw new RuntimeException("Album has at least one image locked by an other user.");
         }
-        else if (hasPendingImage(album.getImages()))
+        else if (hasPendingImage(itemUris))
         {
             throw new RuntimeException(
                     "Album has at least one image with status pending. All images have to be released to release an album");
         }
         else
         {
-            album.setStatus(Status.RELEASED);
-            album.setVersionDate(DateHelper.getCurrentDate());
-            ItemController itemController = new ItemController(user);
-            for (URI uri : album.getImages())
-            {
-                try
-                {
-                    itemController.release(itemController.retrieve(uri));
-                }
-                catch (NotFoundException e)
-                {
-                    logger.error("Release image error: " + uri + " could not be found");
-                }
-                catch (Exception e)
-                {
-                    logger.error("You are not allowed to release image " + uri + ". I could be deleted by it's owner.");
-                }
-            }
+            writeReleaseProperty(album, user);
             update(album);
         }
     }
 
-    public SearchResult getAlbumItems(String uri)
-    {
-        String query = "SELECT ?s count(DISTINCT ?s) WHERE {<" + uri + "> <http://imeji.org/terms/item> ?s }";
-        return new SearchResult(ImejiSPARQL.exec(query, ImejiJena.imageModel), new SortCriterion());
-    }
-
-    public boolean hasPendingImage(Collection<URI> images) throws Exception
+    public synchronized boolean hasPendingImage(List<String> uris) throws Exception
     {
         ItemController c = new ItemController(user);
-        for (URI im : images)
+        for (Item item : c.loadItems(uris, -1, 0))
         {
-            Item vo = c.retrieve(im);
-            if (Status.PENDING.equals(vo.getStatus()))
+            if (Status.PENDING.equals(item.getStatus()))
             {
                 return true;
             }
@@ -211,15 +154,10 @@ public class AlbumController extends ImejiController
      */
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset)
     {
-        Search search = new Search("http://imeji.org/terms/album", null);
+        Search search = new Search(SearchType.ALBUM, null);
         return search.search(searchQuery, sortCri, user);
     }
 
-    // public SearchResult search(List<SearchCriterion> scList, SortCriterion sortCri, int limit, int offset)
-    // {
-    // Search search = new Search("http://imeji.org/terms/album", null);
-    // return search.search(scList, sortCri, user);
-    // }
     public Collection<Album> load(List<String> uris, int limit, int offset)
     {
         LinkedList<Album> albs = new LinkedList<Album>();
@@ -243,6 +181,12 @@ public class AlbumController extends ImejiController
         return albs;
     }
 
+    public int countAllAlbums()
+    {
+        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/album>}",
+                ImejiJena.albumModel);
+    }
+
     @Override
     @Deprecated
     protected String getSpecificQuery() throws Exception
@@ -257,12 +201,12 @@ public class AlbumController extends ImejiController
         String filter = "(";
         if (user == null)
         {
-            filter += "?status = <<http://imeji.org/terms/status#RELEASED>";
+            filter += "?status = <" + Status.RELEASED.getUri() + ">";
         }
         else
         {
             String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
-            filter += "?status = <<http://imeji.org/terms/status#RELEASED> || ?createdBy=<" + userUri + ">";
+            filter += "?status = <" + Status.RELEASED.getUri() + "> || ?createdBy=<" + userUri + ">";
             for (Grant grant : user.getGrants())
             {
                 switch (grant.asGrantType())

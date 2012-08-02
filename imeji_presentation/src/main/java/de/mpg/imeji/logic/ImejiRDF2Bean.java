@@ -75,12 +75,16 @@ public class ImejiRDF2Bean
 
     private void checkSecurity(List<Object> list, User user, OperationsType opType)
     {
-        for (Object o : list)
+        for (int i = 0; i < list.size(); i++)
         {
-            if (!security.check(opType, user, o))
+            if (!security.check(opType, user, list.get(i)))
             {
-                throw new RuntimeException("Imeji Security exception: " + user.getEmail() + " not allowed to "
-                        + opType.name() + " " + J2JHelper.getId(o));
+                String id = J2JHelper.getId(list.get(i)).toString();
+                String email = "Not logged in";
+                if (user != null)
+                    email = user.getEmail();
+                throw new RuntimeException("Imeji Security exception: " + email + " not allowed to " + opType.name()
+                        + " " + id);
             }
         }
     }

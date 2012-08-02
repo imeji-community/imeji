@@ -5,7 +5,7 @@ package de.mpg.imeji.logic.controller;
 
 import java.net.URI;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -15,6 +15,9 @@ import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.Counter;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
@@ -32,9 +35,8 @@ public abstract class ImejiController
         this.user = user2;
     }
 
-    protected static void writeCreateProperties(Properties properties, User user)
+    protected void writeCreateProperties(Properties properties, User user)
     {
-        //properties.setId(ObjectHelper.getURI(Properties.class, Integer.toString(getUniqueId())));
         Calendar now = DateHelper.getCurrentDate();
         properties.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail()));
         properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
@@ -44,17 +46,63 @@ public abstract class ImejiController
             properties.setStatus(Status.PENDING);
     }
 
-    public static void writeUpdateProperties(Properties properties, User user)
+    protected void writeUpdateProperties(Properties properties, User user)
     {
         properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
         properties.setModified(DateHelper.getCurrentDate());
     }
 
-    public boolean hasImageLocked(Collection<URI> containersUri, User user)
+    protected void writeReleaseProperty(Properties properties, User user)
     {
-        for (URI u : containersUri)
+        properties.setVersion(1);
+        properties.setVersionDate(DateHelper.getCurrentDate());
+        properties.setStatus(Status.RELEASED);
+    }
+
+    protected void writeWithdrawProperties(Properties properties, String comment)
+    {
+        if (comment != null && !"".equals(comment))
         {
-            if (Locks.isLocked(u.toString(), user.getEmail()))
+            properties.setDiscardComment(comment);
+        }
+        if (properties.getDiscardComment() == null || "".equals(properties.getDiscardComment()))
+        {
+            throw new RuntimeException("Discard error: A Discard comment is needed");
+        }
+        properties.setStatus(Status.WITHDRAWN);
+    }
+
+    public User addCreatorGrant(URI id, User user) throws Exception
+    {
+        GrantController gc = new GrantController(user);
+        Grant grant = new Grant(GrantType.CONTAINER_ADMIN, id);
+        gc.addGrant(user, grant);
+        UserController uc = new UserController(user);
+        return uc.retrieve(user.getEmail());
+    }
+
+    /**
+     * Remove images from a container which have been either deleted or withdrawn.
+     * 
+     * @param c
+     * @param user
+     */
+    public Container cleanContainerItems(Container c, User user)
+    {
+        ItemController ic = new ItemController(user);
+        List<String> newUris = ic.searchImagesInContainer(c.getId(), null, null, -1, 0).getResults();
+        for (String s : newUris)
+        {
+            c.getImages().add(URI.create(s));
+        }
+        return c;
+    }
+
+    public boolean hasImageLocked(List<String> uris, User user)
+    {
+        for (String uri : uris)
+        {
+            if (Locks.isLocked(uri.toString(), user.getEmail()))
             {
                 return true;
             }
@@ -96,7 +144,7 @@ public abstract class ImejiController
     {
         try
         {
-            c.setCounter(c.getCounter() + 1 );
+            c.setCounter(c.getCounter() + 1);
             ImejiBean2RDF bean2rdf = new ImejiBean2RDF(null);
             bean2rdf.update(bean2rdf.toList(c), ImejiJena.adminUser);
         }
@@ -106,31 +154,6 @@ public abstract class ImejiController
         }
     }
 
-    // protected Model getModel()
-    // {
-    // try
-    // {
-    // String tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-    // base = DataFactory.model(tdbPath);
-    // return base;
-    // }
-    // catch (IOException e)
-    // {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // catch (URISyntaxException e)
-    // {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // return null;
-    // }
-    //
-    // protected void closeModel()
-    // {
-    // base.close();
-    // }
     protected abstract String getSpecificQuery() throws Exception;
 
     protected abstract String getSpecificFilter() throws Exception;

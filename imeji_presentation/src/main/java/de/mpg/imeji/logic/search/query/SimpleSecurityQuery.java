@@ -7,13 +7,14 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 
 public class SimpleSecurityQuery
 {
-    public static String getQuery(User user, SearchPair pair, String type, boolean includeWithdrawn)
+    public static String getQuery(User user, SearchPair pair, String rdfType, boolean includeWithdrawn)
     {
-        String f = "?status!=<http://imeji.org/terms/status#WITHDRAWN> && (";
+        String f = "?status!=<" + Status.WITHDRAWN.getUri() + "> && (";
         if (includeWithdrawn)
         {
             f = "(";
@@ -23,9 +24,9 @@ public class SimpleSecurityQuery
         {
             if (includeWithdrawn)
             {
-                return " .FILTER(?status!=<http://imeji.org/terms/status#PENDING>)";
+                return " .FILTER(?status!=<" + Status.PENDING.getUri() + ">)";
             }
-            return " .FILTER(?status=<http://imeji.org/terms/status#RELEASED>)";
+            return " .FILTER(?status=<" + Status.RELEASED.getUri() + ">)";
         }
         if (pair != null && SearchIndex.names.PROPERTIES_STATUS.name().equals(pair.getIndex().getName()))
         {
@@ -56,8 +57,8 @@ public class SimpleSecurityQuery
                         {
                             uf += " || ";
                         }
-                        if ("http://imeji.org/terms/collection".equals(type)
-                                || "http://imeji.org/terms/album".equals(type))
+                        if ("http://imeji.org/terms/collection".equals(rdfType)
+                                || "http://imeji.org/terms/album".equals(rdfType))
                         {
                             uf += "?s";
                         }
@@ -84,7 +85,7 @@ public class SimpleSecurityQuery
         }
         if (imageCollection != null && !hasGrantForCollection)
         {
-            uf += "?c=<" + imageCollection + "> && ?status=<http://imeji.org/terms/status#RELEASED>";
+            uf += "?c=<" + imageCollection + "> && ?status=<" + Status.RELEASED.getUri() + ">";
         }
         else if (user != null && user.getGrants() != null && user.getGrants().isEmpty() && myImages)
         {
@@ -96,7 +97,7 @@ public class SimpleSecurityQuery
             f = " .FILTER(" + f + op + "(";
             if (pair == null || (pair != null && !SearchIndex.names.MY_IMAGES.equals(pair.getIndex().getName())))
             {
-                f += "?status=<http://imeji.org/terms/status#RELEASED> || ";
+                f += "?status=<" + Status.RELEASED.getUri() + "> || ";
             }
             f += uf + "))";
         }
@@ -106,7 +107,7 @@ public class SimpleSecurityQuery
         }
         else if ("".equals(f))
         {
-            f = " .FILTER(?status=<http://imeji.org/terms/status#RELEASED>)";
+            f = " .FILTER(?status=" + Status.RELEASED.getUri() + ">)";
         }
         return f;
     }

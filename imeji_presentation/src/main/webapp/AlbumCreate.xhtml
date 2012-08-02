@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 	<!--
 
@@ -36,17 +37,15 @@
 </ui:remove>
 
 <body>
-<ui:composition template="templates/template_album_formular.xhtml">
-	<ui:define name="init">
-		<a4j:keepAlive beanName="AlbumBean"/>
-	</ui:define>
-	<ui:param name="headline" value="#{lbl.createAlbum}"/>
-	<ui:param name="FormularBean" value="#{AlbumBean}" />
-	
-	<ui:define name="contentMenu">
-				
-	</ui:define>
-</ui:composition>
+	<ui:composition template="templates/template_album_formular.xhtml">
+
+		<ui:param name="headline" value="#{lbl.createAlbum}" />
+		<ui:param name="FormularBean" value="#{AlbumBean}" />
+
+		<ui:define name="contentMenu">
+
+		</ui:define>
+	</ui:composition>
 </body>
 </html>
 

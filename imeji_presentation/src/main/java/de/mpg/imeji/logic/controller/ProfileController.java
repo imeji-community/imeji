@@ -132,7 +132,7 @@ public class ProfileController extends ImejiController
     	String q = "SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/mdprofile> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status " +
     			".FILTER( ";
     	
-    	q += "?status=<<http://imeji.org/terms/status#RELEASED> || (?status!=<<http://imeji.org/terms/status#WITHDRAWN> ";
+    	q += "?status=<" + Status.RELEASED.getUri() + "> || (?status!=<" + Status.WITHDRAWN.getUri() + "> ";
     	
     	int i=0;
     	

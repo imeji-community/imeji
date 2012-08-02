@@ -8,7 +8,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -17,8 +19,11 @@ import de.escidoc.core.client.ItemHandlerClient;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.concurrency.locks.Lock;
+import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.search.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -175,22 +180,6 @@ public class ItemController extends ImejiController
     }
 
     /**
-     * NOT WORKING
-     * 
-     * @param uri
-     */
-    public void getGraph(URI uri)
-    {
-        additionalQuery = " . <"
-                + uri.toString()
-                + "> <http://imeji.org/terms/item/metadata> ?md . ?md <http://www.w3.org/2000/01/rdf-schema#member> ?list . ?list <http://purl.org/dc/terms/type> ?type";
-        // QuerySPARQL querySPARQL = new QuerySPARQLImpl();
-        // String query = querySPARQL.createConstructQuery(new ArrayList<SearchCriterion>(), null,
-        // "http://imeji.org/terms/item", additionalQuery , "?s=<http://imeji.org/terms/item/111>", 1, 0, user, false);
-        // ImejiSPARQL.execConstruct(query).write(System.out, "RDF/XML-ABBREV");
-    }
-
-    /**
      * Get the number of all images
      * 
      * @return
@@ -203,41 +192,39 @@ public class ItemController extends ImejiController
 
     public SearchResult searchImages(SearchQuery searchQuery, SortCriterion sortCri)
     {
-        Search search = new Search("http://imeji.org/terms/item", null);
+        Search search = new Search(SearchType.ITEM, null);
         return search.search(searchQuery, sortCri, simplifyUser(null));
     }
 
     public SearchResult searchImagesInContainer(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri,
             int limit, int offset)
     {
-        Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
+        Search search = new Search(SearchType.ITEM, containerUri.toString());
         return search.search(searchQuery, sortCri, simplifyUser(containerUri));
     }
 
     public int countImages(SearchQuery searchQuery)
     {
-        Search search = new Search("http://imeji.org/terms/item", null);
+        Search search = new Search(SearchType.ITEM, null);
         return search.search(searchQuery, null, simplifyUser(null)).getNumberOfRecords();
     }
 
     public int countImages(SearchQuery searchQuery, List<String> allImages)
     {
-        Search search = new Search("http://imeji.org/terms/item", null);
+        Search search = new Search(SearchType.ITEM, null);
         return search.search(allImages, searchQuery, null, simplifyUser(null)).getNumberOfRecords();
     }
 
     public int countImagesInContainer(URI containerUri, SearchQuery searchQuery)
     {
-        Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
+        Search search = new Search(SearchType.ITEM, containerUri.toString());
         int size = 0;
         if (searchQuery.isEmpty())
         {
-            size = search
-                    .searchSimpleForQuery(
-                            "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
-                                    + containerUri
-                                    + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN>) }",
-                            new SortCriterion()).size();
+            size = search.searchSimpleForQuery(
+                    "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
+                            + containerUri + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<"
+                            + Status.WITHDRAWN.getUri() + ">) }", new SortCriterion()).size();
         }
         else
         {
@@ -248,8 +235,9 @@ public class ItemController extends ImejiController
 
     public int countImagesInContainer(URI containerUri, SearchQuery searchQuery, List<String> containerImages)
     {
-        Search search = new Search("http://imeji.org/terms/item", containerUri.toString());
-        return search.search(containerImages, searchQuery, new SortCriterion(), simplifyUser(containerUri)).getNumberOfRecords();
+        Search search = new Search(SearchType.ITEM, containerUri.toString());
+        return search.search(containerImages, searchQuery, new SortCriterion(), simplifyUser(containerUri))
+                .getNumberOfRecords();
     }
 
     public Collection<Item> loadItems(List<String> uris, int limit, int offset)
@@ -326,61 +314,95 @@ public class ItemController extends ImejiController
         return simplifiedUser;
     }
 
-    public void delete(Item img, User user) throws Exception
+    public int delete(List<Item> items, User user) throws Exception
     {
-        if (img != null)
+        int count = 0;
+        Map<String, URI> cMap = new HashMap<String, URI>();
+        List<Object> toDelete = new ArrayList<Object>();
+        for (Item item : items)
         {
-            imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-            imejiBean2RDF.delete(imejiBean2RDF.toList(img), user);
-            removeImageFromEscidoc(img.getEscidocId());
-        }
-    }
-
-    public void release(Item img) throws Exception
-    {
-        if (Status.PENDING.equals(img.getStatus()))
-        {
-            img.setStatus(Status.RELEASED);
-            img.setVisibility(Visibility.PUBLIC);
-            update(img);
-        }
-    }
-
-    public void withdraw(Item img) throws Exception
-    {
-        if (img.getStatus().equals(Status.RELEASED))
-        {
-            img.setStatus(Status.WITHDRAWN);
-            img.setVisibility(Visibility.PUBLIC);
-            update(img);
-            if (img.getEscidocId() != null)
+            if (item != null)
             {
-                removeImageFromEscidoc(img.getEscidocId());
-                img.setEscidocId(null);
+                removeImageFromEscidoc(item.getEscidocId());
+                toDelete.add(item);
+                count++;
+                cMap.put(item.getCollection().toString(), item.getCollection());
             }
         }
-        else
-            throw new RuntimeException("Only released images can be discarded: " + img.getId() + " has status "
-                    + img.getStatus());
+        imejiBean2RDF.delete(toDelete, user);
+        // Remove items from their collections
+        for (URI uri : cMap.values())
+        {
+            CollectionController cc = new CollectionController(user);
+            CollectionImeji c = cc.retrieveLazy(uri);
+            c = (CollectionImeji)cleanContainerItems(c, user);
+            cc.update(c);
+        }
+        return count;
+    }
+
+    public void release(List<Item> l, User user) throws Exception
+    {
+        for (Item item : l)
+        {
+            if (Status.PENDING.equals(item.getStatus()))
+            {
+                writeReleaseProperty(item, user);
+                item.setVisibility(Visibility.PUBLIC);
+            }
+        }
+        update(l);
+    }
+
+    public void withdraw(List<Item> items, String comment) throws Exception
+    {
+        Map<String, URI> cMap = new HashMap<String, URI>();
+        for (Item item : items)
+        {
+            if (!item.getStatus().equals(Status.RELEASED))
+            {
+                throw new RuntimeException("Error discard " + item.getId() + " must be release (found: "
+                        + item.getStatus() + ")");
+            }
+            else
+            {
+                writeWithdrawProperties(item, comment);
+                item.setVisibility(Visibility.PUBLIC);
+                if (item.getEscidocId() != null)
+                {
+                    removeImageFromEscidoc(item.getEscidocId());
+                    item.setEscidocId(null);
+                }
+            }
+        }
+        update(items);
+        // Remove items from their collections
+        for (URI uri : cMap.values())
+        {
+            CollectionController cc = new CollectionController(user);
+            CollectionImeji c = cc.retrieveLazy(uri);
+            c = (CollectionImeji)cleanContainerItems(c, user);
+            cc.update(c);
+        }
     }
 
     public void removeImageFromEscidoc(String id)
     {
-        try
-        {
-            String username = PropertyReader.getProperty("imeji.escidoc.user");
-            String password = PropertyReader.getProperty("imeji.escidoc.password");
-            Authentication auth = new Authentication(new URL(
-                    PropertyReader.getProperty("escidoc.framework_access.framework.url")), username, password);
-            ItemHandlerClient handler = new ItemHandlerClient(auth.getServiceAddress());
-            handler.setHandle(auth.getHandle());
-            handler.delete(id);
-        }
-        catch (Exception e)
-        {
-            logger.error("Error removing image from eSciDoc (" + id + ")", e);
-            throw new RuntimeException("Error removing image from eSciDoc (" + id + ")", e);
-        }
+        // try
+        // {
+        // String username = PropertyReader.getProperty("imeji.escidoc.user");
+        // String password = PropertyReader.getProperty("imeji.escidoc.password");
+        // Authentication auth = new Authentication(new URL(
+        // PropertyReader.getProperty("escidoc.framework_access.framework.url")), username, password);
+        // ItemHandlerClient handler = new ItemHandlerClient(auth.getServiceAddress());
+        // handler.setHandle(auth.getHandle());
+        // handler.delete(id);
+        // }
+        // catch (Exception e)
+        // {
+        // logger.error("Error removing image from eSciDoc (" + id + ")", e);
+        // throw new RuntimeException("Error removing image from eSciDoc (" + id + ")", e);
+        // }
     }
 
     public String getEscidocUserHandle() throws Exception
@@ -398,12 +420,14 @@ public class ItemController extends ImejiController
         String filter = "(";
         if (user == null)
         {
-            filter += "?collStatus = <<http://imeji.org/terms/status#RELEASED> && ?visibility = <http://imeji.org/terms/item/visibility/PUBLIC>";
+            filter += "?collStatus = <" + Status.RELEASED.getUri()
+                    + "> && ?visibility = <http://imeji.org/terms/item/visibility/PUBLIC>";
         }
         else
         {
             String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
-            filter += "(?collStatus = <<http://imeji.org/terms/status#RELEASED> && ?visibility = <http://imeji.org/terms/item/visibility/PUBLIC>)";
+            filter += "(?collStatus = <" + Status.RELEASED.getUri()
+                    + "> && ?visibility = <http://imeji.org/terms/item/visibility/PUBLIC>)";
             filter += " || ?collCreatedBy=<" + userUri + ">";
             for (Grant grant : user.getGrants())
             {

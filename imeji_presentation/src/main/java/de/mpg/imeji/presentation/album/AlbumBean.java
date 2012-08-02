@@ -16,15 +16,16 @@ import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.security.Authorization;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
+import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.image.ImageBean;
@@ -98,7 +99,7 @@ public class AlbumBean
         AlbumController ac = new AlbumController(sessionBean.getUser());
         try
         {
-            setAlbum(ac.retrieve(id));
+            setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id)));
             save = false;
             if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().equals(album.getId()))
             {
@@ -262,7 +263,7 @@ public class AlbumBean
         ItemController ic = new ItemController(sessionBean.getUser());
         if (album == null)
             return 0;
-        return ic.countImagesInContainer(this.getAlbum().getId(), null);
+        return ic.countImagesInContainer(this.getAlbum().getId(), new SearchQuery());
     }
 
     public boolean getIsOwner()

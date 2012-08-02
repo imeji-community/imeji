@@ -138,16 +138,16 @@ public class Scripts
 	 
 	 public void clean(User admin)
 	 {
-		 ItemController im = new ItemController(admin);
-		
-		 try 
-		 {
-			 Item img = im.retrieve("2802");
-			 im.delete(img, admin);
-		 } catch (Exception e) {
-			// TODO Auto-generated catch block
-			 e.printStackTrace();
-		 }
+//		 ItemController im = new ItemController(admin);
+//		
+//		 try 
+//		 {
+//			 Item img = im.retrieve("2802");
+//			 im.delete(img, admin);
+//		 } catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			 e.printStackTrace();
+//		 }
 
 	 }
 	 
@@ -264,36 +264,36 @@ public class Scripts
 	 
 	 public void setCompleteNamesForContainers(User admin) throws Exception
 	 {
-		 CollectionController cc = new CollectionController(admin);
-		 ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
-			
-		 for (CollectionImeji c : cc.retrieveAll())
-		 {
-			 c = (CollectionImeji) ObjectHelper.castAllHashSetToList(c);
-			 for (int i = 0; i < c.getMetadata().getPersons().size(); i++) 
-			 {
-				 ((List<Person>)c.getMetadata().getPersons()).get(i).setCompleteName(
-						 	((List<Person>)c.getMetadata().getPersons()).get(i).getFamilyName() + " " 
-						 	+ ((List<Person>)c.getMetadata().getPersons()).get(i).getGivenName());
-				 System.out.println(((List<Person>)c.getMetadata().getPersons()).get(i).getCompleteName());
-			 }
-			 imejiBean2RDF.update(imejiBean2RDF.toList(c), admin);
-		 }
-		 
-		 AlbumController ac = new AlbumController(admin);
-		 imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-		 
-		 for (Album a : ac.retrieveAll())
-		 {
-			 a = (Album) ObjectHelper.castAllHashSetToList(a);
-			 for (int i = 0; i < a.getMetadata().getPersons().size(); i++) 
-			 {
-				 ((List<Person>)a.getMetadata().getPersons()).get(i).setCompleteName(
-						 	((List<Person>)a.getMetadata().getPersons()).get(i).getFamilyName() + " " 
-						 	+ ((List<Person>)a.getMetadata().getPersons()).get(i).getGivenName()); 
-			 }
-			 imejiBean2RDF.update(imejiBean2RDF.toList(a), admin);
-		 }
+//		 CollectionController cc = new CollectionController(admin);
+//		 ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
+//			
+//		 for (CollectionImeji c : cc.retrieveAll())
+//		 {
+//			 c = (CollectionImeji) ObjectHelper.castAllHashSetToList(c);
+//			 for (int i = 0; i < c.getMetadata().getPersons().size(); i++) 
+//			 {
+//				 ((List<Person>)c.getMetadata().getPersons()).get(i).setCompleteName(
+//						 	((List<Person>)c.getMetadata().getPersons()).get(i).getFamilyName() + " " 
+//						 	+ ((List<Person>)c.getMetadata().getPersons()).get(i).getGivenName());
+//				 System.out.println(((List<Person>)c.getMetadata().getPersons()).get(i).getCompleteName());
+//			 }
+//			 imejiBean2RDF.update(imejiBean2RDF.toList(c), admin);
+//		 }
+//		 
+//		 AlbumController ac = new AlbumController(admin);
+//		 imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+//		 
+//		 for (Album a : ac.retrieveAll())
+//		 {
+//			 a = (Album) ObjectHelper.castAllHashSetToList(a);
+//			 for (int i = 0; i < a.getMetadata().getPersons().size(); i++) 
+//			 {
+//				 ((List<Person>)a.getMetadata().getPersons()).get(i).setCompleteName(
+//						 	((List<Person>)a.getMetadata().getPersons()).get(i).getFamilyName() + " " 
+//						 	+ ((List<Person>)a.getMetadata().getPersons()).get(i).getGivenName()); 
+//			 }
+//			 imejiBean2RDF.update(imejiBean2RDF.toList(a), admin);
+//		 }
 	 }
 	 
 	

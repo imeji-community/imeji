@@ -9,8 +9,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.query.Syntax;
-
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
@@ -24,16 +22,25 @@ import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.j2j.helper.J2JHelper;
 
 public class Search
 {
     private String containerURI = null;
-    private String type = "http://imeji.org/terms/item";
+    private SearchType type = SearchType.ITEM;
     private static Logger logger = Logger.getLogger(Search.class);
     public static Map<String, SearchIndex> indexes = SearchIndexInitializer.init();
 
-    public Search(String type, String containerURI)
+    public static enum SearchType
+    {
+        ITEM, COLLECTION, ALBUM, ALL;
+    }
+
+    public Search(SearchType type, String containerURI)
     {
         this.containerURI = containerURI;
         if (type != null)
@@ -44,6 +51,7 @@ public class Search
 
     /**
      * Search for {@link SearchQuery} according to {@link User} permissions
+     * 
      * @param sq
      * @param sortCri
      * @param user
@@ -51,13 +59,12 @@ public class Search
      */
     public SearchResult search(SearchQuery sq, SortCriterion sortCri, User user)
     {
-        if (sortCri == null)
-            sortCri = new SortCriterion();
         return new SearchResult(advanced(sq, sortCri, user), sortCri);
     }
 
     /**
      * Search for {@link SearchQuery} according to {@link User} permissions, within a set of possible results
+     * 
      * @param previousResults
      * @param sq
      * @param sortCri
@@ -66,13 +73,12 @@ public class Search
      */
     public SearchResult search(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
     {
-        if (sortCri == null)
-            sortCri = new SortCriterion();
         return new SearchResult(advanced(previousResults, sq, sortCri, user), sortCri);
     }
 
     /**
      * Search for with query following spaql syntax
+     * 
      * @param sparqlQuery
      * @param sortCri
      * @return
@@ -90,6 +96,10 @@ public class Search
 
     private List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
     {
+        if (sq == null)
+            sq = new SearchQuery();
+        if (sortCri == null)
+            sortCri = new SortCriterion();
         List<String> results = new ArrayList<String>(previousResults);
         // second case is useless so far, since all query within a container are container specific.
         if (sq.isEmpty() || (containerURI != null && results.isEmpty() && false))
@@ -144,10 +154,8 @@ public class Search
 
     private List<String> simple(SearchPair pair, SortCriterion sortCri, User user)
     {
-        String sparqlQuery = SimpleQueryFactory.getQuery(type, pair, sortCri, user, (containerURI != null),
+        String sparqlQuery = SimpleQueryFactory.getQuery(getRDFType(type), pair, sortCri, user, (containerURI != null),
                 getSpecificQuery());
-        // sparqlQuery="PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/item> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN> && ( (?status=<http://imeji.org/terms/status#RELEASED> || ?c=<http://imeji.org/collection/13>)))  . ?props <http://purl.org/dc/terms/created> ?sort0}  ORDER BY DESC(?sort0)";
-        // logger.info(sparqlQuery);
         return ImejiSPARQL.exec(sparqlQuery, getModelName(type));
     }
 
@@ -156,29 +164,40 @@ public class Search
         String specificQuery = "";
         if (containerURI != null)
         {
-            specificQuery = " <" + containerURI + "> <http://imeji.org/terms/item> ?s . ";
             specificQuery = " ?s <http://imeji.org/terms/collection> <" + containerURI + "> . ";
         }
-        if ("http://imeji.org/terms/item".equals(type))
+        if (SearchType.ITEM.equals(type))
         {
             specificQuery += " ?s <http://imeji.org/terms/collection> ?c . ";
         }
         return specificQuery;
     }
 
-    private String getModelName(String type)
+    private String getModelName(SearchType type)
     {
-        if ("http://imeji.org/terms/collection".equals(type))
+        switch (type)
         {
-            return ImejiJena.collectionModel;
+            case ITEM:
+                return ImejiJena.imageModel;
+            case COLLECTION:
+                return ImejiJena.collectionModel;
+            case ALBUM:
+                return ImejiJena.albumModel;
+            default:
+                return null;
         }
-        else if ("http://imeji.org/terms/album".equals(type))
+    }
+
+    private String getRDFType(SearchType type)
+    {
+        switch (type)
         {
-            return ImejiJena.albumModel;
-        }
-        else
-        {
-            return null;
+            case COLLECTION:
+                return J2JHelper.getResourceNamespace(new CollectionImeji());
+            case ALBUM:
+                return J2JHelper.getResourceNamespace(new Album());
+            default:
+                return J2JHelper.getResourceNamespace(new Item());
         }
     }
 

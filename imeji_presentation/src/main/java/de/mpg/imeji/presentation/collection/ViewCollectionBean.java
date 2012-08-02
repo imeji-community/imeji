@@ -44,7 +44,7 @@ public class ViewCollectionBean extends CollectionBean
     public void createBigCollection()
     {
         List<Item> l = new ArrayList<Item>();
-        for (int i = 0; i < 0; i++)
+        for (int i = 0; i < 100; i++)
         {
             de.mpg.imeji.logic.vo.Item item = ItemFactory.create(this.getCollection());
             item.setCollection(this.getCollection().getId());

@@ -26,6 +26,7 @@ public abstract class Transaction extends Thread
     @Override
     public synchronized void start()
     {
+        logger.info("Threads active count: " + Thread.activeCount());
         running = true;
         super.start();
     }

@@ -26,6 +26,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -287,7 +288,7 @@ public abstract class CollectionBean
         CollectionController cc = new CollectionController(sessionBean.getUser());
         try
         {
-            cc.release(collection);
+            cc.release(collection, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_release"));
         }
         catch (Exception e)
@@ -344,7 +345,7 @@ public abstract class CollectionBean
                     .searchSimpleForQuery(
                             "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
                                     + collection.getId().toString()
-                                    + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT 5",
+                                    + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<" + Status.WITHDRAWN.getUri() + ">)} LIMIT 5",
                             new SortCriterion());
             return ImejiFactory.imageListToBeanList(ic.loadItems(uris, 5, 0));
         }

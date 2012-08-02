@@ -2,7 +2,6 @@ package de.mpg.j2j.transaction;
 
 import java.util.List;
 
-import com.hp.hpl.jena.query.ARQ;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -13,7 +12,6 @@ import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.sparql.mgt.Explain.InfoLevel;
 import com.hp.hpl.jena.tdb.TDB;
 
 import de.mpg.imeji.logic.search.util.SortHelper;
@@ -39,12 +37,8 @@ public class SearchTransaction extends Transaction
     {
         long startSearch = System.currentTimeMillis();
         // searchQuery += " OFFSET 29982 LIMIT 30000";
+        //searchQuery = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s ?sort0 WHERE {?s <http://imeji.org/terms/status> ?status}";
         System.out.println(searchQuery);
-        // ImejiJena.printModel(ImejiJena.collectionModel);
-        // searchQuery
-        // ="PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {  ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md  <http://imeji.org/terms/statement> <http://imeji.org/statement/25785198-709b-4cd6-a5a5-85b39823a252> . ?s <http://imeji.org/terms/collection> <http://imeji.org/collection/10003> .?s <http://imeji.org/terms/collection> ?c .  ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN> && ( (?status=<http://imeji.org/terms/status#RELEASED> || ?c=<http://imeji.org/collection/10003>)))}";
-        // // searchQuery =
-        // "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s ?sort0 WHERE {?s <http://imeji.org/terms/collection> <http://imeji.org/collection/2016> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c   .FILTER(?status!=<http://imeji.org/terms/status#WITHDRAWN> && ( (?status=<http://imeji.org/terms/status#RELEASED> || ?c=<http://imeji.org/collection/12> || ?c=<http://imeji.org/collection/2016>)))} ";
         Query q = QueryFactory.create(searchQuery, Syntax.syntaxARQ);
         // System.out.println(q.serialize(Syntax.syntaxSPARQL_11));
         QueryExecution qexec = initQueryExecution(ds, q);

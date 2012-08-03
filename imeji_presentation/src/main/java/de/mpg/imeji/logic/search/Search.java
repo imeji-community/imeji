@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.search;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -164,9 +166,18 @@ public class Search
         String specificQuery = "";
         if (containerURI != null)
         {
-            specificQuery = " ?s <http://imeji.org/terms/collection> <" + containerURI + "> . ";
+            String id = ObjectHelper.getId(URI.create(containerURI));
+            if (containerURI.equals(ObjectHelper.getURI(CollectionImeji.class, id).toString()))
+            {
+                specificQuery = " ?s <http://imeji.org/terms/collection> <" + containerURI + "> . ";
+            }
+            else if (containerURI.equals(ObjectHelper.getURI(Album.class, id).toString()))
+            {
+                type = SearchType.ALL;
+                specificQuery = " <" + containerURI + "> <http://imeji.org/terms/item> ?s . ";
+            }
         }
-        if (SearchType.ITEM.equals(type))
+        if (SearchType.ITEM.equals(type) || SearchType.ALL.equals(type))
         {
             specificQuery += " ?s <http://imeji.org/terms/collection> ?c . ";
         }

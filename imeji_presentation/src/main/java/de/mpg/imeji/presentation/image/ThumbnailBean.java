@@ -58,7 +58,7 @@ public class ThumbnailBean
         selected = sessionBean.getSelected().contains(uri);
         if (sessionBean.getActiveAlbum() != null)
         {
-            isInActiveAlbum = sessionBean.getActiveAlbum().getAlbum().getImages().contains(item.getId());
+            isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
         }
         initSecurity(item);
     }
@@ -122,12 +122,12 @@ public class ThumbnailBean
     public void selectedChanged(ValueChangeEvent event)
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(uri))
+        if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(uri.toString()))
         {
             selected = true;
             select();
         }
-        else if (event.getNewValue().toString().equals("false") && sessionBean.getSelected().contains(uri))
+        else if (event.getNewValue().toString().equals("false") && sessionBean.getSelected().contains(uri.toString()))
         {
             selected = false;
             select();
@@ -138,11 +138,11 @@ public class ThumbnailBean
     {
         if (!selected)
         {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(uri);
+            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(uri.toString());
         }
         else
         {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(uri);
+            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(uri.toString());
         }
         return "";
     }

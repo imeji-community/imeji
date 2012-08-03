@@ -4,8 +4,6 @@
 package de.mpg.imeji.logic.controller;
 
 import java.net.URI;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,13 +12,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import de.escidoc.core.client.Authentication;
-import de.escidoc.core.client.ItemHandlerClient;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
-import de.mpg.imeji.logic.concurrency.locks.Lock;
-import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.search.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -64,24 +58,11 @@ public class ItemController extends ImejiController
         else
             img.setVisibility(Visibility.PUBLIC);
         img.setCollection(coll);
-        img.setId(ObjectHelper.getURI(Item.class, Integer.toString(getUniqueId())));
         img.getMetadataSet().setProfile(ic.getProfile());
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
         imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
         ic.getImages().add(img.getId());
         cc.update(ic);
-    }
-
-    public void createTest(Item img, URI coll) throws Exception
-    {
-        writeCreateProperties(img, user);
-        img.setVisibility(Visibility.PUBLIC);
-        img.setCollection(coll);
-        img.setId(ObjectHelper.getURI(Item.class, Integer.toString(getUniqueId())));
-        img.getMetadataSet().setId(ObjectHelper.getURI(Item.class, Integer.toString(getUniqueId())));
-        img.getMetadataSet().setProfile(URI.create("http://imeji.org/mdProfile/3"));
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-        imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
     }
 
     public void create(Collection<Item> items, URI coll) throws Exception
@@ -97,7 +78,6 @@ public class ItemController extends ImejiController
             else
                 img.setVisibility(Visibility.PUBLIC);
             img.setCollection(coll);
-            img.setId(ObjectHelper.getURI(Item.class, Integer.toString(getUniqueId())));
             img.getMetadataSet().setProfile(ic.getProfile());
             // imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
             ic.getImages().add(img.getId());
@@ -243,25 +223,19 @@ public class ItemController extends ImejiController
     public Collection<Item> loadItems(List<String> uris, int limit, int offset)
     {
         long before = System.currentTimeMillis();
-        ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.imageModel);
         int counter = 0;
-        List<Object> l = new ArrayList<Object>();
+        List<Item> items = new ArrayList<Item>();
         for (String s : uris)
         {
             if (offset <= counter && (counter < (limit + offset) || limit == -1))
             {
-                l.add(J2JHelper.setId(new Item(), URI.create(s)));
+                items.add((Item)J2JHelper.setId(new Item(), URI.create(s)));
             }
             counter++;
         }
         try
         {
-            l = reader.load(l, user);
-            List<Item> items = new ArrayList<Item>();
-            for (Object o : l)
-            {
-                items.add((Item)o);
-            }
+            imejiRDF2Bean.load(J2JHelper.cast2ObjectList(items), user);
             long after = System.currentTimeMillis();
             logger.info(items.size() + " items loaded in " + Long.valueOf(after - before));
             return items;
@@ -410,44 +384,5 @@ public class ItemController extends ImejiController
         String userName = PropertyReader.getProperty("imeji.escidoc.user");
         String password = PropertyReader.getProperty("imeji.escidoc.password");
         return LoginHelper.login(userName, password);
-    }
-
-    @Override
-    @Deprecated
-    protected String getSpecificFilter() throws Exception
-    {
-        // Add filters for user management
-        String filter = "(";
-        if (user == null)
-        {
-            filter += "?collStatus = <" + Status.RELEASED.getUri()
-                    + "> && ?visibility = <http://imeji.org/terms/item/visibility/PUBLIC>";
-        }
-        else
-        {
-            String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
-            filter += "(?collStatus = <" + Status.RELEASED.getUri()
-                    + "> && ?visibility = <http://imeji.org/terms/item/visibility/PUBLIC>)";
-            filter += " || ?collCreatedBy=<" + userUri + ">";
-            for (Grant grant : user.getGrants())
-            {
-                switch (grant.asGrantType())
-                {
-                    case CONTAINER_ADMIN: // Add specifics here
-                    default:
-                        if (grant.getGrantFor() != null)
-                            filter += " || ?collection=<" + grant.getGrantFor().toString() + ">";
-                }
-            }
-        }
-        filter += ")";
-        return filter;
-    }
-
-    @Override
-    protected String getSpecificQuery() throws Exception
-    {
-        return additionalQuery
-                + " . ?s <http://imeji.org/terms/collection> ?collection . ?s <http://imeji.org/terms/visibility> ?visibility . ?collection <http://imeji.org/terms/properties> ?collprops . ?collprops <http://imeji.org/terms/createdBy> ?collCreatedBy . ?collprops <http://imeji.org/terms/status> ?collStatus ";
     }
 }

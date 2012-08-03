@@ -3,7 +3,9 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -21,8 +23,11 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
+import de.mpg.j2j.helper.J2JHelper;
 
 public abstract class ImejiController
 {
@@ -37,6 +42,7 @@ public abstract class ImejiController
 
     protected void writeCreateProperties(Properties properties, User user)
     {
+        J2JHelper.setId(properties, ObjectHelper.getURI(properties.getClass(), Integer.toString(getUniqueId())));
         Calendar now = DateHelper.getCurrentDate();
         properties.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail()));
         properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
@@ -153,8 +159,4 @@ public abstract class ImejiController
             throw new RuntimeException("Fatal error: Counter not found. Please restart your server. ", e);
         }
     }
-
-    protected abstract String getSpecificQuery() throws Exception;
-
-    protected abstract String getSpecificFilter() throws Exception;
 }

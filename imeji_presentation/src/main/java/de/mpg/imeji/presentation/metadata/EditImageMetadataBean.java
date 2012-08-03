@@ -8,7 +8,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.SealedObject;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -24,11 +23,8 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
-import de.mpg.imeji.presentation.collection.CollectionImagesBean;
 import de.mpg.imeji.presentation.history.HistorySession;
-import de.mpg.imeji.presentation.image.SelectedBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.editors.MetadataEditor;
 import de.mpg.imeji.presentation.metadata.editors.MetadataMultipleEditor;
@@ -213,9 +209,9 @@ public class EditImageMetadataBean
     public List<String> getSelectedItems()
     {
         List<String> l = new ArrayList<String>(session.getSelected().size());
-        for (URI uri : session.getSelected())
+        for (String uri : session.getSelected())
         {
-            l.add(uri.toString());
+            l.add(uri);
         }
         return l;
     }

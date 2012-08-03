@@ -109,7 +109,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset);
-        collections = controller.loadLazy(results.getResults(), limit, offset);
+        collections = controller.loadCollectionsLazy(results.getResults(), limit, offset);
         totalNumberOfRecords = results.getNumberOfRecords();
         return ImejiFactory.collectionListToListItem(collections, sb.getUser());
     }

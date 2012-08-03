@@ -62,7 +62,7 @@
 				
 				<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements})" styleClass="free_area0 "/><span style="padding-left: 1px" />
 				
-				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
+				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
 					<h:outputText value="#{lbl.add_to_album}" styleClass="free_area0"/>
 				</a4j:commandLink>
 				
@@ -78,7 +78,7 @@
 								<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/All_Search_LensStart_15_Active.png"/>
 							</h:outputLink>
 						</h:panelGroup>
-						<a4j:commandLink action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+						<a4j:commandLink action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 							<span class="xLarge_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 						</a4j:commandLink>
 						<h:outputLink value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit2" rendered="#{paginatorListSessionBean.imageEditable}">
@@ -103,7 +103,7 @@
 					<input type="button" class="min_imgBtn checkboxSelectButton"/>
 						
 					<div class="selectMenu" style="display: none; width:150px;" >
-						<a4j:commandLink action="#{paginatorListSessionBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.album.deletable}">
+						<a4j:commandLink action="#{paginatorListSessionBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
 							<h:outputText value="#{lbl.remove}" styleClass="xLarge_area0_p8"/>
 						</a4j:commandLink>
 						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{SessionBean.activeAlbum == null}">
@@ -112,7 +112,7 @@
 								<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/All_Search_LensStart_15_Active.png"/>
 							</h:outputLink>
 						</h:panelGroup>
-						<a4j:commandLink action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+						<a4j:commandLink action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 							<span class="xLarge_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 						</a4j:commandLink>
 					</div>
@@ -127,7 +127,7 @@
 					<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}&#160;" styleClass="free_area0"/>
 				</h:panelGroup>
 				
-				<a4j:commandLink styleClass="free_area0" action="#{SelectedBean.addToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
+				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
 					<h:outputText styleClass="free_area0" value="#{lbl.add_to_album}"/>
 				</a4j:commandLink>
 			
@@ -147,7 +147,7 @@
 										<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/All_Search_LensStart_15_Active.png"/>
 									</h:outputLink>
 								</h:panelGroup>
-								<a4j:commandLink action="#{SelectedBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+								<a4j:commandLink action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 									<span class="xLarge_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 								</a4j:commandLink>
 								<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit" rendered="#{paginatorListSessionBean.imageEditable}">
@@ -172,7 +172,7 @@
 					<input type="button" class="min_imgBtn checkboxSelectButton"/>
 						
 					<div class="selectMenu" style="display: none; width:150px;" >
-						<a4j:commandLink action="#{SelectedBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.album.deletable}">
+						<a4j:commandLink action="#{paginatorListSessionBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
 							<h:outputText value="#{lbl.remove}" styleClass="xLarge_area0_p8"/>
 						</a4j:commandLink>
 						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{SessionBean.activeAlbum == null}">
@@ -181,7 +181,7 @@
 								<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/All_Search_LensStart_15_Active.png"/>
 							</h:outputLink>
 						</h:panelGroup>
-						<a4j:commandLink action="#{paginatorListSessionBean.addToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+						<a4j:commandLink action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 							<span class="xLarge_area0_p8"><h:outputText value="#{lbl.add_to_album}"/></span>
 						</a4j:commandLink>
 					</div>

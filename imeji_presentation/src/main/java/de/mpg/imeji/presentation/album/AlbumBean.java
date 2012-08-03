@@ -12,6 +12,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
@@ -53,7 +54,7 @@ public class AlbumBean
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.id = ObjectHelper.getId(album.getId());
         if (sessionBean.getActiveAlbum() != null
-                && sessionBean.getActiveAlbum().getAlbum().getId().equals(album.getId()))
+                && sessionBean.getActiveAlbum().getId().equals(album.getId()))
         {
             active = true;
         }
@@ -66,11 +67,12 @@ public class AlbumBean
 
     public void initView()
     {
+        ImejiJena.printModel(ImejiJena.albumModel);
         try
         {
             if (id != null)
             {
-                setAlbum(ObjectLoader.loadAlbum(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
+                setAlbum(ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
                 if (getAlbum() != null)
                 {
                     if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().equals(album.getId()))
@@ -99,7 +101,7 @@ public class AlbumBean
         AlbumController ac = new AlbumController(sessionBean.getUser());
         try
         {
-            setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id)));
+            setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
             save = false;
             if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().equals(album.getId()))
             {
@@ -355,7 +357,7 @@ public class AlbumBean
 
     public String makeActive()
     {
-        sessionBean.setActiveAlbum(this);
+        sessionBean.setActiveAlbum(this.album);
         this.setActive(true);
         return "pretty:";
     }

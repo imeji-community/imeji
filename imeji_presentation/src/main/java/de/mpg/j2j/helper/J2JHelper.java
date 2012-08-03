@@ -11,6 +11,7 @@ import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
+import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
 public class J2JHelper
@@ -85,6 +86,11 @@ public class J2JHelper
             return o.getClass().getAnnotation(j2jDataType.class).value();
         }
         return null;
+    }
+    
+    public static String getModel(Object o)
+    {
+        return o.getClass().getAnnotation(j2jModel.class).value();
     }
 
     public static String getNamespace(Object o, Field f)

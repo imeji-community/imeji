@@ -12,7 +12,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -20,9 +19,8 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
-import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
@@ -52,6 +50,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private boolean isSimpleSearch;
     private SearchQuery searchQuery = new SearchQuery();
     private String discardComment;
+    private String selectedImagesContext;
 
     public ImagesBean()
     {
@@ -207,50 +206,50 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
     }
 
-    public String addToActiveAlbum() throws Exception
+    public String addSelectedToActiveAlbum() throws Exception
     {
-        AlbumBean activeAlbum = sb.getActiveAlbum();
+        addToActiveAlbum(sb.getSelected());
+        sb.getSelected().clear();
+        return "pretty:";
+    }
+
+    public String addAllToActiveAlbum() throws Exception
+    {
+        addToActiveAlbum(search(searchQuery, null).getResults());
+        return "pretty:";
+    }
+
+    public void addToActiveAlbum(List<String> items) throws Exception
+    {
         AlbumController ac = new AlbumController(sb.getUser());
-        int els = getElementsPerPage();
-        int page = getCurrentPageNumber();
-        setElementsPerPage(totalNumberOfRecords);
-        setCurrentPageNumber(1);
-        update();
-        setElementsPerPage(els);
-        setCurrentPageNumber(page);
-        int count = 0;
-        for (ThumbnailBean tb : getCurrentPartList())
-        {
-            if (tb.isInActiveAlbum())
-            {
-                BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("image")
-                        + " "
-                        + tb.getFilename()
-                        + " "
-                        + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                                .getMessage("already_in_active_album"));
-            }
-            else
-            {
-                activeAlbum.getAlbum().getImages().add(tb.getUri());
-                count++;
-            }
-        }
         try
         {
-            ac.update(activeAlbum.getAlbum());
-            BeanHelper.info(count
-                    + " "
-                    + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                            .getMessage("images_added_to_active_album"));
+            int sizeToAdd = items.size();
+            int notAdded = ac.addToAlbum(sb.getActiveAlbum(), items, sb.getUser()).size();
+            int sizeadded = sizeToAdd - notAdded;
+            String message = "";
+            if (sizeadded > 0)
+            {
+                message = sizeadded
+                        + " "
+                        + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
+                                .getMessage("images_added_to_active_album");
+            }
+            if (notAdded > 0)
+            {
+                message += notAdded
+                        + " "
+                        + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
+                                .getMessage("already_in_active_album");
+            }
+            BeanHelper.info(message);
         }
         catch (Exception e)
         {
             BeanHelper.error(e.getMessage());
-            activeAlbum.setAlbum(ac.retrieve(activeAlbum.getAlbum().getId()));
+            sb.setActiveAlbum(ac.retrieveLazy(sb.getActiveAlbum().getId(), sb.getUser()));
             e.printStackTrace();
         }
-        return "pretty:";
     }
 
     public String deleteAll() throws Exception
@@ -280,6 +279,31 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
             BeanHelper.info(count + " " + sb.getLabel("images_withdraw"));
         }
         return "pretty:";
+    }
+
+    public String getInitComment()
+    {
+        setDiscardComment("");
+        return "";
+    }
+
+    public String getSelectedImagesContext()
+    {
+        return selectedImagesContext;
+    }
+
+    public void setSelectedImagesContext(String selectedImagesContext)
+    {
+        if (selectedImagesContext.equals(sb.getSelectedImagesContext()))
+        {
+            this.selectedImagesContext = selectedImagesContext;
+        }
+        else
+        {
+            sb.getSelected().clear();
+            this.selectedImagesContext = selectedImagesContext;
+            sb.setSelectedImagesContext(selectedImagesContext);
+        }
     }
 
     public String getImageBaseUrl()
@@ -377,7 +401,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         {
             if (!(sb.getSelected().contains(bean.getUri())))
             {
-                sb.getSelected().add(bean.getUri());
+                sb.getSelected().add(bean.getUri().toString());
             }
         }
         return getNavigationString();

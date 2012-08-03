@@ -4,7 +4,6 @@
 package de.mpg.imeji.logic.controller;
 
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,16 +19,12 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.security.Security;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.exceptions.NotFoundException;
-import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
 public class CollectionController extends ImejiController
@@ -53,11 +48,7 @@ public class CollectionController extends ImejiController
      */
     public URI create(CollectionImeji ic, URI profile) throws Exception
     {
-        ProfileController pc = new ProfileController(user);
-        pc.retrieve(profile);
         writeCreateProperties(ic, user);
-        ic.setStatus(Status.PENDING);
-        ic.setId(ObjectHelper.getURI(CollectionImeji.class, Integer.toString(getUniqueId())));
         ic.setProfile(profile);
         imejiBean2RDF.create(imejiBean2RDF.toList(ic), user);
         user = addCreatorGrant(ic.getId(), user);
@@ -201,10 +192,9 @@ public class CollectionController extends ImejiController
         return simplifiedUser;
     }
 
-    public Collection<CollectionImeji> loadLazy(List<String> uris, int limit, int offset) throws Exception
+    public Collection<CollectionImeji> loadCollectionsLazy(List<String> uris, int limit, int offset) throws Exception
     {
         LinkedList<CollectionImeji> cols = new LinkedList<CollectionImeji>();
-        ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.collectionModel);
         int counter = 0;
         for (String s : uris)
         {
@@ -216,52 +206,12 @@ public class CollectionController extends ImejiController
                 }
                 catch (Exception e)
                 {
-                    logger.error("Error loading image " + s, e);
+                    logger.error("Error loading collection " + s, e);
                 }
             }
             counter++;
         }
-        reader.loadLazy(J2JHelper.cast2ObjectList(cols), user);
+        imejiRDF2Bean.loadLazy(J2JHelper.cast2ObjectList(cols), user);
         return cols;
-    }
-
-    @Override
-    protected String getSpecificQuery() throws Exception
-    {
-        return " . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/createdBy> ?createdBy . ?props <http://imeji.org/terms/status> ?status";
-    }
-
-    @Override
-    protected String getSpecificFilter() throws Exception
-    {
-        // Add filters for user management
-        String filter = "(";
-        Security security = new Security();
-        if (user == null)
-        {
-            filter += "?status = <" + Status.RELEASED.getUri() + ">";
-        }
-        else if (security.isSysAdmin(user))
-        {
-            filter += "?status = <" + Status.RELEASED.getUri() + "> || ?status = <" + Status.RELEASED.getUri() + ">";
-        }
-        else
-        {
-            String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
-            filter += "?status = <" + Status.RELEASED.getUri() + "> || ?createdBy=<" + userUri + ">";
-            for (Grant grant : user.getGrants())
-            {
-                switch (grant.asGrantType())
-                {
-                    case CONTAINER_ADMIN: // Add specifics here
-                        break;
-                    default:
-                        filter += " || ?s=<" + grant.getGrantFor().toString() + ">";
-                        break;
-                }
-            }
-        }
-        filter += ")";
-        return filter;
     }
 }

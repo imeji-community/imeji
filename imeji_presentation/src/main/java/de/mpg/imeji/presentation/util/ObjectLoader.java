@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -70,7 +69,7 @@ public class ObjectLoader
         try 
         {
         	AlbumController ac = new AlbumController(user); 
-        	return ac.retrieve(id);
+        	return ac.retrieve(id, user);
 		} 
         catch (NotFoundException e) 
 		{
@@ -88,7 +87,7 @@ public class ObjectLoader
         try 
         {
             AlbumController ac = new AlbumController(user); 
-            return ac.retrieveLazy(id);
+            return ac.retrieveLazy(id, user);
         } 
         catch (NotFoundException e) 
         {

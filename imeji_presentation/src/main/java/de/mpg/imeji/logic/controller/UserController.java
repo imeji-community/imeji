@@ -108,16 +108,4 @@ public class UserController extends ImejiController
         }
         return hexString.toString();
     }
-
-    @Override
-    protected String getSpecificFilter() throws Exception
-    {
-        return "";
-    }
-
-    @Override
-    protected String getSpecificQuery() throws Exception
-    {
-        return "";
-    }
 }

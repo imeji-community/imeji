@@ -9,30 +9,27 @@ import java.util.List;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
+import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.image.ImagesBean;
-import de.mpg.imeji.presentation.image.SelectedBean;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 
 public class AlbumImagesBean extends ImagesBean
 {
     private int totalNumberOfRecords;
     private String id = null;
-    private AlbumBean album;
+    private Album album;
     private URI uri;
     private SessionBean sb;
     private CollectionImeji collection;
@@ -47,30 +44,21 @@ public class AlbumImagesBean extends ImagesBean
 
     public void init()
     {
-        AlbumController ac = new AlbumController(sb.getUser());
-        try
-        {
-            this.setAlbum(new AlbumBean(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id))));
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(e.getMessage());
-            e.printStackTrace();
-        }
+        readUrl();
+        loadAlbum();
     }
 
     @Override
     public String getNavigationString()
     {
-        if (album != null)
+        if (album != null && album.getId() != null)
         {
             if (sb.getSelectedImagesContext() != null
-                    && !(sb.getSelectedImagesContext().equals("pretty:albumImages"
-                            + album.getAlbum().getId().toString())))
+                    && !(sb.getSelectedImagesContext().equals("pretty:albumImages" + album.getId().toString())))
             {
                 sb.getSelected().clear();
             }
-            sb.setSelectedImagesContext("pretty:albumImages" + album.getAlbum().getId().toString());
+            sb.setSelectedImagesContext("pretty:albumImages" + album.getId().toString());
         }
         return "pretty:albumImages";
     }
@@ -84,7 +72,8 @@ public class AlbumImagesBean extends ImagesBean
     @Override
     public List<ThumbnailBean> retrieveList(int offset, int limit)
     {
-        uri = ObjectHelper.getURI(Album.class, id);
+        readUrl();
+        loadAlbum();
         SortCriterion sortCriterion = initSortCriterion();
         ItemController controller = new ItemController(sb.getUser());
         SearchResult result = controller.searchImagesInContainer(uri, new SearchQuery(), sortCriterion, limit, offset);
@@ -92,6 +81,16 @@ public class AlbumImagesBean extends ImagesBean
         result.setQuery(getQuery());
         result.setSort(sortCriterion);
         return ImejiFactory.imageListToThumbList(loadImages(result));
+    }
+
+    public void readUrl()
+    {
+        uri = ObjectHelper.getURI(Album.class, id);
+    }
+
+    public void loadAlbum()
+    {
+        album = ObjectLoader.loadAlbumLazy(uri, sb.getUser());
     }
 
     @Override
@@ -104,25 +103,16 @@ public class AlbumImagesBean extends ImagesBean
     public String removeFromAlbum() throws Exception
     {
         AlbumController ac = new AlbumController(sb.getUser());
-        BeanHelper.info(album.getAlbum().getImages().size() + " " + sb.getMessage("success_album_remove_images"));
-        album.getAlbum().getImages().clear();
-        ac.update(album.getAlbum());
-        AlbumBean activeAlbum = sb.getActiveAlbum();
-        if (activeAlbum != null
-                && activeAlbum.getAlbum().getId().toString().equals(album.getAlbum().getId().toString()))
-        {
-            sb.setActiveAlbum(album);
-        }
-        SelectedBean sb = (SelectedBean)BeanHelper.getSessionBean(SelectedBean.class);
-        sb.clearAll();
+        ac.removeFromAlbum(sb.getActiveAlbum(), new ArrayList<String>(), sb.getUser());
+        BeanHelper.info(album.getImages().size() + " " + sb.getMessage("success_album_remove_images"));
         return "pretty:";
     }
 
     public String getImageBaseUrl()
     {
-        if (album.getAlbum() == null)
+        if (album == null || album.getId() == null)
             return "";
-        return navigation.getApplicationUri() + album.getAlbum().getId().getPath();
+        return navigation.getApplicationUri() + album.getId().getPath();
     }
 
     public String getBackUrl()
@@ -150,7 +140,7 @@ public class AlbumImagesBean extends ImagesBean
     {
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
-        String dc = getAlbum().getAlbum().getDiscardComment();
+        String dc = album.getDiscardComment();
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).getAlbum().setDiscardComment(dc);
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
         return "pretty:";
@@ -159,13 +149,13 @@ public class AlbumImagesBean extends ImagesBean
     public boolean isEditable()
     {
         Security security = new Security();
-        return security.check(OperationsType.UPDATE, sb.getUser(), album.getAlbum());
+        return security.check(OperationsType.UPDATE, sb.getUser(), album);
     }
 
     public boolean isDeletable()
     {
         Security security = new Security();
-        return security.check(OperationsType.DELETE, sb.getUser(), album.getAlbum());
+        return security.check(OperationsType.DELETE, sb.getUser(), album);
     }
 
     public String getId()
@@ -188,12 +178,12 @@ public class AlbumImagesBean extends ImagesBean
         return collection;
     }
 
-    public void setAlbum(AlbumBean album)
+    public void setAlbum(Album album)
     {
         this.album = album;
     }
 
-    public AlbumBean getAlbum()
+    public Album getAlbum()
     {
         return album;
     }

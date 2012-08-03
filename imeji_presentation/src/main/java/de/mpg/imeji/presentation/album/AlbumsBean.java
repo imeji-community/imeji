@@ -3,14 +3,12 @@
  */
 package de.mpg.imeji.presentation.album;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -64,7 +62,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
         }
         SearchResult searchResult = controller.search(searchQuery, sortCriterion, limit, offset);
         totalNumberOfRecords = searchResult.getNumberOfRecords();
-        return ImejiFactory.albumListToBeanList(controller.load(searchResult.getResults(), limit, offset));
+        return ImejiFactory.albumListToBeanList(controller.loadAlbumsLazy(searchResult.getResults(), limit, offset));
     }
 
     public SessionBean getSb()

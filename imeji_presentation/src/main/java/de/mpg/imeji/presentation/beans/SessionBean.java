@@ -4,7 +4,6 @@
 
 package de.mpg.imeji.presentation.beans;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,12 +18,12 @@ import javax.faces.event.ActionEvent;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 
-public class SessionBean implements Serializable
+public class SessionBean
 {
     private static Logger logger = Logger.getLogger(SessionBean.class);
     private User user = null;
@@ -33,19 +32,19 @@ public class SessionBean implements Serializable
     public static final String MESSAGES_BUNDLE = "messages";
     public static final String METADATA_BUNDLE = "metadata";
     // His locale
-    private Locale locale = new Locale("en");//.getCurrentInstance().getExternalContext().getRequestLocale();
+    private Locale locale = new Locale("en");
     private Page currentPage = null;
-    private List<URI> selected;
+    private List<String> selected;
 	private List<URI> selectedCollections;
 	private List<URI> selectedAlbums;
-    private AlbumBean activeAlbum;
+    private Album activeAlbum;
     private Map<URI, MetadataProfile> profileCached;
     
     private String selectedImagesContext = null;
 
 	public SessionBean()
     {
-        selected = new ArrayList<URI>();
+        selected = new ArrayList<String>();
         selectedCollections = new ArrayList<URI>();
         selectedAlbums = new ArrayList<URI>();
         profileCached = new HashMap<URI, MetadataProfile>();
@@ -177,12 +176,12 @@ public class SessionBean implements Serializable
     	return security.isSysAdmin(user);
     }
   
-    public List<URI> getSelected()
+    public List<String> getSelected()
     {
         return selected;
     }
 
-    public void setSelected(List<URI> selected)
+    public void setSelected(List<String> selected)
     {
         this.selected = selected;
     }
@@ -216,14 +215,19 @@ public class SessionBean implements Serializable
 		return this.selectedAlbums.size();
 	}
 	
-    public void setActiveAlbum(AlbumBean activeAlbum)
+    public void setActiveAlbum(Album activeAlbum)
     {
         this.activeAlbum = activeAlbum;
     }
 
-    public AlbumBean getActiveAlbum()
+    public Album getActiveAlbum()
     {
         return activeAlbum;
+    }
+    
+    public int getActiveAlbumSize()
+    {
+        return activeAlbum.getImages().size();
     }
 
 	public Map<URI, MetadataProfile> getProfileCached() {

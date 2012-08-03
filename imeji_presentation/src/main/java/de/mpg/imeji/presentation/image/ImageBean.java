@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.image;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,16 +15,16 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
+import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.presentation.album.AlbumBean;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.album.AlbumImagesBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
@@ -35,7 +34,7 @@ import de.mpg.imeji.presentation.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.j2j.exceptions.NotFoundException;
+import de.mpg.j2j.helper.J2JHelper;
 
 public class ImageBean
 {
@@ -371,9 +370,11 @@ public class ImageBean
 
     public String addToActiveAlbum() throws Exception
     {
-        AlbumBean activeAlbum = sessionBean.getActiveAlbum();
         AlbumController ac = new AlbumController(sessionBean.getUser());
-        if (activeAlbum.getAlbum().getImages().contains(item.getId()))
+        List<String> l = new ArrayList<String>();
+        l.add(item.getId().toString());
+        boolean added = ac.addToAlbum(sessionBean.getActiveAlbum(), l, sessionBean.getUser()).size() == 0;
+        if (!added)
         {
             BeanHelper
                     .error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("image")
@@ -385,8 +386,6 @@ public class ImageBean
         }
         else
         {
-            activeAlbum.getAlbum().getImages().add(item.getId());
-            ac.update(activeAlbum.getAlbum());
             BeanHelper.info(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("image") + " "
                     + item.getFilename() + " "
                     + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("added_to_active_album"));
@@ -396,12 +395,10 @@ public class ImageBean
 
     public String removeFromAlbum() throws Exception
     {
-        AlbumImagesBean aib = (AlbumImagesBean)BeanHelper.getSessionBean(AlbumImagesBean.class);
         AlbumController ac = new AlbumController(sessionBean.getUser());
-        aib.getAlbum().getAlbum().getImages().remove(item.getId());
-        ac.update(aib.getAlbum().getAlbum());
-        if (getIsInActiveAlbum())
-            sessionBean.getActiveAlbum().getAlbum().getImages().remove(item.getId());
+        List<String> l = new ArrayList<String>();
+        l.add(item.getId().toString());
+        ac.removeFromAlbum(sessionBean.getActiveAlbum(), l, sessionBean.getUser());
         BeanHelper.info(sessionBean.getLabel("image") + " " + item.getFilename() + " "
                 + sessionBean.getMessage("success_album_remove_from"));
         return "pretty:";
@@ -411,7 +408,7 @@ public class ImageBean
     {
         if (sessionBean.getActiveAlbum() != null)
         {
-            return sessionBean.getActiveAlbum().getAlbum().getImages().contains(item.getId());
+            return sessionBean.getActiveAlbum().getImages().contains(item.getId());
         }
         return false;
     }
@@ -435,11 +432,11 @@ public class ImageBean
     {
         if (!selected)
         {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(item.getId());
+            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(item.getId().toString());
         }
         else
         {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(item.getId());
+            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(item.getId().toString());
         }
         return "";
     }

@@ -40,12 +40,12 @@
 <body>
 	<ui:composition template="templates/template_paginator_images.xhtml">	
 			<ui:param name="paginatorListSessionBean" value="#{AlbumImagesBean}" />
-			<ui:param name="headline" value="#{AlbumImagesBean.album.album.metadata.title}"/>
+			<ui:param name="headline" value="#{AlbumImagesBean.album.metadata.title}"/>
 	
 
 		<ui:define name="contentMenu">
 			
-			<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.id}" rendered="true">
+			<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.id.path}" rendered="true">
 				<h:outputText value="Album startpage"/>
 			</h:outputLink>
 			
@@ -55,7 +55,7 @@
 			
 			<h:outputText styleClass="seperator void" />
 			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.id}/details?init=1" rendered="true">
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.id.path}/details?init=1" rendered="true">
 				<h:outputText value="Album metadata"/>
 			</h:outputLink>
 			
@@ -76,12 +76,12 @@
 					<!-- SORTING content menu lower line ends here -->
 				</h:panelGroup>
 				
-				<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.album.status=='PENDING'}">
+				<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='PENDING'}">
 					<h:outputText value="#{lbl.release}"/>
 					<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
 				</h:outputLink>
 				
-				<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.album.status=='RELEASED'}">
+				<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='RELEASED'}">
 					<h:outputText value="#{lbl.withdraw}"/>
 					<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
 				</h:outputLink>
@@ -105,7 +105,7 @@
 			</ui:include>
 			<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
 				<ui:param name="bean" value="#{AlbumImagesBean}"/>
-				<ui:param name="discardComment" value="#{AlbumImagesBean.album.album.discardComment}"/>
+				<ui:param name="discardComment" value="#{AlbumImagesBean.album.discardComment}"/>
 			</ui:include>
 		</ui:define>
 	

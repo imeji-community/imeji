@@ -41,8 +41,8 @@
 	        	<h:outputText styleClass="xDouble_area0_p8 xTiny_marginLExcl" value="#{lbl.delete_images}?" rendered="#{bean.deletable}"/>
 	       		<h:outputText styleClass="xDouble_area0_p8 xTiny_marginLExcl" value="#{lbl.withdraw_images}? #{lbl.images_withdraw_comment}" rendered="#{!bean.deletable and bean.editable}"/>
 	        </h3>
-	        <h:outputText value="#{SelectedBean.initComment}"/>
-	        <h:inputTextarea value="#{SelectedBean.discardComment}" onkeyup="getElementById('formular:DeleteSelected:discardBtn').style.display = 'inline';getElementById('formular:DeleteSelected:discardBtnNoComment').style.display = 'none';" valueChangeListener="#{SelectedBean.discardCommentListener}" rows="6" styleClass="xTiny_marginLExcl xDouble_area0_p8" rendered="#{!bean.deletable and bean.editable}"/>
+	        <h:outputText value="#{paginatorListSessionBean.initComment}"/>
+	        <h:inputTextarea value="#{paginatorListSessionBean.discardComment}" onkeyup="getElementById('formular:DeleteSelected:discardBtn').style.display = 'inline';getElementById('formular:DeleteSelected:discardBtnNoComment').style.display = 'none';" valueChangeListener="#{paginatorListSessionBean.discardCommentListener}" rows="6" styleClass="xTiny_marginLExcl xDouble_area0_p8" rendered="#{!bean.deletable and bean.editable}"/>
 	        
 	        <h:panelGroup layout="block" styleClass="quad_area0_p8">
 				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
@@ -52,9 +52,9 @@
 						</a>
 	       			</div>
 					<div class="xLarge_txtBtn tiny_marginLExcl">
-						<a4j:commandButton onclick="this.disabled=true; this.style.opacity = 0.5; this.value='#{msg.please_wait}';" action="#{SelectedBean.deleteAll}" rendered="#{bean.deletable}" value="#{lbl.delete}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
+						<a4j:commandButton onclick="this.disabled=true; this.style.opacity = 0.5; this.value='#{msg.please_wait}';" action="#{paginatorListSessionBean.deleteAll}" rendered="#{bean.deletable}" value="#{lbl.delete}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
 						<a4j:commandButton id="discardBtnNoComment" disabled="true" style="display:inline;" action="#" rendered="#{!bean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>    
-						<a4j:commandButton id="discardBtn" style="display:none;" onclick="this.disabled=true; this.style.opacity = 0.5; this.value='#{msg.please_wait}';" action="#{SelectedBean.withdrawAll}" rendered="#{!bean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>    
+						<a4j:commandButton id="discardBtn" style="display:none;" onclick="this.disabled=true; this.style.opacity = 0.5; this.value='#{msg.please_wait}';" action="#{paginatorListSessionBean.withdrawAll}" rendered="#{!bean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>    
 				 	</div>
 				</div>
 			</h:panelGroup>

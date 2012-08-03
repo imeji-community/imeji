@@ -4,11 +4,8 @@
 package de.mpg.imeji.logic.controller;
 
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -22,16 +19,13 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.security.Security;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.j2j.exceptions.NotFoundException;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.DateHelper;
+import de.mpg.j2j.helper.J2JHelper;
 
 public class AlbumController extends ImejiController
 {
@@ -49,19 +43,14 @@ public class AlbumController extends ImejiController
     /**
      * Creates a new collection. - Add a unique id - Write user properties
      * 
-     * @param ic
+     * @param album
      * @param user
      */
-    public void create(Album ic) throws Exception
+    public void create(Album album) throws Exception
     {
-        writeCreateProperties(ic, user);
-        ic.setStatus(Status.PENDING);
-        ic.setId(new URI("http://imeji.org/terms/album/" + getUniqueId()));
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-        imejiBean2RDF.create(imejiBean2RDF.toList(ic), user);
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
-        // ic = (Album) imejiRDF2Bean.load(ic.getId().toString(), user);
-        user = addCreatorGrant(ic.getId(), user);
+        writeCreateProperties(album, user);
+        imejiBean2RDF.create(imejiBean2RDF.toList(album), user);
+        user = addCreatorGrant(album.getId(), user);
     }
 
     /**
@@ -78,15 +67,13 @@ public class AlbumController extends ImejiController
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
     }
 
-    public Album retrieve(URI selectedAlbumId) throws Exception
+    public Album retrieve(URI selectedAlbumId, User user) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
         return (Album)imejiRDF2Bean.load(selectedAlbumId.toString(), user, new Album());
     }
 
-    public Album retrieveLazy(URI selectedAlbumId) throws Exception
+    public Album retrieveLazy(URI selectedAlbumId, User user) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
         return (Album)imejiRDF2Bean.loadLazy(selectedAlbumId.toString(), user, new Album());
     }
 
@@ -120,6 +107,41 @@ public class AlbumController extends ImejiController
             writeReleaseProperty(album, user);
             update(album);
         }
+    }
+
+    public List<String> addToAlbum(Album album, List<String> uris, User user) throws Exception
+    {
+        ItemController ic = new ItemController(user);
+        List<String> inAlbums = ic.searchImagesInContainer(album.getId(), null, null, -1, 0).getResults();
+        List<String> notAddedUris = new ArrayList<String>();
+        for (String uri : uris)
+        {
+            if (!inAlbums.contains(uri))
+            {
+                inAlbums.add(uri);
+            }
+            else
+            {
+                notAddedUris.add(uri);
+            }
+        }
+        album.getImages().clear();
+        for (String uri : inAlbums)
+        {
+            album.getImages().add(URI.create(uri));
+        }
+        update(album);
+        return notAddedUris;
+    }
+
+    public void removeFromAlbum(Album album, List<String> uris, User user) throws Exception
+    {
+        album.getImages().clear();
+        for (String uri : uris)
+        {
+            album.getImages().add(URI.create(uri));
+        }
+        update(album);
     }
 
     public synchronized boolean hasPendingImage(List<String> uris) throws Exception
@@ -158,26 +180,19 @@ public class AlbumController extends ImejiController
         return search.search(searchQuery, sortCri, user);
     }
 
-    public Collection<Album> load(List<String> uris, int limit, int offset)
+    public Collection<Album> loadAlbumsLazy(List<String> uris, int limit, int offset) throws Exception
     {
-        LinkedList<Album> albs = new LinkedList<Album>();
-        ImejiRDF2Bean reader = new ImejiRDF2Bean(ImejiJena.albumModel);
+        List<Album> albs = new ArrayList<Album>();
         int counter = 0;
         for (String s : uris)
         {
             if (offset <= counter && (counter < (limit + offset) || limit == -1))
             {
-                try
-                {
-                    albs.add((Album)reader.load(s, user, new Album()));
-                }
-                catch (Exception e)
-                {
-                    logger.error("Error loading image " + s);
-                }
+                albs.add((Album)J2JHelper.setId(new Album(), URI.create(s)));
             }
             counter++;
         }
+        imejiRDF2Bean.loadLazy(J2JHelper.cast2ObjectList(albs), user);
         return albs;
     }
 
@@ -185,39 +200,5 @@ public class AlbumController extends ImejiController
     {
         return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/album>}",
                 ImejiJena.albumModel);
-    }
-
-    @Override
-    @Deprecated
-    protected String getSpecificQuery() throws Exception
-    {
-        return " . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/createdBy> ?createdBy . ?props <http://imeji.org/terms/status> ?status";
-    }
-
-    @Override
-    protected String getSpecificFilter() throws Exception
-    {
-        // Add filters for user management
-        String filter = "(";
-        if (user == null)
-        {
-            filter += "?status = <" + Status.RELEASED.getUri() + ">";
-        }
-        else
-        {
-            String userUri = "http://xmlns.com/foaf/0.1/Person/" + URLEncoder.encode(user.getEmail(), "UTF-8");
-            filter += "?status = <" + Status.RELEASED.getUri() + "> || ?createdBy=<" + userUri + ">";
-            for (Grant grant : user.getGrants())
-            {
-                switch (grant.asGrantType())
-                {
-                    case CONTAINER_ADMIN: // Add specifics here
-                    default:
-                        filter += " || ?s=<" + grant.getGrantFor().toString() + ">";
-                }
-            }
-        }
-        filter += ")";
-        return filter;
     }
 }

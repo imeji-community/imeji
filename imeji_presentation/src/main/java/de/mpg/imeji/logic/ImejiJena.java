@@ -7,21 +7,13 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 
-import tdb.tdbbackup;
-import tdb.tdbclean;
-import tdb.tdbrecovery;
 import tdb.tdbstats;
 
-import com.hp.hpl.jena.query.ARQ;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.tdb.TDB;
-import com.hp.hpl.jena.tdb.TDBBackup;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.tdb.TDBLoader;
 import com.hp.hpl.jena.tdb.sys.SystemTDB;
-import com.hp.hpl.jena.tdb.sys.TDBInternal;
 
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.Counter;

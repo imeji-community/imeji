@@ -34,6 +34,7 @@ public class AlbumImagesBean extends ImagesBean
     private SessionBean sb;
     private CollectionImeji collection;
     private Navigation navigation;
+    private List<String> itemsUris = new ArrayList<String>();
 
     public AlbumImagesBean()
     {
@@ -78,6 +79,7 @@ public class AlbumImagesBean extends ImagesBean
         ItemController controller = new ItemController(sb.getUser());
         SearchResult result = controller.searchImagesInContainer(uri, new SearchQuery(), sortCriterion, limit, offset);
         totalNumberOfRecords = result.getNumberOfRecords();
+        itemsUris = result.getResults();
         result.setQuery(getQuery());
         result.setSort(sortCriterion);
         return ImejiFactory.imageListToThumbList(loadImages(result));
@@ -103,8 +105,36 @@ public class AlbumImagesBean extends ImagesBean
     public String removeFromAlbum() throws Exception
     {
         AlbumController ac = new AlbumController(sb.getUser());
-        ac.removeFromAlbum(sb.getActiveAlbum(), new ArrayList<String>(), sb.getUser());
-        BeanHelper.info(album.getImages().size() + " " + sb.getMessage("success_album_remove_images"));
+        int deletedCount = ac.removeFromAlbum(this.album, sb.getSelected(), sb.getUser());
+        sb.getSelected().clear();
+        BeanHelper.info(deletedCount + " " + sb.getMessage("success_album_remove_images"));
+        return "pretty:";
+    }
+
+    public String removeFromActiveAlbum() throws Exception
+    {
+        AlbumController ac = new AlbumController(sb.getUser());
+        int deletedCount = ac.removeFromAlbum(sb.getActiveAlbum(), sb.getSelected(), sb.getUser());
+        sb.getSelected().clear();
+        BeanHelper.info(deletedCount + " " + sb.getMessage("success_album_remove_images"));
+        return "pretty:";
+    }
+
+    public String removeAllFromAlbum() throws Exception
+    {
+        AlbumController ac = new AlbumController(sb.getUser());
+        int deletedCount = ac.removeFromAlbum(this.album, itemsUris, sb.getUser());
+        sb.getSelected().clear();
+        BeanHelper.info(deletedCount + " " + sb.getMessage("success_album_remove_images"));
+        return "pretty:";
+    }
+
+    public String removeAllFromActiveAlbum() throws Exception
+    {
+        AlbumController ac = new AlbumController(sb.getUser());
+        int deletedCount = ac.removeFromAlbum(sb.getActiveAlbum(), itemsUris, sb.getUser());
+        sb.getSelected().clear();
+        BeanHelper.info(deletedCount + " " + sb.getMessage("success_album_remove_images"));
         return "pretty:";
     }
 

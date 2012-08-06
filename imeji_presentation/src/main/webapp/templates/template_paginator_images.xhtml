@@ -103,8 +103,11 @@
 					<input type="button" class="min_imgBtn checkboxSelectButton"/>
 						
 					<div class="selectMenu" style="display: none; width:150px;" >
-						<a4j:commandLink action="#{paginatorListSessionBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
+						<a4j:commandLink action="#{paginatorListSessionBean.removeAllFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
 							<h:outputText value="#{lbl.remove}" styleClass="xLarge_area0_p8"/>
+						</a4j:commandLink>
+						<a4j:commandLink action="#{paginatorListSessionBean.removeAllFromActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+							<h:outputText value="#{lbl.remove_from_active}" styleClass="xLarge_area0_p8"/>
 						</a4j:commandLink>
 						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{SessionBean.activeAlbum == null}">
 							<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>
@@ -174,6 +177,9 @@
 					<div class="selectMenu" style="display: none; width:150px;" >
 						<a4j:commandLink action="#{paginatorListSessionBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
 							<h:outputText value="#{lbl.remove}" styleClass="xLarge_area0_p8"/>
+						</a4j:commandLink>
+						<a4j:commandLink action="#{paginatorListSessionBean.removeFromActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+							<h:outputText value="#{lbl.remove_from_active}" styleClass="xLarge_area0_p8"/>
 						</a4j:commandLink>
 						<h:panelGroup styleClass="xLarge_area0_p8" rendered="#{SessionBean.activeAlbum == null}">
 							<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>

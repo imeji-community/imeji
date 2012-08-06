@@ -53,11 +53,12 @@ public class AlbumBean
         this.album = album;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.id = ObjectHelper.getId(album.getId());
-        if (sessionBean.getActiveAlbum() != null
-                && sessionBean.getActiveAlbum().getId().equals(album.getId()))
+        if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
         {
             active = true;
         }
+        AlbumController ac = new AlbumController(sessionBean.getUser());
+        album = (Album)ac.loadContainerItems(album, sessionBean.getUser());
     }
 
     public AlbumBean()
@@ -67,7 +68,6 @@ public class AlbumBean
 
     public void initView()
     {
-        ImejiJena.printModel(ImejiJena.albumModel);
         try
         {
             if (id != null)
@@ -262,18 +262,14 @@ public class AlbumBean
 
     public int getSize()
     {
-        ItemController ic = new ItemController(sessionBean.getUser());
-        if (album == null)
-            return 0;
-        return ic.countImagesInContainer(this.getAlbum().getId(), new SearchQuery());
+        return album.getImages().size();
     }
 
     public boolean getIsOwner()
     {
         if (sessionBean.getUser() != null)
         {
-            return getAlbum().getCreatedBy()
-                    .equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
+            return getAlbum().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
         }
         else
             return false;

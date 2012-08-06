@@ -161,7 +161,7 @@ public class SharingBean
 
 	public Album retrieveAlbum(String albId)
 	{
-		return ObjectLoader.loadAlbum(ObjectHelper.getURI(Album.class, albId), sb.getUser());
+		return ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, albId), sb.getUser());
 	}
 
 	public String getStatus() 

@@ -14,7 +14,9 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ImejiController;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -169,6 +171,12 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             for (int i = 0; i < ((getTotalNumberOfElements() - 1) / elementsPerPage) + 1; i++)
             {
                 paginatorPageList.add(new PaginatorPage(i + 1));
+            }
+            SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+            if (sb.getActiveAlbum() != null)
+            {
+                AlbumController ac = new AlbumController(sb.getUser());
+                sb.setActiveAlbum((Album)ac.loadContainerItems(sb.getActiveAlbum(), sb.getUser()));
             }
         }
         catch (Exception e)

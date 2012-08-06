@@ -23,7 +23,6 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -67,6 +66,15 @@ public class AlbumController extends ImejiController
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
     }
 
+    /**
+     * Load album and images: can lead to performance issues
+     * 
+     * @deprecated
+     * @param selectedAlbumId
+     * @param user
+     * @return
+     * @throws Exception
+     */
     public Album retrieve(URI selectedAlbumId, User user) throws Exception
     {
         return (Album)imejiRDF2Bean.load(selectedAlbumId.toString(), user, new Album());
@@ -74,7 +82,9 @@ public class AlbumController extends ImejiController
 
     public Album retrieveLazy(URI selectedAlbumId, User user) throws Exception
     {
-        return (Album)imejiRDF2Bean.loadLazy(selectedAlbumId.toString(), user, new Album());
+        Album a = (Album)imejiRDF2Bean.loadLazy(selectedAlbumId.toString(), user, new Album());
+        a = (Album)loadContainerItems(a, user);
+        return a;
     }
 
     public void delete(Album album, User user) throws Exception
@@ -134,14 +144,19 @@ public class AlbumController extends ImejiController
         return notAddedUris;
     }
 
-    public void removeFromAlbum(Album album, List<String> uris, User user) throws Exception
+    public int removeFromAlbum(Album album, List<String> toDelete, User user) throws Exception
     {
+        List<URI> inAlbums = new ArrayList<URI>(album.getImages());
         album.getImages().clear();
-        for (String uri : uris)
+        for (URI uri : inAlbums)
         {
-            album.getImages().add(URI.create(uri));
+            if (!toDelete.contains(uri.toString()))
+            {
+                album.getImages().add(uri);
+            }
         }
         update(album);
+        return inAlbums.size() - album.getImages().size();
     }
 
     public synchronized boolean hasPendingImage(List<String> uris) throws Exception

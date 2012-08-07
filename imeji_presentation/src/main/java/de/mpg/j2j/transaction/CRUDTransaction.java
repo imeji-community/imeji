@@ -8,7 +8,6 @@ import com.hp.hpl.jena.query.ReadWrite;
 
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.j2j.controler.ResourceController;
-import de.mpg.j2j.helper.J2JHelper;
 
 public class CRUDTransaction extends Transaction
 {

@@ -309,7 +309,7 @@ public class ItemController extends ImejiController
         {
             CollectionController cc = new CollectionController(user);
             CollectionImeji c = cc.retrieveLazy(uri);
-            c = (CollectionImeji)loadContainerItems(c, user);
+            c = (CollectionImeji)loadContainerItems(c, user, -1, 0);
             cc.update(c);
         }
         return count;
@@ -355,7 +355,7 @@ public class ItemController extends ImejiController
         {
             CollectionController cc = new CollectionController(user);
             CollectionImeji c = cc.retrieveLazy(uri);
-            c = (CollectionImeji)loadContainerItems(c, user);
+            c = (CollectionImeji)loadContainerItems(c, user, -1, 0);
             cc.update(c);
         }
     }

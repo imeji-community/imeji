@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.beans;
 
 import java.net.URI;
@@ -17,6 +16,9 @@ import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.controller.AlbumController;
+import de.mpg.imeji.logic.controller.ImejiController;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -35,14 +37,13 @@ public class SessionBean
     private Locale locale = new Locale("en");
     private Page currentPage = null;
     private List<String> selected;
-	private List<URI> selectedCollections;
-	private List<URI> selectedAlbums;
+    private List<URI> selectedCollections;
+    private List<URI> selectedAlbums;
     private Album activeAlbum;
     private Map<URI, MetadataProfile> profileCached;
-    
     private String selectedImagesContext = null;
 
-	public SessionBean()
+    public SessionBean()
     {
         selected = new ArrayList<String>();
         selectedCollections = new ArrayList<URI>();
@@ -50,16 +51,17 @@ public class SessionBean
         profileCached = new HashMap<URI, MetadataProfile>();
     }
 
-	public String getSelectedImagesContext() {
-		return selectedImagesContext;
-	}
+    public String getSelectedImagesContext()
+    {
+        return selectedImagesContext;
+    }
 
-	public void setSelectedImagesContext(String selectedImagesContext) {
-		this.selectedImagesContext = selectedImagesContext;
-	}
+    public void setSelectedImagesContext(String selectedImagesContext)
+    {
+        this.selectedImagesContext = selectedImagesContext;
+    }
 
-
-	/**
+    /**
      * Returns the label according to the current user locale.
      * 
      * @param placeholder A string containing the name of a label.
@@ -69,7 +71,7 @@ public class SessionBean
     {
         try
         {
-        	return ResourceBundle.getBundle(this.getSelectedLabelBundle()).getString(placeholder);
+            return ResourceBundle.getBundle(this.getSelectedLabelBundle()).getString(placeholder);
         }
         catch (Exception e)
         {
@@ -144,6 +146,16 @@ public class SessionBean
         this.locale = userLocale;
     }
 
+    public String getReloadActiveAlbum()
+    {
+        if (activeAlbum != null)
+        {
+            ItemController ic = new ItemController(user);
+            activeAlbum = (Album)ic.loadContainerItems(activeAlbum, user, -1, 0);
+        }
+        return "";
+    }
+
     /**
      * @return the user
      */
@@ -173,9 +185,9 @@ public class SessionBean
     public boolean isAdmin()
     {
         Security security = new Security();
-    	return security.isSysAdmin(user);
+        return security.isSysAdmin(user);
     }
-  
+
     public List<String> getSelected()
     {
         return selected;
@@ -185,36 +197,42 @@ public class SessionBean
     {
         this.selected = selected;
     }
-    
+
     public int getSelectedSize()
     {
         return selected.size();
     }
-    
-    public List<URI> getSelectedCollections() {
-		return selectedCollections;
-	}
 
-	public void setSelectedCollections(List<URI> selectedCollections) {
-		this.selectedCollections = selectedCollections;
-	}
-	
-	public int getSelectCollectionsSize(){
-		return this.selectedCollections.size();
-	}
-    
-    public List<URI> getSelectedAlbums() {
-		return selectedAlbums;
-	}
+    public List<URI> getSelectedCollections()
+    {
+        return selectedCollections;
+    }
 
-	public void setSelectedAlbums(List<URI> selectedAlbums) {
-		this.selectedAlbums = selectedAlbums;
-	}
-	
-	public int getSelectedAlbumsSize(){
-		return this.selectedAlbums.size();
-	}
-	
+    public void setSelectedCollections(List<URI> selectedCollections)
+    {
+        this.selectedCollections = selectedCollections;
+    }
+
+    public int getSelectCollectionsSize()
+    {
+        return this.selectedCollections.size();
+    }
+
+    public List<URI> getSelectedAlbums()
+    {
+        return selectedAlbums;
+    }
+
+    public void setSelectedAlbums(List<URI> selectedAlbums)
+    {
+        this.selectedAlbums = selectedAlbums;
+    }
+
+    public int getSelectedAlbumsSize()
+    {
+        return this.selectedAlbums.size();
+    }
+
     public void setActiveAlbum(Album activeAlbum)
     {
         this.activeAlbum = activeAlbum;
@@ -224,20 +242,19 @@ public class SessionBean
     {
         return activeAlbum;
     }
-    
+
     public int getActiveAlbumSize()
     {
         return activeAlbum.getImages().size();
     }
 
-	public Map<URI, MetadataProfile> getProfileCached() {
-		return profileCached;
-	}
+    public Map<URI, MetadataProfile> getProfileCached()
+    {
+        return profileCached;
+    }
 
-	public void setProfileCached(Map<URI, MetadataProfile> profileCached) {
-		this.profileCached = profileCached;
-	}
-    
-    
-    
+    public void setProfileCached(Map<URI, MetadataProfile> profileCached)
+    {
+        this.profileCached = profileCached;
+    }
 }

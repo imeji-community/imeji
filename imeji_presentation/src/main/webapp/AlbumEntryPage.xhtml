@@ -51,7 +51,7 @@
 				
 				<h:outputText styleClass="seperator void" rendered="#{AlbumBean.size > 0}"/>
 				
-				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumBean.id}/details?init=1" rendered="true">
+				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.albumHome}/#{AlbumBean.id}/details?init=1" rendered="true">
 					<h:outputText value="#{lbl.album_metadata}"/>
 				</h:outputLink>
 				

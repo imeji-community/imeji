@@ -83,7 +83,7 @@ public class AlbumController extends ImejiController
     public Album retrieveLazy(URI selectedAlbumId, User user) throws Exception
     {
         Album a = (Album)imejiRDF2Bean.loadLazy(selectedAlbumId.toString(), user, new Album());
-        a = (Album)loadContainerItems(a, user);
+        // a = (Album)loadContainerItems(a, user);
         return a;
     }
 

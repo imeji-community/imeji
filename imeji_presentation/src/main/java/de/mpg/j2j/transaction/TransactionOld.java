@@ -5,35 +5,36 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.imeji.logic.ImejiJena;
 
-/**
- * Transaction for Jena operations.
- * 
- * @author saquet (initial creation)
- * @author $Author$ (last modification)
- * @version $Revision$ $LastChangedDate$
- */
-public abstract class Transaction
+public abstract class TransactionOld extends Thread
 {
-    private String modelURI;
-    private boolean isException;
+    private String modelURI = null;
+    private boolean running = false;
     private Exception exception;
-    private static Logger logger = Logger.getLogger(Transaction.class);
+    private boolean isException = false;
+    protected static Logger logger = Logger.getLogger(TransactionOld.class);
 
-    public Transaction(String modelURI)
+    public TransactionOld(String modelURI)
     {
+        super();
         this.modelURI = modelURI;
     }
 
-    public void start()
+    @Override
+    public synchronized void start()
     {
-        start(ImejiJena.imejiDataSet);
+        logger.info("Threads active count: " + Thread.activeCount());
+        running = true;
+        super.start();
     }
 
-    public void start(Dataset dataset)
+    @Override
+    public void run()
     {
+        Dataset dataset = TDBFactory.createDataset(ImejiJena.tdbPath);
         try
         {
             dataset.begin(getLockType());
@@ -50,12 +51,25 @@ public abstract class Transaction
         finally
         {
             dataset.end();
+            running = false;
         }
     }
 
-    protected abstract void execute(Dataset ds) throws Exception;
-
-    protected abstract ReadWrite getLockType();
+    public void waitForEnd()
+    {
+        while (running)
+        {
+            try
+            {
+                Thread.sleep(1);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+                running = false;
+            }
+        }
+    }
 
     protected Model getModel(Dataset dataset)
     {
@@ -67,6 +81,20 @@ public abstract class Transaction
         {
             return dataset.getDefaultModel();
         }
+    }
+
+    protected abstract void execute(Dataset ds) throws Exception;
+
+    protected abstract ReadWrite getLockType();
+
+    public void setRunning(boolean running)
+    {
+        this.running = running;
+    }
+
+    public boolean isRunning()
+    {
+        return running;
     }
 
     /**

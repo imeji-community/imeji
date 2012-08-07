@@ -14,8 +14,6 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
@@ -25,8 +23,8 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -109,7 +107,7 @@ public abstract class CollectionBean
 
     public String addAuthor()
     {
-        LinkedList<Person> c = (LinkedList<Person>)collection.getMetadata().getPersons();
+        List<Person> c = (List<Person>)collection.getMetadata().getPersons();
         Person p = ImejiFactory.newPerson();
         p.setPos(authorPosition + 1);
         c.add(authorPosition + 1, p);
@@ -118,7 +116,7 @@ public abstract class CollectionBean
 
     public String removeAuthor()
     {
-        LinkedList<Person> c = (LinkedList<Person>)collection.getMetadata().getPersons();
+        List<Person> c = (List<Person>)collection.getMetadata().getPersons();
         if (c.size() > 1)
             c.remove(authorPosition);
         else
@@ -128,8 +126,8 @@ public abstract class CollectionBean
 
     public String addOrganization()
     {
-        LinkedList<Person> persons = (LinkedList<Person>)collection.getMetadata().getPersons();
-        LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
+        List<Person> persons = (List<Person>)collection.getMetadata().getPersons();
+        List<Organization> orgs = (List<Organization>)persons.get(authorPosition).getOrganizations();
         Organization o = ImejiFactory.newOrganization();
         o.setPos(organizationPosition + 1);
         orgs.add(organizationPosition + 1, o);
@@ -138,8 +136,8 @@ public abstract class CollectionBean
 
     public String removeOrganization()
     {
-        LinkedList<Person> persons = (LinkedList<Person>)collection.getMetadata().getPersons();
-        LinkedList<Organization> orgs = (LinkedList<Organization>)persons.get(authorPosition).getOrganizations();
+        List<Person> persons = (List<Person>)collection.getMetadata().getPersons();
+        List<Organization> orgs = (List<Organization>)persons.get(authorPosition).getOrganizations();
         if (orgs.size() > 1)
             orgs.remove(organizationPosition);
         else

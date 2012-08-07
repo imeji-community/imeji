@@ -93,10 +93,10 @@ public abstract class ImejiController
      * @param c
      * @param user
      */
-    public Container loadContainerItems(Container c, User user)
+    public Container loadContainerItems(Container c, User user, int limit, int offset)
     {
         ItemController ic = new ItemController(user);
-        List<String> newUris = ic.searchImagesInContainer(c.getId(), null, null, -1, 0).getResults();
+        List<String> newUris = ic.searchImagesInContainer(c.getId(), null, null, limit, offset).getResults();
         c.getImages().clear();
         for (String s : newUris)
         {

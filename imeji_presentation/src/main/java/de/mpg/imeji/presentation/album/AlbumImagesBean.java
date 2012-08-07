@@ -45,8 +45,8 @@ public class AlbumImagesBean extends ImagesBean
 
     public void init()
     {
-        readUrl();
-        loadAlbum();
+//        readUrl();
+//        loadAlbum();
     }
 
     @Override
@@ -78,6 +78,7 @@ public class AlbumImagesBean extends ImagesBean
         SortCriterion sortCriterion = initSortCriterion();
         ItemController controller = new ItemController(sb.getUser());
         SearchResult result = controller.searchImagesInContainer(uri, new SearchQuery(), sortCriterion, limit, offset);
+        setAlbumItems(result.getResults());
         totalNumberOfRecords = result.getNumberOfRecords();
         itemsUris = result.getResults();
         result.setQuery(getQuery());
@@ -93,6 +94,14 @@ public class AlbumImagesBean extends ImagesBean
     public void loadAlbum()
     {
         album = ObjectLoader.loadAlbumLazy(uri, sb.getUser());
+    }
+    
+    public void setAlbumItems(List<String> uris)
+    {
+        for(String uri : uris)
+        {
+            album.getImages().add(URI.create(uri));
+        }
     }
 
     @Override

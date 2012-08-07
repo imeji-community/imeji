@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.util;
 
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
@@ -27,10 +25,19 @@ import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.j2j.misc.LocalizedString;
 
+/**
+ * Create objects ready to be displayed in JSF
+ * TODO Description
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class ImejiFactory
 {
-	private static Logger logger = Logger.getLogger(ImejiFactory.class);
-	
+    private static Logger logger = Logger.getLogger(ImejiFactory.class);
+
     public static CollectionImeji newCollection()
     {
         CollectionImeji coll = new CollectionImeji();
@@ -41,14 +48,9 @@ public class ImejiFactory
     public static ContainerMetadata newContainerMetadata()
     {
         ContainerMetadata cm = new ContainerMetadata();
+        cm.getPersons().add(newPerson());
         return cm;
     }
-
-//    public static Properties newProperties()
-//    {
-//        Properties props = new Properties();
-//        return props;
-//    }
 
     public static Statement newStatement()
     {
@@ -74,15 +76,15 @@ public class ImejiFactory
         org.setName("");
         return org;
     }
-    
+
     public static List<CollectionListItem> collectionListToListItem(Collection<CollectionImeji> collList, User user)
     {
-    	List<CollectionListItem> l = new ArrayList<CollectionListItem>();
-    	for(CollectionImeji c : collList)
-    	{
-    		l.add(new CollectionListItem(c, user));
-    	}
-    	return l;
+        List<CollectionListItem> l = new ArrayList<CollectionListItem>();
+        for (CollectionImeji c : collList)
+        {
+            l.add(new CollectionListItem(c, user));
+        }
+        return l;
     }
 
     public static List<ViewCollectionBean> collectionListToBeanList(Collection<CollectionImeji> collList)
@@ -104,29 +106,29 @@ public class ImejiFactory
         }
         return beanList;
     }
-    
+
     public static List<ThumbnailBean> imageListToThumbList(Collection<Item> imgList)
     {
         List<ThumbnailBean> beanList = new ArrayList<ThumbnailBean>();
-        try 
+        try
         {
-			((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-				.setProfileCached(ProfileHelper.loadProfiles((List<Item>) imgList));
-		} 
-        catch (Exception e) 
+            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).setProfileCached(ProfileHelper
+                    .loadProfiles((List<Item>)imgList));
+        }
+        catch (Exception e)
         {
-        	logger.error("Error loading profiles", e);
-		}
+            logger.error("Error loading profiles", e);
+        }
         for (Item img : imgList)
         {
-        	try 
-        	{
-        		beanList.add(new ThumbnailBean(img));
-			} 
-        	catch (Exception e) 
-			{
-        		logger.error("Error creating ThumbnailBean list", e);
-			} 
+            try
+            {
+                beanList.add(new ThumbnailBean(img));
+            }
+            catch (Exception e)
+            {
+                logger.error("Error creating ThumbnailBean list", e);
+            }
         }
         return beanList;
     }
@@ -134,25 +136,25 @@ public class ImejiFactory
     public static List<ImageBean> imageListToBeanList(Collection<Item> imgList)
     {
         List<ImageBean> beanList = new ArrayList<ImageBean>();
-        try 
+        try
         {
-			((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-				.setProfileCached(ProfileHelper.loadProfiles((List<Item>) imgList));
-		} 
-        catch (Exception e1) 
+            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).setProfileCached(ProfileHelper
+                    .loadProfiles((List<Item>)imgList));
+        }
+        catch (Exception e1)
         {
-			e1.printStackTrace();
-		}
+            e1.printStackTrace();
+        }
         for (Item img : imgList)
         {
-        	try 
-        	{
-        		beanList.add(new ImageBean(img));
-			} 
-        	catch (Exception e) 
-			{
-				e.printStackTrace();
-			} 
+            try
+            {
+                beanList.add(new ImageBean(img));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
         return beanList;
     }

@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
@@ -57,20 +56,25 @@ public class CreateCollectionBean extends CollectionBean
             URI profile = profileController.create(mdp);
             collectionController.create(getCollection(), profile);
             BeanHelper.info(sessionBean.getMessage("success_collection_create"));
-            FacesContext.getCurrentInstance().getExternalContext().redirect(((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getApplicationUrl()+ "collections?q=");
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getApplicationUrl()
+                                    + "collections?q=");
             return "";
         }
-        else return "";
-       
+        else
+            return "";
     }
 
     public void reset()
     {
-        super.setCollection(new CollectionImeji());
-        super.getCollection().getMetadata().setTitle("");
-        super.getCollection().getMetadata().setDescription("");
-        super.getCollection().getMetadata().getPersons().clear();
-        super.getCollection().getMetadata().getPersons().add(ImejiFactory.newPerson());
+        setCollection(ImejiFactory.newCollection());
+        // super.getCollection().getMetadata().setTitle("");
+        // super.getCollection().getMetadata().setDescription("");
+        // super.getCollection().getMetadata().getPersons().clear();
+        // super.getCollection().getMetadata().getPersons().add(ImejiFactory.newPerson());
         collectionSession.setActive(super.getCollection());
         reset = "0";
     }

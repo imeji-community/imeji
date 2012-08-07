@@ -34,10 +34,10 @@ public class ResourceController
     private Jena2Java rdf2Java;
     private static Logger logger = Logger.getLogger(ResourceController.class);
 
-    public ResourceController(String modelURI)
-    {
-        this(modelURI, false);
-    }
+//    public ResourceController(String modelURI)
+//    {
+//        this(modelURI, false);
+//    }
 
     /**
      * Use only without transaction

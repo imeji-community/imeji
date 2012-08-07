@@ -18,6 +18,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.J2JHelper;
 import de.mpg.j2j.transaction.CRUDTransaction;
 import de.mpg.j2j.transaction.Transaction;
+import de.mpg.j2j.transaction.TransactionOld;
 
 /**
  * Interface for read operations from Jena. Implements security and transaction.
@@ -52,6 +53,7 @@ public class ImejiRDF2Bean
         List<Object> objects = new ArrayList<Object>();
         objects.add(o);
         List<Object> l = load(objects, user);
+        lazy = false;
         if (l.size() > 0)
             return l.get(0);
         return null;
@@ -61,7 +63,6 @@ public class ImejiRDF2Bean
     {
         Transaction transaction = new CRUDTransaction(objects, OperationsType.READ, modelURI, lazy);
         transaction.start();
-        transaction.waitForEnd();
         transaction.throwException();
         checkSecurity(objects, user, OperationsType.READ);
         return objects;

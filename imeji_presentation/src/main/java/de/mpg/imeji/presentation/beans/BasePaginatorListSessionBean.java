@@ -158,7 +158,8 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             previousPartList.addAll(currentPartList);
             long a = System.currentTimeMillis();
             currentPartList = retrieveList(getOffset(), elementsPerPage);
-            System.out.println("BasePaginatorListSession - retrieveList: " + Long.valueOf(System.currentTimeMillis() - a));
+            System.out.println("BasePaginatorListSession - retrieveList: "
+                    + Long.valueOf(System.currentTimeMillis() - a));
             totalNumberOfElements = getTotalNumberOfRecords();
             // reset current page and reload list if list is shorter than the given current page number allows
             if (getTotalNumberOfElements() <= getOffset())
@@ -172,12 +173,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             {
                 paginatorPageList.add(new PaginatorPage(i + 1));
             }
-            SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-            if (sb.getActiveAlbum() != null)
-            {
-                AlbumController ac = new AlbumController(sb.getUser());
-                sb.setActiveAlbum((Album)ac.loadContainerItems(sb.getActiveAlbum(), sb.getUser()));
-            }
         }
         catch (Exception e)
         {
@@ -185,8 +180,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             logger.error("Error paginator list update ", e);
         }
     }
-
-
 
     public String getListElementTypeId(ListElementType el)
     {

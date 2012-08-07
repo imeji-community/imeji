@@ -31,14 +31,22 @@ public class Java2Jena
 {
     private Model model;
     private LiteralHelper literalHelper;
-    private String baseURI = "http://imeji.org/";
     private static Logger logger = Logger.getLogger(Java2Jena.class);
+    // Lazy write is not working.
+    private boolean lazy = false;
 
     public Java2Jena(Model model)
     {
         this.model = model;
         literalHelper = new LiteralHelper(model);
     }
+
+//    public Java2Jena(Model model, boolean lazy)
+//    {
+//        this.model = model;
+//        literalHelper = new LiteralHelper(model);
+//        this.lazy = lazy;
+//    }
 
     /**
      * Write a {@link Object} in Jena
@@ -68,12 +76,6 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-        // Resource r = model.getResource(J2JHelper.getId(o).toString());
-        // r.removeProperties();
-        // for (Resource e : getEmbeddedResources(r, o))
-        // {
-        // e.removeProperties();
-        // }
         remove(o);
         write(o);
     }
@@ -167,18 +169,22 @@ public class Java2Jena
      */
     private void addList2Resource(Resource s, List<?> list, Field f)
     {
-        for (int i = 0; i < list.size(); i++)
+        if(!(lazy && J2JHelper.isLazyList(f)))
         {
-            Object listElement = list.get(i);
-            if (J2JHelper.isResource(listElement) && J2JHelper.getId(listElement) == null)
+            for (int i = 0; i < list.size(); i++)
             {
-                URI ns = URI.create(J2JHelper.getResourceNamespace(listElement));
-                String objectName = ns.getPath().replaceAll("/terms/", "");
-                String subjectId = s.getURI();
-                listElement = J2JHelper.setId(listElement, URI.create(subjectId + "/" + objectName + "/" + i));
+                Object listElement = list.get(i);
+                if (J2JHelper.isResource(listElement) && J2JHelper.getId(listElement) == null)
+                {
+                    URI ns = URI.create(J2JHelper.getResourceNamespace(listElement));
+                    String objectName = ns.getPath().replaceAll("/terms/", "");
+                    String subjectId = s.getURI();
+                    listElement = J2JHelper.setId(listElement, URI.create(subjectId + "/" + objectName + "/" + i));
+                }
+                addProperty(s, listElement, f);
             }
-            addProperty(s, listElement, f);
         }
+        
     }
 
     /**
@@ -208,11 +214,6 @@ public class Java2Jena
             {
                 addLabel(s, (LocalizedString)obj);
             }
-            // else if(!f.toString().contains(".id"))
-            // {
-            // // logger.debug(f + " not added to " + s);
-            // // logger.info(f + " not added to " + s);
-            // }
         }
         catch (Exception e)
         {

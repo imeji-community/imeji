@@ -12,12 +12,10 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
@@ -58,7 +56,7 @@ public class AlbumBean
             active = true;
         }
         AlbumController ac = new AlbumController(sessionBean.getUser());
-        album = (Album)ac.loadContainerItems(album, sessionBean.getUser());
+        album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
     }
 
     public AlbumBean()
@@ -72,12 +70,17 @@ public class AlbumBean
         {
             if (id != null)
             {
-                setAlbum(ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
-                if (getAlbum() != null)
+                Album a = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
+                ItemController ic = new ItemController(sessionBean.getUser());
+                ic.loadContainerItems(a, sessionBean.getUser(), 5, 0);
+                setAlbum(a);
+                if (album != null)
                 {
-                    if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().equals(album.getId()))
+                    if (sessionBean.getActiveAlbum() != null
+                            && sessionBean.getActiveAlbum().getId().equals(album.getId()))
                     {
                         active = true;
+                        sessionBean.setActiveAlbum(album);
                     }
                     List<SelectItem> grantsMenu = new ArrayList<SelectItem>();
                     grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, ((SessionBean)BeanHelper
@@ -312,7 +315,8 @@ public class AlbumBean
         AlbumController ac = new AlbumController(sessionBean.getUser());
         if (valid())
         {
-            ac.update(getAlbum());
+            album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
+            ac.update(album);
             BeanHelper.info(sessionBean.getMessage("success_album_update"));
             Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
             FacesContext.getCurrentInstance().getExternalContext()
@@ -367,11 +371,11 @@ public class AlbumBean
 
     public String release()
     {
-        makeInactive();
         AlbumController ac = new AlbumController(sessionBean.getUser());
         try
         {
             ac.release(album);
+            makeInactive();
             BeanHelper.info(sessionBean.getMessage("success_album_release"));
         }
         catch (Exception e)

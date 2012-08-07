@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import java.io.Serializable;
 import java.net.URI;
 
 import de.mpg.j2j.annotations.j2jId;

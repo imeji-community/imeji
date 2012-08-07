@@ -7,19 +7,14 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
-import de.mpg.imeji.logic.util.MetadataFactory;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.helper.J2JHelper;
@@ -38,11 +33,6 @@ public class Jena2Java
     private Model model;
     private boolean lazy = false;
 
-    public Jena2Java(Model model)
-    {
-        this.model = model;
-    }
-    
     public Jena2Java(Model model, boolean lazy)
     {
         this.model = model;

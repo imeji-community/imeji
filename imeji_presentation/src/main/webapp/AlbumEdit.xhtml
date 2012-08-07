@@ -37,34 +37,8 @@
 
 <body>
 <ui:composition template="templates/template_album_formular.xhtml">
-	<ui:define name="init">
-		<a4j:keepAlive beanName="AlbumBean"/>
-	</ui:define>
 	<ui:param name="headline" value="Edit Album"/>
 	<ui:param name="FormularBean" value="#{AlbumBean}" />
-	
-	
-	
-	
-	<ui:define name="contentMenu">
-			
-		<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumBean.id}" rendered="true">
-			<h:outputText value="Album startpage"/>
-		</h:outputLink>
-		
-		<h:outputText styleClass="seperator void" />
-		
-		<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{AlbumBean.id}?q=" rendered="true">
-			<h:outputText value="#{lbl.view_images}"/>
-		</h:outputLink>
-		
-		<h:outputText styleClass="seperator void" />
-		
-		<h:outputText value="Album metadata" styleClass="free_area0"/>
-		
-	</ui:define>
-			
-	
 </ui:composition>
 </body>
 </html>

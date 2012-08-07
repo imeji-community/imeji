@@ -37,7 +37,6 @@ public class Person
     public Person()
     {
         Organization o = new Organization();
-        this.getOrganizations().add(o);
     }
 
     public String getFamilyName()

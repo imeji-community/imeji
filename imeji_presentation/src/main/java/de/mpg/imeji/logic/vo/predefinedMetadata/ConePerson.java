@@ -27,8 +27,8 @@ public class ConePerson extends Metadata
     public ConePerson()
     {
         person = new Person();
-//        Organization o = new Organization();
-//        person.getOrganizations().add(o);
+        // Organization o = new Organization();
+        // person.getOrganizations().add(o);
     }
 
     public ConePerson(Person pers)
@@ -69,17 +69,6 @@ public class ConePerson extends Metadata
     }
 
     @Override
-    public void init()
-    {
-        String str = person.getCompleteName();
-        for (Organization org : person.getOrganizations())
-        {
-            str += org.getName();
-        }
-        setSearchValue(str);
-    }
-
-    @Override
     public void copy(Metadata metadata)
     {
         if (metadata instanceof ConePerson)
@@ -88,5 +77,16 @@ public class ConePerson extends Metadata
             this.coneId = ((ConePerson)metadata).getConeId();
             this.statement = metadata.getStatement();
         }
+    }
+
+    @Override
+    public void indexFulltext()
+    {
+        String str = person.getCompleteName();
+        for (Organization org : person.getOrganizations())
+        {
+            str += " " + org.getName();
+        }
+        setFulltextIndex(str);
     }
 }

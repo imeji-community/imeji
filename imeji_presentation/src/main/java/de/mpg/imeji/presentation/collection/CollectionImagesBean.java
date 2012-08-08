@@ -29,6 +29,7 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 public class CollectionImagesBean extends ImagesBean
 {
@@ -47,8 +48,9 @@ public class CollectionImagesBean extends ImagesBean
         this.navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
-    public void init()
+    public String getInit()
     {
+        setQuery(UrlHelper.getParameterValue("q"));
         collection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), sb.getUser());
         List<SelectItem> sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(null, sb.getLabel("default")));
@@ -57,6 +59,7 @@ public class CollectionImagesBean extends ImagesBean
         sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE, sb
                 .getLabel(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name())));
         setSortMenu(sortMenu);
+        return "";
     }
 
     @Override
@@ -88,7 +91,6 @@ public class CollectionImagesBean extends ImagesBean
         {
             getFacets().getFacets().clear();
         }
-
         SortCriterion sortCriterion = initSortCriterion();
         initBackPage();
         try

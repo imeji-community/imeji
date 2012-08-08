@@ -41,12 +41,12 @@ public class Java2Jena
         literalHelper = new LiteralHelper(model);
     }
 
-//    public Java2Jena(Model model, boolean lazy)
-//    {
-//        this.model = model;
-//        literalHelper = new LiteralHelper(model);
-//        this.lazy = lazy;
-//    }
+    public Java2Jena(Model model, boolean lazy)
+    {
+        this.model = model;
+        literalHelper = new LiteralHelper(model);
+        this.lazy = lazy;
+    }
 
     /**
      * Write a {@link Object} in Jena
@@ -61,7 +61,6 @@ public class Java2Jena
         }
         Resource type = model.createResource(J2JHelper.getResourceNamespace(o).toString(), RDFS.Class);
         Resource r = model.createResource(J2JHelper.getId(o).toString(), type);
-        // Resource r = createResource(o);
         addProperties2Resource(r, o);
     }
 
@@ -76,7 +75,10 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-        remove(o);
+        if (lazy)
+            removeLazy(o);
+        else
+            remove(o);
         write(o);
     }
 
@@ -91,13 +93,38 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-        // Resource r = model.createResource(J2JHelper.getId(o).toString());
         Resource r = createResource(o);
         model.removeAll(r, null, null);
         for (Resource e : getEmbeddedResources(r, o))
         {
             model.removeAll(e, null, null);
-            // model.removeAll(null, null, e);
+        }
+    }
+
+    /**
+     * Remove only relation not defined in a lazy list
+     * 
+     * @param o
+     */
+    private void removeLazy(Object o)
+    {
+        Resource r = createResource(o);
+        for (Field f : J2JHelper.getAllObjectFields(o.getClass()))
+        {
+            if (!J2JHelper.isLazyList(f))
+            {
+                String ns = J2JHelper.getNamespace(f);
+                if (ns != null)
+                {
+                    Property p = model.createProperty(ns);
+                    model.removeAll(r, p, null);
+                }
+            }
+        }
+        for (Resource e : getEmbeddedResources(r, o))
+        {
+            System.out.println(e.getNameSpace());
+            model.removeAll(e, null, null);
         }
     }
 
@@ -169,7 +196,7 @@ public class Java2Jena
      */
     private void addList2Resource(Resource s, List<?> list, Field f)
     {
-        if(!(lazy && J2JHelper.isLazyList(f)))
+        if (!(lazy && J2JHelper.isLazyList(f)))
         {
             for (int i = 0; i < list.size(); i++)
             {
@@ -184,7 +211,6 @@ public class Java2Jena
                 addProperty(s, listElement, f);
             }
         }
-        
     }
 
     /**
@@ -304,43 +330,50 @@ public class Java2Jena
         List<Resource> l = new ArrayList<Resource>();
         for (Field f : J2JHelper.getAllObjectFields(r.getClass()))
         {
-            try
+            if (!(lazy && J2JHelper.isLazyList(f)))
             {
-                Object r2 = J2JHelper.getFieldAsJavaObject(f, r);
-                if (J2JHelper.isResource(r2) && exists(r2))
+                try
                 {
-                    Resource o = model.getResource(J2JHelper.getId(r2).toString());
-                    l.add(o);
-                    l.addAll(getEmbeddedResources(o, r2));
+                    Object r2 = J2JHelper.getFieldAsJavaObject(f, r);
+                    if (J2JHelper.isResource(r2) && exists(r2))
+                    {
+                        Resource o = model.getResource(J2JHelper.getId(r2).toString());
+                        l.add(o);
+                        l.addAll(getEmbeddedResources(o, r2));
+                    }
+                    else if (r2 instanceof ArrayList<?>)
+                    {
+                        String predicate = J2JHelper.getNamespace(r2, f);
+                        Resource resource = model.getResource(J2JHelper.getId(r).toString());
+                        l.add(resource);
+                        // delete all properties for this predicate
+                        for (StmtIterator iterator = resource.listProperties(model.createProperty(predicate)); iterator
+                                .hasNext();)
+                        {
+                            Statement st = iterator.next();
+                            if (st.getObject().isResource())
+                            {
+                                l.add(st.getResource());
+                            }
+                        }
+                        // Search for other objects
+                        for (Object o : ((ArrayList<?>)r2))
+                        {
+                            if (J2JHelper.isResource(o) && exists(o))
+                            {
+                                l.addAll(getEmbeddedResources(s, o));
+                            }
+                        }
+                    }
                 }
-                else if (r2 instanceof ArrayList<?>)
+                catch (Exception e)
                 {
-                    String predicate = J2JHelper.getNamespace(r2, f);
-                    Resource resource = model.getResource(J2JHelper.getId(r).toString());
-                    l.add(resource);
-                    // delete all properties for this predicate
-                    for (StmtIterator iterator = resource.listProperties(model.createProperty(predicate)); iterator
-                            .hasNext();)
-                    {
-                        Statement st = iterator.next();
-                        if (st.getObject().isResource())
-                        {
-                            l.add(st.getResource());
-                        }
-                    }
-                    // Search for other objects
-                    for (Object o : ((ArrayList<?>)r2))
-                    {
-                        if (J2JHelper.isResource(o) && exists(o))
-                        {
-                            l.addAll(getEmbeddedResources(s, o));
-                        }
-                    }
+                    throw new RuntimeException("Error getting all embedded resources for " + r, e);
                 }
             }
-            catch (Exception e)
+            else
             {
-                throw new RuntimeException("Error getting all embedded resources for " + r, e);
+                System.out.println("LAZY EMBEDDED RESOURCE");
             }
         }
         return l;

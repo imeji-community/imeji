@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 	<!--
 
@@ -34,38 +35,16 @@
  All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
-	<body>
-		<ui:composition template="templates/template_collection_formular.xhtml">
-			<ui:param name="FormularBean" value="#{EditCollectionBean}" />
-			
-			<ui:define name="contentMenu">
-				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{EditCollectionBean.id}" rendered="true">
-					<h:outputText value="#{lbl.collection_home}"/>
-				</h:outputLink>
-				
-				<h:outputText styleClass="seperator void" />
-				
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{ViewCollectionBean.id}?q=" rendered="#{ViewCollectionBean.size > 0}">
-					<h:outputText value="#{lbl.view_images}"/>
-				</h:outputLink>
-				
-				<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
-				
-				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{EditCollectionBean.id}/details?init=1" rendered="true">
-					<h:outputText value="#{lbl.collection_metadata}"/>
-				</h:outputLink>
-				
-				<h:outputText styleClass="seperator void" />
-				
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{EditCollectionBean.id}?init=1" rendered="#{EditCollectionBean.editable}">
-					<h:outputText value="#{lbl.upload_images}"></h:outputText>
-				</h:outputLink>
-			</ui:define>
-	
-					
-					
-		</ui:composition>
-	</body>
+<body>
+	<ui:composition template="templates/template_collection_formular.xhtml">
+		<ui:param name="FormularBean" value="#{EditCollectionBean}" />
+		<ui:param name="headline" value="#{lbl.collection_edit}"/>
+		<ui:define name="contentMenu">
+
+		</ui:define>
+
+	</ui:composition>
+</body>
 </html>
 
 

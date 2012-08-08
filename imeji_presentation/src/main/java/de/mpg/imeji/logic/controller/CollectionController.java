@@ -66,6 +66,12 @@ public class CollectionController extends ImejiController
         writeUpdateProperties(ic, user);
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
     }
+    
+    public void updateLazy(CollectionImeji ic, User user) throws Exception
+    {
+        writeUpdateProperties(ic, user);
+        imejiBean2RDF.updateLazy(imejiBean2RDF.toList(ic), user);
+    }
 
     public void delete(CollectionImeji collection, User user) throws Exception
     {

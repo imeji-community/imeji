@@ -21,7 +21,6 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
@@ -37,7 +36,7 @@ import de.mpg.j2j.helper.J2JHelper;
 
 public class ItemController extends ImejiController
 {
-    private String additionalQuery = "";
+    private int MAXIMUM_LOADS_PER_TRANSACTION = 1000;
     private static Logger logger = null;
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
@@ -102,7 +101,7 @@ public class ItemController extends ImejiController
         for (Item item : items)
         {
             writeUpdateProperties(item, user);
-            imBeans.add(initAllMetadata(item));
+            imBeans.add(createFulltextForMetadata(item));
         }
         long afterinit = System.currentTimeMillis();
         logger.info("upadate item initialized = " + Long.valueOf(afterinit - beforeinit));
@@ -112,13 +111,13 @@ public class ItemController extends ImejiController
         logger.info("item controller update = " + Long.valueOf(after - before));
     }
 
-    private Item initAllMetadata(Item item)
+    private Item createFulltextForMetadata(Item item)
     {
         for (MetadataSet mds : item.getMetadataSets())
         {
             for (Metadata md : mds.getMetadata())
             {
-                md.init();
+                md.indexFulltext();
             }
         }
         return item;
@@ -137,26 +136,12 @@ public class ItemController extends ImejiController
         return (Item)imejiRDF2Bean.load(imgUri.toString(), user, new Item());
     }
 
-    /**
-     * User ObjectLoader instead
-     * 
-     * @deprecated
-     * @param id
-     * @return
-     * @throws Exception
-     */
-    public Item retrieve(String id) throws Exception
-    {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
-        return (Item)imejiRDF2Bean.load(ObjectHelper.getURI(Item.class, id).toString(), user, new Item());
-    }
-
-    @Deprecated
     public Collection<Item> retrieveAll()
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
-        // return imejiRDF2Bean.load(Image.class);
-        return new ArrayList<Item>();
+        List<String> uris = ImejiSPARQL.exec("SELECT ?s WHERE { ?s a <http://imeji.org/terms/item>}",
+                ImejiJena.imageModel);
+        return loadItems(uris, -1, 0);
     }
 
     /**
@@ -235,7 +220,18 @@ public class ItemController extends ImejiController
         }
         try
         {
-            imejiRDF2Bean.load(J2JHelper.cast2ObjectList(items), user);
+            int loaded = 0;
+            // Loads items with a maximum interval to minimize memory usage
+            while (loaded < items.size() - 1)
+            {
+                int toIndex = loaded + MAXIMUM_LOADS_PER_TRANSACTION;
+                if (toIndex > items.size())
+                {
+                    toIndex = items.size();
+                }
+                imejiRDF2Bean.load(J2JHelper.cast2ObjectList(items.subList(loaded, toIndex)), user);
+                loaded = toIndex;
+            }
             long after = System.currentTimeMillis();
             logger.info(items.size() + " items loaded in " + Long.valueOf(after - before));
             return items;

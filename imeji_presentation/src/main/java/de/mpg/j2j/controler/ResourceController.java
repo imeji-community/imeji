@@ -55,7 +55,7 @@ public class ResourceController
         {
             model = ImejiJena.imejiDataSet.getDefaultModel();
         }
-        this.java2rdf = new Java2Jena(model);
+        this.java2rdf = new Java2Jena(model, lazy);
         this.rdf2Java = new Jena2Java(model, lazy);
     }
 
@@ -72,7 +72,7 @@ public class ResourceController
             throw new NullPointerException("Fatal error: Model is null");
         }
         this.model = model;
-        this.java2rdf = new Java2Jena(model);
+        this.java2rdf = new Java2Jena(model, lazy);
         this.rdf2Java = new Jena2Java(model, lazy);
     }
 

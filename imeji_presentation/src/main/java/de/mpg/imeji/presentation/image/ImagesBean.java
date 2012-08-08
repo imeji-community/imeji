@@ -19,7 +19,6 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
-import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -399,7 +398,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         for (ThumbnailBean bean : getCurrentPartList())
         {
-            if (!(sb.getSelected().contains(bean.getUri())))
+            if (!(sb.getSelected().contains(bean.getUri().toString())))
             {
                 sb.getSelected().add(bean.getUri().toString());
             }

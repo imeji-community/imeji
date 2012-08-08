@@ -65,44 +65,43 @@ public abstract class CollectionBean
 
     public boolean valid()
     {
-        boolean valid = true;
-        boolean hasAuthor = false;
         if (collection.getMetadata().getTitle() == null || "".equals(collection.getMetadata().getTitle()))
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_need_title"));
-            valid = false;
+            return false;
         }
+        List<Person> pers = new ArrayList<Person>();
         for (Person c : collection.getMetadata().getPersons())
         {
-            boolean hasOrganization = false;
-            if (!"".equals(c.getFamilyName()))
-            {
-                hasAuthor = true;
-            }
+            List<Organization> orgs = new ArrayList<Organization>();
             for (Organization o : c.getOrganizations())
             {
-                if (!"".equals(o.getName()) || "".equals(c.getFamilyName()))
+                if (!"".equals(o.getName()))
                 {
-                    hasOrganization = true;
-                }
-                if (hasOrganization && "".equals(c.getFamilyName()))
-                {
-                    BeanHelper.error(sessionBean.getMessage("error_author_need_one_family_name"));
-                    valid = false;
+                    orgs.add(o);
                 }
             }
-            if (!hasOrganization)
+            if (!"".equals(c.getFamilyName()))
             {
-                BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
-                valid = false;
+                if (orgs.size() > 0)
+                {
+                    c.setOrganizations(orgs);
+                    pers.add(c);
+                }
+                else
+                {
+                    BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
+                    return false;
+                }
             }
         }
-        if (!hasAuthor)
+        if (pers.size() == 0)
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_need_one_author"));
-            valid = false;
+            return false;
         }
-        return valid;
+        collection.getMetadata().setPersons(pers);
+        return true;
     }
 
     public String addAuthor()
@@ -339,12 +338,11 @@ public abstract class CollectionBean
         try
         {
             Search search = new Search(null, collection.getId().toString());
-            List<String> uris = search
-                    .searchSimpleForQuery(
-                            "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
-                                    + collection.getId().toString()
-                                    + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<" + Status.WITHDRAWN.getUri() + ">)} LIMIT 5",
-                            new SortCriterion());
+            List<String> uris = search.searchSimpleForQuery(
+                    "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
+                            + collection.getId().toString()
+                            + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<"
+                            + Status.WITHDRAWN.getUri() + ">)} LIMIT 5", new SortCriterion());
             return ImejiFactory.imageListToBeanList(ic.loadItems(uris, 5, 0));
         }
         catch (Exception e)

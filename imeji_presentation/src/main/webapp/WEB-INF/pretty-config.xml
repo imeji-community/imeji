@@ -95,14 +95,14 @@
 		<pattern value="/images/collection/#{CollectionImagesBean.id}"/>
 		<query-param name="q">#{CollectionImagesBean.query}</query-param>
 		<view-id>/jsf/CollectionBrowse.xhtml</view-id>
-		<action>#{CollectionImagesBean.init}</action>
+		<!--  <action>#{CollectionImagesBean.init}</action>-->
 	</url-mapping>
 	
 	
 	<url-mapping id="viewImageOfCollection">
 		<pattern value="/collection/#{CollectionImageBean.collectionId}/item/#{CollectionImageBean.id}/view" />
 		<view-id>/jsf/CollectionImage.xhtml</view-id>
-		<action>#{CollectionImageBean.initView}</action>
+		 <action>#{CollectionImageBean.initView}</action>
 	</url-mapping>
 	
 	<url-mapping id="EditImageOfCollection">
@@ -167,7 +167,7 @@
 	<url-mapping id="albumImages">
 		<pattern value="/images/album/#{AlbumImagesBean.id}"/>
 		<view-id>/jsf/AlbumBrowse.xhtml</view-id>
-		<action>#{AlbumImagesBean.init}</action>
+		<!-- <action>#{AlbumImagesBean.init}</action>-->
 	</url-mapping>
 	
 	<url-mapping id="viewImageOfAlbum">

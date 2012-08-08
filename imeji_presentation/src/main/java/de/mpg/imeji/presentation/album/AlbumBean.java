@@ -315,8 +315,8 @@ public class AlbumBean
         AlbumController ac = new AlbumController(sessionBean.getUser());
         if (valid())
         {
-            album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
-            ac.update(album);
+            //album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
+            ac.updateLazy(album);
             BeanHelper.info(sessionBean.getMessage("success_album_update"));
             Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
             FacesContext.getCurrentInstance().getExternalContext()

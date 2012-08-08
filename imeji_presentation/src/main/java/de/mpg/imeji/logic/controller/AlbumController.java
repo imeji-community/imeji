@@ -65,6 +65,20 @@ public class AlbumController extends ImejiController
         writeUpdateProperties(ic, user);
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
     }
+    
+    /**
+     * Updates a collection -Logged in users: --User is collection owner --OR user is collection editor
+     * 
+     * @param ic
+     * @param user
+     * @throws Exception
+     */
+    public void updateLazy(Album ic) throws Exception
+    {
+        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+        writeUpdateProperties(ic, user);
+        imejiBean2RDF.updateLazy(imejiBean2RDF.toList(ic), user);
+    }
 
     /**
      * Load album and images: can lead to performance issues

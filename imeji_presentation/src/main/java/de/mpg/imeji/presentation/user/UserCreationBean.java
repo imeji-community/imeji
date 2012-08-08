@@ -3,16 +3,9 @@
  */
 package de.mpg.imeji.presentation.user;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
@@ -85,48 +78,6 @@ public class UserCreationBean
         {
             logger.error("Error sending email", e);
             BeanHelper.error(sb.getMessage("error") + ": Email not sent");
-        }
-    }
-
-    public List<User> getAllUsers() throws IllegalArgumentException, IllegalAccessException
-    {
-        List<User> users = new ArrayList<User>();
-        UserController uc = new UserController(user);
-        users.addAll(uc.retrieveAll());
-        for (User u : users)
-        {
-            u = (User)ObjectHelper.castAllHashSetToList(u);
-        }
-        return users;
-    }
-
-    public int getAllAlbumsSize()
-    {
-        AlbumController ac = new AlbumController(sb.getUser());
-        return ac.countAllAlbums();
-    }
-
-    public int getAllCollectionsSize()
-    {
-        CollectionController cc = new CollectionController(sb.getUser());
-        return cc.countAllCollections();
-    }
-
-    public int getAllImagesSize()
-    {
-        ItemController ic = new ItemController(sb.getUser());
-        return ic.allImagesSize();
-    }
-
-    public int getAllUsersSize()
-    {
-        try
-        {
-            return this.getAllUsers().size();
-        }
-        catch (Exception e)
-        {
-            return 0;
         }
     }
 

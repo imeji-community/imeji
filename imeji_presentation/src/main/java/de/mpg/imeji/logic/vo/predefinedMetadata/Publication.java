@@ -72,12 +72,6 @@ public class Publication extends Metadata
     }
 
     @Override
-    public void init()
-    {
-        setSearchValue(citation + " " + uri.toString());
-    }
-
-    @Override
     public void copy(Metadata metadata)
     {
         if (metadata instanceof Publication)
@@ -87,5 +81,11 @@ public class Publication extends Metadata
             this.uri = ((Publication)metadata).getUri();
             this.statement = metadata.getStatement();
         }
+    }
+
+    @Override
+    public void indexFulltext()
+    {
+        setFulltextIndex(citation + " " + uri.toString());
     }
 }

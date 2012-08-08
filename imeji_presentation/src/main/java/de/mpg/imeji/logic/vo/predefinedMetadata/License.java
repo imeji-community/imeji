@@ -36,7 +36,8 @@ public class License extends Metadata
 
     public String getDateString()
     {
-        if (date.isLenient()) return "";
+        if (date.isLenient())
+            return "";
         return date.format(date);
     }
 
@@ -63,12 +64,6 @@ public class License extends Metadata
     }
 
     @Override
-    public void init()
-    {
-        setSearchValue(license + " " + getDateString());
-    }
-
-    @Override
     public void copy(Metadata metadata)
     {
         if (metadata instanceof License)
@@ -76,5 +71,11 @@ public class License extends Metadata
             this.license = ((License)metadata).getLicense();
             this.statement = metadata.getStatement();
         }
+    }
+
+    @Override
+    public void indexFulltext()
+    {
+        setFulltextIndex(license + " " + getDateString());
     }
 }

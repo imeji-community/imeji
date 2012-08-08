@@ -59,12 +59,6 @@ public class Link extends Metadata
     }
 
     @Override
-    public void init()
-    {
-        setSearchValue(label + " " + uri.toString());
-    }
-
-    @Override
     public void copy(Metadata metadata)
     {
         if (metadata instanceof Link)
@@ -73,5 +67,11 @@ public class Link extends Metadata
             this.uri = ((Link)metadata).getUri();
             this.statement = metadata.getStatement();
         }
+    }
+
+    @Override
+    public void indexFulltext()
+    {
+        setFulltextIndex(label + " " + uri.toString());
     }
 }

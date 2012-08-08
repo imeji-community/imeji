@@ -53,12 +53,6 @@ public class Number extends Metadata
     }
 
     @Override
-    public void init()
-    {
-        setSearchValue(Double.toString(number));
-    }
-
-    @Override
     public void copy(Metadata metadata)
     {
         if (metadata instanceof Number)
@@ -66,6 +60,11 @@ public class Number extends Metadata
             this.number = ((Number)metadata).getNumber();
             this.statement = metadata.getStatement();
         }
-        
+    }
+
+    @Override
+    public void indexFulltext()
+    {
+        setFulltextIndex(Double.toString(number));
     }
 }

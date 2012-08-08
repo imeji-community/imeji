@@ -43,10 +43,11 @@ public class AlbumImagesBean extends ImagesBean
         this.navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
-    public void init()
+    public String getInit()
     {
-//        readUrl();
-//        loadAlbum();
+        readUrl();
+        loadAlbum();
+        return "";
     }
 
     @Override
@@ -73,8 +74,8 @@ public class AlbumImagesBean extends ImagesBean
     @Override
     public List<ThumbnailBean> retrieveList(int offset, int limit)
     {
-        readUrl();
-        loadAlbum();
+        // readUrl();
+        // loadAlbum();
         SortCriterion sortCriterion = initSortCriterion();
         ItemController controller = new ItemController(sb.getUser());
         SearchResult result = controller.searchImagesInContainer(uri, new SearchQuery(), sortCriterion, limit, offset);
@@ -95,10 +96,10 @@ public class AlbumImagesBean extends ImagesBean
     {
         album = ObjectLoader.loadAlbumLazy(uri, sb.getUser());
     }
-    
+
     public void setAlbumItems(List<String> uris)
     {
-        for(String uri : uris)
+        for (String uri : uris)
         {
             album.getImages().add(URI.create(uri));
         }

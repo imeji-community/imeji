@@ -44,6 +44,7 @@
 	
 
 		<ui:define name="contentMenu">
+			<h:outputText value="#{AlbumImagesBean.init}"/>
 			
 			<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.id.path}" rendered="true">
 				<h:outputText value="Album startpage"/>

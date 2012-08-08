@@ -36,7 +36,6 @@ public class Person
 
     public Person()
     {
-        Organization o = new Organization();
     }
 
     public String getFamilyName()

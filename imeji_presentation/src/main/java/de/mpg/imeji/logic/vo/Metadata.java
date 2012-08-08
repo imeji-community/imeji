@@ -6,6 +6,7 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.UUID;
 
+import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
@@ -21,11 +22,11 @@ import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public abstract class Metadata
+public abstract class Metadata implements FulltextIndex
 {
     private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
-    // Not written
-    private String searchValue;
+    @j2jLiteral("http://imeji.org/terms/fulltext")
+    private String fulltext;
     private int pos = 0;
 
     public enum Types
@@ -69,18 +70,18 @@ public abstract class Metadata
             return 1;
     }
 
-    public abstract void init();
-
     public abstract void copy(Metadata metadata);
 
     public abstract URI getStatement();
 
     public abstract void setStatement(URI namespace);
+    
+    public abstract void indexFulltext();
 
     protected void copyMetadata(Metadata metadata)
     {
         this.id = metadata.getId();
-        this.searchValue = metadata.searchValue;
+        this.fulltext = metadata.fulltext;
     }
 
     public URI getId()
@@ -103,13 +104,13 @@ public abstract class Metadata
         this.pos = pos;
     }
 
-    public String getSearchValue()
+    public String getFulltextIndex()
     {
-        return searchValue;
+        return fulltext;
     }
 
-    public void setSearchValue(String searchValue)
+    public void setFulltextIndex(String fulltext)
     {
-        this.searchValue = searchValue;
+        this.fulltext = fulltext;
     }
 }

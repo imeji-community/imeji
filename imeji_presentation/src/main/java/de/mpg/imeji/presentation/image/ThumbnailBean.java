@@ -55,7 +55,7 @@ public class ThumbnailBean
         metadata = (List<Metadata>)item.getMetadataSet().getMetadata();
         statements = loadStatements(item.getMetadataSet().getProfile());
         caption = findCaption();
-        selected = sessionBean.getSelected().contains(uri);
+        selected = sessionBean.getSelected().contains(uri.toString());
         if (sessionBean.getActiveAlbum() != null)
         {
             isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
@@ -111,7 +111,7 @@ public class ThumbnailBean
                 {
                     if (md.getStatement().equals(s.getId()))
                     {
-                        return md.getSearchValue();
+                        return md.getFulltextIndex();
                     }
                 }
             }

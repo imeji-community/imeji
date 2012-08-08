@@ -112,7 +112,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     }
 
     // Must be called by PrettyFaces action method
-    public String getInit()
+    public String getInitPaginator()
     {
         update();
         return "";

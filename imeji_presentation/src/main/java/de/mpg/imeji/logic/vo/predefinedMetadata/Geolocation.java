@@ -76,12 +76,6 @@ public class Geolocation extends Metadata
     }
 
     @Override
-    public void init()
-    {
-        setSearchValue(name + " " + " " + latitude + " " + longitude);
-    }
-
-    @Override
     public void copy(Metadata metadata)
     {
         if (metadata instanceof Geolocation)
@@ -91,5 +85,11 @@ public class Geolocation extends Metadata
             this.name = ((Geolocation)metadata).getName();
             this.statement = metadata.getStatement();
         }
+    }
+
+    @Override
+    public void indexFulltext()
+    {
+        setFulltextIndex(name + " " + " lat:" + latitude + " long:" + longitude);
     }
 }

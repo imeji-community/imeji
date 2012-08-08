@@ -35,6 +35,10 @@ public class Date extends Metadata
 
     public void setDate(String date)
     {
+        if (date != null)
+        {
+            time = DateFormatter.getTime(date);
+        }
         this.date = date;
     }
 
@@ -61,16 +65,6 @@ public class Date extends Metadata
     }
 
     @Override
-    public void init()
-    {
-        if (date != null)
-        {
-            time = DateFormatter.getTime(date);
-        }
-        setSearchValue(date);
-    }
-
-    @Override
     public void copy(Metadata metadata)
     {
         if (metadata instanceof Date)
@@ -79,5 +73,11 @@ public class Date extends Metadata
             this.time = ((Date)metadata).getTime();
             this.statement = metadata.getStatement();
         }
+    }
+
+    @Override
+    public void indexFulltext()
+    {
+        setFulltextIndex(date);
     }
 }

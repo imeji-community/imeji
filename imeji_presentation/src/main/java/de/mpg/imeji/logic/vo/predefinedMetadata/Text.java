@@ -48,18 +48,18 @@ public class Text extends Metadata
     }
 
     @Override
-    public void init()
-    {
-        setSearchValue(text);
-    }
-
-    @Override
     public void copy(Metadata metadata)
     {
         if (metadata instanceof Text)
         {
             this.text = ((Text)metadata).getText();
             this.statement = metadata.getStatement();
-        }        
+        }
+    }
+
+    @Override
+    public void indexFulltext()
+    {
+        setFulltextIndex(text);
     }
 }

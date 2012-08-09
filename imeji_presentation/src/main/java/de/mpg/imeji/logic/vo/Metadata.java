@@ -6,7 +6,6 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.UUID;
 
-import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
@@ -22,7 +21,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public abstract class Metadata implements FulltextIndex
+public abstract class Metadata
 {
     private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
     @j2jLiteral("http://imeji.org/terms/fulltext")
@@ -75,13 +74,13 @@ public abstract class Metadata implements FulltextIndex
     public abstract URI getStatement();
 
     public abstract void setStatement(URI namespace);
-    
-    public abstract void indexFulltext();
+
+    public abstract String asFulltext();
 
     protected void copyMetadata(Metadata metadata)
     {
         this.id = metadata.getId();
-        this.fulltext = metadata.fulltext;
+        this.fulltext = "";
     }
 
     public URI getId()
@@ -102,15 +101,5 @@ public abstract class Metadata implements FulltextIndex
     public void setPos(int pos)
     {
         this.pos = pos;
-    }
-
-    public String getFulltextIndex()
-    {
-        return fulltext;
-    }
-
-    public void setFulltextIndex(String fulltext)
-    {
-        this.fulltext = fulltext;
     }
 }

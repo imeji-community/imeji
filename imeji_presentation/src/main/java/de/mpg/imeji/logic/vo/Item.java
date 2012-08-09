@@ -8,6 +8,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -17,7 +18,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/item")
 @j2jModel("item")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public class Item extends Properties
+public class Item extends Properties implements FulltextIndex
 {
     public enum Visibility
     {
@@ -25,8 +26,8 @@ public class Item extends Properties
     }
 
     private URI id;
-//    @j2jResource("http://imeji.org/terms/properties")
-//    private Properties properties = new Properties();
+    // @j2jResource("http://imeji.org/terms/properties")
+    // private Properties properties = new Properties();
     @j2jResource("http://imeji.org/terms/collection")
     private URI collection;
     @j2jList("http://imeji.org/terms/metadataSet")
@@ -43,6 +44,8 @@ public class Item extends Properties
     private String filename;
     @j2jLiteral("http://imeji.org/terms/escidocId")
     private String escidocId;
+    @j2jLiteral("http://imeji.org/terms/fulltext")
+    private String fulltext;
 
     public Item()
     {
@@ -120,16 +123,15 @@ public class Item extends Properties
         return id;
     }
 
-//    public void setProperties(Properties properties)
-//    {
-//        this.properties = properties;
-//    }
-//
-//    public Properties getProperties()
-//    {
-//        return properties;
-//    }
-
+    // public void setProperties(Properties properties)
+    // {
+    // this.properties = properties;
+    // }
+    //
+    // public Properties getProperties()
+    // {
+    // return properties;
+    // }
     public void setCollection(URI collection)
     {
         this.collection = collection;
@@ -195,5 +197,28 @@ public class Item extends Properties
     public List<MetadataSet> getMetadataSets()
     {
         return metadataSets;
+    }
+
+    public void setFulltextIndex(String fulltext)
+    {
+        this.fulltext = fulltext;
+    }
+
+    public String getFulltextIndex()
+    {
+        return fulltext;
+    }
+
+    public void indexFulltext()
+    {
+        fulltext = filename;
+        for (Metadata md : getMetadataSet().getMetadata())
+        {
+            if (!"".equals(md.asFulltext()))
+            {
+                fulltext += " " + md.asFulltext();
+            }
+        }
+        fulltext.trim();
     }
 }

@@ -123,7 +123,6 @@ public class Java2Jena
         }
         for (Resource e : getEmbeddedResources(r, o))
         {
-            System.out.println(e.getNameSpace());
             model.removeAll(e, null, null);
         }
     }

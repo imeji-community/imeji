@@ -58,8 +58,8 @@ public class Text extends Metadata
     }
 
     @Override
-    public void indexFulltext()
+    public String asFulltext()
     {
-        setFulltextIndex(text);
+        return text;
     }
 }

@@ -230,4 +230,11 @@ public class AlbumController extends ImejiController
         return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/album>}",
                 ImejiJena.albumModel);
     }
+    
+    public List<Album> retrieveAll() throws Exception
+    {
+        List<String> uris =  ImejiSPARQL.exec("SELECT ?s WHERE { ?s a <http://imeji.org/terms/album>}",
+                ImejiJena.albumModel);
+       return (List<Album>)loadAlbumsLazy(uris, -1, 0);
+    }
 }

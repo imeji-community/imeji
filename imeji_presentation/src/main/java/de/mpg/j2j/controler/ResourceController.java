@@ -1,17 +1,14 @@
 package de.mpg.j2j.controler;
 
-import java.lang.reflect.Field;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
-import de.mpg.imeji.logic.util.Counter;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.exceptions.AlreadyExistsException;
 import de.mpg.j2j.exceptions.NotFoundException;

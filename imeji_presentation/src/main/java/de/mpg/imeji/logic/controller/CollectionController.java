@@ -66,7 +66,7 @@ public class CollectionController extends ImejiController
         writeUpdateProperties(ic, user);
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
     }
-    
+
     public void updateLazy(CollectionImeji ic, User user) throws Exception
     {
         writeUpdateProperties(ic, user);
@@ -163,6 +163,13 @@ public class CollectionController extends ImejiController
     {
         return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/collection>}",
                 ImejiJena.collectionModel);
+    }
+
+    public List<CollectionImeji> retrieveAllCollections() throws Exception
+    {
+        List<String> uris = ImejiSPARQL.exec("SELECT ?s WHERE { ?s a <http://imeji.org/terms/collection>}",
+                ImejiJena.collectionModel);
+        return (List<CollectionImeji>)loadCollectionsLazy(uris, -1, 0);
     }
 
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset)

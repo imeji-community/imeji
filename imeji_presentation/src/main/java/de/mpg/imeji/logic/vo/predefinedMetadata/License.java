@@ -74,8 +74,8 @@ public class License extends Metadata
     }
 
     @Override
-    public void indexFulltext()
+    public String asFulltext()
     {
-        setFulltextIndex(license + " " + getDateString());
+        return license + " " + getDateString();
     }
 }

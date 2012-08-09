@@ -70,8 +70,8 @@ public class Link extends Metadata
     }
 
     @Override
-    public void indexFulltext()
+    public String asFulltext()
     {
-        setFulltextIndex(label + " " + uri.toString());
+        return label + " " + uri.toString();
     }
 }

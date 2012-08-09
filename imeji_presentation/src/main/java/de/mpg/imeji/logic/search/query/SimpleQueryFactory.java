@@ -3,9 +3,19 @@
  */
 package de.mpg.imeji.logic.search.query;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.User;
 
@@ -36,6 +46,10 @@ public class SimpleQueryFactory
         if (pair == null)
         {
             return "";
+        }
+        else if (SearchIndex.names.FULLTEXT.name().equals(pair.getIndex().getName()))
+        {
+            searchQuery = " ?s <" + pair.getIndex().getNamespace() + "> ?el";
         }
         else if (SearchIndex.names.IMAGE_FILENAME.name().equals(pair.getIndex().getName()))
         {
@@ -137,6 +151,10 @@ public class SimpleQueryFactory
 
     public static String getSimpleFilter(SearchPair pair, String variable)
     {
+        if (pair.getIndex().equals(Search.getIndex(SearchIndex.names.FULLTEXT)))
+        {
+            return getTextSearchFilter(pair, variable);
+        }
         String filter = "";
         variable = "?" + variable;
         if (pair.getValue() != null)
@@ -213,5 +231,59 @@ public class SimpleQueryFactory
             return "true";
         }
         return filter;
+    }
+
+    public static String getTextSearchFilter(SearchPair pair, String variable)
+    {
+        String filter = "";
+        String text = pair.getValue();
+        StringReader simpleReader = new StringReader(text);
+        int i = 0;
+        boolean isExactQuery = false;
+        List<String> words = new ArrayList<String>();
+        String word = "";
+        try
+        {
+            while ((i = simpleReader.read()) != -1)
+            {
+                if (i == '"')
+                {
+                    if (isExactQuery)
+                    {
+                        isExactQuery = false;
+                        words.add(word);
+                        word = "";
+                    }
+                    else
+                        isExactQuery = true;
+                }
+                else if (i == ' ' && !isExactQuery)
+                {
+                    words.add(word);
+                    word = "";
+                }
+                else
+                {
+                    word += (char)i;
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        if (!"".equals(word.trim()))
+        {
+            words.add(word);
+        }
+        for (String str : words)
+        {
+            if (!"".equals(filter))
+            {
+                filter += " || ";
+            }
+            filter += "regex(?" + variable + ", '" + str + "', 'i')";
+        }
+        return filter.trim();
     }
 }

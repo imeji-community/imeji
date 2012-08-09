@@ -6,7 +6,6 @@ package de.mpg.imeji.logic.vo.predefinedMetadata;
 import java.net.URI;
 
 import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
@@ -80,13 +79,8 @@ public class ConePerson extends Metadata
     }
 
     @Override
-    public void indexFulltext()
+    public String asFulltext()
     {
-        String str = person.getCompleteName();
-        for (Organization org : person.getOrganizations())
-        {
-            str += " " + org.getName();
-        }
-        setFulltextIndex(str);
+        return person.AsFullText();
     }
 }

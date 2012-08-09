@@ -88,8 +88,8 @@ public class Geolocation extends Metadata
     }
 
     @Override
-    public void indexFulltext()
+    public String asFulltext()
     {
-        setFulltextIndex(name + " " + " lat:" + latitude + " long:" + longitude);
+        return name + " " + " lat:" + latitude + " long:" + longitude;
     }
 }

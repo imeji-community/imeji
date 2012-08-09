@@ -84,8 +84,8 @@ public class Publication extends Metadata
     }
 
     @Override
-    public void indexFulltext()
+    public String asFulltext()
     {
-        setFulltextIndex(citation + " " + uri.toString());
+        return citation + " " + uri.toString();
     }
 }

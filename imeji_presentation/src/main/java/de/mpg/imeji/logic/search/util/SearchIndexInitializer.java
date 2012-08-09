@@ -33,6 +33,10 @@ public class SearchIndexInitializer
         indexes = put(indexes, new SearchIndex(SearchIndex.names.ID_URI.name(), "http://imeji.org/terms/id"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.MY_IMAGES.name(), "http://imeji.org/terms/"));
         /**
+         *  Fulltext search index
+         */
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.FULLTEXT.name(), "http://imeji.org/terms/fulltext"));
+        /**
          * Properties indexes
          */
         //indexes = put(indexes, new SearchIndex(SearchIndex.names.PROPERTIES.name(), "http://imeji.org/terms/properties"));

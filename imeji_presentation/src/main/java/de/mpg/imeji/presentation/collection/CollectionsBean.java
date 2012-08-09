@@ -22,6 +22,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
+import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 
@@ -62,48 +63,18 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         CollectionController controller = new CollectionController(sb.getUser());
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         SearchQuery searchQuery = new SearchQuery();
-        if (getFilter() != null)
-        {
-            searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
-            searchQuery.addPair(getFilter());
-        }
         if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("q"))
         {
             query = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("q");
         }
         if (!"".equals(query))
         {
-            // if (query.startsWith("\"") && query.endsWith("\""))
-            // {
-            // scList.add(new SearchCriterion(SearchIndexes.CONTAINER_METADATA_TITLE, query));
-            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_DESCRIPTION, query,
-            // Filtertype.REGEX));
-            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_FAMILY_NAME, query,
-            // Filtertype.REGEX));
-            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_GIVEN_NAME, query,
-            // Filtertype.REGEX));
-            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_COMPLETE_NAME,
-            // query, Filtertype.REGEX));
-            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME,
-            // query, Filtertype.REGEX));
-            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.COLLECTION_PROFILE, query, Filtertype.URI));
-            // }
-            // else
-            // {
-            // for (String s : query.split("\\s"))
-            // {
-            // scList.add(new SearchCriterion(SearchIndexes.CONTAINER_METADATA_TITLE, s));
-            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_DESCRIPTION, s,
-            // Filtertype.REGEX));
-            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_FAMILY_NAME, s,
-            // Filtertype.REGEX));
-            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.CONTAINER_METADATA_PERSON_GIVEN_NAME, s,
-            // Filtertype.REGEX));
-            // scList.add(new SearchCriterion(Operator.OR,
-            // SearchIndexes.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, s, Filtertype.REGEX));
-            // scList.add(new SearchCriterion(Operator.OR, SearchIndexes.COLLECTION_PROFILE, s, Filtertype.URI));
-            // }
-            // }
+            searchQuery = URLQueryTransformer.parseStringQuery(query);
+        }
+        if (getFilter() != null)
+        {
+            searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
+            searchQuery.addPair(getFilter());
         }
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));

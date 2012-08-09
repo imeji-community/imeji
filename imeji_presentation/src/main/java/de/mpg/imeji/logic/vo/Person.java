@@ -127,4 +127,15 @@ public class Person
     {
         return id;
     }
+    
+    
+    public String AsFullText()
+    {
+        String str = givenName + " " + familyName + " " + alternativeName;
+        for (Organization org : organizations)
+        {
+            str += " " + org.getName();
+        }
+        return str.trim();
+    }
 }

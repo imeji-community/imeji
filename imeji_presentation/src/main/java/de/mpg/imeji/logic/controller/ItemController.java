@@ -117,7 +117,7 @@ public class ItemController extends ImejiController
         {
             for (Metadata md : mds.getMetadata())
             {
-                md.indexFulltext();
+                md.asFulltext();
             }
         }
         return item;

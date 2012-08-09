@@ -63,8 +63,8 @@ public class Number extends Metadata
     }
 
     @Override
-    public void indexFulltext()
+    public String asFulltext()
     {
-        setFulltextIndex(Double.toString(number));
+        return Double.toString(number);
     }
 }

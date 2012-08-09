@@ -519,7 +519,7 @@ public class ImageBean
                 {
                     if (md.getStatement().equals(s.getId()))
                     {
-                        return md.getFulltextIndex();
+                        return md.asFulltext();
                     }
                 }
             }

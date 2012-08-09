@@ -76,8 +76,8 @@ public class Date extends Metadata
     }
 
     @Override
-    public void indexFulltext()
+    public String asFulltext()
     {
-        setFulltextIndex(date);
+        return date;
     }
 }

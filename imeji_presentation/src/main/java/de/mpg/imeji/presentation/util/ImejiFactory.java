@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.util;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +14,8 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
@@ -26,13 +29,11 @@ import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.j2j.misc.LocalizedString;
 
 /**
- * Create objects ready to be displayed in JSF
- * TODO Description
- *
+ * Create objects ready to be displayed in JSF TODO Description
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class ImejiFactory
 {
@@ -75,6 +76,21 @@ public class ImejiFactory
         Organization org = new Organization();
         org.setName("");
         return org;
+    }
+
+    public static MetadataSet newMetadataSet(URI profile)
+    {
+        MetadataSet mds = new MetadataSet();
+        mds.setProfile(profile);
+        return mds;
+    }
+
+    public static Item newItem(CollectionImeji collection)
+    {
+        Item item = new Item();
+        item.setCollection(collection.getId());
+        item.getMetadataSets().add(newMetadataSet(collection.getProfile()));
+        return item;
     }
 
     public static List<CollectionListItem> collectionListToListItem(Collection<CollectionImeji> collList, User user)

@@ -21,6 +21,7 @@ public class StatementWrapper
     private Statement statement;
     private String vocabularyString = null;
     private String typeString;
+    private boolean preview = true;
     private URI profile;
     private List<LocalizedString> labels = new ArrayList<LocalizedString>();
     private VocabularyHelper vocabularyHelper = null;
@@ -37,6 +38,7 @@ public class StatementWrapper
         statement.setType(st.getType());
         statement.setVocabulary(st.getVocabulary());
         description = st.isDescription();
+        this.preview = st.isPreview();
         if (Integer.parseInt(st.getMinOccurs()) > 0)
         {
             required = true;
@@ -102,6 +104,14 @@ public class StatementWrapper
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
             statement.setType(URI.create(event.getNewValue().toString()));
+        }
+    }
+
+    public void previewListener(ValueChangeEvent event)
+    {
+        if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
+        {
+            statement.setPreview((Boolean)event.getNewValue());
         }
     }
 
@@ -222,5 +232,15 @@ public class StatementWrapper
     public void setLabels(List<LocalizedString> labels)
     {
         this.labels = labels;
+    }
+
+    public void setPreview(boolean preview)
+    {
+        this.preview = preview;
+    }
+
+    public boolean isPreview()
+    {
+        return preview;
     }
 }

@@ -55,6 +55,15 @@
 		</h:selectOneMenu>
 				
 		<!-- METADATA TYPE URI -->
+		<h:outputLabel value="#{lbl.label}" styleClass="huge_label" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#link' and !SuggestBean.suggests[metadata.statement].hasRestrictedValues}"/>
+		<h:inputText id="inputLinkLabel" styleClass="xHuge_txtInput" value="#{metadata.label}" immediate="true" onfocus="this.select();" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#link' and !SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
+				<rich:suggestionbox frequency="0.0001" rendered="#{SuggestBean.suggests[metadata.statement].doAutoComplete}" for="inputLinkLabel" var="results" suggestionAction="#{SuggestBean.suggests[metadata.statement].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
+					<h:column>
+						<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
+					</h:column>
+				</rich:suggestionbox>
+			</h:inputText>
+		<h:outputLabel value="#{lbl.url}" styleClass="huge_label" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#link' and !SuggestBean.suggests[metadata.statement].hasRestrictedValues}"/>
 		<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" immediate="true" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#link' and !SuggestBean.suggests[metadata.statement].hasRestrictedValues}" onfocus="this.select();">
 			<f:converter converterId="URIConverter" />
 			<rich:suggestionbox frequency="0.001" rendered="#{SuggestBean.suggests[metadata.statement].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.statement].autoComplete}"  for="inputURI" var="results" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">

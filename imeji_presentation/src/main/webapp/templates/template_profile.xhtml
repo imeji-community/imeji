@@ -57,16 +57,22 @@
 									<span class="noDisplay">: </span>
 								</b>
 								<h:panelGroup styleClass="free_area0 tiny_marginRExcl" style="float:right">
-									<h:panelGroup styleClass="free_area0 tiny_marginRExcl">
-										<h:outputLabel styleClass="free_area0" value="#{lbl.multiple}"/>
-										<h:selectBooleanCheckbox value="#{statement.multiple}"  valueChangeListener="#{statement.multipleListener}"/>
-									</h:panelGroup>
 									<h:panelGroup styleClass="free_area0">
 										<h:selectOneRadio styleClass="free_area0" id="radioDescription" readonly="true" value="#{statement.description}" converter="javax.faces.Boolean" onclick="unSelectUnique(#{position});">
 											<f:selectItem id="true" itemLabel="#{lbl.use_as_description}" itemValue="true"/>
 										</h:selectOneRadio>
 										<h:selectBooleanCheckbox styleClass="free_area0" style="visibility:hidden;" id="uniqueSelect" value="#{statement.description}" onclick="unSelectUnique(#{position});" valueChangeListener="#{statement.descriptionListener}"/>
 									</h:panelGroup>
+									<h:panelGroup styleClass="free_area0 tiny_marginRExcl">
+										<h:selectBooleanCheckbox styleClass="free_area0" value="#{statement.multiple}"  valueChangeListener="#{statement.multipleListener}"/>
+										<h:outputLabel styleClass="free_area0 xTiny_marginLExcl" value="#{lbl.multiple}"/>
+									</h:panelGroup>
+									<h:panelGroup styleClass="free_area0">
+										<h:selectBooleanCheckbox styleClass="free_area0" value="#{statement.preview}" valueChangeListener="#{statement.previewListener}"/>
+										<h:outputLabel styleClass="free_area0 xTiny_marginLExcl" value="#{lbl.preview}"/>
+									</h:panelGroup>
+									
+									
 								</h:panelGroup>	
 								<h:panelGroup class="full_area0 xLarge_marginLExcl endline">
 									<h:panelGroup styleClass="medium_area0 clear">

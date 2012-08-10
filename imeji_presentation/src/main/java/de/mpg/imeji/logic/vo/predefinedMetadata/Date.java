@@ -35,7 +35,7 @@ public class Date extends Metadata
 
     public void setDate(String date)
     {
-        if (date != null)
+        if (date != null && date != "")
         {
             time = DateFormatter.getTime(date);
         }

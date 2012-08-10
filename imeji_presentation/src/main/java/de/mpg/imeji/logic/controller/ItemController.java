@@ -207,7 +207,6 @@ public class ItemController extends ImejiController
 
     public Collection<Item> loadItems(List<String> uris, int limit, int offset)
     {
-        long before = System.currentTimeMillis();
         int counter = 0;
         List<Item> items = new ArrayList<Item>();
         for (String s : uris)
@@ -220,20 +219,7 @@ public class ItemController extends ImejiController
         }
         try
         {
-            int loaded = 0;
-            // Loads items with a maximum interval to minimize memory usage
-            while (loaded < items.size() - 1)
-            {
-                int toIndex = loaded + MAXIMUM_LOADS_PER_TRANSACTION;
-                if (toIndex > items.size())
-                {
-                    toIndex = items.size();
-                }
-                imejiRDF2Bean.load(J2JHelper.cast2ObjectList(items.subList(loaded, toIndex)), user);
-                loaded = toIndex;
-            }
-            long after = System.currentTimeMillis();
-            logger.info(items.size() + " items loaded in " + Long.valueOf(after - before));
+            imejiRDF2Bean.load(J2JHelper.cast2ObjectList(items), user);
             return items;
         }
         catch (Exception e)

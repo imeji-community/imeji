@@ -33,6 +33,7 @@ import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -132,6 +133,7 @@ public class EditImageMetadataBean
 
     private void initProfileAndStatement(List<Item> items)
     {
+        profile = null;
         if (items != null && items.size() > 0)
         {
             profile = ObjectLoader.loadProfile(items.get(0).getMetadataSet().getProfile(), session.getUser());

@@ -25,9 +25,6 @@ public class ConePerson extends Metadata
 
     public ConePerson()
     {
-        person = new Person();
-        // Organization o = new Organization();
-        // person.getOrganizations().add(o);
     }
 
     public ConePerson(Person pers)

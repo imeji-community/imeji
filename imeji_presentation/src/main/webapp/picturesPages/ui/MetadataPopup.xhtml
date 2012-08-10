@@ -73,8 +73,8 @@
 	
 
 	<a4j:repeat var="statement" value="#{item.statements}" rows="0">
-		
-		<a4j:repeat var="md" value="#{item.metadata}" rows="0">
+
+		<a4j:repeat var="md" value="#{item.metadata}" rows="0" rendered="#{statement.preview}">
 			<h:panelGroup  rendered="#{md.statement == statement.id}" styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
 				<h:outputText value="#{MetadataLabels.internationalizedLabels[statement.id]}"/>
 			</h:panelGroup>
@@ -84,7 +84,8 @@
 				<h:outputText value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}"/>
 				<h:outputText value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'}"/>
 				<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication' or md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
-					<h:outputText value="Link" />
+					<h:outputText value="Link" rendered="#{md.label == ''}"/>
+					<h:outputText value="#{md.label}" rendered="#{md.label != ''}"/>
 				</h:outputLink>
 				<h:outputText value="#{md.license}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}"/>
 				<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">

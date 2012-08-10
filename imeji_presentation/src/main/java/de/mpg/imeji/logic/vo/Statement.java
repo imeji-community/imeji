@@ -36,6 +36,8 @@ public class Statement implements Comparable<Statement>
     private String maxOccurs = "1";
     @j2jResource("http://imeji.org/terms/parent")
     private URI parent = null;
+    @j2jLiteral("http://imeji.org/terms/isPreview")
+    private boolean isPreview = true;
     private int pos = 0;
 
     public Statement()
@@ -151,5 +153,15 @@ public class Statement implements Comparable<Statement>
     public URI getParent()
     {
         return parent;
+    }
+
+    public void setPreview(boolean isPreview)
+    {
+        this.isPreview = isPreview;
+    }
+
+    public boolean isPreview()
+    {
+        return isPreview;
     }
 }

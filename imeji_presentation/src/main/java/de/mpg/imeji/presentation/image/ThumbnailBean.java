@@ -12,7 +12,6 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.factory.MetadataSetFactory;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.vo.Item;
@@ -23,6 +22,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 
 public class ThumbnailBean
@@ -67,7 +67,7 @@ public class ThumbnailBean
     {
         List<Item> l = new ArrayList<Item>();
         Item im = new Item();
-        im.getMetadataSets().add(MetadataSetFactory.create(profile));
+        im.getMetadataSets().add(ImejiFactory.newMetadataSet(profile));
         l.add(im);
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(l);
         return "";

@@ -7,8 +7,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.richfaces.model.SortOrder;
-
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -50,7 +48,7 @@ public class CollectionFacets
         for (Statement st : profile.getStatements())
         {
             List<Facet> group = new ArrayList<Facet>();
-            if (!fs.isFilter(getName(st.getId())))
+            if (st.isPreview() && !fs.isFilter(getName(st.getId())))
             {
                 SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_METADATA_STATEMENT),
                         SearchOperators.URI, st.getId().toString());

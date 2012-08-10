@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.vo.Container;
@@ -29,6 +30,7 @@ public class ImejiBean2RDF
     private Security security;
     private static Logger logger = Logger.getLogger(ImejiBean2RDF.class);
     private String modelURI;
+
     public ImejiBean2RDF(String modelURI)
     {
         security = new Security();
@@ -37,6 +39,7 @@ public class ImejiBean2RDF
 
     private void runTransaction(List<Object> objects, OperationsType type, boolean lazy) throws Exception
     {
+        index(objects);
         Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);
         // Write Transaction needs to be added in a new Thread
         ThreadedTransaction ts = new ThreadedTransaction(t);
@@ -62,7 +65,7 @@ public class ImejiBean2RDF
         checkSecurity(objects, user, OperationsType.UPDATE);
         runTransaction(objects, OperationsType.UPDATE, false);
     }
-    
+
     public void updateLazy(List<Object> objects, User user) throws Exception
     {
         checkSecurity(objects, user, OperationsType.UPDATE);
@@ -88,32 +91,17 @@ public class ImejiBean2RDF
         return list;
     }
 
+    private void index(List<Object> l)
+    {
+        for (Object o : l)
+        {
+            if (o instanceof FulltextIndex)
+            {
+                ((FulltextIndex)o).indexFulltext();
+            }
+        }
+    }
 
-
-    // private void setLastModificationDate(Object o, User user)
-    // {
-    // if (o instanceof Item)
-    // {
-    // ImejiController.writeUpdateProperties(((Item)o), user);
-    // }
-    // else if (o instanceof Container)
-    // {
-    // ImejiController.writeUpdateProperties(((Container)o), user);
-    // }
-    // }
-    //
-    // private Calendar getLastModificationDate(Object o)
-    // {
-    // if (o instanceof Item)
-    // {
-    // return ((Item)o).getCreated();
-    // }
-    // else if (o instanceof Container)
-    // {
-    // return ((Container)o).getCreated();
-    // }
-    // return null;
-    // }
     private URI extractID(Object o)
     {
         if (o instanceof Item)

@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.factory.ItemFactory;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 public class ViewCollectionBean extends CollectionBean
@@ -46,7 +47,7 @@ public class ViewCollectionBean extends CollectionBean
         List<Item> l = new ArrayList<Item>();
         for (int i = 0; i < 100; i++)
         {
-            de.mpg.imeji.logic.vo.Item item = ItemFactory.create(this.getCollection());
+            de.mpg.imeji.logic.vo.Item item = ImejiFactory.newItem(getCollection());
             item.setCollection(this.getCollection().getId());
             item.setFullImageUrl(URI.create("http://imeji.org/item/test"));
             item.setThumbnailImageUrl(URI.create("http://imeji.org/item/test"));
@@ -70,7 +71,7 @@ public class ViewCollectionBean extends CollectionBean
     public void init()
     {
         // ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel).removeAll();
-        // ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel).write(System.out, "RDF/XML-ABBREV");
+         ImejiJena.printModel(ImejiJena.imageModel);
        
         try
         {

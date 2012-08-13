@@ -66,11 +66,11 @@ public class StatementWrapper
 
     public Statement getAsStatement()
     {
-        if (statement.getId() == null)
-        {
-            statement.setId(URI.create(profile + "/" + labels.get(0).getString().replace(" ", "_")));
-        }
-        statement.getLabels().clear();
+//        if (statement.getId() == null)
+//        {
+//            statement.setId(URI.create(profile + "/" + labels.get(0).getString().replace(" ", "_")));
+//        }
+        //statement.getLabels().clear();
         statement.setLabels(labels);
         if (vocabularyString != null)
         {
@@ -94,8 +94,8 @@ public class StatementWrapper
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
             int pos = Integer.parseInt(event.getComponent().getAttributes().get("position").toString());
-            ((List<LocalizedString>)statement.getLiteralConstraints()).set(pos, new LocalizedString(event.getNewValue()
-                    .toString(), "eng"));
+            ((List<String>)statement.getLiteralConstraints()).set(pos, event.getNewValue()
+                    .toString());
         }
     }
 

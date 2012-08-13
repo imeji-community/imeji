@@ -68,7 +68,7 @@ public class MetadataLabels
                         internationalizedLabels.put(s.getId(), ls.getString());
                         hasInternationalizedLabel = true;
                     }
-                    labelFallBack = ls.toString();
+                    labelFallBack = ls.getString();
                 }
                 if (!hasLabel)
                 {

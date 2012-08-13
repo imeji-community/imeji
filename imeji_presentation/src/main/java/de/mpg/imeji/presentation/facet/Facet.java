@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.facet;
 
 import java.io.Serializable;
@@ -10,114 +9,118 @@ import java.net.URI;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.j2j.misc.LocalizedString;
 
-public class Facet implements Serializable
+public class Facet
 {
-	private URI uri;
-	private String label;
-	private int count;
-	private FacetType type;
-	private  URI metadataURI;
+    private URI uri;
+    private String label;
+    private int count;
+    private FacetType type;
+    private URI metadataURI;
 
-	public enum FacetType
-	{
-		TECHNICAL, COLLECTION, SEARCH;
-	}
+    public enum FacetType
+    {
+        TECHNICAL, COLLECTION, SEARCH;
+    }
 
-	public Facet(URI uri, String label, int count, FacetType type, URI metadataURI)
-	{
-		this.count = count;
-		this.label = label;
-		this.uri = uri;
-		this.type = type;
-		this.metadataURI = metadataURI;
-	}
+    public Facet(URI uri, String label, int count, FacetType type, URI metadataURI)
+    {
+        this.count = count;
+        this.label = label;
+        this.uri = uri;
+        this.type = type;
+        this.metadataURI = metadataURI;
+    }
 
-	public URI getUri()
-	{
-		return uri;
-	}
+    public URI getUri()
+    {
+        return uri;
+    }
 
-	public void setUri(URI uri)
-	{
-		this.uri = uri;
-	}
+    public void setUri(URI uri)
+    {
+        this.uri = uri;
+    }
 
-	public String getinternationalizedLabel()
-	{
-		String s = label;
+    public String getinternationalizedLabel()
+    {
+        String s = label;
+        if (FacetType.TECHNICAL.name().equals(type.name()))
+        {
+            s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
+        }
+        else if (FacetType.COLLECTION.name().equals(type.name()))
+        {
+            s = ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(
+                    metadataURI);
+            if (isNotDefine())
+            {
+                s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_not_define");// + " " +
+                                                                                                             // s;
+            }
+        }
+        else if (FacetType.SEARCH.name().equals(type.name()))
+        {
+            s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("search");
+        }
+        if (s == null || (label != null && s.equals("facet_" + label.toLowerCase())))
+        {
+            return label;
+        }
+        return s;
+    }
 
-		if (FacetType.TECHNICAL.name().equals(type.name()))
-		{
-			s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_" + label.toLowerCase());
-		}
-		else if (FacetType.COLLECTION.name().equals(type.name()))
-		{
-			s = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(metadataURI);
-			if (isNotDefine())
-			{
-				s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_not_define");// + " " + s;
-			}
-		}
-		else if (FacetType.SEARCH.name().equals(type.name()))
-		{
-			s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("search");
-		}
+    public String getNotDefineType()
+    {
+        return ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(
+                metadataURI);
+    }
 
-		if (s == null || (label != null && s.equals("facet_" + label.toLowerCase())))
-		{
-			return label;
-		}
+    public boolean isNotDefine()
+    {
+        if (label == null)
+            return false;
+        return (label.toLowerCase().startsWith("no "));
+    }
 
-		return s;
-	}
+    public String getLabel()
+    {
+        return label;
+    }
 
-	public String getNotDefineType()
-	{
-		return ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(metadataURI);
-	}
+    public void setLabel(String label)
+    {
+        this.label = label;
+    }
 
-	public boolean isNotDefine()
-	{
-		if (label == null) return false;
-		return (label.toLowerCase().startsWith("no "));
-	}
+    public int getCount()
+    {
+        return count;
+    }
 
-	public String getLabel()
-	{
-		return label;
-	}
+    public void setCount(int count)
+    {
+        this.count = count;
+    }
 
-	public void setLabel(String label)
-	{
-		this.label = label;
-	}
+    public FacetType getType()
+    {
+        return type;
+    }
 
-	public int getCount()
-	{
-		return count;
-	}
+    public void setType(FacetType type)
+    {
+        this.type = type;
+    }
 
-	public void setCount(int count)
-	{
-		this.count = count;
-	}
+    public URI getMetadataURI()
+    {
+        return metadataURI;
+    }
 
-	public FacetType getType() {
-		return type;
-	}
-
-	public void setType(FacetType type) {
-		this.type = type;
-	}
-
-	public URI getMetadataURI() {
-		return metadataURI;
-	}
-
-	public void setMetadataURI(URI metadataURI) {
-		this.metadataURI = metadataURI;
-	}
-
-
+    public void setMetadataURI(URI metadataURI)
+    {
+        this.metadataURI = metadataURI;
+    }
 }

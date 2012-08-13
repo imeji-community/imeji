@@ -31,7 +31,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.misc.LocalizedString;
 
-public class MdProfileBean implements Serializable
+public class MdProfileBean
 {
     private MetadataProfile profile = null;
     private TabType tab = TabType.PROFILE;
@@ -224,16 +224,14 @@ public class MdProfileBean implements Serializable
 
     public String addConstraint()
     {
-        // Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
         Statement st = ((List<StatementWrapper>)statements).get(getStatementPosition()).getAsStatement();
         if (getConstraintPosition() >= st.getLiteralConstraints().size())
         {
-            ((List<LocalizedString>)st.getLiteralConstraints()).add(new LocalizedString("", "en"));
+            ((List<String>)st.getLiteralConstraints()).add("");
         }
         else
         {
-            ((List<LocalizedString>)st.getLiteralConstraints()).add(getConstraintPosition() + 1, new LocalizedString(
-                    "", "en"));
+            ((List<String>)st.getLiteralConstraints()).add(getConstraintPosition() + 1,"");
         }
         collectionSession.setProfile(profile);
         return getNavigationString();
@@ -241,9 +239,8 @@ public class MdProfileBean implements Serializable
 
     public String removeConstraint()
     {
-        // Statement st = ((List<Statement>)profile.getStatements()).get(getStatementPosition());
         Statement st = ((List<StatementWrapper>)statements).get(getStatementPosition()).getAsStatement();
-        ((List<LocalizedString>)st.getLiteralConstraints()).remove(getConstraintPosition());
+        ((List<String>)st.getLiteralConstraints()).remove(getConstraintPosition());
         collectionSession.setProfile(profile);
         return getNavigationString();
     }
@@ -398,11 +395,11 @@ public class MdProfileBean implements Serializable
                 statementNames.add(s.getId().toString());
             }
             s.setPos(i);
-            if (s.getId() != null && s.getId().toString().equals(profile.getId().toString() + "/"))
-            {
-                s.setId(URI.create(profile.getId().toString() + "/"
-                        + ((List<LocalizedString>)s.getLabels()).get(0).toString()));
-            }
+//            if (s.getId() != null && s.getId().toString().equals(profile.getId().toString() + "/"))
+//            {
+//                s.setId(URI.create(profile.getId().toString() + "/"
+//                        + ((List<LocalizedString>)s.getLabels()).get(0).toString()));
+//            }
             i++;
         }
         return true;

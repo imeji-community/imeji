@@ -27,7 +27,7 @@ public class Statement implements Comparable<Statement>
     @j2jResource("http://purl.org/dc/dcam/VocabularyEncodingScheme")
     private URI vocabulary;
     @j2jList("http://imeji.org/terms/literalConstraint")
-    private Collection<LocalizedString> literalConstraints = new LinkedList<LocalizedString>();
+    private Collection<String> literalConstraints = new LinkedList<String>();
     @j2jLiteral("http://imeji.org/terms/isDescription")
     private boolean isDescription = false;
     @j2jLiteral("http://imeji.org/terms/minOccurs")
@@ -75,12 +75,12 @@ public class Statement implements Comparable<Statement>
         this.vocabulary = vocabulary;
     }
 
-    public Collection<LocalizedString> getLiteralConstraints()
+    public Collection<String> getLiteralConstraints()
     {
         return literalConstraints;
     }
 
-    public void setLiteralConstraints(Collection<LocalizedString> literalConstraints)
+    public void setLiteralConstraints(Collection<String> literalConstraints)
     {
         this.literalConstraints = literalConstraints;
     }

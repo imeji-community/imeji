@@ -119,12 +119,12 @@ public class Search
                     subResults = new ArrayList<String>(advanced(new SearchQuery(((SearchGroup)se).getGroup()), sortCri,
                             user));
                     results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
-                            SortHelper.removeSortValue(subResults));
+                            SortHelper.removeSortValue(results));
                     break;
                 case PAIR:
                     subResults = new ArrayList<String>(simple((SearchPair)se, sortCri, user));
                     results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
-                            SortHelper.removeSortValue(subResults));
+                            SortHelper.removeSortValue(results));
                     break;
                 case LOGICAL_RELATIONS:
                     logic = ((SearchLogicalRelation)se).getLogicalRelation();

@@ -107,7 +107,7 @@ public class CollectionImagesBean extends ImagesBean
         totalNumberOfRecords = results.getNumberOfRecords();
         results.setQuery(getQuery());
         results.setSort(sortCriterion);
-        List<Item> items = (List<Item>)loadImages(results);
+        List<Item> items = (List<Item>)loadImages(results.getResults());
         return ImejiFactory.imageListToThumbList(items);
     }
 

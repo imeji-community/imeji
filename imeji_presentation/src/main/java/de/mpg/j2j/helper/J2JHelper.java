@@ -68,7 +68,7 @@ public class J2JHelper
         }
         return o;
     }
-    
+
     public static List<Object> cast2ObjectList(List<?> l)
     {
         List<Object> list = new ArrayList<Object>();
@@ -87,7 +87,7 @@ public class J2JHelper
         }
         return null;
     }
-    
+
     public static String getModel(Object o)
     {
         return o.getClass().getAnnotation(j2jModel.class).value();
@@ -176,6 +176,8 @@ public class J2JHelper
     {
         if (isLiteral(f))
             return f.getAnnotation(j2jLiteral.class).value();
+        else if (isList(f))
+            return getListNamespace(f);
         else
             return null;
     }

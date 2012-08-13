@@ -111,6 +111,11 @@ public class Jena2Java
         {
             object = readLocalizedString(f, subject, object, position);
         }
+        else if (J2JHelper.isList(f) && J2JHelper.getLiteralNamespace(f) != null)
+        {
+            // field of a list which has not been handle so for (i.e not an URI or not a localized String)
+            object = loadObjectLiteral(f, subject, object, position);
+        }
         return object;
     }
 

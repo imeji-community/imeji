@@ -4,8 +4,6 @@
 
 package de.mpg.imeji.presentation.mdProfile;
 
-import java.io.Serializable;
-
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ProfileController;
@@ -13,7 +11,7 @@ import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
-public class CreateMdProfileBean extends MdProfileBean implements Serializable
+public class CreateMdProfileBean extends MdProfileBean
 {
     private SessionBean session;
     private static Logger logger = Logger.getLogger(CreateMdProfileBean.class);

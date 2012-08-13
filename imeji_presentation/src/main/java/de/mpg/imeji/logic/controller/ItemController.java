@@ -4,6 +4,7 @@
 package de.mpg.imeji.logic.controller;
 
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +13,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import de.escidoc.core.client.Authentication;
+import de.escidoc.core.client.ItemHandlerClient;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
@@ -344,21 +347,21 @@ public class ItemController extends ImejiController
 
     public void removeImageFromEscidoc(String id)
     {
-        // try
-        // {
-        // String username = PropertyReader.getProperty("imeji.escidoc.user");
-        // String password = PropertyReader.getProperty("imeji.escidoc.password");
-        // Authentication auth = new Authentication(new URL(
-        // PropertyReader.getProperty("escidoc.framework_access.framework.url")), username, password);
-        // ItemHandlerClient handler = new ItemHandlerClient(auth.getServiceAddress());
-        // handler.setHandle(auth.getHandle());
-        // handler.delete(id);
-        // }
-        // catch (Exception e)
-        // {
-        // logger.error("Error removing image from eSciDoc (" + id + ")", e);
-        // throw new RuntimeException("Error removing image from eSciDoc (" + id + ")", e);
-        // }
+        try
+        {
+            String username = PropertyReader.getProperty("imeji.escidoc.user");
+            String password = PropertyReader.getProperty("imeji.escidoc.password");
+            Authentication auth = new Authentication(new URL(
+                    PropertyReader.getProperty("escidoc.framework_access.framework.url")), username, password);
+            ItemHandlerClient handler = new ItemHandlerClient(auth.getServiceAddress());
+            handler.setHandle(auth.getHandle());
+            handler.delete(id);
+        }
+        catch (Exception e)
+        {
+            logger.error("Error removing image from eSciDoc (" + id + ")", e);
+            throw new RuntimeException("Error removing image from eSciDoc (" + id + ")", e);
+        }
     }
 
     public String getEscidocUserHandle() throws Exception

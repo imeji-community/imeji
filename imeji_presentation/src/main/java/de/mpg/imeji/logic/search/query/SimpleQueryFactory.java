@@ -7,15 +7,11 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.User;
 
@@ -28,7 +24,7 @@ public class SimpleQueryFactory
     public static String getQuery(String rdfType, SearchPair pair, SortCriterion sortCriterion, User user,
             boolean isCollection, String specificQuery)
     {
-        PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
+        PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
                 + " ?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
         return PATTERN_SELECT
                 .replaceAll("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.getQuery(user, pair, rdfType, false))
@@ -107,13 +103,14 @@ public class SimpleQueryFactory
         }
         else
         {
-            searchQuery = " ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md "
+            searchQuery = " ?s <http://imeji.org/terms/metadataSet> ?mds . NOT EXISTS{ ?mds <http://imeji.org/terms/metadata> ?md  . ?md "
                     + getSearchElementsParent(pair.getIndex(), 0) + " <" + pair.getIndex().getNamespace() + "> ?el ";
         }
         if (pair.isNot())
         {
-            return " MINUS{ " + searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(pair, variable) + ")} .";
+            return searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(pair, variable) + ")} .";
         }
+        searchQuery = searchQuery.replace("NOT EXISTS{", "");
         return searchQuery + " .FILTER(" + getSimpleFilter(pair, variable) + ") .";
     }
 

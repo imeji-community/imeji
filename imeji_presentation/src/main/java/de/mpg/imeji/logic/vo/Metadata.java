@@ -24,8 +24,6 @@ import de.mpg.j2j.annotations.j2jResource;
 public abstract class Metadata
 {
     private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
-    @j2jLiteral("http://imeji.org/terms/fulltext")
-    private String fulltext;
     private int pos = 0;
 
     public enum Types
@@ -80,7 +78,6 @@ public abstract class Metadata
     protected void copyMetadata(Metadata metadata)
     {
         this.id = metadata.getId();
-        this.fulltext = "";
     }
 
     public URI getId()

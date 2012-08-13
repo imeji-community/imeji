@@ -63,10 +63,8 @@ public class SortHelper
 
     public final static List<String> removeSortValue(List<String> l)
     {
-        long a = System.currentTimeMillis();
         if (!isListToSort(l))
         {
-            System.out.println("Remove Sort Value: " + Long.valueOf(System.currentTimeMillis() - a));
             return l;
         }
         List<String> l1 = new ArrayList<String>(l.size());
@@ -74,19 +72,16 @@ public class SortHelper
         {
             l1.add(removeSortValue(s));
         }
-        System.out.println("Remove Sort Value: " + Long.valueOf(System.currentTimeMillis() - a));
         return l1;
     }
 
     public final static List<String> toStringList(List<ComparableSearchResult> unsortedResults)
     {
-        long a = System.currentTimeMillis();
         List<String> sortedResults = new ArrayList<String>(unsortedResults.size());
         for (ComparableSearchResult csr : unsortedResults)
         {
             sortedResults.add(csr.getValue());
         }
-        System.out.println("toStringList: " + Long.valueOf(System.currentTimeMillis() - a));
         return sortedResults;
     }
 

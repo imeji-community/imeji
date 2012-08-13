@@ -70,19 +70,16 @@ public class ViewCollectionBean extends CollectionBean
 
     public void init()
     {
-        // ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel).removeAll();
-         ImejiJena.printModel(ImejiJena.imageModel);
-       
         try
         {
             User user = sessionBean.getUser();
             String id = super.getId();
             setCollection(ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user));
             if (getCollection() != null && getCollection().getId() != null)
-              {
-                  ItemController ic = new ItemController(sessionBean.getUser());
-                  setSize(ic.countImagesInContainer(getCollection().getId(), new SearchQuery()));
-              }
+            {
+                ItemController ic = new ItemController(sessionBean.getUser());
+                setSize(ic.countImagesInContainer(getCollection().getId(), new SearchQuery()));
+            }
             if (getCollection() != null)
             {
                 setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
@@ -106,9 +103,7 @@ public class ViewCollectionBean extends CollectionBean
             BeanHelper.error(e.getMessage());
             logger.error("Error init of collection home page", e);
         }
-        long before = System.currentTimeMillis();
-        //createBigCollection();
-        logger.info("Big collection created in : " + Long.valueOf(System.currentTimeMillis() - before));
+        // createBigCollection();
     }
 
     public List<Person> getPersons()

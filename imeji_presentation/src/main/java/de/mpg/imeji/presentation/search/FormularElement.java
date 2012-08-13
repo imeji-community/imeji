@@ -109,9 +109,9 @@ public class FormularElement
         {
             predefinedValues = new ArrayList<SelectItem>();
             predefinedValues.add(new SelectItem(null, "Select"));
-            for (LocalizedString s : statement.getLiteralConstraints())
+            for (String s : statement.getLiteralConstraints())
             {
-                predefinedValues.add(new SelectItem(s, s.toString()));
+                predefinedValues.add(new SelectItem(s, s));
             }
         }
         else

@@ -6,17 +6,13 @@ package de.mpg.imeji.presentation.beans;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.ImejiController;
-import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -142,6 +138,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public void update()
     {
+        ImejiJena.printModel(ImejiJena.imageModel);
         try
         {
             if (elementsPerPage == 0)
@@ -156,10 +153,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
             setGoToPageTop(Integer.toString(currentPageNumber));
             previousPartList = new ArrayList<ListElementType>();
             previousPartList.addAll(currentPartList);
-            long a = System.currentTimeMillis();
             currentPartList = retrieveList(getOffset(), elementsPerPage);
-            System.out.println("BasePaginatorListSession - retrieveList: "
-                    + Long.valueOf(System.currentTimeMillis() - a));
             totalNumberOfElements = getTotalNumberOfRecords();
             // reset current page and reload list if list is shorter than the given current page number allows
             if (getTotalNumberOfElements() <= getOffset())
@@ -178,32 +172,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         {
             BeanHelper.error(e.getMessage());
             logger.error("Error paginator list update ", e);
-        }
-    }
-
-    public String getListElementTypeId(ListElementType el)
-    {
-        try
-        {
-            return (String)el.getClass().getDeclaredMethod("getId", null).invoke(el, null);
-        }
-        catch (Exception e)
-        {
-            logger.warn("Element has no getID method");
-        }
-        return null;
-    }
-
-    public void setListElementTypeIdSelected(ListElementType dest)
-    {
-        try
-        {
-            dest.getClass().getDeclaredField("selected").setAccessible(true);
-            dest.getClass().getDeclaredField("selected").set(dest, true);
-        }
-        catch (Exception e)
-        {
-            logger.warn("Element has no getID method");
         }
     }
 

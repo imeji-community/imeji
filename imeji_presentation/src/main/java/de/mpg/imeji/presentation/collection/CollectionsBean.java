@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 
+import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
@@ -54,7 +55,6 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     public List<CollectionListItem> retrieveList(int offset, int limit) throws Exception
     {
         UserController uc = new UserController(sb.getUser());
-        // ImejiJena.printModel(ImejiJena.imageModel);
         initMenus();
         if (sb.getUser() != null)
         {

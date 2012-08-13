@@ -134,14 +134,14 @@ public class UploadBean
                         try
                         {
                             DepositController controller = new DepositController();
-                            // Item escidocItem = controller.createEscidocItem(stream, title, mimetype, format);
-                            // controller.createImejiImage(collection, user, escidocItem.getOriginObjid(), title,
-                            // URI.create(EscidocHelper.getOriginalResolution(escidocItem)),
-                            // URI.create(EscidocHelper.getThumbnailUrl(escidocItem)),
-                            // URI.create(EscidocHelper.getWebResolutionUrl(escidocItem)));
-                            controller.createImejiImage(collection, user, "escidoc:123", title,
-                                    URI.create("http://imeji.org/test"), URI.create("http://imeji.org/test"),
-                                    URI.create("http://imeji.org/test"));
+                            Item escidocItem = controller.createEscidocItem(stream, title, mimetype, format);
+                            controller.createImejiImage(collection, user, escidocItem.getOriginObjid(), title,
+                                    URI.create(EscidocHelper.getOriginalResolution(escidocItem)),
+                                    URI.create(EscidocHelper.getThumbnailUrl(escidocItem)),
+                                    URI.create(EscidocHelper.getWebResolutionUrl(escidocItem)));
+//                            controller.createImejiImage(collection, user, "escidoc:123", title,
+//                                    URI.create("http://imeji.org/test"), URI.create("http://imeji.org/test"),
+//                                    URI.create("http://imeji.org/test"));
                             sNum += 1;
                             sFiles.add(title);
                         }

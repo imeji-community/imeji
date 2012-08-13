@@ -239,6 +239,10 @@ public class Java2Jena
             {
                 addLabel(s, (LocalizedString)obj);
             }
+            else if(J2JHelper.isList(f))
+            {
+                addLiteral(s, obj, f);
+            }
         }
         catch (Exception e)
         {

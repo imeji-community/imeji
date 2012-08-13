@@ -163,7 +163,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         searchResult.setSort(sortCriterion);
         totalNumberOfRecords = searchResult.getNumberOfRecords();
         // load images
-        Collection<Item> items = loadImages(searchResult);
+        Collection<Item> items = loadImages(searchResult.getResults());
         return ImejiFactory.imageListToThumbList(items);
     }
 
@@ -173,10 +173,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return controller.searchImages(searchQuery, sortCriterion);
     }
 
-    public Collection<Item> loadImages(SearchResult searchResult)
+    public Collection<Item> loadImages(List<String> uris)
     {
         ItemController controller = new ItemController(sb.getUser());
-        return controller.loadItems(searchResult.getResults(), getElementsPerPage(), getOffset());
+        return controller.loadItems(uris, getElementsPerPage(), getOffset());
     }
 
     public String getSimpleQuery()
@@ -251,20 +251,43 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
     }
 
+    public String deleteSelected() throws Exception
+    {
+        delete(sb.getSelected());
+        return "pretty:";
+    }
+
     public String deleteAll() throws Exception
     {
-        Collection<Item> items = loadImages(search(searchQuery, null));
+        delete(search(searchQuery, null).getResults());
+        return "pretty:";
+    }
+
+    private void delete(List<String> uris) throws Exception
+    {
+        Collection<Item> items = loadImages(uris);
         ItemController ic = new ItemController(sb.getUser());
         int count = ic.delete((List<Item>)items, sb.getUser());
         BeanHelper.info(count + " " + sb.getLabel("images_deleted"));
         sb.getSelected().clear();
-        return "pretty:";
     }
 
     public String withdrawAll() throws Exception
     {
+        withdraw(search(searchQuery, null).getResults());
+        return "pretty:";
+    }
+
+    public String withdrawSelected() throws Exception
+    {
+        withdraw(sb.getSelected());
+        return "pretty:";
+    }
+
+    private void withdraw(List<String> uris) throws Exception
+    {
         ItemController ic = new ItemController(sb.getUser());
-        Collection<Item> items = loadImages(search(searchQuery, null));
+        Collection<Item> items = loadImages(uris);
         int count = 0;
         if ("".equals(discardComment.trim()))
         {
@@ -277,7 +300,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
             sb.getSelected().clear();
             BeanHelper.info(count + " " + sb.getLabel("images_withdraw"));
         }
-        return "pretty:";
     }
 
     public String getInitComment()

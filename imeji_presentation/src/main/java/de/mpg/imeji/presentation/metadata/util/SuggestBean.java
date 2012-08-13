@@ -61,9 +61,9 @@ public class SuggestBean implements Serializable
 			{	            
 				List<SelectItem> list = new ArrayList<SelectItem>();
 				list.add(new SelectItem(null, "-"));
-				for (LocalizedString str : statement.getLiteralConstraints())
+				for (String str : statement.getLiteralConstraints())
 				{
-					list.add(new SelectItem(str.toString(), str.toString()));
+					list.add(new SelectItem(str, str));
 				}
 				return list;
 			}

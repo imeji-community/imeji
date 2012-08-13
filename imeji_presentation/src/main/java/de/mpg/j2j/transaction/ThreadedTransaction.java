@@ -29,7 +29,6 @@ public class ThreadedTransaction extends Thread
     @Override
     public synchronized void start()
     {
-        logger.info("Threads active count: " + Thread.activeCount() + ", current id = " + getId());
         running = true;
         super.start();
     }

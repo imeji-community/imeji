@@ -84,7 +84,7 @@ public class AlbumImagesBean extends ImagesBean
         itemsUris = result.getResults();
         result.setQuery(getQuery());
         result.setSort(sortCriterion);
-        return ImejiFactory.imageListToThumbList(loadImages(result));
+        return ImejiFactory.imageListToThumbList(loadImages(result.getResults()));
     }
 
     public void readUrl()

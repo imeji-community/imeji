@@ -26,6 +26,49 @@ Gesellschaft zur FÃƒÂ¶rderung der Wissenschaft e.V.
 All rights reserved. Use is subject to license terms.
  */
 
+function autosuggestGoogleGeoAPI(suggestionBox, index, pos, type) {
+	var items = suggestionBox.getSelectedItems();
+	var address, longitude, latitude;
+	if (items && items.length > 0) {
+		for ( var i = 0; i < items.length; i++) {
+			try {
+				address = items[i].adress;
+			} catch (e) {
+				address = ' ';
+			}
+			try {
+				longitude = items[i].longitude;
+			} catch (e) {
+				longitude = ' ';
+			}
+			try {
+				latitude = items[i].latitude;
+			} catch (e) {
+				latitude = ' ';
+			}
+		}
+
+		var baseId = 'formular:statementList:' + pos + ':metadata:' + index
+				+ ':MetadataInput:';
+
+		if (type == 0) {
+			if (index >= 0) {
+				baseId = 'formular:imagesList:' + index
+						+ ':metadata:0:MetadataInput:';
+			} else {
+				baseId = 'formular:MetadataInput:';
+			}
+		}
+
+		setInputTextValue(baseId + 'inputAddress', address);
+		setInputTextValue(baseId + 'inputLongitude', longitude);
+		setInputTextValue(baseId + 'inputLatitude', latitude);
+
+		autoSuggestWrite(suggestionBox, index, pos, type);
+
+	}
+}
+
 function autoSuggestWrite(suggestionBox, index, pos, type) {
 	var items = suggestionBox.getSelectedItems();
 	var familyName, firstName, alternative, id, org, title, complete;
@@ -68,19 +111,16 @@ function autoSuggestWrite(suggestionBox, index, pos, type) {
 				title = ' ';
 			}
 
-
 		}
-		
-		var baseId = 'formular:statementList:' + pos + ':metadata:' + index + ':MetadataInput:';
-		
-		if (type == 0)
-		{
-			if (index >= 0)
-			{
-				baseId = 'formular:imagesList:' + index + ':metadata:0:MetadataInput:';
-			}
-			else
-			{
+
+		var baseId = 'formular:statementList:' + pos + ':metadata:' + index
+				+ ':MetadataInput:';
+
+		if (type == 0) {
+			if (index >= 0) {
+				baseId = 'formular:imagesList:' + index
+						+ ':metadata:0:MetadataInput:';
+			} else {
 				baseId = 'formular:MetadataInput:';
 			}
 		}
@@ -92,16 +132,13 @@ function autoSuggestWrite(suggestionBox, index, pos, type) {
 		setInputTextValue(baseId + 'inputIdentifier', id);
 		setInputTextValue(baseId + 'inputLanguageIdentifier', id);
 		setInputTextValue(baseId + 'inputLanguageName', title)
-		
-		if (title != null) 
-		{
+
+		if (title != null) {
 			setInputTextValue(baseId + 'inputText', title);
-		} 
-		else 
-		{
+		} else {
 			setInputTextValue(baseId + 'inputText', complete);
 		}
-		
+
 	}
 }
 
@@ -127,8 +164,10 @@ function albumSearchOnEnter(event) {
 
 function albumSearch() {
 	var url = '?query=';
-	if (document.getElementById('formAlbums:Albums:AlbumTableView:inputAlbumSearch').value != '') {
-		url += document.getElementById('formAlbums:Albums:AlbumTableView:inputAlbumSearch').value;
+	if (document
+			.getElementById('formAlbums:Albums:AlbumTableView:inputAlbumSearch').value != '') {
+		url += document
+				.getElementById('formAlbums:Albums:AlbumTableView:inputAlbumSearch').value;
 		window.location.href = url;
 	}
 }
@@ -137,16 +176,26 @@ function modifyexportparameters() {
 	var url = '';
 	var resolution = 'default';
 	for ( var int = 0; int < document.formular.elements.length; int++) {
-		if (document.formular.elements[int].type == 'radio' && document.formular.elements[int].checked) {
+		if (document.formular.elements[int].type == 'radio'
+				&& document.formular.elements[int].checked) {
 			url += document.formular.elements[int].value;
 		}
 
-		if (document.formular.elements[int].type == 'checkbox' && document.formular.elements[int].checked) {
+		if (document.formular.elements[int].type == 'checkbox'
+				&& document.formular.elements[int].checked) {
 			if (resolution == 'default') {
-				url += '&resolutions=' + document.formular.elements[int].id.substr('SearchFormular:'.length, (document.formular.elements[int].id.length - 'SearchFormular:'.length));
+				url += '&resolutions='
+						+ document.formular.elements[int].id
+								.substr(
+										'SearchFormular:'.length,
+										(document.formular.elements[int].id.length - 'SearchFormular:'.length));
 				resolution = 'modify';
 			} else {
-				url += ',' + document.formular.elements[int].id.substr('SearchFormular:'.length, (document.formular.elements[int].id.length - 'SearchFormular:'.length));
+				url += ','
+						+ document.formular.elements[int].id
+								.substr(
+										'SearchFormular:'.length,
+										(document.formular.elements[int].id.length - 'SearchFormular:'.length));
 			}
 		}
 	}
@@ -156,7 +205,9 @@ function modifyexportparameters() {
 function agreeexport(url) {
 	var agree = 'false';
 	for ( var int = 0; int < document.formular.elements.length; int++) {
-		if (document.formular.elements[int].type == 'checkbox' && document.formular.elements[int].checked && document.formular.elements[int].id == 'confirmationFormular:agreement') {
+		if (document.formular.elements[int].type == 'checkbox'
+				&& document.formular.elements[int].checked
+				&& document.formular.elements[int].id == 'confirmationFormular:agreement') {
 			agree = 'true';
 		}
 	}

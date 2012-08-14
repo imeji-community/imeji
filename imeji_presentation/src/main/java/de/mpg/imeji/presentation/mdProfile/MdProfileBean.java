@@ -3,13 +3,13 @@
  */
 package de.mpg.imeji.presentation.mdProfile;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
@@ -25,10 +25,8 @@ import de.mpg.imeji.presentation.collection.CollectionSessionBean;
 import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.LocalizedStringHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
-import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.misc.LocalizedString;
 
 public class MdProfileBean
@@ -73,8 +71,8 @@ public class MdProfileBean
         mdTypesMenu.add(new SelectItem(null, "--"));
         for (Metadata.Types t : Metadata.Types.values())
         {
-            mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("facet_" + t.name().toLowerCase())));
+            mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean)BeanHelper
+                    .getSessionBean(SessionBean.class)).getLabel("facet_" + t.name().toLowerCase())));
         }
     }
 
@@ -173,24 +171,22 @@ public class MdProfileBean
         return "pretty:";
     }
 
-    public String addVocabulary()
-    {
-        statements.get(getStatementPosition()).setVocabularyString("--");
-        return getNavigationString();
-    }
-
     public int getSize()
     {
         return statements.size();
     }
 
-    public String removeVocabulary()
+    public void addVocabulary()
     {
-        statements.get(getStatementPosition()).setVocabularyString(null);
-        return getNavigationString();
+        statements.get(getStatementPosition()).setVocabularyString("--");
     }
 
-    public String addStatement()
+    public void removeVocabulary()
+    {
+        statements.get(getStatementPosition()).setVocabularyString(null);
+    }
+
+    public void addStatement()
     {
         if (statements.isEmpty())
         {
@@ -201,28 +197,24 @@ public class MdProfileBean
             statements.add(getStatementPosition() + 1,
                     new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
         }
-        return getNavigationString();
     }
 
-    public String removeStatement()
+    public void removeStatement()
     {
         statements.remove(getStatementPosition());
-        return getNavigationString();
     }
 
-    public String addLabel()
+    public void addLabel()
     {
         statements.get(getStatementPosition()).getLabels().add(new LocalizedString("", ""));
-        return getNavigationString();
     }
 
-    public String removeLabel()
+    public void removeLabel()
     {
         statements.get(getStatementPosition()).getLabels().remove(getLabelPosition());
-        return getNavigationString();
     }
 
-    public String addConstraint()
+    public void addConstraint()
     {
         Statement st = ((List<StatementWrapper>)statements).get(getStatementPosition()).getAsStatement();
         if (getConstraintPosition() >= st.getLiteralConstraints().size())
@@ -231,18 +223,16 @@ public class MdProfileBean
         }
         else
         {
-            ((List<String>)st.getLiteralConstraints()).add(getConstraintPosition() + 1,"");
+            ((List<String>)st.getLiteralConstraints()).add(getConstraintPosition() + 1, "");
         }
         collectionSession.setProfile(profile);
-        return getNavigationString();
     }
 
-    public String removeConstraint()
+    public void removeConstraint()
     {
         Statement st = ((List<StatementWrapper>)statements).get(getStatementPosition()).getAsStatement();
         ((List<String>)st.getLiteralConstraints()).remove(getConstraintPosition());
         collectionSession.setProfile(profile);
-        return getNavigationString();
     }
 
     public int getConstraintPosition()
@@ -395,11 +385,11 @@ public class MdProfileBean
                 statementNames.add(s.getId().toString());
             }
             s.setPos(i);
-//            if (s.getId() != null && s.getId().toString().equals(profile.getId().toString() + "/"))
-//            {
-//                s.setId(URI.create(profile.getId().toString() + "/"
-//                        + ((List<LocalizedString>)s.getLabels()).get(0).toString()));
-//            }
+            // if (s.getId() != null && s.getId().toString().equals(profile.getId().toString() + "/"))
+            // {
+            // s.setId(URI.create(profile.getId().toString() + "/"
+            // + ((List<LocalizedString>)s.getLabels()).get(0).toString()));
+            // }
             i++;
         }
         return true;

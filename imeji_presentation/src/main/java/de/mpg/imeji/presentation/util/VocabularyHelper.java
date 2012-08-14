@@ -13,6 +13,8 @@ import java.util.Properties;
 
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.presentation.beans.SessionBean;
+
 public class VocabularyHelper
 {
 	private List<SelectItem> vocabularies;
@@ -34,11 +36,13 @@ public class VocabularyHelper
 
 	public void initVocabularies()
 	{
+	    SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
 		vocabularies = new ArrayList<SelectItem>();
 		vocabularies.add(new SelectItem("", "--"));
 		for (Object o : properties.keySet())
 		{
-			vocabularies.add(new SelectItem(properties.getProperty(o.toString()), o.toString()));
+		   
+			vocabularies.add(new SelectItem(properties.getProperty(o.toString()), session.getLabel("vocabulary_" + o.toString())));
 		}
 	}
 

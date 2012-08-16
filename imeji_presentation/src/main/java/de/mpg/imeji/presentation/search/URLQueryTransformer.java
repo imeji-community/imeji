@@ -78,6 +78,7 @@ public class URLQueryTransformer
                 SearchOperators operator = SearchOperators.valueOf(pairString[1].trim());
                 searchQuery.addPair(new SearchPair(index, operator, value, not));
                 scString = "";
+                not = false;
             }
         }
         if (!"".equals(query) && searchQuery.isEmpty())

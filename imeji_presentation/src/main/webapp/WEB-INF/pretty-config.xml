@@ -34,7 +34,6 @@
 	
 	<url-mapping id="images">
 		<pattern value="/images" />
-		<query-param name="q">#{ImagesBean.query}</query-param>
 		<view-id>/jsf/Images.xhtml</view-id>
 	</url-mapping>
 	

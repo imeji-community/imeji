@@ -36,15 +36,17 @@ public class Filter extends Facet
             label = "Search";
         try
         {
+            System.out.println("Filter query: " + query);
             searchQuery = URLQueryTransformer.parseStringQuery(query);
+            System.out.println("Filter, searchquery: " + URLQueryTransformer.transform2URL(searchQuery));
             if (!searchQuery.isEmpty() && SEARCH_ELEMENTS.PAIR.equals(searchQuery.getElements().get(0).getType()))
             {
-                this.setMetadataURI(URI.create(((SearchPair)searchQuery.getElements().get(0)).getValue()));
+                setMetadataURI(URI.create(((SearchPair)searchQuery.getElements().get(0)).getValue()));
+                System.out.println("Filter metadataUri: " +getMetadataURI());
             }
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

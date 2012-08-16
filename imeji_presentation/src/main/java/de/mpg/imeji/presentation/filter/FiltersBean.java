@@ -31,6 +31,7 @@ public class FiltersBean
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 		
 		String q = ec.getRequestParameterMap().get("q");
+		System.out.println("Filtersbean query: " + q);
 		String n = ec.getRequestParameterMap().get("f");
 		String t = ec.getRequestParameterMap().get("t");
 		

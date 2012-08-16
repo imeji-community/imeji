@@ -33,6 +33,7 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 {
@@ -91,6 +92,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         initBackPage();
         try
         {
+            query = UrlHelper.getParameterValue("q");
             searchQuery = URLQueryTransformer.parseStringQuery(query);
         }
         catch (Exception e)

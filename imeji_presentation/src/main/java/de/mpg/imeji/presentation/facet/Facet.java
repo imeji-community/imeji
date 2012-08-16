@@ -3,13 +3,11 @@
  */
 package de.mpg.imeji.presentation.facet;
 
-import java.io.Serializable;
 import java.net.URI;
 
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.j2j.misc.LocalizedString;
 
 public class Facet
 {

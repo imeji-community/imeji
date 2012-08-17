@@ -69,7 +69,7 @@ public class URLQueryTransformer
                     subQuery = "";
                 }
             }
-            if (scString.matches("\\s*[^\\s]+=\".*\"\\s+"))
+            if (scString.matches("\\s*[^\\s]+=.*=\".*\"\\s*"))
             {
                 String[] pairString = scString.split("=");
                 String value = pairString[2].trim();
@@ -84,7 +84,7 @@ public class URLQueryTransformer
         if (!"".equals(query) && searchQuery.isEmpty())
         {
             searchQuery.addPair(new SearchPair(Search.getIndex(SearchIndex.names.FULLTEXT), SearchOperators.REGEX,
-                    query));
+                    query.trim()));
         }
         return searchQuery;
     }
@@ -129,7 +129,7 @@ public class URLQueryTransformer
                     break;
             }
         }
-        return query;
+        return query.trim();
     }
 
     // public static String transform2SimpleQuery(List<SearchCriterion> scList)

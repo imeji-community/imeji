@@ -1,7 +1,6 @@
 package de.mpg.imeji.presentation.mdProfile;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -9,30 +8,26 @@ import javax.faces.event.ValueChangeEvent;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
-import de.mpg.imeji.presentation.collection.CollectionSessionBean;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
 import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
-public class EditMdProfileBean extends MdProfileBean implements Serializable
+public class EditMdProfileBean extends MdProfileBean
 {
     private SessionBean session;
-    private CollectionSessionBean collectionSession;
     private ProfileController profileController;
     private boolean init = false;
     private String colId = null;
-    private CollectionImeji collection = null;
     private static Logger logger = Logger.getLogger(EditMdProfileBean.class);
 
     public EditMdProfileBean()
     {
         super();
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         readUrl();
     }
 
@@ -53,10 +48,6 @@ public class EditMdProfileBean extends MdProfileBean implements Serializable
                         ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
                         setProfile(((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class))
                                 .getProfile());
-                        // this.setProfile(profileController.retrieve(this.getId()));
-                        // collectionSession.setProfile(this.getProfile());
-                        // collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, colId),
-                        // session.getUser());
                     }
                     catch (Exception e)
                     {
@@ -106,11 +97,6 @@ public class EditMdProfileBean extends MdProfileBean implements Serializable
         {
             try
             {
-//                getProfile().getStatements().clear();
-//                for (StatementWrapper wrapper : getStatements())
-//                {
-//                    getProfile().getStatements().add(wrapper.getAsStatement());
-//                }
                 profileController.update(getProfile());
                 session.getProfileCached().clear();
                 BeanHelper.info(session.getMessage("success_profile_save"));
@@ -131,6 +117,12 @@ public class EditMdProfileBean extends MdProfileBean implements Serializable
         {
             this.getProfile().setTitle(event.getNewValue().toString());
         }
+    }
+
+    public String addFirstStatement()
+    {
+        getStatements().add(new StatementWrapper(ImejiFactory.newStatement(), getProfile().getId()));
+        return getNavigationString();
     }
 
     @Override

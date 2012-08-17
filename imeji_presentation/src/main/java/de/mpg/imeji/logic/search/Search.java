@@ -130,11 +130,16 @@ public class Search
                     logic = ((SearchLogicalRelation)se).getLogicalRelation();
                     break;
             }
-            if (isFirstResult)
+            if (se.getType() != SearchElement.SEARCH_ELEMENTS.LOGICAL_RELATIONS)
             {
-                results = new ArrayList<String>(subResults);
+                // if the query has started with a logical relation, it should not be counted as a first result
+                if (isFirstResult)
+                {
+                    // if is is the first subresults of a query, add it to the results, instead of or/and operation 
+                    results = new ArrayList<String>(subResults);
+                }
+                isFirstResult = false;
             }
-            isFirstResult = false;
         }
         return results;
     }

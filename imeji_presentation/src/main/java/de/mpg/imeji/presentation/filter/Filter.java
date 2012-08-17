@@ -3,7 +3,9 @@
  */
 package de.mpg.imeji.presentation.filter;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -33,17 +35,16 @@ public class Filter extends Facet
     public void init()
     {
         if (label == null)
+        {
             label = "Search";
+        }
         try
         {
-            System.out.println("Filter query: " + query);
-            searchQuery = URLQueryTransformer.parseStringQuery(query);
-            System.out.println("Filter, searchquery: " + URLQueryTransformer.transform2URL(searchQuery));
-            if (!searchQuery.isEmpty() && SEARCH_ELEMENTS.PAIR.equals(searchQuery.getElements().get(0).getType()))
-            {
-                setMetadataURI(URI.create(((SearchPair)searchQuery.getElements().get(0)).getValue()));
-                System.out.println("Filter metadataUri: " +getMetadataURI());
-            }
+            // searchQuery = URLQueryTransformer.parseStringQuery(query);
+            // if (!searchQuery.isEmpty() && SEARCH_ELEMENTS.PAIR.equals(searchQuery.getElements().get(0).getType()))
+            // {
+            // setMetadataURI(URI.create(((SearchPair)searchQuery.getElements().get(0)).getValue()));
+            // }
         }
         catch (Exception e)
         {

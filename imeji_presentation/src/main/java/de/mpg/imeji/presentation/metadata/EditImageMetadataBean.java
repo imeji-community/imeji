@@ -33,7 +33,6 @@ import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**

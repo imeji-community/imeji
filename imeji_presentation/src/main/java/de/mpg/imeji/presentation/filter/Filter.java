@@ -3,19 +3,14 @@
  */
 package de.mpg.imeji.presentation.filter;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
 
-import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
-import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.presentation.facet.Facet;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 
 public class Filter extends Facet
 {
-    // private SearchCriterion filter;
     private String query = "";
     private URI collectionID;
     private String label = "Search";
@@ -40,11 +35,10 @@ public class Filter extends Facet
         }
         try
         {
-            // searchQuery = URLQueryTransformer.parseStringQuery(query);
-            // if (!searchQuery.isEmpty() && SEARCH_ELEMENTS.PAIR.equals(searchQuery.getElements().get(0).getType()))
-            // {
-            // setMetadataURI(URI.create(((SearchPair)searchQuery.getElements().get(0)).getValue()));
-            // }
+            if (FacetType.SEARCH == getType())
+            {
+                searchQuery = URLQueryTransformer.parseStringQuery(query);
+            }
         }
         catch (Exception e)
         {

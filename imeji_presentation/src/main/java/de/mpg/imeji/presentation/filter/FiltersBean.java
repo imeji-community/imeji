@@ -9,6 +9,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
@@ -19,6 +21,7 @@ public class FiltersBean
 {
     private FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
     private int count = 0;
+    private static Logger logger = Logger.getLogger(FiltersBean.class);
 
     public FiltersBean()
     {
@@ -76,7 +79,7 @@ public class FiltersBean
      */
     private List<Filter> parseQueryAndSetFilters(String q, String n, String t) throws IOException
     {
-        System.out.println("complete query before parsing: " + q);
+        
         List<Filter> filters = findAlreadyDefinedFilters(q, n, t);
         String newQuery = removeFiltersQueryFromQuery(q, filters);
         Filter newFilter = createNewFilter(newQuery, n, t);
@@ -129,20 +132,18 @@ public class FiltersBean
     }
 
     /**
-     * Reset the queries to remove the filters
+     * Reset the queries to remove the filters (since the complete query has been change with the new filter)
      * 
      * @param q
      * @param filters
      * @return
+     * @throws UnsupportedEncodingException 
      */
-    private List<Filter> resetQueriesToRemoveFilters(String q, List<Filter> filters)
+    private List<Filter> resetQueriesToRemoveFilters(String q, List<Filter> filters) throws UnsupportedEncodingException
     {
-        System.out.println("Complete query used to remove: " + q);
         for (Filter f : filters)
         {
-            f.setRemoveQuery(removeFilterQueryFromQuery(q, f));
-            System.out.println("remove query: " + f.getRemoveQuery());
-            
+            f.setRemoveQuery(createQueryToRemoveFilter(f, q));
         }
         return filters;
     }
@@ -172,20 +173,11 @@ public class FiltersBean
      */
     private String removeFilterQueryFromQuery(String q, Filter filter)
     {
-        try
+        if (!q.contains(filter.getQuery()))
         {
-            System.out.println("To be remove: " + filter.getQuery());
-            if (!q.contains(filter.getQuery()))
-            {
-                throw new RuntimeException("non removable filter: " + q);
-            }
-            return URLEncoder.encode(q.replace(filter.getQuery(), ""), "UTF-8").trim();
+            logger.error("Query: " + q + " . Error: non removable filter: " + filter.getQuery());
         }
-        catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-        return q;
+        return q.replace(filter.getQuery(), "").replace("  ", " ").trim();
     }
 
     /**
@@ -194,10 +186,11 @@ public class FiltersBean
      * @param f
      * @param q
      * @return
+     * @throws UnsupportedEncodingException 
      */
-    public String createQueryToRemoveFilter(Filter f, String q)
+    public String createQueryToRemoveFilter(Filter f, String q) throws UnsupportedEncodingException
     {
-        return removeFilterQueryFromQuery(q, f) + "&f=" + f.getLabel();
+        return URLEncoder.encode(removeFilterQueryFromQuery(q, f),"UTF-8") + "&f=" + f.getLabel();
     }
 
     /**
@@ -210,8 +203,7 @@ public class FiltersBean
      */
     private String formatQuery(String q) throws IOException
     {
-        return URLEncoder
-                .encode(URLQueryTransformer.transform2URL(URLQueryTransformer.parseStringQuery(q)), "UTF-8");
+        return URLQueryTransformer.transform2URL(URLQueryTransformer.parseStringQuery(q));
     }
 
     public FiltersSession getSession()

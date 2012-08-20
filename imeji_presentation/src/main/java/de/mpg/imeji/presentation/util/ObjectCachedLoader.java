@@ -24,6 +24,7 @@ public class ObjectCachedLoader
 		if (profile == null)
 		{
 			profile = ObjectLoader.loadProfile(uri, sessionBean.getUser());
+			sessionBean.getProfileCached().put(profile.getId(), profile);
 		}
 		return profile;
 	}

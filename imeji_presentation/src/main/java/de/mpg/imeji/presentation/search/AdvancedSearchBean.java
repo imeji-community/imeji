@@ -3,7 +3,9 @@
  */
 package de.mpg.imeji.presentation.search;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,11 +22,12 @@ import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.filter.FiltersSession;
-import de.mpg.imeji.presentation.image.ImagesBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 public class AdvancedSearchBean
@@ -108,19 +111,24 @@ public class AdvancedSearchBean
     {
         FiltersSession filtersSession = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
         filtersSession.getFilters().clear();
-        ImagesBean bean = (ImagesBean)BeanHelper.getSessionBean(ImagesBean.class);
-        SearchQuery searchQuery = formular.getFormularAsSearchQuery();
-        bean.setQuery(URLQueryTransformer.transform2URL(searchQuery));
-        bean.setSearchQuery(searchQuery);
-        if (bean.getFacets() != null)
+        goToResultPage();
+        return "";
+    }
+
+    public void goToResultPage()
+    {
+        Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        try
         {
-            bean.getFacets().getFacets().clear();
+            String encodedQuery = URLEncoder.encode(
+                    URLQueryTransformer.transform2URL(formular.getFormularAsSearchQuery()), "UTF-8");
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(navigation.getImagesUrl() + "?q=" + encodedQuery);
         }
-        if (bean.getQuery() == null || "".equals(bean.getQuery().trim()))
+        catch (IOException e)
         {
-            return "";
+            e.printStackTrace();
         }
-        return "pretty:images";
     }
 
     public void changeGroup()
@@ -191,8 +199,7 @@ public class AdvancedSearchBean
 
     public String getSimpleQuery()
     {
-        // return URLQueryTransformer.transform2SimpleQuery(formular.getFormularAsSearchQuery());
-        return URLQueryTransformer.transform2URL(formular.getFormularAsSearchQuery());
+        return URLQueryTransformer.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
     }
 
     public List<SelectItem> getCollectionsMenu()

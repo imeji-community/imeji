@@ -58,7 +58,7 @@
 				</h:panelGroup>
 			</ui:define>
 			<ui:define name="searchQuery">
-				<h:panelGroup styleClass="full_area0 small_marginLExcl" rendered="#{paginatorListSessionBean.query != ''}">
+				<h:panelGroup styleClass="full_area0 small_marginLExcl" rendered="#{paginatorListSessionBean.searchFilter != null}">
 					<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p2"/>
 					<h:panelGroup styleClass="xHuge_area0">
 						<h:outputText value="#{lbl.search_for}" styleClass="free_area0_p2" rendered="#{paginatorListSessionBean.simpleSearch}"/>

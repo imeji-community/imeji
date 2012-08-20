@@ -6,8 +6,13 @@ package de.mpg.imeji.presentation.search;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
@@ -18,6 +23,8 @@ import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class URLQueryTransformer
 {
@@ -94,7 +101,7 @@ public class URLQueryTransformer
         for (SearchElement element : searchQuery.getElements())
         {
             if (SEARCH_ELEMENTS.PAIR.equals(element.getType())
-                    && ((SearchPair)element).getIndex().getName().equals(SearchIndex.names.FULLTEXT))
+                    && ((SearchPair)element).getIndex().getName().equals(SearchIndex.names.FULLTEXT.name()))
             {
                 return true;
             }
@@ -132,81 +139,82 @@ public class URLQueryTransformer
         return query.trim();
     }
 
-    // public static String transform2SimpleQuery(List<SearchCriterion> scList)
-    // {
-    // String query = "";
-    // String metadataNamespace = null;
-    // String metadataValue = null;
-    // String filename = null;
-    // Filtertype filter = Filtertype.EQUALS;
-    // if (scList == null)
-    // return "";
-    // for (SearchCriterion sc : scList)
-    // {
-    // if (!"".equals(query))
-    // {
-    // query += " " + sc.getOperator().name() + " ";
-    // }
-    // if (isPersonCriterion(sc) != null)
-    // {
-    // query += isPersonCriterion(sc);
-    // }
-    // else if (sc.getChildren().size() > 0)
-    // {
-    // String subquery = transform2SimpleQuery(sc.getChildren());
-    // if (subquery.contains("OR") || subquery.contains("AND"))
-    // {
-    // query += " ( ";
-    // }
-    // query += subquery;
-    // if (subquery.contains("OR") || subquery.contains("AND"))
-    // {
-    // query += " ) ";
-    // }
-    // }
-    // else
-    // {
-    // String value = "";
-    // if (sc.getValue() != null)
-    // value = sc.getValue();
-    // if (sc.getNamespace() != null)
-    // {
-    // if (sc.getNamespace().name().contains(SearchIndexes.IMAGE_METADATA.name()))
-    // {
-    // if (sc.getNamespace().equals(SearchIndexes.IMAGE_METADATA_STATEMENT))
-    // {
-    // metadataNamespace = value;
-    // }
-    // else
-    // {
-    // metadataValue = value;
-    // filter = sc.getFilterType();
-    // }
-    // }
-    // else if (sc.getNamespace().equals(SearchIndexes.IMAGE_FILENAME))
-    // {
-    // filename = value;
-    // }
-    // else
-    // {
-    // query += " " + getNamespaceAsLabel(sc.getNamespace().getNs())
-    // + getFilterAsLabel(sc.getFilterType()) + getIdAsLabel(value) + "  ";
-    // }
-    // if (metadataNamespace != null && metadataValue != null)
-    // {
-    // query += " " + getNamespaceAsLabel(metadataNamespace) + getFilterAsLabel(filter)
-    // + metadataValue;
-    // }
-    // if (filename != null && metadataValue != null)
-    // {
-    // query += value;
-    // }
-    // }
-    // }
-    // }
-    // return query;
-    // }
-    public static String getNamespaceAsLabel(String namespace)
+    public static String searchQuery2PrettyQuery(SearchQuery sq)
+    {
+        return searchElements2PrettyQuery(sq.getElements());
+    }
+
+    private static String searchPair2PrettyQuery(SearchPair pair)
+    {
+        if (pair.getValue() == null || pair.getValue() == "")
+            return "";
+        if (pair.getIndex().getName().equals(SearchIndex.names.FULLTEXT.name()))
+        {
+            return pair.getValue();
+        }
+        else
+        {
+            return indexNamespace2PrettyQuery(pair.getIndex().getNamespace())
+                    + searchOperator2PrettyQuery(pair.getOperator()) + pair.getValue();
+        }
+    }
+
+    private static String searchGroup2PrettyQuery(SearchGroup group)
+    {
+        String str = searchElements2PrettyQuery(group.getElements());
+        if ("".equals(str))
+            return "";
+        if (!"".equals(metadataGroup2PrettyQuery(group)))
+            return metadataGroup2PrettyQuery(group);
+        return " (" + removeUseLessLogicalOperation(str) + ") ";
+    }
+
+    private static String searchLogicalRelation2PrettyQuery(SearchLogicalRelation rel)
+    {
+        return " " + rel.getLogicalRelation().name() + " ";
+    }
+
+    private static String searchElements2PrettyQuery(List<SearchElement> els)
+    {
+        String q = "";
+        int position = 0;
+        for (SearchElement el : els)
+        {
+            position++;
+            switch (el.getType())
+            {
+                case PAIR:
+                    q += searchPair2PrettyQuery((SearchPair)el);
+                    break;
+                case GROUP:
+                    q += searchGroup2PrettyQuery((SearchGroup)el);
+                    break;
+                case LOGICAL_RELATIONS:
+                    q += searchLogicalRelation2PrettyQuery((SearchLogicalRelation)el);
+                    break;
+            }
+        }
+        return removeUseLessLogicalOperation(q).trim();
+    }
+
+    /**
+     * Remove a logical operation if is not followed by a non empty search element
+     * 
+     * @param q
+     * @return
+     */
+    private static String removeUseLessLogicalOperation(String q)
+    {
+        if (q.endsWith(" "))
+            q = q.substring(0, q.length() - 1);
+        if (q.endsWith(" AND"))
+            q = q.substring(0, q.length() - 4);
+        if (q.endsWith(" OR"))
+            q = q.substring(0, q.length() - 3);
+        return q;
+    }
+
+    public static String indexNamespace2PrettyQuery(String namespace)
     {
         String s[] = namespace.split("/");
         if (s.length > 0)
@@ -228,20 +236,55 @@ public class URLQueryTransformer
         }
         return uri;
     }
-    // public static String getFilterAsLabel(Filtertype filter)
-    // {
-    // switch (filter)
-    // {
-    // case GREATER_DATE:
-    // return " >= ";
-    // case GREATER_NUMBER:
-    // return " >= ";
-    // case LESSER_DATE:
-    // return " <= ";
-    // case LESSER_NUMBER:
-    // return " <= ";
-    // default:
-    // return " = ";
-    // }
-    // }
+
+    private static String searchOperator2PrettyQuery(SearchOperators op)
+    {
+        switch (op)
+        {
+            case GREATER_DATE:
+                return " >= ";
+            case GREATER_NUMBER:
+                return " >= ";
+            case LESSER_DATE:
+                return " <= ";
+            case LESSER_NUMBER:
+                return " <= ";
+            default:
+                return " = ";
+        }
+    }
+
+    /**
+     * Special case to display a search for a metadata in a
+     * 
+     * @param group
+     * @return
+     */
+    private static String metadataGroup2PrettyQuery(SearchGroup group)
+    {
+        String value = "";
+        String label = "";
+        String operator = "";
+        for (SearchElement el : group.getElements())
+        {
+            if (el.getType() == SEARCH_ELEMENTS.PAIR)
+            {
+                SearchPair p = (SearchPair)el;
+                if (p.getIndex().getName().equals(SearchIndex.names.IMAGE_METADATA_STATEMENT.name()))
+                {
+                    label = p.getValue();
+                }
+                else
+                {
+                    value = p.getValue();
+                    operator = searchOperator2PrettyQuery(p.getOperator());
+                }
+            }
+        }
+        if (!"".equals(value) && !"".equals(label) && !"".equals(operator))
+        {
+            return label + operator + value;
+        }
+        return "";
+    }
 }

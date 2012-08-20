@@ -100,6 +100,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
             BeanHelper.error("Error parsing query");
             logger.error("Error parsing query", e);
         }
+        searchFilter = null;
         for (Filter f : filters.getSession().getFilters())
         {
             if (FacetType.SEARCH.equals(f.getType()))
@@ -108,6 +109,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
             }
         }
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
+        System.out.println(query);
         return "";
     }
 
@@ -185,7 +187,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         if (searchFilter != null && searchFilter.getSearchQuery() != null)
         {
-            return URLQueryTransformer.transform2URL(searchFilter.getSearchQuery());
+            return URLQueryTransformer.searchQuery2PrettyQuery(searchFilter.getSearchQuery());
         }
         return "";
     }
@@ -511,5 +513,15 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public void setSimpleSearch(boolean isSimpleSearch)
     {
         this.isSimpleSearch = isSimpleSearch;
+    }
+
+    public Filter getSearchFilter()
+    {
+        return searchFilter;
+    }
+
+    public void setSearchFilter(Filter searchFilter)
+    {
+        this.searchFilter = searchFilter;
     }
 }

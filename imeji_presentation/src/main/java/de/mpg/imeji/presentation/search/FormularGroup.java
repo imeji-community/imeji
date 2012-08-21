@@ -28,7 +28,6 @@ public class FormularGroup
     private List<FormularElement> elements;
     private String collectionId;
     private List<SelectItem> statementMenu;
-    
     private static Logger logger = Logger.getLogger(FormularGroup.class);
 
     public FormularGroup()
@@ -59,7 +58,7 @@ public class FormularGroup
         searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
         for (FormularElement e : elements)
         {
-            searchGroup.addGroup(e.getAsSearchGroup());
+            searchGroup.addGroup(e.getAsSearchGroupNew());
             if (!searchGroup.isEmpty())
             {
                 searchGroup.addLogicalRelation(e.getLogicalRelation());
@@ -76,6 +75,11 @@ public class FormularGroup
                     .getInternationalizedLabels().get(st.getId());
             statementMenu.add(new SelectItem(st.getId().toString(), stName));
         }
+    }
+
+    public int getSize()
+    {
+        return elements.size();
     }
 
     public List<FormularElement> getElements()

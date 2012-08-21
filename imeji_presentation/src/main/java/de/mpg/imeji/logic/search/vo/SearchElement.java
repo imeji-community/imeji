@@ -8,7 +8,7 @@ public abstract class SearchElement
 {
     public enum SEARCH_ELEMENTS
     {
-        LOGICAL_RELATIONS, PAIR, GROUP, QUERY;
+        LOGICAL_RELATIONS, PAIR, GROUP, QUERY, METADATA;
     }
 
     public abstract SEARCH_ELEMENTS getType();

@@ -35,11 +35,11 @@ public class SimpleSecurityQuery
         }
         String uf = "";
         String imageCollection = null;
-        if (pair != null && SearchIndex.names.IMAGE_COLLECTION.equals(pair.getIndex().getName()))
+        if (pair != null && SearchIndex.names.IMAGE_COLLECTION.name().equals(pair.getIndex().getName()))
         {
             imageCollection = pair.getValue();
         }
-        boolean myImages = (pair != null && SearchIndex.names.MY_IMAGES.equals(pair.getIndex().getName()));
+        boolean myImages = (pair != null && SearchIndex.names.MY_IMAGES.name().equals(pair.getIndex().getName()));
         boolean hasGrantForCollection = false;
         if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
         {
@@ -78,7 +78,7 @@ public class SimpleSecurityQuery
                     }
                     else if (imageCollection != null)
                     {
-                        uf += "?c=<" + imageCollection + ">";
+                        uf = "?c=<" + imageCollection + ">";
                     }
                 }
             }

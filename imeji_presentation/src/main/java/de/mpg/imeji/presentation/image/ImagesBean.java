@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -109,7 +110,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
             }
         }
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
-        System.out.println(query);
         return "";
     }
 

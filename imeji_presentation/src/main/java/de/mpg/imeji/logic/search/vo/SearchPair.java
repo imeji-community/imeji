@@ -4,18 +4,16 @@ import java.util.List;
 
 public class SearchPair extends SearchElement
 {
-    private boolean not = false;;
+    private boolean not = false;
     private SearchIndex index;
     private SearchOperators operator;
     private String value;
 
     public SearchPair(SearchIndex index, SearchOperators operator, String value)
     {
-        this.index = index;
-        this.operator = operator;
-        this.value = value;
+        this(index, operator, value, false);
     }
-    
+
     public SearchPair(SearchIndex index, SearchOperators operator, String value, boolean not)
     {
         this.index = index;

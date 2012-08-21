@@ -7,23 +7,19 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class URLQueryTransformer
@@ -39,6 +35,7 @@ public class URLQueryTransformer
         if (query == null)
             query = "";
         StringReader reader = new StringReader(query);
+        String metadataPattern = SearchIndex.names.IMAGE_METADATA.name();
         int c = 0;
         while ((c = reader.read()) != -1)
         {
@@ -76,11 +73,32 @@ public class URLQueryTransformer
                     subQuery = "";
                 }
             }
-            if (scString.matches("\\s*[^\\s]+=.*=\".*\"\\s*"))
+            if (scString.matches("\\s*" + metadataPattern + "[^\\s]+=.*=\".+\"\\s*"))
+            {
+                String[] pairString = scString.split("=");
+                String value = pairString[2].trim();
+                String ns = pairString[0].split(",")[0].replace("IMAGE_METADATA[", "");
+                value = value.substring(1, value.length() - 1);
+                if (value.startsWith("\""))
+                {
+                    value += "\"";
+                }
+                SearchIndex index = Search.getIndex(pairString[0].split(",")[1].replace("]", "").trim());
+                SearchOperators operator = SearchOperators.valueOf(pairString[1].trim());
+                searchQuery.addPair(new SearchMetadata(index, operator, value, URI.create(ns), not));
+                scString = "";
+                not = false;
+            }
+            if (scString.matches("\\s*[^\\s]+=.*=\".+\"\\s*")
+                    && !scString.matches("\\s*" + metadataPattern + "[^\\s]+=.*=\".+\"\\s*"))
             {
                 String[] pairString = scString.split("=");
                 String value = pairString[2].trim();
                 value = value.substring(1, value.length() - 1);
+                if (value.startsWith("\""))
+                {
+                    value += "\"";
+                }
                 SearchIndex index = Search.getIndex(pairString[0].trim());
                 SearchOperators operator = SearchOperators.valueOf(pairString[1].trim());
                 searchQuery.addPair(new SearchPair(index, operator, value, not));
@@ -134,6 +152,16 @@ public class URLQueryTransformer
                     query += " " + ((SearchPair)se).getIndex().getName() + "=" + ((SearchPair)se).getOperator().name()
                             + "=\"" + ((SearchPair)se).getValue() + "\" ";
                     break;
+                case METADATA:
+                    if (((SearchMetadata)se).isNot())
+                    {
+                        query += " NOT";
+                    }
+                    query += SearchIndex.names.IMAGE_METADATA.name() + "[" + ((SearchMetadata)se).getStatement() + ","
+                            + ((SearchPair)se).getIndex().getName() + "]" + "="
+                            + ((SearchMetadata)se).getOperator().name() + "=\"" + ((SearchMetadata)se).getValue()
+                            + "\" ";
+                    break;
             }
         }
         return query.trim();
@@ -154,8 +182,9 @@ public class URLQueryTransformer
         }
         else
         {
-            return indexNamespace2PrettyQuery(pair.getIndex().getNamespace())
-                    + searchOperator2PrettyQuery(pair.getOperator()) + pair.getValue();
+            return indexNamespace2PrettyQuery(pair.getIndex().getNamespace()) + " "
+                    + negation2PrettyQuery(pair.isNot()) + searchOperator2PrettyQuery(pair.getOperator()) + " "
+                    + pair.getValue();
         }
     }
 
@@ -164,9 +193,10 @@ public class URLQueryTransformer
         String str = searchElements2PrettyQuery(group.getElements());
         if ("".equals(str))
             return "";
-        if (!"".equals(metadataGroup2PrettyQuery(group)))
-            return metadataGroup2PrettyQuery(group);
-        return " (" + removeUseLessLogicalOperation(str) + ") ";
+        if (group.getElements().size() > 1)
+            return " (" + removeUseLessLogicalOperation(str) + ") ";
+        else
+            return removeUseLessLogicalOperation(str);
     }
 
     private static String searchLogicalRelation2PrettyQuery(SearchLogicalRelation rel)
@@ -192,6 +222,8 @@ public class URLQueryTransformer
                 case LOGICAL_RELATIONS:
                     q += searchLogicalRelation2PrettyQuery((SearchLogicalRelation)el);
                     break;
+                case METADATA:
+                    q += searchMetadata2PrettyQuery((SearchMetadata)el);
             }
         }
         return removeUseLessLogicalOperation(q).trim();
@@ -224,34 +256,28 @@ public class URLQueryTransformer
         return namespace;
     }
 
-    public static String getIdAsLabel(String uri)
-    {
-        if (URI.create(uri).isAbsolute())
-        {
-            String id = ObjectHelper.getId(URI.create(uri));
-            if (id != null)
-            {
-                return "id " + id;
-            }
-        }
-        return uri;
-    }
-
     private static String searchOperator2PrettyQuery(SearchOperators op)
     {
         switch (op)
         {
             case GREATER_DATE:
-                return " >= ";
+                return ">=";
             case GREATER_NUMBER:
-                return " >= ";
+                return ">=";
             case LESSER_DATE:
-                return " <= ";
+                return "<=";
             case LESSER_NUMBER:
-                return " <= ";
+                return "<=";
             default:
-                return " = ";
+                return "=";
         }
+    }
+
+    private static String negation2PrettyQuery(boolean isNot)
+    {
+        if (isNot)
+            return "!";
+        return "";
     }
 
     /**
@@ -260,31 +286,15 @@ public class URLQueryTransformer
      * @param group
      * @return
      */
-    private static String metadataGroup2PrettyQuery(SearchGroup group)
+    private static String searchMetadata2PrettyQuery(SearchMetadata md)
     {
-        String value = "";
-        String label = "";
-        String operator = "";
-        for (SearchElement el : group.getElements())
+        String label = ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels()
+                .get(md.getStatement());
+        if (label == null)
         {
-            if (el.getType() == SEARCH_ELEMENTS.PAIR)
-            {
-                SearchPair p = (SearchPair)el;
-                if (p.getIndex().getName().equals(SearchIndex.names.IMAGE_METADATA_STATEMENT.name()))
-                {
-                    label = p.getValue();
-                }
-                else
-                {
-                    value = p.getValue();
-                    operator = searchOperator2PrettyQuery(p.getOperator());
-                }
-            }
+            label = "Metadata-" + indexNamespace2PrettyQuery(md.getStatement().toString());
         }
-        if (!"".equals(value) && !"".equals(label) && !"".equals(operator))
-        {
-            return label + operator + value;
-        }
-        return "";
+        return label + " " + negation2PrettyQuery(md.isNot()) + searchOperator2PrettyQuery(md.getOperator()) + " "
+                + md.getValue();
     }
 }

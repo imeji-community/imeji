@@ -126,6 +126,11 @@ public class Search
                     results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
                             SortHelper.removeSortValue(results));
                     break;
+                case METADATA:
+                    subResults = new ArrayList<String>(simple((SearchPair)se, sortCri, user));
+                    results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
+                            SortHelper.removeSortValue(results));
+                    break;
                 case LOGICAL_RELATIONS:
                     logic = ((SearchLogicalRelation)se).getLogicalRelation();
                     break;
@@ -135,7 +140,7 @@ public class Search
                 // if the query has started with a logical relation, it should not be counted as a first result
                 if (isFirstResult)
                 {
-                    // if is is the first subresults of a query, add it to the results, instead of or/and operation 
+                    // if is is the first subresults of a query, add it to the results, instead of or/and operation
                     results = new ArrayList<String>(subResults);
                 }
                 isFirstResult = false;
@@ -163,6 +168,7 @@ public class Search
     {
         String sparqlQuery = SimpleQueryFactory.getQuery(getRDFType(type), pair, sortCri, user, (containerURI != null),
                 getSpecificQuery());
+        System.out.println(sparqlQuery);
         return ImejiSPARQL.exec(sparqlQuery, getModelName(type));
     }
 

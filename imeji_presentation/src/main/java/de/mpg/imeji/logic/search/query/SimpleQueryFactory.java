@@ -10,6 +10,7 @@ import java.util.List;
 
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.DateFormatter;
@@ -103,14 +104,19 @@ public class SimpleQueryFactory
         }
         else
         {
-            searchQuery = " ?s <http://imeji.org/terms/metadataSet> ?mds . NOT EXISTS{ ?mds <http://imeji.org/terms/metadata> ?md  . ?md "
+            searchQuery = " ?s <http://imeji.org/terms/metadataSet> ?mds . OPTIONAL{ ?mds <http://imeji.org/terms/metadata> ?md  . ?md "
                     + getSearchElementsParent(pair.getIndex(), 0) + " <" + pair.getIndex().getNamespace() + "> ?el ";
+        }
+        if (pair instanceof SearchMetadata)
+        {
+            searchQuery =  searchQuery + " . ?md <http://imeji.org/terms/statement> ?el1 ";
         }
         if (pair.isNot())
         {
-            return searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(pair, variable) + ")} .";
+            return searchQuery.substring(1) + " .FILTER(" + getSimpleFilter(pair, variable)
+                    + ")}  .  FILTER (!bound(?el) ) .";
         }
-        searchQuery = searchQuery.replace("NOT EXISTS{", "");
+        searchQuery = searchQuery.replace("OPTIONAL{", "");
         return searchQuery + " .FILTER(" + getSimpleFilter(pair, variable) + ") .";
     }
 
@@ -227,6 +233,10 @@ public class SimpleQueryFactory
         {
             return "true";
         }
+        if (pair instanceof SearchMetadata)
+        {
+            filter += " && ?el1=<" + ((SearchMetadata)pair).getStatement().toString() + ">";
+        }
         return filter;
     }
 
@@ -236,7 +246,7 @@ public class SimpleQueryFactory
         String text = pair.getValue();
         StringReader simpleReader = new StringReader(text);
         int i = 0;
-        boolean isExactQuery = false;
+        boolean isPhraseQuery = false;
         List<String> words = new ArrayList<String>();
         String word = "";
         try
@@ -245,16 +255,16 @@ public class SimpleQueryFactory
             {
                 if (i == '"')
                 {
-                    if (isExactQuery)
+                    if (isPhraseQuery)
                     {
-                        isExactQuery = false;
+                        isPhraseQuery = false;
                         words.add(word);
                         word = "";
                     }
                     else
-                        isExactQuery = true;
+                        isPhraseQuery = true;
                 }
-                else if (i == ' ' && !isExactQuery)
+                else if (i == ' ' && !isPhraseQuery)
                 {
                     words.add(word);
                     word = "";

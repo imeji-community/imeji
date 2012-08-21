@@ -87,17 +87,19 @@
 							
 							
 								<a4j:repeat id="els" var="el" value="#{g.elements}" rows="0" rowKeyVar="elIndex">
+
 									
-									<h:panelGroup styleClass="full_area0_p8" rendered="#{elIndex > 0}">
-										<h:selectOneMenu value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
-											<f:selectItems value="#{AdvancedSearchBean.operatorsMenu}"/>
-										</h:selectOneMenu>
-									</h:panelGroup>
 									
 									<h:panelGroup styleClass="tiny_marginLExcl full_area0_p8">
 
+										<h:panelGroup styleClass="free_area0">
+											<h:selectOneMenu value="#{el.inverse}" styleClass="small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+												<f:selectItem itemValue="false" itemLabel="--"/>
+												<f:selectItem itemValue="true" itemLabel="#{lbl.NOT}"/>
+											</h:selectOneMenu>
+										</h:panelGroup>
 										
-										<h:selectOneMenu value="#{el.namespace}" styleClass="double_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:changeEl').click();">
+										<h:selectOneMenu value="#{el.namespace}" styleClass="xTiny_marginLExcl double_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:changeEl').click();">
 											<f:selectItems value="#{g.statementMenu}"/>
 										</h:selectOneMenu>
 										
@@ -111,19 +113,13 @@
 											<f:param name="elPos" value="#{elIndex}"/>
 										</a4j:commandButton>
 										
-										<h:panelGroup styleClass="free_area0">
-											<h:selectOneMenu value="#{el.inverse}" styleClass="xTiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
-												<f:selectItem itemValue="false" itemLabel="#{lbl.is}"/>
-												<f:selectItem itemValue="true" itemLabel="#{lbl.is} #{lbl.NOT}"/>
-											</h:selectOneMenu>
-										</h:panelGroup>
-										
 										<h:panelGroup styleClass="medium_are0">
+											<h:outputText value="#{lbl.is}" styleClass="xTiny_marginLExcl free_area0"/>
 											<h:panelGroup rendered="#{el.filtersMenu == null}" styleClass="xTiny_marginLExcl small_area0">
 												<h:outputText value=" = " style="visibility:hidden;"/>
 											</h:panelGroup>
 											
-											<h:selectOneMenu value="#{el.filter}" rendered="#{el.filtersMenu != null}" styleClass="tiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+											<h:selectOneMenu value="#{el.filter}" rendered="#{el.filtersMenu != null}" styleClass="xTiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
 												<f:selectItems value="#{el.filtersMenu}"/>
 											</h:selectOneMenu>
 										</h:panelGroup>
@@ -133,23 +129,29 @@
 											<f:selectItems value="#{el.predefinedValues}"/>
 										</h:selectOneMenu>
 										
-										<a4j:commandButton value="Add" action="#{AdvancedSearchBean.addElement}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add">
+										<a4j:commandButton value="" action="#{AdvancedSearchBean.addElement}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add">
 											<f:param name="gPos" value="#{gIndex}"/>
 											<f:param name="elPos" value="#{elIndex}"/>
 										</a4j:commandButton>
-										<a4j:commandButton value="Remove" action="#{AdvancedSearchBean.removeElement}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool remove">
+										<a4j:commandButton value="" action="#{AdvancedSearchBean.removeElement}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool remove">
 											<f:param name="gPos" value="#{gIndex}"/>
 											<f:param name="elPos" value="#{elIndex}"/>
 										</a4j:commandButton>
 
 									</h:panelGroup>
+									
+									<h:panelGroup styleClass="full_area0_p8" rendered="#{elIndex &lt; (g.size - 1)}">
+										<h:selectOneMenu value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+											<f:selectItems value="#{AdvancedSearchBean.operatorsMenu}"/>
+										</h:selectOneMenu>
+									</h:panelGroup>
 								</a4j:repeat>
 								
 								<h:panelGroup styleClass="full_area0_p8">
-									<a4j:commandButton value="Add collection" action="#{AdvancedSearchBean.addGroup}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add" shortDesc="#{lbl.add_collection}">
+									<a4j:commandButton value="" action="#{AdvancedSearchBean.addGroup}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add" shortDesc="#{lbl.add_collection}">
 										<f:param name="gPos" value="#{gIndex}"/>
 									</a4j:commandButton>
-									<a4j:commandButton value="Remove collection" action="#{AdvancedSearchBean.removeGroup}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}">
+									<a4j:commandButton value="" action="#{AdvancedSearchBean.removeGroup}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}">
 										<f:param name="gPos" value="#{gIndex}"/>
 									</a4j:commandButton>
 								</h:panelGroup>

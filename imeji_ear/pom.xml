@@ -38,11 +38,12 @@
 							<artifactId>common_presentation</artifactId>
 							<contextRoot>/common</contextRoot>
 						</webModule>
-						<webModule>
+						<!-- Uncomment to enable OAI-PMH and Sitemaps. Important: Fledgeddata needs to be self compiled! -->
+						<!--  <webModule>
 							<groupId>de.mpg.escidoc.services</groupId>
 							<artifactId>fledgeddata_presentation</artifactId>
 							<contextRoot>/fledgeddata</contextRoot>
-						</webModule>
+						</webModule>-->
 					</modules>
 				</configuration>
 			</plugin>
@@ -117,13 +118,15 @@
 			<type>war</type>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
+		<!-- Uncomment to enable OAI-PMH and Sitemaps. Important: Fledgeddata needs to be self compiled! -->
+		<!--  <dependency>
 			<groupId>de.mpg.escidoc.services</groupId>
 			<artifactId>fledgeddata_presentation</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>war</type>
 		</dependency>
+		-->
 	</dependencies>
 
 	

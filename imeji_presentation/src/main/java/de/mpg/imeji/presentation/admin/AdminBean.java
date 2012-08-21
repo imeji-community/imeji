@@ -6,14 +6,6 @@ package de.mpg.imeji.presentation.admin;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.jena.larq.IndexBuilderString;
-import org.apache.jena.larq.IndexLARQ;
-import org.apache.jena.larq.LARQ;
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Selector;
-import com.hp.hpl.jena.rdf.model.impl.SelectorImpl;
-
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.AlbumController;

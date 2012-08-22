@@ -276,7 +276,7 @@ public class ImageBean
 
     public String getPageUrl()
     {
-        return navigation.getApplicationUrl() + "image/" + this.id;
+        return navigation.getApplicationUrl() + "item/" + id;
     }
 
     public String clearAll()

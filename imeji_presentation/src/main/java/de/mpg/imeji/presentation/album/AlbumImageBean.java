@@ -37,7 +37,7 @@ public class AlbumImageBean extends ImageBean
 
     public String getPageUrl()
     {
-        return navigation.getAlbumUrl() + "/" + this.albumId + "/" + "item" + "/" + this.getId();
+        return navigation.getAlbumUrl() + "/" + albumId + "/" + "item" + "/" + this.getId();
     }
 
     public String getNavigationString()

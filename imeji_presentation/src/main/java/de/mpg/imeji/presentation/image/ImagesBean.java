@@ -198,8 +198,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
         if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
         {
-            fs.setFilters(hs.getCurrentPage().getFilters());
-            query = hs.getCurrentPage().getQuery();
+//            fs.setFilters(hs.getCurrentPage().getFilters());
+//            query = hs.getCurrentPage().getQuery();
+            filters = new FiltersBean(query, totalNumberOfRecords);
+            hs.getCurrentPage().setFilters(fs.getFilters());
+            hs.getCurrentPage().setQuery(fs.getWholeQuery());
         }
         else
         {

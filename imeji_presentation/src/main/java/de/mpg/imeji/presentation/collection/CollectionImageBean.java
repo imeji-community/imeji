@@ -3,14 +3,12 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.io.Serializable;
-
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.image.SingleImageBrowse;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
-public class CollectionImageBean extends ImageBean implements Serializable
+public class CollectionImageBean extends ImageBean
 {
     private String collectionId;
     private Navigation navigation;

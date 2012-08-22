@@ -168,7 +168,6 @@ public class Search
     {
         String sparqlQuery = SimpleQueryFactory.getQuery(getRDFType(type), pair, sortCri, user, (containerURI != null),
                 getSpecificQuery());
-        System.out.println(sparqlQuery);
         return ImejiSPARQL.exec(sparqlQuery, getModelName(type));
     }
 

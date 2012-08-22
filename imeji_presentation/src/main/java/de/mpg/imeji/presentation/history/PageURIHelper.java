@@ -24,7 +24,7 @@ public class PageURIHelper
 		case COLLECTION_IMAGES: return URI.create(baseURL + "images/collection/" + id[0] + "?h=");
 		case HOME : return URI.create(baseURL + "?h=");
 		case SEARCH : return URI.create(baseURL + "search" + "?h=");
-		case IMAGE : return URI.create(baseURL + "image/" + id[0] + "/view?h=");
+		case IMAGE : return URI.create(baseURL + "item/" + id[0] + "/view?h=");
 		case COLLECTION_IMAGE : if (id.length == 2) return URI.create(baseURL + "collection/" + id[0] + "/item/" + id[1] + "?h=");
 		case ALBUMS : return URI.create(baseURL + "albums" + "?h=");
 		case COLLECTION_HOME : return URI.create(baseURL + "collection/" + id[0] + "?h=");

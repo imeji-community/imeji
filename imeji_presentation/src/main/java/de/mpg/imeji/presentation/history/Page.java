@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.history;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,7 @@ import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
-public class Page implements Serializable
+public class Page
 {
     public enum ImejiPages
     {
@@ -56,8 +55,6 @@ public class Page implements Serializable
     {
         this.uri = uri;
         this.type = type;
-        // SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-        // this.name = session.getLabel(type.getLabel());
         this.name = type.getLabel();
     }
 

@@ -35,7 +35,6 @@ public class URLQueryTransformer
         if (query == null)
             query = "";
         StringReader reader = new StringReader(query);
-        String metadataPattern = SearchIndex.names.IMAGE_METADATA.name();
         int c = 0;
         while ((c = reader.read()) != -1)
         {
@@ -73,7 +72,7 @@ public class URLQueryTransformer
                     subQuery = "";
                 }
             }
-            if (scString.matches("\\s*" + metadataPattern + "[^\\s]+=.*=\".+\"\\s*"))
+            if (matchSearchMetadataPattern(scString))
             {
                 String[] pairString = scString.split("=");
                 String value = pairString[2].trim();
@@ -89,8 +88,7 @@ public class URLQueryTransformer
                 scString = "";
                 not = false;
             }
-            if (scString.matches("\\s*[^\\s]+=.*=\".+\"\\s*")
-                    && !scString.matches("\\s*" + metadataPattern + "[^\\s]+=.*=\".+\"\\s*"))
+            if (matchSearchPairPattern(scString) && !matchSearchMetadataPattern(scString))
             {
                 String[] pairString = scString.split("=");
                 String value = pairString[2].trim();
@@ -112,6 +110,16 @@ public class URLQueryTransformer
                     query.trim()));
         }
         return searchQuery;
+    }
+
+    private static boolean matchSearchPairPattern(String str)
+    {
+        return str.matches("\\s*[^\\s]+=.*=\".+\"\\s*");
+    }
+
+    private static boolean matchSearchMetadataPattern(String str)
+    {
+        return str.matches("\\s*" + SearchIndex.names.IMAGE_METADATA.name() + "\\[[^\\s]+\\]=.*=\".+\"\\s*");
     }
 
     public static boolean isSimpleSearch(SearchQuery searchQuery)

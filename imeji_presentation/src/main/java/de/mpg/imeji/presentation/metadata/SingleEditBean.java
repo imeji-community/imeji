@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.metadata;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +29,7 @@ import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
-public class SingleEditBean implements Serializable
+public class SingleEditBean
 {
     private Item item = null;
     private MetadataProfile profile = null;

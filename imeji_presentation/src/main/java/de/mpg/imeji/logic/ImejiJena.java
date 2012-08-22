@@ -87,9 +87,6 @@ public class ImejiJena
     private static void initModel(String name)
     {
         imejiDataSet.addNamedModel("http://imeji.org/" + name, ModelFactory.createDefaultModel());
-        // Model m = imejiDataSet.getNamedModel("http://imeji.org/" + name);
-        // ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(m);
-        // return m;
     }
 
     private static void initadminUser()

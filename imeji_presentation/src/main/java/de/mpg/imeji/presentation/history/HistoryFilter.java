@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.history;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
@@ -21,13 +20,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
-
 public class HistoryFilter implements Filter
 {
     private FilterConfig filterConfig = null;
     private ServletContext servletContext;
-    private static Logger logger = Logger.getLogger(HistoryFilter.class);
 
     public void destroy()
     {
@@ -49,32 +45,16 @@ public class HistoryFilter implements Filter
         {
             if (h == null)
             {
+                // if h not defined, then it is a new page
                 hs.add(request.getPathInfo().replaceAll("/", ""), q, ids);
             }
             else if (!"".equals(h))
             {
+                // If h defined, then it is an history link
                 hs.remove(Integer.parseInt(h));
             }
         }
-        // alertForOutOfMemoryError(hs.getCurrentPage().getInternationalizedName());
         chain.doFilter(serv, resp);
-    }
-
-    private void alertForOutOfMemoryError(String page)
-    {
-        long used = (ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() / 1000000);
-        long committed = (ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getCommitted() / 1000000);
-        long max = (ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / 1000000);
-        if (committed - (committed * 10 / 100) < used)
-        {
-            logger.warn("committed mem almost fully used");
-            logger.warn("page:" + page + " used " + used + "(committed: " + committed + ")");
-        }
-        if (max - (max * 10 / 100) < used)
-        {
-            logger.warn("Max mem almost fully used");
-            logger.warn("page:" + page + " used " + used + "(max: " + max + ")");
-        }
     }
 
     public void init(FilterConfig arg0) throws ServletException

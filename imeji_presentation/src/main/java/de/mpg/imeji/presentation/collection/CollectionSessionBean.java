@@ -4,7 +4,6 @@
 
 package de.mpg.imeji.presentation.collection;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +12,8 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
-public class CollectionSessionBean implements Serializable
+public class CollectionSessionBean
 {
-    // Collection active (image browsed are in that collection)
     private CollectionImeji active = null;
     private MetadataProfile profile = null;
     private String selectedMenu = "SORTING";

@@ -52,15 +52,16 @@
 
 				<h:panelGroup layout="block" styleClass="full_area0 endline">
 					<h2>
-						<h:outputLink styleClass="medium_area0"
+						<h:outputLink styleClass="free_area0"
 							value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml">
 							<h:outputText value="Create new User " />
 						</h:outputLink>
 						<h:outputLink value="#{Navigation.applicationUrl}jsf/Users.xhtml"
-							styleClass="small_area0">
+							styleClass="free_area0 xTiny_marginLExcl">
 							<h:outputText value="View users" />
 						</h:outputLink>
-						<h:commandLink styleClass="medium_area0" action="#{AdminBean.reIndex}" value="ReIndex"/>
+						<h:commandLink styleClass="free_area0 xTiny_marginLExcl" action="#{AdminBean.reIndex}" value="ReIndex"/>
+						<h:commandLink styleClass="free_area0 xTiny_marginLExcl" action="#{AdminBean.closeDataSet}" value="Close Dataset"/>
 
 					</h2>
 				</h:panelGroup>

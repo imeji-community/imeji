@@ -33,21 +33,13 @@
 		<managed-bean-class>de.mpg.imeji.presentation.beans.BlogBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>StatisticsBean</managed-bean-name>
-		<managed-bean-class>de.mpg.escidoc.faces.beans.StatisticsBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-
-
-	<!-- Album Beans -->
-	<managed-bean>
-		<managed-bean-name>AlbumBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
 
 	<!-- Collections Bean -->
+	<managed-bean>
+		<managed-bean-name>CollectionsBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>CollectionSession</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionSessionBean</managed-bean-class>
@@ -81,12 +73,6 @@
 	<managed-bean>
 		<managed-bean-name>CollectionImageBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionImageBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-
-	<managed-bean>
-		<managed-bean-name>CollectionsSearchResultBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionsSearchResultBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
@@ -146,6 +132,11 @@
 
 	<!-- Album Beans -->
 	<managed-bean>
+		<managed-bean-name>AlbumBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>AlbumsBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -194,11 +185,7 @@
 		<managed-bean-class>de.mpg.imeji.presentation.beans.MessagesBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>CollectionsBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionsBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
+
 	<managed-bean>
 		<managed-bean-name>SharingBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.user.SharingBean</managed-bean-class>

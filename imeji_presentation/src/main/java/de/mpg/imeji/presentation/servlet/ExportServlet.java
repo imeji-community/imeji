@@ -30,6 +30,11 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 public class ExportServlet extends HttpServlet
 {
 	/**
+     * 
+     */
+    private static final long serialVersionUID = -777947169051357999L;
+
+    /**
 	 * {@inheritDoc}
 	 */
 	@Override

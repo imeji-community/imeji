@@ -45,13 +45,13 @@
 				
 				<h:outputText styleClass="seperator void" />
 				
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.albumImages}/#{AlbumBean.id}?q=" rendered="#{AlbumBean.size > 0}">
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
 					<h:outputText value="#{lbl.view_images}"/>
 				</h:outputLink>
 				
 				<h:outputText styleClass="seperator void" rendered="#{AlbumBean.size > 0}"/>
 				
-				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.albumHome}/#{AlbumBean.id}/details?init=1" rendered="true">
+				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
 					<h:outputText value="#{lbl.album_metadata}"/>
 				</h:outputLink>
 				
@@ -83,18 +83,17 @@
 							
 							<h:panelGroup styleClass="full_area0_p8 small_marginLExcl">
 								<!-- ALBUM IMAGES -->
-								<pretty:link mappingId="albumImages" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
+								<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
 									<f:param value="#{AlbumBean.id}"/>
 										<a4j:repeat var="img" value="#{AlbumBean.images}" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
 											<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
 										</a4j:repeat>
 										<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
-									</pretty:link>
+									</h:outputLink>
 								<h2>
-									<pretty:link mappingId="albumImages" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
-										<f:param value="#{AlbumBean.id}"/>
+									<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
 										<h:outputText value ="#{lbl.album_view_all_images}"/>
-									</pretty:link>
+									</h:outputLink>
 									<h:outputText value="#{lbl.withdrawn}" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}"/>
 								</h2>
 							</h:panelGroup>
@@ -157,7 +156,7 @@
 										<f:attribute name="albumId" value="#{AlbumBean.id}"/>
 										<f:attribute name="name" value="#{AlbumBean.album.metadata.title}"/>
 					           		</h:commandLink>
-					           		<h:outputLink value="#{Navigation.applicationUri}#{AlbumBean.id}"><h:outputText value="Cancel"/></h:outputLink>
+					           		<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}"><h:outputText value="Cancel"/></h:outputLink>
 								</h:panelGrid>
 						 </f:facet>   
 					</rich:togglePanel>

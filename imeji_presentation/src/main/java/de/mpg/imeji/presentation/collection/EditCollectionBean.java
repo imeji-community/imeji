@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -77,8 +78,12 @@ public class EditCollectionBean extends CollectionBean
             collectionController.updateLazy(getCollection(), sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_save"));
             Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getApplicationUri() + getCollection().getId().getPath() + "/details?init=1");
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            navigation.getCollectionUrl() + ObjectHelper.getId(getCollection().getId()) + "/"
+                                    + navigation.getInfosPath() + "?init=1");
         }
         return "";
     }

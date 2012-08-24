@@ -1,12 +1,10 @@
 package de.mpg.j2j.helper;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.datatypes.BaseDatatype;
-import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;

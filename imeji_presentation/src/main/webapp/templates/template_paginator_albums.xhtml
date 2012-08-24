@@ -54,9 +54,9 @@
 				<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.filter}" rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}"/>
 				<h:outputText styleClass="seperator void" />
 				
-				<pretty:link mappingId="createAlbum" rendered="#{SessionBean.user!=null}" styleClass="free_area0">
+				<h:outputLink value="#{Navigation.createAlbumUrl}" rendered="#{SessionBean.user != null}" styleClass="free_area0">
 					<h:outputText value="#{lbl.album_create}"/>
-				</pretty:link>
+				</h:outputLink>
 				<h:outputText styleClass="seperator void" />
 			</ui:define>
 
@@ -241,7 +241,7 @@
 				      	<td class="free_area0 endline">
 				      		<span class="seperator"></span>
 				      		<span class="free_area0_p8 itemHeadline">
-				      			<h:outputLink value="#{Navigation.albumUrl}/#{container.id}">
+				      			<h:outputLink value="#{Navigation.albumUrl}#{container.id}">
 				      				<b><h:outputText value="#{container.album.metadata.title}" /></b>
 				      			</h:outputLink>								
 				      		</span>

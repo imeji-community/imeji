@@ -4,7 +4,6 @@
 
 package de.mpg.imeji.presentation.lang;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -15,7 +14,7 @@ import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
-public class InternationalizationBean implements Serializable
+public class InternationalizationBean
 {
 	private List<SelectItem> languages = null;
 	List<SelectItem> isolanguages = null;

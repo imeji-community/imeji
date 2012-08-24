@@ -215,7 +215,7 @@
 				</h:panelGroup>
 					
 				<div class="full_area0 formButtonArea">
-					<h:outputLink rendered="#{FormularBean.id != null}" value="#{Navigation.collectionHome}/#{FormularBean.id}/details?init=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
+					<h:outputLink rendered="#{FormularBean.id != null}" value="#{Navigation.collectionUrl}/#{FormularBean.id}/details?init=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
 						<h:outputText value="#{lbl.cancel}" />
 					</h:outputLink>
 					<h:outputLink rendered="#{FormularBean.id == null}" value="#{Navigation.applicationUrl}collections" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">

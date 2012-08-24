@@ -26,6 +26,10 @@ import de.mpg.j2j.exceptions.NotFoundException;
  */
 public class InitializerServlet extends HttpServlet
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private static Logger logger = Logger.getLogger(InitializerServlet.class);
 
     @Override

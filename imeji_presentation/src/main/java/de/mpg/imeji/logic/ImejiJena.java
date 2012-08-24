@@ -4,6 +4,7 @@
 package de.mpg.imeji.logic;
 
 import java.net.URI;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -57,10 +58,11 @@ public class ImejiJena
 
     public static void init(String path)
     {
-        logger.info("Initializing Jena models...");
         tdbPath = path;
+        logger.info("Initializing Jena dataset (" + tdbPath + ")...");
         imejiDataSet = TDBFactory.createDataset(tdbPath);
-        logger.info("Transaction supported: " + imejiDataSet.supportsTransactions());
+        logger.info("... done!");
+        logger.info("Initializing Jena models...");
         albumModel = getModelName(Album.class);
         collectionModel = getModelName(CollectionImeji.class);
         imageModel = getModelName(Item.class);
@@ -79,15 +81,25 @@ public class ImejiJena
         logger.info("Initializing counter...");
         initCounter();
         logger.info("... done!");
-        tdbstats.init();
+        logger.info("Transaction supported: " + imejiDataSet.supportsTransactions());
         logger.info("Jena file access : " + SystemTDB.fileMode().name());
         logger.info("Jena is 64 bit system : " + SystemTDB.is64bitSystem);
     }
 
     private static void initModel(String name)
     {
-        imejiDataSet.addNamedModel("http://imeji.org/" + name, ModelFactory.createDefaultModel());
+        try
+        {
+            imejiDataSet.begin(ReadWrite.WRITE);
+            imejiDataSet.addNamedModel("http://imeji.org/" + name, ModelFactory.createDefaultModel());
+            imejiDataSet.commit();
+        }
+        finally
+        {
+            imejiDataSet.end();
+        }
     }
+
 
     private static void initadminUser()
     {

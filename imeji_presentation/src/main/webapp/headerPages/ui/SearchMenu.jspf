@@ -56,11 +56,6 @@
 		<h:outputLink id="lnkAdvancedSearch" styleClass="free_area0 advancedSearchMenu tiny_marginLExcl" value="#{Navigation.searchUrl}">
 	   		<h:outputText value="#{lbl.advanced_search}"/>
 	   	</h:outputLink>
-	   <!-- 
-	   	<h:outputLink id="lnkPublicSearch" styleClass="xLarge_area0_p3 advancedSearchMenu" value="#{Navigation.albumsSearchUrl}">
-	   		<h:outputText value="#{lbl.public_search}"/>
-	   	</h:outputLink>
-	   	-->
 	
 		<!-- search Menu ends here -->
 	</div>

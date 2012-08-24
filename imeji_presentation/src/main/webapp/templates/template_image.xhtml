@@ -86,20 +86,20 @@
 					<div class="fullItemControls">
 						<h:panelGroup styleClass="seperator" />
 						
-						<h:outputLink id="lnkViewItemMdPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}/techmd" rendered="#{imageBean.tab == 'TECHMD'}">
+						<h:outputLink id="lnkViewItemMdPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}?tab=techmd" rendered="#{imageBean.tab == 'TECHMD'}">
 							<h:outputText value="#{lbl.view_tech_md}"/>
 						</h:outputLink>
 						
-						<h:outputLink id="lnkViewItemMdPage2" styleClass="free_area0" value="#{imageBean.pageUrl}/techmd" rendered="#{imageBean.tab != 'TECHMD'}">
+						<h:outputLink id="lnkViewItemMdPage2" styleClass="free_area0" value="#{imageBean.pageUrl}?tab=techmd" rendered="#{imageBean.tab != 'TECHMD'}">
 							<h:outputText value="#{lbl.view_tech_md}"/>
 						</h:outputLink>
 									
 						<h:panelGroup styleClass="seperator" />
 									
-						<h:outputLink id="lnkViewItemPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}/view" rendered="#{imageBean.tab == 'VIEW'}">
+						<h:outputLink id="lnkViewItemPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab == 'VIEW'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
-						<h:outputLink id="lnkViewItemPage2" styleClass="free_area0" value="#{imageBean.pageUrl}/view" rendered="#{imageBean.tab != 'VIEW'}">
+						<h:outputLink id="lnkViewItemPage2" styleClass="free_area0" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab != 'VIEW'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
 						

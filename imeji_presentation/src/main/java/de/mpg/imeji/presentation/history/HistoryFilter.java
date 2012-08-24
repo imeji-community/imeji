@@ -39,6 +39,7 @@ public class HistoryFilter implements Filter
         String q = (String)request.getParameter("q");
         String h = (String)request.getParameter("h");
         String f = (String)request.getParameter("f");
+        // Parameter used by pretty query to pass parameter defined in pretty-config in the url pattern
         String[] ids = request.getParameterValues("com.ocpsoft.vP_0");
         // If f exists, then it is a filter, not added to history
         if (f == null)

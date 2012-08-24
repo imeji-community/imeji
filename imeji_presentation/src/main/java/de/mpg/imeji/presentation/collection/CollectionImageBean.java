@@ -38,11 +38,11 @@ public class CollectionImageBean extends ImageBean
 
     public String getPageUrl()
     {
-        return navigation.getCollectionUrl() + "/" + collectionId + "/" + "item" + "/" + this.getId();
+        return navigation.getCollectionUrl() + collectionId + "/" + navigation.ITEM.getPath() + "/" + getId();
     }
 
     public String getNavigationString()
     {
-        return "pretty:viewImageCollection";
+        return "pretty:CollectionItem";
     }
 }

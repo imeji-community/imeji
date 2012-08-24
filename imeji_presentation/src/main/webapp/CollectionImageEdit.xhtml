@@ -70,10 +70,10 @@
 		
 		<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-			<h:outputLink value="#{Navigation.collectionImages}/#{CollectionImageBean.collectionId}?q=" styleClass="free_area1_p6">
+			<h:outputLink value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/#{Navigation.browsePath}?q=" styleClass="free_area1_p6">
 				<h:outputText value="#{lbl.collection_back_to_images}"/>
 			</h:outputLink>
-			<h:outputLink value="#{Navigation.imagesUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">
+			<h:outputLink value="#{Navigation.browseUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">
 				<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
 			</h:outputLink>
 			<a4j:commandLink value="#{lbl.selected_clear}" action="#{CollectionImageBean.clearAll}" styleClass="free_area2_p6 xHuge_marginLIncl " />	

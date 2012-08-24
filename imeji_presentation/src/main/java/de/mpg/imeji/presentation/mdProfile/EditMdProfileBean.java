@@ -86,7 +86,7 @@ public class EditMdProfileBean extends MdProfileBean
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         if (colId != null)
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getApplicationUri() + "/collection/" + colId + "/details?init=1");
+                    .redirect(navigation.getCollectionUrl() + colId + "/" + navigation.getInfosPath() + "?init=1");
         return "";
     }
 

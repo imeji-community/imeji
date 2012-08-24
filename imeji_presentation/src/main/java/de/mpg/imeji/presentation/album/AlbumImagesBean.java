@@ -157,7 +157,7 @@ public class AlbumImagesBean extends ImagesBean
 
     public String getBackUrl()
     {
-        return navigation.getImagesUrl() + "/album" + "/" + this.id;
+        return navigation.getBrowseUrl() + "/album" + "/" + this.id;
     }
 
     public String release()

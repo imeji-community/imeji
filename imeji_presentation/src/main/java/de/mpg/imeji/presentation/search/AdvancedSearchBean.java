@@ -122,7 +122,7 @@ public class AdvancedSearchBean
             String encodedQuery = URLEncoder.encode(
                     URLQueryTransformer.transform2URL(formular.getFormularAsSearchQuery()), "UTF-8");
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getImagesUrl() + "?q=" + encodedQuery);
+                    .redirect(navigation.getBrowseUrl() + "?q=" + encodedQuery);
         }
         catch (IOException e)
         {

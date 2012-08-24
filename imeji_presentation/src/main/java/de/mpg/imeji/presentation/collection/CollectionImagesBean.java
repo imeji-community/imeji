@@ -136,7 +136,7 @@ public class CollectionImagesBean extends ImagesBean
 
     public String getBackUrl()
     {
-        return navigation.getImagesUrl() + "/collection" + "/" + this.id;
+        return navigation.getBrowseUrl() + "/collection" + "/" + this.id;
     }
 
     public String getId()

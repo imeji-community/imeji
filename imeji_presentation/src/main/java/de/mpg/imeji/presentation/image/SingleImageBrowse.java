@@ -8,7 +8,10 @@ import java.net.URI;
 
 import javax.faces.context.FacesContext;
 
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 
 public class SingleImageBrowse 
@@ -28,7 +31,7 @@ public class SingleImageBrowse
 
 	public void init()
 	{
-		String baseUrl = imagesBean.getImageBaseUrl();
+		String baseUrl = ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getItemUrl();
 
 		URI nextImage = getNextImageFromList();
 		URI prevImage = getPreviousImageFromList();
@@ -63,12 +66,12 @@ public class SingleImageBrowse
 
 		if (nextImage != null)
 		{
-			next = baseUrl + nextImage.getPath() + "/view?nav=next";
+			next = baseUrl + ObjectHelper.getId(nextImage) + "?nav=next";
 		}
 
 		if (prevImage != null)
 		{
-			previous = baseUrl + prevImage.getPath() + "/view?nav=prev";
+			previous = baseUrl +  ObjectHelper.getId(prevImage)+ "?nav=prev";
 		}
 	}
 

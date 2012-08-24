@@ -42,38 +42,12 @@ public class ViewCollectionBean extends CollectionBean
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
-    public void createBigCollection()
-    {
-        List<Item> l = new ArrayList<Item>();
-        for (int i = 0; i < 100; i++)
-        {
-            de.mpg.imeji.logic.vo.Item item = ImejiFactory.newItem(getCollection());
-            item.setCollection(this.getCollection().getId());
-            item.setFullImageUrl(URI.create("http://imeji.org/item/test"));
-            item.setThumbnailImageUrl(URI.create("http://imeji.org/item/test"));
-            item.setWebImageUrl(URI.create("http://imeji.org/item/test"));
-            item.setVisibility(Visibility.PUBLIC);
-            item.setFilename("Test image");
-            l.add(item);
-        }
-        ItemController itemController = new ItemController(sessionBean.getUser());
-        try
-        {
-            itemController.create(l, getCollection().getId());
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
     public void init()
     {
         try
         {
             User user = sessionBean.getUser();
-            String id = super.getId();
+            String id = getId();
             setCollection(ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user));
             if (getCollection() != null && getCollection().getId() != null)
             {
@@ -83,6 +57,7 @@ public class ViewCollectionBean extends CollectionBean
             if (getCollection() != null)
             {
                 setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
+                setProfileId(ObjectHelper.getId(getProfile().getId()));
                 super.setTab(TabType.COLLECTION);
                 persons = new ArrayList<Person>();
                 for (Person p : super.getCollection().getMetadata().getPersons())
@@ -106,6 +81,32 @@ public class ViewCollectionBean extends CollectionBean
         // createBigCollection();
     }
 
+    public void createBigCollection()
+    {
+        List<Item> l = new ArrayList<Item>();
+        for (int i = 0; i < 100; i++)
+        {
+            Item item = ImejiFactory.newItem(getCollection());
+            item.setCollection(this.getCollection().getId());
+            item.setFullImageUrl(URI.create("http://imeji.org/item/test"));
+            item.setThumbnailImageUrl(URI.create("http://imeji.org/item/test"));
+            item.setWebImageUrl(URI.create("http://imeji.org/item/test"));
+            item.setVisibility(Visibility.PUBLIC);
+            item.setFilename("Test image");
+            l.add(item);
+        }
+        ItemController itemController = new ItemController(sessionBean.getUser());
+        try
+        {
+            itemController.create(l, getCollection().getId());
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     public List<Person> getPersons()
     {
         return persons;
@@ -119,7 +120,7 @@ public class ViewCollectionBean extends CollectionBean
     @Override
     protected String getNavigationString()
     {
-        return "pretty:viewCollection";
+        return "pretty:collectionInfos";
     }
 
     public String getPersonString()

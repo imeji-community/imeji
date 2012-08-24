@@ -29,7 +29,7 @@ public class QuickSearchBean
         else if (getSelectedSearchType().equals("images"))
         {
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getImagesUrl() + "?q=" + searchString);
+                    .redirect(navigation.getBrowseUrl() + "?q=" + searchString);
         }
         else if (getSelectedSearchType().equals("albums"))
         {

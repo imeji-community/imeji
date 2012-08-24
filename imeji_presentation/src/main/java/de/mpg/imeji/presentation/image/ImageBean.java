@@ -276,7 +276,7 @@ public class ImageBean
 
     public String getPageUrl()
     {
-        return navigation.getApplicationUrl() + "item/" + id;
+        return navigation.getItemUrl() + id;
     }
 
     public String clearAll()
@@ -352,7 +352,7 @@ public class ImageBean
 
     public String getNavigationString()
     {
-        return "pretty:viewImage";
+        return "pretty:item";
     }
 
     public SessionBean getSessionBean()

@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.upload;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
@@ -139,9 +137,9 @@ public class UploadBean
                                     URI.create(EscidocHelper.getOriginalResolution(escidocItem)),
                                     URI.create(EscidocHelper.getThumbnailUrl(escidocItem)),
                                     URI.create(EscidocHelper.getWebResolutionUrl(escidocItem)));
-//                            controller.createImejiImage(collection, user, "escidoc:123", title,
-//                                    URI.create("http://imeji.org/test"), URI.create("http://imeji.org/test"),
-//                                    URI.create("http://imeji.org/test"));
+                            // controller.createImejiImage(collection, user, "escidoc:123", title,
+                            // URI.create("http://imeji.org/test"), URI.create("http://imeji.org/test"),
+                            // URI.create("http://imeji.org/test"));
                             sNum += 1;
                             sFiles.add(title);
                         }

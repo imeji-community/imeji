@@ -4,127 +4,52 @@
 package de.mpg.imeji.presentation.beans;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URISyntaxException;
 
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
-public class Navigation implements Serializable
+/**
+ * Defines the page names and Path for imeji. All changes here must be synchronized with WEB-INF/pretty-config.xml The
+ * Pages are used by the History
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
+public class Navigation
 {
-    public final String LOGIN_URL = "/aa/login?target=$1";
-    public final String LOGOUT_URL = "/aa/logout?target=$1";
-    public final String USERHANDLE_PARAMETER_NAME = "eSciDocUserHandle";
+    // public final String LOGIN_URL = "/aa/login?target=$1";
+    // public final String LOGOUT_URL = "/aa/logout?target=$1";
+    // public final String USERHANDLE_PARAMETER_NAME = "eSciDocUserHandle";
     // Url of the FW
     public final String frameworkUrl;
     // Url of the application
     public final String applicationUrl;
     // Pages of imeji
-    public final Page HOME_PAGE = new Page("HomePage", "pictures");
-    public final Page ABOUT = new Page("About", "about");
-    public final Page LEGAL = new Page("Legal", "legal");
+    public final Page HOME = new Page("HomePage", "");
     public final Page SEARCH = new Page("Search", "search");
-    public final Page DETAIL = new Page("Details", "details");
-    public final Page COMPARISON = new Page("Comparison", "comparison");
     public final Page HELP = new Page("Help", "help");
-    public final Page MYALBUMS = new Page("MyAlbums", "myalbums");
-    public final Page PUBLISHEDALBUM = new Page("publishedalbums", "publishedalbums");
-    public final Page CREATEALBUM = new Page("CreateAlbum", "album/new");
+    public final Page BROWSE = new Page("Browse", "browse");
+    public final Page ITEM = new Page("Item", "item");
+    public final Page COLLECTION = new Page("collection", "collection");
     public final Page ALBUM = new Page("album", "album");
-    public final Page EXPORT = new Page("export", "export");
-    public final Page CONFIRMATION = new Page("confirmation", "confirmation");
-    public final Page EDITALBUM = new Page("edit", "edit");
-    public final Page SEARCHRESULT = new Page("searchresult", "search/result");
-    public final Page LOGOFF = new Page("logoff", "logoff");
-    public final Page STATISTICS = new Page("statistics", "statistics");
-    public final Page PERSON = new Page("person", "person");
-    public final Page ALBUM_INTERFACE = new Page("Album Interface", "do");
-    public final Page IMAGES = new Page("Images", "images");
-    // collection pages
-    public final Page COLLECTION_HOME = new Page("collection", "collection");
-    public final Page COLLECTION_IMAGES = new Page("images/collection", "images/collection");
-    public final Page COLLECTION_UPLOAD = new Page("upload/collection", "upload/collection");
-    // album pages
-    public final Page ALBUM_HOME = new Page("album", "album");
-    public final Page ALBUM_IMAGES = new Page("images/album", "images/album");
+    public final Page PROFILE = new Page("Profile", "profile");
     public final Page ALBUMS = new Page("albums", "albums");
+    public final Page COLLECTIONS = new Page("Collections", "collections");
+    public final Page EXPORT = new Page("export", "export");
+    public final Page EDIT = new Page("Edit", "edit");
+    public final Page INFOS = new Page("Info", "infos");
+    public final Page CREATE = new Page("Create", "create");
+    public final Page UPLOAD = new Page("Upload collection", "upload");
+    // session
     private SessionBean sessionBean = null;
 
     public Navigation() throws Exception
     {
         frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.ur");
         applicationUrl = PropertyReader.getProperty("escidoc.imeji.instance.url");
-    }
-
-    public String getDomain()
-    {
-        return applicationUrl.replaceAll("imeji/", "");
-    }
-
-    public String getAboutUrl()
-    {
-        return applicationUrl + ABOUT.getFile();
-    }
-
-    public String getHomePageUrl()
-    {
-        return applicationUrl + HOME_PAGE.getFile();
-    }
-
-    public String getCollectionHome()
-    {
-        return applicationUrl + COLLECTION_HOME.getFile();
-    }
-
-    public String getCollectionUpload()
-    {
-        return applicationUrl + COLLECTION_UPLOAD.getFile();
-    }
-
-    public String getCollectionImages()
-    {
-        return applicationUrl + COLLECTION_IMAGES.getFile();
-    }
-
-    public String getAlbums()
-    {
-        return applicationUrl + ALBUMS.getFile();
-    }
-
-    public String getAlbumHome()
-    {
-        return applicationUrl + ALBUM_HOME.getFile();
-    }
-
-    public String getAlbumImages()
-    {
-        return applicationUrl + ALBUM_IMAGES.getFile();
-    }
-
-    public String getComparisonUrl()
-    {
-        return applicationUrl + COMPARISON.getFile();
-    }
-
-    public String getLegalUrl()
-    {
-        return applicationUrl + LEGAL.getFile();
-    }
-
-    public String getSearchUrl()
-    {
-        return applicationUrl + SEARCH.getFile();
-    }
-
-    public String getDetailUrl()
-    {
-        return applicationUrl + DETAIL.getFile();
-    }
-
-    public String getHelpUrl()
-    {
-        return applicationUrl + HELP.getFile() + getContext();
     }
 
     public String getApplicationUrl()
@@ -137,84 +62,74 @@ public class Navigation implements Serializable
         return applicationUrl.substring(0, applicationUrl.length() - 1);
     }
 
-    public String getMyAlbumsUrl()
+    public String getDomain()
     {
-        return applicationUrl + MYALBUMS.getFile();
+        return applicationUrl.replaceAll("imeji/", "");
     }
 
-    public String getPublishedAlbums()
+    public String getHomeUrl()
     {
-        return applicationUrl + PUBLISHEDALBUM.getFile();
+        return applicationUrl + HOME.getPath();
     }
 
-    public String getAlbumsUrl()
+    public String getBrowseUrl()
     {
-        return applicationUrl + "albums";
+        return applicationUrl + BROWSE.getPath();
     }
 
-    public String getCollectionsUrl()
+    public String getItemUrl()
     {
-        return applicationUrl + "collections";
+        return applicationUrl + ITEM.getPath() + "/";
     }
 
     public String getCollectionUrl()
     {
-        return applicationUrl + "collection";
-    }
-
-    public String getPublicationsUrl()
-    {
-        return applicationUrl + "publications";
-    }
-
-    public String getAlbumsSearchUrl()
-    {
-        return applicationUrl + "albums/search";
-    }
-
-    public String getCreateAlbumUrl()
-    {
-        return applicationUrl + CREATEALBUM.getFile();
+        return applicationUrl + COLLECTION.getPath() + "/";
     }
 
     public String getAlbumUrl()
     {
-        return applicationUrl + ALBUM.getFile();
+        return applicationUrl + ALBUM.getPath() + "/";
+    }
+
+    public String getProfileUrl()
+    {
+        return applicationUrl + PROFILE.getPath() + "/";
+    }
+
+    public String getAlbumsUrl()
+    {
+        return applicationUrl + ALBUMS.getPath();
+    }
+
+    public String getCollectionsUrl()
+    {
+        return applicationUrl + COLLECTIONS.getPath();
+    }
+
+    public String getCreateCollectionUrl()
+    {
+        return applicationUrl + CREATE.getPath() + COLLECTION.getPath();
+    }
+
+    public String getCreateAlbumUrl()
+    {
+        return applicationUrl + CREATE.getPath() + ALBUM.getPath();
+    }
+
+    public String getSearchUrl()
+    {
+        return applicationUrl + SEARCH.getPath();
+    }
+
+    public String getHelpUrl()
+    {
+        return applicationUrl + HELP.getPath() + getContext();
     }
 
     public String getExportUrl()
     {
-        return applicationUrl + EXPORT.getFile();
-    }
-
-    public String getConfirmationUrl()
-    {
-        return applicationUrl + CONFIRMATION.getFile();
-    }
-
-    public String getEditAlbumUrl()
-    {
-        return applicationUrl + EDITALBUM.getFile();
-    }
-
-    public String getSearchResultUrl()
-    {
-        return applicationUrl + SEARCHRESULT.getFile();
-    }
-
-    public String getPersonUrl()
-    {
-        return applicationUrl + PERSON.getFile();
-    }
-
-    public String getLogOffUrl()
-    {
-        return applicationUrl + LOGOFF.getFile();
-    }
-
-    public String getStatisticsUrl()
-    {
-        return applicationUrl + STATISTICS.getFile();
+        return applicationUrl + EXPORT.getPath();
     }
 
     public String getBlogUrl() throws IOException, URISyntaxException
@@ -222,19 +137,37 @@ public class Navigation implements Serializable
         return PropertyReader.getProperty("escidoc.imeji.blog.url");
     }
 
-    public String getImpressumUrl() throws IOException, URISyntaxException
+    /*
+     * Paths
+     */
+    public String getCollectionPath()
     {
-        return PropertyReader.getProperty("escidoc.imeji.impressum.url");
+        return COLLECTION.path;
     }
 
-    public String getAlbumInterfaceUrl()
+    public String getInfosPath()
     {
-        return applicationUrl + ALBUM_INTERFACE.getFile();
+        return INFOS.path;
     }
 
-    public String getImagesUrl()
+    public String getBrowsePath()
     {
-        return applicationUrl + IMAGES.getFile();
+        return BROWSE.path;
+    }
+
+    public String getEditPath()
+    {
+        return EDIT.path;
+    }
+
+    public String getItemPath()
+    {
+        return ITEM.path;
+    }
+    
+    public String getUploadPath()
+    {
+        return UPLOAD.path;
     }
 
     /**
@@ -311,16 +244,22 @@ public class Navigation implements Serializable
         return context;
     }
 
-    public class Page implements Serializable
+    /**
+     * An html page
+     * 
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     */
+    public class Page
     {
         private String name;
-        private String file;
+        private String path;
 
         public Page(String name, String file)
         {
-            super();
             this.name = name;
-            this.file = file;
+            this.path = file;
         }
 
         public String getName()
@@ -333,14 +272,14 @@ public class Navigation implements Serializable
             this.name = name;
         }
 
-        public String getFile()
+        public String getPath()
         {
-            return file;
+            return path;
         }
 
-        public void setFile(String file)
+        public void setPath(String file)
         {
-            this.file = file;
+            this.path = file;
         }
     }
 }

@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -36,8 +38,8 @@ public class ObjectHelper
         catch (Exception e)
         {
             baseURI = "http://imeji.org/";
-//            throw new RuntimeException(
-//                    "Error reading property escidoc.imeji.instance.url. Check imeji.properties file.", e);
+            // throw new RuntimeException(
+            // "Error reading property escidoc.imeji.instance.url. Check imeji.properties file.", e);
         }
         j2jModel modelName = c.getAnnotation(j2jModel.class);
         if (modelName != null)
@@ -62,6 +64,12 @@ public class ObjectHelper
 
     public static String getId(URI uri)
     {
+        Pattern p = Pattern.compile("(.*)/(\\d+)");
+        Matcher m = p.matcher(uri.getPath());
+        if (m.matches())
+        {
+            return m.group(2);
+        }
         return uri.toString().substring(uri.toString().lastIndexOf("/"), uri.toString().length()).replace("/", "");
     }
 

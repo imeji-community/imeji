@@ -65,7 +65,7 @@
 	<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
 		<ui:include src="./include/History.xhtml"></ui:include><br/>
-			<h:outputLink value="#{Navigation.applicationUrl}images/album/#{AlbumImageBean.albumId}" styleClass="free_area1_p6 small_marginLIncl">
+			<h:outputLink value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}" styleClass="free_area1_p6 small_marginLIncl">
 				<h:outputText value="#{lbl.album_view_all_images}"/>
 			</h:outputLink>
 		</h:panelGroup>

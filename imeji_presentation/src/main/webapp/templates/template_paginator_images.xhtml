@@ -51,10 +51,10 @@
 					<h:outputText value=" / " styleClass="free_area0"/>
 					<h:outputText value="#{filter.internationalizedLabel} " styleClass="free_area0"/>
 					<h:outputText value="(#{filter.notDefineType})" styleClass="free_area0"	rendered="#{filter.notDefine}"/>
-					<h:outputLink value="#{Navigation.imagesUrl}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images'}" styleClass="free_area0 ">
+					<h:outputLink value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse'}" styleClass="free_area0 ">
 						<h:outputText value="[x]" styleClass="free_area0 "/>
 					</h:outputLink>
-					<h:outputLink value="#{Navigation.imagesUrl}/collection/#{paginatorListSessionBean.id}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString != 'pretty:images' and paginatorListSessionBean.collection != null}" styleClass="free_area0 ">
+					<h:outputLink value="#{Navigation.collectionUrl}/#{paginatorListSessionBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString != 'pretty:browse' and paginatorListSessionBean.collection != null}" styleClass="free_area0 ">
 						<h:outputText value="[x]" styleClass="free_area0 "/>
 					</h:outputLink>
 					<span style="padding-left: 1px" />
@@ -62,11 +62,11 @@
 				
 				<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements})" styleClass="free_area0 "/><span style="padding-left: 1px" />
 				
-				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
+				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
 					<h:outputText value="#{lbl.add_to_album}" styleClass="free_area0"/>
 				</a4j:commandLink>
 				
-				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:collectionImages' and paginatorListSessionBean.collection != null}">
+				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
 					
 					<span class="free_area0_p8 endline itemSelectArea">
 					<input type="button" class="min_imgBtn checkboxSelectButton"/>
@@ -98,7 +98,7 @@
 					</span>
 				</h:panelGroup>
 				
-				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:albumImages'}">
+				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">
 					<span class="free_area0_p8 endline itemSelectArea">
 					<input type="button" class="min_imgBtn checkboxSelectButton"/>
 						
@@ -130,11 +130,11 @@
 					<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}&#160;" styleClass="free_area0"/>
 				</h:panelGroup>
 				
-				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:images' and SessionBean.activeAlbum != null}">
+				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
 					<h:outputText styleClass="free_area0" value="#{lbl.add_to_album}"/>
 				</a4j:commandLink>
 			
-				<h:panelGroup styleClass="free_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionImages' and paginatorListSessionBean.collection != null}">
+				<h:panelGroup styleClass="free_area0" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
 					
 					<div type="button" class="min_imgBtn checkboxSelectButton">&#160;</div>
 				
@@ -170,7 +170,7 @@
 						</h:panelGroup>
 					</div>
 				</h:panelGroup>
-				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:albumImages'}">
+				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">
 					<span class="free_area0_p8 endline itemSelectArea">
 					<input type="button" class="min_imgBtn checkboxSelectButton"/>
 						
@@ -279,15 +279,12 @@
 				<!-- End images -->
 				</a4j:outputPanel>
 			</ul>
-			<h:panelGroup styleClass="fullItem"	rendered="#{paginatorListSessionBean.navigationString == 'pretty:selected'}">
-				<ui:insert name="subImagesContent"/>
-			</h:panelGroup>
 		</h:panelGroup>
 		
 
 		<!-- FACETS -->
-		<h:panelGroup layout="block" styleClass="full_area0 preListHeader" rendered="#{paginatorListSessionBean.navigationString != 'pretty:selected'}">
-			<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{ paginatorListSessionBean.navigationString != 'pretty:albumImages'}">
+		<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
+			<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{ paginatorListSessionBean.navigationString != 'pretty:albumBrowse'}">
 				<a4j:repeat var="groups" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
 					<h:panelGroup layout="block" style="margin:0 0.9090em;" styleClass="free_area0">
 					<a4j:repeat var="facets" value="#{groups}" rowKeyVar="index">

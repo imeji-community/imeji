@@ -39,7 +39,7 @@ public class CollectionFacets
         this.colURI = col.getId();
         MetadataProfile profile = ObjectCachedLoader.loadProfile(col.getProfile());
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        String baseURI = nav.getImagesUrl() + col.getId().getPath() + "?q=";
+        String baseURI = nav.getBrowseUrl() + col.getId().getPath() + "?q=";
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
         FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
         int count = 0;

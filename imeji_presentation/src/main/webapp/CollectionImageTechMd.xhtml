@@ -82,7 +82,7 @@
 			 	<ui:include src="./include/History.xhtml"></ui:include>
 			 </h:panelGroup>
 		
-			<h:outputLink value="#{Navigation.collectionImages}/#{CollectionImageBean.collectionId}?q=" styleClass="free_area1_p6 small_marginLIncl">
+			<h:outputLink value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/#{Navigation.browsePath}?q=" styleClass="free_area1_p6 small_marginLIncl">
 				<h:outputText value="#{lbl.collection_back_to_images}"/>
 			</h:outputLink>
 			

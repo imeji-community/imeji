@@ -11,7 +11,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -129,12 +128,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     @Override
     public String getNavigationString()
     {
-        if (sb.getSelectedImagesContext() != null && !(sb.getSelectedImagesContext().equals("pretty:images")))
+        if (sb.getSelectedImagesContext() != null && !(sb.getSelectedImagesContext().equals("pretty:browse")))
         {
             sb.getSelected().clear();
         }
-        sb.setSelectedImagesContext("pretty:images");
-        return "pretty:images";
+        sb.setSelectedImagesContext("pretty:browse");
+        return "pretty:browse";
     }
 
     @Override
@@ -341,7 +340,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 
     public String getBackUrl()
     {
-        return navigation.getImagesUrl();
+        return navigation.getBrowseUrl();
     }
 
     public String initFacets() throws Exception

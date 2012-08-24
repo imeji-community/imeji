@@ -81,7 +81,6 @@ public class SuggestBean
                     try
                     {
                         HttpClient client = new HttpClient();
-                        System.out.println(statement.getVocabulary().toString());
                         GetMethod getMethod = new GetMethod(statement.getVocabulary().toString()
                                 + URLEncoder.encode(suggest.toString(), "UTF-8"));
                         client.executeMethod(getMethod);

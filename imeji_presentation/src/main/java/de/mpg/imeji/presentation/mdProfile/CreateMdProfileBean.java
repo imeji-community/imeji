@@ -7,9 +7,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.presentation.beans.SessionBean;
-import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 public class CreateMdProfileBean extends MdProfileBean

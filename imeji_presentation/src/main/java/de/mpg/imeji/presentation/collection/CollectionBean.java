@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.collection;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
@@ -40,10 +39,11 @@ public abstract class CollectionBean
 
     private static Logger logger = Logger.getLogger(CollectionBean.class);
     private TabType tab = TabType.HOME;
-    private SessionBean sessionBean = null;
-    private CollectionImeji collection = null;
-    private MetadataProfile profile = null;
-    private String id = null;
+    private SessionBean sessionBean;
+    private CollectionImeji collection;
+    private MetadataProfile profile;
+    private String id;
+    private String profileId;
     private int authorPosition;
     private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
@@ -52,8 +52,9 @@ public abstract class CollectionBean
 
     public CollectionBean(CollectionImeji coll)
     {
-        this.collection = coll;
+        collection = coll;
         // setId(ObjectHelper.getId(coll.getId()));
+        profileId = ObjectHelper.getId(collection.getProfile());
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
@@ -359,6 +360,16 @@ public abstract class CollectionBean
     public void setProfile(MetadataProfile profile)
     {
         this.profile = profile;
+    }
+
+    public String getProfileId()
+    {
+        return profileId;
+    }
+
+    public void setProfileId(String profileId)
+    {
+        this.profileId = profileId;
     }
 
     public boolean isEditable()

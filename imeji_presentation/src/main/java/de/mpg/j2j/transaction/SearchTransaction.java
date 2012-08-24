@@ -2,9 +2,6 @@ package de.mpg.j2j.transaction;
 
 import java.util.List;
 
-import arq.arq;
-
-import com.hp.hpl.jena.query.ARQ;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -15,7 +12,6 @@ import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.sparql.mgt.Explain.InfoLevel;
 import com.hp.hpl.jena.tdb.TDB;
 
 import de.mpg.imeji.logic.search.util.SortHelper;
@@ -39,15 +35,7 @@ public class SearchTransaction extends Transaction
     @Override
     protected void execute(Dataset ds) throws Exception
     {
-        long a = System.currentTimeMillis();
-        // searchQuery += " OFFSET 29982 LIMIT 30000";
-        //searchQuery = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s  WHERE {?s <http://imeji.org/terms/metadataSet> ?mds .  exists{?mds <http://imeji.org/terms/metadata> ?md  .?md  <http://imeji.org/terms/statement> ?el  .FILTER(?el=<http://imeji.org/statement/43d6614e-c204-4f9d-8b67-1fa539f3f3a3>)}}";
-        //searchQuery = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s  WHERE {?s <http://imeji.org/terms/collection> <http://imeji.org/collection/37> . minus{ ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md  <http://imeji.org/terms/statement> ?el  .FILTER(?el=<http://imeji.org/statement/43d6614e-c204-4f9d-8b67-1fa539f3f3a3>)}}";
-
-        //System.out.println(searchQuery);
         Query q = QueryFactory.create(searchQuery, Syntax.syntaxARQ);
-        // System.out.println(q.serialize(Syntax.syntaxSPARQL_11));
-        //System.out.println(q.serialize(Syntax.defaultQuerySyntax));
         QueryExecution qexec = initQueryExecution(ds, q);
         qexec.getContext().set(TDB.symUnionDefaultGraph, true);
         qexec.setTimeout(20000);
@@ -60,7 +48,7 @@ public class SearchTransaction extends Transaction
         finally
         {
             qexec.close();
-            //System.out.println("SEARCH IN " + Long.valueOf(System.currentTimeMillis() - a));
+            // System.out.println("SEARCH IN " + Long.valueOf(System.currentTimeMillis() - a));
             count = false;
         }
     }

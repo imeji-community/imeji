@@ -6,6 +6,9 @@ package de.mpg.imeji.presentation.admin;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hp.hpl.jena.query.ReadWrite;
+import com.hp.hpl.jena.tdb.TDB;
+
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.AlbumController;
@@ -61,6 +64,18 @@ public class AdminBean
         }
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
         imejiBean2RDF.updateLazy(toReindex, sb.getUser());
+    }
+
+    public void closeDataSet()
+    {
+        try
+        {
+            ImejiJena.imejiDataSet.close();
+        }
+        finally
+        {
+            ImejiJena.imejiDataSet.end();
+        }
     }
 
     public int getAllAlbumsSize()

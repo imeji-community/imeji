@@ -315,12 +315,16 @@ public class AlbumBean
         AlbumController ac = new AlbumController(sessionBean.getUser());
         if (valid())
         {
-            //album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
+            // album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
             ac.updateLazy(album);
             BeanHelper.info(sessionBean.getMessage("success_album_update"));
             Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getApplicationUri() + getAlbum().getId().getPath() + "/details?init=1");
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            navigation.getAlbumUrl() + ObjectHelper.getId(getAlbum().getId()) + "/"
+                                    + navigation.getInfosPath() + "?init=1");
         }
         return "";
     }

@@ -5,7 +5,6 @@
 package de.mpg.imeji.presentation.beans;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URISyntaxException;
 
 import javax.faces.context.FacesContext;
@@ -19,7 +18,7 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
-public class LoginBean implements Serializable
+public class LoginBean
 {
     private String login;
     private String passwd;

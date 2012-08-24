@@ -2,8 +2,6 @@ package de.mpg.j2j.controler;
 
 import java.net.URI;
 
-import org.apache.log4j.Logger;
-
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
@@ -29,12 +27,6 @@ public class ResourceController
     private Model model = null;
     private Java2Jena java2rdf;
     private Jena2Java rdf2Java;
-    private static Logger logger = Logger.getLogger(ResourceController.class);
-
-//    public ResourceController(String modelURI)
-//    {
-//        this(modelURI, false);
-//    }
 
     /**
      * Use only without transaction
@@ -160,6 +152,4 @@ public class ResourceController
     {
         this.model = model;
     }
-
-
 }

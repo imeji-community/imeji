@@ -16,10 +16,9 @@ import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.ImejiController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
@@ -241,6 +240,11 @@ public class SessionBean
     public Album getActiveAlbum()
     {
         return activeAlbum;
+    }
+
+    public String getActiveAlbumId()
+    {
+        return ObjectHelper.getId(activeAlbum.getId());
     }
 
     public int getActiveAlbumSize()

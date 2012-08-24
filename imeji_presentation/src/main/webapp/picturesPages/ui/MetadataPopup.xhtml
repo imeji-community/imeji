@@ -42,13 +42,13 @@
 	
 	<h:panelGroup layout="block" class="free_area0_p8 medium_marginRExcl" style="float:right">
 		<h:panelGroup styleClass="viewFileIcon">
-			<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}/item/#{item.id}">
+			<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}">
 				<h:outputText value="#{lbl.view_detail}"/>
 			</h:outputLink>
 		</h:panelGroup>
 		
 		<h:panelGroup styleClass="editFileIcon xTiny_marginLExcl" rendered="#{item.editable}">
-			<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}/item/#{item.id}?edit=1">
+			<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}?edit=1">
 				<h:outputText value="#{lbl.metadata_edit}"/>
 			</h:outputLink>
 		</h:panelGroup>

@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.image;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +11,14 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
+import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -48,7 +48,7 @@ public class ThumbnailBean
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         uri = item.getId();
-        id = uri.getPath().split("/item/")[1];
+        id = ObjectHelper.getId(uri);
         link = item.getThumbnailImageUrl().toString();
         profile = item.getMetadataSet().getProfile();
         filename = item.getFilename();

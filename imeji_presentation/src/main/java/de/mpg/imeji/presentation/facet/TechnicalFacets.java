@@ -11,7 +11,6 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
@@ -34,7 +33,7 @@ public class TechnicalFacets
     {
         FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        String baseURI = nav.getImagesUrl() + "?q=";
+        String baseURI = nav.getBrowseUrl() + "?q=";
         List<Facet> techFacets = new ArrayList<Facet>();
         try
         {

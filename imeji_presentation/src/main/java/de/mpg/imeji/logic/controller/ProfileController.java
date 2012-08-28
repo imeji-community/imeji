@@ -47,7 +47,7 @@ public class ProfileController extends ImejiController
         writeCreateProperties(mdp, user);
         mdp.setStatus(Status.PENDING);
         imejiBean2RDF.create(imejiBean2RDF.toList(mdp), user);
-        addCreatorGrant(mdp, user);
+         addCreatorGrant(mdp, user);
         return mdp.getId();
     }
 

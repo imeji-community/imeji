@@ -46,6 +46,7 @@ public class UserCreationBean
             }
             catch (NotFoundException e)
             {
+                logger.info("User not found: will be created");
                 PasswordGenerator generator = new PasswordGenerator();
                 String password = generator.generatePassword();
                 user.setEncryptedPassword(UserController.convertToMD5(password));

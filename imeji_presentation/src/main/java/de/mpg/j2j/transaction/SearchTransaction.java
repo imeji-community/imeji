@@ -2,6 +2,8 @@ package de.mpg.j2j.transaction;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -22,6 +24,7 @@ public class SearchTransaction extends Transaction
     private List<String> results;
     private String modelName = null;
     private boolean count = false;
+    private static Logger logger = Logger.getLogger(SearchTransaction.class);
 
     public SearchTransaction(String modelName, String searchQuery, List<String> results, boolean count)
     {
@@ -48,7 +51,6 @@ public class SearchTransaction extends Transaction
         finally
         {
             qexec.close();
-            // System.out.println("SEARCH IN " + Long.valueOf(System.currentTimeMillis() - a));
             count = false;
         }
     }

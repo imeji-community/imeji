@@ -45,6 +45,12 @@ public class ImejiFactory
         coll.setMetadata(newContainerMetadata());
         return coll;
     }
+    
+    public static MetadataProfile newProfile()
+    {
+        MetadataProfile p = new MetadataProfile();
+        return p;
+    }
 
     public static ContainerMetadata newContainerMetadata()
     {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.j2j.transaction.SearchTransaction;
+import de.mpg.j2j.transaction.ThreadedTransaction;
 
 public class ImejiSPARQL
 {
@@ -21,11 +22,13 @@ public class ImejiSPARQL
     {
         List<String> results = new ArrayList<String>(1000);
         SearchTransaction transaction = new SearchTransaction(modelName, query, results, false);
-        transaction.start();
-        //transaction.waitForEnd();
+        ThreadedTransaction ts = new ThreadedTransaction(transaction);
+        ts.start();
+        ts.waitForEnd();
+        // transaction.start();
         try
         {
-            transaction.throwException();
+            ts.throwException();
         }
         catch (Exception e)
         {
@@ -46,7 +49,10 @@ public class ImejiSPARQL
         query = query.replace("SELECT DISTINCT ?s WHERE ", "SELECT count(DISTINCT ?s) WHERE ");
         List<String> results = new ArrayList<String>(1);
         SearchTransaction transaction = new SearchTransaction(modelName, query, results, true);
-        transaction.start();
+        ThreadedTransaction ts = new ThreadedTransaction(transaction);
+        ts.start();
+        ts.waitForEnd();
+        // transaction.start();
         try
         {
             transaction.throwException();

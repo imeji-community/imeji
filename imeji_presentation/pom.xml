@@ -77,10 +77,15 @@
 			<artifactId>richfaces-ui</artifactId>
 			<version>3.3.3.Final</version>
 		</dependency>
-		<dependency>
+		<!--  <dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-tdb</artifactId>
 			<version>0.9.4-SNAPSHOT</version>
+		</dependency>-->
+		  <dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-tdb</artifactId>
+			<version>0.9.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.escidoc.core</groupId>

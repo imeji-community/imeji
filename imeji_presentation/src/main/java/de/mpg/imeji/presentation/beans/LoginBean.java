@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.beans;
 
 import java.io.IOException;
@@ -23,7 +22,6 @@ public class LoginBean
     private String login;
     private String passwd;
     private SessionBean sb;
-    
     private static Logger logger = Logger.getLogger(LoginBean.class);
 
     public LoginBean()
@@ -61,17 +59,6 @@ public class LoginBean
             {
                 sb.setUser(user);
                 BeanHelper.info(sb.getMessage("success_log_in"));
-//                ((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class)).setSearchResult(null);
-//                ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class)).setSearchResult(null);
-//                ((AlbumImagesBean)BeanHelper.getSessionBean(AlbumImagesBean.class)).setSearchResult(null);
-                try
-                {
-                    createLoginStatisticData(user);
-                }
-                catch (Exception e)
-                {
-                    logger.error("Error creating statistical data", e);
-                }
             }
             else
             {
@@ -84,29 +71,26 @@ public class LoginBean
             BeanHelper.error(sb.getMessage("error_log_in"));
             BeanHelper.error(sb.getMessage("error_log_in_description"));
             logger.error("Problem logging in User", e);
-            
         }
         return "pretty:";
     }
-    
+
     public boolean loginWithEscidocAccount()
     {
-    	return false;
+        return false;
     }
-    
+
     public boolean loginWithImejiAccount()
     {
-    	return false;
+        return false;
     }
-    
-    
 
     public String logout()
     {
         sb.setUser(null);
         BeanHelper.info(sb.getMessage("success_log_out"));
         FacesContext fc = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+        HttpSession session = (HttpSession)fc.getExternalContext().getSession(false);
         session.invalidate();
         return "pretty:home";
     }
@@ -114,21 +98,20 @@ public class LoginBean
     private void createLoginStatisticData(User user) throws HttpException, ServiceException, IOException,
             URISyntaxException
     {
-        
-//        // Create a statistic data "visit" for statistics "number of visits"
-//        String statisticDataXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-//                + "<statistic-record><scope objid=\"1\"/>" + "<parameter name=\"handler\"><stringvalue>"
-//                + StatisticsBean.INSTANCE_ID + "</stringvalue></parameter>"
-//                + "<parameter name=\"request\"><stringvalue>login</stringvalue></parameter>"
-//                + "<parameter name=\"interface\"><stringvalue>SOAP</stringvalue></parameter>"
-//                + "<parameter name=\"successful\"><stringvalue>1</stringvalue></parameter>"
-//                + "<parameter name=\"internal\"><stringvalue>0</stringvalue></parameter>"
-//                + "<parameter name=\"user_id\"><stringvalue>" + user.getEmail() + "</stringvalue></parameter>"
-//                + "</statistic-record>";
-//        // StatisticsBean statisticsBean = (StatisticsBean) BeanHelper.getRequestBean(StatisticsBean.class);
-//        // ServiceLocator.getStatisticDataHandler(statisticsBean.getStatisitcsEditorHandle()).create(statisticDataXml);
-//        StatisticsBean statisticsBean = (StatisticsBean)BeanHelper.getApplicationBean(StatisticsBean.class);
-//        ServiceLocator.getStatisticDataHandler(statisticsBean.getAdminUserHandle()).create(statisticDataXml);
-        
+        // // Create a statistic data "visit" for statistics "number of visits"
+        // String statisticDataXml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+        // + "<statistic-record><scope objid=\"1\"/>" + "<parameter name=\"handler\"><stringvalue>"
+        // + StatisticsBean.INSTANCE_ID + "</stringvalue></parameter>"
+        // + "<parameter name=\"request\"><stringvalue>login</stringvalue></parameter>"
+        // + "<parameter name=\"interface\"><stringvalue>SOAP</stringvalue></parameter>"
+        // + "<parameter name=\"successful\"><stringvalue>1</stringvalue></parameter>"
+        // + "<parameter name=\"internal\"><stringvalue>0</stringvalue></parameter>"
+        // + "<parameter name=\"user_id\"><stringvalue>" + user.getEmail() + "</stringvalue></parameter>"
+        // + "</statistic-record>";
+        // // StatisticsBean statisticsBean = (StatisticsBean) BeanHelper.getRequestBean(StatisticsBean.class);
+        // //
+        // ServiceLocator.getStatisticDataHandler(statisticsBean.getStatisitcsEditorHandle()).create(statisticDataXml);
+        // StatisticsBean statisticsBean = (StatisticsBean)BeanHelper.getApplicationBean(StatisticsBean.class);
+        // ServiceLocator.getStatisticDataHandler(statisticsBean.getAdminUserHandle()).create(statisticDataXml);
     }
 }

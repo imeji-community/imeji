@@ -34,7 +34,6 @@ public class CRUDTransaction extends Transaction
 
     private void invokeResourceController(ResourceController rc, Object o) throws Exception
     {
-        //logger.info("Start: " + this.getId() + " " + getLockType() + " " + J2JHelper.getId(o));
         switch (type)
         {
             case CREATE:

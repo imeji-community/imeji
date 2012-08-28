@@ -3,9 +3,7 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -23,8 +21,6 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
@@ -124,7 +120,7 @@ public abstract class ImejiController
         {
             try
             {
-                ImejiRDF2Bean rdf2Bean = new ImejiRDF2Bean(null);
+                ImejiRDF2Bean rdf2Bean = new ImejiRDF2Bean(ImejiJena.counterModel);
                 c = (Counter)rdf2Bean.load(c.getId().toString(), ImejiJena.adminUser, c);
                 int id = c.getCounter();
                 logger.info("Counter : Requested id : " + id);
@@ -152,7 +148,7 @@ public abstract class ImejiController
         try
         {
             c.setCounter(c.getCounter() + 1);
-            ImejiBean2RDF bean2rdf = new ImejiBean2RDF(null);
+            ImejiBean2RDF bean2rdf = new ImejiBean2RDF(ImejiJena.counterModel);
             bean2rdf.update(bean2rdf.toList(c), ImejiJena.adminUser);
         }
         catch (Exception e)

@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.J2JHelper;
 import de.mpg.j2j.transaction.CRUDTransaction;
+import de.mpg.j2j.transaction.ThreadedTransaction;
 import de.mpg.j2j.transaction.Transaction;
 import de.mpg.j2j.transaction.TransactionOld;
 
@@ -32,7 +33,6 @@ public class ImejiRDF2Bean
     private static Logger logger = Logger.getLogger(ImejiRDF2Bean.class);
     private String modelURI;
     private boolean lazy = false;
-    private boolean asynchrone = false;
     private Security security = null;
 
     public ImejiRDF2Bean(String modelURI)
@@ -61,9 +61,13 @@ public class ImejiRDF2Bean
 
     public List<Object> load(List<Object> objects, User user) throws Exception
     {
-        Transaction transaction = new CRUDTransaction(objects, OperationsType.READ, modelURI, lazy);
-        transaction.start();
-        transaction.throwException();
+        Transaction t = new CRUDTransaction(objects, OperationsType.READ, modelURI, lazy);
+        ThreadedTransaction ts = new ThreadedTransaction(t);
+        ts.start();
+        ts.waitForEnd();
+        ts.throwException();
+//        transaction.start();
+//        transaction.throwException();
         checkSecurity(objects, user, OperationsType.READ);
         return objects;
     }

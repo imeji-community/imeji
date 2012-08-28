@@ -16,6 +16,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
+import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.j2j.helper.J2JHelper;
 import de.mpg.j2j.helper.LiteralHelper;
 import de.mpg.j2j.misc.LocalizedString;
@@ -32,7 +33,6 @@ public class Java2Jena
     private Model model;
     private LiteralHelper literalHelper;
     private static Logger logger = Logger.getLogger(Java2Jena.class);
-    // Lazy write is not working.
     private boolean lazy = false;
 
     public Java2Jena(Model model)
@@ -139,7 +139,6 @@ public class Java2Jena
         {
             return false;
         }
-        // Resource r = ResourceFactory.createResource(J2JHelper.getId(o).toString());
         Resource r = createResource(o);
         return model.contains(r, null);
     }
@@ -239,7 +238,7 @@ public class Java2Jena
             {
                 addLabel(s, (LocalizedString)obj);
             }
-            else if(J2JHelper.isList(f))
+            else if (J2JHelper.isList(f))
             {
                 addLiteral(s, obj, f);
             }
@@ -262,6 +261,11 @@ public class Java2Jena
         {
             Property p = model.createProperty(J2JHelper.getResourceNamespace(resourceObject));
             Resource o = createResource(resourceObject);// model.createResource(J2JHelper.getId(resourceObject).toString());
+            logger.info("model add resource: " + s + " - " + p + " - " + o);
+            if (o == null)
+            {
+                logger.error("Null resource!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
             model.add(s, p, o);
             addProperties2Resource(o, resourceObject);
         }

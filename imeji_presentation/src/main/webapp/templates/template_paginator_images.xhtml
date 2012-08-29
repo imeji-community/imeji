@@ -65,7 +65,7 @@
 				<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
 					<h:outputText value="#{lbl.add_to_album}" styleClass="free_area0"/>
 				</a4j:commandLink>
-				
+
 				<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
 					
 					<span class="free_area0_p8 endline itemSelectArea">

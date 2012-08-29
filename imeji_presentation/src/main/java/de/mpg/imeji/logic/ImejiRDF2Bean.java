@@ -19,7 +19,6 @@ import de.mpg.j2j.helper.J2JHelper;
 import de.mpg.j2j.transaction.CRUDTransaction;
 import de.mpg.j2j.transaction.ThreadedTransaction;
 import de.mpg.j2j.transaction.Transaction;
-import de.mpg.j2j.transaction.TransactionOld;
 
 /**
  * Interface for read operations from Jena. Implements security and transaction.
@@ -62,12 +61,8 @@ public class ImejiRDF2Bean
     public List<Object> load(List<Object> objects, User user) throws Exception
     {
         Transaction t = new CRUDTransaction(objects, OperationsType.READ, modelURI, lazy);
-        ThreadedTransaction ts = new ThreadedTransaction(t);
-        ts.start();
-        ts.waitForEnd();
-        ts.throwException();
-//        transaction.start();
-//        transaction.throwException();
+        t.start();
+        t.throwException();
         checkSecurity(objects, user, OperationsType.READ);
         return objects;
     }

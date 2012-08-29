@@ -16,7 +16,6 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
-import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.j2j.helper.J2JHelper;
 import de.mpg.j2j.helper.LiteralHelper;
 import de.mpg.j2j.misc.LocalizedString;
@@ -48,7 +47,7 @@ public class Java2Jena
         this.lazy = lazy;
     }
 
-    /**
+    /** 
      * Write a {@link Object} in Jena
      * 
      * @param r
@@ -261,11 +260,6 @@ public class Java2Jena
         {
             Property p = model.createProperty(J2JHelper.getResourceNamespace(resourceObject));
             Resource o = createResource(resourceObject);// model.createResource(J2JHelper.getId(resourceObject).toString());
-            logger.info("model add resource: " + s + " - " + p + " - " + o);
-            if (o == null)
-            {
-                logger.error("Null resource!!!!!!!!!!!!!!!!!!!!!!!!");
-            }
             model.add(s, p, o);
             addProperties2Resource(o, resourceObject);
         }
@@ -332,7 +326,7 @@ public class Java2Jena
      * @param r
      * @return
      */
-    private List<Resource> getEmbeddedResources(Resource s, Object r)
+    public List<Resource> getEmbeddedResources(Resource s, Object r)
     {
         List<Resource> l = new ArrayList<Resource>();
         for (Field f : J2JHelper.getAllObjectFields(r.getClass()))
@@ -377,10 +371,6 @@ public class Java2Jena
                 {
                     throw new RuntimeException("Error getting all embedded resources for " + r, e);
                 }
-            }
-            else
-            {
-                System.out.println("LAZY EMBEDDED RESOURCE");
             }
         }
         return l;

@@ -33,15 +33,17 @@ public class AdvancedSearchBean
 {
     private SearchFormular formular = null;
     // Menus
-    private List<SelectItem> collectionsMenu = new ArrayList<SelectItem>();
-    private List<SelectItem> operatorsMenu = new ArrayList<SelectItem>();
-    private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    private List<SelectItem> collectionsMenu;
+    private List<SelectItem> operatorsMenu;
+    private SessionBean session;
     private static Logger logger = Logger.getLogger(AdvancedSearchBean.class);
 
     public AdvancedSearchBean()
     {
+        operatorsMenu = new ArrayList<SelectItem>();
         operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND, session.getLabel("and")));
         operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session.getLabel("or")));
+        session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
     public String getNewSearch()
@@ -62,7 +64,7 @@ public class AdvancedSearchBean
     public void initFormular(SearchQuery searchQuery) throws Exception
     {
         Map<String, CollectionImeji> cols = loadCollections();
-        Map<String, MetadataProfile> profs = loadProfiles(cols.values());
+        Map<String, MetadataProfile> profs = loadProfilesAndInitCollectionsMenu(cols.values());
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init1((new ArrayList<MetadataProfile>(profs
                 .values())));
         formular = new SearchFormular(searchQuery, cols, profs);
@@ -89,10 +91,10 @@ public class AdvancedSearchBean
         return map;
     }
 
-    private Map<String, MetadataProfile> loadProfiles(Collection<CollectionImeji> collections)
+    private Map<String, MetadataProfile> loadProfilesAndInitCollectionsMenu(Collection<CollectionImeji> collections)
     {
         collectionsMenu = new ArrayList<SelectItem>();
-        collectionsMenu.add(new SelectItem(null, "Select collection"));
+        collectionsMenu.add(new SelectItem(null, session.getLabel("select_collection")));
         Map<String, MetadataProfile> map = new HashMap<String, MetadataProfile>();
         for (CollectionImeji c : collections)
         {

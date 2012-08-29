@@ -69,11 +69,14 @@ public class FormularGroup
 
     public void initStatementsMenu(MetadataProfile p)
     {
-        for (Statement st : p.getStatements())
+        if (p.getStatements() != null)
         {
-            String stName = ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class))
-                    .getInternationalizedLabels().get(st.getId());
-            statementMenu.add(new SelectItem(st.getId().toString(), stName));
+            for (Statement st : p.getStatements())
+            {
+                String stName = ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class))
+                        .getInternationalizedLabels().get(st.getId());
+                statementMenu.add(new SelectItem(st.getId().toString(), stName));
+            }
         }
     }
 

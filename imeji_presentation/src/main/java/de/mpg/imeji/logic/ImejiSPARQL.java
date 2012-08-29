@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.search;
+package de.mpg.imeji.logic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,15 @@ import java.util.List;
 import de.mpg.j2j.transaction.SearchTransaction;
 import de.mpg.j2j.transaction.ThreadedTransaction;
 
+/**
+ * 
+ * Manage search (sparql) transaction
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class ImejiSPARQL
 {
     /**
@@ -22,13 +31,10 @@ public class ImejiSPARQL
     {
         List<String> results = new ArrayList<String>(1000);
         SearchTransaction transaction = new SearchTransaction(modelName, query, results, false);
-        ThreadedTransaction ts = new ThreadedTransaction(transaction);
-        ts.start();
-        ts.waitForEnd();
-        // transaction.start();
+        transaction.start();
         try
         {
-            ts.throwException();
+            transaction.throwException();
         }
         catch (Exception e)
         {

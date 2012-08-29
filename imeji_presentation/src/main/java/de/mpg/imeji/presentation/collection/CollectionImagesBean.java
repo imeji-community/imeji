@@ -69,13 +69,13 @@ public class CollectionImagesBean extends ImagesBean
         {
             if (sb.getSelectedImagesContext() != null
                     && !(sb.getSelectedImagesContext()
-                            .equals("pretty:collectionImages" + collection.getId().toString())))
+                            .equals("pretty:collectionBrowse" + collection.getId().toString())))
             {
                 sb.getSelected().clear();
             }
-            sb.setSelectedImagesContext("pretty:collectionImages" + collection.getId().toString());
+            sb.setSelectedImagesContext("pretty:collectionBrowse" + collection.getId().toString());
         }
-        return "pretty:collectionImages";
+        return "pretty:collectionBrowse";
     }
 
     @Override
@@ -131,7 +131,7 @@ public class CollectionImagesBean extends ImagesBean
     {
         searchQuery = URLQueryTransformer.parseStringQuery(getQuery());
         setFacets(new FacetsBean(collection, searchQuery));
-        return "pretty";
+        return "";
     }
 
     public String getBackUrl()
@@ -173,7 +173,7 @@ public class CollectionImagesBean extends ImagesBean
             BeanHelper.error(e.getMessage());
             e.printStackTrace();
         }
-        return "pretty:";
+        return "pretty";
     }
 
     public String delete()

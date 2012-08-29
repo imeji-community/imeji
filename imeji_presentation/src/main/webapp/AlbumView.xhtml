@@ -47,7 +47,7 @@
 				
 				<h:outputText styleClass="seperator void" />
 				
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
 					<h:outputText value="#{lbl.view_images}"/>
 				</h:outputLink>
 				

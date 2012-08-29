@@ -18,7 +18,7 @@ import de.escidoc.core.client.ItemHandlerClient;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
-import de.mpg.imeji.logic.search.ImejiSPARQL;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -39,7 +39,6 @@ import de.mpg.j2j.helper.J2JHelper;
 
 public class ItemController extends ImejiController
 {
-    private int MAXIMUM_LOADS_PER_TRANSACTION = 1000;
     private static Logger logger = null;
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
@@ -99,19 +98,12 @@ public class ItemController extends ImejiController
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
         List<Object> imBeans = new ArrayList<Object>();
-        logger.info("before init");
-        long beforeinit = System.currentTimeMillis();
         for (Item item : items)
         {
             writeUpdateProperties(item, user);
             imBeans.add(createFulltextForMetadata(item));
         }
-        long afterinit = System.currentTimeMillis();
-        logger.info("upadate item initialized = " + Long.valueOf(afterinit - beforeinit));
-        long before = System.currentTimeMillis();
         imejiBean2RDF.update(imBeans, user);
-        long after = System.currentTimeMillis();
-        logger.info("item controller update = " + Long.valueOf(after - before));
     }
 
     private Item createFulltextForMetadata(Item item)

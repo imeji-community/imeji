@@ -92,31 +92,6 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         initMenus();
     }
 
-    // public SearchCriterion getFilterOld()
-    // {
-    // SearchCriterion sc = null;
-    // if ("my".equals(selectedFilter))
-    // {
-    // sc = new SearchCriterion(Operator.AND, SearchIndexes.MY_IMAGES, ObjectHelper.getURI(User.class,
-    // sb.getUser().getEmail()).toString(), Filtertype.URI);
-    // }
-    // else if ("private".equals(selectedFilter))
-    // {
-    // sc = new SearchCriterion(Operator.AND, SearchIndexes.PROPERTIES_STATUS,
-    // "<http://imeji.org/terms/status#PENDING", Filtertype.URI);
-    // }
-    // else if ("public".equals(selectedFilter))
-    // {
-    // sc = new SearchCriterion(Operator.AND, SearchIndexes.PROPERTIES_STATUS,
-    // "<http://imeji.org/terms/status#RELEASED", Filtertype.URI);
-    // }
-    // else if ("withdrawn".equals(selectedFilter))
-    // {
-    // sc = new SearchCriterion(Operator.AND, SearchIndexes.PROPERTIES_STATUS,
-    // "<http://imeji.org/terms/status#WITHDRAWN", Filtertype.URI);
-    // }
-    // return sc;
-    // }
     public SearchPair getFilter()
     {
         SearchPair pair = null;
@@ -128,17 +103,17 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         else if ("private".equals(selectedFilter))
         {
             pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.URI,
-                    "<http://imeji.org/terms/status#PENDING");
+                    "http://imeji.org/terms/status#PENDING");
         }
         else if ("public".equals(selectedFilter))
         {
             pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.URI,
-                    "<http://imeji.org/terms/status#RELEASED");
+                    "http://imeji.org/terms/status#RELEASED");
         }
         else if ("withdrawn".equals(selectedFilter))
         {
             pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.URI,
-                    "<http://imeji.org/terms/status#WITHDRAWN");
+                    "http://imeji.org/terms/status#WITHDRAWN");
         }
         return pair;
     }

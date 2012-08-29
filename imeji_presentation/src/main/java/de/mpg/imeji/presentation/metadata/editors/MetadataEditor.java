@@ -6,8 +6,6 @@ package de.mpg.imeji.presentation.metadata.editors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
@@ -22,9 +20,8 @@ public abstract class MetadataEditor
     protected List<Item> items = new ArrayList<Item>();
     protected Statement statement;
     protected MetadataProfile profile;
-    // protected Validator validator;
-    private static Logger logger = Logger.getLogger(MetadataEditor.class);
 
+    // protected Validator validator;
     /**
      * Editor: Edit a list of images for one statement.
      * 
@@ -50,19 +47,15 @@ public abstract class MetadataEditor
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         ItemController ic = new ItemController(sb.getUser());
-        logger.info("Start Save update");
         try
         {
             if (prepareUpdate())
             {
-                logger.info("update prepared");
                 if (validateMetadataofImages())
                 {
-                    logger.info("update validate");
                     try
                     {
                         addPositionToMetadata();
-                        logger.info("update position md added");
                         ic.update(items);
                         BeanHelper.info(sb.getMessage("success_editor_edit"));
                         String str = items.size() + " " + sb.getMessage("success_editor_images");

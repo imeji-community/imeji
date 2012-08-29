@@ -14,6 +14,7 @@ import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.tdb.TDB;
 
 import de.mpg.imeji.logic.search.util.SortHelper;
@@ -98,10 +99,19 @@ public class SearchTransaction extends Transaction
     private String readResult(ResultSet results)
     {
         QuerySolution qs = results.nextSolution();
-        Literal l = qs.getLiteral("sort0");
-        if (l != null)
+        RDFNode rdfNode = qs.get("sort0");
+        if (rdfNode != null)
         {
-            return SortHelper.addSortValue(qs.getResource("s").toString(), qs.getLiteral("sort0").toString());
+            String sortValue = "";
+            if (rdfNode.isLiteral())
+            {
+                sortValue = rdfNode.asLiteral().toString();
+            }
+            else if (rdfNode.isURIResource())
+            {
+                sortValue = rdfNode.asResource().getURI();
+            }
+            return SortHelper.addSortValue(qs.getResource("s").toString(), sortValue);
         }
         return qs.getResource("s").toString();
     }

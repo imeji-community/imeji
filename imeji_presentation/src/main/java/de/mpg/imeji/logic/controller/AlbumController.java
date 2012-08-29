@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
-import de.mpg.imeji.logic.search.ImejiSPARQL;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -30,7 +30,6 @@ public class AlbumController extends ImejiController
 {
     private static ImejiRDF2Bean imejiRDF2Bean = null;
     private static ImejiBean2RDF imejiBean2RDF = null;
-    private static Logger logger = Logger.getLogger(CollectionController.class);
 
     public AlbumController(User user)
     {

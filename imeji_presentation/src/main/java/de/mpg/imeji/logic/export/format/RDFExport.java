@@ -1,6 +1,5 @@
 package de.mpg.imeji.logic.export.format;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.Map;
@@ -88,10 +87,7 @@ public abstract class RDFExport extends Export
                 try
                 {
                     writer.append(openTag(st, st.getResource().getURI()));
-                    if (st.getResource().getURI() == null)
-                    {
-                        writer.append(exportResource(st.getResource()).getBuffer());
-                    }
+                    writer.append(exportResource(st.getResource()).getBuffer());
                 }
                 catch (Exception e)
                 {

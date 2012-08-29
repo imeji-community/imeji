@@ -24,9 +24,7 @@ public class SortHelper
         if (SortHelper.isListToSort(l))
         {
             List<ComparableSearchResult> csrl = SortHelper.toComparableSearchResultList(l, order);
-            long a = System.currentTimeMillis();
             Collections.sort(csrl);
-            System.out.println("Sort: " + Long.valueOf(System.currentTimeMillis() - a));
             return toStringList(csrl);
         }
         return SortHelper.removeSortValue(l);
@@ -87,13 +85,11 @@ public class SortHelper
 
     public final static List<ComparableSearchResult> toComparableSearchResultList(List<String> l, SortOrder order)
     {
-        long a = System.currentTimeMillis();
         List<ComparableSearchResult> csrl = new ArrayList<ComparableSearchResult>(l.size());
         for (String s : l)
         {
             csrl.add(new ComparableSearchResult(s, order));
         }
-        System.out.println("toComparableSearchResultList: " + Long.valueOf(System.currentTimeMillis() - a));
         return csrl;
     }
 }

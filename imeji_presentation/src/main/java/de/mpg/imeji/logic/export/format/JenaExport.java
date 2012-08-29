@@ -11,7 +11,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.export.Export;
@@ -56,10 +55,11 @@ public class JenaExport extends Export
         {
             try
             {
-                //ImejiJena.imejiDataSet.begin(ReadWrite.READ);
+                ImejiJena.imejiDataSet.begin(ReadWrite.READ);
                 Model m = ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel);
                 Resource resource = m.getResource(s);
                 exportResource(resource, exportModel);
+                ImejiJena.imejiDataSet.commit();
             }
             catch (Exception e)
             {
@@ -67,7 +67,7 @@ public class JenaExport extends Export
             }
             finally
             {
-                //ImejiJena.imejiDataSet.commit();
+                ImejiJena.imejiDataSet.end();
             }
         }
         return exportModel;
@@ -87,6 +87,7 @@ public class JenaExport extends Export
             Statement st = iterator.next();
             try
             {
+                exportResource(st.getResource(), m);
                 if (st.getResource().getURI() == null)
                 {
                     exportResource(st.getResource(), m);

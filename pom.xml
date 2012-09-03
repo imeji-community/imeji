@@ -146,7 +146,7 @@
 			<url>http://repository.prime.com.tr</url>
 			<layout>default</layout>
 		</repository>
-		
+
 		<repository>
 			<id>apache-repo-snapshots</id>
 			<url>https://repository.apache.org/content/repositories/snapshots/</url>
@@ -206,20 +206,7 @@
 				<version>1.0-beta-2</version>
 			</extension>
 		</extensions>
-		<!-- if no tests are present don't fail the complete package process -->
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<configuration>
-						<!-- if there are no tests, don't bail out -->
-						<failIfNoTests>false</failIfNoTests>
-						<!-- avoid the outofmemory exception thrown in some test scenarios -->
-						<argLine>-Xmx1000M</argLine>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -244,20 +231,25 @@
 	<reporting>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.8.1</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.3</version>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>taglist-maven-plugin</artifactId>
+				<version>2.4</version>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
+				<version>2.7.1</version>
 				<configuration>
 					<sourceEncoding>utf-8</sourceEncoding>
 					<minimumTokens>100</minimumTokens>
@@ -267,10 +259,12 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>changelog-maven-plugin</artifactId>
+				<version>2.2</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.9.1</version>
 				<configuration>
 					<configLocation>http://escidoc1.escidoc.mpg.de/resources/checkstyle/checkstyle.xml</configLocation>
 				</configuration>
@@ -279,12 +273,14 @@
 				<!-- JavaNCSS - A Source Measurement Suite for Java http://www.kclee.de/clemens/java/javancss/ -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>javancss-maven-plugin</artifactId>
+				<version>2.0</version>
 			</plugin>
 			<plugin>
 				<!-- A Java package dependency analyzer that generates design quality 
 					metrics http://clarkware.com/software/JDepend.html -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jdepend-maven-plugin</artifactId>
+				<version>2.0-beta-2</version>
 			</plugin>
 		</plugins>
 	</reporting>
@@ -299,7 +295,8 @@
 				<plugins>
 					<plugin>
 						<groupId>org.zeroturnaround</groupId>
-						<artifactId>javarebel-maven-plugin</artifactId>
+						<!-- new declare format -->
+						<artifactId>jrebel-maven-plugin</artifactId>
 						<executions>
 							<execution>
 								<id>generate-rebel-xml</id>
@@ -308,19 +305,54 @@
 									<goal>generate</goal>
 								</goals>
 							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>org.codehaus.plexus</groupId>
-								<artifactId>plexus-utils</artifactId>
-								<version>1.4.1</version>
-								<scope>runtime</scope>
-							</dependency>
-						</dependencies>
-					</plugin>
+						    </executions>
+					</plugin>				
 				</plugins>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.m2e</groupId>
+							<artifactId>lifecycle-mapping</artifactId>
+							<version>1.0.0</version>
+							<configuration>
+								<lifecycleMappingMetadata>
+									<pluginExecutions>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.zeroturnaround</groupId>
+												<artifactId>jrebel-maven-plugin</artifactId>
+												<versionRange>1.1</versionRange>
+												<goals>
+													<goal>generate</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<execute />
+											</action>
+										</pluginExecution>
+									</pluginExecutions>
+								</lifecycleMappingMetadata>
+							</configuration>
+						</plugin>
+
+						<plugin>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<configuration>
+								<!-- if there are no tests, don't bail out -->
+								<failIfNoTests>false</failIfNoTests>
+								<!-- avoid the outofmemory exception thrown in some test scenarios -->
+								<argLine>-Xmx1000M</argLine>
+							</configuration>
+						</plugin>
+
+					</plugins>
+
+				</pluginManagement>
 			</build>
 			<properties>
+				<!-- TO avoid warning File encoding has not been set, using platform 
+					encoding Cp1252, i.e. build is platform dependent! -->
+				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
 				<jdk.version>1.5</jdk.version>
 
@@ -422,6 +454,7 @@
 				</site>
 			</distributionManagement>
 		</profile>
+
 		<!-- Profile for automated deploy -->
 		<profile>
 			<id>env-testing-continuum</id>

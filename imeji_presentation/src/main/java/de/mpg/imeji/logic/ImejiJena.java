@@ -12,7 +12,6 @@ import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.tdb.sys.SystemTDB;
 
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.Counter;
@@ -45,8 +44,8 @@ public class ImejiJena
     {
         try
         {
-            // tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-            tdbPath = "C:\\Projects\\Imeji\\tdb\\test";
+            tdbPath = PropertyReader.getProperty("imeji.tdb.path");
+            // tdbPath = "C:\\Projects\\Imeji\\tdb\\test";
         }
         catch (Exception e)
         {

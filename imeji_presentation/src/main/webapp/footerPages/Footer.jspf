@@ -40,6 +40,7 @@
 		<div class="full_area0">
 		<!-- begin: footer section-->
 			<div class="huge_area0">&#160;</div>
+			<h:outputText value="#{SessionBean.version}"/>
 			<!--  <div class="huge_area0"> <span id="themeSelector" class="xTiny_marginRExcl"></span><h:outputLabel value="Theme" styleClass="small_label"/></div>-->
 			&#160;
 		<!-- end: footer section -->

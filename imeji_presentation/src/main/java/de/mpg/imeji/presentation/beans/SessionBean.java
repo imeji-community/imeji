@@ -23,6 +23,7 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 public class SessionBean
 {
@@ -110,6 +111,11 @@ public class SessionBean
     public String getSelectedMetadataBundle()
     {
         return METADATA_BUNDLE + "_" + locale.getLanguage();
+    }
+
+    public String getVersion()
+    {
+        return PropertyReader.getVersion();
     }
 
     public void toggleLocale(ActionEvent event)

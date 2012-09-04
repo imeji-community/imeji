@@ -410,10 +410,10 @@
 				<escidoc.cone.isos639_1.all>http://pubman.mpdl.mpg.de/cone/iso639-1/all</escidoc.cone.isos639_1.all>
 
 				<!-- Blog's URL -->
-				<escidoc.imeji.blog.url />
+				<escidoc.imeji.blog.url>https://twitter.com/imeji_org</escidoc.imeji.blog.url>
 
 				<!-- Blog's RSS feed URL -->
-				<escidoc.imeji.blog.rss.url>http://www.nims.go.jp/eng/news/nims.xml</escidoc.imeji.blog.rss.url>
+				<escidoc.imeji.blog.rss.url>https://twitter.com/statuses/user_timeline/imeji_org.rss</escidoc.imeji.blog.rss.url>
 
 				<!-- Help URL -->
 				<escidoc.imeji.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.imeji.help.url>

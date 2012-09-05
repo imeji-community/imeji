@@ -8,7 +8,7 @@
 	<name>imeji</name>
 	<url>http://imeji.org</url>
 	<description>
-		http://colab.mpdl.mpg.de/mediawiki/Imeji
+		http://colab.mpdl.mpg.de/mediawiki/imeji
 	</description>
 	<licenses>
 		<license>
@@ -122,9 +122,9 @@
 	</modules>
 
 	<scm>
-		<connection>scm:git@github.com:bastienMPDL/Imeji.git</connection>
-		<developerConnection>scm:git@github.com:bastienMPDL/Imeji.git</developerConnection>
-		<url>https://bastienMPDL@github.com/bastienMPDL/Imeji.git</url>
+		<connection>scm:git@github.com:bastienMPDL/imeji.git</connection>
+		<developerConnection>scm:git@github.com:bastienMPDL/imeji.git</developerConnection>
+		<url>https://bastienMPDL@github.com/bastienMPDL/imeji.git</url>
 	</scm>
 
 	<repositories>
@@ -378,18 +378,18 @@
 				<!-- <jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir> -->
 
 
-				<!-- Identifier of the content model "Imeji" in the current framework 
+				<!-- Identifier of the content model "imeji" in the current framework 
 					instance -->
 				<escidoc.imeji.content-model.id>escidoc:14001</escidoc.imeji.content-model.id>
 
-				<!-- Identifier of the context of "Imeji" in the current framework instance -->
+				<!-- Identifier of the context of "imeji" in the current framework instance -->
 				<escidoc.imeji.context.id>escidoc:13001</escidoc.imeji.context.id>
 
-				<!-- Identifier of the content model " Imeji Container Content Model" 
+				<!-- Identifier of the content model " imeji Container Content Model" 
 					in the current framework instance -->
 				<escidoc.imeji.container.content-model.id>escidoc:faces60</escidoc.imeji.container.content-model.id>
 
-				<!-- Indentifier of the content model "Imeji collection content model": 
+				<!-- Indentifier of the content model "imeji collection content model": 
 					Not persistent, created only on dev so far -->
 				<escidoc.imeji.collection.content-model.id>escidoc:194286</escidoc.imeji.collection.content-model.id>
 

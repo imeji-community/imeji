@@ -12,9 +12,9 @@
 	<version>0.1</version>
 	
 	<scm>
-		<connection>scm:git:git@github.com:MPDL/Imeji.git</connection>
-		<developerConnection>scm:git:git@github.com:MPDL/Imeji.git</developerConnection>
-		<url>https://bastienMPDL@github.com/MPDL/Imeji.git</url>
+		<connection>scm:git:git@github.com:MPDL/imeji.git</connection>
+		<developerConnection>scm:git:git@github.com:MPDL/imeji.git</developerConnection>
+		<url>https://bastienMPDL@github.com/MPDL/imeji.git</url>
 	</scm>
 	
 	<build>

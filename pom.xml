@@ -416,7 +416,7 @@
 				<escidoc.imeji.blog.rss.url>https://twitter.com/statuses/user_timeline/imeji_org.rss</escidoc.imeji.blog.rss.url>
 
 				<!-- Help URL -->
-				<escidoc.imeji.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.imeji.help.url>
+				<escidoc.imeji.help.url>https://raw.github.com/imeji-community/imeji/master/imeji_static/imeji_help.html</escidoc.imeji.help.url>
 
 				<!-- pagination ajax -->
 				<imeji.pagination.ajaxmodus>true</imeji.pagination.ajaxmodus>

@@ -40,10 +40,10 @@ public class AdvancedSearchBean
 
     public AdvancedSearchBean()
     {
+        session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         operatorsMenu = new ArrayList<SelectItem>();
         operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND, session.getLabel("and")));
         operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session.getLabel("or")));
-        session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
     public String getNewSearch()

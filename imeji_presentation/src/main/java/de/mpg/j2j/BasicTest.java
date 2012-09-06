@@ -25,7 +25,7 @@ public class BasicTest
     public static void main(String[] args) throws Exception
     {
         jenaInitTest();
-        //imejiInitTest();
+        imejiInitTest();
         System.out.println("all done.");
     }
 

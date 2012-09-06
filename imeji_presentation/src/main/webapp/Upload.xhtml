@@ -138,19 +138,19 @@
 						<br style="clear: both"/>
 							
 						<br />
-						<div class="messageError" >	
+						<h:panelGroup styleClass="half_area2_p6 messageArea errorMessageArea"  rendered="#{UploadBean.fNum > 0}">	
 							<br />
-							<h:outputText value ="#{UploadBean.fNum} files failed:" rendered="#{UploadBean.fNum > 0}"/><br />
+							<h2><h:outputText value ="#{UploadBean.fNum} #{msg.error_upload}:"/><br /></h2>
 							<a4j:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}" rowKeyVar="indexf">
 								<h:outputText value="#{fFile}" /><br />
 							</a4j:repeat>					
-						</div>
-						<div >
-							<h:outputText value="#{UploadBean.sNum} files uploaded successfully:" rendered="#{UploadBean.sNum > 0}"/><br />
+						</h:panelGroup>
+						<h:panelGroup styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{UploadBean.sNum > 0}">
+							<h2><h:outputText value="#{UploadBean.sNum} #{msg.success_upload}:" /><br /></h2>
 							<a4j:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}" rowKeyVar="indexs">
 								<h:outputText value="#{sFile}" /><br />
 							</a4j:repeat>
-						</div>
+						</h:panelGroup>
 	
 					</div>
 

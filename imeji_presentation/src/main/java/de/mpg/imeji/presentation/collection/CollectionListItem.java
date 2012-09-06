@@ -117,6 +117,7 @@ public class CollectionListItem
         catch (Exception e)
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_release"));
+            BeanHelper.error(sessionBean.getMessage(e.getMessage()));
             logger.error(sessionBean.getMessage("error_collection_release"), e);
         }
         return "pretty:";

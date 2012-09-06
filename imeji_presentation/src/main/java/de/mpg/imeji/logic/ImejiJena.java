@@ -45,7 +45,7 @@ public class ImejiJena
         try
         {
             tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-            // tdbPath = "C:\\Projects\\Imeji\\tdb\\test";
+            //tdbPath = "C:\\Projects\\Imeji\\tdb\\testjena";
         }
         catch (Exception e)
         {

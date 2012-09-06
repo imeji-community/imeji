@@ -320,7 +320,7 @@ public class EditImageMetadataBean
         initialized = false;
         unlockImages();
         HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
-        FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getPreviousPage().getUri().toString());
+        FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getPreviousPage().getUri().toString().replace("?h=", ""));
     }
 
     public String clearAll()

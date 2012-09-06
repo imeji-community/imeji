@@ -40,6 +40,7 @@
 	<ui:composition template="template.xhtml">
 							
 		<ui:define name="mainContent" >
+			<h:outputText value="#{ImageBean.init}"/>
 			<div class="full_area0 paginator">
 			<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
 			 		
@@ -86,20 +87,20 @@
 					<div class="fullItemControls">
 						<h:panelGroup styleClass="seperator" />
 						
-						<h:outputLink id="lnkViewItemMdPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}?tab=techmd" rendered="#{imageBean.tab == 'TECHMD'}">
+						<h:outputLink id="lnkViewItemMdPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}?tab=techmd" rendered="#{imageBean.tab == 'techmd'}">
 							<h:outputText value="#{lbl.view_tech_md}"/>
 						</h:outputLink>
 						
-						<h:outputLink id="lnkViewItemMdPage2" styleClass="free_area0" value="#{imageBean.pageUrl}?tab=techmd" rendered="#{imageBean.tab != 'TECHMD'}">
+						<h:outputLink id="lnkViewItemMdPage2" styleClass="free_area0" value="#{imageBean.pageUrl}?tab=techmd" rendered="#{imageBean.tab != 'techmd'}">
 							<h:outputText value="#{lbl.view_tech_md}"/>
 						</h:outputLink>
 									
 						<h:panelGroup styleClass="seperator" />
 									
-						<h:outputLink id="lnkViewItemPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab == 'VIEW'}">
+						<h:outputLink id="lnkViewItemPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab != 'techmd'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
-						<h:outputLink id="lnkViewItemPage2" styleClass="free_area0" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab != 'VIEW'}">
+						<h:outputLink id="lnkViewItemPage2" styleClass="free_area0" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab == 'techmd'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
 						
@@ -108,7 +109,7 @@
 			
 				<h:outputText value="#{imageBean.edit.checkToggleState}"/>
 				
-				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab == 'VIEW'}">	
+				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab != 'techmd'}">	
 					
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
@@ -240,9 +241,13 @@
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
-
-				<ui:insert name="editImage"></ui:insert>
-				<ui:insert name="viewTechMD"></ui:insert>
+				<h:panelGroup id="techmetadata" styleClass="full_area0_p4" style="background-color:#494949" rendered="#{imageBean.tab == 'techmd'}">
+					<a4j:repeat id="techMd" var="techMd" value="#{imageBean.techMd}" rowKeyVar="index">
+						<h:panelGroup styleClass="full_area0_p0 ">
+							<h:outputText value="#{techMd}" style="white-space: pre;"/>
+						</h:panelGroup>
+					</a4j:repeat>
+				</h:panelGroup>
 				
 			</h:panelGroup>
 			

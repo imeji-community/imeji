@@ -122,62 +122,6 @@ public class FormularElement
             predefinedValues = null;
     }
 
-    public SearchGroup getAsSearchGroup()
-    {
-        SearchGroup group = new SearchGroup();
-        if (searchValue == null || "".equals(searchValue.trim()))
-        {
-            return group;
-        }
-        switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
-        {
-            case DATE:
-                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_TIME"), operator, searchValue, not));
-                break;
-            case GEOLOCATION:
-                SearchGroup geoGroup = new SearchGroup();
-                geoGroup.setNot(not);
-                geoGroup.addPair(new SearchPair(Search.getIndex("METADATA_GEOLOCATION_LATITUDE"), operator, searchValue));
-                geoGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
-                geoGroup.addPair(new SearchPair(Search.getIndex("METADATA_GEOLOCATION_LONGITUDE"), operator,
-                        searchValue));
-                group.addGroup(geoGroup);
-                break;
-            case LICENSE:
-                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_LICENSE"), operator, searchValue, not));
-                break;
-            case NUMBER:
-                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_NUMBER"), operator, searchValue, not));
-                break;
-            case CONE_PERSON:
-                SearchGroup personGroup = new SearchGroup();
-                group.setNot(not);
-                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_FAMLILYNAME"), operator,
-                        searchValue));
-                personGroup.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_GIVENNAME"), operator,
-                        searchValue));
-                personGroup.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                personGroup.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PERSON_ORGANIZATION_TITLE"),
-                        operator, searchValue));
-                group.addGroup(personGroup);
-                break;
-            case PUBLICATION:
-                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_PUBLICATION"), operator, searchValue, not));
-                break;
-            case TEXT:
-                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_TEXT"), operator, searchValue, not));
-                break;
-            case LINK:
-                group.addPair(new SearchPair(Search.getIndex("IMAGE_METADATA_URI"), operator, searchValue, not));
-                break;
-        }
-        group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-        group.addPair(new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_METADATA_STATEMENT), SearchOperators.URI,
-                this.namespace, false));
-        return group;
-    }
-
     public SearchGroup getAsSearchGroupNew()
     {
         SearchGroup group = new SearchGroup();
@@ -185,53 +129,56 @@ public class FormularElement
         {
             return group;
         }
-        URI ns = URI.create(namespace);
-        switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
+        if (namespace != null)
         {
-            case DATE:
-                group.addPair(new SearchMetadata(Search.getIndex("IMAGE_METADATA_TIME"), operator, searchValue, ns, not));
-                break;
-            case GEOLOCATION:
-                SearchGroup geoGroup = new SearchGroup();
-                geoGroup.setNot(not);
-                geoGroup.addPair(new SearchMetadata(Search.getIndex("METADATA_GEOLOCATION_LATITUDE"), operator,
-                        searchValue, ns));
-                geoGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
-                geoGroup.addPair(new SearchMetadata(Search.getIndex("METADATA_GEOLOCATION_LONGITUDE"), operator,
-                        searchValue, ns));
-                group.addGroup(geoGroup);
-                break;
-            case LICENSE:
-                group.addPair(new SearchMetadata(Search.getIndex("IMAGE_METADATA_LICENSE"), operator, searchValue, ns,
-                        not));
-                break;
-            case NUMBER:
-                group.addPair(new SearchMetadata(Search.getIndex("IMAGE_METADATA_NUMBER"), operator, searchValue, ns,
-                        not));
-                break;
-            case CONE_PERSON:
-                SearchGroup personGroup = new SearchGroup();
-                group.setNot(not);
-                personGroup.addPair(new SearchMetadata(Search.getIndex("IMAGE_METADATA_PERSON_FAMLILYNAME"), operator,
-                        searchValue, ns));
-                personGroup.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                personGroup.addPair(new SearchMetadata(Search.getIndex("IMAGE_METADATA_PERSON_GIVENNAME"), operator,
-                        searchValue, ns));
-                personGroup.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                personGroup.addPair(new SearchMetadata(Search.getIndex("IMAGE_METADATA_PERSON_ORGANIZATION_TITLE"),
-                        operator, searchValue, ns));
-                group.addGroup(personGroup);
-                break;
-            case PUBLICATION:
-                group.addPair(new SearchMetadata(Search.getIndex("IMAGE_METADATA_PUBLICATION"), operator, searchValue,
-                        ns, not));
-                break;
-            case TEXT:
-                group.addPair(new SearchMetadata(Search.getIndex("IMAGE_METADATA_TEXT"), operator, searchValue, ns, not));
-                break;
-            case LINK:
-                group.addPair(new SearchMetadata(Search.getIndex("IMAGE_METADATA_URI"), operator, searchValue, ns, not));
-                break;
+            URI ns = URI.create(namespace);
+            switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
+            {
+                case DATE:
+                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.IMAGE_METADATA_TIME.name()),
+                            operator, searchValue, ns, not));
+                    break;
+                case GEOLOCATION:
+                    group.setNot(not);
+                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.IMAGE_METADATA_TITLE.name()),
+                            operator, searchValue, ns));
+                    break;
+                case LICENSE:
+                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.IMAGE_METADATA_LICENSE.name()),
+                            operator, searchValue, ns, not));
+                    break;
+                case NUMBER:
+                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.IMAGE_METADATA_NUMBER.name()),
+                            operator, searchValue, ns, not));
+                    break;
+                case CONE_PERSON:
+                  
+                    group.setNot(not);
+                    group.addPair(new SearchMetadata(Search
+                            .getIndex(SearchIndex.names.IMAGE_METADATA_PERSON_FAMLILYNAME.name()), operator,
+                            searchValue, ns));
+                    group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                    group.addPair(new SearchMetadata(Search
+                            .getIndex(SearchIndex.names.IMAGE_METADATA_PERSON_GIVENNAME.name()), operator, searchValue,
+                            ns));
+                    group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                    group.addPair(new SearchMetadata(Search
+                            .getIndex(SearchIndex.names.IMAGE_METADATA_PERSON_ORGANIZATION_TITLE.name()), operator,
+                            searchValue, ns));
+                    break;
+                case PUBLICATION:
+                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.IMAGE_METADATA_CITATION.name()),
+                            operator, searchValue, ns, not));
+                    break;
+                case TEXT:
+                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.IMAGE_METADATA_TEXT.name()),
+                            operator, searchValue, ns, not));
+                    break;
+                case LINK:
+                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.IMAGE_METADATA_URI.name()),
+                            operator, searchValue, ns, not));
+                    break;
+            }
         }
         return group;
     }

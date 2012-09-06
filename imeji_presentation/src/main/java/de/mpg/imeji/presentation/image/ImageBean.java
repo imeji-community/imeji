@@ -32,19 +32,15 @@ import de.mpg.imeji.presentation.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 public class ImageBean
 {
-    public enum TabType
-    {
-        VIEW, EDIT, TECHMD;
-    }
-
     private static Logger logger = Logger.getLogger(ImageBean.class);
-    private String tab = null;
-    private SessionBean sessionBean = null;
+    private String tab;
+    private SessionBean sessionBean;
     private Item item;
-    private String id = null;
+    private String id;
     private boolean selected;
     private CollectionImeji collection;
     private List<String> techMd;
@@ -86,21 +82,47 @@ public class ImageBean
         return "";
     }
 
-    public void init() throws Exception
+    public String getInit() throws Exception
     {
+        tab = UrlHelper.getParameterValue("tab");
         loadImage();
+        if ("techmd".equals(tab))
+        {
+            initViewTechnicalMetadata();
+        }
+        else
+        {
+            initViewMetadataTab();
+        }
+        initBrowsing();
+        selected = sessionBean.getSelected().contains(item.getId().toString());
+        return "";
+    }
+
+    public void initViewMetadataTab() throws Exception
+    {
         loadCollection();
         loadProfile();
         removeDeadMetadata();
         sortMetadataAccordingtoProfile();
-        initBrowsing();
-        if (sessionBean.getSelected().contains(item.getId()))
-        {
-            setSelected(true);
-        }
         labels.init(profile);
         edit = new SingleEditBean(item, profile, getPageUrl());
         cleanImageMetadata();
+    }
+
+    public void initViewTechnicalMetadata() throws Exception
+    {
+        try
+        {
+            techMd = new ArrayList<String>();
+            techMd = BasicExtractor.extractTechMd(item);
+        }
+        catch (Exception e)
+        {
+            techMd = new ArrayList<String>();
+            techMd.add(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void initBrowsing()
@@ -243,29 +265,8 @@ public class ImageBean
         return "";
     }
 
-    public void initView() throws Exception
-    {
-        if (item == null || item.getId() == null
-                || !item.getId().toString().equals(ObjectHelper.getURI(Item.class, id).toString()))
-        {
-            init();
-        }
-        setTab(TabType.VIEW.toString());
-    }
-
-    public void initTechMd() throws Exception
-    {
-        if (item == null || item.getId() == null
-                || !item.getId().toString().equals(ObjectHelper.getURI(Item.class, id).toString()))
-        {
-            this.init();
-        }
-        setTab(TabType.TECHMD.toString());
-    }
-
     public List<String> getTechMd() throws Exception
     {
-        techMd = BasicExtractor.extractTechMd(item);
         return techMd;
     }
 
@@ -315,11 +316,6 @@ public class ImageBean
 
     public boolean getSelected()
     {
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (item != null && sessionBean.getSelected().contains(item.getId()))
-            selected = true;
-        else
-            selected = false;
         return selected;
     }
 

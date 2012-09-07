@@ -67,7 +67,7 @@ public class MdProfileBean
     public void initMenus()
     {
         mdTypesMenu = new ArrayList<SelectItem>();
-        mdTypesMenu.add(new SelectItem(null, "--"));
+        mdTypesMenu.add(new SelectItem(null, sessionBean.getLabel("select")));
         for (Metadata.Types t : Metadata.Types.values())
         {
             mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean)BeanHelper
@@ -110,7 +110,7 @@ public class MdProfileBean
     public void loadtemplates()
     {
         profilesMenu = new ArrayList<SelectItem>();
-        profilesMenu.add(new SelectItem(null, "Select Template"));
+        profilesMenu.add(new SelectItem(null, sessionBean.getLabel("profile_select_template")));
         for (MetadataProfile mdp : pc.search())
         {
             if (mdp.getId().toString() != profile.getId().toString())
@@ -384,11 +384,6 @@ public class MdProfileBean
                 statementNames.add(s.getId().toString());
             }
             s.setPos(i);
-            // if (s.getId() != null && s.getId().toString().equals(profile.getId().toString() + "/"))
-            // {
-            // s.setId(URI.create(profile.getId().toString() + "/"
-            // + ((List<LocalizedString>)s.getLabels()).get(0).toString()));
-            // }
             i++;
         }
         return true;

@@ -166,7 +166,7 @@ public class ImageBean
     {
         try
         {
-            collection = ObjectLoader.loadCollectionLazy(getImage().getCollection(), sessionBean.getUser());
+            collection = ObjectLoader.loadCollectionLazy(item.getCollection(), sessionBean.getUser());
         }
         catch (Exception e)
         {

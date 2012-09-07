@@ -6,9 +6,11 @@ package de.mpg.imeji.presentation.search;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
@@ -198,13 +200,49 @@ public class URLQueryTransformer
 
     private static String searchGroup2PrettyQuery(SearchGroup group)
     {
-        String str = searchElements2PrettyQuery(group.getElements());
+        String str = "";
+        int groupSize = group.getElements().size();
+        if (isSearchGroupForComplexMetadata(group))
+        {
+            str = searchMetadata2PrettyQuery((SearchMetadata)group.getElements().get(0));
+            groupSize = 1;
+        }
+        else
+        {
+            str = searchElements2PrettyQuery(group.getElements());
+        }
         if ("".equals(str))
             return "";
-        if (group.getElements().size() > 1)
+        if (groupSize > 1)
             return " (" + removeUseLessLogicalOperation(str) + ") ";
         else
             return removeUseLessLogicalOperation(str);
+    }
+
+    /**
+     * Check if the search group is an group with pair about the same metadata. For instance, when searching for person,
+     * the search group will be conposed of many pairs (family-name, givennane, etc) which sould be displayed as a
+     * pretty query of only one metadata (person = value)
+     * 
+     * @param group
+     * @return
+     */
+    private static boolean isSearchGroupForComplexMetadata(SearchGroup group)
+    {
+        List<String> statementUris = new ArrayList<String>();
+        for (SearchElement el : group.getElements())
+        {
+            if (el.getType().equals(SEARCH_ELEMENTS.METADATA))
+            {
+                SearchMetadata md = (SearchMetadata)el;
+                if (statementUris.contains(md.getStatement().toString()))
+                {
+                    return true;
+                }
+                statementUris.add(md.getStatement().toString());
+            }
+        }
+        return false;
     }
 
     private static String searchLogicalRelation2PrettyQuery(SearchLogicalRelation rel)

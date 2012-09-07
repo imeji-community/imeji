@@ -21,7 +21,7 @@
 						<br/>
 						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
 							<b class="xLarge_area0_p8 labelLine clear">
-								<h:outputText value="Title"/>
+								<h:outputText value="#{lbl.title}"/>
 								<h:outputText value="&#160;"/>
 								<span class="noDisplay">: </span>
 							</b>
@@ -94,12 +94,13 @@
 											<a4j:repeat id="labels" var="label" value="#{statement.labels}" rowKeyVar="labelPosition">
 												<h:panelGroup styleClass="free_area0 xSmall_marginRIncl">
 													<h:inputText id="inputLabel" value="#{label.string}" styleClass="xLarge_txtInput"/>
-													
-													<a4j:commandButton styleClass="min_imgBtn remove" shortDesc="#{lbl.label_remove}" action="#{FormularBean.removeLabel}"  reRender="ajaxArea">
-														<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-														<f:setPropertyActionListener value="#{labelPosition}" target="#{FormularBean.labelPosition}"/>
-													</a4j:commandButton>
-													<h:outputLabel styleClass="" value="#{lbl.label_remove}" />
+													<h:panelGroup rendered="#{statement.labelsCount > 1}">
+														<a4j:commandButton styleClass="min_imgBtn remove" shortDesc="#{lbl.label_remove}"  action="#{FormularBean.removeLabel}"  reRender="ajaxArea">
+															<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
+															<f:setPropertyActionListener value="#{labelPosition}" target="#{FormularBean.labelPosition}"/>
+														</a4j:commandButton>
+														<h:outputLabel styleClass="" value="#{lbl.label_remove}" />
+													</h:panelGroup>
 													<h:selectOneMenu value="#{label.lang}" immediate="true" styleClass="medium_txtInput" >
 														<f:selectItems value="#{Internationalization.languages}"/>
 		  											</h:selectOneMenu>

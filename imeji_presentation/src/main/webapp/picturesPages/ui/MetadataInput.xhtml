@@ -55,7 +55,7 @@
 		</h:selectOneMenu>
 				
 		<!-- METADATA TYPE LINK -->
-		<h:outputLabel value="#{lbl.label}" styleClass="huge_label" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#link' and !SuggestBean.suggests[metadata.statement].hasRestrictedValues}"/>
+		<h:outputLabel value="#{lbl.title}" styleClass="huge_label" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#link' and !SuggestBean.suggests[metadata.statement].hasRestrictedValues}"/>
 		<h:inputText id="inputLinkLabel" styleClass="xHuge_txtInput" value="#{metadata.label}" immediate="true" onfocus="this.select();" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#link' and !SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
 				<rich:suggestionbox styleClass="preListHeader" entryClass="listItem" cellpadding="5" width="400" shadowDepth="0" shadowOpacity="0" height="250" border="1" frequency="0.0001" rendered="#{SuggestBean.suggests[metadata.statement].doAutoComplete}" for="inputLinkLabel" var="results" suggestionAction="#{SuggestBean.suggests[metadata.statement].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>

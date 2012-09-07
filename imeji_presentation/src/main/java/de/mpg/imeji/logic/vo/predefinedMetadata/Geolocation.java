@@ -20,7 +20,7 @@ public class Geolocation extends Metadata
     private double longitude = Double.NaN;
     @j2jLiteral("http://imeji.org/terms/latitude")
     private double latitude = Double.NaN;
-    @j2jLiteral("http://purl.org/dc/elements/1.1/title")
+    @j2jLiteral("http://purl.org/dc/terms/title")
     private String name;
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;

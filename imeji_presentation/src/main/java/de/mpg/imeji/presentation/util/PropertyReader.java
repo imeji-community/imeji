@@ -17,6 +17,7 @@ public class PropertyReader
     private static final String DEFAULT_PROPERTY_FILE = "faces.properties";
     private static URL solution;
     private static String fileLocation = null;
+    private static String version = null;
 
     /**
      * Gets the value of a property for the given key from the system properties or the escidoc property file. It is
@@ -83,6 +84,7 @@ public class PropertyReader
             InputStream in = getInputStream("solution.properties");
             solProperties.load(in);
             String appname = solProperties.getProperty("appname");
+            version = solProperties.getProperty("escidoc.application.version");
             propertiesFile = appname + ".properties";
         }
         else
@@ -131,5 +133,10 @@ public class PropertyReader
             throw new FileNotFoundException(filepath);
         }
         return instream;
+    }
+
+    public static String getVersion()
+    {
+        return version;
     }
 }

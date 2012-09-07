@@ -10,9 +10,9 @@
 	<name>imeji_presentation</name>
 	<packaging>war</packaging>
 	<scm>
-		<connection>scm:git@github.com:bastienMPDL/Imeji.git</connection>
-		<developerConnection>scm:git@github.com:bastienMPDL/Imeji.git</developerConnection>
-		<url>https://bastienMPDL@github.com/bastienMPDL/Imeji.git</url>
+		<connection>scm:git@github.com:bastienMPDL/imeji.git</connection>
+		<developerConnection>scm:git@github.com:bastienMPDL/imeji.git</developerConnection>
+		<url>https://bastienMPDL@github.com/bastienMPDL/imeji.git</url>
 	</scm>
 
 	<build>
@@ -121,4 +121,4 @@
 		</dependency>
 	</dependencies>
 </project>
-<!--Change by bastien -->
+<!--Change by marcoTest -->

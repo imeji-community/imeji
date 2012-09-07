@@ -95,6 +95,11 @@ public abstract class CollectionBean
                     return false;
                 }
             }
+            else
+            {
+                BeanHelper.error(sessionBean.getMessage("error_author_need_one_family_name"));
+                return false;
+            }
         }
         if (pers.size() == 0)
         {

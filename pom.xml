@@ -1,4 +1,3 @@
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -9,7 +8,7 @@
 	<name>imeji</name>
 	<url>http://imeji.org</url>
 	<description>
-		http://colab.mpdl.mpg.de/mediawiki/Imeji
+		http://colab.mpdl.mpg.de/mediawiki/imeji
 	</description>
 	<licenses>
 		<license>
@@ -123,9 +122,9 @@
 	</modules>
 
 	<scm>
-		<connection>scm:git@github.com:bastienMPDL/Imeji.git</connection>
-		<developerConnection>scm:git@github.com:bastienMPDL/Imeji.git</developerConnection>
-		<url>https://bastienMPDL@github.com/bastienMPDL/Imeji.git</url>
+		<connection>scm:git@github.com:bastienMPDL/imeji.git</connection>
+		<developerConnection>scm:git@github.com:bastienMPDL/imeji.git</developerConnection>
+		<url>https://bastienMPDL@github.com/bastienMPDL/imeji.git</url>
 	</scm>
 
 	<repositories>
@@ -379,18 +378,18 @@
 				<!-- <jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir> -->
 
 
-				<!-- Identifier of the content model "Imeji" in the current framework 
+				<!-- Identifier of the content model "imeji" in the current framework 
 					instance -->
 				<escidoc.imeji.content-model.id>escidoc:14001</escidoc.imeji.content-model.id>
 
-				<!-- Identifier of the context of "Imeji" in the current framework instance -->
+				<!-- Identifier of the context of "imeji" in the current framework instance -->
 				<escidoc.imeji.context.id>escidoc:13001</escidoc.imeji.context.id>
 
-				<!-- Identifier of the content model " Imeji Container Content Model" 
+				<!-- Identifier of the content model " imeji Container Content Model" 
 					in the current framework instance -->
 				<escidoc.imeji.container.content-model.id>escidoc:faces60</escidoc.imeji.container.content-model.id>
 
-				<!-- Indentifier of the content model "Imeji collection content model": 
+				<!-- Indentifier of the content model "imeji collection content model": 
 					Not persistent, created only on dev so far -->
 				<escidoc.imeji.collection.content-model.id>escidoc:194286</escidoc.imeji.collection.content-model.id>
 
@@ -411,13 +410,13 @@
 				<escidoc.cone.isos639_1.all>http://pubman.mpdl.mpg.de/cone/iso639-1/all</escidoc.cone.isos639_1.all>
 
 				<!-- Blog's URL -->
-				<escidoc.imeji.blog.url />
+				<escidoc.imeji.blog.url>https://twitter.com/imeji_org</escidoc.imeji.blog.url>
 
 				<!-- Blog's RSS feed URL -->
-				<escidoc.imeji.blog.rss.url>http://www.nims.go.jp/eng/news/nims.xml</escidoc.imeji.blog.rss.url>
+				<escidoc.imeji.blog.rss.url>https://twitter.com/statuses/user_timeline/imeji_org.rss</escidoc.imeji.blog.rss.url>
 
 				<!-- Help URL -->
-				<escidoc.imeji.help.url>https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/faces_help_en_GUI_V2.html</escidoc.imeji.help.url>
+				<escidoc.imeji.help.url>https://raw.github.com/imeji-community/imeji/master/imeji_static/imeji_help.html</escidoc.imeji.help.url>
 
 				<!-- pagination ajax -->
 				<imeji.pagination.ajaxmodus>true</imeji.pagination.ajaxmodus>

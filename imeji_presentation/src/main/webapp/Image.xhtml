@@ -39,12 +39,11 @@
 <body>
 <ui:composition template="templates/template_image.xhtml">
 	<ui:param name="imageBean" value="#{ImageBean}" />
-	
 	<ui:param name="headline" value="#{lbl.details}" />
 
 	<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-			
+		
 			<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 			 	<ui:include src="./include/History.xhtml"></ui:include>
 			 </h:panelGroup>

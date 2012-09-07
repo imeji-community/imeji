@@ -25,7 +25,6 @@ public class SearchTransaction extends Transaction
     private List<String> results;
     private String modelName = null;
     private boolean count = false;
-    private static Logger logger = Logger.getLogger(SearchTransaction.class);
 
     public SearchTransaction(String modelName, String searchQuery, List<String> results, boolean count)
     {

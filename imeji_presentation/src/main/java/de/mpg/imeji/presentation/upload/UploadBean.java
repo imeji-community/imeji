@@ -90,6 +90,7 @@ public class UploadBean
             try
             {
                 totalNum = UrlHelper.getParameterValue("totalNum");
+                loadCollection();
                 report();
             }
             catch (Exception e)

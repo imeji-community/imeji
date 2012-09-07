@@ -75,8 +75,9 @@ public class URLQueryTransformer
             if (matchSearchMetadataPattern(scString))
             {
                 String[] pairString = scString.split("=");
+                scString = "";
                 String value = pairString[2].trim();
-                String ns = pairString[0].split(",")[0].replace("IMAGE_METADATA[", "");
+                String ns = pairString[0].split(",")[0].replace("IMAGE_METADATA[", "").replaceAll(" ", "");
                 value = value.substring(1, value.length() - 1);
                 if (value.startsWith("\""))
                 {
@@ -85,7 +86,6 @@ public class URLQueryTransformer
                 SearchIndex index = Search.getIndex(pairString[0].split(",")[1].replace("]", "").trim());
                 SearchOperators operator = SearchOperators.valueOf(pairString[1].trim());
                 searchQuery.addPair(new SearchMetadata(index, operator, value, URI.create(ns), not));
-                scString = "";
                 not = false;
             }
             if (matchSearchPairPattern(scString) && !matchSearchMetadataPattern(scString))
@@ -147,18 +147,18 @@ public class URLQueryTransformer
                     {
                         query += " NOT";
                     }
-                    query += " (" + transform2URL(new SearchQuery(((SearchGroup)se).getGroup())) + ") ";
+                    query += "(" + transform2URL(new SearchQuery(((SearchGroup)se).getGroup())) + ")";
                     break;
                 case LOGICAL_RELATIONS:
-                    query += ((SearchLogicalRelation)se).getLogicalRelation().name();
+                    query += " " + ((SearchLogicalRelation)se).getLogicalRelation().name() + " ";
                     break;
                 case PAIR:
                     if (((SearchPair)se).isNot())
                     {
                         query += " NOT";
                     }
-                    query += " " + ((SearchPair)se).getIndex().getName() + "=" + ((SearchPair)se).getOperator().name()
-                            + "=\"" + ((SearchPair)se).getValue() + "\" ";
+                    query += ((SearchPair)se).getIndex().getName() + "=" + ((SearchPair)se).getOperator().name()
+                            + "=\"" + ((SearchPair)se).getValue() + "\"";
                     break;
                 case METADATA:
                     if (((SearchMetadata)se).isNot())
@@ -168,7 +168,7 @@ public class URLQueryTransformer
                     query += SearchIndex.names.IMAGE_METADATA.name() + "[" + ((SearchMetadata)se).getStatement() + ","
                             + ((SearchPair)se).getIndex().getName() + "]" + "="
                             + ((SearchMetadata)se).getOperator().name() + "=\"" + ((SearchMetadata)se).getValue()
-                            + "\" ";
+                            + "\"";
                     break;
             }
         }

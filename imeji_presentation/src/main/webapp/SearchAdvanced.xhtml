@@ -76,7 +76,7 @@
 				    		
 							<h:panelGroup styleClass="medium_marginLExcl full_area0_p8  ">
 							
-								<h:selectOneMenu value="#{g.collectionId}" styleClass="double_area0" onchange="getElementById('formular:groups:#{gIndex}:changeGroup').click();">
+								<h:selectOneMenu id="selCollection" value="#{g.collectionId}" styleClass="double_area0" onchange="getElementById('formular:groups:#{gIndex}:changeGroup').click();">
 									<f:selectItems value="#{AdvancedSearchBean.collectionsMenu}"/>
 								</h:selectOneMenu>
 								
@@ -92,13 +92,13 @@
 									<h:panelGroup styleClass="tiny_marginLExcl full_area0_p8">
 
 										<h:panelGroup styleClass="free_area0">
-											<h:selectOneMenu value="#{el.inverse}" styleClass="small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+											<h:selectOneMenu id="selNot" value="#{el.inverse}" styleClass="small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
 												<f:selectItem itemValue="false" itemLabel="--"/>
 												<f:selectItem itemValue="true" itemLabel="#{lbl.NOT}"/>
 											</h:selectOneMenu>
 										</h:panelGroup>
 										
-										<h:selectOneMenu value="#{el.namespace}" styleClass="xTiny_marginLExcl double_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:changeEl').click();">
+										<h:selectOneMenu id="selStatement" value="#{el.namespace}" styleClass="xTiny_marginLExcl double_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:changeEl').click();">
 											<f:selectItems value="#{g.statementMenu}"/>
 										</h:selectOneMenu>
 										
@@ -118,13 +118,13 @@
 												<h:outputText value=" = " style="visibility:hidden;"/>
 											</h:panelGroup>
 											
-											<h:selectOneMenu value="#{el.filter}" rendered="#{el.filtersMenu != null}" styleClass="xTiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+											<h:selectOneMenu id="selFilter" value="#{el.filter}" rendered="#{el.filtersMenu != null}" styleClass="xTiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
 												<f:selectItems value="#{el.filtersMenu}"/>
 											</h:selectOneMenu>
 										</h:panelGroup>
 										
 										<h:inputText value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues == null}" onkeyup="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();"/>
-										<h:selectOneMenu value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues != null}" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+										<h:selectOneMenu id="selPredefinedValue" value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues != null}" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
 											<f:selectItems value="#{el.predefinedValues}"/>
 										</h:selectOneMenu>
 										
@@ -140,7 +140,7 @@
 									</h:panelGroup>
 									
 									<h:panelGroup styleClass="full_area0_p8" rendered="#{elIndex &lt; (g.size - 1)}">
-										<h:selectOneMenu value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+										<h:selectOneMenu id="selLogicalRelation" value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
 											<f:selectItems value="#{AdvancedSearchBean.operatorsMenu}"/>
 										</h:selectOneMenu>
 									</h:panelGroup>

@@ -40,7 +40,7 @@
 	<ui:composition template="template.xhtml">
 							
 		<ui:define name="mainContent" >
-			<h:outputText value="#{ImageBean.init}"/>
+			<h:outputText value="#{imageBean.init}"/>
 			<div class="full_area0 paginator">
 			<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
 			 		
@@ -115,7 +115,7 @@
 						<h3 class="xLarge_area0_p8 endline blockHeader">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata}" /><br/>
 							
-							<a4j:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" reRender="metadata" value="Edit" action="#{imageBean.edit.showEditor}"/>
+							<a4j:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" reRender="metadata" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}"/>
 							<h:outputText value="Image locked " rendered="#{imageBean.editable and imageBean.locked}"/>
 							<h:outputLink vallue="#" title="Image has been locked by another user. It will be automatically release after 15 minutes." rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
 							<br/>

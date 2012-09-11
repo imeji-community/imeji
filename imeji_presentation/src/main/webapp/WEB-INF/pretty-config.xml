@@ -68,7 +68,6 @@
 		<pattern
 			value="/collection/#{CollectionImageBean.collectionId}/item/#{CollectionImageBean.id}" />
 		<view-id>/jsf/CollectionImage.xhtml</view-id>
-		<action>#{CollectionImageBean.initView}</action>
 	</url-mapping>
 
 	<url-mapping id="createcollection">
@@ -126,7 +125,6 @@
 	<url-mapping id="albumItem">
 		<pattern value="/album/#{AlbumImageBean.albumId}/item/#{AlbumImageBean.id}" />
 		<view-id>/jsf/AlbumImage.xhtml</view-id>
-		<action>#{AlbumImageBean.initView}</action>
 	</url-mapping>
 
 	<!-- Search Pages -->

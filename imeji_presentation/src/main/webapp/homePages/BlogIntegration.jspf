@@ -33,7 +33,6 @@
              */
 -->
 </ui:remove>
-
     <script src="http://www.google.com/jsapi" type="text/javascript">&#160;</script> 
     <script type="text/javascript">
 	    google.load("feeds", "1");

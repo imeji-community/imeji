@@ -25,7 +25,7 @@ public class StatementWrapper
     // private URI profile;
     private List<LocalizedString> labels;
     private VocabularyHelper vocabularyHelper;
-    private boolean description = false;;
+    private boolean description = false;
 
     public StatementWrapper(Statement st, URI profile)
     {
@@ -90,6 +90,11 @@ public class StatementWrapper
         }
         statement.setDescription(description);
         return statement;
+    }
+    
+    public int getLabelsCount()
+    {
+        return labels.size();
     }
 
     public void vocabularyListener(ValueChangeEvent event)

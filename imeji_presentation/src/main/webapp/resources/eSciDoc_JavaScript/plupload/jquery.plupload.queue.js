@@ -14,21 +14,21 @@
 				.prepend('<div class="plupload_wrapper plupload_scroll"><div id="'
 						+ f
 						+ '_container" class="plupload_container"><div class="plupload"><div class="plupload_header"><div class="plupload_header_content"><div class="plupload_header_title">'
-						+ a("Select files")
+						+ a(getUploadTitle())
 						+ '</div><div class="plupload_header_text">'
-						+ a("Add files to the upload queue and click the start button.")
+						+ a(getUploadDescription())
 						+ '</div></div></div><div class="plupload_content"><div class="plupload_filelist_header"><div class="plupload_file_name">'
-						+ a("Filename")
+						+ a(getUploadFilename())
 						+ '</div><div class="plupload_file_action">&nbsp;</div><div class="plupload_file_status"><span>'
-						+ a("Status")
+						+ a(getUploadStatus())
 						+ '</span></div><div class="plupload_file_size">'
-						+ a("Size")
+						+ a(getUploadSize())
 						+ '</div><div class="plupload_clearer">&nbsp;</div></div><ul id="'
 						+ f
-						+ '_filelist" class="plupload_filelist"></ul><div class="plupload_filelist_footer"><div class="plupload_file_name"><div class="plupload_buttons"><a href="#" class="plupload_button plupload_add">'
-						+ a("Add files")
-						+ '</a><a href="#" class="plupload_button plupload_start">'
-						+ a("Start upload")
+						+ '_filelist" class="plupload_filelist"></ul><div class="plupload_filelist_footer"><div class="plupload_file_name"><div class="free_area0"><a href="#" class="plupload_button plupload_add">'
+						+ a(getUploadAddFiles())
+						+ '</a><a href="#" class="xTiny_marginLIncl plupload_button plupload_start">'
+						+ a(getUploadStart())
 						+ '</a></div><span class="plupload_upload_status"></span></div><div class="plupload_file_action"></div><div class="plupload_file_status"><span class="plupload_total_status">0%</span></div><div class="plupload_file_size"><span class="plupload_total_file_size">0 b</span></div><div class="plupload_progress"><div class="plupload_progress_container"><div class="plupload_progress_bar"></div></div></div><div class="plupload_clearer">&nbsp;</div></div></div></div></div><input type="hidden" id="'
 						+ f
 						+ '_count" name="'
@@ -175,7 +175,7 @@
 									&& j.settings.dragdrop) {
 								c("#" + k + "_filelist").append(
 										'<li class="plupload_droptext">'
-												+ a("Drag files here.")
+												+ a(getDragHere())
 												+ "</li>")
 							}
 						}
@@ -252,12 +252,12 @@
 												c("#" + k + "_filelist")
 														.append(
 																'<li class="plupload_droptext">'
-																		+ a("Drag files here.")
+																		+ a(getDragHere())
 																		+ "</li>")
 											}
 											c("#" + k + "_container").attr(
 													"title",
-													"Using runtime: "
+													getUsingRuntime()+": "
 															+ m.runtime);
 											c("a.plupload_start", i)
 													.click(

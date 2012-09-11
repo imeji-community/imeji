@@ -117,9 +117,6 @@ public class TechnicalFacets
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages)
     {
         ItemController ic = new ItemController(sb.getUser());
-        // SearchQuery sq = new SearchQuery(searchQuery.getElements());
-        // sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
-        // sq.addPair(pair);
         SearchQuery sq = new SearchQuery();
         sq.addPair(pair);
         return ic.countImages(sq, allImages);

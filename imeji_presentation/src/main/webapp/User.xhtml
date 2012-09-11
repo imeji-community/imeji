@@ -46,14 +46,14 @@
 						<h:panelGroup styleClass="small_marginLExcl full_area0" rendered="#{UserBean.admin}">
 							<h:panelGroup styleClass="full_area0" rendered="#{UserBean.admin}">
 								<h:panelGroup styleClass="full_area0">
-									<h:outputText styleClass="double_area0_p4" value="Email:"/>
+									<h:outputText styleClass="double_area0_p4" value="#{lbl.email}"/>
 									<h:outputText styleClass="half_area0_p4 endLine" value="#{UserBean.user.email}"/>
 								</h:panelGroup>
 								<h:panelGroup styleClass="full_area0">
-									<h:outputText styleClass="double_area0_p4" value="Name:"/>
+									<h:outputText styleClass="double_area0_p4" value="#{lbl.complete_name}"/>
 									<h:outputText styleClass="free_area0_p4" value="#{UserBean.user.name}"/>
 									<h:outputLink id="lnkEditName" value="#" onclick="document.getElementById('formular:pnlEditName').style.display = 'block';document.getElementById('formular:lnkEditNick').style.display = 'none'; this.style.visibility ='hidden';">
-										<h:outputText styleClass="double_area0_p4" value="edit"/>
+										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
 									</h:outputLink>
 									<h:panelGroup styleClass="full_area0_p4" id="pnlEditName" style="display:none;">
 										 <h:outputText styleClass="double_area0_p4" value=" " />
@@ -62,10 +62,10 @@
 									</h:panelGroup>
 					            </h:panelGroup>
 					            <h:panelGroup styleClass="full_area0">
-									<h:outputText styleClass="double_area0_p4" value="NickName:"/>
+									<h:outputText styleClass="double_area0_p4" value="#{lbl.nickname}"/>
 									<h:outputText styleClass="free_area0_p4" value="#{UserBean.user.nick}"/>
 									<h:outputLink id="lnkEditNick" value="#" onclick="document.getElementById('formular:pnlEditNick').style.display = 'block'; document.getElementById('formular:lnkEditName').style.display = 'none'; this.style.visibility ='hidden';">
-										<h:outputText styleClass="double_area0_p4" value="edit"/>
+										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
 									</h:outputLink>
 									<h:panelGroup styleClass="full_area0_p4" id="pnlEditNick" style="display:none;">
 										 <h:outputText styleClass="double_area0_p4" value=" " />
@@ -77,27 +77,27 @@
 							
 							<h:panelGroup styleClass="half_area0">
 								<h:panelGroup styleClass="full_area0_p4">
-									<h:outputLabel for="inputPassword" styleClass="double_area0_p0" value="New password"/>
+									<h:outputLabel for="inputPassword" styleClass="double_area0_p0" value="#{lbl.password_new}"/>
 									<h:inputSecret id="inputPassword" styleClass="huge_txtInput" value="#{UserBean.newPassword}"/>
 								</h:panelGroup>
 								<h:panelGroup styleClass="full_area0_p4">
-									<h:outputLabel for="inputRespeated" styleClass="double_area0_p0" value="Repeat password"/>
+									<h:outputLabel for="inputRespeated" styleClass="double_area0_p0" value="#{lbl.password_repeat}"/>
 									<h:inputSecret id="inputRespeated" styleClass="huge_txtInput" value="#{UserBean.repeatedPassword}"/>
 								</h:panelGroup>
-								<h:commandButton action="#{UserBean.changePassword}" value="Change password" styleClass="large_area1_p0 activeButton"/>
+								<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="large_area1_p0 activeButton"/>
 							</h:panelGroup>
 							
 							<h:panelGroup styleClass="full_area0_p4">
-								<h:outputText styleClass="double_area0_p0" value="#{UserBean.user.name} has following grants:"/>
+								<h:outputText styleClass="double_area0_p0" value="#{UserBean.user.name} #{lbl.grants_has_following}:"/>
 								<h:panelGroup styleClass="xHuge_area0">
 									<a4j:repeat id="grantList" var="grant" value="#{UserBean.user.grants}" rows="0">
 									<h:panelGroup styleClass="full_area0" rendered="#{grant.grantFor != null}">
-										<h:outputText value="#{grant.grantType}" styleClass="large_area0"/>
+										<h:outputText value="#{grant.grantType.fragment}" styleClass="large_area0"/>
 										<h:outputText value="for" styleClass="xSmall_area0"/>
 										<h:outputLink value="#{Navigation.applicationUri}#{grant.grantFor.path}" styleClass="large_area0">
 											<h:outputText value="#{grant.grantFor.path}" />
 										</h:outputLink>
-										<h:commandLink action="#{UserBean.revokeGrant}" value="Revoke" styleClass="xTiny_marginLExcl free_area0" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
+										<h:commandLink action="#{UserBean.revokeGrant}" value="#{lbl.revoke}" styleClass="xTiny_marginLExcl free_area0" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
 											<f:param name="grantType" value="#{grant.grantType}" />  
 											<f:param name="grantFor" value="#{grant.grantFor}" />  
 										</h:commandLink>

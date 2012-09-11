@@ -290,7 +290,7 @@
 					<a4j:repeat var="facets" value="#{groups}" rowKeyVar="index">
 						<h:outputText value="|&#160;" rendered="#{index &gt; 0}" style="color:#486131;"/>
 						<h:outputLink value="#{facets.uri}">
-							<h:outputText value="#{facets.internationalizedLabel}(#{facets.count}) "/>
+							<h:outputText value="#{facets.internationalizedLabel} (#{facets.count}) "/>
 						</h:outputLink>
 					</a4j:repeat>
 					</h:panelGroup>

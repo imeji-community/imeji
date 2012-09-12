@@ -37,73 +37,328 @@
 
 <body>
 
-<ui:composition template="templates/template.xhtml">
-	<ui:param name="headline" value="#{lbl.HomePage}"/>
-	
-	<ui:define name="mainContent">
-		 <h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
-		 	<ui:include src="include/History.xhtml" />
-		 </h:panelGroup>
-		
-		<div class="full_area0 infoPage">
-			<!-- Main Content -->
-						
-			<h:panelGroup id="defaultHome" styleClass="half_area0_p8 mainSection" rendered="#{SessionBean.locale != 'de'}">
-				<div class="free_area1" style="padding: 0px 10px 10px 0px; width: 100%;">
-					<p>&nbsp; &nbsp; An eSciDoc application to manage images together with their specific metadata</p>
-					<div class="free_area1" style="border-width: 1px; padding: 0px 15px 15px; width: 90%; border-top-style: groove;">
-						<br/>
-						<p class="background-color: green;" ><b>What is Imeji?</b></p>
-						<p>Imeji is the successor of the software used for the FACES and the DIAMONDS projects.</p> 
-						<p>With Imeji, users can create own image collections and albums. For each collection, a metadata profile can be defined to describe the characteristics of the images within by using texts, numbers, controlled vocabularies, dates, locations, or URIs, giving all metadata elements own labels. This enables complex queries and faceted display of search results.
-		Imeji allows an easy and efficient upload of images through the web browser. Metadata can be edited comfortably for single or multiple images, allowing also efficient maintenance of larger image sets.
-		Subsets of images can be created as albums for re-use in publications. Albums offer stable citations of the subset after released to public.</p>
-					</div>
-					<div class="free_area1" style="border-width: 1px; padding: 0px 15px 15px; width: 90%; border-top-style: groove;"><br/>
-					<p><b>How to use Imeji?</b></p>
-					<p>Browse and search is open for everyone. </p>
-					<p>To work with Imeji, to upload images, and to create own collections you need an account. To apply for an account, please send an e-mail to <a href="mailto:faces-support@gwdg.de">the support mailinglist</a>.</p> 
-					<p>The idea and name for Imeji were inspired by discussions with National Institute for Materials Science, Japan.</p>
-					</div> 
-					<div class="free_area1" style="border-width: 1px; padding: 12px 15px 15px 10px; width: 90%; border-top-style: groove;">
-					<a href="http://www.mpdl.mpg.de/" target="_blank" style="border: 0px none ;"> <img alt="MPDL logo" src="https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/mpdl.png" style="border: 0px none ;"/> </a> &nbsp;
-					&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.escidoc.org/" target="_blank" style="border: 0px none ;"> <img alt="eSciDoc logo" src="https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/escidoc_new.png" style="border: 0px none ;"/> </a> </div>
-				</div>
-			</h:panelGroup>
-	
-			<h:panelGroup id="deHome" styleClass="half_area0_p8 mainSection" rendered="#{SessionBean.locale == 'de'}">
-				<div class="free_area1" style="padding: 0px 10px 10px 0px; width: 100%;">
-					<p>Eine eSciDoc Anwendung zum Handling von Bildern zusammen mit ihren Metadaten</p>
-					<div class="free_area1" style="border-width: 1px; padding: 0px 15px 15px; width: 90%; border-top-style: groove;">
-						<br/>
-						<p class="background-color: green;" ><b>Was ist Imeji?</b></p>
-						<p>Imeji ist der Nachfolger der für die Projekte FACES und DIAMONDS verwendeten Software.</p> 
-						<p>Mit Imeji können Nutzer ihre eigenen Bildsammlungen und –Alben erstellen. Für jede Sammlung kann ein Metadaten Profil zur Beschreibung der Bild-Charakteristika unter Verwendung von unterschiedlichen Typen (Text, Nummern, kontrollierten Vokabularien, Daten, Lage oder URLs) und der Vergabe frei definierter Labels definiert werden. Dadurch werden komplexe Suchanfragen sowie eine facettierte Darstellung der Suchergebnisse ermöglicht.
-		Imeji besitzt einen einfachen und schnellen Upload von Bildern durch den Webbrowse. Metadaten können sowohl für einzelne wie auch mehrere Bilder komfortabel editiert, eine effiziente Pflege von großen Bildsammlungen ist gewährleistet. Freie Bildzusammenstellungen können als Alben erstellt und in Publikationen wiederverwendet werden, da Alben nach Veröffentlichung durch eine persistente Auszeichnung referenzierbar gemacht werden. 
-						</p>
-					</div>
-					<div class="free_area1" style="border-width: 1px; padding: 0px 15px 15px; width: 90%; border-top-style: groove;"><br/>
-						<p><b>Wie kann Imeji verwendet werden?</b></p>
-						<p>Browsing und Suchen ist möglich für jedermann. </p>
-						<p>Um mit Imeji zu arbeiten, Bilder hochzuladen und eigenen Sammlungen zu erstellen wird ein Nutzerkonto benötigt. Dieses können Sie per Mail an <a href="mailto:faces-support@gwdg.de">die Support Mailingliste</a> beantragen.</p> 
-						<p>Die Idee und der Name für Imeji wurden durch Diskussionen mit dem National Institute for Materials Science in Japan inspiriert. </p>
-					</div> 
-				<div class="free_area1" style="border-width: 1px; padding: 12px 15px 15px 10px; width: 90%; border-top-style: groove;">
-				<a href="http://www.mpdl.mpg.de/" target="_blank" style="border: 0px none ;"> <img alt="MPDL logo" src="https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/mpdl.png" style="border: 0px none ;"/> </a> &nbsp;
-				&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.escidoc.org/" target="_blank" style="border: 0px none ;"> <img alt="eSciDoc logo" src="https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/escidoc_new.png" style="border: 0px none ;"/> </a> </div>
-				</div>
-			
-			</h:panelGroup>
-		
-			<!-- Side Panels -->
-			<h:panelGroup styleClass="sideSectionArea">
+	<ui:composition template="templates/template.xhtml">
+		<ui:param name="headline" value="#{lbl.HomePage}"/>
+		<ui:define name="mainContent">
+			<div class="imj_cont_1 infoPage small_marginLExcl">
+				<!-- Main Content -->
 				
-				<h:panelGroup styleClass="free_area0_p8 sideSection">
-					<ui:include src="homePages/BlogIntegration.jspf" />
-				</h:panelGroup>
-				 
-			</h:panelGroup>
-			
+				
+				<div id="welcomeInfo" class="imj_cont_2_5 imj_welcomeInfo" style="float:left;">
+					<style type="text/css">
+						
+						div.LogoNSearch {
+							overflow:visible;
+						}
+						div.header {
+							overflow:visible;
+						}
+						div.searchMenu {
+							position:absolute;
+							margin-top:5.5em;
+							margin-left:5.5em;
+						}
+						.imj_cont_1 {
+							width:100%;
+						}
+						.imj_cont_1_2 {
+							width:49.85%;
+						}
+						.imj_cont_2_5 {
+							width:39.85%;
+						}
+						.imj_cont_3_5 {
+							width:59.85%;
+						}
+						.imj_welcomeInfo {
+							min-height:34.8333333em;
+							overflow:hidden;
+						}
+						
+						.imj_welcomeInfo .id_tabs ul {
+							padding:0;
+							margin-top:0;
+							padding-top:0.333333em;
+							text-align:right;
+							list-style-type:none;
+						}
+						.imj_welcomeInfo .id_tabs ul li {
+							margin-left:1%;
+							padding:1%;
+							display:inline;
+							font-size:1.0909em;
+							background-color:#323232;
+							border-radius:0.41666666em;
+							-webkit-border-radius:0.41666666em;
+							-moz-border-radius:0.41666666em;
+							-o-border-radius:0.41666666em;
+							-ms-border-radius:0.41666666em;
+						}
+						.imj_welcomeInfo .id_tabs .tab_content {
+							float:left;
+							height:90%;
+							overflow:auto;
+							font-size:1.0909em;
+						}
+						.imj_welcomeInfo .id_tabs li.ui-state-active {
+							background-color:#383838;
+							color:#F0F0F0;
+						}
+						.imj_welcomeInfo .id_tabs li.ui-state-active a {
+							color:#F0F0F0;
+						}
+						.imj_welcomeInfo .id_tabs div.ui-tabs-hide {
+							display:none;
+						}
+						
+						
+						.imj_startpage_carousel {
+							min-height:33.333333em; 
+							overflow:hidden;
+						}
+						.imj_startpage_carousel #carousel {
+							height:26.66666666em; 
+							width:90%; 
+							margin:0 auto;
+							background:transparent; 
+							overflow:visible !important; 
+						}
+						.imj_startpage_carousel #cloudinfoText {
+							display:none;
+						}
+						.dynamicCloudinfo {
+							position:absolute;
+							z-index:5600;
+							background-color:#292929;
+							padding:0.75em;
+						}
+						.imj_startpage_carousel #title-text {
+							margin:0;
+						}
+						.imj_startpage_carousel #alt-text {
+							margin:0;
+						}
+						
+						/* footer */
+						.imj_footer img {
+							border:0 none;
+							margin:0 1%;
+						}
+						.imj_poweredby {
+							padding: 1em 1.25em 1.25em 1em; 
+							text-align:center;
+						}
+						.imj_build_date {
+							text-align:center;
+							font-size:75%;
+						}
+						iframe#twitter-widget-0 {
+							width:99.5%;
+							height:43em;
+						}
+						iframe#twitter-widget-0 div.root div.stream{
+							height:20em !important;
+						}
+					</style>
+					 
+					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale != 'de'}">
+						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search in ...';</script>
+						<!-- tabs -->
+						<ul class="imj_cont_1">
+							<li><a href="#formular:tabsEN-1">What is Imeji?</a></li>
+							<li><a href="#formular:tabsEN-2">News</a></li>
+							<li><a href="#formular:tabsEN-3">How to use Imeji?</a></li>
+						</ul>
+						
+						<!--  tabs content -->
+						<h:panelGroup layout="block" id="tabsEN-1" styleClass="imj_cont_1 tab_content" >
+							<p>Imeji is the successor of the software used for the FACES and the DIAMONDS projects.</p> 
+							<p>With Imeji, users can create own image collections and albums. For each collection, a metadata profile can be defined to describe the characteristics of the images within by using texts, numbers, controlled vocabularies, dates, locations, or URIs, giving all metadata elements own labels. This enables complex queries and faceted display of search results. Imeji allows an easy and efficient upload of images through the web browser. Metadata can be edited comfortably for single or multiple images, allowing also efficient maintenance of larger image sets. Subsets of images can be created as albums for re-use in publications. Albums offer stable citations of the subset after released to public.</p>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" id="tabsEN-2" styleClass="imj_cont_1 tab_content" style="overflow:hidden;">
+							<a class="twitter-timeline" href="https://twitter.com/imeji_org" data-widget-id="245097651257876480">Tweets von @imeji_org</a>
+							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" id="tabsEN-3" styleClass="imj_cont_1 tab_content" >
+							<p>Browse and search is open for everyone. </p>
+							<p>To work with Imeji, to upload images, and to create own collections you need an account. To apply for an account, please send an e-mail to <a href="mailto:faces-support@gwdg.de">the support mailinglist</a>.</p> 
+							<p>The idea and name for Imeji were inspired by discussions with National Institute for Materials Science, Japan.</p>
+						</h:panelGroup>
+					</h:panelGroup> <!-- end of tabs international -->
+					
+					
+					
+					<!-- german part -->
+					<h:panelGroup layout="block" id="tabsDE" styleClass="id_tabs" rendered="#{SessionBean.locale == 'de'}">
+						<script type="text/javascript">var placeholder_username = 'Benutzername'; var placeholder_password = 'Passwort'; var placeholder_simpleSearch = 'Suche in ...';</script>
+						<ul class="imj_cont_1">
+							<li><a href="#formular:tabsDE-1">Was ist Imeji?</a></li>
+							<li><a href="#formular:tabsDE-2">News</a></li>
+							<li><a href="#formular:tabsDE-3">Wie kann Imeji verwendet werden?</a></li>
+						</ul>
+						
+						<h:panelGroup layout="block" id="tabsDE-1" styleClass="imj_cont_1 tab_content" >
+							<p>Imeji ist der Nachfolger der für die Projekte FACES und DIAMONDS verwendeten Software.</p> 
+							<p>Mit Imeji können Nutzer ihre eigenen Bildsammlungen und –Alben erstellen. Für jede Sammlung kann ein Metadaten Profil zur Beschreibung der Bild-Charakteristika unter Verwendung von unterschiedlichen Typen (Text, Nummern, kontrollierten Vokabularien, Daten, Lage oder URLs) und der Vergabe frei definierter Labels definiert werden. Dadurch werden komplexe Suchanfragen sowie eine facettierte Darstellung der Suchergebnisse ermöglicht.
+								Imeji besitzt einen einfachen und schnellen Upload von Bildern durch den Webbrowse. Metadaten können sowohl für einzelne wie auch mehrere Bilder komfortabel editiert, eine effiziente Pflege von großen Bildsammlungen ist gewährleistet. Freie Bildzusammenstellungen können als Alben erstellt und in Publikationen wiederverwendet werden, da Alben nach Veröffentlichung durch eine persistente Auszeichnung referenzierbar gemacht werden. 
+							</p>
+						</h:panelGroup>
+					
+						<h:panelGroup layout="block" id="tabsDE-2" styleClass="imj_cont_1 tab_content" style="overflow:hidden;">
+							<a class="twitter-timeline" href="https://twitter.com/imeji_org" data-widget-id="245097651257876480">Tweets von @imeji_org</a>
+							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" id="tabsDE-3" styleClass="imj_cont_1 tab_content">
+							<p>Browsing und Suchen ist möglich für jedermann. </p>
+							<p>Um mit Imeji zu arbeiten, Bilder hochzuladen und eigenen Sammlungen zu erstellen wird ein Nutzerkonto benötigt. Dieses können Sie per Mail an <a href="mailto:faces-support@gwdg.de">die Support Mailingliste</a> beantragen.</p> 
+							<p>Die Idee und der Name für Imeji wurden durch Diskussionen mit dem National Institute for Materials Science in Japan inspiriert.</p>
+						</h:panelGroup>
+					</h:panelGroup>
+				</div>
+				
+				
+				<!-- carousel -->
+				<div class="imj_cont_3_5" style="margin-top:3em; float:left;">
+					<div class="imj_cont_1 imj_startpage_carousel">
+						<div style="max-height:400px; overflow:visible; min-width:350px; width:40%; margin:0 auto;">
+							
+							<!-- Define elements to accept the alt and title text from the images. -->
+							<div id="carousel">
+								<!-- All images with class of "cloudcarousel" will be turned into carousel items -->
+								<!-- You can place links around these images -->
+								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
+								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
+								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
+								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
+								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
+								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
+								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
+							</div>
+							<span id="cloudinfoText">
+								<h4 id="title-text"></h4>
+								<h5 id="alt-text"></h5>
+							</span>
+							<!-- Define left and right buttons. -->
+							<!--
+							<input id="left-but"  type="button" value="Left" style="float:left;" />
+							<input id="right-but" type="button" value="Right" style="float:right;" />
+							-->
+						</div>
+					</div>
+					
+				</div> <!-- end right content -->
+                
+				
+				
+				<div class="clear imj_cont_1 imj_footer small_negMarginLExcl">
+				<!-- begin: footer section-->
+					<div class="imj_cont_1 imj_poweredby">
+						<a href="http://www.mpdl.mpg.de/" target="_blank"> 
+							<img alt="MPDL logo" src="https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/mpdl.png"/> 
+						</a> 
+						<a href="http://www.escidoc.org/" target="_blank"> 
+							<img alt="eSciDoc logo" src="https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/escidoc_new.png" height="30em"/> 
+						</a>
+					</div>
+				<!-- end: footer section -->
+				</div>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				<script src="http://www.google.com/jsapi" type="text/javascript"> </script>
+				
+				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+				<script type="text/javascript">
+				  jQuery.noConflict();
+				  // Code that uses other library's $ can follow here.
+				</script>
+				
+				<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/jquery/jquery.mousewheel.3.0.2.js"></script>
+				
+				<script type="text/javascript" src="http://code.jquery.com/ui/1.8.23/jquery-ui.min.js"></script>
+				<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/jquery/cloud-carousel.1.0.5.min.js"></script>
+				
+				
+				<script type="text/javascript">
+					function createCarousel() {
+						jQuery("#carousel").CloudCarousel(		
+						{	
+							reflHeight: 56,
+							reflGap:2,
+							yRadius:90,
+							xPos: 145,
+							yPos: 80,
+							speed:0.15,
+							autoRotate:"right",
+							autoRotateDelay:8500,
+							bringToFront:true,
+							mouseWheel:true
+						});
+						
+						jQuery(".cloudcarousel").bind({
+							mouseover: function(ev) {
+								jQuery("#title-text").text(this.title);
+								jQuery("#alt-text").text(this.alt);
+								this.title = '';
+								var cloudInfo = jQuery("#cloudinfoText");
+								cloudInfo.addClass("dynamicCloudinfo borderradius_5");
+								cloudInfo.show();
+								jQuery(this).bind({
+									mousemove: function(ev) {
+										jQuery("#cloudinfoText").css("left", ev.pageX).css("top", ev.pageY+10);
+									}
+								})
+							},
+							mouseout: function(ev) {
+								jQuery("#cloudinfoText").hide();
+								jQuery(this).unbind("mousemove");
+								this.title = jQuery("#title-text").text();
+							}
+						});
+					}
+					
+					function initStartpage() {
+						jQuery( ".id_tabs" ).tabs();
+						createCarousel();
+					};
+					//add to every link on page the current title attribute
+					jQuery(".header a, #content a").each(function(ind, obj){
+						this.title = this.innerHTML;
+					});
+					//add placeholder for login menu
+					jQuery(".metaMenu input[type='text']").attr("placeholder", placeholder_username);
+					jQuery(".metaMenu input[type='password']").attr("placeholder", placeholder_password);
+					jQuery(".quickSearchTextInput").attr("placeholder", placeholder_simpleSearch);
+					
+					//delete the page title on welcome page
+					jQuery("div#contentSkipLinkAnchor.headLine").remove();
+					
+					//initialize the tab menu and carousel
+					initStartpage();
+				</script>
+				
+				
+				<style type="text/css">
+					/* reset the css settings for the footer */
+					div.footer div.full_area0 {
+						width:100%;
+						text-align:center;
+					}
+					div.footer div.full_area0 div.huge_area0 {
+						width:0;
+						display:none;
+					}
+				</style>
 		</div>
 	</ui:define>	
 						

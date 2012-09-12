@@ -43,6 +43,11 @@ All rights reserved. Use is subject to license terms.
         </head>
         <body lang="#{SessionBean.locale}">
             <h:form id="formular">
+            	<style type="text/css">
+            		.metaMenu input:hover, .metaMenu input:focus, .metaMenu button:hover, .metaMenu button:focus, .metaMenu a:hover, .metaMenu a:focus {
+					  background-color:transparent;
+					}
+            	</style>
                 <div class="full wrapper">
                     <ui:insert name="init"/>
                     <h:inputHidden id="offset" styleClass="offset">

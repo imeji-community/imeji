@@ -101,7 +101,7 @@
 										<f:attribute name="collectionId" value="#{ViewCollectionBean.collection.id}"/>
 										<f:attribute name="name" value="#{ViewCollectionBean.collection.metadata.title}"/>
 					           		</h:commandLink>
-					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id}"><h:outputText value="Cancel"/></h:outputLink>
+					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}"><h:outputText value="Cancel"/></h:outputLink>
 								</h:panelGrid>
 						 </f:facet>   
 					</rich:togglePanel>

@@ -70,7 +70,7 @@
 					</h:panelGroup>
 					<h:panelGroup id="image" layout="block" rendered="#{imageBean.image.status != 'WITHDRAWN'}">
 						<h:outputText styleClass="small_label huge_marginLIncl" value="Image in " rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}"/>
-						<h:outputLink styleClass="free_area0  xLarge_marginRExcl" value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.id}" rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
+						<h:outputLink styleClass="free_area0  xLarge_marginRExcl" value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.id.path}" rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
 							<h:outputText value="active album"/>
 						</h:outputLink>
 						<h:commandLink styleClass="free_label huge_marginLIncl xLarge_marginRExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">

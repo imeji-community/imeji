@@ -42,7 +42,7 @@
 	<ui:param name="headline" value="#{lbl.details}" />
 	
 	<ui:define name="contentMenu">
-		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.collectionUrl}/#{CollectionImagesBean.id}" rendered="true">
+		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}" rendered="true">
 			<h:outputText value="#{lbl.collection_home}"/>
 		</h:outputLink>			
 		

@@ -41,7 +41,9 @@
 			
 			<ui:define name="contentMenu">
 			
-				<h:outputText styleClass="free_area0" value="#{lbl.album_home}"/>
+				<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}" rendered="true">
+					<h:outputText value="#{lbl.album_home}"/>
+				</h:outputLink>
 				
 				<h:outputText styleClass="seperator void" />
 				

@@ -58,13 +58,13 @@ public class AlbumImagesBean extends ImagesBean
         if (album != null && album.getId() != null)
         {
             if (sb.getSelectedImagesContext() != null
-                    && !(sb.getSelectedImagesContext().equals("pretty:albumImages" + album.getId().toString())))
+                    && !(sb.getSelectedImagesContext().equals("pretty:albumBrowse" + album.getId().toString())))
             {
                 sb.getSelected().clear();
             }
-            sb.setSelectedImagesContext("pretty:albumImages" + album.getId().toString());
+            sb.setSelectedImagesContext("pretty:albumBrowse" + album.getId().toString());
         }
-        return "pretty:albumImages";
+        return "pretty:albumBrowse";
     }
 
     @Override

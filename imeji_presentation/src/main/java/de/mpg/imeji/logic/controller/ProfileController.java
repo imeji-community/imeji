@@ -5,24 +5,23 @@ package de.mpg.imeji.logic.controller;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.j2j.helper.DateHelper;
 
 public class ProfileController extends ImejiController
@@ -47,7 +46,7 @@ public class ProfileController extends ImejiController
         writeCreateProperties(mdp, user);
         mdp.setStatus(Status.PENDING);
         imejiBean2RDF.create(imejiBean2RDF.toList(mdp), user);
-         addCreatorGrant(mdp, user);
+        addCreatorGrant(mdp, user);
         return mdp.getId();
     }
 
@@ -96,61 +95,22 @@ public class ProfileController extends ImejiController
         update(mdp);
     }
 
-    public int countAllProfiles()
-    {
-        return ImejiSPARQL.execCount("SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/profile>}",
-                ImejiJena.profileModel);
-    }
-
     /**
-     * @deprecated
-     * @return
-     */
-    public List<MetadataProfile> retrieveAll()
-    {
-        // rdf2Bean = new RDF2Bean(ImejiJena.profileModel);
-        // return (List<MetadataProfile>)rdf2Bean.load(MetadataProfile.class);
-        return new ArrayList<MetadataProfile>();
-    }
-
-    /**
-     * To be replaced, with a more generic method
+     * Search all profile allowed for the current user. Not sorted.
      * 
      * @return
-     * @deprecated
+     * @throws Exception
      */
-    public List<MetadataProfile> search()
+    public List<MetadataProfile> search() throws Exception
     {
-        String q = "SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/mdprofile> . ?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status "
-                + ".FILTER( ";
-        q += "?status=<" + Status.RELEASED.getUri() + "> || (?status!=<" + Status.WITHDRAWN.getUri() + "> ";
-        int i = 0;
-        if (user != null && user.getGrants().size() > 0)
+        Search search = new Search(SearchType.PROFILE, null);
+        SearchResult result = search.search(new SearchQuery(), null, user);
+        List<MetadataProfile> l = new ArrayList<MetadataProfile>();
+        for (String uri : result.getResults())
         {
-            q += "&& (";
-            for (Grant g : user.getGrants())
-            {
-                if (GrantType.SYSADMIN.equals(g.asGrantType()))
-                {
-                    if (i > 0)
-                        q += " || ";
-                    q += " true ";
-                    i++;
-                }
-                else if (GrantType.PROFILE_EDITOR.equals(g.asGrantType())
-                        || GrantType.PROFILE_ADMIN.equals(g.asGrantType()))
-                {
-                    if (i > 0)
-                        q += " || ";
-                    q += " ?s=<" + g.getGrantFor() + "> ";
-                    i++;
-                }
-            }
-            q += ")";
+            l.add(retrieve(URI.create(uri)));
         }
-        q += " ))}";
-        // return ImejiSPARQL.execAndLoad(q, MetadataProfile.class);
-        return new ArrayList<MetadataProfile>();
+        return l;
     }
 
     public MetadataProfile retrieve(String id) throws Exception

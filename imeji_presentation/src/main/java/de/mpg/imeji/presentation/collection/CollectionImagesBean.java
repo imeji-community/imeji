@@ -177,7 +177,7 @@ public class CollectionImagesBean extends ImagesBean
             BeanHelper.error(e.getMessage());
             e.printStackTrace();
         }
-        return "pretty";
+        return "pretty:";
     }
 
     public String delete()

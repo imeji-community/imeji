@@ -82,9 +82,16 @@ public class ExportManager
             // TODO Change the search for profiles!!!!!!!!!!!!
             ProfileController pc = new ProfileController(user);
             List<String> uris = new ArrayList<String>();
-            for (MetadataProfile mdp : pc.search())
+            try
             {
-                uris.add(mdp.getId().toString());
+                for (MetadataProfile mdp : pc.search())
+                {
+                    uris.add(mdp.getId().toString());
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
             }
             result = new SearchResult(uris, new SortCriterion());
         }

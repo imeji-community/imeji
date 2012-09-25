@@ -46,7 +46,9 @@
 				
 				<div id="welcomeInfo" class="imj_cont_2_5 imj_welcomeInfo" style="float:left;">
 					<style type="text/css">
-						
+						img {
+							border:0 none;
+						}
 						div.LogoNSearch {
 							overflow:visible;
 						}
@@ -165,9 +167,9 @@
 						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search in ...';</script>
 						<!-- tabs -->
 						<ul class="imj_cont_1">
-							<li><a href="#formular:tabsEN-1">What is imeji?</a></li>
-							<li><a href="#formular:tabsEN-2">News</a></li>
-							<li><a href="#formular:tabsEN-3">How to use imeji?</a></li>
+							<li><a href="#formular:tabsEN-1" title="What is imeji?">What is imeji?</a></li>
+							<li><a href="#formular:tabsEN-2" title="News">News</a></li>
+							<li><a href="#formular:tabsEN-3" title="How to use imeji?">How to use imeji?</a></li>
 						</ul>	
 						
 						<!--  tabs content -->
@@ -194,9 +196,9 @@
 					<h:panelGroup layout="block" id="tabsDE" styleClass="id_tabs" rendered="#{SessionBean.locale == 'de'}">
 						<script type="text/javascript">var placeholder_username = 'Benutzername'; var placeholder_password = 'Passwort'; var placeholder_simpleSearch = 'Suche in ...';</script>
 						<ul class="imj_cont_1">
-							<li><a href="#formular:tabsDE-1">Was ist imeji?</a></li>
-							<li><a href="#formular:tabsDE-2">News</a></li>
-							<li><a href="#formular:tabsDE-3">Wie kann imeji verwendet werden?</a></li>
+							<li><a href="#formular:tabsDE-1" title="Was ist imeji?">Was ist imeji?</a></li>
+							<li><a href="#formular:tabsDE-2" title="News">News</a></li>
+							<li><a href="#formular:tabsDE-3" title="Wie kann imeji verwendet werden?">Wie kann imeji verwendet werden?</a></li>
 						</ul>
 						
 						<h:panelGroup layout="block" id="tabsDE-1" styleClass="imj_cont_1 tab_content" >
@@ -228,7 +230,7 @@
 							<!-- Define elements to accept the alt and title text from the images. -->
 							<div id="carousel">
 								<a4j:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0" rowKeyVar="index">
-									<h:outputLink id="lnkPicDetailCaroussel" title="..." value="#{Navigation.applicationUri}#{item.id.path}">
+									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.applicationUri}#{item.id.path}">
 										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrl}" height="114"/>
 									</h:outputLink>
 								</a4j:repeat>
@@ -307,15 +309,16 @@
 							speed:0.15,
 							autoRotate:"right",
 							autoRotateDelay:8500,
-							bringToFront:true,
+							bringToFront:false,
 							mouseWheel:true
 						});
 						
-						jQuery(".cloudcarousel").bind({
+						jQuery("img.cloudcarousel").bind({
 							mouseover: function(ev) {
-								jQuery("#title-text").text(this.title);
-								jQuery("#alt-text").text(this.alt);
-								this.title = '';
+								var img = this;
+								jQuery("#title-text").text(img.title);
+								jQuery("#alt-text").text(img.alt);
+								
 								var cloudInfo = jQuery("#cloudinfoText");
 								cloudInfo.addClass("dynamicCloudinfo borderradius_5");
 								cloudInfo.show();
@@ -323,7 +326,8 @@
 									mousemove: function(ev) {
 										jQuery("#cloudinfoText").css("left", ev.pageX).css("top", ev.pageY+10);
 									}
-								})
+								});
+								img.title = '';
 							},
 							mouseout: function(ev) {
 								jQuery("#cloudinfoText").hide();
@@ -331,6 +335,7 @@
 								this.title = jQuery("#title-text").text();
 							}
 						});
+						//jQuery("#carousel a").removeAttr("title");
 					}
 					
 					function initStartpage() {
@@ -338,7 +343,7 @@
 						createCarousel();
 					};
 					//add to every link on page the current title attribute
-					jQuery(".header a, #content a").each(function(ind, obj){
+					jQuery("#metaMenuSkipLinkAnchor a, #mainMenuSkipLinkAnchor a, #searchMenuSkipLinkAnchor a").each(function(ind, obj){
 						this.title = this.innerHTML;
 					});
 					//add placeholder for login menu

@@ -29,30 +29,25 @@
 */
 
 function addItemListFunctions() {
+	/*
+	 * for default:
+	 * hide all elements that shows details
+	 */
 	jQuery('.itemList').each(
-			function(i,ele){
-				jQuery(ele).find('.mediumView').each(
-						function(j,elem){
-							jQuery(elem).hide();
-						});
-				jQuery(ele).find('.collapse').each(
-						function(j,elem){
-							jQuery(elem).hide();
-						});
-				jQuery(ele).find('.expand').each(
-						function(j,elem){
-							jQuery(elem).show();
-						});
-				jQuery(ele).find('.listItem').hover(
-						function () {
-							jQuery(this).addClass('listBackground');
-					    }, 
-					    function () {
-					    	jQuery(this).removeClass('listBackground');
-					    }
+		function(i,ele){
+			var list = jQuery(ele);
+			list.find(".mediumView, .collapse").hide();
+			list.find(".expand").show();
+			
+			var listItems = list.find(".listItem");
+			listItems.mouseover(
+						function() { jQuery(this).addClass('listBackground');}
+					).mouseout(
+						function() { jQuery(this).removeClass('listBackground'); }
 					);
-			});
-
+		}
+	);
+	
 	/*jQuery('.checkboxSelectButton').click(function(){jQuery(this).siblings('.selectMenu').show();});
 	jQuery('.checkBoxCloseSelectButton').click(function(){jQuery(this).parent().hide();});
 		jQuery('.selectMenu').find('.selectTotal').click(function(){jQuery(this).parents('.itemList').find('.itemCheckBox').each(function(i, elem){elem.checked=true;}); jQuery(this).parents('.selectMenu').hide();});
@@ -65,7 +60,6 @@ function addItemListFunctions() {
 	// Start with event on document to close the select menu on click elswhere
 	jQuery('body').ready(function(e){
 		
-	
 		jQuery('html').click(function(){
 			// $('.selectMenu').hide();
 		});
@@ -121,56 +115,59 @@ function addItemListFunctions() {
 	});
 	
 
-	
+	/* itemList handling for more/less view */
 	jQuery('.headerSwitchView').find('.expand').click(
 			function(){
-				jQuery(this).hide();
-				jQuery(this).siblings('.collapse').show();
-				jQuery(this).parents('.itemList').find('.listItem').find('.expand:visible').each(
-						function(i, elem){
-							jQuery(elem).trigger('click');
-						});
+				var curEl = jQuery(this);
+				var itemList = curEl.parents(".itemList");
+				itemList.find(".listItem .expand:visible").trigger("click");
+				curEl.hide();
+				curEl.siblings('.collapse').show();
 			});
 	jQuery('.headerSwitchView').find('.collapse').click(
 			function(){
-				jQuery(this).hide();
-				jQuery(this).siblings('.expand').show();
-				jQuery(this).parents('.itemList').find('.listItem').find('.collapse:visible').each(
-						function(i, elem){
-							jQuery(elem).trigger('click');
-						});
+				var curEl = jQuery(this);
+				var itemList = curEl.parents(".itemList");
+				itemList.find(".listItem .collapse:visible").trigger("click");
+				curEl.hide();
+				curEl.siblings('.expand').show();
 			});
 	
-	jQuery('.shortView').find('.expand').each(
+	jQuery('.listItem .shortView .expand').each(
 			function(i,ele){
 				jQuery(ele).click(
 						function(){
-							jQuery(this).hide();
-							jQuery(this).siblings('.collapse').show();
-							var parentElement = jQuery(this).parents('.listItem');
-							jQuery(parentElement).children('.mediumView').slideToggle('normal', function(){
-								if((jQuery(parentElement).find('.shortView').find('.expand:visible').length)==0){
-									jQuery(parentElement).find('.headerSwitchView').find('.expand').hide();
-									jQuery(parentElement).find('.headerSwitchView').find('.collapse').show();
-								}
-							}
-							);
+							var curEl = jQuery(this);
+							
+							var listItem = jQuery(this).parents('.listItem');
+							listItem.find(".mediumView").show(350, function() {
+								curEl.hide();
+								curEl.siblings('.collapse').show();
+							});/*
+							listItem.find('.mediumView').slideToggle(400, function() {
+								curEl.hide();
+								curEl.siblings('.collapse').show();
+							});
+							*/
 						}
 				)
 			});
-	jQuery('.shortView').find('.collapse').each(
+	jQuery('.listItem .shortView .collapse').each(
 			function(i,ele){
 				jQuery(ele).click(
 						function(){
-							jQuery(this).hide();
-							jQuery(this).siblings('.expand').show();
-							var parentElement = jQuery(this).parents('.listItem');
-							jQuery(parentElement).children('.mediumView').slideToggle('normal', function(){
-								if((jQuery(parentElement).find('.shortView').find('.collapse:visible').length)==0){
-									jQuery(parentElement).find('.headerSwitchView').find('.expand').show();
-									jQuery(parentElement).find('.headerSwitchView').find('.collapse').hide();
-								}
+							var curEl = jQuery(this);
+							
+							var listItem = jQuery(this).parents('.listItem');
+							listItem.find(".mediumView").hide(350, function() {
+								curEl.hide();
+								curEl.siblings('.expand').show();
+							});/*
+							listItem.find('.mediumView').slideToggle(400, function() {
+								curEl.hide();
+								curEl.siblings('.collapse').show();
 							});
+							*/
 						}
 				)
 			});

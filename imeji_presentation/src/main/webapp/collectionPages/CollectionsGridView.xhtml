@@ -9,7 +9,7 @@
 	
 <a4j:outputPanel id="ajaxList">
 
-		<div class="full_area0 itemList loggedIn">
+		<div class="full_area0 itemList loggedIn collectionList">
 			<div class="full_area0 listHeader">
 			
 				<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{SessionBean.user != null}">
@@ -213,7 +213,9 @@
 		
 		</div>
 		<script type="text/javascript">
-			addItemListFunctions();
+	/*		jQuery(document).ready(function(){
+				setTimeout("addItemListFunctions()", 200);
+			}); */
 		</script>
 
 	</a4j:outputPanel>

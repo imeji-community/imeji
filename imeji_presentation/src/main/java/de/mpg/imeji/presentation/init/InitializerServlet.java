@@ -73,7 +73,7 @@ public class InitializerServlet extends HttpServlet
         {
             User user = new User();
             user.setEmail("imeji@mpdl.mpg.de");
-            user.setName("Imeji Test User");
+            user.setName("imeji Test User");
             user.setNick("itu");
             user.setEncryptedPassword(UserController.convertToMD5("test"));
             user.getGrants().add(new Grant(GrantType.CONTAINER_ADMIN, URI.create("http://test.de")));

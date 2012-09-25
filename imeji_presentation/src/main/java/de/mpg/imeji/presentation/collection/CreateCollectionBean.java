@@ -70,10 +70,6 @@ public class CreateCollectionBean extends CollectionBean
     public void reset()
     {
         setCollection(ImejiFactory.newCollection());
-        // super.getCollection().getMetadata().setTitle("");
-        // super.getCollection().getMetadata().setDescription("");
-        // super.getCollection().getMetadata().getPersons().clear();
-        // super.getCollection().getMetadata().getPersons().add(ImejiFactory.newPerson());
         collectionSession.setActive(super.getCollection());
         reset = "0";
     }

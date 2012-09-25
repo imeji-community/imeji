@@ -78,7 +78,7 @@ public class ImejiBean2RDF
         {
             if (!security.check(opType, user, o))
             {
-                throw new RuntimeException("Imeji Security exception: " + user.getEmail() + " not allowed to "
+                throw new RuntimeException("imeji Security exception: " + user.getEmail() + " not allowed to "
                         + opType.name() + " " + extractID(o));
             }
         }

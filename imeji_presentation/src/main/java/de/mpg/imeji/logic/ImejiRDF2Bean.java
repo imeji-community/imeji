@@ -83,7 +83,7 @@ public class ImejiRDF2Bean
                 String email = "Not logged in";
                 if (user != null)
                     email = user.getEmail();
-                throw new RuntimeException("Imeji Security exception: " + email + " not allowed to " + opType.name()
+                throw new RuntimeException("imeji Security exception: " + email + " not allowed to " + opType.name()
                         + " " + id);
             }
         }

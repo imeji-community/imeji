@@ -196,14 +196,14 @@
 				</div>
 					
 				<script>
-						// Implements a single radio behovior over many radio, used by "use as caption"
+						// Implements a single radio behavior over many radio, used by "use as caption"
 						function unSelectUnique(index)
 						{
-							var size = <h:outputText value="#{FormularBean.size}"/>;
-						    for(var i = 0; i &lt; size; i++)
-					        {
-					            if (index != i)
-						    	{
+							var i = 0;
+							while (document.getElementById('formular:profile:' + i + ':uniqueSelect') != null)
+							{
+								if (index != i)
+							    {
 					            	document.getElementById('formular:profile:' + i + ':uniqueSelect').checked= false;
 					            	document.getElementById('formular:profile:' + i + ':radioDescription:0').checked= false;
 						    	}
@@ -217,7 +217,8 @@
 					            	document.getElementById('formular:profile:' + i + ':uniqueSelect').checked= true;
 					            	document.getElementById('formular:profile:' + i + ':radioDescription:0').checked= true;
 					            }
-					        }
+								i++;
+							}
 						}
 				</script>
 			</h:panelGroup>

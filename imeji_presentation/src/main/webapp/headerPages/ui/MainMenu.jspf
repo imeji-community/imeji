@@ -42,19 +42,19 @@
 		</h:outputLink>
 		<h:outputText id="txtHomeInactive" styleClass="free_area0" value="#{lbl.home}" rendered="#{HistorySession.currentPage.type.fileName == 'Welcome.xhtml'}" />
 	
-		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="#{Navigation.browseUrl}?q=" rendered="#{HistorySession.currentPage.type.fileName != 'Images.xhtml'}">
+		<h:outputLink id="lnkBrowse" styleClass="free_area0" value="#{Navigation.browseUrl}?page=1&amp;q=" rendered="#{HistorySession.currentPage.type.fileName != 'Images.xhtml'}">
 	  		<h:outputText value="#{lbl.header_browse}"/>
 	  	</h:outputLink>
 	  	
 		<h:outputText id="txtBrowseInactive" styleClass="free_area0" value="#{lbl.header_browse}" rendered="#{HistorySession.currentPage.type.fileName == 'Images.xhtml'}" />
 		
-		<h:outputLink id="lnkCollections" styleClass="free_area0" value="#{Navigation.collectionsUrl}?q=" rendered="#{HistorySession.currentPage.type.fileName != 'Collections.xhtml'}">
+		<h:outputLink id="lnkCollections" styleClass="free_area0" value="#{Navigation.collectionsUrl}?page=1&amp;q=" rendered="#{HistorySession.currentPage.type.fileName != 'Collections.xhtml'}">
 			<h:outputText value="#{lbl.header_collections}"></h:outputText>
 		</h:outputLink>
 		<h:outputText id="lnkCollectionsInactive" styleClass="free_area0" value="#{lbl.header_collections}" rendered="#{HistorySession.currentPage.type.fileName == 'Collections.xhtml'}" />
 		
 		
-		<h:outputLink id="lnkAlbums" styleClass="free_area0" value="#{Navigation.albumsUrl}" rendered="#{HistorySession.currentPage.type.fileName != 'Albums.xhtml'}">
+		<h:outputLink id="lnkAlbums" styleClass="free_area0" value="#{Navigation.albumsUrl}?page=1" rendered="#{HistorySession.currentPage.type.fileName != 'Albums.xhtml'}">
 			<h:outputText value="#{lbl.header_albums}"></h:outputText>
 		</h:outputLink>
 		<h:outputText id="lnkAlbumssInactive" styleClass="free_area0" value="#{lbl.header_albums}" rendered="#{HistorySession.currentPage.type.fileName == 'Albums.xhtml'}" />

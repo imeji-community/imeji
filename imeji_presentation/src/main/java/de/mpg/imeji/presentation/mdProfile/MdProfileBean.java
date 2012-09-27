@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -109,13 +111,33 @@ public class MdProfileBean
         }
     }
 
-    /**
-     * Load the available templates (other profile) for the current user.
-     */
+    static class profilesLabelComparator implements Comparator<Object>
+    {
+        public int compare(Object o1, Object o2)
+        {
+            SelectItem profile1 = (SelectItem)o1;
+            SelectItem profile2 = (SelectItem)o2;
+            String profile1Label = profile1.getLabel();
+            String profile1Labe2 = profile2.getLabel();
+            // Compare values
+            if (profile1Label.compareTo(profile1Labe2) == 0)
+            {
+                return 0;
+            }
+            else if (profile1Label.compareTo(profile1Labe2) < 0)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+    }
+
     public void loadtemplates()
     {
         profilesMenu = new ArrayList<SelectItem>();
-        profilesMenu.add(new SelectItem(null, sessionBean.getLabel("profile_select_template")));
         try
         {
             for (MetadataProfile mdp : pc.search(sessionBean.getUser()))
@@ -125,6 +147,10 @@ public class MdProfileBean
                     profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
                 }
             }
+            // sort profilesMenu
+            Collections.sort(profilesMenu, new profilesLabelComparator());
+            // add title to first position
+            profilesMenu.add(0, new SelectItem(null, sessionBean.getLabel("profile_select_template")));
         }
         catch (Exception e)
         {
@@ -146,7 +172,7 @@ public class MdProfileBean
         }
         for (Statement s : profile.getStatements())
         {
-            s.setId(URI.create("http://imeji.org/statement/" + UUID.randomUUID()));
+            s.setId( URI.create("http://imeji.org/statement/" + UUID.randomUUID()));
         }
         collectionSession.setProfile(profile);
         initBeanObjects(profile);

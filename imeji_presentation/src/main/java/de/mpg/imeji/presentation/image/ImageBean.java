@@ -3,10 +3,12 @@
  */
 package de.mpg.imeji.presentation.image;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
@@ -26,6 +28,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
 import de.mpg.imeji.presentation.metadata.extractors.BasicExtractor;
@@ -34,6 +37,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
+import de.mpg.j2j.helper.J2JHelper;
 
 public class ImageBean
 {
@@ -385,6 +389,24 @@ public class ImageBean
                     + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("added_to_active_album"));
         }
         return "";
+    }
+
+    public void remove() throws Exception
+    {
+        if (getIsInActiveAlbum())
+        {
+            removeFromAlbum();
+        }
+        ItemController ic = new ItemController(sessionBean.getUser());
+        List<Item> l = new ArrayList<Item>();
+        l.add(item);
+        ic.delete(l, sessionBean.getUser());
+        redirectAfterRemove();
+    }
+
+    public void redirectAfterRemove() throws IOException
+    {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl());
     }
 
     public String removeFromAlbum() throws Exception

@@ -27,6 +27,12 @@ public class AlbumImageBean extends ImageBean
     	String tempId=(String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("AlbumImagesBean.id");
     	setBrowse(new SingleImageBrowse((AlbumImagesBean)BeanHelper.getSessionBean(AlbumImagesBean.class), getImage(),"album",tempId));
     }
+    
+    @Override
+    public boolean isDeletable()
+    {
+       return false;
+    }
 
     public String getAlbumId()
     {

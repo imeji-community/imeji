@@ -342,10 +342,7 @@
 						jQuery( ".id_tabs" ).tabs();
 						createCarousel();
 					};
-					//add to every link on page the current title attribute
-					jQuery("#metaMenuSkipLinkAnchor a, #mainMenuSkipLinkAnchor a, #searchMenuSkipLinkAnchor a").each(function(ind, obj){
-						this.title = this.innerHTML;
-					});
+					
 					//add placeholder for login menu
 					jQuery(".metaMenu input[type='text']").attr("placeholder", placeholder_username);
 					jQuery(".metaMenu input[type='password']").attr("placeholder", placeholder_password);

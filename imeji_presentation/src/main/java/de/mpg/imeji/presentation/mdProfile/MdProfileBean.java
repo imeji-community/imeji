@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -117,7 +118,7 @@ public class MdProfileBean
         profilesMenu.add(new SelectItem(null, sessionBean.getLabel("profile_select_template")));
         try
         {
-            for (MetadataProfile mdp : pc.search())
+            for (MetadataProfile mdp : pc.search(sessionBean.getUser()))
             {
                 if (mdp.getId().toString() != profile.getId().toString())
                 {
@@ -145,7 +146,7 @@ public class MdProfileBean
         }
         for (Statement s : profile.getStatements())
         {
-            s.setId(URI.create(s.getId().toString().replace(tp.getId().toString(), profile.getId().toString())));
+            s.setId(URI.create("http://imeji.org/statement/" + UUID.randomUUID()));
         }
         collectionSession.setProfile(profile);
         initBeanObjects(profile);

@@ -91,28 +91,38 @@ public class ImageBean
     {
         tab = UrlHelper.getParameterValue("tab");
         loadImage();
-        if ("techmd".equals(tab))
+        if (item != null)
         {
-            initViewTechnicalMetadata();
+            if ("techmd".equals(tab))
+            {
+                initViewTechnicalMetadata();
+            }
+            else
+            {
+                initViewMetadataTab();
+            }
+            initBrowsing();
+            selected = sessionBean.getSelected().contains(item.getId().toString());
         }
         else
         {
-            initViewMetadataTab();
+            edit = null;
         }
-        initBrowsing();
-        selected = sessionBean.getSelected().contains(item.getId().toString());
         return "";
     }
 
     public void initViewMetadataTab() throws Exception
     {
-        loadCollection();
-        loadProfile();
-        removeDeadMetadata();
-        sortMetadataAccordingtoProfile();
-        labels.init(profile);
-        edit = new SingleEditBean(item, profile, getPageUrl());
-        cleanImageMetadata();
+        if (item != null)
+        {
+            loadCollection();
+            loadProfile();
+            removeDeadMetadata();
+            sortMetadataAccordingtoProfile();
+            labels.init(profile);
+            edit = new SingleEditBean(item, profile, getPageUrl());
+            cleanImageMetadata();
+        }
     }
 
     public void initViewTechnicalMetadata() throws Exception
@@ -132,7 +142,8 @@ public class ImageBean
 
     public void initBrowsing()
     {
-        browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item, "item", "");
+        if (item != null)
+            browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item, "item", "");
     }
 
     private void sortMetadataAccordingtoProfile()
@@ -156,15 +167,7 @@ public class ImageBean
 
     public void loadImage()
     {
-        try
-        {
-            item = ObjectLoader.loadImage(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(sessionBean.getMessage("error_image_load"));
-            logger.error(sessionBean.getMessage("error_image_load"), e);
-        }
+        item = ObjectLoader.loadImage(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
     }
 
     public void loadCollection()
@@ -422,7 +425,7 @@ public class ImageBean
 
     public boolean getIsInActiveAlbum()
     {
-        if (sessionBean.getActiveAlbum() != null)
+        if (sessionBean.getActiveAlbum() != null && item != null)
         {
             return sessionBean.getActiveAlbum().getImages().contains(item.getId());
         }

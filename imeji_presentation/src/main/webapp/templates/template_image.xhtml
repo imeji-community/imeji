@@ -41,6 +41,10 @@
 							
 		<ui:define name="mainContent" >
 			<h:outputText value="#{imageBean.init}"/>
+			<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
+              <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
+          	</h:panelGroup>
+			<h:panelGroup rendered="#{imageBean.image != null}">
 			<div class="full_area0 paginator">
 			<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
 			 		
@@ -258,7 +262,7 @@
 				</h:panelGroup>
 				
 			</h:panelGroup>
-			
+			</h:panelGroup> 
 		</ui:define>
 
 	</ui:composition>

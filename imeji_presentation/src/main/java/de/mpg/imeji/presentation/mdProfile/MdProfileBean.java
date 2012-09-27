@@ -108,6 +108,9 @@ public class MdProfileBean
         }
     }
 
+    /**
+     * Load the available templates (other profile) for the current user.
+     */
     public void loadtemplates()
     {
         profilesMenu = new ArrayList<SelectItem>();

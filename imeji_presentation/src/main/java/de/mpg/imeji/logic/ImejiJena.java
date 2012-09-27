@@ -116,7 +116,7 @@ public class ImejiJena
             {
                 adminUser = new User();
                 adminUser.setEmail(PropertyReader.getProperty("imeji.sysadmin.email"));
-                adminUser.setName("Imeji Sysadmin");
+                adminUser.setName("imeji Sysadmin");
                 adminUser.setNick("sysadmin");
                 adminUser.setEncryptedPassword(UserController.convertToMD5(PropertyReader
                         .getProperty("imeji.sysadmin.password")));
@@ -127,7 +127,7 @@ public class ImejiJena
         {
             adminUser = new User();
             adminUser.setEmail("admin@imeji.org");
-            adminUser.setName("Imeji Sysadmin");
+            adminUser.setName("imeji Sysadmin");
             adminUser.setNick("sysadmin");
             try
             {

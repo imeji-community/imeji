@@ -21,7 +21,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 
 
 /**
- *  JavaBean for static content of the Imeji solution.
+ *  JavaBean for static content of the imeji solution.
  * @author saquet
  *
  */

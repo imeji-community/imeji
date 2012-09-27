@@ -148,6 +148,10 @@ public class SimpleQueryFactory
             {
                 return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
+            else if (SearchIndex.names.CONTAINER_METADATA_TITLE.name().equals( sortCriterion.getIndex().getName()))
+            {
+                return "?s <http://imeji.org/terms/container/metadata> ?cmd. ?cmd <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
+            }
         }
         return "";
     }

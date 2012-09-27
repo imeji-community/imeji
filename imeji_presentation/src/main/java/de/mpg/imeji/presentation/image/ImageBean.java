@@ -127,7 +127,7 @@ public class ImageBean
 
     public void initBrowsing()
     {
-        browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item);
+        browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item,"item","");
     }
 
     private void sortMetadataAccordingtoProfile()

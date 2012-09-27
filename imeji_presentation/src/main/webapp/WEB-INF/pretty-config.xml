@@ -70,13 +70,13 @@
 		<view-id>/jsf/CollectionImage.xhtml</view-id>
 	</url-mapping>
 
-	<url-mapping id="createcollection">
-		<pattern value="/createcollection" />
+	<url-mapping id="createCollection">
+		<pattern value="/createcollection"/>
 		<view-id>/jsf/CollectionCreate.xhtml</view-id>
 	</url-mapping>
 
 	<url-mapping id="editCollection">
-		<pattern value="/collection/#{EditCollectionBean.id}/edit" />
+		<pattern value="/collection/#{EditCollectionBean.id}/edit"/>
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>
 		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>

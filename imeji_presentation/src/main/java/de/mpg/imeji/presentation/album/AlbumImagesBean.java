@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -56,13 +58,13 @@ public class AlbumImagesBean extends ImagesBean
         if (album != null && album.getId() != null)
         {
             if (sb.getSelectedImagesContext() != null
-                    && !(sb.getSelectedImagesContext().equals("pretty:albumImages" + album.getId().toString())))
+                    && !(sb.getSelectedImagesContext().equals("pretty:albumBrowse" + album.getId().toString())))
             {
                 sb.getSelected().clear();
             }
-            sb.setSelectedImagesContext("pretty:albumImages" + album.getId().toString());
+            sb.setSelectedImagesContext("pretty:albumBrowse" + album.getId().toString());
         }
-        return "pretty:albumImages";
+        return "pretty:albumBrowse";
     }
 
     @Override
@@ -206,6 +208,8 @@ public class AlbumImagesBean extends ImagesBean
     public void setId(String id)
     {
         this.id = id;
+        //@Ye set session value to share with AlbumImageBean, another way is via injection
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("AlbumImagesBean.id", id);
     }
 
     public void setCollection(CollectionImeji collection)

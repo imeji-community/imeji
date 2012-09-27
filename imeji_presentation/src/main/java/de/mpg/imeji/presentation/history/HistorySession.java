@@ -30,10 +30,12 @@ public class HistorySession
                 {
                     if (ImejiPages.IMAGES.equals(type) && query != null && !"".equals(query))
                     {
+                        // If a browse page has a query, change the type of the page to search result
                         type = ImejiPages.SEARCH_RESULTS_IMAGES;
                     }
                     else if (ImejiPages.SEARCH_RESULTS_IMAGES.equals(type) && ("".equals(query) || query == null))
                     {
+                        // If a searchPage doesn't have a query, change the type to Browse page
                         type = ImejiPages.IMAGES;
                     }
                     newPage = new Page(type, PageURIHelper.getPageURI(type, query, id));

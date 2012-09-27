@@ -40,9 +40,15 @@ All rights reserved. Use is subject to license terms.
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js"></script>
             <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/theme_cookie.js"></script>
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
+			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/richfaces-ajax-patch.js"></script>
         </head>
         <body lang="#{SessionBean.locale}">
             <h:form id="formular">
+            	<style type="text/css">
+            		.metaMenu input:hover, .metaMenu input:focus, .metaMenu button:hover, .metaMenu button:focus, .metaMenu a:hover, .metaMenu a:focus {
+					  background-color:transparent;
+					}
+            	</style>
                 <div class="full wrapper">
                     <ui:insert name="init"/>
                     <h:inputHidden id="offset" styleClass="offset">

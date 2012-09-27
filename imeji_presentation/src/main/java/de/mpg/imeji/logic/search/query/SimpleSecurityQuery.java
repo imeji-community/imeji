@@ -5,10 +5,14 @@ package de.mpg.imeji.logic.search.query;
 
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.j2j.helper.J2JHelper;
 
 public class SimpleSecurityQuery
 {
@@ -51,14 +55,17 @@ public class SimpleSecurityQuery
                     if (GrantType.CONTAINER_ADMIN.equals(g.asGrantType())
                             || GrantType.CONTAINER_EDITOR.equals(g.asGrantType())
                             || GrantType.PRIVILEGED_VIEWER.equals(g.asGrantType())
-                            || GrantType.IMAGE_EDITOR.equals(g.asGrantType()))
+                            || GrantType.IMAGE_EDITOR.equals(g.asGrantType())
+                            || (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType) && GrantType.PROFILE_ADMIN
+                                    .equals(g.asGrantType())))
                     {
                         if (!"".equals(uf))
                         {
                             uf += " || ";
                         }
-                        if ("http://imeji.org/terms/collection".equals(rdfType)
-                                || "http://imeji.org/terms/album".equals(rdfType))
+                        if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType)
+                                || J2JHelper.getResourceNamespace(new Album()).equals(rdfType)
+                                || J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType))
                         {
                             uf += "?s";
                         }

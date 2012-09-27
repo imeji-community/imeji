@@ -12,6 +12,7 @@ import java.util.List;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -43,19 +44,16 @@ public class UserController extends ImejiController
     public User retrieve(String email) throws Exception
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
-        User u = new User();
-        u.setEmail(email);
-        return (User)imejiRDF2Bean.load(u.getId().toString(), user, u);
-    }
-
-    public User retrieve(URI id) throws Exception
-    {
-        String email = id.getPath().split("/Person/")[1];
-        if (email != null)
+        List<String> users = ImejiSPARQL
+                .exec("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s <http://xmlns.com/foaf/0.1/email> ?email .FILTER(?email='" + email +"')}", ImejiJena.userModel);
+        if (users.size() == 1)
         {
-            return retrieve(email);
+            return (User)imejiRDF2Bean.load(users.get(0), user, new User());
         }
-        return null;
+        else
+        {
+            throw new NotFoundException("User " + email + " not found.");
+        }
     }
 
     public void update(User user) throws Exception

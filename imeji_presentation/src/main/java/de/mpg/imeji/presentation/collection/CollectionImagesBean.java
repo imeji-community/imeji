@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -147,6 +148,9 @@ public class CollectionImagesBean extends ImagesBean
     public void setId(String id)
     {
         this.id = id;
+        //@Ye set session value to share with CollectionImageBean, another way is via injection
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("CollectionImagesBean.id", id);
+        
     }
 
     public void setCollection(CollectionImeji collection)
@@ -173,7 +177,7 @@ public class CollectionImagesBean extends ImagesBean
             BeanHelper.error(e.getMessage());
             e.printStackTrace();
         }
-        return "pretty";
+        return "pretty:";
     }
 
     public String delete()

@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import javax.faces.context.FacesContext;
+
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.image.SingleImageBrowse;
@@ -12,8 +14,17 @@ public class CollectionImageBean extends ImageBean
 {
     private String collectionId;
     private Navigation navigation;
+    private CollectionImagesBean collectionImagesBean;
 
-    public CollectionImageBean() throws Exception
+    public CollectionImagesBean getCollectionImagesBean() {
+		return collectionImagesBean;
+	}
+
+	public void setCollectionImagesBean(CollectionImagesBean collectionImagesBean) {
+		this.collectionImagesBean = collectionImagesBean;
+	}
+
+	public CollectionImageBean() throws Exception
     {
         super();
         this.prettyLink = "pretty:EditImageOfCollection";
@@ -22,8 +33,10 @@ public class CollectionImageBean extends ImageBean
 
     public void initBrowsing()
     {
+    	String tempId=(String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("CollectionImagesBean.id");
         setBrowse(new SingleImageBrowse((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class),
-                getImage()));
+                getImage(),"collection", tempId));
+       
     }
 
     public String getCollectionId()

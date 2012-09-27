@@ -101,7 +101,7 @@
 										<f:attribute name="collectionId" value="#{ViewCollectionBean.collection.id}"/>
 										<f:attribute name="name" value="#{ViewCollectionBean.collection.metadata.title}"/>
 					           		</h:commandLink>
-					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id}"><h:outputText value="Cancel"/></h:outputLink>
+					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}"><h:outputText value="Cancel"/></h:outputLink>
 								</h:panelGrid>
 						 </f:facet>   
 					</rich:togglePanel>
@@ -176,7 +176,7 @@
 		</ui:include>
 		<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
 			<ui:param name="bean" value="#{ViewCollectionBean}"/>
-			<ui:param name="status" value="#{ViewCollectionBean.collection.status}"/>
+			<ui:param name="discardComment" value="#{ViewCollectionBean.collection.discardComment}"/>
 		</ui:include>
 		
 	</ui:define>

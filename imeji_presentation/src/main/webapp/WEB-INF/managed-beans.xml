@@ -259,6 +259,12 @@
 		<managed-bean-class>de.mpg.imeji.presentation.beans.DoctorBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>StartPageBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.StartPageBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
 
 	<converter>
 		<converter-id>DoubleConverter</converter-id>

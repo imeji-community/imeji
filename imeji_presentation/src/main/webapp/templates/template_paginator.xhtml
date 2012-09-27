@@ -74,41 +74,11 @@
 			 		</h:panelGroup>
 			 		<h:panelGroup styleClass="seperator" />
 					
-					
 			 		<a4j:repeat id="paginator" var="paginatorPage" value="#{paginatorListSessionBean.paginatorPages}" first="#{paginatorListSessionBean.firstPaginatorPageNumber - 1}" rows="7">
 			 			<h:commandButton id="btPageNumber1" styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{!paginatorListSessionBean.ajaxMode and !(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}"/>
 			 			<h:panelGroup styleClass="xSmall_txtBtn actual deactivated" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}">
 			 				<h:outputText value="#{paginatorPage.number}"/>
 			 			</h:panelGroup>
-			 			<h:panelGroup styleClass="seperator" />
-			 			<h:panelGroup styleClass="xSmall_txtBtn actual deactivated" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}">
-			 				<h:outputText value="#{paginatorPage.number}"/>
-			 			</h:panelGroup>
-			 			<h:panelGroup styleClass="seperator" />
-			 			<h:panelGroup styleClass="xSmall_txtBtn actual deactivated" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}">
-			 				<h:outputText value="#{paginatorPage.number}"/>
-			 			</h:panelGroup>
-			 			<h:panelGroup styleClass="seperator" />
-			 			<h:panelGroup styleClass="xSmall_txtBtn actual deactivated" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}">
-			 				<h:outputText value="#{paginatorPage.number}"/>
-			 			</h:panelGroup>
-			 			<h:panelGroup styleClass="seperator" />
-			 			<h:panelGroup styleClass="xSmall_txtBtn actual deactivated" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}">
-			 				<h:outputText value="#{paginatorPage.number}"/>
-			 			</h:panelGroup>
-			 			<h:panelGroup styleClass="seperator" />
-			 			<h:panelGroup styleClass="xSmall_txtBtn actual deactivated" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}">
-			 				<h:outputText value="#{paginatorPage.number}"/>
-			 			</h:panelGroup>
-			 			<h:panelGroup styleClass="seperator" />
-			 			<h:panelGroup styleClass="xSmall_txtBtn actual deactivated" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}">
-			 				<h:outputText value="#{paginatorPage.number}"/>
-			 			</h:panelGroup>
-			 			<h:panelGroup styleClass="seperator" />
-			 			<h:panelGroup styleClass="xSmall_txtBtn actual deactivated" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}">
-			 				<h:outputText value="#{paginatorPage.number}"/>
-			 			</h:panelGroup>
-			 			<h:panelGroup styleClass="seperator" />
 			 			<a4j:commandButton id="btPageNumber1Ajax" ajaxSingle="true" onclick="setOpacityToImages();" reRender="ajaxPaginatorTop, ajaxPaginatorBottom,  ajaxList, subHeader" styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{paginatorListSessionBean.ajaxMode and !(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}"/>
 			 			<h:panelGroup styleClass="seperator" />
 			 		</a4j:repeat>

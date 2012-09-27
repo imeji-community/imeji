@@ -31,6 +31,7 @@ import de.mpg.imeji.presentation.metadata.SingleEditBean;
 import de.mpg.imeji.presentation.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -127,7 +128,7 @@ public class ImageBean
 
     public void initBrowsing()
     {
-        browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item,"item","");
+        browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item, "item", "");
     }
 
     private void sortMetadataAccordingtoProfile()
@@ -477,7 +478,7 @@ public class ImageBean
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, sessionBean.getUser(), item) && item != null
-                && !item.getStatus().equals(Status.WITHDRAWN);
+                && !item.getStatus().equals(Status.WITHDRAWN) && profile.getStatements().size() > 0;
     }
 
     public boolean isVisible()

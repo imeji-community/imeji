@@ -10,6 +10,7 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
@@ -26,6 +27,7 @@ public class StatementWrapper
     private List<LocalizedString> labels;
     private VocabularyHelper vocabularyHelper;
     private boolean description = false;
+    private boolean showRemoveWarning = false;
 
     public StatementWrapper(Statement st, URI profile)
     {
@@ -91,7 +93,14 @@ public class StatementWrapper
         statement.setDescription(description);
         return statement;
     }
-    
+
+    public boolean isUsedByAtLeastOnItem()
+    {
+        return ImejiSPARQL
+                .exec("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/metadata> ?md . ?md <http://imeji.org/terms/statement> <"
+                        + statement.getId() + ">} LIMIT 1 ", null).size() > 0;
+    }
+
     public int getLabelsCount()
     {
         return labels.size();
@@ -248,5 +257,15 @@ public class StatementWrapper
     public boolean isPreview()
     {
         return preview;
+    }
+
+    public void setShowRemoveWarning(boolean showRemoveWarning)
+    {
+        this.showRemoveWarning = showRemoveWarning;
+    }
+
+    public boolean isShowRemoveWarning()
+    {
+        return showRemoveWarning;
     }
 }

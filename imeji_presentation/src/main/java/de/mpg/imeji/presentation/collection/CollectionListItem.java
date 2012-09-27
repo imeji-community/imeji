@@ -147,7 +147,7 @@ public class CollectionListItem
         if ("".equals(discardComment.trim()))
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
-            BeanHelper.error(sessionBean.getMessage("error_collection_withdraw_discardcomment"));
+            BeanHelper.error(sessionBean.getMessage("errorn_withdraw_discardcomment"));
         }
         else
         {

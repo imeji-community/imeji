@@ -215,7 +215,24 @@ public class MdProfileBean
 
     public void removeStatement()
     {
+        if (!statements.get(getStatementPosition()).isUsedByAtLeastOnItem())
+        {
+            statements.remove(getStatementPosition());
+        }
+        else
+        {
+            statements.get(getStatementPosition()).setShowRemoveWarning(true);
+        }
+    }
+
+    public void forceRemoveStatement()
+    {
         statements.remove(getStatementPosition());
+    }
+
+    public void closeRemoveWarning()
+    {
+        statements.get(getStatementPosition()).setShowRemoveWarning(false);
     }
 
     public void addLabel()

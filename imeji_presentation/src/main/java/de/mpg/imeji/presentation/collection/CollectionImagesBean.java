@@ -29,6 +29,7 @@ import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -148,9 +149,8 @@ public class CollectionImagesBean extends ImagesBean
     public void setId(String id)
     {
         this.id = id;
-        //@Ye set session value to share with CollectionImageBean, another way is via injection
+        // @Ye set session value to share with CollectionImageBean, another way is via injection
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("CollectionImagesBean.id", id);
-        
     }
 
     public void setCollection(CollectionImeji collection)
@@ -221,31 +221,14 @@ public class CollectionImagesBean extends ImagesBean
     }
 
     /**
-     * Check that at leat one image is editable
+     * Check that at least one image is editable and if the profile is not empty
      */
-    // public boolean isImageEditable()
-    // {
-    // for (ThumbnailBean tb : getCurrentPartList())
-    // {
-    // if (tb.isEditable())
-    // {
-    // return true;
-    // }
-    // }
-    // return false;
-    // }
-    //
-    // public boolean isImageDeletable()
-    // {
-    // for (ThumbnailBean tb : getCurrentPartList())
-    // {
-    // if (tb.isDeletable())
-    // {
-    // return true;
-    // }
-    // }
-    // return false;
-    // }
+    public boolean isImageEditable()
+    {
+        return super.isImageDeletable()
+                && ObjectCachedLoader.loadProfile(collection.getProfile()).getStatements().size() > 0;
+    }
+
     public boolean isVisible()
     {
         Security security = new Security();

@@ -49,7 +49,7 @@
 						</a>
 	       			</div>
 					<div class="xLarge_txtBtn tiny_marginLExcl">
-						<a4j:commandButton onclick="this.disabled=true; this.style.opacity = 0.5; this.value='#{msg.please_wait}';" action="#{bean.release}" rendered="#{bean.deletable}" value="#{lbl.release}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
+						<a4j:commandButton onclick="submitPanel(this, '#{msg.please_wait}');" action="#{bean.release}" rendered="#{bean.deletable}" value="#{lbl.release}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
 				 	</div>
 				</div>
 			</h:panelGroup>

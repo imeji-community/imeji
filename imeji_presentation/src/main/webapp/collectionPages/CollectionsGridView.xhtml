@@ -62,7 +62,7 @@
 			</div>
 			
 			<ol>				
-				<a4j:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0">
+				<a4j:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0" rowKeyVar="index">
 				   
 					<li class="full_area0 listItem">
 					
@@ -207,6 +207,7 @@
 						<ui:include src="../confirmationPages/ContainerWithdraw.xhtml">
 							<ui:param name="bean" value="#{container}"/>
 							<ui:param name="discardComment" value="#{container.discardComment}"/>
+							<ui:param name="index" value="#{index}"/>
 						</ui:include>
 				</a4j:repeat>
 			</ol>

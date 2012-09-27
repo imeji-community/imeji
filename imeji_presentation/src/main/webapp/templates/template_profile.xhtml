@@ -172,11 +172,20 @@
 											
 								</h:panelGroup>
 								<span class="full_area0_p2">
-									<a4j:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{remove_metadata}" action="#{FormularBean.removeStatement}" reRender="ajaxArea">
+									<a4j:commandButton styleClass="min_imgBtn remove groupTool" rendered="#{FormularBean.size &gt; 1}" shortDesc="#{remove_metadata}" action="#{FormularBean.removeStatement}" reRender="ajaxArea">
 										<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 									</a4j:commandButton>
-									<h:outputLabel styleClass="" value="#{lbl.statement_remove}" />
+									<h:outputLabel styleClass="" value="#{lbl.statement_remove}" rendered="#{FormularBean.size &gt; 1}" />
 								</span>
+								<h:panelGroup layout="block" styleClass="quad_area2_p0 messageArea warnMessageArea" rendered="#{statement.showRemoveWarning}">
+                                	<h:outputText styleClass="free_area0_p0" value="#{msg.remove_statement_used}"/><br/><br/>
+                                	<a4j:commandButton action="#{FormularBean.closeRemoveWarning}" value="#{lbl.no}" styleClass="free_area1_p8 cancelButton" reRender="ajaxArea">
+                                		<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
+                                	</a4j:commandButton>		
+                                	<a4j:commandButton styleClass="free_area1_p8 activeButton" value="#{lbl.yes}" action="#{FormularBean.forceRemoveStatement}" reRender="ajaxArea">
+										<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
+									</a4j:commandButton>
+                                </h:panelGroup>
 								<h:panelGroup layout="block" styleClass="free_area0 endline itemLine clear">
 									<span class="full_area0_p2">
 										<a4j:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" action="#{FormularBean.addStatement}" reRender="ajaxArea">

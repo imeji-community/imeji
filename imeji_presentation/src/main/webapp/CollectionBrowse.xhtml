@@ -37,7 +37,7 @@
 
 <body>
 	<ui:composition template="templates/template_paginator_images.xhtml">	
-			<ui:param name="paginatorListSessionBean" value="#{CollectionImagesBean}" />
+			<ui:param name="paginatorListSessionBean" value="#{CollectionImagesBean}"/>
 			<ui:param name="headline" value="#{CollectionImagesBean.collection.metadata.title}"/>
 			<ui:define name="contentMenu">
 				<h:outputText value="#{CollectionImagesBean.init}"/>
@@ -46,17 +46,17 @@
 					<h:outputText value="#{lbl.collection_home}"/>
 				</h:outputLink>
 				
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="seperator void"/>
 				
 				<h:outputText value="#{lbl.view_images}" styleClass="free_area0"/>
 				
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="seperator void"/>
 				
 				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
 					<h:outputText value="#{lbl.collection_metadata}"/>
 				</h:outputLink>
 				
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="seperator void"/>
 				
 				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{CollectionImagesBean.editable}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
@@ -64,49 +64,49 @@
 			</ui:define>
 			
 			<ui:define name="actionsMenu">
-			
-				<h:panelGroup styleClass="free_area0">
-					<!-- SORTING content menu lower line starts here -->
-					<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" />
-					<h:selectOneMenu id="selSort" value="#{CollectionImagesBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
-						<f:selectItems id="sortItem" value="#{CollectionImagesBean.sortMenu}" />
-					</h:selectOneMenu>
-					<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{CollectionImagesBean.toggleSortOrder}" rendered="#{CollectionImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-					<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{CollectionImagesBean.toggleSortOrder}" rendered="#{CollectionImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-					<h:outputText styleClass="seperator void" />
-					<!-- SORTING content menu lower line ends here -->
+				<h:panelGroup layout="block" styleClass="free_area0 sub action">
+					<h:panelGroup styleClass="free_area0">
+						<!-- SORTING content menu lower line starts here -->
+						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0"/>
+						<h:selectOneMenu id="selSort" value="#{CollectionImagesBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
+							<f:selectItems id="sortItem" value="#{CollectionImagesBean.sortMenu}"/>
+						</h:selectOneMenu>
+						<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{CollectionImagesBean.toggleSortOrder}" rendered="#{CollectionImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
+						<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{CollectionImagesBean.toggleSortOrder}" rendered="#{CollectionImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
+						<h:outputText styleClass="seperator void"/>
+						<!-- SORTING content menu lower line ends here -->
+					</h:panelGroup>
+					
+					 <h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
+						<h:outputText value="#{lbl.collection_release}"/>
+						<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
+					</h:outputLink>
+					
+					<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
+						<h:outputText value="#{lbl.withdraw}"/>
+						<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
+					</h:outputLink>
+					
+					<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.deletable}">
+						<h:outputText value="#{lbl.delete}"/>
+						<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
+					</h:outputLink>
+					
+					<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
+						<h:outputText value="#{lbl.export_metadata}"/>
+					</h:outputLink>
+					
+					<ui:include src="confirmationPages/ContainerRelease.xhtml">
+						<ui:param name="bean" value="#{CollectionImagesBean}"/>
+					</ui:include>
+					<ui:include src="confirmationPages/ContainerDelete.xhtml">
+						<ui:param name="bean" value="#{CollectionImagesBean}"/>
+					</ui:include>
+					<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
+						<ui:param name="bean" value="#{CollectionImagesBean}"/>
+						<ui:param name="discardComment" value="#{CollectionImagesBean.collection.discardComment}"/>
+					</ui:include>
 				</h:panelGroup>
-				
-				 <h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
-					<h:outputText value="#{lbl.collection_release}"/>
-					<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
-				</h:outputLink>
-				
-				<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
-					<h:outputText value="#{lbl.withdraw}"/>
-					<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
-				</h:outputLink>
-				
-				<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.deletable}">
-					<h:outputText value="#{lbl.delete}"/>
-					<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
-				</h:outputLink>
-				
-				<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
-					<h:outputText value="#{lbl.export_metadata}"/>
-				</h:outputLink>
-				
-				<ui:include src="confirmationPages/ContainerRelease.xhtml">
-					<ui:param name="bean" value="#{CollectionImagesBean}"/>
-				</ui:include>
-				<ui:include src="confirmationPages/ContainerDelete.xhtml">
-					<ui:param name="bean" value="#{CollectionImagesBean}"/>
-				</ui:include>
-				<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
-					<ui:param name="bean" value="#{CollectionImagesBean}"/>
-					<ui:param name="discardComment" value="#{CollectionImagesBean.collection.discardComment}"/>
-				</ui:include>
-				
 			</ui:define>
 	</ui:composition>
 

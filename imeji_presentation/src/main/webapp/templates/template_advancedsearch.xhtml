@@ -35,41 +35,34 @@
  All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
-
 	<body>
-
-	<ui:composition template="template.xhtml">
-
-
-		<ui:param name="headline" value="#{lbl.search_advanced}"/>
-
-		
-		<ui:define name="contentMenu">
-			<h:outputText id="txtOrganizeLink" styleClass="free_area0" value="#{lbl.advanced_search}"/>
-		</ui:define>
-		
-		<ui:define name="actionsMenu">
-			<h:panelGroup id="advancedSearchMenu">
-				<pretty:link  id="lnkImages" styleClass="free_area0" mappingId="forImages" rendered="#{prettyContext.currentMapping.id != 'forImages'}">
-					<h:outputText value="#{lbl.for_images}"></h:outputText>
-				</pretty:link>
-				<h:outputText id="txtImagesLink" styleClass="free_area0" value="#{lbl.for_images}" rendered="#{prettyContext.currentMapping.id == 'forImages'}" />
-				<h:outputText styleClass="seperator" />
-				<!-- 
-				<pretty:link  id="lnkContainers" styleClass="free_area0" mappingId="forContainers" rendered="#{prettyContext.currentMapping.id != 'forContainers'}">
-					<h:outputText value="#{lbl.for_albums_and_collections}"></h:outputText>
-				</pretty:link>
-				<h:outputText id="txtCollectionsLink" styleClass="free_area0" value="#{lbl.for_albums_and_collections}" rendered="#{prettyContext.currentMapping.id == 'forContainers'}" />
-				<h:outputText styleClass="seperator " />
-				-->
-			</h:panelGroup>
-
-			
-		</ui:define>
-		
-		
-
-	</ui:composition>
+		<ui:composition template="template.xhtml">
 	
+			<ui:param name="headline" value="#{lbl.search_advanced}"/>
+			
+			<ui:define name="contentMenu">
+				<h:outputText id="txtOrganizeLink" styleClass="free_area0" value="#{lbl.advanced_search}"/>
+			</ui:define>
+			
+			<ui:define name="actionsMenu">
+				<h:panelGroup layout="block" styleClass="free_area0 sub action">
+					<h:panelGroup id="advancedSearchMenu">
+						<pretty:link  id="lnkImages" styleClass="free_area0" mappingId="forImages" rendered="#{prettyContext.currentMapping.id != 'forImages'}">
+							<h:outputText value="#{lbl.for_images}"></h:outputText>
+						</pretty:link>
+						<h:outputText id="txtImagesLink" styleClass="free_area0" value="#{lbl.for_images}" rendered="#{prettyContext.currentMapping.id == 'forImages'}"/>
+						<h:outputText styleClass="seperator"/>
+						<!-- 
+						<pretty:link  id="lnkContainers" styleClass="free_area0" mappingId="forContainers" rendered="#{prettyContext.currentMapping.id != 'forContainers'}">
+							<h:outputText value="#{lbl.for_albums_and_collections}"></h:outputText>
+						</pretty:link>
+						<h:outputText id="txtCollectionsLink" styleClass="free_area0" value="#{lbl.for_albums_and_collections}" rendered="#{prettyContext.currentMapping.id == 'forContainers'}"/>
+						<h:outputText styleClass="seperator "/>
+						-->
+					</h:panelGroup>
+				</h:panelGroup>
+			</ui:define>
+	
+		</ui:composition>
 	</body>
 </html>

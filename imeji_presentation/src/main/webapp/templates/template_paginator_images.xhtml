@@ -54,7 +54,7 @@
 					<h:outputLink value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse'}" styleClass="free_area0 ">
 						<h:outputText value="[x]" styleClass="free_area0 "/>
 					</h:outputLink>
-					<h:outputLink value="#{Navigation.collectionUrl}/#{paginatorListSessionBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString != 'pretty:browse' and paginatorListSessionBean.collection != null}" styleClass="free_area0 ">
+					<h:outputLink value="#{Navigation.collectionUrl}#{paginatorListSessionBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString != 'pretty:browse' and paginatorListSessionBean.collection != null}" styleClass="free_area0 ">
 						<h:outputText value="[x]" styleClass="free_area0 "/>
 					</h:outputLink>
 					<span style="padding-left: 1px" />

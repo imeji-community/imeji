@@ -344,7 +344,11 @@ public class AlbumBean
         String personString = "";
         for (Person p : album.getMetadata().getPersons())
         {
-            personString += p.getFamilyName() + ", " + p.getGivenName();
+            if(!"".equals(personString))
+            {
+                personString += ", ";
+            }
+            personString += p.getFamilyName() + " " + p.getGivenName();
         }
         return personString;
     }

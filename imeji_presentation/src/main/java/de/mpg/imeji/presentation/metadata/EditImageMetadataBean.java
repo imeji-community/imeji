@@ -196,7 +196,7 @@ public class EditImageMetadataBean
     public String changeStatement()
     {
         statement = getSelectedStatement();
-        // Reload the images
+        // Reset the original items
         initEditor(new ArrayList<Item>(allItems));
         return "";
     }

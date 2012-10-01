@@ -96,16 +96,18 @@
 						<h:outputText value="#{lbl.export_metadata}"/>
 					</h:outputLink>
 					
-					<ui:include src="confirmationPages/ContainerRelease.xhtml">
-						<ui:param name="bean" value="#{CollectionImagesBean}"/>
-					</ui:include>
-					<ui:include src="confirmationPages/ContainerDelete.xhtml">
-						<ui:param name="bean" value="#{CollectionImagesBean}"/>
-					</ui:include>
-					<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
-						<ui:param name="bean" value="#{CollectionImagesBean}"/>
-						<ui:param name="discardComment" value="#{CollectionImagesBean.collection.discardComment}"/>
-					</ui:include>
+					<h:panelGroup rendered="#{CollectionImagesBean.collection != null}">
+						<ui:include src="confirmationPages/ContainerRelease.xhtml">
+							<ui:param name="bean" value="#{CollectionImagesBean}"/>
+						</ui:include>
+						<ui:include src="confirmationPages/ContainerDelete.xhtml">
+							<ui:param name="bean" value="#{CollectionImagesBean}"/>
+						</ui:include>
+						<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
+							<ui:param name="bean" value="#{CollectionImagesBean}"/>
+							<ui:param name="discardComment" value="#{CollectionImagesBean.collection.discardComment}"/>
+						</ui:include>
+					</h:panelGroup>
 				</h:panelGroup>
 			</ui:define>
 	</ui:composition>

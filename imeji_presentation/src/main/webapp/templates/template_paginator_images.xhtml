@@ -58,7 +58,7 @@
 							<span style="padding-left: 1px;"/>
 						</a4j:repeat>
 						
-						<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements})" styleClass="free_area0 "/><span style="padding-left: 1px"/>
+						<span style="padding-left: 1px"/>
 						
 						<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
 							<h:outputText value="#{lbl.add_to_album}" styleClass="free_area0"/>
@@ -68,12 +68,14 @@
 							<h:panelGroup layout="block" styleClass="free_area0_p8 endline itemSelectArea overlayMenu">
 								<h:panelGroup layout="block" styleClass="menuHeader free_area0">
 									<h:panelGroup styleClass="free_area0">
-										<h:outputText value="&#160;" styleClass="free_area0"/>
+										<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements} #{lbl.images} " styleClass="free_area0 "/>
 									</h:panelGroup>
 									<h:panelGroup layout="block" style="margin-top:0.2727em;" class="free_area0 min_imgBtn checkboxSelectButton"/>
+									<h:outputText value=" )" styleClass="free_area0 "/>
 								</h:panelGroup>
 								<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
 									<div class="selectMenu xLarge_area2 bordst2">
+									
 										<h:outputLink value="#{Navigation.albumsUrl}" styleClass="xLarge_area0_p8 noPaddingTopBottom" title="#{lbl.activate}" rendered="#{SessionBean.activeAlbum == null}">
 											<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>
 											<h:panelGroup styleClass="quickSearchIconSmall" style="float:right; margin-top:0.2727em;"/>

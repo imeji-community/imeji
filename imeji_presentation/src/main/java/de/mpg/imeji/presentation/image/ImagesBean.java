@@ -84,6 +84,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 
     public String getInitPage()
     {
+        getNavigationString();
         initMenus();
         if (facets != null)
         {

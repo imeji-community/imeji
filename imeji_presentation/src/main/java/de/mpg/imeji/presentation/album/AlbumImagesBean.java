@@ -47,6 +47,7 @@ public class AlbumImagesBean extends ImagesBean
 
     public String getInit()
     {
+        getNavigationString();
         readUrl();
         loadAlbum();
         return "";

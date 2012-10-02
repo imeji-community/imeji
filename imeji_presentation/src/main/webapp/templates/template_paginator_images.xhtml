@@ -113,7 +113,7 @@
 								<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
 									<div class="selectMenu xLarge_area2 bordst2">
 										<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
-											<h:outputText value="#{lbl.remove}"/>
+											<h:outputText value="#{lbl.remove_from_album}aaaa"/>
 										</a4j:commandLink>
 										
 										<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
@@ -141,12 +141,10 @@
 								<h:panelGroup id="preListHeaderSelected" styleClass="free_area0">
 									<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}&#160;" styleClass="free_area0"/>
 								</h:panelGroup>
-								
 								<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
 									<h:outputText styleClass="free_area0" value="#{lbl.add_to_album}"/>
 								</a4j:commandLink>
-								
-								<div style="margin-top:0.2727em;" class="free_area0 min_imgBtn checkboxSelectButton" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">&#160;</div>
+								<h:panelGroup layout="block" style="margin-top:0.2727em;" styleClass="free_area0 min_imgBtn checkboxSelectButton" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">&#160;</h:panelGroup>
 							</h:panelGroup>
 							<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="float:right; margin-top:-1.9090em;" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
 								<h:panelGroup layout="block" styleClass="selectMenu xLarge_area2 bordst2">

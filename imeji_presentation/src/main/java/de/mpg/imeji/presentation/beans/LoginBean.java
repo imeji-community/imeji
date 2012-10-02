@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.presentation.beans;
 
+import java.util.Locale;
+
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -10,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.lang.InternationalizationBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class LoginBean
@@ -82,11 +85,14 @@ public class LoginBean
 
     public String logout()
     {
+        Locale locale = sb.getLocale();
         sb.setUser(null);
         BeanHelper.info(sb.getMessage("success_log_out"));
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession)fc.getExternalContext().getSession(false);
         session.invalidate();
+        sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        sb.setLocale(locale);
         return "pretty:home";
     }
 }

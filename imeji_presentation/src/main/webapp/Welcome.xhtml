@@ -46,7 +46,9 @@
 				
 				<div id="welcomeInfo" class="imj_cont_2_5 imj_welcomeInfo" style="float:left;">
 					<style type="text/css">
-						
+						img {
+							border:0 none;
+						}
 						div.LogoNSearch {
 							overflow:visible;
 						}
@@ -244,7 +246,6 @@
 							<p>The imeji software is an open-source, community driven development. Based on the eSciDoc infrastructure, 
 								imeji offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, 
 								as simple as liked or as complex as needed. <a href="http://colab.mpdl.mpg.de/mediawiki/Imeji" target="_blank"> [mehr zur imeji software]</a> </p>
-						
 						</h:panelGroup>
 					
 						<h:panelGroup layout="block" id="tabsDE-2" styleClass="imj_cont_1 tab_content" style="overflow:hidden;">
@@ -359,15 +360,21 @@
 							
 							<!-- Define elements to accept the alt and title text from the images. -->
 							<div id="carousel">
+								<a4j:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0" rowKeyVar="index">
+									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.applicationUri}#{item.id.path}">
+										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrl}" height="114"/>
+									</h:outputLink>
+								</a4j:repeat>
 								<!-- All images with class of "cloudcarousel" will be turned into carousel items -->
 								<!-- You can place links around these images -->
+								<!--  <img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
 								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
 								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
 								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
 								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
 								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
 								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
-								<img class="cloudcarousel" src="http://dev-faces.mpdl.mpg.de/imeji/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A47496/components/component/escidoc%3A47495/content" alt="Flag 1 Description" title="Flag 1 Title" height="114" />
+								-->
 							</div>
 							<span id="cloudinfoText">
 								<h4 id="title-text"></h4>
@@ -427,15 +434,16 @@
 							speed:0.15,
 							autoRotate:"right",
 							autoRotateDelay:8500,
-							bringToFront:true,
+							bringToFront:false,
 							mouseWheel:true
 						});
 						
-						jQuery(".cloudcarousel").bind({
+						jQuery("img.cloudcarousel").bind({
 							mouseover: function(ev) {
-								jQuery("#title-text").text(this.title);
-								jQuery("#alt-text").text(this.alt);
-								this.title = '';
+								var img = this;
+								jQuery("#title-text").text(img.title);
+								jQuery("#alt-text").text(img.alt);
+								
 								var cloudInfo = jQuery("#cloudinfoText");
 								cloudInfo.addClass("dynamicCloudinfo borderradius_5");
 								cloudInfo.show();
@@ -443,7 +451,8 @@
 									mousemove: function(ev) {
 										jQuery("#cloudinfoText").css("left", ev.pageX).css("top", ev.pageY+10);
 									}
-								})
+								});
+								img.title = '';
 							},
 							mouseout: function(ev) {
 								jQuery("#cloudinfoText").hide();
@@ -451,16 +460,14 @@
 								this.title = jQuery("#title-text").text();
 							}
 						});
+						//jQuery("#carousel a").removeAttr("title");
 					}
 					
 					function initStartpage() {
 						jQuery( ".id_tabs" ).tabs();
 						createCarousel();
 					};
-					//add to every link on page the current title attribute
-					jQuery(".header a, #content a").each(function(ind, obj){
-						this.title = this.innerHTML;
-					});
+					
 					//add placeholder for login menu
 					jQuery(".metaMenu input[type='text']").attr("placeholder", placeholder_username);
 					jQuery(".metaMenu input[type='password']").attr("placeholder", placeholder_password);

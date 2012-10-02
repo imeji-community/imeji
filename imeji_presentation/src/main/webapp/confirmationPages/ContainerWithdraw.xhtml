@@ -37,13 +37,14 @@
 
 </ui:remove>
 	<f:subview id="confirmationWithdraw">
-		<rich:modalPanel id="panelConfirmWithdraw" width="390" height="220" style="background-color:#434343" domElementAttachment="form" rendered="#{bean != null}">
+		<rich:modalPanel id="panelConfirmWithdraw" width="390" height="220" style="background-color:#434343;" domElementAttachment="form" rendered="#{bean != null}">
 	        <h3>
 	        	<h:outputText styleClass="xDouble_area0_p0 xTiny_marginLExcl" value="#{msg.confirmation_withdraw_collection}?" rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}"/> 
 	        	<h:outputText styleClass="xDouble_area0_p0 xTiny_marginLExcl" value="#{msg.confirmation_withdraw_album}?" rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}"/>
 	        </h3>
-	        
-	        <h:inputTextarea value="#{discardComment}" rows="6" styleClass="xTiny_marginLExcl xDouble_area0_p8"/>
+
+	        <h:outputText id="errorMessage" styleClass="xTiny_marginLExcl xDouble_area0_p0 messageError" value=""/>
+	        <h:inputTextarea id="discardComment" value="#{discardComment}" rows="6" styleClass="xTiny_marginLExcl xDouble_area0_p8"/>
 	        
 	        <h:panelGroup layout="block" styleClass="quad_area0_p8">
 				<div class="free_area0_p0 xTiny_marginLExcl">
@@ -53,10 +54,37 @@
 						</a>
 	       			</div>
 					<div class="xLarge_txtBtn tiny_marginLExcl">
-						<a4j:commandButton onclick="this.disabled=true; this.style.opacity = 0.5; this.value='#{msg.please_wait}';" action="#{bean.withdraw}"  value="#{lbl.withdraw}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
+						<a4j:commandButton id="btnDiscard" onclick="if(!clickOnDiscard(#{index})){return false};" action="#{bean.withdraw}" value="#{lbl.withdraw}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
 				 	</div>
 				</div>
 			</h:panelGroup>
 		</rich:modalPanel>
+		<script>
+			function clickOnDiscard(index)
+			{
+				var listId = '';
+				if (index != null)
+				{
+					listId = 'list:' + index + ":";	
+				}
+				var textArea = document.getElementById('formular:' + listId + 'confirmationWithdraw:discardComment');
+				var button =  document.getElementById('formular:' + listId + 'confirmationWithdraw:btnDiscard');
+				if (textArea.value != '')
+				{
+					var panel = document.getElementById('formular:' + listId + 'confirmationWithdraw:panelConfirmWithdrawContentDiv');
+					textArea.readOnly=true;
+					panel.disabled=true; 
+					panel.style.opacity = 0.8;
+					button.value= '<h:outputText value="#{msg.please_wait}"/>';
+					return true;
+				}
+				else
+				{
+					var message = document.getElementById('formular:' + listId + 'confirmationWithdraw:errorMessage');
+					message.innerHTML= '<h:outputText value="#{msg.error_withdraw_comment}"/>';
+					return false;
+				}
+			}
+		</script>
 	</f:subview>
 </html>								

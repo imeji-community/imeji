@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import javax.faces.context.FacesContext;
+
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.image.SingleImageBrowse;
@@ -22,7 +24,14 @@ public class AlbumImageBean extends ImageBean
 
     public void initBrowsing()
     {
-        setBrowse(new SingleImageBrowse((AlbumImagesBean)BeanHelper.getSessionBean(AlbumImagesBean.class), getImage()));
+    	String tempId=(String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("AlbumImagesBean.id");
+    	setBrowse(new SingleImageBrowse((AlbumImagesBean)BeanHelper.getSessionBean(AlbumImagesBean.class), getImage(),"album",tempId));
+    }
+    
+    @Override
+    public boolean isDeletable()
+    {
+       return false;
     }
 
     public String getAlbumId()

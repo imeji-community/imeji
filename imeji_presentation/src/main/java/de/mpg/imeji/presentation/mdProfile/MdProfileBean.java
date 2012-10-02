@@ -25,6 +25,7 @@ import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 import de.mpg.j2j.misc.LocalizedString;
 
@@ -111,20 +112,34 @@ public class MdProfileBean
     {
         profilesMenu = new ArrayList<SelectItem>();
         profilesMenu.add(new SelectItem(null, sessionBean.getLabel("profile_select_template")));
-        for (MetadataProfile mdp : pc.search())
+        try
         {
-            if (mdp.getId().toString() != profile.getId().toString())
+            for (MetadataProfile mdp : pc.search())
             {
-                profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
+                if (mdp.getId().toString() != profile.getId().toString())
+                {
+                    profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
+                }
             }
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
         }
     }
 
     public String changeTemplate() throws Exception
     {
-        MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
         profile.getStatements().clear();
-        profile.setStatements(tp.getStatements());
+        MetadataProfile tp = ObjectLoader.loadProfile(URI.create(this.template), sessionBean.getUser());
+        if (!tp.getStatements().isEmpty())
+        {
+            profile.setStatements(tp.getStatements());
+        }
+        else
+        {
+            profile.getStatements().add(ImejiFactory.newStatement());
+        }
         for (Statement s : profile.getStatements())
         {
             s.setId(URI.create(s.getId().toString().replace(tp.getId().toString(), profile.getId().toString())));
@@ -200,7 +215,24 @@ public class MdProfileBean
 
     public void removeStatement()
     {
+        if (!statements.get(getStatementPosition()).isUsedByAtLeastOnItem())
+        {
+            statements.remove(getStatementPosition());
+        }
+        else
+        {
+            statements.get(getStatementPosition()).setShowRemoveWarning(true);
+        }
+    }
+
+    public void forceRemoveStatement()
+    {
         statements.remove(getStatementPosition());
+    }
+
+    public void closeRemoveWarning()
+    {
+        statements.get(getStatementPosition()).setShowRemoveWarning(false);
     }
 
     public void addLabel()

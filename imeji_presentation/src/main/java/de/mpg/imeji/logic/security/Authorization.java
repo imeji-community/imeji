@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 
 /**
- * 			Imeji Authorization. Based on Imeji Grants:
+ * 			imeji Authorization. Based on imeji Grants:
  * <br/>
  * 			SYSADMIN, CONTAINER_ADMIN, CONTAINER_EDITOR, IMAGE_UPLOADER, IMAGE_EDITOR, PRIVILEGED_VIEWER
  * <br/> 	See: http://colab.mpdl.mpg.de/mediawiki/Imeji_User_Management

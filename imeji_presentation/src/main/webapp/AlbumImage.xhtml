@@ -44,20 +44,20 @@
 	
 	<ui:define name="contentMenu">
 			
-			<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.id}" rendered="true">
-				<h:outputText value="Album startpage"/>
+			<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}" rendered="true">
+				<h:outputText value="#{lbl.album_home}"/>
 			</h:outputLink>
 			
 			<h:outputText styleClass="seperator void" />
 			
-			<h:outputLink value="#{Navigation.applicationUrl}images/album/#{AlbumImageBean.albumId}" styleClass="free_area0">
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
 				<h:outputText value="#{lbl.view_images}"/>
 			</h:outputLink>
 			
 			<h:outputText styleClass="seperator void" />
 			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.id}/details?init=1" rendered="true">
-				<h:outputText value="Album metadata"/>
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumImagesBean.album.id.path}/details?init=1" rendered="true">
+				<h:outputText value="#{lbl.album_metadata}"/>
 			</h:outputLink>
 			
 		</ui:define>

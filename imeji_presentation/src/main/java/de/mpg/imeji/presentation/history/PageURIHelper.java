@@ -41,7 +41,7 @@ public class PageURIHelper
             case COLLECTION_HOME:
                 return URI.create(navigation.getCollectionUrl() + id[0] + "?h=");
             case SEARCH_RESULTS_IMAGES:
-                return URI.create(navigation.getBrowsePath() + "?q=" + URLEncoder.encode(q, "UTF-8") + "&h=");
+                return URI.create(navigation.getBrowseUrl() + "?q=" + URLEncoder.encode(q, "UTF-8") + "&h=");
             case ALBUM_IMAGES:
                 return URI.create(navigation.getAlbumUrl() + id[0] + "/" + navigation.getBrowsePath() + "?h=");
             case ALBUM_HOME:

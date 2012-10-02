@@ -156,65 +156,9 @@ function collapse(firstPart, secondPart) {
 	return firstPart + '.' + secondPart;
 }
 
-function albumSearchOnEnter(event) {
-	if (event.keyCode == 13) {
-		albumSearch();
-	}
-}
-
-function albumSearch() {
-	var url = '?query=';
-	if (document
-			.getElementById('formAlbums:Albums:AlbumTableView:inputAlbumSearch').value != '') {
-		url += document
-				.getElementById('formAlbums:Albums:AlbumTableView:inputAlbumSearch').value;
-		window.location.href = url;
-	}
-}
-
-function modifyexportparameters() {
-	var url = '';
-	var resolution = 'default';
-	for ( var int = 0; int < document.formular.elements.length; int++) {
-		if (document.formular.elements[int].type == 'radio'
-				&& document.formular.elements[int].checked) {
-			url += document.formular.elements[int].value;
-		}
-
-		if (document.formular.elements[int].type == 'checkbox'
-				&& document.formular.elements[int].checked) {
-			if (resolution == 'default') {
-				url += '&resolutions='
-						+ document.formular.elements[int].id
-								.substr(
-										'SearchFormular:'.length,
-										(document.formular.elements[int].id.length - 'SearchFormular:'.length));
-				resolution = 'modify';
-			} else {
-				url += ','
-						+ document.formular.elements[int].id
-								.substr(
-										'SearchFormular:'.length,
-										(document.formular.elements[int].id.length - 'SearchFormular:'.length));
-			}
-		}
-	}
-	window.location.href = url;
-}
-
-function agreeexport(url) {
-	var agree = 'false';
-	for ( var int = 0; int < document.formular.elements.length; int++) {
-		if (document.formular.elements[int].type == 'checkbox'
-				&& document.formular.elements[int].checked
-				&& document.formular.elements[int].id == 'confirmationFormular:agreement') {
-			agree = 'true';
-		}
-	}
-	if (agree == 'true') {
-		url += '&agree=true&action=doexport';
-	} else {
-		url = window.location.href + '&error=agreement';
-	}
-	window.location.href = url;
+function submitPanel(button, message) {
+	var panel = button.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+	panel.innerHTML = ' <h2><span class="free_area0_p8 xTiny_marginLExcl">'
+			+ message + '</span></h2>'
+	panel.style.opacity = 0.8;
 }

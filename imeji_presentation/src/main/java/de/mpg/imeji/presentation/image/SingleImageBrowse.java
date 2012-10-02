@@ -22,17 +22,25 @@ public class SingleImageBrowse
 	private String next = null;
 	private String previous = null;
 
-	public SingleImageBrowse(ImagesBean imagesBean, Item item) 
+	public SingleImageBrowse(ImagesBean imagesBean, Item item, String type,String path) 
 	{
 		this.imagesBean = imagesBean;
 		currentImage = item;
-		init();
+		init(type,path);
 	}
 
-	public void init()
+	public void init(String type,String path)
 	{
-		String baseUrl = ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getItemUrl();
-
+		String baseUrl=new String();
+		if(type=="collection"){
+			baseUrl= ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getCollectionUrl()+path+"/item/";
+		}
+		else if(type=="item"){
+			baseUrl= ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getItemUrl();
+		}
+		else if(type=="album"){
+			baseUrl= ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getAlbumUrl()+path+"/item/";
+		}
 		URI nextImage = getNextImageFromList();
 		URI prevImage = getPreviousImageFromList();
 

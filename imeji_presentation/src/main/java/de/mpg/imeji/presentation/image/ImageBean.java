@@ -3,10 +3,12 @@
  */
 package de.mpg.imeji.presentation.image;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
@@ -26,13 +28,16 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
 import de.mpg.imeji.presentation.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
+import de.mpg.j2j.helper.J2JHelper;
 
 public class ImageBean
 {
@@ -86,28 +91,38 @@ public class ImageBean
     {
         tab = UrlHelper.getParameterValue("tab");
         loadImage();
-        if ("techmd".equals(tab))
+        if (item != null)
         {
-            initViewTechnicalMetadata();
+            if ("techmd".equals(tab))
+            {
+                initViewTechnicalMetadata();
+            }
+            else
+            {
+                initViewMetadataTab();
+            }
+            initBrowsing();
+            selected = sessionBean.getSelected().contains(item.getId().toString());
         }
         else
         {
-            initViewMetadataTab();
+            edit = null;
         }
-        initBrowsing();
-        selected = sessionBean.getSelected().contains(item.getId().toString());
         return "";
     }
 
     public void initViewMetadataTab() throws Exception
     {
-        loadCollection();
-        loadProfile();
-        removeDeadMetadata();
-        sortMetadataAccordingtoProfile();
-        labels.init(profile);
-        edit = new SingleEditBean(item, profile, getPageUrl());
-        cleanImageMetadata();
+        if (item != null)
+        {
+            loadCollection();
+            loadProfile();
+            removeDeadMetadata();
+            sortMetadataAccordingtoProfile();
+            labels.init(profile);
+            edit = new SingleEditBean(item, profile, getPageUrl());
+            cleanImageMetadata();
+        }
     }
 
     public void initViewTechnicalMetadata() throws Exception
@@ -127,7 +142,8 @@ public class ImageBean
 
     public void initBrowsing()
     {
-        browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item);
+        if (item != null)
+            browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item, "item", "");
     }
 
     private void sortMetadataAccordingtoProfile()
@@ -151,15 +167,7 @@ public class ImageBean
 
     public void loadImage()
     {
-        try
-        {
-            item = ObjectLoader.loadImage(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(sessionBean.getMessage("error_image_load"));
-            logger.error(sessionBean.getMessage("error_image_load"), e);
-        }
+        item = ObjectLoader.loadImage(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
     }
 
     public void loadCollection()
@@ -386,6 +394,24 @@ public class ImageBean
         return "";
     }
 
+    public void remove() throws Exception
+    {
+        if (getIsInActiveAlbum())
+        {
+            removeFromAlbum();
+        }
+        ItemController ic = new ItemController(sessionBean.getUser());
+        List<Item> l = new ArrayList<Item>();
+        l.add(item);
+        ic.delete(l, sessionBean.getUser());
+        redirectAfterRemove();
+    }
+
+    public void redirectAfterRemove() throws IOException
+    {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl());
+    }
+
     public String removeFromAlbum() throws Exception
     {
         AlbumController ac = new AlbumController(sessionBean.getUser());
@@ -399,7 +425,7 @@ public class ImageBean
 
     public boolean getIsInActiveAlbum()
     {
-        if (sessionBean.getActiveAlbum() != null)
+        if (sessionBean.getActiveAlbum() != null && item != null)
         {
             return sessionBean.getActiveAlbum().getImages().contains(item.getId());
         }
@@ -477,7 +503,7 @@ public class ImageBean
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, sessionBean.getUser(), item) && item != null
-                && !item.getStatus().equals(Status.WITHDRAWN);
+                && !item.getStatus().equals(Status.WITHDRAWN) && profile.getStatements().size() > 0;
     }
 
     public boolean isVisible()

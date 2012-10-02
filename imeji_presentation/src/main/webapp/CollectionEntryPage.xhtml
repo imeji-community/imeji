@@ -101,7 +101,7 @@
 										<f:attribute name="collectionId" value="#{ViewCollectionBean.collection.id}"/>
 										<f:attribute name="name" value="#{ViewCollectionBean.collection.metadata.title}"/>
 					           		</h:commandLink>
-					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id}"><h:outputText value="Cancel"/></h:outputLink>
+					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}"><h:outputText value="Cancel"/></h:outputLink>
 								</h:panelGrid>
 						 </f:facet>   
 					</rich:togglePanel>
@@ -138,14 +138,22 @@
 										<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
 									</a4j:repeat>
 								</h:outputLink>
-								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
-								<h2>
+								
+								<h:panelGroup styleClass="medium_area0" style="text-align:center;" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}">
+									<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
+									<br/>
+									<h:outputText value="#{lbl.withdrawn}"/>
+								</h:panelGroup>
+								<ui:remove>
+									<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
+								</ui:remove>
+								<h2 class="clear">
 									<h:outputLink value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 										<h:outputText value ="#{lbl.collection_view_all_images}"/>
 									</h:outputLink>
 									<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 								</h2>
-							</h:panelGroup>	<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
+							</h:panelGroup>
 							
 							<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 								<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
@@ -153,34 +161,34 @@
 										<h:outputText styleClass="full_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
 									</h1>
 							
-							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{ViewCollectionBean.collection.discardComment != null and ViewCollectionBean.collection.discardComment != ''}">
-								<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
-								<h:outputText styleClass="free_area0"  value=" #{ViewCollectionBean.collection.discardComment}"/>
-							</h:panelGroup>
+									<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{ViewCollectionBean.collection.discardComment != null and ViewCollectionBean.collection.discardComment != ''}">
+										<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
+										<h:outputText styleClass="free_area0"  value=" #{ViewCollectionBean.collection.discardComment}"/>
+									</h:panelGroup>
+									
+									<h:panelGroup styleClass="full_area0">
+										<h:outputText escape="false" value="#{ViewCollectionBean.formattedDescription}"/>
+									</h:panelGroup>
 							
-							<h:panelGroup styleClass="full_area0">
-								<h:outputText escape="false" value="#{ViewCollectionBean.formattedDescription}"/>
+								</h:panelGroup>
 							</h:panelGroup>
-							
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
-			</h:panelGroup>
-		</h:panelGroup>
 		
-		<ui:include src="confirmationPages/ContainerRelease.xhtml">
-			<ui:param name="bean" value="#{ViewCollectionBean}"/>
-		</ui:include>
-		<ui:include src="confirmationPages/ContainerDelete.xhtml">
-			<ui:param name="bean" value="#{ViewCollectionBean}"/>
-		</ui:include>
-		<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
-			<ui:param name="bean" value="#{ViewCollectionBean}"/>
-			<ui:param name="status" value="#{ViewCollectionBean.collection.status}"/>
-		</ui:include>
+				<ui:include src="confirmationPages/ContainerRelease.xhtml">
+					<ui:param name="bean" value="#{ViewCollectionBean}"/>
+				</ui:include>
+				<ui:include src="confirmationPages/ContainerDelete.xhtml">
+					<ui:param name="bean" value="#{ViewCollectionBean}"/>
+				</ui:include>
+				<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
+					<ui:param name="bean" value="#{ViewCollectionBean}"/>
+					<ui:param name="discardComment" value="#{ViewCollectionBean.collection.discardComment}"/>
+				</ui:include>
 		
-	</ui:define>
+			</ui:define>
 			
-</ui:composition>
-</body>
+		</ui:composition>
+	</body>
 </html>

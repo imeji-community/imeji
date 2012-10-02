@@ -51,9 +51,9 @@
 				
 			</h:panelGroup>
 		</span>
-		<h:commandButton id="btnQuickSearchStart" styleClass="small_txtBtn activeButton quickSearchBtn" value="#{lbl.paginator_go}" action="#{QuickSearchBean.search}"/>
+		<h:commandButton id="btnQuickSearchStart" title="#{lbl.search_for}" styleClass="small_txtBtn activeButton quickSearchBtn" value="#{lbl.paginator_go}" action="#{QuickSearchBean.search}"/>
 
-		<h:outputLink id="lnkAdvancedSearch" styleClass="free_area0 advancedSearchMenu tiny_marginLExcl" value="#{Navigation.searchUrl}">
+		<h:outputLink id="lnkAdvancedSearch" title="#{lbl.goto_adv_search}" styleClass="free_area0 advancedSearchMenu tiny_marginLExcl" value="#{Navigation.searchUrl}">
 	   		<h:outputText value="#{lbl.advanced_search}"/>
 	   	</h:outputLink>
 	

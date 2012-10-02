@@ -28,6 +28,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -40,7 +41,7 @@ public class Search
 
     public static enum SearchType
     {
-        ITEM, COLLECTION, ALBUM, ALL;
+        ITEM, COLLECTION, ALBUM, PROFILE, ALL;
     }
 
     public Search(SearchType type, String containerURI)
@@ -192,6 +193,10 @@ public class Search
         {
             specificQuery += " ?s <http://imeji.org/terms/collection> ?c . ";
         }
+        if (SearchType.PROFILE.equals(type))
+        {
+            specificQuery = "";
+        }
         return specificQuery;
     }
 
@@ -205,6 +210,8 @@ public class Search
                 return ImejiJena.collectionModel;
             case ALBUM:
                 return ImejiJena.albumModel;
+            case PROFILE:
+                return ImejiJena.profileModel;
             default:
                 return null;
         }
@@ -218,6 +225,8 @@ public class Search
                 return J2JHelper.getResourceNamespace(new CollectionImeji());
             case ALBUM:
                 return J2JHelper.getResourceNamespace(new Album());
+            case PROFILE:
+                return J2JHelper.getResourceNamespace(new MetadataProfile());
             default:
                 return J2JHelper.getResourceNamespace(new Item());
         }

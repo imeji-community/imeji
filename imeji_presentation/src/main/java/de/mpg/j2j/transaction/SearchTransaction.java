@@ -2,8 +2,6 @@ package de.mpg.j2j.transaction;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;

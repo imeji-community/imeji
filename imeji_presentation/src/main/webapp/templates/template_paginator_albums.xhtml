@@ -46,51 +46,51 @@
 					<h:outputText value="#{lbl.sorting}"/>
 				</h:outputLink>
 				<h:outputText id="txtSortLink" styleClass="free_area0" value="#{lbl.sorting}" rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"/>
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="seperator void"/>
 				
 				<h:outputLink id="lnkFilter" styleClass="free_area0" value="?tab=FILTER" rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER' and SessionBean.user != null}">
 					<h:outputText value="#{lbl.filter}"/>
 				</h:outputLink>
 				<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.filter}" rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}"/>
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="seperator void"/>
 				
 				<h:outputLink value="#{Navigation.createAlbumUrl}" rendered="#{SessionBean.user != null}" styleClass="free_area0">
 					<h:outputText value="#{lbl.album_create}"/>
 				</h:outputLink>
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="seperator void"/>
 			</ui:define>
 
-
-
 			<ui:define name="actionsMenu">
-				<h:outputText value="#{paginatorListSessionBean.initMenus}"/>
-				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}">
-					<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" style="margin-top:0.18em;" />
-					<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
-						<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}"/>
-					</h:selectOneMenu>
-					<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-					<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-					<h:outputText styleClass="seperator void" />
-				</h:panelGroup>
-				
-				<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' and SessionBean.user != null}">
-					<h:outputText id="txtFilter" value="#{lbl.filter_by}" styleClass="free_area0"/>
-					<h:selectOneMenu id="selFilter" value="#{paginatorListSessionBean.selectedFilter}" styleClass="free_select" onchange="window.location.href = '?f=' + this.value">
-						<f:selectItems id="filterItem" value="#{paginatorListSessionBean.filterMenu}"/>
-					</h:selectOneMenu>
-					<h:outputText styleClass="seperator void" />
+				<h:panelGroup layout="block" styleClass="free_area0 sub action">
+					<h:outputText value="#{paginatorListSessionBean.initMenus}"/>
+					<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}">
+						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" style="margin-top:0.18em;"/>
+						<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
+							<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}"/>
+						</h:selectOneMenu>
+						<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
+						<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
+						<h:outputText styleClass="seperator void"/>
+					</h:panelGroup>
+					
+					<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' and SessionBean.user != null}">
+						<h:outputText id="txtFilter" value="#{lbl.filter_by}" styleClass="free_area0"/>
+						<h:selectOneMenu id="selFilter" value="#{paginatorListSessionBean.selectedFilter}" styleClass="free_select" onchange="window.location.href = '?f=' + this.value">
+							<f:selectItems id="filterItem" value="#{paginatorListSessionBean.filterMenu}"/>
+						</h:selectOneMenu>
+						<h:outputText styleClass="seperator void"/>
+					</h:panelGroup>
 				</h:panelGroup>
 			</ui:define>
 			
 			
 			<ui:define name="prelistHeaderTest">
-				<h:outputLink styleClass="free_area0 small_marginLExcl" value="?q=&amp;f=all" style="margin-right:0.36em;" >
+				<h:outputLink styleClass="free_area0 small_marginLExcl" value="?q=&amp;f=all" style="margin-right:0.36em;">
 					<h:outputText value="#{lbl.all}"/>
 				</h:outputLink>
 				
 				<h:outputText value="#{paginatorListSessionBean.filterLabel}"  styleClass="free_area0 xTiny_marginLExcl" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}"/>
-				<h:outputLink value="?f=all" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}" styleClass="free_area0 ">
+				<h:outputLink value="?f=all" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}" styleClass="free_area0">
 					<h:outputText value="[x]" styleClass="free_area0 "/>
 				</h:outputLink>
 				<h:outputText styleClass="free_area0" value=" (#{paginatorListSessionBean.totalNumberOfElements})"/>
@@ -130,16 +130,16 @@
 						      		<span class="seperator"></span>
 						      		<h:commandLink id="lnkStateSort" styleClass="free_area0_p6" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'PROPERTIES_STATUS'}">
 										<f:setPropertyActionListener value="PROPERTIES_STATUS" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
-										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
-										<h:outputText value="#{lbl.state}" />
+										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+										<h:outputText value="#{lbl.state}"/>
 									</h:commandLink>
 									<h:commandLink id="lnkStateSortAsc" styleClass="free_area0_p6 ascSort"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
-										<h:outputText id="txtSortBy2" styleClass="noDisplay" value="#{lbl.sort_by} " />
-										<h:outputText value="#{lbl.state}" />
+										<h:outputText id="txtSortBy2" styleClass="noDisplay" value="#{lbl.sort_by} "/>
+										<h:outputText value="#{lbl.state}"/>
 									</h:commandLink>
 									<h:commandLink id="lnkStateSortDesc" styleClass="free_area0_p6 desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
-										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
-										<h:outputText value="#{lbl.state}" />
+										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+										<h:outputText value="#{lbl.state}"/>
 									</h:commandLink>
 									&#160;
 								</th>
@@ -148,48 +148,48 @@
 						      		<span class="seperator"></span>
 						      		<h:commandLink id="lnkNameSort" styleClass="free_area0_p8 itemHeadline" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'CONTAINER_METADATA_TITLE'}">
 										<f:setPropertyActionListener value="CONTAINER_METADATA_TITLE" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
-										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
-										<h:outputText value="#{lbl.name}" />
+										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+										<h:outputText value="#{lbl.name}"/>
 									</h:commandLink>
 									<h:commandLink id="lnkNameSortAsc" styleClass="free_area0_p8 ascSort itemHeadline"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'CONTAINER_METADATA_TITLE'}">
-										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
-										<h:outputText value="#{lbl.name}" />
+										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+										<h:outputText value="#{lbl.name}"/>
 									</h:commandLink>
 									<h:commandLink id="lnkNameSortDesc" styleClass="free_area0_p8 desSort itemHeadline" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'CONTAINER_METADATA_TITLE'}">
-										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
-										<h:outputText value="#{lbl.name}" />
+										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+										<h:outputText value="#{lbl.name}"/>
 									</h:commandLink>
 									&#160;
 						      	</th>
 						      	
 								<th class="large_area0">
 						     		<span class="seperator"></span>
-									<h:outputText styleClass="large_area0_p8" value="#{lbl.album_owner}" />
+									<h:outputText styleClass="large_area0_p8" value="#{lbl.album_owner}"/>
 						      	</th>
 						      	<th class="small_area0">
 									<!-- Currently disabled because not possible to sort by this criterium at the moment -->
 						     		<span class="seperator"></span>
-									<h:outputText styleClass="small_area0_p8" value="#{lbl.images}" />
+									<h:outputText styleClass="small_area0_p8" value="#{lbl.images}"/>
 						      	</th>
 						      	<th class="large_area0">
 									<!-- Currently disabled bacause not possible to sort by this criterium at the moment -->
 									<span class="seperator"></span>
-									<h:outputText styleClass="large_area0_p8" value="#{lbl.description}" />
+									<h:outputText styleClass="large_area0_p8" value="#{lbl.description}"/>
 							  	</th>
 						      	<th class="medium_area0">
 									<span class="seperator"></span>
 									<h:commandLink id="lnkLmdSort" styleClass="medium_area0_p8" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'PROPERTIES_LAST_MODIFICATION_DATE'}">
 										<f:setPropertyActionListener value="PROPERTIES_LAST_MODIFICATION_DATE" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
-										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
-										<h:outputText value="#{lbl.last_modified}" />
+										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+										<h:outputText value="#{lbl.last_modified}"/>
 									</h:commandLink>
 									<h:commandLink id="lnkLmdSortAsc" styleClass="medium_area0_p8 ascSort"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_LAST_MODIFICATION_DATE'}">
-										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
-										<h:outputText value="#{lbl.last_modified}" />
+										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+										<h:outputText value="#{lbl.last_modified}"/>
 									</h:commandLink>
 									<h:commandLink id="lnkLmdSortDesc" styleClass="medium_area0_p8 desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_LAST_MODIFICATION_DATE'}">
-										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
-										<h:outputText value="#{lbl.last_modified}" />
+										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+										<h:outputText value="#{lbl.last_modified}"/>
 									</h:commandLink>
 									
 							  	</th>
@@ -197,7 +197,7 @@
 									<!-- Currently disabled bacause not possible to sort by this criterium at the moment -->
 									<span class="seperator"></span>
 									
-									<h:outputText styleClass="free_area0_p8" value="#{lbl.active}" />
+									<h:outputText styleClass="free_area0_p8" value="#{lbl.active}"/>
 							  	</th>
 							</tr>
 						</thead>
@@ -220,17 +220,17 @@
 								      	<td class="free_area0 endline status">
 								      		<span class="seperator"></span>
 								      		<span class="free_area0_p0 endline statusArea">
-												<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.album.status == 'WITHDRAWN'}" />
-												<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.album.status == 'PENDING'}" />
-												<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.album.status == 'RELEASED'}" />
+												<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.album.status == 'WITHDRAWN'}"/>
+												<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.album.status == 'PENDING'}"/>
+												<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.album.status == 'RELEASED'}"/>
 												<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'PENDING'}">
-													<h:outputText value="#{lbl.private}" />
+													<h:outputText value="#{lbl.private}"/>
 												</h:outputLabel>
 												<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'RELEASED'}">
-													<h:outputText value="#{lbl.published}" />
+													<h:outputText value="#{lbl.published}"/>
 												</h:outputLabel>
 												<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'WITHDRAWN'}">
-													<h:outputText value="#{lbl.withdrawn}" />
+													<h:outputText value="#{lbl.withdrawn}"/>
 												</h:outputLabel>
 											</span>
 								      	</td>
@@ -239,7 +239,7 @@
 								      		<span class="seperator"></span>
 								      		<span class="free_area0_p8 itemHeadline">
 								      			<h:outputLink value="#{Navigation.albumUrl}#{container.id}">
-								      				<b><h:outputText value="#{container.album.metadata.title}" /></b>
+								      				<b><h:outputText value="#{container.album.metadata.title}"/></b>
 								      			</h:outputLink>								
 								      		</span>
 								      	</td>

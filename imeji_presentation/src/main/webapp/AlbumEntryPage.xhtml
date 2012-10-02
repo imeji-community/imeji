@@ -122,61 +122,61 @@
 			
 			
 			<ui:define name="actionsMenu">
-				<h:panelGroup>
-					<rich:togglePanel  value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{AlbumBean.editable}">
-						 <f:facet name="closed">
-						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
-					            
-					            <rich:toggleControl styleClass="free_area0" value="#{lbl.album_share}" switchToState="open" rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}"/>
-								
-								<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING'}">
-									<h:outputText value="#{lbl.release}"/>
-									<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
-								</h:outputLink>
-								
-								<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}">
-									<h:outputText value="#{lbl.withdraw}"/>
-									<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
-								</h:outputLink>
-								
-								<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.deletable}">
-									<h:outputText value="#{lbl.delete}"/>
-									<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
-								</h:outputLink>
-								
-							</h:panelGrid>
-					     </f:facet>
-					     <f:facet name="open">
-					         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
-     								<h:outputText value="Share with " />
-          							*<rich:inplaceInput styleClass="large_area0 selected" value="#{SharingBean.email}" defaultLabel="click to enter your email"/>*
-          							<h:outputText value=" as" />
-          							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
-											<f:selectItems value="#{SharingBean.grantsMenu}"/>
-									</h:selectOneMenu>
-					        		<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}">
-										<f:attribute name="albumId" value="#{AlbumBean.id}"/>
-										<f:attribute name="name" value="#{AlbumBean.album.metadata.title}"/>
-					           		</h:commandLink>
-					           		<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}"><h:outputText value="Cancel"/></h:outputLink>
+				<h:panelGroup layout="block" styleClass="free_area0 sub action">
+					<h:panelGroup>
+						<rich:togglePanel  value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{AlbumBean.editable}">
+							 <f:facet name="closed">
+							 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
+						            
+						            <rich:toggleControl styleClass="free_area0" value="#{lbl.album_share}" switchToState="open" rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}"/>
+									
+									<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING'}">
+										<h:outputText value="#{lbl.release}"/>
+										<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
+									</h:outputLink>
+									
+									<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}">
+										<h:outputText value="#{lbl.withdraw}"/>
+										<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
+									</h:outputLink>
+									
+									<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.deletable}">
+										<h:outputText value="#{lbl.delete}"/>
+										<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
+									</h:outputLink>
+									
 								</h:panelGrid>
-						 </f:facet>   
-					</rich:togglePanel>
+						     </f:facet>
+						     <f:facet name="open">
+						         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
+	     								<h:outputText value="Share with " />
+	          							*<rich:inplaceInput styleClass="large_area0 selected" value="#{SharingBean.email}" defaultLabel="click to enter your email"/>*
+	          							<h:outputText value=" as" />
+	          							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
+												<f:selectItems value="#{SharingBean.grantsMenu}"/>
+										</h:selectOneMenu>
+						        		<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}">
+											<f:attribute name="albumId" value="#{AlbumBean.id}"/>
+											<f:attribute name="name" value="#{AlbumBean.album.metadata.title}"/>
+						           		</h:commandLink>
+						           		<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}"><h:outputText value="Cancel"/></h:outputLink>
+									</h:panelGrid>
+							 </f:facet>   
+						</rich:togglePanel>
+					</h:panelGroup>
+					
+					<ui:include src="confirmationPages/ContainerRelease.xhtml">
+						<ui:param name="bean" value="#{AlbumBean}"/>
+					</ui:include>
+					<ui:include src="confirmationPages/ContainerDelete.xhtml">
+						<ui:param name="bean" value="#{AlbumBean}"/>
+					</ui:include>
+					<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
+						<ui:param name="bean" value="#{AlbumBean}"/>
+						<ui:param name="discardComment" value="#{AlbumBean.album.discardComment}"/>
+					</ui:include>
 				</h:panelGroup>
-				
-				<ui:include src="confirmationPages/ContainerRelease.xhtml">
-					<ui:param name="bean" value="#{AlbumBean}"/>
-				</ui:include>
-				<ui:include src="confirmationPages/ContainerDelete.xhtml">
-					<ui:param name="bean" value="#{AlbumBean}"/>
-				</ui:include>
-				<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
-					<ui:param name="bean" value="#{AlbumBean}"/>
-					<ui:param name="discardComment" value="#{AlbumBean.album.discardComment}"/>
-				</ui:include>
-				
 			</ui:define>
-		
 			
 		</ui:composition>
 	</body>

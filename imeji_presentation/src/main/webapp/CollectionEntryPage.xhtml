@@ -44,7 +44,7 @@
 					
 					<h:outputText styleClass="free_area0" value="#{lbl.collection_home}"/>
 					
-					<h:outputText styleClass="seperator void" />
+					<h:outputText styleClass="seperator void"/>
 					
 					<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
 						<h:outputText value="#{lbl.view_images}"/>
@@ -56,16 +56,16 @@
 						<h:outputText value="#{lbl.collection_metadata}"/>
 					</h:outputLink>
 					
-					<h:outputText styleClass="seperator void" />
+					<h:outputText styleClass="seperator void"/>
 					
 					<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 						<h:outputText value="#{lbl.upload_images}"></h:outputText>
 					</h:outputLink>
 				</h:panelGroup>
 			</ui:define>
-					
+			
 			<ui:define name="actionsMenu">
-				<h:panelGroup rendered="#{ViewCollectionBean.visible}">
+				<h:panelGroup layout="block" styleClass="free_area0 sub action" rendered="#{ViewCollectionBean.visible}">
 					<rich:togglePanel  value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{ViewCollectionBean.editable}">
 						 <f:facet name="closed">
 						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
@@ -91,9 +91,9 @@
 					     </f:facet>
 					     <f:facet name="open">
 					         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
-     								<h:outputText value="Share with " />
+     								<h:outputText value="Share with "/>
           							*<rich:inplaceInput styleClass="large_area0 selected" value="#{SharingBean.email}" defaultLabel="click to enter your email"/>*
-          							<h:outputText value=" as" />
+          							<h:outputText value=" as"/>
           							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
 											<f:selectItems value="#{SharingBean.grantsMenu}"/>
 									</h:selectOneMenu>
@@ -118,7 +118,7 @@
 				</div>
 				
 				<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!ViewCollectionBean.visible}">
-				 	<ui:include src="./include/LoginFormular.xhtml" />
+				 	<ui:include src="./include/LoginFormular.xhtml"/>
 				 </h:panelGroup>
 				
 				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{ViewCollectionBean.visible}">
@@ -175,18 +175,18 @@
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
-		
-				<ui:include src="confirmationPages/ContainerRelease.xhtml">
-					<ui:param name="bean" value="#{ViewCollectionBean}"/>
-				</ui:include>
-				<ui:include src="confirmationPages/ContainerDelete.xhtml">
-					<ui:param name="bean" value="#{ViewCollectionBean}"/>
-				</ui:include>
-				<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
-					<ui:param name="bean" value="#{ViewCollectionBean}"/>
-					<ui:param name="discardComment" value="#{ViewCollectionBean.collection.discardComment}"/>
-				</ui:include>
-		
+				<h:panelGroup rendered="#{CollectionImagesBean.collection != null}">
+					<ui:include src="confirmationPages/ContainerRelease.xhtml">
+						<ui:param name="bean" value="#{ViewCollectionBean}"/>
+					</ui:include>
+					<ui:include src="confirmationPages/ContainerDelete.xhtml">
+						<ui:param name="bean" value="#{ViewCollectionBean}"/>
+					</ui:include>
+					<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
+						<ui:param name="bean" value="#{ViewCollectionBean}"/>
+						<ui:param name="discardComment" value="#{ViewCollectionBean.collection.discardComment}"/>
+					</ui:include>
+				</h:panelGroup>
 			</ui:define>
 			
 		</ui:composition>

@@ -162,3 +162,26 @@ function submitPanel(button, message) {
 			+ message + '</span></h2>'
 	panel.style.opacity = 0.8;
 }
+
+
+function clickOnDiscard(index, panelId, errorMessage)
+{
+	var listId = '';
+	if (index != '')
+	{
+		listId = ':list:' + index;	
+	}
+	var textArea = document.getElementById('formular' + listId + ":" + panelId + ':discardComment');
+	var button =  document.getElementById('formular' + listId + ":" + panelId + ':btnDiscard');
+	if (textArea.value != '')
+	{
+		return true;
+	}
+	else
+	{
+		var message = document.getElementById('formular' + listId +  ":" + panelId + ':errorMessage');
+		
+		message.innerHTML= errorMessage;
+		return false;
+	}
+}

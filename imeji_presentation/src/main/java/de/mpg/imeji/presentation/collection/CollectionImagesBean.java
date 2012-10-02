@@ -52,6 +52,7 @@ public class CollectionImagesBean extends ImagesBean
 
     public String getInit()
     {
+        getNavigationString();
         setQuery(UrlHelper.getParameterValue("q"));
         collection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), sb.getUser());
         List<SelectItem> sortMenu = new ArrayList<SelectItem>();

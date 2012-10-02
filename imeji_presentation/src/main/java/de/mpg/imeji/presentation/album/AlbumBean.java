@@ -152,19 +152,19 @@ public class AlbumBean
                 }
                 if (hasOrganization && "".equals(c.getFamilyName()))
                 {
-                    BeanHelper.error(sessionBean.getMessage("collection_create_error_family_name"));
+                    BeanHelper.error(sessionBean.getMessage("error_author_need_one_family_name"));
                     valid = false;
                 }
             }
             if (!hasOrganization)
             {
-                BeanHelper.error(sessionBean.getMessage("collection_create_error_organization"));
+                BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
                 valid = false;
             }
         }
         if (!hasAuthor)
         {
-            BeanHelper.error(sessionBean.getMessage("collection_create_error_author"));
+            BeanHelper.error(sessionBean.getMessage("error_album_need_one_author"));
             valid = false;
         }
         return valid;
@@ -344,7 +344,11 @@ public class AlbumBean
         String personString = "";
         for (Person p : album.getMetadata().getPersons())
         {
-            personString += p.getFamilyName() + ", " + p.getGivenName();
+            if(!"".equals(personString))
+            {
+                personString += ", ";
+            }
+            personString += p.getFamilyName() + " " + p.getGivenName();
         }
         return personString;
     }

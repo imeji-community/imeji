@@ -40,64 +40,66 @@ public class TechnicalFacets
             SearchResult allImages = retrieveAllImages(searchQuery);
             int count = 0;
             int sizeAllImages = allImages.getNumberOfRecords();
-            if (sb.getUser() != null && sizeAllImages > 0)
+            if (sizeAllImages > 0)
             {
-                if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
+                if (sb.getUser() != null)
                 {
-                    SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.MY_IMAGES),
-                            SearchOperators.EQUALS, "my");
-                    count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
-                    if (count > 0)
+                    if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
-                        techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, myImageSearchPair, "my_images",
-                                FacetType.TECHNICAL), "my_images", count, FacetType.TECHNICAL, null));
+                        SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.MY_IMAGES),
+                                SearchOperators.EQUALS, "my");
+                        count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
+                        if (count > 0)
+                        {
+                            techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, myImageSearchPair, "my_images",
+                                    FacetType.TECHNICAL), "my_images", count, FacetType.TECHNICAL, null));
+                        }
+                        else
+                        {
+                            fs.getNoResultsFilters().add(new Filter("My images", "", 0, FacetType.TECHNICAL, null));
+                        }
                     }
-                    else
+                    if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                     {
-                        fs.getNoResultsFilters().add(new Filter("My images", "", 0, FacetType.TECHNICAL, null));
+                        SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
+                                SearchOperators.URI, Status.PENDING.getUri().toString());
+                        count = getCount(searchQuery, privatePair, allImages.getResults());
+                        if (count > 0)
+                        {
+                            techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, privatePair, "pending_images",
+                                    FacetType.TECHNICAL), "pending_images", count, FacetType.TECHNICAL, null));
+                        }
+                    }
+                    if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
+                    {
+                        SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
+                                SearchOperators.URI, Status.RELEASED.getUri().toString());
+                        count = getCount(searchQuery, publicPair, allImages.getResults());
+                        if (count > 0)
+                        {
+                            techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, publicPair, "released_images",
+                                    FacetType.TECHNICAL), "released_images", count, FacetType.TECHNICAL, null));
+                        }
                     }
                 }
-                if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
+                for (Metadata.Types t : Metadata.Types.values())
                 {
-                    SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
-                            SearchOperators.URI, Status.PENDING.getUri().toString());
-                    count = getCount(searchQuery, privatePair, allImages.getResults());
-                    if (count > 0)
+                    if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
                     {
-                        techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, privatePair, "pending_images",
-                                FacetType.TECHNICAL), "pending_images", count, FacetType.TECHNICAL, null));
+                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_METADATA_TYPE_RDF),
+                                SearchOperators.URI, t.getClazzNamespace());
+                        count = getCount(searchQuery, pair, allImages.getResults());
+                        if (count > 0)
+                        {
+                            techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, pair, t.name(),
+                                    FacetType.TECHNICAL), t.name().toLowerCase(), count, FacetType.TECHNICAL, null));
+                        }
+                        else
+                        {
+                            fs.getNoResultsFilters().add(new Filter(t.name(), "", 0, FacetType.TECHNICAL, null));
+                        }
+                        count = 0;
                     }
-                }
-                if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
-                {
-                    SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
-                            SearchOperators.URI, Status.RELEASED.getUri().toString());
-                    count = getCount(searchQuery, publicPair, allImages.getResults());
-                    if (count > 0)
-                    {
-                        techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, publicPair, "released_images",
-                                FacetType.TECHNICAL), "released_images", count, FacetType.TECHNICAL, null));
-                    }
-                }
-            }
-            for (Metadata.Types t : Metadata.Types.values())
-            {
-                if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
-                {
-                    SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_METADATA_TYPE_RDF),
-                            SearchOperators.URI, t.getClazzNamespace());
-                    count = getCount(searchQuery, pair, allImages.getResults());
-                    if (count > 0)
-                    {
-                        techFacets.add(new Facet(
-                                uriFactory.createFacetURI(baseURI, pair, t.name(), FacetType.TECHNICAL), t.name()
-                                        .toLowerCase(), count, FacetType.TECHNICAL, null));
-                    }
-                    else
-                    {
-                        fs.getNoResultsFilters().add(new Filter(t.name(), "", 0, FacetType.TECHNICAL, null));
-                    }
-                    count = 0;
                 }
             }
             facets.add(techFacets);

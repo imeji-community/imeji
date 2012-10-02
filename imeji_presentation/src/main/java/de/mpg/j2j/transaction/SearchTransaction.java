@@ -89,7 +89,7 @@ public class SearchTransaction extends Transaction
     {
         for (; rs.hasNext();)
         {
-            results.add(readResult(rs));
+            results.add(0, readResult(rs));
         }
     }
 

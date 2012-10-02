@@ -70,12 +70,9 @@ public class ObjectLoader
     {
         try
         {
-            AlbumController ac = new AlbumController(user);
-            return ac.retrieve(id, user);
-        }
-        catch (NotFoundException e)
-        {
-            writeErrorNotFound("album", id);
+            Album a = loadAlbumLazy(id, user);
+            ItemController ic = new ItemController(user);
+            return (Album)ic.loadContainerItems(a, user, -1, 0);
         }
         catch (Exception e)
         {

@@ -398,7 +398,7 @@ public class ImageBean
     {
         if (getIsInActiveAlbum())
         {
-            removeFromAlbum();
+            removeFromActiveAlbum();
         }
         ItemController ic = new ItemController(sessionBean.getUser());
         List<Item> l = new ArrayList<Item>();
@@ -412,7 +412,7 @@ public class ImageBean
         FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl());
     }
 
-    public String removeFromAlbum() throws Exception
+    public String removeFromActiveAlbum() throws Exception
     {
         AlbumController ac = new AlbumController(sessionBean.getUser());
         List<String> l = new ArrayList<String>();

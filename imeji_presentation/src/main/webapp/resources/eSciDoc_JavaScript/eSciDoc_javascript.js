@@ -167,7 +167,7 @@ function install_javascripts() {
 	installDateTextbox();
 	installSameHeight();
 //	bindSuggests();	//from autoSuggestFunctions.js
-	themeCookieInit();
+//	themeCookieInit();
 }
 
 /* INCLUDES EXTERNAL JAVASCRIPTS */ 

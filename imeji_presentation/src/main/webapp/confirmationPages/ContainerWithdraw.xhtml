@@ -54,37 +54,10 @@
 						</a>
 	       			</div>
 					<div class="xLarge_txtBtn tiny_marginLExcl">
-						<a4j:commandButton id="btnDiscard" onclick="if(!clickOnDiscard(#{index})){return false};" action="#{bean.withdraw}" value="#{lbl.withdraw}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
+						<a4j:commandButton id="btnDiscard" onclick="if(!clickOnDiscard('#{index}', 'confirmationWithdraw', '#{msg.error_withdraw_comment}')){return false};" action="#{bean.withdraw}" value="#{lbl.withdraw}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
 				 	</div>
 				</div>
 			</h:panelGroup>
 		</rich:modalPanel>
-		<script>
-			function clickOnDiscard(index)
-			{
-				var listId = '';
-				if (index != null)
-				{
-					listId = 'list:' + index + ":";	
-				}
-				var textArea = document.getElementById('formular:' + listId + 'confirmationWithdraw:discardComment');
-				var button =  document.getElementById('formular:' + listId + 'confirmationWithdraw:btnDiscard');
-				if (textArea.value != '')
-				{
-					var panel = document.getElementById('formular:' + listId + 'confirmationWithdraw:panelConfirmWithdrawContentDiv');
-					textArea.readOnly=true;
-					panel.disabled=true; 
-					panel.style.opacity = 0.8;
-					button.value= '<h:outputText value="#{msg.please_wait}"/>';
-					return true;
-				}
-				else
-				{
-					var message = document.getElementById('formular:' + listId + 'confirmationWithdraw:errorMessage');
-					message.innerHTML= '<h:outputText value="#{msg.error_withdraw_comment}"/>';
-					return false;
-				}
-			}
-		</script>
 	</f:subview>
 </html>								

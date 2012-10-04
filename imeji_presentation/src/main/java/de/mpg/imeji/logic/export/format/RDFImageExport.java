@@ -37,7 +37,7 @@ public class RDFImageExport extends RDFExport
         super.namespaces.put("http://purl.org/dc/terms/", "dcterms");
         super.namespaces.put("http://purl.org/escidoc/metadata/profiles/0.1/", "eprofiles");
         super.namespaces.put("http://xmlns.com/foaf/0.1/", "foaf");
-       
+        super.namespaces.put("http://www.w3.org/2000/01/rdf-schema#", "rdfs");       
     }
 
     @Override

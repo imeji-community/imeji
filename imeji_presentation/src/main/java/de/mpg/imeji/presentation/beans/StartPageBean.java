@@ -37,7 +37,10 @@ public class StartPageBean
         Random r = new Random();
         for (int i = 0; i < CAROUSSEL_SIZE; i++)
         {
-            l.add(sr.getResults().get(r.nextInt(sr.getNumberOfRecords() - 1)));
+            if (sr.getNumberOfRecords() > 1)
+            {
+                l.add(sr.getResults().get(r.nextInt(sr.getNumberOfRecords() - 1)));
+            }
         }
         return l;
     }

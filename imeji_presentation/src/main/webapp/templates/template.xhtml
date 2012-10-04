@@ -32,13 +32,9 @@ All rights reserved. Use is subject to license terms.
             <meta http-equiv="expires" content="0"/>
             <title><h:outputText value="imeji - #{HistorySession.currentPage.internationalizedName}"/></title>
             <link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
-            <link rel="stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_darkGrey/styles/theme.css" id="DarkGreyTheme" title="dark grey" type="text/css" media="all"/>
-            <link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_highContrast/styles/theme.css" id="highContrastTheme" title="high contrast" type="text/css" />
-            <link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_classic/styles/theme.css" id="classicTheme" title="classic" type="text/css" />
-			
+            <link rel="stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_darkGrey/styles/theme.css" id="DarkGreyTheme" title="default" type="text/css" media="all"/>
 			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>
-			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js"></script>
-            <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/theme_cookie.js"></script>
+			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js"></script>       
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/richfaces-ajax-patch.js"></script>
         </head>
@@ -55,67 +51,76 @@ All rights reserved. Use is subject to license terms.
                     </h:inputHidden>
                     <h:inputHidden id="rssFeedUrl" value="#{BlogBean.rssFeedUrl}">
                     </h:inputHidden>
-                    <!-- import header --><ui:include src="/headerPages/Header.jspf" />
+                    <!-- import header -->
+                    <ui:include src="/headerPages/Header.jspf"/>
+                    
                     <div id="content" class="full_area0 clear">
                         <!-- begin: content section (including elements that visually belong to the header (breadcrumb, headline, subheader and content menu)) -->
-                        <div class="clear">
-                            <div class="headerSection">
-                                <div class="clear breadcrumb">
-                                   
-                                </div>
-                                <div id="contentSkipLinkAnchor" class="clear headLine">
-                                    <!-- Headline starts here, taken from facelets parameter -->
-                                    <ui:insert name="headline">
-                                        <h1><h:outputText value="#{headline}" /></h1>
-                                    </ui:insert><!-- Headline ends here -->
-                                </div>
-                            </div>
-                            <div class="small_marginLIncl subHeaderSection">
-                                <div class="contentMenu">
-                                    <!-- content menu starts here -->
-                                    <div class="free_area0 sub">
-                                        <!-- content menu upper line starts here -->
-                                        <ui:insert name="contentMenu">
-                                            &#160;
-                                        </ui:insert>
-                                        <!-- content menu upper line ends here -->
-                                    </div>
-                                    <div class="free_area0 sub action">
-                                        <!-- content menu lower line starts here --><ui:insert name="actionsMenu"/><!-- content menu lower line ends here -->
-                                    </div>
-                                    <div class="free_area0 sub action">
-                                        <!-- content menu lower line starts here --><ui:insert name="actionsMenu2"/><!-- content menu lower line ends here -->
-                                    </div>
-                                    <div class="free_area0 sub action">
-                                        <!-- content menu lower line starts here --><ui:insert name="actionsMenu3"/><!-- content menu lower line ends here -->
-                                    </div><!-- content menu ends here -->
-                                </div>
-                                <ui:insert name="additionalSubheaders">
-                                    &#160;
-                                </ui:insert>
-                               	<div class="subHeader">
-                                    <!-- Subheadline starts here -->
-                                    <a4j:outputPanel id="subHeader">
-                                    <h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
-                                    <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
-                                        <h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{MessagesBean.hasMessages and !MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
-                                        <h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
-                                    </h:panelGroup><h:outputText value="&#160;" rendered="#{!MessagesBean.hasErrorMessages}" /><!-- Subheadline ends here -->
-                                   	<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="full_area0" rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml'}">
-										<h:panelGroup styleClass="huge_area0">
-											<h:outputText value="#{lbl.active_album}: #{SessionBean.reloadActiveAlbum}" />
-											<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">
-												<h:outputText value="#{SessionBean.activeAlbum.metadata.title} (#{SessionBean.activeAlbumSize})" />
-											</h:outputLink>
+						<div class="clear full_area0">
+							<ui:remove>
+								<div class="headerSection">
+									<div class="clear breadcrumb"></div>
+								</div>
+							</ui:remove>
+							
+							<div id="contentSkipLinkAnchor" class="headLine">
+								<!-- Headline starts here, taken from facelets parameter -->
+								<ui:insert name="headline">
+									<h1><h:outputText value="#{headline}"/></h1>
+								</ui:insert><!-- Headline ends here -->
+							</div>
+							
+							<div class="small_marginLIncl subHeaderSection">
+								<div class="contentMenu">
+									<!-- content menu starts here -->
+									<div class="free_area0 sub">
+										<!-- content menu upper line starts here -->
+										<ui:insert name="contentMenu">
+											&#160;
+										</ui:insert>
+										<!-- content menu upper line ends here -->
+									</div>
+									<ui:remove>
+										<!--  the div container must be inside of the actionsMenu content, for invisibility in case of none content -->
+										<div class="free_area0 sub action">
+											<!-- content menu lower line starts here --><ui:insert name="actionsMenu"/><!-- content menu lower line ends here -->
+										</div>
+									</ui:remove>
+									
+									<ui:insert name="actionsMenu"/>
+									<ui:insert name="actionsMenu2"/>
+									<ui:insert name="actionsMenu3"/>
+								</div>
+								<ui:insert name="additionalSubheaders">
+									&#160;
+								</ui:insert>
+								
+								<h:panelGroup layout="block" styleClass="full_area0 subHeader">
+									<!-- Subheadline starts here -->
+									<a4j:outputPanel id="subHeader">
+										<h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
+										<h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
+											<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
 										</h:panelGroup>
-									</h:panelGroup>
+	                                    <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{MessagesBean.hasMessages and !MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
+	                                        <h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
+	                                    </h:panelGroup>
+	                                    <h:outputText value="&#160;" rendered="#{!MessagesBean.hasErrorMessages}"/>
+	                                    <!-- Subheadline ends here -->
+	                                   	<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="full_area0" rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml'}">
+											<h:panelGroup styleClass="huge_area0">
+												<h:outputText value="#{lbl.active_album}: #{SessionBean.reloadActiveAlbum}"/>
+												<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">
+													<h:outputText value="#{SessionBean.activeAlbum.metadata.title} (#{SessionBean.activeAlbumSize})"/>
+												</h:outputLink>
+											</h:panelGroup>
+										</h:panelGroup>
 									</a4j:outputPanel>
-                                </div>
+                                </h:panelGroup>
                             </div>
+                            
                         </div>
-                        <div class="full_area0">
+                        <div class="clear full_area0">
                             <!-- Main Content -->
                             <ui:insert name="paginationTop">
                                 &#160;
@@ -131,7 +136,7 @@ All rights reserved. Use is subject to license terms.
                     </div>
                     <!-- end: content section -->
                 </div>
-                <ui:include src="/footerPages/Footer.jspf" />
+                <ui:include src="/footerPages/Footer.jspf"/>
                          
             </h:form>
            

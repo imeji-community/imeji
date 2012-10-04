@@ -84,7 +84,7 @@ public class ExportManager
             List<String> uris = new ArrayList<String>();
             try
             {
-                for (MetadataProfile mdp : pc.search())
+                for (MetadataProfile mdp : pc.search(user))
                 {
                     uris.add(mdp.getId().toString());
                 }

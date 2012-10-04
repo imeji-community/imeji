@@ -28,7 +28,7 @@
 * All rights reserved. Use is subject to license terms.
 */
 
-function addItemListFunctions() {
+function setListDefaultStatus() {
 	/*
 	 * for default:
 	 * hide all elements that shows details
@@ -47,6 +47,10 @@ function addItemListFunctions() {
 					);
 		}
 	);
+}
+
+function addItemListFunctions() {
+	setListDefaultStatus();
 	
 	/*jQuery('.checkboxSelectButton').click(function(){jQuery(this).siblings('.selectMenu').show();});
 	jQuery('.checkBoxCloseSelectButton').click(function(){jQuery(this).parent().hide();});
@@ -59,7 +63,7 @@ function addItemListFunctions() {
 	// Openration of the select menu for checkboxes
 	// Start with event on document to close the select menu on click elswhere
 	jQuery('body').ready(function(e){
-		
+		/*
 		jQuery('html').click(function(){
 			// $('.selectMenu').hide();
 		});
@@ -73,6 +77,7 @@ function addItemListFunctions() {
 		function hideElement(element) {
 			element.hide(30);
 		} 
+		
 		
 		function check4OpenSelectMenues() {
 			jQuery('.selectMenu').each(function(e){
@@ -111,7 +116,8 @@ function addItemListFunctions() {
 				}
 			});
 			
-		}); 
+		});
+		*/
 	});
 	
 

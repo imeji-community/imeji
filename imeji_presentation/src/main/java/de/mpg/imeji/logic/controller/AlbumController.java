@@ -82,7 +82,6 @@ public class AlbumController extends ImejiController
     /**
      * Load album and images: can lead to performance issues
      * 
-     * @deprecated
      * @param selectedAlbumId
      * @param user
      * @return

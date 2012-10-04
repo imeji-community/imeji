@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.io.IOException;
+
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -16,15 +18,17 @@ public class CollectionImageBean extends ImageBean
     private Navigation navigation;
     private CollectionImagesBean collectionImagesBean;
 
-    public CollectionImagesBean getCollectionImagesBean() {
-		return collectionImagesBean;
-	}
+    public CollectionImagesBean getCollectionImagesBean()
+    {
+        return collectionImagesBean;
+    }
 
-	public void setCollectionImagesBean(CollectionImagesBean collectionImagesBean) {
-		this.collectionImagesBean = collectionImagesBean;
-	}
+    public void setCollectionImagesBean(CollectionImagesBean collectionImagesBean)
+    {
+        this.collectionImagesBean = collectionImagesBean;
+    }
 
-	public CollectionImageBean() throws Exception
+    public CollectionImageBean() throws Exception
     {
         super();
         this.prettyLink = "pretty:EditImageOfCollection";
@@ -33,10 +37,17 @@ public class CollectionImageBean extends ImageBean
 
     public void initBrowsing()
     {
-    	String tempId=(String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("CollectionImagesBean.id");
+        String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                .get("CollectionImagesBean.id");
         setBrowse(new SingleImageBrowse((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class),
-                getImage(),"collection", tempId));
-       
+                getImage(), "collection", tempId));
+    }
+
+    @Override
+    public void redirectAfterRemove() throws IOException
+    {
+        FacesContext.getCurrentInstance().getExternalContext()
+                .redirect(navigation.getCollectionUrl() + collectionId + "/" + navigation.getBrowsePath());
     }
 
     public String getCollectionId()

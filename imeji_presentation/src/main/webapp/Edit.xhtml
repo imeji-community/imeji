@@ -66,9 +66,8 @@
 							<a4j:support event="onchange" ajaxSingle="true" reRender="ajaxContent" action="#{EditImageMetadataBean.changeStatement}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
-					<h:panelGroup rendered="#{EditImageMetadataBean.profileWithStatements}">
 					
-						
+					<h:panelGroup styleClass="full_area0_p0" rendered="#{EditImageMetadataBean.profileWithStatements}">
 						<h:panelGroup styleClass="full_area0_p8">
 						</h:panelGroup>
 						<!-- COMMON METADATA -->
@@ -159,11 +158,6 @@
 												</h:panelGroup>
 				        					</h:panelGroup>
 				        				</a4j:repeat>
-			        				</h:panelGroup>
-			        				<h:panelGroup rendered="#{image.metadataSet.profile != EditImageMetadataBean.profile.id}">
-			        					<h:panelGroup styleClass="half_area0">
-			        						<h:outputText value="This image is not editable with selected profile."/>
-			        					</h:panelGroup>
 			        				</h:panelGroup>
 			        			</h:panelGroup>
 		        			</a4j:repeat>

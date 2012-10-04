@@ -81,11 +81,11 @@
 											<h:outputText value="#{lbl.status}"/>
 											<span class="noDisplay">: </span>
 										</b>
-										<h:panelGroup layout="block" styleClass="small_area0 medium_marginLExcl statusIconArea">
+										<h:panelGroup layout="block" styleClass="large_area0 medium_marginLExcl statusIconArea">
 											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{AlbumBean.album.status == 'PENDING'}"/>
 											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{AlbumBean.album.status == 'RELEASED'}"/>
 											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}"/>
-											<h:panelGroup layout="block" styleClass="small_area0">
+											<h:panelGroup layout="block" styleClass="medium_area0">
 												<h:outputText value="#{lbl.private}" rendered="#{AlbumBean.album.status == 'PENDING'}"/>
 												<h:outputText value="#{lbl.published}" rendered="#{AlbumBean.album.status == 'RELEASED'}"/>
 												<h:outputText value="#{lbl.withdrawn}" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}"/>

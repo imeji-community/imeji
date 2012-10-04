@@ -36,7 +36,7 @@
 </ui:remove>
 	<body>
 		<ui:composition template="templates/template.xhtml">
-			<ui:param name="headline" value="Create new user"/>
+			<ui:param name="headline" value="#{lbl.admin_user_new}"/>
 			<ui:define name="mainContent">
 			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!SessionBean.admin}">
 				<h2><h:outputText value="You are not allowed to view this page"/></h2>
@@ -44,7 +44,7 @@
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{SessionBean.admin}">
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="User Information"/>
+						<h:outputText value="#{lbl.admin_user_info}"/>
 					</h3>
 					<span class="seperator"></span>
 					<div class="free_area0 itemBlockContent endline">

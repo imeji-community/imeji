@@ -101,7 +101,7 @@ public class ProfileController extends ImejiController
      * @return
      * @throws Exception
      */
-    public List<MetadataProfile> search() throws Exception
+    public List<MetadataProfile> search(User user) throws Exception
     {
         Search search = new Search(SearchType.PROFILE, null);
         SearchResult result = search.search(new SearchQuery(), null, user);

@@ -54,11 +54,11 @@
 					<h2>
 						<h:outputLink styleClass="free_area0"
 							value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml">
-							<h:outputText value="Create new User " />
+							<h:outputText value="#{lbl.admin_user_new}" />
 						</h:outputLink>
 						<h:outputLink value="#{Navigation.applicationUrl}jsf/Users.xhtml"
 							styleClass="free_area0 xTiny_marginLExcl">
-							<h:outputText value="View users" />
+							<h:outputText value="#{lbl.admin_user_view}" />
 						</h:outputLink>
 						<h:commandLink styleClass="free_area0 xTiny_marginLExcl" action="#{AdminBean.reIndex}" value="ReIndex"/>
 
@@ -67,7 +67,7 @@
 				<h:panelGroup layout="block" styleClass="full_area0 endline">
 					<h2>
 						<h:outputText
-							value="System has: #{AdminBean.allImagesSize} Images, #{AdminBean.allUsersSize} Users, #{AdminBean.allCollectionsSize} collections, #{AdminBean.allAlbumsSize} Albums" />
+							value="#{lbl.admin_info_sys1} #{AdminBean.allImagesSize} #{admin_info_sys2}, #{AdminBean.allUsersSize} #{lbl.admin_info_users}, #{AdminBean.allCollectionsSize} #{lbl.admin_info_col}, #{AdminBean.allAlbumsSize} #{lbl.admin_info_alb}." />
 					</h2>
 				</h:panelGroup>
 			</h:panelGroup>

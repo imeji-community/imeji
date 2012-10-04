@@ -149,9 +149,9 @@
 						     </f:facet>
 						     <f:facet name="open">
 						         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
-	     								<h:outputText value="Share with " />
-	          							*<rich:inplaceInput styleClass="large_area0 selected" value="#{SharingBean.email}" defaultLabel="click to enter your email"/>*
-	          							<h:outputText value=" as" />
+	     								<h:outputText value="#{lbl.share} " />
+	          							*<rich:inplaceInput styleClass="large_area0 selected" value="#{SharingBean.email}" defaultLabel="#{lbl.share_email}"/>*
+	          							<h:outputText value=" #{lbl.share_as}" />
 	          							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
 												<f:selectItems value="#{SharingBean.grantsMenu}"/>
 										</h:selectOneMenu>
@@ -159,7 +159,7 @@
 											<f:attribute name="albumId" value="#{AlbumBean.id}"/>
 											<f:attribute name="name" value="#{AlbumBean.album.metadata.title}"/>
 						           		</h:commandLink>
-						           		<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}"><h:outputText value="Cancel"/></h:outputLink>
+						           		<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}"><h:outputText value="#{lbl.cancel}"/></h:outputLink>
 									</h:panelGrid>
 							 </f:facet>   
 						</rich:togglePanel>

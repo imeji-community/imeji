@@ -78,7 +78,7 @@
 						<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{imageBean.selected}" action="#{imageBean.select}" style="visibility:hidden;" reRender="preListHeader" rendered="#{SessionBean.user != null}"/>
 						<h:outputText styleClass="free_label" value="#{lbl.selected}" rendered="#{SessionBean.user != null}"/>
 						<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
-							<h:outputText value="#{lbl.remove}" />
+							<h:outputText value="#{lbl.remove_from_col}" />
 						</h:commandLink>
 						<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.navigationString == 'pretty:albumItem'}">
 							<h:outputText value="#{lbl.remove_from_album}" />
@@ -136,7 +136,7 @@
 							
 							<a4j:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" reRender="metadata" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}"/>
 							<h:outputText value="Image locked " rendered="#{imageBean.editable and imageBean.locked}"/>
-							<h:outputLink vallue="#" title="Image has been locked by another user. It will be automatically release after 15 minutes." rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
+							<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
 							<br/>
 							
 						</h3>

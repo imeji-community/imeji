@@ -36,7 +36,7 @@
 </ui:remove>
 	<body>
 		<ui:composition template="templates/template.xhtml">
-			<ui:param name="headline" value="imeji Users"/>
+			<ui:param name="headline" value="#{lbl.admin_users_head}"/>
 			<ui:define name="mainContent">
 				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!UsersBean.sysAdmin}">
 					<h2><h:outputText value="You are not allowed to view this page"/></h2>

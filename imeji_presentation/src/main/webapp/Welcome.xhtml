@@ -303,25 +303,23 @@
 				
 				<!-- japanese part -->
 				<h:panelGroup layout="block" id="tabsJP" styleClass="id_tabs" rendered="#{SessionBean.locale == 'jp'}">
-						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
+						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = '検索キーワード...';</script>
 						<!-- tabs -->
 						<ul class="imj_cont_1">
-							<li><a href="#formular:tabsJP-1">About</a></li>
-							<li><a href="#formular:tabsJP-2">News</a></li>
-							<li><a href="#formular:tabsJP-3">How To</a></li>
+							<li><a href="#formular:tabsJP-1">Imejiについて</a></li>
+							<li><a href="#formular:tabsJP-2">ニュース</a></li>
+							<li><a href="#formular:tabsJP-3">登録その他</a></li>
 						</ul>
 						
 						<!--  tabs content -->
 						<h:panelGroup layout="block" id="tabsJP-1" styleClass="imj_cont_1 tab_content" >
-							<p><b>Publish Your Scientific Media Data</b></p>
+							<p><b>マルチメディア科学データの提供、配信</b></p>
 							<br/>
-							<p>imeji creates citable research assets by describing, enriching, sharing, exposing and linking data.</p> 
-							<p>This imeji instance contains test collections for the imeji community. The imeji community aims to sustain an active open source software developer 
-								community around the imeji software. 
-								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank"> [more on the imeji community]</a></p>
-							<p>The imeji software is an open-source, community driven development. Based on the eSciDoc infrastructure, 
-								imeji offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, 
-								as simple as liked or as complex as needed. <a href="http://colab.mpdl.mpg.de/mediawiki/Imeji" target="_blank"> [more on the imeji software]</a> </p>
+							<p>Imejiは引用可能な研究データ資料集を生成します。マルチメディアデータに説明を付与したり、意味を追加したり、リンクを張るなどして、提供データの価値を高めることができます</p> 
+							<p>Imejiサービスは、コミュニティ向けのテスト用コレクションを含んでいます。Imejiコミュニティは、活発な開発で持続的なコミュニティとなるよう開発しています。
+								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank"> [Imejiコミュニティの説明]</a></p>
+							<p>Imejiソフトウェアはオープンソースソフトウェアとして提供され、コミュニティ主導により開発している。eSciDocリポジトリ基盤ソフトウェアを基礎として構築されたImejiは、自由なメタデータスキーマをサポートし、拡張的なメタデータ管理を可能としています。ニーズに応じてシンプルなメタデータや複雑なメタデータを構成することができます。
+								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji" target="_blank"> [Imejiソフトウェアの説明]</a> </p>
 						</h:panelGroup>
 						
 						<h:panelGroup layout="block" id="tabsJP-2" styleClass="imj_cont_1 tab_content" style="overflow:hidden;">
@@ -330,39 +328,39 @@
 						</h:panelGroup>
 						
 						<h:panelGroup layout="block" id="tabsJP-3" styleClass="imj_cont_1 tab_content" >
-							<p><b>imeji visitors (not logged in): </b></p>
+							<p><b>閲覧者向けリンク (非ログイン時): </b></p>
 									<li>
-									  &nbsp;View collection list <a href="#{Navigation.applicationUrl}help#2.2._Collection_List" target="_blank"> 
+									  &nbsp;コレクション一覧を見る <a href="#{Navigation.applicationUrl}help#2.2._Collection_List" target="_blank"> 
 															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
 												 		 </a>
 								</li> 
-								<li>  &nbsp;View album list <a href="#{Navigation.applicationUrl}help#3.2._Album_List" target="_blank"> 
+								<li>  &nbsp;アルバム一覧を見る <a href="#{Navigation.applicationUrl}help#3.2._Album_List" target="_blank"> 
 															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
 												 		  </a> 
 								</li>
-								<li>  &nbsp;Search in collections <a href="#{Navigation.applicationUrl}help#4._Search" target="_blank"> 
+								<li>  &nbsp;コレクション全体を検索する <a href="#{Navigation.applicationUrl}help#4._Search" target="_blank"> 
 															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
 												 		  </a> 
 								</li>
 								<br/><br/>
-							<p><b>imeji users (logged in): </b></p>
-								<li>  &nbsp;Create a collection <a href="#{Navigation.applicationUrl}help#2.1._Create_Collection" target="_blank"> 
+							<p><b>Imeji登録利用者 (ログイン時): </b></p>
+								<li>  &nbsp;コレクションを作る <a href="#{Navigation.applicationUrl}help#2.1._Create_Collection" target="_blank"> 
 															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
 												 		  </a> 
 								</li>
-								<li>  &nbsp;Upload pictures <a href="#{Navigation.applicationUrl}help#2.4._Manage_Collection" target="_blank"> 
+								<li>  &nbsp;画像をアップロードする <a href="#{Navigation.applicationUrl}help#2.4._Manage_Collection" target="_blank"> 
 															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
 												 		  </a> 
 								</li>
-								<li>  &nbsp;Create a metadata profile <a href="#{Navigation.applicationUrl}help#2.3._Create_Metadata_Profile" target="_blank"> 
+								<li>  &nbsp;メタデータ構造を新規作成する <a href="#{Navigation.applicationUrl}help#2.3._Create_Metadata_Profile" target="_blank"> 
 															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
 												 		  </a> 
 								</li>
-								<li>  &nbsp;Organize images in albums <a href="#{Navigation.applicationUrl}help#3.1._Create_Album" target="_blank"> 
+								<li>  &nbsp;アルバム内の画像を編集する <a href="#{Navigation.applicationUrl}help#3.1._Create_Album" target="_blank"> 
 															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
 												 		  </a> 
 								</li>
-								<li>  &nbsp;Share albums with coworkers <a href="#{Navigation.applicationUrl}help#3.6._Share_Album" target="_blank"> 
+								<li>  &nbsp;アルバム画像を共有する <a href="#{Navigation.applicationUrl}help#3.6._Share_Album" target="_blank"> 
 															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
 												 		  </a> 
 								</li>

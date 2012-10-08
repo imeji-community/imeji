@@ -2,14 +2,14 @@
 	<parent>
 		<artifactId>imeji</artifactId>
 		<groupId>de.mpg.mpdl.imeji</groupId>
-		<version>0.0.0.1-SNAPSHOT</version>
+		<version>0.0.0.1</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.mpg.mpdl.imeji</groupId>
 	<artifactId>imeji_ear</artifactId>
 	<name>imeji_ear</name>
 	<packaging>ear</packaging>
-	<version>0.0.0.1-SNAPSHOT</version>
+	<version>0.0.0.1</version>
 	
 	<scm>
 		<connection>scm:git:git@github.com:MPDL/imeji.git</connection>
@@ -39,11 +39,11 @@
 							<contextRoot>/common</contextRoot>
 						</webModule>
 						<!-- Uncomment to enable OAI-PMH and Sitemaps. Important: Fledgeddata needs to be self compiled! -->
-					 	<!--  <webModule>
+					 	<webModule>
 							<groupId>de.mpg.escidoc.services</groupId>
 							<artifactId>fledgeddata_presentation</artifactId>
 							<contextRoot>/fledgeddata</contextRoot>
-						</webModule>-->
+						</webModule>
 					</modules>
 				</configuration>
 			</plugin>
@@ -115,18 +115,18 @@
 			<groupId>de.mpg.escidoc.services</groupId>
 			<artifactId>common_presentation</artifactId>
 			<!-- version>1.0.45-SNAPSHOT</version -->
-			<version>1.0.52-SNAPSHOT</version>
+			<version>1.0.52</version>
 			<type>war</type>
 			<scope>compile</scope>
 		</dependency>
 		<!-- Uncomment to enable OAI-PMH and Sitemaps. Important: Fledgeddata needs to be self compiled! -->
-		<!--  <dependency>
+		<dependency>
 			<groupId>de.mpg.escidoc.services</groupId>
 			<artifactId>fledgeddata_presentation</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.0</version>
 			<scope>compile</scope>
 			<type>war</type>
-		</dependency>-->
+		</dependency>
 	
 	</dependencies>
 
@@ -162,11 +162,11 @@
 											<fileset dir="src/jboss/configuration42x" />
 										</copy>
 										<!-- copy over the jboss service descriptor -->
-										<copy overwrite="true" file="${project.build.directory}/classes/jboss-service.xml" todir="${project.build.directory}/jboss/server/conf"></copy>
+										<copy overwrite="true" file="${project.build.directory}/classes/jboss-service.xml" todir="${project.build.directory}/jboss/server/conf" />
 										<!-- copy over the configuration file -->
-										<copy overwrite="true" file="${project.build.directory}/classes/imeji.properties" todir="${project.build.directory}/jboss/server/conf"></copy>
+										<copy overwrite="true" file="${project.build.directory}/classes/imeji.properties" todir="${project.build.directory}/jboss/server/conf" />
 										<!-- copy over the descriptio set template file -->
-										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${project.build.directory}/jboss/server/conf"></copy>
+										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${project.build.directory}/jboss/server/conf" />
 									</tasks>
 								</configuration>
 							</execution>
@@ -183,9 +183,9 @@
 
 										<!-- configuration for the deploy jboss server -->
 										<!-- copy over the configuration file -->
-										<copy overwrite="true" file="${project.build.directory}/classes/imeji.properties" todir="${jboss.install.dir}/server/default/conf"></copy>
+										<copy overwrite="true" file="${project.build.directory}/classes/imeji.properties" todir="${jboss.install.dir}/server/default/conf" />
 										<!-- copy over the screen config file file -->
-										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${jboss.install.dir}/server/default/conf"></copy>
+										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${jboss.install.dir}/server/default/conf" />
 
 									
 									</tasks>

@@ -12,9 +12,9 @@
 	<version>0.0.0.2-SNAPSHOT</version>
 	
 	<scm>
-		<connection>scm:git:git@github.com:MPDL/imeji.git</connection>
-		<developerConnection>scm:git:git@github.com:MPDL/imeji.git</developerConnection>
-		<url>https://bastienMPDL@github.com/MPDL/imeji.git</url>
+		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
+		<developerConnection>scm:git:https://github.com/imeji-community/imeji.git</developerConnection>
+		<url>https://github.com/imeji-community/imeji.git</url>
 	</scm>
 	
 	<build>

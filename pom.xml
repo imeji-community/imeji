@@ -122,9 +122,9 @@
 	</modules>
 
 	<scm>
-		<connection>scm:git:https://github.com/imeji-community/imeji.git</connection>
+		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
 		<developerConnection>scm:git:https://github.com/imeji-community/imeji.git</developerConnection>
-		<url>scm:git:https://github.com/imeji-community/imeji.git</url>
+		<url>https://github.com/imeji-community/imeji.git</url>
 	</scm>
 
 	<repositories>

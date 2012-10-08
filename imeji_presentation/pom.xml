@@ -9,7 +9,7 @@
 	<name>imeji_presentation</name>
 	<packaging>war</packaging>
 	<groupId>de.mpg.mpdl.imeji</groupId>
-	<version>0.0.0.1-SNAPSHOT</version>
+	<version>0.0.0.1</version>
 	<scm>
 		<connection>scm:git@github.com:bastienMPDL/imeji.git</connection>
 		<developerConnection>scm:git@github.com:bastienMPDL/imeji.git</developerConnection>

@@ -122,8 +122,8 @@
 	</modules>
 
 	<scm>
-		<connection>scm:git@github.com:imeji-community/imeji.git</connection>
-		<developerConnection>scm:git@github.com:imeji-community/imeji.git</developerConnection>
+		<connection>https://github.com/imeji-community/imeji.git</connection>
+		<developerConnection>https://github.com/imeji-community/imeji.git</developerConnection>
 		<url>https://github.com/imeji-community/imeji.git</url>
 	</scm>
 

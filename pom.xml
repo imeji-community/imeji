@@ -124,7 +124,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/imeji-community/imeji.git</connection>
 		<developerConnection>scm:git:https://github.com/imeji-community/imeji.git</developerConnection>
-		<url>https://github.com/imeji-community/imeji.git</url>
+		<url>scm:git:https://github.com/imeji-community/imeji.git</url>
 	</scm>
 
 	<repositories>

@@ -2,14 +2,14 @@
 	<parent>
 		<artifactId>imeji</artifactId>
 		<groupId>de.mpg.mpdl.imeji</groupId>
-		<version>1.0.0.0</version>
+		<version>0.0.0.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>imeji_presentation</artifactId>
 	<name>imeji_presentation</name>
 	<packaging>war</packaging>
 	<groupId>de.mpg.mpdl.imeji</groupId>
-	<version>1.0.0.0</version>
+	<version>0.0.0.2-SNAPSHOT</version>
 	<scm>
 		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
 		<developerConnection>scm:git:https://github.com/imeji-community/imeji.git</developerConnection>

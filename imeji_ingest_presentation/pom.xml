@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.fub.imeji</groupId>
+  <artifactId>imeji_ingest_converter</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Imeji Ingest Converter</name>
+  <description>This is a converter application for IMEJI</description>
+  <url>http://www.imeji.org</url>
+  <organization>
+  	<name>Freie Universität Berlin</name>
+  	<url>http://www.fu-berlin.de</url>
+  </organization>
+  <dependencies>
+    <dependency>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <version>2.0.1</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+    	<groupId>net.sourceforge.jexcelapi</groupId>
+    	<artifactId>jxl</artifactId>
+    	<version>2.6.12</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+  </dependencies>
+  <parent>
+  	<groupId>de.fub.imeji</groupId>
+  	<artifactId>imeji</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  </parent>
+</project>

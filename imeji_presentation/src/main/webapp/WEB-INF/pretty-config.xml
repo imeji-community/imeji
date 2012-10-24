@@ -3,160 +3,158 @@
                xsi:schemaLocation="http://ocpsoft.org/prettyfaces/3.3.3               http://ocpsoft.org/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.3.xsd">
 
 
-	<!-- Begin RewriteRules -->
-	<rewrite trailingSlash="remove"/>
-	<!-- <rewrite match="^/old-url/(\w+)/$" substitute="/new_url/$1/" redirect="301" 
-		/> -->
-	<!-- Begin UrlMappings -->
+    <!-- Begin RewriteRules -->
+    <rewrite trailingSlash="remove"/>
+    <!-- <rewrite match="^/old-url/(\w+)/$" substitute="/new_url/$1/" redirect="301" 
+  		/> -->
+    <!-- Begin UrlMappings -->
 
-	<url-mapping id="home">
-		<pattern value="/" />
-		<view-id>/jsf/Welcome.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="home">
+        <pattern value="/" />
+        <view-id>/jsf/Welcome.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="albums">
-		<pattern value="/albums" />
-		<view-id>/jsf/Albums.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="albums">
+        <pattern value="/albums" />
+        <view-id>/jsf/Albums.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="collections">
-		<pattern value="/collections" />
-		<view-id>/jsf/Collections.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="collections">
+        <pattern value="/collections" />
+        <view-id>/jsf/Collections.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="browse">
-		<pattern value="/browse" />
-		<view-id>/jsf/Images.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="browse">
+        <pattern value="/browse" />
+        <view-id>/jsf/Images.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="editPage">
-		<pattern value="/edit"></pattern>
-		<view-id>/jsf/Edit.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="editPage">
+        <pattern value="/edit"></pattern>
+        <view-id>/jsf/Edit.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="item">
-		<pattern value="/item/#{ImageBean.id}" />
-		<view-id>/jsf/Image.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="item">
+        <pattern value="/item/#{ImageBean.id}" />
+        <view-id>/jsf/Image.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="upload">
-		<pattern value="/collection/#{UploadBean.id}/upload" />
-		<view-id>/jsf/Upload.xhtml</view-id>
-		<action onPostback="false">#{UploadBean.status}</action>
-	</url-mapping>
+    <url-mapping id="upload">
+        <pattern value="/collection/#{UploadBean.id}/upload" />
+        <view-id>/jsf/Upload.xhtml</view-id>
+        <action onPostback="false">#{UploadBean.status}</action>
+    </url-mapping>
 
-	<!-- Collection pages -->
-	<url-mapping id="collection">
-		<pattern value="/collection/#{ViewCollectionBean.id}" />
-		<view-id>/jsf/CollectionEntryPage.xhtml</view-id>
-		<action>#{ViewCollectionBean.init}</action>
-	</url-mapping>
+    <!-- Collection pages -->
+    <url-mapping id="collection">
+        <pattern value="/collection/#{ViewCollectionBean.id}" />
+        <view-id>/jsf/CollectionEntryPage.xhtml</view-id>
+        <action>#{ViewCollectionBean.init}</action>
+    </url-mapping>
 
-	<url-mapping id="collectionInfos">
-		<pattern value="/collection/#{ViewCollectionBean.id}/infos" />
-		<view-id>/jsf/CollectionView.xhtml</view-id>
-		<action>#{ViewCollectionBean.init}</action>
-	</url-mapping>
+    <url-mapping id="collectionInfos">
+        <pattern value="/collection/#{ViewCollectionBean.id}/infos" />
+        <view-id>/jsf/CollectionView.xhtml</view-id>
+        <action>#{ViewCollectionBean.init}</action>
+    </url-mapping>
 
-	<url-mapping id="collectionBrowse">
-		<pattern value="/collection/#{CollectionImagesBean.id}/browse" />
-		<view-id>/jsf/CollectionBrowse.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="collectionBrowse">
+        <pattern value="/collection/#{CollectionImagesBean.id}/browse" />
+        <view-id>/jsf/CollectionBrowse.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="collectionItem">
-		<pattern
-			value="/collection/#{CollectionImageBean.collectionId}/item/#{CollectionImageBean.id}" />
-		<view-id>/jsf/CollectionImage.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="collectionItem">
+        <pattern
+            value="/collection/#{CollectionImageBean.collectionId}/item/#{CollectionImageBean.id}" />
+        <view-id>/jsf/CollectionImage.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="createCollection">
-		<pattern value="/createcollection"/>
-		<view-id>/jsf/CollectionCreate.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="createCollection">
+        <pattern value="/createcollection"/>
+        <view-id>/jsf/CollectionCreate.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="editCollection">
-		<pattern value="/collection/#{EditCollectionBean.id}/edit"/>
-		<view-id>/jsf/CollectionEdit.xhtml</view-id>
-		<action onPostback="false">#{EditCollectionBean.init}</action>
-	</url-mapping>
+    <url-mapping id="editCollection">
+        <pattern value="/collection/#{EditCollectionBean.id}/edit"/>
+        <view-id>/jsf/CollectionEdit.xhtml</view-id>
+        <action onPostback="false">#{EditCollectionBean.init}</action>
+    </url-mapping>
 
-	<!-- Profile Pages -->
-	<url-mapping id="viewProfile">
-		<pattern value="/profile/#{ViewMdProfileBean.id}" />
-		<view-id>/jsf/ProfileView.xhtml</view-id>
-	</url-mapping>
+    <!-- Profile Pages -->
+    <url-mapping id="viewProfile">
+        <pattern value="/profile/#{ViewMdProfileBean.id}" />
+        <view-id>/jsf/ProfileView.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="editProfile">
-		<pattern value="/profile/#{EditMdProfileBean.id}/edit" />
-		<view-id>/jsf/ProfileEdit.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="editProfile">
+        <pattern value="/profile/#{EditMdProfileBean.id}/edit" />
+        <view-id>/jsf/ProfileEdit.xhtml</view-id>
+    </url-mapping>
 
-	<!-- Album Pages -->
-	<url-mapping id="createalbum">
-		<pattern value="/createalbum" />
-		<view-id>/jsf/AlbumCreate.xhtml</view-id>
-		<action onPostback="false">#{AlbumBean.initCreate}</action>
-	</url-mapping>
+    <!-- Album Pages -->
+    <url-mapping id="createalbum">
+        <pattern value="/createalbum" />
+        <view-id>/jsf/AlbumCreate.xhtml</view-id>
+        <action onPostback="false">#{AlbumBean.initCreate}</action>
+    </url-mapping>
 
-	<url-mapping id="editAlbum">
-		<pattern value="/album/#{AlbumBean.id}/edit" />
-		<view-id>/jsf/AlbumEdit.xhtml</view-id>
-		<action onPostback="false">#{AlbumBean.initEdit}</action>
-	</url-mapping>
+    <url-mapping id="editAlbum">
+        <pattern value="/album/#{AlbumBean.id}/edit" />
+        <view-id>/jsf/AlbumEdit.xhtml</view-id>
+        <action onPostback="false">#{AlbumBean.initEdit}</action>
+    </url-mapping>
 
-	<url-mapping id="album">
-		<pattern value="/album/#{AlbumBean.id}" />
-		<view-id>/jsf/AlbumEntryPage.xhtml</view-id>
-		<action>#{AlbumBean.initView}</action>
-	</url-mapping>
+    <url-mapping id="album">
+        <pattern value="/album/#{AlbumBean.id}" />
+        <view-id>/jsf/AlbumEntryPage.xhtml</view-id>
+        <action>#{AlbumBean.initView}</action>
+    </url-mapping>
 
-	<url-mapping id="albumInfos">
-		<pattern value="/album/#{AlbumBean.id}/infos" />
-		<view-id>/jsf/AlbumView.xhtml</view-id>
-		<action>#{AlbumBean.initView}</action>
-	</url-mapping>
+    <url-mapping id="albumInfos">
+        <pattern value="/album/#{AlbumBean.id}/infos" />
+        <view-id>/jsf/AlbumView.xhtml</view-id>
+        <action>#{AlbumBean.initView}</action>
+    </url-mapping>
 
-	<url-mapping id="albumBrowse">
-		<pattern value="/album/#{AlbumImagesBean.id}/browse" />
-		<view-id>/jsf/AlbumBrowse.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="albumBrowse">
+        <pattern value="/album/#{AlbumImagesBean.id}/browse" />
+        <view-id>/jsf/AlbumBrowse.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="albumItem">
-		<pattern value="/album/#{AlbumImageBean.albumId}/item/#{AlbumImageBean.id}" />
-		<view-id>/jsf/AlbumImage.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="albumItem">
+        <pattern value="/album/#{AlbumImageBean.albumId}/item/#{AlbumImageBean.id}" />
+        <view-id>/jsf/AlbumImage.xhtml</view-id>
+    </url-mapping>
 
-	<!-- Search Pages -->
-	<url-mapping id="search">
-		<pattern value="/search"></pattern>
-		<view-id>/jsf/SearchAdvanced.xhtml</view-id>
-	</url-mapping>
+    <!-- Search Pages -->
+    <url-mapping id="search">
+        <pattern value="/search"></pattern>
+        <view-id>/jsf/SearchAdvanced.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="help">
-		<pattern value="/help"></pattern>
-		<view-id>/jsf/Help.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="help">
+        <pattern value="/help"></pattern>
+        <view-id>/jsf/Help.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="userPage">
-		<pattern value="/user"></pattern>
-		<view-id>/jsf/User.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="userPage">
+        <pattern value="/user"></pattern>
+        <view-id>/jsf/User.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="administration">
-		<pattern value="/admin"></pattern>
-		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="administration">
+        <pattern value="/admin"></pattern>
+        <view-id>/jsf/UserAdministrationPage.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="createUser">
-		<pattern value="/createuser"></pattern>
-		<view-id>/jsf/UserCreate.xhtml</view-id>
-	</url-mapping>
+    <url-mapping id="createUser">
+        <pattern value="/createuser"></pattern>
+        <view-id>/jsf/UserCreate.xhtml</view-id>
+    </url-mapping>
 
-	<url-mapping id="userbrowse">
-		<pattern value="/user/browse"></pattern>
-		<view-id>/jsf/Users.xhtml</view-id>
-	</url-mapping>
-
-
+    <url-mapping id="userbrowse">
+        <pattern value="/user/browse"></pattern>
+        <view-id>/jsf/Users.xhtml</view-id>
+    </url-mapping>
 
 </pretty-config>

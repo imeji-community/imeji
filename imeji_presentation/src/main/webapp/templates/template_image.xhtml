@@ -222,12 +222,12 @@
 																	<a4j:commandButton styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{statement.maxOccurs != '1'}" reRender="singleEditPanel" action="#{imageBean.edit.removeMetadata}" value="">
 																		<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 																		<f:setPropertyActionListener value="#{indexMetadata}" target="#{imageBean.edit.mdPosition}" />
-																		<a4j:support event="oncomplete" reRender="singleEditPanel" />
+																		<a4j:ajax event="complete" reRender="singleEditPanel" />
 																	</a4j:commandButton>
 																	<a4j:commandButton styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{statement.maxOccurs != '1'}" reRender="singleEditPanel" action="#{imageBean.edit.addMetadata}" value="">
 																		<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 																		<f:setPropertyActionListener value="#{indexMetadata}" target="#{imageBean.edit.mdPosition}" />
-																		<a4j:support event="oncomplete" reRender="singleEditPanel" />
+																		<a4j:ajax event="complete" reRender="singleEditPanel" />
 																	</a4j:commandButton>
 																</div>
 																</h:panelGroup>

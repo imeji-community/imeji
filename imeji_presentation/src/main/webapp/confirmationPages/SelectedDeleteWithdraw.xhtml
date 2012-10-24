@@ -36,7 +36,7 @@
 
 </ui:remove>
 	<f:subview id="DeleteSelected">
-		<rich:modalPanel id="panelConfirmDeleteSelected" width="390" height="220" style="background-color:#434343" domElementAttachment="form">
+		<rich:popupPanel id="panelConfirmDeleteSelected" width="390" height="220" style="background-color:#434343" domElementAttachment="form">
 			 <h3>
 	        	<h:outputText styleClass="xDouble_area0_p8 xTiny_marginLExcl" value="#{lbl.delete_images}?" rendered="#{bean.deletable}"/>
 	       		<h:outputText styleClass="xDouble_area0_p8 xTiny_marginLExcl" value="#{lbl.withdraw_images}? #{lbl.images_withdraw_comment}" rendered="#{!bean.deletable and bean.editable}"/>
@@ -58,7 +58,7 @@
 					</div>
 				</div>
 			</h:panelGroup>
-		</rich:modalPanel>
+		</rich:popupPanel>
 		
 		
 	</f:subview>

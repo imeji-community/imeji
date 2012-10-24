@@ -36,7 +36,7 @@
 
 </ui:remove>
 	<f:subview id="DeleteSelectedContainer">
-		<rich:modalPanel id="panelConfirmDeleteSelectedContainer" width="390" height="100" style="background-color:#434343" domElementAttachment="form">
+		<rich:popupPanel id="panelConfirmDeleteSelectedContainer" width="390" height="100" style="background-color:#434343" domElementAttachment="form">
 			 <h3>
 	        	<h:outputText styleClass="xDouble_area0_p8 xTiny_marginLExcl"  value="#{lbl.delete_selected_collections}?" rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and SessionBean.user != null}"/>
 	       		<h:outputText styleClass="xDouble_area0_p8 xTiny_marginLExcl"  value="#{lbl.delete_selected_albums}?" rendered="#{HistorySession.currentPage.type == 'ALBUMS' and SessionBean.user != null}"/>
@@ -55,6 +55,6 @@
 		 			</div>
 				</div>
 			</h:panelGroup>
-		</rich:modalPanel>
+		</rich:popupPanel>
 	</f:subview>
 </html>

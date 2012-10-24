@@ -259,9 +259,9 @@
 										<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}/item/#{item.id}">
 											<h:graphicImage alt="#{item.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.link}"/>
 										</h:outputLink>
-										<rich:toolTip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="400">
+										<rich:tooltip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="400">
 											<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"></ui:include>
-										</rich:toolTip>
+										</rich:tooltip>
 									</h:panelGroup>
 									
 									<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->
@@ -270,7 +270,7 @@
 									<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null}">
 										<span class="free_area0">
 											<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
-												<a4j:support event="onchange" ajaxSingle="true" reRender="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu"/>
+												<a4j:ajax event="change" ajaxSingle="true" reRender="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu"/>
 											</h:selectBooleanCheckbox>
 										</span>
 									</h:panelGroup>
@@ -308,7 +308,7 @@
 				</h:panelGroup>
 				
 				<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
-					<a4j:support event="onchange" reRender="facetGroup" action="#{paginatorListSessionBean.initFacets}" status="loadFacets"/>
+					<a4j:ajax event="change" reRender="facetGroup" action="#{paginatorListSessionBean.initFacets}" status="loadFacets"/>
 				</h:selectBooleanCheckbox>
 				
 				<!--

@@ -211,7 +211,7 @@
 								      	<td class="free_area0 endline">
 								      		<span class="free_area0_p8 endline itemSelectArea">
 												<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" value="#{container.selected}" rendered="#{container.deletable}" disabled="#{container.album.status=='RELEASED'}">
-													<a4j:support event="onchange"/>
+													<a4j:ajax event="change"/>
 												</h:selectBooleanCheckbox>
 												&#160;
 								      		</span>

@@ -61,7 +61,7 @@
 						<div class="free_area0 itemHeader">
 							<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea">
 								<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{SessionBean.user != null and container.deletable}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
-									<a4j:support event="onchange"/>
+									<a4j:ajax event="change"/>
 								</h:selectBooleanCheckbox>
 								&#160;
 							</h:panelGroup>

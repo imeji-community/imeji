@@ -37,7 +37,7 @@
 </ui:remove>
 	<f:subview id="confirmationDelete">
 
-		<rich:modalPanel id="panelConfirmDelete" width="390" height="100" style="background-color:#434343" domElementAttachment="form">
+		<rich:popupPanel id="panelConfirmDelete" width="390" height="100" style="background-color:#434343" domElementAttachment="form">
 			<div id="contentPanel">
 	        <h3>
 	        	<h:outputText styleClass="free_area0_p8 xTiny_marginLExcl"  value="#{msg.confirmation_delete_collection}?" rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}"/>
@@ -58,6 +58,6 @@
 				</div>
 			</h:panelGroup>
 			</div>
-		</rich:modalPanel>
+		</rich:popupPanel>
 	</f:subview>
 </html>

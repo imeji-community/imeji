@@ -37,7 +37,7 @@
 
 </ui:remove>
 	<f:subview id="confirmationWithdraw">
-		<rich:modalPanel id="panelConfirmWithdraw" width="390" height="220" style="background-color:#434343;" domElementAttachment="form" rendered="#{bean != null}">
+		<rich:popupPanel id="panelConfirmWithdraw" width="390" height="220" style="background-color:#434343;" domElementAttachment="form" rendered="#{bean != null}">
 	        <h3>
 	        	<h:outputText styleClass="xDouble_area0_p0 xTiny_marginLExcl" value="#{msg.confirmation_withdraw_collection}?" rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}"/> 
 	        	<h:outputText styleClass="xDouble_area0_p0 xTiny_marginLExcl" value="#{msg.confirmation_withdraw_album}?" rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}"/>
@@ -58,6 +58,6 @@
 				 	</div>
 				</div>
 			</h:panelGroup>
-		</rich:modalPanel>
+		</rich:popupPanel>
 	</f:subview>
 </html>								

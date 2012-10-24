@@ -1,160 +1,178 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- CDDL HEADER START The contents of this file are subject to the terms 
-	of the Common Development and Distribution License, Version 1.0 only (the 
-	"License"). You may not use this file except in compliance with the License. 
-	You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license. 
-	See the License for the specific language governing permissions and limitations 
-	under the License. When distributing Covered Code, include this CDDL HEADER 
-	in each file and include the License file at license/ESCIDOC.LICENSE. If 
-	applicable, add the following below this CDDL HEADER, with the fields enclosed 
-	by brackets "[]" replaced with your own identifying information: Portions 
-	Copyright [yyyy] [name of copyright owner] CDDL HEADER END Copyright 2006-2007 
-	Fachinformationszentrum Karlsruhe Gesellschaft für wissenschaftlich-technische 
-	Information mbH and Max-Planck- Gesellschaft zur Förderung der Wissenschaft 
-	e.V. All rights reserved. Use is subject to license terms. -->
-<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd">
+of the Common Development and Distribution License, Version 1.0 only (the 
+"License"). You may not use this file except in compliance with the License. 
+You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license. 
+See the License for the specific language governing permissions and limitations 
+under the License. When distributing Covered Code, include this CDDL HEADER 
+in each file and include the License file at license/ESCIDOC.LICENSE. If 
+applicable, add the following below this CDDL HEADER, with the fields enclosed 
+by brackets "[]" replaced with your own identifying information: Portions 
+Copyright [yyyy] [name of copyright owner] CDDL HEADER END Copyright 2006-2007 
+Fachinformationszentrum Karlsruhe Gesellschaft für wissenschaftlich-technische 
+Information mbH and Max-Planck- Gesellschaft zur Förderung der Wissenschaft 
+e.V. All rights reserved. Use is subject to license terms. -->
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-	<!-- Servlets -->
-	<servlet>
-		<servlet-name>Faces Servlet</servlet-name>
-		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>Initializer Servlet</servlet-name>
-		<servlet-class>de.mpg.imeji.presentation.init.InitializerServlet</servlet-class>
-		<load-on-startup>4</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>Image Servlet</servlet-name>
-		<servlet-class>de.mpg.imeji.presentation.servlet.ImageServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>Export Servlet</servlet-name>
-		<servlet-class>de.mpg.imeji.presentation.servlet.ExportServlet</servlet-class>
-		<load-on-startup>3</load-on-startup>
-	</servlet>
-	<!-- Filters -->
-	<filter>
-		<filter-name>Pretty Filter</filter-name>
-		<filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>
-	</filter>
-	<filter>
-		<filter-name>History Filter</filter-name>
-		<filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
-	</filter>
-	<filter>
-		<display-name>RichFaces Filter</display-name>
-		<filter-name>richfaces</filter-name>
-		<filter-class>org.ajax4jsf.Filter</filter-class>
-	</filter>
-	<!-- Servlet mappings -->
-	<servlet-mapping>
-		<servlet-name>Faces Servlet</servlet-name>
-		<url-pattern>/jsf/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Image Servlet</servlet-name>
-		<url-pattern>/coreserviceimage</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Export Servlet</servlet-name>
-		<url-pattern>/export</url-pattern>
-	</servlet-mapping>
-	<!-- Filter mappings -->
-	<filter-mapping>
-		<filter-name>Pretty Filter</filter-name>
-		<url-pattern>/*</url-pattern>
-		<dispatcher>FORWARD</dispatcher>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>ERROR</dispatcher>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>richfaces</filter-name>
-		<servlet-name>Faces Servlet</servlet-name>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>FORWARD</dispatcher>
-		<dispatcher>INCLUDE</dispatcher>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>History Filter</filter-name>
-		<servlet-name>Faces Servlet</servlet-name>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>FORWARD</dispatcher>
-	</filter-mapping>
+    <!-- Servlets -->
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>Initializer Servlet</servlet-name>
+        <servlet-class>de.mpg.imeji.presentation.init.InitializerServlet</servlet-class>
+        <load-on-startup>4</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>Image Servlet</servlet-name>
+        <servlet-class>de.mpg.imeji.presentation.servlet.ImageServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>Export Servlet</servlet-name>
+        <servlet-class>de.mpg.imeji.presentation.servlet.ExportServlet</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+    
+    <!-- Filters -->
+    <!-- URL Rewriting lib-->
+    <filter>
+        <filter-name>Pretty Filter</filter-name>
+        <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+    <!-- It seems history-filter is not used since history-filter is not in pom.xml 
+    <filter> 
+        <filter-name>History Filter</filter-name> 
+        <filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class> 
+     </filter>
+     -->
+    <!-- Not necessary anymore in RichFaces 4.x 
+    <filter> 
+        <display-name>RichFaces Filter</display-name> 
+        <filter-name>richfaces</filter-name> 
+        <filter-class>org.ajax4jsf.Filter</filter-class> 
+    </filter> 
+    -->
 
-	<!-- others -->
-	<context-param>
-		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-		<param-value>client</param-value>
-	</context-param>
-	<context-param>
-		<param-name>javax.faces.CONFIG_FILES</param-name>
-		<param-value>/WEB-INF/navigation.xml,/WEB-INF/managed-beans.xml
-		</param-value>
-	</context-param>
-	<context-param>
-		<param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
-		<param-value>false</param-value>
-	</context-param>
+    <!-- Servlet mappings -->
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/jsf/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Image Servlet</servlet-name>
+        <url-pattern>/coreserviceimage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Export Servlet</servlet-name>
+        <url-pattern>/export</url-pattern>
+    </servlet-mapping>
+    
+    
+    <!-- Filter mappings -->
+    <filter-mapping>
+        <filter-name>Pretty Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+        <dispatcher>ASYNC</dispatcher>
+    </filter-mapping>
+    <!-- RF 4.0 you do not need to put anything in web.xml 
+    <filter-mapping> 
+        <filter-name>richfaces</filter-name> 
+        <servlet-name>Faces Servlet</servlet-name> 
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher> 
+        <dispatcher>INCLUDE</dispatcher> 
+    </filter-mapping> 
+    -->
+    <!-- It seems history-filter is not used since history-filter is not in pom.xml 
+    <filter-mapping>
+        <filter-name>History Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    -->
+	
+    <!-- others -->
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>client</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.CONFIG_FILES</param-name>
+        <param-value>/WEB-INF/navigation.xml,/WEB-INF/managed-beans.xml
+        </param-value>
+    </context-param>
+    <context-param>
+        <param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
+        <param-value>false</param-value>
+    </context-param>
 
-	<!-- Plugging the "Blue Sky" skin into the project -->
+    <!-- Plugging the "Blue Sky" skin into the project -->
+    <context-param>
+        <param-name>org.richfaces.skin</param-name>
+        <param-value>plain</param-value>
+    </context-param>
 
-	<context-param>
-		<param-name>org.richfaces.SKIN</param-name>
-		<param-value>plain</param-value>
-	</context-param>
+    <!-- Making the RichFaces skin spread to standard HTML controls
+   Note: richfaces4 it's boolean property. true when you want turn standard skinning on globally
+    -->
+    <context-param>
+        <param-name>org.richfaces.enableControlSkinning</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    
+<!-- Defines how the RichFaces script files are loaded to application -->
+    <context-param>
+        <param-name>org.richfaces.LoadScriptStrategy</param-name>
+        <param-value>ALL</param-value>
+    </context-param>
+    <!-- not needed for richfaces4
+    <context-param> 
+        <param-name>org.ajax4jsf.COMPRESS_SCRIPT</param-name> 
+        <param-value>true</param-value> 
+    </context-param> 
+    -->
+  <!-- no longer needed for JSF 2.0 Use documents saved as *.xhtml for Facelets 
+     <context-param>
+        <param-name>facelets.VIEW_MAPPINGS</param-name>
+        <param-value>*.xhtml</param-value>
+    </context-param>
+    -->
+   
+    <!-- TEST FACELETS PERFORMANCE TUNING -->
+    <context-param>
+        <param-name>facelets.DEVELOPMENT</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <!-- control debug info level-->
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Production</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.sun.faces.responseBufferSize</param-name>
+        <param-value>500000</param-value>
+    </context-param>
+    <context-param>
+        <param-name>facelets.REFRESH_PERIOD</param-name>
+        <param-value>-1</param-value>
+    </context-param>
+    <!-- ENd TUNING -->
 
-	<!-- Making the RichFaces skin spread to standard HTML controls -->
+    <session-config>
+        <session-timeout>180</session-timeout>
+    </session-config>
 
-	<context-param>
-		<param-name>org.richfaces.CONTROL_SKINNING</param-name>
-		<param-value>disable</param-value>
-	</context-param>
-
-	<context-param>
-		<param-name>org.richfaces.LoadScriptStrategy</param-name>
-		<param-value>ALL</param-value>
-	</context-param>
-
-	<context-param>
-		<param-name>org.ajax4jsf.COMPRESS_SCRIPT</param-name>
-		<param-value>true</param-value>
-	</context-param>
-
-	<!-- Defining and mapping the RichFaces filter -->
-
-
-	<!-- Use documents saved as *.xhtml for Facelets -->
-	<context-param>
-		<param-name>facelets.VIEW_MAPPINGS</param-name>
-		<param-value>*.xhtml</param-value>
-	</context-param>
-	<!-- TEST FACELETS PERFORMANCE TUNING -->
-	<context-param>
-		<param-name>facelets.DEVELOPMENT</param-name>
-		<param-value>false</param-value>
-	</context-param>
-	<context-param>
-		<param-name>com.sun.faces.responseBufferSize</param-name>
-		<param-value>500000</param-value>
-	</context-param>
-	<context-param>
-		<param-name>facelets.REFRESH_PERIOD</param-name>
-		<param-value>-1</param-value>
-	</context-param>
-	<!-- ENd TUNING -->
-
-	<session-config>
-		<session-timeout>180</session-timeout>
-	</session-config>
-
-	<welcome-file-list>
-		<welcome-file>jsf/Welcome.xhtml</welcome-file>
-	</welcome-file-list>
+    <welcome-file-list>
+        <welcome-file>jsf/Welcome.xhtml</welcome-file>
+    </welcome-file-list>
 
 </web-app>
-

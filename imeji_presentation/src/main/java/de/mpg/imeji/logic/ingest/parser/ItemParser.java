@@ -16,8 +16,10 @@ public class ItemParser
     public List<Item> parseItemList(String itemListXml)
     {
         List<Item> l = new ArrayList<Item>();
+        //TODO
         // here is done the parsing. The results is written into the list l
         // You can parse the list completely at once or parse one item after the other like I propose it here:
+        // Perser might use the item.xsd, that is created by ItemSchemaFactory
         for (String itemXml : parseItemList2ListOfItems(itemListXml))
         {
             l.add(parseItem(itemXml));
@@ -34,12 +36,14 @@ public class ItemParser
     public Item parseItem(String itemXml)
     {
         Item item = new Item();
+      //TODO
         return item;
     }
 
     private List<String> parseItemList2ListOfItems(String itemListXml)
     {
         List<String> l = new ArrayList<String>();
+      //TODO
         return l;
     }
 }

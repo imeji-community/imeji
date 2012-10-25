@@ -8,6 +8,7 @@ public class ItemSchemaFactory
     {
         // Here is the schema created according to the profile
         // It must return the schema object instead of a simple Object
+      //TODO
         return null;
     }
 }

@@ -44,12 +44,13 @@ e.V. All rights reserved. Use is subject to license terms. -->
         <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>
         <async-supported>true</async-supported>
     </filter>
-    <!-- It seems history-filter is not used since history-filter is not in pom.xml 
+    
+    <!-- de.mpg.imeji.presentation.history -->
     <filter> 
         <filter-name>History Filter</filter-name> 
         <filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class> 
      </filter>
-     -->
+    
     <!-- Not necessary anymore in RichFaces 4.x 
     <filter> 
         <display-name>RichFaces Filter</display-name> 
@@ -74,14 +75,14 @@ e.V. All rights reserved. Use is subject to license terms. -->
     
     
     <!-- Filter mappings -->
-    <filter-mapping>
-        <filter-name>Pretty Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-        <dispatcher>ASYNC</dispatcher>
-    </filter-mapping>
+  <filter-mapping> 
+      <filter-name>Pretty Filter</filter-name> 
+      <url-pattern>/*</url-pattern> 
+      <dispatcher>FORWARD</dispatcher> 
+      <dispatcher>REQUEST</dispatcher> 
+      <dispatcher>ERROR</dispatcher>
+      <dispatcher>ASYNC</dispatcher>
+   </filter-mapping>
     <!-- RF 4.0 you do not need to put anything in web.xml 
     <filter-mapping> 
         <filter-name>richfaces</filter-name> 
@@ -91,15 +92,14 @@ e.V. All rights reserved. Use is subject to license terms. -->
         <dispatcher>INCLUDE</dispatcher> 
     </filter-mapping> 
     -->
-    <!-- It seems history-filter is not used since history-filter is not in pom.xml 
+   <!-- de.mpg.imeji.presentation.history -->
     <filter-mapping>
         <filter-name>History Filter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-    -->
-	
+    
     <!-- others -->
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>

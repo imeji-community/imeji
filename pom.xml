@@ -364,22 +364,6 @@
 				<!-- the ears are deployed to this server using jboss:harddeploy -->
 				<!-- <jboss.install.dir>${user.home}/jboss/server_eclipse/jboss-4.2.2.GA/jboss-4.2.2.GA</jboss.install.dir> -->
 
-
-				<!-- Identifier of the content model "imeji" in the current framework 
-					instance -->
-				<escidoc.imeji.content-model.id>escidoc:14001</escidoc.imeji.content-model.id>
-
-				<!-- Identifier of the context of "imeji" in the current framework instance -->
-				<escidoc.imeji.context.id>escidoc:13001</escidoc.imeji.context.id>
-
-				<!-- Identifier of the content model " imeji Container Content Model" 
-					in the current framework instance -->
-				<escidoc.imeji.container.content-model.id>escidoc:faces60</escidoc.imeji.container.content-model.id>
-
-				<!-- Indentifier of the content model "imeji collection content model": 
-					Not persistent, created only on dev so far -->
-				<escidoc.imeji.collection.content-model.id>escidoc:194286</escidoc.imeji.collection.content-model.id>
-
 				<!-- Default number of image in the lists -->
 				<imeji.image.list.size>18</imeji.image.list.size>
 
@@ -392,8 +376,10 @@
 				<!-- Options for number of container in the lists -->
 				<imeji.container.list.size.options>5,10,15,20,50</imeji.container.list.size.options>
 
+				<!-- supported imeji languages (iso1 code) -->
 				<imeji.i18n.languages>en,de,ja</imeji.i18n.languages>
 
+				<!-- CoNE URL for languages -->
 				<escidoc.cone.isos639_1.all>http://pubman.mpdl.mpg.de/cone/iso639-1/all</escidoc.cone.isos639_1.all>
 
 				<!-- Blog's URL -->
@@ -410,7 +396,18 @@
 
 				<!-- Counter for imeji objects -->
 				<imeji.counter.first.value>0</imeji.counter.first.value>
+				
+				<!-- eSciDoc images types -->
+				<xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
+				<xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
+				<xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
+				
+				<!-- size of the imeji images -->
+				<xsd.resolution.thumbnail>103</xsd.resolution.thumbnail>
+				<xsd.resolution.web>357</xsd.resolution.web>
 
+				<!-- Cone -->
+				<escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
 
 				<!-- Due to a historical defect, QName was released with multiple serialVersionUID 
 					values even though its serialization was the same. To workaround this issue, 
@@ -423,14 +420,7 @@
 				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
 				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
 
-				<xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
-				<xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
-				<xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
-				<xsd.resolution.thumbnail>103</xsd.resolution.thumbnail>
-				<xsd.resolution.web>357</xsd.resolution.web>
-
-				<!-- Cone -->
-				<escidoc.cone.service.url>http://dev-pubman.mpdl.mpg.de:8080/cone/</escidoc.cone.service.url>
+				
 
 			</properties>
 			<distributionManagement>

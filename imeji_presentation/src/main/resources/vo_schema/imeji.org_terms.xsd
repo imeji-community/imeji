@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" 
+	targetNamespace="http://imeji.org/terms"
+	xmlns:imeji="http://imeji.org/terms"
+	xmlns:dcterms="http://purl.org/dc/terms"
+	xmlns:dc="http://purl.org/dc/elements/1.1"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:vens="http://purl.org/dc/dcam/VocabularyEncodingScheme"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:import namespace="http://purl.org/dc/terms" schemaLocation="purl.org_dc_terms.xsd"/>  
+  <xs:import namespace="http://purl.org/dc/elements/1.1" schemaLocation="purl.org_dc_elements_1.1.xsd"/>
+  <xs:import namespace="http://www.w3.org/2000/01/rdf-schema#" schemaLocation="w3.org_2000_01_rdf-schema.xsd"/> 
+  <xs:import namespace="http://purl.org/dc/dcam/VocabularyEncodingScheme" schemaLocation="purl.org_dc_dcam_VocabularyEncodingScheme.xsd"/> 
+  
+  <xs:simpleType name="versionNumber">
+    <xs:restriction base="xs:int"></xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="discardComments">
+    <xs:restriction base="xs:string"></xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="escidocId">
+    <xs:restriction base="xs:string"></xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="fulltext">
+    <xs:restriction base="xs:string"></xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="literalConstraint">
+    <xs:restriction base="xs:string"></xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="isDescription">
+    <xs:restriction base="xs:boolean"></xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="minOccurs">
+    <xs:restriction base="xs:string"></xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="maxOccurs">
+    <xs:restriction base="xs:string"></xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="parent">
+    <xs:restriction base="xs:string"></xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="isPreview">
+    <xs:restriction base="xs:boolean"></xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="pos">
+    <xs:restriction base="xs:int"></xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="status">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PENDING"/>
+      <xs:enumeration value="RELEASED"/>
+      <xs:enumeration value="WITHDRAWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="visibility">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PUBLIC"/>
+      <xs:enumeration value="PRIVATE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="metadata" abstract="true">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"  minOccurs="1" maxOccurs="1"/>
+      <xs:element name="pos" type="xs:int" minOccurs="0"/>
+      <xs:element name="statement" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="metadataSet">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="profile" type="xs:string" minOccurs="0"/>
+      <xs:element name="metadata" type="imeji:metadata" minOccurs="0"
+      	maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="properties">
+    <xs:sequence>
+      <xs:element name="created" type="dcterms:created" minOccurs="0"/>
+      <xs:element name="createdBy" type="dcterms:createdBy" minOccurs="0"/>
+      <xs:element name="discardComment" type="imeji:discardComments" minOccurs="0"/>
+      <xs:element name="modified" type="dcterms:modified" minOccurs="0"/>
+      <xs:element name="modifiedBy" type="dcterms:modifiedBy" minOccurs="0"/>
+      <xs:element name="status" type="imeji:status" minOccurs="0"/>
+      <xs:element name="version" type="imeji:versionNumber" minOccurs="0"/>
+      <xs:element name="versionDate" type="dcterms:issued" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="mdprofile">  
+    <xs:complexContent>
+    	<xs:extension base="imeji:properties">
+	    	<xs:sequence>
+	  		<xs:element name="id" type="xs:string" minOccurs="1"
+	  			maxOccurs="1" />
+	  		<xs:element name="title" type="dc:title" minOccurs="0" />
+	  		<xs:element name="description" type="dc:description"
+	  			minOccurs="0" />
+	  		<xs:element name="statements" type="imeji:statement"
+	  			minOccurs="0" maxOccurs="unbounded" />  		
+	        </xs:sequence>
+    	</xs:extension>
+   	</xs:complexContent>  
+  </xs:complexType>
+  
+  <xs:complexType name="statement">
+	<xs:sequence>
+		<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		<xs:element name="type" type="dcterms:type" minOccurs="0"/>
+		<xs:element name="labels" type="rdfs:localizedString"
+			minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="vocabulary" type="vens:vocabulary" minOccurs="0"/>
+		<xs:element name="literalConstraints" type="imeji:literalConstraint"
+			minOccurs="0" maxOccurs="unbounded" />	
+    	<xs:element name="isDescription" default="false" type="imeji:isDescription" minOccurs="0"/>
+    	<xs:element name="minOccurs" default="0" type="imeji:minOccurs" minOccurs="0"/>
+    	<xs:element name="maxOccurs" default="1" type="imeji:maxOccurs" minOccurs="0"/>
+    	<xs:element name="parent" type="imeji:parent" minOccurs="0"/>
+    	<xs:element name="isPreview" default="true" type="imeji:isPreview" minOccurs="0"/>
+    	<xs:element name="pos" default="0" type="imeji:pos" minOccurs="0"/>
+	</xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="item">
+	<xs:sequence>
+		<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		<xs:element name="collection" type="xs:string" minOccurs="0"/>
+		<xs:element name="escidocId" type="imeji:escidocId" minOccurs="0"/>          
+		<xs:element name="fullImageUrl" type="xs:string" minOccurs="0"/>
+		<xs:element name="filename" type="xs:string" minOccurs="0"/>
+		<xs:element name="fulltext" type="imeji:fulltext" minOccurs="0"/>
+		<xs:element name="webImageUrl" type="xs:string" minOccurs="0"/>
+		<xs:element name="thumbnailImageUrl" type="xs:string" minOccurs="0"/>
+		<xs:element name="metadataSets" type="imeji:metadataSet"
+			minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="visibility" type="imeji:visibility"
+			minOccurs="0" />
+	</xs:sequence>
+  </xs:complexType>
+
+
+ 
+</xs:schema>

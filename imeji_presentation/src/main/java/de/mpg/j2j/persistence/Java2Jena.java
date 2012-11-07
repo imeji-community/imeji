@@ -294,7 +294,7 @@ public class Java2Jena
      */
     private void addLabel(Resource s, LocalizedString ls)
     {
-        Literal o = model.createLiteral(ls.getString(), ls.getLang());
+        Literal o = model.createLiteral(ls.getValue(), ls.getLang());
         Property p = RDFS.label;
         if (o != null)
         {

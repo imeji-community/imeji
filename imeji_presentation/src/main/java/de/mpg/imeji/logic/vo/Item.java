@@ -8,6 +8,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
@@ -18,32 +21,41 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/item")
 @j2jModel("item")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlRootElement(name = "item")
 public class Item extends Properties implements FulltextIndex
 {
     public enum Visibility
     {
         PUBLIC, PRIVATE;
     }
-
+    
     private URI id;
     // @j2jResource("http://imeji.org/terms/properties")
     // private Properties properties = new Properties();
-    @j2jResource("http://imeji.org/terms/collection")
+    @j2jResource("http://imeji.org/terms/collection")    
     private URI collection;
-    @j2jList("http://imeji.org/terms/metadataSet")
+    
+    @j2jList("http://imeji.org/terms/metadataSet")    
     private List<MetadataSet> metadataSets = new ArrayList<MetadataSet>();
+    
     @j2jResource("http://imeji.org/terms/webImageUrl")
     private URI webImageUrl;
+    
     @j2jResource("http://imeji.org/terms/thumbnailImageUrl")
     private URI thumbnailImageUrl;
+    
     @j2jResource("http://imeji.org/terms/fullImageUrl")
     private URI fullImageUrl;
+    
     @j2jResource("http://imeji.org/terms/visibility")
     private URI visibility = URI.create("http://imeji.org/terms/visibility#" + Visibility.PRIVATE.name());;
+    
     @j2jLiteral("http://imeji.org/terms/filename")
     private String filename;
+    
     @j2jLiteral("http://imeji.org/terms/escidocId")
     private String escidocId;
+    
     @j2jLiteral("http://imeji.org/terms/fulltext")
     private String fulltext;
 
@@ -118,6 +130,7 @@ public class Item extends Properties implements FulltextIndex
         this.id = id;
     }
 
+    @XmlElement(name = "id", type = URI.class)    
     public URI getId()
     {
         return id;
@@ -136,7 +149,7 @@ public class Item extends Properties implements FulltextIndex
     {
         this.collection = collection;
     }
-
+  
     public URI getCollection()
     {
         return collection;

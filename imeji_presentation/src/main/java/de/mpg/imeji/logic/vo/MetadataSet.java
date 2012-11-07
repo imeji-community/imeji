@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import javax.xml.bind.annotation.XmlType;
+
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jList;
@@ -14,6 +16,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/metadataSet")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlType(name = "MetadataSet")
 public class MetadataSet
 {
     @j2jList("http://imeji.org/terms/metadata")

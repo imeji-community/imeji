@@ -1,5 +1,8 @@
 package de.mpg.j2j.misc;
 
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(name="LocalizedString")
 public class LocalizedString
 {
     private String value;
@@ -16,12 +19,12 @@ public class LocalizedString
         this.lang = lang;
     }
 
-    public String getString()
+    public String getValue()
     {
         return value;
     }
 
-    public void setString(String value)
+    public void setValue(String value)
     {
         this.value = value;
     }

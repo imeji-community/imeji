@@ -6,6 +6,8 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlType;
+
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
@@ -21,6 +23,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlType(name = "Metadata")
 public abstract class Metadata
 {
     private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());

@@ -3,7 +3,16 @@ package de.mpg.imeji.logic.ingest.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.JAXBException;
+
+import org.xml.sax.SAXException;
+
+import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+import de.mpg.imeji.logic.ingest.jaxb.interfaces.IJaxbItem;
+import de.mpg.imeji.logic.ingest.jaxb.interfaces.IJaxbMetadataProfile;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.ingest.IngestBean;
 
 public class ItemParser
 {
@@ -46,4 +55,9 @@ public class ItemParser
       //TODO
         return l;
     }
+    
+    public Item getItems( String xmlFile ) throws JAXBException, SAXException
+	{
+    	return new JaxbIngestProfile().unmarshalItem(xmlFile);
+	}
 }

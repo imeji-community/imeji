@@ -8,6 +8,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -16,35 +19,47 @@ import de.mpg.j2j.misc.LocalizedString;
 
 @j2jResource("http://imeji.org/terms/statement")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlType(name="statement")
 public class Statement implements Comparable<Statement>
 {
     // Id: creation to be changed with pretty ids
     private URI id = URI.create("http://imeji.org/statement/" + UUID.randomUUID());
-    @j2jResource("http://purl.org/dc/terms/type")
+	
+    @j2jResource("http://purl.org/dc/terms/type")    
     private URI type = URI.create("http://imeji.org/terms/metadata#text");
-    @j2jList("http://www.w3.org/2000/01/rdf-schema#label")
+    
+    @j2jList("http://www.w3.org/2000/01/rdf-schema#label")    
     private Collection<LocalizedString> labels = new LinkedList<LocalizedString>();
-    @j2jResource("http://purl.org/dc/dcam/VocabularyEncodingScheme")
+    
+    @j2jResource("http://purl.org/dc/dcam/VocabularyEncodingScheme")    
     private URI vocabulary;
-    @j2jList("http://imeji.org/terms/literalConstraint")
+    
+    @j2jList("http://imeji.org/terms/literalConstraint")    
     private Collection<String> literalConstraints = new LinkedList<String>();
-    @j2jLiteral("http://imeji.org/terms/isDescription")
+    
+    @j2jLiteral("http://imeji.org/terms/isDescription")    
     private boolean isDescription = false;
-    @j2jLiteral("http://imeji.org/terms/minOccurs")
+    
+    @j2jLiteral("http://imeji.org/terms/minOccurs")    
     private String minOccurs = "0";
+    
     @j2jLiteral("http://imeji.org/terms/maxOccurs")
+    
     private String maxOccurs = "1";
-    @j2jResource("http://imeji.org/terms/parent")
+        
+    @j2jResource("http://imeji.org/terms/parent")    
     private URI parent = null;
-    @j2jLiteral("http://imeji.org/terms/isPreview")
+    
+    @j2jLiteral("http://imeji.org/terms/isPreview")    
     private boolean isPreview = true;
+        
     private int pos = 0;
 
     public Statement()
     {
         // TODO Auto-generated constructor stub
     }
-
+    
     public URI getType()
     {
         return type;
@@ -54,7 +69,7 @@ public class Statement implements Comparable<Statement>
     {
         this.type = type;
     }
-
+    
     public Collection<LocalizedString> getLabels()
     {
         return labels;
@@ -64,7 +79,7 @@ public class Statement implements Comparable<Statement>
     {
         this.labels = labels;
     }
-
+    
     public URI getVocabulary()
     {
         return vocabulary;
@@ -74,7 +89,7 @@ public class Statement implements Comparable<Statement>
     {
         this.vocabulary = vocabulary;
     }
-
+    
     public Collection<String> getLiteralConstraints()
     {
         return literalConstraints;
@@ -84,7 +99,7 @@ public class Statement implements Comparable<Statement>
     {
         this.literalConstraints = literalConstraints;
     }
-
+    
     public String getMinOccurs()
     {
         return minOccurs;
@@ -94,7 +109,7 @@ public class Statement implements Comparable<Statement>
     {
         this.minOccurs = minOccurs;
     }
-
+    
     public String getMaxOccurs()
     {
         return maxOccurs;
@@ -105,6 +120,7 @@ public class Statement implements Comparable<Statement>
         this.maxOccurs = maxOccurs;
     }
 
+    @XmlElement(name = "pos", type = Integer.class)
     public int getPos()
     {
         return pos;
@@ -125,6 +141,7 @@ public class Statement implements Comparable<Statement>
             return 1;
     }
 
+    
     public boolean isDescription()
     {
         return isDescription;

@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlType;
+
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -15,6 +17,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://xmlns.com/foaf/0.1/person")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlType(name="person")
 public class Person
 {
     private URI id = URI.create("http://imeji.org/person/" + UUID.randomUUID());

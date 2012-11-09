@@ -163,7 +163,7 @@
 						}
 					</style>
 					 
-					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale == 'en'}">
+					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
 						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
 						<!-- tabs -->
 						<ul class="imj_cont_1">
@@ -302,7 +302,7 @@
 				</div>
 				
 				<!-- japanese part -->
-				<h:panelGroup layout="block" id="tabsJP" styleClass="id_tabs" rendered="#{SessionBean.locale == 'jp'}">
+				<h:panelGroup layout="block" id="tabsJP" styleClass="id_tabs" rendered="#{SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
 						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = '検索キーワード...';</script>
 						<!-- tabs -->
 						<ul class="imj_cont_1">

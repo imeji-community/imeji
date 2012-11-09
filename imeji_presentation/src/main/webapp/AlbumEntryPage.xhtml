@@ -124,11 +124,14 @@
 			<ui:define name="actionsMenu">
 				<h:panelGroup layout="block" styleClass="free_area0 sub action">
 					<h:panelGroup>
-						<rich:togglePanel  value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{AlbumBean.editable}">
-							 <f:facet name="closed">
-							 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
-						            
-						            <rich:toggleControl styleClass="free_area0" value="#{lbl.album_share}" switchToState="open" rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}"/>
+						<rich:togglePanel  id="sharePanel" activeItem="#{SharingBean.status}" switchType="ajax" rendered="#{AlbumBean.editable}">
+							 <rich:togglePanelItem name="closed">
+							 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">						   
+						           
+									<h:outputLink styleClass="free_area0" value="#" rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}">
+										<h:outputText value="#{lbl.album_share}"/>
+										 <rich:toggleControl event="click" targetPanel="sharePanel" targetItem="open"  />
+									</h:outputLink>
 									
 									<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING'}">
 										<h:outputText value="#{lbl.release}"/>
@@ -146,10 +149,11 @@
 									</h:outputLink>
 									
 								</h:panelGrid>
-						     </f:facet>
-						     <f:facet name="open">
+						     </rich:togglePanelItem>
+						     <rich:togglePanelItem name="open">
 						         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
 	     								<h:outputText value="#{lbl.share} " />
+	     								<!-- FIXME input below white background make typing invisible -->
 	          							*<rich:inplaceInput styleClass="large_area0 selected" value="#{SharingBean.email}" defaultLabel="#{lbl.share_email}"/>*
 	          							<h:outputText value=" #{lbl.share_as}" />
 	          							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
@@ -161,7 +165,7 @@
 						           		</h:commandLink>
 						           		<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}"><h:outputText value="#{lbl.cancel}"/></h:outputLink>
 									</h:panelGrid>
-							 </f:facet>   
+							 </rich:togglePanelItem>   
 						</rich:togglePanel>
 					</h:panelGroup>
 					

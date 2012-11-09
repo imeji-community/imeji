@@ -66,11 +66,13 @@
 			
 			<ui:define name="actionsMenu">
 				<h:panelGroup layout="block" styleClass="free_area0 sub action" rendered="#{ViewCollectionBean.visible}">
-					<rich:togglePanel  value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{ViewCollectionBean.editable}">
-						 <f:facet name="closed">
-						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
-					            
-					            <rich:toggleControl styleClass="free_area0" value="#{lbl.collection_share}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" switchToState="open"/>
+					<rich:togglePanel id="sharePanel" activeItem="#{SharingBean.status}" switchType="ajax"  rendered="#{ViewCollectionBean.editable}">
+						 <rich:togglePanelItem name="closed">
+						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">					            
+					      		<h:outputLink styleClass="free_area0" value="#" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" >
+									<h:outputText value="#{lbl.collection_share}"/>	
+									<rich:toggleControl event="click" targetPanel="sharePanel" targetItem="open" />			
+								</h:outputLink>
 					      
 								<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='PENDING'}">
 									<h:outputText value="#{lbl.collection_release}"/>
@@ -88,10 +90,11 @@
 								</h:outputLink>
 								
 							</h:panelGrid>
-					     </f:facet>
-					     <f:facet name="open">
+					     </rich:togglePanelItem>
+					     <rich:togglePanelItem name="open">
 					         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
-     								<h:outputText value="Share with "/>
+     								<h:outputText value="#{lbl.share} " />
+     								<!-- FIXME input below white background make typing invisible -->
           							*<rich:inplaceInput styleClass="large_area0 selected" value="#{SharingBean.email}" defaultLabel="click to enter your email"/>*
           							<h:outputText value=" as"/>
           							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
@@ -103,7 +106,7 @@
 					           		</h:commandLink>
 					           		<h:outputLink value="#{Navigation.applicationUri}#{ViewCollectionBean.collection.id.path}"><h:outputText value="Cancel"/></h:outputLink>
 								</h:panelGrid>
-						 </f:facet>   
+						</rich:togglePanelItem>
 					</rich:togglePanel>
 				</h:panelGroup>
 			</ui:define>

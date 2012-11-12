@@ -95,7 +95,8 @@ e.V. All rights reserved. Use is subject to license terms. -->
    <!-- de.mpg.imeji.presentation.history -->
     <filter-mapping>
         <filter-name>History Filter</filter-name>
-        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/*</url-pattern> 
+        <!--  <servlet-name>Faces Servlet</servlet-name>-->
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>

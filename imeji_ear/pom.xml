@@ -150,25 +150,6 @@
 							configuration" need to be solve -->
 						<executions>
 							<execution>
-								<id>prepare-test-deployment</id>
-								<phase>generate-test-sources</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<!-- copy over the configuration file -->
-										<copy overwrite="true"
-											file="${project.build.directory}/classes/imeji.properties"
-											todir="${project.build.directory}/jboss/server/conf" />
-										<!-- copy over the descriptio set template file -->
-										<copy overwrite="true"
-											file="${project.build.directory}/classes/vocabulary.properties"
-											todir="${project.build.directory}/jboss/server/conf" />
-									</tasks>
-								</configuration>
-							</execution>
-							<execution>
 								<id>prepare-deployment</id>
 								<phase>process-resources</phase>
 								<goals>
@@ -178,7 +159,7 @@
 									<tasks>
 
 										<echo
-											message="Deploy files from ${project.build.directory} to ${jboss.install.dir}" />
+											message="Yeah! Deploy files from ${project.build.directory} to ${jboss.install.dir}" />
 
 										<!-- configuration for the deploy jboss server -->
 										<!-- copy over the configuration file -->

@@ -146,7 +146,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public SortCriterion initSortCriterion()
     {
         SortCriterion sortCriterion = new SortCriterion();
-        if (getSelectedSortCriterion() != null)
+        if (getSelectedSortCriterion() != null && !getSelectedSortCriterion().trim().equals(""))
         {
             sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));

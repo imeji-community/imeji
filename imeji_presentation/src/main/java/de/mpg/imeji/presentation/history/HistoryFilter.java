@@ -42,9 +42,9 @@ public class HistoryFilter implements Filter
         // Parameter used by pretty query to pass parameter defined in pretty-config in the url pattern
         String[] ids = request.getParameterValues("com.ocpsoft.vP_0");
         // If f exists, then it is a filter, not added to history
-        if (f == null)
+        if (f == null&& request.getPathInfo() != null)
         {
-            if (h == null)
+            if (h == null )
             {
                 // if h not defined, then it is a new page
                 hs.add(request.getPathInfo().replaceAll("/", ""), q, ids);

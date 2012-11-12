@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.ingest.jaxb.interfaces.IJaxbItem;
 import de.mpg.imeji.logic.ingest.jaxb.interfaces.IJaxbItems;
 import de.mpg.imeji.logic.ingest.jaxb.interfaces.IJaxbMetadataProfile;
 import de.mpg.imeji.logic.ingest.jaxb.interfaces.IJaxbMetadataProfiles;
-import de.mpg.imeji.logic.ingest.util.ImejiNamespacePrefixMapper;
+import de.mpg.imeji.logic.ingest.util.ImejiSchemaFilename;
 import de.mpg.imeji.logic.ingest.vo.IngestProfile;
 import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.ingest.vo.MetadataProfiles;
@@ -144,7 +144,7 @@ public class JaxbIngestProfile extends JaxbUtil implements IJaxbItem, IJaxbItems
 	@Override
 	public void marshalIngestProfile(String xmlFile, IngestProfile ingestProfile)
 			throws JAXBException, SAXException {
-		String xsdFile = ImejiNamespacePrefixMapper.IMEJI_INGEST_PROFILE_XSDFILE;
+		String xsdFile = ImejiSchemaFilename.IMEJI_INGEST_PROFILE_XSDFILE;
 		
 		if( xmlFile.isEmpty() || xsdFile.isEmpty() )
 		{
@@ -157,7 +157,7 @@ public class JaxbIngestProfile extends JaxbUtil implements IJaxbItem, IJaxbItems
 	
 	@Override	
 	public IngestProfile unmarshalIngestProfile(String xmlFile) throws JAXBException, SAXException {
-		String xsdFile = ImejiNamespacePrefixMapper.IMEJI_INGEST_PROFILE_XSDFILE;
+		String xsdFile = ImejiSchemaFilename.IMEJI_INGEST_PROFILE_XSDFILE;
 		
 		if( xmlFile.isEmpty() || xsdFile.isEmpty() )
 		{

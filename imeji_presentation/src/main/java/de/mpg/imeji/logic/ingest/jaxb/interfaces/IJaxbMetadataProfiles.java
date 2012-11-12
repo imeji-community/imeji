@@ -7,7 +7,7 @@ import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
 
-import de.mpg.imeji.logic.ingest.util.ImejiNamespacePrefixMapper;
+import de.mpg.imeji.logic.ingest.util.ImejiSchemaFilename;
 import de.mpg.imeji.logic.ingest.vo.MetadataProfiles;
 
 /**
@@ -15,7 +15,8 @@ import de.mpg.imeji.logic.ingest.vo.MetadataProfiles;
  *
  */
 public interface IJaxbMetadataProfiles {
-	public String xsdFilename = ImejiNamespacePrefixMapper.IMEJI_METADATAPROFILES_XSDFILE;
+	
+	public String xsdFilename = ImejiSchemaFilename.IMEJI_METADATAPROFILES_XSDFILE;
 	/**
 	 * This method exports the meta data profiles to the xml file through the given schema file.
 	 * @param xmlFile, the xml file to output

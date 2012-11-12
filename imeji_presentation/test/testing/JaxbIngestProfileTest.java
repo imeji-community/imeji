@@ -2,6 +2,8 @@ package testing;
 
 import static org.junit.Assert.*;
 
+import java.net.URL;
+
 import javax.xml.bind.JAXBException;
 
 import org.junit.Test;
@@ -13,22 +15,14 @@ import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.ingest.vo.MetadataProfiles;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 public class JaxbIngestProfileTest {
-
+	
 	@Test
-	public void testJaxbIngestProfile() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testMarshalItem() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testUnmarshalItem() {
-		fail("Not yet implemented");
+	public void testPropertyReader() {
+		URL solution = PropertyReader.class.getClassLoader().getResource("imeji_item_schema.xsd");
+		System.out.println(solution);
 	}
 	
 	@Test
@@ -80,16 +74,6 @@ public class JaxbIngestProfileTest {
 			fail("SAXException");
 		}
 	}	
-
-	@Test
-	public void testMarshalMdProfile() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testUnmarshalMdProfile() {
-		fail("Not yet implemented");
-	}
 	
 	@Test
 	public void testUnmarshalMarshalMdProfile() {
@@ -119,16 +103,6 @@ public class JaxbIngestProfileTest {
 			fail("SAXException");
 		}
 	}
-
-	@Test
-	public void testMarshalMdProfiles() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testUnmarshalMdProfiles() {
-		fail("Not yet implemented");
-	}
 	
 	@Test
 	public void testUnmarshalMarshalMdProfiles() {
@@ -157,16 +131,6 @@ public class JaxbIngestProfileTest {
 			e.printStackTrace();
 			fail("SAXException");
 		}
-	}
-	
-	@Test
-	public void testMarshalIngestProfile() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testUnmarshalIngestProfile() {
-		fail("Not yet implemented");
 	}
 	
 //	@Test

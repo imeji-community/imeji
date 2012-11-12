@@ -3,14 +3,11 @@
  */
 package de.mpg.imeji.logic.ingest.jaxb.interfaces;
 
-
-import java.util.List;
-
 import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
 
-import de.mpg.imeji.logic.ingest.util.ImejiNamespacePrefixMapper;
+import de.mpg.imeji.logic.ingest.util.ImejiSchemaFilename;
 import de.mpg.imeji.logic.ingest.vo.Items;
 
 /**
@@ -19,7 +16,7 @@ import de.mpg.imeji.logic.ingest.vo.Items;
  */
 public interface IJaxbItems {	
 	
-	public String xsdFilename = ImejiNamespacePrefixMapper.IMEJI_ITEMS_XSDFILE;
+	public String xsdFilename = ImejiSchemaFilename.IMEJI_ITEMS_XSDFILE;
 	
 	/**
 	 * This method exports the items to the xml file through the given schema file.

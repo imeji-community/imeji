@@ -8,7 +8,7 @@ import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
 
-import de.mpg.imeji.logic.ingest.util.ImejiNamespacePrefixMapper;
+import de.mpg.imeji.logic.ingest.util.ImejiSchemaFilename;
 import de.mpg.imeji.logic.vo.Item;
 
 /**
@@ -17,7 +17,7 @@ import de.mpg.imeji.logic.vo.Item;
  */
 public interface IJaxbItem {	
 	
-	public String xsdFilename = ImejiNamespacePrefixMapper.IMEJI_ITEM_XSDFILE;
+	public String xsdFilename = ImejiSchemaFilename.IMEJI_ITEM_XSDFILE;
 	
 	/**
 	 * This method exports the item to the xml file through the given schema file.

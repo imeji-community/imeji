@@ -8,11 +8,7 @@ import javax.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
-import de.mpg.imeji.logic.ingest.jaxb.interfaces.IJaxbItem;
-import de.mpg.imeji.logic.ingest.jaxb.interfaces.IJaxbMetadataProfile;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.ingest.IngestBean;
 
 public class ItemParser
 {
@@ -24,16 +20,21 @@ public class ItemParser
      */
     public List<Item> parseItemList(String itemListXml)
     {
-        List<Item> l = new ArrayList<Item>();
+        List<Item> itemList = new ArrayList<Item>();
         //TODO
         // here is done the parsing. The results is written into the list l
         // You can parse the list completely at once or parse one item after the other like I propose it here:
-        // Perser might use the item.xsd, that is created by ItemSchemaFactory
-        for (String itemXml : parseItemList2ListOfItems(itemListXml))
-        {
-            l.add(parseItem(itemXml));
-        }
-        return l;
+        // Parser might use the item.xsd, that is created by ItemSchemaFactory
+        
+		try {
+			itemList = new JaxbIngestProfile().unmarshalItems(itemListXml).getItem();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		
+        return itemList;
     }
 
     /**
@@ -45,19 +46,29 @@ public class ItemParser
     public Item parseItem(String itemXml)
     {
         Item item = new Item();
-      //TODO
+        
+        try {
+			item = new JaxbIngestProfile().unmarshalItem(itemXml);
+		} catch (JAXBException e) {			
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+        
         return item;
     }
 
-    private List<String> parseItemList2ListOfItems(String itemListXml)
+    @SuppressWarnings("unused")
+	private List<String> parseItemList2ListOfItems(String itemListXml)
     {
         List<String> l = new ArrayList<String>();
-      //TODO
+        
+        List<Item> items = parseItemList(itemListXml);
+       
+        for (Item item : items) {
+			l.add(item.getId().toString());
+		}
+        
         return l;
     }
-    
-    public Item getItems( String xmlFile ) throws JAXBException, SAXException
-	{
-    	return new JaxbIngestProfile().unmarshalItem(xmlFile);
-	}
 }

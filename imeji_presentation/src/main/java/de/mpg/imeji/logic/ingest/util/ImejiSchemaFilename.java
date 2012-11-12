@@ -7,7 +7,7 @@ package de.mpg.imeji.logic.ingest.util;
  * @author hnguyen
  *
  */
-public class ImejiNamespacePrefixMapper {
+public class ImejiSchemaFilename {
 
 	public static final String IMEJI_XSDFILE = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\src\\main\\resources\\vo_schema\\imeji_ingest_schema.xsd";
 	

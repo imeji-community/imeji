@@ -9,6 +9,8 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -22,7 +24,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/mdprofile")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @j2jModel("metadataProfile")
-@XmlRootElement(name = "mdProfile", namespace="http://imeji.org/terms/mdprofile")
+@XmlRootElement(name = "mdProfile")
 public class MetadataProfile extends Properties
 {
 	
@@ -36,7 +38,6 @@ public class MetadataProfile extends Properties
     @j2jList("http://imeji.org/terms/statement")
     private Collection<Statement> statements = new LinkedList<Statement>();
     
-    @XmlElement(name="id", namespace="http://imeji.org/terms")
     public URI getId()
     {
         return id;
@@ -47,7 +48,6 @@ public class MetadataProfile extends Properties
         this.id = id;
     }
 
-    @XmlElement(name="title", namespace="http://imeji.org/terms")
     public String getTitle()
     {
         return title;
@@ -58,7 +58,6 @@ public class MetadataProfile extends Properties
         this.title = title;
     }
 
-    @XmlElement(name="description", namespace="http://imeji.org/terms")
     public String getDescription()
     {
         return description;

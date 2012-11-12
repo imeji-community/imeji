@@ -5,6 +5,8 @@ package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.j2j.annotations.j2jId;

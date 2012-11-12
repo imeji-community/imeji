@@ -3,10 +3,18 @@
  */
 package de.mpg.imeji.logic.ingest.vo;
 
+import java.util.List;
+import java.util.Vector;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 
 
 /**
@@ -17,8 +25,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class IngestProfile {
 
 	
-	private MetadataProfiles mdProfiles = new MetadataProfiles();
-	private Items items = new Items();
+	private MetadataProfiles mdProfiles;
+	private Items items;
 	
 	/**
 	 * 
@@ -30,7 +38,6 @@ public class IngestProfile {
 	/**
 	 * @return the mdProfile
 	 */
-	@XmlElement(name="mdProfile")
 	public MetadataProfiles getMdProfiles() {
 		return mdProfiles;
 	}
@@ -44,8 +51,7 @@ public class IngestProfile {
 
 	/**
 	 * @return the items
-	 */
-	@XmlElement(name="item")
+	 */	
 	public Items getItems() {
 		return items;
 	}

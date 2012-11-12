@@ -6,13 +6,16 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.Calendar;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+
 
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/properties")
-@XmlType(name="properties")
+@XmlType(name = "properties")
 public class Properties
 {
     @j2jResource("http://purl.org/dc/terms/creator")

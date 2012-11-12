@@ -17,7 +17,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
  */
 public interface IJaxbMetadataProfile {
 	
-	public String xsdFile = ImejiNamespacePrefixMapper.IMEJI_METADATAPROFILE_XSDFILE;
+	public String xsdFilename = ImejiNamespacePrefixMapper.IMEJI_METADATAPROFILE_XSDFILE;
 
 	
 	/**

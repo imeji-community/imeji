@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.ingest.vo.MetadataProfiles;
  *
  */
 public interface IJaxbMetadataProfiles {
-	public String xsdFile = ImejiNamespacePrefixMapper.IMEJI_METADATAPROFILE_XSDFILE;
+	public String xsdFilename = ImejiNamespacePrefixMapper.IMEJI_METADATAPROFILES_XSDFILE;
 	/**
 	 * This method exports the meta data profiles to the xml file through the given schema file.
 	 * @param xmlFile, the xml file to output

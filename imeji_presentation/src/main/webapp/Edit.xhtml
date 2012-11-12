@@ -29,7 +29,7 @@
 		</script>			
 	
 		<h:selectBooleanCheckbox id="editInitialized" value="false" style="visibility:hidden">
-			<a4j:ajax event="change" reRender="ajaxContent" action="#{EditImageMetadataBean.init}" status="initEditPage" />
+			<a4j:ajax event="change" render="ajaxContent" action="#{EditImageMetadataBean.init}" status="initEditPage" />
 		</h:selectBooleanCheckbox>
 		
 		<h:panelGroup styleClass="full_area0 itemList " >	
@@ -63,7 +63,7 @@
 						<h:outputLabel for="selStatement" styleClass="full_area0_p0" value="#{lbl.metadata_type_select}"/>
 						<h:selectOneMenu styleClass="huge_area0" id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}">
 							<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
-							<a4j:ajax event="change" ajaxSingle="true" reRender="ajaxContent" action="#{EditImageMetadataBean.changeStatement}"/>
+							<a4j:ajax event="change" execute="@this" render="ajaxContent" action="#{EditImageMetadataBean.changeStatement}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
 					
@@ -82,7 +82,7 @@
 									<ui:param name="hideLabel" value="true"/>
 								</ui:include>
 								
-								<a4j:commandButton reRender="ajaxContent" styleClass="xLarge_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}" action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}"/>
+								<a4j:commandButton render="ajaxContent" styleClass="xLarge_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}" action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}"/>
 								
 								<h:panelGroup id="modeRadioMenu" styleClass="full_area0 ">
 									<h:selectOneRadio layout="pageDirection" styleClass="huge_are0" value="#{EditImageMetadataBean.selectedMode}">
@@ -107,9 +107,9 @@
 							
 							
 							<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
-								<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
+								<a4j:commandButton render="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
 								
-								<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}"/>
+								<a4j:commandButton render="ajaxContent" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}"/>
 								
 								<h:outputLink value="" rendered="false" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
 									<h:outputText value="#{lbl.reset_changes}" />
@@ -147,11 +147,11 @@
 												</ui:include>
 												<!-- BUTTONS -->
 												<h:panelGroup layout="block">
-													<a4j:commandLink styleClass="small_label" reRender="ajaxContent" action="#{EditImageMetadataBean.addMetadata}" value="#{lbl.add}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
+													<a4j:commandLink styleClass="small_label" render="ajaxContent" action="#{EditImageMetadataBean.addMetadata}" value="#{lbl.add}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
 														<f:setPropertyActionListener value="#{indexMetadata}" target="#{EditImageMetadataBean.mdPosition}" />
 														<f:setPropertyActionListener value="#{indexImage}" target="#{EditImageMetadataBean.imagePosition}" />
 													</a4j:commandLink>
-													<a4j:commandLink  styleClass="small_label"  reRender="ajaxContent" action="#{EditImageMetadataBean.removeMetadata}" value="#{lbl.remove}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
+													<a4j:commandLink  styleClass="small_label"  render="ajaxContent" action="#{EditImageMetadataBean.removeMetadata}" value="#{lbl.remove}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
 														<f:setPropertyActionListener value="#{indexMetadata}" target="#{EditImageMetadataBean.mdPosition}" />
 														<f:setPropertyActionListener value="#{indexImage}" target="#{EditImageMetadataBean.imagePosition}" />
 													</a4j:commandLink>	
@@ -167,7 +167,7 @@
 					<h:panelGroup styleClass="full_area0_p8 preListHeader"  rendered="#{EditImageMetadataBean.profileWithStatements and EditImageMetadataBean.editType == 'selected'}">
 							
 						<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
-							<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
+							<a4j:commandButton render="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
 							<h:outputLink value="" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
 								<h:outputText value="#{lbl.reset_changes}" />
 							</h:outputLink>

@@ -270,7 +270,7 @@
 									<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null}">
 										<span class="free_area0">
 											<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
-												<a4j:ajax event="change" ajaxSingle="true" reRender="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu"/>
+												<a4j:ajax event="change" execute="@this" render="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu"/>
 											</h:selectBooleanCheckbox>
 										</span>
 									</h:panelGroup>
@@ -308,7 +308,7 @@
 				</h:panelGroup>
 				
 				<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
-					<a4j:ajax event="change" reRender="facetGroup" action="#{paginatorListSessionBean.initFacets}" status="loadFacets"/>
+					<a4j:ajax event="change" render="facetGroup" action="#{paginatorListSessionBean.initFacets}" status="loadFacets"/>
 				</h:selectBooleanCheckbox>
 				
 				<!--

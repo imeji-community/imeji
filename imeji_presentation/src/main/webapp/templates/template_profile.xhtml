@@ -84,7 +84,7 @@
 												<f:selectItems value="#{FormularBean.mdTypesMenu}"/>
 											</h:selectOneMenu>
 											<h:message for="selStatementType" styleClass="xLarge_label endline clean" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" globalOnly="false" showDetail="false" showSummary="true"/>
-											<a4j:commandButton id="changeType" action="#{statement.reset}" reRender="ajaxArea" style="visibility:hidden;"/>
+											<a4j:commandButton id="changeType" action="#{statement.reset}" render="ajaxArea" style="visibility:hidden;"/>
 										</h:panelGroup>
 										
 										<h:panelGroup styleClass="quad_area0 xTiny_marginLIncl">
@@ -95,7 +95,7 @@
 												<h:panelGroup styleClass="free_area0 xSmall_marginRIncl">
 													<h:inputText id="inputLabel" value="#{label.string}" styleClass="xLarge_txtInput"/>
 													<h:panelGroup rendered="#{statement.labelsCount > 1}">
-														<a4j:commandButton styleClass="min_imgBtn remove" shortDesc="#{lbl.label_remove}"  action="#{FormularBean.removeLabel}"  reRender="ajaxArea">
+														<a4j:commandButton styleClass="min_imgBtn remove" shortDesc="#{lbl.label_remove}"  action="#{FormularBean.removeLabel}"  render="ajaxArea">
 															<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 															<f:setPropertyActionListener value="#{labelPosition}" target="#{FormularBean.labelPosition}"/>
 														</a4j:commandButton>
@@ -109,7 +109,7 @@
 											</a4j:repeat>
 											
 											<h:panelGroup styleClass="xDouble_area1 xSmall_marginRIncl">
-												<a4j:commandButton id="addLabel" styleClass="min_imgBtn add" action="#{FormularBean.addLabel}" reRender="ajaxArea">
+												<a4j:commandButton id="addLabel" styleClass="min_imgBtn add" action="#{FormularBean.addLabel}" render="ajaxArea">
 													<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 												</a4j:commandButton>
 												<h:outputLabel styleClass="" value="#{lbl.label_add}" />
@@ -117,13 +117,13 @@
 										</h:panelGroup>	
 										
 										<h:panelGroup styleClass="full_area0 xSmall_marginLExcl endline" rendered="#{statement.constraintsSize == 0 and statement.vocabularyString == null}">
-											<a4j:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}" reRender="ajaxArea">
+											<a4j:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}" render="ajaxArea">
 												<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 											</a4j:commandButton>
 											<h:outputLabel styleClass="" value="#{lbl.add_vocabulary}" />
 											<span style="padding-left:20px"></span>
 											<h:panelGroup rendered="#{statement.statement.type != 'http://imeji.org/terms/metadata#conePerson' and statement.statement.type != 'http://imeji.org/terms/metadata#geolocation' and  statement.statement.type !='http://imeji.org/terms/metadata#publication'}">
-												<a4j:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addConstraint}" reRender="ajaxArea">
+												<a4j:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addConstraint}" render="ajaxArea">
 													<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 												</a4j:commandButton>
 												<h:outputLabel value="#{lbl.add_constraint}" />
@@ -140,7 +140,7 @@
 											</h:panelGroup>
 											
 											
-											<a4j:commandButton styleClass="min_imgBtn remove"  shortDesc="#{lbl.remove_vocabulary}" action="#{FormularBean.removeVocabulary}" reRender="ajaxArea">
+											<a4j:commandButton styleClass="min_imgBtn remove"  shortDesc="#{lbl.remove_vocabulary}" action="#{FormularBean.removeVocabulary}" render="ajaxArea">
 												<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 											</a4j:commandButton>
 											<h:outputLabel styleClass="" value="#{lbl.remove_vocabulary}" />
@@ -155,11 +155,11 @@
 													</h:inputText>
 													<h:panelGroup styleClass="large_area0 endline">
 													<span style="padding-left:10px"></span>
-														<a4j:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{FormularBean.addConstraint}" reRender="ajaxArea">
+														<a4j:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{FormularBean.addConstraint}" render="ajaxArea">
 															<f:setPropertyActionListener value="#{index}" target="#{FormularBean.constraintPosition}"/>
 															<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 														</a4j:commandButton>
-														<a4j:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}" action="#{FormularBean.removeConstraint}" reRender="ajaxArea">
+														<a4j:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}" action="#{FormularBean.removeConstraint}" render="ajaxArea">
 															<f:setPropertyActionListener value="#{index}" target="#{FormularBean.constraintPosition}"/>
 															<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 														</a4j:commandButton>
@@ -172,23 +172,23 @@
 											
 								</h:panelGroup>
 								<span class="full_area0_p2">
-									<a4j:commandButton styleClass="min_imgBtn remove groupTool" rendered="#{FormularBean.size &gt; 1}" shortDesc="#{remove_metadata}" action="#{FormularBean.removeStatement}" reRender="ajaxArea">
+									<a4j:commandButton styleClass="min_imgBtn remove groupTool" rendered="#{FormularBean.size &gt; 1}" shortDesc="#{remove_metadata}" action="#{FormularBean.removeStatement}" render="ajaxArea">
 										<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 									</a4j:commandButton>
 									<h:outputLabel styleClass="" value="#{lbl.statement_remove}" rendered="#{FormularBean.size &gt; 1}" />
 								</span>
 								<h:panelGroup layout="block" styleClass="quad_area2_p0 messageArea warnMessageArea" rendered="#{statement.showRemoveWarning}">
                                 	<h:outputText styleClass="free_area0_p0" value="#{msg.remove_statement_used}"/><br/><br/>
-                                	<a4j:commandButton action="#{FormularBean.closeRemoveWarning}" value="#{lbl.no}" styleClass="free_area1_p8 cancelButton" reRender="ajaxArea">
+                                	<a4j:commandButton action="#{FormularBean.closeRemoveWarning}" value="#{lbl.no}" styleClass="free_area1_p8 cancelButton" render="ajaxArea">
                                 		<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
                                 	</a4j:commandButton>		
-                                	<a4j:commandButton styleClass="free_area1_p8 activeButton" value="#{lbl.yes}" action="#{FormularBean.forceRemoveStatement}" reRender="ajaxArea">
+                                	<a4j:commandButton styleClass="free_area1_p8 activeButton" value="#{lbl.yes}" action="#{FormularBean.forceRemoveStatement}" render="ajaxArea">
 										<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 									</a4j:commandButton>
                                 </h:panelGroup>
 								<h:panelGroup layout="block" styleClass="free_area0 endline itemLine clear">
 									<span class="full_area0_p2">
-										<a4j:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" action="#{FormularBean.addStatement}" reRender="ajaxArea">
+										<a4j:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" action="#{FormularBean.addStatement}" render="ajaxArea">
 											<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
 										</a4j:commandButton>
 										<h:outputLabel styleClass="" value="#{lbl.statement_add}" />

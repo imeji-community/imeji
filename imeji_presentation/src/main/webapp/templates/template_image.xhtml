@@ -75,7 +75,7 @@
 						
 						<h:outputText value=":" style="visibility:hidden" styleClass="small_area0"/>
 						<h:selectBooleanCheckbox styleClass="xDouble_marginLIncl tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" onchange="getElementById('formular:selectBtn').click();" rendered="#{SessionBean.user != null}"/>
-						<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{imageBean.selected}" action="#{imageBean.select}" style="visibility:hidden;" reRender="preListHeader" rendered="#{SessionBean.user != null}"/>
+						<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{imageBean.selected}" action="#{imageBean.select}" style="visibility:hidden;" render="preListHeader" rendered="#{SessionBean.user != null}"/>
 						<h:outputText styleClass="free_label" value="#{lbl.selected}" rendered="#{SessionBean.user != null}"/>
 						<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
 							<h:outputText value="#{lbl.remove_from_col}" />
@@ -134,7 +134,7 @@
 						<h3 class="xLarge_area0_p8 endline blockHeader">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata}" /><br/>
 							
-							<a4j:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" reRender="metadata" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}"/>
+							<a4j:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" render="metadata" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}"/>
 							<h:outputText value="Image locked " rendered="#{imageBean.editable and imageBean.locked}"/>
 							<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
 							<br/>
@@ -219,15 +219,15 @@
 																		<ui:param name="hideLabel" value="true"/>
 																	</ui:include>
 																	<div class="free_area0 ">
-																	<a4j:commandButton styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{statement.maxOccurs != '1'}" reRender="singleEditPanel" action="#{imageBean.edit.removeMetadata}" value="">
+																	<a4j:commandButton styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{statement.maxOccurs != '1'}" render="singleEditPanel" action="#{imageBean.edit.removeMetadata}" value="">
 																		<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 																		<f:setPropertyActionListener value="#{indexMetadata}" target="#{imageBean.edit.mdPosition}" />
-																		<a4j:ajax event="complete" reRender="singleEditPanel" />
+																		<a4j:ajax event="complete" render="singleEditPanel" />
 																	</a4j:commandButton>
-																	<a4j:commandButton styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{statement.maxOccurs != '1'}" reRender="singleEditPanel" action="#{imageBean.edit.addMetadata}" value="">
+																	<a4j:commandButton styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{statement.maxOccurs != '1'}" render="singleEditPanel" action="#{imageBean.edit.addMetadata}" value="">
 																		<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 																		<f:setPropertyActionListener value="#{indexMetadata}" target="#{imageBean.edit.mdPosition}" />
-																		<a4j:ajax event="complete" reRender="singleEditPanel" />
+																		<a4j:ajax event="complete" render="singleEditPanel" />
 																	</a4j:commandButton>
 																</div>
 																</h:panelGroup>
@@ -241,7 +241,7 @@
 											<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd'}" layout="block" styleClass="quad_area0_p1">
 												<div class="large_marginLExcl marginTExcl025">
 													<div class="small_txtBtn">
-														<a4j:commandLink styleClass="small_txtBtn dialogCancelButton"  action="#{imageBean.edit.cancel}" reRender="metadata">
+														<a4j:commandLink styleClass="small_txtBtn dialogCancelButton"  action="#{imageBean.edit.cancel}" render="metadata">
 															<h:outputText value="#{lbl.cancel}"/>
 														</a4j:commandLink>
 													</div>

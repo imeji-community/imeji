@@ -80,7 +80,7 @@
 									<f:selectItems value="#{AdvancedSearchBean.collectionsMenu}"/>
 								</h:selectOneMenu>
 								
-								<a4j:commandButton id="changeGroup" action="#{AdvancedSearchBean.changeGroup}" reRender="ajaxForm, ajaxQuery" style="visibility:hidden;">
+								<a4j:commandButton id="changeGroup" action="#{AdvancedSearchBean.changeGroup}" render="ajaxForm, ajaxQuery" style="visibility:hidden;">
 									<f:param name="gPos" value="#{gIndex}"/>
 								</a4j:commandButton>
 							
@@ -102,12 +102,12 @@
 											<f:selectItems value="#{g.statementMenu}"/>
 										</h:selectOneMenu>
 										
-										<a4j:commandButton id="changeEl" action="#{AdvancedSearchBean.changeElement}" reRender="ajaxForm, ajaxQuery" style="visibility:hidden;">
+										<a4j:commandButton id="changeEl" action="#{AdvancedSearchBean.changeElement}" render="ajaxForm, ajaxQuery" style="visibility:hidden;">
 											<f:param name="gPos" value="#{gIndex}"/>
 											<f:param name="elPos" value="#{elIndex}"/>
 										</a4j:commandButton>
 										
-										<a4j:commandButton id="updateEl" action="#{AdvancedSearchBean.updateElement}" reRender="ajaxQuery" style="visibility:hidden;">
+										<a4j:commandButton id="updateEl" action="#{AdvancedSearchBean.updateElement}" render="ajaxQuery" style="visibility:hidden;">
 											<f:param name="gPos" value="#{gIndex}"/>
 											<f:param name="elPos" value="#{elIndex}"/>
 										</a4j:commandButton>
@@ -128,11 +128,11 @@
 											<f:selectItems value="#{el.predefinedValues}"/>
 										</h:selectOneMenu>
 										
-										<a4j:commandButton value="" action="#{AdvancedSearchBean.addElement}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add">
+										<a4j:commandButton value="" action="#{AdvancedSearchBean.addElement}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add">
 											<f:param name="gPos" value="#{gIndex}"/>
 											<f:param name="elPos" value="#{elIndex}"/>
 										</a4j:commandButton>
-										<a4j:commandButton value="" action="#{AdvancedSearchBean.removeElement}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool remove">
+										<a4j:commandButton value="" action="#{AdvancedSearchBean.removeElement}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool remove">
 											<f:param name="gPos" value="#{gIndex}"/>
 											<f:param name="elPos" value="#{elIndex}"/>
 										</a4j:commandButton>
@@ -147,10 +147,10 @@
 								</a4j:repeat>
 								
 								<h:panelGroup styleClass="full_area0_p8">
-									<a4j:commandButton value="" action="#{AdvancedSearchBean.addGroup}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add" shortDesc="#{lbl.add_collection}">
+									<a4j:commandButton value="" action="#{AdvancedSearchBean.addGroup}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add" shortDesc="#{lbl.add_collection}">
 										<f:param name="gPos" value="#{gIndex}"/>
 									</a4j:commandButton>
-									<a4j:commandButton value="" action="#{AdvancedSearchBean.removeGroup}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}">
+									<a4j:commandButton value="" action="#{AdvancedSearchBean.removeGroup}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}">
 										<f:param name="gPos" value="#{gIndex}"/>
 									</a4j:commandButton>
 								</h:panelGroup>
@@ -158,7 +158,7 @@
 						</a4j:repeat>
 					</a4j:outputPanel>
 					<h:panelGroup styleClass="full_area0_p8">
-						<a4j:commandButton value="#{lbl.clear_all_values}" action="#{AdvancedSearchBean.initFormular}" reRender="ajaxForm, ajaxQuery" styleClass="medium_marginLExcl free_area1_p8 cancelButton">
+						<a4j:commandButton value="#{lbl.clear_all_values}" action="#{AdvancedSearchBean.initFormular}" render="ajaxForm, ajaxQuery" styleClass="medium_marginLExcl free_area1_p8 cancelButton">
 						</a4j:commandButton>
 						<a4j:commandButton value="#{lbl.search}" action="#{AdvancedSearchBean.search}" styleClass="free_area1_p8 activeButton advancedSearchButton">
 						</a4j:commandButton>

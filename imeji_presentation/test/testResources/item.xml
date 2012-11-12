@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<item>
+	<created>2012-10-24T13:41:35.606Z</created>
+    <createdBy>Hai2</createdBy>
+    <discardComment>discard comment</discardComment>
+    <modified>2012-10-24T13:41:35.606Z</modified>    
+    <modifiedBy>hai2</modifiedBy>
+    <status>PENDING</status>
+    <version>2</version>
+    <versionDate>2012-10-24T13:41:35.606Z</versionDate>
+	<collection>collection url2</collection>
+	<filename>fielname2</filename>
+	<fullImageUrl>fullImage url2</fullImageUrl>
+	<fulltextIndex>full text index2</fulltextIndex>
+	<id>id url2</id>
+	<metadataSets>
+    	<id>metadta sets id 0</id>
+    	<!-- <metadata>
+    		<id>metadata id 0</id>
+    		<pos>0</pos>
+    		<statement>statemen url 0</statement>
+    	</metadata>
+    	<metadata>
+    		<id>metadata id 1</id>
+    		<pos>1</pos>
+    		<statement>statemen url 1</statement>
+    	</metadata>
+    	<metadata>
+    		<id>metadata id 2</id>
+    		<pos>2</pos>
+    		<statement>statemen url </statement>
+    	</metadata> -->
+    	<profile>profile url</profile>
+    </metadataSets>
+	<thumbnailImageUrl>thumb nail image url2</thumbnailImageUrl>
+	<visibility>PUBLIC</visibility>
+	<webImageUrl>web image url2</webImageUrl>
+</item>

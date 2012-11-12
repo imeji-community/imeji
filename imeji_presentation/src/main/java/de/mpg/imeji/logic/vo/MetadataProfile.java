@@ -24,7 +24,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/mdprofile")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @j2jModel("metadataProfile")
-@XmlRootElement(name = "mdProfile")
+@XmlRootElement(name = "metadataProfile")
 public class MetadataProfile extends Properties
 {
 	

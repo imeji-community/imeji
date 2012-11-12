@@ -3,6 +3,8 @@
 
   <xs:element name="item" type="item"/>
 
+  <xs:element name="metadata" type="metadata"/>
+
   <xs:complexType name="item">
     <xs:complexContent>
       <xs:extension base="properties">

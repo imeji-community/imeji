@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<mdProfiles>
+	<metadataProfile>
+	    <created>2012-10-24T13:41:35.606Z</created>
+	    <discardComment>a discard comment</discardComment>
+	    <modified>2012-10-24T13:41:35.606Z</modified>
+	    <status>PENDING</status>
+	    <version>0</version>
+	    <versionDate>2012-10-24T13:41:35.606Z</versionDate>
+	    <description>this the first profile</description>
+	    <id>http://imeji.org/md/a082c70c-aff2-437c-95d0-61dc5ef2e3bc</id>
+	    <statements>
+	        <description>true</description>
+	        <id>http://imeji.org/statement/c082c70c-af7f-4371-95d0-6fd257f2e3bc</id>
+	        <labels>
+	            <lang>en</lang>
+	            <value>tilte</value>
+	        </labels>
+	        <labels>
+	            <lang>de</lang>
+	            <value>titel</value>
+	        </labels>
+	        <literalConstraints>nothing</literalConstraints>
+	        <maxOccurs>1</maxOccurs>
+	        <minOccurs>1</minOccurs>
+	        <parent>null</parent>
+	        <pos>0</pos>
+	        <preview>true</preview>
+	        <vocabulary>vocab</vocabulary>
+	    </statements>
+	    <statements>
+	        <description>true</description>
+	        <id>http://imeji.org/statement/c082c70c-af72-437c-95d0-6fd257f0e3bc</id>
+	        <labels>
+	            <lang>en</lang>
+	            <value>name</value>
+	        </labels>
+	        <labels>
+	            <lang>de</lang>
+	            <value>name</value>
+	        </labels>
+	        <literalConstraints>nothing</literalConstraints>
+	        <maxOccurs>1</maxOccurs>
+	        <minOccurs>1</minOccurs>
+	        <parent>null</parent>
+	        <pos>1</pos>
+	        <preview>true</preview>
+	        <vocabulary>vocab1</vocabulary>
+	    </statements>
+	    <title>a title</title>		
+	</metadataProfile>
+	<metadataProfile>
+	    <created>2012-10-24T13:41:35.606Z</created>
+	    <discardComment>a discard comment 222222</discardComment>
+	    <modified>2012-10-24T13:41:35.606Z</modified>
+	    <status>PENDING</status>
+	    <version>2</version>
+	    <versionDate>2012-10-24T13:41:35.606Z</versionDate>
+	    <description>this the second profile</description>
+	    <id>http://imeji.org/md/a082c70c-aff2-437c-95d0-61dc5ef2e3bc</id>
+	    <statements>
+	        <description>true</description>
+	        <id>http://imeji.org/statement/c082c70c-af7f-4371-95d0-6fd257f2e3bc</id>
+	        <labels>
+	            <lang>en</lang>
+	            <value>description</value>
+	        </labels>
+	        <labels>
+	            <lang>de</lang>
+	            <value>beschreibung</value>
+	        </labels>
+	        <literalConstraints>nothing</literalConstraints>
+	        <maxOccurs>1</maxOccurs>
+	        <minOccurs>1</minOccurs>
+	        <parent>null</parent>
+	        <pos>0</pos>
+	        <preview>true</preview>
+	        <vocabulary>vocab2</vocabulary>
+	    </statements>
+	    <statements>
+	        <description>true</description>
+	        <id>http://imeji.org/statement/c082c70c-af72-437c-95d0-6fd257f0e3bc</id>
+	        <labels>
+	            <lang>en</lang>
+	            <value>content</value>
+	        </labels>
+	        <labels>
+	            <lang>de</lang>
+	            <value>inhalt</value>
+	        </labels>
+	        <literalConstraints>nothing</literalConstraints>
+	        <maxOccurs>1</maxOccurs>
+	        <minOccurs>1</minOccurs>
+	        <parent>null</parent>
+	        <pos>1</pos>
+	        <preview>true</preview>
+	        <vocabulary>vocab3</vocabulary>
+	    </statements>
+	    <title>a second title</title>
+	</metadataProfile>	
+</mdProfiles>	

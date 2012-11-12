@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
@@ -25,7 +26,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlType(name = "metadata")
+@XmlRootElement(name="metadata")
 public abstract class Metadata
 {
     private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());

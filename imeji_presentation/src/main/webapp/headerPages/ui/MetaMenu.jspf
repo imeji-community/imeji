@@ -55,7 +55,7 @@
 	<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="free_area0_p4">
 		<h:inputText styleClass="medium_txtInput" value="#{LoginBean.login}"/>
 		<h:inputSecret styleClass="medium_txtInput" value="#{LoginBean.passwd}" onkeypress="return loginOnEnter(event)"/>
-		<h:commandButton id="lnkLogin" styleClass="medium_area0 endline" style="text-align:left;" title="#{lbl.login}" value="#{lbl.login}" action ="#{LoginBean.login}"/>
+		<h:commandButton id="lnkLogin" styleClass="medium_area0 endline" style="text-align:left;" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.login}"/>
 	</h:panelGroup>
 	
 

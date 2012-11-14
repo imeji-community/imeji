@@ -78,7 +78,7 @@
 			<h:panelGroup  rendered="#{md.statement == statement.id}" styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
 				<h:outputText value="#{MetadataLabels.internationalizedLabels[statement.id]}"/>
 			</h:panelGroup>
-			
+			<h:outputText value="#{md.typeNamespace}" />
 			<h:panelGroup rendered="#{md.statement == statement.id}" layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">
 				<h:outputText value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}"/>
 				<h:outputText value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}"/>

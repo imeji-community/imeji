@@ -39,6 +39,8 @@
 
 	<h:panelGroup layout="block" styleClass="free_area0">
 		
+		<h:outputText value="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}" /> 
+		
 		<h:outputLabel value="#{MetadataLabels.internationalizedLabels[metadata.statement]} (#{MetadataLabels.lang})" rendered="#{hideLabel != true}" styleClass="huge_label"/>
 		
 		<!-- METADATA TYPE TEXT -->

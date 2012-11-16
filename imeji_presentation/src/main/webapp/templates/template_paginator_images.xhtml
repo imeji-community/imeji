@@ -308,7 +308,7 @@
 				</h:panelGroup>
 				
 				<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
-					<a4j:ajax event="change" render="facetGroup" action="#{paginatorListSessionBean.initFacets}" status="loadFacets"/>
+					<a4j:ajax event="change" render="facetGroup" listener="#{paginatorListSessionBean.initFacets}" status="loadFacets"/>
 				</h:selectBooleanCheckbox>
 				
 				<!--

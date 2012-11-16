@@ -9,7 +9,6 @@
 
 <ui:composition template="templates/template.xhtml">
 <ui:param name="headline" value="#{lbl.edit_images}"/>
-	
 <body>
 	<ui:define name="contentMenu">
 		
@@ -29,7 +28,7 @@
 		</script>			
 	
 		<h:selectBooleanCheckbox id="editInitialized" value="false" style="visibility:hidden">
-			<a4j:ajax event="change" render="ajaxContent" action="#{EditImageMetadataBean.init}" status="initEditPage" />
+			<a4j:ajax event="change" render="ajaxContent" listener="#{EditImageMetadataBean.init}" status="initEditPage" />
 		</h:selectBooleanCheckbox>
 		
 		<h:panelGroup styleClass="full_area0 itemList " >	
@@ -63,7 +62,7 @@
 						<h:outputLabel for="selStatement" styleClass="full_area0_p0" value="#{lbl.metadata_type_select}"/>
 						<h:selectOneMenu styleClass="huge_area0" id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}">
 							<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
-							<a4j:ajax event="change" execute="@this" render="ajaxContent" action="#{EditImageMetadataBean.changeStatement}"/>
+							<a4j:ajax event="change" execute="@this" render="ajaxContent" listener="#{EditImageMetadataBean.changeStatement}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
 					
@@ -172,7 +171,7 @@
 								<h:outputText value="#{lbl.reset_changes}" />
 							</h:outputLink>
 							<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
-								 <a4j:ajax event="click" action="#{EditImageMetadataBean.cancel}" />
+								 <a4j:ajax event="click" listener="#{EditImageMetadataBean.cancel}" />
 								<h:outputText value=" #{lbl.cancel} " />
 							</h:outputLink>	
 							

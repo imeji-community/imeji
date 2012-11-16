@@ -90,9 +90,12 @@
 				<h:outputText value="#{md.license}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}"/>
 				<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
 					<h:outputText value="#{md.person.familyName}, #{md.person.givenName} ("/>
+					<!-- JSF2 bug: UIRepeat calling getValue() when rendered is false 
 					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
 						<h:outputText value="#{orga.name}"/>
 					</a4j:repeat>
+					-->
+					
 					<h:outputText value=")" />
 				</h:panelGroup>
 				

@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.vo.Item;
 
 public class ItemParser

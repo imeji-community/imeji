@@ -48,7 +48,7 @@
 	
 	<url-mapping id="ingest">
 		<pattern value="/collection/#{IngestBean.collectionId}/ingest" />
-		<view-id>/jsf/ingest.xhtml</view-id>
+		<view-id>/jsf/Ingest.xhtml</view-id>
 		<action onPostback="false">#{IngestBean.status}</action>
 	</url-mapping>
 

@@ -2,7 +2,13 @@ package testing;
 
 import static org.junit.Assert.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
@@ -14,19 +20,22 @@ import de.mpg.imeji.logic.ingest.vo.IngestProfile;
 import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.ingest.vo.MetadataProfiles;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 public class JaxbIngestProfileTest {
 	
-	@Test
+//	@Test
 	public void testPropertyReader() {
 		URL solution = PropertyReader.class.getClassLoader().getResource("imeji_item_schema.xsd");
 		System.out.println(solution);
 	}
 	
-	@Test
-	public void testUnmarshalMarshalItem() {
+//	@Test
+	public void testUnmarshalMarshalItem() throws URISyntaxException {
 		String xmlFilename = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\item.xml";
 		
 		try {
@@ -34,6 +43,22 @@ public class JaxbIngestProfileTest {
 			JaxbIngestProfile jmp = new JaxbIngestProfile();
 			
 			Item item = jmp.unmarshalItem(xmlFilename);
+			
+//			List<MetadataSet> mdsList = item.getMetadataSets();
+//			
+//			MetadataSet mds = mdsList.get(0);
+//			
+//			Collection<Metadata> md = mds.getMetadata();
+//			
+//			mds.setId(new URI("http://imeji.org/mds/id/123123123123213123123"));
+//			mds.setProfile(new URI("http://imeji.org/profile/12----123123"));
+//			
+//			Text txt = new Text();
+//			txt.setId(new URI("http://imeji.org/text/id/3123"));
+//			txt.setPos(0);
+//			txt.setText("a text string");
+//			txt.setStatement(new URI("http://imeji.org/statement/98273493123"));
+//			md.add(txt);
 			
 //			jmp.marshalItem(xmlFile + "-output.xml", item);
 			
@@ -75,7 +100,7 @@ public class JaxbIngestProfileTest {
 		}
 	}	
 	
-	@Test
+//	@Test
 	public void testUnmarshalMarshalMdProfile() {
 		String xmlFile = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\mdp.xml";
 		
@@ -104,7 +129,7 @@ public class JaxbIngestProfileTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testUnmarshalMarshalMdProfiles() {
 		String xmlFilename = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\mdps.xml";
 		

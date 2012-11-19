@@ -22,10 +22,11 @@ public class IngestItemController
 
     public void ingest(String itemListXml) throws Exception
     {
-        ItemValidator iv = new ItemValidator();
-        iv.valid(itemListXml, profile);
+       
         ItemParser ip = new ItemParser();
         List<Item> itemList = ip.parseItemList(itemListXml);
+        ItemValidator iv = new ItemValidator();
+        iv.valid(itemListXml, profile);
         ItemController ic = new ItemController(user);
         ic.update(itemList);
     }

@@ -5,8 +5,6 @@ package de.mpg.imeji.logic.ingest.vo;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.mpg.imeji.logic.vo.MetadataProfile;

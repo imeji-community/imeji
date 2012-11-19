@@ -48,7 +48,7 @@ public class Item extends Properties implements FulltextIndex
     private URI fullImageUrl;
     
     @j2jResource("http://imeji.org/terms/visibility")
-    private URI visibility = URI.create("http://imeji.org/terms/visibility#" + Visibility.PRIVATE.name());;
+    private URI visibility = URI.create("http://imeji.org/terms/visibility#" + Visibility.PRIVATE.name());
     
     @j2jLiteral("http://imeji.org/terms/filename")
     private String filename;

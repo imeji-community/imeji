@@ -6,3 +6,11 @@ Properties
 Statement
 Item
 MetadataProfile
+predefinedMetadata.ConePerson
+predefinedMetadata.Date
+predefinedMetadata.Geolocation
+predefinedMetadata.License
+predefinedMetadata.Link
+predefinedMetadata.Number
+predefinedMetadata.Publication
+predefinedMetadata.Text

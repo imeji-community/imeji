@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
 <metadataProfile>
-    <created>2012-10-24T13:41:35.606Z</created>
-    <discardComment>a discard comment</discardComment>
-    <modified>2012-10-24T13:41:35.606Z</modified>
-    <status>PENDING</status>
-    <version>0</version>
-    <versionDate>2012-10-24T13:41:35.606Z</versionDate>
-    <description>this the second profile</description>
-    <id>http://imeji.org/md/a082c70c-aff2-437c-95d0-61dc5ef2e3bc</id>
+    <created></created>
+    <discardComment></discardComment>
+    <modified></modified>
+    <status></status>
+    <version></version>
+    <versionDate></versionDate>
+    <description></description>
+    <id>http://zuse.zib.demetadataProfile/12</id>
     <statements>
         <description>true</description>
         <id>http://imeji.org/statement/c082c70c-af7f-4371-95d0-6fd257f2e3bc</id>
@@ -46,5 +46,5 @@
         <preview>true</preview>
         <vocabulary>vocab1</vocabulary>
     </statements>
-    <title>a title</title>
+    <title></title>
 </metadataProfile>

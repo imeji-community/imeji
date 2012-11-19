@@ -6,10 +6,10 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.UUID;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
@@ -27,6 +27,15 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlRootElement(name="metadata")
+@XmlSeeAlso({
+	Text.class,
+	Number.class,
+	ConePerson.class,
+	Date.class,
+	Geolocation.class,
+	License.class,
+	Link.class,Publication.class
+})
 public abstract class Metadata
 {
     private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
@@ -43,6 +52,16 @@ public abstract class Metadata
             this.clazz = clazz;
         }
 
+        @XmlElements({
+            @XmlElement(name="text",type=Text.class),
+            @XmlElement(name="number",type=Number.class),
+            @XmlElement(name="conePerson",type=ConePerson.class),
+            @XmlElement(name="date",type=Date.class),
+            @XmlElement(name="geolocation",type=Geolocation.class),
+            @XmlElement(name="license",type=License.class),
+            @XmlElement(name="link",type=Link.class),
+            @XmlElement(name="publication",type=Publication.class)
+        })
         public Class<? extends Metadata> getClazz()
         {
             return clazz;
@@ -53,10 +72,11 @@ public abstract class Metadata
             return clazz.getAnnotation(j2jDataType.class).value();
         }
     }
-
+    
     public Metadata()
     {
     }
+
 
     public String getTypeNamespace()
     {

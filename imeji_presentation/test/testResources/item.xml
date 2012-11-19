@@ -90,7 +90,7 @@
         </metadata>       
     	<profile>profile url</profile>
     </metadataSets>    
-	<thumbnailImageUrl>thumb nail image url2</thumbnailImageUrl>
-	<visibility>PUBLIC</visibility>
-	<webImageUrl>web image url2</webImageUrl>
+	<thumbnailImageUrl>http://latest-coreservice.mpdl.mpg.de:8080/ir/item/escidoc:951/components/component/escidoc:950/content<!-- URL String format to the image --></thumbnailImageUrl>
+	<visibility>PUBLIC<!-- the value for the visibility as STRING, possible values: PRIVATE | PUBLIC --></visibility>
+	<webImageUrl>http://latest-coreservice.mpdl.mpg.de:8080/ir/item/escidoc:951/components/component/escidoc:949/content<!-- URL String format to the image --></webImageUrl>
 </item>

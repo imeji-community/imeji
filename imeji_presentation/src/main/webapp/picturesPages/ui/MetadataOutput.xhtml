@@ -50,11 +50,9 @@
 				<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.person.familyName != null}">
 				<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
 				<h:outputText value="(" rendered="#{not empty md.person.organizations}"/>
-				<!-- JSF2 bug: UIRepeat calling getValue() when rendered is false
 				<a4j:repeat var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
 					<h:outputText value="#{orga.name}"/>
 				</a4j:repeat>
-				 -->
 				
 				<h:outputText value=")" rendered="#{not empty md.person.organizations}"/>
 			</h:panelGroup>
@@ -62,11 +60,10 @@
 			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId == null and md.person.familyName != null}">
 				<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
 				<h:outputText value="(" rendered="#{not empty md.person.organizations}"/>
-				<!-- JSF2 bug: UIRepeat calling getValue() when rendered is false 
-					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
+				
+				<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
 					<h:outputText value="#{orga.name}"/>
 				</a4j:repeat>
-				-->
 			
 				<h:outputText value=")" rendered="#{not empty md.person.organizations}"/>
 			</h:panelGroup>

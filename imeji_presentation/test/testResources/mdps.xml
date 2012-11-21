@@ -12,7 +12,7 @@
 	    <description>a description<!-- as simple STRING--></description>
 	    <id>http://dev.imeji.org/metadataProfile/14<!-- URL String format to the meta data profile--></id>
 	    <statements><!-- the statements for the profile is listed here -->
-	        <description>false<!-- whether the statement has description or not, use boolean type: TRUE or FALSE --></description>
+	        <description>false<!-- whether this statement is used for caption or not, use boolean type: TRUE or FALSE --></description>
 	        <id>http://imeji.org/statement/c082c70c-af72-437c-95d0-6fd257f0e3bc<!-- URL String format to this statement--></id>
 	        <labels><!-- the label for this statement, multiple labels for multiple language -->
 	            <lang>en<!-- the language code, e.g.: en, de, ja, es --></lang>
@@ -185,7 +185,7 @@
 	    <description>a description<!-- as simple STRING--></description>
 	    <id>http://dev.imeji.org/metadataProfile/14<!-- URL String format to the meta data profile--></id>
 	    <statements><!-- the statements for the profile is listed here -->
-	        <description>false<!-- whether the statement has description or not, use boolean type: TRUE or FALSE --></description>
+	        <description>false<!-- whether this statement is used for caption or not, use boolean type: TRUE or FALSE --></description>
 	        <id>http://imeji.org/statement/c082c70c-af72-437c-95d0-6fd257f0e3bc<!-- URL String format to this statement--></id>
 	        <labels><!-- the label for this statement, multiple labels for multiple language -->
 	            <lang>en<!-- the language code, e.g.: en, de, ja, es --></lang>

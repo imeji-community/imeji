@@ -37,7 +37,6 @@
 <f:subview id="MetadataOuptut">
 	<h:panelGroup layout="block" styleClass="free_area0">
 		<h:panelGroup layout="block" styleClass="free_area0_p0 endline">
-			<h:outputText value="#{md.typeNamespace}" />
 			<h:outputText value="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}" /> 
 			<h:outputText styleClass="free_area0" value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text' and md.text != null  }"/>
 			<h:outputText styleClass="free_area0 endline" value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number' and md.number != null}"/>
@@ -62,11 +61,13 @@
 			</h:outputLink>
 			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId == null and md.person.familyName != null}">
 				<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
-				<h:outputText value="(" rendered="#{not empty md.person.organizations}"/>
-				<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
-					<h:outputText value="#{orga.name}"/>
-				</a4j:repeat>
-				<h:outputText value=")" rendered="#{not empty md.person.organizations}"/>
+				<h:panelGroup rendered="#{not empty md.person.organizations}">
+					<h:outputText value="("/>
+					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}">
+						<h:outputText value="#{orga.name}"/>
+					</a4j:repeat>
+					<h:outputText value=")"/>
+				</h:panelGroup>
 			</h:panelGroup>
 			
 			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">

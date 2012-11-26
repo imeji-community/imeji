@@ -259,11 +259,11 @@
 										<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}/item/#{item.id}">
 											<h:graphicImage alt="#{item.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.link}"/>
 										</h:outputLink>
-										<ui:remove>
+									
 										<rich:tooltip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="400">
 											<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"></ui:include>
 										</rich:tooltip>
-										</ui:remove>
+								
 									</h:panelGroup>
 									
 									<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->

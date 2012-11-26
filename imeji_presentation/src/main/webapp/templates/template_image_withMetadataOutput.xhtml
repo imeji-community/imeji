@@ -188,14 +188,11 @@
 															<h:outputText value="#{MetadataLabels.internationalizedLabels[md.statement]}" /> 
 															<span class="noDisplay">: </span>
 														</b>
-														<ui:remove>
 														<h:panelGroup layout="block" styleClass="double_area0_p2 xTiny_marginLExcl endline" >
 															<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
 																<ui:param name="md" value="#{md}"/>
 															</ui:include>
-														</h:panelGroup>
-														</ui:remove>
-														<br/>
+														</h:panelGroup><br/>
 													</h:panelGroup>
 												</a4j:repeat>
 											</a4j:repeat>

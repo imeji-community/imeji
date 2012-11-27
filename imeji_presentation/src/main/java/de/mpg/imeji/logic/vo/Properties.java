@@ -9,15 +9,25 @@ import java.util.Calendar;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
+import de.mpg.imeji.logic.vo.predefinedMetadata.License;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/properties")
 @XmlRootElement(name="properties")
 @XmlType(name="properties")
+@XmlSeeAlso({MetadataProfile.class})
 public class Properties
 {
     @j2jResource("http://purl.org/dc/terms/creator")

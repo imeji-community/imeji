@@ -18,7 +18,7 @@ public class ProfileParser
      */
     public MetadataProfile parse(File profileXmlFile)
     {
-        MetadataProfile mdp = new MetadataProfile();
+        MetadataProfile mdp = null;
 		
 		try {
 			mdp = new JaxbIngestProfile().unmarshalMdProfile(profileXmlFile);

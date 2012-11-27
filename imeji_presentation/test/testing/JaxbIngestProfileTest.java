@@ -23,6 +23,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -34,7 +35,7 @@ public class JaxbIngestProfileTest {
 		System.out.println(solution);
 	}
 	
-	@Test
+//	@Test
 	public void testUnmarshalMarshalItem() throws URISyntaxException {
 		String xmlFilename = "C:\\Git\\imeji\\imeji_presentation\\test\\testResources\\item.xml";
 		
@@ -166,7 +167,7 @@ public class JaxbIngestProfileTest {
 			
 //			jmp.marshalMdProfile(xmlFilename + "-output.xml", mpd);
 			
-			jmp.toString(mdps);
+			JaxbIngestProfile.toString(mdps);
 			
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
@@ -179,32 +180,37 @@ public class JaxbIngestProfileTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void testUnmarshalMarshalIngestProfile() {
 
-		String xmlFile = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\ingest-profile.xml";
+		String xmlFilename = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\simpleMdp.xml";
 		
 		try {
 			
-			JaxbIngestProfile jmp = new JaxbIngestProfile();
+			JaxbIngestProfile jmp = new JaxbIngestProfile();			
 			
-			IngestProfile ingestProfile = jmp.unmarshalIngestProfile(xmlFile);
-			MetadataProfiles mdps = ingestProfile.getMdProfiles();
+			MetadataProfile mdp = jmp.unmarshalMdProfile(xmlFilename);
 			
-			if(mdps.getMetadataProfile().isEmpty()) {
-				fail("bla?");
-			}
+//			MetadataProfile mdp = new MetadataProfile();
+//			Collection<Statement> statements = new LinkedList<Statement>();
+//			
+//			Statement statement = new Statement();
+//			
+//			statements.add(statement);
+//			
+//			mdp.setStatements(statements);
 			
 //			jmp.marshalMdProfiles(xmlFile + "-output.xml", mdps);
 			
-			jmp.toString(mdps);
+			JaxbIngestProfile.toString(mdp);
 			
 //			System.out.println(mpd.toString());
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("JAXBException");
-		} catch (SAXException e) {
+		}
+		catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("SAXException");

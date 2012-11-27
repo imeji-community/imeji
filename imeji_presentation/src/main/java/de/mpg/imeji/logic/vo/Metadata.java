@@ -34,7 +34,8 @@ import de.mpg.j2j.annotations.j2jResource;
 	Date.class,
 	Geolocation.class,
 	License.class,
-	Link.class,Publication.class
+	Link.class,
+	Publication.class
 })
 public abstract class Metadata
 {

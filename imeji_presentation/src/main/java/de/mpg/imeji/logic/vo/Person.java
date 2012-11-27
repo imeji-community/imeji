@@ -22,7 +22,6 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlRootElement(name="person")
 @XmlType(name="person")
-@XmlRootElement
 public class Person
 {
     private URI id = URI.create("http://imeji.org/person/" + UUID.randomUUID());

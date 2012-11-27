@@ -18,7 +18,6 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlRootElement(name="organization")
 @XmlType(name="organization")
-@XmlRootElement
 public class Organization
 {
     private URI id;

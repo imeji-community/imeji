@@ -11,6 +11,7 @@ import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.j2j.annotations.j2jId;
@@ -21,6 +22,7 @@ import de.mpg.j2j.misc.LocalizedString;
 
 @j2jResource("http://imeji.org/terms/statement")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlRootElement(name="statement")
 @XmlType(name="statement")
 public class Statement implements Comparable<Statement>
 {

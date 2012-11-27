@@ -8,8 +8,6 @@ package de.mpg.imeji.logic.ingest.util;
  *
  */
 public class ImejiSchemaFilename {
-
-	public static final String IMEJI_XSDFILE = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\src\\main\\resources\\vo_schema\\imeji_ingest_schema.xsd";
 	
 	public static final String IMEJI_ITEM_XSDFILE = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\src\\main\\resources\\vo_schema\\imeji_item_schema.xsd";
 	public static final String IMEJI_ITEMS_XSDFILE = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\src\\main\\resources\\vo_schema\\imeji_items_schema.xsd";

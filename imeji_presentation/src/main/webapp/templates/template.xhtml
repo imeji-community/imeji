@@ -38,8 +38,7 @@ All rights reserved. Use is subject to license terms.
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/richfaces-ajax-patch.js"></script>
         </h:head>
-        <body lang="#{SessionBean.locale}">
-            <h:form id="formular">
+        <h:body lang="#{SessionBean.locale}">
             	<style type="text/css">
             		.metaMenu input:hover, .metaMenu input:focus, .metaMenu button:hover, .metaMenu button:focus, .metaMenu a:hover, .metaMenu a:focus {
 					  background-color:transparent;
@@ -137,8 +136,7 @@ All rights reserved. Use is subject to license terms.
                     <!-- end: content section -->
                 </div>
                 <ui:include src="/footerPages/Footer.jspf"/>
-                         
-            </h:form>
+
            
             <script type="text/javascript">
                 
@@ -156,6 +154,6 @@ All rights reserved. Use is subject to license terms.
                 }
                 
             </script>
-        </body>
+        </h:body>
     </html>
 </f:view>

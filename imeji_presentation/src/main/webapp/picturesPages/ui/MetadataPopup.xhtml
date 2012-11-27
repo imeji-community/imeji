@@ -78,7 +78,6 @@
 			<h:panelGroup  rendered="#{md.statement == statement.id}" styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
 				<h:outputText value="#{MetadataLabels.internationalizedLabels[statement.id]}"/>
 			</h:panelGroup>
-			<h:outputText value="#{md.typeNamespace}" />
 			<h:panelGroup rendered="#{md.statement == statement.id}" layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">
 				<h:outputText value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}"/>
 				<h:outputText value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}"/>
@@ -89,14 +88,8 @@
 				</h:outputLink>
 				<h:outputText value="#{md.license}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}"/>
 				<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
-					<h:outputText value="#{md.person.familyName}, #{md.person.givenName} ("/>
-					
-					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
-						<h:outputText value="#{orga.name}"/>
-					</a4j:repeat>
-					
-					
-					<h:outputText value=")" />
+					<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
+					<h:outputText value="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''"/>
 				</h:panelGroup>
 				
 				<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">

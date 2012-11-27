@@ -36,39 +36,40 @@
 
 <span id="metaMenuSkipLinkAnchor" class="full_area0 metaMenu">
 	<!-- meta Menu starts here -->
-
-	<!-- Language -->
-	<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit(); return false;" rendered="true">
-		<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
-	</h:selectOneMenu>
-
-
+	<h:form id="metaMenuForm">
 	
-	<h:panelGroup styleClass="seperator"></h:panelGroup>
-	<!-- Help -->
-	<h:outputLink id="lnkHelp" styleClass="medium_area0_p8 endline" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
-		<h:outputText value="#{lbl.help}"/>
-	</h:outputLink>
-	<h:panelGroup styleClass="seperator"></h:panelGroup>
-
-	<!-- LogIn, LogOut -->
-	<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="free_area0_p4">
-		<h:inputText styleClass="medium_txtInput" value="#{LoginBean.login}"/>
-		<h:inputSecret styleClass="medium_txtInput" value="#{LoginBean.passwd}" onkeypress="return loginOnEnter(event)"/>
-		<h:commandButton id="lnkLogin" styleClass="medium_area0 endline" style="text-align:left;" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.login}"/>
-	</h:panelGroup>
+		<!-- Language -->
+		<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit(); return false;" rendered="true">
+			<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
+		</h:selectOneMenu>
+		
+		<h:panelGroup styleClass="seperator"></h:panelGroup>
+		
+		<!-- Help -->
+		<h:outputLink id="lnkHelp" styleClass="medium_area0_p8 endline" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
+			<h:outputText value="#{lbl.help}"/>
+		</h:outputLink>
+		
+		<h:panelGroup styleClass="seperator"></h:panelGroup>
 	
-
-	<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="medium_area0_p8 endline" rendered="#{SessionBean.user != null}">
-    	<h:outputText value="#{lbl.logout}"></h:outputText>
-    </h:commandLink>
-
-	<h:panelGroup styleClass="seperator"></h:panelGroup>
-
-	<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="free_area0_p8 endline" value="#{Navigation.applicationUrl}user?id=#{SessionBean.user.email}" rendered="#{SessionBean.user != null}">
-		<h:outputText  value="#{SessionBean.user.name}"/>
-	</h:outputLink>
+		<!-- LogIn, LogOut -->
+		<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="free_area0_p4">
+			<h:inputText styleClass="medium_txtInput" value="#{LoginBean.login}"/>
+			<h:inputSecret styleClass="medium_txtInput" value="#{LoginBean.passwd}" onkeypress="return loginOnEnter(event)"/>
+			<h:commandButton id="lnkLogin" styleClass="medium_area0 endline" style="text-align:left;" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}"/>
+		</h:panelGroup>
+		
+		<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="medium_area0_p8 endline" rendered="#{SessionBean.user != null}">
+	    	<h:outputText value="#{lbl.logout}"></h:outputText>
+	    </h:commandLink>
 	
+		<h:panelGroup styleClass="seperator"></h:panelGroup>
+	
+		<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="free_area0_p8 endline" value="#{Navigation.applicationUrl}user?id=#{SessionBean.user.email}" rendered="#{SessionBean.user != null}">
+			<h:outputText  value="#{SessionBean.user.name}"/>
+		</h:outputLink>
+	
+	</h:form>
 	<!-- meta Menu ends here -->
 </span>
 	<script type="text/javascript">

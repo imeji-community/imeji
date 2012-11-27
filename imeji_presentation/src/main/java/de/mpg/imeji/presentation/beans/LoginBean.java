@@ -46,7 +46,7 @@ public class LoginBean
         return passwd;
     }
 
-    public String login() throws Exception
+    public String doLogin() throws Exception
     {
         UserController uc = new UserController(null);
         try

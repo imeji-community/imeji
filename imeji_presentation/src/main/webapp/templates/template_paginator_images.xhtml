@@ -40,180 +40,189 @@
 	<body>
 		<ui:composition template="template_paginator.xhtml">
 			<ui:define name="prelistHeaderTest">
-				<div id="preListHeader" class="full_area0">
-					<h:panelGroup styleClass="xHuge_area0 small_marginLIncl clear">
-						<h:outputLink value="?q=">
-							<h:outputText value="#{lbl.all}&#160;" styleClass="free_area0"/>
-						</h:outputLink>
-						<a4j:repeat id="filterList" var="filter" value="#{FiltersSession.filters}" rows="0" rowKeyVar="index">
-							<h:outputText value=" / " styleClass="free_area0"/>
-							<h:outputText value="#{filter.internationalizedLabel} " styleClass="free_area0"/>
-							<h:outputText value="(#{filter.notDefineType})" styleClass="free_area0"	rendered="#{filter.notDefine}"/>
-							<h:outputLink value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse'}" styleClass="free_area0 ">
-								<h:outputText value="[x]" styleClass="free_area0 "/>
-							</h:outputLink>
-							<h:outputLink value="#{Navigation.collectionUrl}#{paginatorListSessionBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString != 'pretty:browse' and paginatorListSessionBean.collection != null}" styleClass="free_area0 ">
-								<h:outputText value="[x]" styleClass="free_area0 "/>
-							</h:outputLink>
-							<span style="padding-left: 1px;"/>
-						</a4j:repeat>
-						<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements} #{lbl.images})" styleClass="free_area0 " rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse'}"/>
-						<span style="padding-left: 1px"/>
-						
-						<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
-							<h:outputText value="#{lbl.add_to_active_album}" styleClass="free_area0"/>
-						</a4j:commandLink>
-						
-						<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
-							<h:panelGroup layout="block" styleClass="free_area0_p0 endline itemSelectArea overlayMenu">
-								<h:panelGroup layout="block" styleClass="menuHeader free_area0">
-									<h:panelGroup styleClass="free_area0">
-										<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements} #{lbl.images} " styleClass="free_area0 "/>
-									</h:panelGroup>
-									<h:panelGroup layout="block" style="margin-top:0.2727em;" class="free_area0 min_imgBtn checkboxSelectButton"/>
-									<h:outputText value=" )" styleClass="free_area0 "/>
-								</h:panelGroup>
-								<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
-									<div class="selectMenu xLarge_area2 bordst2">
-									
-										<h:outputLink value="#{Navigation.albumsUrl}" styleClass="xLarge_area0_p8 noPaddingTopBottom" title="#{lbl.activate}" rendered="#{SessionBean.activeAlbum == null}">
-											<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>
-											<h:panelGroup styleClass="quickSearchIconSmall" style="float:right; margin-top:0.2727em;"/>
-										</h:outputLink>
-										
-										<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
-											<h:outputText value="#{lbl.add_to_active_album}"/>
-										</a4j:commandLink>
-										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit2" rendered="#{paginatorListSessionBean.imageEditable}">
-											<h:outputText value="#{lbl.edit_all}"/>
-										</h:outputLink>
-										<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
-											<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
-												<h:outputText value="#{lbl.delete_all}"/>
-												<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
-											</h:outputLink>
-											<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" rendered="#{paginatorListSessionBean.imageEditable  and paginatorListSessionBean.collection.status == 'RELEASED'}">
-												<h:outputText value="#{lbl.withdraw_all}"/>
-												<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
-											</h:outputLink>
-										</h:panelGroup>
-									</div>
-								</h:panelGroup>
-							</h:panelGroup>
-						</h:panelGroup>
-						
-						<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">
-							<h:panelGroup layout="block" styleClass="free_area0_p8 endline itemSelectArea overlayMenu">
-								<h:panelGroup layout="block" styleClass="menuHeader free_area0">
-									<h:panelGroup styleClass="free_area0">
-										<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements} #{lbl.images} " styleClass="free_area0 "/>
-									</h:panelGroup>
-									<h:panelGroup layout="block" style="margin-top:0.2727em;" class="free_area0 min_imgBtn checkboxSelectButton"/>
-									<h:outputText value=" )" styleClass="free_area0 "/>
-								</h:panelGroup>
-								<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
-									<div class="selectMenu xLarge_area2 bordst2">
-										<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
-											<h:outputText value="#{lbl.remove_from_album}"/>
-										</a4j:commandLink>
-										
-										<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
-											<h:outputText value="#{lbl.remove_from_active}"/>
-										</a4j:commandLink>
-										
-										<h:outputLink value="#{Navigation.albumsUrl}" styleClass="xLarge_area0_p8 noPaddingTopBottom" title="#{lbl.activate}" rendered="#{SessionBean.activeAlbum == null}">
-											<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>
-											<h:panelGroup styleClass="quickSearchIconSmall" style="float:right; margin-top:0.2727em;"/>
-										</h:outputLink>
-											
-										<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
-											<h:outputText value="#{lbl.add_to_active_album}"/>
-										</a4j:commandLink>
-									</div>
-								</h:panelGroup>
-							</h:panelGroup>
-						</h:panelGroup>
-					</h:panelGroup> <ui:remove><!-- END OF left content for global action --></ui:remove>
+			
+				<h:form id="preListForm">
+					<div id="preListHeader" class="full_area0">
 					
-					<!-- right selectMenu -->
-					<h:panelGroup styleClass="xDouble_area0" style="float:right; clear:right;" rendered="#{SessionBean.user != null}">
-						<a4j:outputPanel layout="block" styleClass="overlayMenu xDouble_area0">
-							<h:panelGroup layout="block" styleClass="menuHeader free_area0" style="float:right;">
-								<h:panelGroup id="preListHeaderSelected" styleClass="free_area0">
-									<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}&#160;" styleClass="free_area0"/>
-								</h:panelGroup>
-								<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
-									<h:outputText styleClass="free_area0" value="#{lbl.add_to_active_album}"/>
-								</a4j:commandLink>
-								<h:panelGroup layout="block" style="margin-top:0.2727em;" styleClass="free_area0 min_imgBtn checkboxSelectButton" rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">&#160;</h:panelGroup>
-							</h:panelGroup>
-							<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="float:right; margin-top:-1.9090em;" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
-								<h:panelGroup layout="block" styleClass="selectMenu xLarge_area2 bordst2">
-									<h:panelGroup id="preListHeaderSelectedMenu">
-										<h:outputText styleClass="free_area0_p8" value="#{lbl.no_image_selected}" rendered="#{SessionBean.selectedSize == 0}"/>
-										<h:panelGroup rendered="#{SessionBean.selectedSize > 0}">
-											
+						<h:panelGroup styleClass="xHuge_area0 small_marginLIncl clear">
+							<h:outputLink value="?q=">
+								<h:outputText value="#{lbl.all}&#160;" styleClass="free_area0"/>
+							</h:outputLink>
+							<a4j:repeat id="filterList" var="filter" value="#{FiltersSession.filters}" rows="0" rowKeyVar="index">
+								<h:outputText value=" / " styleClass="free_area0"/>
+								<h:outputText value="#{filter.internationalizedLabel} " styleClass="free_area0"/>
+								<h:outputText value="(#{filter.notDefineType})" styleClass="free_area0"	rendered="#{filter.notDefine}"/>
+								<h:outputLink value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse'}" styleClass="free_area0 ">
+									<h:outputText value="[x]" styleClass="free_area0 "/>
+								</h:outputLink>
+								<h:outputLink value="#{Navigation.collectionUrl}#{paginatorListSessionBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString != 'pretty:browse' and paginatorListSessionBean.collection != null}" styleClass="free_area0 ">
+									<h:outputText value="[x]" styleClass="free_area0 "/>
+								</h:outputLink>
+								<span style="padding-left: 1px;"/>
+							</a4j:repeat>
+							<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements} #{lbl.images})" styleClass="free_area0 " rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse'}"/>
+							<span style="padding-left: 1px"/>
+							
+							<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
+								<h:outputText value="#{lbl.add_to_active_album}" styleClass="free_area0"/>
+							</a4j:commandLink>
+							
+							<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
+								<h:panelGroup layout="block" styleClass="free_area0_p0 endline itemSelectArea overlayMenu">
+									<h:panelGroup layout="block" styleClass="menuHeader free_area0">
+										<h:panelGroup styleClass="free_area0">
+											<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements} #{lbl.images} " styleClass="free_area0 "/>
+										</h:panelGroup>
+										<h:panelGroup layout="block" style="margin-top:0.2727em;" class="free_area0 min_imgBtn checkboxSelectButton"/>
+										<h:outputText value=" )" styleClass="free_area0 "/>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
+										<div class="selectMenu xLarge_area2 bordst2">
+										
 											<h:outputLink value="#{Navigation.albumsUrl}" styleClass="xLarge_area0_p8 noPaddingTopBottom" title="#{lbl.activate}" rendered="#{SessionBean.activeAlbum == null}">
 												<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>
 												<h:panelGroup styleClass="quickSearchIconSmall" style="float:right; margin-top:0.2727em;"/>
 											</h:outputLink>
 											
-											<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+											<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 												<h:outputText value="#{lbl.add_to_active_album}"/>
 											</a4j:commandLink>
-											<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit" rendered="#{paginatorListSessionBean.imageEditable}">
-												<h:outputText value="#{lbl.selected_edit}"/>
+											<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit2" rendered="#{paginatorListSessionBean.imageEditable}">
+												<h:outputText value="#{lbl.edit_all}"/>
 											</h:outputLink>
 											<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
-												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#"  rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
-													<h:outputText value="#{lbl.delete_selectedImages}"/>
-													<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
+													<h:outputText value="#{lbl.delete_all}"/>
+													<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
 												</h:outputLink>
-												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" rendered="#{paginatorListSessionBean.imageEditable and paginatorListSessionBean.collection.status == 'RELEASED'}">
-													<h:outputText value="#{lbl.withdraw_selected}"/>
-													<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" rendered="#{paginatorListSessionBean.imageEditable  and paginatorListSessionBean.collection.status == 'RELEASED'}">
+													<h:outputText value="#{lbl.withdraw_all}"/>
+													<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
 												</h:outputLink>
 											</h:panelGroup>
-										</h:panelGroup>
+										</div>
 									</h:panelGroup>
 								</h:panelGroup>
 							</h:panelGroup>
 							
-							<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0 hidden" style="float:right; margin-top:-1.9090em;" rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">
-								<span class="free_area0_p8 endline itemSelectArea">
-									<div class="selectMenu xLarge_area2 bordst2">
-										<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
-											<h:outputText value="#{lbl.remove_from_album}"/>
-										</a4j:commandLink>
-										
-										<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeFromActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
-											<h:outputText value="#{lbl.remove_from_active}"/>
-										</a4j:commandLink>
-										
-										<h:outputLink value="#{Navigation.albumsUrl}" styleClass="xLarge_area0_p8 noPaddingTopBottom" title="#{lbl.activate}" rendered="#{SessionBean.activeAlbum == null}">
-											<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>
-											<h:panelGroup styleClass="quickSearchIconSmall" style="float:right; margin-top:0.2727em;"/>
-										</h:outputLink>
-										<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
-											<h:outputText value="#{lbl.add_to_active_album}"/>
-										</a4j:commandLink>
-									</div>
-								</span>
+							<h:panelGroup rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">
+								<h:panelGroup layout="block" styleClass="free_area0_p8 endline itemSelectArea overlayMenu">
+									<h:panelGroup layout="block" styleClass="menuHeader free_area0">
+										<h:panelGroup styleClass="free_area0">
+											<h:outputText value="(#{paginatorListSessionBean.totalNumberOfElements} #{lbl.images} " styleClass="free_area0 "/>
+										</h:panelGroup>
+										<h:panelGroup layout="block" style="margin-top:0.2727em;" class="free_area0 min_imgBtn checkboxSelectButton"/>
+										<h:outputText value=" )" styleClass="free_area0 "/>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
+										<div class="selectMenu xLarge_area2 bordst2">
+											<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
+												<h:outputText value="#{lbl.remove_from_album}"/>
+											</a4j:commandLink>
+											
+											<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+												<h:outputText value="#{lbl.remove_from_active}"/>
+											</a4j:commandLink>
+											
+											<h:outputLink value="#{Navigation.albumsUrl}" styleClass="xLarge_area0_p8 noPaddingTopBottom" title="#{lbl.activate}" rendered="#{SessionBean.activeAlbum == null}">
+												<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>
+												<h:panelGroup styleClass="quickSearchIconSmall" style="float:right; margin-top:0.2727em;"/>
+											</h:outputLink>
+												
+											<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.addAllToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+												<h:outputText value="#{lbl.add_to_active_album}"/>
+											</a4j:commandLink>
+										</div>
+									</h:panelGroup>
+								</h:panelGroup>
 							</h:panelGroup>
-						</a4j:outputPanel>
-					</h:panelGroup>
-				</div> <ui:remove><!-- END OF div id="preListHeader" --></ui:remove>
+						</h:panelGroup> 
+						
+						<ui:remove><!-- END OF left content for global action --></ui:remove>
+						
+						<!-- right selectMenu -->
+						<h:panelGroup styleClass="xDouble_area0" style="float:right; clear:right;" rendered="#{SessionBean.user != null}">
+							<a4j:outputPanel layout="block" styleClass="overlayMenu xDouble_area0">
+								<h:panelGroup layout="block" styleClass="menuHeader free_area0" style="float:right;">
+									<h:panelGroup id="preListHeaderSelected" styleClass="free_area0">
+										<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}&#160;" styleClass="free_area0"/>
+									</h:panelGroup>
+									<a4j:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
+										<h:outputText styleClass="free_area0" value="#{lbl.add_to_active_album}"/>
+									</a4j:commandLink>
+									<h:panelGroup layout="block" style="margin-top:0.2727em;" styleClass="free_area0 min_imgBtn checkboxSelectButton" rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">&#160;</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="float:right; margin-top:-1.9090em;" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
+									<h:panelGroup layout="block" styleClass="selectMenu xLarge_area2 bordst2">
+										<h:panelGroup id="preListHeaderSelectedMenu">
+											<h:outputText styleClass="free_area0_p8" value="#{lbl.no_image_selected}" rendered="#{SessionBean.selectedSize == 0}"/>
+											<h:panelGroup rendered="#{SessionBean.selectedSize > 0}">
+												
+												<h:outputLink value="#{Navigation.albumsUrl}" styleClass="xLarge_area0_p8 noPaddingTopBottom" title="#{lbl.activate}" rendered="#{SessionBean.activeAlbum == null}">
+													<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>
+													<h:panelGroup styleClass="quickSearchIconSmall" style="float:right; margin-top:0.2727em;"/>
+												</h:outputLink>
+												
+												<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+													<h:outputText value="#{lbl.add_to_active_album}"/>
+												</a4j:commandLink>
+												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=selected" id="lnkSelectEdit" rendered="#{paginatorListSessionBean.imageEditable}">
+													<h:outputText value="#{lbl.selected_edit}"/>
+												</h:outputLink>
+												<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
+													<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#"  rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
+														<h:outputText value="#{lbl.delete_selectedImages}"/>
+														<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+													</h:outputLink>
+													<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" rendered="#{paginatorListSessionBean.imageEditable and paginatorListSessionBean.collection.status == 'RELEASED'}">
+														<h:outputText value="#{lbl.withdraw_selected}"/>
+														<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+													</h:outputLink>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+								
+								<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0 hidden" style="float:right; margin-top:-1.9090em;" rendered="#{SessionBean.user != null and paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">
+									<span class="free_area0_p8 endline itemSelectArea">
+										<div class="selectMenu xLarge_area2 bordst2">
+											<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
+												<h:outputText value="#{lbl.remove_from_album}"/>
+											</a4j:commandLink>
+											
+											<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeFromActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+												<h:outputText value="#{lbl.remove_from_active}"/>
+											</a4j:commandLink>
+											
+											<h:outputLink value="#{Navigation.albumsUrl}" styleClass="xLarge_area0_p8 noPaddingTopBottom" title="#{lbl.activate}" rendered="#{SessionBean.activeAlbum == null}">
+												<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>
+												<h:panelGroup styleClass="quickSearchIconSmall" style="float:right; margin-top:0.2727em;"/>
+											</h:outputLink>
+											<a4j:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+												<h:outputText value="#{lbl.add_to_active_album}"/>
+											</a4j:commandLink>
+										</div>
+									</span>
+								</h:panelGroup>
+							</a4j:outputPanel>
+						</h:panelGroup>
+					</div>
+					
+					<ui:remove><!-- END OF div id="preListHeader" --></ui:remove>
+					
+					<ui:include src="../confirmationPages/AllDeleteWithdraw.xhtml">
+						<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+					</ui:include>
+					
+					<ui:include src="../confirmationPages/SelectedDeleteWithdraw.xhtml">
+						<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+					</ui:include>
+				
+				</h:form>
 			</ui:define>
 			
 			<ui:define name="list">
-				<ui:include src="../confirmationPages/AllDeleteWithdraw.xhtml">
-					<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-				</ui:include>
-				
-				<ui:include src="../confirmationPages/SelectedDeleteWithdraw.xhtml">
-					<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-				</ui:include>
-				
 				<h:panelGroup layout="block" styleClass="full_area0 noTopBorder">
 					<h:panelGroup layout="block"  styleClass="full_area0 itemList" rendered="#{SessionBean.user != null}">
 						<div class="full_area0 listHeader">
@@ -259,11 +268,11 @@
 										<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}/item/#{item.id}">
 											<h:graphicImage alt="#{item.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.link}"/>
 										</h:outputLink>
-										<ui:remove>
+										
 										<rich:tooltip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="400">
 											<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"></ui:include>
 										</rich:tooltip>
-										</ui:remove>
+										
 									</h:panelGroup>
 									
 									<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->
@@ -271,9 +280,11 @@
 									<!-- Album Selected -->
 									<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null}">
 										<span class="free_area0">
-											<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
-												<a4j:ajax event="change" execute="@this" render="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu"/>
-											</h:selectBooleanCheckbox>
+											<h:form id="selectItemForm">
+												<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
+													<a4j:ajax event="change" execute="@this" render="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu"/>
+												</h:selectBooleanCheckbox>
+											</h:form>
 										</span>
 									</h:panelGroup>
 									

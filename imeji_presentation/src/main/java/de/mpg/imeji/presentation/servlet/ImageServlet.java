@@ -6,9 +6,6 @@ package de.mpg.imeji.presentation.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.util.LoginHelper;
@@ -37,7 +36,7 @@ public class ImageServlet extends HttpServlet
     private static Logger logger = Logger.getLogger(ImageServlet.class);
     private String userHandle;
     private String frameworkUrl;
-    private static int counter = 0;
+    private HttpClient client = null;
 
     @Override
     public void init()
@@ -46,6 +45,12 @@ public class ImageServlet extends HttpServlet
         {
             frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.url");
             logger.info("ImageServlet initialized");
+            MultiThreadedHttpConnectionManager conn = new MultiThreadedHttpConnectionManager();
+            HttpConnectionManagerParams connParams = new HttpConnectionManagerParams();
+            connParams.setConnectionTimeout(5000);
+            connParams.setDefaultMaxConnectionsPerHost(50);
+            conn.setParams(connParams);
+            client = new HttpClient(conn);
         }
         catch (Exception e)
         {
@@ -61,6 +66,7 @@ public class ImageServlet extends HttpServlet
     {
         String imageUrl = req.getParameter("imageUrl");
         GetMethod method = null;
+        
         try
         {
             if (imageUrl == null)
@@ -80,7 +86,8 @@ public class ImageServlet extends HttpServlet
                 method.addRequestHeader("Cache-Control", "public");
                 method.setRequestHeader("Connection", "close");
                 // Execute the method with HttpClient.
-                HttpClient client = new HttpClient();
+                //HttpClient client = new HttpClient();
+                
                 ProxyHelper.setProxy(client, frameworkUrl);
                 client.executeMethod(method);
                 // byte[] input;
@@ -89,7 +96,7 @@ public class ImageServlet extends HttpServlet
                 {
                     // try again
                     logger.info("try load image again");
-                    method.releaseConnection();
+                   // method.releaseConnection();
                     userHandle = LoginHelper.login(
                             de.mpg.imeji.presentation.util.PropertyReader.getProperty("imeji.escidoc.user"),
                             PropertyReader.getProperty("imeji.escidoc.password"));
@@ -107,7 +114,6 @@ public class ImageServlet extends HttpServlet
                     // out = resp.getOutputStream();
                     if (method.getStatusCode() == 302)
                     {
-                        method.releaseConnection();
                         throw new RuntimeException("error code " + method.getStatusCode());
                     }
                     input = method.getResponseBodyAsStream();
@@ -131,44 +137,21 @@ public class ImageServlet extends HttpServlet
                     numWritten += numRead;
                 }
                 input.close();
-                method.releaseConnection();
                 out.flush();
                 out.close();
-                // ReadableByteChannel inputChannel = Channels.newChannel(input);
-                // WritableByteChannel outputChannel = Channels.newChannel(out);
-                // fastChannelCopy(inputChannel, outputChannel);
-                // inputChannel.close();
-                // outputChannel.close();
             }
         }
         catch (Exception e)
         {
             logger.error(e.getMessage(), e);
-            if (method != null)
-                method.releaseConnection();
+           
         }
-    }
-
-    public static void fastChannelCopy(final ReadableByteChannel src, final WritableByteChannel dest)
-            throws IOException
-    {
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(16 * 1024);
-        while (src.read(buffer) != -1)
+        finally
         {
-            // prepare the buffer to be drained
-            buffer.flip();
-            // write to the channel, may block
-            dest.write(buffer);
-            // If partial transfer, shift remainder down
-            // If buffer is empty, same as doing clear()
-            buffer.compact();
-        }
-        // EOF will leave buffer in fill state
-        buffer.flip();
-        // make sure the buffer is fully drained.
-        while (buffer.hasRemaining())
-        {
-            dest.write(buffer);
+        	 if (method != null)
+        	 {
+        		 method.releaseConnection();
+        	 }
         }
     }
 

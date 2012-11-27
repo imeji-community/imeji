@@ -1,5 +1,7 @@
 package de.mpg.imeji.logic.ingest.controller;
 
+import java.io.File;
+
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.ingest.parser.ProfileParser;
 import de.mpg.imeji.logic.ingest.validator.ProfileValidator;
@@ -15,12 +17,12 @@ public class IngestProfileController
         this.user = user;
     }
 
-    public void ingest(String profileXml) throws Exception
+    public void ingest(File profileXmlFile) throws Exception
     {
         ProfileValidator pv = new ProfileValidator();
-        pv.valid(profileXml);
+        pv.valid(profileXmlFile);
         ProfileParser pp = new ProfileParser();
-        MetadataProfile mdp = pp.parse(profileXml);
+        MetadataProfile mdp = pp.parse(profileXmlFile);
         ProfileController pc = new ProfileController(user);
         pc.update(mdp);
     }

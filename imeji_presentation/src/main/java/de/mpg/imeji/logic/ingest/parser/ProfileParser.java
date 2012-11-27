@@ -1,5 +1,7 @@
 package de.mpg.imeji.logic.ingest.parser;
 
+import java.io.File;
+
 import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
@@ -14,12 +16,12 @@ public class ProfileParser
      * @param profileXml
      * @return
      */
-    public MetadataProfile parse(String profileXml)
+    public MetadataProfile parse(File profileXmlFile)
     {
         MetadataProfile mdp = new MetadataProfile();
 		
 		try {
-			mdp = new JaxbIngestProfile().unmarshalMdProfile(profileXml);
+			mdp = new JaxbIngestProfile().unmarshalMdProfile(profileXmlFile);
 		} catch (JAXBException e) {			
 			e.printStackTrace();
 		} catch (SAXException e) {		

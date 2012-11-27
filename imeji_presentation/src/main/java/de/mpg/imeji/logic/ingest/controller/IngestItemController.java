@@ -1,5 +1,6 @@
 package de.mpg.imeji.logic.ingest.controller;
 
+import java.io.File;
 import java.util.List;
 
 import de.mpg.imeji.logic.controller.ItemController;
@@ -20,13 +21,13 @@ public class IngestItemController
         this.profile = profile;
     }
 
-    public void ingest(String itemListXml) throws Exception
+    public void ingest(File itemListXmlFile) throws Exception
     {
        
         ItemParser ip = new ItemParser();
-        List<Item> itemList = ip.parseItemList(itemListXml);
+        List<Item> itemList = ip.parseItemList(itemListXmlFile);
         ItemValidator iv = new ItemValidator();
-        iv.valid(itemListXml, profile);
+        iv.valid(itemListXmlFile, profile);
         ItemController ic = new ItemController(user);
         ic.update(itemList);
     }

@@ -3,6 +3,9 @@
  */
 package de.mpg.imeji.logic.ingest.jaxb;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
@@ -37,35 +40,62 @@ public class JaxbIngestProfile extends JaxbUtil implements IJaxbItem, IJaxbItems
     }
 
     @Override
-    public void marshalItem(String xmlFile, Item item) throws JAXBException, SAXException
+    public void marshalItem(String xmlFilename, Item item) throws JAXBException, SAXException, FileNotFoundException
     {
-        String xsdFile = IJaxbItem.xsdFilename;
-        if (xmlFile.isEmpty() || xsdFile.isEmpty())
+        String xsdFilename = IJaxbItem.xsdFilename;
+        if (xmlFilename.isEmpty() || xsdFilename.isEmpty())
         {
             logger.error("\nSchema file or Xml file not provided!");
+            return;
         }
-        super.marshal(xsdFile, xmlFile, item);
+        super.marshal(xsdFilename, xmlFilename, item);
     }
 
     @Override
-    public Item unmarshalItem(String xmlFile) throws JAXBException, SAXException
+    public Item unmarshalItem(String xmlFilename) throws JAXBException, SAXException
     {
-        String xsdFile = IJaxbItem.xsdFilename;
-        if (xmlFile.isEmpty() || xsdFile.isEmpty())
+        String xsdFilename = IJaxbItem.xsdFilename;
+        if (xmlFilename.isEmpty() || xsdFilename.isEmpty())
         {
             logger.error("\nSchema file or Xml file not provided!");
             return null;
         }
-        return unmarshal(xsdFile, xmlFile, Item.class);
+        return unmarshal(xsdFilename, xmlFilename, Item.class);
     }
 
+	@Override
+	public void marshalItem(File xmlFile, Item item) throws JAXBException, SAXException, FileNotFoundException
+	{
+		String xsdFilename = IJaxbItem.xsdFilename;
+        if (xmlFile == null || xsdFilename.isEmpty())
+        {
+            logger.error("\nSchema file or Xml file not provided!");
+            return;
+        }
+        super.marshal(xsdFilename, xmlFile, item);
+	}
+
+	@Override
+	public Item unmarshalItem(File xmlFile) throws JAXBException, SAXException
+	{
+		String xsdFilename = IJaxbItem.xsdFilename;
+        if (xmlFile == null || xsdFilename.isEmpty())
+        {
+            logger.error("\nSchema file or Xml file not provided!");
+            return null;
+        }
+        return unmarshal(xsdFilename, xmlFile, Item.class);
+	}
+    
+    
     @Override
-    public void marshalItems(String xmlFilename, Items items) throws JAXBException, SAXException
+    public void marshalItems(String xmlFilename, Items items) throws JAXBException, SAXException, FileNotFoundException
     {
         String xsdFilename = IJaxbItems.xsdFilename;
         if (xmlFilename.isEmpty() || xsdFilename.isEmpty())
         {
             logger.error("\nSchema file or Xml file not provided!");
+            return;
         }
         super.marshal(xsdFilename, xmlFilename, items);
     }
@@ -81,14 +111,37 @@ public class JaxbIngestProfile extends JaxbUtil implements IJaxbItem, IJaxbItems
         }
         return unmarshal(xsdFilename, xmlFilename, Items.class);
     }
+    
+	@Override
+	public void marshalItems(File xmlFile, Items items) throws JAXBException, SAXException, FileNotFoundException {
+		String xsdFilename = IJaxbItems.xsdFilename;
+        if (xmlFile == null || xsdFilename.isEmpty())
+        {
+            logger.error("\nSchema file or Xml file not provided!");
+            return;
+        }
+        super.marshal(xsdFilename, xmlFile, items);
+	}
+
+	@Override
+	public Items unmarshalItems(File xmlFile) throws JAXBException, SAXException {
+		String xsdFilename = IJaxbItems.xsdFilename;
+		if (xmlFile == null || xsdFilename.isEmpty())
+		{
+		    logger.error("\nSchema file or Xml file not provided!");
+			return null;
+		}
+		return unmarshal(xsdFilename, xmlFile, Items.class);
+	}
 
     @Override
-    public void marshalMdProfile(String xmlFilename, MetadataProfile mdp) throws JAXBException, SAXException
+    public void marshalMdProfile(String xmlFilename, MetadataProfile mdp) throws JAXBException, SAXException, FileNotFoundException
     {
         String xsdFilename = IJaxbMetadataProfile.xsdFilename;
         if (xmlFilename.isEmpty() || xsdFilename.isEmpty())
         {
             logger.error("\nSchema file or Xml file not provided!");
+            return;
         }
         super.marshal(xsdFilename, xmlFilename, mdp);
     }
@@ -104,9 +157,31 @@ public class JaxbIngestProfile extends JaxbUtil implements IJaxbItem, IJaxbItems
         }
         return super.unmarshal(xsdFilename, xmlFilename, MetadataProfile.class);
     }
+    
+	@Override
+	public void marshalMdProfile(File xmlFile, MetadataProfile mdp) throws JAXBException, SAXException, FileNotFoundException {
+		String xsdFilename = IJaxbMetadataProfile.xsdFilename;
+	    if (xmlFile == null || xsdFilename.isEmpty())
+	    {
+	        logger.error("\nSchema file or Xml file not provided!");
+	        return;
+	    }
+		super.marshal(xsdFilename, xmlFile, mdp);
+	}
+
+	@Override
+	public MetadataProfile unmarshalMdProfile(File xmlFile) throws JAXBException, SAXException {
+		String xsdFilename = IJaxbMetadataProfile.xsdFilename;
+        if (xmlFile == null || xsdFilename.isEmpty())
+        {
+            logger.error("\nSchema file or Xml file not provided!");
+            return null;
+        }
+        return super.unmarshal(xsdFilename, xmlFile, MetadataProfile.class);
+	}
 
     @Override
-    public void marshalMdProfiles(String xmlFilename, MetadataProfiles mdps) throws JAXBException, SAXException
+    public void marshalMdProfiles(String xmlFilename, MetadataProfiles mdps) throws JAXBException, SAXException, FileNotFoundException
     {
         String xsdFilename = IJaxbMetadataProfiles.xsdFilename;
         if (xmlFilename.isEmpty() || xsdFilename.isEmpty())
@@ -127,27 +202,72 @@ public class JaxbIngestProfile extends JaxbUtil implements IJaxbItem, IJaxbItems
         }
         return super.unmarshal(xsdFilename, xmlFilename, MetadataProfiles.class);
     }
-
-    @Override
-    public void marshalIngestProfile(String xmlFile, IngestProfile ingestProfile) throws JAXBException, SAXException
-    {
-        String xsdFile = ImejiSchemaFilename.IMEJI_INGEST_PROFILE_XSDFILE;
-        if (xmlFile.isEmpty() || xsdFile.isEmpty())
+    
+	@Override
+	public void marshalMdProfiles(File xmlFile, MetadataProfiles mdps) throws JAXBException, SAXException, FileNotFoundException {
+		String xsdFilename = IJaxbMetadataProfiles.xsdFilename;
+        if (xmlFile == null || xsdFilename.isEmpty())
         {
             logger.error("\nSchema file or Xml file not provided!");
+            return;
         }
-        super.marshal(xsdFile, xmlFile, ingestProfile);
-    }
+        super.marshal(xsdFilename, xmlFile, mdps);
+	}
 
-    @Override
-    public IngestProfile unmarshalIngestProfile(String xmlFile) throws JAXBException, SAXException
-    {
-        String xsdFile = ImejiSchemaFilename.IMEJI_INGEST_PROFILE_XSDFILE;
-        if (xmlFile.isEmpty() || xsdFile.isEmpty())
+	@Override
+	public MetadataProfiles unmarshalMdProfiles(File xmlFile) throws JAXBException, SAXException {
+		String xsdFilename = IJaxbMetadataProfiles.xsdFilename;
+        if (xmlFile == null || xsdFilename.isEmpty())
         {
             logger.error("\nSchema file or Xml file not provided!");
             return null;
         }
-        return super.unmarshal(xsdFile, xmlFile, IngestProfile.class);
+        return super.unmarshal(xsdFilename, xmlFile, MetadataProfiles.class);
+	}
+
+    @Override
+    public void marshalIngestProfile(String xmlFilename, IngestProfile ingestProfile) throws JAXBException, SAXException, FileNotFoundException
+    {
+        String xsdFilename = IJaxbIngestProfile.xsdFilename;
+        if (xmlFilename.isEmpty() || xsdFilename.isEmpty())
+        {
+            logger.error("\nSchema file or Xml file not provided!");
+            return;
+        }
+        super.marshal(xsdFilename, xmlFilename, ingestProfile);
     }
+
+    @Override
+    public IngestProfile unmarshalIngestProfile(String xmlFilename) throws JAXBException, SAXException
+    {
+        String xsdFilename = IJaxbIngestProfile.xsdFilename;
+        if (xmlFilename.isEmpty() || xsdFilename.isEmpty())
+        {
+            logger.error("\nSchema file or Xml file not provided!");
+            return null;
+        }
+        return super.unmarshal(xsdFilename, xmlFilename, IngestProfile.class);
+    }
+
+	@Override
+	public void marshalIngestProfile(File xmlFile, IngestProfile ingestProfile) throws JAXBException, SAXException, FileNotFoundException {
+		String xsdFilename = IJaxbIngestProfile.xsdFilename;
+        if (xmlFile == null || xsdFilename.isEmpty())
+        {
+            logger.error("\nSchema file or Xml file not provided!");
+            return;
+        }
+        super.marshal(xsdFilename, xmlFile, ingestProfile);		
+	}
+
+	@Override
+	public IngestProfile unmarshalIngestProfile(File xmlFile) throws JAXBException, SAXException {
+		String xsdFilename = IJaxbIngestProfile.xsdFilename;
+        if (xmlFile == null || xsdFilename.isEmpty())
+        {
+            logger.error("\nSchema file or Xml file not provided!");
+            return null;
+        }
+        return super.unmarshal(xsdFilename, xmlFile, IngestProfile.class);
+	}
 }

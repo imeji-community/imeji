@@ -1,5 +1,7 @@
 package de.mpg.imeji.logic.ingest.validator;
 
+import java.io.File;
+
 import de.mpg.imeji.logic.ingest.factory.ItemSchemaFactory;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
@@ -10,7 +12,7 @@ public class ItemValidator
      * @param itemListXml
      * @param mdp
      */
-    public void valid(String itemListXml, MetadataProfile mdp)
+    public void valid(File itemListXmlFile, MetadataProfile mdp)
     {
         // This must be changed with the real schema object, according to the chosen parser
         ItemSchemaFactory isf = new ItemSchemaFactory();

@@ -1,5 +1,6 @@
 package de.mpg.imeji.logic.ingest.parser;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class ItemParser
      * @param itemListXml
      * @return
      */
-    public List<Item> parseItemList(String itemListXml)
+    public List<Item> parseItemList(File itemListXmlFile)
     {
         List<Item> itemList = new ArrayList<Item>();
         //TODO
@@ -28,7 +29,7 @@ public class ItemParser
         // Parser might use the item.xsd, that is created by ItemSchemaFactory
         
 		try {
-			itemList = new JaxbIngestProfile().unmarshalItems(itemListXml).getItem();
+			itemList = new JaxbIngestProfile().unmarshalItems(itemListXmlFile).getItem();
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -59,12 +60,12 @@ public class ItemParser
         return item;
     }
 
-    @SuppressWarnings("unused")
-	private List<String> parseItemList2ListOfItems(String itemListXml)
+	@SuppressWarnings("unused")
+	private List<String> parseItemList2ListOfItems(File itemListXmlFile)
     {
         List<String> l = new ArrayList<String>();
         
-        List<Item> items = parseItemList(itemListXml);
+        List<Item> items = parseItemList(itemListXmlFile);
        
         for (Item item : items) {
 			l.add(item.getId().toString());

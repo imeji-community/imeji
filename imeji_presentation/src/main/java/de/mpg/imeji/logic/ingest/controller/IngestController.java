@@ -1,5 +1,7 @@
 package de.mpg.imeji.logic.ingest.controller;
 
+import java.io.File;
+
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -29,16 +31,16 @@ public class IngestController
      * @param profileXml
      * @throws Exception
      */
-    public void ingest(String itemListXml, String profileXml) throws Exception
+    public void ingest(File itemListXmlFile, File profileXmlFile) throws Exception
     {
-        if (profileXml != null)
+        if (profileXmlFile != null)
         {
             IngestProfileController ipc = new IngestProfileController(user);
-            ipc.ingest(profileXml);
+            ipc.ingest(profileXmlFile);
         }
         ProfileController pc = new ProfileController(user);
         MetadataProfile mdp = pc.retrieve(collection.getProfile());
         IngestItemController iic = new IngestItemController(user, mdp);
-        iic.ingest(itemListXml);
+        iic.ingest(itemListXmlFile);
     }
 }

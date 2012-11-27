@@ -1,5 +1,7 @@
 package de.mpg.imeji.logic.ingest.factory;
 
+import java.io.FileNotFoundException;
+
 import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
@@ -23,6 +25,9 @@ public class ItemSchemaFactory
 		} catch (JAXBException e) {			
 			e.printStackTrace();
 		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	

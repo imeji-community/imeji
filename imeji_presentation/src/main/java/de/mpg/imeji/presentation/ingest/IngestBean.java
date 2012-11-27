@@ -18,8 +18,8 @@ import de.mpg.imeji.presentation.util.UrlHelper;
 
 public class IngestBean
 {
-    private String itemListXml;
-    private String profileXml;
+    private File itemListXmlFile;
+    private File profileXmlFile;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String collectionId;
     private CollectionImeji collection;
@@ -29,12 +29,12 @@ public class IngestBean
         IngestController ic = new IngestController(session.getUser(), collection);
         try
         {
-            ic.ingest(itemListXml, profileXml);
+            ic.ingest(itemListXmlFile, profileXmlFile);
         }
         catch (Exception e)
         {
-            itemListXml = null;
-            profileXml = null;
+        	itemListXmlFile = null;
+        	profileXmlFile = null;
             BeanHelper.error(session.getMessage("error_ingest"));
             BeanHelper.error(e.getMessage());
             e.printStackTrace();
@@ -47,13 +47,13 @@ public class IngestBean
     public void itemListXmlListener(UploadEvent event) throws Exception
     {
         UploadItem item = event.getUploadItem();
-        itemListXml = readFile(item.getFile());
+        itemListXmlFile = item.getFile();
     }
 
     public void profileXmlListener(UploadEvent event) throws Exception
     {
         UploadItem item = event.getUploadItem();
-        profileXml = readFile(item.getFile());
+        profileXmlFile = item.getFile();
     }
 
     public void loadCollection()
@@ -70,6 +70,7 @@ public class IngestBean
         }
     }
 
+    @Deprecated
     private String readFile(File file) throws IOException
     {
         FileReader fr = new FileReader(file);

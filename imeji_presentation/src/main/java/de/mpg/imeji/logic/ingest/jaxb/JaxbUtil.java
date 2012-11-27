@@ -18,58 +18,79 @@ import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
 
-import de.mpg.imeji.logic.ingest.jaxb.interfaces.IJaxbItem;
-
 /**
  * @author http://www.torsten-horn.de/techdocs/java-xml-jaxb.htm modified by hnguyen
  */
 public class JaxbUtil
 {
-    public static <T> T unmarshal(String xsdFile, String xmlFile, Class<T> clss) throws JAXBException, SAXException
+    public static <T> T unmarshal(String xsdFilename, String xmlFilename, Class<T> clss) throws JAXBException, SAXException
     {
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = (xsdFile == null || xsdFile.trim().length() == 0) ? null : schemaFactory
-                .newSchema(getFileURLInClasspath(xsdFile));
+        Schema schema = (xsdFilename == null || xsdFilename.trim().length() == 0) ? null : schemaFactory
+                .newSchema(getFileURLInClasspath(xsdFilename));
+        JAXBContext jaxbContext = JAXBContext.newInstance(clss.getPackage().getName());
+        return unmarshal(jaxbContext, schema, xmlFilename, clss);
+    }
+
+    public static <T> T unmarshal(JAXBContext jaxbContext, Schema schema, String xmlFilename, Class<T> clss) throws JAXBException
+    {
+        Unmarshaller unmarshaller = (Unmarshaller)jaxbContext.createUnmarshaller();
+        ((javax.xml.bind.Unmarshaller)unmarshaller).setSchema(schema);
+        return clss.cast(((javax.xml.bind.Unmarshaller)unmarshaller).unmarshal(new File(xmlFilename)));
+    }
+    
+    public static <T> T unmarshal(String xsdFilename, File xmlFile, Class<T> clss) throws JAXBException, SAXException
+    {
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = (xsdFilename == null || xsdFilename.trim().length() == 0) ? null : schemaFactory.newSchema(getFileURLInClasspath(xsdFilename));
         JAXBContext jaxbContext = JAXBContext.newInstance(clss.getPackage().getName());
         return unmarshal(jaxbContext, schema, xmlFile, clss);
     }
 
-    public static <T> T unmarshal(JAXBContext jaxbContext, Schema schema, String xmlFile, Class<T> clss)
-            throws JAXBException
+    public static <T> T unmarshal(JAXBContext jaxbContext, Schema schema, File xmlFile, Class<T> clss) throws JAXBException
     {
         Unmarshaller unmarshaller = (Unmarshaller)jaxbContext.createUnmarshaller();
         ((javax.xml.bind.Unmarshaller)unmarshaller).setSchema(schema);
-        return clss.cast(((javax.xml.bind.Unmarshaller)unmarshaller).unmarshal(new File(xmlFile)));
+        return clss.cast(((javax.xml.bind.Unmarshaller)unmarshaller).unmarshal(xmlFile));
     }
 
-    public static void marshal(String xsdFile, String xmlFile, Object jaxbElement) throws JAXBException, SAXException
+    public static void marshal(String xsdFilename, String xmlFilename, Object jaxbElement) throws JAXBException, SAXException, FileNotFoundException
     {
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = (xsdFile == null || xsdFile.trim().length() == 0) ? null : schemaFactory
-                .newSchema(getFileURLInClasspath(xsdFile));
+        Schema schema = (xsdFilename == null || xsdFilename.trim().length() == 0) ? null : schemaFactory
+                .newSchema(getFileURLInClasspath(xsdFilename));
         JAXBContext jaxbContext = JAXBContext.newInstance(jaxbElement.getClass().getPackage().getName());
-        marshal(jaxbContext, schema, xmlFile, jaxbElement);
+        marshal(jaxbContext, schema, xmlFilename, jaxbElement);
     }
 
-    public static void marshal(JAXBContext jaxbContext, Schema schema, String xmlFile, Object jaxbElement)
-            throws JAXBException
+    public static void marshal(JAXBContext jaxbContext, Schema schema, String xmlFilename, Object jaxbElement) throws JAXBException, FileNotFoundException
     {
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setSchema(schema);
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        try
-        {
-            marshaller.marshal(jaxbElement, new FileOutputStream(new File(xmlFile)));
-        }
-        catch (FileNotFoundException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        marshaller.marshal(jaxbElement, new FileOutputStream(new File(xmlFilename)));
+    }
+    
+    public static void marshal(String xsdFilename, File xmlFile, Object jaxbElement) throws JAXBException, SAXException, FileNotFoundException
+    {
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = (xsdFilename == null || xsdFilename.trim().length() == 0) ? null : schemaFactory
+                .newSchema(getFileURLInClasspath(xsdFilename));
+        JAXBContext jaxbContext = JAXBContext.newInstance(jaxbElement.getClass().getPackage().getName());
+        marshal(jaxbContext, schema, xmlFile, jaxbElement);
     }
 
-    public void toString(Object obj) throws JAXBException
+    public static void marshal(JAXBContext jaxbContext, Schema schema, File xmlFile, Object jaxbElement) throws JAXBException, FileNotFoundException
+    {
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setSchema(schema);
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.marshal(jaxbElement, new FileOutputStream(xmlFile));
+    }
+
+    public static void toString(Object obj) throws JAXBException
     {
         JAXBContext ctx = JAXBContext.newInstance(obj.getClass());
         Marshaller marshaller = ctx.createMarshaller();

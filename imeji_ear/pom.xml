@@ -187,11 +187,11 @@
 										<!-- copy over the screen config file file -->
 										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${jboss.install.dir}/server/default/conf" />
 										<!-- copy over the import schema files -->
-										<copy overwrite="true" file="${project.build.directory}/classes/vo_schema/imeji_item_schema.xsd" todir="${jboss.install.dir}/server/default/conf" />
+										<!--  <copy overwrite="true" file="${project.build.directory}/classes/vo_schema/imeji_item_schema.xsd" todir="${jboss.install.dir}/server/default/conf" />
 										<copy overwrite="true" file="${project.build.directory}/classes/vo_schema/imeji_items_schema.xsd" todir="${jboss.install.dir}/server/default/conf" />
 										<copy overwrite="true" file="${project.build.directory}/classes/vo_schema/imeji_metadataprofile_schema.xsd" todir="${jboss.install.dir}/server/default/conf" />
 										<copy overwrite="true" file="${project.build.directory}/classes/vo_schema/imeji_metadataprofiles_schema.xsd" todir="${jboss.install.dir}/server/default/conf" />
-									
+										-->
 									</tasks>
 								</configuration>
 							</execution>

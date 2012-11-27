@@ -36,7 +36,7 @@ public class JaxbIngestProfileTest {
 	
 	@Test
 	public void testUnmarshalMarshalItem() throws URISyntaxException {
-		String xmlFilename = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\item.xml";
+		String xmlFilename = "C:\\Git\\imeji\\imeji_presentation\\test\\testResources\\item.xml";
 		
 		try {
 
@@ -123,7 +123,7 @@ public class JaxbIngestProfileTest {
 	
 //	@Test
 	public void testUnmarshalMarshalMdProfile() {
-		String xmlFile = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\mdp.xml";
+		String xmlFile = "C:\\Git\\imeji\\imeji_presentation\\test\\testResources\\mdp.xml";
 		
 		try {
 

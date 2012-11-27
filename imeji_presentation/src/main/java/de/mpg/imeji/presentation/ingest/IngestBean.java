@@ -40,7 +40,7 @@ public class IngestBean
             e.printStackTrace();
         }
         BeanHelper.info(session.getMessage("success_ingest"));
-        BeanHelper.info(session.getMessage("success_ingest_images_into_collection") + " " +collection.getMetadata().getTitle());
+        BeanHelper.info(session.getMessage("success_ingest_images_into_collection") + " " + collection.getMetadata().getTitle());
         return "pretty:";
     }
 

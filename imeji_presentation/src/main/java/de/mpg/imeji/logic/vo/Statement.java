@@ -24,6 +24,7 @@ import de.mpg.j2j.misc.LocalizedString;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlRootElement(name="statement")
 @XmlType(name="statement")
+@XmlRootElement
 public class Statement implements Comparable<Statement>
 {
     // Id: creation to be changed with pretty ids

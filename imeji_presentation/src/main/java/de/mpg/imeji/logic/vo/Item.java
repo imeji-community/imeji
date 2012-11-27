@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.j2j.annotations.j2jId;

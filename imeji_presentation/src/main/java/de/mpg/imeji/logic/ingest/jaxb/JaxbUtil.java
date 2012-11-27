@@ -59,7 +59,7 @@ public class JaxbUtil {
 		}
 	}
 	
-	public void toString ( Object obj ) throws JAXBException
+	public static void toString ( Object obj ) throws JAXBException
 	{
 		JAXBContext ctx = JAXBContext.newInstance(obj.getClass());
         Marshaller marshaller = ctx.createMarshaller();

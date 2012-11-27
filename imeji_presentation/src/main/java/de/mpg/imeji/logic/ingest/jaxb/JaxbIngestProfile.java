@@ -3,8 +3,6 @@
  */
 package de.mpg.imeji.logic.ingest.jaxb;
 
-import java.util.List;
-
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;

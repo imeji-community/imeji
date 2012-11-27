@@ -42,11 +42,32 @@ public class JaxbIngestProfileTest {
 
 			JaxbIngestProfile jmp = new JaxbIngestProfile();
 			
-			Item item = jmp.unmarshalItem(xmlFilename);
+//			Item item = jmp.unmarshalItem(xmlFilename);
+			jmp.unmarshalItem(xmlFilename);
 			
-//			List<MetadataSet> mdsList = item.getMetadataSets();
-//			
-//			MetadataSet mds = mdsList.get(0);
+			Item item = new Item();
+			
+			List<MetadataSet> mdsList = item.getMetadataSets();
+			
+			MetadataSet mds = new MetadataSet();
+			
+			Collection<Metadata> mdC = new LinkedList<Metadata>();
+			
+			Text text = new Text();
+			
+			text.setId(new URI("id"));
+			text.setStatement(new URI("stsid"));
+			text.setText("a new text here");
+			
+			mdC.add(text);
+			
+			mds.setMetadata(mdC);
+			
+			mdsList.add(mds);
+			
+			item.setMetadataSets(mdsList);
+			
+			
 //			
 //			Collection<Metadata> md = mds.getMetadata();
 //			
@@ -62,7 +83,7 @@ public class JaxbIngestProfileTest {
 			
 //			jmp.marshalItem(xmlFile + "-output.xml", item);
 			
-			jmp.toString(item);
+			JaxbIngestProfile.toString(item);
 			
 		} catch (JAXBException e) {
 			
@@ -75,7 +96,7 @@ public class JaxbIngestProfileTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testUnmarshalMarshalItems() {
 		String xmlFilename = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\items.xml";
 		
@@ -100,7 +121,7 @@ public class JaxbIngestProfileTest {
 		}
 	}	
 	
-	@Test
+//	@Test
 	public void testUnmarshalMarshalMdProfile() {
 		String xmlFile = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\mdp.xml";
 		
@@ -129,7 +150,7 @@ public class JaxbIngestProfileTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testUnmarshalMarshalMdProfiles() {
 		String xmlFilename = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\mdps.xml";
 		

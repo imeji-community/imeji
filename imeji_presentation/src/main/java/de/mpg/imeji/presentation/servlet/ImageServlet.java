@@ -85,18 +85,17 @@ public class ImageServlet extends HttpServlet
                 method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
                 method.addRequestHeader("Cache-Control", "public");
                 method.setRequestHeader("Connection", "close");
-                // Execute the method with HttpClient.
-                //HttpClient client = new HttpClient();
                 
-                ProxyHelper.setProxy(client, frameworkUrl);
+                //ProxyHelper.setProxy(client, frameworkUrl);
                 client.executeMethod(method);
                 // byte[] input;
                 InputStream input;
                 if (method.getStatusCode() == 302)
                 {
+                	// release previous connection
+                	method.releaseConnection();
                     // try again
                     logger.info("try load image again");
-                   // method.releaseConnection();
                     userHandle = LoginHelper.login(
                             de.mpg.imeji.presentation.util.PropertyReader.getProperty("imeji.escidoc.user"),
                             PropertyReader.getProperty("imeji.escidoc.password"));
@@ -107,7 +106,9 @@ public class ImageServlet extends HttpServlet
                 }
                 if (method.getStatusCode() != 200)
                 {
-                    ProxyHelper.setProxy(client, PropertyReader.getProperty("escidoc.imeji.instance.url"));
+                	// release previous connection
+                	method.releaseConnection();
+                    //ProxyHelper.setProxy(client, PropertyReader.getProperty("escidoc.imeji.instance.url"));
                     method = new GetMethod(PropertyReader.getProperty("escidoc.imeji.instance.url")
                             + "/resources/icon/defaultThumb.gif");
                     client.executeMethod(method);
@@ -129,12 +130,10 @@ public class ImageServlet extends HttpServlet
                 OutputStream out = resp.getOutputStream();
                 byte[] buffer = new byte[1024];
                 int numRead;
-                long numWritten = 0;
                 while ((numRead = input.read(buffer)) != -1)
                 {
                     out.write(buffer, 0, numRead);
                     // out.flush();
-                    numWritten += numRead;
                 }
                 input.close();
                 out.flush();

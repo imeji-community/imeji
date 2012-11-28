@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +36,7 @@ public class ImageServlet extends HttpServlet
     private static final long serialVersionUID = 5502546330318540997L;
     private static Logger logger = Logger.getLogger(ImageServlet.class);
     private String userHandle;
-    private String frameworkUrl;
+    private String imejiUrl;
     private HttpClient client = null;
 
     @Override
@@ -43,7 +44,7 @@ public class ImageServlet extends HttpServlet
     {
         try
         {
-            frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.url");
+            imejiUrl = PropertyReader.getProperty("escidoc.imeji.instance.url");
             logger.info("ImageServlet initialized");
             MultiThreadedHttpConnectionManager conn = new MultiThreadedHttpConnectionManager();
             HttpConnectionManagerParams connParams = new HttpConnectionManagerParams();
@@ -75,44 +76,30 @@ public class ImageServlet extends HttpServlet
             }
             else
             {
-                method = new GetMethod(imageUrl);
-                method.setFollowRedirects(false);
-                if (userHandle == null)
-                {
-                    userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"),
-                            PropertyReader.getProperty("imeji.escidoc.password"));
-                }
-                method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
-                method.addRequestHeader("Cache-Control", "public");
-                method.setRequestHeader("Connection", "close");
-                
-                //ProxyHelper.setProxy(client, frameworkUrl);
+            	userHandle = getEscidocUserHandle();
+                method = newGetMethod(imageUrl, false, userHandle);
+                // Check if the image url is accessible via a proxy
+                ProxyHelper.setProxy(client, imageUrl);
                 client.executeMethod(method);
-                // byte[] input;
                 InputStream input;
                 if (method.getStatusCode() == 302)
                 {
+                	// image not found, try again
                 	// release previous connection
                 	method.releaseConnection();
-                    // try again
-                    logger.info("try load image again");
-                    userHandle = LoginHelper.login(
-                            de.mpg.imeji.presentation.util.PropertyReader.getProperty("imeji.escidoc.user"),
-                            PropertyReader.getProperty("imeji.escidoc.password"));
-                    method = new GetMethod(imageUrl);
-                    method.setFollowRedirects(true);
-                    method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
+                	userHandle = getNewEscidocUserHandle();
+                	method = newGetMethod(imageUrl, true, userHandle);
                     client.executeMethod(method);
                 }
                 if (method.getStatusCode() != 200)
                 {
+                	// image not found after retry, display default Thumbnail
                 	// release previous connection
                 	method.releaseConnection();
-                    //ProxyHelper.setProxy(client, PropertyReader.getProperty("escidoc.imeji.instance.url"));
-                    method = new GetMethod(PropertyReader.getProperty("escidoc.imeji.instance.url")
-                            + "/resources/icon/defaultThumb.gif");
+                	// Check if the imejiUrl is accessible via a proxy
+                    ProxyHelper.setProxy(client, imejiUrl);
+                    method = newGetMethod(imejiUrl + "/resources/icon/defaultThumb.gif", false, null);
                     client.executeMethod(method);
-                    // out = resp.getOutputStream();
                     if (method.getStatusCode() == 302)
                     {
                         throw new RuntimeException("error code " + method.getStatusCode());
@@ -133,7 +120,6 @@ public class ImageServlet extends HttpServlet
                 while ((numRead = input.read(buffer)) != -1)
                 {
                     out.write(buffer, 0, numRead);
-                    // out.flush();
                 }
                 input.close();
                 out.flush();
@@ -143,7 +129,6 @@ public class ImageServlet extends HttpServlet
         catch (Exception e)
         {
             logger.error(e.getMessage(), e);
-           
         }
         finally
         {
@@ -152,6 +137,34 @@ public class ImageServlet extends HttpServlet
         		 method.releaseConnection();
         	 }
         }
+    }
+    
+    private String getNewEscidocUserHandle() throws IOException, URISyntaxException, Exception
+    {
+    	 return LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"),
+                 PropertyReader.getProperty("imeji.escidoc.password"));
+    }
+    
+    private String getEscidocUserHandle() throws IOException, URISyntaxException, Exception
+    {
+    	 if (userHandle == null)
+    	 {
+    		return getNewEscidocUserHandle();
+    	 }
+    	 return null;
+    }
+    
+    private GetMethod newGetMethod(String url, boolean followRedirects, String userHandle) throws IOException, URISyntaxException, Exception
+    {
+    	 GetMethod method = new GetMethod(url);
+         method.setFollowRedirects(followRedirects);
+         if (userHandle != null)
+         {
+        	 method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
+         }
+         method.addRequestHeader("Cache-Control", "public");
+         method.setRequestHeader("Connection", "close");
+         return method;
     }
 
     /**

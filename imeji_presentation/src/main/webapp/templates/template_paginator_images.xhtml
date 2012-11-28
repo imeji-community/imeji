@@ -39,7 +39,7 @@
 </ui:remove>
 	<body>
 		<ui:composition template="template_paginator.xhtml">
-			<ui:define name="prelistHeaderTest">
+			<ui:define name="prelistHeader">
 			
 				<h:form id="preListForm">
 					<div id="preListHeader" class="full_area0">
@@ -269,7 +269,7 @@
 											<h:graphicImage alt="#{item.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.link}"/>
 										</h:outputLink>
 										
-										<rich:tooltip id="imgEditToolTip" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" horizontalOffset="-10" verticalOffset="-10" for="lnkPicDetailBrowse" mode="ajax" hideDelay="0" showDelay="400">
+										<rich:tooltip id="imgEditToolTip" target="imgFrame" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox" followMouse="false" verticalOffset="-10" horizontalOffset="-10" attached="false" mode="ajax" hideDelay="50" showDelay="400">
 											<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"></ui:include>
 										</rich:tooltip>
 										
@@ -281,7 +281,7 @@
 									<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null}">
 										<span class="free_area0">
 											<h:form id="selectItemForm">
-												<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
+												<h:selectBooleanCheckbox  styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
 													<a4j:ajax event="change" execute="@this" render="preListHeaderSelected, imgFrame, preListHeaderSelectedMenu"/>
 												</h:selectBooleanCheckbox>
 											</h:form>
@@ -301,28 +301,30 @@
 				</h:panelGroup>
 				
 				<!-- FACETS -->
-				<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
-					<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{ paginatorListSessionBean.navigationString != 'pretty:albumBrowse'}">
-						<a4j:repeat var="groups" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
-							<h:panelGroup layout="block" style="margin:0 0.9090em;" styleClass="free_area0">
-								<a4j:repeat var="facets" value="#{groups}" rowKeyVar="index">
-									<h:outputText value="|&#160;" rendered="#{index &gt; 0}" style="color:#486131;"/>
-									<h:outputLink value="#{facets.uri}">
-										<h:outputText value="#{facets.internationalizedLabel} (#{facets.count}) "/>
-									</h:outputLink>
-								</a4j:repeat>
+				<h:form id="facetForm">
+					<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
+						<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{ paginatorListSessionBean.navigationString != 'pretty:albumBrowse'}">
+							<a4j:repeat var="groups" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
+								<h:panelGroup layout="block" style="margin:0 0.9090em;" styleClass="free_area0">
+									<a4j:repeat var="facets" value="#{groups}" rowKeyVar="index">
+										<h:outputText value="|&#160;" rendered="#{index &gt; 0}" style="color:#486131;"/>
+										<h:outputLink value="#{facets.uri}">
+											<h:outputText value="#{facets.internationalizedLabel} (#{facets.count}) "/>
+										</h:outputLink>
+									</a4j:repeat>
+								</h:panelGroup>
+							</a4j:repeat>
+							
+							<h:panelGroup layout="block" styleClass="full_area0">
+								<a4j:status id="loadFacets" forceId="true" startText="#{lbl.facets_loading}..."/>
 							</h:panelGroup>
-						</a4j:repeat>
-						
-						<h:panelGroup layout="block" styleClass="full_area0">
-							<a4j:status id="loadFacets" forceId="true" startText="#{lbl.facets_loading}..."/>
 						</h:panelGroup>
 					</h:panelGroup>
-				</h:panelGroup>
-				
-				<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
-					<a4j:ajax event="change" render="facetGroup" listener="#{paginatorListSessionBean.initFacets}" status="loadFacets"/>
-				</h:selectBooleanCheckbox>
+					
+					<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
+						<a4j:ajax event="change" render="facetGroup" listener="#{paginatorListSessionBean.initFacets}" status="loadFacets"/>
+					</h:selectBooleanCheckbox>
+				</h:form>
 				
 				<!--
 				Reload the page if selected images don't have the correct style
@@ -348,7 +350,7 @@
 				-->
 				<script>
 					jQuery(document).ready(function() {
-						document.getElementById('formular:facetInitialized').click();
+						document.getElementById('facetForm:facetInitialized').click();
 					});
 				</script>
 			</ui:define>

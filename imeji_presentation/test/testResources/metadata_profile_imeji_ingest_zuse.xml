@@ -4,7 +4,7 @@
     <status>PENDING</status>
     <version>0</version>
     <description>This is the description field</description>
-    <id>http://zuse.zib.de/terms/metadata/88d6b292-5ed5-45a5-999c-baa752047410</id>
+    <id>http://zuse.zib.de/metadataProfile/25</id>
     <statements>
         <description>false</description>
         <id>http://zuse.zib.de/terms/statement/4cfa2c97-50bf-4b05-a446-0f0a70a36684</id>

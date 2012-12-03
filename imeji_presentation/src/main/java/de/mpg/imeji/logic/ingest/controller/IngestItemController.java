@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.ingest.mapper.ItemMapper;
 import de.mpg.imeji.logic.ingest.parser.ItemParser;
 import de.mpg.imeji.logic.ingest.validator.ItemValidator;
 import de.mpg.imeji.logic.vo.Item;
@@ -25,10 +26,16 @@ public class IngestItemController
     {
        
         ItemParser ip = new ItemParser();
-        List<Item> itemList = ip.parseItemList(itemListXmlFile);
-        ItemValidator iv = new ItemValidator();
-        iv.valid(itemListXmlFile, profile);
+        List<Item> itemList = ip.parseItemList(itemListXmlFile);        
+//        FileNameMapper fm = new FileNameMapper(itemList);
+//        itemList = fm.getMappedList
+        
+        ItemMapper im = new ItemMapper(itemList);
+        
+//        ItemValidator iv = new ItemValidator();
+//        iv.valid(itemListXmlFile, profile);
+        
         ItemController ic = new ItemController(user);
-        ic.update(itemList);
+        ic.update(im.getMappedItems());
     }
 }

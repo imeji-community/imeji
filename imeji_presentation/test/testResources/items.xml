@@ -102,10 +102,105 @@
 	    <modified>2012-11-19T13:59:48.606Z<!-- date STRING format --></modified>    
 	    <modifiedBy>imeji modify user<!-- as simple STRING --></modifiedBy>
 	    <status>PENDING<!-- possible STRING constants: WITHDRAWN | RELEASED | PENDING --></status>
-	    <version>1<!-- a version number as an INTEGER--></version>
+	    <version>2<!-- a version number as an INTEGER--></version>
 	    <versionDate>2012-11-19T13:59:35.606Z<!-- this date STRING format--></versionDate>
 		<collection>http://demo.imeji.org/collection/452<!-- URL String format to the collection--></collection>
-		<filename>the filename<!-- as simple STRING --></filename>
+		<filename>the filename.jpg<!-- as simple STRING --></filename>
+		<fullImageUrl>http://demo.imeji.org/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A2024/components/component/escidoc%3A2021/content<!-- URL String format to the image [from escidoc]--></fullImageUrl>
+		<fulltextIndex>Jellyfish.jpg source2 http://demo.imeji.org/collection/452/item/455 Hans-Knöll-Straße, 07745 Jena, Germany lat:50.9102864 long:11.568265 10.0 2012-10-12<!-- all the meta data information as simple String--></fulltextIndex>
+		<id>http://demo.imeji.org/item/455<!-- the url id for this item --></id>
+		<metadataSets>
+	    	<id>http://demo.imeji.org/item/454/metadataSet/0<!-- the url id for this meta data set --></id>
+	    	<metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text"><!-- specified the meta data TEXT type: http://imeji.org/terms/text -->
+	            <id>http://imeji.org/terms/metadata/05af55ea-ff5d-4897-b113-7f2e48f2aa73<!-- URL String format for this meta data id --></id>
+	            <pos>0<!-- the position as an INTEGER number --></pos>
+	            <statement>http://imeji.org/statement/c082c70c-af72-437c-95d0-6fd257f0e3bc<!-- the statement id as an URL String format --></statement>
+	            <text>a text string<!-- the value of this statement field as STRING--></text>
+	        </metadata>
+	        <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="number"><!-- specified the meta data NUMBER type: http://imeji.org/terms/number -->
+	            <id>http://imeji.org/terms/metadata/077ef38d-c36c-4f3e-8e99-54299e7f45b5<!-- URL String format for this meta data id --></id>
+	            <pos>1<!-- the position as an INTEGER number --></pos>
+	            <statement>http://imeji.org/statement/57b31741-e946-4726-87fa-6e3279403341<!-- the statement id as an URL String format --></statement>
+	            <number>1.0<!-- the value of this statement field as DOUBLE --></number>
+	        </metadata>
+	        <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="conePerson"><!-- specified the meta data CONEPERSON type: http://imeji.org/terms/conePerson -->
+	            <id>http://imeji.org/terms/metadata/9d161f7e-d795-4118-9938-dd979928c3db<!-- URL String format for this meta data id --></id>
+	            <pos>2<!-- the position as an INTEGER number --></pos>
+	            <statement>http://imeji.org/statement/5a4b0a85-5e3c-4f78-ad45-6e44b969f276<!-- the statement id as an URL String format --></statement>
+	            <coneId>this is the cone Id<!-- the id as a String --></coneId>
+	            <person>
+	            	<alternativeName>an alternative name<!-- as a simple String --></alternativeName>
+	            	<completeName>the complete name<!-- as a simple String --></completeName>
+	            	<familyName>the family name<!-- as a simple String --></familyName>
+	            	<givenName>the given name<!-- as a simple String --></givenName>
+	            	<id>http://imeji.org/person/bb5b2c32-8c3d-4ad1-bb08-0e75d09300cf<!-- URL String format for this meta data id --></id>
+	            	<identifier>an identifier<!-- as a simple String --></identifier>
+					<organizations>
+		    			<city>Berlin<!-- as a simple String for a city --></city>
+		    			<country>Germany<!-- as a simple String for a country --></country>
+		    			<description>the description text<!-- as a simple String --></description>
+		    			<id>an id for the organization unit<!-- URL String format for this attribute id --></id>
+		    			<identifier>an identifier<!-- as a simple String --></identifier>
+		    			<name>name of the organization<!-- as a simple String --></name>
+		    			<pos>0<!-- the position as an INTEGER number --></pos>
+		    		</organizations>
+	            	<pos>0<!-- the position as an INTEGER number --></pos>
+	            	<role>user role<!-- a simple STRING for the role --></role>
+	            </person>
+	        </metadata>
+	        <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="geolocation"><!-- specified the meta data GEOLOCATION type: http://imeji.org/terms/geolocation -->
+	            <id>http://imeji.org/terms/metadata/04565d29-3a0f-42a7-a720-93284cfacfb3<!-- URL String format for this meta data id --></id>
+	            <pos>3<!-- the position as an INTEGER number --></pos>
+	            <statement>http://imeji.org/statement/1575dd8f-0d63-454b-a7d6-5182c59ab54a<!-- the statement id as an URL String format --></statement>
+	           	<latitude>52.506844<!-- a number as DOUBLE --></latitude>
+	           	<longitude>52.506844<!-- a number as DOUBLE --></longitude>
+	           	<name>Berlin<!-- a simple STRING for city name --></name>
+	        </metadata>
+	        <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="license"><!-- specified the meta data LICENSE type: http://imeji.org/terms/license -->
+	            <id>http://imeji.org/terms/metadata/a0394c09-6f85-46c9-a18f-eb574558ab28<!-- URL String format for this meta data id --></id>
+	            <pos>5<!-- the position as an INTEGER number --></pos>
+	            <statement>http://imeji.org/statement/38657c49-9ae0-4d5d-b245-bc59f1bb4284<!-- the statement id as an URL String format --></statement>
+	            <license>license<!-- URL String format for this license value --></license>
+	        </metadata>
+	        <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="date"><!-- specified the meta data DATE type: http://imeji.org/terms/date -->
+	            <id>http://imeji.org/terms/metadata/c4fa366a-aa49-4cea-a4bb-a81a62aa24e9<!-- URL String format for this meta data id --></id>
+	            <pos>6<!-- the position as an INTEGER number --></pos>
+	            <statement>http://imeji.org/statement/3af55b6f-7318-4940-8ac6-0ed74537b002<!-- the statement id as an URL String format --></statement>
+	            <date>2012-11-19<!-- a STRING with the date format --></date>
+	            <time>1353279600000<!-- a number as LONG --></time>
+	        </metadata>
+	        <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="publication"><!-- specified the meta data PUBLICATION type: http://imeji.org/terms/publication -->
+	            <id>http://imeji.org/terms/metadata/9d0508e9-a20f-45d0-a9c1-bdd4e407c533<!-- URL String format for this meta data id --></id>
+	            <pos>8<!-- the position as an INTEGER number --></pos>
+	            <statement>http://imeji.org/statement/4d0d08e9-a20f-4540-a9c1-edd4e407c53a<!-- the statement id as an URL String format --></statement>
+	            <citation>citation<!-- name of the citation as simple STRING --></citation>
+	            <exportFormat>APA<!-- export format as STRING with following possibilty: APA | AJP | JUS --></exportFormat>
+	            <uri>an uri</uri>
+	        </metadata>
+	        <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="link"><!-- specified the meta data LINK type: http://imeji.org/terms/link -->
+	            <id>http://imeji.org/terms/metadata/2d0508e9-920f-45d0-acc1-bdd4e407c533<!-- URL String format for this meta data id --></id>
+	            <pos>9<!-- the position as an INTEGER number --></pos>
+	            <statement>http://imeji.org/statement/1a07a6d1-8eba-497a-a72f-fb0969b40ec4<!-- the statement id as an URL String format --></statement>
+	            <label>label name<!-- the label name for the url as simple STRING --></label>
+	            <uri>http://dev-faces.mpdl.mpg.de/collection/15/item/21<!-- any url as url STRING format --></uri>
+	        </metadata>       
+	    	<profile>profile url</profile>
+	    </metadataSets>    
+		<thumbnailImageUrl>http://latest-coreservice.mpdl.mpg.de:8080/ir/item/escidoc:951/components/component/escidoc:950/content<!-- URL String format to the image --></thumbnailImageUrl>
+		<visibility>PUBLIC<!-- the value for the visibility as STRING, possible values: PRIVATE | PUBLIC --></visibility>
+		<webImageUrl>http://latest-coreservice.mpdl.mpg.de:8080/ir/item/escidoc:951/components/component/escidoc:949/content<!-- URL String format to the image --></webImageUrl>
+	</item>
+	<item>
+		<created>2012-11-19T13:59:35.606Z<!-- date STRING format --></created>
+	    <createdBy>imeji create user<!-- as simple STRING--></createdBy>
+	    <discardComment>this is the field for the discard comment<!-- as simple STRING--></discardComment>
+	    <modified>2012-11-19T13:59:48.606Z<!-- date STRING format --></modified>    
+	    <modifiedBy>imeji modify user<!-- as simple STRING --></modifiedBy>
+	    <status>PENDING<!-- possible STRING constants: WITHDRAWN | RELEASED | PENDING --></status>
+	    <version>3<!-- a version number as an INTEGER--></version>
+	    <versionDate>2012-11-19T13:59:35.606Z<!-- this date STRING format--></versionDate>
+		<collection>http://demo.imeji.org/collection/452<!-- URL String format to the collection--></collection>
+		<filename>the filename.png<!-- as simple STRING --></filename>
 		<fullImageUrl>http://demo.imeji.org/coreserviceimage?imageUrl=http%3A//latest-coreservice.mpdl.mpg.de%3A8080/ir/item/escidoc%3A2024/components/component/escidoc%3A2021/content<!-- URL String format to the image [from escidoc]--></fullImageUrl>
 		<fulltextIndex>Jellyfish.jpg source2 http://demo.imeji.org/collection/452/item/455 Hans-Knöll-Straße, 07745 Jena, Germany lat:50.9102864 long:11.568265 10.0 2012-10-12<!-- all the meta data information as simple String--></fulltextIndex>
 		<id>http://demo.imeji.org/item/455<!-- the url id for this item --></id>

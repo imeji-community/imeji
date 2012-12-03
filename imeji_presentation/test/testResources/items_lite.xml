@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<items>
+	<item>
+	    <version>1</version>
+		<filename>Hydrangeas.jpg</filename>
+		<metadataSets>
+	    	<metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text"><!-- specified the meta data TEXT type: http://imeji.org/terms/text -->
+	            <pos>0<!-- the position as an INTEGER number --></pos>
+	            <statement>http://imeji.org/statement/6387dcee-0483-461c-aec7-a234d5085f66</statement>
+	            <text>the content of the title</text>
+	        </metadata>
+	        <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text"><!-- specified the meta data TEXT type: http://imeji.org/terms/text -->
+	            <pos>1<!-- the position as an INTEGER number --></pos>
+	            <statement>http://imeji.org/statement/aa0e2e65-8a19-479a-a4cb-4cf8b25806ea</statement>
+	            <text>the content of the description</text>
+	        </metadata>
+	    	<profile>http://zuse.zib.de/metadataProfile/34</profile>
+	    </metadataSets>		
+	</item>
+</items>
+	    

@@ -93,7 +93,7 @@
 										
 											<a4j:repeat id="labels" var="label" value="#{statement.labels}" rowKeyVar="labelPosition">
 												<h:panelGroup styleClass="free_area0 xSmall_marginRIncl">
-													<h:inputText id="inputLabel" value="#{label.string}" styleClass="xLarge_txtInput"/>
+													<h:inputText id="inputLabel" value="#{label.value}" styleClass="xLarge_txtInput"/>
 													<h:panelGroup rendered="#{statement.labelsCount > 1}">
 														<a4j:commandButton styleClass="min_imgBtn remove" shortDesc="#{lbl.label_remove}"  action="#{FormularBean.removeLabel}"  reRender="ajaxArea">
 															<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>

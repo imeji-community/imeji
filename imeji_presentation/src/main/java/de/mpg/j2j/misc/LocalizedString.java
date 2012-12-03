@@ -1,8 +1,10 @@
 package de.mpg.j2j.misc;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(name="LocalizedString")
+@XmlRootElement(name="LocalizedString")
 public class LocalizedString
 {
     private String value;

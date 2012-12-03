@@ -3,6 +3,8 @@ package testing;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -11,13 +13,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
 import de.mpg.imeji.logic.ingest.mapper.ItemMapper;
 import de.mpg.imeji.logic.ingest.mapper.ProfileMapper;
 import de.mpg.imeji.logic.ingest.parser.ItemParser;
 import de.mpg.imeji.logic.ingest.parser.ProfileParser;
-import de.mpg.imeji.logic.ingest.validator.ItemValidator;
 import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.ingest.vo.MetadataProfiles;
 import de.mpg.imeji.logic.vo.Item;
@@ -41,7 +41,7 @@ public class IngestTest {
 			
 			ItemMapper im = new ItemMapper(items.getItem());
 			
-			items.setItem(im.getMappedItems());
+			items.setItem(new ArrayList<Item>(im.getMappedItemObjects()));
 			
 			JaxbIngestProfile.toString(items);
 
@@ -65,10 +65,10 @@ public class IngestTest {
         List<Item> itemList = ip.parseItemList(new File(xmlFilename));
         
         ItemMapper im = new ItemMapper(itemList);
-        List<Item> mappedItemList = im.getMappedItems();
+        Collection<Item> mappedItemList = im.getMappedItemObjects();
         
         Items items = new Items();
-        items.setItem(mappedItemList);
+        items.setItem(new ArrayList<Item>(mappedItemList));
         try {
 			JaxbIngestProfile.toString(items);
 		} catch (JAXBException e) {
@@ -107,10 +107,10 @@ public class IngestTest {
         List<MetadataProfile> profileList = pp.parseList(new File(xmlFilename));
         
         ProfileMapper pm = new ProfileMapper(profileList);
-        List<MetadataProfile> mappedItemList = pm.getMappedProfiles();
+        Collection<MetadataProfile> mappedItemList = pm.getMappedProfileObjects();
         
         MetadataProfiles mdps = new MetadataProfiles();
-        mdps.setMetadataProfile(mappedItemList);
+        mdps.setMetadataProfile(new ArrayList<MetadataProfile>(mappedItemList));
         try {
 			JaxbIngestProfile.toString(mdps);
 		} catch (JAXBException e) {

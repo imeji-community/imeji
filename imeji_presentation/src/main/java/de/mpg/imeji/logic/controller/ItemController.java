@@ -105,6 +105,18 @@ public class ItemController extends ImejiController
         }
         imejiBean2RDF.update(imBeans, user);
     }
+    
+    public void update4Ingest(Collection<Item> items) throws Exception
+    {
+    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+        List<Object> imBeans = new ArrayList<Object>();
+        for (Item item : items)
+        {
+            writeUpdateProperties(item, user);
+            imBeans.add(createFulltextForMetadata(item));
+        }
+        imejiBean2RDF.update(imBeans, user);
+    }
 
     private Item createFulltextForMetadata(Item item)
     {

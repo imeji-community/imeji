@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.ingest.mapper;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -189,12 +190,24 @@ public class ItemMapper {
 //	}
 
 	
-	private List<Item> getUniqueFilenameListsAsItemList() {				
-		return new ArrayList<Item>(this.dupItems.hashTableFilename.values());
+//	private List<Item> getUniqueFilenameListsAsItemList() {				
+//		return new ArrayList<Item>(this.dupItems.hashTableFilename.values());
+//	}
+	
+	private Collection<Item> getUniqueFilenameListsAsItemList() {				
+		return this.dupItems.hashTableFilename.values();
 	}
 	
-	public List<Item> getMappedItems() {
+	private Collection<String> getUniqueFilenameListsAsStringList() {				
+		return this.dupItems.hashTableFilename.keySet();
+	}
+	
+	public Collection<Item> getMappedItemObjects() {
 		return this.getUniqueFilenameListsAsItemList();
+	}
+	
+	public Collection<String> getMappedItemKeys() {
+		return this.getUniqueFilenameListsAsStringList();
 	}
 
 }

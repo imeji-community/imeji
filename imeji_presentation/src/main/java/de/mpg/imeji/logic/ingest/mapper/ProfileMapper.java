@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.ingest.mapper;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -94,12 +95,20 @@ public class ProfileMapper {
 		return !this.getDuplicateFilenames().isEmpty();
 	}
 
-	private List<MetadataProfile> getUniqueFilenameListsAsProfileList() {				
-		return new ArrayList<MetadataProfile>(this.dupProfiles.hashTableFilename.values());
+	private Collection<MetadataProfile> getUniqueFilenameListsAsProfileList() {				
+		return this.dupProfiles.hashTableFilename.values();
 	}
 	
-	public List<MetadataProfile> getMappedProfiles() {
+	private Collection<String> getUniqueFilenameListsAsStringList() {				
+		return this.dupProfiles.hashTableFilename.keySet();
+	}
+	
+	public Collection<MetadataProfile> getMappedProfileObjects() {
 		return this.getUniqueFilenameListsAsProfileList();
+	}
+	
+	public Collection<String> getMappedProfileKeys() {
+		return this.getUniqueFilenameListsAsStringList();
 	}
 
 }

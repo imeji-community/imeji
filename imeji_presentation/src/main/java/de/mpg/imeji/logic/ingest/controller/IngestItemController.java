@@ -36,6 +36,6 @@ public class IngestItemController
 //        iv.valid(itemListXmlFile, profile);
         
         ItemController ic = new ItemController(user);
-        ic.update(im.getMappedItems());
+        ic.update(im.getMappedItemObjects());
     }
 }

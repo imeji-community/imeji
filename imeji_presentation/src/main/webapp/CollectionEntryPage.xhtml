@@ -66,6 +66,7 @@
 			
 			<ui:define name="actionsMenu">
 				<h:panelGroup layout="block" styleClass="free_area0 sub action" rendered="#{ViewCollectionBean.visible}">
+					<h:form>
 					<rich:togglePanel id="sharePanel" activeItem="#{SharingBean.status}" switchType="ajax"  rendered="#{ViewCollectionBean.editable}">
 						 <rich:togglePanelItem name="closed">
 						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">					            
@@ -108,6 +109,7 @@
 								</h:panelGrid>
 						</rich:togglePanelItem>
 					</rich:togglePanel>
+					</h:form>
 				</h:panelGroup>
 			</ui:define>
 			

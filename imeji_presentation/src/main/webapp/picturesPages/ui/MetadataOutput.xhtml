@@ -50,23 +50,17 @@
 			<h:outputLink value="#{md.coneId}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId != null}" >
 				<h:panelGroup styleClass="free_area0 endline" rendered="#{md.person.familyName != null}">
 				<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
-				<h:panelGroup rendered="#{not empty md.person.organizations}">
-					<h:outputText value="("/>
-					<a4j:repeat var="orga" value="#{md.person.organizations}">
-						<h:outputText value="#{orga.name}"/>
-					</a4j:repeat>
-					<h:outputText value=")"/>
+				<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
+					<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
+					<h:outputText value="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''"/>
 				</h:panelGroup>
 			</h:panelGroup>
 			</h:outputLink>
 			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId == null and md.person.familyName != null}">
 				<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
-				<h:panelGroup rendered="#{not empty md.person.organizations}">
-					<h:outputText value="("/>
-					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}">
-						<h:outputText value="#{orga.name}"/>
-					</a4j:repeat>
-					<h:outputText value=")"/>
+				<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
+					<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
+					<h:outputText value="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''"/>
 				</h:panelGroup>
 			</h:panelGroup>
 			

@@ -23,10 +23,10 @@
 		 -->
 		<script>
 			jQuery(document).ready(function() {
-				document.getElementById('formular:editInitialized').click();
+				#{rich:element('editInitialized')}.click();
 			});
 		</script>			
-	
+		<h:form id="batchEditForm">
 		<h:selectBooleanCheckbox id="editInitialized" value="false" style="visibility:hidden">
 			<a4j:ajax event="change" render="ajaxContent" listener="#{EditImageMetadataBean.init}" status="initEditPage" />
 		</h:selectBooleanCheckbox>
@@ -56,7 +56,7 @@
 					<h:panelGroup rendered="#{EditImageMetadataBean.lockedImages > 0}">
 						<h3><h:outputText value="#{EditImageMetadataBean.lockedImages} #{msg.error_editor_images_locked}!"/></h3>
 					</h:panelGroup>
-					<!-- MAIN FORMULAR -->
+					<!-- MAIN FORM -->
 					
 					<h:panelGroup styleClass="half_area0_p0 huge_marginLExcl">
 						<h:outputLabel for="selStatement" styleClass="full_area0_p0" value="#{lbl.metadata_type_select}"/>
@@ -179,9 +179,11 @@
 								<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
 							</h:commandButton>
 						</h:panelGroup>
-					</h:panelGroup>		        	
+					</h:panelGroup>		
+					  	
 				</h:panelGroup>
-			</a4j:outputPanel> 
+			</a4j:outputPanel>
+			
 		</h:panelGroup>
 		
 		<rich:popupPanel id="panelSaveWait" width="390" height="100" style="background-color:#434343" domElementAttachment="form">
@@ -191,7 +193,7 @@
 	        </h3>
 			</div>
 		</rich:popupPanel>
-		
+		</h:form>      
 	</ui:define>
 </body>
 </ui:composition>

@@ -6,6 +6,7 @@ package de.mpg.imeji.logic.ingest.jaxb;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.net.URL;
 
 import javax.xml.XMLConstants;
@@ -93,6 +94,14 @@ public class JaxbUtil
         Marshaller marshaller = ctx.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         marshaller.marshal(obj, System.out);
+    }
+    
+    public static void writeToOutputStream(Object obj, OutputStream os) throws JAXBException
+    {
+        JAXBContext ctx = JAXBContext.newInstance(obj.getClass());
+        Marshaller marshaller = ctx.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.marshal(obj, os);
     }
 
     public static URL getFileURLInClasspath(String path)

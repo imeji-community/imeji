@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
 <metadataProfile>
-    <version>1</version>
-    <id>http://zuse.zib.de/metadataProfile/34</id>
-    <statements>
-        <description>false<!-- whether this statement is used for caption or not, use boolean type: TRUE or FALSE --></description>
-        <labels><!-- the label for this statement, multiple labels for multiple language -->
-            <lang>en<!-- the language code, e.g.: en, de, ja, es --></lang>
+	<created>2012-12-04T13:26:48.599Z</created>
+	<createdBy>http://zuse.zib.de/user/zusearchiv%40zib.de</createdBy>
+	<discardComment/>
+	<modified>2012-12-04T13:26:48.599Z</modified>
+	<modifiedBy>http://zuse.zib.de/user/zusearchiv%40zib.de</modifiedBy>
+	<status>PENDING</status>
+	<version>0</version>
+	<description/>
+	<id>http://zuse.zib.de/metadataProfile/0</id>
+	<statements>
+        <description>false</description>
+        <labels>
+            <lang>en</lang>
             <value>Tilte<!-- a STRING for the label name --></value>
         </labels>
         <labels>
-            <lang>de<!-- the language code, e.g.: en, de, ja, es --></lang>
-            <value>Titel<!-- a STRING for the label name --></value>
+            <lang>de</lang>
+            <value>Titel</value>
         </labels>
         <pos>0</pos>
-        <preview>true<!-- whether the statement will be previewed or not, use boolean type: TRUE or FALSE --></preview>
-       	<type>http://imeji.org/terms/metadata#text<!-- URL String format type, specified by imeji --></type>
+        <preview>true</preview>
+       	<type>http://imeji.org/terms/metadata#text</type>
     </statements>
     <statements>
-        <description>false<!-- whether this statement is used for caption or not, use boolean type: TRUE or FALSE --></description>
-        <labels><!-- the label for this statement, multiple labels for multiple language -->
-            <lang>en<!-- the language code, e.g.: en, de, ja, es --></lang>
-            <value>Description<!-- a STRING for the label name --></value>
+        <description>false</description>
+        <labels>
+            <lang>en</lang>
+            <value>Description</value>
         </labels>
         <labels>
-            <lang>de<!-- the language code, e.g.: en, de, ja, es --></lang>
-            <value>Beschreibung<!-- a STRING for the label name --></value>
+            <lang>de</lang>
+            <value>Beschreibung</value>
         </labels>
         <pos>1</pos>
-        <preview>true<!-- whether the statement will be previewed or not, use boolean type: TRUE or FALSE --></preview>
-       	<type>http://imeji.org/terms/metadata#text<!-- URL String format type, specified by imeji --></type>
+        <preview>true</preview>
+       	<type>http://imeji.org/terms/metadata#text</type>
     </statements>
-    <title>the title for the meta data profile<!-- simple STRING for the title of the meta data profile --></title>
+	<title>Test collection 1</title>
 </metadataProfile>

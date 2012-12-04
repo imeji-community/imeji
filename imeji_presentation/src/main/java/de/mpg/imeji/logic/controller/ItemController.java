@@ -19,6 +19,8 @@ import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -97,18 +99,6 @@ public class ItemController extends ImejiController
     public void update(Collection<Item> items) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-        List<Object> imBeans = new ArrayList<Object>();
-        for (Item item : items)
-        {
-            writeUpdateProperties(item, user);
-            imBeans.add(createFulltextForMetadata(item));
-        }
-        imejiBean2RDF.update(imBeans, user);
-    }
-    
-    public void update4Ingest(Collection<Item> items) throws Exception
-    {
-    	imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
         List<Object> imBeans = new ArrayList<Object>();
         for (Item item : items)
         {
@@ -234,6 +224,18 @@ public class ItemController extends ImejiController
             throw new RuntimeException("Error loading images:", e);
         }
     }
+    
+	public Collection<Item> retrieveAllFromCollection(CollectionImeji collection) {
+		Collection<Item> allItems = this.retrieveAll();
+		Collection<Item> allItemsOfCollection = new ArrayList<Item>();
+
+		for (Item item : allItems) {
+			if(item.getCollection().equals(collection.getId())) {
+				allItemsOfCollection.add(item);
+			}
+		}		
+		return allItemsOfCollection;
+	}
 
     /**
      * Increase performance by restricting grants to the only grants needed

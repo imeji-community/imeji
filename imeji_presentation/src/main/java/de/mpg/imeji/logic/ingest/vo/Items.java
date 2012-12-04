@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.ingest.vo;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,6 +21,10 @@ public class Items {
 	
 	public Items() {
 		
+	}
+
+	public Items(Collection<Item> items) {
+		this.setItem((List<Item>) items);
 	}
 
 	/**

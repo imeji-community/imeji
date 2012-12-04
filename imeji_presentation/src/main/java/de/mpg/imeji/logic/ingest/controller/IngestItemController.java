@@ -6,7 +6,6 @@ import java.util.List;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.ingest.mapper.ItemMapper;
 import de.mpg.imeji.logic.ingest.parser.ItemParser;
-import de.mpg.imeji.logic.ingest.validator.ItemValidator;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
@@ -36,6 +35,7 @@ public class IngestItemController
 //        iv.valid(itemListXmlFile, profile);
         
         ItemController ic = new ItemController(user);
+        
         ic.update(im.getMappedItemObjects());
     }
 }

@@ -224,7 +224,7 @@
 												<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.album.status == 'PENDING'}"/>
 												<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.album.status == 'RELEASED'}"/>
 												<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'PENDING'}">
-													<h:outputText value="#{lbl.private}"/>
+													<h:outputText value="lbl.['private']"/>
 												</h:outputLabel>
 												<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'RELEASED'}">
 													<h:outputText value="#{lbl.published}"/>

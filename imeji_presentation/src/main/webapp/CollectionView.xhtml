@@ -92,7 +92,7 @@
 											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
 											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 											<h:panelGroup layout="block" styleClass="medium_area0">
-												<h:outputText value="#{lbl.private}" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
+												<h:outputText value="lbl.['private']" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
 												<h:outputText value="#{lbl.published}" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
 												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 											</h:panelGroup>

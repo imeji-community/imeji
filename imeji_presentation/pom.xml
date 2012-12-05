@@ -22,8 +22,10 @@
              so that generated project uses correct version of richfaces.
          -->
         <org.richfaces.bom.version>4.2.2.Final</org.richfaces.bom.version>
+        <!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
+        <project.warName>imeji</project.warName>
     </properties>
-
+	
     <build>
         <plugins>
             <plugin>
@@ -32,6 +34,17 @@
                 <version>3.0</version>
             </plugin>
             <!--   -->
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<!-- Exclude dlc.properties from war file, because it should be copied 
+						to tomcat conf directory -->
+					<packagingExcludes>**/imeji.properties</packagingExcludes>
+					<warName>${project.warName}</warName>
+				</configuration>
+			</plugin>
              
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -176,5 +189,6 @@
         </dependency>
        <!-- richfaces 4 libs ends-->
     </dependencies>
+    
     
 </project>

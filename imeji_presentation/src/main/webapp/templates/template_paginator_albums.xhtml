@@ -144,7 +144,7 @@
 										</h:commandLink>
 										&#160;
 									</th>
-										<th class="free_area0">
+									<th class="free_area0">
 							      		<span class="seperator"></span>
 							      		<h:commandLink id="lnkNameSort" styleClass="free_area0_p8 itemHeadline" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'CONTAINER_METADATA_TITLE'}">
 											<f:setPropertyActionListener value="CONTAINER_METADATA_TITLE" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
@@ -191,10 +191,13 @@
 											<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
 											<h:outputText value="#{lbl.last_modified}"/>
 										</h:commandLink>
-									<h:outputText styleClass="free_area0_p8" value="#{lbl.active}"/>
-							  	</th>
-							</tr>
-						</thead>
+									</th>
+									<th class="medium_area0">
+										<span class="seperator"></span>
+										<h:outputText styleClass="free_area0_p8" value="#{lbl.active}"/>
+									</th>
+								</tr>
+							</thead>
 							
 							
 							<tbody style="text-align: left; vertical-align:top;">

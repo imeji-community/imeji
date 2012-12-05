@@ -6,16 +6,13 @@ package de.mpg.imeji.logic.vo;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -26,7 +23,7 @@ import de.mpg.j2j.annotations.j2jResource;
 public class MetadataSet
 {
     @j2jList("http://imeji.org/terms/metadata")
-    private Collection<Metadata> metadata = new LinkedList<Metadata>();
+    private Collection<Metadata> metadata = new ArrayList<Metadata>();
     @j2jResource("http://imeji.org/terms/mdprofile")
     private URI profile;
     private URI id;

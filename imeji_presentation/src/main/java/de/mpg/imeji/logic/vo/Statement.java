@@ -4,8 +4,8 @@
 package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,13 +30,13 @@ public class Statement implements Comparable<Statement>
     private URI type = URI.create("http://imeji.org/terms/metadata#text");
     
     @j2jList("http://www.w3.org/2000/01/rdf-schema#label")    
-    private Collection<LocalizedString> labels = new LinkedList<LocalizedString>();
+    private Collection<LocalizedString> labels = new ArrayList<LocalizedString>();
     
     @j2jResource("http://purl.org/dc/dcam/VocabularyEncodingScheme")    
     private URI vocabulary;
     
     @j2jList("http://imeji.org/terms/literalConstraint")    
-    private Collection<String> literalConstraints = new LinkedList<String>();
+    private Collection<String> literalConstraints = new ArrayList<String>();
     
     @j2jLiteral("http://imeji.org/terms/isDescription")    
     private boolean isDescription = false;

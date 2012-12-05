@@ -4,12 +4,10 @@
 package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.UUID;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -39,7 +37,7 @@ public class Person
     private URI role;
     private int pos = 0;
     @j2jList("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
-    protected Collection<Organization> organizations = new LinkedList<Organization>();
+    protected Collection<Organization> organizations = new ArrayList<Organization>();
 
     public Person()
     {

@@ -21,7 +21,6 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/metadata")

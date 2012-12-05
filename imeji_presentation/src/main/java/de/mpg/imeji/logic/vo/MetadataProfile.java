@@ -6,6 +6,7 @@
 package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -33,7 +34,7 @@ public class MetadataProfile extends Properties
     @j2jLiteral("http://purl.org/dc/elements/1.1/description")
     private String description;
     @j2jList("http://imeji.org/terms/statement")
-    private Collection<Statement> statements = new LinkedList<Statement>();
+    private Collection<Statement> statements = new ArrayList<Statement>();
     
     public URI getId()
     {

@@ -43,8 +43,6 @@ public class IngestItemsExport extends Export
     	CollectionImeji collection = ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getCollection();
         
     	ItemController ic = new ItemController(session.getUser());
-//    	Collection<Item> itemList = ic.retrieveAll();
-    	int s = ic.searchImagesInContainer(collection.getId(), null, null, -1, 0).getResults().size();
     	Collection<Item> itemList = ic.loadItems(ic.searchImagesInContainer(collection.getId(), null, null, -1, 0).getResults(), -1,0);
         Items items = new Items(itemList);
         

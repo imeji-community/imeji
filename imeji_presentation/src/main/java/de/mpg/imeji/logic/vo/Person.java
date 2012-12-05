@@ -4,6 +4,7 @@
 package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -39,7 +40,7 @@ public class Person
     private URI role;
     private int pos = 0;
     @j2jList("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
-    protected Collection<Organization> organizations = new LinkedList<Organization>();
+    protected Collection<Organization> organizations = new ArrayList<Organization>();
 
     public Person()
     {

@@ -3,9 +3,12 @@ package de.mpg.imeji.logic.ingest.controller;
 import java.io.File;
 import java.util.List;
 
+import de.escidoc.core.client.exceptions.application.invalid.InvalidItemStatusException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.ingest.mapper.ItemMapper;
 import de.mpg.imeji.logic.ingest.parser.ItemParser;
+import de.mpg.imeji.logic.ingest.validator.ItemContentValidator;
+import de.mpg.imeji.logic.ingest.validator.ItemValidator;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
@@ -26,13 +29,17 @@ public class IngestItemController
        
         ItemParser ip = new ItemParser();
         List<Item> itemList = ip.parseItemList(itemListXmlFile);        
-//        FileNameMapper fm = new FileNameMapper(itemList);
-//        itemList = fm.getMappedList
+       
+        ItemContentValidator iv = new ItemContentValidator();
+        
+        
+        	iv.validate(itemList);
+        
+        
         
         ItemMapper im = new ItemMapper(itemList);
         
-//        ItemValidator iv = new ItemValidator();
-//        iv.valid(itemListXmlFile, profile);
+                
         
         ItemController ic = new ItemController(user);
         

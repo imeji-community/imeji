@@ -43,12 +43,12 @@ public class RDFImageExport extends RDFExport
     @Override
     protected String openTagResource(String uri)
     {
-        return "<imeji:image rdf:about=\"" + uri + "\">";
+        return "<imeji:item rdf:about=\"" + uri + "\">";
     }
 
     @Override
     protected String closeTagResource()
     {
-        return "</imeji:image>";
+        return "</imeji:item>";
     }
 }

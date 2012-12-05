@@ -224,18 +224,6 @@ public class ItemController extends ImejiController
             throw new RuntimeException("Error loading images:", e);
         }
     }
-    
-	public Collection<Item> retrieveAllFromCollection(CollectionImeji collection) {
-		Collection<Item> allItems = this.retrieveAll();
-		Collection<Item> allItemsOfCollection = new ArrayList<Item>();
-
-		for (Item item : allItems) {
-			if(item.getCollection().equals(collection.getId())) {
-				allItemsOfCollection.add(item);
-			}
-		}		
-		return allItemsOfCollection;
-	}
 
     /**
      * Increase performance by restricting grants to the only grants needed

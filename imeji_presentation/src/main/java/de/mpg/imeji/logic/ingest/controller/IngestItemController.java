@@ -33,7 +33,7 @@ public class IngestItemController
         ItemContentValidator iv = new ItemContentValidator();
         
         
-        	iv.validate(itemList);
+       	iv.validate(itemList);
         
         
         

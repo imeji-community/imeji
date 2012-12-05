@@ -4,6 +4,7 @@
 package de.mpg.imeji.logic.export.format;
 
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,14 +39,9 @@ public class IngestItemsExport extends Export
     @Override
     public void export(OutputStream out, SearchResult sr)
     {
-    	
-    	SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-    	CollectionImeji collection = ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getCollection();
-        
+    	SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);        
     	ItemController ic = new ItemController(session.getUser());
-//    	Collection<Item> itemList = ic.retrieveAll();
-    	int s = ic.searchImagesInContainer(collection.getId(), null, null, -1, 0).getResults().size();
-    	Collection<Item> itemList = ic.loadItems(ic.searchImagesInContainer(collection.getId(), null, null, -1, 0).getResults(), -1,0);
+    	Collection<Item> itemList = ic.loadItems(sr.getResults(), -1,0);
         Items items = new Items(itemList);
         
         //TODO: fix problem with overriding statement contents

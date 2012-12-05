@@ -96,8 +96,8 @@
 						<h:outputText value="#{lbl.export_metadata}"/>
 					</h:outputLink>
 					
-					<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=ingestItems&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
-						<h:outputText value="Export for ingest"/>
+					<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
+						<h:outputText value="Export for ingest "/>
 					</h:outputLink>
 					
 					<h:panelGroup rendered="#{CollectionImagesBean.collection != null}">

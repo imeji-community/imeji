@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.logic.vo.predefinedMetadata;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -66,5 +68,29 @@ public class Text extends Metadata
     public String asFulltext()
     {
         return text;
+    }
+    
+    public Object getValueFromMethod(String methodName) {
+    	Method method;
+    	
+    	Object ret = null;    	
+    	try {
+    	      method = this.getClass().getMethod(methodName);
+    	      ret = method.invoke(this);
+    	    } catch (SecurityException e) {
+    	    	e.printStackTrace();
+    	    } catch (NoSuchMethodException e) {
+    	    	e.printStackTrace();
+    	    } catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	return ret;
     }
 }

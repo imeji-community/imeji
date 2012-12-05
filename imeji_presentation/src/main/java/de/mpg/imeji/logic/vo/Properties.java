@@ -3,24 +3,15 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Calendar;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
-
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -154,5 +145,29 @@ public class Properties
     public void setVersionDate(Calendar versionDate)
     {
         this.versionDate = versionDate;
+    }
+    
+    public Object getValueFromMethod(String methodName) {
+    	Method method;
+    	
+    	Object ret = null;    	
+    	try {
+    	      method = this.getClass().getMethod(methodName);
+    	      ret = method.invoke(this);
+    	    } catch (SecurityException e) {
+    	    	e.printStackTrace();
+    	    } catch (NoSuchMethodException e) {
+    	    	e.printStackTrace();
+    	    } catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	return ret;
     }
 }

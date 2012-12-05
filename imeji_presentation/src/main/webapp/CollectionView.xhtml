@@ -156,7 +156,7 @@
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.collection_profile}"/>								
 								
-								<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=ingestMdProfile&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
+								<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=profile&amp;id=#{ViewCollectionBean.collection.profile}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
 									<h:outputText value="XML View"/>
 								</h:outputLink>
 								

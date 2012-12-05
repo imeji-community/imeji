@@ -12,28 +12,29 @@ import de.mpg.imeji.logic.ingest.factory.ItemSchemaFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
-public class ItemContentValidator
+public class ObjectContentValidator
 {
 	
 	/**
      * Validate the provided item
+	 * @param <T>
      * @param item
      */
-    public void validate(Item item) throws Exception, IntrospectionException
+    public <T> void validate(Class<T> clazz) throws Exception, IntrospectionException
     {    	
     	    	
-    	if(item == null)
-        	throw new Exception(new Throwable("item is null"));
+    	if(clazz == null)
+        	throw new Exception(new Throwable("object is null"));
     	
-		for(PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(Item.class).getPropertyDescriptors()){
+		for(PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(clazz.getClass()).getPropertyDescriptors()){
 
 			
 			if(propertyDescriptor.getWriteMethod() == null) continue;
 			
 			if(propertyDescriptor.getReadMethod().getReturnType() == String.class || propertyDescriptor.getReadMethod().getReturnType() == URI.class) {
-				if(item.getValueFromMethod(propertyDescriptor.getReadMethod().getName()).toString().isEmpty()) {
-					throw new Exception(new Throwable("item object has invalid setting for: " + propertyDescriptor.getName()));
-				}
+//				if(clazz.getValueFromMethod(propertyDescriptor.getReadMethod().getName()).toString().isEmpty()) {
+//					throw new Exception(new Throwable("item object has invalid setting for: " + propertyDescriptor.getName()));
+//				}
 			}		
 		}
     }
@@ -47,7 +48,7 @@ public class ItemContentValidator
     public void validate(List<Item> items) throws Exception
     {
     	for (Item item : items) {
-			this.validate(item);
+//			this.validate(item);
 		}
     }
 }

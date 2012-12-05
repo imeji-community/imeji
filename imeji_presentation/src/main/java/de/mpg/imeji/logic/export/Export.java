@@ -101,12 +101,12 @@ public abstract class Export
 			{
 				throw new HttpResponseException(400, "Required parameter 'type' is missing.");
 			} 
-			else if (type.equals("ingestItems"))
+			else if (type.equals("image"))
 			{
 				supportedType = true;
 				export = new IngestItemsExport();
 			}
-			else if (type.equals("ingestMdProfile"))
+			else if (type.equals("profile"))
 			{
 				supportedType = true;
 				export = new IngestMdProfileExport();

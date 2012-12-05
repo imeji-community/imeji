@@ -358,10 +358,4 @@ public class ItemController extends ImejiController
         }
     }
 
-    public String getEscidocUserHandle() throws Exception
-    {
-        String userName = PropertyReader.getProperty("imeji.escidoc.user");
-        String password = PropertyReader.getProperty("imeji.escidoc.password");
-        return LoginHelper.login(userName, password);
-    }
 }

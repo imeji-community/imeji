@@ -18,19 +18,12 @@ public class ProfileParser
      * Parse a profile Xml
      * @param profileXml
      * @return
+     * @throws SAXException 
+     * @throws JAXBException 
      */
-    public MetadataProfile parse(File profileXmlFile)
+    public MetadataProfile parse(File profileXmlFile) throws JAXBException, SAXException
     {
-        MetadataProfile mdp = null;
-		
-		try {
-			mdp = new JaxbIngestProfile().unmarshalMdProfile(profileXmlFile);
-		} catch (JAXBException e) {			
-			e.printStackTrace();
-		} catch (SAXException e) {		
-			e.printStackTrace();
-		}
-		return mdp;
+		return new JaxbIngestProfile().unmarshalMdProfile(profileXmlFile);
     }
     
     /**
@@ -38,20 +31,12 @@ public class ProfileParser
      * 
      * @param itemListXml
      * @return
+     * @throws SAXException 
+     * @throws JAXBException 
      */
-    public List<MetadataProfile> parseList(File profileListXmlFile)
+    public List<MetadataProfile> parseList(File profileListXmlFile) throws JAXBException, SAXException
     {
-        List<MetadataProfile> profileList = new ArrayList<MetadataProfile>();
-        
-		try {
-			profileList = new JaxbIngestProfile().unmarshalMdProfiles(profileListXmlFile).getMetadataProfile();
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-		
-        return profileList;
+        return new JaxbIngestProfile().unmarshalMdProfiles(profileListXmlFile).getMetadataProfile();
     }
     
 }

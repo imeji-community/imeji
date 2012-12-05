@@ -19,24 +19,12 @@ public class ItemParser
      * 
      * @param itemListXml
      * @return
+     * @throws SAXException 
+     * @throws JAXBException 
      */
-    public List<Item> parseItemList(File itemListXmlFile)
-    {
-        List<Item> itemList = new ArrayList<Item>();
-        //TODO
-        // here is done the parsing. The results is written into the list l
-        // You can parse the list completely at once or parse one item after the other like I propose it here:
-        // Parser might use the item.xsd, that is created by ItemSchemaFactory
-        
-		try {
-			itemList = new JaxbIngestProfile().unmarshalItems(itemListXmlFile).getItem();
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-		
-        return itemList;
+    public List<Item> parseItemList(File itemListXmlFile) throws JAXBException, SAXException
+    {	
+        return new JaxbIngestProfile().unmarshalItems(itemListXmlFile).getItem();
     }
 
     /**
@@ -44,24 +32,16 @@ public class ItemParser
      * 
      * @param itemXml
      * @return
+     * @throws SAXException 
+     * @throws JAXBException 
      */
-    public Item parseItem(String itemXml)
+    public Item parseItem(String itemXml) throws JAXBException, SAXException
     {
-        Item item = new Item();
-        
-        try {
-			item = new JaxbIngestProfile().unmarshalItem(itemXml);
-		} catch (JAXBException e) {			
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-        
-        return item;
+        return new JaxbIngestProfile().unmarshalItem(itemXml);
     }
 
 	@SuppressWarnings("unused")
-	private List<String> parseItemList2ListOfItems(File itemListXmlFile)
+	private List<String> parseItemList2ListOfItems(File itemListXmlFile) throws JAXBException, SAXException
     {
         List<String> l = new ArrayList<String>();
         

@@ -3,52 +3,65 @@ package de.mpg.imeji.logic.ingest.validator;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.File;
-import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-import de.escidoc.core.client.exceptions.application.invalid.InvalidItemStatusException;
-import de.mpg.imeji.logic.ingest.factory.ItemSchemaFactory;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataSet;
 
+/**
+ * 
+ * @author hnguyen
+ *
+ */
 public class MetadataSetContentValidator
 {
+	private static final ArrayList<String> notRequiredList = new ArrayList<String>();
 	
 	/**
-     * Validate the provided item
-     * @param item
-     */
-    public void validate(MetadataSet metadataSet) throws Exception, IntrospectionException
+	 * 
+	 * @param metadataSet
+	 * @throws Exception
+	 * @throws IntrospectionException
+	 */
+    @SuppressWarnings("unchecked")
+	public static void validate(MetadataSet metadataSet, Item item) throws Exception, IntrospectionException
     {    	
     	    	
     	if(metadataSet == null)
-        	throw new Exception(new Throwable("metadataSet is null"));
+        	throw new Exception(new Throwable("MetadataSet is null"));
     	
-		for(PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(Item.class).getPropertyDescriptors()){
+		for(PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(MetadataSet.class).getPropertyDescriptors()){
 
 			
 			if(propertyDescriptor.getWriteMethod() == null) continue;
 			
-			if(propertyDescriptor.getReadMethod().getReturnType() == String.class || propertyDescriptor.getReadMethod().getReturnType() == URI.class) {
-				if(metadataSet.getValueFromMethod(propertyDescriptor.getReadMethod().getName()).toString().isEmpty()) {
-					throw new Exception(new Throwable("metadataSet object has invalid setting for attribute: " + propertyDescriptor.getName()));
+			if(!notRequiredList.contains(propertyDescriptor.getName())) {
+				if(metadataSet.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null) {
+					throw new Exception(new Throwable("MetadataSet object of Item ("+item.getId().toString()+") has invalid setting for element: " + propertyDescriptor.getName()));					
+				} else {
+					if(propertyDescriptor.getPropertyType() == Collection.class) {
+						MetadataContentValidator.validate((Collection<Metadata>)metadataSet.getValueFromMethod(propertyDescriptor.getReadMethod().getName()),item);
+					}
 				}
-			}		
+			}
+			
 		}
     }
 	
 	
     /**
-     * Valid the xml against the profile
-     * @param itemListXml
-     * @param mdp
+     * 
+     * @param metadataSets
+     * @throws Exception
      */
-    public void validate(List<MetadataSet> metadataSets) throws Exception
+    public static void validate(List<MetadataSet> metadataSets, Item item) throws Exception
     {
     	for (MetadataSet metadataSet : metadataSets) {
-			this.validate(metadataSet);
+    		MetadataSetContentValidator.validate(metadataSet, item);
 		}
     }
 }

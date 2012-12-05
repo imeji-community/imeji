@@ -3,51 +3,64 @@ package de.mpg.imeji.logic.ingest.validator;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.File;
-import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import de.escidoc.core.client.exceptions.application.invalid.InvalidItemStatusException;
-import de.mpg.imeji.logic.ingest.factory.ItemSchemaFactory;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 
+/**
+ * 
+ * @author hnguyen
+ *
+ */
 public class ItemContentValidator
 {
+	private static final ArrayList<String> notRequiredList = new ArrayList<String>(
+			Arrays.asList("discardComment", "versionDate")
+			);
 	
 	/**
-     * Validate the provided item
-     * @param item
-     */
-    public void validate(Item item) throws Exception, IntrospectionException
+	 * 
+	 * @param item
+	 * @throws Exception
+	 * @throws IntrospectionException
+	 */
+    @SuppressWarnings("unchecked")
+	public static void validate(Item item) throws Exception, IntrospectionException
     {    	
     	    	
     	if(item == null)
-        	throw new Exception(new Throwable("item is null"));
+        	throw new Exception(new Throwable("Item is null"));
     	
 		for(PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(Item.class).getPropertyDescriptors()){
 
 			
 			if(propertyDescriptor.getWriteMethod() == null) continue;
 			
-			if(propertyDescriptor.getReadMethod().getReturnType() == String.class || propertyDescriptor.getReadMethod().getReturnType() == URI.class) {
-				if(item.getValueFromMethod(propertyDescriptor.getReadMethod().getName()).toString().isEmpty()) {
-					throw new Exception(new Throwable("item object has invalid setting for: " + propertyDescriptor.getName()));
+			if(!notRequiredList.contains(propertyDescriptor.getName())) {
+				if(item.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null) {
+					throw new Exception(new Throwable("Item object ("+item.getId().toString()+")has invalid setting for element: " + propertyDescriptor.getName()));					
+				} else {
+					if(propertyDescriptor.getPropertyType() == List.class) {
+						MetadataSetContentValidator.validate((List<MetadataSet>)item.getValueFromMethod(propertyDescriptor.getReadMethod().getName()),item);
+					}
 				}
-			}		
+			}
+			
 		}
     }
 	
-	
-    /**
-     * Valid the xml against the profile
-     * @param itemListXml
-     * @param mdp
-     */
-    public void validate(List<Item> items) throws Exception
+	/**
+	 * 
+	 * @param items
+	 * @throws Exception
+	 */
+    public static void validate(List<Item> items) throws Exception
     {
     	for (Item item : items) {
-			this.validate(item);
+    		ItemContentValidator.validate(item);
 		}
     }
 }

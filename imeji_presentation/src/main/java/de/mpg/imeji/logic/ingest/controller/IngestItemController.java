@@ -28,18 +28,12 @@ public class IngestItemController
     {
        
         ItemParser ip = new ItemParser();
+        
         List<Item> itemList = ip.parseItemList(itemListXmlFile);        
-       
-        ItemContentValidator iv = new ItemContentValidator();
+         
+       	ItemContentValidator.validate(itemList);
         
-        
-       	iv.validate(itemList);
-        
-        
-        
-        ItemMapper im = new ItemMapper(itemList);
-        
-                
+        ItemMapper im = new ItemMapper(itemList);   
         
         ItemController ic = new ItemController(user);
         

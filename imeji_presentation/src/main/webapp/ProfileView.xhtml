@@ -73,7 +73,7 @@
 											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewMdProfileBean.profile.status == 'RELEASED'}"/>
 											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewMdProfileBean.profile.status == 'WITHDRAWN'}"/>
 											<h:panelGroup layout="block" styleClass="small_area0">
-												<h:outputText value="lbl.['private']" rendered="#{ViewMdProfileBean.profile.status == 'PENDING'}"/>
+												<h:outputText value="#{lbl['private']}" rendered="#{ViewMdProfileBean.profile.status == 'PENDING'}"/>
 												<h:outputText value="#{lbl.published}" rendered="#{ViewMdProfileBean.profile.status == 'RELEASED'}"/>
 												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewMdProfileBean.profile.status == 'WITHDRAWN'}"/>
 											</h:panelGroup>

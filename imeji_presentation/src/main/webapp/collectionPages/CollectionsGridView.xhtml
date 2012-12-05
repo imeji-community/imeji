@@ -79,7 +79,7 @@
 								<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.status == 'RELEASED'}"/>
 								
 								<h:outputLabel styleClass="medium_label endline" rendered="#{container.status == 'PENDING'}">
-									<h:outputText value="lbl.['private']"/>
+									<h:outputText value="#{lbl['private']}"/>
 								</h:outputLabel>
 								
 								<h:outputLabel styleClass="medium_label endline" rendered="#{container.status == 'RELEASED'}">

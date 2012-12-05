@@ -62,9 +62,9 @@
 			</ui:define>
 			
 			<ui:define name="actionsMenu">
-				<h:panelGroup layout="block" styleClass="free_area0 sub action">
+				<h:panelGroup layout="block" styleClass="xHuge_area0 sub action">
 					<h:outputText value="#{paginatorListSessionBean.initMenus}"/>
-					<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}">
+					<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}" styleClass="free_area0">
 						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" style="margin-top:0.18em;"/>
 	
 						<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
@@ -75,7 +75,7 @@
 						<h:outputText styleClass="seperator void"/>
 					</h:panelGroup>
 					
-					<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' and SessionBean.user != null}">
+					<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' and SessionBean.user != null}" styleClass="xHuge_area0">
 						<h:outputText id="txtFilter" value="#{lbl.filter_by}" styleClass="free_area0"/>
 						<h:selectOneMenu id="selFilter" value="#{paginatorListSessionBean.selectedFilter}" styleClass="free_select" onchange="window.location.href = '?f=' + this.value">
 							<f:selectItems id="filterItem" value="#{paginatorListSessionBean.filterMenu}"/>
@@ -103,7 +103,7 @@
 				
 				<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#">
 					<h:outputText value="#{lbl.delete_selected_collections}" rendered="#{SessionBean.user != null}"/>
-					<rich:componentControl for="panelConfirmDeleteSelectedContainer" operation="show" event="onclick"/>
+					<rich:componentControl target="panelConfirmDeleteSelectedContainer" operation="show" event="click"/>
 				</h:outputLink>
 			
 			</ui:define>
@@ -116,7 +116,7 @@
 			<ui:define name="listFooter">
 				<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#">
 					<h:outputText value="#{lbl.delete_selected_collections}" rendered="#{SessionBean.user != null}"/>
-					<rich:componentControl for="panelConfirmDeleteSelectedContainer" operation="show" event="onclick"/>
+					<rich:componentControl target="panelConfirmDeleteSelectedContainer" operation="show" event="click"/>
 				</h:outputLink>
 			</ui:define>
 

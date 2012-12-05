@@ -36,13 +36,13 @@
 
 </ui:remove>
 	<f:subview id="confirmation">
-		<rich:popupPanel id="panelConfirmRelease" width="390" height="100" style="background-color:#434343" domElementAttachment="form">
-	        <h3>
-	        	<h:outputText styleClass="free_area0_p8 xTiny_marginLExcl"  value="#{msg.confirmation_release_collection}?" rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}"/>
-	        	<h:outputText styleClass="free_area0_p8 xTiny_marginLExcl"  value="#{msg.confirmation_release_album}?"  rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}"/>
-	        </h3>
-	        <h:panelGroup layout="block" styleClass="quad_area0_p8">
-				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
+		<rich:popupPanel id="panelConfirmRelease" style="background-color:#434343"  autosized="true">
+	        <div id="contentPanel" class="half_area0_p8" >
+		        <div class="half_area0_p8">
+		        	<h:outputText value="#{msg.confirmation_release_collection}?" rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}"/>
+		        	<h:outputText value="#{msg.confirmation_release_album}?"  rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}"/>
+		        </div>
+				<div class="half_area0_p8">
 					<div class="large_txtBtn">
 	       				<a href="#" class="large_txtBtn dialogCancelButton" onclick="#{rich:component('panelConfirmRelease')}.hide()">
 							<h:outputText value="#{lbl.cancel}"/>
@@ -52,7 +52,7 @@
 						<a4j:commandButton onclick="submitPanel(this, '#{msg.please_wait}');" action="#{bean.release}" rendered="#{bean.deletable}" value="#{lbl.release}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
 				 	</div>
 				</div>
-			</h:panelGroup>
+			</div>
 		</rich:popupPanel>
 	</f:subview>
 </html>								

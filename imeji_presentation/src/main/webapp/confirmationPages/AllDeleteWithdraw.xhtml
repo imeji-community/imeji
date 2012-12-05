@@ -36,16 +36,15 @@
 
 </ui:remove>
 	<f:subview id="DeleteAll">
-		<rich:popupPanel id="panelConfirmDeleteAll" width="390" height="220" style="background-color:#434343" domElementAttachment="form">
-			 <h3>
-	        	<h:outputText styleClass="huge_area0_p8 xTiny_marginLExcl"  value="#{lbl.delete_images}?" rendered="#{bean.deletable}"/>
-	       		<h:outputText styleClass="huge_area0_p8 xTiny_marginLExcl"  value="#{lbl.withdraw_images}?" rendered="#{!bean.deletable and bean.editable}"/>
-	        </h3>
-	        <h:outputText id="errorMessage" styleClass="xTiny_marginLExcl xDouble_area0_p0 messageError" value=""/>
-	        <h:inputTextarea id="discardComment" value="#{bean.discardComment}" rows="6" styleClass="xTiny_marginLExcl xDouble_area0_p8" valueChangeListener="#{bean.discardCommentListener}" rendered="#{!bean.deletable and bean.editable}"/>
-	        
-	      <h:panelGroup layout="block" styleClass="quad_area0_p8">
-				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
+		<rich:popupPanel id="panelConfirmDeleteAll" autosized="true" style="background-color:#434343">
+			<div id="contentPanel" class="half_area0_p8" >
+				<div class="half_area0_p8">
+		        	<h:outputText value="#{lbl.delete_images}?" rendered="#{bean.deletable}"/>
+		       		<h:outputText  value="#{lbl.withdraw_images}?" rendered="#{!bean.deletable and bean.editable}"/>
+			        <h:outputText id="errorMessage" styleClass="xDouble_area0_p0 messageError" value=""/>
+			        <h:inputTextarea id="discardComment" value="#{bean.discardComment}" rows="6" styleClass="quad_area0_p0" valueChangeListener="#{bean.discardCommentListener}" rendered="#{!bean.deletable and bean.editable}"/>
+			    </div>
+				<div class="half_area0_p8 ">
 					<div class="large_txtBtn">
 	       				<a href="#" class="large_txtBtn dialogCancelButton" onclick="#{rich:component('panelConfirmDeleteAll')}.hide()">
 	       					<h:outputText value="#{lbl.cancel}"/>
@@ -56,7 +55,7 @@
 						<a4j:commandButton onclick="if(!clickOnDiscard('', 'DeleteAll', '#{msg.error_withdraw_comment}')){return false};" action="#{bean.withdrawAll}" rendered="#{!bean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>    
 				 	</div>
 				</div>
-			</h:panelGroup>
+			</div>
 		</rich:popupPanel>
 	</f:subview>
 </html>

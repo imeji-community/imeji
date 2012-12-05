@@ -136,6 +136,8 @@ public class Search
                 case LOGICAL_RELATIONS:
                     logic = ((SearchLogicalRelation)se).getLogicalRelation();
                     break;
+                default:
+                	break;
             }
             if (se.getType() != SearchElement.SEARCH_ELEMENTS.LOGICAL_RELATIONS)
             {

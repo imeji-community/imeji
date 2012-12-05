@@ -42,9 +42,8 @@
 			
 			<ui:define name="actionsMenu">
 				<h:panelGroup layout="block" styleClass="free_area0 sub action">
-					<h:form id="actionForm">
 						<!-- SORTING content menu lower line starts here -->
-						<h:outputText id="txtSort" value="#{paginatorListSessionBean.initPage}#{lbl.sort_by}" styleClass="free_area0" style="margin-top:0.18em;"/>
+						<h:outputText id="txtSort" value="#{paginatorListSessionBean.initPage}#{lbl.sort_by}" styleClass="freee_area0" style="margin-top:0.18em;"/>
 						<h:selectOneMenu id="selSort" value="#{ImagesBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
 							<f:selectItems id="sortItem" value="#{ImagesBean.sortMenu}"/>
 						</h:selectOneMenu>
@@ -56,7 +55,6 @@
 						<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}" target="_blank">
 							<h:outputText value="#{lbl.export_metadata}"/>
 						</h:outputLink>
-					</h:form>
 				</h:panelGroup>
 			</ui:define>
 			

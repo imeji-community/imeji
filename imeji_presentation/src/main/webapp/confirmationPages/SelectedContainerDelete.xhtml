@@ -36,14 +36,14 @@
 
 </ui:remove>
 	<f:subview id="DeleteSelectedContainer">
-		<rich:popupPanel id="panelConfirmDeleteSelectedContainer" width="390" height="100" style="background-color:#434343" domElementAttachment="form">
-			 <h3>
-	        	<h:outputText styleClass="xDouble_area0_p8 xTiny_marginLExcl"  value="#{lbl.delete_selected_collections}?" rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and SessionBean.user != null}"/>
-	       		<h:outputText styleClass="xDouble_area0_p8 xTiny_marginLExcl"  value="#{lbl.delete_selected_albums}?" rendered="#{HistorySession.currentPage.type == 'ALBUMS' and SessionBean.user != null}"/>
-	        </h3>
+		<rich:popupPanel id="panelConfirmDeleteSelectedContainer" autosized="true" style="background-color:#434343">
+			<div class="half_area0_p8">
+		       <div class="half_area0_p8">
+	        		<h:outputText value="#{lbl.delete_selected_collections}?" rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and SessionBean.user != null}"/>
+	       			<h:outputText value="#{lbl.delete_selected_albums}?" rendered="#{HistorySession.currentPage.type == 'ALBUMS' and SessionBean.user != null}"/>
+	       		</div>
 	        
-	        <h:panelGroup layout="block" styleClass="quad_area0_p8">
-				<div class="free_area0_p0 xTiny_marginLExcl marginTExcl025">
+				<div class="half_area0_p8">
 					<div class="large_txtBtn">
 	       				<a href="#" class="large_txtBtn dialogCancelButton" onclick="#{rich:component('panelConfirmDeleteSelectedContainer')}.hide()">
 							<h:outputText value="#{lbl.cancel}"/>
@@ -54,7 +54,7 @@
 		 				<a4j:commandButton onclick="this.disabled=true; this.style.opacity = 0.5; this.value='#{msg.please_wait}';" rendered="#{HistorySession.currentPage.type == 'ALBUMS' and SessionBean.user != null}" value="#{lbl.delete}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton" action="#{AlbumsBean.deleteAll}" />
 		 			</div>
 				</div>
-			</h:panelGroup>
+			</div>
 		</rich:popupPanel>
 	</f:subview>
 </html>

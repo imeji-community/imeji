@@ -93,11 +93,11 @@
 											<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
 												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
 													<h:outputText value="#{lbl.delete_all}"/>
-													<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
+													<rich:componentControl target="panelConfirmDeleteAll" operation="show" event="click"/>
 												</h:outputLink>
 												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" rendered="#{paginatorListSessionBean.imageEditable  and paginatorListSessionBean.collection.status == 'RELEASED'}">
 													<h:outputText value="#{lbl.withdraw_all}"/>
-													<rich:componentControl for="panelConfirmDeleteAll" operation="show" event="onclick"/>
+													<rich:componentControl target="panelConfirmDeleteAll" operation="show" event="click"/>
 												</h:outputLink>
 											</h:panelGroup>
 										</div>
@@ -172,11 +172,11 @@
 												<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
 													<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#"  rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
 														<h:outputText value="#{lbl.delete_selectedImages}"/>
-														<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+														<rich:componentControl target="panelConfirmDeleteSelected" operation="show" event="click"/>
 													</h:outputLink>
 													<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" rendered="#{paginatorListSessionBean.imageEditable and paginatorListSessionBean.collection.status == 'RELEASED'}">
 														<h:outputText value="#{lbl.withdraw_selected}"/>
-														<rich:componentControl for="panelConfirmDeleteSelected" operation="show" event="onclick"/>
+														<rich:componentControl target="panelConfirmDeleteSelected" operation="show" event="click"/>
 													</h:outputLink>
 												</h:panelGroup>
 											</h:panelGroup>
@@ -230,25 +230,27 @@
 							<span class="seperator"></span>
 							
 							<h:panelGroup layout="block" styleClass="free_area0_p8 endline overlayMenu noPaddingTopBottom">
-								<h:panelGroup layout="block" styleClass="menuHeader free_area0">
-									<h:panelGroup styleClass="free_area0">
-										<h:outputText styleClass="free_area0" value="#{lbl.select}&#160;"/>
+								<h:form id="selectMenuFrom">
+									<h:panelGroup layout="block" styleClass="menuHeader free_area0">
+										<h:panelGroup styleClass="free_area0">
+											<h:outputText styleClass="free_area0" value="#{lbl.select}&#160;"/>
+										</h:panelGroup>
+										<h:panelGroup layout="block" style="margin-top:0.2727em;" class="free_area0 min_imgBtn checkboxSelectButton"/>
 									</h:panelGroup>
-									<h:panelGroup layout="block" style="margin-top:0.2727em;" class="free_area0 min_imgBtn checkboxSelectButton"/>
-								</h:panelGroup>
-								<h:panelGroup layout="block" styleClass="clear menuBody large_area0" style="margin-top:-1.9090em;">
-									<div class="selectMenu large_area2 bordst2">
-										<span class="large_area0_p8"><h:outputText value="#{lbl.select_item}:"/></span>
-										<br />
-										<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
-											<span class="large_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
-										</h:commandLink>
-										<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
-											<span class="large_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
-										</h:commandLink>
-									</div>
-									&#160;
-								</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="clear menuBody large_area0" style="margin-top:-1.9090em;">
+										<div class="selectMenu large_area2 bordst2">
+											<span class="large_area0_p8"><h:outputText value="#{lbl.select_item}:"/></span>
+											<br />
+											<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
+												<span class="large_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
+											</h:commandLink>
+											<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
+												<span class="large_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
+											</h:commandLink>
+										</div>
+										&#160;
+									</h:panelGroup>
+								</h:form>
 							</h:panelGroup>
 						</div>
 					</h:panelGroup>

@@ -65,7 +65,8 @@
 			</ui:define>
 			
 			<ui:define name="actionsMenu">
-				<h:panelGroup layout="block" styleClass="free_area0 sub action">
+				<h:panelGroup layout="block" styleClass="half_area0 sub action">
+				
 					<h:panelGroup styleClass="free_area0">
 						<!-- SORTING content menu lower line starts here -->
 						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0"/>
@@ -80,17 +81,17 @@
 					
 					 <h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
 						<h:outputText value="#{lbl.collection_release}"/>
-						<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
+						<rich:componentControl target="panelConfirmRelease" operation="show" event="click"/>
 					</h:outputLink>
 					
 					<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
 						<h:outputText value="#{lbl.withdraw}"/>
-						<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
+						<rich:componentControl target="panelConfirmWithdraw" operation="show" event="click"/>
 					</h:outputLink>
 					
 					<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.deletable}">
 						<h:outputText value="#{lbl.delete}"/>
-						<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
+						<rich:componentControl target="panelConfirmDelete" operation="show" event="click"/>
 					</h:outputLink>
 					
 					<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
@@ -109,6 +110,7 @@
 							<ui:param name="discardComment" value="#{CollectionImagesBean.collection.discardComment}"/>
 						</ui:include>
 					</h:panelGroup>
+				
 				</h:panelGroup>
 			</ui:define>
 	</ui:composition>

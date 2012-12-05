@@ -10,44 +10,47 @@
 	<a4j:outputPanel id="ajaxList">
 		<div class="full_area0 itemList loggedIn collectionList">
 			<div class="full_area0 listHeader">
-				<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{SessionBean.user != null}">
-					<input type="button" class="min_imgBtn checkboxSelectButton"/>
+				<h:form id="headerForm">
+					<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{SessionBean.user != null}">
 					
-					<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none; width:150px;">
-						<span class="large_area0_p8">
-							<h:outputText value="#{lbl.select_collections}"/>
-						</span>
-						<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" styleClass="large_area0 selectAll">
-							<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
+						<input type="button" class="min_imgBtn checkboxSelectButton"/>
+						
+						<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none; width:150px;">
+							<span class="large_area0_p8">
+								<h:outputText value="#{lbl.select_collections}"/>
+							</span>
+							<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" styleClass="large_area0 selectAll">
+								<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
+							</h:commandLink>
+							<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
+								<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
+							</h:commandLink>
+						</div>
+						
+						&#160;
+					</h:panelGroup>
+					<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{SessionBean.user == null}">
+						&#160;
+					</h:panelGroup>
+					
+					<span class="seperator"></span>
+					<span class="free_area0 endline status statusArea">
+						<h:commandLink id="lnkStateSort" styleClass="free_area0_p8" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'PROPERTIES_STATUS'}">
+							<f:setPropertyActionListener value="PROPERTIES_STATUS" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
+							<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+							<h:outputText value="#{lbl.state}"/>
 						</h:commandLink>
-						<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
-							<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
+						<h:commandLink id="lnkStateSortAsc" styleClass="free_area0_p8 ascSort"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
+						<h:outputText id="txtSortBy2" styleClass="noDisplay" value="#{lbl.sort_by} "/>
+							<h:outputText value="#{lbl.state}"/>
 						</h:commandLink>
-					</div>
-					&#160;
-				</h:panelGroup>
-				<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{SessionBean.user == null}">
-					&#160;
-				</h:panelGroup>
-				
-				<span class="seperator"></span>
-				<span class="free_area0 endline status statusArea">
-					<h:commandLink id="lnkStateSort" styleClass="free_area0_p8" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'PROPERTIES_STATUS'}">
-						<f:setPropertyActionListener value="PROPERTIES_STATUS" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
-						<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
-						<h:outputText value="#{lbl.state}"/>
-					</h:commandLink>
-					<h:commandLink id="lnkStateSortAsc" styleClass="free_area0_p8 ascSort"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
-					<h:outputText id="txtSortBy2" styleClass="noDisplay" value="#{lbl.sort_by} "/>
-						<h:outputText value="#{lbl.state}"/>
-					</h:commandLink>
-					<h:commandLink id="lnkStateSortDesc" styleClass="free_area0_p8 desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
-						<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
-						<h:outputText value="#{lbl.state}"/>
-					</h:commandLink>
-					&#160;
-				</span>
-				
+						<h:commandLink id="lnkStateSortDesc" styleClass="free_area0_p8 desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
+							<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+							<h:outputText value="#{lbl.state}"/>
+						</h:commandLink>
+						&#160;
+					</span>
+				</h:form>
 				<span class="seperator"></span>
 				<span class="half_area0_p6 headerSwitchView">
 					<a class="expand" title="#{msg.show_all_items_in_medium_view}"><span class="noDisplay"><h:outputText value="#{lbl.show} "/></span><h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/></a>
@@ -142,17 +145,17 @@
 									<h:panelGroup styleClass="free_area0 small_marginLIncl">
 										<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{container.editable and container.status == 'PENDING'}">
 											<h:outputText value="#{lbl.collection_release}"/>
-											<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
+											<rich:componentControl target="panelConfirmRelease" operation="show" event="click"/>
 										</h:outputLink>
 										
 										<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{container.editable and container.status == 'RELEASED'}">
 											<h:outputText value="#{lbl.withdraw}"/>
-											<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
+											<rich:componentControl target="panelConfirmWithdraw" operation="show" event="click"/>
 										</h:outputLink>
 										
 										<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{container.deletable}">
 											<h:outputText value="#{lbl.delete}"/>
-											<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
+											<rich:componentControl target="panelConfirmDelete" operation="show" event="click"/>
 										</h:outputLink>
 									</h:panelGroup>
 								</span>

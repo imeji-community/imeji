@@ -44,6 +44,12 @@
 		<view-id>/jsf/Upload.xhtml</view-id>
 		<action onPostback="false">#{UploadBean.status}</action>
 	</url-mapping>
+	
+	<url-mapping id="ingest">
+		<pattern value="/collection/#{IngestBean.collectionId}/ingest" />
+		<view-id>/jsf/Ingest.xhtml</view-id>
+		<action onPostback="false">#{IngestBean.status}</action>
+	</url-mapping>
 
 	<!-- Collection pages -->
 	<url-mapping id="collection">

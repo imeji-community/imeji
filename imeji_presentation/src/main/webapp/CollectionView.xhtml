@@ -154,7 +154,12 @@
 						
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
-								<h:outputText value="#{lbl.collection_profile}"/>
+								<h:outputText value="#{lbl.collection_profile}"/>								
+								
+								<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=profile&amp;id=#{ViewCollectionBean.collection.profile}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
+									<h:outputText value="XML View"/>
+								</h:outputLink>
+								
 								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.profileUrl}#{ViewCollectionBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.profileEditor and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.edit}"></h:outputText>
 								</h:outputLink>
@@ -203,7 +208,7 @@
 															<h:panelGroup styleClass="endline">
 																<span class="endline">
 																	<h:outputText value=", " rendered="#{indexO > 0}"/>
-																	<h:outputText value="#{label.string}"/>
+																	<h:outputText value="#{label.value}"/>
 																	<h:outputText value=" (#{label.lang})"/>
 																</span>
 															</h:panelGroup>

@@ -12,6 +12,8 @@ import org.apache.http.client.HttpResponseException;
 import com.hp.hpl.jena.query.ReadWrite;
 
 import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.export.format.IngestItemsExport;
+import de.mpg.imeji.logic.export.format.IngestMdProfileExport;
 import de.mpg.imeji.logic.export.format.JenaExport;
 import de.mpg.imeji.logic.export.format.RDFAlbumExport;
 import de.mpg.imeji.logic.export.format.RDFCollectionExport;
@@ -90,6 +92,25 @@ public abstract class Export
 			supportedType = true;//default, no type necessary here
 			
 			export = new SitemapExport();
+		}
+		
+		else if("xml".equals(format))
+		{	
+			supportedFormat = true;
+			if (type == null || type.equals(""))
+			{
+				throw new HttpResponseException(400, "Required parameter 'type' is missing.");
+			} 
+			else if (type.equals("image"))
+			{
+				supportedType = true;
+				export = new IngestItemsExport();
+			}
+			else if (type.equals("profile"))
+			{
+				supportedType = true;
+				export = new IngestMdProfileExport();
+			}
 		}
 		
 		if (!supportedFormat)

@@ -5,12 +5,17 @@ package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlRootElement(name="organization")
+@XmlType(name="organization")
 public class Organization
 {
     private URI id;

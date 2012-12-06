@@ -60,15 +60,15 @@ public class MetadataLabels
                 {
                     if (ls.getLang().equals("en"))
                     {
-                        labels.put(s.getId(), ls.getString());
+                        labels.put(s.getId(), ls.getValue());
                         hasLabel = true;
                     }
                     if (ls.getLang().equals(lang))
                     {
-                        internationalizedLabels.put(s.getId(), ls.getString());
+                        internationalizedLabels.put(s.getId(), ls.getValue());
                         hasInternationalizedLabel = true;
                     }
-                    labelFallBack = ls.getString();
+                    labelFallBack = ls.getValue();
                 }
                 if (!hasLabel)
                 {

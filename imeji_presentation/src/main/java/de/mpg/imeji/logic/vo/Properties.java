@@ -3,29 +3,45 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Calendar;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 @j2jResource("http://imeji.org/terms/properties")
+@XmlRootElement(name="properties")
+@XmlType(name="properties")
+@XmlSeeAlso({MetadataProfile.class})
 public class Properties
 {
     @j2jResource("http://purl.org/dc/terms/creator")
     private URI createdBy;
+    
     @j2jResource("http://imeji.org/terms/modifiedBy")
     private URI modifiedBy;
+    
     @j2jLiteral("http://purl.org/dc/terms/created")
     private Calendar created;
+    
     @j2jLiteral("http://purl.org/dc/terms/modified")
     private Calendar modified;
+    
     @j2jLiteral("http://purl.org/dc/terms/issued")
     private Calendar versionDate;
+    
     @j2jResource("http://imeji.org/terms/status")
     private URI status = Status.PENDING.getUri();
+    
     @j2jLiteral("http://imeji.org/terms/versionNumber")
     private int version = 0;
+    
     @j2jLiteral("http://imeji.org/terms/discardComment")
     private String discardComment;
 
@@ -129,5 +145,29 @@ public class Properties
     public void setVersionDate(Calendar versionDate)
     {
         this.versionDate = versionDate;
+    }
+    
+    public Object getValueFromMethod(String methodName) {
+    	Method method;
+    	
+    	Object ret = null;    	
+    	try {
+    	      method = this.getClass().getMethod(methodName);
+    	      ret = method.invoke(this);
+    	    } catch (SecurityException e) {
+    	    	e.printStackTrace();
+    	    } catch (NoSuchMethodException e) {
+    	    	e.printStackTrace();
+    	    } catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	return ret;
     }
 }

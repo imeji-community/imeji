@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+<body>
+	<ui:composition template="templates/template_collection.xhtml">
+
+		<ui:param name="headline" value="#{IngestBean.collection.metadata.title}"/>
+		<ui:define name="contentMenu">
+			<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.collectionUrl}#{IngestBean.collectionId}" rendered="true">
+				<h:outputText value="#{lbl.collection_home}"/>
+			</h:outputLink>			
+			
+			<h:outputText styleClass="seperator void" />
+			
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{IngestBean.collectionId}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
+				<h:outputText value="#{lbl.view_images}"/>
+			</h:outputLink>
+			
+			<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
+			
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.collectionUrl}#{IngestBean.collectionId}/#{Navigation.infosPath}?init=1" rendered="true">
+				<h:outputText value="#{lbl.collection_metadata}"/>
+			</h:outputLink>
+			
+			<h:outputText styleClass="seperator void" />
+			
+			<h:outputText styleClass="free_area0" value="#{lbl.upload_images}"></h:outputText>
+			
+		</ui:define>
+
+		
+		<ui:define name="mainContent">
+			
+			<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
+			 	<ui:include src="./include/History.xhtml"></ui:include>
+			 </h:panelGroup>
+			 <div class="full_area0 listItem">
+			 	<h:outputText value="#{lbl.ingest_select}" styleClass="free_area0_p8 small_marginLExcl"/><br/><br/><br/>
+				<div class="free_area0_p8 small_marginLExcl ">
+					<h:outputText value="#{lbl.select_profile_xml}" styleClass="free_area0_p0"/>
+					<rich:fileUpload fileUploadListener="#{IngestBean.profileXmlListener}" maxFilesQuantity="1" id="uploadProfile" acceptedTypes="xml" 
+					listHeight="80px" listWidth="300px" addControlLabel="#{lbl.add}" immediateUpload="true">
+		            </rich:fileUpload>
+	            </div>
+				<div class="free_area0_p8 small_marginLExcl ">
+					<h:outputText value="#{lbl.select_item_xml}" styleClass="free_area0_p0"/>
+					<rich:fileUpload fileUploadListener="#{IngestBean.itemListXmlListener}" immediateUpload="true" maxFilesQuantity="1" 
+					id="uploadItemList" acceptedTypes="xml" listHeight="80px" listWidth="300px" addControlLabel="#{lbl.add}">
+		            </rich:fileUpload>
+	            </div>
+	            <div class="full_area0_p8">
+	            	<h:outputLink styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  value="/">
+	            		<h:outputText value="#{lbl.cancel}"/>
+	            	</h:outputLink>
+					<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" action="#{IngestBean.ingest}" value="#{lbl.ingest}"/>
+				</div>
+            </div>
+			<!-- Select item -->
+		</ui:define>
+		
+	</ui:composition>
+
+</body>
+</html>
+
+
+
+
+

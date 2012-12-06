@@ -135,6 +135,7 @@ e.V. All rights reserved. Use is subject to license terms. -->
         <param-name>org.richfaces.LoadScriptStrategy</param-name>
         <param-value>ALL</param-value>
     </context-param>
+
     <!-- not needed for richfaces4
     <context-param> 
         <param-name>org.ajax4jsf.COMPRESS_SCRIPT</param-name> 
@@ -163,7 +164,7 @@ e.V. All rights reserved. Use is subject to license terms. -->
         <param-value>500000</param-value>
     </context-param>
     <context-param>
-        <param-name>facelets.REFRESH_PERIOD</param-name>
+        <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
         <param-value>-1</param-value>
     </context-param>
     <!-- ENd TUNING -->

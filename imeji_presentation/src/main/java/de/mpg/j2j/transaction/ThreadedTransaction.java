@@ -19,7 +19,7 @@ public class ThreadedTransaction extends Thread
 {
     private boolean running = false;
     private Transaction transaction;
-    protected static Logger logger = Logger.getLogger(TransactionOld.class);
+    protected static Logger logger = Logger.getLogger(ThreadedTransaction.class);
 
     public ThreadedTransaction(Transaction transaction)
     {

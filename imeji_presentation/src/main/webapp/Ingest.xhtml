@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:a4j="http://richfaces.org/a4j" 
+	xmlns:rich="http://richfaces.org/rich">
 <body>
 	<ui:composition template="templates/template_collection.xhtml">
 
@@ -37,27 +38,141 @@
 			<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 			 	<ui:include src="./include/History.xhtml"></ui:include>
 			 </h:panelGroup>
-			 <div class="full_area0 listItem">
-			 	<h:outputText value="#{lbl.ingest_select}" styleClass="free_area0_p8 small_marginLExcl"/><br/><br/><br/>
-				<div class="free_area0_p8 small_marginLExcl ">
-					<h:outputText value="#{lbl.select_profile_xml}" styleClass="free_area0_p0"/>
-					<rich:fileUpload fileUploadListener="#{IngestBean.profileXmlListener}" maxFilesQuantity="1" id="uploadProfile" acceptedTypes="xml" 
-					listHeight="80px" listWidth="300px" addControlLabel="#{lbl.add}" immediateUpload="true">
-		            </rich:fileUpload>
-	            </div>
-				<div class="free_area0_p8 small_marginLExcl ">
-					<h:outputText value="#{lbl.select_item_xml}" styleClass="free_area0_p0"/>
-					<rich:fileUpload fileUploadListener="#{IngestBean.itemListXmlListener}" immediateUpload="true" maxFilesQuantity="1" 
-					id="uploadItemList" acceptedTypes="xml" listHeight="80px" listWidth="300px" addControlLabel="#{lbl.add}">
-		            </rich:fileUpload>
-	            </div>
-	            <div class="full_area0_p8">
-	            	<h:outputLink styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  value="/">
-	            		<h:outputText value="#{lbl.cancel}"/>
-	            	</h:outputLink>
-					<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" action="#{IngestBean.ingest}" value="#{lbl.ingest}"/>
-				</div>
-            </div>
+			 
+				<!-- Load Queue widget CSS and jQuery -->
+				<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+				<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
+				<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+				<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/plupload.full.js"></script>
+				<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/jquery.plupload.queue.js"></script>
+				
+				<script>
+			
+				$(function() {
+					// Setup html5 version
+					$("#uploader").pluploadQueue({
+						// General settings
+						runtimes : 'html5,silverlight,flash,html4',
+						url : location.pathname  + "?start=itemlist",
+						//max_file_size : '10mb',
+						multi_selection : false,
+						//chunk_size : '1mb',
+						unique_names : false,
+						flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.flash.swf',
+						silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.silverlight.xap',
+						filters : [{
+							title : "Item list xml", 
+							extensions : "xml,XML"}
+						],
+						});
+				});
+
+				$(function() {
+					// Setup html5 version
+					$("#uploaderProfile").pluploadQueue({
+						// General settings
+						runtimes : 'html5,silverlight,flash,html4',
+						url : location.pathname  + "?start=profile",
+						//max_file_size : '10mb',
+						multi_selection : false,
+						//chunk_size : '1mb',
+						unique_names : false,
+						flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.flash.swf',
+						silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.silverlight.xap',
+						filters : [{
+							title : "Item list xml", 
+							extensions : "xml,XML"}
+						],
+						});
+				});
+				
+				function getUploadTitle()
+				{
+					return '';
+				}				
+				function getUploadDescription()
+				{
+					return '';
+				}
+				function getUploadFilename()
+				{
+					return '<h:outputText value="#{lbl.filename}"/>';
+				}
+				function getUploadStatus()
+				{
+					return '<h:outputText value="#{lbl.status}"/>';
+				}
+				function getUploadSize()
+				{
+					return '<h:outputText value="#{lbl.size}"/>';
+				}
+				function getUploadAddFiles()
+				{
+					return '<h:outputText value="#{lbl.upload_add_files}"/>';
+				}
+				function getUploadStart()
+				{
+					return '<h:outputText value="#{lbl.ingest_start}"/>';
+				}
+				function getDragHere()
+				{
+					return '<h:outputText value="#{lbl.upload_drag_files_here}"/>';
+				}
+				function getUsingRuntime()
+				{
+					return '<h:outputText value="#{lbl.upload_using_runtime}"/>';
+				}
+				
+				</script>
+				<style>
+					.plupload_filelist
+					{ 
+						height: 5em;
+						overflow-y: auto: 
+					}
+				</style>
+					<div class="full_area0  infoPage">
+					<br/>
+						<h:outputText value="#{lbl.ingest_item}" styleClass="half_area0_p8 double_marginLExcl" />
+						<div class="half_area0 double_marginLExcl"  >
+							<div id="uploader">
+								Your browser doens't support native upload!<br/>
+								Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br/>
+							<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">
+								Download Siverlight
+							</a>
+							<br/>
+							or
+							<br/>
+							<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">
+								Download Flash
+							</a></div>
+						</div>
+							
+						<br style="clear: both"/>
+						
+						<h:outputText value="#{lbl.or_big}" styleClass="half_area0_p8 double_marginLExcl" />
+						<h:outputText value="#{lbl.ingest_profile}" styleClass="half_area0_p8 double_marginLExcl" />
+						
+						<div class="half_area0 double_marginLExcl"  >
+							<div id="uploaderProfile">
+								Your browser doens't support native upload!<br/>
+								Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br/>
+							<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">
+								Download Siverlight
+							</a>
+							<br/>
+							or
+							<br/>
+							<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">
+								Download Flash
+							</a></div>
+						</div>
+						
+	
+					</div>
+			 <h:form>
+            </h:form>
 			<!-- Select item -->
 		</ui:define>
 		

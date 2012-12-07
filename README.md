@@ -12,7 +12,7 @@
 <p>Try the <a href="http://demo.imeji.org/" title="Go to the demo page" target="_blank">demo version</a></p>
 
 <h2>The imeji community</h2>  
-<p>The imeji community aims to initiate and sustain an active open source software developer community around the imeji software.</p>
+<p>The <a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank" title="imeji community">imeji community</a> aims to initiate and sustain an active open source software developer community around the imeji software.</p>
 <p>Originated in March 2012 from the <a title="MPDL" href="http://mpdl.mpg.de/" target="_blank">Max Planck Digital Library</a>, the <a title="IKB" href="http://www.kunstgeschichte.hu-berlin.de/" target="_blank">Institute of Art and Visual History</a> of the Humboldt-Universität zu Berlin and the <a title="Konrad Zuse Internet Archive" href="http://zuse.zib.de" target="_blank">Konrad Zuse Internet Archive</a> of Freie Universität Berlin, the community constantly grows.</p>
 <p>We are open to everyone who wants to get involved and contribute to the imeji development. Please contact the <a href="mailto:imeji-community@gwdg.de" title="contact to the imeji community">community list</a> for further information.</p>
 

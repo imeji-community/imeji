@@ -54,8 +54,8 @@
 						</a>
 	       			</div>
 					<div class="xLarge_txtBtn tiny_marginLExcl">
-						<a4j:commandButton id="btnDelete" action="#{paginatorListSessionBean.deleteSelected}" rendered="#{bean.deletable}" value="#{lbl.delete}"  styleClass="xLarge_area0_p0  xLarge_txtBtn activeButton"/>
-						<a4j:commandButton id="btnDiscard" onclick="if(!clickOnDiscard('', 'DeleteSelected', '#{msg.error_withdraw_comment}')){return false};" action="#{paginatorListSessionBean.withdrawSelected}" rendered="#{!bean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
+						<h:commandButton id="btnDelete" action="#{paginatorListSessionBean.deleteSelected}" rendered="#{bean.deletable}" value="#{lbl.delete}"  styleClass="xLarge_area0_p0  xLarge_txtBtn activeButton"/>
+						<h:commandButton id="btnDiscard" onclick="if(!clickOnDiscard('', 'DeleteSelected', '#{msg.error_withdraw_comment}')){return false};" action="#{paginatorListSessionBean.withdrawSelected}" rendered="#{!bean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
 					</div>
 				</div>
 			</div>

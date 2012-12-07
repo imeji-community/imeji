@@ -435,25 +435,24 @@ public class ImageBean
     public void selectedChanged(ValueChangeEvent event)
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(item.getId()))
+        if (event.getNewValue().toString().equals("true"))
         {
             setSelected(true);
-            select();
         }
-        else if (event.getNewValue().toString().equals("false") && sessionBean.getSelected().contains(item.getId()))
+        else if (event.getNewValue().toString().equals("false"))
         {
             setSelected(false);
-            select();
         }
+        manageSelectionInSession();
     }
 
-    public String select()
+    public String manageSelectionInSession()
     {
-        if (!selected)
+        if (!selected  && sessionBean.getSelected().contains(item.getId()))
         {
             ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(item.getId().toString());
         }
-        else
+        else if (selected && !sessionBean.getSelected().contains(item.getId()))
         {
             ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(item.getId().toString());
         }

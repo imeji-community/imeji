@@ -40,7 +40,6 @@
 	<ui:composition template="template.xhtml">
 		
 		<ui:define name="mainContent" >
-		<h:form>
 			<h:outputText value="#{imageBean.init}"/>
 			<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
               <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
@@ -73,33 +72,35 @@
 						<h:outputText styleClass="free_area0_p8 xDouble_marginLIncl" value="#{lbl.withdraw_image_content}" /> 
 					</h:panelGroup>
 					<h:panelGroup id="image" layout="block" rendered="#{imageBean.image.status != 'WITHDRAWN'}">
-						
-						<h:outputText value=":" style="visibility:hidden" styleClass="small_area0"/>
-						<h:selectBooleanCheckbox styleClass="xDouble_marginLIncl tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" onchange="getElementById('formular:selectBtn').click();" rendered="#{SessionBean.user != null}"/>
-						<a4j:commandButton id="selectBtn" partialSubmit="true" value="#{imageBean.selected}" action="#{imageBean.select}" style="visibility:hidden;" render="preListHeader" rendered="#{SessionBean.user != null}"/>
-						<h:outputText styleClass="free_label" value="#{lbl.selected}" rendered="#{SessionBean.user != null}"/>
-						<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
-							<h:outputText value="#{lbl.remove_from_col}" />
-						</h:commandLink>
-						<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.navigationString == 'pretty:albumItem'}">
-							<h:outputText value="#{lbl.remove_from_album}" />
-						</h:commandLink>
-						
-						<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
-							<h:outputText value="#{lbl.add_to_active_album}" />
-						</h:commandLink>
-						<h:panelGroup rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
-							<h:outputText styleClass="free_label xTiny_marginLExcl" value=" (Image in"/>
-							<h:outputText value=":" style="visibility:hidden" styleClass="free_label"/>
-							<h:outputLink styleClass="free_area0 " value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.id.path}">
-								<h:outputText value="active album"/>
-							</h:outputLink>
-							<h:outputText styleClass="free_area0 " value=" - "/>
-							<h:commandLink styleClass="free_label" id="lnkPicRemoveFromAvtiveAlbum" action="#{imageBean.removeFromActiveAlbum}">
-								<h:outputText value="#{lbl.remove}" />
+						<h:form id="itemForm">
+							<h:outputText value=":" style="visibility:hidden" styleClass="small_area0"/>
+							<h:selectBooleanCheckbox styleClass="xDouble_marginLIncl tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" valueChangeListener="#{imageBean.selectedChanged}" rendered="#{SessionBean.user != null}">
+								<f:ajax execute="@this" render=":preListHeader"/>
+							</h:selectBooleanCheckbox>
+							<h:outputText styleClass="free_label" value="#{lbl.selected}" rendered="#{SessionBean.user != null}"/>
+							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
+								<h:outputText value="#{lbl.remove_from_col}" />
 							</h:commandLink>
-						<h:outputText styleClass="free_area0 " value=")"/>
-						</h:panelGroup>
+							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.navigationString == 'pretty:albumItem'}">
+								<h:outputText value="#{lbl.remove_from_album}" />
+							</h:commandLink>
+							
+							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
+								<h:outputText value="#{lbl.add_to_active_album}" />
+							</h:commandLink>
+							<h:panelGroup rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
+								<h:outputText styleClass="free_label xTiny_marginLExcl" value=" (Image in"/>
+								<h:outputText value=":" style="visibility:hidden" styleClass="free_label"/>
+								<h:outputLink styleClass="free_area0 " value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.id.path}">
+									<h:outputText value="active album"/>
+								</h:outputLink>
+								<h:outputText styleClass="free_area0 " value=" - "/>
+								<h:commandLink styleClass="free_label" id="lnkPicRemoveFromAvtiveAlbum" action="#{imageBean.removeFromActiveAlbum}">
+									<h:outputText value="#{lbl.remove}" />
+								</h:commandLink>
+								<h:outputText styleClass="free_area0 " value=")"/>
+							</h:panelGroup>
+						</h:form>
 					</h:panelGroup>
 				</h:panelGroup>
 				
@@ -130,7 +131,7 @@
 				<h:outputText value="#{imageBean.edit.checkToggleState}"/>
 				
 				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab != 'techmd'}">	
-					
+					<h:form id="itemEdit">
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata}" /><br/>
@@ -262,6 +263,7 @@
 							</rich:panel>
 						</h:panelGroup>
 					</h:panelGroup>
+				</h:form>
 				</h:panelGroup>
 				<h:panelGroup id="techmetadata" styleClass="full_area0_p4" style="background-color:#494949" rendered="#{imageBean.tab == 'techmd'}">
 					<a4j:repeat id="techMd" var="techMd" value="#{imageBean.techMd}" rowKeyVar="index">
@@ -273,7 +275,7 @@
 				
 			</h:panelGroup>
 			</h:panelGroup> 
-			</h:form>
+			
 		</ui:define>
 						
 	</ui:composition>

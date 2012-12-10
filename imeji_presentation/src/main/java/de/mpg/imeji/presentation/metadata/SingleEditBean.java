@@ -38,6 +38,7 @@ public class SingleEditBean
     private String toggleState = "displayMd";
     private int mdPosition = 0;
     private String pageUrl = "";
+    private List<SuperMetadataBean> metadataList;
 
     public SingleEditBean(Item im, MetadataProfile profile, String pageUrl)
     {
@@ -77,12 +78,23 @@ public class SingleEditBean
         }
         List<Item> imAsList = new ArrayList<Item>();
         imAsList.add(item);
+       
         editor = new SimpleImageEditor(imAsList, profile, null);
         ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
+        
+        // test with supermetadatabean
+        metadataList = new ArrayList<SuperMetadataBean>();
+        for (Metadata metadata : item.getMetadataSet().getMetadata())
+        {
+        	metadataList.add(new SuperMetadataBean(metadata));
+        }
     }
 
+    
+    
     public String save() throws Exception
     {
+    	copySuperMetadatatoItem();
         cleanImageMetadata();
         editor.getImages().clear();
         editor.getImages().add(item);
@@ -91,15 +103,24 @@ public class SingleEditBean
         cancel();
         return "";
     }
-
+    
+    private void copySuperMetadatatoItem()
+    {
+    	item.getMetadataSet().getMetadata().clear();
+    	for (SuperMetadataBean smb : metadataList)
+    	{
+    		item.getMetadataSet().getMetadata().add(smb.getMetadata());
+    	}
+    }
     public String cancel() throws Exception
     {
         this.toggleState = "displayMd";
         if (editor != null && !editor.getImages().isEmpty())
-            item = editor.getImages().get(0);
         {
-            cleanImageMetadata();
+        	item = editor.getImages().get(0);
         }
+        cleanImageMetadata();
+
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         Locks.unLock(new Lock(this.item.getId().toString(), sb.getUser().getEmail()));
         reloadImage();
@@ -237,4 +258,12 @@ public class SingleEditBean
     {
         this.toggleState = toggleState;
     }
+
+	public List<SuperMetadataBean> getMetadataList() {
+		return metadataList;
+	}
+
+	public void setMetadataList(List<SuperMetadataBean> metadataList) {
+		this.metadataList = metadataList;
+	}
 }

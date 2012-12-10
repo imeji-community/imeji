@@ -78,7 +78,7 @@
 				 			<h:commandButton id="btPageNumber1Ajax" onclick="setOpacityToImages();"  styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{paginatorListSessionBean.ajaxMode and !(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}">
 				 				<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":#{rich:clientId('ajaxPaginatorTop')} :#{rich:clientId('ajaxPaginatorBottom')} :#{rich:clientId('ajaxList')} :#{rich:clientId('subHeader')}"/>
 				 			</h:commandButton>
-				 			<h:panelGroup styleClass="seperator" />
+				 			<h:panelGroup styleClass="seperator"/>
 				 		</ui:repeat>
 						
 				 		<h:commandButton id="btList_lkNextAjax" onclick="setOpacityToImages();" styleClass="forward" value="#{lbl.paginator_next}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 + paginatorListSessionBean.elementsPerPage} -  #{paginatorListSessionBean.offset + 1 + 2*paginatorListSessionBean.elementsPerPage}" action="#{paginatorListSessionBean.goToNextPage}" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber != paginatorListSessionBean.paginatorPageSize}">
@@ -186,7 +186,7 @@
 	<script type="text/javascript">
 		function setOpacityToImages()
 		{
-			try {document.getElementById(':#{rich:clientId('ajaxList')}').style.opacity = 0.3;}
+			try {document.getElementById('ajaxList').style.opacity = 0.3;}
 			catch (e) {/* No opacity*/}
 			return true;
 		}

@@ -8,37 +8,36 @@
 	xmlns:pretty="http://ocpsoft.com/prettyfaces">
 
 <ui:composition template="templates/template.xhtml">
-<ui:param name="headline" value="#{lbl.edit_images}"/>
-<body>
-	<ui:define name="contentMenu">
-		
-	</ui:define>
+	<ui:param name="headline" value="#{lbl.edit_images}"/>
+	
+	<ui:define name="contentMenu"></ui:define>
 	
 	<ui:define name="mainContent">
 		<h:panelGroup layout="block" styleClass="full_area0 itemList">
 		 	<ui:include src="./include/History.xhtml"></ui:include>
 		 </h:panelGroup>
-			<!-- 
+		
+		<!-- 
 			Initialize the Edit form
 		 -->
 		<script>
 			jQuery(document).ready(function() {
-				#{rich:element('editInitialized')}.click();
-			});
+				document.getElementById('batchEditForm:editInitialized').click();			
+				});
 		</script>			
+		
+		<h:outputText value="#{EditImageMetadataBean.urlParameters}"/>
+		
 		<h:form id="batchEditForm">
+		
 		<h:selectBooleanCheckbox id="editInitialized" value="false" style="visibility:hidden">
-			<a4j:ajax event="change" render="ajaxContent" listener="#{EditImageMetadataBean.init}" status="initEditPage" />
+			<f:ajax event="change" render=":batchEditForm:ajaxContent" listener="#{EditImageMetadataBean.init}"  />
 		</h:selectBooleanCheckbox>
 		
 		<h:panelGroup styleClass="full_area0 itemList " >	
 			<br/>
 			
-			<a4j:outputPanel id="NonAjaxContent" rendered="false">
-				<h:outputText value="#{EditImageMetadataBean.init}"/>
-			</a4j:outputPanel>
-			
-			<a4j:outputPanel id="ajaxContent">
+			<h:panelGroup id="ajaxContent">
 				
 				<h:panelGroup id="editorInitializing" styleClass="full_area0 huge_marginLExcl" rendered="#{!EditImageMetadataBean.initialized and SessionBean.user != null}">
 					<h2><h:outputText stylClass="full_area0_p8 text-align:center" value="Preparing editor! Please a wait a few seconds..."/></h2>
@@ -182,7 +181,7 @@
 					</h:panelGroup>		
 					  	
 				</h:panelGroup>
-			</a4j:outputPanel>
+			</h:panelGroup>
 			
 		</h:panelGroup>
 		
@@ -193,8 +192,9 @@
 	        </h3>
 			</div>
 		</rich:popupPanel>
-		</h:form>      
+		
+		</h:form>    
 	</ui:define>
-</body>
+
 </ui:composition>
 </html>

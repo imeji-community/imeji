@@ -8,6 +8,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.ManagedBean;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -56,12 +59,15 @@ public class EditImageMetadataBean
     // other
     private int mdPosition;
     private int imagePosition;
-    private String editType = "all";
     private boolean isProfileWithStatements = true;
     private int lockedImages = 0;
     private boolean initialized = false;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private static Logger logger = Logger.getLogger(EditImageMetadataBean.class);
+    // url parameters
+    private String type = "all";
+    private String query = "";
+    private String collectionId = null;
 
     /**
      * Constructor
@@ -72,12 +78,14 @@ public class EditImageMetadataBean
         modeRadio = new ArrayList<SelectItem>();
     }
 
+    /**
+     * Initialize all elements of the bean
+     */
     public void init()
     {
         reset();
         try
         {
-            editType = UrlHelper.getParameterValue("type");
             allItems = initImages();
             initProfileAndStatement(allItems);
             initStatementsMenu();
@@ -92,9 +100,11 @@ public class EditImageMetadataBean
         }
     }
 
+    /**
+     * Set all pages element to their default values
+     */
     public void reset()
     {
-        editType = "all";
         initialized = false;
         statementMenu = new ArrayList<SelectItem>();
         modeRadio = new ArrayList<SelectItem>();
@@ -106,30 +116,56 @@ public class EditImageMetadataBean
     }
 
     /**
-     * Initialize the complete page
+     * Go back to the previous page
      * 
      * @return
+     * @throws IOException
      */
-    public String getInit()
+    public String cancel() throws IOException
     {
-        init();
+        redirectToView();
         return "";
     }
 
+    /**
+     * Read the url paramameters when the page is first called
+     * 
+     * @return
+     */
+    public String getUrlParameters()
+    {
+        type = UrlHelper.getParameterValue("type");
+        query = UrlHelper.getParameterValue("q");
+        collectionId = UrlHelper.getParameterValue("c");
+        System.out.println(type + query + collectionId);
+        return "";
+    }
+
+    /**
+     * Load the images to be edited
+     * 
+     * @return
+     * @throws IOException
+     */
     private List<Item> initImages() throws IOException
     {
         List<String> uris = new ArrayList<String>();
-        if ("selected".equals(editType))
+        if ("selected".equals(type))
         {
             uris = getSelectedItems();
         }
-        else if ("all".equals(editType))
+        else if ("all".equals(type))
         {
             uris = searchItems();
         }
         return loaditems(uris);
     }
 
+    /**
+     * Load the profile of the images, and set the statement to be edited.
+     * 
+     * @param items
+     */
     private void initProfileAndStatement(List<Item> items)
     {
         profile = null;
@@ -140,6 +176,12 @@ public class EditImageMetadataBean
         statement = getSelectedStatement();
     }
 
+    /**
+     * Init the {@link MetadataEditor}
+     * 
+     * @param items
+     * @return
+     */
     private String initEditor(List<Item> items)
     {
         try
@@ -168,6 +210,9 @@ public class EditImageMetadataBean
         return "";
     }
 
+    /**
+     * Init the radio select menu with the 3 edit modes (overwrite all values, append new value, add if empty)
+     */
     private void initModeMenu()
     {
         selectedMode = "basic";
@@ -183,6 +228,9 @@ public class EditImageMetadataBean
                 .getMessage("editor_overwrite")));
     }
 
+    /**
+     * Initialize the select menu with the possible statement to edit (i.e. statement of the profiles)
+     */
     private void initStatementsMenu()
     {
         statementMenu = new ArrayList<SelectItem>();
@@ -193,6 +241,10 @@ public class EditImageMetadataBean
         }
     }
 
+    /**
+     * Change the statement to edit
+     * @return
+     */
     public String changeStatement()
     {
         statement = getSelectedStatement();
@@ -200,13 +252,34 @@ public class EditImageMetadataBean
         initEditor(new ArrayList<Item>(allItems));
         return "";
     }
+    
+    /**
+     * Set to the original state
+     * @return
+     */
+    public String resetChanges()
+    {
+        init();
+        return "";
+    }
 
+    /**
+     * Load the list of items
+     * 
+     * @param uris
+     * @return
+     */
     public List<Item> loaditems(List<String> uris)
     {
         ItemController itemController = new ItemController(session.getUser());
         return (List<Item>)itemController.loadItems(uris, -1, 0);
     }
 
+    /**
+     * Load the selected item from the session
+     * 
+     * @return
+     */
     public List<String> getSelectedItems()
     {
         List<String> l = new ArrayList<String>(session.getSelected().size());
@@ -217,10 +290,14 @@ public class EditImageMetadataBean
         return l;
     }
 
+    /**
+     * Search for item according to the query
+     * 
+     * @return
+     * @throws IOException
+     */
     public List<String> searchItems() throws IOException
     {
-        String query = UrlHelper.getParameterValue("q");
-        String collectionId = UrlHelper.getParameterValue("c");
         SearchQuery sq = URLQueryTransformer.parseStringQuery(query);
         ItemController itemController = new ItemController(session.getUser());
         SearchResult sr = itemController.searchImagesInContainer(URI.create(collectionId), sq, null, -1, 0);
@@ -256,12 +333,6 @@ public class EditImageMetadataBean
         editor.save();
         long after = System.currentTimeMillis();
         logger.info("saving = " + Long.valueOf(after - before));
-        redirectToView();
-        return "";
-    }
-
-    public String cancel() throws IOException
-    {
         redirectToView();
         return "";
     }
@@ -320,7 +391,8 @@ public class EditImageMetadataBean
         initialized = false;
         unlockImages();
         HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
-        FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getPreviousPage().getUri().toString().replace("?h=", ""));
+        FacesContext.getCurrentInstance().getExternalContext()
+                .redirect(hs.getPreviousPage().getUri().toString().replace("?h=", ""));
     }
 
     public String clearAll()
@@ -330,12 +402,6 @@ public class EditImageMetadataBean
         {
             removeAllMetadata(im);
         }
-        return "";
-    }
-
-    public String resetChanges()
-    {
-        getInit();
         return "";
     }
 
@@ -520,12 +586,12 @@ public class EditImageMetadataBean
 
     public String getEditType()
     {
-        return editType;
+        return type;
     }
 
     public void setEditType(String editType)
     {
-        this.editType = editType;
+        this.type = editType;
     }
 
     public Statement getStatement()

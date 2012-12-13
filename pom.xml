@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.mpg.mpdl.imeji</groupId>
 	<artifactId>imeji</artifactId>
@@ -281,9 +282,22 @@
 				<plugins>
 					<plugin>
 						<groupId>org.zeroturnaround</groupId>
-						<!-- new declare format -->
-						<artifactId>jrebel-maven-plugin</artifactId>
-						<executions>
+						<artifactId>javarebel-maven-plugin</artifactId>
+						<configuration>
+							<packaging>war</packaging>
+							<classpath>
+								<fallback>default</fallback>
+								<resources>
+									<resource>
+										<directory>target/classes</directory>
+										<excludes>
+											<exclude>log4j.xml</exclude>
+										</excludes>
+									</resource>
+								</resources>
+							</classpath>
+						</configuration>
+						 <executions>
 							<execution>
 								<id>generate-rebel-xml</id>
 								<phase>process-resources</phase>
@@ -291,8 +305,8 @@
 									<goal>generate</goal>
 								</goals>
 							</execution>
-						    </executions>
-					</plugin>				
+						</executions>
+					</plugin>
 				</plugins>
 				<pluginManagement>
 					<plugins>
@@ -396,12 +410,12 @@
 
 				<!-- Counter for imeji objects -->
 				<imeji.counter.first.value>0</imeji.counter.first.value>
-				
+
 				<!-- eSciDoc images types -->
 				<xsd.metadata.content-category.thumbnail>http://purl.org/escidoc/metadata/ves/content-categories/thumbnail</xsd.metadata.content-category.thumbnail>
 				<xsd.metadata.content-category.web-resolution>http://purl.org/escidoc/metadata/ves/content-categories/web-resolution</xsd.metadata.content-category.web-resolution>
 				<xsd.metadata.content-category.original-resolution>http://purl.org/escidoc/metadata/ves/content-categories/original-resolution</xsd.metadata.content-category.original-resolution>
-				
+
 				<!-- size of the imeji images -->
 				<xsd.resolution.thumbnail>103</xsd.resolution.thumbnail>
 				<xsd.resolution.web>357</xsd.resolution.web>
@@ -420,7 +434,7 @@
 				<xsd.metadata.dc>http://purl.org/dc/elements/1.1/</xsd.metadata.dc>
 				<xsd.metadata.dcterms>http://purl.org/dc/terms/</xsd.metadata.dcterms>
 
-				
+
 
 			</properties>
 			<distributionManagement>

@@ -13,11 +13,14 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.metadata.EditorItemBean;
+import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 public abstract class MetadataEditor
 {
-    protected List<Item> items = new ArrayList<Item>();
+    // protected List<Item> items = new ArrayList<Item>();
+    protected List<EditorItemBean> items;
     protected Statement statement;
     protected MetadataProfile profile;
 
@@ -28,17 +31,21 @@ public abstract class MetadataEditor
      * @param items
      * @param statement
      */
-    public MetadataEditor(List<Item> items, MetadataProfile profile, Statement statement)
+    public MetadataEditor(List<Item> itemList, MetadataProfile profile, Statement statement)
     {
         this.statement = statement;
         this.profile = profile;
-        this.items = items;
+        items = new ArrayList<EditorItemBean>();
+        for (Item item : itemList)
+        {
+            items.add(new EditorItemBean(item));
+        }
         initialize();
     }
 
     public void reset()
     {
-        items = new ArrayList<Item>();
+        items = new ArrayList<EditorItemBean>();
         statement = null;
         profile = null;
     }
@@ -56,7 +63,12 @@ public abstract class MetadataEditor
                     try
                     {
                         addPositionToMetadata();
-                        ic.update(items);
+                        List<Item> itemList = new ArrayList<Item>();
+                        for (EditorItemBean eib : items)
+                        {
+                            itemList.add(eib.asItem());
+                        }
+                        ic.update(itemList);
                         BeanHelper.info(sb.getMessage("success_editor_edit"));
                         String str = items.size() + " " + sb.getMessage("success_editor_images");
                         if (items.size() == 1)
@@ -90,12 +102,12 @@ public abstract class MetadataEditor
      */
     private void addPositionToMetadata()
     {
-        for (Item im : items)
+        for (EditorItemBean eib : items)
         {
             int pos = 0;
-            for (Metadata md : im.getMetadataSet().getMetadata())
+            for (SuperMetadataBean smb : eib.getMetadata())
             {
-                md.setPos(pos);
+                smb.setPos(pos);
                 pos++;
             }
         }
@@ -109,11 +121,11 @@ public abstract class MetadataEditor
 
     public abstract void addMetadata(int imagePos, int metadataPos);
 
-    public abstract void addMetadata(Item item, int metadataPos);
+    public abstract void addMetadata(EditorItemBean item, int metadataPos);
 
     public abstract void removeMetadata(int imagePos, int metadataPos);
 
-    public abstract void removeMetadata(Item item, int metadataPos);
+    public abstract void removeMetadata(EditorItemBean item, int metadataPos);
 
     /**
      * Create a new Metadata according to current Editor configuration.
@@ -129,12 +141,12 @@ public abstract class MetadataEditor
         return null;
     }
 
-    public List<Item> getImages()
+    public List<EditorItemBean> getItems()
     {
         return items;
     }
 
-    public void setImages(List<Item> items)
+    public void setItems(List<EditorItemBean> items)
     {
         this.items = items;
     }

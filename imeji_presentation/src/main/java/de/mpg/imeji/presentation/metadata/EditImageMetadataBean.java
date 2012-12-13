@@ -8,9 +8,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.ManagedBean;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -70,7 +67,7 @@ public class EditImageMetadataBean
     private String collectionId = null;
 
     /**
-     * Constructor
+     * Bean for batch and multiple metadata editor
      */
     public EditImageMetadataBean()
     {
@@ -137,7 +134,6 @@ public class EditImageMetadataBean
         type = UrlHelper.getParameterValue("type");
         query = UrlHelper.getParameterValue("q");
         collectionId = UrlHelper.getParameterValue("c");
-        System.out.println(type + query + collectionId);
         return "";
     }
 
@@ -348,7 +344,7 @@ public class EditImageMetadataBean
             }
             catch (Exception e)
             {
-                editor.getImages().remove(i);
+                editor.getItems().remove(i);
                 lockedImages++;
                 i--;
             }
@@ -358,34 +354,45 @@ public class EditImageMetadataBean
     private void unlockImages()
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        for (Item im : editor.getImages())
+        for (EditorItemBean eib : editor.getItems())
         {
-            Locks.unLock(new Lock(im.getId().toString(), sb.getUser().getEmail()));
+            Locks.unLock(new Lock(eib.asItem().getId().toString(), sb.getUser().getEmail()));
         }
     }
 
+    /**
+     * Called method when "add to all" button is clicked
+     * @return
+     */
     public String addToAll()
     {
-        for (Item im : editor.getImages())
+        //TODO remove the item with only the editoritembeans
+        for (EditorItemBean eib : editor.getItems())
         {
+            Item item = eib.asItem();
             if ("overwrite".equals(selectedMode))
             {
-                im = removeAllMetadata(im);
-                im.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
+                item = removeAllMetadata(item);
+                item.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
             }
             else if ("append".equals(selectedMode))
             {
-                im.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
+                item.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
             }
             else if ("basic".equals(selectedMode))
             {
-                addMetadataIfNotExists(im, MetadataFactory.copyMetadata(metadata));
+                addMetadataIfNotExists(item, MetadataFactory.copyMetadata(metadata));
             }
+            eib.init(item);
         }
         metadata = MetadataFactory.createMetadata(getSelectedStatement());
         return "";
     }
 
+    /**
+     * redirect to previous page
+     * @throws IOException
+     */
     public void redirectToView() throws IOException
     {
         initialized = false;
@@ -395,16 +402,26 @@ public class EditImageMetadataBean
                 .redirect(hs.getPreviousPage().getUri().toString().replace("?h=", ""));
     }
 
+    /**
+     * Remove all metadata
+     * @return
+     */
     public String clearAll()
     {
         metadata = MetadataFactory.createMetadata(statement);
-        for (Item im : editor.getImages())
+        for (EditorItemBean eib : editor.getItems())
         {
-            removeAllMetadata(im);
+            removeAllMetadata(eib.asItem());
         }
         return "";
     }
 
+    /**
+     * Add a the same metadata to all item having no value defined for this statement
+     * @param im
+     * @param metadata
+     * @return
+     */
     private Item addMetadataIfNotExists(Item im, Metadata metadata)
     {
         boolean hasValue = false;
@@ -633,4 +650,5 @@ public class EditImageMetadataBean
     {
         return initialized;
     }
+
 }

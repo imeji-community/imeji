@@ -11,9 +11,10 @@ import de.mpg.imeji.logic.vo.Person;
  * 
  * @author saquet
  */
-public class SuperMetadataBean extends Metadata
+public class SuperMetadataBean
 {
     private Metadata metadata;
+    private int pos = 0;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -29,9 +30,8 @@ public class SuperMetadataBean extends Metadata
     private double number = Double.NaN;
     private String license = null;
 
-  
     /**
-     * Constructor for one Metadata
+     * Bean for all Metadata types. This bean should have all variable that have been defined in all metadata types.
      * 
      * @param metadata
      */
@@ -41,44 +41,25 @@ public class SuperMetadataBean extends Metadata
         ObjectHelper.copyFields(metadata, this);
     }
 
-    public Metadata getMetadata()
+    /**
+     * Get {@link SuperMetadataBean} as {@link Metadata}
+     * 
+     * @return
+     */
+    public Metadata asMetadata()
     {
         ObjectHelper.copyFields(this, metadata);
         return metadata;
     }
-
-    public void setMetadata(Metadata metadata)
-    {
-        this.metadata = metadata;
-    }
-
-    @Override
-    public String getTypeNamespace()
-    {
-        return metadata.getTypeNamespace();
-    }
-
-    public void copy(Metadata metadata)
-    {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
+    
     public URI getStatement()
     {
         return metadata.getStatement();
     }
 
-    @Override
-    public void setStatement(URI namespace)
+    public String getTypeNamespace()
     {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public String asFulltext()
-    {
-        return metadata.asFulltext();
+        return metadata.getTypeNamespace();
     }
 
     public String getText()
@@ -209,5 +190,15 @@ public class SuperMetadataBean extends Metadata
     public void setLicense(String license)
     {
         this.license = license;
+    }
+
+    public int getPos()
+    {
+        return pos;
+    }
+
+    public void setPos(int pos)
+    {
+        this.pos = pos;
     }
 }

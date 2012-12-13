@@ -78,49 +78,44 @@ public class SingleEditBean
         }
         List<Item> imAsList = new ArrayList<Item>();
         imAsList.add(item);
-       
         editor = new SimpleImageEditor(imAsList, profile, null);
         ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
-        
-        // test with supermetadatabean
         metadataList = new ArrayList<SuperMetadataBean>();
         for (Metadata metadata : item.getMetadataSet().getMetadata())
         {
-        	metadataList.add(new SuperMetadataBean(metadata));
+            metadataList.add(new SuperMetadataBean(metadata));
         }
     }
 
-    
-    
     public String save() throws Exception
     {
-    	copySuperMetadatatoItem();
+        copySuperMetadatatoItem();
         cleanImageMetadata();
-        editor.getImages().clear();
-        editor.getImages().add(item);
+        editor.getItems().clear();
+        editor.getItems().add(new EditorItemBean(item));
         editor.save();
         reloadPage();
         cancel();
         return "";
     }
-    
+
     private void copySuperMetadatatoItem()
     {
-    	item.getMetadataSet().getMetadata().clear();
-    	for (SuperMetadataBean smb : metadataList)
-    	{
-    		item.getMetadataSet().getMetadata().add(smb.getMetadata());
-    	}
+        item.getMetadataSet().getMetadata().clear();
+        for (SuperMetadataBean smb : metadataList)
+        {
+            item.getMetadataSet().getMetadata().add(smb.asMetadata());
+        }
     }
+
     public String cancel() throws Exception
     {
         this.toggleState = "displayMd";
-        if (editor != null && !editor.getImages().isEmpty())
+        if (editor != null && !editor.getItems().isEmpty())
         {
-        	item = editor.getImages().get(0);
+            item = editor.getItems().get(0).asItem();
         }
         cleanImageMetadata();
-
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         Locks.unLock(new Lock(this.item.getId().toString(), sb.getUser().getEmail()));
         reloadImage();
@@ -186,7 +181,7 @@ public class SingleEditBean
     public String addMetadata()
     {
         editor.addMetadata(0, mdPosition);
-        this.item = editor.getImages().get(0);
+        this.item = editor.getItems().get(0).asItem();
         init();
         return "";
     }
@@ -194,7 +189,7 @@ public class SingleEditBean
     public String removeMetadata()
     {
         editor.removeMetadata(0, mdPosition);
-        this.item = editor.getImages().get(0);
+        this.item = editor.getItems().get(0).asItem();
         init();
         return "";
     }
@@ -259,11 +254,13 @@ public class SingleEditBean
         this.toggleState = toggleState;
     }
 
-	public List<SuperMetadataBean> getMetadataList() {
-		return metadataList;
-	}
+    public List<SuperMetadataBean> getMetadataList()
+    {
+        return metadataList;
+    }
 
-	public void setMetadataList(List<SuperMetadataBean> metadataList) {
-		this.metadataList = metadataList;
-	}
+    public void setMetadataList(List<SuperMetadataBean> metadataList)
+    {
+        this.metadataList = metadataList;
+    }
 }

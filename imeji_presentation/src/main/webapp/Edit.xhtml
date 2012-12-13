@@ -61,7 +61,7 @@
 						<h:outputLabel for="selStatement" styleClass="full_area0_p0" value="#{lbl.metadata_type_select}"/>
 						<h:selectOneMenu styleClass="huge_area0" id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}">
 							<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
-							<a4j:ajax event="change" execute="@this" render="ajaxContent" listener="#{EditImageMetadataBean.changeStatement}"/>
+							<f:ajax event="change" execute="@this" render="ajaxContent" listener="#{EditImageMetadataBean.changeStatement}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
 					
@@ -80,7 +80,9 @@
 									<ui:param name="hideLabel" value="true"/>
 								</ui:include>
 								
-								<a4j:commandButton render="ajaxContent" styleClass="xLarge_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}" action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}"/>
+								<h:commandButton styleClass="xLarge_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}" action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}">
+									<f:ajax render="ajaxContent" execute="@form"/>
+								</h:commandButton>
 								
 								<h:panelGroup id="modeRadioMenu" styleClass="full_area0 ">
 									<h:selectOneRadio layout="pageDirection" styleClass="huge_are0" value="#{EditImageMetadataBean.selectedMode}">
@@ -105,9 +107,13 @@
 							
 							
 							<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
-								<a4j:commandButton render="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
+								<h:commandButton  styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}">
+									<f:ajax render="ajaxContent"/>
+								</h:commandButton >
 								
-								<a4j:commandButton render="ajaxContent" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}"/>
+								<h:commandButton styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}">
+									<f:ajax render="ajaxContent"/>
+								</h:commandButton>
 								
 								<h:outputLink value="" rendered="false" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
 									<h:outputText value="#{lbl.reset_changes}" />
@@ -126,13 +132,13 @@
 					<!-- IMAGES -->
 					<h:panelGroup styleClass="full_area0 " rendered="#{EditImageMetadataBean.profileWithStatements}">	
 			        	<h:panelGroup id="imagesMetadata" layout="block" styleClass="free_area0 endline" rendered="#{EditImageMetadataBean.editType == 'selected'}">
-		        			<a4j:repeat id="imagesList" var="image" value="#{EditImageMetadataBean.editor.images}" rowKeyVar="indexImage">
+		        			<ui:repeat id="imagesList" var="image" value="#{EditImageMetadataBean.editor.items}" rowKeyVar="indexImage">
 		        				<h:panelGroup styleClass="full_area0_p0 preListHeader" >
 			        				<h:panelGroup styleClass="huge_area0_p8">
-										<h:graphicImage alt="#{image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{image.thumbnailImageUrl}"/>
+										<h:graphicImage alt="#{image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{image.thumbnail}"/>
 			        				</h:panelGroup>
-			        				<h:panelGroup styleClass="half_area0" rendered="#{image.metadataSet.profile == EditImageMetadataBean.profile.id}">
-				        				<a4j:repeat id="metadata" var="md" value="#{image.metadataSet.metadata}" rowKeyVar="indexMetadata">
+			        				<h:panelGroup styleClass="half_area0" rendered="#{image.profile == EditImageMetadataBean.profile.id}">
+				        				<ui:repeat id="metadata" var="md" value="#{image.metadata}" rowKeyVar="indexMetadata">
 				        					<h:panelGroup  rendered="#{md.statement == EditImageMetadataBean.metadata.statement}">
 				        						<!-- Field -->
 				        						<ui:include src="./picturesPages/ui/MetadataInput.xhtml">
@@ -145,20 +151,22 @@
 												</ui:include>
 												<!-- BUTTONS -->
 												<h:panelGroup layout="block">
-													<a4j:commandLink styleClass="small_label" render="ajaxContent" action="#{EditImageMetadataBean.addMetadata}" value="#{lbl.add}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
+													<h:commandLink id="add" styleClass="small_label" action="#{EditImageMetadataBean.addMetadata}" value="#{lbl.add}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
 														<f:setPropertyActionListener value="#{indexMetadata}" target="#{EditImageMetadataBean.mdPosition}" />
 														<f:setPropertyActionListener value="#{indexImage}" target="#{EditImageMetadataBean.imagePosition}" />
-													</a4j:commandLink>
-													<a4j:commandLink  styleClass="small_label"  render="ajaxContent" action="#{EditImageMetadataBean.removeMetadata}" value="#{lbl.remove}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
+														<f:ajax render=":batchEditForm:ajaxContent"/>
+													</h:commandLink>
+													<h:commandLink  id="remove" styleClass="small_label" action="#{EditImageMetadataBean.removeMetadata}" value="#{lbl.remove}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
 														<f:setPropertyActionListener value="#{indexMetadata}" target="#{EditImageMetadataBean.mdPosition}" />
 														<f:setPropertyActionListener value="#{indexImage}" target="#{EditImageMetadataBean.imagePosition}" />
-													</a4j:commandLink>	
+														<f:ajax render=":batchEditForm:ajaxContent"/>
+													</h:commandLink>	
 												</h:panelGroup>
 				        					</h:panelGroup>
-				        				</a4j:repeat>
+				        				</ui:repeat>
 			        				</h:panelGroup>
 			        			</h:panelGroup>
-		        			</a4j:repeat>
+		        			</ui:repeat>
 						</h:panelGroup>
 			        </h:panelGroup>
 			        <!-- SAVE BUTTON -->

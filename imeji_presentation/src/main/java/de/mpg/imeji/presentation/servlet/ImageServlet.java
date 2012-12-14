@@ -25,11 +25,13 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.ProxyHelper;
 
 /**
- * A servlet for retrieving and redirecting the content objects urls.
  * 
- * @author franke (initial creation)
- * @author $Author: mfranke $ (last modification)
- * @version $Revision: 3780 $ $LastChangedDate: 2010-07-23 10:01:12 +0200 (Fri, 23 Jul 2010) $
+ * The Servlet to Read images from external systems (to enable authentification and authorization for this systems)
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
  */
 public class ImageServlet extends HttpServlet
 {
@@ -122,7 +124,7 @@ public class ImageServlet extends HttpServlet
                     out.write(buffer, 0, numRead);
                 }
                 input.close();
-                out.flush();
+                //out.flush();
                 out.close();
             }
         }
@@ -139,12 +141,26 @@ public class ImageServlet extends HttpServlet
         }
     }
     
+    /**
+     * Log in eSciDoc and return the userHandle
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws Exception
+     */
     private String getNewEscidocUserHandle() throws IOException, URISyntaxException, Exception
     {
     	 return LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"),
                  PropertyReader.getProperty("imeji.escidoc.password"));
     }
     
+    /**
+     * Get the current handle, if null get a new one
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws Exception
+     */
     private String getEscidocUserHandle() throws IOException, URISyntaxException, Exception
     {
     	 if (userHandle == null)
@@ -153,7 +169,16 @@ public class ImageServlet extends HttpServlet
     	 }
     	 return null;
     }
-    
+    /**
+     * Initialize a http get mehtod
+     * @param url
+     * @param followRedirects
+     * @param userHandle
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws Exception
+     */
     private GetMethod newGetMethod(String url, boolean followRedirects, String userHandle) throws IOException, URISyntaxException, Exception
     {
     	 GetMethod method = new GetMethod(url);

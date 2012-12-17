@@ -3,9 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich"
-	xmlns:pretty="http://ocpsoft.com/prettyfaces">
+	xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 	<!--
 
@@ -40,7 +38,7 @@
 	<body>
 		<ui:composition template="template_paginator.xhtml">
 			<ui:define name="prelistHeader">
-			
+				
 				<h:form id="preListForm">
 					<div id="preListHeader" class="full_area0">
 					
@@ -142,7 +140,7 @@
 						
 						<!-- right selectMenu -->
 						<h:panelGroup styleClass="xDouble_area0" style="float:right; clear:right;" rendered="#{SessionBean.user != null}">
-							<a4j:outputPanel layout="block" styleClass="overlayMenu xDouble_area0">
+							<h:panelGroup layout="block" styleClass="overlayMenu xDouble_area0">
 								<h:panelGroup layout="block" styleClass="menuHeader free_area0" style="float:right;">
 									<h:panelGroup id="preListHeaderSelected" styleClass="free_area0">
 										<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}&#160;" styleClass="free_area0"/>
@@ -205,7 +203,7 @@
 										</div>
 									</span>
 								</h:panelGroup>
-							</a4j:outputPanel>
+							</h:panelGroup>
 						</h:panelGroup>
 					</div>
 					
@@ -264,17 +262,15 @@
 						<h:panelGroup layout="block" id="ajaxList">
 							<h:outputText value="#{msg.no_images_found}!" rendered="#{paginatorListSessionBean.totalNumberOfElements  == 0}" styleClass="free_area0 "/>
 							<ui:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" varStatus="index">
-								<li class="large_area0 itemTile">
+								<li class="large_area0 itemTile" style="z-index: 5;">
 									
 										<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'}  free_area1 matrixItem #{item.inActiveAlbum ? 'inAlbum' : ''}">
 											<!-- Image with link to the details view -->
 											<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}/item/#{item.id}">
-												<h:graphicImage alt="#{item.filename}" id="thumbnail" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.link}"/>			
+												<h:graphicImage alt="#{item.filename}" title="#{item.filename}" id="thumbnail" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.link}"/>			
 											</h:outputLink>
 											
-											<h:panelGroup id="tooltip" layout="block" styleClass="quad_area0_p6 bordst0 shadst1 posRel dialogbox">
-												<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"/>
-											</h:panelGroup>
+											
 											
 										</h:panelGroup>
 										
@@ -296,6 +292,11 @@
 												<h:outputLabel for="pictureCheckbox" value="#{item.caption}"/>
 											</span>
 										</span>
+											
+										<div id="tooltip" style="display:none; z-index: 10; position:absolute; background-color:#292929;" class="quad_area0_p0 bordst0 shadst1  dialogbox">
+											<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"/>
+										</div>
+									
 									
 									<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
 								</li>
@@ -322,15 +323,16 @@
 					</h:panelGroup>
 					
 					<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
-						<a4j:ajax event="change" render="facetGroup" listener="#{paginatorListSessionBean.initFacets}" status="loadFacets"/>
+						<f:ajax event="change" render=":facetForm:facetGroup" listener="#{paginatorListSessionBean.initFacets}"/>
 					</h:selectBooleanCheckbox>
 				</h:form>
-				
-				<!--
-				Reload the page if selected images don't have the correct style
-				Happening by back button
-				-->
+				<div id="log"></div>
+
 				<script>
+					/*
+					Reload the page if selected images don't have the correct style
+					Happening by back button
+					*/
 					jQuery(document).ready(function() {
 						var $checkbox = jQuery(".fullBrowse input:checkbox");
 						var $images = jQuery(".fullBrowse .itemTile");
@@ -344,54 +346,42 @@
 							}
 						});
 					});
-				</script>
-				<!--
-				Initialize the facets
-				-->
-				<script>
+					
+					/*
+					Initialize the facets
+					*/
 					jQuery(document).ready(function() {
 						#{rich:element('facetInitialized')}.click();	
 					});
 				</script>
 				
-				<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
-			    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
-			    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-			    <script>
-					var open;
-	
-					$(function() {
-						 $( document ).tooltip({
-				            items: "img",
-				            show: {
-				                effect: "slideDown",
-				                duration: 200,
-				            },
-				            hide:{
-					            effect: "fold",
-					            delay: 1000,
-					            duration: 200,
-				            },
-				            content: function() {
-				            	closeOpened(this.id);
-				                return document.getElementById(this.id.replace("thumbnail", "tooltip")).innerHTML;
-				            },
-			       	 	});
-				       
-				    });
-	
-				    function closeOpened(newTooltip)
-				    {  
-					    if (open != null){
-					    	var $o = jQuery(document).find("img").tooltip();
-					    	jQuery($o).tooltip( "close" );
-					    	$o.each(function(){
-					    		$(this).tooltip( "close" );
-							});
-					    }
-					    open = newTooltip;
-					}
-		    </script>		
+				<!-- 
+				Script that need to be reloaded after an ajax request
+				-->
+				<h:panelGroup id="scriptToReload">
+					<!-- 
+						Show/hide metadata popup
+						-->
+				    <script>
+						$(function() {
+							$( ".fullBrowse .itemTile" ).hover(function(){
+								var tooltip =  $(this).find("#tooltip");
+								var top =  tooltip.parent().offset().top + 120;
+								var left =  tooltip.parent().offset().left - 120;
+								
+								 $(this).find("#tooltip").css({ top: top, left: left})
+								 $(this).find("#tooltip").show();
+								 $(this).mouseleave(function(){
+									 $(this).find("#tooltip").hide();
+								})
+							})
+							
+						});
+						
+			    	</script>
+			    
+				</h:panelGroup>
+				
 			</ui:define>
 		</ui:composition>
 	</body>

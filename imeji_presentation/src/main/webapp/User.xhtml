@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:f="http://java.sun.com/jsf/core">
 <ui:remove>
 	<!--
 
@@ -90,7 +89,7 @@
 							<h:panelGroup styleClass="full_area0_p4">
 								<h:outputText styleClass="double_area0_p0" value="#{UserBean.user.name} #{lbl.grants_has_following}:"/>
 								<h:panelGroup styleClass="xHuge_area0">
-									<a4j:repeat id="grantList" var="grant" value="#{UserBean.user.grants}" rows="0">
+									<ui:repeat id="grantList" var="grant" value="#{UserBean.user.grants}" rows="0">
 									<h:panelGroup styleClass="full_area0" rendered="#{grant.grantFor != null}">
 										<h:outputText value="#{grant.grantType.fragment}" styleClass="large_area0"/>
 										<h:outputText value="for" styleClass="xSmall_area0"/>
@@ -102,7 +101,7 @@
 											<f:param name="grantFor" value="#{grant.grantFor}" />  
 										</h:commandLink>
 									</h:panelGroup>
-								</a4j:repeat>
+								</ui:repeat>
 								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>

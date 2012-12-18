@@ -3,7 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
+	 xmlns:rich="http://richfaces.org/rich"
 	xmlns:pretty="http://ocpsoft.com/prettyfaces">
 <ui:remove>
 <!--
@@ -43,10 +43,10 @@
 		
 		<ui:define name="additionalSubheaders">
 			<h:outputText value="#{AdvancedSearchBean.newSearch}"/>
-			<a4j:outputPanel id="ajaxQuery" styleClass="full_area0">
+			<h:panelGroup id="ajaxQuery" styleClass="full_area0">
 				<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p4" rendered="#{AdvancedSearchBean.simpleQuery != ''}"/>
 				<h:outputText value="#{AdvancedSearchBean.simpleQuery} " styleClass="xHuge_area0_p4"/>
-			</a4j:outputPanel>
+			</h:panelGroup>
 		</ui:define>
 		
 		<ui:define name="mainContent">
@@ -65,11 +65,11 @@
 					</h:panelGroup>
 					
 					<h:form id="advancedSearchForm">
-						<a4j:outputPanel id="ajaxForm" styleClass="itemList full_area0_p8">
+						<h:panelGroup id="ajaxForm" styleClass="itemList full_area0_p8">
 							
-							<a4j:repeat id="groups" var="g" value="#{AdvancedSearchBean.formular.groups}" rows="0" rowKeyVar="gIndex">
+							<ui:repeat id="groups" var="g" value="#{AdvancedSearchBean.formular.groups}" rows="0" varStatus="gIndex">
 								
-								<h:panelGroup class="full_area0 medium_marginLExcl itemBlock" rendered="#{gIndex > 0}">
+								<h:panelGroup class="full_area0 medium_marginLExcl itemBlock" rendered="#{gIndex.index > 0}">
 						    		<h:outputLabel value="#{lbl.or_big}"/>
 					    		</h:panelGroup>
 					    		
@@ -79,18 +79,19 @@
 										<f:selectItems value="#{AdvancedSearchBean.collectionsMenu}"/>
 									</h:selectOneMenu>
 									
-									<a4j:commandButton id="changeGroup" action="#{AdvancedSearchBean.changeGroup}" render="ajaxForm, ajaxQuery" style="visibility:hidden;">
-										<f:param name="gPos" value="#{gIndex}"/>
-									</a4j:commandButton>
+									<h:commandButton id="changeGroup" action="#{AdvancedSearchBean.changeGroup}" style="visibility:hidden;">
+										<f:ajax execute="@form" render="@form :ajaxQuery"/>
+										<f:param name="gPos" value="#{gIndex.index}"/>
+									</h:commandButton>
 								
 								
-									<a4j:repeat id="els" var="el" value="#{g.elements}" rows="0" rowKeyVar="elIndex">
+									<ui:repeat id="els" var="el" value="#{g.elements}" rows="0" varStatus="elIndex">
 	
 										
 										
 										<h:panelGroup styleClass="tiny_marginLExcl full_area0_p8">
 	
-											<h:panelGroup styleClass="free_area0">aa
+											<h:panelGroup styleClass="free_area0">
 												<h:selectOneMenu id="selNot" value="#{el.inverse}" styleClass="small_area0" onchange="#{rich:element('updateEl')}.click();">
 													<f:selectItem itemValue="false" itemLabel="--"/>
 													<f:selectItem itemValue="true" itemLabel="#{lbl.NOT}"/>
@@ -101,15 +102,17 @@
 												<f:selectItems value="#{g.statementMenu}"/>
 											</h:selectOneMenu>
 											
-											<a4j:commandButton id="changeEl" action="#{AdvancedSearchBean.changeElement}" render="ajaxForm, ajaxQuery" style="visibility:hidden;">
-												<f:param name="gPos" value="#{gIndex}"/>
-												<f:param name="elPos" value="#{elIndex}"/>
-											</a4j:commandButton>
+											<h:commandButton id="changeEl" action="#{AdvancedSearchBean.changeElement}" style="visibility:hidden;">
+												<f:ajax execute="@form" render=":ajaxQuery"/>
+												<f:param name="gPos" value="#{gIndex.index}"/>
+												<f:param name="elPos" value="#{elIndex.index}"/>
+											</h:commandButton>
 											
-											<a4j:commandButton id="updateEl" action="#{AdvancedSearchBean.updateElement}" render="ajaxQuery" style="visibility:hidden;">
-												<f:param name="gPos" value="#{gIndex}"/>
-												<f:param name="elPos" value="#{elIndex}"/>
-											</a4j:commandButton>
+											<h:commandButton id="updateEl" action="#{AdvancedSearchBean.updateElement}" render="ajaxQuery" style="visibility:hidden;">
+												<f:ajax execute="@form" render=":ajaxQuery"/>
+												<f:param name="gPos" value="#{gIndex.index}"/>
+												<f:param name="elPos" value="#{elIndex.index}"/>
+											</h:commandButton>
 											
 											<h:panelGroup styleClass="medium_are0">
 												<h:outputText value="#{lbl.is}" styleClass="xTiny_marginLExcl free_area0"/>
@@ -127,40 +130,45 @@
 												<f:selectItems value="#{el.predefinedValues}"/>
 											</h:selectOneMenu>
 											
-											<a4j:commandButton value="" action="#{AdvancedSearchBean.addElement}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add">
-												<f:param name="gPos" value="#{gIndex}"/>
-												<f:param name="elPos" value="#{elIndex}"/>
-											</a4j:commandButton>
-											<a4j:commandButton value="" action="#{AdvancedSearchBean.removeElement}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool remove">
-												<f:param name="gPos" value="#{gIndex}"/>
-												<f:param name="elPos" value="#{elIndex}"/>
-											</a4j:commandButton>
+											<h:commandButton value="" action="#{AdvancedSearchBean.addElement}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add">
+												<f:ajax execute="@form" render="@form :ajaxQuery"/>
+												<f:param name="gPos" value="#{gIndex.index}"/>
+												<f:param name="elPos" value="#{elIndex.index}"/>
+											</h:commandButton>
+											<h:commandButton value="" action="#{AdvancedSearchBean.removeElement}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool remove">
+												<f:ajax execute="@form" render="@form :ajaxQuery"/>
+												<f:param name="gPos" value="#{gIndex.index}"/>
+												<f:param name="elPos" value="#{elIndex.index}"/>
+											</h:commandButton>
 	
 										</h:panelGroup>
 										
-										<h:panelGroup styleClass="full_area0_p8" rendered="#{elIndex &lt; (g.size - 1)}">
+										<h:panelGroup styleClass="full_area0_p8" rendered="#{elIndex.index &lt; (g.size - 1)}">
 											<h:selectOneMenu id="selLogicalRelation" value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="#{rich:element('updateEl')}.click();">
 												<f:selectItems value="#{AdvancedSearchBean.operatorsMenu}"/>
 											</h:selectOneMenu>
 										</h:panelGroup>
-									</a4j:repeat>
+									</ui:repeat>
 									
 									<h:panelGroup styleClass="full_area0_p8">
-										<a4j:commandButton value="" action="#{AdvancedSearchBean.addGroup}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add" shortDesc="#{lbl.add_collection}">
-											<f:param name="gPos" value="#{gIndex}"/>
-										</a4j:commandButton>
-										<a4j:commandButton value="" action="#{AdvancedSearchBean.removeGroup}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}">
-											<f:param name="gPos" value="#{gIndex}"/>
-										</a4j:commandButton>
+										<h:commandButton value="" action="#{AdvancedSearchBean.addGroup}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add" shortDesc="#{lbl.add_collection}">
+											<f:ajax execute="@form" render="@form :ajaxQuery"/>
+											<f:param name="gPos" value="#{gIndex.index}"/>
+										</h:commandButton>
+										<h:commandButton value="" action="#{AdvancedSearchBean.removeGroup}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}">
+											<f:ajax execute="@form" render="@form :ajaxQuery"/>
+											<f:param name="gPos" value="#{gIndex.index}"/>
+										</h:commandButton>
 									</h:panelGroup>
 								</h:panelGroup>
-							</a4j:repeat>
-						</a4j:outputPanel>
+							</ui:repeat>
+						</h:panelGroup>
 						<h:panelGroup styleClass="full_area0_p8">
-							<a4j:commandButton value="#{lbl.clear_all_values}" action="#{AdvancedSearchBean.initFormular}" render="ajaxForm, ajaxQuery" styleClass="medium_marginLExcl free_area1_p8 cancelButton">
-							</a4j:commandButton>
-							<a4j:commandButton value="#{lbl.search}" action="#{AdvancedSearchBean.search}" styleClass="free_area1_p8 activeButton advancedSearchButton">
-							</a4j:commandButton>
+							<h:commandButton value="#{lbl.clear_all_values}" action="#{AdvancedSearchBean.initFormular}" styleClass="medium_marginLExcl free_area1_p8 cancelButton">
+								<f:ajax execute="@form" render="@form :ajaxQuery"/>
+							</h:commandButton>
+							<h:commandButton value="#{lbl.search}" action="#{AdvancedSearchBean.search}" styleClass="free_area1_p8 activeButton advancedSearchButton">
+							</h:commandButton>
 						</h:panelGroup>
 					</h:form>
 				</h:panelGroup>			

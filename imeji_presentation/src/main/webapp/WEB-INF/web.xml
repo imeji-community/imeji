@@ -12,9 +12,10 @@
 	Fachinformationszentrum Karlsruhe Gesellschaft für wissenschaftlich-technische 
 	Information mbH and Max-Planck- Gesellschaft zur Förderung der Wissenschaft 
 	e.V. All rights reserved. Use is subject to license terms. -->
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+    version="3.0">
 
 	<!-- Servlets -->
 	<servlet>
@@ -144,6 +145,10 @@
 		<param-name>org.richfaces.LoadScriptStrategy</param-name>
 		<param-value>ALL</param-value>
 	</context-param>
+	 <context-param>
+        <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
 	<!-- not needed for richfaces4 <context-param> <param-name>org.ajax4jsf.COMPRESS_SCRIPT</param-name> 
 		<param-value>true</param-value> </context-param> -->

@@ -3,7 +3,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" 
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:pretty="http://ocpsoft.com/prettyfaces">
 <ui:remove>
@@ -103,7 +102,7 @@
 	
 			
 			<ui:define name="list">
-				<a4j:outputPanel id="ajaxList">
+				<h:panelGroup id="ajaxList">
 					<h:form id="albumListForm">
 						<table class="full_area0 itemList loggedIn" rules="none" style="border-collapse: collapse;">
 							<thead class="listHeader" style="text-align: left; vertical-align:top;">
@@ -202,7 +201,7 @@
 							
 							<tbody style="text-align: left; vertical-align:top;">
 								
-								<a4j:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0">
+								<ui:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0">
 									<h:panelGroup>
 									   
 									    <tr class="full_0area0 listItem #{container.active ? 'activeAlbum' : ''}">
@@ -210,7 +209,7 @@
 									      	<td class="free_area0 endline">
 									      		<span class="free_area0_p8 endline itemSelectArea">
 													<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" value="#{container.selected}" rendered="#{container.deletable}" disabled="#{container.album.status=='RELEASED'}">
-														<a4j:ajax event="change"/>
+														<f:ajax event="change"/>
 													</h:selectBooleanCheckbox>
 													&#160;
 									      		</span>
@@ -278,12 +277,12 @@
 									      	</td>
 									    </tr>
 									</h:panelGroup>
-								</a4j:repeat>
+								</ui:repeat>
 								
 							</tbody>
 						</table>
 					</h:form>
-				</a4j:outputPanel>
+				</h:panelGroup>
 				<div class="cleaning"></div>
 				
 				<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#">

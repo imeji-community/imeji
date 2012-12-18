@@ -35,7 +35,7 @@
 	</managed-bean>
 
 	<!-- Collections Bean -->
-	<managed-bean>
+	 <managed-bean>
 		<managed-bean-name>CollectionsBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -117,7 +117,7 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
-	<managed-bean>
+	 <managed-bean>
 		<managed-bean-name>ImagesBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.image.ImagesBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -223,7 +223,7 @@
 	</managed-bean>
 
 
-	<managed-bean>
+  <managed-bean>
 		<managed-bean-name>SessionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.beans.SessionBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>

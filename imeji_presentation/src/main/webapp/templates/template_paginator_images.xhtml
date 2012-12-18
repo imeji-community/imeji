@@ -301,6 +301,24 @@
 									<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
 								</li>
 							</ui:repeat><!-- End images -->
+							<!-- 
+								Show/hide metadata popup Needs to be defined in ahax area to rebind the DOM objects
+							-->
+							<script>
+								$(function() {
+									$( ".fullBrowse .itemTile" ).delay(200).hover(function(){
+										var tooltip =  $(this).find("#tooltip");
+										var top =  tooltip.parent().offset().top + 150;
+										var left =  tooltip.parent().offset().left - 60;
+										
+										 $(this).find("#tooltip").css({ top: top, left: left})
+										 $(this).find("#tooltip").show();
+										 $(this).mouseleave(function(){
+											 $(this).find("#tooltip").hide();
+										})
+									})
+								});
+							</script>
 						</h:panelGroup>
 					</ul>
 				</h:panelGroup>
@@ -354,34 +372,6 @@
 						#{rich:element('facetInitialized')}.click();	
 					});
 				</script>
-				
-				<!-- 
-				Script that need to be reloaded after an ajax request
-				-->
-				<h:panelGroup id="scriptToReload">
-					<!-- 
-						Show/hide metadata popup
-						-->
-				    <script>
-						$(function() {
-							$( ".fullBrowse .itemTile" ).hover(function(){
-								var tooltip =  $(this).find("#tooltip");
-								var top =  tooltip.parent().offset().top + 120;
-								var left =  tooltip.parent().offset().left - 120;
-								
-								 $(this).find("#tooltip").css({ top: top, left: left})
-								 $(this).find("#tooltip").show();
-								 $(this).mouseleave(function(){
-									 $(this).find("#tooltip").hide();
-								})
-							})
-							
-						});
-						
-			    	</script>
-			    
-				</h:panelGroup>
-				
 			</ui:define>
 		</ui:composition>
 	</body>

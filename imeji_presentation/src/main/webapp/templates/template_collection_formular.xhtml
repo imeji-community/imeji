@@ -2,28 +2,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <ui:composition template="template_collection.xhtml">
-	<h:messages/>
-			<ui:define name="contentMenus">
-				<h:outputLink id="lnkFilter" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=VIEW" rendered="#{paginatorListSessionBean.selectedMenu != 'VIEW' and SessionBean.user != null}">
-					<h:outputText value="#{lbl.view}"/>
-				</h:outputLink>
-				<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.view}" rendered="#{paginatorListSessionBean.selectedMenu == 'VIEW' and SessionBean.user != null}" />
-				<h:outputText styleClass="seperator void" />
-				
-				<h:outputLink id="lnkSort" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=SORTING" rendered="#{paginatorListSessionBean.selectedMenu != 'SORTING'}">
-					<h:outputText value="#{lbl.sorting}"/>
-				</h:outputLink>
-				<h:outputText id="txtSortLink" styleClass="free_area0" value="#{lbl.sorting}" rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"/>
-				<h:outputText styleClass="seperator void" />
-				
-				<h:outputText id="textCreateCollection" styleClass="free_area0" value="#{lbl.collection_create}" rendered="#{SessionBean.user != null}" />
-				<h:outputText styleClass="seperator void" />
-				
-			</ui:define>
+	<ui:define name="contentMenus">
+		<h:outputLink id="lnkFilter" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=VIEW" rendered="#{paginatorListSessionBean.selectedMenu != 'VIEW' and SessionBean.user != null}">
+			<h:outputText value="#{lbl.view}"/>
+		</h:outputLink>
+		<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.view}" rendered="#{paginatorListSessionBean.selectedMenu == 'VIEW' and SessionBean.user != null}" />
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputLink id="lnkSort" styleClass="free_area0" value="#{Navigation.collectionsUrl}?tab=SORTING" rendered="#{paginatorListSessionBean.selectedMenu != 'SORTING'}">
+			<h:outputText value="#{lbl.sorting}"/>
+		</h:outputLink>
+		<h:outputText id="txtSortLink" styleClass="free_area0" value="#{lbl.sorting}" rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"/>
+		<h:outputText styleClass="seperator void" />
+		
+		<h:outputText id="textCreateCollection" styleClass="free_area0" value="#{lbl.collection_create}" rendered="#{SessionBean.user != null}" />
+		<h:outputText styleClass="seperator void" />
+		
+	</ui:define>
 	<ui:define name="mainContent">
 		<h:panelGroup layout="block" styleClass="full_area0">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
@@ -59,7 +57,7 @@
 									
 							<!-- Authors -->
 							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<a4j:repeat var="creator" value="#{FormularBean.collection.metadata.persons}" rowKeyVar="indexA">
+								<ui:repeat var="creator" value="#{FormularBean.collection.metadata.persons}" varStatus="indexA">
 									<h:panelGroup>
 										<b class="xLarge_area0_p8 endline labelLine clear">
 											<h:outputText value="#{lbl.author}*"/>
@@ -85,11 +83,11 @@
 										
 										<!-- Add/Remove Author buttons -->		
 										<h:panelGroup styleClass="small_area0">
-											<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_author}" action="#{FormularBean.addAuthor}">
-												<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
+											<h:commandButton styleClass="min_imgBtn add groupTool" title="#{lbl.add_author}" action="#{FormularBean.addAuthor}">
+												<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
 											</h:commandButton>
-											<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_author}" action="#{FormularBean.removeAuthor}">
-												<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
+											<h:commandButton styleClass="min_imgBtn remove groupTool" title="#{lbl.remove_author}" action="#{FormularBean.removeAuthor}">
+												<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
 											</h:commandButton>
 										</h:panelGroup>	
 												
@@ -102,7 +100,7 @@
 											<h:outputText value="#{lbl.organization}*"/>
 										</span>
 										
-										<a4j:repeat var="organization" value="#{creator.organizations}" rowKeyVar="indexO">
+										<ui:repeat var="organization" value="#{creator.organizations}" varStatus="indexO">
 											<h:panelGroup styleClass="endline">
 												<h:panelGroup>
 													<b class="xLarge_area0_p8 endline labelLine clear">
@@ -114,19 +112,19 @@
 													</span>
 												</h:panelGroup>
 												<h:panelGroup layout="block" styleClass="large_area0 sectionToolSection xLarge_marginRExcl">
-													<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_organization}" action="#{FormularBean.addOrganization}">
-														<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
-														<f:setPropertyActionListener value="#{indexO}" target="#{FormularBean.organizationPosition}"/>
+													<h:commandButton styleClass="min_imgBtn add groupTool" title="#{lbl.add_organization}" action="#{FormularBean.addOrganization}">
+														<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
+														<f:setPropertyActionListener value="#{indexO.index}" target="#{FormularBean.organizationPosition}"/>
 													</h:commandButton>
-													<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_organization}" action="#{FormularBean.removeOrganization}">
-														<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
-														<f:setPropertyActionListener value="#{indexO}" target="#{FormularBean.organizationPosition}"/>
+													<h:commandButton styleClass="min_imgBtn remove groupTool" title="#{lbl.remove_organization}" action="#{FormularBean.removeOrganization}">
+														<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
+														<f:setPropertyActionListener value="#{indexO.index}" target="#{FormularBean.organizationPosition}"/>
 													</h:commandButton>
 												</h:panelGroup>
 											</h:panelGroup>
-										</a4j:repeat>
+										</ui:repeat>
 									</h:panelGroup>
-								</a4j:repeat>
+								</ui:repeat>
 							</h:panelGroup>
 						</div>
 					</h:panelGroup>

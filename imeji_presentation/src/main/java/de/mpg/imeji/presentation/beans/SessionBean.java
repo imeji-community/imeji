@@ -11,6 +11,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -25,6 +27,13 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
+/**
+ * The session Bean for imeji.
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SessionBean
 {
     private static Logger logger = Logger.getLogger(SessionBean.class);
@@ -34,8 +43,8 @@ public class SessionBean
     public static final String MESSAGES_BUNDLE = "messages";
     public static final String METADATA_BUNDLE = "metadata";
     // His locale
-    private Locale locale = new Locale("en");
-    private Page currentPage = null;
+    private Locale locale;
+    private Page currentPage;
     private List<String> selected;
     private List<URI> selectedCollections;
     private List<URI> selectedAlbums;
@@ -43,22 +52,16 @@ public class SessionBean
     private Map<URI, MetadataProfile> profileCached;
     private String selectedImagesContext = null;
 
+    /**
+     * The session Bean for imeji
+     */
     public SessionBean()
     {
         selected = new ArrayList<String>();
         selectedCollections = new ArrayList<URI>();
         selectedAlbums = new ArrayList<URI>();
         profileCached = new HashMap<URI, MetadataProfile>();
-    }
-
-    public String getSelectedImagesContext()
-    {
-        return selectedImagesContext;
-    }
-
-    public void setSelectedImagesContext(String selectedImagesContext)
-    {
-        this.selectedImagesContext = selectedImagesContext;
+        locale = new Locale("en");
     }
 
     /**
@@ -118,6 +121,11 @@ public class SessionBean
         return PropertyReader.getVersion();
     }
 
+    /**
+     * Change the {@link Locale} in the session
+     * 
+     * @param event
+     */
     public void toggleLocale(ActionEvent event)
     {
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -151,6 +159,26 @@ public class SessionBean
         this.locale = userLocale;
     }
 
+    /**
+     * Get the context of the images (item, collection, album)
+     * 
+     * @return
+     */
+    public String getSelectedImagesContext()
+    {
+        return selectedImagesContext;
+    }
+
+    public void setSelectedImagesContext(String selectedImagesContext)
+    {
+        this.selectedImagesContext = selectedImagesContext;
+    }
+
+    /**
+     * reload the active album from the database
+     * 
+     * @return
+     */
     public String getReloadActiveAlbum()
     {
         if (activeAlbum != null)

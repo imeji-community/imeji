@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:f="http://java.sun.com/jsf/core">
 <ui:remove>
 <!--
 
@@ -374,11 +373,11 @@
 							
 							<!-- Define elements to accept the alt and title text from the images. -->
 							<div id="carousel">
-								<a4j:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0" rowKeyVar="index">
+								<ui:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0">
 									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.applicationUri}#{item.id.path}">
 										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrl}" height="114"/>
 									</h:outputLink>
-								</a4j:repeat>
+								</ui:repeat>
 							</div>
 							<span id="cloudinfoText">
 								<h4 id="title-text"></h4>

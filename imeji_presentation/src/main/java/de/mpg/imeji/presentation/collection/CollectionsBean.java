@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -25,6 +29,15 @@ import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+/**
+ * 
+ * Bean for the collections page
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 
 public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 {
@@ -32,6 +45,9 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     private SessionBean sb;
     private String query = "";
 
+    /**
+     * Bean for the collections page
+     */
     public CollectionsBean()
     {
         super();

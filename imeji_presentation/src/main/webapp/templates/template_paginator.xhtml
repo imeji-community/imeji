@@ -32,7 +32,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" 
 	xmlns:rich="http://richfaces.org/rich">
 <body>
 
@@ -41,7 +40,7 @@
 		<h:form id="navTop">
 			<div class="full_area0 paginator" style="overflow:hidden;">
 				<h:outputText value="#{paginatorListSessionBean.urlParameters}" style="visibility:hidden;"/>
-				<a4j:outputPanel id="ajaxPaginatorTop">
+				<h:panelGroup id="ajaxPaginatorTop">
 					<h:outputText value="#{paginatorListSessionBean.initPaginator}" style="visibility:hidden;"/>
 					
 				 	<div class="large_area0 small_marginLIncl rangeSelector">
@@ -76,7 +75,7 @@
 				 				<h:outputText value="#{paginatorPage.number}"/>
 				 			</h:panelGroup>
 				 			<h:commandButton id="btPageNumber1Ajax" onclick="setOpacityToImages();"  styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{paginatorListSessionBean.ajaxMode and !(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}">
-				 				<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader :scriptToReload"/>
+				 				<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
 				 			</h:commandButton>
 				 			<h:panelGroup styleClass="seperator"/>
 				 		</ui:repeat>
@@ -94,7 +93,7 @@
 				 			<h:outputText value=" "/>
 				 		</h:panelGroup>
 				 	</div>
-				</a4j:outputPanel>
+				</h:panelGroup>
 			 	<div class="gotoBox">
 			 		<label class="free_label gotoLabel"><h:outputText id="lblList_lblGoToPage" value="#{lbl.paginator_goToPage}"/></label>
 			 		<h:inputText id="inpGoToPageTop" styleClass="tiny_txtInput" value="#{paginatorListSessionBean.goToPageTop}"/>
@@ -130,7 +129,7 @@
 	 		<h:outputLabel id="lblItemList_ObjectsPerPageBottom" for="extSelectBottom" styleClass="free_label hitsLabel" value=" #{lbl.paginator_objectsPerPage}" />
 	 	</div>
 		
-		<a4j:outputPanel id="ajaxPaginatorBottom">
+		<h:panelGroup id="ajaxPaginatorBottom">
 	 		<div class="small_marginLExcl pageBrowser">
 	 			<label class="noDisplay pageLabel"><h:outputText value="#{lbl.List_lblPage}"/></label>
 		 		
@@ -172,7 +171,7 @@
 		 			<h:outputText value=" "/>
 		 		</h:panelGroup>
 			</div>
-		</a4j:outputPanel>
+		</h:panelGroup>
 		<div class="gotoBox">
 	 		<label class="free_label gotoLabel"><h:outputText value="#{lbl.paginator_goToPage}"/></label>
 	 		<h:inputText id="inpGoToPageBottom" styleClass="tiny_txtInput" value="#{paginatorListSessionBean.goToPageBottom}"/>
@@ -183,6 +182,7 @@
  	</h:form>
 	</div>
 	
+	
 	<script type="text/javascript">
 		function setOpacityToImages()
 		{
@@ -191,6 +191,11 @@
 			return true;
 		}
 	</script>
+
+	
+	
+			    
+	
 </ui:define>
 
 </ui:composition>

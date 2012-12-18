@@ -1,9 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" 
-	xmlns:rich="http://richfaces.org/rich">
+	xmlns:f="http://java.sun.com/jsf/core">
 <ui:remove>
 <!--
 
@@ -38,16 +36,16 @@
 
 	<h:panelGroup styleClass="full_area0 small_marginLIncl">
 		<h:outputText value="#{lbl.history}: " styleClass="free_area0" style="margin-right:0.36em;" />
-		<a4j:repeat var="page" value="#{HistorySession.pages}" rows="0" rowKeyVar="index">
-			<h:panelGroup rendered="#{index + 6 &gt; HistorySession.historySize}" styleClass="historyText">
-				<h:outputLink value="#{page.uri}#{index}">
+		<ui:repeat var="page" value="#{HistorySession.pages}" rows="0" varStatus="index">
+			<h:panelGroup rendered="#{index.index + 6 &gt; HistorySession.historySize}" styleClass="historyText">
+				<h:outputLink value="#{page.uri}#{index.index}">
 					<h:outputText value="#{page.internationalizedName}"/>
 				</h:outputLink>
 				<span />
 				<h:outputText value="/"/>
 				<span />
 			</h:panelGroup>
-		</a4j:repeat>
+		</ui:repeat>
 	</h:panelGroup>
 
 </html>

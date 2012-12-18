@@ -20,9 +20,6 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 public class Navigation
 {
-    // public final String LOGIN_URL = "/aa/login?target=$1";
-    // public final String LOGOUT_URL = "/aa/logout?target=$1";
-    // public final String USERHANDLE_PARAMETER_NAME = "eSciDocUserHandle";
     // Url of the FW
     public final String frameworkUrl;
     // Url of the application
@@ -46,6 +43,10 @@ public class Navigation
     // session
     private SessionBean sessionBean = null;
 
+    /**
+     * Application bean managing navigation
+     * @throws Exception
+     */
     public Navigation() throws Exception
     {
         frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.ur");
@@ -164,7 +165,7 @@ public class Navigation
     {
         return ITEM.path;
     }
-    
+
     public String getUploadPath()
     {
         return UPLOAD.path;

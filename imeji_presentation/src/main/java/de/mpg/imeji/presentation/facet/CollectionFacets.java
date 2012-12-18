@@ -26,7 +26,15 @@ import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
-
+/**
+ * 
+ * Facets for the images browsed within a collection
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class CollectionFacets
 {
     private SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -34,6 +42,12 @@ public class CollectionFacets
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
     private URI colURI = null;
 
+    /**
+     * Constructor for the {@link Facet}s of one {@link CollectionImeji} with one {@link SearchQuery}
+     * @param col
+     * @param searchQuery
+     * @throws Exception
+     */
     public CollectionFacets(CollectionImeji col, SearchQuery searchQuery) throws Exception
     {
         this.colURI = col.getId();

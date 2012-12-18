@@ -3,8 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
-	xmlns:pretty="http://ocpsoft.com/prettyfaces">
+	 xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 <!--
 
@@ -156,7 +155,7 @@
 				</h:panelGroup>
 				-->
 				
-				<a4j:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0">
+				<ui:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0">
 					<h:panelGroup>
 					   
 					    <tr class="full_0area0 listItem">
@@ -165,7 +164,7 @@
 					      		<h:panelGroup id="ckeckCollectionSelected">
 						      		<span class="free_area0_p8 endline itemSelectArea">
 										<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" value="#{container.selected}" disabled="#{container.collection.status=='RELEASED'}">
-											<a4j:ajax event="change"/>
+											<f:ajax event="change"/>
 										</h:selectBooleanCheckbox>
 										&#160;
 						      		</span>
@@ -234,7 +233,7 @@
 					      	</td>
 					    </tr>
 					</h:panelGroup>
-				</a4j:repeat>
+				</ui:repeat>
 				
 				
 

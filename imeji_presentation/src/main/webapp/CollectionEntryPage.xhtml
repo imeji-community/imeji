@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:rich="http://richfaces.org/rich">
 	<ui:remove>
 		<!--
 
@@ -139,9 +139,9 @@
 							<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 								<!-- COLLECTION IMAGES -->
 								<h:outputLink value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
-									<a4j:repeat var="img" value="#{ViewCollectionBean.images}" rendered="#{img.status != 'WITHDRAWN'}">
+									<ui:repeat var="img" value="#{ViewCollectionBean.images}" rendered="#{img.status != 'WITHDRAWN'}">
 										<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
-									</a4j:repeat>
+									</ui:repeat>
 								</h:outputLink>
 								
 								<h:panelGroup styleClass="medium_area0" style="text-align:center;" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}">

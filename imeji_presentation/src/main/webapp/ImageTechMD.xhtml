@@ -3,7 +3,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
 	<!--
@@ -44,11 +43,11 @@
 
 	<ui:define name="viewTechMD">
 		<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-			<a4j:repeat id="techMd" var="techMd" value="#{ImageBean.techMd}" rowKeyVar="index">
+			<ui:repeat id="techMd" var="techMd" value="#{ImageBean.techMd}">
 				<h:panelGroup styleClass="half_area0_p1 endline itemLine noTopBorder" style="line-height: 7px">
 					<h:outputText value="#{techMd}" style="white-space: pre;"/>
 				</h:panelGroup>
-			</a4j:repeat>
+			</ui:repeat>
 		</h:panelGroup>
 	</ui:define>
 	

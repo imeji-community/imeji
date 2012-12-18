@@ -2,12 +2,11 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
-	xmlns:pretty="http://ocpsoft.com/prettyfaces">
+	xmlns:rich="http://richfaces.org/rich">
 	
 	<ui:remove><!-- License: src/main/resources/license/escidoc.license --></ui:remove>
 	
-	<a4j:outputPanel id="ajaxList">
+	<h:panelGroup id="ajaxList">
 		<div class="full_area0 itemList loggedIn collectionList">
 			<div class="full_area0 listHeader">
 				<h:form id="headerForm">
@@ -59,12 +58,12 @@
 			</div>
 			
 			<ol>
-				<a4j:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0" rowKeyVar="index">
+				<ui:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0" rowKeyVar="index">
 					<li class="full_area0 listItem">
 						<div class="free_area0 itemHeader">
 							<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea">
 								<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{SessionBean.user != null and container.deletable}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
-									<a4j:ajax event="change"/>
+									<f:ajax event="change"/>
 								</h:selectBooleanCheckbox>
 								&#160;
 							</h:panelGroup>
@@ -209,7 +208,7 @@
 						<ui:param name="discardComment" value="#{container.discardComment}"/>
 						<ui:param name="index" value="#{index}"/>
 					</ui:include>
-				</a4j:repeat>
+				</ui:repeat>
 			</ol>
 			
 		</div>
@@ -219,5 +218,5 @@
 				setTimeout("addItemListFunctions()", 200);
 			}); */
 		</script>
-	</a4j:outputPanel>
+	</h:panelGroup>
 </html>								

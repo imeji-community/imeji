@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.beans;
+package de.mpg.imeji.presentation.session;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -11,8 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -179,15 +177,15 @@ public class SessionBean
      * 
      * @return
      */
-    public String getReloadActiveAlbum()
-    {
-        if (activeAlbum != null)
-        {
-            ItemController ic = new ItemController(user);
-            activeAlbum = (Album)ic.loadContainerItems(activeAlbum, user, -1, 0);
-        }
-        return "";
-    }
+//    public String getReloadActiveAlbum()
+//    {
+//        if (activeAlbum != null)
+//        {
+//            ItemController ic = new ItemController(user);
+//            activeAlbum = (Album)ic.loadContainerItems(activeAlbum, user, -1, 0);
+//        }
+//        return "";
+//    }
 
     /**
      * @return the user

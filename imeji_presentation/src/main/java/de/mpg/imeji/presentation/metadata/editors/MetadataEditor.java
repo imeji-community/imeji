@@ -12,9 +12,9 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.metadata.EditorItemBean;
 import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 public abstract class MetadataEditor

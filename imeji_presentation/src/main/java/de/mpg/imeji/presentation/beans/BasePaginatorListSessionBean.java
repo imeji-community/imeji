@@ -12,6 +12,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -448,7 +449,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      * @author $Author: haarlaender $ (last modification)
      * @version $Revision: 3185 $ $LastChangedDate: 2009-11-20 14:30:15 +0100 (Fri, 20 Nov 2009) $
      */
-    public class PaginatorPage implements Serializable
+    public class PaginatorPage
     {
         /**
          * The page number of the paginator button

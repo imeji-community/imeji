@@ -15,9 +15,13 @@ import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.Counter;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
@@ -25,12 +29,32 @@ import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
+/**
+ * Abstract class for the controller in imeji dealing with imeji VO: {@link Item} {@link CollectionImeji} {@link Album} {@link User} {@link MetadataProfile}
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public abstract class ImejiController
 {
     private static Logger logger = Logger.getLogger(ImejiController.class);
     protected User user;
 
-    // private static Model base = null;
+    /**
+     * Default constructor for {@link ImejiController}
+     */
+    public ImejiController()
+    {
+        // TODO Auto-generated constructor stub
+    }
+    
+    /**
+     * Constructor with a user
+     * @param user2
+     * @deprecated use rather ImejiController() as constructor. User should be passed as parameter in the methods 
+     */
     public ImejiController(User user2)
     {
         this.user = user2;
@@ -84,7 +108,7 @@ public abstract class ImejiController
     }
 
     /**
-     * Remove images from a container which have been either deleted or withdrawn.
+     * load items of a container. Perform a search to load all items: is faster than to read the complete container
      * 
      * @param c
      * @param user

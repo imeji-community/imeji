@@ -11,7 +11,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 /**
  * 
  * Some Method to read URLs

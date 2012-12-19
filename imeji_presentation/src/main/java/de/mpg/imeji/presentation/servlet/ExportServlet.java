@@ -24,8 +24,8 @@ import de.mpg.imeji.logic.export.ExportManager;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import de.mpg.imeji.presentation.session.SessionBean;
 
 public class ExportServlet extends HttpServlet
 {

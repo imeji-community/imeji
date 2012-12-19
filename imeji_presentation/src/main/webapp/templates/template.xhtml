@@ -109,7 +109,7 @@ All rights reserved. Use is subject to license terms.
 	                                    <!-- Subheadline ends here -->
 	                                   	<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="full_area0" rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml'}">
 											<h:panelGroup styleClass="huge_area0">
-												<h:outputText value="#{lbl.active_album}: #{SessionBean.reloadActiveAlbum}"/>
+												<h:outputText value="#{lbl.active_album}: "/>
 												<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">
 													<h:outputText value="#{SessionBean.activeAlbum.metadata.title} (#{SessionBean.activeAlbumSize})"/>
 												</h:outputLink>

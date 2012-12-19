@@ -7,15 +7,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -23,10 +19,10 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.filter.Filter;
@@ -34,6 +30,8 @@ import de.mpg.imeji.presentation.filter.FiltersBean;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -226,6 +224,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
     }
 
+    /**
+     * Add all select {@link Item} to the active {@link Album}, and unselect all {@link Item} from session
+     * 
+     * @return
+     * @throws Exception
+     */
     public String addSelectedToActiveAlbum() throws Exception
     {
         addToActiveAlbum(session.getSelected());
@@ -233,43 +237,43 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return "pretty:";
     }
 
+    /**
+     * Add all {@link Item} of the current {@link ImagesBean} (i.e. browse page) to the active album
+     * 
+     * @return
+     * @throws Exception
+     */
     public String addAllToActiveAlbum() throws Exception
     {
         addToActiveAlbum(search(searchQuery, null).getResults());
         return "pretty:";
     }
 
-    public void addToActiveAlbum(List<String> items) throws Exception
+    /**
+     * Add a {@link List} of uris to the active album, and write an info message in the {@link FacesMessage}
+     * 
+     * @param uris
+     * @throws Exception
+     */
+    private void addToActiveAlbum(List<String> uris) throws Exception
     {
-        AlbumController ac = new AlbumController(session.getUser());
-        try
+        int sizeToAdd = uris.size();
+        int sizeBefore = session.getActiveAlbumSize();
+        SessionObjectsController soc = new SessionObjectsController();
+        soc.addToActiveAlbum(uris);
+        int sizeAfter = session.getActiveAlbumSize();
+        int added = sizeAfter - sizeBefore;
+        int notAdded = sizeToAdd - added;
+        String message = "";
+        if (added > 0)
         {
-            int sizeToAdd = items.size();
-            int notAdded = ac.addToAlbum(session.getActiveAlbum(), items, session.getUser()).size();
-            int sizeadded = sizeToAdd - notAdded;
-            String message = "";
-            if (sizeadded > 0)
-            {
-                message = sizeadded
-                        + " "
-                        + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                                .getMessage("images_added_to_active_album");
-            }
-            if (notAdded > 0)
-            {
-                message += notAdded
-                        + " "
-                        + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                                .getMessage("already_in_active_album");
-            }
-            BeanHelper.info(message);
+            message = " " + added + " " + session.getMessage("images_added_to_active_album");
         }
-        catch (Exception e)
+        if (notAdded > 0)
         {
-            BeanHelper.error(e.getMessage());
-            session.setActiveAlbum(ac.retrieveLazy(session.getActiveAlbum().getId(), session.getUser()));
-            e.printStackTrace();
+            message += " " + notAdded + " " + session.getMessage("already_in_active_album");
         }
+        BeanHelper.info(message);
     }
 
     public String deleteSelected() throws Exception

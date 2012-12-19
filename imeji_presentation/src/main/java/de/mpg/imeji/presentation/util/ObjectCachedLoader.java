@@ -7,7 +7,7 @@ package de.mpg.imeji.presentation.util;
 import java.net.URI;
 
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * If an object is already in a session, return it.

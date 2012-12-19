@@ -263,14 +263,12 @@
 							<h:outputText value="#{msg.no_images_found}!" rendered="#{paginatorListSessionBean.totalNumberOfElements  == 0}" styleClass="free_area0 "/>
 							<ui:repeat id="pictureList" var="item" value="#{paginatorListSessionBean.currentPartList}" rows="0" varStatus="index">
 								<li class="large_area0 itemTile" style="z-index: 5;">
-									
+									<h:form id="itemSelectForm">
 										<h:panelGroup layout="block" id="imgFrame" styleClass="large_area1_p2 #{item.selected ? 'tileIconAreaSelected'  : 'tileIconArea'}  free_area1 matrixItem #{item.inActiveAlbum ? 'inAlbum' : ''}">
 											<!-- Image with link to the details view -->
 											<h:outputLink id="lnkPicDetailBrowse" value="#{paginatorListSessionBean.imageBaseUrl}/item/#{item.id}">
 												<h:graphicImage alt="#{item.filename}" title="#{item.filename}" id="thumbnail" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.link}"/>			
 											</h:outputLink>
-											
-											
 											
 										</h:panelGroup>
 										
@@ -279,24 +277,21 @@
 										<!-- Album Selected -->
 										<h:panelGroup styleClass="tiny_checkbox" rendered="#{SessionBean.user != null}">
 											<span class="free_area0">
-												<h:form id="itemSelectForm">
-													<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
-														<f:ajax event="change" execute="@this" render="@form :#{rich:clientId('preListHeaderSelected')} :#{rich:clientId('preListHeaderSelectedMenu')}"/>
-													</h:selectBooleanCheckbox>
-												</h:form>
+												<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}"  valueChangeListener="#{item.selectedChanged}">
+													<f:ajax event="change" execute="@this" render="@form :preListForm:preListHeaderSelected :preListForm:preListHeaderSelectedMenu"/>
+												</h:selectBooleanCheckbox>
 											</span>
 										</h:panelGroup>
-										
-										<span class="medium_area0">
-											<span class="free_area0_p3 tileControlIconArea">
-												<h:outputLabel for="pictureCheckbox" value="#{item.caption}"/>
-											</span>
+									</h:form>
+									<span class="medium_area0">
+										<span class="free_area0_p3 tileControlIconArea">
+											<h:outputLabel for="pictureCheckbox" value="#{item.caption}"/>
 										</span>
-											
-										<div id="tooltip" style="display:none; z-index: 10; position:absolute; background-color:#292929;" class="quad_area0_p0 bordst0 shadst1  dialogbox">
-											<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"/>
-										</div>
-									
+									</span>
+										
+									<div id="tooltip" style="display:none; z-index: 10; position:absolute; background-color:#292929;" class="quad_area0_p0 bordst0 shadst1  dialogbox">
+										<ui:include src="../picturesPages/ui/MetadataPopup.xhtml"/>
+									</div>
 									
 									<!-- End : Browse / Search Result / All Pictures of one Person Pages / resource-->
 								</li>

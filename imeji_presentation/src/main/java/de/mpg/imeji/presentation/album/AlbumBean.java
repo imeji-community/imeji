@@ -26,13 +26,21 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.image.ImageBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.SharingBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-
+/**
+ * The javabean for the {@link Album}
+ * TODO Description
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class AlbumBean
 {
     private SessionBean sessionBean = null;
@@ -55,7 +63,7 @@ public class AlbumBean
         {
             active = true;
         }
-        AlbumController ac = new AlbumController(sessionBean.getUser());
+        AlbumController ac = new AlbumController();
         album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
     }
 
@@ -101,7 +109,7 @@ public class AlbumBean
 
     public void initEdit()
     {
-        AlbumController ac = new AlbumController(sessionBean.getUser());
+        AlbumController ac = new AlbumController();
         try
         {
             setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
@@ -290,14 +298,19 @@ public class AlbumBean
         return null;
     }
 
+    /**
+     * Save (create or update) the {@link Album} in the database
+     * @return
+     * @throws Exception
+     */
     public String save() throws Exception
     {
         if (save)
         {
-            AlbumController ac = new AlbumController(sessionBean.getUser());
+            AlbumController ac = new AlbumController();
             if (valid())
             {
-                ac.create(getAlbum());
+                ac.create(getAlbum(), sessionBean.getUser());
                 UserController uc = new UserController(sessionBean.getUser());
                 sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
                 BeanHelper.info(sessionBean.getMessage("success_album_create"));
@@ -313,11 +326,10 @@ public class AlbumBean
 
     public String update() throws Exception
     {
-        AlbumController ac = new AlbumController(sessionBean.getUser());
+        AlbumController ac = new AlbumController();
         if (valid())
         {
-            // album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
-            ac.updateLazy(album);
+            ac.updateLazy(album, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_album_update"));
             Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
             FacesContext
@@ -345,7 +357,7 @@ public class AlbumBean
         String personString = "";
         for (Person p : album.getMetadata().getPersons())
         {
-            if(!"".equals(personString))
+            if (!"".equals(personString))
             {
                 personString += ", ";
             }
@@ -380,10 +392,10 @@ public class AlbumBean
 
     public String release()
     {
-        AlbumController ac = new AlbumController(sessionBean.getUser());
+        AlbumController ac = new AlbumController();
         try
         {
-            ac.release(album);
+            ac.release(album, sessionBean.getUser());
             makeInactive();
             BeanHelper.info(sessionBean.getMessage("success_album_release"));
         }
@@ -398,7 +410,7 @@ public class AlbumBean
 
     public String delete()
     {
-        AlbumController c = new AlbumController(sessionBean.getUser());
+        AlbumController c = new AlbumController();
         try
         {
             makeInactive();
@@ -416,10 +428,10 @@ public class AlbumBean
 
     public String withdraw() throws Exception
     {
-        AlbumController c = new AlbumController(sessionBean.getUser());
+        AlbumController c = new AlbumController();
         try
         {
-            c.withdraw(album);
+            c.withdraw(album, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_album_withdraw"));
         }
         catch (Exception e)

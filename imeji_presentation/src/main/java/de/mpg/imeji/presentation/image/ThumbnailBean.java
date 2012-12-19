@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.image;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +19,9 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
@@ -161,35 +161,35 @@ public class ThumbnailBean
      */
     public void selectedChanged(ValueChangeEvent event)
     {
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(uri.toString()))
+        SessionObjectsController soc = new SessionObjectsController();
+        if (event.getNewValue().toString().equals("true"))
         {
-            selected = true;
-            select();
+            setSelected(true);
+            soc.selectItem(uri);
         }
-        else if (event.getNewValue().toString().equals("false") && sessionBean.getSelected().contains(uri.toString()))
+        else if (event.getNewValue().toString().equals("false"))
         {
-            selected = false;
-            select();
+            setSelected(false);
+            soc.unselectItem(uri);
         }
     }
 
-    /**
-     * Select this {@link ThumbnailBean}
-     * @return
-     */
-    public String select()
-    {
-        if (!selected)
-        {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(uri.toString());
-        }
-        else
-        {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(uri.toString());
-        }
-        return "";
-    }
+//    /**
+//     * Select this {@link ThumbnailBean}
+//     * @return
+//     */
+//    public String select()
+//    {
+//        if (!selected)
+//        {
+//            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(uri.toString());
+//        }
+//        else
+//        {
+//            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(uri.toString());
+//        }
+//        return "";
+//    }
 
     public String getLink()
     {

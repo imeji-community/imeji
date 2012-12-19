@@ -17,25 +17,9 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
 	version="2.0">
 
-	<!-- new form old -->
-	<managed-bean>
-		<managed-bean-name>Navigation</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.Navigation</managed-bean-class>
-		<managed-bean-scope>application</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>StaticContent</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.StaticContentBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>BlogBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.BlogBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
 
 	<!-- Collections Bean -->
-	 <managed-bean>
+	<managed-bean>
 		<managed-bean-name>CollectionsBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -117,7 +101,7 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
-	 <managed-bean>
+	<managed-bean>
 		<managed-bean-name>ImagesBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.image.ImagesBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -181,7 +165,7 @@
 	<!-- Other Beans -->
 	<managed-bean>
 		<managed-bean-name>LoginBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.LoginBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.user.LoginBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 
@@ -221,14 +205,26 @@
 		<managed-bean-class>de.mpg.imeji.presentation.history.HistorySession</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
-
-  <managed-bean>
+	<managed-bean>
+		<managed-bean-name>Navigation</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.Navigation</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>StaticContent</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.StaticContentBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>BlogBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.BlogBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>SessionBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.SessionBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.session.SessionBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
 	<managed-bean>
 		<managed-bean-name>QuickSearchBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.search.QuickSearchBean</managed-bean-class>
@@ -258,7 +254,7 @@
 		<managed-bean-class>de.mpg.imeji.presentation.lang.InternationalizationBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	
+
 	<managed-bean>
 		<managed-bean-name>StartPageBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.beans.StartPageBean</managed-bean-class>

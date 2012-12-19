@@ -1,65 +1,27 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:rich="http://richfaces.org/rich">
-<ui:remove>
-<!--
-
- CDDL HEADER START
-
- The contents of this file are subject to the terms of the
- Common Development and Distribution License, Version 1.0 only
- (the "License"). You may not use this file except in compliance
- with the License.
-
- You can obtain a copy of the license at license/ESCIDOC.LICENSE
- or http://www.escidoc.de/license.
- See the License for the specific language governing permissions
- and limitations under the License.
-
- When distributing Covered Code, include this CDDL HEADER in each
- file and include the License file at license/ESCIDOC.LICENSE.
- If applicable, add the following below this CDDL HEADER, with the
- fields enclosed by brackets "[]" replaced with your own identifying
- information: Portions Copyright [yyyy] [name of copyright owner]
-
- CDDL HEADER END
-
-
- Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
- für wissenschaftlich-technische Information mbH and Max-Planck-
- Gesellschaft zur Förderung der Wissenschaft e.V.
- All rights reserved. Use is subject to license terms.
--->
-
-</ui:remove>
-	<f:subview id="DeleteSelected">
-		<rich:popupPanel id="panelConfirmDeleteSelected" autosized="true" style="background-color:#434343">
-			<div class="half_area0_p8">
-		       <div class="half_area0_p8">
-	        		<h:outputText value="#{lbl.delete_images}?" rendered="#{bean.deletable}"/>
-	       			<h:outputText value="#{lbl.withdraw_images}? #{lbl.images_withdraw_comment}" rendered="#{!bean.deletable and bean.editable}"/>
-	       
-	        		<h:outputText value="#{paginatorListSessionBean.initComment}"/>
-	        		<h:outputText id="errorMessage" styleClass="xDouble_area0_p0 messageError" value=""/>
-	        		<h:inputTextarea id="discardComment" value="#{paginatorListSessionBean.discardComment}" valueChangeListener="#{paginatorListSessionBean.discardCommentListener}" rows="6" styleClass="quad_area0_p0" rendered="#{!bean.deletable and bean.editable}"/>
-	        	</div>
-	       
-				<div class="half_area0_p8">
-					<div class="large_txtBtn">
-	       				<a href="#" class="large_txtBtn dialogCancelButton" onclick="#{rich:component('panelConfirmDeleteSelected')}.hide();">
-							<h:outputText value="#{lbl.cancel}"/>
-						</a>
-	       			</div>
-					<div class="xLarge_txtBtn tiny_marginLExcl">
-						<h:commandButton id="btnDelete" action="#{paginatorListSessionBean.deleteSelected}" rendered="#{bean.deletable}" value="#{lbl.delete}"  styleClass="xLarge_area0_p0  xLarge_txtBtn activeButton"/>
-						<h:commandButton id="btnDiscard" onclick="if(!clickOnDiscard('', 'DeleteSelected', '#{msg.error_withdraw_comment}')){return false};" action="#{paginatorListSessionBean.withdrawSelected}" rendered="#{!bean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
-					</div>
-				</div>
+	<div id="confirmDeleteSelected" class="half_area0_p8 bordst0 shadst1  dialogbox" style="display:none; z-index: 10; position:absolute; background-color:#494949;">
+       <div class="half_area0_p8">
+       		<h:outputText value="#{lbl.delete_images}?" rendered="#{bean.deletable}"/>
+      			<h:outputText value="#{lbl.withdraw_images}? #{lbl.images_withdraw_comment}" rendered="#{!bean.deletable and bean.editable}"/>
+       		<h:outputText value="#{paginatorListSessionBean.initComment}"/>
+       		<h:outputText id="errorMessage" styleClass="xDouble_area0_p0 messageError" value=""/>
+       		<h:inputTextarea id="discardComment" value="#{paginatorListSessionBean.discardComment}" valueChangeListener="#{paginatorListSessionBean.discardCommentListener}" rows="6" styleClass="quad_area0_p0" rendered="#{!bean.deletable and bean.editable}"/>
+       	</div>
+      
+		<div class="half_area0_p8">
+			<div class="large_txtBtn">
+      				<a href="#" class="large_txtBtn dialogCancelButton" onclick="closeDialog('confirmDeleteSelected');">
+					<h:outputText value="#{lbl.cancel}"/>
+				</a>
+      			</div>
+			<div class="xLarge_txtBtn tiny_marginLExcl">
+				<h:commandButton id="btnDelete" action="#{paginatorListSessionBean.deleteSelected}" rendered="#{bean.deletable}" value="#{lbl.delete}"  styleClass="xLarge_area0_p0  xLarge_txtBtn activeButton"/>
+				<h:commandButton id="btnDiscard" onclick="if(!clickOnDiscard('', 'DeleteSelected', '#{msg.error_withdraw_comment}')){return false};" action="#{paginatorListSessionBean.withdrawSelected}" rendered="#{!bean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
 			</div>
-		</rich:popupPanel>
-		
-		
-	</f:subview>
-</html>
+		</div>
+	</div>
+</ui:composition>

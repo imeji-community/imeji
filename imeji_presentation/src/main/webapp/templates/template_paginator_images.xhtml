@@ -168,9 +168,9 @@
 													<h:outputText value="#{lbl.selected_edit}"/>
 												</h:outputLink>
 												<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
-													<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#"  rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
+													<h:outputLink onclick="openDialog('confirmDeleteSelected')" styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#"  rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
 														<h:outputText value="#{lbl.delete_selectedImages}"/>
-														<rich:componentControl target="panelConfirmDeleteSelected" operation="show" event="click"/>
+														<ui:remove><rich:componentControl target="panelConfirmDeleteSelected" operation="show" event="click"/></ui:remove>
 													</h:outputLink>
 													<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" rendered="#{paginatorListSessionBean.imageEditable and paginatorListSessionBean.collection.status == 'RELEASED'}">
 														<h:outputText value="#{lbl.withdraw_selected}"/>
@@ -213,11 +213,15 @@
 						<ui:param name="bean" value="#{paginatorListSessionBean}"/>
 					</ui:include>
 					
-					<ui:include src="../confirmationPages/SelectedDeleteWithdraw.xhtml">
-						<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-					</ui:include>
+					
 				
 				</h:form>
+			</ui:define>
+			
+			<ui:define name="dialogs">
+				<ui:include src="../confirmationPages/SelectedDeleteWithdraw.xhtml">
+					<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+				</ui:include>
 			</ui:define>
 			
 			<ui:define name="list">
@@ -301,7 +305,7 @@
 							-->
 							<script>
 								$(function() {
-									$( ".fullBrowse .itemTile" ).delay(200).hover(function(){
+									$( ".fullBrowse .itemTile" ).hover(function(){
 										var tooltip =  $(this).find("#tooltip");
 										var top =  tooltip.parent().offset().top + 150;
 										var left =  tooltip.parent().offset().left - 60;
@@ -366,6 +370,7 @@
 					jQuery(document).ready(function() {
 						#{rich:element('facetInitialized')}.click();	
 					});
+
 				</script>
 			</ui:define>
 		</ui:composition>

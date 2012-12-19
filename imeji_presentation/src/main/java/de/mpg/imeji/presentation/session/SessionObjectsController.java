@@ -1,6 +1,5 @@
 package de.mpg.imeji.presentation.session;
 
-import java.net.URI;
 import java.util.List;
 
 import de.mpg.imeji.logic.controller.AlbumController;
@@ -30,9 +29,9 @@ public class SessionObjectsController
     /**
      * Add the item to the {@link List} of selected {@link Item} stored in the {@link SessionBean}.
      * 
-     * @param item
+     * @param itemURI
      */
-    public void selectItem(URI itemURI)
+    public void selectItem(String itemURI)
     {
         if (!session.getSelected().contains(itemURI.toString()))
         {
@@ -43,9 +42,9 @@ public class SessionObjectsController
     /**
      * Remove the item from the {@link List} of selected {@link Item} stored in the {@link SessionBean}
      * 
-     * @param item
+     * @param itemURI
      */
-    public void unselectItem(URI itemURI)
+    public void unselectItem(String itemURI)
     {
         if (session.getSelected().contains(itemURI.toString()))
         {

@@ -283,7 +283,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     }
 
     public String deleteAll() throws Exception
-    {
+    {   
         delete(search(searchQuery, null).getResults());
         return "pretty:";
     }
@@ -294,7 +294,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         ItemController ic = new ItemController(session.getUser());
         int count = ic.delete((List<Item>)items, session.getUser());
         BeanHelper.info(count + " " + session.getLabel("images_deleted"));
-        session.getSelected().clear();
+        SessionObjectsController soc = new SessionObjectsController();
+        for (String uri : uris)
+        {
+            soc.unselectItem(uri);
+        }
     }
 
     public String withdrawAll() throws Exception

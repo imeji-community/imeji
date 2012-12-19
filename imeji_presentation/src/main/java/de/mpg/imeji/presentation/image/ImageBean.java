@@ -13,10 +13,8 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
-import org.richfaces.taglib.ListHandler;
 
 import de.mpg.imeji.logic.concurrency.locks.Locks;
-import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
@@ -40,13 +38,11 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
- * 
  * Bean for a Single image
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class ImageBean
 {
@@ -67,6 +63,7 @@ public class ImageBean
 
     /**
      * Construct an {@link ImageBean} from am {@link Item}
+     * 
      * @param img
      * @throws Exception
      */
@@ -88,6 +85,7 @@ public class ImageBean
 
     /**
      * Construct a default {@link ImageBean}
+     * 
      * @throws Exception
      */
     public ImageBean() throws Exception
@@ -99,14 +97,14 @@ public class ImageBean
         labels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
     }
 
-//    public String getInitPopup() throws Exception
-//    {
-//        labels.init(profile);
-//        return "";
-//    }
-
+    // public String getInitPopup() throws Exception
+    // {
+    // labels.init(profile);
+    // return "";
+    // }
     /**
      * Initialize the {@link ImageBean}
+     * 
      * @return
      * @throws Exception
      */
@@ -136,6 +134,7 @@ public class ImageBean
 
     /**
      * Initialize the metadata information when the "view metadata" tab is called.
+     * 
      * @throws Exception
      */
     public void initViewMetadataTab() throws Exception
@@ -154,6 +153,7 @@ public class ImageBean
 
     /**
      * Initialize the technical metadata when the "technical metadata" tab is called
+     * 
      * @throws Exception
      */
     public void initViewTechnicalMetadata() throws Exception
@@ -211,7 +211,7 @@ public class ImageBean
     }
 
     /**
-     * Load the collection according to the identifier defined in the URL 
+     * Load the collection according to the identifier defined in the URL
      */
     public void loadCollection()
     {
@@ -417,6 +417,7 @@ public class ImageBean
 
     /**
      * Add the current {@link Item} to the active {@link Album}
+     * 
      * @return
      * @throws Exception
      */
@@ -449,7 +450,9 @@ public class ImageBean
     }
 
     /**
-     * Remvoe the {@link Item} from the database. If the item was in the current {@link Album}, remove the {@link Item} from it
+     * Remove the {@link Item} from the database. If the item was in the current {@link Album}, remove the {@link Item}
+     * from it
+     * 
      * @throws Exception
      */
     public void remove() throws Exception
@@ -462,20 +465,14 @@ public class ImageBean
         List<Item> l = new ArrayList<Item>();
         l.add(item);
         ic.delete(l, sessionBean.getUser());
+        SessionObjectsController soc = new SessionObjectsController();
+        soc.unselectItem(item.getId().toString());
         redirectToBrowsePage();
     }
 
     /**
-     * Redirect to the browse page
-     * @throws IOException
-     */
-    public void redirectToBrowsePage() throws IOException
-    {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl());
-    }
-
-    /**
      * Remove the {@link Item} from the active {@link Album}
+     * 
      * @return
      * @throws Exception
      */
@@ -492,6 +489,7 @@ public class ImageBean
 
     /**
      * Return true if the {@link Item} is in the active {@link Album}
+     * 
      * @return
      */
     public boolean getIsInActiveAlbum()
@@ -504,7 +502,18 @@ public class ImageBean
     }
 
     /**
+     * Redirect to the browse page
+     * 
+     * @throws IOException
+     */
+    public void redirectToBrowsePage() throws IOException
+    {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl());
+    }
+
+    /**
      * Listener of the value of the select box
+     * 
      * @param event
      */
     public void selectedChanged(ValueChangeEvent event)
@@ -513,12 +522,12 @@ public class ImageBean
         if (event.getNewValue().toString().equals("true"))
         {
             setSelected(true);
-            soc.selectItem(item.getId());
+            soc.selectItem(item.getId().toString());
         }
         else if (event.getNewValue().toString().equals("false"))
         {
             setSelected(false);
-            soc.unselectItem(item.getId());
+            soc.unselectItem(item.getId().toString());
         }
     }
 

@@ -25,14 +25,13 @@ import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+
 /**
- * 
  * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a {@link ThumbnailBean}
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class ThumbnailBean
 {
@@ -55,6 +54,7 @@ public class ThumbnailBean
 
     /**
      * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a {@link ThumbnailBean}
+     * 
      * @param item
      */
     public ThumbnailBean(Item item)
@@ -157,6 +157,7 @@ public class ThumbnailBean
 
     /**
      * Listener for the select box of this {@link ThumbnailBean}
+     * 
      * @param event
      */
     public void selectedChanged(ValueChangeEvent event)
@@ -165,31 +166,14 @@ public class ThumbnailBean
         if (event.getNewValue().toString().equals("true"))
         {
             setSelected(true);
-            soc.selectItem(uri);
+            soc.selectItem(uri.toString());
         }
         else if (event.getNewValue().toString().equals("false"))
         {
             setSelected(false);
-            soc.unselectItem(uri);
+            soc.unselectItem(uri.toString());
         }
     }
-
-//    /**
-//     * Select this {@link ThumbnailBean}
-//     * @return
-//     */
-//    public String select()
-//    {
-//        if (!selected)
-//        {
-//            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(uri.toString());
-//        }
-//        else
-//        {
-//            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(uri.toString());
-//        }
-//        return "";
-//    }
 
     public String getLink()
     {

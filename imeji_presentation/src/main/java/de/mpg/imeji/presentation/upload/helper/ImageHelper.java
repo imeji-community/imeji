@@ -7,17 +7,30 @@ package de.mpg.imeji.presentation.upload.helper;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-//import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
-
 import de.mpg.imeji.presentation.util.PropertyReader;
-
+//import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
+/**
+ * 
+ * TODO Description
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class ImageHelper
 {
+    /**
+     * Rescale an image
+     * @param image
+     * @param size
+     * @param resolution
+     * @return
+     * @throws Exception
+     */
 	public static BufferedImage scaleImage(BufferedImage image, int size, String resolution) throws Exception
 	{
 		int width = image.getWidth(null);

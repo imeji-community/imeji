@@ -1,12 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="templates/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:rich="http://richfaces.org/rich"
-	xmlns:pretty="http://ocpsoft.com/prettyfaces">
-
-<ui:composition template="templates/template.xhtml">
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 	<ui:param name="headline" value="#{lbl.edit_images}"/>
 	
 	<ui:define name="contentMenu"></ui:define>
@@ -94,8 +90,7 @@
 							
 							<h:panelGroup rendered="#{EditImageMetadataBean.editType != 'selected'}" styleClass="full_area0">
 								<h:commandButton styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.cancel}"/>
-								<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl"  action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value=" #{lbl.save} ">
-									<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
+								<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl"  onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value=" #{lbl.save} ">
 								</h:commandButton>			
 							</h:panelGroup>	
 						</h:panelGroup>
@@ -120,8 +115,7 @@
 								
 								<h:commandButton styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.cancel}"/>
 							
-								<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
-									<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
+								<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
 								</h:commandButton>
 							</h:panelGroup>
 						</h:panelGroup>	
@@ -181,8 +175,7 @@
 								<h:outputText value=" #{lbl.cancel} " />
 							</h:outputLink>	
 							
-							<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
-								<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
+							<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
 							</h:commandButton>
 						</h:panelGroup>
 					</h:panelGroup>		
@@ -192,16 +185,12 @@
 			
 		</h:panelGroup>
 		
-		<rich:popupPanel id="panelSaveWait" width="390" height="100" style="background-color:#434343" domElementAttachment="form">
-			<div id="contentPanel">
-	        <h3>
+		</h:form>   
+		<div id="dialogWait" class="double_area0_p8 bordst0 shadst1 dialogbox" style="display: none;">
+	        <h2>
 	        	<h:outputText styleClass="free_area0_p8 xTiny_marginLExcl"  value="#{msg.please_wait}"/>
-	        </h3>
-			</div>
-		</rich:popupPanel>
-		
-		</h:form>    
+	        	<br/><br/>
+	        </h2>
+		</div>
 	</ui:define>
-
 </ui:composition>
-</html>

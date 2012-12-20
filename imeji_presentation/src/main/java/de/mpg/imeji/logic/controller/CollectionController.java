@@ -169,7 +169,7 @@ public class CollectionController extends ImejiController
      * @param collection
      * @throws Exception
      */
-    public void withdraw(CollectionImeji collection) throws Exception
+    public void withdraw(CollectionImeji collection, User user) throws Exception
     {
         ItemController itemController = new ItemController(user);
         List<String> itemUris = itemController.searchImagesInContainer(collection.getId(), null, null, -1, 0)

@@ -18,21 +18,32 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
 import de.escidoc.core.resources.om.item.Item;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.collection.ViewCollectionBean;
 import de.mpg.imeji.presentation.escidoc.EscidocHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.upload.deposit.DepositController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.LoginHelper;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
+/**
+ * Bean for the upload page
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class UploadBean
 {
     private CollectionImeji collection;
+    private int collectionSize = 0;
     private SessionBean sessionBean;
     private String id;
     private String escidocContext;
@@ -49,6 +60,9 @@ public class UploadBean
     private List<String> fFiles;
     private static Logger logger = Logger.getLogger(Upload.class);
 
+    /**
+     * Construct the Bean and initalize the pages
+     */
     public UploadBean()
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -63,6 +77,9 @@ public class UploadBean
         }
     }
 
+    /**
+     * Method checking the url parameters and triggering then the {@link UploadBean} methods
+     */
     public void status()
     {
         if (UrlHelper.getParameterBoolean("init"))
@@ -100,6 +117,11 @@ public class UploadBean
         }
     }
 
+    /**
+     * Start the Upload of the items
+     * 
+     * @throws Exception
+     */
     public void upload() throws Exception
     {
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
@@ -138,9 +160,6 @@ public class UploadBean
                                     URI.create(EscidocHelper.getOriginalResolution(escidocItem)),
                                     URI.create(EscidocHelper.getThumbnailUrl(escidocItem)),
                                     URI.create(EscidocHelper.getWebResolutionUrl(escidocItem)));
-                            // controller.createImejiImage(collection, user, "escidoc:123", title,
-                            // URI.create("http://imeji.org/test"), URI.create("http://imeji.org/test"),
-                            // URI.create("http://imeji.org/test"));
                             sNum += 1;
                             sFiles.add(title);
                         }
@@ -149,7 +168,6 @@ public class UploadBean
                             fNum += 1;
                             fFiles.add(title);
                             logger.error("Error uploading image: ", e);
-                            // throw new RuntimeException(e);
                         }
                     }
                     catch (Exception e)
@@ -162,6 +180,32 @@ public class UploadBean
         }
     }
 
+    /**
+     * Load the collection
+     */
+    public void loadCollection()
+    {
+        if (id != null)
+        {
+            collection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), sessionBean.getUser());
+            if (collection != null && getCollection().getId() != null)
+            {
+                ItemController ic = new ItemController(sessionBean.getUser());
+                collectionSize = ic.countImagesInContainer(getCollection().getId(), new SearchQuery());
+            }
+        }
+        else
+        {
+            BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
+        }
+    }
+
+    /**
+     * Write the report about the upload results
+     * 
+     * @return
+     * @throws Exception
+     */
     public String report() throws Exception
     {
         setTotalNum(totalNum);
@@ -174,7 +218,6 @@ public class UploadBean
 
     public String getTotalNum()
     {
-        System.err.println("totalNum = " + totalNum);
         return totalNum;
     }
 
@@ -223,22 +266,11 @@ public class UploadBean
         this.fFiles = fFiles;
     }
 
-    public void loadCollection()
-    {
-        if (id != null)
-        {
-            ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).setId(id);
-            ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
-            // collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class,id),
-            // sessionBean.getUser());
-            collection = ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getCollection();
-        }
-        else
-        {
-            BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
-        }
-    }
-
+    /**
+     * Log in in escidoc with the escidoc user
+     * 
+     * @throws Exception
+     */
     public void logInEscidoc() throws Exception
     {
         String userName = PropertyReader.getProperty("imeji.escidoc.user");
@@ -294,5 +326,15 @@ public class UploadBean
     public void setUser(User user)
     {
         this.user = user;
+    }
+
+    public int getCollectionSize()
+    {
+        return collectionSize;
+    }
+
+    public void setCollectionSize(int collectionSize)
+    {
+        this.collectionSize = collectionSize;
     }
 }

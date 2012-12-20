@@ -28,7 +28,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.SharingBean;
+import de.mpg.imeji.presentation.user.ShareBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -97,7 +97,7 @@ public class AlbumBean
                     grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
                             .getSessionBean(SessionBean.class)).getLabel("role_album_editor"),
                             "Can edit informations about the collection"));
-                    ((SharingBean)BeanHelper.getRequestBean(SharingBean.class)).setGrantsMenu(grantsMenu);
+                    ((ShareBean)BeanHelper.getRequestBean(ShareBean.class)).setGrantsMenu(grantsMenu);
                 }
             }
         }

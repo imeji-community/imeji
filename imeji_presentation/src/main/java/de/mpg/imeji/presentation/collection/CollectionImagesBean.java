@@ -200,10 +200,10 @@ public class CollectionImagesBean extends ImagesBean
 
     public String withdraw() throws Exception
     {
-        CollectionController cc = new CollectionController(sb.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
-            cc.withdraw(collection);
+            cc.withdraw(collection, sb.getUser());
             BeanHelper.info(sb.getMessage("success_collection_withdraw"));
         }
         catch (Exception e)

@@ -123,49 +123,21 @@
 			<ui:define name="actionsMenu">
 				<h:panelGroup layout="block" styleClass="free_area0 sub action">
 					<h:panelGroup>
-						<rich:togglePanel  id="sharePanel" activeItem="#{SharingBean.status}" switchType="ajax" rendered="#{AlbumBean.editable}">
-							 <rich:togglePanelItem name="closed">
-							 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">						   
-						           
-									<h:outputLink styleClass="free_area0" value="#" rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}">
-										<h:outputText value="#{lbl.album_share}"/>
-										 <rich:toggleControl event="click" targetPanel="sharePanel" targetItem="open"  />
-									</h:outputLink>
-									
-									<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING'}">
-										<h:outputText value="#{lbl.release}"/>
-										<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
-									</h:outputLink>
-									
-									<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}">
-										<h:outputText value="#{lbl.withdraw}"/>
-										<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
-									</h:outputLink>
-									
-									<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.deletable}">
-										<h:outputText value="#{lbl.delete}"/>
-										<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
-									</h:outputLink>
-									
-								</h:panelGrid>
-						     </rich:togglePanelItem>
-						     <rich:togglePanelItem name="open">
-						         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
-	     								<h:outputText value="#{lbl.share} " />
-	     								<!-- FIXME input below white background make typing invisible -->
-	          							*<rich:inplaceInput styleClass="large_area0 selected" value="#{SharingBean.email}" defaultLabel="#{lbl.share_email}"/>*
-	          							<h:outputText value=" #{lbl.share_as}" />
-	          							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
-												<f:selectItems value="#{SharingBean.grantsMenu}"/>
-										</h:selectOneMenu>
-						        		<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}">
-											<f:attribute name="albumId" value="#{AlbumBean.id}"/>
-											<f:attribute name="name" value="#{AlbumBean.album.metadata.title}"/>
-						           		</h:commandLink>
-						           		<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}"><h:outputText value="#{lbl.cancel}"/></h:outputLink>
-									</h:panelGrid>
-							 </rich:togglePanelItem>   
-						</rich:togglePanel>
+						<h:outputLink styleClass="free_area0" value="#{Navigation.shareUrl}?uri=#{AlbumBean.album.id}"  rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}">
+							<h:outputText value="#{lbl.album_share}"/>
+						</h:outputLink>
+						
+						<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogRelease');" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING'}">
+							<h:outputText value="#{lbl.release}"/>
+						</h:outputLink>
+						
+						<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogWithdraw');"  rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}">
+							<h:outputText value="#{lbl.withdraw}"/>
+						</h:outputLink>
+						
+						<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogDelete');"  rendered="#{AlbumBean.deletable}">
+							<h:outputText value="#{lbl.delete}"/>
+						</h:outputLink>
 					</h:panelGroup>
 					
 					<ui:include src="confirmationPages/ContainerRelease.xhtml">

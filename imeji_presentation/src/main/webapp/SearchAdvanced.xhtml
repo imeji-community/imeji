@@ -1,44 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="templates/template.xhtml" 
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	 xmlns:rich="http://richfaces.org/rich"
 	xmlns:pretty="http://ocpsoft.com/prettyfaces">
-<ui:remove>
-<!--
-
- CDDL HEADER START
-
- The contents of this file are subject to the terms of the
- Common Development and Distribution License, Version 1.0 only
- (the "License"). You may not use this file except in compliance
- with the License.
-
- You can obtain a copy of the license at license/ESCIDOC.LICENSE
- or http://www.escidoc.de/license.
- See the License for the specific language governing permissions
- and limitations under the License.
-
- When distributing Covered Code, include this CDDL HEADER in each
- file and include the License file at license/ESCIDOC.LICENSE.
- If applicable, add the following below this CDDL HEADER, with the
- fields enclosed by brackets "[]" replaced with your own identifying
- information: Portions Copyright [yyyy] [name of copyright owner]
-
- CDDL HEADER END
-
-
- Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
- für wissenschaftlich-technische Information mbH and Max-Planck-
- Gesellschaft zur Förderung der Wissenschaft e.V.
- All rights reserved. Use is subject to license terms.
--->
-</ui:remove>
-
-	<body>
-
-	<ui:composition template="templates/template.xhtml">
 		<ui:param name="headline" value="#{lbl.search_advanced}"/>
 		
 		<ui:define name="additionalSubheaders">
@@ -75,7 +40,7 @@
 					    		
 								<h:panelGroup styleClass="medium_marginLExcl full_area0_p8  ">
 								
-									<h:selectOneMenu id="selCollection" value="#{g.collectionId}" styleClass="double_area0" onchange="#{rich:element('changeGroup')}.click();">
+									<h:selectOneMenu id="selCollection" value="#{g.collectionId}" styleClass="double_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':changeGroup').click();">
 										<f:selectItems value="#{AdvancedSearchBean.collectionsMenu}"/>
 									</h:selectOneMenu>
 									
@@ -86,29 +51,26 @@
 								
 								
 									<ui:repeat id="els" var="el" value="#{g.elements}" rows="0" varStatus="elIndex">
-	
-										
-										
 										<h:panelGroup styleClass="tiny_marginLExcl full_area0_p8">
 	
 											<h:panelGroup styleClass="free_area0">
-												<h:selectOneMenu id="selNot" value="#{el.inverse}" styleClass="small_area0" onchange="#{rich:element('updateEl')}.click();">
+												<h:selectOneMenu id="selNot" value="#{el.inverse}" styleClass="small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 													<f:selectItem itemValue="false" itemLabel="--"/>
 													<f:selectItem itemValue="true" itemLabel="#{lbl.NOT}"/>
 												</h:selectOneMenu>
 											</h:panelGroup>
 											
-											<h:selectOneMenu id="selStatement" value="#{el.namespace}" styleClass="xTiny_marginLExcl double_area0" onchange="#{rich:element('changeEl')}.click();">
+											<h:selectOneMenu id="selStatement" value="#{el.namespace}" styleClass="xTiny_marginLExcl double_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':changeEl').click();">
 												<f:selectItems value="#{g.statementMenu}"/>
 											</h:selectOneMenu>
 											
 											<h:commandButton id="changeEl" action="#{AdvancedSearchBean.changeElement}" style="visibility:hidden;">
-												<f:ajax execute="@form" render=":ajaxQuery"/>
+												<f:ajax execute="@form" render="@form :ajaxQuery"/>
 												<f:param name="gPos" value="#{gIndex.index}"/>
 												<f:param name="elPos" value="#{elIndex.index}"/>
 											</h:commandButton>
 											
-											<h:commandButton id="updateEl" action="#{AdvancedSearchBean.updateElement}" render="ajaxQuery" style="visibility:hidden;">
+											<h:commandButton id="updateEl" action="#{AdvancedSearchBean.updateElement}" style="visibility:hidden;">
 												<f:ajax execute="@form" render=":ajaxQuery"/>
 												<f:param name="gPos" value="#{gIndex.index}"/>
 												<f:param name="elPos" value="#{elIndex.index}"/>
@@ -120,13 +82,13 @@
 													<h:outputText value=" = " style="visibility:hidden;"/>
 												</h:panelGroup>
 												
-												<h:selectOneMenu id="selFilter" value="#{el.filter}" rendered="#{el.filtersMenu != null}" styleClass="xTiny_marginLExcl small_area0" onchange="#{rich:element('updateEl')}.click();">
+												<h:selectOneMenu id="selFilter" value="#{el.filter}" rendered="#{el.filtersMenu != null}" styleClass="xTiny_marginLExcl small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 													<f:selectItems value="#{el.filtersMenu}"/>
 												</h:selectOneMenu>
 											</h:panelGroup>
 											
-											<h:inputText value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues == null}" onkeyup="#{rich:element('updateEl')}.click();"/>
-											<h:selectOneMenu id="selPredefinedValue" value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues != null}" onchange="#{rich:element('updateEl')}.click();">
+											<h:inputText id="input" autocomplete="false" value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues == null}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+											<h:selectOneMenu id="select" value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues != null}" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 												<f:selectItems value="#{el.predefinedValues}"/>
 											</h:selectOneMenu>
 											
@@ -144,18 +106,18 @@
 										</h:panelGroup>
 										
 										<h:panelGroup styleClass="full_area0_p8" rendered="#{elIndex.index &lt; (g.size - 1)}">
-											<h:selectOneMenu id="selLogicalRelation" value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="#{rich:element('updateEl')}.click();">
+											<h:selectOneMenu id="selLogicalRelation" value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 												<f:selectItems value="#{AdvancedSearchBean.operatorsMenu}"/>
 											</h:selectOneMenu>
 										</h:panelGroup>
 									</ui:repeat>
 									
 									<h:panelGroup styleClass="full_area0_p8">
-										<h:commandButton value="" action="#{AdvancedSearchBean.addGroup}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add" shortDesc="#{lbl.add_collection}">
+										<h:commandButton value="" action="#{AdvancedSearchBean.addGroup}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add" title="#{lbl.add_collection}">
 											<f:ajax execute="@form" render="@form :ajaxQuery"/>
 											<f:param name="gPos" value="#{gIndex.index}"/>
 										</h:commandButton>
-										<h:commandButton value="" action="#{AdvancedSearchBean.removeGroup}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}">
+										<h:commandButton value="" action="#{AdvancedSearchBean.removeGroup}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn remove sectionTool" title="#{lbl.remove_collection}">
 											<f:ajax execute="@form" render="@form :ajaxQuery"/>
 											<f:param name="gPos" value="#{gIndex.index}"/>
 										</h:commandButton>
@@ -179,8 +141,4 @@
 			
 			
 		</ui:define>
-
-	</ui:composition>
-	
-	</body>
-</html>
+</ui:composition>

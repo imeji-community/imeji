@@ -29,7 +29,15 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
-
+/**
+ * 
+ *Abstract bean for all collection beans
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public abstract class CollectionBean
 {
     public enum TabType
@@ -288,7 +296,7 @@ public abstract class CollectionBean
 
     public String release()
     {
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
             cc.release(collection, sessionBean.getUser());
@@ -305,7 +313,7 @@ public abstract class CollectionBean
 
     public String delete()
     {
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
             cc.delete(collection, sessionBean.getUser());
@@ -321,10 +329,10 @@ public abstract class CollectionBean
 
     public String withdraw() throws Exception
     {
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
-            cc.withdraw(collection);
+            cc.withdraw(collection, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
         }
         catch (Exception e)

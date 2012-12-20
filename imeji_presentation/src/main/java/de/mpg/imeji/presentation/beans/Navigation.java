@@ -41,11 +41,13 @@ public class Navigation
     public final Page INFOS = new Page("Info", "infos");
     public final Page CREATE = new Page("Create", "create");
     public final Page UPLOAD = new Page("Upload collection", "upload");
+    public final Page SHARE = new Page("Share", "share");
     // session
     private SessionBean sessionBean = null;
 
     /**
      * Application bean managing navigation
+     * 
      * @throws Exception
      */
     public Navigation() throws Exception
@@ -137,6 +139,11 @@ public class Navigation
     public String getBlogUrl() throws IOException, URISyntaxException
     {
         return PropertyReader.getProperty("escidoc.imeji.blog.url");
+    }
+
+    public String getShareUrl()
+    {
+        return applicationUrl + SHARE.getPath();
     }
 
     /*

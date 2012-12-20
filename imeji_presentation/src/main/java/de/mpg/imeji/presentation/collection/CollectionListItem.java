@@ -143,7 +143,7 @@ public class CollectionListItem
     public String withdraw()
     {
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         if ("".equals(discardComment.trim()))
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
@@ -155,7 +155,7 @@ public class CollectionListItem
             {
                 CollectionImeji c = cc.retrieve(uri);
                 c.setDiscardComment(discardComment);
-                cc.withdraw(c);
+                cc.withdraw(c, sessionBean.getUser());
                 BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
             }
             catch (Exception e)

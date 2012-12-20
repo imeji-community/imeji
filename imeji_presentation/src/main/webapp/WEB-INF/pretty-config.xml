@@ -162,5 +162,10 @@
 		<pattern value="/user/browse"></pattern>
 		<view-id>/jsf/Users.xhtml</view-id>
 	</url-mapping>
+	
+	<url-mapping id="sharee">
+		<pattern value="/share"></pattern>
+		<view-id>/jsf/Share.xhtml</view-id>
+	</url-mapping>
 
 </pretty-config>

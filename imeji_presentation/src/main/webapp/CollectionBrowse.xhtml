@@ -78,19 +78,16 @@
 						<!-- SORTING content menu lower line ends here -->
 					</h:panelGroup>
 					
-					 <h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
+					 <h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogRelease');" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
 						<h:outputText value="#{lbl.collection_release}"/>
-						<rich:componentControl target="panelConfirmRelease" operation="show" event="click"/>
 					</h:outputLink>
 					
-					<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
+					<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogWithdraw');" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
 						<h:outputText value="#{lbl.withdraw}"/>
-						<rich:componentControl target="panelConfirmWithdraw" operation="show" event="click"/>
 					</h:outputLink>
 					
-					<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.deletable}">
+					<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogDelete');" rendered="#{CollectionImagesBean.deletable}">
 						<h:outputText value="#{lbl.delete}"/>
-						<rich:componentControl target="panelConfirmDelete" operation="show" event="click"/>
 					</h:outputLink>
 					
 					<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
@@ -100,23 +97,19 @@
 					<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
 						<h:outputText value="Export for ingest "/>
 					</h:outputLink>
-					
-					<h:panelGroup rendered="#{CollectionImagesBean.collection != null}">
-						<ui:include src="confirmationPages/ContainerRelease.xhtml">
-							<ui:param name="bean" value="#{CollectionImagesBean}"/>
-						</ui:include>
-						<ui:include src="confirmationPages/ContainerDelete.xhtml">
-							<ui:param name="bean" value="#{CollectionImagesBean}"/>
-						</ui:include>
-						<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
-							<ui:param name="bean" value="#{CollectionImagesBean}"/>
-							<ui:param name="discardComment" value="#{CollectionImagesBean.collection.discardComment}"/>
-						</ui:include>
-					</h:panelGroup>
-				
 				</h:panelGroup>
+				
+				<ui:include src="confirmationPages/ContainerRelease.xhtml">
+					<ui:param name="bean" value="#{CollectionImagesBean}"/>
+				</ui:include>
+				<ui:include src="confirmationPages/ContainerDelete.xhtml">
+					<ui:param name="bean" value="#{CollectionImagesBean}"/>
+				</ui:include>
+				<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
+					<ui:param name="bean" value="#{CollectionImagesBean}"/>
+					<ui:param name="discardComment" value="#{CollectionImagesBean.collection.discardComment}"/>
+				</ui:include>
 			</ui:define>
 	</ui:composition>
-
 </body>
 </html>

@@ -37,6 +37,7 @@ All rights reserved. Use is subject to license terms.
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js"></script>       
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/richfaces-ajax-patch.js"></script>
+			<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
         </h:head>
         <h:body lang="#{SessionBean.locale}">
             	<style type="text/css">
@@ -135,47 +136,54 @@ All rights reserved. Use is subject to license terms.
                         </div>
                     </div>
                     <!-- end: content section -->
+                    <div id="dialogs"></div>
                 </div>
-                 <ui:insert name="dialogs"/>
+                                 
                 <ui:include src="/footerPages/Footer.jspf"/>
                 <script type="text/javascript">
 				function openDialog(id) {
-					/* lock the content*/
-					var content = $("#full_wrapper");
-					content.css({ opacity: 0.2});
-					$.uiLock('');
 					/*set the dialog in center of the screen*/
 					var dialog = $(document).find("#" + id);
 					dialog.css("position","absolute");
+					dialog.css("z-index", 1000);
+					dialog.css("background-color","#434343");
 					dialog.css("top", Math.max(0, (($(window).height() - $(dialog).outerHeight()) / 2) + 
 				                                                $(window).scrollTop()) + "px");
 					dialog.css("left", Math.max(0, (($(window).width() - $(dialog).outerWidth()) / 2) + 
 				                                                $(window).scrollLeft()) + "px");
 					/*open the dialog*/
 					dialog.show();
+					/* lock the page*/
+					var content = $("#full_wrapper");
+					content.css({ opacity: 0.3});
+					$.lock(dialog);
+					
 				}
 				function closeDialog(id) {
 					var dialog = $(document).find("#" + id);
 					var content = $("#full_wrapper");
 					content.css({ opacity: 1});
 					dialog.hide();
-					$.uiUnlock();
+					$.unlock(dialog);
 				}
 				(function($) {
 				    $.extend({
-				uiLock: function(content){
+				lock: function(content){
 				            if(content == 'undefined') content = '';
 				            $("&amp;&lt;div&amp;gt;&amp;&lt;/div&amp;&gt;").attr('id', 'uiLockId').css({
 				                'position': 'absolute',
 				                'top': 0,
 				                'left': 0,
-				                'opacity': 0.2,
+				                'opacity': 1,
 				                'width':'100%',
 				                'height':'100%',
-				            }).html(content).appendTo('body');;
+				            }).html(content).appendTo('body');
 				        },
-				uiUnlock: function(){
-				            $('#uiLockId').remove();
+				unlock: function(content){
+							/*remove the lock*/
+		            		$('#uiLockId').remove();
+		            		/*reappend the dialog, otherwise is null by next call*/
+				            $('#dialogs').html(content).appendTo('body');
 				        }
 				    });
 				})(jQuery);

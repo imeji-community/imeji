@@ -94,9 +94,8 @@
 				</h:outputLink>
 				<h:outputText styleClass="free_area0" value=" (#{paginatorListSessionBean.totalNumberOfElements})"/>
 				
-				<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#">
-					<h:outputText value="#{lbl.delete_selected_albums}" rendered="#{SessionBean.user != null}"/>    
-					<rich:componentControl target="panelConfirmDeleteSelectedContainer" operation="show" event="click"/>
+				<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#" onclick="openDialog('dialogDeleteSelectedContainer');">
+					<h:outputText value="#{lbl.delete_selected_albums}" rendered="#{SessionBean.user != null}"/>
 				</h:outputLink>
 			</ui:define>
 	
@@ -285,11 +284,14 @@
 				</h:panelGroup>
 				<div class="cleaning"></div>
 				
-				<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#">
+				<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#" onclick="openDialog('dialogDeleteSelectedContainer');">
 					<h:outputText value="#{lbl.delete_selected_albums}" rendered="#{SessionBean.user != null}"/>
-					<rich:componentControl for="panelConfirmDeleteSelectedContainer" operation="show" event="onclick"/>
 				</h:outputLink>
-						
+					<ui:include src="../confirmationPages/SelectedContainerDelete.xhtml"/>	
+			</ui:define>
+			
+			<ui:define name="dialogs">
+			
 			</ui:define>
 
 		</ui:composition>

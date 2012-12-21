@@ -19,6 +19,8 @@ import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -36,17 +38,29 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.LoginHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.helper.J2JHelper;
-
+/**
+ * 
+ * Implements CRUD and Search methods for {@link Item}
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class ItemController extends ImejiController
 {
-    private static Logger logger = null;
+    private static Logger logger = Logger.getLogger(ItemController.class);
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+
+    public ItemController()
+    {
+        super();
+    }
 
     public ItemController(User user)
     {
         super(user);
-        logger = Logger.getLogger(ItemController.class);
     }
 
     public void create(Item img, URI coll) throws Exception
@@ -354,12 +368,5 @@ public class ItemController extends ImejiController
             logger.error("Error removing image from eSciDoc (" + id + ")", e);
             throw new RuntimeException("Error removing image from eSciDoc (" + id + ")", e);
         }
-    }
-
-    public String getEscidocUserHandle() throws Exception
-    {
-        String userName = PropertyReader.getProperty("imeji.escidoc.user");
-        String password = PropertyReader.getProperty("imeji.escidoc.password");
-        return LoginHelper.login(userName, password);
     }
 }

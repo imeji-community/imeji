@@ -18,7 +18,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -178,19 +177,20 @@ public class EscidocHelper
 				{
 					if(format.equalsIgnoreCase("gif"))
 					{
-						GifDecoder gifDecoder = ImageHelper.checkAnimation(imageStream);
-						if(gifDecoder.getFrameCount()>1)
-						{
-							scaledImageStream = ImageHelper.scaleAnimation(imageStream, gifDecoder, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
-						}
-						else
-						{
-							bufferedImage = ImageHelper.scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")),contentCategory);
-							ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-							// use imageIO.write to encode the image back into a byte[]
-							ImageIO.write(bufferedImage, format, byteOutput);
-							scaledImageStream = byteOutput.toByteArray();
-						} 
+						//TODO 
+						//GifDecoder gifDecoder = ImageHelper.checkAnimation(imageStream);
+//						if(gifDecoder.getFrameCount()>1)
+//						{
+//							scaledImageStream = ImageHelper.scaleAnimation(imageStream, gifDecoder, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
+//						}
+//						else
+//						{
+//							bufferedImage = ImageHelper.scaleImage(bufferedImage, Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")),contentCategory);
+//							ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+//							// use imageIO.write to encode the image back into a byte[]
+//							ImageIO.write(bufferedImage, format, byteOutput);
+//							scaledImageStream = byteOutput.toByteArray();
+//						} 
 					}
 					else
 					{

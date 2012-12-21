@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" >
 	<ui:remove>
 		<!--
 
@@ -92,7 +92,7 @@
 											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
 											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 											<h:panelGroup layout="block" styleClass="medium_area0">
-												<h:outputText value="#{lbl.private}" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
+												<h:outputText value="#{lbl['private']}" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
 												<h:outputText value="#{lbl.published}" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
 												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 											</h:panelGroup>
@@ -110,7 +110,7 @@
 									</h:panelGroup>
 									
 									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-										<a4j:repeat var="creator" rowKeyVar="status" value="#{ViewCollectionBean.persons}">
+										<ui:repeat var="creator" rowKeyVar="status" value="#{ViewCollectionBean.persons}">
 											<b class="xLarge_area0_p8 endline labelLine clear">
 												<h:outputText value="#{lbl.authors}"/>
 												<span class="noDisplay">: </span>
@@ -136,17 +136,17 @@
 											</b>
 											<span class="xHuge_area0 xTiny_marginLExcl endline">
 												<h:outputText value="#{lbl.organization} : "/>
-												<a4j:repeat var="organization" value="#{creator.organizations}" rowKeyVar="indexO">
+												<ui:repeat var="organization" value="#{creator.organizations}" varStatus="indexO">
 													<h:panelGroup styleClass="endline">
 														<span class="endline">
-															<h:outputText value=",  " rendered="#{indexO > 0}"/>
+															<h:outputText value=",  " rendered="#{indexO.index > 0}"/>
 															<h:outputText value=" #{organization.name}"/>
 														</span>
 													</h:panelGroup>
-												</a4j:repeat>
+												</ui:repeat>
 											</span>
 											
-										</a4j:repeat>
+										</ui:repeat>
 									</h:panelGroup>
 								</div>
 							</h:panelGroup>
@@ -154,7 +154,12 @@
 						
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
-								<h:outputText value="#{lbl.collection_profile}"/>
+								<h:outputText value="#{lbl.collection_profile}"/>								
+								
+								<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=profile&amp;id=#{ViewCollectionBean.collection.profile}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
+									<h:outputText value="XML View"/>
+								</h:outputLink>
+								
 								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.profileUrl}#{ViewCollectionBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.profileEditor and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.edit}"></h:outputText>
 								</h:outputLink>
@@ -172,7 +177,7 @@
 										<!-- Picture status of the Collection -->
 										<div class="free_area0 itemBlockContent endline">	
 											<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-												<a4j:repeat var="statement" rowKeyVar="status" value="#{ViewCollectionBean.profile.statements}">
+												<ui:repeat var="statement" value="#{ViewCollectionBean.profile.statements}">
 													<b class="xLarge_area0_p8 endline labelLine clear">
 														<h:outputText value="#{lbl.metadata}"/>
 														<span class="noDisplay">: </span>
@@ -199,15 +204,15 @@
 													<span class="xHuge_area0 xTiny_marginLExcl endline">
 														<h:outputText value="#{lbl.labels} : "/>
 													
-														<a4j:repeat var="label" value="#{statement.labels}" rowKeyVar="indexO">
+														<ui:repeat var="label" value="#{statement.labels}" varStatus="indexO">
 															<h:panelGroup styleClass="endline">
 																<span class="endline">
-																	<h:outputText value=", " rendered="#{indexO > 0}"/>
-																	<h:outputText value="#{label.string}"/>
+																	<h:outputText value=", " rendered="#{indexO.index > 0}"/>
+																	<h:outputText value="#{label.value}"/>
 																	<h:outputText value=" (#{label.lang})"/>
 																</span>
 															</h:panelGroup>
-														</a4j:repeat>
+														</ui:repeat>
 													</span>
 													<h:panelGroup rendered="#{!(empty statement.literalConstraints)}">
 														<b class="xLarge_area0_p8 endline labelLine clear">
@@ -217,14 +222,14 @@
 														<span class="xHuge_area0 xTiny_marginLExcl endline">
 															<h:outputText value="#{lbl.values} : "/>
 														
-															<a4j:repeat var="value" value="#{statement.literalConstraints}" rowKeyVar="indexO">
+															<ui:repeat var="value" value="#{statement.literalConstraints}" varStatus="indexO">
 																<h:panelGroup styleClass="endline">
 																	<span class="endline">
-																		<h:outputText value=", " rendered="#{indexO > 0}"/>
+																		<h:outputText value=", " rendered="#{indexO.index > 0}"/>
 																		<h:outputText value="#{value}"/>
 																	</span>
 																</h:panelGroup>
-															</a4j:repeat>
+															</ui:repeat>
 														</span>
 													</h:panelGroup>
 													<h:panelGroup rendered="#{statement.vocabulary != null}">
@@ -237,7 +242,7 @@
 															<h:outputText styleClass="quad_txtOutput" value="   #{statement.vocabulary}"/>
 														</span>
 													</h:panelGroup>
-												</a4j:repeat>
+												</ui:repeat>
 											</h:panelGroup>
 										</div>
 									</h:panelGroup>

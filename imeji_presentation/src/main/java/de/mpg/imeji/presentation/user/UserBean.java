@@ -13,9 +13,8 @@ import javax.faces.context.FacesContext;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.LoginBean;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 

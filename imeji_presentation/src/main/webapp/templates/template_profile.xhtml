@@ -2,236 +2,249 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:a4j="http://richfaces.org/a4j" 
-	xmlns:rich="http://richfaces.org/rich">
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <ui:composition template="template_collection.xhtml">
 	<ui:define name="mainContent">
-
-		<h:panelGroup layout="block" styleClass="full_area0">
-			<h:panelGroup layout="block" styleClass="full_area0 fullItem">					
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="#{lbl.metadata_profile}"/>
-					</h3>
-					<span class="seperator"></span>
-					
-					<div class="free_area0 itemBlockContent endline">
-						<br/>
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
-							<b class="xLarge_area0_p8 labelLine clear">
-								<h:outputText value="#{lbl.title}"/>
-								<h:outputText value="&#160;"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<h:panelGroup styleClass="half_area xSmall_marginLExcl">
-								<h:inputText styleClass="half_txtInput endline" value="#{FormularBean.profile.title}" valueChangeListener="#{FormularBean.titleListener}" />
-							</h:panelGroup>
-						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="free_area0  endline itemLine clear"></h:panelGroup>
+		<h:form id="profileForm">
+			<h:panelGroup layout="block" styleClass="full_area0">
+				<h:panelGroup layout="block" styleClass="full_area0 fullItem">					
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+						<h3 class="xLarge_area0_p8 endline blockHeader">
+							<h:outputText value="#{lbl.metadata_profile}"/>
+						</h3>
+						<span class="seperator"></span>
 						
-						<h:panelGroup styleClass="full_area0_p8" rendered="#{empty FormularBean.statements}">
-							<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl">
-								<h:commandLink action="#{FormularBean.addFirstStatement}"><h:outputText value="#{lbl.profile_start_new} "/></h:commandLink>
+						<div class="free_area0 itemBlockContent endline">
+							<br/>
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder clear">
+								<b class="xLarge_area0_p8 labelLine clear">
+									<h:outputText value="#{lbl.title}"/>
+									<h:outputText value="&#160;"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<h:panelGroup styleClass="half_area xSmall_marginLExcl">
+									<h:inputText styleClass="half_txtInput endline" value="#{FormularBean.profile.title}" valueChangeListener="#{FormularBean.titleListener}" />
+								</h:panelGroup>
 							</h:panelGroup>
-							<h:outputText value=" #{lbl.or_small} " styleClass="full_area0_p8 huge_marginLExcl"/>
-							<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl" >
-								<h:outputText value=" #{lbl.profile_use_template} "/>
-								<span class="xTiny_marginLExcl">
-									<h:selectOneMenu value="#{FormularBean.template}" onchange="getElementById('formular:changeTemplate').click();" valueChangeListener="#{FormularBean.templateListener}">
-										<f:selectItems value="#{FormularBean.profilesMenu}"/>
-									</h:selectOneMenu>
-									<h:commandButton id="changeTemplate" action="#{FormularBean.changeTemplate}" style="visibility:hidden"/>
-								</span>
+							<h:panelGroup layout="block" styleClass="free_area0  endline itemLine clear"></h:panelGroup>
+							
+							<h:panelGroup styleClass="full_area0_p8" rendered="#{empty FormularBean.statements}">
+								<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl">
+									<h:commandLink action="#{FormularBean.addFirstStatement}"><h:outputText value="#{lbl.profile_start_new} "/></h:commandLink>
+								</h:panelGroup>
+								<h:outputText value=" #{lbl.or_small} " styleClass="full_area0_p8 huge_marginLExcl"/>
+								<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl" >
+									<h:outputText value=" #{lbl.profile_use_template} "/>
+									<span class="xTiny_marginLExcl">
+										<h:selectOneMenu value="#{FormularBean.template}" onchange="getElementById('formular:changeTemplate').click();" valueChangeListener="#{FormularBean.templateListener}">
+											<f:selectItems value="#{FormularBean.profilesMenu}"/>
+										</h:selectOneMenu>
+										<h:commandButton id="changeTemplate" action="#{FormularBean.changeTemplate}" style="visibility:hidden"/>
+									</span>
+								</h:panelGroup>
 							</h:panelGroup>
-						</h:panelGroup>
-						
-						
-						<a4j:outputPanel id="ajaxArea">
-							<a4j:repeat id="profile" var="statement" value="#{FormularBean.statements}" rowKeyVar="position">
-								<h:panelGroup layout="block" styleClass="free_area0 noTopBorder endline itemLine clear">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.metadata}"/>
-										<h:outputText value="&#160;"/>
-										<span class="noDisplay">: </span>
-									</b>
-									<h:panelGroup styleClass="free_area0 tiny_marginRExcl" style="float:right">
-										<h:panelGroup styleClass="free_area0">
-											<h:selectOneRadio styleClass="free_area0" id="radioDescription" readonly="true" value="#{statement.description}" converter="javax.faces.Boolean" onclick="unSelectUnique(#{position});">
-												<f:selectItem id="true" itemLabel="#{lbl.use_as_description}" itemValue="true"/>
-											</h:selectOneRadio>
-											<h:selectBooleanCheckbox styleClass="free_area0" style="visibility:hidden;" id="uniqueSelect" value="#{statement.description}" onclick="unSelectUnique(#{position});" valueChangeListener="#{statement.descriptionListener}"/>
-										</h:panelGroup>
-										<h:panelGroup styleClass="free_area0 tiny_marginRExcl">
-											<h:selectBooleanCheckbox styleClass="free_area0" value="#{statement.multiple}"  valueChangeListener="#{statement.multipleListener}"/>
-											<h:outputLabel styleClass="free_area0 xTiny_marginLExcl" value="#{lbl.multiple}"/>
-										</h:panelGroup>
-										<h:panelGroup styleClass="free_area0">
-											<h:selectBooleanCheckbox styleClass="free_area0" value="#{statement.preview}" valueChangeListener="#{statement.previewListener}"/>
-											<h:outputLabel styleClass="free_area0 xTiny_marginLExcl" value="#{lbl.preview}"/>
-										</h:panelGroup>
-										
-										
-									</h:panelGroup>	
-									<h:panelGroup class="full_area0 xLarge_marginLExcl endline">
-										
-									
-										<h:panelGroup styleClass="medium_area0 clear">
-											<h:outputLabel styleClass="medium_label" value="#{lbl.type}"/>										
-											<h:selectOneMenu  requiredMessage="Please choose a type!"  id="selStatementType" styleClass="medium_select" onchange="getElementById('formular:profile:#{position}:changeType').click();" value="#{statement.statement.type}" valueChangeListener="#{statement.typeListener}">
-												<f:converter converterId="URIConverter" />
-												<f:selectItems value="#{FormularBean.mdTypesMenu}"/>
-											</h:selectOneMenu>
-											<h:message for="selStatementType" styleClass="xLarge_label endline clean" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" globalOnly="false" showDetail="false" showSummary="true"/>
-											<a4j:commandButton id="changeType" action="#{statement.reset}" reRender="ajaxArea" style="visibility:hidden;"/>
-										</h:panelGroup>
-										
-										<h:panelGroup styleClass="quad_area0 xTiny_marginLIncl">
-											
-											<h:outputLabel styleClass="xLarge_label" value="#{lbl.name}"/>
-										
-											<a4j:repeat id="labels" var="label" value="#{statement.labels}" rowKeyVar="labelPosition">
-												<h:panelGroup styleClass="free_area0 xSmall_marginRIncl">
-													<h:inputText id="inputLabel" value="#{label.string}" styleClass="xLarge_txtInput"/>
-													<h:panelGroup rendered="#{statement.labelsCount > 1}">
-														<a4j:commandButton styleClass="min_imgBtn remove" shortDesc="#{lbl.label_remove}"  action="#{FormularBean.removeLabel}"  reRender="ajaxArea">
-															<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-															<f:setPropertyActionListener value="#{labelPosition}" target="#{FormularBean.labelPosition}"/>
-														</a4j:commandButton>
-														<h:outputLabel styleClass="" value="#{lbl.label_remove}" />
-													</h:panelGroup>
-													<h:selectOneMenu value="#{label.lang}" immediate="true" styleClass="medium_txtInput" >
-														<f:selectItems value="#{Internationalization.languages}"/>
-		  											</h:selectOneMenu>
-		  											
-		  										</h:panelGroup>
-											</a4j:repeat>
-											
-											<h:panelGroup styleClass="xDouble_area1 xSmall_marginRIncl">
-												<a4j:commandButton id="addLabel" styleClass="min_imgBtn add" action="#{FormularBean.addLabel}" reRender="ajaxArea">
-													<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-												</a4j:commandButton>
-												<h:outputLabel styleClass="" value="#{lbl.label_add}" />
+							
+							
+							<h:panelGroup id="ajaxArea">
+								<ui:repeat id="profile" var="statement" value="#{FormularBean.statements}" varStatus="position">
+									<h:panelGroup layout="block" styleClass="free_area0 noTopBorder endline itemLine clear">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.metadata}"/>
+											<h:outputText value="&#160;"/>
+											<span class="noDisplay">: </span>
+										</b>
+										<h:panelGroup styleClass="free_area0 tiny_marginRExcl" style="float:right">
+											<h:panelGroup styleClass="free_area0">
+												<h:selectOneRadio styleClass="free_area0" id="radioDescription" readonly="true" value="#{statement.description}" converter="javax.faces.Boolean" onclick="unSelectUnique(#{position.index});">
+													<f:selectItem id="true" itemLabel="#{lbl.use_as_description}" itemValue="true"/>
+												</h:selectOneRadio>
+												<h:selectBooleanCheckbox styleClass="free_area0" style="visibility:hidden;" id="uniqueSelect" value="#{statement.description}" onclick="unSelectUnique(#{position.index});" valueChangeListener="#{statement.descriptionListener}"/>
 											</h:panelGroup>
+											<h:panelGroup styleClass="free_area0 tiny_marginRExcl">
+												<h:selectBooleanCheckbox styleClass="free_area0" value="#{statement.multiple}"  valueChangeListener="#{statement.multipleListener}"/>
+												<h:outputLabel styleClass="free_area0 xTiny_marginLExcl" value="#{lbl.multiple}"/>
+											</h:panelGroup>
+											<h:panelGroup styleClass="free_area0">
+												<h:selectBooleanCheckbox styleClass="free_area0" value="#{statement.preview}" valueChangeListener="#{statement.previewListener}"/>
+												<h:outputLabel styleClass="free_area0 xTiny_marginLExcl" value="#{lbl.preview}"/>
+											</h:panelGroup>
+											
+											
 										</h:panelGroup>	
+										<h:panelGroup class="full_area0 xLarge_marginLExcl endline">
 										
-										<h:panelGroup styleClass="full_area0 xSmall_marginLExcl endline" rendered="#{statement.constraintsSize == 0 and statement.vocabularyString == null}">
-											<a4j:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}" reRender="ajaxArea">
-												<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-											</a4j:commandButton>
-											<h:outputLabel styleClass="" value="#{lbl.add_vocabulary}" />
-											<span style="padding-left:20px"></span>
-											<h:panelGroup rendered="#{statement.statement.type != 'http://imeji.org/terms/metadata#conePerson' and statement.statement.type != 'http://imeji.org/terms/metadata#geolocation' and  statement.statement.type !='http://imeji.org/terms/metadata#publication'}">
-												<a4j:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addConstraint}" reRender="ajaxArea">
-													<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-												</a4j:commandButton>
-												<h:outputLabel value="#{lbl.add_constraint}" />
-											</h:panelGroup>
-										</h:panelGroup>
-										
-										<h:panelGroup styleClass="full_area0" rendered="#{statement.vocabularyString != null}">
-											
-											<h:outputLabel styleClass="full_label" value="#{lbl.vocabulary}" />
-											<h:panelGroup styleClass="full_area0 tiny_marginRIncl clear">
-												<h:selectOneMenu value="#{statement.vocabularyString}"  styleClass="free_txtInput" >
-													 <f:selectItems value="#{statement.vocabularyHelper.vocabularies}"/>
-		  										</h:selectOneMenu>
+											<h:panelGroup styleClass="medium_area0 clear">
+												<h:outputLabel styleClass="medium_label" value="#{lbl.type}"/>										
+												<h:selectOneMenu  requiredMessage="Please choose a type!"  id="selStatementType" styleClass="medium_select" onchange="getElementById('formular:profile:#{position.index}:changeType').click();" value="#{statement.statement.type}" valueChangeListener="#{statement.typeListener}">
+													<f:converter converterId="URIConverter" />
+													<f:selectItems value="#{FormularBean.mdTypesMenu}"/>
+												</h:selectOneMenu>
+												<h:message for="selStatementType" styleClass="xLarge_label endline clean" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" globalOnly="false" showDetail="false" showSummary="true"/>
+												<h:commandButton id="changeType" action="#{statement.reset}"  style="visibility:hidden;">
+													<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+												</h:commandButton>
 											</h:panelGroup>
 											
+											<h:panelGroup styleClass="quad_area0 xTiny_marginLIncl">
+												
+												<h:outputLabel styleClass="xLarge_label" value="#{lbl.name}"/>
 											
-											<a4j:commandButton styleClass="min_imgBtn remove"  shortDesc="#{lbl.remove_vocabulary}" action="#{FormularBean.removeVocabulary}" reRender="ajaxArea">
-												<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-											</a4j:commandButton>
-											<h:outputLabel styleClass="" value="#{lbl.remove_vocabulary}" />
-										</h:panelGroup>	
-										
-										<h:panelGroup styleClass="full_area0" rendered="#{statement.constraintsSize > 0}">
-											<h:outputLabel styleClass="huge_label" value="#{lbl.constraints}" />
-											<a4j:repeat id="constraints" var="constraint" value="#{statement.statement.literalConstraints}" rowKeyVar="index">
-												<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
-													<h:inputText styleClass="huge_txtInput endline" value="#{constraint}"  valueChangeListener="#{statement.constraintListener}">
-														<f:attribute name="position" value="#{index}"/>
-													</h:inputText>
-													<h:panelGroup styleClass="large_area0 endline">
-													<span style="padding-left:10px"></span>
-														<a4j:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_constraint}" action="#{FormularBean.addConstraint}" reRender="ajaxArea">
-															<f:setPropertyActionListener value="#{index}" target="#{FormularBean.constraintPosition}"/>
-															<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-														</a4j:commandButton>
-														<a4j:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_constraint}" action="#{FormularBean.removeConstraint}" reRender="ajaxArea">
-															<f:setPropertyActionListener value="#{index}" target="#{FormularBean.constraintPosition}"/>
-															<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-														</a4j:commandButton>
-													</h:panelGroup>
+												<ui:repeat id="labels" var="label" value="#{statement.labels}" varStatus="labelPosition">
+													<h:panelGroup styleClass="free_area0 xSmall_marginRIncl">
+														<h:inputText id="inputLabel" value="#{label.value}" styleClass="xLarge_txtInput"/>
+														<h:panelGroup rendered="#{statement.labelsCount > 1}">
+															<h:commandButton styleClass="min_imgBtn remove" title="#{lbl.label_remove}"  action="#{FormularBean.removeLabel}">
+																<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+																<f:setPropertyActionListener value="#{labelPosition.index}" target="#{FormularBean.labelPosition}"/>
+																<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+															</h:commandButton>
+															<h:outputLabel styleClass="" value="#{lbl.label_remove}" />
+														</h:panelGroup>
+														<h:selectOneMenu value="#{label.lang}" immediate="true" styleClass="medium_txtInput" >
+															<f:selectItems value="#{Internationalization.languages}"/>
+			  											</h:selectOneMenu>
+			  											
+			  										</h:panelGroup>
+												</ui:repeat>
+												
+												<h:panelGroup styleClass="xDouble_area1 xSmall_marginRIncl">
+													<h:commandButton id="addLabel" styleClass="min_imgBtn add" action="#{FormularBean.addLabel}" title="#{lbl.label_add}">
+														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+													</h:commandButton>
+													<h:outputLabel styleClass="" value="#{lbl.label_add}" />
 												</h:panelGroup>
-											</a4j:repeat>
+											</h:panelGroup>	
+											
+											<h:panelGroup styleClass="full_area0 xSmall_marginLExcl endline" rendered="#{statement.constraintsSize == 0 and statement.vocabularyString == null}">
+												<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}">
+													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+													<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+												</h:commandButton>
+												<h:outputLabel styleClass="" value="#{lbl.add_vocabulary}" />
+												<span style="padding-left:20px"></span>
+												<h:panelGroup rendered="#{statement.statement.type != 'http://imeji.org/terms/metadata#conePerson' and statement.statement.type != 'http://imeji.org/terms/metadata#geolocation' and  statement.statement.type !='http://imeji.org/terms/metadata#publication'}">
+													<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addConstraint}">
+														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+														<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+													</h:commandButton>
+													<h:outputLabel value="#{lbl.add_constraint}" />
+												</h:panelGroup>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="full_area0" rendered="#{statement.vocabularyString != null}">
+												
+												<h:outputLabel styleClass="full_label" value="#{lbl.vocabulary}" />
+												<h:panelGroup styleClass="full_area0 tiny_marginRIncl clear">
+													<h:selectOneMenu value="#{statement.vocabularyString}"  styleClass="free_txtInput" >
+														 <f:selectItems value="#{statement.vocabularyHelper.vocabularies}"/>
+			  										</h:selectOneMenu>
+												</h:panelGroup>
+												
+												
+												<h:commandButton styleClass="min_imgBtn remove"  shortDesc="#{lbl.remove_vocabulary}" action="#{FormularBean.removeVocabulary}">
+													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+													<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+												</h:commandButton>
+												<h:outputLabel styleClass="" value="#{lbl.remove_vocabulary}" />
+											</h:panelGroup>	
+											
+											<h:panelGroup styleClass="full_area0" rendered="#{statement.constraintsSize > 0}">
+												<h:outputLabel styleClass="huge_label" value="#{lbl.constraints}" />
+												<ui:repeat id="constraints" var="constraint" value="#{statement.statement.literalConstraints}" rowKeyVar="index">
+													<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
+														<h:inputText styleClass="huge_txtInput endline" value="#{constraint}"  valueChangeListener="#{statement.constraintListener}">
+															<f:attribute name="position" value="#{index}"/>
+														</h:inputText>
+														<h:panelGroup styleClass="large_area0 endline">
+														<span style="padding-left:10px"></span>
+															<h:commandButton styleClass="min_imgBtn add groupTool" title="#{lbl.add_constraint}" action="#{FormularBean.addConstraint}" >
+																<f:setPropertyActionListener value="#{index}" target="#{FormularBean.constraintPosition}"/>
+																<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+																<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+															</h:commandButton>
+															<h:commandButton styleClass="min_imgBtn remove groupTool" title="#{lbl.remove_constraint}" action="#{FormularBean.removeConstraint}">
+																<f:setPropertyActionListener value="#{index}" target="#{FormularBean.constraintPosition}"/>
+																<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+																<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+															</h:commandButton>
+														</h:panelGroup>
+													</h:panelGroup>
+												</ui:repeat>
+											</h:panelGroup>
+													
 										</h:panelGroup>
 												
 									</h:panelGroup>
-											
-								</h:panelGroup>
-								<span class="full_area0_p2">
-									<a4j:commandButton styleClass="min_imgBtn remove groupTool" rendered="#{FormularBean.size &gt; 1}" shortDesc="#{remove_metadata}" action="#{FormularBean.removeStatement}" reRender="ajaxArea">
-										<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-									</a4j:commandButton>
-									<h:outputLabel styleClass="" value="#{lbl.statement_remove}" rendered="#{FormularBean.size &gt; 1}" />
-								</span>
-								<h:panelGroup layout="block" styleClass="quad_area2_p0 messageArea warnMessageArea" rendered="#{statement.showRemoveWarning}">
-                                	<h:outputText styleClass="free_area0_p0" value="#{msg.remove_statement_used}"/><br/><br/>
-                                	<a4j:commandButton action="#{FormularBean.closeRemoveWarning}" value="#{lbl.no}" styleClass="free_area1_p8 cancelButton" reRender="ajaxArea">
-                                		<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-                                	</a4j:commandButton>		
-                                	<a4j:commandButton styleClass="free_area1_p8 activeButton" value="#{lbl.yes}" action="#{FormularBean.forceRemoveStatement}" reRender="ajaxArea">
-										<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-									</a4j:commandButton>
-                                </h:panelGroup>
-								<h:panelGroup layout="block" styleClass="free_area0 endline itemLine clear">
 									<span class="full_area0_p2">
-										<a4j:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_metadata}" action="#{FormularBean.addStatement}" reRender="ajaxArea">
-											<f:setPropertyActionListener value="#{position}" target="#{FormularBean.statementPosition}"/>
-										</a4j:commandButton>
-										<h:outputLabel styleClass="" value="#{lbl.statement_add}" />
+										<h:commandButton styleClass="min_imgBtn remove groupTool" rendered="#{FormularBean.size &gt; 1}" title="#{remove_metadata}" action="#{FormularBean.removeStatement}">
+											<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+											<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+										</h:commandButton>
+										<h:outputLabel styleClass="" value="#{lbl.statement_remove}" rendered="#{FormularBean.size &gt; 1}" />
 									</span>
-								</h:panelGroup>
-							</a4j:repeat>
-						</a4j:outputPanel>
+									<h:panelGroup layout="block" styleClass="quad_area2_p0 messageArea warnMessageArea" rendered="#{statement.showRemoveWarning}">
+	                                	<h:outputText styleClass="free_area0_p0" value="#{msg.remove_statement_used}"/><br/><br/>
+	                                	<h:commandButton action="#{FormularBean.closeRemoveWarning}" value="#{lbl.no}" styleClass="free_area1_p8 cancelButton">
+	                                		<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+	                                		<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+	                                	</h:commandButton>		
+	                                	<h:commandButton styleClass="free_area1_p8 activeButton" value="#{lbl.yes}" action="#{FormularBean.forceRemoveStatement}" render="ajaxArea">
+											<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+											<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+										</h:commandButton>
+	                                </h:panelGroup>
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine clear">
+									
+										<span class="full_area0_p2">
+											<h:commandButton styleClass="min_imgBtn add groupTool" title="#{lbl.add_metadata}" action="#{FormularBean.addStatement}">
+												<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+												<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+											</h:commandButton>
+											<h:outputLabel styleClass="" value="#{lbl.statement_add}" />
+										</span>
+									</h:panelGroup>
+								</ui:repeat>
+							</h:panelGroup>
+						</div>
+					</h:panelGroup>
+						
+					<div class="full_area0 formButtonArea">
+						<h:commandButton action="#{FormularBean.cancel}"  value="#{lbl.reset}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl"/>		
+						<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
 					</div>
-				</h:panelGroup>
-					
-				<div class="full_area0 formButtonArea">
-					<h:commandButton action="#{FormularBean.cancel}"  value="#{lbl.reset}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl"/>		
-					<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
-				</div>
-					
-				<script>
-						// Implements a single radio behavior over many radio, used by "use as caption"
-						function unSelectUnique(index)
-						{
-							var i = 0;
-							while (document.getElementById('formular:profile:' + i + ':uniqueSelect') != null)
+						
+					<script>
+							// Implements a single radio behavior over many radio, used by "use as caption"
+							function unSelectUnique(index)
 							{
-								if (index != i)
-							    {
-					            	document.getElementById('formular:profile:' + i + ':uniqueSelect').checked= false;
-					            	document.getElementById('formular:profile:' + i + ':radioDescription:0').checked= false;
-						    	}
-					            else if (document.getElementById('formular:profile:' + i + ':uniqueSelect').checked )
-					            {
-					            	document.getElementById('formular:profile:' + i + ':uniqueSelect').checked= false;
-					            	document.getElementById('formular:profile:' + i + ':radioDescription:0').checked= false;
-					            }
-					            else
-					            {
-					            	document.getElementById('formular:profile:' + i + ':uniqueSelect').checked= true;
-					            	document.getElementById('formular:profile:' + i + ':radioDescription:0').checked= true;
-					            }
-								i++;
+								var i = 0;
+								while (document.getElementById('profileForm:profile:' + i + ':uniqueSelect') != null)
+								{
+									if (index != i)
+								    {
+						            	document.getElementById('profileForm:profile:' + i + ':uniqueSelect').checked= false;
+						            	document.getElementById('profileForm:profile:' + i + ':radioDescription:0').checked= false;
+							    	}
+						            else if (document.getElementById('profileForm:profile:' + i + ':uniqueSelect').checked )
+						            {
+						            	document.getElementById('profileForm:profile:' + i + ':uniqueSelect').checked= false;
+						            	document.getElementById('profileForm:profile:' + i + ':radioDescription:0').checked= false;
+						            }
+						            else
+						            {
+						            	document.getElementById('profileForm:profile:' + i + ':uniqueSelect').checked= true;
+						            	document.getElementById('profileForm:profile:' + i + ':radioDescription:0').checked= true;
+						            }
+									i++;
+								}
 							}
-						}
-				</script>
+					</script>
+				</h:panelGroup>
 			</h:panelGroup>
-		</h:panelGroup>
+		</h:form>
 	</ui:define>
+
 </ui:composition>
 </html>

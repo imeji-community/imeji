@@ -60,6 +60,7 @@ public class ExportManager
     {
         String collectionId = export.getParam("col");
         String albumId = export.getParam("alb");
+        String id = export.getParam("id");
         String searchType = export.getParam("type");
         int maximumNumberOfRecords = 20;
         if (export.getParam("n") != null)
@@ -79,20 +80,8 @@ public class ExportManager
         }
         else if ("profile".equals(searchType))
         {
-            // TODO Change the search for profiles!!!!!!!!!!!!
-            ProfileController pc = new ProfileController(user);
             List<String> uris = new ArrayList<String>();
-            try
-            {
-                for (MetadataProfile mdp : pc.search(user))
-                {
-                    uris.add(mdp.getId().toString());
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            uris.add(id);
             result = new SearchResult(uris, new SortCriterion());
         }
         else if ("image".equals(searchType))

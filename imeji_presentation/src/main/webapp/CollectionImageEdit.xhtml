@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+
+>
 <ui:remove>
 <!--
 
@@ -76,7 +77,7 @@
 			<h:outputLink value="#{Navigation.browseUrl}/selected?reset=1"  styleClass="free_area1_p6 xSmall_marginLIncl">
 				<h:outputText value="#{lbl.selected_view} (#{SessionBean.selectedSize})"/>
 			</h:outputLink>
-			<a4j:commandLink value="#{lbl.selected_clear}" action="#{CollectionImageBean.clearAll}" styleClass="free_area2_p6 xHuge_marginLIncl " />	
+			<h:commandLink value="#{lbl.selected_clear}" action="#{CollectionImageBean.clearAll}" styleClass="free_area2_p6 xHuge_marginLIncl " />	
 		</h:panelGroup>
 	</ui:define>
 	</ui:composition>

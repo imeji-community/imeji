@@ -1,119 +1,88 @@
 <div xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
-<ui:remove>
-	  <!--  
-            CDDL HEADER START
-
-            The contents of this file are subject to the terms of the
-            Common Development and Distribution License, Version 1.0 only
-            (the "License"). You may not use this file except in compliance
-            with the License.
-
-            You can obtain a copy of the license at license/ESCIDOC.LICENSE
-            or http://www.escidoc.de/license.
-            See the License for the specific language governing permissions
-            and limitations under the License.
-
-            When distributing Covered Code, include this CDDL HEADER in each
-            file and include the License file at license/ESCIDOC.LICENSE.
-            If applicable, add the following below this CDDL HEADER, with the
-            fields enclosed by brackets "[]" replaced with your own identifying
-            information: Portions Copyright [yyyy] [name of copyright owner]
-
-            CDDL HEADER END
-
-
-            Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
-            für wissenschaftlich-technische Information mbH and Max-Planck-
-            Gesellschaft zur Förderung der Wissenschaft e.V.
-            All rights reserved. Use is subject to license terms.
--->
-</ui:remove>
-
-<f:subview id="Details">
-
-<div class="marginTExcl075 linebreak">&#160;</div>
-
-<div class="quad_area_p6">
-	<h:outputText value="#{item.initPopup}"/>
-	
-	<h:panelGroup layout="block" class="free_area0_p8 medium_marginRExcl" style="float:right">
-		<h:panelGroup styleClass="viewFileIcon">
-			<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}">
-				<h:outputText value="#{lbl.view_detail}"/>
-			</h:outputLink>
-		</h:panelGroup>
-		
-		<h:panelGroup styleClass="editFileIcon xTiny_marginLExcl" rendered="#{item.editable}">
-			<h:outputLink value="#{paginatorListSessionBean.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}?edit=1">
-				<h:outputText value="#{lbl.metadata_edit}"/>
-			</h:outputLink>
-		</h:panelGroup>
-	</h:panelGroup>
-	
-	<div class="marginTExcl075 linebreak">&#160;</div>
-	<div class="marginTExcl075 linebreak">&#160;</div>
-	<div class="marginTExcl075 linebreak">&#160;</div>
-	
-	<h:panelGroup layout="block" class="quad_area0_p0">
-		<h:panelGroup styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
-			<h:outputText value="#{lbl.filename}"/>
-		</h:panelGroup>
-		
-		<h:panelGroup layout="block" styleClass="double_area0_p0 xTiny_marginLExcl">
-			<h:outputText value="#{item.filename}" />
-		</h:panelGroup>
-		
-	</h:panelGroup>
-	
-	<div class="marginTExcl075 linebreak">&#160;</div>
-	
-
-	<a4j:repeat var="statement" value="#{item.statements}" rows="0">
-
-		<a4j:repeat var="md" value="#{item.metadata}" rows="0" rendered="#{statement.preview}">
-			<h:panelGroup  rendered="#{md.statement == statement.id}" styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right;">
-				<h:outputText value="#{MetadataLabels.internationalizedLabels[statement.id]}"/>
-			</h:panelGroup>
-			
-			<h:panelGroup rendered="#{md.statement == statement.id}" layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">
-				<h:outputText value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}"/>
-				<h:outputText value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}"/>
-				<h:outputText value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'}"/>
-				<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication' or md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
-					<h:outputText value="Link" rendered="#{md.label == ''}"/>
-					<h:outputText value="#{md.label}" rendered="#{md.label != ''}"/>
-				</h:outputLink>
-				<h:outputText value="#{md.license}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}"/>
-				<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
-					<h:outputText value="#{md.person.familyName}, #{md.person.givenName} ("/>
-					<a4j:repeat id="orgaList" var="orga" value="#{md.person.organizations}" rendered="#{not empty md.person.organizations}">
-						<h:outputText value="#{orga.name}"/>
-					</a4j:repeat>
-					<h:outputText value=")" />
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:subview id="Details">
+		<div class="marginTExcl075 linebreak">&#160;</div>
+		<div class="quad_area_p8">
+			<h:outputText value="#{item.initPopup}" />
+			<h:panelGroup layout="block" class="free_area0_p4 medium_marginRExcl"
+				style="float:right">
+				<h:panelGroup styleClass="viewFileIcon">
+					<h:outputLink
+						value="#{paginatorListSessionBean.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}">
+						<h:outputText value="#{lbl.view_detail}" />
+					</h:outputLink>
 				</h:panelGroup>
-				
-				<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">
-					<h:outputText value="#{md.name} (" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}"/>
-					<h:outputText  value="#{md.longitude}/#{md.latitude}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}"/>
-					<h:outputText value=")" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}"/>
-				</h:outputLink>
-				<br/>
+				<h:panelGroup styleClass="editFileIcon xTiny_marginLExcl"
+					rendered="#{item.editable}">
+					<h:outputLink
+						value="#{paginatorListSessionBean.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}?edit=1">
+						<h:outputText value="#{lbl.metadata_edit}" />
+					</h:outputLink>
+				</h:panelGroup>
 			</h:panelGroup>
-			
-		</a4j:repeat>
-
-
-	</a4j:repeat>
-	
-	<div class="marginTExcl075 linebreak">&#160;</div>
-
-
-	</div>
-</f:subview>
+			<div class="marginTExcl075 linebreak">&#160;</div>
+			<div class="marginTExcl075 linebreak">&#160;</div>
+			<div class="marginTExcl075 linebreak">&#160;</div>
+			<h:panelGroup layout="block" class="quad_area0_p8">
+				<h:panelGroup styleClass="xLarge_area0_p8 noPaddingTopBottom"
+					style="text-align:right;">
+					<h:outputText value="#{lbl.filename}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block"
+					styleClass="double_area0_p0 xTiny_marginLExcl">
+					<h:outputText value="#{item.filename}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<div class="marginTExcl075 linebreak">&#160;</div>
+			<ui:repeat var="statement" value="#{item.statements}" rows="0">
+				<ui:repeat var="md" value="#{item.metadata}" rows="0"
+					rendered="#{statement.preview}">
+					<h:panelGroup rendered="#{md.statement == statement.id}"
+						styleClass="xLarge_area0_p4 noPaddingTopBottom"
+						style="text-align:right;">
+						<h:outputText
+							value="#{MetadataLabels.internationalizedLabels[statement.id]}" />
+					</h:panelGroup>
+					<h:panelGroup rendered="#{md.statement == statement.id}"
+						layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">
+						<h:outputText value="#{md.text}"
+							rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}" />
+						<h:outputText value="#{md.number}"
+							rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}" />
+						<h:outputText value="#{md.date}"
+							rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'}" />
+						<h:outputLink value="#{md.uri}" target="_blank"
+							rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication' or md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
+							<h:outputText value="Link" rendered="#{md.label == ''}" />
+							<h:outputText value="#{md.label}" rendered="#{md.label != ''}" />
+						</h:outputLink>
+						<h:outputText value="#{md.license}"
+							rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}" />
+						<h:panelGroup
+							rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
+							<h:outputText
+								value="#{md.person.familyName}, #{md.person.givenName}" />
+							<h:outputText value="(#{md.person.organizationString})"
+								rendered="#{md.person.organizationString} != ''" />
+						</h:panelGroup>
+						<h:outputLink
+							value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}"
+							target="_blank"
+							rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">
+							<h:outputText value="#{md.name} ("
+								rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}" />
+							<h:outputText value="#{md.longitude}/#{md.latitude}"
+								rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}" />
+							<h:outputText value=")"
+								rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}" />
+						</h:outputLink>
+						<br />
+					</h:panelGroup>
+				</ui:repeat>
+			</ui:repeat>
+			<div class="marginTExcl075 linebreak">&#160;</div>
+		</div>
+	</f:subview>
 </div>
-
-

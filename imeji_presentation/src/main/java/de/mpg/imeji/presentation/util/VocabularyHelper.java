@@ -13,7 +13,7 @@ import java.util.Properties;
 
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 
 public class VocabularyHelper
 {

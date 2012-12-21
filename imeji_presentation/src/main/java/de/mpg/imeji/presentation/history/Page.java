@@ -7,8 +7,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.filter.Filter;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class Page

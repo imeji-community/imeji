@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<items>
+    <item>
+        <created>2012-12-04T14:25:32.509Z</created>
+        <createdBy>http://zuse.zib.de/user/zusearchiv%40zib.de</createdBy>
+        <discardComment></discardComment>
+        <modified>2012-12-04T14:25:32.509Z</modified>
+        <modifiedBy>http://zuse.zib.de/user/zusearchiv%40zib.de</modifiedBy>
+        <status>PENDING</status>
+        <version>0</version>
+        <collection>http://zuse.zib.de/collection/19</collection>
+        <escidocId>escidoc:812</escidocId>
+        <filename>visualstudioerror.PNG</filename>
+        <fullImageUrl>http://localhost:8080/ir/item/escidoc:812/components/component/escidoc:809/content</fullImageUrl>
+        <fulltextIndex>visualstudioerror.PNG</fulltextIndex>
+        <id>http://zuse.zib.de/item/24</id>
+        <metadataSets>
+            <id>http://zuse.zib.de/item/24/metadataSet/0</id>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+            	<id>http://imeji.org/terms/metadata/e4ab7cf4-17a3-40e8-8c01-cc7fda828fb0</id>	            
+	            <pos>0</pos>	            
+	            <statement>http://imeji.org/statement/01d0cef6-1fde-45a8-a704-4a79f6ab5356</statement>
+	            <text>bild 10</text>
+	        </metadata>
+            <profile>http://zuse.zib.de/metadataProfile/18</profile>
+        </metadataSets>
+        <thumbnailImageUrl>http://localhost:8080/ir/item/escidoc:812/components/component/escidoc:811/content</thumbnailImageUrl>
+        <visibility>PRIVATE</visibility>
+        <webImageUrl>http://localhost:8080/ir/item/escidoc:812/components/component/escidoc:810/content</webImageUrl>
+    </item>
+    <item>
+        <created>2012-12-04T14:25:29.960Z</created>
+        <createdBy>http://zuse.zib.de/user/zusearchiv%40zib.de</createdBy>
+        <discardComment></discardComment>
+        <modified>2012-12-04T14:25:29.960Z</modified>
+        <modifiedBy>http://zuse.zib.de/user/zusearchiv%40zib.de</modifiedBy>
+        <status>PENDING</status>
+        <version>0</version>
+        <collection>http://zuse.zib.de/collection/19</collection>
+        <escidocId>escidoc:808</escidocId>
+        <filename>facesErr2.PNG</filename>
+        <fullImageUrl>http://localhost:8080/ir/item/escidoc:808/components/component/escidoc:805/content</fullImageUrl>
+        <fulltextIndex>facesErr2.PNG</fulltextIndex>
+        <id>http://zuse.zib.de/item/23</id>
+        <metadataSets>
+            <id>http://zuse.zib.de/item/23/metadataSet/0</id>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">	            
+	            <pos>0</pos>
+	            <statement>http://imeji.org/statement/01d0cef6-1fde-45a8-a704-4a79f6ab5356</statement>
+	            <text>bild 2</text>
+	        </metadata>
+            <profile>http://zuse.zib.de/metadataProfile/18</profile>
+        </metadataSets>
+        <thumbnailImageUrl>http://localhost:8080/ir/item/escidoc:808/components/component/escidoc:807/content</thumbnailImageUrl>
+        <visibility>PRIVATE</visibility>
+        <webImageUrl>http://localhost:8080/ir/item/escidoc:808/components/component/escidoc:806/content</webImageUrl>
+    </item>
+    <item>
+        <created>2012-12-04T14:25:26.215Z</created>
+        <createdBy>http://zuse.zib.de/user/zusearchiv%40zib.de</createdBy>
+        <discardComment></discardComment>
+        <modified>2012-12-04T14:25:26.215Z</modified>
+        <modifiedBy>http://zuse.zib.de/user/zusearchiv%40zib.de</modifiedBy>
+        <status>PENDING</status>
+        <version>0</version>
+        <collection>http://zuse.zib.de/collection/19</collection>
+        <escidocId>escidoc:804</escidocId>
+        <filename>facesErr1.PNG</filename>
+        <fullImageUrl>http://localhost:8080/ir/item/escidoc:804/components/component/escidoc:801/content</fullImageUrl>
+        <fulltextIndex>facesErr1.PNG</fulltextIndex>
+        <id>http://zuse.zib.de/item/22</id>
+        <metadataSets>
+            <id>http://zuse.zib.de/item/22/metadataSet/0</id>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">	            
+	            <pos>0</pos>
+	            <statement>http://imeji.org/statement/01d0cef6-1fde-45a8-a704-4a79f6ab5356</statement>
+	            <text>bild 3</text>
+	        </metadata>
+            <profile>http://zuse.zib.de/metadataProfile/18</profile>
+        </metadataSets>
+        <thumbnailImageUrl>http://localhost:8080/ir/item/escidoc:804/components/component/escidoc:803/content</thumbnailImageUrl>
+        <visibility>PRIVATE</visibility>
+        <webImageUrl>http://localhost:8080/ir/item/escidoc:804/components/component/escidoc:802/content</webImageUrl>
+    </item>
+</items>

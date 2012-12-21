@@ -44,7 +44,7 @@ public class CollectionImageBean extends ImageBean
     }
 
     @Override
-    public void redirectAfterRemove() throws IOException
+    public void redirectToBrowsePage() throws IOException
     {
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect(navigation.getCollectionUrl() + collectionId + "/" + navigation.getBrowsePath());

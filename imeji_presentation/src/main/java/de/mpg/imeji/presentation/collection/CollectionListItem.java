@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
@@ -17,7 +18,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -105,10 +106,14 @@ public class CollectionListItem
             selected = false;
     }
 
+    /**
+     * Release the {@link Collection} in the list
+     * @return
+     */
     public String release()
     {
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
             cc.release(cc.retrieve(uri), sessionBean.getUser());
@@ -123,10 +128,14 @@ public class CollectionListItem
         return "pretty:";
     }
 
+    /**
+     * Delete the {@link CollectionImeji} in the list
+     * @return
+     */
     public String delete()
     {
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
             cc.delete(cc.retrieve(uri), sessionBean.getUser());
@@ -140,10 +149,14 @@ public class CollectionListItem
         return "pretty:collections";
     }
 
+    /**
+     * Withdraw the {@link CollectionImeji} of the list
+     * @return
+     */
     public String withdraw()
     {
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         if ("".equals(discardComment.trim()))
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
@@ -155,7 +168,7 @@ public class CollectionListItem
             {
                 CollectionImeji c = cc.retrieve(uri);
                 c.setDiscardComment(discardComment);
-                cc.withdraw(c);
+                cc.withdraw(c, sessionBean.getUser());
                 BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
             }
             catch (Exception e)

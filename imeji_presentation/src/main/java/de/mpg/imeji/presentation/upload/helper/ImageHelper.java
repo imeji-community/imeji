@@ -7,17 +7,30 @@ package de.mpg.imeji.presentation.upload.helper;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
-
 import de.mpg.imeji.presentation.util.PropertyReader;
-
+//import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
+/**
+ * 
+ * TODO Description
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class ImageHelper
 {
+    /**
+     * Rescale an image
+     * @param image
+     * @param size
+     * @param resolution
+     * @return
+     * @throws Exception
+     */
 	public static BufferedImage scaleImage(BufferedImage image, int size, String resolution) throws Exception
 	{
 		int width = image.getWidth(null);
@@ -62,33 +75,33 @@ public class ImageHelper
 		return rescaledBufferedImage;
 	}
 
-	public static GifDecoder checkAnimation(byte[] image) throws Exception
-	{
-		GifDecoder gifDecoder = new GifDecoder(); 
-		gifDecoder.read(new ByteArrayInputStream(image));
-		return gifDecoder;
-	}        
-
-	public static byte[] scaleAnimation(byte[] image, GifDecoder gifDecoder, int width) throws Exception
-	{
-		ByteArrayOutputStream outputStream =new ByteArrayOutputStream();
-		outputStream.write("".getBytes());
-		AnimatedGifEncoder animatedGifEncoder = new AnimatedGifEncoder();
-		int frameCount = gifDecoder.getFrameCount();
-		int loopCount = gifDecoder.getLoopCount();
-		animatedGifEncoder.setRepeat(loopCount);
-		animatedGifEncoder.start(outputStream);
-		for (int frameNumber = 0; frameNumber < frameCount; frameNumber++) {
-
-			BufferedImage frame = gifDecoder.getFrame(frameNumber);  // frame i
-			int delay = gifDecoder.getDelay(frameNumber);  // display duration of frame in milliseconds
-			animatedGifEncoder.setDelay(delay);   // frame delay per sec
-			BufferedImage scaleImage = scaleImage(frame, width, getWeb());
-			animatedGifEncoder.addFrame( scaleImage );
-		}    
-		animatedGifEncoder.finish();
-		return outputStream.toByteArray();
-	}
+//	public static GifDecoder checkAnimation(byte[] image) throws Exception
+//	{
+//		GifDecoder gifDecoder = new GifDecoder(); 
+//		gifDecoder.read(new ByteArrayInputStream(image));
+//		return gifDecoder;
+//	}        
+//
+//	public static byte[] scaleAnimation(byte[] image, GifDecoder gifDecoder, int width) throws Exception
+//	{
+//		ByteArrayOutputStream outputStream =new ByteArrayOutputStream();
+//		outputStream.write("".getBytes());
+//		AnimatedGifEncoder animatedGifEncoder = new AnimatedGifEncoder();
+//		int frameCount = gifDecoder.getFrameCount();
+//		int loopCount = gifDecoder.getLoopCount();
+//		animatedGifEncoder.setRepeat(loopCount);
+//		animatedGifEncoder.start(outputStream);
+//		for (int frameNumber = 0; frameNumber < frameCount; frameNumber++) {
+//
+//			BufferedImage frame = gifDecoder.getFrame(frameNumber);  // frame i
+//			int delay = gifDecoder.getDelay(frameNumber);  // display duration of frame in milliseconds
+//			animatedGifEncoder.setDelay(delay);   // frame delay per sec
+//			BufferedImage scaleImage = scaleImage(frame, width, getWeb());
+//			animatedGifEncoder.addFrame( scaleImage );
+//		}    
+//		animatedGifEncoder.finish();
+//		return outputStream.toByteArray();
+//	}
 
 
 	public static String getThumb() throws IOException, URISyntaxException

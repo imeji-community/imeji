@@ -22,10 +22,10 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.metadata.editors.SimpleImageEditor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -38,6 +38,7 @@ public class SingleEditBean
     private String toggleState = "displayMd";
     private int mdPosition = 0;
     private String pageUrl = "";
+    private List<SuperMetadataBean> metadataList;
 
     public SingleEditBean(Item im, MetadataProfile profile, String pageUrl)
     {
@@ -79,27 +80,42 @@ public class SingleEditBean
         imAsList.add(item);
         editor = new SimpleImageEditor(imAsList, profile, null);
         ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
+        metadataList = new ArrayList<SuperMetadataBean>();
+        for (Metadata metadata : item.getMetadataSet().getMetadata())
+        {
+            metadataList.add(new SuperMetadataBean(metadata));
+        }
     }
 
     public String save() throws Exception
     {
+        copySuperMetadatatoItem();
         cleanImageMetadata();
-        editor.getImages().clear();
-        editor.getImages().add(item);
+        editor.getItems().clear();
+        editor.getItems().add(new EditorItemBean(item));
         editor.save();
         reloadPage();
         cancel();
         return "";
     }
 
+    private void copySuperMetadatatoItem()
+    {
+        item.getMetadataSet().getMetadata().clear();
+        for (SuperMetadataBean smb : metadataList)
+        {
+            item.getMetadataSet().getMetadata().add(smb.asMetadata());
+        }
+    }
+
     public String cancel() throws Exception
     {
         this.toggleState = "displayMd";
-        if (editor != null && !editor.getImages().isEmpty())
-            item = editor.getImages().get(0);
+        if (editor != null && !editor.getItems().isEmpty())
         {
-            cleanImageMetadata();
+            item = editor.getItems().get(0).asItem();
         }
+        cleanImageMetadata();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         Locks.unLock(new Lock(this.item.getId().toString(), sb.getUser().getEmail()));
         reloadImage();
@@ -165,7 +181,7 @@ public class SingleEditBean
     public String addMetadata()
     {
         editor.addMetadata(0, mdPosition);
-        this.item = editor.getImages().get(0);
+        this.item = editor.getItems().get(0).asItem();
         init();
         return "";
     }
@@ -173,7 +189,7 @@ public class SingleEditBean
     public String removeMetadata()
     {
         editor.removeMetadata(0, mdPosition);
-        this.item = editor.getImages().get(0);
+        this.item = editor.getItems().get(0).asItem();
         init();
         return "";
     }
@@ -236,5 +252,15 @@ public class SingleEditBean
     public void setToggleState(String toggleState)
     {
         this.toggleState = toggleState;
+    }
+
+    public List<SuperMetadataBean> getMetadataList()
+    {
+        return metadataList;
+    }
+
+    public void setMetadataList(List<SuperMetadataBean> metadataList)
+    {
+        this.metadataList = metadataList;
     }
 }

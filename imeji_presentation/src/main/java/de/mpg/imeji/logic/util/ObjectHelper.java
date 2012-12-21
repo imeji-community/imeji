@@ -62,6 +62,11 @@ public class ObjectHelper
         return URI.create(baseURI + "/" + encodedId);
     }
 
+    /**
+     * Extract the id number from the object uri
+     * @param uri
+     * @return
+     */
     public static String getId(URI uri)
     {
         Pattern p = Pattern.compile("(.*)/(\\d+)");
@@ -138,10 +143,60 @@ public class ObjectHelper
         return fields;
     }
 
-    public static boolean hasFields(Object obj)
+    
+    /**
+     * Copy {@link Field} from obj1 to obj2. Only Fields with same name and same type are copied. Fields from superclass are not copied.
+     * @param obj1
+     * @param obj2
+     */
+    public static void copyFields(Object obj1, Object obj2)
     {
-        if (getObjectFields(obj.getClass()).size() > 0)
-            return true;
-        return false;
+        for (Field f2 : getObjectFields(obj2.getClass()))
+        {
+            try
+            {
+                f2.setAccessible(true);
+                for (Field f1 : getObjectFields(obj1.getClass()))
+                {
+                    f1.setAccessible(true);
+                    if (f1.getName().equals(f2.getName()) && f1.getType().equals(f2.getType()))
+                    {
+                        f2.set(obj2, f1.get(obj1)); 
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * Copy {@link Field} from obj1 to obj2. Only Fields with same name and same type are copied. Fields from superclass are copied.
+     * @param obj1
+     * @param obj2
+     */
+    public static void copyAllFields(Object obj1, Object obj2)
+    {
+        for (Field f2 : getAllObjectFields(obj2.getClass()))
+        {
+            try
+            {
+                f2.setAccessible(true);
+                for (Field f1 : getAllObjectFields(obj1.getClass()))
+                {
+                    f1.setAccessible(true);
+                    if (f1.getName().equals(f2.getName()) && f1.getType().equals(f2.getType()))
+                    {
+                        f2.set(obj2, f1.get(obj1)); 
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 }

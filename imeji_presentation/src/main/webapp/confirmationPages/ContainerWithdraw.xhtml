@@ -2,7 +2,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:rich="http://richfaces.org/rich">
+	>
 	<div id="dialogWithdraw" class="half_area0_p8 bordst0 shadst1 dialogbox" style="display:none;">
        <div class="half_area0_p8">
         	<h:outputText value="#{msg.confirmation_withdraw_collection}?" rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}"/> 

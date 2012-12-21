@@ -107,7 +107,7 @@
 		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
 		<param-value>true</param-value>
 	</context-param>
-	<context-param>
+	<!--  <context-param>
 		<param-name>org.richfaces.fileUpload.createTempFiles</param-name>
 		<param-value>false</param-value>
 	</context-param>
@@ -128,6 +128,10 @@
 		<param-value>blueSky</param-value>
 	</context-param>
 	<context-param>
+		<param-name>org.richfaces.LoadScriptStrategy</param-name>
+		<param-value>ALL</param-value>
+	</context-param>-->
+	<context-param>
 		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
 		<param-value>client</param-value>
 	</context-param>
@@ -140,11 +144,7 @@
 		<param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
 		<param-value>false</param-value>
 	</context-param>
-	<!-- Defines how the RichFaces script files are loaded to application -->
-	<context-param>
-		<param-name>org.richfaces.LoadScriptStrategy</param-name>
-		<param-value>ALL</param-value>
-	</context-param>
+	
 	 <context-param>
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
         <param-value>true</param-value>

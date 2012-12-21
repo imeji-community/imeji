@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
@@ -105,10 +106,14 @@ public class CollectionListItem
             selected = false;
     }
 
+    /**
+     * Release the {@link Collection} in the list
+     * @return
+     */
     public String release()
     {
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
             cc.release(cc.retrieve(uri), sessionBean.getUser());
@@ -123,10 +128,14 @@ public class CollectionListItem
         return "pretty:";
     }
 
+    /**
+     * Delete the {@link CollectionImeji} in the list
+     * @return
+     */
     public String delete()
     {
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
             cc.delete(cc.retrieve(uri), sessionBean.getUser());
@@ -140,6 +149,10 @@ public class CollectionListItem
         return "pretty:collections";
     }
 
+    /**
+     * Withdraw the {@link CollectionImeji} of the list
+     * @return
+     */
     public String withdraw()
     {
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);

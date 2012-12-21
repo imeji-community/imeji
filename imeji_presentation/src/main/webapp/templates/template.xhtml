@@ -22,7 +22,7 @@ Gesellschaft zur Förderung der Wissenschaft e.V.
 All rights reserved. Use is subject to license terms.
 */
 -->
-<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:rich="http://richfaces.org/rich">
+<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" >
     <f:loadBundle var="lbl" basename="labels"/>
     <f:loadBundle var="msg" basename="messages"/>
     <html xmlns="http://www.w3.org/1999/xhtml">
@@ -36,7 +36,6 @@ All rights reserved. Use is subject to license terms.
 			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js"></script>       
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
-			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/richfaces-ajax-patch.js"></script>
 			<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
         </h:head>
         <h:body lang="#{SessionBean.locale}">

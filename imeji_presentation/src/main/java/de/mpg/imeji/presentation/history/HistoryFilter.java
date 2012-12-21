@@ -27,7 +27,7 @@ public class HistoryFilter implements Filter
 
     public void destroy()
     {
-        filterConfig = null;
+        setFilterConfig(null);
     }
 
     public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain) throws IOException,
@@ -60,14 +60,14 @@ public class HistoryFilter implements Filter
 
     public void init(FilterConfig arg0) throws ServletException
     {
-        this.filterConfig = arg0;
+        this.setFilterConfig(arg0);
     }
 
     private HistorySession getHistorySession(ServletRequest request, ServletResponse resp)
     {
         String name = (String)HistorySession.class.getSimpleName();
         FacesContext fc = getFacesContext(request, resp);
-        Object result = fc.getCurrentInstance().getExternalContext().getSessionMap().get(name);
+        Object result = fc.getExternalContext().getSessionMap().get(name);
         if (result == null)
         {
             try
@@ -110,6 +110,16 @@ public class HistoryFilter implements Filter
         UIViewRoot view = facesContext.getApplication().getViewHandler().createView(facesContext, "imeji");
         facesContext.setViewRoot(view);
         return facesContext;
+    }
+
+    public FilterConfig getFilterConfig()
+    {
+        return filterConfig;
+    }
+
+    public void setFilterConfig(FilterConfig filterConfig)
+    {
+        this.filterConfig = filterConfig;
     }
 
     public abstract static class InnerFacesContext extends FacesContext

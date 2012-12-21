@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.image;
 
-import java.awt.Menu;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

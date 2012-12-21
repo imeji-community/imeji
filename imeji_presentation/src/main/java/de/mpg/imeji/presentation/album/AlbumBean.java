@@ -97,7 +97,7 @@ public class AlbumBean
                     grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
                             .getSessionBean(SessionBean.class)).getLabel("role_album_editor"),
                             "Can edit information about the collection"));
-                    ((SharingBean)BeanHelper.getRequestBean(SharingBean.class)).setGrantsMenu(grantsMenu);
+                    ((ShareBean)BeanHelper.getRequestBean(ShareBean.class)).setGrantsMenu(grantsMenu);
                 }
             }
         }

@@ -12,7 +12,15 @@ import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
-
+/**
+ * 
+ * Super class for all imeji containers ({@link CollectionImeji} and {@link Album})
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 @j2jResource("http://imeji.org/terms/container")
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class Container extends Properties implements FulltextIndex
@@ -87,6 +95,6 @@ public class Container extends Properties implements FulltextIndex
         {
             fulltext += " " + p.AsFullText();
         }
-        fulltext.trim();
+        fulltext = fulltext.trim();
     }
 }

@@ -23,13 +23,12 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
-import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.j2j.misc.LocalizedString;
 
 /**
- * Create objects ready to be displayed in JSF TODO Description
+ * Create objects ready to be displayed in JSF
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -129,19 +128,24 @@ public class ImejiFactory
         return beanList;
     }
 
-    public static List<ThumbnailBean> imageListToThumbList(Collection<Item> imgList)
+    /**
+     * Transform a {@link List} of {@link Item} to a {@link List} of {@link ThumbnailBean}
+     * @param itemList
+     * @return
+     */
+    public static List<ThumbnailBean> imageListToThumbList(Collection<Item> itemList)
     {
         List<ThumbnailBean> beanList = new ArrayList<ThumbnailBean>();
         try
         {
             ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).setProfileCached(ProfileHelper
-                    .loadProfiles((List<Item>)imgList));
+                    .loadProfiles(new ArrayList<Item>(itemList)));
         }
         catch (Exception e)
         {
             logger.error("Error loading profiles", e);
         }
-        for (Item img : imgList)
+        for (Item img : itemList)
         {
             try
             {
@@ -155,29 +159,4 @@ public class ImejiFactory
         return beanList;
     }
 
-    public static List<ImageBean> imageListToBeanList(Collection<Item> imgList)
-    {
-        List<ImageBean> beanList = new ArrayList<ImageBean>();
-        try
-        {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).setProfileCached(ProfileHelper
-                    .loadProfiles((List<Item>)imgList));
-        }
-        catch (Exception e1)
-        {
-            e1.printStackTrace();
-        }
-        for (Item img : imgList)
-        {
-            try
-            {
-                beanList.add(new ImageBean(img));
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-        return beanList;
-    }
 }

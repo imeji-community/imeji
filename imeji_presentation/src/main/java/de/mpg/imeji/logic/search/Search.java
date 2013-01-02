@@ -31,7 +31,15 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.J2JHelper;
-
+/**
+ * 
+ * imeji Search, using sparql query
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class Search
 {
     private String containerURI = null;
@@ -44,6 +52,11 @@ public class Search
         ITEM, COLLECTION, ALBUM, PROFILE, ALL;
     }
 
+    /**
+     * Initialize the search
+     * @param type
+     * @param containerURI
+     */
     public Search(SearchType type, String containerURI)
     {
         this.containerURI = containerURI;
@@ -81,7 +94,7 @@ public class Search
     }
 
     /**
-     * Search for with query following spaql syntax
+     * Search for with query following sparql syntax
      * 
      * @param sparqlQuery
      * @param sortCri

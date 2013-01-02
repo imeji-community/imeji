@@ -88,7 +88,7 @@ public class UserBean
 
 		for(Grant g : user.getGrants())
 		{
-			if (!g.getGrantFor().toString().equals(grantFor) && !g.asGrantType().equals(grantType))
+			if (!g.getGrantFor().toString().equals(grantFor) && !g.asGrantType().toString().equals(grantType))
 			{
 				newGrants.add(g);
 			}

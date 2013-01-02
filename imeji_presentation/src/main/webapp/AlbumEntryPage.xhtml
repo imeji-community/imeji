@@ -57,8 +57,8 @@
 						<!-- ALBUM IMAGES -->
 						<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
 							<f:param value="#{AlbumBean.id}"/>
-								<ui:repeat var="img" value="#{AlbumBean.images}" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
-									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
+								<ui:repeat var="thumb" value="#{AlbumBean.thumbnails}" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
+									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{thumb.link}"/>
 								</ui:repeat>
 								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
 							</h:outputLink>

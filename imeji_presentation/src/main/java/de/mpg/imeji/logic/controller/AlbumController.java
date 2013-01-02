@@ -67,7 +67,7 @@ public class AlbumController extends ImejiController
     {
         writeCreateProperties(album, user);
         imejiBean2RDF.create(imejiBean2RDF.toList(album), user);
-        user = addCreatorGrant(album.getId(), user);
+        addCreatorGrant(album.getId(), user);
     }
 
     /**

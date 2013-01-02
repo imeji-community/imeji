@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,31 +16,37 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.ingest.vo.Items;
+import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ImageBean;
+import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.ShareBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
 /**
  * The javabean for the {@link Album}
- * TODO Description
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class AlbumBean
 {
@@ -54,6 +61,11 @@ public class AlbumBean
     private boolean selected;
     private static Logger logger = Logger.getLogger(AlbumBean.class);
 
+    /**
+     * Construct an {@link AlbumBean} from an {@link Album}
+     * 
+     * @param album
+     */
     public AlbumBean(Album album)
     {
         this.album = album;
@@ -64,14 +76,20 @@ public class AlbumBean
             active = true;
         }
         AlbumController ac = new AlbumController();
-        album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
+        this.album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
     }
 
+    /**
+     * Construct an emtpy {@link AlbumBean}
+     */
     public AlbumBean()
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
+    /**
+     * Load the {@link Album} and its {@link Item} when the {@link AlbumBean} page is called, and initialize it.
+     */
     public void initView()
     {
         try
@@ -90,14 +108,6 @@ public class AlbumBean
                         active = true;
                         sessionBean.setActiveAlbum(album);
                     }
-                    List<SelectItem> grantsMenu = new ArrayList<SelectItem>();
-                    grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, ((SessionBean)BeanHelper
-                            .getSessionBean(SessionBean.class)).getLabel("role_viewer"),
-                            "Can view all images for this collection"));
-                    grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
-                            .getSessionBean(SessionBean.class)).getLabel("role_album_editor"),
-                            "Can edit information about the collection"));
-                    ((ShareBean)BeanHelper.getRequestBean(ShareBean.class)).setGrantsMenu(grantsMenu);
                 }
             }
         }
@@ -107,6 +117,9 @@ public class AlbumBean
         }
     }
 
+    /**
+     * Initialize the album form to edit the metadata of the album
+     */
     public void initEdit()
     {
         AlbumController ac = new AlbumController();
@@ -114,7 +127,8 @@ public class AlbumBean
         {
             setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
             save = false;
-            if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().equals(album.getId()))
+            if (sessionBean.getActiveAlbum() != null
+                    && sessionBean.getActiveAlbum().getId().toString().equals(album.getId().toString()))
             {
                 active = true;
             }
@@ -287,19 +301,30 @@ public class AlbumBean
             return false;
     }
 
-    public List<ImageBean> getImages() throws Exception
+    /**
+     * Load the 5 first {@link Items} of the {@link Album} as {@link ThumbnailBean}
+     * 
+     * @return
+     * @throws Exception
+     */
+    public List<ThumbnailBean> getThumbnails() throws Exception
     {
         ItemController ic = new ItemController(sessionBean.getUser());
-        if (getAlbum() != null)
+        if (album != null)
         {
-            SearchResult r = ic.searchImagesInContainer(getAlbum().getId(), null, null, 5, 0);
-            return ImejiFactory.imageListToBeanList(ic.loadItems(r.getResults(), 5, 0));
+            List<String> uris = new ArrayList<String>();
+            for (URI uri : album.getImages())
+            {
+                uris.add(uri.toString());
+            }
+            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 5, 0));
         }
         return null;
     }
 
     /**
      * Save (create or update) the {@link Album} in the database
+     * 
      * @return
      * @throws Exception
      */

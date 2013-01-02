@@ -59,11 +59,11 @@ public class ShareBean
     public void loadContainer()
     {
         URI uri = URI.create(UrlHelper.getParameterValue("uri"));
-        if (uri.getPath().contains("/collection/"))
+        if (isCollection(uri))
         {
             container = ObjectLoader.loadCollectionLazy(uri, session.getUser());
         }
-        else if (uri.getPath().contains("/album/"))
+        else
         {
             container = ObjectLoader.loadAlbumLazy(uri, session.getUser());
         }
@@ -76,18 +76,31 @@ public class ShareBean
     {
         selectedGrant = GrantType.PRIVILEGED_VIEWER;
         grantsMenu = new ArrayList<SelectItem>();
-        grantsMenu
-                .add(new SelectItem(GrantType.PRIVILEGED_VIEWER, ((SessionBean)BeanHelper
-                        .getSessionBean(SessionBean.class)).getLabel("role_viewer"),
-                        "Can view all images for this collection"));
-        grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
-                .getSessionBean(SessionBean.class)).getLabel("role_collection_editor"),
-                "Can edit informations about the collection"));
-        grantsMenu.add(new SelectItem(GrantType.IMAGE_EDITOR, ((SessionBean)BeanHelper
-                .getSessionBean(SessionBean.class)).getLabel("role_image_editor"),
-                "Can view and edit all images for this collection"));
-        grantsMenu.add(new SelectItem(GrantType.PROFILE_EDITOR, ((SessionBean)BeanHelper
-                .getSessionBean(SessionBean.class)).getLabel("role_profile_editor"), "Can edit the metadata profile"));
+        URI uri = URI.create(UrlHelper.getParameterValue("uri"));
+        if (isCollection(uri))
+        {
+            grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, ((SessionBean)BeanHelper
+                    .getSessionBean(SessionBean.class)).getLabel("role_viewer"),
+                    "Can view all images for this collection"));
+            grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
+                    .getSessionBean(SessionBean.class)).getLabel("role_collection_editor"),
+                    "Can edit informations about the collection"));
+            grantsMenu.add(new SelectItem(GrantType.IMAGE_EDITOR, ((SessionBean)BeanHelper
+                    .getSessionBean(SessionBean.class)).getLabel("role_image_editor"),
+                    "Can view and edit all images for this collection"));
+            grantsMenu.add(new SelectItem(GrantType.PROFILE_EDITOR, ((SessionBean)BeanHelper
+                    .getSessionBean(SessionBean.class)).getLabel("role_profile_editor"),
+                    "Can edit the metadata profile"));
+        }
+        else
+        {
+            grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, ((SessionBean)BeanHelper
+                    .getSessionBean(SessionBean.class)).getLabel("role_viewer"),
+                    "Can view all images for this collection"));
+            grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
+                    .getSessionBean(SessionBean.class)).getLabel("role_album_editor"),
+                    "Can edit information about the collection"));
+        }
     }
 
     /**
@@ -142,6 +155,17 @@ public class ShareBean
             BeanHelper.info(session.getMessage("success_share"));
             BeanHelper.info(message);
         }
+    }
+
+    /**
+     * Check if an imeji object with the given {@link URI} is a {@link CollectionImeji}
+     * 
+     * @param uri
+     * @return
+     */
+    private boolean isCollection(URI uri)
+    {
+        return uri.getPath().contains("/collection/");
     }
 
     /**

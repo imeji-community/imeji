@@ -96,7 +96,7 @@ public class AlbumBean
                             "Can view all images for this collection"));
                     grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
                             .getSessionBean(SessionBean.class)).getLabel("role_album_editor"),
-                            "Can edit informations about the collection"));
+                            "Can edit information about the collection"));
                     ((ShareBean)BeanHelper.getRequestBean(ShareBean.class)).setGrantsMenu(grantsMenu);
                 }
             }

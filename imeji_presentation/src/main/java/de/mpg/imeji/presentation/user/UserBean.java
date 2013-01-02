@@ -69,7 +69,7 @@ public class UserBean
 			{
 				user.setEncryptedPassword(UserController.convertToMD5(newPassword));
 				updateUser();
-				BeanHelper.info("Password changed!");
+				BeanHelper.info(session.getMessage("success_change_user_password"));
 			}
 			else
 			{

@@ -46,7 +46,6 @@ public class LocksSurveyor extends Thread
                         }
                     }
                     // wait a bit...
-                    System.out.println("wait");
                     logger.wait(10000);
                     //Thread.sleep(10000);
                 }

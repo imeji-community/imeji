@@ -28,7 +28,7 @@ public class SimpleQueryFactory
         PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
                 + " ?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
         return PATTERN_SELECT
-                .replaceAll("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.getQuery(user, pair, rdfType, false))
+                .replaceAll("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.queryFactory(user, pair, rdfType, false))
                 .replaceAll("XXX_SORT_QUERY_XXX", SortQueryFactory.create(sortCriterion))
                 .replaceAll("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair))
                 .replaceAll("XXX_SEARCH_TYPE_ELEMENT_XXX", rdfType)

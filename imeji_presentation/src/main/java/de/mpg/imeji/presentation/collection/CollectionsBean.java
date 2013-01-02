@@ -34,7 +34,6 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
  * @version $Revision$ $LastChangedDate$
  *
  */
-
 public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 {
     private int totalNumberOfRecords;
@@ -110,7 +109,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     {
         for (CollectionListItem bean : getCurrentPartList())
         {
-            if (bean.getStatus() == Status.PENDING.toString())
+            if (Status.PENDING.toString().equals(bean.getStatus()))
             {
                 bean.setSelected(true);
                 if (!(sb.getSelectedCollections().contains(bean.getUri())))

@@ -186,69 +186,48 @@ public class Navigation
      */
     public String getContext()
     {
-        String context = "#";
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if ("help".equals(sessionBean.getCurrentPage()))
+        if (sessionBean.getCurrentPage() == null)
+        {
+            return "";
+        }
+        String context = "#";
+        if ("help".equals(sessionBean.getCurrentPage().name))
         {
             context += "";
         }
-        if ("welcome".equals(sessionBean.getCurrentPage()) || "about".equals(sessionBean.getCurrentPage())
-                || "legal".equals(sessionBean.getCurrentPage()))
+        if ("welcome".equals(sessionBean.getCurrentPage().name) || "about".equals(sessionBean.getCurrentPage().name)
+                || "legal".equals(sessionBean.getCurrentPage().name))
         {
             context += "1._Home";
         }
-        if ("home".equals(sessionBean.getCurrentPage()))
+        if ("home".equals(sessionBean.getCurrentPage().name))
         {
             context += "2._Pictures";
         }
-        if ("search".equals(sessionBean.getCurrentPage()) || "searchResult".equals(sessionBean.getCurrentPage()))
+        if ("search".equals(sessionBean.getCurrentPage().name) || "searchResult".equals(sessionBean.getCurrentPage().name))
         {
             context += "4.1_Advanced_Search";
         }
-        if ("albumssearch".equals(sessionBean.getCurrentPage()))
+        if ("albumssearch".equals(sessionBean.getCurrentPage().name))
         {
             context += "4.2_Public_Album_Search";
         }
-        if ("details".equals(sessionBean.getCurrentPage()) || "comparison".equals(sessionBean.getCurrentPage())
-                || "detailsFromAlbum".equals(sessionBean.getCurrentPage())
-                || "comparisonFromAlbum".equals(sessionBean.getCurrentPage())
-                || "person".equals(sessionBean.getCurrentPage()))
+        if ("details".equals(sessionBean.getCurrentPage().name) || "comparison".equals(sessionBean.getCurrentPage().name)
+                || "detailsFromAlbum".equals(sessionBean.getCurrentPage().name)
+                || "comparisonFromAlbum".equals(sessionBean.getCurrentPage().name)
+                || "person".equals(sessionBean.getCurrentPage().name))
         {
             context += "2.2_Picture_View";
         }
-        if ("albums".equals(sessionBean.getCurrentPage()) || "createalbum".equals(sessionBean.getCurrentPage())
-                || "editalbum".equals(sessionBean.getCurrentPage()))
+        if ("albums".equals(sessionBean.getCurrentPage().name) || "createalbum".equals(sessionBean.getCurrentPage().name)
+                || "editalbum".equals(sessionBean.getCurrentPage().name))
         {
             context += "3._Album";
         }
-        if ("viewAlbum".equals(sessionBean.getCurrentPage()))
+        if ("viewAlbum".equals(sessionBean.getCurrentPage().name))
         {
             context += "3.2_Album_View";
-        }
-        if (("confirmation".equals(sessionBean.getCurrentPage()) && "delete".equals(UrlHelper
-                .getParameterValue("action"))))
-        {
-            context += "Delete_album";
-        }
-        if (("confirmation".equals(sessionBean.getCurrentPage()) && "publish".equals(UrlHelper
-                .getParameterValue("action"))))
-        {
-            context += "Publish_album";
-        }
-        if (("confirmation".equals(sessionBean.getCurrentPage()) && "withdraw".equals(UrlHelper
-                .getParameterValue("action"))))
-        {
-            context += "Withdraw_album";
-        }
-        if ("export".equals(sessionBean.getCurrentPage())
-                || ("confirmation".equals(sessionBean.getCurrentPage()) && "export".equals(UrlHelper
-                        .getParameterValue("action"))))
-        {
-            context += "3.3_Export";
-        }
-        if ("statistics".equals(sessionBean.getCurrentPage()))
-        {
-            context += "5._Usage_Statistics";
         }
         return context;
     }

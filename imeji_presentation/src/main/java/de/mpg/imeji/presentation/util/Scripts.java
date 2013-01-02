@@ -46,6 +46,14 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.presentation.upload.deposit.DepositController;
 
+/**
+ * Class where some scripts for administration purpose can be written
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class Scripts 
 {
 	 public String copyDataFromCoreToCore(User admin)
@@ -161,106 +169,106 @@ public class Scripts
 	 }
 	 
 	 
-	 public GetMethod loadImage(String frameworkUrl, String imageUrl, String userHandle) throws Exception
-	 { 		
-		 System.out.println("loading image: " + imageUrl);
- 		 byte[] buffer = null;
-         GetMethod method = new GetMethod(imageUrl);
-         method.setFollowRedirects(false);
- 
-         method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
-         method.addRequestHeader("Cache-Control", "public");
-         method.setRequestHeader("Connection", "close"); 
-         // Execute the method with HttpClient.
-         HttpClient client = new HttpClient();
-         ProxyHelper.setProxy(client, frameworkUrl);
-         client.executeMethod(method);
-        
-         //byte[] input;
-         
-         InputStream input = null;
-         
-         OutputStream out = new FileOutputStream("tmp");
-         
-         if (method.getStatusCode() == 302)
-         {
-             //try again
-             method.releaseConnection();
-             //userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
-             method = new GetMethod(imageUrl);
-             method.setFollowRedirects(false);
-             method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
-             client.executeMethod(method);
-             
-         }
-         else
-         {
-             //input = method.getResponseBodyAsStream();
-         }
-         
-         return method;
-	 }
+//	 public GetMethod loadImage(String frameworkUrl, String imageUrl, String userHandle) throws Exception
+//	 { 		
+//		 System.out.println("loading image: " + imageUrl);
+// 		 byte[] buffer = null;
+//         GetMethod method = new GetMethod(imageUrl);
+//         method.setFollowRedirects(false);
+// 
+//         method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
+//         method.addRequestHeader("Cache-Control", "public");
+//         method.setRequestHeader("Connection", "close"); 
+//         // Execute the method with HttpClient.
+//         HttpClient client = new HttpClient();
+//         ProxyHelper.setProxy(client, frameworkUrl);
+//         client.executeMethod(method);
+//        
+//         //byte[] input;
+//         
+//         InputStream input = null;
+//         
+//         OutputStream out = new FileOutputStream("tmp");
+//         
+//         if (method.getStatusCode() == 302)
+//         {
+//             //try again
+//             method.releaseConnection();
+//             //userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"), PropertyReader.getProperty("imeji.escidoc.password"));
+//             method = new GetMethod(imageUrl);
+//             method.setFollowRedirects(false);
+//             method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
+//             client.executeMethod(method);
+//             
+//         }
+//         else
+//         {
+//             //input = method.getResponseBodyAsStream();
+//         }
+//         
+//         return method;
+//	 }
 	 
-	 public static String login(String frameworkUrl, String userName, String password) throws Exception
-		{
-	        StringTokenizer tokens = new StringTokenizer( frameworkUrl, "//" );
-	                
-	        tokens.nextToken();
-	        StringTokenizer hostPort = new StringTokenizer(tokens.nextToken(), ":");
-	        
-	        String host = hostPort.nextToken();
-	        int port = Integer.parseInt( hostPort.nextToken() );
-	        
-	        HttpClient client = new HttpClient();
-	        client.getHostConfiguration().setHost( host, port, "http");
-	        client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
-	        
-	        PostMethod login = new PostMethod( frameworkUrl + "/aa/j_spring_security_check");
-	        login.addParameter("j_username", userName);
-	        login.addParameter("j_password", password);
-	        
-	        client.executeMethod(login);
-	        //System.out.println("Login form post: " + login.getStatusLine().toString());
-	                
-	        login.releaseConnection();
-	        CookieSpec cookiespec = CookiePolicy.getDefaultSpec();
-	        Cookie[] logoncookies = cookiespec.match(
-	                host, port, "/", false, 
-	                client.getState().getCookies());
-	        
-	        Cookie sessionCookie = logoncookies[0];
-	        
-	        PostMethod postMethod = new PostMethod("/aa/login");
-	        postMethod.addParameter("target", frameworkUrl);
-	        client.getState().addCookie(sessionCookie);
-	        client.executeMethod(postMethod);
-	        //System.out.println("Login second post: " + postMethod.getStatusLine().toString());
-	      
-	        if (HttpServletResponse.SC_SEE_OTHER != postMethod.getStatusCode())
-	        {
-	            throw new HttpException("Wrong status code: " + login.getStatusCode());
-	        }
-	        
-	        String userHandle = null;
-	        Header headers[] = postMethod.getResponseHeaders();
-	        for (int i = 0; i < headers.length; ++i)
-	        {
-	            if ("Location".equals(headers[i].getName()))
-	            {
-	                String location = headers[i].getValue();
-	                int index = location.indexOf('=');
-	                userHandle = new String(Base64.decode(location.substring(index + 1, location.length())));
-	                //System.out.println("location: "+location);
-	                //System.out.println("handle: "+userHandle);
-	            }
-	        }
-	        
-	        if (userHandle == null)
-	        {
-	            throw new ServiceException("User not logged in.");
-	        }
-	        return userHandle;
-		}
+//	 public static String login(String frameworkUrl, String userName, String password) throws Exception
+//		{
+//	        StringTokenizer tokens = new StringTokenizer( frameworkUrl, "//" );
+//	                
+//	        tokens.nextToken();
+//	        StringTokenizer hostPort = new StringTokenizer(tokens.nextToken(), ":");
+//	        
+//	        String host = hostPort.nextToken();
+//	        int port = Integer.parseInt( hostPort.nextToken() );
+//	        
+//	        HttpClient client = new HttpClient();
+//	        client.getHostConfiguration().setHost( host, port, "http");
+//	        client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
+//	        
+//	        PostMethod login = new PostMethod( frameworkUrl + "/aa/j_spring_security_check");
+//	        login.addParameter("j_username", userName);
+//	        login.addParameter("j_password", password);
+//	        
+//	        client.executeMethod(login);
+//	        //System.out.println("Login form post: " + login.getStatusLine().toString());
+//	                
+//	        login.releaseConnection();
+//	        CookieSpec cookiespec = CookiePolicy.getDefaultSpec();
+//	        Cookie[] logoncookies = cookiespec.match(
+//	                host, port, "/", false, 
+//	                client.getState().getCookies());
+//	        
+//	        Cookie sessionCookie = logoncookies[0];
+//	        
+//	        PostMethod postMethod = new PostMethod("/aa/login");
+//	        postMethod.addParameter("target", frameworkUrl);
+//	        client.getState().addCookie(sessionCookie);
+//	        client.executeMethod(postMethod);
+//	        //System.out.println("Login second post: " + postMethod.getStatusLine().toString());
+//	      
+//	        if (HttpServletResponse.SC_SEE_OTHER != postMethod.getStatusCode())
+//	        {
+//	            throw new HttpException("Wrong status code: " + login.getStatusCode());
+//	        }
+//	        
+//	        String userHandle = null;
+//	        Header headers[] = postMethod.getResponseHeaders();
+//	        for (int i = 0; i < headers.length; ++i)
+//	        {
+//	            if ("Location".equals(headers[i].getName()))
+//	            {
+//	                String location = headers[i].getValue();
+//	                int index = location.indexOf('=');
+//	                userHandle = new String(Base64.decode(location.substring(index + 1, location.length())));
+//	                //System.out.println("location: "+location);
+//	                //System.out.println("handle: "+userHandle);
+//	            }
+//	        }
+//	        
+//	        if (userHandle == null)
+//	        {
+//	            throw new ServiceException("User not logged in.");
+//	        }
+//	        return userHandle;
+//		}
 	 
 	 public void setCompleteNamesForContainers(User admin) throws Exception
 	 {

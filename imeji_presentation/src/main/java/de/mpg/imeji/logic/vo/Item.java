@@ -16,7 +16,15 @@ import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
-
+/**
+ * 
+ * imeji item. Can be an image, a video, a sound, etc.
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 @j2jResource("http://imeji.org/terms/item")
 @j2jModel("item")
 @j2jId(getMethod = "getId", setMethod = "setId")
@@ -230,6 +238,6 @@ public class Item extends Properties implements FulltextIndex
                 fulltext += " " + md.asFulltext();
             }
         }
-        fulltext.trim();
+        fulltext = fulltext.trim();
     }
 }

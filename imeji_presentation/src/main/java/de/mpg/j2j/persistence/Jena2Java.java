@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -32,6 +34,7 @@ public class Jena2Java
 {
     private Model model;
     private boolean lazy = false;
+    private static Logger logger = Logger.getLogger(Jena2Java.class);
 
     public Jena2Java(Model model, boolean lazy)
     {
@@ -286,7 +289,7 @@ public class Jena2Java
         }
         catch (Exception e)
         {
-            new RuntimeException("Error initializing resource with a datatype: ", e);
+            logger.info("Error initializing resource with a datatype: ", e);
         }
         return null;
     }

@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
@@ -25,18 +27,18 @@ import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.image.ImageBean;
+import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
+
 /**
+ * Abstract bean for all collection beans
  * 
- *Abstract bean for all collection beans
- *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public abstract class CollectionBean
 {
@@ -344,25 +346,26 @@ public abstract class CollectionBean
         return "pretty:";
     }
 
-    public List<ImageBean> getImages() throws Exception
+    /**
+     * Return the 5 {@link ThumbnailBean} for the {@link CollectionImeji} startpage. Use a specific sparql query with a
+     * limit, to increase performance
+     * 
+     * @return
+     * @throws Exception
+     */
+    public List<ThumbnailBean> getThumbnails() throws Exception
     {
-        ItemController ic = new ItemController(sessionBean.getUser());
-        if (collection == null || collection.getId() == null)
-            return null;
-        try
+        if (collection != null)
         {
-            Search search = new Search(null, collection.getId().toString());
-            List<String> uris = search.searchSimpleForQuery(
-                    "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
-                            + collection.getId().toString()
-                            + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<"
-                            + Status.WITHDRAWN.getUri() + ">)} LIMIT 5", new SortCriterion());
-            return ImejiFactory.imageListToBeanList(ic.loadItems(uris, 5, 0));
+            List<String> uris = new ArrayList<String>();
+            for (URI uri : getCollection().getImages())
+            {
+                uris.add(uri.toString());
+            }
+            ItemController ic = new ItemController(sessionBean.getUser());
+            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 5, 0));
         }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+        return null;
     }
 
     public MetadataProfile getProfile()

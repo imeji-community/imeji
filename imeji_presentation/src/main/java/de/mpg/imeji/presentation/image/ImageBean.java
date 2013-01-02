@@ -61,27 +61,6 @@ public class ImageBean
     private MetadataLabels labels;
     private SingleImageBrowse browse = null;
 
-    /**
-     * Construct an {@link ImageBean} from am {@link Item}
-     * 
-     * @param img
-     * @throws Exception
-     */
-    public ImageBean(Item img) throws Exception
-    {
-        item = img;
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        prettyLink = "pretty:editImage";
-        labels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
-        if (sessionBean.getSelected().contains(item.getId()))
-        {
-            setSelected(true);
-        }
-        loadProfile();
-        removeDeadMetadata();
-        sortMetadataAccordingtoProfile();
-    }
 
     /**
      * Construct a default {@link ImageBean}

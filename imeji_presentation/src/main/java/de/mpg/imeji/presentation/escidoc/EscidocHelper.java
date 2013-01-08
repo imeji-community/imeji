@@ -205,7 +205,10 @@ public class EscidocHelper
 			}
 			catch(Exception e)
 			{
-				url = uploadFileContent(imageStream, mimetype, auth);
+				
+//				url = uploadFileContent(imageStream, mimetype, auth);
+//				e.printStackTrace();
+				url = uploadFileContent(scaledImageStream, mimetype, auth);
 			}
 		}
 		else if(contentCategory.equals(ImageHelper.getOrig()))

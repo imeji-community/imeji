@@ -20,6 +20,20 @@ public class ImageHelper
 {
 	public static BufferedImage scaleImage(BufferedImage image, int size, String resolution) throws Exception
 	{
+		// resize on width
+		BufferedImage resizedImage = ImageScaler.scaleImage(image, size, -1);
+		
+		int newHeight = resizedImage.getHeight(null);
+		
+		// resize on height if necessary		
+		if(newHeight > size)
+			resizedImage = ImageScaler.scaleImage(resizedImage, -1, size);
+		
+		return resizedImage;
+	}
+	
+	public static BufferedImage scaleImage_Bastien(BufferedImage image, int size, String resolution) throws Exception
+	{
 		int width = image.getWidth(null);
 		int height = image.getHeight(null);
 		BufferedImage newImg = null;
@@ -55,12 +69,63 @@ public class ImageHelper
 				rescaledImage = image.getScaledInstance(-1, size, Image.SCALE_SMOOTH);
 
 		}
-
+		
 		BufferedImage rescaledBufferedImage = new BufferedImage(rescaledImage.getWidth(null), rescaledImage.getHeight(null), BufferedImage.TYPE_INT_RGB);
 		Graphics g2 = rescaledBufferedImage.getGraphics();
 		g2.drawImage(rescaledImage, 0, 0, null);
 		return rescaledBufferedImage;
 	}
+	
+//	public static BufferedImage scaleImage(BufferedImage image, int size, String resolution) throws Exception
+//	{
+//		int width = image.getWidth(null);
+//		int height = image.getHeight(null);
+//		BufferedImage newImg = null;
+////		Image rescaledImage;
+//		BufferedImage rescaledImage;
+//		if(width > height)
+//		{
+//			if(resolution.equals(getThumb()))
+//			{
+//				newImg= new BufferedImage(height, height,BufferedImage.TYPE_INT_RGB);
+//				Graphics g1 = newImg.createGraphics();
+//				g1.drawImage(image, (height-width)/2, 0, null);
+//				if(height>size)
+////					rescaledImage = newImg.getScaledInstance(size, -1, Image.SCALE_SMOOTH);
+//					rescaledImage = ImageScaler.scaleImage(newImg, size, -1);
+//				else
+//					rescaledImage = newImg;
+//			}
+//			else
+////				rescaledImage = image.getScaledInstance(size, -1, Image.SCALE_SMOOTH);
+//				rescaledImage = ImageScaler.scaleImage(image, size, -1);
+//		}
+//		else  
+//		{
+//			if(resolution.equals(getThumb()))
+//			{
+//				newImg= new BufferedImage(width, width,BufferedImage.TYPE_INT_RGB);
+//				Graphics g1 = newImg.createGraphics();
+//				g1.drawImage(image, 0, (width-height)/2, null);
+//				if(width>size)
+////					rescaledImage = newImg.getScaledInstance(-1, size, Image.SCALE_SMOOTH);
+//					rescaledImage = ImageScaler.scaleImage(newImg, -1, size);
+//				else
+//					rescaledImage = newImg;
+//			}
+//			else
+////				rescaledImage = image.getScaledInstance(-1, size, Image.SCALE_SMOOTH);
+//				rescaledImage = ImageScaler.scaleImage(image, -1, size);
+//
+//		}
+//
+////		BufferedImage rescaledBufferedImage = new BufferedImage(rescaledImage.getWidth(null), rescaledImage.getHeight(null), BufferedImage.TYPE_INT_RGB);
+////		Graphics g2 = rescaledBufferedImage.getGraphics();
+////		g2.drawImage(rescaledImage, 0, 0, null);
+////		return rescaledBufferedImage;
+//		
+//		return rescaledImage;
+//	}
 
 	public static GifDecoder checkAnimation(byte[] image) throws Exception
 	{
@@ -169,7 +234,4 @@ public class ImageHelper
 	//    	BufferedImage image = stream4Image.getImage();
 	//    	return image;
 	//    }
-
-
-
 }

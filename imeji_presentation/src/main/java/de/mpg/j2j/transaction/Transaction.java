@@ -22,16 +22,27 @@ public abstract class Transaction
     private Exception exception;
     private static Logger logger = Logger.getLogger(Transaction.class);
 
+    /**
+     * Construct a {@link Transaction} for one model defined by its uri
+     * @param modelURI
+     */
     public Transaction(String modelURI)
     {
         this.modelURI = modelURI;
     }
 
+    /**
+     * Do the {@link Transaction} over the complete imeji {@link Dataset}
+     */
     public void start()
     {
         start(ImejiJena.imejiDataSet);
     }
 
+    /**
+     * Do the {@link Transaction} over a {@link Dataset}.
+     * @param dataset
+     */
     public void start(Dataset dataset)
     {
         try
@@ -42,6 +53,7 @@ public abstract class Transaction
         }
         catch (Exception e)
         {
+        	dataset.abort();
             isException = true;
             exception = e;
             logger.error("Exception in a transaction: has been aborted");
@@ -52,10 +64,24 @@ public abstract class Transaction
         }
     }
 
+    /**
+     * Execute the operation of the {@link Transaction} Is called after the {@link Transaction} has been started
+     * @param ds
+     * @throws Exception
+     */
     protected abstract void execute(Dataset ds) throws Exception;
 
+    /**
+     * Return the type of Jena lock ({@link ReadWrite}) uses for the {@link Transaction} 
+     * @return
+     */
     protected abstract ReadWrite getLockType();
 
+    /**
+     * Return the {@link Model} of the {@link Dataset} according to the uri defined in constructor
+     * @param dataset
+     * @return
+     */
     protected Model getModel(Dataset dataset)
     {
         if (modelURI != null)

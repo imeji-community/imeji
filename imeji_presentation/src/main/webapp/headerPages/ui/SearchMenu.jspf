@@ -1,5 +1,4 @@
-<div xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
+<div  xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
 	<ui:remove>
@@ -37,35 +36,28 @@
 	<div id="searchMenuSkipLinkAnchor" class="free_area0 searchMenu">
 		<!-- search Menu starts here -->
 	
-		<span class="std_imgArea quickSearchIcon">&#160;</span>
-
-
-		<span class="xLarge_area0 quickSearchMenu">
-			<h:inputText id="quickSearchString" styleClass="xLarge_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}" onkeypress="return quickSearchOnEnter(event)"/>
-			<h:panelGroup styleClass="xLarge_area0" style="text-align:left;">
-				
-				<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}" valueChangeListener="#{QuickSearchBean.selectedSearchTypeListener}">
-					<f:selectItem id="selIm" itemLabel="#{lbl.images}" itemValue="images"/>
-					<f:selectItem id="selCol" itemLabel="#{lbl.collections}" itemValue="collections"/>
-				</h:selectOneRadio>
-				
-			</h:panelGroup>
-		</span>
-		<h:commandButton id="btnQuickSearchStart" title="#{lbl.search_for}" styleClass="small_txtBtn activeButton quickSearchBtn" value="#{lbl.paginator_go}" action="#{QuickSearchBean.search}"/>
-
-		<h:outputLink id="lnkAdvancedSearch" title="#{lbl.goto_adv_search}" styleClass="free_area0 advancedSearchMenu tiny_marginLExcl" value="#{Navigation.searchUrl}">
-	   		<h:outputText value="#{lbl.advanced_search}"/>
-	   	</h:outputLink>
+		<h:form id="simpleSearchForm">
+			<span class="std_imgArea quickSearchIcon">&#160;</span>
 	
+				<span class="xLarge_area0 quickSearchMenu">
+				
+					<h:inputText id="quickSearchString" styleClass="xLarge_txtInput quickSearchTextInput" value="#{QuickSearchBean.searchString}" />
+					<h:panelGroup styleClass="xLarge_area0" style="text-align:left;">
+						
+						<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}" valueChangeListener="#{QuickSearchBean.selectedSearchTypeListener}">
+							<f:selectItem id="selIm" itemLabel="#{lbl.images}" itemValue="images"/>
+							<f:selectItem id="selCol" itemLabel="#{lbl.collections}" itemValue="collections"/>
+						</h:selectOneRadio>
+						
+					</h:panelGroup>
+				</span>
+				
+				<h:commandButton id="btnQuickSearchStart" title="#{lbl.search_for}" styleClass="small_txtBtn activeButton quickSearchBtn" value="#{lbl.paginator_go}" action="#{QuickSearchBean.search}"/>
+			
+			<h:outputLink id="lnkAdvancedSearch" title="#{lbl.goto_adv_search}" styleClass="free_area0 advancedSearchMenu tiny_marginLExcl" value="#{Navigation.searchUrl}">
+		   		<h:outputText value="#{lbl.advanced_search}"/>
+		   	</h:outputLink>
+		</h:form>
 		<!-- search Menu ends here -->
 	</div>
-	<script type="text/javascript">
-	function quickSearchOnEnter(event)
-	{
-		if (event.keyCode == 13)
-		{
-			document.getElementById('formular:Header:btnQuickSearchStart').click();
-		}
-	}
-	</script>
 </div>

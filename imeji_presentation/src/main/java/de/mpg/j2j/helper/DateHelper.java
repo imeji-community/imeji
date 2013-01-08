@@ -6,20 +6,37 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Methods related to {@link Date}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class DateHelper
 {
-    public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-
+    /**
+     * Return the current {@link Calendar} from the system
+     * 
+     * @return
+     */
     public static Calendar getCurrentDate()
     {
-        Calendar cal = Calendar.getInstance();  
+        Calendar cal = Calendar.getInstance();
         return cal;
     }
 
+    /**
+     * Parse a {@link String} to a {@link Calendar}
+     * 
+     * @param dateString
+     * @return
+     */
     public static Calendar parseDate(String dateString)
     {
         try
         {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
             Date d = format.parse(dateString);
             Calendar cal = Calendar.getInstance();
             cal.setTime(d);

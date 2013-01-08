@@ -1,5 +1,4 @@
-<div xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
+<div  xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
 <ui:remove>
@@ -63,11 +62,6 @@
 		<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" rendered="#{SessionBean.admin}">
 			<h:outputText value="ADMIN"></h:outputText>
 		</h:outputLink>
-		
-		<h:outputLink id="lnkStatistics" title="#{lbl.goto_statistics}" value="#{Navigation.statisticsUrl}/visit" rendered="false">
-			<h:outputText value="#{lbl.header_statistics}"></h:outputText>
-		</h:outputLink>
-		<h:outputText id="txtStatisticsInactive" styleClass="free_area0" value="Statistics" rendered="false" />
 		
 		<!-- main Menu ends here -->
 	

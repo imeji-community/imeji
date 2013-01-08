@@ -133,6 +133,17 @@ public class Person
         return id;
     }
     
+    public String getOrganizationString()
+    {
+    	String s ="";
+    	for (Organization o : organizations)
+    	{
+    		if (!"".equals(s)) s+=" ,";
+    		s += o.getName();
+    	}
+    	return s;
+    }
+    
     
     public String AsFullText()
     {

@@ -58,7 +58,7 @@ public class IngestTest {
 	}
 	
 	@Test
-	public void itemParsingTest() {
+	public void itemParsingTest() throws JAXBException, SAXException {
 		String xmlFilename = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\items_lite.xml";
 		
 		ItemParser ip = new ItemParser();
@@ -85,7 +85,7 @@ public class IngestTest {
 	}
 	
 //	@Test
-	public void profileParsingTest() {
+	public void profileParsingTest() throws JAXBException, SAXException {
 		String xmlFilename = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\mdp_lite.xml";
 		
 		ProfileParser pp = new ProfileParser();
@@ -100,7 +100,7 @@ public class IngestTest {
 	}
 
 //	@Test
-	public void profilesParsingTest() {
+	public void profilesParsingTest() throws JAXBException, SAXException {
 		String xmlFilename = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\mdps_lite.xml";
 		
 		ProfileParser pp = new ProfileParser();

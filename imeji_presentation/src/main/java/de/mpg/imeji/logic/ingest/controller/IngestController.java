@@ -33,15 +33,17 @@ public class IngestController
      */
     public void ingest(File itemListXmlFile, File profileXmlFile) throws Exception
     {
-    	//TODO: what to do here?
         if (profileXmlFile != null)
         {
             IngestProfileController ipc = new IngestProfileController(user);
             ipc.ingest(profileXmlFile);
         }
-        ProfileController pc = new ProfileController(user);
-        MetadataProfile mdp = pc.retrieve(collection.getProfile());
-        IngestItemController iic = new IngestItemController(user, mdp);
-        iic.ingest(itemListXmlFile);
+        if (itemListXmlFile != null)
+        {
+	        ProfileController pc = new ProfileController(user);
+	        MetadataProfile mdp = pc.retrieve(collection.getProfile());
+	        IngestItemController iic = new IngestItemController(user, mdp);
+	        iic.ingest(itemListXmlFile);
+        }
     }
 }

@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.ingest.vo;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class Items {
 	}
 
 	public Items(Collection<Item> items) {
-		this.setItem((List<Item>) items);
+		this.setItem(new ArrayList<Item>(items));
 	}
 
 	/**

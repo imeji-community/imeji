@@ -7,6 +7,7 @@ import java.util.Random;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class StartPageBean

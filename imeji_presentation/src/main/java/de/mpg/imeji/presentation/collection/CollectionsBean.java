@@ -20,18 +20,29 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-
+/**
+ * 
+ * Bean for the collections page
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
     private String query = "";
 
+    /**
+     * Bean for the collections page
+     */
     public CollectionsBean()
     {
         super();
@@ -98,7 +109,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     {
         for (CollectionListItem bean : getCurrentPartList())
         {
-            if (bean.getStatus() == Status.PENDING.toString())
+            if (Status.PENDING.toString().equals(bean.getStatus()))
             {
                 bean.setSelected(true);
                 if (!(sb.getSelectedCollections().contains(bean.getUri())))

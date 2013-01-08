@@ -1,42 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="templates/template_paginator_images.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
-<ui:remove>
-<!--
-
- CDDL HEADER START
-
- The contents of this file are subject to the terms of the
- Common Development and Distribution License, Version 1.0 only
- (the "License"). You may not use this file except in compliance
- with the License.
-
- You can obtain a copy of the license at license/ESCIDOC.LICENSE
- or http://www.escidoc.de/license.
- See the License for the specific language governing permissions
- and limitations under the License.
-
- When distributing Covered Code, include this CDDL HEADER in each
- file and include the License file at license/ESCIDOC.LICENSE.
- If applicable, add the following below this CDDL HEADER, with the
- fields enclosed by brackets "[]" replaced with your own identifying
- information: Portions Copyright [yyyy] [name of copyright owner]
-
- CDDL HEADER END
-
-
- Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
- für wissenschaftlich-technische Information mbH and Max-Planck-
- Gesellschaft zur Förderung der Wissenschaft e.V.
- All rights reserved. Use is subject to license terms.
--->
-</ui:remove>
-
-<body>
-	<ui:composition template="templates/template_paginator_images.xhtml">	
+	>	
 			<ui:param name="paginatorListSessionBean" value="#{CollectionImagesBean}"/>
 			<ui:param name="headline" value="#{CollectionImagesBean.collection.metadata.title}"/>
 			<ui:define name="contentMenu">
@@ -64,7 +31,8 @@
 			</ui:define>
 			
 			<ui:define name="actionsMenu">
-				<h:panelGroup layout="block" styleClass="free_area0 sub action">
+				<h:panelGroup layout="block" styleClass="half_area0 sub action">
+				
 					<h:panelGroup styleClass="free_area0">
 						<!-- SORTING content menu lower line starts here -->
 						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0"/>
@@ -77,19 +45,16 @@
 						<!-- SORTING content menu lower line ends here -->
 					</h:panelGroup>
 					
-					 <h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
+					 <h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogRelease');" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
 						<h:outputText value="#{lbl.collection_release}"/>
-						<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
 					</h:outputLink>
 					
-					<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
+					<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogWithdraw');" rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
 						<h:outputText value="#{lbl.withdraw}"/>
-						<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
 					</h:outputLink>
 					
-					<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{CollectionImagesBean.deletable}">
+					<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogDelete');" rendered="#{CollectionImagesBean.deletable}">
 						<h:outputText value="#{lbl.delete}"/>
-						<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
 					</h:outputLink>
 					
 					<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
@@ -99,22 +64,17 @@
 					<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
 						<h:outputText value="Export for ingest "/>
 					</h:outputLink>
-					
-					<h:panelGroup rendered="#{CollectionImagesBean.collection != null}">
-						<ui:include src="confirmationPages/ContainerRelease.xhtml">
-							<ui:param name="bean" value="#{CollectionImagesBean}"/>
-						</ui:include>
-						<ui:include src="confirmationPages/ContainerDelete.xhtml">
-							<ui:param name="bean" value="#{CollectionImagesBean}"/>
-						</ui:include>
-						<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
-							<ui:param name="bean" value="#{CollectionImagesBean}"/>
-							<ui:param name="discardComment" value="#{CollectionImagesBean.collection.discardComment}"/>
-						</ui:include>
-					</h:panelGroup>
 				</h:panelGroup>
+				
+				<ui:include src="confirmationPages/ContainerRelease.xhtml">
+					<ui:param name="bean" value="#{CollectionImagesBean}"/>
+				</ui:include>
+				<ui:include src="confirmationPages/ContainerDelete.xhtml">
+					<ui:param name="bean" value="#{CollectionImagesBean}"/>
+				</ui:include>
+				<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
+					<ui:param name="bean" value="#{CollectionImagesBean}"/>
+					<ui:param name="discardComment" value="#{CollectionImagesBean.collection.discardComment}"/>
+				</ui:include>
 			</ui:define>
-	</ui:composition>
-
-</body>
-</html>
+</ui:composition>

@@ -19,12 +19,20 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 
+/**
+ * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a {@link ThumbnailBean}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class ThumbnailBean
 {
     private String link = "";
@@ -44,6 +52,11 @@ public class ThumbnailBean
     private SessionBean sessionBean;
     private static Logger logger = Logger.getLogger(ThumbnailBean.class);
 
+    /**
+     * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a {@link ThumbnailBean}
+     * 
+     * @param item
+     */
     public ThumbnailBean(Item item)
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -63,6 +76,12 @@ public class ThumbnailBean
         initSecurity(item);
     }
 
+    /**
+     * Inititialize the popup with the metadata for this image. The method is called directly from xhtml
+     * 
+     * @return
+     * @throws Exception
+     */
     public String getInitPopup() throws Exception
     {
         List<Item> l = new ArrayList<Item>();
@@ -73,6 +92,11 @@ public class ThumbnailBean
         return "";
     }
 
+    /**
+     * Initialize security parameters of this item.
+     * 
+     * @param item
+     */
     private void initSecurity(Item item)
     {
         Security security = new Security();
@@ -82,6 +106,12 @@ public class ThumbnailBean
         deletable = security.check(OperationsType.DELETE, sessionBean.getUser(), item);
     }
 
+    /**
+     * Load the statements of a {@link MetadataProfile} according to its id ( {@link URI} )
+     * 
+     * @param uri
+     * @return
+     */
     private List<Statement> loadStatements(URI uri)
     {
         try
@@ -101,6 +131,12 @@ public class ThumbnailBean
         return new ArrayList<Statement>();
     }
 
+    /**
+     * Find the caption for this {@link ThumbnailBean} as defined in the {@link MetadataProfile}. If none defined in the
+     * {@link MetadataProfile} return the filename
+     * 
+     * @return
+     */
     private String findCaption()
     {
         for (Statement s : statements)
@@ -119,32 +155,24 @@ public class ThumbnailBean
         return filename;
     }
 
+    /**
+     * Listener for the select box of this {@link ThumbnailBean}
+     * 
+     * @param event
+     */
     public void selectedChanged(ValueChangeEvent event)
     {
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(uri.toString()))
+        SessionObjectsController soc = new SessionObjectsController();
+        if (event.getNewValue().toString().equals("true"))
         {
-            selected = true;
-            select();
+            setSelected(true);
+            soc.selectItem(uri.toString());
         }
-        else if (event.getNewValue().toString().equals("false") && sessionBean.getSelected().contains(uri.toString()))
+        else if (event.getNewValue().toString().equals("false"))
         {
-            selected = false;
-            select();
+            setSelected(false);
+            soc.unselectItem(uri.toString());
         }
-    }
-
-    public String select()
-    {
-        if (!selected)
-        {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(uri.toString());
-        }
-        else
-        {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(uri.toString());
-        }
-        return "";
     }
 
     public String getLink()

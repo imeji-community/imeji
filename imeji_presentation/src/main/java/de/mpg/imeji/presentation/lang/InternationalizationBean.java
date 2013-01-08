@@ -9,7 +9,7 @@ import java.util.Locale;
 
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 

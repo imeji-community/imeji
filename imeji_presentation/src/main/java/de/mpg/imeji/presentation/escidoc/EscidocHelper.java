@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.escidoc;
 
 import java.awt.image.BufferedImage;
@@ -18,7 +17,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -45,7 +43,14 @@ import de.mpg.imeji.presentation.upload.helper.ImageHelper;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
-public class EscidocHelper 
+/**
+ * Helper for escidoc operation
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
+public class EscidocHelper
 {
 	private static Logger logger = Logger.getLogger(EscidocHelper.class);
 	

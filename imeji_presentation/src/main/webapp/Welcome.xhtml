@@ -1,43 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="templates/template.xhtml"  
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
-<ui:remove>
-<!--
-
- CDDL HEADER START
-
- The contents of this file are subject to the terms of the
- Common Development and Distribution License, Version 1.0 only
- (the "License"). You may not use this file except in compliance
- with the License.
-
- You can obtain a copy of the license at license/ESCIDOC.LICENSE
- or http://www.escidoc.de/license.
- See the License for the specific language governing permissions
- and limitations under the License.
-
- When distributing Covered Code, include this CDDL HEADER in each
- file and include the License file at license/ESCIDOC.LICENSE.
- If applicable, add the following below this CDDL HEADER, with the
- fields enclosed by brackets "[]" replaced with your own identifying
- information: Portions Copyright [yyyy] [name of copyright owner]
-
- CDDL HEADER END
-
-
- Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
- für wissenschaftlich-technische Information mbH and Max-Planck-
- Gesellschaft zur Förderung der Wissenschaft e.V.
- All rights reserved. Use is subject to license terms.
--->
-</ui:remove>
-
-<body>
-
-	<ui:composition template="templates/template.xhtml">
+	xmlns:f="http://java.sun.com/jsf/core">
 		<ui:param name="headline" value="#{lbl.HomePage}"/>
 		<ui:define name="mainContent">
 			<div class="imj_cont_1 infoPage small_marginLExcl" >
@@ -163,13 +129,13 @@
 						}
 					</style>
 					 
-					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale == 'en'}">
+					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
 						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
 						<!-- tabs -->
 						<ul class="imj_cont_1">
-							<li><a href="#formular:tabsEN-1">About</a></li>
-							<li><a href="#formular:tabsEN-2">News</a></li>
-							<li><a href="#formular:tabsEN-3">How To</a></li>
+							<li><a href="#tabsEN-1">About</a></li>
+							<li><a href="#tabsEN-2">News</a></li>
+							<li><a href="#tabsEN-3">How To</a></li>
 						</ul>
 						
 						<!--  tabs content -->
@@ -236,9 +202,9 @@
 					<h:panelGroup layout="block" id="tabsDE" styleClass="id_tabs" rendered="#{SessionBean.locale == 'de'}">
 						<script type="text/javascript">var placeholder_username = 'Benutzername'; var placeholder_password = 'Passwort'; var placeholder_simpleSearch = 'Suche nach ...';</script>
 						<ul class="imj_cont_1">
-							<li><a href="#formular:tabsDE-1">Über</a></li>
-							<li><a href="#formular:tabsDE-2">Neuigkeiten</a></li>
-							<li><a href="#formular:tabsDE-3">How To</a></li>
+							<li><a href="#tabsDE-1">Über</a></li>
+							<li><a href="#tabsDE-2">Neuigkeiten</a></li>
+							<li><a href="#tabsDE-3">How To</a></li>
 						</ul>
 						
 						<h:panelGroup layout="block" id="tabsDE-1" styleClass="imj_cont_1 tab_content" >
@@ -302,13 +268,13 @@
 				</div>
 				
 				<!-- japanese part -->
-				<h:panelGroup layout="block" id="tabsJP" styleClass="id_tabs" rendered="#{SessionBean.locale == 'jp'}">
+				<h:panelGroup layout="block" id="tabsJP" styleClass="id_tabs" rendered="#{SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
 						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = '検索キーワード...';</script>
 						<!-- tabs -->
 						<ul class="imj_cont_1">
-							<li><a href="#formular:tabsJP-1">Imejiについて</a></li>
-							<li><a href="#formular:tabsJP-2">ニュース</a></li>
-							<li><a href="#formular:tabsJP-3">登録その他</a></li>
+							<li><a href="#tabsJP-1">Imejiについて</a></li>
+							<li><a href="#tabsJP-2">ニュース</a></li>
+							<li><a href="#tabsJP-3">登録その他</a></li>
 						</ul>
 						
 						<!--  tabs content -->
@@ -365,7 +331,8 @@
 												 		  </a> 
 								</li>
 						</h:panelGroup>
-					</h:panelGroup> <!-- end of tabs international -->
+					</h:panelGroup> 
+					<!-- end of tabs international -->
 				
 				<!-- carousel -->
 				<div class="imj_cont_3_5" style="margin-top:3em; float:left;">
@@ -374,11 +341,11 @@
 							
 							<!-- Define elements to accept the alt and title text from the images. -->
 							<div id="carousel">
-								<a4j:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0" rowKeyVar="index">
+								<ui:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0">
 									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.applicationUri}#{item.id.path}">
 										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrl}" height="114"/>
 									</h:outputLink>
-								</a4j:repeat>
+								</ui:repeat>
 							</div>
 							<span id="cloudinfoText">
 								<h4 id="title-text"></h4>
@@ -405,8 +372,6 @@
 				<!-- end: footer section -->
 				</div>
 
-				
-				
 				<script src="http://www.google.com/jsapi" type="text/javascript"> </script>
 				
 				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
@@ -495,7 +460,4 @@
 	</ui:define>	
 						
 </ui:composition>
-
-</body>
-</html>
 					

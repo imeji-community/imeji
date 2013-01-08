@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -19,10 +19,10 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.filter.Filter;
@@ -30,15 +30,24 @@ import de.mpg.imeji.presentation.filter.FiltersBean;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
+/**
+ * The bean for all list of images
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 {
     private int totalNumberOfRecords;
-    private SessionBean sb;
+    private SessionBean session;
     private List<SelectItem> sortMenu;
     private String selectedSortCriterion;
     private String selectedSortOrder;
@@ -52,11 +61,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private String discardComment;
     private String selectedImagesContext;
 
+    /**
+     * The bean for all list of images
+     */
     public ImagesBean()
     {
         super();
-        sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         filters = new FiltersBean();
         initMenus();
         selectedSortCriterion = null;
@@ -82,6 +94,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
     }
 
+    /**
+     * Init the page when it is called
+     * @return
+     */
     public String getInitPage()
     {
         getNavigationString();
@@ -113,15 +129,18 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return "";
     }
 
+    /**
+     * Init all menus of the page
+     */
     private void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(null, sb.getLabel("default")));
-        sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_CREATION_DATE, sb
+        sortMenu.add(new SelectItem(null, session.getLabel("default")));
+        sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_CREATION_DATE, session
                 .getLabel(SearchIndex.names.PROPERTIES_CREATION_DATE.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.IMAGE_COLLECTION, sb.getLabel(SearchIndex.names.IMAGE_COLLECTION
-                .name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE, sb
+        sortMenu.add(new SelectItem(SearchIndex.names.IMAGE_COLLECTION, session
+                .getLabel(SearchIndex.names.IMAGE_COLLECTION.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE, session
                 .getLabel(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name())));
         selectedSortOrder = SortOrder.DESCENDING.name();
     }
@@ -129,11 +148,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     @Override
     public String getNavigationString()
     {
-        if (sb.getSelectedImagesContext() != null && !(sb.getSelectedImagesContext().equals("pretty:browse")))
+        if (session.getSelectedImagesContext() != null && !(session.getSelectedImagesContext().equals("pretty:browse")))
         {
-            sb.getSelected().clear();
+            session.getSelected().clear();
         }
-        sb.setSelectedImagesContext("pretty:browse");
+        session.setSelectedImagesContext("pretty:browse");
         return "pretty:browse";
     }
 
@@ -143,10 +162,14 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return totalNumberOfRecords;
     }
 
+    /**
+     * Initialize the {@link SortCriterion} according to the selected value in the sort menu.
+     * @return
+     */
     public SortCriterion initSortCriterion()
     {
         SortCriterion sortCriterion = new SortCriterion();
-        if (getSelectedSortCriterion() != null)
+        if (getSelectedSortCriterion() != null && !getSelectedSortCriterion().trim().equals(""))
         {
             sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
@@ -171,18 +194,33 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return ImejiFactory.imageListToThumbList(items);
     }
 
+    /**
+     * Perform the {@link Search}
+     * @param searchQuery
+     * @param sortCriterion
+     * @return
+     */
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
     {
-        ItemController controller = new ItemController(sb.getUser());
+        ItemController controller = new ItemController(session.getUser());
         return controller.searchImages(searchQuery, sortCriterion);
     }
 
+    /**
+     * Laod all items (defined by their uri)
+     * @param uris
+     * @return
+     */
     public Collection<Item> loadImages(List<String> uris)
     {
-        ItemController controller = new ItemController(sb.getUser());
+        ItemController controller = new ItemController(session.getUser());
         return controller.loadItems(uris, getElementsPerPage(), getOffset());
     }
 
+    /**
+     * return the current  {@link SearchQuery} in a user friendly style.
+     * @return
+     */
     public String getSimpleQuery()
     {
         if (searchFilter != null && searchFilter.getSearchQuery() != null)
@@ -192,14 +230,15 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return "";
     }
 
+    /**
+     * Initialize the page when the page has been called by the browser back button
+     */
     public void initBackPage()
     {
         HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
         FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
         if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
         {
-            // fs.setFilters(hs.getCurrentPage().getFilters());
-            // query = hs.getCurrentPage().getQuery();
             filters = new FiltersBean(query, totalNumberOfRecords);
             hs.getCurrentPage().setFilters(fs.getFilters());
             hs.getCurrentPage().setQuery(fs.getWholeQuery());
@@ -212,101 +251,157 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
     }
 
+    /**
+     * Add all select {@link Item} to the active {@link Album}, and unselect all {@link Item} from session
+     * 
+     * @return
+     * @throws Exception
+     */
     public String addSelectedToActiveAlbum() throws Exception
     {
-        addToActiveAlbum(sb.getSelected());
-        sb.getSelected().clear();
+        addToActiveAlbum(session.getSelected());
+        session.getSelected().clear();
         return "pretty:";
     }
 
+    /**
+     * Add all {@link Item} of the current {@link ImagesBean} (i.e. browse page) to the active album
+     * 
+     * @return
+     * @throws Exception
+     */
     public String addAllToActiveAlbum() throws Exception
     {
         addToActiveAlbum(search(searchQuery, null).getResults());
         return "pretty:";
     }
 
-    public void addToActiveAlbum(List<String> items) throws Exception
-    {
-        AlbumController ac = new AlbumController(sb.getUser());
-        try
-        {
-            int sizeToAdd = items.size();
-            int notAdded = ac.addToAlbum(sb.getActiveAlbum(), items, sb.getUser()).size();
-            int sizeadded = sizeToAdd - notAdded;
-            String message = "";
-            if (sizeadded > 0)
-            {
-                message = sizeadded
-                        + " "
-                        + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                                .getMessage("images_added_to_active_album");
-            }
-            if (notAdded > 0)
-            {
-                message += notAdded
-                        + " "
-                        + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                                .getMessage("already_in_active_album");
-            }
-            BeanHelper.info(message);
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(e.getMessage());
-            sb.setActiveAlbum(ac.retrieveLazy(sb.getActiveAlbum().getId(), sb.getUser()));
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Delete selected {@link Item}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String deleteSelected() throws Exception
     {
-        delete(sb.getSelected());
+        delete(session.getSelected());
         return "pretty:";
     }
 
+    /**
+     * Delete all {@link Item} currently browsed
+     * 
+     * @return
+     * @throws Exception
+     */
     public String deleteAll() throws Exception
     {
         delete(search(searchQuery, null).getResults());
         return "pretty:";
     }
 
-    private void delete(List<String> uris) throws Exception
-    {
-        Collection<Item> items = loadImages(uris);
-        ItemController ic = new ItemController(sb.getUser());
-        int count = ic.delete((List<Item>)items, sb.getUser());
-        BeanHelper.info(count + " " + sb.getLabel("images_deleted"));
-        sb.getSelected().clear();
-    }
-
+    /**
+     * Withdraw all {@link Item} currently browsed
+     * 
+     * @return
+     * @throws Exception
+     */
     public String withdrawAll() throws Exception
     {
         withdraw(search(searchQuery, null).getResults());
         return "pretty:";
     }
 
+    /**
+     * Withdraw all selected {@link Item}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String withdrawSelected() throws Exception
     {
-        withdraw(sb.getSelected());
+        withdraw(session.getSelected());
         return "pretty:";
     }
 
+    /**
+     * withdraw a list of {@link Item} (defined by their uri)
+     * 
+     * @param uris
+     * @throws Exception
+     */
     private void withdraw(List<String> uris) throws Exception
     {
-        ItemController ic = new ItemController(sb.getUser());
+        ItemController ic = new ItemController(session.getUser());
         Collection<Item> items = loadImages(uris);
         int count = 0;
         if ("".equals(discardComment.trim()))
         {
-            BeanHelper.error(sb.getMessage("error_image_withdraw_discardComment"));
+            BeanHelper.error(session.getMessage("error_image_withdraw_discardComment"));
         }
         else
         {
             ic.withdraw((List<Item>)items, discardComment);
             discardComment = null;
-            sb.getSelected().clear();
-            BeanHelper.info(count + " " + sb.getLabel("images_withdraw"));
+            unselect(uris);
+            BeanHelper.info(count + " " + session.getLabel("images_withdraw"));
         }
+    }
+
+    /**
+     * Delete a {@link List} of {@link Item} (defined by their uris).
+     * 
+     * @param uris
+     * @throws Exception
+     */
+    private void delete(List<String> uris) throws Exception
+    {
+        Collection<Item> items = loadImages(uris);
+        ItemController ic = new ItemController(session.getUser());
+        int count = ic.delete((List<Item>)items, session.getUser());
+        BeanHelper.info(count + " " + session.getLabel("images_deleted"));
+        unselect(uris);
+    }
+
+    /**
+     * Unselect a list of {@link Item}
+     * 
+     * @param uris
+     */
+    private void unselect(List<String> uris)
+    {
+        SessionObjectsController soc = new SessionObjectsController();
+        for (int i = 0; i < uris.size() - 1; i++)
+        {
+            soc.unselectItem(uris.get(i));
+        }
+    }
+
+    /**
+     * Add a {@link List} of uris to the active album, and write an info message in the {@link FacesMessage}
+     * 
+     * @param uris
+     * @throws Exception
+     */
+    private void addToActiveAlbum(List<String> uris) throws Exception
+    {
+        int sizeToAdd = uris.size();
+        int sizeBefore = session.getActiveAlbumSize();
+        SessionObjectsController soc = new SessionObjectsController();
+        soc.addToActiveAlbum(uris);
+        int sizeAfter = session.getActiveAlbumSize();
+        int added = sizeAfter - sizeBefore;
+        int notAdded = sizeToAdd - added;
+        String message = "";
+        if (added > 0)
+        {
+            message = " " + added + " " + session.getMessage("images_added_to_active_album");
+        }
+        if (notAdded > 0)
+        {
+            message += " " + notAdded + " " + session.getMessage("already_in_active_album");
+        }
+        BeanHelper.info(message);
     }
 
     public String getInitComment()
@@ -322,15 +417,15 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 
     public void setSelectedImagesContext(String selectedImagesContext)
     {
-        if (selectedImagesContext.equals(sb.getSelectedImagesContext()))
+        if (selectedImagesContext.equals(session.getSelectedImagesContext()))
         {
             this.selectedImagesContext = selectedImagesContext;
         }
         else
         {
-            sb.getSelected().clear();
+            session.getSelected().clear();
             this.selectedImagesContext = selectedImagesContext;
-            sb.setSelectedImagesContext(selectedImagesContext);
+            session.setSelectedImagesContext(selectedImagesContext);
         }
     }
 
@@ -427,9 +522,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         for (ThumbnailBean bean : getCurrentPartList())
         {
-            if (!(sb.getSelected().contains(bean.getUri().toString())))
+            if (!(session.getSelected().contains(bean.getUri().toString())))
             {
-                sb.getSelected().add(bean.getUri().toString());
+                session.getSelected().add(bean.getUri().toString());
             }
         }
         return getNavigationString();
@@ -437,7 +532,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 
     public String selectNone()
     {
-        sb.getSelected().clear();
+        session.getSelected().clear();
         return getNavigationString();
     }
 

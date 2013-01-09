@@ -9,8 +9,20 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import com.sun.media.jai.codec.FileSeekableStream;
+import com.sun.media.jai.codec.ImageCodec;
+import com.sun.media.jai.codec.ImageDecoder;
+import com.sun.media.jai.codec.ImageEncoder;
+import com.sun.media.jai.codec.JPEGEncodeParam;
+import com.sun.media.jai.codec.SeekableStream;
+import com.sun.media.jai.codec.TIFFDecodeParam;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -202,6 +214,80 @@ public class ImageHelper
         }
         while (w != targetWidth || h != targetHeight);
         return ret;
+    }
+
+    /**
+     * Transform tiff to jpeg
+     * 
+     * @param tiffFile
+     * @param name
+     * @return
+     */
+    public static File tiffToJpeg(File tiffFile, String name)
+    {
+        File tmpFile = null;
+        try
+        {
+            tmpFile = File.createTempFile(name, "jpg.tmp");
+            SeekableStream s = new FileSeekableStream(tiffFile);
+            TIFFDecodeParam param = new TIFFDecodeParam();
+            ImageDecoder dec = ImageCodec.createImageDecoder("tiff", s, param);
+            RenderedImage ri = dec.decodeAsRenderedImage(0);
+            FileOutputStream fos = new FileOutputStream(tmpFile);
+            JPEGEncodeParam jParam = new JPEGEncodeParam();
+            jParam.setQuality(1.0f);
+            ImageEncoder imageEncoder = ImageCodec.createImageEncoder("JPEG", fos, jParam);
+            imageEncoder.encode(ri);
+            fos.flush();
+            fos.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error transforming tiff to jpeg", e);
+        }
+        return tmpFile;
+    }
+
+    /**
+     * Transform a tiff image into a jpeg image
+     * 
+     * @param tiffByteArray
+     * @return
+     */
+    public static byte[] tiff2Jpeg(byte[] tiffByteArray)
+    {
+        byte[] jb = new byte[1024];
+        File tmpFile = null;
+        try
+        {
+            // write tiff byte in a temp file
+            File tiffFile = File.createTempFile("upload", "tif.tmp");
+            FileOutputStream fos1 = new FileOutputStream(tiffFile);
+            fos1.write(tiffByteArray);
+            fos1.close();
+            // Transform tiff 2 jpeg
+            SeekableStream s = new FileSeekableStream(tiffFile);
+            TIFFDecodeParam param = new TIFFDecodeParam();
+            ImageDecoder dec = ImageCodec.createImageDecoder("tiff", s, param);
+            RenderedImage ri = dec.decodeAsRenderedImage(0);
+            tmpFile = File.createTempFile("upload", "jpg.tmp");
+            FileOutputStream fos = new FileOutputStream(tmpFile);
+            JPEGEncodeParam jParam = new JPEGEncodeParam();
+            jParam.setQuality(1.0f);
+            ImageEncoder imageEncoder = ImageCodec.createImageEncoder("JPEG", fos, jParam);
+            imageEncoder.encode(ri);
+            fos.flush();
+            fos.close();
+            // Read the jpeg file inot a byte array
+            FileInputStream fis = new FileInputStream(tmpFile);
+            fis.read(jb);
+            fis.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error transforming tiff to jpeg", e);
+        }
+        return jb;
     }
 
     // public static GifDecoder checkAnimation(byte[] image) throws Exception

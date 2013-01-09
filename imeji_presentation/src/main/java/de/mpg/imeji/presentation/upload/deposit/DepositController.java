@@ -14,6 +14,7 @@ import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.escidoc.EscidocHelper;
+import de.mpg.imeji.presentation.upload.UploadManager;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -37,10 +38,11 @@ public class DepositController
     {
         EscidocHelper escidocHelper = new EscidocHelper();
         Authentication auth = escidocHelper.login();
-        Item item = escidocHelper.initNewItem(PropertyReader.getProperty("escidoc.imeji.content-model.id"),
+        Item item = escidocHelper.itemFactory(PropertyReader.getProperty("escidoc.imeji.content-model.id"),
                 PropertyReader.getProperty("escidoc.imeji.context.id"));
-        item = escidocHelper.loadFiles(item, inputStream, title, mimetype, format, auth);
-        return escidocHelper.createItem(item, auth);
+        UploadManager uploadManager = new UploadManager();
+        item = uploadManager.uploadInEscidoc(item, inputStream, title, mimetype, format, auth);
+        return escidocHelper.createItemInEscidoc(item, auth);
     }
 
     /**

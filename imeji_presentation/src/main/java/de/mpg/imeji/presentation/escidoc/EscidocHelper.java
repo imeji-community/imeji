@@ -3,27 +3,20 @@
  */
 package de.mpg.imeji.presentation.escidoc;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import de.escidoc.core.client.Authentication;
 import de.escidoc.core.client.ItemHandlerClient;
-import de.escidoc.core.client.StagingHandlerClient;
 import de.escidoc.core.client.exceptions.EscidocException;
 import de.escidoc.core.client.exceptions.InternalClientException;
 import de.escidoc.core.client.exceptions.TransportException;
@@ -38,9 +31,7 @@ import de.escidoc.core.resources.om.item.component.Component;
 import de.escidoc.core.resources.om.item.component.ComponentContent;
 import de.escidoc.core.resources.om.item.component.ComponentProperties;
 import de.escidoc.core.resources.om.item.component.Components;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.upload.helper.ImageHelper;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -52,10 +43,8 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 public class EscidocHelper
 {
-    private static Logger logger = Logger.getLogger(EscidocHelper.class);
-
     /**
-     * Create an escidoc {@link Item} object, ready to be created in escidoc
+     * Factory an {@link Item} with imeji values
      * 
      * @param contentModel
      * @param context
@@ -83,7 +72,8 @@ public class EscidocHelper
     }
 
     /**
-     * Create an escidoc {@link Component} object ready to be created in escidoc
+     * Factory for a {@link Component} for imeji files
+     * 
      * @param contentCategory
      * @param filename
      * @param mimeType
@@ -107,7 +97,8 @@ public class EscidocHelper
     }
 
     /**
-     * Return the {@link Authentication} according to the credentials in the imeji.properties
+     * Login in eSciDoc
+     * 
      * @return
      * @throws AuthenticationException
      * @throws TransportException
@@ -123,7 +114,8 @@ public class EscidocHelper
     }
 
     /**
-     * Create an {@link Item} in escidoc
+     * Create an {@link Item} in eSciDoc
+     * 
      * @param item
      * @param auth
      * @return
@@ -131,176 +123,12 @@ public class EscidocHelper
      * @throws InternalClientException
      * @throws TransportException
      */
-    public Item createItem(Item item, Authentication auth) throws EscidocException, InternalClientException,
+    public Item createItemInEscidoc(Item item, Authentication auth) throws EscidocException, InternalClientException,
             TransportException
     {
         ItemHandlerClient handler = new ItemHandlerClient(auth.getServiceAddress());
         handler.setHandle(auth.getHandle());
         return handler.create(item);
-    }
-
-    /**
-     * Upload all files of an {@link Item} (thumbnail, web-resolution, and orginal resolution) in escidoc
-     * @param item
-     * @param inputStream
-     * @param fileName
-     * @param mimetype
-     * @param format
-     * @param auth
-     * @return
-     * @throws URISyntaxException
-     * @throws Exception
-     */
-    public Item uploadFiles(Item item, InputStream inputStream, String fileName, String mimetype, String format,
-            Authentication auth) throws URISyntaxException, Exception
-    {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        int b;
-        while ((b = inputStream.read()) != -1)
-        {
-            bos.write(b);
-        }
-        byte[] imageStream = bos.toByteArray();
-        bos.flush();
-        bos.close();
-        item = uploadFile(item, ImageHelper.getOrig(), imageStream, fileName, mimetype, format, auth);
-        item = uploadFile(item, ImageHelper.getWeb(), imageStream, fileName, mimetype, format, auth);
-        item = uploadFile(item, ImageHelper.getThumb(), imageStream, fileName, mimetype, format, auth);
-        return item;
-    }
-
-    /**
-     * Upload one File in escidoc for one {@link Item}
-     * @param item
-     * @param contentCategory
-     * @param imageStream
-     * @param fileName
-     * @param mimetype
-     * @param format
-     * @param auth
-     * @return
-     * @throws Exception
-     */
-    public Item uploadFile(Item item, String contentCategory, byte[] imageStream, String fileName, String mimetype,
-            String format, Authentication auth) throws Exception
-    {
-        URL url = null;
-        byte[] scaledImageStream = null;
-        if (contentCategory.equals(ImageHelper.getThumb()))
-        {
-            BufferedImage bufferedImage;
-            try
-            {
-                bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
-                if (bufferedImage.getWidth() > Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"))
-                        || bufferedImage.getHeight() > Integer.parseInt(PropertyReader
-                                .getProperty("xsd.resolution.thumbnail")))
-                {
-                    bufferedImage = ImageHelper.scaleImage(bufferedImage,
-                            Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail")), contentCategory);
-                }
-                ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-                // use imageIO.write to encode the image back into a byte[]
-                ImageIO.write(bufferedImage, format, byteOutput);
-                scaledImageStream = byteOutput.toByteArray();
-                url = uploadFileContent(scaledImageStream, mimetype, auth);
-            }
-            catch (Exception e)
-            {
-                logger.error("Error transforming image", e);
-                Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-                String test = navigation.getApplicationUrl() + "resources/icon/defaultThumb.gif";
-                URL noThumbUrl = new URL(test);
-                int contentLength = noThumbUrl.openConnection().getContentLength();
-                InputStream openStream = noThumbUrl.openStream();
-                byte[] data = new byte[contentLength];
-                openStream.read(data);
-                openStream.close();
-                url = uploadFileContent(data, mimetype, auth);
-            }
-        }
-        else if (contentCategory.equals(ImageHelper.getWeb()))
-        {
-            BufferedImage bufferedImage;
-            try
-            {
-                bufferedImage = ImageIO.read(new ByteArrayInputStream(imageStream));
-                if (bufferedImage.getWidth() < Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web"))
-                        && bufferedImage.getHeight() < Integer.parseInt(PropertyReader
-                                .getProperty("xsd.resolution.web")))
-                {
-                    scaledImageStream = imageStream;
-                }
-                else
-                {
-                    if (format.equalsIgnoreCase("gif"))
-                    {
-                        // TODO
-                        // GifDecoder gifDecoder = ImageHelper.checkAnimation(imageStream);
-                        // if(gifDecoder.getFrameCount()>1)
-                        // {
-                        // scaledImageStream = ImageHelper.scaleAnimation(imageStream, gifDecoder,
-                        // Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")));
-                        // }
-                        // else
-                        // {
-                        // bufferedImage = ImageHelper.scaleImage(bufferedImage,
-                        // Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")),contentCategory);
-                        // ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-                        // // use imageIO.write to encode the image back into a byte[]
-                        // ImageIO.write(bufferedImage, format, byteOutput);
-                        // scaledImageStream = byteOutput.toByteArray();
-                        // }
-                    }
-                    else
-                    {
-                        bufferedImage = ImageHelper.scaleImage(bufferedImage,
-                                Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web")), contentCategory);
-                        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-                        // use imageIO.write to encode the image back into a byte[]
-                        ImageIO.write(bufferedImage, format, byteOutput);
-                        scaledImageStream = byteOutput.toByteArray();
-                    }
-                }
-                if (scaledImageStream != null)
-                {
-                    url = uploadFileContent(scaledImageStream, mimetype, auth);
-                }
-            }
-            catch (Exception e)
-            {
-                url = uploadFileContent(imageStream, mimetype, auth);
-            }
-        }
-        else if (contentCategory.equals(ImageHelper.getOrig()))
-        {
-            url = uploadFileContent(imageStream, mimetype, auth);
-        }
-        if (item.getComponents() == null)
-        {
-            Components cs = new Components();
-            item.setComponents(cs);
-        }
-        if(url != null)
-        {
-            item.getComponents().add(componentFactory(contentCategory, fileName, mimetype, url.toExternalForm()));
-        }
-        return item;
-    }
-
-    /**
-     * Upload via statig are method a {@link Byte} file in escidoc
-     * @param image
-     * @param mimetype
-     * @param auth
-     * @return
-     * @throws Exception
-     */
-    public URL uploadFileContent(byte[] image, String mimetype, Authentication auth) throws Exception
-    {
-        StagingHandlerClient handler = new StagingHandlerClient(auth.getServiceAddress());
-        handler.setHandle(auth.getHandle());
-        return handler.upload(new ByteArrayInputStream(image));
     }
 
     public static String getThumbnailUrl(Item item) throws Exception
@@ -318,6 +146,14 @@ public class EscidocHelper
         return getContentUrl(item, ImageHelper.getOrig());
     }
 
+    /**
+     * Return the url of content of a {@link Component} of an {@link Item} according to its content-category
+     * 
+     * @param item
+     * @param contentCategory
+     * @return
+     * @throws Exception
+     */
     public static String getContentUrl(Item item, String contentCategory) throws Exception
     {
         for (Component c : item.getComponents())
@@ -329,5 +165,26 @@ public class EscidocHelper
             }
         }
         return null;
+    }
+
+    /**
+     * Add the image (defined by its url returned by the staging area) to the {@link Item} as a {@link Component}
+     * 
+     * @param item
+     * @param imageUrl
+     * @param contentCategory
+     * @param fileName
+     * @param mimetype
+     * @return
+     */
+    public Item addImageToEscidocItem(Item item, URL imageUrl, String contentCategory, String fileName, String mimetype)
+    {
+        if (item.getComponents() == null)
+        {
+            Components cs = new Components();
+            item.setComponents(cs);
+        }
+        item.getComponents().add(componentFactory(contentCategory, fileName, mimetype, imageUrl.toExternalForm()));
+        return item;
     }
 }

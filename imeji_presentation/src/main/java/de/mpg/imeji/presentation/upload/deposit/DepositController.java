@@ -14,6 +14,8 @@ import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.escidoc.EscidocHelper;
+import de.mpg.imeji.presentation.upload.UploadManager;
+import de.mpg.imeji.presentation.upload.uploader.EscidocUploader;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -27,20 +29,22 @@ public class DepositController
      * 
      * @param inputStream
      * @param title
-     * @param mimetype
+     * @param mimetype - the mime-type of the file
      * @param format
      * @return
      * @throws Exception
      */
-    public Item createEscidocItem(InputStream inputStream, String title, String mimetype, String format)
+    public Item createEscidocItem(InputStream inputStream, String title, String mimetype)
             throws Exception
     {
         EscidocHelper escidocHelper = new EscidocHelper();
         Authentication auth = escidocHelper.login();
         Item item = escidocHelper.itemFactory(PropertyReader.getProperty("escidoc.imeji.content-model.id"),
                 PropertyReader.getProperty("escidoc.imeji.context.id"));
-        item = escidocHelper.uploadFiles(item, inputStream, title, mimetype, format, auth);
-        return escidocHelper.createItem(item, auth);
+        UploadManager uploadManager = new UploadManager(new EscidocUploader(item, title, mimetype, auth));
+        uploadManager.uploadItemFiles(inputStream);
+        item = ((EscidocUploader)uploadManager.getUploader()).getItem();
+        return escidocHelper.createItemInEscidoc(item, auth);
     }
 
     /**

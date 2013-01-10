@@ -96,6 +96,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 
     /**
      * Init the page when it is called
+     * 
      * @return
      */
     public String getInitPage()
@@ -164,6 +165,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 
     /**
      * Initialize the {@link SortCriterion} according to the selected value in the sort menu.
+     * 
      * @return
      */
     public SortCriterion initSortCriterion()
@@ -196,6 +198,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 
     /**
      * Perform the {@link Search}
+     * 
      * @param searchQuery
      * @param sortCriterion
      * @return
@@ -208,6 +211,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
 
     /**
      * Laod all items (defined by their uri)
+     * 
      * @param uris
      * @return
      */
@@ -218,7 +222,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     }
 
     /**
-     * return the current  {@link SearchQuery} in a user friendly style.
+     * return the current {@link SearchQuery} in a user friendly style.
+     * 
      * @return
      */
     public String getSimpleQuery()
@@ -368,12 +373,13 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      * 
      * @param uris
      */
-    private void unselect(List<String> uris)
+    private void unselect(List<String> l)
     {
         SessionObjectsController soc = new SessionObjectsController();
-        for (int i = 0; i < uris.size() - 1; i++)
+        List<String> uris = new ArrayList<String>(l);
+        for (String uri : uris)
         {
-            soc.unselectItem(uris.get(i));
+            soc.unselectItem(uri);
         }
     }
 

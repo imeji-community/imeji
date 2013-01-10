@@ -7,14 +7,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import de.escidoc.core.client.Authentication;
-import de.escidoc.core.resources.om.item.Item;
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.escidoc.EscidocHelper;
 import de.mpg.imeji.presentation.upload.helper.ImageHelper;
+import de.mpg.imeji.presentation.upload.uploader.Uploader;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -27,28 +29,55 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 public class UploadManager
 {
+    private Uploader uploader;
+    private static Logger logger = Logger.getLogger(UploadManager.class);
+
     /**
-     * Upload all the files (for the 3 resolution) of an {@link Item}
+     * Construct a new {@link UploadManager} with an {@link Uploader} to upload files of an {@link Item}
      * 
-     * @param item
-     * @param inputStream the file
-     * @param fileName
-     * @param mimetype
-     * @param format
-     * @param auth
-     * @return
-     * @throws URISyntaxException
-     * @throws Exception
+     * @param uploader
      */
-    public Item uploadInEscidoc(Item item, InputStream inputStream, String fileName, String mimetype, String format,
-            Authentication auth) throws URISyntaxException, Exception
+    public UploadManager(Uploader uploader)
     {
-        byte[] imageStream = inputStreamToByteArray(inputStream);
-        EscidocHelper escidocHelper = new EscidocHelper();
-        item = escidocHelper.uploadFile(item, ImageHelper.getOrig(), imageStream, fileName, mimetype, format, auth);
-        item = escidocHelper.uploadFile(item, ImageHelper.getWeb(), imageStream, fileName, mimetype, format, auth);
-        item = escidocHelper.uploadFile(item, ImageHelper.getThumb(), imageStream, fileName, mimetype, format, auth);
-        return item;
+        this.uploader = uploader;
+    }
+
+    /**
+     * Upload a file for the 3 imeji resolution (original, web, thumbnail). Use the {@link Uploader} defined in the
+     * constructor. If some parameters needs to be give back, it should be done throught the {@link Uploader}
+     * 
+     * @param is - {@link InputStream} from the uploader compoment
+     * @param format - the image format (image/jpg, image/png, etc)
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    public void uploadItemFiles(InputStream is) throws IOException, URISyntaxException
+    {
+        byte[] stream = inputStreamToByteArray(is);
+        uploadFile(stream, ImageHelper.getOrig());
+        uploadFile(stream, ImageHelper.getWeb());
+        uploadFile(stream, ImageHelper.getThumb());
+    }
+
+    /**
+     * Upload one single File in the repository defined throught the {@link Uploader}.
+     * 
+     * @param stream
+     * @param contentCategory
+     * @param format
+     */
+    private void uploadFile(byte[] stream, String contentCategory)
+    {
+        try
+        {
+            stream = prepareImageForUpload(stream, contentCategory, uploader.getMimetype());
+            uploader.upload(stream, contentCategory);
+        }
+        catch (Exception e)
+        {
+            logger.error("Error transforming image", e);
+            uploader.upload(getDefaultThumbnailAsByteArray(), contentCategory);
+        }
     }
 
     /**
@@ -57,26 +86,54 @@ public class UploadManager
      * if it is another resolution, resize it <br/>
      * if it is a tiff to be resized, transformed it to jpeg and resize it
      * 
-     * @param imageStream
+     * @param stream
      * @param contentCategory
      * @param format
      * @return
      * @throws IOException
      * @throws Exception
      */
-    public byte[] prepareImageForUpload(byte[] imageStream, String contentCategory, String format) throws IOException,
+    public byte[] prepareImageForUpload(byte[] stream, String contentCategory, String mimeType) throws IOException,
             Exception
     {
         if (!contentCategory.equals(ImageHelper.getOrig()))
         {
-            if (format.equalsIgnoreCase("tif"))
+            byte[] compressed = compressImage(stream, mimeType);
+            if (!Arrays.equals(compressed, stream))
             {
-                // transform tiff image to a jpeg
-                imageStream = ImageHelper.tiff2Jpeg(imageStream);
+                mimeType = ImageHelper.getMimeType("jpg");
             }
-            imageStream = scaleImage(ImageIO.read(new ByteArrayInputStream(imageStream)), format, contentCategory);
+            stream = scaleImage(ImageIO.read(new ByteArrayInputStream(compressed)), mimeType, contentCategory);
         }
-        return imageStream;
+        return stream;
+    }
+
+    /**
+     * Compress an image in jpeg. Useful to reduce size of thumbnail and web resolution images
+     * 
+     * @param bytes
+     * @param mimeType
+     * @return
+     */
+    private byte[] compressImage(byte[] bytes, String mimeType)
+    {
+        if (mimeType.equals(ImageHelper.getMimeType("tif")))
+        {
+            bytes = ImageHelper.tiff2Jpeg(bytes);
+        }
+        else if (mimeType.equals(ImageHelper.getMimeType("png")))
+        {
+            bytes = ImageHelper.png2Jpeg(bytes);
+        }
+        else if (mimeType.equals(ImageHelper.getMimeType("bmp")))
+        {
+            bytes = ImageHelper.bmp2Jpeg(bytes);
+        }
+        else if (mimeType.equals(ImageHelper.getMimeType("gif")))
+        {
+            // bytes = ImageHelper.gif2Jpeg(bytes);
+        }
+        return bytes;
     }
 
     /**
@@ -110,12 +167,12 @@ public class UploadManager
      * @param image
      * @param size
      * @param resolution
-     * @param format
+     * @param mimeType
      * @param contentCategory
      * @return
      * @throws Exception
      */
-    private byte[] scaleImage(BufferedImage image, String format, String contentCategory) throws Exception
+    private byte[] scaleImage(BufferedImage image, String mimeType, String contentCategory) throws Exception
     {
         BufferedImage bufferedImage = null;
         int size = getResolution(contentCategory);
@@ -123,9 +180,13 @@ public class UploadManager
         {
             bufferedImage = ImageHelper.scaleImageFast(image, size, contentCategory);
         }
+        else
+        {
+            bufferedImage = image;
+        }
         ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
         // use imageIO.write to encode the image back into a byte[]
-        ImageIO.write(bufferedImage, format, byteOutput);
+        ImageIO.write(bufferedImage, ImageHelper.getImageFormat(mimeType), byteOutput);
         return byteOutput.toByteArray();
     }
 
@@ -156,7 +217,7 @@ public class UploadManager
      * @param inputStream
      * @return
      */
-    private static byte[] inputStreamToByteArray(InputStream inputStream)
+    public byte[] inputStreamToByteArray(InputStream inputStream)
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         int b;
@@ -175,5 +236,15 @@ public class UploadManager
         {
             throw new RuntimeException("Error transforming inputstream to bytearryoutputstream", e);
         }
+    }
+
+    /**
+     * The {@link Uploader} used by the {@link UploadManager} to upload the files
+     * 
+     * @return
+     */
+    public Uploader getUploader()
+    {
+        return uploader;
     }
 }

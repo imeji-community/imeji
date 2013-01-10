@@ -27,6 +27,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.escidoc.EscidocHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.upload.deposit.DepositController;
+import de.mpg.imeji.presentation.upload.helper.ImageHelper;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.LoginHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -145,7 +146,7 @@ public class UploadBean
                     {
                         format = st.nextToken();
                     }
-                    mimetype = "image/" + format;
+                    mimetype = ImageHelper.getMimeType(format);
                     // TODO remove static image description
                     description = "";
                     try
@@ -155,7 +156,7 @@ public class UploadBean
                         try
                         {
                             DepositController controller = new DepositController();
-                            Item escidocItem = controller.createEscidocItem(stream, title, mimetype, format);
+                            Item escidocItem = controller.createEscidocItem(stream, title, mimetype);
                             controller.createImejiImage(collection, user, escidocItem.getOriginObjid(), title,
                                     URI.create(EscidocHelper.getOriginalResolution(escidocItem)),
                                     URI.create(EscidocHelper.getThumbnailUrl(escidocItem)),
@@ -176,7 +177,6 @@ public class UploadBean
                     }
                 }
             }
-            logger.info("Upload finished");
         }
     }
 
@@ -187,7 +187,8 @@ public class UploadBean
     {
         if (id != null)
         {
-            collection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), sessionBean.getUser());
+            collection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id),
+                    sessionBean.getUser());
             if (collection != null && getCollection().getId() != null)
             {
                 ItemController ic = new ItemController(sessionBean.getUser());

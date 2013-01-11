@@ -15,7 +15,6 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
-import de.mpg.imeji.logic.search.util.SortHelper;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
@@ -31,6 +30,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.J2JHelper;
+import de.mpg.j2j.helper.SortHelper;
 /**
  * 
  * imeji Search, using sparql query

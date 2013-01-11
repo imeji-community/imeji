@@ -13,10 +13,17 @@ import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * {@link Metadata} for publication
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jDataType("http://imeji.org/terms/metadata#publication")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlType(name="publication")
+@XmlType(name = "publication")
 public class Publication extends Metadata
 {
     @j2jLiteral("http://imeji.org/terms/uri")

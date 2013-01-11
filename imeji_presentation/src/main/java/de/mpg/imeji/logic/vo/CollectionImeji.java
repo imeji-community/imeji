@@ -9,6 +9,13 @@ import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * imeji collection has one {@link MetadataProfile} and contains {@link Item}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/collection")
 @j2jModel("collection")
 @j2jId(getMethod = "getId", setMethod = "setId")

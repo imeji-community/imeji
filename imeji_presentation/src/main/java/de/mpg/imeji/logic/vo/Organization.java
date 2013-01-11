@@ -12,10 +12,17 @@ import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * An organization
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name="organization")
-@XmlType(name="organization")
+@XmlRootElement(name = "organization")
+@XmlType(name = "organization")
 public class Organization
 {
     private URI id;
@@ -30,7 +37,7 @@ public class Organization
     @j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/country")
     private String country;
     private int pos = 0;
-    
+
     public Organization()
     {
         // TODO Auto-generated constructor stub

@@ -1,42 +1,73 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.logic.security.operations;
 
 import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Operations;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 
+/**
+ * {@link Operations} for {@link MetadataProfile}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class OperationsProfile implements Operations
 {
-	private Authorization auth = new Authorization();
-	
-	public boolean create(User user, Object object) 
-	{
-		return true;
-	}
+    private Authorization auth = new Authorization();
 
-	public boolean read(User user, Object object) {
-		return ( Status.RELEASED.equals(((MetadataProfile) object).getStatus())
-				|| Status.WITHDRAWN.equals(((MetadataProfile) object).getStatus())
-				||auth.is(GrantType.PROFILE_VIEWER, user, ((MetadataProfile) object).getId())
-				||auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile) object).getId())
-				|| auth.is(GrantType.PROFILE_EDITOR, user, ((MetadataProfile) object).getId()));
-	}
+    /**
+     * Create {@link MetadataProfile}<br/>
+     * Allowed for:<br/>
+     * - all
+     */
+    public boolean create(User user, Object object)
+    {
+        return true;
+    }
 
-	public boolean update(User user, Object object) {
-		return (user != null
-				&& 	(	auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile) object).getId())
-						|| auth.is(GrantType.PROFILE_EDITOR, user, ((MetadataProfile) object).getId()))
-					);
-	}
+    /**
+     * Read {@link MetadataProfile}<br/>
+     * Allowed for:<br/>
+     * - Profile is Released<br/>
+     * - Profile is withdrawn<br/>
+     * - Profile Admin<br/>
+     * - Profile Editor<br/>
+     * - Profile Viewer
+     */
+    public boolean read(User user, Object object)
+    {
+        return (Status.RELEASED.equals(((MetadataProfile)object).getStatus())
+                || Status.WITHDRAWN.equals(((MetadataProfile)object).getStatus())
+                || auth.is(GrantType.PROFILE_VIEWER, user, ((MetadataProfile)object).getId())
+                || auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile)object).getId()) || auth.is(
+                GrantType.PROFILE_EDITOR, user, ((MetadataProfile)object).getId()));
+    }
 
-	public boolean delete(User user, Object object) {
-		return (auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile) object).getId()));
-	}
+    /**
+     * Update {@link MetadataProfile}<br/>
+     * Allowed for:<br/>
+     * - Profile Admin<br/>
+     * - Profile Editor
+     */
+    public boolean update(User user, Object object)
+    {
+        return (user != null && (auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile)object).getId()) || auth.is(
+                GrantType.PROFILE_EDITOR, user, ((MetadataProfile)object).getId())));
+    }
+
+    /**
+     * Delete {@link MetadataProfile}<br/>
+     * Allowed for:<br/>
+     * - Profile Admin
+     */
+    public boolean delete(User user, Object object)
+    {
+        return (auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile)object).getId()));
+    }
 }

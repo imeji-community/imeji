@@ -92,7 +92,7 @@
 	
 	
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="free_area0 sub action">
+		<h:panelGroup layout="block" styleClass="half_area0 sub action">
 			<h:panelGroup>
 				<h:outputLink styleClass="free_area0" value="#{Navigation.shareUrl}?uri=#{AlbumBean.album.id}"  rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}">
 					<h:outputText value="#{lbl.album_share}"/>

@@ -18,6 +18,15 @@ import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * 
+ * Profile where {@link Item} {@link Metadata} are defined 
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 @j2jResource("http://imeji.org/terms/mdprofile")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @j2jModel("metadataProfile")

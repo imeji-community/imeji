@@ -1,7 +1,7 @@
 package de.mpg.imeji.logic.search.vo;
 
-import de.mpg.imeji.logic.search.util.SortHelper;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.j2j.helper.SortHelper;
 
 public class ComparableSearchResult implements Comparable<ComparableSearchResult>
 {

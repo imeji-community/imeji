@@ -11,7 +11,7 @@
 	</ui:define>
 	
 	<ui:define name="contentMenu">
-		<h:panelGroup rendered="#{ViewCollectionBean.visible}">
+		<h:panelGroup rendered="#{ViewCollectionBean.visible}" styleClass="half_area0">
 			
 			<h:outputText styleClass="free_area0" value="#{lbl.collection_home}"/>
 			
@@ -36,7 +36,7 @@
 	</ui:define>
 	
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="free_area0 sub action" rendered="#{ViewCollectionBean.visible}">
+		<h:panelGroup layout="block" styleClass="half_area0 sub action" rendered="#{ViewCollectionBean.visible}">
       		<h:outputLink styleClass="free_area0" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" >
 				<h:outputText value="#{lbl.collection_share}"/>		
 			</h:outputLink>

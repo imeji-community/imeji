@@ -10,59 +10,52 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.joda.time.chrono.AssembledChronology.Fields;
+
 import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
+
 /**
- * 
  * imeji item. Can be an image, a video, a sound, etc.
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 @j2jResource("http://imeji.org/terms/item")
 @j2jModel("item")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name="item")
+@XmlRootElement(name = "item")
 public class Item extends Properties implements FulltextIndex
 {
     public enum Visibility
     {
         PUBLIC, PRIVATE;
     }
-    
+
     private URI id;
     // @j2jResource("http://imeji.org/terms/properties")
     // private Properties properties = new Properties();
-    @j2jResource("http://imeji.org/terms/collection")    
+    @j2jResource("http://imeji.org/terms/collection")
     private URI collection;
-    
-    @j2jList("http://imeji.org/terms/metadataSet")    
+    @j2jList("http://imeji.org/terms/metadataSet")
     private List<MetadataSet> metadataSets = new ArrayList<MetadataSet>();
-    
     @j2jResource("http://imeji.org/terms/webImageUrl")
     private URI webImageUrl;
-    
     @j2jResource("http://imeji.org/terms/thumbnailImageUrl")
     private URI thumbnailImageUrl;
-    
     @j2jResource("http://imeji.org/terms/fullImageUrl")
     private URI fullImageUrl;
-    
     @j2jResource("http://imeji.org/terms/visibility")
     private URI visibility = URI.create("http://imeji.org/terms/visibility#" + Visibility.PRIVATE.name());
-    
     @j2jLiteral("http://imeji.org/terms/filename")
     private String filename;
-    
     @j2jLiteral("http://imeji.org/terms/escidocId")
     private String escidocId;
-    
     @j2jLiteral("http://imeji.org/terms/fulltext")
     private String fulltext;
 
@@ -155,7 +148,7 @@ public class Item extends Properties implements FulltextIndex
     {
         this.collection = collection;
     }
-  
+
     public URI getCollection()
     {
         return collection;
@@ -171,6 +164,11 @@ public class Item extends Properties implements FulltextIndex
         return filename;
     }
 
+    /**
+     * Copy all {@link Fields} of an {@link Item} (including {@link Metadata}) to the current {@link Item}
+     * 
+     * @param copyFrom
+     */
     protected void copyInFields(Item copyFrom)
     {
         Class copyFromClass = copyFrom.getClass();
@@ -228,6 +226,9 @@ public class Item extends Properties implements FulltextIndex
         return fulltext;
     }
 
+    /**
+     * Set the value for the fulltext search (according to all {@link Metadata} values)
+     */
     public void indexFulltext()
     {
         fulltext = filename;

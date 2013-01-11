@@ -6,8 +6,8 @@ package de.mpg.imeji.logic.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.search.util.SortHelper;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.j2j.helper.SortHelper;
 
 public class SearchResult
 {

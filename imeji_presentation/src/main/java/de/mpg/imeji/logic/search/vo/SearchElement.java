@@ -4,6 +4,13 @@ import java.util.List;
 
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 
+/**
+ * Element of a {@link SearchQuery}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public abstract class SearchElement
 {
     public enum SEARCH_ELEMENTS

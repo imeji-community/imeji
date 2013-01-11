@@ -14,6 +14,13 @@ import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.search.SearchResult;
 
+/**
+ * {@link Export} in rdf
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public abstract class RDFExport extends Export
 {
     protected String[] filteredTriples = {};

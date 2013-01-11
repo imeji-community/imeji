@@ -82,6 +82,12 @@ public abstract class RDFExport extends Export
         }
     }
 
+    /**
+     * Write a {@link Resource} in rdf
+     * 
+     * @param r
+     * @return
+     */
     private StringWriter exportResource(Resource r)
     {
         StringWriter writer = new StringWriter();
@@ -137,20 +143,6 @@ public abstract class RDFExport extends Export
     private String closeTag(Statement st)
     {
         return "</" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName() + ">";
-    }
-
-    private String tagValue(Statement st)
-    {
-        String s = "";
-        try
-        {
-            s = st.getResource().toString();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return s;
     }
 
     private String getNamespace(String ns)

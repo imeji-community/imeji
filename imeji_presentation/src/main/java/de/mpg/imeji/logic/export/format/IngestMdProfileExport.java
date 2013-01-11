@@ -5,18 +5,11 @@ package de.mpg.imeji.logic.export.format;
 
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.Collection;
 
-import javax.xml.bind.JAXBException;
-
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.collection.ViewCollectionBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 

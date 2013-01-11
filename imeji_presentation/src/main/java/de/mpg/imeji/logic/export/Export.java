@@ -27,10 +27,24 @@ public abstract class Export
 {
     private Map<String, String[]> params;
 
+    /**
+     * Export a {@link SearchResult} in an {@link OutputStream}
+     * 
+     * @param out
+     * @param sr
+     */
     public abstract void export(OutputStream out, SearchResult sr);
 
+    /**
+     * Return the Mime-type of the http response
+     * 
+     * @return
+     */
     public abstract String getContentType();
 
+    /**
+     * Initialize the {@link Export}
+     */
     public abstract void init();
 
     /**

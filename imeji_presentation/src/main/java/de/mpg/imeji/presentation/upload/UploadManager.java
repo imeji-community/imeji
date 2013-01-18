@@ -131,7 +131,7 @@ public class UploadManager
         }
         else if (mimeType.equals(ImageHelper.getMimeType("gif")))
         {
-            // bytes = ImageHelper.gif2Jpeg(bytes);
+             bytes = ImageHelper.gif2Jpeg(bytes);
         }
         return bytes;
     }

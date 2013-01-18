@@ -123,8 +123,8 @@ public class CollectionController extends ImejiController
             List<Item> items = (List<Item>)itemController.loadItems(itemUris, -1, 0);
             itemController.delete(items, user);
             // Delete profile
-            ProfileController pc = new ProfileController(user);
-            pc.delete(pc.retrieve(collection.getProfile()), user);
+            ProfileController pc = new ProfileController();
+            pc.delete(pc.retrieve(collection.getProfile(), user), user);
             imejiBean2RDF.delete(imejiBean2RDF.toList(collection), user);
             GrantController gc = new GrantController(user);
             gc.removeAllGrantsFor(user, collection.getId());
@@ -157,9 +157,8 @@ public class CollectionController extends ImejiController
             List<Item> items = (List<Item>)itemController.loadItems(itemUris, -1, 0);
             itemController.release(items, user);
             update(collection);
-            ProfileController pc = new ProfileController(user);
-            pc.retrieve(collection.getProfile());
-            pc.release(pc.retrieve(collection.getProfile()));
+            ProfileController pc = new ProfileController();
+            pc.release(pc.retrieve(collection.getProfile(), user), user);
         }
     }
 
@@ -189,9 +188,8 @@ public class CollectionController extends ImejiController
             writeWithdrawProperties(collection, null);
             update(collection);
             // Withdraw profile
-            ProfileController pc = new ProfileController(user);
-            pc.retrieve(collection.getProfile());
-            pc.withdraw(pc.retrieve(collection.getProfile()), user);
+            ProfileController pc = new ProfileController();
+            pc.withdraw(pc.retrieve(collection.getProfile(), user), user);
         }
     }
 

@@ -19,7 +19,6 @@ import de.mpg.imeji.presentation.util.UrlHelper;
 public class EditMdProfileBean extends MdProfileBean
 {
     private SessionBean session;
-    private ProfileController profileController;
     private boolean init = false;
     private String colId = null;
     private static Logger logger = Logger.getLogger(EditMdProfileBean.class);
@@ -34,7 +33,6 @@ public class EditMdProfileBean extends MdProfileBean
     @Override
     public String getInit()
     {
-        profileController = new ProfileController(session.getUser());
         try
         {
             readUrl();
@@ -97,7 +95,8 @@ public class EditMdProfileBean extends MdProfileBean
         {
             try
             {
-                profileController.update(getProfile());
+                ProfileController profileController = new ProfileController();
+                profileController.update(getProfile(), session.getUser());
                 session.getProfileCached().clear();
                 BeanHelper.info(session.getMessage("success_profile_save"));
             }

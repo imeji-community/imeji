@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.net.URI;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +11,6 @@ import java.util.List;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -20,35 +18,80 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.exceptions.NotFoundException;
 
+/**
+ * Controller for {@link User}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class UserController extends ImejiController
 {
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
 
+    /**
+     * Default constructor
+     */
+    public UserController()
+    {
+        super();
+    }
+
+    /**
+     * TODO remove this constructor and add to all methods of controller the user as parameter
+     * 
+     * @deprecated
+     * @param user
+     */
     public UserController(User user)
     {
         super(user);
     }
 
+    /**
+     * Create a new {@link User}
+     * 
+     * @param newUser
+     * @throws Exception
+     */
     public void create(User newUser) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
         imejiBean2RDF.create(imejiBean2RDF.toList(newUser), user);
     }
 
+    /**
+     * Delete a {@link User}
+     * 
+     * @param user
+     * @throws Exception
+     */
     public void delete(User user) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
         imejiBean2RDF.delete(imejiBean2RDF.toList(user), this.user);
     }
 
+    /**
+     * Retrieve a {@link User} according to its email
+     * 
+     * @param email
+     * @return
+     * @throws Exception
+     */
     public User retrieve(String email) throws Exception
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
         return (User)imejiRDF2Bean.load(ObjectHelper.getURI(User.class, email).toString(), user, new User());
-
     }
 
+    /**
+     * Update a {@link User}
+     * 
+     * @param user
+     * @throws Exception
+     */
     public void update(User user) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
@@ -56,6 +99,9 @@ public class UserController extends ImejiController
     }
 
     /**
+     * Retrieve all {@link User} in imeji<br/>
+     * Only allowed for System administrator
+     * 
      * @return
      */
     public Collection<User> retrieveAll()
@@ -83,18 +129,5 @@ public class UserController extends ImejiController
             }
         }
         return users;
-    }
-
-    public static String convertToMD5(String pass) throws Exception
-    {
-        MessageDigest dig = MessageDigest.getInstance("MD5");
-        dig.update(pass.getBytes("UTF-8"));
-        byte messageDigest[] = dig.digest();
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < messageDigest.length; i++)
-        {
-            hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-        }
-        return hexString.toString();
     }
 }

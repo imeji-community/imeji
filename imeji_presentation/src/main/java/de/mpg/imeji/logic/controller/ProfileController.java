@@ -24,14 +24,24 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.DateHelper;
 
+/**
+ * Controller for {@link MetadataProfile}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class ProfileController extends ImejiController
 {
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
 
-    public ProfileController(User user)
+    /**
+     * Default Constructor
+     */
+    public ProfileController()
     {
-        super(user);
+        super();
     }
 
     /**
@@ -40,7 +50,7 @@ public class ProfileController extends ImejiController
      * @param ic
      * @param user
      */
-    public URI create(MetadataProfile mdp) throws Exception
+    public URI create(MetadataProfile mdp, User user) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
         writeCreateProperties(mdp, user);
@@ -50,13 +60,34 @@ public class ProfileController extends ImejiController
         return mdp.getId();
     }
 
-    private User addCreatorGrant(MetadataProfile p, User user) throws Exception
+    /**
+     * Retrieve a {@link User} by its id
+     * 
+     * @param id
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    public MetadataProfile retrieve(String id, User user) throws Exception
     {
-        GrantController gc = new GrantController(user);
-        Grant grant = new Grant(GrantType.PROFILE_ADMIN, p.getId());
-        gc.addGrant(user, grant);
-        UserController uc = new UserController(user);
-        return uc.retrieve(user.getEmail());
+        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
+        return retrieve(ObjectHelper.getURI(MetadataProfile.class, id), user);
+    }
+
+    /**
+     * Retrieve a {@link User} by its {@link URI}
+     * 
+     * @param uri
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    public MetadataProfile retrieve(URI uri, User user) throws Exception
+    {
+        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
+        MetadataProfile p = ((MetadataProfile)imejiRDF2Bean.load(uri.toString(), user, new MetadataProfile()));
+        Collections.sort((List<Statement>)p.getStatements());
+        return p;
     }
 
     /**
@@ -66,20 +97,34 @@ public class ProfileController extends ImejiController
      * @param user
      * @throws Exception
      */
-    public void update(MetadataProfile mdp) throws Exception
+    public void update(MetadataProfile mdp, User user) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
         writeUpdateProperties(mdp, user);
         imejiBean2RDF.update(imejiBean2RDF.toList(mdp), user);
     }
 
-    public void release(MetadataProfile mdp) throws Exception
+    /**
+     * Release a {@link MetadataProfile}
+     * 
+     * @param mdp
+     * @param user
+     * @throws Exception
+     */
+    public void release(MetadataProfile mdp, User user) throws Exception
     {
         mdp.setStatus(Status.RELEASED);
         mdp.setVersionDate(DateHelper.getCurrentDate());
-        update(mdp);
+        update(mdp, user);
     }
 
+    /**
+     * Delete a {@link MetadataProfile}
+     * 
+     * @param mdp
+     * @param user
+     * @throws Exception
+     */
     public void delete(MetadataProfile mdp, User user) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
@@ -92,7 +137,24 @@ public class ProfileController extends ImejiController
     {
         mdp.setStatus(Status.WITHDRAWN);
         mdp.setVersionDate(DateHelper.getCurrentDate());
-        update(mdp);
+        update(mdp, user);
+    }
+
+    /**
+     * Add Creator {@link Grant} to a {@link User}
+     * 
+     * @param p
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    private User addCreatorGrant(MetadataProfile p, User user) throws Exception
+    {
+        GrantController gc = new GrantController(user);
+        Grant grant = new Grant(GrantType.PROFILE_ADMIN, p.getId());
+        gc.addGrant(user, grant);
+        UserController uc = new UserController(user);
+        return uc.retrieve(user.getEmail());
     }
 
     /**
@@ -108,22 +170,8 @@ public class ProfileController extends ImejiController
         List<MetadataProfile> l = new ArrayList<MetadataProfile>();
         for (String uri : result.getResults())
         {
-            l.add(retrieve(URI.create(uri)));
+            l.add(retrieve(URI.create(uri), user));
         }
         return l;
-    }
-
-    public MetadataProfile retrieve(String id) throws Exception
-    {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
-        return retrieve(ObjectHelper.getURI(MetadataProfile.class, id));
-    }
-
-    public MetadataProfile retrieve(URI uri) throws Exception
-    {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
-        MetadataProfile p = ((MetadataProfile)imejiRDF2Bean.load(uri.toString(), user, new MetadataProfile()));
-        Collections.sort((List<Statement>)p.getStatements());
-        return p;
     }
 }

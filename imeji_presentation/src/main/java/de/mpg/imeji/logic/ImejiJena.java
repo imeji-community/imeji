@@ -16,6 +16,7 @@ import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.Counter;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
@@ -139,7 +140,7 @@ public class ImejiJena
                 adminUser.setEmail(PropertyReader.getProperty("imeji.sysadmin.email"));
                 adminUser.setName("imeji Sysadmin");
                 adminUser.setNick("sysadmin");
-                adminUser.setEncryptedPassword(UserController.convertToMD5(PropertyReader
+                adminUser.setEncryptedPassword(StringHelper.convertToMD5(PropertyReader
                         .getProperty("imeji.sysadmin.password")));
                 adminUser.getGrants().add(new Grant(GrantType.SYSADMIN, URI.create("http://imeji.org/")));
             }
@@ -152,7 +153,7 @@ public class ImejiJena
             adminUser.setNick("sysadmin");
             try
             {
-                adminUser.setEncryptedPassword(UserController.convertToMD5("password"));
+                adminUser.setEncryptedPassword(StringHelper.convertToMD5("password"));
             }
             catch (Exception e1)
             {

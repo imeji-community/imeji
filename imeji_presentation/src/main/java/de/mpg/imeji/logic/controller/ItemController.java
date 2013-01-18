@@ -35,14 +35,13 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.helper.J2JHelper;
+
 /**
- * 
  * Implements CRUD and Search methods for {@link Item}
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class ItemController extends ImejiController
 {
@@ -62,32 +61,22 @@ public class ItemController extends ImejiController
 
     /**
      * Create an {@link Item} in a {@link CollectionImeji}
+     * 
      * @param img
      * @param coll
      * @throws Exception
      */
     public void create(Item item, URI coll) throws Exception
     {
-//        CollectionController cc = new CollectionController(user);
-//        CollectionImeji ic = cc.retrieve(coll);
-//        writeCreateProperties(img, user);
-//        if (Status.PENDING.equals(ic.getStatus()))
-//            img.setVisibility(Visibility.PRIVATE);
-//        else
-//            img.setVisibility(Visibility.PUBLIC);
-//        img.setCollection(coll);
-//        img.getMetadataSet().setProfile(ic.getProfile());
-//        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-//        imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
-//        ic.getImages().add(img.getId());
-//        cc.update(ic);
         Collection<Item> l = new ArrayList<Item>();
         l.add(item);
         create(l, coll);
     }
 
     /**
-     * Create a {@link List} of {@link Item} in a {@link CollectionImeji}. This method is faster than using create(Item item, URI coll) when creating many items
+     * Create a {@link List} of {@link Item} in a {@link CollectionImeji}. This method is faster than using create(Item
+     * item, URI coll) when creating many items
+     * 
      * @param items
      * @param coll
      * @throws Exception
@@ -118,6 +107,7 @@ public class ItemController extends ImejiController
 
     /**
      * Update an {@link Item} in the database
+     * 
      * @param item
      * @throws Exception
      */
@@ -130,6 +120,7 @@ public class ItemController extends ImejiController
 
     /**
      * Update a {@link Collection} of {@link Item}
+     * 
      * @param items
      * @throws Exception
      */
@@ -147,6 +138,7 @@ public class ItemController extends ImejiController
 
     /**
      * Initialize the fulltext search value for all {@link Metadata} of an {@link Item}
+     * 
      * @param item
      * @return
      */

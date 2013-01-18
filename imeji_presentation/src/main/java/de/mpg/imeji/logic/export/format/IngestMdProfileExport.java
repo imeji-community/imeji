@@ -29,23 +29,25 @@ public class IngestMdProfileExport extends Export
     @Override
     public void export(OutputStream out, SearchResult sr)
     {
-    	SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);        
-    	ProfileController pc = new ProfileController(session.getUser());
-    	if (sr.getNumberOfRecords() == 1)
-    	{
-    		try {
-				JaxbIngestProfile.writeToOutputStream(pc.retrieve(URI.create(sr.getResults().get(0))),out);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		 
-    	}
-    	else
-    	{
-    		throw new RuntimeException(sr.getNumberOfRecords() + " profile(s) found. Only 1 profile sould be found");
-    	}
-    }       
+        SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        ProfileController pc = new ProfileController();
+        if (sr.getNumberOfRecords() == 1)
+        {
+            try
+            {
+                JaxbIngestProfile.writeToOutputStream(
+                        pc.retrieve(URI.create(sr.getResults().get(0)), session.getUser()), out);
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        else
+        {
+            throw new RuntimeException(sr.getNumberOfRecords() + " profile(s) found. Only 1 profile sould be found");
+        }
+    }
 
     @Override
     public String getContentType()

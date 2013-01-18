@@ -7,6 +7,13 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 
+/**
+ * Controller for ingest
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class IngestController
 {
     /**
@@ -40,10 +47,10 @@ public class IngestController
         }
         if (itemListXmlFile != null)
         {
-	        ProfileController pc = new ProfileController(user);
-	        MetadataProfile mdp = pc.retrieve(collection.getProfile());
-	        IngestItemController iic = new IngestItemController(user, mdp);
-	        iic.ingest(itemListXmlFile);
+            ProfileController pc = new ProfileController();
+            MetadataProfile mdp = pc.retrieve(collection.getProfile(), user);
+            IngestItemController iic = new IngestItemController(user, mdp);
+            iic.ingest(itemListXmlFile);
         }
     }
 }

@@ -51,7 +51,6 @@ public class MdProfileBean
     private List<SelectItem> profilesMenu = null;
     private SessionBean sessionBean;
     private String template;
-    private ProfileController pc;
     private int statementPosition = 0;
     private int constraintPosition = 0;
     private int labelPosition = 0;
@@ -69,7 +68,6 @@ public class MdProfileBean
         }
         profile = collectionSession.getProfile();
         statements = new ArrayList<StatementWrapper>();
-        pc = new ProfileController(sessionBean.getUser());
         initMenus();
     }
 
@@ -173,6 +171,7 @@ public class MdProfileBean
         profilesMenu = new ArrayList<SelectItem>();
         try
         {
+            ProfileController pc = new ProfileController();
             for (MetadataProfile mdp : pc.search(sessionBean.getUser()))
             {
                 if (mdp.getId().toString().equals(profile.getId().toString()))
@@ -193,6 +192,7 @@ public class MdProfileBean
 
     /**
      * Change the template, when the user select one
+     * 
      * @return
      * @throws Exception
      */
@@ -219,6 +219,7 @@ public class MdProfileBean
 
     /**
      * Listener for the template value
+     * 
      * @param event
      * @throws Exception
      */
@@ -248,6 +249,7 @@ public class MdProfileBean
 
     /**
      * Return the id of the profile encoded in utf-8
+     * 
      * @return
      * @throws UnsupportedEncodingException
      */

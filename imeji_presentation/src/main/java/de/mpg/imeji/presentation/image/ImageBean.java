@@ -186,7 +186,7 @@ public class ImageBean
      */
     public void loadImage()
     {
-        item = ObjectLoader.loadImage(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
+        item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
     }
 
     /**

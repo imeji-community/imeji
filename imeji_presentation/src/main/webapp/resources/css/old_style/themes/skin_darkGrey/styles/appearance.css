@@ -1,0 +1,813 @@
+@charset "UTF-8";
+
+/*
+*
+* CDDL HEADER START
+*
+* The contents of this file are subject to the terms of the
+* Common Development and Distribution License, Version 1.0 only
+* (the "License"). You may not use this file except in compliance
+* with the License.
+*
+* You can obtain a copy of the license at license/ESCIDOC.LICENSE
+* or http://www.escidoc.de/license.
+* See the License for the specific language governing permissions
+* and limitations under the License.
+*
+* When distributing Covered Code, include this CDDL HEADER in each
+* file and include the License file at license/ESCIDOC.LICENSE.
+* If applicable, add the following below this CDDL HEADER, with the
+* fields enclosed by brackets "[]" replaced with your own identifying
+* information: Portions Copyright [yyyy] [name of copyright owner]
+*
+* CDDL HEADER END
+*/
+
+/*
+* Copyright 2006-2012 Fachinformationszentrum Karlsruhe Gesellschaft
+* fÃ¼r wissenschaftlich-technische Information mbH and Max-Planck-
+* Gesellschaft zur FÃ¶rderung der Wissenschaft e.V.
+* All rights reserved. Use is subject to license terms.
+*/
+
+/*
+ALL COLORS USED
+
+LINK COLOR		#147DA2 Replaced with: #6CAD2F 
+AUTHOR/ORG BG	        #4397B4
+LIGHT LINES		#A1CBDA
+DROPDOWN/BG		#DCECF1
+INPUT BG		#F3F8FA
+PAGE TITLE		#0F313E
+ERROR MSG		#D80000
+SUCCESS MSG		#00712B
+DEACTIVATED		#827775
+DEA LIGHT		#CDC9C8
+TEXT LIGHT		#BAB4B3
+MOUSEOVER		#382926
+INPUT TEXT		#000000
+FORM BG			#f0f0f0
+
+
+BODY-Background								#434343
+WRAPPER-Background 							#292929
+CONTENT-Background							#313131
+OVERLAY-Background (e.g. Dialog, Tooltip)	#3C3C3C
+TEXT										#f0f0f0
+
+
+COLOR EEEEEE was changed to EEEEEE; - 2011-03-28
+COLOR 303030 was changed to 292929; - 2011-03-28
+COLOR 4C4C4C was changed to 3C3C3C; - 2011-03-28
+*/
+
+/*FONT DEFINITION*/
+	/*HEADER*/
+		/*H1*/
+		h1 {
+				color: #FF7F00;
+				font-weight: normal;
+			}
+		/*H2*/
+		h2 {
+				font-weight: normal;
+			}
+		/*H3*/
+		h3 {
+
+			}
+		/*H4*/
+			h4 {
+				
+			}
+		/*H5*/
+		h5 {
+					
+			}
+		/*H6*/
+		h6 {
+				font-weight: bold;
+				color: #EEEEEE;
+				margin: 0px;
+			}
+	/*GENERAL*/
+		/*FONT RELATED*/
+		body, label, input, textarea, select, button, input.numberLabel, h2, h3, h6, a {
+			font-family: Trebuchet, "Trebuchet MS", sans-serif;
+		}
+		input[type=text], textarea {
+			font-family : Courier, "Courier New", serif;
+		}
+		h1, h4, h5 {
+			font-family: "Myriad Pro Condensed", "Arial Narrow", sans-serif;
+		}
+/*
+*
+*  COMPONENT RELATED COLORING
+*
+*/
+/*GENERAL*/
+	body {
+		background-color: #292929;
+		color: #EEEEEE;
+		line-height: 145%;
+	}
+	
+	body .wrapper, body .footer {
+		background-color: #292929;
+		border-right: 1px dotted #6CAD2F;
+		border-left: 1px dotted #6CAD2F;
+	}
+	
+	input, button, textarea, select {
+		color: #000000;
+	}
+	
+	a, a:visited {
+		color: #6CAD2F;
+		text-decoration: none;
+	}
+	
+	a.OraLinkDisabled {
+		color: #EEEEEE;
+		cursor: default;
+	}
+	
+	a:hover, a:focus, button:hover, button:focus {
+		color: #EEEEEE;
+		text-decoration: none;
+	}
+
+	input:hover, input:focus {
+		color: #000000;
+		text-decoration: none;
+	}
+	
+	input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:hover {
+		cursor: pointer;
+	}
+
+	input, textarea, select {
+		border-style: solid;
+		border-color: #6CAD2F;
+	}
+	
+	input[type="text"], textarea, select {
+		background-color: #F3F8FA;
+	}
+	
+	a:hover, a:focus {
+	/*	text-decoration: underline; */
+		cursor: pointer;
+	}
+	
+	a:disabled, a.disabled, input:disabled, input.disabled, button:disabled, button.disabled {
+		cursor: default;
+		color: #486131;
+	}
+	/*SEPERATORS*/
+	.metaMenu .seperator {
+		background-color: #486131;
+		border-width:0;
+		/*border-color: #393939;*/
+		border-color:#292929;  /* erweitert 2011-03-30 - Marco */
+	}
+	
+	.contentMenu .seperator, .pageBrowser .seperator {
+		background-color: #486131;
+		/*border-color: #393939;*/
+		border-color:#292929;  /* erweitert 2011-03-30 - Marco */
+	}
+	
+	.itemList .seperator {
+		/*background-color: #393939; */
+		background-color:#292929;  /* erweitert 2011-03-30 - Marco */
+	}
+	
+	.fullItem .seperator, .tiledList .seperator {
+		background-color: #f0f0f0;
+	}
+	
+	.fullItem .fullItemControls .seperator {
+		background-color: #f0f0f0;
+		border-color: #6CAD2F;
+	}
+	
+	.fullItem .easySubmissionHeader .seperator {
+		background-color: #f0f0f0;
+		border-color: #486131;
+	}
+	
+	.itemList .seperator, .fullItem .seperator {
+		border-color: #BAB4B3;
+	}
+	
+	.contentMenu .void {
+		/*border-color: #393939;
+		background-color: #393939;*/
+		border-color:#292929;		/* erweitert 2011-03-30 - Marco */
+		background-color:#292929;	/* erweitert 2011-03-30 - Marco */
+	}
+
+/*HEADER
+
+-----------------------------------------------
+
+|[ Logo ]                 [      Meta Menu   ]|
+
+|                           [   Breadcrumb   ]|
+
+|[ Main Menu ]                   [   Title   ]|
+
+|[ Options ]                        	      |
+
+|[ Actions ]                         	      |
+
+|[ Message ]                        	      |
+
+-----------------------------------------------
+
+*/
+
+/* META MENU */
+.metaMenu {
+	height:auto;
+}
+
+	/*COLORING FOR ALL MENU INPUTS AND LABELS*/
+	.metaMenu input, .metaMenu button, .metaMenu a, .quickSearchMenu a, .advancedSearchMenu input, .advancedSearchMenu a, .organisationSearchMenu input, .organisationSearchMenu a, .mainMenu input, .mainMenu a, .contentMenu input, .contentMenu a {
+		/*background-color: #393939;*/
+		background-color:#292929;  /* erweitert 2011-03-30 - Marco */
+		color: #6CAD2F;
+	}
+
+.quickSearchCheckBoxMenu label {
+		color: #EEEEEE;
+	} 
+	
+	.quickSearchMenu {
+		line-height:1.63em;
+		display:table-cell; 
+		vertical-align:middle;
+	}
+	
+	.quickSearchMenu input[type=radio] {
+		border:0;
+		padding-left:0;
+		margin:0;
+	}
+	.quickSearchMenu table tr td:first-child {
+		padding-left:0em;
+	}
+	
+	.quickSearchMenu label {
+		padding:0;
+		margin-right:0.72em;
+	}
+	
+	.logoAlternate span {
+		font-weight: bold;
+		color: #EEEEEE;
+	}
+	
+	.logoAlternate span a {
+		font-weight: normal;
+	}
+	
+	.contentMenu span {
+		color: #EEEEEE;
+	}
+	
+	.contentMenu .sub {
+		text-transform: uppercase;
+	}
+	
+	.contentMenu .action, .contentMenu .sub.action, .contentMenu .sub .action {
+		text-transform:none;
+	}
+	
+	.metaMenu input:hover, .metaMenu input:focus, .metaMenu button:hover, .metaMenu button:focus, .metaMenu a:hover, .metaMenu a:focus, .quickSearchMenu a:hover, .quickSearchMenu a:focus, .quickSearchCheckBoxMenu label:hover, .quickSearchCheckBoxMenu label:focus, .advancedSearchMenu input:hover, .advancedSearchMenu input:focus, .advancedSearchMenu a:hover, .advancedSearchMenu a:focus, .organisationSearchMenu input:hover, .organisationSearchMenu input:focus, .organisationSearchMenu a:hover, .organisationSearchMenu a:focus, .mainMenu input:hover, .mainMenu input:focus, .mainMenu a:hover, .mainMenu a:focus, .contentMenu input:hover, .contentMenu input:focus, .contentMenu a:hover, .contentMenu a:focus  {
+		color: #f0f0f0;
+	}
+
+	.quickSearchMenu input:hover, .quickSearchMenu input:focus {
+		color: #000000;
+	}
+	
+	/*COLORING FOR BREADCRUMB SLASHES*/
+	.breadcrumb li {
+		color: #636363;
+	}
+	/*COLORING FOR BREADCRUMB TEXT*/
+	.breadcrumb li a, .breadcrumb li a:visited {
+		color:#6CAD2F;
+	}
+	
+	.breadcrumb li a:hover, .breadcrumb li a:focus {
+		color: #f0f0f0;
+	}
+	
+	.contentMenu span, .contentMenu input, .contentMenu a {
+	/*	font-weight: bold; */
+	}
+	
+	.advancedSearchMenu {
+		margin-top:0.18em;
+	}
+/*Content
+
+-----------------------------------------------
+
+|         [      Paginator      ]             |
+
+|                               	      	  |
+
+|[ Lists & Full Item ]                        |
+
+|         [        Footer       ]             |
+
+-----------------------------------------------*/
+
+/*EXT. PAGINATOR*/
+	.overlayMenu.itemSelectArea {
+		width:auto;
+	}
+	.overlayMenu img {
+		border:0 none;
+	}
+	.overlayMenu a:hover .quickSearchIconSmall,
+	.overlayMenu a:hover.quickSearchIconSmall {
+		background-color:transparent;
+	}
+	.overlayMenu .menuHeader+.menuBody {
+		display:none;
+	}
+	.overlayMenu .menuHeader:hover+.menuBody {
+		display:block;
+	}
+	.overlayMenu .menuHeader+.menuBody:hover {
+		display:block;
+	}
+	.overlayMenu a.criticalItem:hover {
+		background-color:#D80000;
+	}
+	.paginatorFallbackGoBtn {
+		background-color: #393939;
+		color: #6CAD2F;
+	}
+
+	/*PAGE BROWSER*/
+	.pageBrowser input, .pageBrowser button, .pageBrowser a {
+		/*background-color: #393939;*/
+		background-color:#292929;  /* erweitert 2011-03-30 - Marco */
+		color: #6CAD2F;
+	}
+	
+	.pageBrowser input:hover, .pageBrowser button:hover, .pageBrowser a:hover, .pageBrowser input:focus, .pageBrowser button:focus, .pageBrowser a:focus {
+		color: #EEEEEE;
+		cursor: pointer;
+	}
+	
+	.pageBrowser .actual, .pageBrowser .actual:hover, .pageBrowser .actual:focus {
+		font-weight: bold;
+		color: #EEEEEE;
+		cursor: pointer;
+	}
+	
+	@media print {
+		.pageBrowser .actual {
+			font-weight: normal;
+			background-color: white;
+		}
+	}
+	
+	.pageBrowser .deactivated, .pageBrowser .deactivated:hover, .pageBrowser .deactivated:focus {
+		color: #486131;
+		cursor:default;
+	}
+	.pageBrowser :disabled, .pageBrowser :disabled:hover, .pageBrowser :disabled:focus {
+		color: #486131;
+		cursor:default;
+	}
+	
+/* INFO PAGE*/
+
+	.infoPage .sideSection {
+		border-style: solid;
+		border-left-color: #BAB4B3;
+	}
+	.infoPage .videoPreview {
+		border-style: solid;
+		border-color: #382926;
+	}
+	
+/*LISTS & FULL ITEM*/
+
+	/*GENERAL*/
+	
+	.itemList, .tiledList, .fullItem {
+		border-top-color: #6CAD2F;
+	}
+	
+	.itemList, .tiledList, .fullItem {
+		border-bottom-color: #262626;
+	}
+	
+	/*PRE-HEADER*/
+
+	.preListHeader {
+		border-top-color: #292929 !important; 
+	}
+	
+	/*LIST HEADER*/
+	
+		/*GENERAL*/
+	
+	.listHeader a, .listHeader span {
+		line-height: normal;
+		font-weight: normal;
+	}
+	.loggedIn.collectionList .listItem .itemHeader {
+		margin-bottom:0;
+	}
+	.headLine h1 {
+		color:#f0f0f0;
+	}
+		/*SELECT MENU*/
+	
+	.itemList .checkboxSelectButton {
+/*		background-color: #393939; */
+		cursor: pointer;
+	}
+	
+	.selectMenu {
+		border-color: #486131;
+		/*
+		opacity: 0.95;
+		filter: alpha(opacity=95);
+		*/
+	}
+
+	.selectMenu, .selectMenu input {
+		background-color: #393939;
+	}
+
+	.selectMenu span {
+		font-weight: bold;
+	}
+
+	.selectMenu a:hover, .selectMenu input:hover {
+		background-color: #6CAD2F;
+		color: #f0f0f0;
+	}
+	
+	.statusArea .ascSort, .statusArea .desSort, th .ascSort, th .desSort {
+		background-color:transparent;
+	}
+	
+	.listBackground .ascSort, .listBackground .descSort {
+		background-color: #393939;
+	}
+	
+	/*LIST ITEM*/
+	
+		/*GENERAL*/
+		
+	.listItem {
+		background-color:#313131;
+	}
+	.listItem, .listItem td {
+		border-top-color: #BAB4B3 !important;
+/*		background-color:#3C3C3C; *//* erweitert 2011-03-30 - Marco */
+	}
+	
+	.searchHit {
+		background-color: #486131;
+	}
+	
+	.preListHeader, .fullItem, .tiledList, .listBackground, .listBackground .seperator {
+		background-color: #313131;
+	}
+	
+/*	.listBackground, .listBackground td {
+		background-color:#313131;
+	}
+	*/
+	.tiledList .metaDataSection, .itemTile .tileIconArea {
+		border-color: #BAB4B3 !important;
+		border-style: solid;
+	}
+	
+	.tiledList .inAlbum, .fullItem .inAlbum, .activeAlbum, .activeAlbum .seperator, .activeAlbum td { /* .activeAlbum td - erweitert 2011-04-06 - Marco */
+		background-color: #484848;
+		color: #f0f0f0;
+	}
+	
+	
+		/*ITEM HEADER*/
+		
+	.fullItem .itemHeadline b {
+		font-size: 16px !important;
+		font-weight: normal;
+	}
+		
+	.listItem .itemHeadline b {
+		font-size: 14px !important;
+		font-weight: normal;
+	}
+
+	.listItem td .itemHeadline b {
+		font-size: 11px !important;
+		font-weight: normal;
+	}
+	
+	.fullItem .easySubmissionHeader b {
+		color: #BAB4B3;
+		font-size: 16px;
+	}
+	
+	.fullItem .easySubmissionHeader b.actual {
+		color: #EEEEEE;
+	}
+	
+	/*FULL ITEM HEADER*/
+	
+	.fullItem .fullItemControls a {
+		cursor: pointer;
+	}
+	
+	.fullItem .fullItemControls .actual {
+		color: #f0f0f0;
+		background-color: #6CAD2F;
+	}
+	
+	/*FULL ITEM BLOCK*/
+	
+	.fullItem .metaDataSection, .fullItem .detailedItem, .fullItem .fullsizedBlock, .fullItem .splitBlockHeader, .fullItem .splitBlockBody {
+		border-color: #BAB4B3 !important;
+		border-style: solid;
+	}
+	
+	.fullItem .itemBlock, .fullItem .itemHeader {
+		border-top-color: #BAB4B3;
+	}
+	
+	.itemBlock .voidBlock {
+		color: #BAB4B3;
+	}
+	
+	.fullItem li, .itemBlock .itemLine {
+		border-top-color: #CDC9C8;
+	}
+	
+	.itemBlock .newBlock {
+		border-top-color: #EEEEEE;
+	}
+	
+	.affHover {
+		background-color: #393939;
+	}
+	
+	.add, .remove {
+		cursor: pointer;
+		background-color: transparent !important;
+	}
+	
+	.add:disabled, .remove:disabled {
+		cursor: default;
+	}
+	
+	.fullItem .groupBtn {
+		/*font-weight: bold;*/
+		color: #6CAD2F;
+		background-color: transparent;
+		text-align: left;
+	}
+	
+	.fullItem .groupBtn:hover, .fullItem .groupBtn:focus {
+		color: #f0f0f0;
+		cursor: pointer;
+	}
+	
+	.fullItem .groupBtn:disabled {
+		color: #486131;
+		cursor: default;
+	}
+	
+/*SINGLE ELEMENTS*/
+	.dateJSLabel {
+		background-color: #DCECF1;
+		color: #EEEEEE;
+	}
+	.dialogBox {
+		background-color:#3C3C3C;
+	}
+	/* CSS3 Enhancements */
+	.bordst0 { -moz-border-radius:6px 6px 6px 6px; -webkit-border-radius:6px 6px 6px 6px; border-radius:6px 6px 6px 6px; border:0px; } /* border-radius = CSS3 */
+	.bordst1 { -moz-border-radius:6px 6px 6px 6px; -webkit-border-radius:6px 6px 6px 6px; border-radius:6px 6px 6px 6px; border-width:0.0909em; } /* border-radius = CSS3 */
+	.bordst2 { -moz-border-radius:6px 6px 6px 6px; -webkit-border-radius:6px 6px 6px 6px; border-radius:6px 6px 6px 6px; border-width:0.1818em; } /* border-radius = CSS3 */
+	.shadst1 { -moz-box-shadow:5px 5px 5px #111111; box-shadow:5px 5px 5px #111111; -webkit-box-shadow:5px 5px 5px #111111; } /* CSS3 in: FF > 3.5, Safari + Chrome */
+	
+/*FORM BUTTONS*/
+	.dialogCancelButton {
+		float: left;
+		color: #6CAD2F;
+		background-color: #3C3C3C;
+		border-top-color: #292929;
+		border-right: #6CAD2F solid 0.091em;
+		border-bottom: #6CAD2F solid 0.091em;
+		border-left-color: #292929;
+	}
+	
+	.dialogCancelButton:hover {
+		color: #f0f0f0;
+		background-color: #292929;
+		border-color: #f0f0f0;
+	}
+	
+	.cancelButton, .activeButton, .dialogActiveButton {
+		border-style: solid;
+		padding-top: 0.10em;
+		padding-bottom: 0.10em;
+	}
+
+	.cancelButton {
+		float: left;
+		color: #6CAD2F;
+		background-color: #393939;
+		border-top-color: #393939;
+		border-right-color: #6CAD2F;
+		border-bottom-color: #6CAD2F;
+		border-left-color: #393939;
+	}
+	
+	.cancelButton:hover {
+		color: #f0f0f0;
+		background-color: #393939;
+		border-color: #f0f0f0;
+	}
+	
+	.activeButton, .dialogActiveButton {
+		float: right;
+		color: #f0f0f0 !important;
+		background-color: #6CAD2F !important;
+		border-color: #6CAD2F;
+	}
+	
+	.activeButton:hover, .dialogActiveButton:hover {
+		color: #f0f0f0 !important;
+		background-color: #393939 !important;
+		border-color: #f0f0f0;
+	}
+	
+/*AUTOSUGGEST*/
+
+	.ac_results {
+		border-style: solid;
+		border-color: #6CAD2F;
+		background-color: #393939;
+	}
+	
+	.ac_results li {
+		border-bottom-style: solid;
+		border-bottom-color: #486131;
+		font-family: sans-serif;
+	}
+	
+	.ac_over {
+		cursor: pointer;
+		background-color: #4397B4;
+	}
+	
+	.ac_match {
+		font-family: sans-serif;
+		font-weight: bold;
+		color: #f0f0f0;
+	}
+
+/*BLANK INPUT*/
+	.blankInput {
+		color: #BAB4B3;
+	}	
+
+/*MESSAGE AREAS*/
+	.messageArea {
+		border-width: 1px !important;
+		border-style: solid;
+		background-color: #393939;
+	}
+	
+	.infoMessageArea {
+		border-color: #00712B;
+	}
+	
+	.infoMessageArea h2 {
+		color: #00712B;
+	}
+	
+	.errorMessageArea {
+		border-color: #D80000;
+	}
+	
+	.errorMessageArea h2 {
+		color: #D80000;
+	}
+	
+	.absoluteMessageArea {
+		position: fixed;
+		z-index: 100;
+	}
+	
+	.fixMessageBlockBtn, .fixErrorMessageBlockBtn, .fixSuccessMessageBlockBtn {
+		float: right;
+		overflow: auto;
+		background-color: #f0f0f0;
+	}
+	
+/*ERROR OR WARNING MESSAGES*/
+	.falseValue, .messageError, .messageWarn, .messageFatal {
+		color: #D80000;
+	}
+	
+/*STATUS OR SUCCESS MESSAGE*/
+.messageSuccess {
+    color: #00712B;
+}
+
+.messageStatus {
+	color: #00712B;
+}
+
+/*MANDATORY FIELD*/
+	.mandatory {
+/*		color: #FF7F00;
+		font-weight: bold;
+*/	}
+	
+/*UNDER REWORK*/
+
+.underRework {
+	background-color: #F43E71 !important;
+}
+	
+	
+
+.itemTile .tileIconArea {
+	background-color:#494949 !important;
+}
+
+
+.tileIconAreaSelected {
+    background: none repeat scroll 0 0 #33698F;
+  	border:0em none !important;
+}
+
+.full_area0 .noTopBorder { background-color:#313131; } /* erweitert 2011-03-30 */
+.pageBrowser { /* erweitert 2011-03-30 */
+	background-color:#292929;
+	min-width:49%; /* bugfix for chrome 22, without min-width - linebreak before skipToLast */
+	text-align:center;
+}
+.tileIconAreaSelected a img { border-color:#33698F; } /* erweitert 2011-04-06 */
+
+/*Richfaces Overwrite*/
+.rich-tool-tip {
+	background-color: #3C3C3C;
+}
+
+.rich-inplace-field {
+	color:#292929 !important;
+}
+
+
+.contentHeader {
+	border-top-style:solid;
+	border-top-width:0.1818em; 
+	border-top-color:#6CAD2F;
+	background-color:#313131;
+}
+.contentHeader .preListHeader {
+	border:0;
+}
+
+.listHeader {
+	background-color:#313131;
+}
+
+.historyText {
+	color:#486330;
+}
+
+.hitsLabel {
+	margin-left:0.27em;
+}
+
+.contentMenu {
+	padding-top:0;
+}
+.itemList input[type="button"] {
+	margin-top:-0.001em;
+}
+.fullItem .detailedItem {
+	border-color:#292929 !important;
+}

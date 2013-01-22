@@ -1,0 +1,166 @@
+@charset "UTF-8";
+
+/*
+*
+* CDDL HEADER START
+*
+* The contents of this file are subject to the terms of the
+* Common Development and Distribution License, Version 1.0 only
+* (the "License"). You may not use this file except in compliance
+* with the License.
+*
+* You can obtain a copy of the license at license/ESCIDOC.LICENSE
+* or http://www.escidoc.de/license.
+* See the License for the specific language governing permissions
+* and limitations under the License.
+*
+* When distributing Covered Code, include this CDDL HEADER in each
+* file and include the License file at license/ESCIDOC.LICENSE.
+* If applicable, add the following below this CDDL HEADER, with the
+* fields enclosed by brackets "[]" replaced with your own identifying
+* information: Portions Copyright [yyyy] [name of copyright owner]
+*
+* CDDL HEADER END
+*/
+
+/*
+* Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+* für wissenschaftlich-technische Information mbH and Max-Planck-
+* Gesellschaft zur Förderung der Wissenschaft e.V.
+* All rights reserved. Use is subject to license terms.
+*/
+
+/*DATE INPUT*/
+
+.dateJSLabel {
+	position: absolute;
+	float: none;
+	z-index: 2;
+	display: inline;
+	padding-top: 0.09em;
+	padding-bottom: 0.09em;
+	height: 1.3em;
+	margin-top: -1.4em ;
+	/*ADD OPACITY*/
+	/*
+	opacity: 0.9;
+	filter: alpha(opacity=90);
+	*/
+}
+
+.sameHeightSlave {
+	overflow-y: auto;
+}
+
+/*Dialog*/
+
+.messageArea {
+	margin-bottom: 1em;
+	padding: 0.83em 0.92em 1.37em 0.92em  !important;
+}
+
+.captionWrapper{
+    position:relative;  
+    margin:auto;  
+    overflow:hidden;
+	}
+
+.editCaption:hover {
+	opacity: 0.95;
+	text-decoration:underline;
+	}
+	
+.editCaption {
+   	position:absolute;
+   	left:0px;
+   	color:#FFFFFF !important;
+   	opacity: 0.4;
+   	width: 7em;
+   	word-spacing:-0.5px;
+   	font-size:11px;
+   	font-weight:bold;
+   	background: #434343; 
+   	line-height: 1.56em;
+	}
+	
+
+/*Richfaces Overwrite*/
+
+.rich-tool-tip {
+		padding: 0.92em 0.92em 0.92em 0.92em;
+		text-align: left;
+        line-height: 1.6em;
+		position: absolute;
+		display: none;
+}
+
+/*PLUPLOAD Component*/
+.plupload_header {
+	padding:0.3636em;
+}
+.plupload_header_title {
+	font-size:2em;
+}
+
+.plupload_file_name {
+	float:left;
+	width:18.83em;
+	margin-left:1.37em;
+}
+.plupload_file_action {
+	float:left;
+	width:8.65em;
+}
+.plupload_file_status {
+	float:right;
+	width:5.74em;
+}
+.plupload_file_size {
+	float:right;
+	width:5.74em;
+}
+.plupload_total_status {
+	float:right;
+	width: 5.74em;
+}
+
+
+.plupload_filelist {
+	height:20em;
+	overflow-y:auto;
+}
+
+.plupload_filelist li {
+	list-style-type:none;
+}
+
+
+.plupload_filelist_footer .plupload_file_name {
+	width:25.37em;
+}
+.plupload_filelist_footer .plupload_file_action {
+	width:auto;
+}
+.plupload_buttons {
+	float:left;
+	width:11.56em;
+}
+.plupload_buttons .plupload_start, .plupload_buttons .plupload_disabled {
+	margin-left:1.37em;
+}
+
+.plupload_filelist {
+	background-color:#E4E4E4;
+	color:#262626;
+}
+
+/* CC License */
+#cc_js_required {
+	width:39.5454em !important;
+}
+#cc_js_jurisdiction_box {
+	width:39.5454em !important;
+}
+#cc_js_license_selected {
+	width:38.4545em !important;
+}

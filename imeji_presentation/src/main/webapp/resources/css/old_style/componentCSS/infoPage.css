@@ -1,0 +1,135 @@
+@charset "UTF-8";
+
+/*
+*
+* CDDL HEADER START
+*
+* The contents of this file are subject to the terms of the
+* Common Development and Distribution License, Version 1.0 only
+* (the "License"). You may not use this file except in compliance
+* with the License.
+*
+* You can obtain a copy of the license at license/ESCIDOC.LICENSE
+* or http://www.escidoc.de/license.
+* See the License for the specific language governing permissions
+* and limitations under the License.
+*
+* When distributing Covered Code, include this CDDL HEADER in each
+* file and include the License file at license/ESCIDOC.LICENSE.
+* If applicable, add the following below this CDDL HEADER, with the
+* fields enclosed by brackets "[]" replaced with your own identifying
+* information: Portions Copyright [yyyy] [name of copyright owner]
+*
+* CDDL HEADER END
+*/
+
+/*
+* Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+* für wissenschaftlich-technische Information mbH and Max-Planck-
+* Gesellschaft zur Förderung der Wissenschaft e.V.
+* All rights reserved. Use is subject to license terms.
+*/
+
+.infoPage {
+	border-top-width: 0.10em !important;
+}
+
+.infoPage .mainSection {
+	margin-left: 4.92em;
+	padding-top: 0px;
+}
+
+.infoPage .mainSection *, .infoPage .mainSection li {
+	font-size: 118%;
+}
+
+.infoPage .mainSection * * {
+	font-size: 100%;
+}
+
+.infoPage .sideSection {
+	float: right;
+	padding: 0px;
+	width: 31.28em;
+	border-width: 0px 0px 0px 0.10em !important;
+}
+
+.infoPage .sideSection * {
+	font-size: 114%;
+	margin-bottom: 6px;
+}
+
+.infoPage .mainSection ul {
+	font-size: 85%;
+	margin-left: 5.19em;
+	padding-left: 0px;
+	list-style: inside;
+	padding-left: 0.74em;
+}
+
+.infoPage .mainSection li a {
+	font-size: 100%;
+}
+
+.mainSection h3 {
+	font-size: 200% !important;
+	line-height:1.3em;
+	font-weight:normal;
+}
+
+.infoPage h2, .infoPage .mainSection h2, .infoPage .sideSection h2 {
+	line-height: 1.3em;
+	margin: 0px;
+	padding-top: 0.28em;
+	margin-left: -0.74em;
+	padding-left: 0.74em;
+}
+
+.infoPage .mainSection h2 {
+	border-width: 0px;
+	border-top-width: 0.10em !important;
+}
+
+.infoPage .mainSection span h2 {
+	font-size: 18px !important;
+	margin-bottom: 0em;
+	padding-bottom: 0em;
+}
+
+.infoPage .mainSection h4 {
+	font-size:120%;
+	margin-bottom:0.4545em;
+}
+
+.infoPage .sideSectionArea { 
+	width: 34em;
+}
+
+.infoPage .sideSection .gfc-resultsHeader {
+	border: 0px;
+}
+
+.gfc-result .gf-title {
+	height: auto !important;
+	line-height: 112% !important;
+	font-weight: normal !important;
+	font-size: 120%;
+}
+
+.infoPage .sideSection .gf-result {
+	margin-top: 1.2em;
+} 
+
+.infoPage .sideSection a {
+	font-weight: bold;
+}
+
+.startPageIcon {
+	float: left;
+	border: 0px;
+	margin-top: 1.7em;
+}
+
+.infoPage .videoPreview {
+	border-width: 0.10em;
+}

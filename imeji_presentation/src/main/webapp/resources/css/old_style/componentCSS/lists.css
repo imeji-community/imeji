@@ -1,0 +1,563 @@
+@charset "UTF-8";
+
+/*
+*
+* CDDL HEADER START
+*
+* The contents of this file are subject to the terms of the
+* Common Development and Distribution License, Version 1.0 only
+* (the "License"). You may not use this file except in compliance
+* with the License.
+*
+* You can obtain a copy of the license at license/ESCIDOC.LICENSE
+* or http://www.escidoc.de/license.
+* See the License for the specific language governing permissions
+* and limitations under the License.
+*
+* When distributing Covered Code, include this CDDL HEADER in each
+* file and include the License file at license/ESCIDOC.LICENSE.
+* If applicable, add the following below this CDDL HEADER, with the
+* fields enclosed by brackets "[]" replaced with your own identifying
+* information: Portions Copyright [yyyy] [name of copyright owner]
+*
+* CDDL HEADER END
+*/
+
+/*
+* Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+* für wissenschaftlich-technische Information mbH and Max-Planck-
+* Gesellschaft zur Förderung der Wissenschaft e.V.
+* All rights reserved. Use is subject to license terms.
+*/
+
+/*GENERAL*/
+/*fix for all IE*/
+input[type=checkbox] {
+/*	border-width:0; */
+	background-color:transparent; 
+}
+input[type=button] {
+/*	border-width:0; */
+	background-color:transparent; 
+}
+input[type=radio] {
+	border-width:0;
+	background-color:transparent;
+	margin-left:-0.1818em;
+}
+input[type=password]:focus, input[type=text]:focus {
+	background-color:#ffffff;
+}
+textarea:focus {
+	background-color:#ffffff;
+}
+
+.itemList, .tiledList {
+	border-top-width: 0.1818em !important;
+	border-bottom-width: 0.0909em !important;
+	border-top-style: solid;
+	border-bottom-style: solid; 
+}
+
+.tiledList {
+	float: left;
+	margin-bottom: 0.74em;
+}
+
+.itemList .seperator, .tiledList .seperator {
+	float: left;
+	width: 0.0909em;
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-top-width: 1.2727em;
+	height: 0em;
+	border-style: solid;
+}
+
+.itemList .collapseTriangle, .itemList .expandTriangle {
+	display: block;
+}
+
+.itemList ol, .itemList ul, .tiledList ol, tiledList ul {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.tiledList .fullBrowse {
+	width: 75em;
+}
+
+.tiledList .metaDataSection {
+	margin-right: 0.74em;
+	margin-top: 0.74em;
+}
+
+.tiledList .albumBrowse {
+	width: 50em;
+}
+
+.itemList input[type="button"] {
+	border-width: 0;
+	background-color: transparent;
+}
+.itemList input[type="button"]:hover {
+	border-width: 0;
+	background-color: transparent;
+}
+
+/*PRE-HEADER*/
+
+.preListHeader {
+	border-top: 0.09em solid !important;
+	padding-top: 0.19em;
+	padding-bottom: 0.19em;
+}
+
+/*LIST HEADER*/
+
+	/*GENERAL*/
+
+/* 
+ * IE 7 HACK
+ * table view - bug in IE7- 
+ */
+*:first-child+html table input[type="checkbox"] {	
+	height:1.3636em;
+	width:1.3636em;
+}
+table .listHeader a, table .listHeader span { /* IE HACK */
+	float:left;
+	text-align:left;
+}
+
+/* 
+ * IE 8+ hack 
+ */
+.listHeader th:first-child {
+	 height:3em; 
+	 max-height:3em;
+}
+
+.listHeader {
+	overflow: visible;
+	text-align: left;
+	vertical-align: top;
+	height: 3em;
+}
+
+.listHeader input {
+	float: left;
+	border: none;
+}
+
+div.listHeader span.itemSelectArea {
+	padding-top:0;
+	padding-bottom:0;
+	margin:0;
+}
+
+.listHeader a, .listHeader span, .listHeader thead {
+	padding-top: 0.1818em; 
+	padding-bottom: 0px;
+	margin: 0px;
+	margin-right: -0.0909em;
+	line-height: normal;
+    font-weight: normal;
+}
+
+.listHeader .collapseTriangle, .listHeader .collapseTriangle:hover, .listHeader .collapseTriangle:focus, .listHeader .expandTriangle, .listHeader .expandTriangle:hover, .listHeader .expandTriangle:focus {
+	line-height: normal;
+/*	margin-left: 0.1818em; */
+	background-position: left;
+}
+
+.listHeader .headerSwitchView {
+	margin-top:0;
+	padding: 0;
+}
+
+.headerSwitchView .collapseTriangle {
+	display:block;
+	padding:0.1818em 0 0 0;
+}
+
+.headerSwitchView .expandTriangle {
+	display:block;
+	padding:0.1818em 0 0 0;
+}
+
+.headerSwitchView .collapseTriangle span, .headerSwitchView .expandTriangle span {
+	padding-top:0.0909em;
+	height:0.7272em;
+}
+
+.shortView .collapseTriangle {
+	display:none;
+}
+
+	/*SELECT MENU*/
+	
+.itemList .checkboxSelectButton {
+	margin-top: 0.19em;
+	margin-right: 0.19em;
+	float: right;
+	background-color: transparent;
+}
+
+	/*REPLACEMENT HACK FOR IE 7*/
+	*:first-child+html .itemList th .checkboxSelectButton {
+	margin-right: -1.19em;
+	}
+	
+.itemSelectArea {
+	overflow: visible;
+	padding-top: 0;
+	padding-bottom: 0;
+	width: 3.4545em;
+}
+
+.selectMenu {
+	border-style: solid;
+	border-top-width: 0px !important;
+	position: absolute;
+	padding-bottom:0.4545em;
+	z-index:3;
+}
+
+th .selectMenu {
+	margin-top:0;
+}
+
+.selectMenu input {
+	margin-left: 0.56em;
+	margin-top: 0.19em;
+	border: 0px;
+}
+
+.selectMenu span {
+	padding-top: 0.28em;
+	padding-bottom: 0em;
+}
+
+.selectMenu a span {
+	padding-top: 0em;
+}
+
+.selectMenu .selectAll {
+	cursor:pointer;
+}
+.selectMenu .selectNone {
+	cursor:pointer;
+}
+.selectMenu .toggleAll {
+	cursor:pointer;
+}
+
+.optionHeadlineSeparator {
+	margin:0; 
+	padding:0;
+	background-color:#999999; 
+	height:0.0909em; 
+	border:0 none;
+}
+
+.optionSeparator {
+	margin:0; 
+	padding:0;
+	background-color:#acacac; 
+	height:0.0909em; 
+	border:0 none;
+}
+
+
+	/*STATUS RELATED HEADER ELEMENTS*/
+
+.listHeader .statusArea {
+	width: 9.19em;
+}
+
+.listHeader th.statusArea {
+	width: 9.09em;
+}
+
+.listHeader .statusArea a {
+	width: 7.74em;
+}
+
+.listHeader span.statusArea a, .listHeader div.statusArea a {
+	padding-top: 0.00em;
+}
+
+/*LIST ITEM*/
+
+	/*GENERAL*/
+	
+.listItem, .mediaSideBar {
+	list-style: none;
+}
+
+.listItem td {
+	 vertical-align: top;
+}
+	
+.listItem, .listItem td, .mediaSideBar {
+	border-top-width: 0.09em !important;
+	border-top-style: solid !important;
+}
+
+.itemTile {
+	margin-right: 0.74em;
+	margin-top: 0.74em;
+}
+
+.itemTile .tileIconArea {
+	border: 0.0909em !important; 
+/*	height: 11.56em;
+	line-height: 11.56em; */
+	height:10.2727em;
+	line-height:10.2727em;
+	text-align:center;
+	
+	background: #282828;
+	
+/*	padding: 18px 11px 0px 0px; */
+	padding:1.1818em 0em 0.2727em 0.0em; 
+}
+
+.tileIconAreaSelected {
+	border: 0.0909em !important; 
+/*	height: 11.56em;
+	line-height: 11.56em; */
+	height:10.2727em;
+	line-height:10.2727em;
+	text-align:center;
+	
+	background: #757575;
+	
+/*	padding: 18px 11px 0px 0px; */
+	padding:1em 0em 0.4545em 0.0em; 
+}
+
+.tileControlIconArea {	/* new in content but predefined in Component Library - 2011-04-05 Marco */
+	height:3em;
+	max-height:3em;
+}
+
+.itemTile .tileIconArea img {
+	border: 0px;
+}
+
+.itemTile .tileIconArea img.horizontal {
+	width: 100%;
+	vertical-align:middle;
+}
+		
+.itemTile .tileIconArea img.vertical {
+	height: 100%;
+	margin: 0 auto 0 auto !important;
+}
+
+.itemList tr.listItem {
+	border: 0px !important;
+}
+
+.listItem td span, .listItem td {
+	padding-top: 0px;
+	margin-right: 0px;
+}
+
+.listItem .itemHeader {
+	margin-bottom: -0.37em;
+}
+
+.loggedIn .listItem .itemHeader {
+	margin-bottom: -3em;
+}
+
+.listItem .shortView {
+	margin-top:0.3636em;
+}
+
+.listItem .shortView, .listItem .mediumView {
+	margin-bottom: 0.5em;
+}
+
+.listItem .shortView, .listItem .mediumView {
+	padding-bottom: 0.65em;
+}
+
+	/*ITEM HEADER*/
+
+.free_area0_p6.itemHeadline {
+	padding-top:0.1818em;
+	padding-bottom:0.1818em;
+}
+
+.listItem .itemHeadline {
+	width: 59.56em;
+}
+
+.itemHeader label {
+	padding-top: 0em;
+}
+
+.listHeader .itemHeader {
+	width: 38.65em;
+}
+
+.listHeader .allCheckBox {
+	float: left;
+}
+
+.loggedIn .listHeader .itemHeader {
+	width: 20.19em;
+}
+
+.listItem td .itemHeadline {
+	width: 28.01em;
+	padding-bottom: 0.19em;
+}
+
+.loggedIn .listItem td .itemHeadline {
+	width: 18.65em;
+}
+
+.listHeader th .itemHeadline {
+	width: 28.01em;
+}
+
+.loggedIn .listHeader th .itemHeadline {
+	width: 18.65em;
+}
+
+	/*ITEM BODY*/
+
+.listItem .collapseTriangle, .listItem .expandTriangle {
+	float: left;
+	line-height: normal;
+	padding-left: 1.36em;
+	margin-left: -0.65em;
+}
+
+.listItem .itemCheckBox {
+	float: right;
+}
+
+.listItem .itemCheckBox, .listItem .itemCheckBox * {
+	float: right;
+	border-width: 0px;
+}
+
+.listItem .statusIcon {
+/*	position: relative;
+	float: left; */
+	margin:0 auto;
+}
+
+.listItem td .statusIcon {
+	margin: 0 auto;
+	margin-top: 0.18em;
+}
+
+.listItem .listItemLine {
+	width: 75.92em; /*835px*/
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.listItemLine .labelLine {
+	text-align: right;
+	width: 22.45em;
+	margin-right: 0.82em !important;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.loggedIn .labelLine {
+	width: 12.19em;
+	padding-left: 11.00em !important;
+}
+
+.listItem .filesSection {
+	margin-top: 0.19em;
+}
+
+.listItem .files, .listItem .locators {
+	padding-left: 2.10em;
+	margin-left: 0.19em;
+}
+
+.listItem td .files, .listItem td .locators {
+	margin: 0px;
+}
+
+.tiledList .lineToolSection, .tiledList .sectionToolSection {
+	float: right;
+}
+
+.tiledList .lineToolSection .groupTool, .tiledList .sectionToolSection .groupTool {
+	float: left;
+}
+
+.tiledList .lineToolSection .sectionTool, .tiledList .sectionToolSection .sectionTool {
+	float: right;
+}
+
+.citeAuthor {
+}
+
+.citeDate {
+}
+		
+.citeLink {
+}
+		
+.citeSource {
+	font-style: italic;
+}
+		
+.citeID {
+}
+		
+
+	/*STATUS RELATED ITEM ELEMENTS*/
+
+.listHeader .status, .listItem .status {
+	display: none;
+}
+
+.loggedIn .status {
+	display: block;
+}
+
+.listItem .statusArea {
+	width: 9.1818em;
+	padding-top: 0.27em;
+	text-align:center;
+}
+
+.listItem td .statusArea {
+	width: 9.1818em;
+	padding-top: 0em;
+	text-align:center;
+}
+
+/*PRINT RELATED DEFINITIONS*/
+
+@media print {
+	.itemList input, .itemList select, .itemList .seperator, .listItem .collapseTriangle, .listItem .expandTriangle {
+		display: none !important;
+	}
+	
+	.itemSelectArea {
+		display: none !important;
+	}
+	
+	.itemList, .listItem {
+		border-top-width: 0px !important;
+	}
+}

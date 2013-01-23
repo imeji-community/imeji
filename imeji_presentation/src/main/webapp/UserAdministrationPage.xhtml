@@ -58,7 +58,10 @@
 							styleClass="free_area0 xTiny_marginLExcl">
 							<h:outputText value="#{lbl.admin_user_view}" />
 						</h:outputLink>
+						<h:form>
 						<h:commandLink styleClass="free_area0 xTiny_marginLExcl" action="#{AdminBean.reIndex}" value="ReIndex"/>
+						<h:commandLink styleClass="free_area0 xTiny_marginLExcl" action="#{AdminBean.clean}" value="Clean data"/>
+						</h:form>
 
 					</h2>
 				</h:panelGroup>

@@ -41,64 +41,64 @@
 				<h2><h:outputText value="You are not allowed to view this page"/></h2>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{SessionBean.admin}">
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
-					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="#{lbl.admin_user_info}"/>
-					</h3>
-					<span class="seperator"></span>
-					<div class="free_area0 itemBlockContent endline">
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="Email"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:inputText id="inputEmailText" styleClass="quad_txtInput" value="#{UserCreationBean.user.email}" required="true"/>
-							</span>
-						</h:panelGroup>
+				<h:form>
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+						<h3 class="xLarge_area0_p8 endline blockHeader">
+							<h:outputText value="#{lbl.admin_user_info}"/>
+						</h3>
+						<span class="seperator"></span>
+						<div class="free_area0 itemBlockContent endline">
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="Email"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline">
+									<h:inputText id="inputEmailText" styleClass="quad_txtInput" value="#{UserCreationBean.user.email}" required="true"/>
+								</span>
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="Name"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline">
+									<h:inputText id="inputNameText" styleClass="quad_txtInput" value="#{UserCreationBean.user.name}" required="true"/>
+								</span>
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="Nickname"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline">
+									<h:inputText id="inputNickText" styleClass="quad_txtInput" value="#{UserCreationBean.user.nick}" required="true"/>
+								</span>
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="Send an email"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline">
+									<h:selectBooleanCheckbox value="#{UserCreationBean.sendEmail}"/>
+								</span>
+							</h:panelGroup>
+							
+						</div>
+					</h:panelGroup>
+					<div class="full_area0 formButtonArea">
 						
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="Name"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:inputText id="inputNameText" styleClass="quad_txtInput" value="#{UserCreationBean.user.name}" required="true"/>
-							</span>
-						</h:panelGroup>
-						
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="Nickname"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:inputText id="inputNickText" styleClass="quad_txtInput" value="#{UserCreationBean.user.nick}" required="true"/>
-							</span>
-						</h:panelGroup>
-						
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="Send an email"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:selectBooleanCheckbox value="#{UserCreationBean.sendEmail}"/>
-							</span>
-						</h:panelGroup>
-						
+						<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" >
+							<h:outputText value="#{lbl.cancel}" />
+						</h:outputLink>
+						<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
 					</div>
-				</h:panelGroup>
-				<div class="full_area0 formButtonArea">
-					
-					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" >
-						<h:outputText value="#{lbl.cancel}" />
-					</h:outputLink>
-					<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
-			</div>
+				</h:form>
 			</h:panelGroup>
-			
-		
 		</ui:define>
 		</ui:composition>
 	</body>

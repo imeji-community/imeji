@@ -6,7 +6,15 @@ package de.mpg.imeji.logic.controller;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+
+import org.apache.bcel.generic.NEWARRAY;
+
+import com.hp.hpl.jena.query.ReadWrite;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
@@ -15,6 +23,7 @@ import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.exceptions.NotFoundException;
 
@@ -30,6 +39,7 @@ public class UserController extends ImejiController
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
 
+<<<<<<< HEAD
     /**
      * Default constructor
      */
@@ -44,13 +54,28 @@ public class UserController extends ImejiController
      * @deprecated
      * @param user
      */
+=======
+    @Deprecated
+>>>>>>> origin/gui-restructure
     public UserController(User user)
     {
         super(user);
     }
 
     /**
+<<<<<<< HEAD
      * Create a new {@link User}
+=======
+     * Default constructor
+     */
+    public UserController()
+    {
+        // construct
+    }
+
+    /**
+     * Create {@link User}
+>>>>>>> origin/gui-restructure
      * 
      * @param newUser
      * @throws Exception
@@ -62,7 +87,11 @@ public class UserController extends ImejiController
     }
 
     /**
+<<<<<<< HEAD
      * Delete a {@link User}
+=======
+     * Delete {@link User}
+>>>>>>> origin/gui-restructure
      * 
      * @param user
      * @throws Exception
@@ -70,11 +99,18 @@ public class UserController extends ImejiController
     public void delete(User user) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
+        // remove user grant
+        imejiBean2RDF.delete(new ArrayList<Object>(user.getGrants()), user);
+        // remove user
         imejiBean2RDF.delete(imejiBean2RDF.toList(user), this.user);
     }
 
     /**
+<<<<<<< HEAD
      * Retrieve a {@link User} according to its email
+=======
+     * Retrieve {@link User}
+>>>>>>> origin/gui-restructure
      * 
      * @param email
      * @return
@@ -87,7 +123,11 @@ public class UserController extends ImejiController
     }
 
     /**
+<<<<<<< HEAD
      * Update a {@link User}
+=======
+     * Update {@link User}
+>>>>>>> origin/gui-restructure
      * 
      * @param user
      * @throws Exception
@@ -99,8 +139,12 @@ public class UserController extends ImejiController
     }
 
     /**
+<<<<<<< HEAD
      * Retrieve all {@link User} in imeji<br/>
      * Only allowed for System administrator
+=======
+     * Retrieve all {@link User}. Must be called by sysadmin {@link User}
+>>>>>>> origin/gui-restructure
      * 
      * @return
      */
@@ -130,4 +174,27 @@ public class UserController extends ImejiController
         }
         return users;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Encode a string inot md5
+     * 
+     * @param pass
+     * @return
+     * @throws Exception
+     */
+    public static String convertToMD5(String pass) throws Exception
+    {
+        MessageDigest dig = MessageDigest.getInstance("MD5");
+        dig.update(pass.getBytes("UTF-8"));
+        byte messageDigest[] = dig.digest();
+        StringBuffer hexString = new StringBuffer();
+        for (int i = 0; i < messageDigest.length; i++)
+        {
+            hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+        }
+        return hexString.toString();
+    }
+>>>>>>> origin/gui-restructure
 }

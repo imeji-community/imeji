@@ -55,12 +55,14 @@
 							<h:outputLink styleClass="huge_area0_p1" value="#{Navigation.applicationUrl}user?id=#{user.email}">
 								<h:outputText value="Edit"/>
 							</h:outputLink>
-							<h:commandLink styleClass="huge_area0_p1" action="#{UsersBean.sendPassword}" value="Send new password" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
-								<f:param name="email" value="#{user.email}"/>
-							</h:commandLink>
-							<h:commandLink styleClass="huge_area0_p1" action="#{UsersBean.deleteUser}" value="Delete" onclick="if (confirm('Do you really want to delete this user?')) return true; return false;">
-								<f:param name="email" value="#{user.email}"/>
-							</h:commandLink>
+							<h:form>
+								<h:commandLink styleClass="huge_area0_p1" action="#{UsersBean.sendPassword}" value="Send new password" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
+									<f:param name="email" value="#{user.email}"/>
+								</h:commandLink>
+								<h:commandLink styleClass="huge_area0_p1" action="#{UsersBean.deleteUser}" value="Delete" onclick="if (confirm('Do you really want to delete this user?')) return true; return false;">
+									<f:param name="email" value="#{user.email}"/>
+								</h:commandLink>
+							</h:form>
 						</h:panelGroup>
 					</h:panelGroup>
 					</ui:repeat>

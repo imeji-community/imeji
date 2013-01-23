@@ -81,8 +81,22 @@ public class CollectionController extends ImejiController
      * 
      * @param ic
      * @param user
+     * @deprecated
      */
     public void update(CollectionImeji ic) throws Exception
+    {
+        writeUpdateProperties(ic, user);
+        imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
+    }
+
+    /**
+     * Update a {@link CollectionImeji} (inclusive its {@link Item}: slow for huge {@link CollectionImeji})
+     * 
+     * @param ic
+     * @param user
+     * @throws Exception
+     */
+    public void update(CollectionImeji ic, User user) throws Exception
     {
         writeUpdateProperties(ic, user);
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
@@ -156,9 +170,16 @@ public class CollectionController extends ImejiController
             writeReleaseProperty(collection, user);
             List<Item> items = (List<Item>)itemController.loadItems(itemUris, -1, 0);
             itemController.release(items, user);
+<<<<<<< HEAD
             update(collection);
             ProfileController pc = new ProfileController();
             pc.release(pc.retrieve(collection.getProfile(), user), user);
+=======
+            update(collection, user);
+            ProfileController pc = new ProfileController(user);
+            pc.retrieve(collection.getProfile());
+            pc.release(pc.retrieve(collection.getProfile()));
+>>>>>>> origin/gui-restructure
         }
     }
 

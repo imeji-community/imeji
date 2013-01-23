@@ -17,7 +17,9 @@
 				</a>
       			</div>
 			<div class="xLarge_txtBtn tiny_marginLExcl">
-				<h:commandButton id="btnDiscard" onclick="if(!clickOnDiscard('#{index}', 'confirmationWithdraw', '#{msg.error_withdraw_comment}')){return false};" action="#{bean.withdraw}" value="#{lbl.withdraw}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
+				<h:form>
+					<h:commandButton id="btnDiscard" onclick="if(!clickOnDiscard('#{index}', 'confirmationWithdraw', '#{msg.error_withdraw_comment}')){return false};" action="#{bean.withdraw}" value="#{lbl.withdraw}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
+		 		</h:form>
 		 	</div>
 		</div>
 	</div>

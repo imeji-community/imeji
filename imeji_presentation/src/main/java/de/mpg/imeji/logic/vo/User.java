@@ -46,7 +46,7 @@ public class User
     public void setEmail(String email)
     {
         this.email = email;
-        this.id = ObjectHelper.getURI(User.class, email);
+        this.id = ObjectHelper.getURI(User.class, this.email);
     }
 
     public String getName()

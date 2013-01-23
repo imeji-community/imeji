@@ -32,14 +32,13 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
+
 /**
- * 
  * {@link ImagesBean} to browse {@link Item} of a {@link CollectionImeji}
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class CollectionImagesBean extends ImagesBean
 {
@@ -51,6 +50,9 @@ public class CollectionImagesBean extends ImagesBean
     private Navigation navigation;
     private SearchQuery searchQuery = new SearchQuery();
 
+    /**
+     * Initialize the bean
+     */
     public CollectionImagesBean()
     {
         super();
@@ -58,6 +60,11 @@ public class CollectionImagesBean extends ImagesBean
         this.navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
+    /**
+     * Initialize the elements of the page
+     * 
+     * @return
+     */
     public String getInit()
     {
         getNavigationString();
@@ -110,7 +117,6 @@ public class CollectionImagesBean extends ImagesBean
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         uri = ObjectHelper.getURI(CollectionImeji.class, id);
@@ -122,19 +128,11 @@ public class CollectionImagesBean extends ImagesBean
         return ImejiFactory.imageListToThumbList(items);
     }
 
+    @Override
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
     {
         ItemController controller = new ItemController(sb.getUser());
         return controller.searchImagesInContainer(uri, searchQuery, sortCriterion, getElementsPerPage(), getOffset());
-    }
-
-    public String getImageBaseUrl()
-    {
-        if (collection == null)
-        {
-            return "";
-        }
-        return navigation.getApplicationUri() + collection.getId().getPath();
     }
 
     @Override
@@ -145,6 +143,21 @@ public class CollectionImagesBean extends ImagesBean
         return "";
     }
 
+    /**
+     * return the url of the collection
+     */
+    public String getImageBaseUrl()
+    {
+        if (collection == null)
+        {
+            return "";
+        }
+        return navigation.getApplicationUri() + collection.getId().getPath();
+    }
+
+    /**
+     * return the url of the collection
+     */
     public String getBackUrl()
     {
         return navigation.getBrowseUrl() + "/collection" + "/" + this.id;
@@ -174,6 +187,7 @@ public class CollectionImagesBean extends ImagesBean
 
     /**
      * Release the current {@link CollectionImeji}
+     * 
      * @return
      */
     public String release()
@@ -195,6 +209,7 @@ public class CollectionImagesBean extends ImagesBean
 
     /**
      * Delete the current {@link CollectionImeji}
+     * 
      * @return
      */
     public String delete()
@@ -216,6 +231,7 @@ public class CollectionImagesBean extends ImagesBean
 
     /**
      * Withdraw the current {@link CollectionImeji}
+     * 
      * @return
      * @throws Exception
      */

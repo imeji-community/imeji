@@ -170,10 +170,9 @@
 			</div>
 			
 			<ui:remove><!-- END OF div id="preListHeader" --></ui:remove>
-		
 		</h:form>
 		<ui:include src="../confirmationPages/SelectedDeleteWithdraw.xhtml">
-			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+				<ui:param name="bean" value="#{paginatorListSessionBean}"/>
 		</ui:include>
 		<ui:include src="../confirmationPages/AllDeleteWithdraw.xhtml">
 			<ui:param name="bean" value="#{paginatorListSessionBean}"/>

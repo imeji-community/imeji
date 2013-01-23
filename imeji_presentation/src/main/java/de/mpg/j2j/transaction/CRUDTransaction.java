@@ -9,12 +9,27 @@ import com.hp.hpl.jena.query.ReadWrite;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.j2j.controler.ResourceController;
 
+/**
+ * {@link Transaction} for CRUD methods
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class CRUDTransaction extends Transaction
 {
     private List<Object> objects = new ArrayList<Object>();
     private OperationsType type;
     private boolean lazy = false;
 
+    /**
+     * Constructor for a {@link CRUDTransaction} with a {@link List} of {@link Object}
+     * 
+     * @param objects
+     * @param type
+     * @param modelURI
+     * @param lazy
+     */
     public CRUDTransaction(List<Object> objects, OperationsType type, String modelURI, boolean lazy)
     {
         super(modelURI);
@@ -23,6 +38,7 @@ public class CRUDTransaction extends Transaction
         this.lazy = lazy;
     }
 
+    @Override
     protected void execute(Dataset ds) throws Exception
     {
         ResourceController rc = new ResourceController(getModel(ds), lazy);
@@ -32,6 +48,12 @@ public class CRUDTransaction extends Transaction
         }
     }
 
+    /**
+     * Make the CRUD operation for one {@link Object} thanks to the {@link ResourceController} 
+     * @param rc
+     * @param o
+     * @throws Exception
+     */
     private void invokeResourceController(ResourceController rc, Object o) throws Exception
     {
         switch (type)
@@ -40,7 +62,7 @@ public class CRUDTransaction extends Transaction
                 rc.create(o);
                 break;
             case READ:
-                o = rc.read(o);
+                rc.read(o);
                 break;
             case UPDATE:
                 rc.update(o);

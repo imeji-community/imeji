@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -32,6 +34,7 @@ public class Jena2Java
 {
     private Model model;
     private boolean lazy = false;
+    private static Logger logger = Logger.getLogger(Jena2Java.class);
 
     public Jena2Java(Model model, boolean lazy)
     {
@@ -269,12 +272,24 @@ public class Jena2Java
         return object;
     }
 
-    public boolean isTypedResource(Resource r)
+    /**
+     * True if the {@link Resource} is a {@link RDF}.type
+     * 
+     * @param r
+     * @return
+     */
+    private boolean isTypedResource(Resource r)
     {
         return r.getProperty(RDF.type) != null;
     }
 
-    public Object createJavaObjectFromDataType(Resource r)
+    /**
+     * Create an {@link Object} of the type defined in the {@link RDF}.type value defined for this {@link Resource}
+     * 
+     * @param r
+     * @return
+     */
+    private Object createJavaObjectFromDataType(Resource r)
     {
         Statement statementType = r.getProperty(RDF.type);
         String clazz = statementType.getResource().getProperty(RDF.type).getString();
@@ -286,7 +301,7 @@ public class Jena2Java
         }
         catch (Exception e)
         {
-            new RuntimeException("Error initializing resource with a datatype: ", e);
+            logger.info("Error initializing resource with a datatype: ", e);
         }
         return null;
     }
@@ -300,7 +315,7 @@ public class Jena2Java
      * @param position
      * @return
      */
-    public Statement getStatement(Resource subject, String predicateUri, int position)
+    private Statement getStatement(Resource subject, String predicateUri, int position)
     {
         int count = 0;
         for (StmtIterator iterator = subject.listProperties(model.createProperty(predicateUri)); iterator.hasNext();)

@@ -2,15 +2,22 @@ package de.mpg.imeji.logic.search.vo;
 
 import java.util.List;
 
+/**
+ * {@link SearchElement} defining logical operations (and/or) between other {@link SearchElement}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SearchLogicalRelation extends SearchElement
 {
     public enum LOGICAL_RELATIONS
     {
         AND, OR;
     }
-    
+
     private LOGICAL_RELATIONS logicalRelation;
-    
+
     public SearchLogicalRelation(LOGICAL_RELATIONS lr)
     {
         setLogicalRelation(lr);

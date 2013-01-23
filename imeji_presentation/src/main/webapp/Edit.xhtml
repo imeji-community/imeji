@@ -1,45 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="templates/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich"
-	xmlns:pretty="http://ocpsoft.com/prettyfaces">
-
-<ui:composition template="templates/template.xhtml">
-<ui:param name="headline" value="#{lbl.edit_images}"/>
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<ui:param name="headline" value="#{lbl.edit_images}"/>
 	
-<body>
-	<ui:define name="contentMenu">
-		
-	</ui:define>
+	<ui:define name="contentMenu"></ui:define>
 	
 	<ui:define name="mainContent">
 		<h:panelGroup layout="block" styleClass="full_area0 itemList">
 		 	<ui:include src="./include/History.xhtml"></ui:include>
 		 </h:panelGroup>
-			<!-- 
+		
+		<!-- 
 			Initialize the Edit form
 		 -->
 		<script>
 			jQuery(document).ready(function() {
-				document.getElementById('formular:editInitialized').click();
-			});
+				document.getElementById('batchEditForm:editInitialized').click();			
+				});
 		</script>			
-	
+		
+		<h:outputText value="#{EditImageMetadataBean.urlParameters}"/>
+		
+		<h:form id="batchEditForm">
+		
 		<h:selectBooleanCheckbox id="editInitialized" value="false" style="visibility:hidden">
-			<a4j:support event="onchange" reRender="ajaxContent" action="#{EditImageMetadataBean.init}" status="initEditPage" />
+			<f:ajax event="change" render=":batchEditForm:ajaxContent" listener="#{EditImageMetadataBean.init}"  />
 		</h:selectBooleanCheckbox>
 		
 		<h:panelGroup styleClass="full_area0 itemList " >	
 			<br/>
 			
-			<a4j:outputPanel id="NonAjaxContent" rendered="false">
-				<h:outputText value="#{EditImageMetadataBean.init}"/>
-			</a4j:outputPanel>
-			
-			<a4j:outputPanel id="ajaxContent">
+			<h:panelGroup id="ajaxContent">
 				
 				<h:panelGroup id="editorInitializing" styleClass="full_area0 huge_marginLExcl" rendered="#{!EditImageMetadataBean.initialized and SessionBean.user != null}">
 					<h2><h:outputText stylClass="full_area0_p8 text-align:center" value="Preparing editor! Please a wait a few seconds..."/></h2>
@@ -57,13 +50,13 @@
 					<h:panelGroup rendered="#{EditImageMetadataBean.lockedImages > 0}">
 						<h3><h:outputText value="#{EditImageMetadataBean.lockedImages} #{msg.error_editor_images_locked}!"/></h3>
 					</h:panelGroup>
-					<!-- MAIN FORMULAR -->
+					<!-- MAIN FORM -->
 					
 					<h:panelGroup styleClass="half_area0_p0 huge_marginLExcl">
 						<h:outputLabel for="selStatement" styleClass="full_area0_p0" value="#{lbl.metadata_type_select}"/>
 						<h:selectOneMenu styleClass="huge_area0" id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}">
 							<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
-							<a4j:support event="onchange" ajaxSingle="true" reRender="ajaxContent" action="#{EditImageMetadataBean.changeStatement}"/>
+							<f:ajax event="change" execute="@this" render="ajaxContent" listener="#{EditImageMetadataBean.changeStatement}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
 					
@@ -82,7 +75,9 @@
 									<ui:param name="hideLabel" value="true"/>
 								</ui:include>
 								
-								<a4j:commandButton reRender="ajaxContent" styleClass="xLarge_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}" action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}"/>
+								<h:commandButton styleClass="xLarge_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}" action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}">
+									<f:ajax render="ajaxContent" execute="@form"/>
+								</h:commandButton>
 								
 								<h:panelGroup id="modeRadioMenu" styleClass="full_area0 ">
 									<h:selectOneRadio layout="pageDirection" styleClass="huge_are0" value="#{EditImageMetadataBean.selectedMode}">
@@ -95,8 +90,7 @@
 							
 							<h:panelGroup rendered="#{EditImageMetadataBean.editType != 'selected'}" styleClass="full_area0">
 								<h:commandButton styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.cancel}"/>
-								<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl"  action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value=" #{lbl.save} ">
-									<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
+								<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl"  onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value=" #{lbl.save} ">
 								</h:commandButton>			
 							</h:panelGroup>	
 						</h:panelGroup>
@@ -107,9 +101,13 @@
 							
 							
 							<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
-								<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
+								<h:commandButton  styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}">
+									<f:ajax render="ajaxContent"/>
+								</h:commandButton >
 								
-								<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}"/>
+								<h:commandButton styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}">
+									<f:ajax render="ajaxContent"/>
+								</h:commandButton>
 								
 								<h:outputLink value="" rendered="false" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
 									<h:outputText value="#{lbl.reset_changes}" />
@@ -117,8 +115,7 @@
 								
 								<h:commandButton styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.cancel}"/>
 							
-								<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
-									<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
+								<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
 								</h:commandButton>
 							</h:panelGroup>
 						</h:panelGroup>	
@@ -128,13 +125,13 @@
 					<!-- IMAGES -->
 					<h:panelGroup styleClass="full_area0 " rendered="#{EditImageMetadataBean.profileWithStatements}">	
 			        	<h:panelGroup id="imagesMetadata" layout="block" styleClass="free_area0 endline" rendered="#{EditImageMetadataBean.editType == 'selected'}">
-		        			<a4j:repeat id="imagesList" var="image" value="#{EditImageMetadataBean.editor.images}" rowKeyVar="indexImage">
+		        			<ui:repeat id="imagesList" var="image" value="#{EditImageMetadataBean.editor.items}" rowKeyVar="indexImage">
 		        				<h:panelGroup styleClass="full_area0_p0 preListHeader" >
 			        				<h:panelGroup styleClass="huge_area0_p8">
-										<h:graphicImage alt="#{image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{image.thumbnailImageUrl}"/>
+										<h:graphicImage alt="#{image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{image.thumbnail}"/>
 			        				</h:panelGroup>
-			        				<h:panelGroup styleClass="half_area0" rendered="#{image.metadataSet.profile == EditImageMetadataBean.profile.id}">
-				        				<a4j:repeat id="metadata" var="md" value="#{image.metadataSet.metadata}" rowKeyVar="indexMetadata">
+			        				<h:panelGroup styleClass="half_area0" rendered="#{image.profile == EditImageMetadataBean.profile.id}">
+				        				<ui:repeat id="metadata" var="md" value="#{image.metadata}" rowKeyVar="indexMetadata">
 				        					<h:panelGroup  rendered="#{md.statement == EditImageMetadataBean.metadata.statement}">
 				        						<!-- Field -->
 				        						<ui:include src="./picturesPages/ui/MetadataInput.xhtml">
@@ -147,53 +144,53 @@
 												</ui:include>
 												<!-- BUTTONS -->
 												<h:panelGroup layout="block">
-													<a4j:commandLink styleClass="small_label" reRender="ajaxContent" action="#{EditImageMetadataBean.addMetadata}" value="#{lbl.add}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
+													<h:commandLink id="add" styleClass="small_label" action="#{EditImageMetadataBean.addMetadata}" value="#{lbl.add}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
 														<f:setPropertyActionListener value="#{indexMetadata}" target="#{EditImageMetadataBean.mdPosition}" />
 														<f:setPropertyActionListener value="#{indexImage}" target="#{EditImageMetadataBean.imagePosition}" />
-													</a4j:commandLink>
-													<a4j:commandLink  styleClass="small_label"  reRender="ajaxContent" action="#{EditImageMetadataBean.removeMetadata}" value="#{lbl.remove}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
+														<f:ajax render=":batchEditForm:ajaxContent"/>
+													</h:commandLink>
+													<h:commandLink  id="remove" styleClass="small_label" action="#{EditImageMetadataBean.removeMetadata}" value="#{lbl.remove}" rendered="#{EditImageMetadataBean.statement.maxOccurs != '1'}">
 														<f:setPropertyActionListener value="#{indexMetadata}" target="#{EditImageMetadataBean.mdPosition}" />
 														<f:setPropertyActionListener value="#{indexImage}" target="#{EditImageMetadataBean.imagePosition}" />
-													</a4j:commandLink>	
+														<f:ajax render=":batchEditForm:ajaxContent"/>
+													</h:commandLink>	
 												</h:panelGroup>
 				        					</h:panelGroup>
-				        				</a4j:repeat>
+				        				</ui:repeat>
 			        				</h:panelGroup>
 			        			</h:panelGroup>
-		        			</a4j:repeat>
+		        			</ui:repeat>
 						</h:panelGroup>
 			        </h:panelGroup>
 			        <!-- SAVE BUTTON -->
 					<h:panelGroup styleClass="full_area0_p8 preListHeader"  rendered="#{EditImageMetadataBean.profileWithStatements and EditImageMetadataBean.editType == 'selected'}">
 							
 						<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
-							<a4j:commandButton reRender="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
+							<h:commandButton render="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
 							<h:outputLink value="" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
 								<h:outputText value="#{lbl.reset_changes}" />
 							</h:outputLink>
 							<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
-								 <a4j:support event="onclick" action="#{EditImageMetadataBean.cancel}" />
+								 <f:ajax event="click" listener="#{EditImageMetadataBean.cancel}" />
 								<h:outputText value=" #{lbl.cancel} " />
 							</h:outputLink>	
 							
-							<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
-								<rich:componentControl for="panelSaveWait" operation="show" event="onclick"/>
+							<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}">
 							</h:commandButton>
 						</h:panelGroup>
-					</h:panelGroup>		        	
+					</h:panelGroup>		
+					  	
 				</h:panelGroup>
-			</a4j:outputPanel> 
+			</h:panelGroup>
+			
 		</h:panelGroup>
 		
-		<rich:modalPanel id="panelSaveWait" width="390" height="100" style="background-color:#434343" domElementAttachment="form">
-			<div id="contentPanel">
-	        <h3>
+		</h:form>   
+		<div id="dialogWait" class="double_area0_p8 bordst0 shadst1 dialogbox" style="display: none;">
+	        <h2>
 	        	<h:outputText styleClass="free_area0_p8 xTiny_marginLExcl"  value="#{msg.please_wait}"/>
-	        </h3>
-			</div>
-		</rich:modalPanel>
-		
+	        	<br/><br/>
+	        </h2>
+		</div>
 	</ui:define>
-</body>
 </ui:composition>
-</html>

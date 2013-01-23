@@ -2,6 +2,14 @@ package de.mpg.imeji.logic.search.vo;
 
 import java.util.List;
 
+/**
+ * Define a pair of a {@link SearchIndex} with a {@link String} value, related by a {@link SearchOperators}<br/>
+ * {@link SearchPair} are {@link SearchElement} of a {@link SearchQuery}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SearchPair extends SearchElement
 {
     private boolean not = false;

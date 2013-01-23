@@ -185,3 +185,61 @@ function clickOnDiscard(index, panelId, errorMessage)
 		return false;
 	}
 }
+
+
+var currentViewState;
+jsf.ajax.addOnEvent(function(e){
+    var xml = e.responseXML;
+    var source = e.source;
+    var status = e.status;
+    if(status === 'success'){
+        var response = xml.getElementsByTagName('partial-response')[0];
+        if(response !== null){
+            var changes = response.getElementsByTagName('changes')[0];
+            if(changes != undefined){
+                var updates = changes.getElementsByTagName('update');
+                if(updates != undefined){
+                    for(var i = 0; i< updates.length; i++){
+                        var update = updates[i];
+                        var id = update.getAttribute('id');
+                        if(id === 'javax.faces.ViewState'){
+                            currentViewState = update.firstChild.data;
+                            //update all forms
+                            var forms = document.forms;
+                            for(var j = 0; j < forms.length; j++){
+                                var form = forms[j];
+                                var field = form.elements["javax.faces.ViewState"];
+                                if (typeof field == 'undefined') {
+                                    field = document.createElement("input");
+                                    field.type = "hidden";
+                                    field.name = "javax.faces.ViewState";
+                                    form.appendChild(field);
+                                }
+                                field.value = currentViewState;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+ 
+});
+
+
+var patchJSF = function () {
+  jsf.ajax.addOnEvent(function (e) {
+    if (e.status === 'success') {
+      $("partial-response:first changes:first update[id='javax.faces.ViewState']", e.responseXML).each(function (i, u) {
+        // update all forms
+        $(document.forms).each(function (i, f) {
+          var field = $("input[name='javax.faces.ViewState']", f);
+          if (field.length == 0) {
+            field = $("<input type=\"hidden\" name=\"javax.faces.ViewState\" />").appendTo(f);
+          }
+          field.val(u.firstChild.data);
+        });
+      });
+    }
+  });
+}

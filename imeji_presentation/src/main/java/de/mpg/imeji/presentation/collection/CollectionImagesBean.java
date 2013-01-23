@@ -22,17 +22,25 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ImagesBean;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
-
+/**
+ * 
+ * {@link ImagesBean} to browse {@link Item} of a {@link CollectionImeji}
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class CollectionImagesBean extends ImagesBean
 {
     private int totalNumberOfRecords;
@@ -164,9 +172,13 @@ public class CollectionImagesBean extends ImagesBean
         return collection;
     }
 
+    /**
+     * Release the current {@link CollectionImeji}
+     * @return
+     */
     public String release()
     {
-        CollectionController cc = new CollectionController(sb.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
             cc.release(collection, sb.getUser());
@@ -181,9 +193,13 @@ public class CollectionImagesBean extends ImagesBean
         return "pretty:";
     }
 
+    /**
+     * Delete the current {@link CollectionImeji}
+     * @return
+     */
     public String delete()
     {
-        CollectionController cc = new CollectionController(sb.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
             cc.delete(collection, sb.getUser());
@@ -198,12 +214,17 @@ public class CollectionImagesBean extends ImagesBean
         return "pretty:collections";
     }
 
+    /**
+     * Withdraw the current {@link CollectionImeji}
+     * @return
+     * @throws Exception
+     */
     public String withdraw() throws Exception
     {
-        CollectionController cc = new CollectionController(sb.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
-            cc.withdraw(collection);
+            cc.withdraw(collection, sb.getUser());
             BeanHelper.info(sb.getMessage("success_collection_withdraw"));
         }
         catch (Exception e)

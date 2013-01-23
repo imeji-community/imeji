@@ -21,10 +21,11 @@ import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.collection.CollectionBean.TabType;
 import de.mpg.imeji.presentation.collection.CollectionSessionBean;
 import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
@@ -32,6 +33,13 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 import de.mpg.j2j.misc.LocalizedString;
 
+/**
+ * Bean for {@link MetadataProfile} view pages
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class MdProfileBean
 {
     private MetadataProfile profile = null;
@@ -48,6 +56,9 @@ public class MdProfileBean
     private int constraintPosition = 0;
     private int labelPosition = 0;
 
+    /**
+     * initialize a default {@link MdProfileBean}
+     */
     public MdProfileBean()
     {
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
@@ -62,23 +73,11 @@ public class MdProfileBean
         initMenus();
     }
 
-    public MdProfileBean(MetadataProfile profile)
-    {
-        this();
-        this.profile = profile;
-    }
-
-    public void initMenus()
-    {
-        mdTypesMenu = new ArrayList<SelectItem>();
-        mdTypesMenu.add(new SelectItem(null, sessionBean.getLabel("select")));
-        for (Metadata.Types t : Metadata.Types.values())
-        {
-            mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean)BeanHelper
-                    .getSessionBean(SessionBean.class)).getLabel("facet_" + t.name().toLowerCase())));
-        }
-    }
-
+    /**
+     * Method called on the html page to trigger the initialization of the bean
+     * 
+     * @return
+     */
     public String getInit()
     {
         parseID();
@@ -90,11 +89,28 @@ public class MdProfileBean
         if (UrlHelper.getParameterBoolean("init"))
         {
             loadtemplates();
-            initBeanObjects(profile);
+            initStatementWrappers(profile);
         }
         return "";
     }
 
+    /**
+     * Initialize the menus of the page
+     */
+    public void initMenus()
+    {
+        mdTypesMenu = new ArrayList<SelectItem>();
+        mdTypesMenu.add(new SelectItem(null, sessionBean.getLabel("select")));
+        for (Metadata.Types t : Metadata.Types.values())
+        {
+            mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean)BeanHelper
+                    .getSessionBean(SessionBean.class)).getLabel("facet_" + t.name().toLowerCase())));
+        }
+    }
+
+    /**
+     * Reset to an empty {@link MetadataProfile}
+     */
     public void reset()
     {
         profile.getStatements().clear();
@@ -102,7 +118,12 @@ public class MdProfileBean
         collectionSession.setProfile(profile);
     }
 
-    public void initBeanObjects(MetadataProfile mdp)
+    /**
+     * Initialize the {@link StatementWrapper} {@link List}
+     * 
+     * @param mdp
+     */
+    private void initStatementWrappers(MetadataProfile mdp)
     {
         statements.clear();
         for (Statement st : mdp.getStatements())
@@ -111,6 +132,14 @@ public class MdProfileBean
         }
     }
 
+    /**
+     * Comparator of {@link MetadataProfile} names, to sort a {@link List} of {@link MetadataProfile} according to their
+     * name
+     * 
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     */
     static class profilesLabelComparator implements Comparator<Object>
     {
         public int compare(Object o1, Object o2)
@@ -135,6 +164,10 @@ public class MdProfileBean
         }
     }
 
+    /**
+     * Load the templates (i.e. the {@link MetadataProfile} that can be used by the {@link User}), and add it the the
+     * menu (sorted by name)
+     */
     public void loadtemplates()
     {
         profilesMenu = new ArrayList<SelectItem>();
@@ -142,7 +175,7 @@ public class MdProfileBean
         {
             for (MetadataProfile mdp : pc.search(sessionBean.getUser()))
             {
-                if (mdp.getId().toString() != profile.getId().toString())
+                if (mdp.getId().toString().equals(profile.getId().toString()))
                 {
                     profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
                 }
@@ -158,6 +191,11 @@ public class MdProfileBean
         }
     }
 
+    /**
+     * Change the template, when the user select one
+     * @return
+     * @throws Exception
+     */
     public String changeTemplate() throws Exception
     {
         profile.getStatements().clear();
@@ -172,13 +210,18 @@ public class MdProfileBean
         }
         for (Statement s : profile.getStatements())
         {
-            s.setId( URI.create("http://imeji.org/statement/" + UUID.randomUUID()));
+            s.setId(URI.create("http://imeji.org/statement/" + UUID.randomUUID()));
         }
         collectionSession.setProfile(profile);
-        initBeanObjects(profile);
+        initStatementWrappers(profile);
         return getNavigationString();
     }
 
+    /**
+     * Listener for the template value
+     * @param event
+     * @throws Exception
+     */
     public void templateListener(ValueChangeEvent event) throws Exception
     {
         if (event != null && event.getNewValue() != event.getOldValue())
@@ -188,10 +231,13 @@ public class MdProfileBean
             profile.getStatements().clear();
             profile.setStatements(tp.getStatements());
             collectionSession.setProfile(profile);
-            initBeanObjects(profile);
+            initStatementWrappers(profile);
         }
     }
 
+    /**
+     * Parse the id defined in the url
+     */
     public void parseID()
     {
         if (this.getId() == null && this.getProfile().getId() != null)
@@ -200,6 +246,11 @@ public class MdProfileBean
         }
     }
 
+    /**
+     * Return the id of the profile encoded in utf-8
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public String getEncodedId() throws UnsupportedEncodingException
     {
         if (profile != null && profile.getId() != null)
@@ -429,11 +480,6 @@ public class MdProfileBean
             else if (s.getId() == null || !s.getId().isAbsolute())
             {
                 BeanHelper.error(s.getId() + " " + sessionBean.getMessage("error_profile_name_not_valid"));
-                return false;
-            }
-            else if (statementNames.contains(s.getId()))
-            {
-                BeanHelper.error(sessionBean.getMessage("error_profile_name_not_unique"));
                 return false;
             }
             else if (s.getLabels().isEmpty() || "".equals(((List<LocalizedString>)s.getLabels()).get(0).toString()))

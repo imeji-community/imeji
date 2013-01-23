@@ -1,5 +1,4 @@
-<div xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
+<div  xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
 <ui:remove>
@@ -36,48 +35,44 @@
 
 <span id="metaMenuSkipLinkAnchor" class="full_area0 metaMenu">
 	<!-- meta Menu starts here -->
-
-	<!-- Language -->
-	<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit(); return false;" rendered="true">
-		<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
-	</h:selectOneMenu>
-
-
 	
-	<h:panelGroup styleClass="seperator"></h:panelGroup>
-	<!-- Help -->
-	<h:outputLink id="lnkHelp" styleClass="medium_area0_p8 endline" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
-		<h:outputText value="#{lbl.help}"/>
-	</h:outputLink>
-	<h:panelGroup styleClass="seperator"></h:panelGroup>
-
-	<!-- LogIn, LogOut -->
-	<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="free_area0_p4">
-		<h:inputText styleClass="medium_txtInput" value="#{LoginBean.login}"/>
-		<h:inputSecret styleClass="medium_txtInput" value="#{LoginBean.passwd}" onkeypress="return loginOnEnter(event)"/>
-		<h:commandButton id="lnkLogin" styleClass="medium_area0 endline" style="text-align:left;" title="#{lbl.login}" value="#{lbl.login}" action ="#{LoginBean.login}"/>
-	</h:panelGroup>
 	
-
-	<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="medium_area0_p8 endline" rendered="#{SessionBean.user != null}">
-    	<h:outputText value="#{lbl.logout}"></h:outputText>
-    </h:commandLink>
-
-	<h:panelGroup styleClass="seperator"></h:panelGroup>
-
-	<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="free_area0_p8 endline" value="#{Navigation.applicationUrl}user?id=#{SessionBean.user.email}" rendered="#{SessionBean.user != null}">
-		<h:outputText  value="#{SessionBean.user.name}"/>
-	</h:outputLink>
+		<!-- Language -->
+		<h:form id="langForm">
+			<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit(); return false;" rendered="true">
+				<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
+			</h:selectOneMenu>
+		</h:form>
+		
+		<h:panelGroup styleClass="seperator"></h:panelGroup>
+		
+		<!-- Help -->
+		<h:outputLink id="lnkHelp" styleClass="medium_area0_p8 endline" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
+			<h:outputText value="#{lbl.help}"/>
+		</h:outputLink>
+		
+		<h:panelGroup styleClass="seperator"></h:panelGroup>
+	
+		<!-- LogIn, LogOut -->
+		<h:form id="loginForm">
+			<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="free_area0_p4">
+				<h:inputText styleClass="medium_txtInput" value="#{LoginBean.login}"/>
+				<h:inputSecret styleClass="medium_txtInput" value="#{LoginBean.passwd}"/>
+				<h:commandButton id="lnkLogin" styleClass="medium_area0 endline" style="text-align:left;" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}"/>
+			</h:panelGroup>
+		
+			<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="medium_area0_p8 endline" rendered="#{SessionBean.user != null}">
+		    	<h:outputText value="#{lbl.logout}"></h:outputText>
+		    </h:commandLink>
+		</h:form>
+		
+		<h:panelGroup styleClass="seperator"></h:panelGroup>
+	
+		<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="free_area0_p8 endline" value="#{Navigation.applicationUrl}user?id=#{SessionBean.user.email}" rendered="#{SessionBean.user != null}">
+			<h:outputText  value="#{SessionBean.user.name}"/>
+		</h:outputLink>
+	
 	
 	<!-- meta Menu ends here -->
 </span>
-	<script type="text/javascript">
-		function loginOnEnter(event)
-		{
-			if (event.keyCode == 13)
-			{
-				document.getElementById('formular:Header:lnkLogin').click();
-			}
-		}
-	</script>
 </div>

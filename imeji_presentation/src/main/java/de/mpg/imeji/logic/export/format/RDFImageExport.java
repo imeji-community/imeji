@@ -6,9 +6,10 @@ package de.mpg.imeji.logic.export.format;
 import java.util.HashMap;
 
 import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.vo.Item;
 
 /**
- * Export in a pretty RDF (without technical triples) of images
+ * {@link RDFExport} for {@link Item}
  * 
  * @author saquet
  */
@@ -37,7 +38,7 @@ public class RDFImageExport extends RDFExport
         super.namespaces.put("http://purl.org/dc/terms/", "dcterms");
         super.namespaces.put("http://purl.org/escidoc/metadata/profiles/0.1/", "eprofiles");
         super.namespaces.put("http://xmlns.com/foaf/0.1/", "foaf");
-        super.namespaces.put("http://www.w3.org/2000/01/rdf-schema#", "rdfs");       
+        super.namespaces.put("http://www.w3.org/2000/01/rdf-schema#", "rdfs");
     }
 
     @Override

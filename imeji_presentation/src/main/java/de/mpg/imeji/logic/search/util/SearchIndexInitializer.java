@@ -5,9 +5,23 @@ import java.util.Map;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.vo.Metadata;
 
+/**
+ * 
+ * Initialize the imeji {@link SearchIndex}
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class SearchIndexInitializer
 {
+    /**
+     * Initialize all {@link SearchIndex} in imeji
+     * @return
+     */
     public static Map<String, SearchIndex> init()
     {
         Map<String, SearchIndex> indexes = new HashMap<String, SearchIndex>();
@@ -16,6 +30,10 @@ public class SearchIndexInitializer
         return indexes;
     }
 
+    /**
+     * Initialize all {@link SearchIndex} which are not related to {@link Metadata}
+     * @return
+     */
     private static Map<String, SearchIndex> initBasisIndexes()
     {
         Map<String, SearchIndex> indexes = new HashMap<String, SearchIndex>();
@@ -82,6 +100,10 @@ public class SearchIndexInitializer
         return indexes;
     }
 
+    /**
+     * Initialized all {@link SearchIndex} related to {@link Metadata}
+     * @return
+     */
     private static Map<String, SearchIndex> initMetadataIndexes()
     {
         Map<String, SearchIndex> indexes = new HashMap<String, SearchIndex>();

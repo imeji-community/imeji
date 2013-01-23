@@ -13,10 +13,26 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.J2JHelper;
-
+/**
+ * 
+ * Simple security query add to any imeji sparql query, a security filter (according to user, searchtype, etc) 
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class SimpleSecurityQuery
 {
-    public static String getQuery(User user, SearchPair pair, String rdfType, boolean includeWithdrawn)
+    /**
+     * Static factory for the security query. A {@link String} is returned which sould be added to the complete sparql query
+     * @param user
+     * @param pair
+     * @param rdfType
+     * @param includeWithdrawn
+     * @return
+     */
+    public static String queryFactory(User user, SearchPair pair, String rdfType, boolean includeWithdrawn)
     {
         String f = "?status!=<" + Status.WITHDRAWN.getUri() + "> && (";
         if (includeWithdrawn)
@@ -102,7 +118,7 @@ public class SimpleSecurityQuery
         if (!"".equals(uf.trim()))
         {
             f = " .FILTER(" + f + op + "(";
-            if (pair == null || (pair != null && !SearchIndex.names.MY_IMAGES.equals(pair.getIndex().getName())))
+            if (pair == null || (pair != null && !SearchIndex.names.MY_IMAGES.toString().equals(pair.getIndex().getName())))
             {
                 f += "?status=<" + Status.RELEASED.getUri() + "> || ";
             }

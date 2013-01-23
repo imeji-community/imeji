@@ -3,6 +3,15 @@ package de.mpg.imeji.logic.search.vo;
 import java.net.URI;
 import java.util.List;
 
+import de.mpg.imeji.logic.vo.Metadata;
+
+/**
+ * Specific {@link SearchPair} for {@link Metadata} search
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SearchMetadata extends SearchPair
 {
     private URI statement;

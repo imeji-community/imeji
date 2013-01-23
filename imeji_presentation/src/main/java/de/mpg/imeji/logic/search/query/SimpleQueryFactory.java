@@ -16,27 +16,49 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.User;
 
+/**
+ * Factory to created Sparql query from a {@link SearchPair}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SimpleQueryFactory
 {
     private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {?s a <XXX_SEARCH_TYPE_ELEMENT_XXX> . "
-            + "?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status XXX_SPECIFIC_QUERY_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SORT_ELEMENT_XXX} "
-            + "XXX_SORT_QUERY_XXX ";
+            + "?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status XXX_SPECIFIC_QUERY_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SORT_ELEMENT_XXX} ";
 
+    /**
+     * Create a SPARQL query
+     * 
+     * @param rdfType
+     * @param pair
+     * @param sortCriterion
+     * @param user
+     * @param isCollection
+     * @param specificQuery
+     * @return
+     */
     public static String getQuery(String rdfType, SearchPair pair, SortCriterion sortCriterion, User user,
             boolean isCollection, String specificQuery)
     {
         PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
                 + " ?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
         return PATTERN_SELECT
-                .replaceAll("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.getQuery(user, pair, rdfType, false))
-                .replaceAll("XXX_SORT_QUERY_XXX", SortQueryFactory.create(sortCriterion))
+                .replaceAll("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.queryFactory(user, pair, rdfType, false))
                 .replaceAll("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair))
                 .replaceAll("XXX_SEARCH_TYPE_ELEMENT_XXX", rdfType)
                 .replaceAll("XXX_SORT_ELEMENT_XXX", getSortElement(sortCriterion))
                 .replaceAll("XXX_SPECIFIC_QUERY_XXX", specificQuery);
     }
 
-    public static String getSearchElement(SearchPair pair)
+    /**
+     * Return all sparql elements needed for the query
+     * 
+     * @param pair
+     * @return
+     */
+    private static String getSearchElement(SearchPair pair)
     {
         String searchQuery = "";
         String variable = "el";
@@ -109,7 +131,7 @@ public class SimpleQueryFactory
         }
         if (pair instanceof SearchMetadata)
         {
-            searchQuery =  searchQuery + " . ?md <http://imeji.org/terms/statement> ?el1 ";
+            searchQuery = searchQuery + " . ?md <http://imeji.org/terms/statement> ?el1 ";
         }
         if (pair.isNot())
         {
@@ -120,6 +142,13 @@ public class SimpleQueryFactory
         return searchQuery + " .FILTER(" + getSimpleFilter(pair, variable) + ") .";
     }
 
+    /**
+     * Return all parent search element (according to {@link SearchIndex}) of a search element, as a sparql query
+     * 
+     * @param index
+     * @param parentNumber
+     * @return
+     */
     private static String getSearchElementsParent(SearchIndex index, int parentNumber)
     {
         String q = "";
@@ -131,7 +160,13 @@ public class SimpleQueryFactory
         return q;
     }
 
-    public static String getSortElement(SortCriterion sortCriterion)
+    /**
+     * Return the sparql elements needed for the search
+     * 
+     * @param sortCriterion
+     * @return
+     */
+    private static String getSortElement(SortCriterion sortCriterion)
     {
         if (sortCriterion != null && sortCriterion.getIndex() != null)
         {
@@ -148,15 +183,23 @@ public class SimpleQueryFactory
             {
                 return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
-            else if (SearchIndex.names.CONTAINER_METADATA_TITLE.name().equals( sortCriterion.getIndex().getName()))
+            else if (SearchIndex.names.CONTAINER_METADATA_TITLE.name().equals(sortCriterion.getIndex().getName()))
             {
-                return "?s <http://imeji.org/terms/container/metadata> ?cmd. ?cmd <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
+                return "?s <http://imeji.org/terms/container/metadata> ?cmd. ?cmd <"
+                        + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
         }
         return "";
     }
 
-    public static String getSimpleFilter(SearchPair pair, String variable)
+    /**
+     * Return a sparql filter for a {@link SearchPair}
+     * 
+     * @param pair
+     * @param variable
+     * @return
+     */
+    private static String getSimpleFilter(SearchPair pair, String variable)
     {
         if (pair.getIndex().equals(Search.getIndex(SearchIndex.names.FULLTEXT)))
         {
@@ -244,7 +287,14 @@ public class SimpleQueryFactory
         return filter;
     }
 
-    public static String getTextSearchFilter(SearchPair pair, String variable)
+    /**
+     * Return the {@link String} search value of the filter
+     * 
+     * @param pair
+     * @param variable
+     * @return
+     */
+    private static String getTextSearchFilter(SearchPair pair, String variable)
     {
         String filter = "";
         String text = pair.getValue();

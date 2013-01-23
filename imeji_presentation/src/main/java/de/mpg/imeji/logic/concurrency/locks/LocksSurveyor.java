@@ -7,7 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-
+/**
+ * 
+ * Thread checking periodically if some {@link Lock} needs to be unlocked
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class LocksSurveyor extends Thread
 {
     private static Logger logger = Logger.getLogger(LocksSurveyor.class);
@@ -37,7 +45,9 @@ public class LocksSurveyor extends Thread
                             Locks.unLock(l);
                         }
                     }
-                    Thread.sleep(10000);
+                    // wait a bit...
+                    logger.wait(10000);
+                    //Thread.sleep(10000);
                 }
             }
             catch (NegativeArraySizeException e)

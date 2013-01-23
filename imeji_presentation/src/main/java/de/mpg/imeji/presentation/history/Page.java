@@ -7,10 +7,17 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.filter.Filter;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
+/**
+ * An imeji web page
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class Page
 {
     public enum ImejiPages
@@ -51,6 +58,12 @@ public class Page
     private String query = "";
     private String id = null;
 
+    /**
+     * Construct a new imeji web page
+     * 
+     * @param type
+     * @param uri
+     */
     public Page(ImejiPages type, URI uri)
     {
         this.uri = uri;
@@ -58,14 +71,20 @@ public class Page
         this.name = type.getLabel();
     }
 
-    public boolean equals(Page page)
+    /**
+     * Compares 2 {@link Page}
+     * 
+     * @param page
+     * @return
+     */
+    public boolean isSame(Page page)
     {
-        if (isNull() && page.isNull())
+        if (isNull() && ((Page)page).isNull())
             return true;
-        else if (isNull() || page == null || page.isNull())
+        else if (isNull() || page == null || ((Page)page).isNull())
             return false;
         else
-            return (type.equals(page.getType()) && uri.equals(page.getUri()));
+            return (type.equals(((Page)page).getType()) && uri.equals(((Page)page).getUri()));
     }
 
     public boolean isNull()

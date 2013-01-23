@@ -16,7 +16,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.richfaces.json.JSONCollection;
+//import org.richfaces.json.JSONCollection;
 
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -70,30 +70,30 @@ public class SuggestBean
 
         public List<Object> autoComplete(Object suggest)
         {
-            if (statement.getVocabulary() != null)
-            {
-                if (suggest.toString().isEmpty())
-                {
-                    suggest = "a";
-                }
-                else if (!suggest.toString().isEmpty())
-                {
-                    try
-                    {
-                        HttpClient client = new HttpClient();
-                        GetMethod getMethod = new GetMethod(statement.getVocabulary().toString()
-                                + URLEncoder.encode(suggest.toString(), "UTF-8"));
-                        client.executeMethod(getMethod);
-                        String responseString = getMethod.getResponseBodyAsString().trim();
-                        JSONCollection jsc = new JSONCollection(formatResultString(responseString));
-                        return Arrays.asList(jsc.toArray());
-                    }
-                    catch (Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
+//            if (statement.getVocabulary() != null)
+//            {
+//                if (suggest.toString().isEmpty())
+//                {
+//                    suggest = "a";
+//                }
+//                else if (!suggest.toString().isEmpty())
+//                {
+//                    try
+//                    {
+//                        HttpClient client = new HttpClient();
+//                        GetMethod getMethod = new GetMethod(statement.getVocabulary().toString()
+//                                + URLEncoder.encode(suggest.toString(), "UTF-8"));
+//                        client.executeMethod(getMethod);
+//                        String responseString = getMethod.getResponseBodyAsString().trim();
+//                        JSONCollection jsc = new JSONCollection(formatResultString(responseString));
+//                        return Arrays.asList(jsc.toArray());
+//                    }
+//                    catch (Exception e)
+//                    {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//            }
             return null;
         }
 

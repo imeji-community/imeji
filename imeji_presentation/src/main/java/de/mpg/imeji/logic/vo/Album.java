@@ -3,10 +3,19 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.util.Collection;
+
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * Simple {@link Container} which can have {@link Item} from different {@link Collection}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/album")
 @j2jModel("album")
 @j2jId(getMethod = "getId", setMethod = "setId")

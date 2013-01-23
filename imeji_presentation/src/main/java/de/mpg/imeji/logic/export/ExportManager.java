@@ -14,22 +14,36 @@ import org.apache.http.client.HttpResponseException;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 
+/**
+ * Manage {@link Export}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class ExportManager
 {
     private OutputStream out;
     private Export export;
     private User user;
 
+    /**
+     * Create a new {@link ExportManager} with url parameters, and perform the {@link Export} in the specified
+     * {@link OutputStream}
+     * 
+     * @param out
+     * @param user
+     * @param params
+     * @throws HttpResponseException
+     */
     public ExportManager(OutputStream out, User user, Map<String, String[]> params) throws HttpResponseException
     {
         this.out = out;
@@ -60,6 +74,7 @@ public class ExportManager
     {
         String collectionId = export.getParam("col");
         String albumId = export.getParam("alb");
+        String id = export.getParam("id");
         String searchType = export.getParam("type");
         int maximumNumberOfRecords = 20;
         if (export.getParam("n") != null)
@@ -79,20 +94,8 @@ public class ExportManager
         }
         else if ("profile".equals(searchType))
         {
-            // TODO Change the search for profiles!!!!!!!!!!!!
-            ProfileController pc = new ProfileController(user);
             List<String> uris = new ArrayList<String>();
-            try
-            {
-                for (MetadataProfile mdp : pc.search(user))
-                {
-                    uris.add(mdp.getId().toString());
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            uris.add(id);
             result = new SearchResult(uris, new SortCriterion());
         }
         else if ("image".equals(searchType))

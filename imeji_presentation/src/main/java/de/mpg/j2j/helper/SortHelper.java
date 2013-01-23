@@ -1,4 +1,4 @@
-package de.mpg.imeji.logic.search.util;
+package de.mpg.j2j.helper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,6 +8,13 @@ import java.util.regex.Pattern;
 import de.mpg.imeji.logic.search.vo.ComparableSearchResult;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 
+/**
+ * Helper for sort parameters in SPARQL queries
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SortHelper
 {
     public final static String SORT_VALUE_REGEX = "XXX_SORT_VALUE_PATTERN_XXX";

@@ -4,17 +4,29 @@
 package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.UUID;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * a foaf person
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://xmlns.com/foaf/0.1/person")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlRootElement(name = "person")
+@XmlType(name = "person")
 public class Person
 {
     private URI id = URI.create("http://imeji.org/person/" + UUID.randomUUID());
@@ -32,7 +44,7 @@ public class Person
     private URI role;
     private int pos = 0;
     @j2jList("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
-    protected Collection<Organization> organizations = new LinkedList<Organization>();
+    protected Collection<Organization> organizations = new ArrayList<Organization>();
 
     public Person()
     {
@@ -127,8 +139,19 @@ public class Person
     {
         return id;
     }
-    
-    
+
+    public String getOrganizationString()
+    {
+        String s = "";
+        for (Organization o : organizations)
+        {
+            if (!"".equals(s))
+                s += " ,";
+            s += o.getName();
+        }
+        return s;
+    }
+
     public String AsFullText()
     {
         String str = givenName + " " + familyName + " " + alternativeName;

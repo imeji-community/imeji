@@ -8,6 +8,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.joda.time.chrono.AssembledChronology.Fields;
+
 import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
@@ -15,9 +19,17 @@ import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * imeji item. Can be an image, a video, a sound, etc.
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/item")
 @j2jModel("item")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlRootElement(name = "item")
 public class Item extends Properties implements FulltextIndex
 {
     public enum Visibility
@@ -39,7 +51,7 @@ public class Item extends Properties implements FulltextIndex
     @j2jResource("http://imeji.org/terms/fullImageUrl")
     private URI fullImageUrl;
     @j2jResource("http://imeji.org/terms/visibility")
-    private URI visibility = URI.create("http://imeji.org/terms/visibility#" + Visibility.PRIVATE.name());;
+    private URI visibility = URI.create("http://imeji.org/terms/visibility#" + Visibility.PRIVATE.name());
     @j2jLiteral("http://imeji.org/terms/filename")
     private String filename;
     @j2jLiteral("http://imeji.org/terms/escidocId")
@@ -152,6 +164,11 @@ public class Item extends Properties implements FulltextIndex
         return filename;
     }
 
+    /**
+     * Copy all {@link Fields} of an {@link Item} (including {@link Metadata}) to the current {@link Item}
+     * 
+     * @param copyFrom
+     */
     protected void copyInFields(Item copyFrom)
     {
         Class copyFromClass = copyFrom.getClass();
@@ -209,6 +226,9 @@ public class Item extends Properties implements FulltextIndex
         return fulltext;
     }
 
+    /**
+     * Set the value for the fulltext search (according to all {@link Metadata} values)
+     */
     public void indexFulltext()
     {
         fulltext = filename;
@@ -219,6 +239,6 @@ public class Item extends Properties implements FulltextIndex
                 fulltext += " " + md.asFulltext();
             }
         }
-        fulltext.trim();
+        fulltext = fulltext.trim();
     }
 }

@@ -5,15 +5,25 @@ package de.mpg.imeji.logic.vo.predefinedMetadata;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlType;
+
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * Metadata for {@link Person}. Can have a CoNe identifier
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jDataType("http://imeji.org/terms/metadata#conePerson")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlType(name = "conePerson")
 public class ConePerson extends Metadata
 {
     @j2jResource("http://xmlns.com/foaf/0.1/person")

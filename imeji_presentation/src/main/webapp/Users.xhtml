@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:f="http://java.sun.com/jsf/core">
 <ui:remove>
 	<!--
 
@@ -42,15 +41,15 @@
 					<h2><h:outputText value="You are not allowed to view this page"/></h2>
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{UsersBean.sysAdmin}">
-					<a4j:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0" rowKeyVar="index">
+					<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0">
 					<h:panelGroup layout="block" styleClass="full_area0_p4 listItem noTopBorder">
 						<h:panelGroup layout="block" styleClass="huge_area0_p4">
 							<h:outputText styleClass="huge_area0_p1" value="#{user.name} (#{user.email})"/>
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="quad_area0_p1">
-							<a4j:repeat id="grantList" var="grant" value="#{user.grants}" rows="0" >
+							<ui:repeat id="grantList" var="grant" value="#{user.grants}" rows="0" >
 								<h:outputText  styleClass="xHuge_area0_p0" value="#{grant.grantType} for #{grant.grantFor}"/>
-							</a4j:repeat>
+							</ui:repeat>
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="large_area0_p0">
 							<h:outputLink styleClass="huge_area0_p1" value="#{Navigation.applicationUrl}user?id=#{user.email}">
@@ -64,7 +63,7 @@
 							</h:commandLink>
 						</h:panelGroup>
 					</h:panelGroup>
-					</a4j:repeat>
+					</ui:repeat>
 				</h:panelGroup>
 			</ui:define>
 		</ui:composition>

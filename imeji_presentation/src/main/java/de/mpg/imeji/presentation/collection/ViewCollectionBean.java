@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,34 +12,49 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
+/**
+ * Bean for the pages "CollectionEntryPage" and "ViewCollection"
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class ViewCollectionBean extends CollectionBean
 {
     private SessionBean sessionBean = null;
     private List<Person> persons = null;
     private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
 
+    /**
+     * Construct a {@link ViewCollectionBean} from a {@link CollectionImageBean}
+     * 
+     * @param coll
+     */
     public ViewCollectionBean(CollectionImeji coll)
     {
         super(coll);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
+    /**
+     * Construct a default {@link ViewCollectionBean}
+     */
     public ViewCollectionBean()
     {
         super();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
+    /**
+     * Initialize all elements of the page.
+     */
     public void init()
     {
         try
@@ -51,7 +65,9 @@ public class ViewCollectionBean extends CollectionBean
             if (getCollection() != null && getCollection().getId() != null)
             {
                 ItemController ic = new ItemController(sessionBean.getUser());
-                setSize(ic.countImagesInContainer(getCollection().getId(), new SearchQuery()));
+                ic.loadContainerItems(getCollection(), user, 5, 0);
+                setSize(getCollection().getImages().size());
+                //setSize(ic.countImagesInContainer(getCollection().getId(), new SearchQuery()));
             }
             if (getCollection() != null)
             {
@@ -76,33 +92,6 @@ public class ViewCollectionBean extends CollectionBean
         {
             BeanHelper.error(e.getMessage());
             logger.error("Error init of collection home page", e);
-        }
-        // createBigCollection();
-    }
-
-    public void createBigCollection()
-    {
-        List<Item> l = new ArrayList<Item>();
-        for (int i = 0; i < 100; i++)
-        {
-            Item item = ImejiFactory.newItem(getCollection());
-            item.setCollection(this.getCollection().getId());
-            item.setFullImageUrl(URI.create("http://imeji.org/item/test"));
-            item.setThumbnailImageUrl(URI.create("http://imeji.org/item/test"));
-            item.setWebImageUrl(URI.create("http://imeji.org/item/test"));
-            item.setVisibility(Visibility.PUBLIC);
-            item.setFilename("Test image");
-            l.add(item);
-        }
-        ItemController itemController = new ItemController(sessionBean.getUser());
-        try
-        {
-            itemController.create(l, getCollection().getId());
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
     }
 

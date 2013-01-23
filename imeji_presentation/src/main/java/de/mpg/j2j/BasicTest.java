@@ -20,6 +20,13 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.exceptions.NotFoundException;
 
+/**
+ * Class for developer testing purpose
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class BasicTest
 {
     public static void main(String[] args) throws Exception

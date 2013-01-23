@@ -33,39 +33,65 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.util.LoginHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.helper.J2JHelper;
-
+/**
+ * 
+ * Implements CRUD and Search methods for {@link Item}
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class ItemController extends ImejiController
 {
-    private static Logger logger = null;
+    private static Logger logger = Logger.getLogger(ItemController.class);
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+
+    public ItemController()
+    {
+        super();
+    }
 
     public ItemController(User user)
     {
         super(user);
-        logger = Logger.getLogger(ItemController.class);
     }
 
-    public void create(Item img, URI coll) throws Exception
+    /**
+     * Create an {@link Item} in a {@link CollectionImeji}
+     * @param img
+     * @param coll
+     * @throws Exception
+     */
+    public void create(Item item, URI coll) throws Exception
     {
-        CollectionController cc = new CollectionController(user);
-        CollectionImeji ic = cc.retrieve(coll);
-        writeCreateProperties(img, user);
-        if (Status.PENDING.equals(ic.getStatus()))
-            img.setVisibility(Visibility.PRIVATE);
-        else
-            img.setVisibility(Visibility.PUBLIC);
-        img.setCollection(coll);
-        img.getMetadataSet().setProfile(ic.getProfile());
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-        imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
-        ic.getImages().add(img.getId());
-        cc.update(ic);
+//        CollectionController cc = new CollectionController(user);
+//        CollectionImeji ic = cc.retrieve(coll);
+//        writeCreateProperties(img, user);
+//        if (Status.PENDING.equals(ic.getStatus()))
+//            img.setVisibility(Visibility.PRIVATE);
+//        else
+//            img.setVisibility(Visibility.PUBLIC);
+//        img.setCollection(coll);
+//        img.getMetadataSet().setProfile(ic.getProfile());
+//        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+//        imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
+//        ic.getImages().add(img.getId());
+//        cc.update(ic);
+        Collection<Item> l = new ArrayList<Item>();
+        l.add(item);
+        create(l, coll);
     }
 
+    /**
+     * Create a {@link List} of {@link Item} in a {@link CollectionImeji}. This method is faster than using create(Item item, URI coll) when creating many items
+     * @param items
+     * @param coll
+     * @throws Exception
+     */
     public void create(Collection<Item> items, URI coll) throws Exception
     {
         CollectionController cc = new CollectionController(user);
@@ -75,25 +101,38 @@ public class ItemController extends ImejiController
         {
             writeCreateProperties(img, user);
             if (Status.PENDING.equals(ic.getStatus()))
+            {
                 img.setVisibility(Visibility.PRIVATE);
+            }
             else
+            {
                 img.setVisibility(Visibility.PUBLIC);
+            }
             img.setCollection(coll);
             img.getMetadataSet().setProfile(ic.getProfile());
-            // imejiBean2RDF.create(imejiBean2RDF.toList(img), user);
             ic.getImages().add(img.getId());
         }
-        imejiBean2RDF.create(J2JHelper.cast2ObjectList((List<?>)items), user);
+        imejiBean2RDF.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)), user);
         cc.update(ic);
     }
 
-    public void update(Item img) throws Exception
+    /**
+     * Update an {@link Item} in the database
+     * @param item
+     * @throws Exception
+     */
+    public void update(Item item) throws Exception
     {
-        Collection<Item> im = new ArrayList<Item>();
-        im.add(img);
-        update(im);
+        Collection<Item> l = new ArrayList<Item>();
+        l.add(item);
+        update(l);
     }
 
+    /**
+     * Update a {@link Collection} of {@link Item}
+     * @param items
+     * @throws Exception
+     */
     public void update(Collection<Item> items) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
@@ -106,6 +145,11 @@ public class ItemController extends ImejiController
         imejiBean2RDF.update(imBeans, user);
     }
 
+    /**
+     * Initialize the fulltext search value for all {@link Metadata} of an {@link Item}
+     * @param item
+     * @return
+     */
     private Item createFulltextForMetadata(Item item)
     {
         for (MetadataSet mds : item.getMetadataSets())
@@ -354,12 +398,5 @@ public class ItemController extends ImejiController
             logger.error("Error removing image from eSciDoc (" + id + ")", e);
             throw new RuntimeException("Error removing image from eSciDoc (" + id + ")", e);
         }
-    }
-
-    public String getEscidocUserHandle() throws Exception
-    {
-        String userName = PropertyReader.getProperty("imeji.escidoc.user");
-        String password = PropertyReader.getProperty("imeji.escidoc.password");
-        return LoginHelper.login(userName, password);
     }
 }

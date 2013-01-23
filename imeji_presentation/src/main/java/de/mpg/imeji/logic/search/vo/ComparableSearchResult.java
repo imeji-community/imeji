@@ -1,8 +1,17 @@
 package de.mpg.imeji.logic.search.vo;
 
-import de.mpg.imeji.logic.search.util.SortHelper;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import java.util.List;
 
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.j2j.helper.SortHelper;
+
+/**
+ * Search result (as {@link String} entry of a {@link List} of uris) which can be sorted
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class ComparableSearchResult implements Comparable<ComparableSearchResult>
 {
     private String value = null;

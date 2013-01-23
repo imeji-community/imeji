@@ -7,7 +7,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import com.hp.hpl.jena.Jena;
+import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
@@ -21,22 +22,94 @@ import de.mpg.j2j.transaction.ThreadedTransaction;
 import de.mpg.j2j.transaction.Transaction;
 
 /**
- * Interface for write operations (create/delete/update) in Jena. Implements transactions and security.
+ * imeji WRITE operations (create/delete/update) in {@link Jena} <br/>
+ * - Use {@link Transaction} and {@link Security} <br/>
+ * - For concurrency purpose, each write {@link Transaction} is made within a single {@link Thread}. Use
+ * {@link ThreadedTransaction} <br/>
+ * - for READ operations, uses {@link ImejiRDF2Bean}
  * 
- * @author saquet
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
  */
 public class ImejiBean2RDF
 {
     private Security security;
-    private static Logger logger = Logger.getLogger(ImejiBean2RDF.class);
     private String modelURI;
 
+    /**
+     * Construct one {@link ImejiBean2RDF} for one {@link Model}
+     * 
+     * @param modelURI
+     */
     public ImejiBean2RDF(String modelURI)
     {
         security = new Security();
         this.modelURI = modelURI;
     }
 
+    /**
+     * Create a {@link List} of {@link Object} in {@link Jena}
+     * 
+     * @param objects
+     * @param user
+     * @throws Exception
+     */
+    public void create(List<Object> objects, User user) throws Exception
+    {
+        checkSecurity(objects, user, OperationsType.CREATE);
+        runTransaction(objects, OperationsType.CREATE, false);
+    }
+
+    /**
+     * Delete a {@link List} of {@link Object} in {@link Jena}
+     * 
+     * @param objects
+     * @param user
+     * @throws Exception
+     */
+    public void delete(List<Object> objects, User user) throws Exception
+    {
+        checkSecurity(objects, user, OperationsType.DELETE);
+        runTransaction(objects, OperationsType.DELETE, false);
+    }
+
+    /**
+     * Update a {@link List} of {@link Object} in {@link Jena}
+     * 
+     * @param objects
+     * @param user
+     * @throws Exception
+     */
+    public void update(List<Object> objects, User user) throws Exception
+    {
+        checkSecurity(objects, user, OperationsType.UPDATE);
+        runTransaction(objects, OperationsType.UPDATE, false);
+    }
+
+    /**
+     * Update LAZY a {@link List} of {@link Object} in {@link Jena}<br/>
+     * - {@link List} contained within the {@link Object} are not updated: faster performance, especially for objects
+     * with huge {@link List}
+     * 
+     * @param objects
+     * @param user
+     * @throws Exception
+     */
+    public void updateLazy(List<Object> objects, User user) throws Exception
+    {
+        checkSecurity(objects, user, OperationsType.UPDATE);
+        runTransaction(objects, OperationsType.UPDATE, true);
+    }
+
+    /**
+     * Run one WRITE operation in {@link Transaction} within a {@link ThreadedTransaction}
+     * 
+     * @param objects
+     * @param type
+     * @param lazy
+     * @throws Exception
+     */
     private void runTransaction(List<Object> objects, OperationsType type, boolean lazy) throws Exception
     {
         index(objects);
@@ -48,30 +121,13 @@ public class ImejiBean2RDF
         ts.throwException();
     }
 
-    public void create(List<Object> objects, User user) throws Exception
-    {
-        checkSecurity(objects, user, OperationsType.CREATE);
-        runTransaction(objects, OperationsType.CREATE, false);
-    }
-
-    public void delete(List<Object> objects, User user) throws Exception
-    {
-        checkSecurity(objects, user, OperationsType.DELETE);
-        runTransaction(objects, OperationsType.DELETE, false);
-    }
-
-    public void update(List<Object> objects, User user) throws Exception
-    {
-        checkSecurity(objects, user, OperationsType.UPDATE);
-        runTransaction(objects, OperationsType.UPDATE, false);
-    }
-
-    public void updateLazy(List<Object> objects, User user) throws Exception
-    {
-        checkSecurity(objects, user, OperationsType.UPDATE);
-        runTransaction(objects, OperationsType.UPDATE, true);
-    }
-
+    /**
+     * Check {@link Security} for WRITE operations
+     * 
+     * @param list
+     * @param user
+     * @param opType
+     */
     private void checkSecurity(List<Object> list, User user, OperationsType opType)
     {
         for (Object o : list)
@@ -84,13 +140,11 @@ public class ImejiBean2RDF
         }
     }
 
-    public List<Object> toList(Object o)
-    {
-        List<Object> list = new ArrayList<Object>();
-        list.add(o);
-        return list;
-    }
-
+    /**
+     * Set the fulltext value of each imeji object (based on the metadata values, the author, etc.)
+     * 
+     * @param l
+     */
     private void index(List<Object> l)
     {
         for (Object o : l)
@@ -102,6 +156,25 @@ public class ImejiBean2RDF
         }
     }
 
+    /**
+     * Transform a single {@link Object} into a {@link List} with one {@link Object}
+     * 
+     * @param o
+     * @return
+     */
+    public List<Object> toList(Object o)
+    {
+        List<Object> list = new ArrayList<Object>();
+        list.add(o);
+        return list;
+    }
+
+    /**
+     * Extract the id (as {@link URI}) of an imeji {@link Object},
+     * 
+     * @param o
+     * @return
+     */
     private URI extractID(Object o)
     {
         if (o instanceof Item)

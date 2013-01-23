@@ -15,11 +15,11 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.concurrency.locks.Locks;
-import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -27,18 +27,23 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SessionBean;
-import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
 import de.mpg.imeji.presentation.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
-import de.mpg.j2j.helper.J2JHelper;
 
+/**
+ * Bean for a Single image
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class ImageBean
 {
     private static Logger logger = Logger.getLogger(ImageBean.class);
@@ -56,22 +61,12 @@ public class ImageBean
     private MetadataLabels labels;
     private SingleImageBrowse browse = null;
 
-    public ImageBean(Item img) throws Exception
-    {
-        item = img;
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        prettyLink = "pretty:editImage";
-        labels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
-        if (sessionBean.getSelected().contains(item.getId()))
-        {
-            setSelected(true);
-        }
-        loadProfile();
-        removeDeadMetadata();
-        sortMetadataAccordingtoProfile();
-    }
 
+    /**
+     * Construct a default {@link ImageBean}
+     * 
+     * @throws Exception
+     */
     public ImageBean() throws Exception
     {
         item = new Item();
@@ -81,12 +76,17 @@ public class ImageBean
         labels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
     }
 
-    public String getInitPopup() throws Exception
-    {
-        labels.init(profile);
-        return "";
-    }
-
+    // public String getInitPopup() throws Exception
+    // {
+    // labels.init(profile);
+    // return "";
+    // }
+    /**
+     * Initialize the {@link ImageBean}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String getInit() throws Exception
     {
         tab = UrlHelper.getParameterValue("tab");
@@ -111,6 +111,11 @@ public class ImageBean
         return "";
     }
 
+    /**
+     * Initialize the metadata information when the "view metadata" tab is called.
+     * 
+     * @throws Exception
+     */
     public void initViewMetadataTab() throws Exception
     {
         if (item != null)
@@ -125,6 +130,11 @@ public class ImageBean
         }
     }
 
+    /**
+     * Initialize the technical metadata when the "technical metadata" tab is called
+     * 
+     * @throws Exception
+     */
     public void initViewTechnicalMetadata() throws Exception
     {
         try
@@ -140,12 +150,18 @@ public class ImageBean
         }
     }
 
+    /**
+     * Initiliaue the {@link SingleImageBrowse} for this {@link ImageBean}
+     */
     public void initBrowsing()
     {
         if (item != null)
             browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item, "item", "");
     }
 
+    /**
+     * Order the metadata of the {@link Item} according to the order defined in its {@link MetadataProfile}
+     */
     private void sortMetadataAccordingtoProfile()
     {
         Collection<Metadata> mdSorted = new ArrayList<Metadata>();
@@ -165,11 +181,17 @@ public class ImageBean
         item.getMetadataSet().setMetadata(mdSorted);
     }
 
+    /**
+     * Load the item according to the idntifier defined in the URL
+     */
     public void loadImage()
     {
         item = ObjectLoader.loadImage(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
     }
 
+    /**
+     * Load the collection according to the identifier defined in the URL
+     */
     public void loadCollection()
     {
         try
@@ -184,6 +206,9 @@ public class ImageBean
         }
     }
 
+    /**
+     * Load the {@link MetadataProfile} of the {@link Item}
+     */
     public void loadProfile()
     {
         try
@@ -369,12 +394,21 @@ public class ImageBean
         this.sessionBean = sessionBean;
     }
 
+    /**
+     * Add the current {@link Item} to the active {@link Album}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String addToActiveAlbum() throws Exception
     {
-        AlbumController ac = new AlbumController(sessionBean.getUser());
+        SessionObjectsController soc = new SessionObjectsController();
         List<String> l = new ArrayList<String>();
         l.add(item.getId().toString());
-        boolean added = ac.addToAlbum(sessionBean.getActiveAlbum(), l, sessionBean.getUser()).size() == 0;
+        int sizeBeforeAdd = sessionBean.getActiveAlbumSize();
+        soc.addToActiveAlbum(l);
+        int sizeAfterAdd = sessionBean.getActiveAlbumSize();
+        boolean added = sizeAfterAdd > sizeBeforeAdd;
         if (!added)
         {
             BeanHelper
@@ -394,6 +428,12 @@ public class ImageBean
         return "";
     }
 
+    /**
+     * Remove the {@link Item} from the database. If the item was in the current {@link Album}, remove the {@link Item}
+     * from it
+     * 
+     * @throws Exception
+     */
     public void remove() throws Exception
     {
         if (getIsInActiveAlbum())
@@ -404,25 +444,33 @@ public class ImageBean
         List<Item> l = new ArrayList<Item>();
         l.add(item);
         ic.delete(l, sessionBean.getUser());
-        redirectAfterRemove();
+        SessionObjectsController soc = new SessionObjectsController();
+        soc.unselectItem(item.getId().toString());
+        redirectToBrowsePage();
     }
 
-    public void redirectAfterRemove() throws IOException
-    {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl());
-    }
-
+    /**
+     * Remove the {@link Item} from the active {@link Album}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String removeFromActiveAlbum() throws Exception
     {
-        AlbumController ac = new AlbumController(sessionBean.getUser());
+        SessionObjectsController soc = new SessionObjectsController();
         List<String> l = new ArrayList<String>();
         l.add(item.getId().toString());
-        ac.removeFromAlbum(sessionBean.getActiveAlbum(), l, sessionBean.getUser());
+        soc.removeFromActiveAlbum(l);
         BeanHelper.info(sessionBean.getLabel("image") + " " + item.getFilename() + " "
                 + sessionBean.getMessage("success_album_remove_from"));
         return "pretty:";
     }
 
+    /**
+     * Return true if the {@link Item} is in the active {@link Album}
+     * 
+     * @return
+     */
     public boolean getIsInActiveAlbum()
     {
         if (sessionBean.getActiveAlbum() != null && item != null)
@@ -432,32 +480,34 @@ public class ImageBean
         return false;
     }
 
-    public void selectedChanged(ValueChangeEvent event)
+    /**
+     * Redirect to the browse page
+     * 
+     * @throws IOException
+     */
+    public void redirectToBrowsePage() throws IOException
     {
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (event.getNewValue().toString().equals("true") && !sessionBean.getSelected().contains(item.getId()))
-        {
-            setSelected(true);
-            select();
-        }
-        else if (event.getNewValue().toString().equals("false") && sessionBean.getSelected().contains(item.getId()))
-        {
-            setSelected(false);
-            select();
-        }
+        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl());
     }
 
-    public String select()
+    /**
+     * Listener of the value of the select box
+     * 
+     * @param event
+     */
+    public void selectedChanged(ValueChangeEvent event)
     {
-        if (!selected)
+        SessionObjectsController soc = new SessionObjectsController();
+        if (event.getNewValue().toString().equals("true"))
         {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().remove(item.getId().toString());
+            setSelected(true);
+            soc.selectItem(item.getId().toString());
         }
-        else
+        else if (event.getNewValue().toString().equals("false"))
         {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelected().add(item.getId().toString());
+            setSelected(false);
+            soc.unselectItem(item.getId().toString());
         }
-        return "";
     }
 
     public MetadataProfile getProfile()

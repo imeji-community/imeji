@@ -13,6 +13,13 @@ import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * Metadata of a {@link Container} TODO Description
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/container/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class ContainerMetadata
@@ -23,7 +30,7 @@ public class ContainerMetadata
     private String description;
     @j2jList("http://xmlns.com/foaf/0.1/person")
     protected Collection<Person> persons = new ArrayList<Person>();
-    private URI id= URI.create("http://imeji.org/terms/container/metadata/" + UUID.randomUUID());
+    private URI id = URI.create("http://imeji.org/terms/container/metadata/" + UUID.randomUUID());
 
     public String getTitle()
     {

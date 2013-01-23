@@ -27,7 +27,7 @@ public class HistoryFilter implements Filter
 
     public void destroy()
     {
-        filterConfig = null;
+        setFilterConfig(null);
     }
 
     public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain) throws IOException,
@@ -42,9 +42,9 @@ public class HistoryFilter implements Filter
         // Parameter used by pretty query to pass parameter defined in pretty-config in the url pattern
         String[] ids = request.getParameterValues("com.ocpsoft.vP_0");
         // If f exists, then it is a filter, not added to history
-        if (f == null)
+        if (f == null&& request.getPathInfo() != null)
         {
-            if (h == null)
+            if (h == null )
             {
                 // if h not defined, then it is a new page
                 hs.add(request.getPathInfo().replaceAll("/", ""), q, ids);
@@ -60,14 +60,14 @@ public class HistoryFilter implements Filter
 
     public void init(FilterConfig arg0) throws ServletException
     {
-        this.filterConfig = arg0;
+        this.setFilterConfig(arg0);
     }
 
     private HistorySession getHistorySession(ServletRequest request, ServletResponse resp)
     {
         String name = (String)HistorySession.class.getSimpleName();
         FacesContext fc = getFacesContext(request, resp);
-        Object result = fc.getCurrentInstance().getExternalContext().getSessionMap().get(name);
+        Object result = fc.getExternalContext().getSessionMap().get(name);
         if (result == null)
         {
             try
@@ -110,6 +110,16 @@ public class HistoryFilter implements Filter
         UIViewRoot view = facesContext.getApplication().getViewHandler().createView(facesContext, "imeji");
         facesContext.setViewRoot(view);
         return facesContext;
+    }
+
+    public FilterConfig getFilterConfig()
+    {
+        return filterConfig;
+    }
+
+    public void setFilterConfig(FilterConfig filterConfig)
+    {
+        this.filterConfig = filterConfig;
     }
 
     public abstract static class InnerFacesContext extends FacesContext

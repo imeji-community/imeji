@@ -14,6 +14,13 @@ import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.search.SearchResult;
 
+/**
+ * {@link Export} in rdf
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public abstract class RDFExport extends Export
 {
     protected String[] filteredTriples = {};
@@ -75,6 +82,12 @@ public abstract class RDFExport extends Export
         }
     }
 
+    /**
+     * Write a {@link Resource} in rdf
+     * 
+     * @param r
+     * @return
+     */
     private StringWriter exportResource(Resource r)
     {
         StringWriter writer = new StringWriter();
@@ -130,20 +143,6 @@ public abstract class RDFExport extends Export
     private String closeTag(Statement st)
     {
         return "</" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName() + ">";
-    }
-
-    private String tagValue(Statement st)
-    {
-        String s = "";
-        try
-        {
-            s = st.getResource().toString();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return s;
     }
 
     private String getNamespace(String ns)

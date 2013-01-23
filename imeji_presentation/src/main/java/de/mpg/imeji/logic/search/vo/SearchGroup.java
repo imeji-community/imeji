@@ -2,7 +2,15 @@ package de.mpg.imeji.logic.search.vo;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * 
+ * SearchElement grouping {@link SearchElement}
+ *
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ *
+ */
 public class SearchGroup extends SearchElement
 {
     private List<SearchElement> group;

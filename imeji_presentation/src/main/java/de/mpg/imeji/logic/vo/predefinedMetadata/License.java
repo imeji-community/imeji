@@ -6,15 +6,25 @@ package de.mpg.imeji.logic.vo.predefinedMetadata;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 
+import javax.xml.bind.annotation.XmlType;
+
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * {@link Metadata} for license value
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jDataType("http://imeji.org/terms/metadata#license")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlType(name = "license")
 public class License extends Metadata
 {
     private SimpleDateFormat date;

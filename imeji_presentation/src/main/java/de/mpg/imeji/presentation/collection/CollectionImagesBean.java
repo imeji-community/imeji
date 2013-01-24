@@ -238,7 +238,6 @@ public class CollectionImagesBean extends ImagesBean
      */
     public String withdraw() throws Exception
     {
-        System.out.println("discard");
         CollectionController cc = new CollectionController();
         try
         {

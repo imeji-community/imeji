@@ -1,8 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	>
+	xmlns:f="http://java.sun.com/jsf/core">
 	<div id="dialogWithdraw" class="half_area0_p8 bordst0 shadst1 dialogbox" style="display:none;">
 		<h:form id="discardForm">
 	       <div class="half_area0_p8">
@@ -18,7 +17,7 @@
 					</a>
 	      			</div>
 				<div class="xLarge_txtBtn tiny_marginLExcl">
-					<h:commandButton id="btnDiscard" onclick="if(!clickOnDiscard('#{index}', this, '#{msg.error_withdraw_comment}')){;return false};" action="#{bean.withdraw}" value="#{lbl.withdraw}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
+					<h:commandButton id="btnDiscard" onclick="if(!clickOnDiscard('#{index}', this, '#{msg.error_withdraw_comment}')){return false;}else{this.submit();}" action="#{bean.withdraw}" value="#{lbl.withdraw}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
 			 	</div>
 			</div>
 		</h:form>

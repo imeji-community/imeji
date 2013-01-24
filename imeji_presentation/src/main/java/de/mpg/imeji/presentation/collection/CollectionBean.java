@@ -301,6 +301,7 @@ public abstract class CollectionBean
         CollectionController cc = new CollectionController();
         try
         {
+            System.out.println("release collecionbean");
             cc.release(collection, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_release"));
         }
@@ -337,7 +338,6 @@ public abstract class CollectionBean
      */
     public String withdraw() throws Exception
     {
-        System.out.println("withdraw!!!");
         CollectionController cc = new CollectionController();
         try
         {
@@ -348,7 +348,7 @@ public abstract class CollectionBean
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error discarding collection:", e);
         }
         return "pretty:";
     }

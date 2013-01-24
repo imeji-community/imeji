@@ -2,7 +2,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	>
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<ui:remove><!-- License: src/main/resources/license/escidoc.license --></ui:remove>
 	
@@ -193,18 +193,11 @@
 							</div>
 						</div>
 					</li>
-					
-					<ui:include src="../confirmationPages/ContainerRelease.xhtml">
-						<ui:param name="bean" value="#{container}"/>
-					</ui:include>
+					<imjc:DiscardContainer bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>
 					<ui:include src="../confirmationPages/ContainerDelete.xhtml">
 						<ui:param name="bean" value="#{container}"/>
 					</ui:include>
-					<ui:include src="../confirmationPages/ContainerWithdraw.xhtml">
-						<ui:param name="bean" value="#{container}"/>
-						<ui:param name="discardComment" value="#{container.discardComment}"/>
-						<ui:param name="index" value="#{index.index}"/>
-					</ui:include>
+					
 				</ui:repeat>
 			</ol>
 			

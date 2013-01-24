@@ -170,7 +170,7 @@ public class CollectionController extends ImejiController
             writeReleaseProperty(collection, user);
             List<Item> items = (List<Item>)itemController.loadItems(itemUris, -1, 0);
             itemController.release(items, user);
-            update(collection);
+            update(collection, user);
             ProfileController pc = new ProfileController();
             pc.release(pc.retrieve(collection.getProfile(), user), user);
         }
@@ -200,7 +200,7 @@ public class CollectionController extends ImejiController
             List<Item> items = (List<Item>)itemController.loadItems(itemUris, -1, 0);
             itemController.withdraw(items, collection.getDiscardComment());
             writeWithdrawProperties(collection, null);
-            update(collection);
+            update(collection, user);
             // Withdraw profile
             ProfileController pc = new ProfileController();
             pc.withdraw(pc.retrieve(collection.getProfile(), user), user);

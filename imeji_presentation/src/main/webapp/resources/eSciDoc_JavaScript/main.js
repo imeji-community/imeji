@@ -183,8 +183,6 @@ function clickOnDiscard(index, button, errorMessage) {
 	var listId = '';
 	if (index != '') {
 		listId = 'list:' + index + ":";
-	} else {
-		listId = 'actionsMenu:';
 	}
 	// Get textarea with discard comment
 	var textArea = document.getElementById(listId
@@ -194,7 +192,7 @@ function clickOnDiscard(index, button, errorMessage) {
 		return true;
 	} else {
 		// if discard comment is empty, show error message
-		var message = document.getElementById(listId + 'errorMessage');
+		var message = document.getElementById(listId + 'discardForm:errorMessage');
 		message.innerHTML = errorMessage;
 		return false;
 	}

@@ -1,0 +1,28 @@
+
+	
+.imj_siteWrapper {
+    width: 84.0909em;
+    height: auto !important;
+    min-height: 100%;
+    margin: 0 auto;
+    margin-bottom: -2.001em;
+    
+    overflow: hidden;
+    border-left: 1px dotted #6CAD2F;
+	border-right: 1px dotted #6CAD2F;
+}
+
+/*
+ * breadcrump component
+ */ 
+.imj_breadcrumpHistory {
+	width:92.75%;
+	padding-left:7%;
+}
+.imj_breadcrumpTitle {
+	margin-right:0.3636em;
+}
+.imj_breadcrumpSeparator {
+	margin-left:0.3636em;
+	margin-right:0.3636em;
+}

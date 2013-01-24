@@ -139,6 +139,7 @@ All rights reserved. Use is subject to license terms.
                                  
                 <ui:include src="/footerPages/Footer.jspf"/>
                 <script type="text/javascript">
+                /* open a dialog*/
 				function openDialog(id) {
 					/*set the dialog in center of the screen*/
 					var dialog = $(document).find("#" + id);
@@ -157,6 +158,7 @@ All rights reserved. Use is subject to license terms.
 					$.lock(dialog);
 					
 				}
+				/*close a dialog*/
 				function closeDialog(id) {
 					var dialog = $(document).find("#" + id);
 					var content = $("#full_wrapper");
@@ -164,6 +166,9 @@ All rights reserved. Use is subject to license terms.
 					dialog.hide();
 					$.unlock(dialog);
 				}
+				/*
+				* Lock/unlock html elements
+				*/
 				(function($) {
 				    $.extend({
 				lock: function(content){

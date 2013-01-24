@@ -15,7 +15,7 @@
 	     	</div>
 			<div class="xLarge_txtBtn tiny_marginLExcl">
 				<h:form>
-					<h:commandButton onclick="submitPanel(this, '#{msg.please_wait}');" action="#{bean.release}" rendered="#{bean.deletable}" value="#{lbl.release}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
+					<h:commandButton onclick="submitPanel(this, '#{msg.please_wait}');return true;" action="#{bean.release}" rendered="#{bean.deletable}" value="#{lbl.release}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
 		 		</h:form>
 		 	</div>
 		</div>

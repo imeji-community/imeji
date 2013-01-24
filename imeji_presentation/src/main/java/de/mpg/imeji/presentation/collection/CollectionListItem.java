@@ -108,6 +108,7 @@ public class CollectionListItem
 
     /**
      * Release the {@link Collection} in the list
+     * 
      * @return
      */
     public String release()
@@ -130,6 +131,7 @@ public class CollectionListItem
 
     /**
      * Delete the {@link CollectionImeji} in the list
+     * 
      * @return
      */
     public String delete()
@@ -151,6 +153,7 @@ public class CollectionListItem
 
     /**
      * Withdraw the {@link CollectionImeji} of the list
+     * 
      * @return
      */
     public String withdraw()
@@ -160,7 +163,7 @@ public class CollectionListItem
         if ("".equals(discardComment.trim()))
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
-            BeanHelper.error(sessionBean.getMessage("errorn_withdraw_discardcomment"));
+            BeanHelper.error(sessionBean.getMessage("error_withdraw_discardcomment"));
         }
         else
         {
@@ -175,6 +178,7 @@ public class CollectionListItem
             {
                 BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
                 logger.error(sessionBean.getMessage("error_collection_withdraw"), e);
+                e.printStackTrace();
             }
         }
         return "pretty:";

@@ -54,6 +54,19 @@
 			</h:outputLink>
 				
 		</h:panelGroup>
+		
+		<h:panelGroup rendered="#{CollectionImagesBean.collection != null}">
+			<ui:include src="confirmationPages/ContainerRelease.xhtml">
+				<ui:param name="bean" value="#{ViewCollectionBean}"/>
+			</ui:include>
+			<ui:include src="confirmationPages/ContainerDelete.xhtml">
+				<ui:param name="bean" value="#{ViewCollectionBean}"/>
+			</ui:include>
+			<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
+				<ui:param name="bean" value="#{ViewCollectionBean}"/>
+				<ui:param name="discardComment" value="#{ViewCollectionBean.collection.discardComment}"/>
+			</ui:include>
+		</h:panelGroup>
 	</ui:define>
 	
 	
@@ -123,18 +136,7 @@
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
-		<h:panelGroup rendered="#{CollectionImagesBean.collection != null}">
-			<ui:include src="confirmationPages/ContainerRelease.xhtml">
-				<ui:param name="bean" value="#{ViewCollectionBean}"/>
-			</ui:include>
-			<ui:include src="confirmationPages/ContainerDelete.xhtml">
-				<ui:param name="bean" value="#{ViewCollectionBean}"/>
-			</ui:include>
-			<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
-				<ui:param name="bean" value="#{ViewCollectionBean}"/>
-				<ui:param name="discardComment" value="#{ViewCollectionBean.collection.discardComment}"/>
-			</ui:include>
-		</h:panelGroup>
+		
 	</ui:define>
 	
 </ui:composition>

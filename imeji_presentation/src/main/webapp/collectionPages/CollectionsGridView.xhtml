@@ -58,7 +58,7 @@
 			</div>
 			
 			<ol>
-				<ui:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0" rowKeyVar="index">
+				<ui:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0"  varStatus="index">
 					<li class="full_area0 listItem">
 						<div class="free_area0 itemHeader">
 							<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea">
@@ -203,7 +203,7 @@
 					<ui:include src="../confirmationPages/ContainerWithdraw.xhtml">
 						<ui:param name="bean" value="#{container}"/>
 						<ui:param name="discardComment" value="#{container.discardComment}"/>
-						<ui:param name="index" value="#{index}"/>
+						<ui:param name="index" value="#{index.index}"/>
 					</ui:include>
 				</ui:repeat>
 			</ol>

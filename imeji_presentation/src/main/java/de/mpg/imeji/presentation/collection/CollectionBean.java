@@ -329,8 +329,15 @@ public abstract class CollectionBean
         return "pretty:collections";
     }
 
+    /**
+     * Discard the {@link CollectionImeji} of this {@link CollectionBean}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String withdraw() throws Exception
     {
+        System.out.println("withdraw!!!");
         CollectionController cc = new CollectionController();
         try
         {

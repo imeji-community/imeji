@@ -58,19 +58,7 @@ public class UserCreationBean
                 {
                     BeanHelper.error(sb.getMessage("error_user_already_exists"));
                 }
-<<<<<<< HEAD
-            }
-            catch (NotFoundException e)
-            {
-                logger.info("User not found: will be created");
-                PasswordGenerator generator = new PasswordGenerator();
-                String password = generator.generatePassword();
-                user.setEncryptedPassword(StringHelper.convertToMD5(password));
-                uc.create(user);
-                if (sendEmail)
-=======
                 else
->>>>>>> origin/gui-restructure
                 {
                     String password = createNewUser();
                     if (sendEmail)
@@ -99,7 +87,7 @@ public class UserCreationBean
         UserController uc = new UserController(sb.getUser());
         PasswordGenerator generator = new PasswordGenerator();
         String password = generator.generatePassword();
-        user.setEncryptedPassword(UserController.convertToMD5(password));
+        user.setEncryptedPassword(StringHelper.convertToMD5(password));
         uc.create(user);
         return password;
     }
@@ -131,7 +119,7 @@ public class UserCreationBean
         }
         catch (NotFoundException e)
         {
-            logger.info("User not found: " +  user.getEmail());
+            logger.info("User not found: " + user.getEmail());
             return false;
         }
     }

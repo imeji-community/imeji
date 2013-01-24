@@ -39,7 +39,6 @@ public class UserController extends ImejiController
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
 
-<<<<<<< HEAD
     /**
      * Default constructor
      */
@@ -54,28 +53,13 @@ public class UserController extends ImejiController
      * @deprecated
      * @param user
      */
-=======
-    @Deprecated
->>>>>>> origin/gui-restructure
     public UserController(User user)
     {
         super(user);
     }
 
     /**
-<<<<<<< HEAD
      * Create a new {@link User}
-=======
-     * Default constructor
-     */
-    public UserController()
-    {
-        // construct
-    }
-
-    /**
-     * Create {@link User}
->>>>>>> origin/gui-restructure
      * 
      * @param newUser
      * @throws Exception
@@ -87,11 +71,7 @@ public class UserController extends ImejiController
     }
 
     /**
-<<<<<<< HEAD
      * Delete a {@link User}
-=======
-     * Delete {@link User}
->>>>>>> origin/gui-restructure
      * 
      * @param user
      * @throws Exception
@@ -106,11 +86,7 @@ public class UserController extends ImejiController
     }
 
     /**
-<<<<<<< HEAD
      * Retrieve a {@link User} according to its email
-=======
-     * Retrieve {@link User}
->>>>>>> origin/gui-restructure
      * 
      * @param email
      * @return
@@ -123,11 +99,7 @@ public class UserController extends ImejiController
     }
 
     /**
-<<<<<<< HEAD
      * Update a {@link User}
-=======
-     * Update {@link User}
->>>>>>> origin/gui-restructure
      * 
      * @param user
      * @throws Exception
@@ -139,12 +111,8 @@ public class UserController extends ImejiController
     }
 
     /**
-<<<<<<< HEAD
      * Retrieve all {@link User} in imeji<br/>
      * Only allowed for System administrator
-=======
-     * Retrieve all {@link User}. Must be called by sysadmin {@link User}
->>>>>>> origin/gui-restructure
      * 
      * @return
      */
@@ -174,27 +142,4 @@ public class UserController extends ImejiController
         }
         return users;
     }
-<<<<<<< HEAD
-=======
-
-    /**
-     * Encode a string inot md5
-     * 
-     * @param pass
-     * @return
-     * @throws Exception
-     */
-    public static String convertToMD5(String pass) throws Exception
-    {
-        MessageDigest dig = MessageDigest.getInstance("MD5");
-        dig.update(pass.getBytes("UTF-8"));
-        byte messageDigest[] = dig.digest();
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < messageDigest.length; i++)
-        {
-            hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-        }
-        return hexString.toString();
-    }
->>>>>>> origin/gui-restructure
 }

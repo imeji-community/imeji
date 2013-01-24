@@ -170,16 +170,9 @@ public class CollectionController extends ImejiController
             writeReleaseProperty(collection, user);
             List<Item> items = (List<Item>)itemController.loadItems(itemUris, -1, 0);
             itemController.release(items, user);
-<<<<<<< HEAD
             update(collection);
             ProfileController pc = new ProfileController();
             pc.release(pc.retrieve(collection.getProfile(), user), user);
-=======
-            update(collection, user);
-            ProfileController pc = new ProfileController(user);
-            pc.retrieve(collection.getProfile());
-            pc.release(pc.retrieve(collection.getProfile()));
->>>>>>> origin/gui-restructure
         }
     }
 

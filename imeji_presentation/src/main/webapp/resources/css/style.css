@@ -1,4 +1,9 @@
 
+a:hover,
+input:hover {
+	color:#FFFFFF;
+}
+
 	
 .imj_siteWrapper {
     width: 84.0909em;
@@ -11,6 +16,10 @@
     border-left: 1px dotted #6CAD2F;
 	border-right: 1px dotted #6CAD2F;
 }
+.imj_siteWrapper input[type="text"], textarea {
+	font-family: Courier,"Courier New",serif;
+}
+
 
 /*
  * breadcrump component
@@ -19,10 +28,63 @@
 	width:92.75%;
 	padding-left:7%;
 }
-.imj_breadcrumpTitle {
+.imj_breadcrumpHistory .imj_breadcrumpTitle {
 	margin-right:0.3636em;
 }
-.imj_breadcrumpSeparator {
+.imj_breadcrumpHistory .imj_breadcrumpSeparator {
 	margin-left:0.3636em;
 	margin-right:0.3636em;
+}
+
+/*
+ * metaMenuStandard
+ */
+.imj_metaMenuStandardSingleLine {
+	width:100%;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuAlignRight {
+	float:right;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {
+	height:1.5454em;
+	width:0.0909em;
+	margin:0 0.72727em;
+	border-right:solid #6CAD2F 0.090909em;
+	display:inline-block;
+}
+.imj_metaMenuStandardSingleLine select.imj_metaMenuItem {
+	color:#000000;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] {
+	color: #6CAD2F;
+	display:inline;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"],
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] {
+	background-color:#292929;
+    color: #6CAD2F;
+    font-size: 0.75em;
+   	height: 1.4545em;
+   	width:10.2727em;
+   	border:solid #6CAD2F 0.0909em;
+   	margin-right:0.1818em;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:hover,
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:hover {
+	color:#FFFFFF;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:focus,
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:focus {
+	color:#FFFFFF;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {
+	background-color:#292929;
+	color: #6CAD2F;
+	padding:0;
+	height:1.4545em;
+	border:none 0;
+	padding-top:0.1818em;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {
+	color:#FFFFFF;
 }

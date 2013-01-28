@@ -193,7 +193,7 @@
 							</div>
 						</div>
 					</li>
-					<imjc:DiscardContainer bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>
+					<imjc:DiscardContainer id="dialDiscardContainer" bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>
 					<ui:include src="../confirmationPages/ContainerDelete.xhtml">
 						<ui:param name="bean" value="#{container}"/>
 					</ui:include>

@@ -5,6 +5,9 @@ package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Collections;
+
+import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
@@ -18,6 +21,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -92,6 +96,7 @@ public class CollectionListItem
 
     /**
      * Initialize security parameters
+     * 
      * @param collection
      * @param user
      */
@@ -105,6 +110,7 @@ public class CollectionListItem
 
     /**
      * Count the size of the collection
+     * 
      * @param user
      */
     private void initSize(User user)
@@ -192,6 +198,18 @@ public class CollectionListItem
             logger.error(sessionBean.getMessage("error_collection_withdraw"), e);
         }
         return "pretty:";
+    }
+
+    /**
+     * Listener for the discard comment
+     * 
+     * @param event
+     */
+    public void discardCommentListener(ValueChangeEvent event)
+    {
+        String nc = event.getNewValue().toString();
+        System.out.println(nc);
+        setDiscardComment(nc);
     }
 
     public String getTitle()

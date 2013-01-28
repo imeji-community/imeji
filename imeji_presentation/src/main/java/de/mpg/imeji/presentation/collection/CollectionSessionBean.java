@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.collection;
 
 import java.util.ArrayList;
@@ -12,6 +11,13 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
+/**
+ * Session with objects related to {@link CollectionImeji}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class CollectionSessionBean
 {
     private CollectionImeji active = null;
@@ -20,6 +26,9 @@ public class CollectionSessionBean
     private String filter = "all";
     private List<Metadata> metadataTypes = null;
 
+    /**
+     * Constructor
+     */
     public CollectionSessionBean()
     {
         try
@@ -32,6 +41,11 @@ public class CollectionSessionBean
         }
     }
 
+    /**
+     * Initialize the session objects
+     * 
+     * @throws Exception
+     */
     public void init() throws Exception
     {
         active = new CollectionImeji();
@@ -42,7 +56,7 @@ public class CollectionSessionBean
             metadataTypes.add(MetadataFactory.createMetadata(t));
         }
     }
-    
+
     /**
      * @return the active
      */
@@ -75,34 +89,63 @@ public class CollectionSessionBean
         this.selectedMenu = selectedMenu;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getFilter()
     {
         return filter;
     }
 
+    /**
+     * setter
+     * 
+     * @param filter
+     */
     public void setFilter(String filter)
     {
         this.filter = filter;
     }
 
+    /**
+     * setter
+     * 
+     * @param metadataTypes
+     */
     public void setMetadataTypes(List<Metadata> metadataTypes)
     {
         this.metadataTypes = metadataTypes;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<Metadata> getMetadataTypes()
     {
         return metadataTypes;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public MetadataProfile getProfile()
     {
         return profile;
     }
 
+    /**
+     * setter
+     * 
+     * @param profile
+     */
     public void setProfile(MetadataProfile profile)
     {
         this.profile = profile;
     }
-    
 }

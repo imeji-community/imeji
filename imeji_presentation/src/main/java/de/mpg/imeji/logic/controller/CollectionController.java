@@ -221,6 +221,20 @@ public class CollectionController extends ImejiController
     }
 
     /**
+     * Retrieve a complete {@link CollectionImeji} (inclusive its {@link Item}: slow for huge {@link CollectionImeji})
+     * 
+     * @param uri
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    public CollectionImeji retrieve(URI uri, User user) throws Exception
+    {
+        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user, new CollectionImeji());
+    }
+
+    /**
      * Retrieve the {@link CollectionImeji} without its {@link Item}
      * 
      * @param uri

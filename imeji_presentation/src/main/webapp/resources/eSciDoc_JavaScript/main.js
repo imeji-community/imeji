@@ -186,13 +186,13 @@ function clickOnDiscard(index, button, errorMessage) {
 	}
 	// Get textarea with discard comment
 	var textArea = document.getElementById(listId
-			+ 'discardForm:discardComment');
+			+ 'dialDiscardContainer:discardForm:discardComment');
 	if (textArea.value != '') {
 		// if discard comment is not empty, then procceed to discard
 		return true;
 	} else {
 		// if discard comment is empty, show error message
-		var message = document.getElementById(listId + 'discardForm:errorMessage');
+		var message = document.getElementById(listId + 'dialDiscardContainer:discardForm:errorMessage');
 		message.innerHTML = errorMessage;
 		return false;
 	}

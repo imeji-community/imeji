@@ -207,9 +207,7 @@ public class CollectionListItem
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-        String nc = event.getNewValue().toString();
-        System.out.println(nc);
-        setDiscardComment(nc);
+        setDiscardComment(event.getNewValue().toString());
     }
 
     public String getTitle()

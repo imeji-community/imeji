@@ -211,6 +211,24 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     {
         return ((currentPageNumber - 1) * elementsPerPage);
     }
+    
+    /**
+     * Return the first page of the paginator
+     * @return
+     */
+    public int getPageOffset()
+    {
+        if(getFirstPaginatorPageNumber() > 1)
+        {
+            return getFirstPaginatorPageNumber() - 1;
+        }
+        return 0;
+    }
+    
+    public void setPageOffset(int i)
+    {
+        //
+    }
 
     /*
      * public abstract String getAdditionalParameterUrl();

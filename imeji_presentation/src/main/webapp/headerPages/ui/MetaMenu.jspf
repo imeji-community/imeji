@@ -34,7 +34,7 @@
 </ui:remove>
 	<!-- meta Menu starts here -->
 	<h:panelGroup layout="block" styleClass="imj_metaMenuStandardSingleLine">
-		<h:panelGroup styleClass="imj_metaMenuAlignRight">
+		<h:panelGroup styleClass="imj_metaMenuItemsAlign">
 			<!-- Username if logged in -->
 			<ui:fragment rendered="#{SessionBean.user != null}">
 				<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="imj_metaMenuItem" value="#{Navigation.applicationUrl}user?id=#{SessionBean.user.email}">

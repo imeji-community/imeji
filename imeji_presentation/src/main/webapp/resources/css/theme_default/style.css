@@ -1,4 +1,4 @@
-
+/*theme_default*/
 a:hover,
 input:hover {
 	color:#FFFFFF;
@@ -42,7 +42,7 @@ input:hover {
 .imj_metaMenuStandardSingleLine {
 	width:100%;
 }
-.imj_metaMenuStandardSingleLine .imj_metaMenuAlignRight {
+.imj_metaMenuStandardSingleLine .imj_metaMenuItemsAlign {
 	float:right;
 }
 .imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {

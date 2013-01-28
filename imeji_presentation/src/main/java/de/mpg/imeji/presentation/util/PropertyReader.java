@@ -126,9 +126,9 @@ public class PropertyReader
         		serverConfDirectory = System.getProperty("catalina.home") + "/conf";
         	}
         	
-        	logger.info("loading properties from " + serverConfDirectory + "//" + filepath);
-            instream = new FileInputStream(serverConfDirectory + "//" + filepath);
-            fileLocation = (new File(serverConfDirectory + "//" + filepath)).getAbsolutePath();
+        	logger.info("loading properties from " + serverConfDirectory + "/" + filepath);
+            instream = new FileInputStream(serverConfDirectory + "/" + filepath);
+            fileLocation = (new File(serverConfDirectory + "/" + filepath)).getAbsolutePath();
         }
         catch (Exception e)
         {

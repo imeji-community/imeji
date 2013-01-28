@@ -2,21 +2,33 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<div id="dialogDeleteSelectedContainer" class="half_area0_p8 bordst0 shadst1 dialogbox" style="display:none;">
-	      <div class="half_area0_p8">
-	      		<h:outputText value="#{lbl.delete_selected_collections}?" rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and SessionBean.user != null}"/>
-	     			<h:outputText value="#{lbl.delete_selected_albums}?" rendered="#{HistorySession.currentPage.type == 'ALBUMS' and SessionBean.user != null}"/>
-	     		</div>
+	<div id="dialogDeleteSelectedContainer"
+		class="half_area0_p8 bordst0 shadst1 dialogbox" style="display: none;">
+		<div class="half_area0_p8">
+			<h:outputText value="#{lbl.delete_selected_collections}?"
+				rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and SessionBean.user != null}" />
+			<h:outputText value="#{lbl.delete_selected_albums}?"
+				rendered="#{HistorySession.currentPage.type == 'ALBUMS' and SessionBean.user != null}" />
+		</div>
 		<div class="half_area0_p8">
 			<div class="large_txtBtn">
-	     		<a href="#" class="large_txtBtn dialogCancelButton" onclick="closeDialog('dialogDeleteSelectedContainer')">
-					<h:outputText value="#{lbl.cancel}"/>
+				<a href="#" class="large_txtBtn dialogCancelButton"
+					onclick="closeDialog('dialogDeleteSelectedContainer')"> <h:outputText
+						value="#{lbl.cancel}" />
 				</a>
-	     			</div>
+			</div>
 			<div class="xLarge_txtBtn tiny_marginLExcl">
-				<h:form>
-					<h:commandButton onclick="this.disabled=true; this.style.opacity = 0.5; this.value='#{msg.please_wait}';" rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and SessionBean.user != null}" value="#{lbl.delete}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton" action="#{CollectionsBean.deleteAll}" />
-					<h:commandButton onclick="this.disabled=true; this.style.opacity = 0.5; this.value='#{msg.please_wait}';" rendered="#{HistorySession.currentPage.type == 'ALBUMS' and SessionBean.user != null}" value="#{lbl.delete}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton" action="#{AlbumsBean.deleteAll}" />
+				<h:form id="delSelForm">
+					<h:commandButton id="btnDelColl"
+						rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and SessionBean.user != null}"
+						value="#{lbl.delete}"
+						styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"
+						action="#{CollectionsBean.deleteAll}" />
+					<h:commandButton  id="btnDelAlb"
+						rendered="#{HistorySession.currentPage.type == 'ALBUMS' and SessionBean.user != null}"
+						value="#{lbl.delete}"
+						styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"
+						action="#{AlbumsBean.deleteAll}" />
 				</h:form>
 			</div>
 		</div>

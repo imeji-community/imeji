@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -62,9 +62,11 @@
 					<li class="full_area0 listItem">
 						<div class="free_area0 itemHeader">
 							<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea">
-								<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{SessionBean.user != null and container.deletable}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
-									<f:ajax event="change"/>
-								</h:selectBooleanCheckbox>
+								<h:form>
+									<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{SessionBean.user != null and container.deletable}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
+										<f:ajax event="change"/>
+									</h:selectBooleanCheckbox>
+								</h:form>
 								&#160;
 							</h:panelGroup>
 							
@@ -207,6 +209,7 @@
 		/*	jQuery(document).ready(function(){
 				setTimeout("addItemListFunctions()", 200);
 			}); */
+			
 		</script>
 	</h:panelGroup>
-</html>								
+</ui:composition>						

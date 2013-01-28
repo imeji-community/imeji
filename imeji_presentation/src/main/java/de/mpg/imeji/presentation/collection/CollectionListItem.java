@@ -164,7 +164,7 @@ public class CollectionListItem
         CollectionController cc = new CollectionController();
         try
         {
-            cc.delete(cc.retrieve(uri), sessionBean.getUser());
+            cc.delete(cc.retrieve(uri, sessionBean.getUser()), sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
         }
         catch (Exception e)

@@ -51,7 +51,6 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     public CollectionsBean()
     {
         super();
-        System.out.println("AAASASA");
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
@@ -163,9 +162,13 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         }
         sb.getSelectedCollections().clear();
         if (count == 0)
+        {
             BeanHelper.warn(sb.getMessage("error_delete_no_collection_selected"));
+        }
         else
+        {
             BeanHelper.info(count + " " + sb.getMessage("success_collections_delete"));
+        }
         return "pretty:collections";
     }
 

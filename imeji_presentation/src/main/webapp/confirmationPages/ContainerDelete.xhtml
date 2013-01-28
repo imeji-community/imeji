@@ -2,22 +2,28 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<div id="dialogDelete" class="half_area0_p8 bordst0 shadst1 dialogbox" style="display:none;">
-      	<div class="half_area0_p8">
-        	<h:outputText value="#{msg.confirmation_delete_collection}?" rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}"/>
-        	<h:outputText value="#{msg.confirmation_delete_album}?" rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}"/>
-        </div>
+	<div id="dialogDelete" class="half_area0_p8 bordst0 shadst1 dialogbox"
+		style="display: none;">
+		<div class="half_area0_p8">
+			<h:outputText value="#{msg.confirmation_delete_collection}?"
+				rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}" />
+			<h:outputText value="#{msg.confirmation_delete_album}?"
+				rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}" />
+		</div>
 		<div class="half_area0_p8">
 			<div class="large_txtBtn">
-      			<a href="#" class="large_txtBtn dialogCancelButton" onclick="closeDialog('dialogDelete');">
-					<h:outputText value="#{lbl.cancel}"/>
+				<a href="#" class="large_txtBtn dialogCancelButton"
+					onclick="closeDialog('dialogDelete');"> <h:outputText
+						value="#{lbl.cancel}" />
 				</a>
-      			</div>
+			</div>
 			<div class="xLarge_txtBtn tiny_marginLExcl">
 				<h:form>
-					<h:commandButton onclick="submitPanel(this, '#{msg.please_wait}');" action="#{bean.delete}" value="#{lbl.delete}" styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"/>
-		 		</h:form>
-		 	</div>
+					<h:commandButton onclick="submitPanel('dialogDelete', '#{msg.please_wait}');"
+						action="#{bean.delete}" value="#{lbl.delete}"
+						styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton" />
+				</h:form>
+			</div>
 		</div>
 	</div>
 </ui:composition>

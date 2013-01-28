@@ -163,12 +163,11 @@ function collapse(firstPart, secondPart) {
  * @param button
  * @param message
  */
-function submitPanel(button, message) {
-	var panel = button.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+function submitPanel(panelId, message) {
+	var panel = document.getElementById(panelId);
 	if (panel != null) {
-		panel.innerHTML = ' <h2><span class="free_area0_p8 xTiny_marginLExcl">'
+		panel.innerHTML = '<h2><span class="free_area0_p8 xTiny_marginLExcl">'
 				+ message + '</span></h2>';
-		panel.style.opacity = 0.8;
 	}
 }
 /**

@@ -24,6 +24,7 @@ public class StaticContentBean
 
     /**
      * Construct the {@link StaticContentBean} by reading in the imeji.properties which external content are defined
+     * 
      * @throws IOException
      * @throws URISyntaxException
      */
@@ -43,9 +44,9 @@ public class StaticContentBean
         }
     }
 
-
     /**
-     * Read the URL of the logo from the imeji.preporties and return an CSS snippet 
+     * Read the URL of the logo from the imeji.preporties and return an CSS snippet
+     * 
      * @return
      */
     public String getHeaderLogo()
@@ -63,6 +64,7 @@ public class StaticContentBean
 
     /**
      * Read the link to use hover the logo from the imeji.propertis.
+     * 
      * @return
      */
     public String getLogoLink()
@@ -91,6 +93,7 @@ public class StaticContentBean
         {
             String helpProp = PropertyReader.getProperty("escidoc.imeji.help.url");
             html = getContent(new URL(helpProp));
+            System.out.println(html);
         }
         catch (Exception e)
         {

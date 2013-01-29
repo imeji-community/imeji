@@ -42,6 +42,7 @@ public class Navigation
     public final Page CREATE = new Page("Create", "create");
     public final Page UPLOAD = new Page("Upload collection", "upload");
     public final Page SHARE = new Page("Share", "share");
+    public final Page USER = new Page("User", "user");
     // session
     private SessionBean sessionBean = null;
 
@@ -146,6 +147,11 @@ public class Navigation
         return applicationUrl + SHARE.getPath();
     }
 
+    public String getUserUrl()
+    {
+        return applicationUrl + USER.getPath();
+    }
+
     /*
      * Paths
      */
@@ -205,7 +211,8 @@ public class Navigation
         {
             context += "2._Pictures";
         }
-        if ("search".equals(sessionBean.getCurrentPage().name) || "searchResult".equals(sessionBean.getCurrentPage().name))
+        if ("search".equals(sessionBean.getCurrentPage().name)
+                || "searchResult".equals(sessionBean.getCurrentPage().name))
         {
             context += "4.1_Advanced_Search";
         }
@@ -213,14 +220,16 @@ public class Navigation
         {
             context += "4.2_Public_Album_Search";
         }
-        if ("details".equals(sessionBean.getCurrentPage().name) || "comparison".equals(sessionBean.getCurrentPage().name)
+        if ("details".equals(sessionBean.getCurrentPage().name)
+                || "comparison".equals(sessionBean.getCurrentPage().name)
                 || "detailsFromAlbum".equals(sessionBean.getCurrentPage().name)
                 || "comparisonFromAlbum".equals(sessionBean.getCurrentPage().name)
                 || "person".equals(sessionBean.getCurrentPage().name))
         {
             context += "2.2_Picture_View";
         }
-        if ("albums".equals(sessionBean.getCurrentPage().name) || "createalbum".equals(sessionBean.getCurrentPage().name)
+        if ("albums".equals(sessionBean.getCurrentPage().name)
+                || "createalbum".equals(sessionBean.getCurrentPage().name)
                 || "editalbum".equals(sessionBean.getCurrentPage().name))
         {
             context += "3._Album";

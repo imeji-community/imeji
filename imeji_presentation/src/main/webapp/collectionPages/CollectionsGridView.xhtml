@@ -10,23 +10,26 @@
 		<div class="full_area0 itemList loggedIn collectionList">
 			<div class="full_area0 listHeader">
 				<h:form id="headerForm">
-					<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{SessionBean.user != null}">
-					
-						<input type="button" class="min_imgBtn checkboxSelectButton"/>
-						
-						<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none; width:150px;">
-							<span class="large_area0_p8">
-								<h:outputText value="#{lbl.select_collections}"/>
-							</span>
-							<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" styleClass="large_area0 selectAll">
-								<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
-							</h:commandLink>
-							<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
-								<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
-							</h:commandLink>
-						</div>
-						
-						&#160;
+					<h:panelGroup layout="block" styleClass="free_area0_p8 endline overlayMenu noPaddingTopBottom" rendered="#{SessionBean.user != null}">
+						<h:panelGroup layout="block" styleClass="menuHeader free_area0">
+							<h:panelGroup styleClass="free_area0">
+								<h:outputText styleClass="free_area0" value="#{lbl.select}&#160;"/>
+							</h:panelGroup>
+							<h:panelGroup layout="block" style="margin-top:0.2727em;" class="free_area0 min_imgBtn checkboxSelectButton"/>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="clear menuBody large_area0" style="margin-top:-1.9090em;">
+							<div class="selectMenu large_area2 bordst2">
+								<span class="large_area0_p8"><h:outputText value="#{lbl.select_item}:"/></span>
+								<br />
+								<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
+									<span class="large_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
+								</h:commandLink>
+								<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
+									<span class="large_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
+								</h:commandLink>
+							</div>
+							&#160;
+						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{SessionBean.user == null}">
 						&#160;
@@ -52,8 +55,10 @@
 				</h:form>
 				<span class="seperator"></span>
 				<span class="half_area0_p6 headerSwitchView">
+					<h:form>
 					<a class="expand" title="#{msg.show_all_items_in_medium_view}"><span class="noDisplay"><h:outputText value="#{lbl.show} "/></span><h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/></a>
 					<a class="collapse" title="#{msg.show_all_items_in_short_view}"><span class="noDisplay"><h:outputText value="#{lbl.show} "/></span><h:outputText value="#{lbl.short_view} (#{lbl.all_items})"/></a>
+					</h:form>
 				</span>
 			</div>
 			

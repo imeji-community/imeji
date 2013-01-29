@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -53,7 +54,7 @@ public class LoginBean
         try
         {
             User user = uc.retrieve(getLogin());
-            if (user.getEncryptedPassword().equals(UserController.convertToMD5(getPasswd())))
+            if (user.getEncryptedPassword().equals(StringHelper.convertToMD5(getPasswd())))
             {
                 sb.setUser(user);
                 BeanHelper.info(sb.getMessage("success_log_in"));

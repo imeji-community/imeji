@@ -137,8 +137,8 @@ public class CollectionController extends ImejiController
             List<Item> items = (List<Item>)itemController.loadItems(itemUris, -1, 0);
             itemController.delete(items, user);
             // Delete profile
-            ProfileController pc = new ProfileController(user);
-            pc.delete(pc.retrieve(collection.getProfile()), user);
+            ProfileController pc = new ProfileController();
+            pc.delete(pc.retrieve(collection.getProfile(), user), user);
             imejiBean2RDF.delete(imejiBean2RDF.toList(collection), user);
             GrantController gc = new GrantController(user);
             gc.removeAllGrantsFor(user, collection.getId());
@@ -171,9 +171,8 @@ public class CollectionController extends ImejiController
             List<Item> items = (List<Item>)itemController.loadItems(itemUris, -1, 0);
             itemController.release(items, user);
             update(collection, user);
-            ProfileController pc = new ProfileController(user);
-            pc.retrieve(collection.getProfile());
-            pc.release(pc.retrieve(collection.getProfile()));
+            ProfileController pc = new ProfileController();
+            pc.release(pc.retrieve(collection.getProfile(), user), user);
         }
     }
 
@@ -201,11 +200,10 @@ public class CollectionController extends ImejiController
             List<Item> items = (List<Item>)itemController.loadItems(itemUris, -1, 0);
             itemController.withdraw(items, collection.getDiscardComment());
             writeWithdrawProperties(collection, null);
-            update(collection);
+            update(collection, user);
             // Withdraw profile
-            ProfileController pc = new ProfileController(user);
-            pc.retrieve(collection.getProfile());
-            pc.withdraw(pc.retrieve(collection.getProfile()), user);
+            ProfileController pc = new ProfileController();
+            pc.withdraw(pc.retrieve(collection.getProfile(), user), user);
         }
     }
 
@@ -217,6 +215,20 @@ public class CollectionController extends ImejiController
      * @throws Exception
      */
     public CollectionImeji retrieve(URI uri) throws Exception
+    {
+        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user, new CollectionImeji());
+    }
+
+    /**
+     * Retrieve a complete {@link CollectionImeji} (inclusive its {@link Item}: slow for huge {@link CollectionImeji})
+     * 
+     * @param uri
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    public CollectionImeji retrieve(URI uri, User user) throws Exception
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
         return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user, new CollectionImeji());

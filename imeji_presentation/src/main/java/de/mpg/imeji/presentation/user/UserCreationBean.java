@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.user;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
@@ -86,7 +87,7 @@ public class UserCreationBean
         UserController uc = new UserController(sb.getUser());
         PasswordGenerator generator = new PasswordGenerator();
         String password = generator.generatePassword();
-        user.setEncryptedPassword(UserController.convertToMD5(password));
+        user.setEncryptedPassword(StringHelper.convertToMD5(password));
         uc.create(user);
         return password;
     }
@@ -118,7 +119,7 @@ public class UserCreationBean
         }
         catch (NotFoundException e)
         {
-            logger.info("User not found: " +  user.getEmail());
+            logger.info("User not found: " + user.getEmail());
             return false;
         }
     }

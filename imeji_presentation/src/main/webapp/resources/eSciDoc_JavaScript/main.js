@@ -157,40 +157,52 @@ function collapse(firstPart, secondPart) {
 }
 
 /**
- * When a confirmation is confirmed, make the panel emty until the method called is done
+ * When a confirmation is confirmed, make the panel emty until the method called
+ * is done
+ * 
  * @param button
  * @param message
  */
-function submitPanel(button, message) {
-	
-	var panel = button.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+function submitPanel(panelId, message) {
+	var panel = document.getElementById(panelId);
 	if (panel != null) {
-		panel.innerHTML = ' <h2><span class="free_area0_p8 xTiny_marginLExcl">'
-				+ message + '</span></h2>'
-		panel.style.opacity = 0.8;
+		panel.innerHTML = '<h2><span class="free_area0_p8 xTiny_marginLExcl">'
+				+ message + '</span></h2>';
 	}
 }
-
-function clickOnDiscard(index, panelId, errorMessage) {
+/**
+ * When Discard is submitted, check the discard comment
+ * 
+ * @param index
+ * @param panelId
+ * @param errorMessage
+ * @returns {Boolean}
+ */
+function clickOnDiscard(index, button, errorMessage) {
 	var listId = '';
 	if (index != '') {
-		listId = ':list:' + index;
+		listId = 'list:' + index + ":";
 	}
-	var textArea = document.getElementById('formular' + listId + ":" + panelId
-			+ ':discardComment');
-	var button = document.getElementById('formular' + listId + ":" + panelId
-			+ ':btnDiscard');
+	// Get textarea with discard comment
+	var textArea = document.getElementById(listId
+			+ 'dialDiscardContainer:discardForm:discardComment');
 	if (textArea.value != '') {
+		// if discard comment is not empty, then procceed to discard
 		return true;
 	} else {
-		var message = document.getElementById('formular' + listId + ":"
-				+ panelId + ':errorMessage');
-
+		// if discard comment is empty, show error message
+		var message = document.getElementById(listId + 'dialDiscardContainer:discardForm:errorMessage');
 		message.innerHTML = errorMessage;
 		return false;
 	}
+	return false;
 }
 
+
+
+/**
+ * Part of the Patch for jsf
+ */
 var currentViewState;
 jsf.ajax
 		.addOnEvent(function(e) {
@@ -232,6 +244,9 @@ jsf.ajax
 
 		});
 
+/**
+ * JSF patch for jsf for reaload of ajax component after ajax request
+ */
 var patchJSF = function() {
 	jsf.ajax
 			.addOnEvent(function(e) {

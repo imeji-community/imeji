@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
@@ -62,7 +63,6 @@ public class UsersBean
                 users.add(user);
             }
         }
-        
     }
 
     /**
@@ -77,7 +77,7 @@ public class UsersBean
         PasswordGenerator generator = new PasswordGenerator();
         String newPassword = generator.generatePassword();
         UserBean userBean = new UserBean(email);
-        userBean.getUser().setEncryptedPassword(UserController.convertToMD5(newPassword));
+        userBean.getUser().setEncryptedPassword(StringHelper.convertToMD5(newPassword));
         userBean.updateUser();
         sendEmail(email, newPassword, userBean.getUser().getName());
         return "";

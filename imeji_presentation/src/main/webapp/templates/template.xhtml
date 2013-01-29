@@ -80,23 +80,12 @@ All rights reserved. Use is subject to license terms.
 										</ui:insert>
 										<!-- content menu upper line ends here -->
 									</div>
-									<ui:remove>
-										<!--  the div container must be inside of the actionsMenu content, for invisibility in case of none content -->
-										<div class="free_area0 sub action">
-											<!-- content menu lower line starts here --><ui:insert name="actionsMenu"/><!-- content menu lower line ends here -->
-										</div>
-									</ui:remove>
-									
-									<h:form id="actionsMenu" >
-										<ui:insert name="actionsMenu"/>
-									</h:form>
-									
+									<ui:insert name="actionsMenu"/>								
 								</div>
 								<ui:insert name="additionalSubheaders">
 									&#160;
 								</ui:insert>
-								
-								<h:panelGroup layout="block" styleClass="full_area0 subHeader">
+								<div class="full_area0 subHeader">
 									<!-- Subheadline starts here -->
 									<h:panelGroup id="subHeader">
 										<h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
@@ -117,22 +106,18 @@ All rights reserved. Use is subject to license terms.
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>
-                                </h:panelGroup>
+                                </div>
                             </div>
                             
                         </div>
                         <div class="clear full_area0">
                             <!-- Main Content -->
-                            <ui:insert name="paginationTop">
-                                &#160;
-                            </ui:insert>
+                            <ui:insert name="paginationTop"></ui:insert>
                             <ui:insert name="searchQuery"/>
                             <ui:insert name="mainContent">
                                 &#160;
                             </ui:insert>
-                            <ui:insert name="paginationBottom">
-                                &#160;
-                            </ui:insert>
+                            <ui:insert name="paginationBottom"></ui:insert>
                         </div>
                     </div>
                     <!-- end: content section -->
@@ -141,52 +126,56 @@ All rights reserved. Use is subject to license terms.
                                  
                 <ui:include src="/footerPages/Footer.jspf"/>
                 <script type="text/javascript">
-					function openDialog(id) {
-						/*set the dialog in center of the screen*/
-						var dialog = $(document).find("#" + id);
-						dialog.css("position","absolute");
-						dialog.css("z-index", 1000);
-						dialog.css("background-color","#434343");
-						dialog.css("top", Math.max(0, (($(window).height() - $(dialog).outerHeight()) / 2) + 
-					                                                $(window).scrollTop()) + "px");
-						dialog.css("left", Math.max(0, (($(window).width() - $(dialog).outerWidth()) / 2) + 
-					                                                $(window).scrollLeft()) + "px");
-						/*open the dialog*/
-						dialog.show();
-						/* lock the page*/
-						var content = $("#full_wrapper");
-						content.css({ opacity: 0.3});
-						$.lock(dialog);
-						
-					}
-					function closeDialog(id) {
-						var dialog = $(document).find("#" + id);
-						var content = $("#full_wrapper");
-						content.css({ opacity: 1});
-						dialog.hide();
-						$.unlock(dialog);
-					}
-					(function($) {
-					    $.extend({
-							lock: function(content){
-							            if(content == 'undefined') content = '';
-							            $("&amp;&lt;div&amp;gt;&amp;&lt;/div&amp;&gt;").attr('id', 'uiLockId').css({
-							                'position': 'absolute',
-							                'top': 0,
-							                'left': 0,
-							                'opacity': 1,
-							                'width':'100%',
-							                'height':'100%',
-							            }).html(content).appendTo('body');
-							        },
-							unlock: function(content){
-										/*remove the lock*/
-					            		$('#uiLockId').remove();
-					            		/*reappend the dialog, otherwise is null by next call*/
-							            $('#dialogs').html(content).appendTo('body');
-							        }
-							    });
-					})(jQuery);
+                /* open a dialog*/
+				function openDialog(id) {
+					/*set the dialog in center of the screen*/
+					var dialog = $(document).find("#" + id);
+					dialog.css("position","absolute");
+					dialog.css("z-index", 1000);
+					dialog.css("background-color","#434343");
+					dialog.css("top", Math.max(0, (($(window).height() - $(dialog).outerHeight()) / 2) + 
+				                                                $(window).scrollTop()) + "px");
+					dialog.css("left", Math.max(0, (($(window).width() - $(dialog).outerWidth()) / 2) + 
+				                                                $(window).scrollLeft()) + "px");
+					/*open the dialog*/
+					dialog.show();
+					/* lock the page*/
+					var content = $("#full_wrapper");
+					content.css({ opacity: 0.3});
+					$.lock(dialog);				
+				}
+				/*close a dialog*/
+				function closeDialog(id) {
+					var dialog = $(document).find("#" + id);
+					var content = $("#full_wrapper");
+					content.css({ opacity: 1});
+					dialog.hide();
+					$.unlock(dialog);
+				}
+				/*
+				* Lock/unlock html elements
+				*/
+				(function($) {
+				    $.extend({
+				lock: function(content){
+				            if(content == 'undefined') content = '';
+				            $("&amp;&lt;div&amp;gt;&amp;&lt;/div&amp;&gt;").attr('id', 'uiLockId').css({
+				                'position': 'absolute',
+				                'top': 0,
+				                'left': 0,
+				                'opacity': 1,
+				                'width':'100%',
+				                'height':'100%',
+				            }).html(content).appendTo('body');
+				        },
+				unlock: function(content){
+							/*remove the lock*/
+		            		$('#uiLockId').remove();
+		            		/*reappend the dialog, otherwise is null by next call*/
+				            $('#dialogs').html(content).appendTo('body');
+				        }
+				    });
+				})(jQuery);
                 </script>
         </h:body>
     </html>

@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
@@ -60,6 +61,11 @@ public abstract class CollectionBean
     private boolean selected;
     private int size = 0;
 
+    /**
+     * Initialize the {@link CollectionBean} with a {@link CollectionImeji}
+     * 
+     * @param coll
+     */
     public CollectionBean(CollectionImeji coll)
     {
         collection = coll;
@@ -68,12 +74,20 @@ public abstract class CollectionBean
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
+    /**
+     * New default {@link CollectionBean}
+     */
     public CollectionBean()
     {
         collection = new CollectionImeji();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
+    /**
+     * Validate whether the {@link CollectionImeji} values are correct
+     * 
+     * @return
+     */
     public boolean valid()
     {
         if (collection.getMetadata().getTitle() == null || "".equals(collection.getMetadata().getTitle()))
@@ -120,6 +134,11 @@ public abstract class CollectionBean
         return true;
     }
 
+    /**
+     * Add a new author to the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String addAuthor()
     {
         List<Person> c = (List<Person>)collection.getMetadata().getPersons();
@@ -129,6 +148,11 @@ public abstract class CollectionBean
         return getNavigationString();
     }
 
+    /**
+     * Remove an author of the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String removeAuthor()
     {
         List<Person> c = (List<Person>)collection.getMetadata().getPersons();
@@ -139,6 +163,11 @@ public abstract class CollectionBean
         return getNavigationString();
     }
 
+    /**
+     * Add an organization to an author of the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String addOrganization()
     {
         List<Person> persons = (List<Person>)collection.getMetadata().getPersons();
@@ -149,6 +178,11 @@ public abstract class CollectionBean
         return getNavigationString();
     }
 
+    /**
+     * Remove an organization to an author of the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String removeOrganization()
     {
         List<Person> persons = (List<Person>)collection.getMetadata().getPersons();
@@ -160,13 +194,28 @@ public abstract class CollectionBean
         return getNavigationString();
     }
 
+    /**
+     * return the navigation value (according to jsf2 standard) of the current page
+     * 
+     * @return
+     */
     protected abstract String getNavigationString();
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public int getAuthorPosition()
     {
         return authorPosition;
     }
 
+    /**
+     * setter
+     * 
+     * @param pos
+     */
     public void setAuthorPosition(int pos)
     {
         this.authorPosition = pos;
@@ -189,6 +238,18 @@ public abstract class CollectionBean
     }
 
     /**
+     * Listener for the discard comment
+     * 
+     * @param event
+     */
+    public void discardCommentListener(ValueChangeEvent event)
+    {
+        collection.setDiscardComment(event.getNewValue().toString());
+    }
+
+    /**
+     * getter
+     * 
      * @return the tab
      */
     public TabType getTab()
@@ -201,6 +262,8 @@ public abstract class CollectionBean
     }
 
     /**
+     * setter
+     * 
      * @param tab the tab to set
      */
     public void setTab(TabType tab)
@@ -240,11 +303,21 @@ public abstract class CollectionBean
         this.id = id;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<SelectItem> getProfilesMenu()
     {
         return profilesMenu;
     }
 
+    /**
+     * setter
+     * 
+     * @param profilesMenu
+     */
     public void setProfilesMenu(List<SelectItem> profilesMenu)
     {
         this.profilesMenu = profilesMenu;
@@ -277,16 +350,31 @@ public abstract class CollectionBean
         this.selected = selected;
     }
 
+    /**
+     * setter
+     * 
+     * @param size
+     */
     public void setSize(int size)
     {
         this.size = size;
     }
 
+    /**
+     * getter (get size of collection)
+     * 
+     * @return
+     */
     public int getSize()
     {
         return size;
     }
 
+    /**
+     * True if the current {@link User} is the creator of the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public boolean getIsOwner()
     {
         if (collection != null && collection.getCreatedBy() != null && sessionBean.getUser() != null)
@@ -296,11 +384,17 @@ public abstract class CollectionBean
         return false;
     }
 
+    /**
+     * release the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String release()
     {
         CollectionController cc = new CollectionController();
         try
         {
+            System.out.println("release collecionbean");
             cc.release(collection, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_release"));
         }
@@ -313,6 +407,11 @@ public abstract class CollectionBean
         return "pretty:";
     }
 
+    /**
+     * Delete the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String delete()
     {
         CollectionController cc = new CollectionController();
@@ -329,6 +428,12 @@ public abstract class CollectionBean
         return "pretty:collections";
     }
 
+    /**
+     * Discard the {@link CollectionImeji} of this {@link CollectionBean}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String withdraw() throws Exception
     {
         CollectionController cc = new CollectionController();
@@ -341,7 +446,7 @@ public abstract class CollectionBean
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error discarding collection:", e);
         }
         return "pretty:";
     }
@@ -368,50 +473,95 @@ public abstract class CollectionBean
         return null;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public MetadataProfile getProfile()
     {
         return profile;
     }
 
+    /**
+     * setter
+     * 
+     * @param profile
+     */
     public void setProfile(MetadataProfile profile)
     {
         this.profile = profile;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getProfileId()
     {
         return profileId;
     }
 
+    /**
+     * setter
+     * 
+     * @param profileId
+     */
     public void setProfileId(String profileId)
     {
         this.profileId = profileId;
     }
 
+    /**
+     * true if current {@link User} can UPDATE the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public boolean isEditable()
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, sessionBean.getUser(), collection);
     }
 
+    /**
+     * true if current {@link User} can VIEW the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public boolean isVisible()
     {
         Security security = new Security();
         return security.check(OperationsType.READ, sessionBean.getUser(), collection);
     }
 
+    /**
+     * true if current {@link User} can DELETE the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public boolean isDeletable()
     {
         Security security = new Security();
         return security.check(OperationsType.DELETE, sessionBean.getUser(), collection);
     }
 
+    /**
+     * true if current {@link User} can EDIT the {@link MetadataProfile} of the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public boolean isProfileEditor()
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, sessionBean.getUser(), profile);
     }
 
+    /**
+     * True if the current {@link User} is SYSADMIN
+     * 
+     * @return
+     */
     public boolean isAdmin()
     {
         Authorization auth = new Authorization();

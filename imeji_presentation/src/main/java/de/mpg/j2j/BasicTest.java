@@ -12,6 +12,7 @@ import com.hp.hpl.jena.tdb.TDBFactory;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
@@ -54,8 +55,8 @@ public class BasicTest
         {
             uc.create(getTestUser());
         }
-        ProfileController pc = new ProfileController(getTestUser());
-        pc.create(new MetadataProfile());
+        ProfileController pc = new ProfileController();
+        pc.create(new MetadataProfile(), getTestUser());
         ImejiJena.printModel(ImejiJena.profileModel);
         ImejiJena.printModel(ImejiJena.userModel);
         System.out.println("done...");
@@ -178,7 +179,7 @@ public class BasicTest
         adminUser.setNick("test");
         try
         {
-            adminUser.setEncryptedPassword(UserController.convertToMD5("password"));
+            adminUser.setEncryptedPassword(StringHelper.convertToMD5("password"));
         }
         catch (Exception e1)
         {
@@ -196,7 +197,7 @@ public class BasicTest
         adminUser.setNick("sysadmin");
         try
         {
-            adminUser.setEncryptedPassword(UserController.convertToMD5("password"));
+            adminUser.setEncryptedPassword(StringHelper.convertToMD5("password"));
         }
         catch (Exception e1)
         {

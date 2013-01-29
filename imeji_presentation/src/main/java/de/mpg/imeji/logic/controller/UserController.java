@@ -39,22 +39,27 @@ public class UserController extends ImejiController
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
 
-    @Deprecated
+    /**
+     * Default constructor
+     */
+    public UserController()
+    {
+        super();
+    }
+
+    /**
+     * TODO remove this constructor and add to all methods of controller the user as parameter
+     * 
+     * @deprecated
+     * @param user
+     */
     public UserController(User user)
     {
         super(user);
     }
 
     /**
-     * Default constructor
-     */
-    public UserController()
-    {
-        // construct
-    }
-
-    /**
-     * Create {@link User}
+     * Create a new {@link User}
      * 
      * @param newUser
      * @throws Exception
@@ -66,7 +71,7 @@ public class UserController extends ImejiController
     }
 
     /**
-     * Delete {@link User}
+     * Delete a {@link User}
      * 
      * @param user
      * @throws Exception
@@ -81,7 +86,7 @@ public class UserController extends ImejiController
     }
 
     /**
-     * Retrieve {@link User}
+     * Retrieve a {@link User} according to its email
      * 
      * @param email
      * @return
@@ -94,7 +99,7 @@ public class UserController extends ImejiController
     }
 
     /**
-     * Update {@link User}
+     * Update a {@link User}
      * 
      * @param user
      * @throws Exception
@@ -106,7 +111,8 @@ public class UserController extends ImejiController
     }
 
     /**
-     * Retrieve all {@link User}. Must be called by sysadmin {@link User}
+     * Retrieve all {@link User} in imeji<br/>
+     * Only allowed for System administrator
      * 
      * @return
      */
@@ -135,25 +141,5 @@ public class UserController extends ImejiController
             }
         }
         return users;
-    }
-
-    /**
-     * Encode a string inot md5
-     * 
-     * @param pass
-     * @return
-     * @throws Exception
-     */
-    public static String convertToMD5(String pass) throws Exception
-    {
-        MessageDigest dig = MessageDigest.getInstance("MD5");
-        dig.update(pass.getBytes("UTF-8"));
-        byte messageDigest[] = dig.digest();
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < messageDigest.length; i++)
-        {
-            hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-        }
-        return hexString.toString();
     }
 }

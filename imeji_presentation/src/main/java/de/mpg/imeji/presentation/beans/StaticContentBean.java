@@ -92,8 +92,9 @@ public class StaticContentBean
         try
         {
             String helpProp = PropertyReader.getProperty("escidoc.imeji.help.url");
+            String supportEmail = PropertyReader.getProperty("imeji.support.email");
             html = getContent(new URL(helpProp));
-            System.out.println(html);
+            html = html.replaceAll("XXX_SUPPORT_EMAIL_XXX", supportEmail);
         }
         catch (Exception e)
         {

@@ -78,23 +78,12 @@ All rights reserved. Use is subject to license terms.
 										</ui:insert>
 										<!-- content menu upper line ends here -->
 									</div>
-									<ui:remove>
-										<!--  the div container must be inside of the actionsMenu content, for invisibility in case of none content -->
-										<div class="free_area0 sub action">
-											<!-- content menu lower line starts here --><ui:insert name="actionsMenu"/><!-- content menu lower line ends here -->
-										</div>
-									</ui:remove>
-									
-									
-										<ui:insert name="actionsMenu"/>
-									
-									
+									<ui:insert name="actionsMenu"/>								
 								</div>
 								<ui:insert name="additionalSubheaders">
 									&#160;
 								</ui:insert>
-								
-								<h:panelGroup layout="block" styleClass="full_area0 subHeader">
+								<div class="full_area0 subHeader">
 									<!-- Subheadline starts here -->
 									<h:panelGroup id="subHeader">
 										<h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
@@ -115,28 +104,23 @@ All rights reserved. Use is subject to license terms.
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>
-                                </h:panelGroup>
+                                </div>
                             </div>
                             
                         </div>
                         <div class="clear full_area0">
                             <!-- Main Content -->
-                            <ui:insert name="paginationTop">
-                                &#160;
-                            </ui:insert>
+                            <ui:insert name="paginationTop"></ui:insert>
                             <ui:insert name="searchQuery"/>
                             <ui:insert name="mainContent">
                                 &#160;
                             </ui:insert>
-                            <ui:insert name="paginationBottom">
-                                &#160;
-                            </ui:insert>
+                            <ui:insert name="paginationBottom"></ui:insert>
                         </div>
                     </div>
                     <!-- end: content section -->
                     <div id="dialogs"></div>
-                </div>
-                                 
+                </div> 
                 <ui:include src="/footerPages/Footer.jspf"/>
                 <script type="text/javascript">
                 /* open a dialog*/
@@ -155,8 +139,7 @@ All rights reserved. Use is subject to license terms.
 					/* lock the page*/
 					var content = $("#full_wrapper");
 					content.css({ opacity: 0.3});
-					$.lock(dialog);
-					
+					$.lock(dialog);				
 				}
 				/*close a dialog*/
 				function closeDialog(id) {

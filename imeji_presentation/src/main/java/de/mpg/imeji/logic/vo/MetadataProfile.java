@@ -35,8 +35,6 @@ import de.mpg.j2j.annotations.j2jResource;
 public class MetadataProfile extends Properties
 {
     private URI id;
-//    @j2jResource("http://imeji.org/terms/properties")
-//    private Properties properties = new Properties();
     @j2jLiteral("http://purl.org/dc/elements/1.1/title")
     private String title;
     @j2jLiteral("http://purl.org/dc/elements/1.1/description")

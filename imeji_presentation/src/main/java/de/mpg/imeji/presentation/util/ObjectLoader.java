@@ -198,7 +198,6 @@ public class ObjectLoader
         {
             ProfileController pc = new ProfileController();
             MetadataProfile p = pc.retrieve(id, user);
-            Collections.sort((List<Statement>)p.getStatements());
             return p;
         }
         catch (NotFoundException e)

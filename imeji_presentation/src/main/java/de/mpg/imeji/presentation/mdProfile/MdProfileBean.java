@@ -45,7 +45,7 @@ public class MdProfileBean
     private MetadataProfile profile = null;
     private TabType tab = TabType.PROFILE;
     private CollectionSessionBean collectionSession = null;
-    private List<StatementWrapper> statements = null;
+    private List<StatementWrapper> wrappers = null;
     private List<SelectItem> mdTypesMenu = null;
     private String id = null;
     private List<SelectItem> profilesMenu = null;
@@ -67,7 +67,7 @@ public class MdProfileBean
             collectionSession.setProfile(new MetadataProfile());
         }
         profile = collectionSession.getProfile();
-        statements = new ArrayList<StatementWrapper>();
+        wrappers = new ArrayList<StatementWrapper>();
         initMenus();
     }
 
@@ -112,7 +112,7 @@ public class MdProfileBean
     public void reset()
     {
         profile.getStatements().clear();
-        statements.clear();
+        wrappers.clear();
         collectionSession.setProfile(profile);
     }
 
@@ -123,10 +123,10 @@ public class MdProfileBean
      */
     private void initStatementWrappers(MetadataProfile mdp)
     {
-        statements.clear();
+        wrappers.clear();
         for (Statement st : mdp.getStatements())
         {
-            statements.add(new StatementWrapper(st, mdp.getId()));
+            wrappers.add(new StatementWrapper(st, mdp.getId()));
         }
     }
 
@@ -146,19 +146,7 @@ public class MdProfileBean
             SelectItem profile2 = (SelectItem)o2;
             String profile1Label = profile1.getLabel();
             String profile1Labe2 = profile2.getLabel();
-            // Compare values
-            if (profile1Label.compareTo(profile1Labe2) == 0)
-            {
-                return 0;
-            }
-            else if (profile1Label.compareTo(profile1Labe2) < 0)
-            {
-                return -1;
-            }
-            else
-            {
-                return 1;
-            }
+            return profile1Label.compareTo(profile1Labe2);
         }
     }
 
@@ -218,6 +206,57 @@ public class MdProfileBean
     }
 
     /**
+     * Check all profile elements, and return true if all are valid. Error messages are logged for the user to help him
+     * to find why is profile not valid
+     * 
+     * @param profile
+     * @return
+     */
+    public boolean validateProfile(MetadataProfile profile)
+    {
+        List<String> statementNames = new ArrayList<String>();
+        if (profile.getStatements() == null)
+        {
+            BeanHelper.error(sessionBean.getLabel("profile_empty"));
+            return false;
+        }
+        int i = 0;
+        for (Statement s : profile.getStatements())
+        {
+            for (LocalizedString ls : s.getLabels())
+            {
+                if (ls.getLang() == null)
+                {
+                    BeanHelper.error(sessionBean.getMessage("error_profile_label_no_lang"));
+                    return false;
+                }
+            }
+            if (s.getType() == null)
+            {
+                BeanHelper.error(sessionBean.getMessage("error_profile_select_metadata_type"));
+                return false;
+            }
+            else if (s.getId() == null || !s.getId().isAbsolute())
+            {
+                BeanHelper.error(s.getId() + " " + sessionBean.getMessage("error_profile_name_not_valid"));
+                return false;
+            }
+            else if (s.getLabels().isEmpty() || "".equals(((List<LocalizedString>)s.getLabels()).get(0).toString()))
+            {
+                BeanHelper.error(sessionBean.getMessage("error_profile_name_required"));
+                return false;
+            }
+            else
+            {
+                statementNames.add(s.getId().toString());
+            }
+            s.setPos(i);
+            i++;
+        }
+        return true;
+    }
+
+    /**
      * Listener for the template value
      * 
      * @param event
@@ -270,67 +309,99 @@ public class MdProfileBean
 
     public int getSize()
     {
-        return statements.size();
+        return wrappers.size();
+    }
+
+    public void moveUp()
+    {
+        Collections.swap(wrappers, getStatementPosition(), getStatementPosition() + 1);
+    }
+
+    public void moveDown()
+    {
+        Collections.swap(wrappers, getStatementPosition() + 1, getStatementPosition());
     }
 
     public void addVocabulary()
     {
-        statements.get(getStatementPosition()).setVocabularyString("--");
+        wrappers.get(getStatementPosition()).setVocabularyString("--");
     }
 
     public void removeVocabulary()
     {
-        statements.get(getStatementPosition()).setVocabularyString(null);
+        wrappers.get(getStatementPosition()).setVocabularyString(null);
     }
 
+    /**
+     * Called by add statement button. Add a new statement to the profile. The position of the new statement is defined
+     * by the button position
+     */
     public void addStatement()
     {
-        if (statements.isEmpty())
+        if (wrappers.isEmpty())
         {
-            statements.add(new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
+            wrappers.add(new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
         }
         else
         {
-            statements.add(getStatementPosition() + 1,
-                    new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
+            wrappers.add(getStatementPosition() + 1, new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
         }
     }
 
+    /**
+     * Called by remove statement button. If the statement is not used by an imeji item, remove it, according to the
+     * position of the button. If the statement is used, display a warning message in a panel
+     */
     public void removeStatement()
     {
-        if (!statements.get(getStatementPosition()).isUsedByAtLeastOnItem())
+        if (!wrappers.get(getStatementPosition()).isUsedByAtLeastOnItem())
         {
-            statements.remove(getStatementPosition());
+            wrappers.remove(getStatementPosition());
         }
         else
         {
-            statements.get(getStatementPosition()).setShowRemoveWarning(true);
+            wrappers.get(getStatementPosition()).setShowRemoveWarning(true);
         }
     }
 
+    /**
+     * Remove a statement even if it is used by a an item
+     */
     public void forceRemoveStatement()
     {
-        statements.remove(getStatementPosition());
+        wrappers.remove(getStatementPosition());
     }
 
+    /**
+     * Close the panel with warning information
+     */
     public void closeRemoveWarning()
     {
-        statements.get(getStatementPosition()).setShowRemoveWarning(false);
+        wrappers.get(getStatementPosition()).setShowRemoveWarning(false);
     }
 
+    /**
+     * called by add label button
+     */
     public void addLabel()
     {
-        statements.get(getStatementPosition()).getLabels().add(new LocalizedString("", ""));
+        wrappers.get(getStatementPosition()).getStatement().getLabels().add(new LocalizedString("", ""));
     }
 
+    /**
+     * Called by remove label button
+     */
     public void removeLabel()
     {
-        statements.get(getStatementPosition()).getLabels().remove(getLabelPosition());
+        wrappers.get(getStatementPosition()).getStatement().getLabels().remove(getLabelPosition());
     }
 
+    /**
+     * Called by add constraint button
+     */
     public void addConstraint()
     {
-        Statement st = ((List<StatementWrapper>)statements).get(getStatementPosition()).getAsStatement();
+        Statement st = ((List<StatementWrapper>)wrappers).get(getStatementPosition()).getAsStatement();
         if (getConstraintPosition() >= st.getLiteralConstraints().size())
         {
             ((List<String>)st.getLiteralConstraints()).add("");
@@ -342,38 +413,71 @@ public class MdProfileBean
         collectionSession.setProfile(profile);
     }
 
+    /**
+     * Called by remove constraint button
+     */
     public void removeConstraint()
     {
-        Statement st = ((List<StatementWrapper>)statements).get(getStatementPosition()).getAsStatement();
+        Statement st = ((List<StatementWrapper>)wrappers).get(getStatementPosition()).getAsStatement();
         ((List<String>)st.getLiteralConstraints()).remove(getConstraintPosition());
         collectionSession.setProfile(profile);
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public int getConstraintPosition()
     {
         return constraintPosition;
     }
 
+    /**
+     * setter
+     * 
+     * @param constraintPosition
+     */
     public void setConstraintPosition(int constraintPosition)
     {
         this.constraintPosition = constraintPosition;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public MetadataProfile getProfile()
     {
         return profile;
     }
 
+    /**
+     * setter
+     * 
+     * @param profile
+     */
     public void setProfile(MetadataProfile profile)
     {
         this.profile = profile;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public TabType getTab()
     {
         return tab;
     }
 
+    /**
+     * setter
+     * 
+     * @param tab
+     */
     public void setTab(TabType tab)
     {
         this.tab = tab;
@@ -395,133 +499,169 @@ public class MdProfileBean
         this.statementPosition = statementPosition;
     }
 
+    /**
+     * return the {@link List} of {@link StatementWrapper} as a {@link List} of {@link Statement}
+     * 
+     * @return
+     */
     public List<Statement> getUnwrappedStatements()
     {
         List<Statement> l = new ArrayList<Statement>();
-        for (StatementWrapper w : getStatements())
+        for (StatementWrapper w : getWrappers())
         {
             l.add(w.getAsStatement());
         }
         return l;
     }
 
-    public List<StatementWrapper> getStatements()
+    /**
+     * getter
+     * 
+     * @return
+     */
+    public List<StatementWrapper> getWrappers()
     {
-        return statements;
+        return wrappers;
     }
 
-    public void setStatements(List<StatementWrapper> statements)
+    /**
+     * setter
+     * 
+     * @param statements
+     */
+    public void setWrappers(List<StatementWrapper> wrappers)
     {
-        this.statements = statements;
+        this.wrappers = wrappers;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<SelectItem> getMdTypesMenu()
     {
         return mdTypesMenu;
     }
 
+    /**
+     * setter
+     * 
+     * @param mdTypesMenu
+     */
     public void setMdTypesMenu(List<SelectItem> mdTypesMenu)
     {
         this.mdTypesMenu = mdTypesMenu;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getId()
     {
         return id;
     }
 
+    /**
+     * setter
+     * 
+     * @param id
+     */
     public void setId(String id)
     {
         this.id = id;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<SelectItem> getProfilesMenu()
     {
         return profilesMenu;
     }
 
+    /**
+     * setter
+     * 
+     * @param profilesMenu
+     */
     public void setProfilesMenu(List<SelectItem> profilesMenu)
     {
         this.profilesMenu = profilesMenu;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getTemplate()
     {
         return template;
     }
 
+    /**
+     * setter
+     * 
+     * @param template
+     */
     public void setTemplate(String template)
     {
         this.template = template;
     }
 
-    public boolean validateProfile(MetadataProfile profile)
-    {
-        List<String> statementNames = new ArrayList<String>();
-        if (profile.getStatements() == null)
-        {
-            BeanHelper.error(sessionBean.getLabel("profile_empty"));
-            return false;
-        }
-        int i = 0;
-        for (Statement s : profile.getStatements())
-        {
-            for (LocalizedString ls : s.getLabels())
-            {
-                if (ls.getLang() == null)
-                {
-                    BeanHelper.error(sessionBean.getMessage("error_profile_label_no_lang"));
-                    return false;
-                }
-            }
-            if (s.getType() == null)
-            {
-                BeanHelper.error(sessionBean.getMessage("error_profile_select_metadata_type"));
-                return false;
-            }
-            else if (s.getId() == null || !s.getId().isAbsolute())
-            {
-                BeanHelper.error(s.getId() + " " + sessionBean.getMessage("error_profile_name_not_valid"));
-                return false;
-            }
-            else if (s.getLabels().isEmpty() || "".equals(((List<LocalizedString>)s.getLabels()).get(0).toString()))
-            {
-                BeanHelper.error(sessionBean.getMessage("error_profile_name_required"));
-                return false;
-            }
-            else
-            {
-                statementNames.add(s.getId().toString());
-            }
-            s.setPos(i);
-            i++;
-        }
-        return true;
-    }
-
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean isEditable()
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, sessionBean.getUser(), profile);
     }
 
+    /**
+     * setter
+     * 
+     * @return
+     */
     public boolean isVisible()
     {
         Security security = new Security();
         return security.check(OperationsType.READ, sessionBean.getUser(), profile);
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean isDeletable()
     {
         Security security = new Security();
         return security.check(OperationsType.DELETE, sessionBean.getUser(), profile);
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public int getLabelPosition()
     {
         return labelPosition;
     }
 
+    /**
+     * setter
+     * 
+     * @param labelPosition
+     */
     public void setLabelPosition(int labelPosition)
     {
         this.labelPosition = labelPosition;

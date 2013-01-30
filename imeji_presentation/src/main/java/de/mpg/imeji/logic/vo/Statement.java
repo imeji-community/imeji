@@ -50,11 +50,13 @@ public class Statement implements Comparable<Statement>
     private URI parent = null;
     @j2jLiteral("http://imeji.org/terms/isPreview")
     private boolean isPreview = true;
+    @j2jLiteral("http://imeji.org/terms/position")
     private int pos = 0;
+    @j2jLiteral("http://imeji.org/terms/restricted")
+    private boolean restricted = false;
 
     public Statement()
     {
-        // TODO Auto-generated constructor stub
     }
 
     public URI getType()
@@ -127,6 +129,7 @@ public class Statement implements Comparable<Statement>
         this.pos = pos;
     }
 
+    @Override
     public int compareTo(Statement o)
     {
         if (o.getPos() > this.pos)
@@ -175,5 +178,15 @@ public class Statement implements Comparable<Statement>
     public boolean isPreview()
     {
         return isPreview;
+    }
+
+    public boolean isRestricted()
+    {
+        return restricted;
+    }
+
+    public void setRestricted(boolean restricted)
+    {
+        this.restricted = restricted;
     }
 }

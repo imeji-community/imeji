@@ -71,7 +71,7 @@ public class MetadataMultipleEditor extends MetadataEditor
                 }
                 else
                 {
-                    if (eib.getMetadata().get(i).getPerson() != null)
+                    if (eib.getMetadata().get(i).getPerson() != null && eib.getMetadata().get(i).getPerson().getIdentifier() != null)
                     {
                         eib.getMetadata().get(i).getPerson()
                                 .setId(URI.create(eib.getMetadata().get(i).getPerson().getIdentifier()));

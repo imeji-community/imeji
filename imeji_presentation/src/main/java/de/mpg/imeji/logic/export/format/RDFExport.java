@@ -2,6 +2,8 @@ package de.mpg.imeji.logic.export.format;
 
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.hp.hpl.jena.query.ReadWrite;
@@ -24,6 +26,7 @@ import de.mpg.imeji.logic.search.SearchResult;
 public abstract class RDFExport extends Export
 {
     protected String[] filteredTriples = {};
+    protected List<String> filteredResources = new ArrayList<String>();
     protected Map<String, String> namespaces;
     protected String modelURI;
 
@@ -31,6 +34,7 @@ public abstract class RDFExport extends Export
     public void export(OutputStream out, SearchResult sr)
     {
         initNamespaces();
+        filterResources(sr);
         exportIntoOut(sr, out);
     }
 
@@ -43,7 +47,16 @@ public abstract class RDFExport extends Export
     @Override
     public abstract void init();
 
+    /**
+     * Initialize the namespaces used for the export
+     */
     protected abstract void initNamespaces();
+
+    /**
+     * Check which {@link Resource} should be filtered
+     * @param sr TODO
+     */
+    protected abstract void filterResources(SearchResult sr);
 
     private void exportIntoOut(SearchResult sr, OutputStream out)
     {
@@ -91,6 +104,10 @@ public abstract class RDFExport extends Export
     private StringWriter exportResource(Resource r)
     {
         StringWriter writer = new StringWriter();
+        if (isFilteredResource(r))
+        {
+            return writer;
+        }
         newLine(writer);
         for (StmtIterator iterator = r.listProperties(); iterator.hasNext();)
         {
@@ -160,11 +177,37 @@ public abstract class RDFExport extends Export
         writer.append("\n");
     }
 
+    /**
+     * If the Statement is filtered (namespace has been defined as to be filtered), then return false
+     * 
+     * @param st
+     * @return
+     */
     private boolean isFiltered(Statement st)
     {
+        // Check if the triple is filtered
         for (String s : filteredTriples)
         {
             if (s.equals(st.getPredicate().getURI()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * If the {@link Resource} is filtered (for instance a metadata which should not be displayed, because restricted to
+     * current user), return true
+     * 
+     * @param r
+     * @return
+     */
+    private boolean isFilteredResource(Resource r)
+    {
+        for (String s : filteredResources)
+        {
+            if (s.equals(r.getURI().toString()))
             {
                 return true;
             }

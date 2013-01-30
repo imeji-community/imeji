@@ -66,25 +66,23 @@ public class RDFImageExport extends RDFExport
         String q1 = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {  ?p a <http://imeji.org/terms/mdprofile> . "
                 + "?p <http://imeji.org/terms/statement> ?s . ?s <http://imeji.org/terms/restricted> ?r .FILTER(?r='true'^^<http://www.w3.org/2001/XMLSchema#boolean>)}";
         List<String> statements = s.searchSimpleForQuery(q1, null);
-        String q2 = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {  ?im a <http://imeji.org/terms/image> . "
+        String q2 = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {  ?im a <http://imeji.org/terms/item> . "
                 + "?im <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?s . ?s <http://imeji.org/terms/statement> ?st"
                 + " ";
         boolean first = true;
         for (String stURI : statements)
         {
-//            if (first)
-//                q2 += ". FILTER(";
-//            else
-//                q2 += " && ";
-//            q2 += "?st=<" + stURI + ">";
-//            first = false;
+            if (first)
+                q2 += ". FILTER(";
+            else
+                q2 += " || ";
+            q2 += "?st=<" + stURI + ">";
+            first = false;
         }
         if (!first)
             q2 += ")";
         q2 += "}";
-        System.out.println(q2);
         filteredResources = s.searchSimpleForQuery(q2, null);
-        System.out.println("filtered");
         for (String str : filteredResources)
         {
             System.out.println(str);

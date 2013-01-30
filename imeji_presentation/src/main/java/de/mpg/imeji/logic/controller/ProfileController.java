@@ -108,7 +108,7 @@ public class ProfileController extends ImejiController
                 l.add(st);
             }
         }
-        mdp.setStatements(l);
+       // mdp.setStatements(l);
         return mdp;
     }
 

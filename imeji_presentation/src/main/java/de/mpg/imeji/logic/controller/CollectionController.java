@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -125,7 +126,7 @@ public class CollectionController extends ImejiController
     public void delete(CollectionImeji collection, User user) throws Exception
     {
         ItemController itemController = new ItemController(user);
-        List<String> itemUris = itemController.searchImagesInContainer(collection.getId(), null, null, -1, 0)
+        List<String> itemUris = itemController.search(collection.getId(), null, null, null)
                 .getResults();
         if (hasImageLocked(itemUris, user))
         {
@@ -155,7 +156,7 @@ public class CollectionController extends ImejiController
     public void release(CollectionImeji collection, User user) throws Exception
     {
         ItemController itemController = new ItemController(user);
-        List<String> itemUris = itemController.searchImagesInContainer(collection.getId(), null, null, -1, 0)
+        List<String> itemUris = itemController.search(collection.getId(), null, null, null)
                 .getResults();
         if (hasImageLocked(itemUris, user))
         {
@@ -185,7 +186,7 @@ public class CollectionController extends ImejiController
     public void withdraw(CollectionImeji collection, User user) throws Exception
     {
         ItemController itemController = new ItemController(user);
-        List<String> itemUris = itemController.searchImagesInContainer(collection.getId(), null, null, -1, 0)
+        List<String> itemUris = itemController.search(collection.getId(), null, null, null)
                 .getResults();
         if (hasImageLocked(itemUris, user))
         {
@@ -248,17 +249,6 @@ public class CollectionController extends ImejiController
     }
 
     /**
-     * Count all {@link CollectionImeji} in imeji
-     * 
-     * @return
-     */
-    public int countAllCollections()
-    {
-        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/collection>}",
-                ImejiJena.collectionModel);
-    }
-
-    /**
      * Retieve all {@link CollectionImeji} in imeji
      * 
      * @return
@@ -266,8 +256,7 @@ public class CollectionController extends ImejiController
      */
     public List<CollectionImeji> retrieveAllCollections() throws Exception
     {
-        List<String> uris = ImejiSPARQL.exec("SELECT ?s WHERE { ?s a <http://imeji.org/terms/collection>}",
-                ImejiJena.collectionModel);
+        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectCollectionAll(), ImejiJena.collectionModel);
         return (List<CollectionImeji>)loadCollectionsLazy(uris, -1, 0);
     }
 

@@ -116,7 +116,7 @@ public abstract class ImejiController
     public Container loadContainerItems(Container c, User user, int limit, int offset)
     {
         ItemController ic = new ItemController(user);
-        List<String> newUris = ic.searchImagesInContainer(c.getId(), null, null, limit, offset).getResults();
+        List<String> newUris = ic.search(c.getId(), null, null, null).getResults();
         c.getImages().clear();
         for (String s : newUris)
         {
@@ -125,6 +125,12 @@ public abstract class ImejiController
         return c;
     }
 
+    /**
+     * True if at least one {@link Item} is locked by another {@link User}
+     * @param uris
+     * @param user
+     * @return
+     */
     public boolean hasImageLocked(List<String> uris, User user)
     {
         for (String uri : uris)

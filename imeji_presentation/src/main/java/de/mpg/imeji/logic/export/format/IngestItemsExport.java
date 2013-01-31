@@ -33,16 +33,19 @@ public class IngestItemsExport extends Export
     @Override
     public void export(OutputStream out, SearchResult sr)
     {
-    	SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);        
-    	ItemController ic = new ItemController(session.getUser());
-    	Collection<Item> itemList = ic.loadItems(sr.getResults(), -1,0);
+        SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        ItemController ic = new ItemController(session.getUser());
+        Collection<Item> itemList = ic.loadItems(sr.getResults(), -1, 0);
         Items items = new Items(itemList);
-        try {
-			JaxbIngestProfile.writeToOutputStream(items,out);
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}   		
+        try
+        {
+            JaxbIngestProfile.writeToOutputStream(items, out);
+        }
+        catch (JAXBException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override

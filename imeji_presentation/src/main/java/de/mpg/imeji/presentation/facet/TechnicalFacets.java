@@ -14,6 +14,7 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -110,18 +111,32 @@ public class TechnicalFacets
         }
     }
 
+    /**
+     * Retrieve all {@link Item} currently browsed
+     * 
+     * @param searchQuery
+     * @return
+     */
     public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
         ItemController ic = new ItemController(sb.getUser());
-        return ic.searchImages(searchQuery, null);
+        return ic.search(null, searchQuery, null, null);
     }
 
+    /**
+     * Count the number of item for a facet with one {@link SearchPair}
+     * 
+     * @param searchQuery
+     * @param pair
+     * @param allImages
+     * @return
+     */
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages)
     {
         ItemController ic = new ItemController(sb.getUser());
         SearchQuery sq = new SearchQuery();
         sq.addPair(pair);
-        return ic.countImages(sq, allImages);
+        return ic.search(null, sq, null, allImages).getNumberOfRecords();
     }
 
     public List<List<Facet>> getFacets()

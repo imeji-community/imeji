@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -91,6 +92,13 @@ public class CollectionFacets
         return name;
     }
 
+    /**
+     * Count {@link Item} for one facet
+     * @param searchQuery
+     * @param pair
+     * @param collectionImages
+     * @return
+     */
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> collectionImages)
     {
         ItemController ic = new ItemController(sb.getUser());
@@ -101,13 +109,13 @@ public class CollectionFacets
             sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
             sq.addPair(pair);
         }
-        return ic.countImagesInContainer(colURI, sq, collectionImages);
+        return ic.search(colURI, sq, null, collectionImages).getNumberOfRecords();
     }
 
     public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
         ItemController ic = new ItemController(sb.getUser());
-        return ic.searchImagesInContainer(colURI, searchQuery, new SortCriterion(), 0, 0);
+        return ic.search(colURI, searchQuery, new SortCriterion(), null);
     }
 
     public List<List<Facet>> getFacets()

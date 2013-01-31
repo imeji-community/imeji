@@ -192,7 +192,7 @@ public class UploadBean
             if (collection != null && getCollection().getId() != null)
             {
                 ItemController ic = new ItemController(sessionBean.getUser());
-                collectionSize = ic.countImagesInContainer(getCollection().getId(), new SearchQuery());
+                collectionSize = ic.search(getCollection().getId(), null, null, null).getNumberOfRecords();
             }
         }
         else

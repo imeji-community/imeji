@@ -60,13 +60,15 @@ public abstract class RDFExport extends Export
 
     private void exportIntoOut(SearchResult sr, OutputStream out)
     {
+        namespaces.put("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf");
         ImejiJena.imejiDataSet.begin(ReadWrite.READ);
+        
         try
         {
             Model model = ImejiJena.imejiDataSet.getNamedModel(modelURI);
             StringWriter writer = new StringWriter();
             writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            writer.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"");
+            writer.append("<rdf:RDF");
             for (String key : namespaces.keySet())
             {
                 writer.append(" xmlns:" + namespaces.get(key) + "=\"" + key + "\"");
@@ -178,7 +180,7 @@ public abstract class RDFExport extends Export
     }
 
     /**
-     * If the Statement is filtered (namespace has been defined as to be filtered), then return false
+     * If the {@link Statement} is filtered (namespace has been defined as to be filtered), then return false
      * 
      * @param st
      * @return

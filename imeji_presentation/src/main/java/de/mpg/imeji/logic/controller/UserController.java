@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Grant;
@@ -121,10 +122,7 @@ public class UserController extends ImejiController
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
         Collection<User> users = new ArrayList<User>();
         Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search
-                .searchSimpleForQuery(
-                        "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> }",
-                        new SortCriterion());
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserAll(), null);
         for (String uri : uris)
         {
             try

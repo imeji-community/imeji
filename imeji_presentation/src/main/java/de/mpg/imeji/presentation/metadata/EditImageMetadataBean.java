@@ -296,7 +296,7 @@ public class EditImageMetadataBean
     {
         SearchQuery sq = URLQueryTransformer.parseStringQuery(query);
         ItemController itemController = new ItemController(session.getUser());
-        SearchResult sr = itemController.searchImagesInContainer(URI.create(collectionId), sq, null, -1, 0);
+        SearchResult sr = itemController.search(URI.create(collectionId), sq, null, null);
         return sr.getResults();
     }
 

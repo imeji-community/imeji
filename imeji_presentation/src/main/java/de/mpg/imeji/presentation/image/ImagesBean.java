@@ -206,7 +206,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
     {
         ItemController controller = new ItemController(session.getUser());
-        return controller.searchImages(searchQuery, sortCriterion);
+        return controller.search(null, searchQuery, sortCriterion, null);
     }
 
     /**

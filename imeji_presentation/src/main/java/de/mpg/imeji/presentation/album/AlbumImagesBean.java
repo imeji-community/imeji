@@ -90,7 +90,7 @@ public class AlbumImagesBean extends ImagesBean
         // loadAlbum();
         SortCriterion sortCriterion = initSortCriterion();
         ItemController controller = new ItemController(session.getUser());
-        SearchResult result = controller.searchImagesInContainer(uri, new SearchQuery(), sortCriterion, limit, offset);
+        SearchResult result = controller.search(uri, null, sortCriterion, null);
         setAlbumItems(result.getResults());
         totalNumberOfRecords = result.getNumberOfRecords();
         itemsUris = result.getResults();

@@ -116,7 +116,7 @@ public class CollectionListItem
     private void initSize(User user)
     {
         ItemController ic = new ItemController(user);
-        size = ic.countImagesInContainer(uri, new SearchQuery());
+        size = ic.search(uri, null, null, null).getNumberOfRecords();
     }
 
     /**

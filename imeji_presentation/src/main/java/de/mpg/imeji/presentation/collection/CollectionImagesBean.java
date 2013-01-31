@@ -133,7 +133,7 @@ public class CollectionImagesBean extends ImagesBean
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
     {
         ItemController controller = new ItemController(sb.getUser());
-        return controller.searchImagesInContainer(uri, searchQuery, sortCriterion, getElementsPerPage(), getOffset());
+        return controller.search(uri, searchQuery, sortCriterion, null);
     }
 
     @Override

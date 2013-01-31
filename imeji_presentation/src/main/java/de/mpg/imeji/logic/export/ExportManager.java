@@ -103,18 +103,16 @@ public class ExportManager
             ItemController itemController = new ItemController(user);
             if (collectionId != null)
             {
-                result = itemController.searchImagesInContainer(
-                        ObjectHelper.getURI(CollectionImeji.class, collectionId), searchQuery, null,
-                        maximumNumberOfRecords, 0);
+                result = itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId), searchQuery,
+                        null, null);
             }
             else if (albumId != null)
             {
-                result = itemController.searchImagesInContainer(ObjectHelper.getURI(Album.class, albumId), searchQuery,
-                        null, maximumNumberOfRecords, 0);
+                result = itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery, null, null);
             }
             else
             {
-                result = itemController.searchImages(searchQuery, null);
+                result = itemController.search(null, searchQuery, null, null);
             }
         }
         if (result != null && result.getNumberOfRecords() > 0 && result.getNumberOfRecords() > maximumNumberOfRecords)

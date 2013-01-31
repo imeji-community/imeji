@@ -22,9 +22,11 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
@@ -49,6 +51,9 @@ public class ItemController extends ImejiController
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
 
+    /**
+     * Controller constructor
+     */
     public ItemController()
     {
         super();
@@ -167,75 +172,58 @@ public class ItemController extends ImejiController
         return (Item)imejiRDF2Bean.load(imgUri.toString(), user, new Item());
     }
 
+    /**
+     * Retrieve all {@link Item} (all status, all users) in imeji
+     * 
+     * @return
+     */
     public Collection<Item> retrieveAll()
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
-        List<String> uris = ImejiSPARQL.exec("SELECT ?s WHERE { ?s a <http://imeji.org/terms/item>}",
-                ImejiJena.imageModel);
+        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectItemAll(), ImejiJena.imageModel);
         return loadItems(uris, -1, 0);
     }
 
     /**
-     * Get the number of all images
+     * Search
      * 
+     * @param containerUri
+     * @param searchQuery
+     * @param sortCri
      * @return
      */
-    public int allImagesSize()
-    {
-        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item>}",
-                ImejiJena.imageModel);
-    }
-
-    public SearchResult searchImages(SearchQuery searchQuery, SortCriterion sortCri)
-    {
-        Search search = new Search(SearchType.ITEM, null);
-        return search.search(searchQuery, sortCri, simplifyUser(null));
-    }
-
-    public SearchResult searchImagesInContainer(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri,
-            int limit, int offset)
+    public SearchResult searchItemInContainer(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri)
     {
         Search search = new Search(SearchType.ITEM, containerUri.toString());
         return search.search(searchQuery, sortCri, simplifyUser(containerUri));
     }
 
-    public int countImages(SearchQuery searchQuery)
+    /**
+     * Search {@link Item}
+     * 
+     * @param containerUri - if the search is done within a {@link Container}
+     * @param searchQuery - the {@link SearchQuery}
+     * @param sortCri - the {@link SortCriterion}
+     * @param uris - The {@link List} of uri to restrict the search
+     * @return
+     */
+    public SearchResult search(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri, List<String> uris)
     {
-        Search search = new Search(SearchType.ITEM, null);
-        return search.search(searchQuery, null, simplifyUser(null)).getNumberOfRecords();
+        String uriString = null;
+        if (containerUri != null)
+            uriString = containerUri.toString();
+        Search search = new Search(SearchType.ITEM, uriString);
+        return search.search(uris, searchQuery, sortCri, simplifyUser(containerUri));
     }
 
-    public int countImages(SearchQuery searchQuery, List<String> allImages)
-    {
-        Search search = new Search(SearchType.ITEM, null);
-        return search.search(allImages, searchQuery, null, simplifyUser(null)).getNumberOfRecords();
-    }
-
-    public int countImagesInContainer(URI containerUri, SearchQuery searchQuery)
-    {
-        Search search = new Search(SearchType.ITEM, containerUri.toString());
-        int size = 0;
-        if (searchQuery.isEmpty())
-        {
-            size = search.searchSimpleForQuery(
-                    "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
-                            + containerUri + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<"
-                            + Status.WITHDRAWN.getUri() + ">) }", new SortCriterion()).size();
-        }
-        else
-        {
-            size = search.search(searchQuery, new SortCriterion(), simplifyUser(containerUri)).getNumberOfRecords();
-        }
-        return size;
-    }
-
-    public int countImagesInContainer(URI containerUri, SearchQuery searchQuery, List<String> containerImages)
-    {
-        Search search = new Search(SearchType.ITEM, containerUri.toString());
-        return search.search(containerImages, searchQuery, new SortCriterion(), simplifyUser(containerUri))
-                .getNumberOfRecords();
-    }
-
+    /**
+     * Load the {@link List} of {@link Item}
+     * 
+     * @param uris
+     * @param limit
+     * @param offset
+     * @return
+     */
     public Collection<Item> loadItems(List<String> uris, int limit, int offset)
     {
         int counter = 0;

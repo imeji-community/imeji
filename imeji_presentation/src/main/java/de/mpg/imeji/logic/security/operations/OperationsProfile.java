@@ -26,6 +26,7 @@ public class OperationsProfile implements Operations
      * Allowed for:<br/>
      * - all
      */
+    @Override
     public boolean create(User user, Object object)
     {
         return true;
@@ -40,6 +41,7 @@ public class OperationsProfile implements Operations
      * - Profile Editor<br/>
      * - Profile Viewer
      */
+    @Override
     public boolean read(User user, Object object)
     {
         return (Status.RELEASED.equals(((MetadataProfile)object).getStatus())
@@ -55,6 +57,7 @@ public class OperationsProfile implements Operations
      * - Profile Admin<br/>
      * - Profile Editor
      */
+    @Override
     public boolean update(User user, Object object)
     {
         return (user != null && (auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile)object).getId()) || auth.is(
@@ -66,6 +69,7 @@ public class OperationsProfile implements Operations
      * Allowed for:<br/>
      * - Profile Admin
      */
+    @Override
     public boolean delete(User user, Object object)
     {
         return (auth.is(GrantType.PROFILE_ADMIN, user, ((MetadataProfile)object).getId()));

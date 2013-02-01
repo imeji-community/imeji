@@ -39,6 +39,7 @@ public class AlbumImageBean extends ImageBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
+    @Override
     public void initBrowsing()
     {
         String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
@@ -92,11 +93,13 @@ public class AlbumImageBean extends ImageBean
         this.albumId = albumId;
     }
 
+    @Override
     public String getPageUrl()
     {
         return navigation.getAlbumUrl() + albumId + "/" + navigation.ITEM.getPath() + "/" + getId();
     }
 
+    @Override
     public String getNavigationString()
     {
         return "pretty:albumItem";

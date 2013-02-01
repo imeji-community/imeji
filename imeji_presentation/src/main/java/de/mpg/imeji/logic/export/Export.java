@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.export.format.RDFImageExport;
 import de.mpg.imeji.logic.export.format.RDFProfileExport;
 import de.mpg.imeji.logic.export.format.SitemapExport;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export of data
@@ -25,6 +26,13 @@ import de.mpg.imeji.logic.search.SearchResult;
  */
 public abstract class Export
 {
+    /**
+     * The {@link User} doing the export
+     */
+    protected User user;
+    /**
+     * The params in the url ofr the export
+     */
     private Map<String, String[]> params;
 
     /**
@@ -151,13 +159,35 @@ public abstract class Export
         return null;
     }
 
+    /**
+     * @return
+     */
     public Map<String, String[]> getParams()
     {
         return params;
     }
 
+    /**
+     * @param params
+     */
     public void setParams(Map<String, String[]> params)
     {
         this.params = params;
+    }
+
+    /**
+     * @return
+     */
+    public User getUser()
+    {
+        return user;
+    }
+
+    /**
+     * @param user
+     */
+    public void setUser(User user)
+    {
+        this.user = user;
     }
 }

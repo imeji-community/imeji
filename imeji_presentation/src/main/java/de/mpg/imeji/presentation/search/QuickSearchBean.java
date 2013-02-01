@@ -4,6 +4,9 @@
 package de.mpg.imeji.presentation.search;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -11,11 +14,24 @@ import javax.faces.event.ValueChangeEvent;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
+/**
+ * Java bean for the simple search
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class QuickSearchBean
 {
     private String searchString = "";
     private String selectedSearchType = "images";
 
+    /**
+     * Method when search is submitted
+     * 
+     * @return
+     * @throws IOException
+     */
     public String search() throws IOException
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
@@ -24,36 +40,56 @@ public class QuickSearchBean
         if (getSelectedSearchType().equals("collections"))
         {
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getCollectionsUrl() + "?q=" + searchString);
+                    .redirect(navigation.getCollectionsUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
         }
         else if (getSelectedSearchType().equals("images"))
         {
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getBrowseUrl() + "?q=" + searchString);
+                    .redirect(navigation.getBrowseUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
         }
         else if (getSelectedSearchType().equals("albums"))
         {
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getAlbumsUrl() + "?q=" + searchString);
+                    .redirect(navigation.getAlbumsUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
         }
         return "";
     }
 
+    /**
+     * setter
+     * 
+     * @param searchString
+     */
     public void setSearchString(String searchString)
     {
         this.searchString = searchString;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getSearchString()
     {
         return searchString;
     }
 
+    /**
+     * setter
+     * 
+     * @param selectedSearchType
+     */
     public void setSelectedSearchType(String selectedSearchType)
     {
         this.selectedSearchType = selectedSearchType;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getSelectedSearchType()
     {
         if (selectedSearchType == null)
@@ -61,6 +97,11 @@ public class QuickSearchBean
         return selectedSearchType;
     }
 
+    /**
+     * Listener for the search type
+     * 
+     * @param event
+     */
     public void selectedSearchTypeListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && !event.getNewValue().equals(event.getOldValue()))

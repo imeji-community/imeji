@@ -30,14 +30,12 @@ package de.mpg.imeji.logic.search.query;
 
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Properties.Status;
 
 /**
  * SPARQL queries for imeji
@@ -55,11 +53,11 @@ public class SPARQLQueries
      */
     public static String selectMetadataRestricted()
     {
-        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {  ?it a <http://imeji.org/terms/item> . "
-                + "?it <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?s . ?s <http://imeji.org/terms/statement> ?st"
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {  ?it a <http://imeji.org/terms/item>"
+                + " . ?it <http://imeji.org/terms/collection> ?sort0"
+                + ". ?it <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?s . ?s <http://imeji.org/terms/statement> ?st"
                 + " . ?st <http://imeji.org/terms/restricted> ?r  .FILTER(?r='true'^^<http://www.w3.org/2001/XMLSchema#boolean>) }";
     }
-
 
     /**
      * Select all {@link User}

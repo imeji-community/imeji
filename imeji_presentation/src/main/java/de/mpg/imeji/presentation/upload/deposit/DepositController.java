@@ -34,8 +34,7 @@ public class DepositController
      * @return
      * @throws Exception
      */
-    public Item createEscidocItem(InputStream inputStream, String title, String mimetype)
-            throws Exception
+    public Item createEscidocItem(InputStream inputStream, String title, String mimetype) throws Exception
     {
         EscidocHelper escidocHelper = new EscidocHelper();
         Authentication auth = escidocHelper.login();

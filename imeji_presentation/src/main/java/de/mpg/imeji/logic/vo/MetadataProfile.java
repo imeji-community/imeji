@@ -1,8 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
-
 package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
@@ -19,19 +17,17 @@ import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
 /**
+ * Profile where {@link Item} {@link Metadata} are defined
  * 
- * Profile where {@link Item} {@link Metadata} are defined 
- *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 @j2jResource("http://imeji.org/terms/mdprofile")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @j2jModel("metadataProfile")
-@XmlRootElement(name="metadataProfile")
-@XmlType(name="metadataProfile")
+@XmlRootElement(name = "metadataProfile")
+@XmlType(name = "metadataProfile")
 public class MetadataProfile extends Properties
 {
     private URI id;
@@ -41,7 +37,7 @@ public class MetadataProfile extends Properties
     private String description;
     @j2jList("http://imeji.org/terms/statement")
     private Collection<Statement> statements = new ArrayList<Statement>();
-    
+
     public URI getId()
     {
         return id;
@@ -81,14 +77,13 @@ public class MetadataProfile extends Properties
     {
         this.statements = statements;
     }
-
-//    public void setProperties(Properties properties)
-//    {
-//        this.properties = properties;
-//    }
-//
-//    public Properties getProperties()
-//    {
-//        return properties;
-//    }
+    // public void setProperties(Properties properties)
+    // {
+    // this.properties = properties;
+    // }
+    //
+    // public Properties getProperties()
+    // {
+    // return properties;
+    // }
 }

@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.upload;
 
 import java.util.ArrayList;
@@ -12,53 +11,51 @@ import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 
 /**
- * 
  * @author saquet
- *
  */
-public class Upload 
+public class Upload
 {
-	private List<Item> items = null;
-	private String contentModelId = null;
-	private CollectionImeji collection = null;
-	private Date startDate = null;
-	private Date endDate = null;
-		
-	public Upload(String contentModelId) 
-	{
-		items = new ArrayList<Item>();
-		this.contentModelId = contentModelId;
-	}
+    private List<Item> items = null;
+    private String contentModelId = null;
+    private CollectionImeji collection = null;
+    private Date startDate = null;
+    private Date endDate = null;
 
-	public List<Item> getItems() 
-	{
-		return items;
-	}
+    public Upload(String contentModelId)
+    {
+        items = new ArrayList<Item>();
+        this.contentModelId = contentModelId;
+    }
 
-	public void setItems(List<Item> items) 
-	{
-		this.items = items;
-	}
+    public List<Item> getItems()
+    {
+        return items;
+    }
 
-	public Date getStartDate() 
-	{
-		return startDate;
-	}
+    public void setItems(List<Item> items)
+    {
+        this.items = items;
+    }
 
-	public void setStartDate(Date startDate) 
-	{
-		this.startDate = startDate;
-	}
+    public Date getStartDate()
+    {
+        return startDate;
+    }
 
-	public Date getEndDate() 
-	{
-		return endDate;
-	}
+    public void setStartDate(Date startDate)
+    {
+        this.startDate = startDate;
+    }
 
-	public void setEndDate(Date endDate) 
-	{
-		this.endDate = endDate;
-	}
+    public Date getEndDate()
+    {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate)
+    {
+        this.endDate = endDate;
+    }
 
     public String getContentModelId()
     {
@@ -79,6 +76,4 @@ public class Upload
     {
         this.collection = collection;
     }
-
-	
 }

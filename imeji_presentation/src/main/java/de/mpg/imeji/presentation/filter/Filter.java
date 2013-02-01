@@ -8,10 +8,9 @@ import java.net.URI;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.presentation.facet.Facet;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
+
 /**
- * 
  * @author saquet
- *
  */
 public class Filter extends Facet
 {
@@ -21,7 +20,6 @@ public class Filter extends Facet
     private int count = 0;
     private String removeQuery = "";
     private SearchQuery searchQuery;
-
 
     public Filter(String label, String query, int count, FacetType type, URI metadataURI)
     {
@@ -51,11 +49,13 @@ public class Filter extends Facet
         }
     }
 
+    @Override
     public String getLabel()
     {
         return label;
     }
 
+    @Override
     public void setLabel(String label)
     {
         this.label = label;
@@ -71,11 +71,13 @@ public class Filter extends Facet
         this.collectionID = collectionID;
     }
 
+    @Override
     public int getCount()
     {
         return count;
     }
 
+    @Override
     public void setCount(int count)
     {
         this.count = count;

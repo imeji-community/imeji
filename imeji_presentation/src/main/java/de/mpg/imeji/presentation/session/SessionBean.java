@@ -16,7 +16,6 @@ import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -131,8 +130,8 @@ public class SessionBean
         // toggle the locale
         Locale locale = null;
         Map<String, String> map = fc.getExternalContext().getRequestParameterMap();
-        String language = (String)map.get("language");
-        String country = (String)map.get("country");
+        String language = map.get("language");
+        String country = map.get("country");
         try
         {
             locale = new Locale(language, country);
@@ -177,16 +176,15 @@ public class SessionBean
      * 
      * @return
      */
-//    public String getReloadActiveAlbum()
-//    {
-//        if (activeAlbum != null)
-//        {
-//            ItemController ic = new ItemController(user);
-//            activeAlbum = (Album)ic.loadContainerItems(activeAlbum, user, -1, 0);
-//        }
-//        return "";
-//    }
-
+    // public String getReloadActiveAlbum()
+    // {
+    // if (activeAlbum != null)
+    // {
+    // ItemController ic = new ItemController(user);
+    // activeAlbum = (Album)ic.loadContainerItems(activeAlbum, user, -1, 0);
+    // }
+    // return "";
+    // }
     /**
      * @return the user
      */

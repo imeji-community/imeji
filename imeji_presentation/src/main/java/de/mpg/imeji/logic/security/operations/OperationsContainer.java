@@ -27,6 +27,7 @@ public class OperationsContainer implements Operations
      * Allowed for: <br/>
      * - everybody
      */
+    @Override
     public boolean create(User user, Object object)
     {
         return true;
@@ -41,10 +42,12 @@ public class OperationsContainer implements Operations
      * - Collection Editor <br/>
      * - Collection Administrator
      */
+    @Override
     public boolean read(User user, Object object)
     {
         return (Status.RELEASED.equals(((Container)object).getStatus())
                 || Status.WITHDRAWN.equals(((Container)object).getStatus())
+                || auth.isPrivilegedViewer(user, (Container)object)
                 || auth.isViewerFor(user, (Container)object) || auth.isPictureEditor(user, (Container)object)
                 || auth.isContainerEditor(user, (Container)object) || auth.isContainerAdmin(user, (Container)object));
     }
@@ -55,6 +58,7 @@ public class OperationsContainer implements Operations
      * - Collection Editor <br/>
      * - Collection Administrator
      */
+    @Override
     public boolean update(User user, Object object)
     {
         return (user != null && (auth.isContainerEditor(user, (Container)object) || auth.isContainerAdmin(user,
@@ -66,6 +70,7 @@ public class OperationsContainer implements Operations
      * Allowed for: <br/>
      * - Collection Administrator (if collection isn't released)
      */
+    @Override
     public boolean delete(User user, Object object)
     {
         return (!Status.RELEASED.equals(((Container)object).getStatus())

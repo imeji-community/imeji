@@ -30,12 +30,12 @@ import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
- * Abstract class for the controller in imeji dealing with imeji VO: {@link Item} {@link CollectionImeji} {@link Album} {@link User} {@link MetadataProfile}
- *
+ * Abstract class for the controller in imeji dealing with imeji VO: {@link Item} {@link CollectionImeji} {@link Album}
+ * {@link User} {@link MetadataProfile}
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public abstract class ImejiController
 {
@@ -49,12 +49,14 @@ public abstract class ImejiController
     {
         // TODO Auto-generated constructor stub
     }
-    
+
     /**
      * Constructor with a user
+     * 
      * @param user2
-     * @deprecated use rather ImejiController() as constructor. User should be passed as parameter in the methods 
+     * @deprecated use rather ImejiController() as constructor. User should be passed as parameter in the methods
      */
+    @Deprecated
     public ImejiController(User user2)
     {
         this.user = user2;
@@ -127,6 +129,7 @@ public abstract class ImejiController
 
     /**
      * True if at least one {@link Item} is locked by another {@link User}
+     * 
      * @param uris
      * @param user
      * @return

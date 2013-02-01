@@ -8,7 +8,6 @@ import java.util.List;
 
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.EditorItemBean;
@@ -16,18 +15,17 @@ import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 
 /**
- * 
  * Editor for one item (by the item detail page)
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class SimpleImageEditor extends MetadataEditor
 {
     /**
      * Editor for one item (by the item detail page)
+     * 
      * @param items
      * @param profile
      * @param statement
@@ -75,6 +73,7 @@ public class SimpleImageEditor extends MetadataEditor
         return true;
     }
 
+    @Override
     public void addMetadata(int imagePos, int metadataPos)
     {
         if (imagePos < items.size())
@@ -83,6 +82,7 @@ public class SimpleImageEditor extends MetadataEditor
         }
     }
 
+    @Override
     public void addMetadata(EditorItemBean eib, int metadataPos)
     {
         if (metadataPos <= eib.getMetadata().size())
@@ -92,6 +92,7 @@ public class SimpleImageEditor extends MetadataEditor
         }
     }
 
+    @Override
     public void removeMetadata(int imagePos, int metadataPos)
     {
         if (imagePos < items.size())
@@ -100,6 +101,7 @@ public class SimpleImageEditor extends MetadataEditor
         }
     }
 
+    @Override
     public void removeMetadata(EditorItemBean eib, int metadataPos)
     {
         if (metadataPos < eib.getMetadata().size())

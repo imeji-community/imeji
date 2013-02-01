@@ -51,7 +51,7 @@ public class SuperMetadataBean
         ObjectHelper.copyFields(this, metadata);
         return metadata;
     }
-    
+
     public URI getStatement()
     {
         return metadata.getStatement();

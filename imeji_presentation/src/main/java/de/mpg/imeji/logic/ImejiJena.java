@@ -14,7 +14,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.Counter;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;

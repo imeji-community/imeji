@@ -1,21 +1,18 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.beans;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
-
 
 public class BlogBean
 {
     private String rssFeedUrl = null;
     private String blogUrl = null;
     private String googleKey = null;
-    
+
     public BlogBean()
     {
-        
     }
 
     public String getRssFeedUrl()
@@ -26,14 +23,13 @@ public class BlogBean
         }
         catch (Exception e)
         {
-           throw new RuntimeException("Error reading property  ", e);
+            throw new RuntimeException("Error reading property  ", e);
         }
         return rssFeedUrl;
     }
 
     public void setRssFeedUrl(String rssFeedUrl)
     {
-       
         this.rssFeedUrl = rssFeedUrl;
     }
 
@@ -45,7 +41,7 @@ public class BlogBean
         }
         catch (Exception e)
         {
-           throw new RuntimeException("Error reading property ", e);
+            throw new RuntimeException("Error reading property ", e);
         }
         return blogUrl;
     }
@@ -60,11 +56,10 @@ public class BlogBean
         try
         {
             googleKey = PropertyReader.getProperty("escidoc.imeji.blog.rss.google.key");
-
         }
         catch (Exception e)
         {
-           throw new RuntimeException("Error reading property  ", e);
+            throw new RuntimeException("Error reading property  ", e);
         }
         return googleKey;
     }
@@ -73,7 +68,4 @@ public class BlogBean
     {
         this.googleKey = googleKey;
     }
-    
-    
-    
 }

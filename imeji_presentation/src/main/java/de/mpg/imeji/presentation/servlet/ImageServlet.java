@@ -25,13 +25,11 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.ProxyHelper;
 
 /**
- * 
  * The Servlet to Read images from external systems (to enable authentification and authorization for this systems)
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class ImageServlet extends HttpServlet
 {
@@ -69,7 +67,6 @@ public class ImageServlet extends HttpServlet
     {
         String imageUrl = req.getParameter("imageUrl");
         GetMethod method = null;
-        
         try
         {
             if (imageUrl == null)
@@ -78,7 +75,7 @@ public class ImageServlet extends HttpServlet
             }
             else
             {
-            	userHandle = getEscidocUserHandle();
+                userHandle = getEscidocUserHandle();
                 method = newGetMethod(imageUrl, false, userHandle);
                 // Check if the image url is accessible via a proxy
                 ProxyHelper.setProxy(client, imageUrl);
@@ -86,19 +83,19 @@ public class ImageServlet extends HttpServlet
                 InputStream input;
                 if (method.getStatusCode() == 302)
                 {
-                	// image not found, try again
-                	// release previous connection
-                	method.releaseConnection();
-                	userHandle = getNewEscidocUserHandle();
-                	method = newGetMethod(imageUrl, true, userHandle);
+                    // image not found, try again
+                    // release previous connection
+                    method.releaseConnection();
+                    userHandle = getNewEscidocUserHandle();
+                    method = newGetMethod(imageUrl, true, userHandle);
                     client.executeMethod(method);
                 }
                 if (method.getStatusCode() != 200)
                 {
-                	// image not found after retry, display default Thumbnail
-                	// release previous connection
-                	method.releaseConnection();
-                	// Check if the imejiUrl is accessible via a proxy
+                    // image not found after retry, display default Thumbnail
+                    // release previous connection
+                    method.releaseConnection();
+                    // Check if the imejiUrl is accessible via a proxy
                     ProxyHelper.setProxy(client, imejiUrl);
                     method = newGetMethod(imejiUrl + "/resources/icon/defaultThumb.gif", false, null);
                     client.executeMethod(method);
@@ -124,7 +121,7 @@ public class ImageServlet extends HttpServlet
                     out.write(buffer, 0, numRead);
                 }
                 input.close();
-                //out.flush();
+                // out.flush();
                 out.close();
             }
         }
@@ -134,15 +131,16 @@ public class ImageServlet extends HttpServlet
         }
         finally
         {
-        	 if (method != null)
-        	 {
-        		 method.releaseConnection();
-        	 }
+            if (method != null)
+            {
+                method.releaseConnection();
+            }
         }
     }
-    
+
     /**
      * Log in eSciDoc and return the userHandle
+     * 
      * @return
      * @throws IOException
      * @throws URISyntaxException
@@ -150,12 +148,13 @@ public class ImageServlet extends HttpServlet
      */
     private String getNewEscidocUserHandle() throws IOException, URISyntaxException, Exception
     {
-    	 return LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"),
-                 PropertyReader.getProperty("imeji.escidoc.password"));
+        return LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"),
+                PropertyReader.getProperty("imeji.escidoc.password"));
     }
-    
+
     /**
      * Get the current handle, if null get a new one
+     * 
      * @return
      * @throws IOException
      * @throws URISyntaxException
@@ -163,14 +162,16 @@ public class ImageServlet extends HttpServlet
      */
     private String getEscidocUserHandle() throws IOException, URISyntaxException, Exception
     {
-    	 if (userHandle == null)
-    	 {
-    		return getNewEscidocUserHandle();
-    	 }
-    	 return null;
+        if (userHandle == null)
+        {
+            return getNewEscidocUserHandle();
+        }
+        return null;
     }
+
     /**
      * Initialize a http get mehtod
+     * 
      * @param url
      * @param followRedirects
      * @param userHandle
@@ -179,17 +180,18 @@ public class ImageServlet extends HttpServlet
      * @throws URISyntaxException
      * @throws Exception
      */
-    private GetMethod newGetMethod(String url, boolean followRedirects, String userHandle) throws IOException, URISyntaxException, Exception
+    private GetMethod newGetMethod(String url, boolean followRedirects, String userHandle) throws IOException,
+            URISyntaxException, Exception
     {
-    	 GetMethod method = new GetMethod(url);
-         method.setFollowRedirects(followRedirects);
-         if (userHandle != null)
-         {
-        	 method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
-         }
-         method.addRequestHeader("Cache-Control", "public");
-         method.setRequestHeader("Connection", "close");
-         return method;
+        GetMethod method = new GetMethod(url);
+        method.setFollowRedirects(followRedirects);
+        if (userHandle != null)
+        {
+            method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
+        }
+        method.addRequestHeader("Cache-Control", "public");
+        method.setRequestHeader("Connection", "close");
+        return method;
     }
 
     /**

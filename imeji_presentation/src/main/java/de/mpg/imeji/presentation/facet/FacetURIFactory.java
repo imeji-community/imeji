@@ -32,13 +32,11 @@ public class FacetURIFactory
         return URI.create(uri);
     }
 
-    private String getCommonURI(SearchQuery sq, String facetName, FacetType type)
-            throws UnsupportedEncodingException
+    private String getCommonURI(SearchQuery sq, String facetName, FacetType type) throws UnsupportedEncodingException
     {
         String commonURI = "";
-        commonURI += URLEncoder.encode(URLQueryTransformer.transform2URL(sq), "UTF-8") + "&f="
-                + URLEncoder.encode(facetName, "UTF-8") + "&t=" + URLEncoder.encode(type.name().toLowerCase(), "UTF-8")
-                + "&page=1";
+        commonURI += URLQueryTransformer.transform2UTF8URL(sq) + "&f=" + URLEncoder.encode(facetName, "UTF-8") + "&t="
+                + URLEncoder.encode(type.name().toLowerCase(), "UTF-8") + "&page=1";
         return commonURI;
     }
 }

@@ -55,6 +55,7 @@ public class CollectionController extends ImejiController
      * @deprecated
      * @param user
      */
+    @Deprecated
     public CollectionController(User user)
     {
         super(user);
@@ -84,6 +85,7 @@ public class CollectionController extends ImejiController
      * @param user
      * @deprecated
      */
+    @Deprecated
     public void update(CollectionImeji ic) throws Exception
     {
         writeUpdateProperties(ic, user);
@@ -126,8 +128,7 @@ public class CollectionController extends ImejiController
     public void delete(CollectionImeji collection, User user) throws Exception
     {
         ItemController itemController = new ItemController(user);
-        List<String> itemUris = itemController.search(collection.getId(), null, null, null)
-                .getResults();
+        List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
             throw new RuntimeException("Collection has at least one image locked by another user.");
@@ -156,8 +157,7 @@ public class CollectionController extends ImejiController
     public void release(CollectionImeji collection, User user) throws Exception
     {
         ItemController itemController = new ItemController(user);
-        List<String> itemUris = itemController.search(collection.getId(), null, null, null)
-                .getResults();
+        List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
             throw new RuntimeException("Collection has at least one image locked by another user.");
@@ -186,8 +186,7 @@ public class CollectionController extends ImejiController
     public void withdraw(CollectionImeji collection, User user) throws Exception
     {
         ItemController itemController = new ItemController(user);
-        List<String> itemUris = itemController.search(collection.getId(), null, null, null)
-                .getResults();
+        List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
             throw new RuntimeException("Collection has at least one image locked by another user.");

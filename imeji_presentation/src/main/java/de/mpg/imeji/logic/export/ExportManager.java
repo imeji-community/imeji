@@ -49,6 +49,7 @@ public class ExportManager
         this.out = out;
         this.user = user;
         export = Export.factory(params);
+        export.setUser(user);
     }
 
     public void export(SearchResult sr)

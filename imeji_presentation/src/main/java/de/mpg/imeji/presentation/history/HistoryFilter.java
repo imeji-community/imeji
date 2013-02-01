@@ -5,7 +5,6 @@ package de.mpg.imeji.presentation.history;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.FactoryFinder;
@@ -48,10 +47,10 @@ public class HistoryFilter implements Filter
         HttpServletRequest request = (HttpServletRequest)serv;
         servletContext = request.getSession().getServletContext();
         HistorySession hs = getHistorySession(request, resp);
-        String q = (String)request.getParameter("q");
-        String h = (String)request.getParameter("h");
-        String f = (String)request.getParameter("f");
-        String id = (String)request.getParameter("id");
+        String q = request.getParameter("q");
+        String h = request.getParameter("h");
+        String f = request.getParameter("f");
+        String id = request.getParameter("id");
         // Parameter used by pretty query to pass parameter defined in pretty-config in the url pattern
         String[] ids = request.getParameterValues("com.ocpsoft.vP_0");
         if (id != null)
@@ -93,7 +92,7 @@ public class HistoryFilter implements Filter
      */
     private HistorySession getHistorySession(ServletRequest request, ServletResponse resp)
     {
-        String name = (String)HistorySession.class.getSimpleName();
+        String name = HistorySession.class.getSimpleName();
         FacesContext fc = getFacesContext(request, resp);
         Object result = fc.getExternalContext().getSessionMap().get(name);
         if (result == null)

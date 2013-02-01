@@ -15,6 +15,7 @@ import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
@@ -87,29 +88,7 @@ public class ProfileController extends ImejiController
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
         MetadataProfile p = ((MetadataProfile)imejiRDF2Bean.load(uri.toString(), user, new MetadataProfile()));
         Collections.sort((List<Statement>)p.getStatements());
-        p = removeRestrictedStatements(p, user);
         return p;
-    }
-
-    /**
-     * Remove the {@link Statement} which are restricted for this user
-     * 
-     * @param mdp
-     * @param user
-     * @return
-     */
-    private MetadataProfile removeRestrictedStatements(MetadataProfile mdp, User user)
-    {
-        List<Statement> l = new ArrayList<Statement>();
-        for (Statement st : mdp.getStatements())
-        {
-            if (!st.isRestricted())
-            {
-                l.add(st);
-            }
-        }
-       // mdp.setStatements(l);
-        return mdp;
     }
 
     /**

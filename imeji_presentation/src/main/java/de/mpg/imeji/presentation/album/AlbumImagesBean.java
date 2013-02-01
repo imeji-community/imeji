@@ -12,7 +12,6 @@ import javax.faces.context.FacesContext;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
@@ -216,6 +215,7 @@ public class AlbumImagesBean extends ImagesBean
         BeanHelper.info(deleted + " " + session.getMessage("success_album_remove_images"));
     }
 
+    @Override
     public String getImageBaseUrl()
     {
         if (album == null || album.getId() == null)
@@ -223,6 +223,7 @@ public class AlbumImagesBean extends ImagesBean
         return navigation.getApplicationUri() + album.getId().getPath();
     }
 
+    @Override
     public String getBackUrl()
     {
         return navigation.getBrowseUrl() + "/album" + "/" + this.id;
@@ -270,12 +271,14 @@ public class AlbumImagesBean extends ImagesBean
         return "pretty:";
     }
 
+    @Override
     public boolean isEditable()
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, session.getUser(), album);
     }
 
+    @Override
     public boolean isDeletable()
     {
         Security security = new Security();

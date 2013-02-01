@@ -45,6 +45,7 @@ public class ComparableSearchResult implements Comparable<ComparableSearchResult
         this.sortValue = sortValue;
     }
 
+    @Override
     public int compareTo(ComparableSearchResult o)
     {
         return o.getSortValue().compareToIgnoreCase(sortValue) * orderAsInteger();

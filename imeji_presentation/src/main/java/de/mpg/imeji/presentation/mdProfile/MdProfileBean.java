@@ -140,6 +140,7 @@ public class MdProfileBean
      */
     static class profilesLabelComparator implements Comparator<Object>
     {
+        @Override
         public int compare(Object o1, Object o2)
         {
             SelectItem profile1 = (SelectItem)o1;
@@ -302,6 +303,7 @@ public class MdProfileBean
             return "";
     }
 
+
     protected String getNavigationString()
     {
         return "pretty:";
@@ -322,11 +324,17 @@ public class MdProfileBean
         Collections.swap(wrappers, getStatementPosition() + 1, getStatementPosition());
     }
 
+    /**
+     * add a vocabulary according to the position of the clicked button
+     */
     public void addVocabulary()
     {
         wrappers.get(getStatementPosition()).setVocabularyString("--");
     }
 
+    /**
+     * remove a vocabulary
+     */
     public void removeVocabulary()
     {
         wrappers.get(getStatementPosition()).setVocabularyString(null);
@@ -393,7 +401,8 @@ public class MdProfileBean
      */
     public void removeLabel()
     {
-        wrappers.get(getStatementPosition()).getStatement().getLabels().remove(getLabelPosition());
+        ((List<LocalizedString>)wrappers.get(getStatementPosition()).getStatement().getLabels())
+                .remove(getLabelPosition());
     }
 
     /**
@@ -401,7 +410,7 @@ public class MdProfileBean
      */
     public void addConstraint()
     {
-        Statement st = ((List<StatementWrapper>)wrappers).get(getStatementPosition()).getAsStatement();
+        Statement st = wrappers.get(getStatementPosition()).getAsStatement();
         if (getConstraintPosition() >= st.getLiteralConstraints().size())
         {
             ((List<String>)st.getLiteralConstraints()).add("");
@@ -418,7 +427,7 @@ public class MdProfileBean
      */
     public void removeConstraint()
     {
-        Statement st = ((List<StatementWrapper>)wrappers).get(getStatementPosition()).getAsStatement();
+        Statement st = wrappers.get(getStatementPosition()).getAsStatement();
         ((List<String>)st.getLiteralConstraints()).remove(getConstraintPosition());
         collectionSession.setProfile(profile);
     }

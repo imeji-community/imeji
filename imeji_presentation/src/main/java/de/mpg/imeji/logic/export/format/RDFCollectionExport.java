@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link RDFExport} for {@link Collection}
@@ -51,9 +52,8 @@ public class RDFCollectionExport extends RDFExport
     }
 
     @Override
-    protected void filterResources(SearchResult sr)
+    protected void filterResources(SearchResult sr, User user)
     {
         // TODO Auto-generated method stub
-        
     }
 }

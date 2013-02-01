@@ -103,12 +103,12 @@ public class Page
      */
     public boolean isSame(Page page)
     {
-        if (isNull() && ((Page)page).isNull())
+        if (isNull() && page.isNull())
             return true;
-        else if (isNull() || page == null || ((Page)page).isNull())
+        else if (isNull() || page == null || page.isNull())
             return false;
         else
-            return (type.equals(((Page)page).getType()) && uri.equals(((Page)page).getUri()));
+            return (type.equals(page.getType()) && uri.equals(page.getUri()));
     }
 
     public boolean isNull()

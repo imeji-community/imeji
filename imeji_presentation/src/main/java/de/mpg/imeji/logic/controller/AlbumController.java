@@ -51,6 +51,7 @@ public class AlbumController extends ImejiController
      * @deprecated
      * @param user
      */
+    @Deprecated
     public AlbumController(User user)
     {
         super(user);
@@ -280,6 +281,7 @@ public class AlbumController extends ImejiController
 
     /**
      * Load the albums without the images
+     * 
      * @param uris
      * @param limit
      * @param offset

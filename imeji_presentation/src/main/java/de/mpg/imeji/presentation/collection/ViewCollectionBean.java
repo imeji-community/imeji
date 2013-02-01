@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;

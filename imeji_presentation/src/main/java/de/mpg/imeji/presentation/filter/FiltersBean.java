@@ -79,7 +79,6 @@ public class FiltersBean
      */
     private List<Filter> parseQueryAndSetFilters(String q, String n, String t) throws IOException
     {
-        
         List<Filter> filters = findAlreadyDefinedFilters(q, n, t);
         String newQuery = removeFiltersQueryFromQuery(q, filters);
         Filter newFilter = createNewFilter(newQuery, n, t);
@@ -137,9 +136,10 @@ public class FiltersBean
      * @param q
      * @param filters
      * @return
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
-    private List<Filter> resetQueriesToRemoveFilters(String q, List<Filter> filters) throws UnsupportedEncodingException
+    private List<Filter> resetQueriesToRemoveFilters(String q, List<Filter> filters)
+            throws UnsupportedEncodingException
     {
         for (Filter f : filters)
         {
@@ -186,11 +186,11 @@ public class FiltersBean
      * @param f
      * @param q
      * @return
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
     public String createQueryToRemoveFilter(Filter f, String q) throws UnsupportedEncodingException
     {
-        return URLEncoder.encode(removeFilterQueryFromQuery(q, f),"UTF-8") + "&f=" + f.getLabel();
+        return URLEncoder.encode(removeFilterQueryFromQuery(q, f), "UTF-8") + "&f=" + f.getLabel();
     }
 
     /**
@@ -203,7 +203,7 @@ public class FiltersBean
      */
     private String formatQuery(String q) throws IOException
     {
-        return URLQueryTransformer.transform2URL(URLQueryTransformer.parseStringQuery(q));
+        return URLQueryTransformer.transform2UTF8URL(URLQueryTransformer.parseStringQuery(q));
     }
 
     public FiltersSession getSession()

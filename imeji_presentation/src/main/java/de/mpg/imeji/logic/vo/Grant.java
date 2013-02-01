@@ -29,7 +29,7 @@ public class Grant
      */
     public enum GrantType
     {
-        SYSADMIN, CONTAINER_ADMIN, CONTAINER_EDITOR, IMAGE_UPLOADER, IMAGE_EDITOR, PRIVILEGED_VIEWER, PROFILE_ADMIN, PROFILE_EDITOR, PROFILE_VIEWER;
+        SYSADMIN, CONTAINER_ADMIN, CONTAINER_EDITOR, IMAGE_UPLOADER, IMAGE_EDITOR, VIEWER, PRIVILEGED_VIEWER, PROFILE_ADMIN, PROFILE_EDITOR, PROFILE_VIEWER;
     }
 
     @j2jResource("http://imeji.org/terms/grantType")
@@ -38,6 +38,9 @@ public class Grant
     private URI grantFor;
     private URI id = URI.create("http://imeji.org/grant/" + UUID.randomUUID());
 
+    /**
+     * Constructor
+     */
     public Grant()
     {
     }

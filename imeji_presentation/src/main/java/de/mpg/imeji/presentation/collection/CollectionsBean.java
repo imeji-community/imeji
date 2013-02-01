@@ -43,7 +43,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     /**
      * The comment required to discard a {@link container}
      */
-    private String discardComment ="";
+    private String discardComment = "";
 
     /**
      * Bean for the collections page
@@ -199,7 +199,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
      */
     public String getDiscardComment()
     {
-        return discardComment ;
+        return discardComment;
     }
 
     /**

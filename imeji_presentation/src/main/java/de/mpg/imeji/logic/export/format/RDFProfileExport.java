@@ -5,6 +5,7 @@ import java.util.HashMap;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link RDFExport} for {@link MetadataProfile}
@@ -52,9 +53,8 @@ public class RDFProfileExport extends RDFExport
     }
 
     @Override
-    protected void filterResources(SearchResult sr)
+    protected void filterResources(SearchResult sr, User user)
     {
         // TODO Auto-generated method stub
-        
     }
 }

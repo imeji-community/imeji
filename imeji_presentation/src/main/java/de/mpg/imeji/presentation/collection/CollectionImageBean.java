@@ -35,6 +35,7 @@ public class CollectionImageBean extends ImageBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
+    @Override
     public void initBrowsing()
     {
         String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
@@ -60,11 +61,13 @@ public class CollectionImageBean extends ImageBean
         this.collectionId = collectionId;
     }
 
+    @Override
     public String getPageUrl()
     {
         return navigation.getCollectionUrl() + collectionId + "/" + navigation.ITEM.getPath() + "/" + getId();
     }
 
+    @Override
     public String getNavigationString()
     {
         return "pretty:CollectionItem";

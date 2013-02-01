@@ -216,11 +216,13 @@ public class Item extends Properties implements FulltextIndex
         return metadataSets;
     }
 
+    @Override
     public void setFulltextIndex(String fulltext)
     {
         this.fulltext = fulltext;
     }
 
+    @Override
     public String getFulltextIndex()
     {
         return fulltext;
@@ -229,6 +231,7 @@ public class Item extends Properties implements FulltextIndex
     /**
      * Set the value for the fulltext search (according to all {@link Metadata} values)
      */
+    @Override
     public void indexFulltext()
     {
         fulltext = filename;

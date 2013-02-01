@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.util;
 
 import java.net.URI;
@@ -12,19 +11,19 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
 import de.mpg.imeji.presentation.session.SessionBean;
+
 /**
- * 
  * Some Method to read URLs
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class UrlHelper
 {
     /**
      * Return the value of a parameter in an url
+     * 
      * @param parameterName
      * @return
      */
@@ -35,6 +34,7 @@ public class UrlHelper
 
     /**
      * Return a value as boolean of a parameter in a url: true if value is1, false if value is -1
+     * 
      * @param parameterName
      * @return
      */
@@ -50,6 +50,7 @@ public class UrlHelper
 
     /**
      * Check if the uri is valid
+     * 
      * @param uri
      * @return
      */
@@ -64,7 +65,8 @@ public class UrlHelper
         }
         catch (Exception e)
         {
-        	BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("error") + " (Non valid URL): " + e);
+            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("error")
+                    + " (Non valid URL): " + e);
         }
         return false;
     }

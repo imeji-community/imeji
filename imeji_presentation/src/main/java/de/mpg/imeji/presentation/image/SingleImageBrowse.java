@@ -13,14 +13,13 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
+
 /**
- * 
  * Object for the browsing over the detail items
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class SingleImageBrowse
 {
@@ -30,7 +29,9 @@ public class SingleImageBrowse
     private String previous = null;
 
     /**
-     * Object for the browsing over the detail items. The Browsing is based on a {@link ImagesBean} and the current {@link Item}.
+     * Object for the browsing over the detail items. The Browsing is based on a {@link ImagesBean} and the current
+     * {@link Item}.
+     * 
      * @param imagesBean
      * @param item
      * @param type
@@ -45,6 +46,7 @@ public class SingleImageBrowse
 
     /**
      * Initialize the {@link SingleImageBrowse} for the current {@link Item} and {@link ImagesBean} according to:
+     * 
      * @param type - if the detail page is initialized within a collection, an album, or a browse page (item)
      * @param path - the id (not the uri) of the current container ({@link Album} or {@link CollectionImeji})
      */
@@ -62,7 +64,8 @@ public class SingleImageBrowse
         }
         else if (type == "album")
         {
-            baseUrl = ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getAlbumUrl() + containerId + "/item/";
+            baseUrl = ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getAlbumUrl() + containerId
+                    + "/item/";
         }
         URI nextImage = getNextImageFromList();
         URI prevImage = getPreviousImageFromList();
@@ -102,6 +105,7 @@ public class SingleImageBrowse
 
     /**
      * Retrieve the {@link URI} of {@link Item} of the next page
+     * 
      * @return
      */
     public URI getNextImageFromList()
@@ -118,6 +122,7 @@ public class SingleImageBrowse
 
     /**
      * Retrieve the URI of the {@link Item} of the previous page.
+     * 
      * @return
      */
     public URI getPreviousImageFromList()
@@ -133,7 +138,8 @@ public class SingleImageBrowse
     }
 
     /**
-     *  Return the {@link URI} of the first page of the current {@link ImagesBean}
+     * Return the {@link URI} of the first page of the current {@link ImagesBean}
+     * 
      * @return
      */
     private URI getFirstImageOfList()
@@ -147,6 +153,7 @@ public class SingleImageBrowse
 
     /**
      * Return the {@link URI} of the last page of the current {@link ImagesBean}
+     * 
      * @return
      */
     private URI getLastImageOfList()
@@ -160,6 +167,7 @@ public class SingleImageBrowse
 
     /**
      * Load the next page and make it the current page
+     * 
      * @return
      */
     private boolean loadNextPage()
@@ -175,6 +183,7 @@ public class SingleImageBrowse
 
     /**
      * load the previous page and make it the current page.
+     * 
      * @return
      */
     private boolean loadPreviousPage()

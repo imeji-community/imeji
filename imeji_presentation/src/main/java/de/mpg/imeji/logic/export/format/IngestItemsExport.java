@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.Item;
@@ -39,7 +40,7 @@ public class IngestItemsExport extends Export
         Items items = new Items(itemList);
         try
         {
-            JaxbIngestProfile.writeToOutputStream(items, out);
+            JaxbUtil.writeToOutputStream(items, out);
         }
         catch (JAXBException e)
         {

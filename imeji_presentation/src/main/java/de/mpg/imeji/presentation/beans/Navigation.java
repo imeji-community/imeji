@@ -9,7 +9,6 @@ import java.net.URISyntaxException;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Defines the page names and Path for imeji. All changes here must be synchronized with WEB-INF/pretty-config.xml The

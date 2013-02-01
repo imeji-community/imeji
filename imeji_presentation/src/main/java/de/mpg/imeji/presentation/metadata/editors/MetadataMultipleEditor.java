@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.metadata.editors;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.util.MetadataFactory;
@@ -71,7 +70,8 @@ public class MetadataMultipleEditor extends MetadataEditor
                 }
                 else
                 {
-                    if (eib.getMetadata().get(i).getPerson() != null && eib.getMetadata().get(i).getPerson().getIdentifier() != null)
+                    if (eib.getMetadata().get(i).getPerson() != null
+                            && eib.getMetadata().get(i).getPerson().getIdentifier() != null)
                     {
                         eib.getMetadata().get(i).getPerson()
                                 .setId(URI.create(eib.getMetadata().get(i).getPerson().getIdentifier()));
@@ -95,6 +95,7 @@ public class MetadataMultipleEditor extends MetadataEditor
         return true;
     }
 
+    @Override
     public void addMetadata(int imagePos, int metadataPos)
     {
         if (imagePos < items.size())
@@ -103,6 +104,7 @@ public class MetadataMultipleEditor extends MetadataEditor
         }
     }
 
+    @Override
     public void addMetadata(EditorItemBean eib, int metadataPos)
     {
         if (metadataPos <= eib.getMetadata().size())
@@ -112,6 +114,7 @@ public class MetadataMultipleEditor extends MetadataEditor
         }
     }
 
+    @Override
     public void removeMetadata(int imagePos, int metadataPos)
     {
         if (imagePos < items.size())
@@ -120,6 +123,7 @@ public class MetadataMultipleEditor extends MetadataEditor
         }
     }
 
+    @Override
     public void removeMetadata(EditorItemBean eib, int metadataPos)
     {
         if (metadataPos < eib.getMetadata().size())

@@ -50,7 +50,7 @@ public class AdvancedSearchBean
     {
         getNewSearch();
     }
-    
+
     public String getNewSearch()
     {
         try
@@ -126,10 +126,12 @@ public class AdvancedSearchBean
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         try
         {
-            String encodedQuery = URLEncoder.encode(
-                    URLQueryTransformer.transform2URL(formular.getFormularAsSearchQuery()), "UTF-8");
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getBrowseUrl() + "?q=" + encodedQuery);
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            navigation.getBrowseUrl() + "?q="
+                                    + URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery()));
         }
         catch (IOException e)
         {

@@ -239,6 +239,7 @@ public class EditImageMetadataBean
 
     /**
      * Change the statement to edit
+     * 
      * @return
      */
     public String changeStatement()
@@ -248,9 +249,10 @@ public class EditImageMetadataBean
         initEditor(new ArrayList<Item>(allItems));
         return "";
     }
-    
+
     /**
      * Set to the original state
+     * 
      * @return
      */
     public String resetChanges()
@@ -362,11 +364,12 @@ public class EditImageMetadataBean
 
     /**
      * Called method when "add to all" button is clicked
+     * 
      * @return
      */
     public String addToAll()
     {
-        //TODO remove the item with only the editoritembeans
+        // TODO remove the item with only the editoritembeans
         for (EditorItemBean eib : editor.getItems())
         {
             Item item = eib.asItem();
@@ -391,6 +394,7 @@ public class EditImageMetadataBean
 
     /**
      * redirect to previous page
+     * 
      * @throws IOException
      */
     public void redirectToView() throws IOException
@@ -404,6 +408,7 @@ public class EditImageMetadataBean
 
     /**
      * Remove all metadata
+     * 
      * @return
      */
     public String clearAll()
@@ -418,6 +423,7 @@ public class EditImageMetadataBean
 
     /**
      * Add a the same metadata to all item having no value defined for this statement
+     * 
      * @param im
      * @param metadata
      * @return
@@ -650,5 +656,4 @@ public class EditImageMetadataBean
     {
         return initialized;
     }
-
 }

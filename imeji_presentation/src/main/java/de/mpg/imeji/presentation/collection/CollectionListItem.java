@@ -5,15 +5,12 @@ package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
 import java.util.Collection;
-import java.util.Collections;
-
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -21,7 +18,6 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 

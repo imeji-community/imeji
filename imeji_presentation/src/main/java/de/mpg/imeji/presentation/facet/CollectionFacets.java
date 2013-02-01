@@ -27,14 +27,13 @@ import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+
 /**
- * 
  * Facets for the images browsed within a collection
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class CollectionFacets
 {
@@ -45,6 +44,7 @@ public class CollectionFacets
 
     /**
      * Constructor for the {@link Facet}s of one {@link CollectionImeji} with one {@link SearchQuery}
+     * 
      * @param col
      * @param searchQuery
      * @throws Exception
@@ -94,6 +94,7 @@ public class CollectionFacets
 
     /**
      * Count {@link Item} for one facet
+     * 
      * @param searchQuery
      * @param pair
      * @param collectionImages
@@ -102,7 +103,7 @@ public class CollectionFacets
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> collectionImages)
     {
         ItemController ic = new ItemController(sb.getUser());
-       // SearchQuery sq = new SearchQuery(searchQuery.getElements());
+        // SearchQuery sq = new SearchQuery(searchQuery.getElements());
         SearchQuery sq = new SearchQuery();
         if (pair != null)
         {

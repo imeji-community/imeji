@@ -147,6 +147,7 @@ public class CollectionImagesBean extends ImagesBean
     /**
      * return the url of the collection
      */
+    @Override
     public String getImageBaseUrl()
     {
         if (collection == null)
@@ -159,6 +160,7 @@ public class CollectionImagesBean extends ImagesBean
     /**
      * return the url of the collection
      */
+    @Override
     public String getBackUrl()
     {
         return navigation.getBrowseUrl() + "/collection" + "/" + this.id;
@@ -256,6 +258,7 @@ public class CollectionImagesBean extends ImagesBean
     /**
      * True if the {@link CollectionImeji} is updatable for this {@link User}
      */
+    @Override
     public boolean isEditable()
     {
         Security security = new Security();
@@ -265,18 +268,21 @@ public class CollectionImagesBean extends ImagesBean
     /**
      * Check that at least one image is editable and if the profile is not empty
      */
+    @Override
     public boolean isImageEditable()
     {
         return super.isImageDeletable()
                 && ObjectCachedLoader.loadProfile(collection.getProfile()).getStatements().size() > 0;
     }
 
+    @Override
     public boolean isVisible()
     {
         Security security = new Security();
         return security.check(OperationsType.READ, sb.getUser(), collection);
     }
 
+    @Override
     public boolean isDeletable()
     {
         Security security = new Security();

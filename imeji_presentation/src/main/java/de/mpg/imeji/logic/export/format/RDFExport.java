@@ -15,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Export} in rdf
@@ -34,7 +35,7 @@ public abstract class RDFExport extends Export
     public void export(OutputStream out, SearchResult sr)
     {
         initNamespaces();
-        filterResources(sr);
+        filterResources(sr, super.user);
         exportIntoOut(sr, out);
     }
 
@@ -52,17 +53,10 @@ public abstract class RDFExport extends Export
      */
     protected abstract void initNamespaces();
 
-    /**
-     * Check which {@link Resource} should be filtered
-     * @param sr TODO
-     */
-    protected abstract void filterResources(SearchResult sr);
-
     private void exportIntoOut(SearchResult sr, OutputStream out)
     {
         namespaces.put("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf");
         ImejiJena.imejiDataSet.begin(ReadWrite.READ);
-        
         try
         {
             Model model = ImejiJena.imejiDataSet.getNamedModel(modelURI);
@@ -216,4 +210,12 @@ public abstract class RDFExport extends Export
         }
         return false;
     }
+
+    /**
+     * Check which {@link Resource} should be filtered
+     * 
+     * @param sr
+     * @param user
+     */
+    protected abstract void filterResources(SearchResult sr, User user);
 }

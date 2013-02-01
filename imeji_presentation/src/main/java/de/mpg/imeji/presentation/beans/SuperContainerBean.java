@@ -11,8 +11,6 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -113,6 +111,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     /**
      * Reset the page, called when url paramenter "init" is set to 1
      */
+    @Override
     public void reset()
     {
         super.reset();

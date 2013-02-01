@@ -44,7 +44,7 @@ public class ImejiFactory
         coll.setMetadata(newContainerMetadata());
         return coll;
     }
-    
+
     public static MetadataProfile newProfile()
     {
         MetadataProfile p = new MetadataProfile();
@@ -130,6 +130,7 @@ public class ImejiFactory
 
     /**
      * Transform a {@link List} of {@link Item} to a {@link List} of {@link ThumbnailBean}
+     * 
      * @param itemList
      * @return
      */
@@ -158,5 +159,4 @@ public class ImejiFactory
         }
         return beanList;
     }
-
 }

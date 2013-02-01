@@ -3,14 +3,21 @@
  */
 package de.mpg.imeji.logic.export.format;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.j2j.helper.SortHelper;
 
 /**
  * {@link RDFExport} for {@link Item}
@@ -19,10 +26,14 @@ import de.mpg.imeji.logic.vo.Item;
  */
 public class RDFImageExport extends RDFExport
 {
+    /**
+     * Triples that are not displayed. <br/>
+     * IMPORTANT: fulltext might be a security issue, so never show
+     */
     private String[] filteredTriples = { "http://imeji.org/terms/metadata/pos",
             "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://imeji.org/terms/metadata/id",
             "http://imeji.org/terms/id", "http://imeji.org/terms/metadata/searchValue",
-            "http://purl.org/escidoc/metadata/profiles/0.1/pos" };
+            "http://purl.org/escidoc/metadata/profiles/0.1/pos", "http://imeji.org/terms/fulltext" };
 
     @Override
     public void init()
@@ -57,10 +68,29 @@ public class RDFImageExport extends RDFExport
         return "</imeji:image>";
     }
 
+    /*
+     * Not implemented : needs of specifaction about restricted metadata (how to meke it really private...)
+     * @see de.mpg.imeji.logic.export.format.RDFExport#filterResources(de.mpg.imeji.logic.search.SearchResult,
+     * de.mpg.imeji.logic.vo.User)
+     */
     @Override
-    protected void filterResources(SearchResult sr)
+    protected void filterResources(SearchResult sr, User user)
     {
-        Search s = new Search(SearchType.ALL, null);
-        filteredResources = s.searchSimpleForQuery(SPARQLQueries.selectMetadataRestricted(), null);
+        // List<String> restrictedMetadataWithCollection = ImejiSPARQL
+        // .exec(SPARQLQueries.selectMetadataRestricted(), null);
+        // filteredResources = new ArrayList<String>();
+        // Security security = new Security();
+        // for (String str : restrictedMetadataWithCollection)
+        // {
+        // String[] splited = SortHelper.SORT_VALUE_PATTERN.split(str);
+        // // create an emty item with the URI of the collection
+        // Item it = new Item();
+        // it.setCollection(URI.create(splited[1]));
+        // // Check if user is privileged viewer for this item
+        // if (!security.isPrivilegedViewer(user, it))
+        // {
+        // filteredResources.add(splited[0]);
+        // }
+        // }
     }
 }

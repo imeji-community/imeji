@@ -152,15 +152,13 @@ public class FormularElement
                             operator, searchValue, ns, not));
                     break;
                 case CONE_PERSON:
-                  
                     group.setNot(not);
                     group.addPair(new SearchMetadata(Search
                             .getIndex(SearchIndex.names.IMAGE_METADATA_PERSON_FAMLILYNAME.name()), operator,
                             searchValue, ns));
                     group.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                    group.addPair(new SearchMetadata(Search
-                            .getIndex(SearchIndex.names.IMAGE_METADATA_PERSON_GIVENNAME.name()), operator, searchValue,
-                            ns));
+                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.IMAGE_METADATA_PERSON_GIVENNAME
+                            .name()), operator, searchValue, ns));
                     group.addLogicalRelation(LOGICAL_RELATIONS.OR);
                     group.addPair(new SearchMetadata(Search
                             .getIndex(SearchIndex.names.IMAGE_METADATA_PERSON_ORGANIZATION_TITLE.name()), operator,

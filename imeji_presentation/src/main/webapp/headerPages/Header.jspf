@@ -65,7 +65,7 @@
 				</h:outputLink>
 		
 				<!-- import search here-->
-				<ui:include src="ui/SearchMenu.jspf"/>
+				<ui:include src="ui/SearchMenu.xhtml"/>
 		
 			</div>
 		

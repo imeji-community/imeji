@@ -5,7 +5,6 @@ package de.mpg.imeji.presentation.search;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,9 +18,11 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -29,6 +30,13 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
+/**
+ * Java bean for the advanced search page
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class AdvancedSearchBean
 {
     private SearchFormular formular = null;
@@ -38,6 +46,9 @@ public class AdvancedSearchBean
     private SessionBean session;
     private static Logger logger = Logger.getLogger(AdvancedSearchBean.class);
 
+    /**
+     * Constructor for the {@link AdvancedSearchBean}
+     */
     public AdvancedSearchBean()
     {
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -46,17 +57,17 @@ public class AdvancedSearchBean
         operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session.getLabel("or")));
     }
 
-    public void newSearch()
-    {
-        getNewSearch();
-    }
-
+    /**
+     * Called when the page is called per get request. Read the query in the url and initialize the form with it
+     * 
+     * @return
+     */
     public String getNewSearch()
     {
         try
         {
             String query = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("q");
-            initFormular(URLQueryTransformer.parseStringQuery(query));
+            initForm(URLQueryTransformer.parseStringQuery(query));
         }
         catch (Exception e)
         {
@@ -66,7 +77,13 @@ public class AdvancedSearchBean
         return "";
     }
 
-    public void initFormular(SearchQuery searchQuery) throws Exception
+    /**
+     * Initialized the search form with the {@link SearchQuery}
+     * 
+     * @param searchQuery
+     * @throws Exception
+     */
+    public void initForm(SearchQuery searchQuery) throws Exception
     {
         Map<String, CollectionImeji> cols = loadCollections();
         Map<String, MetadataProfile> profs = loadProfilesAndInitCollectionsMenu(cols.values());
@@ -79,11 +96,21 @@ public class AdvancedSearchBean
         }
     }
 
-    public void initFormular() throws Exception
+    /**
+     * Reset the Search form with empty values
+     * 
+     * @throws Exception
+     */
+    public void reset() throws Exception
     {
-        initFormular(new SearchQuery());
+        initForm(new SearchQuery());
     }
 
+    /**
+     * Load all {@link CollectionImeji} which are searchable for the current {@link User}
+     * 
+     * @return
+     */
     private Map<String, CollectionImeji> loadCollections()
     {
         CollectionController cc = new CollectionController(session.getUser());
@@ -96,6 +123,12 @@ public class AdvancedSearchBean
         return map;
     }
 
+    /**
+     * Load the {@link MetadataProfile} of the {@link Collection} and init the collectionmenu
+     * 
+     * @param collections
+     * @return
+     */
     private Map<String, MetadataProfile> loadProfilesAndInitCollectionsMenu(Collection<CollectionImeji> collections)
     {
         collectionsMenu = new ArrayList<SelectItem>();
@@ -113,6 +146,11 @@ public class AdvancedSearchBean
         return map;
     }
 
+    /**
+     * Method called when form is submitted
+     * 
+     * @return
+     */
     public String search()
     {
         FiltersSession filtersSession = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
@@ -121,6 +159,9 @@ public class AdvancedSearchBean
         return "";
     }
 
+    /**
+     * Redirect to the search result page
+     */
     public void goToResultPage()
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
@@ -139,6 +180,9 @@ public class AdvancedSearchBean
         }
     }
 
+    /**
+     * Change the {@link SearchGroup}
+     */
     public void changeGroup()
     {
         int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -146,6 +190,9 @@ public class AdvancedSearchBean
         formular.changeSearchGroup(gPos);
     }
 
+    /**
+     * Add a new {@link FormularGroup}
+     */
     public void addGroup()
     {
         int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -153,6 +200,9 @@ public class AdvancedSearchBean
         formular.addSearchGroup(gPos);
     }
 
+    /**
+     * Remove a {@link FormularGroup}
+     */
     public void removeGroup()
     {
         int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -164,6 +214,9 @@ public class AdvancedSearchBean
         }
     }
 
+    /**
+     * Change a {@link FormularElement}. The search value is removed
+     */
     public void changeElement()
     {
         int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -173,6 +226,9 @@ public class AdvancedSearchBean
         formular.changeElement(gPos, elPos, false);
     }
 
+    /**
+     * Update a {@link FormularElement}. The search value is keeped
+     */
     public void updateElement()
     {
         int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -182,6 +238,9 @@ public class AdvancedSearchBean
         formular.changeElement(gPos, elPos, true);
     }
 
+    /**
+     * Add a new {@link FormularElement}
+     */
     public void addElement()
     {
         int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -191,6 +250,9 @@ public class AdvancedSearchBean
         formular.addElement(gPos, elPos);
     }
 
+    /**
+     * Remove a new {@link FormularElement}
+     */
     public void removeElement()
     {
         int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -205,21 +267,41 @@ public class AdvancedSearchBean
         }
     }
 
+    /**
+     * Return the current {@link SearchQuery} in the form as a user friendly query
+     * 
+     * @return
+     */
     public String getSimpleQuery()
     {
         return URLQueryTransformer.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
     }
 
+    /**
+     * Getter
+     * 
+     * @return
+     */
     public List<SelectItem> getCollectionsMenu()
     {
         return collectionsMenu;
     }
 
+    /**
+     * Setter
+     * 
+     * @param collectionsMenu
+     */
     public void setCollectionsMenu(List<SelectItem> collectionsMenu)
     {
         this.collectionsMenu = collectionsMenu;
     }
 
+    /**
+     * Getter
+     * 
+     * @return
+     */
     public SearchFormular getFormular()
     {
         return formular;
@@ -230,11 +312,21 @@ public class AdvancedSearchBean
         this.formular = formular;
     }
 
+    /**
+     * Getter
+     * 
+     * @return
+     */
     public List<SelectItem> getOperatorsMenu()
     {
         return operatorsMenu;
     }
 
+    /**
+     * Setter
+     * 
+     * @param operatorsMenu
+     */
     public void setOperatorsMenu(List<SelectItem> operatorsMenu)
     {
         this.operatorsMenu = operatorsMenu;

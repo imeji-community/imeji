@@ -6,10 +6,14 @@ package de.mpg.imeji.presentation.search;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -25,6 +29,7 @@ public class QuickSearchBean
 {
     private String searchString = "";
     private String selectedSearchType = "images";
+    private static Logger logger = Logger.getLogger(QuickSearchBean.class);
 
     /**
      * Method when search is submitted

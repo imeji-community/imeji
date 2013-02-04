@@ -44,6 +44,8 @@ public class URLQueryTransformer
      */
     public static SearchQuery parseStringQuery(String query) throws IOException
     {
+        if (query == null)
+            query = "";
         return parseStringQueryDecoded(URLDecoder.decode(query, "UTF-8"));
     }
 

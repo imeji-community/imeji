@@ -53,7 +53,7 @@ public class Search
     public static Map<String, SearchIndex> indexes = SearchIndexInitializer.init();
 
     /**
-     * Types of search (related to the different {@link Jena} {@link Model}) TODO Description
+     * Types of search (related to the different {@link Jena} {@link Model})
      * 
      * @author saquet (initial creation)
      * @author $Author$ (last modification)

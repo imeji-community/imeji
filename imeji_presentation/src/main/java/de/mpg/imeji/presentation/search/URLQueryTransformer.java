@@ -109,7 +109,7 @@ public class URLQueryTransformer
                 String[] pairString = scString.split("=");
                 scString = "";
                 String value = pairString[2].trim();
-                String ns = pairString[0].split(",")[0].replace("IMAGE_METADATA[", "").replaceAll(" ", "");
+                String ns = pairString[0].split(",")[0].replace("IMAGE_METADATA[", "").replace(" ", "");
                 value = value.substring(1, value.length() - 1);
                 if (value.startsWith("\""))
                 {

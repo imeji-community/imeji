@@ -1,4 +1,4 @@
-package testing;
+package ingest;
 
 import static org.junit.Assert.*;
 
@@ -57,7 +57,7 @@ public class IngestTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void itemParsingTest() throws JAXBException, SAXException {
 		String xmlFilename = "C:\\Users\\hnguyen\\Development\\GitHub\\imeji\\imeji_presentation\\test\\testResources\\items_lite.xml";
 		

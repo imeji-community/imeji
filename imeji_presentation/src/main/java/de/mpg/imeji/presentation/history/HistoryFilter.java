@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -44,8 +45,27 @@ public class HistoryFilter implements Filter
     public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain) throws IOException,
             ServletException
     {
-        HttpServletRequest request = (HttpServletRequest)serv;
-        servletContext = request.getSession().getServletContext();
+        // Limit the case to filter:  dispachertype only forward, and only HTTP GET method 
+        if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0)
+        {
+            HttpServletRequest request = (HttpServletRequest)serv;
+            if ("GET".equals(request.getMethod()))
+            {
+                servletContext = request.getSession().getServletContext();
+                dofilterImpl(request, resp);
+            }
+        }
+        chain.doFilter(serv, resp);
+    }
+
+    /**
+     * Implement the History filter
+     * 
+     * @param request
+     * @param resp
+     */
+    private void dofilterImpl(HttpServletRequest request, ServletResponse resp)
+    {
         HistorySession hs = getHistorySession(request, resp);
         String q = request.getParameter("q");
         String h = request.getParameter("h");
@@ -66,6 +86,7 @@ public class HistoryFilter implements Filter
             if (h == null)
             {
                 // if h not defined, then it is a new page
+               
                 hs.add(request.getPathInfo().replaceAll("/", ""), q, ids);
             }
             else if (!"".equals(h))
@@ -74,7 +95,6 @@ public class HistoryFilter implements Filter
                 hs.remove(Integer.parseInt(h));
             }
         }
-        chain.doFilter(serv, resp);
     }
 
     @Override

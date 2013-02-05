@@ -7,7 +7,6 @@
 		
 		<h:form id="preListForm">
 			<div id="preListHeader" class="full_area0">
-			
 				<h:panelGroup styleClass="xHuge_area0 small_marginLIncl clear">
 					<h:outputLink value="?q=">
 						<h:outputText value="#{lbl.all}&#160;" styleClass="free_area0"/>
@@ -293,7 +292,7 @@
 			</h:panelGroup>
 			
 			<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
-				<f:ajax event="change" render=":facetForm:facetGroup" listener="#{paginatorListSessionBean.initFacets}"/>
+				<f:ajax event="change" execute="@this" render=":facetForm:facetGroup" listener="#{paginatorListSessionBean.initFacets}"/>
 			</h:selectBooleanCheckbox>
 		</h:form>
 		<div id="log"></div>

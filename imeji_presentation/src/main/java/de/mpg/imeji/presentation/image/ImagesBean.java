@@ -73,7 +73,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         filters = new FiltersBean();
-        initMenus();
         selectedSortCriterion = null;
         try
         {
@@ -114,6 +113,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseInit();
+        initMenus();
         return "";
     }
 

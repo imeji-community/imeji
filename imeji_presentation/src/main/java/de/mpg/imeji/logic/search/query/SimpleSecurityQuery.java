@@ -62,7 +62,7 @@ public class SimpleSecurityQuery
         {
             imageCollection = pair.getValue();
         }
-        boolean myImages = (pair != null && SearchIndex.names.my.name().equals(pair.getIndex().getName()));
+        boolean myImages = (pair != null && SearchIndex.names.user.name().equals(pair.getIndex().getName()));
         boolean hasGrantForCollection = false;
         if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
         {
@@ -123,7 +123,7 @@ public class SimpleSecurityQuery
         {
             f = " .FILTER(" + f + op + "(";
             if (pair == null
-                    || (pair != null && !SearchIndex.names.my.toString().equals(pair.getIndex().getName())))
+                    || (pair != null && !SearchIndex.names.user.toString().equals(pair.getIndex().getName())))
             {
                 f += "?status=<" + Status.RELEASED.getUri() + "> || ";
             }

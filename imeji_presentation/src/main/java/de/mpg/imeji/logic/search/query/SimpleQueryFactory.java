@@ -74,7 +74,7 @@ public class SimpleQueryFactory
         {
             searchQuery = " ?s <" + pair.getIndex().getNamespace() + "> ?el";
         }
-        else if (SearchIndex.names.uri.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.item.name().equals(pair.getIndex().getName()))
         {
             searchQuery = "";
             variable = "s";
@@ -87,7 +87,7 @@ public class SimpleQueryFactory
         {
             return "";
         }
-        else if (SearchIndex.names.my.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
             return "";
         }
@@ -119,7 +119,7 @@ public class SimpleQueryFactory
         {
             searchQuery = " .?s <http://imeji.org/terms/mdprofile> ?el";
         }
-        else if (SearchIndex.names.rdfType.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.type.name().equals(pair.getIndex().getName()))
         {
             return "?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md a <"
                     + pair.getValue() + "> .";

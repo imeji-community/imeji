@@ -51,7 +51,7 @@ public class URLQueryTransformerTest
      * TODO Non working characters: ()+=
      */
     private static String specialsChar = "japanese:テスト  chinese:實驗 yiddish:פּראָבע arab:اختبار bengali: পরীক্ষা other:öäü@ß$&@*~!?{}[]-#'.,áò";
-    private static String advancedQuery = "(col==\"http://imeji.org/collection/86\" AND (e6537a19-86b6-47ca-bba7-c8cc4d6bd6bc:text=\"TEST\") OR (750c1b37-f766-4b74-9d83-ddc858ff4365:title=\"TEST\") OR)";
+    private static String advancedQuery = "(col==\"http://imeji.org/collection/86\" AND (e6537a19-86b6-47ca-bba7-c8cc4d6bd6bc:text=\"TEST\") OR (750c1b37-f766-4b74-9d83-ddc858ff4365:title=\"TEST\") OR (rdfType==\"http://imeji.org/terms/metadata#number\"))";
     private static String simpleQuery = "TEST";
 
     /**
@@ -123,13 +123,15 @@ public class URLQueryTransformerTest
         Assert.assertEquals(query, resultNotCoded);
         Assert.assertEquals(encodedQuery, resultEncoded);
     }
+
     /**
      * Transform a string query to a imeji simple query
+     * 
      * @param q
      * @return
      */
     private String toSimpleQuery(String q)
     {
-        return  "all=\"" + q + "\"";
+        return "all=\"" + q + "\"";
     }
 }

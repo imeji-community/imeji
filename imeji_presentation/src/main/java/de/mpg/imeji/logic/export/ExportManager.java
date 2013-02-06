@@ -52,6 +52,11 @@ public class ExportManager
         export.setUser(user);
     }
 
+    /**
+     * Write in {@link OutputStream} the export
+     * 
+     * @param sr
+     */
     public void export(SearchResult sr)
     {
         if (export != null)
@@ -71,6 +76,12 @@ public class ExportManager
         }
     }
 
+    /**
+     * Search the element to export
+     * 
+     * @param searchQuery
+     * @return
+     */
     public SearchResult search(SearchQuery searchQuery)
     {
         String collectionId = export.getParam("col");

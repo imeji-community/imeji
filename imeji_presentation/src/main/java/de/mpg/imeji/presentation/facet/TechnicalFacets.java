@@ -48,8 +48,8 @@ public class TechnicalFacets
                 {
                     if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
-                        SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.my),
-                                SearchOperators.EQUALS, "my");
+                        SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.user),
+                                SearchOperators.EQUALS, sb.getUser().getEmail());
                         count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
                         if (count > 0)
                         {
@@ -88,17 +88,17 @@ public class TechnicalFacets
                 {
                     if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
                     {
-                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.rdfType),
+                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.type),
                                 SearchOperators.URI, t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());
                         if (count > 0)
                         {
                             techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, pair, t.name(),
-                                    FacetType.TECHNICAL), t.name().toLowerCase(), count, FacetType.TECHNICAL, null));
+                                    FacetType.TECHNICAL), t.toString(), count, FacetType.TECHNICAL, null));
                         }
                         else
                         {
-                            fs.getNoResultsFilters().add(new Filter(t.name(), "", 0, FacetType.TECHNICAL, null));
+                            fs.getNoResultsFilters().add(new Filter(t.toString(), "", 0, FacetType.TECHNICAL, null));
                         }
                         count = 0;
                     }
@@ -121,8 +121,6 @@ public class TechnicalFacets
     public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
         return ((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class)).getSearchResult();
-//        ItemController ic = new ItemController(sb.getUser());
-//        return ic.search(null, searchQuery, null, null);
     }
 
     /**

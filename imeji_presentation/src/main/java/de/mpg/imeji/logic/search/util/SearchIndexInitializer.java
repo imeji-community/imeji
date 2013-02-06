@@ -37,8 +37,8 @@ public class SearchIndexInitializer
     private static Map<String, SearchIndex> initBasisIndexes()
     {
         Map<String, SearchIndex> indexes = new HashMap<String, SearchIndex>();
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.uri.name(), "http://imeji.org/terms/id"));
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.my.name(), "http://imeji.org/terms/"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.item.name(), "http://imeji.org/terms/id"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.user.name(), "http://imeji.org/terms/"));
         /**
          * Fulltext search index
          */
@@ -63,12 +63,12 @@ public class SearchIndexInitializer
                 "http://xmlns.com/foaf/0.1/grants", indexes.get(SearchIndex.names.creator.name())));
         indexes = put(
                 indexes,
-                new SearchIndex(SearchIndex.names.grantType.name(),
+                new SearchIndex(SearchIndex.names.grant_type.name(),
                         "http://imeji.org/terms/grantType", indexes
                                 .get(SearchIndex.names.grant.name())));
         indexes = put(
                 indexes,
-                new SearchIndex(SearchIndex.names.grantFor.name(),
+                new SearchIndex(SearchIndex.names.grant_for.name(),
                         "http://imeji.org/terms/grantFor", indexes
                                 .get(SearchIndex.names.grant.name())));
         /**
@@ -78,7 +78,7 @@ public class SearchIndexInitializer
                 "http://imeji.org/terms/filename"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.visibility.name(),
                 "http://imeji.org/terms/visibility"));
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.mdSet.name(),
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.mds.name(),
                 "http://imeji.org/terms/metadataSet"));
         /**
          * Collection indexes
@@ -143,7 +143,7 @@ public class SearchIndexInitializer
                 "http://imeji.org/terms/statement"));
         indexes = put(
                 indexes,
-                new SearchIndex(SearchIndex.names.rdfType.name(), RDF.type.getNameSpace(), indexes
+                new SearchIndex(SearchIndex.names.type.name(), RDF.type.getNameSpace(), indexes
                         .get(SearchIndex.names.md.name())));
         return indexes;
     }
@@ -178,7 +178,7 @@ public class SearchIndexInitializer
                 "http://www.w3.org/2000/01/rdf-schema#label", indexes.get(SearchIndex.names.md.name())));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.citation.name(),
                 "http://imeji.org/terms/citation", indexes.get(SearchIndex.names.md.name())));
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.citationStyle.name(),
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.citation_style.name(),
                 "http://imeji.org/terms/citationStyle", indexes.get(SearchIndex.names.md.name())));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.cone.name(),
                 "http://imeji.org/terms/coneId", indexes.get(SearchIndex.names.md.name())));

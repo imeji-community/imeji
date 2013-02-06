@@ -17,22 +17,38 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
+/**
+ * Java Bean for the {@link Filter}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class FiltersBean
 {
     private FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
     private int count = 0;
     private static Logger logger = Logger.getLogger(FiltersBean.class);
 
+    /**
+     * Default constructor
+     */
     public FiltersBean()
     {
     }
 
-    public FiltersBean(String query, int count)
+    /**
+     * Constructor with one string query and one count (total number of elements on the current page)
+     * 
+     * @param query
+     * @param count
+     */
+    public FiltersBean(SearchQuery sq, int count)
     {
         try
         {
             this.count = count;
-            String q = UrlHelper.getParameterValue("q");
+            String q = URLQueryTransformer.transform2URL(sq);
             String n = UrlHelper.getParameterValue("f");
             String t = UrlHelper.getParameterValue("t");
             if (n != null)
@@ -41,7 +57,6 @@ public class FiltersBean
                 t = FacetType.SEARCH.name();
             if (q != null)
             {
-                q = formatQuery(q);
                 List<Filter> filters = parseQueryAndSetFilters(q, n, t);
                 resetFiltersSession(q, filters);
             }
@@ -109,8 +124,15 @@ public class FiltersBean
         return null;
     }
 
+    public static void main(String[] args)
+    {
+        String s1 = "+AND+type%3D%3D%22http%3A%2F%2Fimeji.org%2Fterms%2Fmetadata%23geolocation%22";
+        String s2 = "+AND+type%3D%3D%22http%3A%2F%2Fimeji.org%2Fterms%2Fmetadata%23geolocation%22+AND+type%3D%3D%22http%3A%2F%2Fimeji.org%2Fterms%2Fmetadata%23link%22";
+        System.out.println(s2.contains(s1));
+    }
+
     /**
-     * Find the filters which were alredy defined (in previous queries)
+     * Find the filters which were already defined (in previous queries)
      * 
      * @param q
      * @param n
@@ -191,19 +213,6 @@ public class FiltersBean
     public String createQueryToRemoveFilter(Filter f, String q) throws UnsupportedEncodingException
     {
         return URLEncoder.encode(removeFilterQueryFromQuery(q, f), "UTF-8") + "&f=" + f.getLabel();
-    }
-
-    /**
-     * Make transformation of the query from String to {@link SearchQuery} and from {@link SearchQuery} to String to
-     * ensure the query to be always in the same format
-     * 
-     * @param q
-     * @return
-     * @throws IOException
-     */
-    private String formatQuery(String q) throws IOException
-    {
-        return URLQueryTransformer.transform2UTF8URL(URLQueryTransformer.parseStringQuery(q));
     }
 
     public FiltersSession getSession()

@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.presentation.image;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -122,9 +124,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         getNavigationString();
         cleanFacets();
-        setQuery(UrlHelper.getParameterValue("q"));
         try
         {
+            setQuery(URLEncoder.encode(UrlHelper.getParameterValue("q"), "UTF-8"));
             setSearchQuery(URLQueryTransformer.parseStringQuery(query));
         }
         catch (Exception e)
@@ -247,13 +249,13 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
         if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
         {
-            filters = new FiltersBean(query, totalNumberOfRecords);
+            filters = new FiltersBean(searchQuery, totalNumberOfRecords);
             hs.getCurrentPage().setFilters(fs.getFilters());
             hs.getCurrentPage().setQuery(fs.getWholeQuery());
         }
         else
         {
-            filters = new FiltersBean(query, totalNumberOfRecords);
+            filters = new FiltersBean(searchQuery, totalNumberOfRecords);
             hs.getCurrentPage().setFilters(fs.getFilters());
             hs.getCurrentPage().setQuery(fs.getWholeQuery());
         }

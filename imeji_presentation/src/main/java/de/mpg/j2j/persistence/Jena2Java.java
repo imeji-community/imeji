@@ -46,7 +46,7 @@ public class Jena2Java
      * Load a {@link Resource} into a Java Object. The Java Object must define a {@link j2jResource} and have and id non
      * null (defined by {@link j2jId})
      * 
-     * @param uri : The uri of the resource
+     * @param item : The uri of the resource
      * @param o : The java Object in which the resource should be written
      * @return
      */

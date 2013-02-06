@@ -63,6 +63,7 @@ public class URLQueryTransformer
         String subQuery = "";
         String scString = "";
         boolean not = false;
+        boolean hasBracket = false; // don't try to look for group if there isn't any bracket
         int bracketsOpened = 0;
         int bracketsClosed = 0;
         if (query == null)
@@ -77,6 +78,7 @@ public class URLQueryTransformer
                 scString += (char)c;
             if (c == '(')
             {
+                hasBracket = true;
                 bracketsOpened++;
             }
             if (c == ')')
@@ -94,7 +96,7 @@ public class URLQueryTransformer
                 not = true;
                 scString = "";
             }
-            if (bracketsOpened - bracketsClosed == 0)
+            if (hasBracket && (bracketsOpened - bracketsClosed == 0))
             {
                 SearchQuery subSearchQuery = parseStringQueryDecoded(subQuery);
                 if (!subSearchQuery.isEmpty())
@@ -122,7 +124,7 @@ public class URLQueryTransformer
                 not = false;
                 scString = "";
             }
-            if (matchSearchPairPattern(scString) && !matchSearchMetadataPattern(scString))
+            else if (matchSearchPairPattern(scString))
             {
                 int indexOp = scString.indexOf("=");
                 int indexValue = scString.indexOf("\"");

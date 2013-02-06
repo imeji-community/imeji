@@ -137,7 +137,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public void update()
     {
-        // ImejiJena.printModel(ImejiJena.imageModel);
         try
         {
             if (elementsPerPage == 0)

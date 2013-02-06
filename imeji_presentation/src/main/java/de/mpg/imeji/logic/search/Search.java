@@ -219,7 +219,7 @@ public class Search
     }
 
     /**
-     * Perform {@link LOGICAL_RELATIONS} betweern 2 {@link List} of {@link String}
+     * Perform {@link LOGICAL_RELATIONS} between 2 {@link List} of {@link String}
      * 
      * @param l1
      * @param logic

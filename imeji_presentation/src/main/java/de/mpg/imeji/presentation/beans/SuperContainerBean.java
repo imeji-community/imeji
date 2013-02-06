@@ -12,6 +12,7 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
@@ -51,7 +52,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         selectedFilter = "all";
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         initMenus();
-        selectedSortCriterion = Search.getIndex("PROPERTIES_LAST_MODIFICATION_DATE").getName();
+        selectedSortCriterion = SearchIndex.names.modified.name();
         selectedSortOrder = SortOrder.DESCENDING.name();
         try
         {
@@ -81,11 +82,9 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     protected void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem("PROPERTIES_STATUS", sb.getLabel(Search.getIndex("PROPERTIES_STATUS").getName())));
-        sortMenu.add(new SelectItem("CONTAINER_METADATA_TITLE", sb.getLabel(Search.getIndex("CONTAINER_METADATA_TITLE")
-                .getName())));
-        sortMenu.add(new SelectItem("PROPERTIES_LAST_MODIFICATION_DATE", sb.getLabel(Search.indexes.get(
-                "PROPERTIES_LAST_MODIFICATION_DATE").getName())));
+        sortMenu.add(new SelectItem("PROPERTIES_STATUS", sb.getLabel(SearchIndex.names.status.name())));
+        sortMenu.add(new SelectItem("CONTAINER_METADATA_TITLE", sb.getLabel(SearchIndex.names.cont_title.name())));
+        sortMenu.add(new SelectItem("PROPERTIES_LAST_MODIFICATION_DATE", sb.getLabel(SearchIndex.names.modified.name())));
         filterMenu = new ArrayList<SelectItem>();
         filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
         if (sb.getUser() != null)

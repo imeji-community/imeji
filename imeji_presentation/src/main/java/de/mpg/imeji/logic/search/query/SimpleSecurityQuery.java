@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.logic.search.query;
 
+import java.net.URI;
+
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.vo.Album;
@@ -49,18 +51,18 @@ public class SimpleSecurityQuery
             }
             return " .FILTER(?status=<" + Status.RELEASED.getUri() + ">)";
         }
-        if (pair != null && SearchIndex.names.PROPERTIES_STATUS.name().equals(pair.getIndex().getName()))
+        if (pair != null && SearchIndex.names.status.name().equals(pair.getIndex().getName()))
         {
             f = "?status=<" + pair.getValue() + ">";
             op = " && (";
         }
         String uf = "";
         String imageCollection = null;
-        if (pair != null && SearchIndex.names.IMAGE_COLLECTION.name().equals(pair.getIndex().getName()))
+        if (pair != null && SearchIndex.names.col.name().equals(pair.getIndex().getName()))
         {
             imageCollection = pair.getValue();
         }
-        boolean myImages = (pair != null && SearchIndex.names.MY_IMAGES.name().equals(pair.getIndex().getName()));
+        boolean myImages = (pair != null && SearchIndex.names.my.name().equals(pair.getIndex().getName()));
         boolean hasGrantForCollection = false;
         if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
         {
@@ -121,7 +123,7 @@ public class SimpleSecurityQuery
         {
             f = " .FILTER(" + f + op + "(";
             if (pair == null
-                    || (pair != null && !SearchIndex.names.MY_IMAGES.toString().equals(pair.getIndex().getName())))
+                    || (pair != null && !SearchIndex.names.my.toString().equals(pair.getIndex().getName())))
             {
                 f += "?status=<" + Status.RELEASED.getUri() + "> || ";
             }

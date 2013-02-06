@@ -51,7 +51,7 @@ public class URLQueryTransformerTest
      * TODO Non working characters: ()+=
      */
     private static String specialsChar = "japanese:テスト  chinese:實驗 yiddish:פּראָבע arab:اختبار bengali: পরীক্ষা other:öäü@ß$&@*~!?{}[]-#'.,áò";
-    private static String advancedQuery = "(IMAGE_COLLECTION=URI=\"http://imeji.org/collection/316\" AND (IMAGE_METADATA[http://imeji.org/statement/acd90ca5-b9d7-4eff-90ff-2a1dd4f05661,IMAGE_METADATA_URI]=REGEX=\"TEST\") OR (NOTIMAGE_METADATA[http://imeji.org/statement/d6b25e1b-b707-4ccb-92d0-9d6d86be2f31,IMAGE_METADATA_TEXT]=EQUALS=\"TEST\") OR) AND (IMAGE_COLLECTION=URI=\"http://imeji.org/collection/6\" AND (NOTIMAGE_METADATA[http://imeji.org/statement/e4f105ba-2565-4253-a3c5-d4ed58c2cc86,IMAGE_METADATA_TIME]=GREATER_DATE=\"2012\") AND (IMAGE_METADATA[http://imeji.org/statement/eae412ac-6cb3-44af-a28f-7a2205484796,IMAGE_METADATA_TITLE]=REGEX=\"TEST\") OR)";
+    private static String advancedQuery = "(col==\"http://imeji.org/collection/86\" AND (e6537a19-86b6-47ca-bba7-c8cc4d6bd6bc:text=\"TEST\") OR (750c1b37-f766-4b74-9d83-ddc858ff4365:title=\"TEST\") OR)";
     private static String simpleQuery = "TEST";
 
     /**
@@ -130,6 +130,6 @@ public class URLQueryTransformerTest
      */
     private String toSimpleQuery(String q)
     {
-        return  "FULLTEXT=REGEX=\"" + q + "\"";
+        return  "all=\"" + q + "\"";
     }
 }

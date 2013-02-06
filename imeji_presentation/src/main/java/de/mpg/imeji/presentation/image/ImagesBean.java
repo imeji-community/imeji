@@ -60,6 +60,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private SearchQuery searchQuery = new SearchQuery();
     private String discardComment;
     private String selectedImagesContext;
+    private SearchResult searchResult;
 
     /**
      * The bean for all list of images
@@ -101,23 +102,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     public String getInitPage()
     {
-        getNavigationString();
-        initMenus();
-        if (facets != null)
-        {
-            facets.getFacets().clear();
-        }
-        initBackPage();
-        try
-        {
-            query = UrlHelper.getParameterValue("q");
-            searchQuery = URLQueryTransformer.parseStringQuery(query);
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error("Error parsing query");
-            logger.error("Error parsing query", e);
-        }
         searchFilter = null;
         for (Filter f : filters.getSession().getFilters())
         {
@@ -127,23 +111,80 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
             }
         }
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
+        browseInit();
         return "";
+    }
+
+    /**
+     * Initialization for all browse pages for get queries (non ajay queries)
+     */
+    protected void browseInit()
+    {
+        getNavigationString();
+        cleanFacets();
+        setQuery(UrlHelper.getParameterValue("q"));
+        try
+        {
+            setSearchQuery(URLQueryTransformer.parseStringQuery(query));
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error("Error parsing query");
+            logger.error("Error parsing query", e);
+        }
+        SortCriterion sortCriterion = initSortCriterion();
+        searchResult = search(searchQuery, sortCriterion);
+        searchResult.setQuery(getQuery());
+        searchResult.setSort(sortCriterion);
+        totalNumberOfRecords = searchResult.getNumberOfRecords();
+        initMenus();
+        initBackPage();
     }
 
     /**
      * Init all menus of the page
      */
-    private void initMenus()
+    public void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(null, session.getLabel("default")));
-        sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_CREATION_DATE, session
-                .getLabel(SearchIndex.names.PROPERTIES_CREATION_DATE.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.IMAGE_COLLECTION, session
-                .getLabel(SearchIndex.names.IMAGE_COLLECTION.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE, session
-                .getLabel(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel(SearchIndex.names.created.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel(SearchIndex.names.col.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel(SearchIndex.names.modified.name())));
         selectedSortOrder = SortOrder.DESCENDING.name();
+    }
+
+    @Override
+    public List<ThumbnailBean> retrieveList(int offset, int limit)
+    {
+        // load images
+        Collection<Item> items = loadImages(searchResult.getResults(), offset, limit);
+        return ImejiFactory.imageListToThumbList(items);
+    }
+
+    /**
+     * Perform the {@link Search}
+     * 
+     * @param searchQuery
+     * @param sortCriterion
+     * @return
+     */
+    public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
+    {
+        ItemController controller = new ItemController(session.getUser());
+        return controller.search(null, searchQuery, sortCriterion, null);
+    }
+
+    /**
+     * load all items (defined by their uri)
+     * 
+     * @param uris
+     * @return
+     */
+    public Collection<Item> loadImages(List<String> uris, int offset, int limit)
+    {
+        ItemController controller = new ItemController(session.getUser());
+        return controller.loadItems(uris, limit, offset);
     }
 
     @Override
@@ -183,44 +224,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return sortCriterion;
     }
 
-    @Override
-    public List<ThumbnailBean> retrieveList(int offset, int limit)
-    {
-        SortCriterion sortCriterion = initSortCriterion();
-        SearchResult searchResult = search(searchQuery, sortCriterion);
-        searchResult.setQuery(query);
-        searchResult.setSort(sortCriterion);
-        totalNumberOfRecords = searchResult.getNumberOfRecords();
-        // load images
-        Collection<Item> items = loadImages(searchResult.getResults());
-        return ImejiFactory.imageListToThumbList(items);
-    }
-
-    /**
-     * Perform the {@link Search}
-     * 
-     * @param searchQuery
-     * @param sortCriterion
-     * @return
-     */
-    public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
-    {
-        ItemController controller = new ItemController(session.getUser());
-        return controller.search(null, searchQuery, sortCriterion, null);
-    }
-
-    /**
-     * Laod all items (defined by their uri)
-     * 
-     * @param uris
-     * @return
-     */
-    public Collection<Item> loadImages(List<String> uris)
-    {
-        ItemController controller = new ItemController(session.getUser());
-        return controller.loadItems(uris, getElementsPerPage(), getOffset());
-    }
-
     /**
      * return the current {@link SearchQuery} in a user friendly style.
      * 
@@ -253,6 +256,29 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
             filters = new FiltersBean(query, totalNumberOfRecords);
             hs.getCurrentPage().setFilters(fs.getFilters());
             hs.getCurrentPage().setQuery(fs.getWholeQuery());
+        }
+    }
+
+    /**
+     * Methods called at the end of the page loading, which initialize the facets
+     * 
+     * @return
+     * @throws Exception
+     */
+    public String initFacets() throws Exception
+    {
+        this.setFacets(new FacetsBean(URLQueryTransformer.parseStringQuery(query)));
+        return "pretty";
+    }
+
+    /**
+     * When the page starts to load, clean all facets to avoid displaying wrong facets
+     */
+    public void cleanFacets()
+    {
+        if (facets != null)
+        {
+            facets.getFacets().clear();
         }
     }
 
@@ -338,7 +364,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private void withdraw(List<String> uris) throws Exception
     {
         ItemController ic = new ItemController(session.getUser());
-        Collection<Item> items = loadImages(uris);
+        Collection<Item> items = loadImages(uris, getElementsPerPage(), getOffset());
         int count = 0;
         if ("".equals(discardComment.trim()))
         {
@@ -361,7 +387,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     private void delete(List<String> uris) throws Exception
     {
-        Collection<Item> items = loadImages(uris);
+        Collection<Item> items = loadImages(uris, getElementsPerPage(), getOffset());
         ItemController ic = new ItemController(session.getUser());
         int count = ic.delete((List<Item>)items, session.getUser());
         BeanHelper.info(count + " " + session.getLabel("images_deleted"));
@@ -443,12 +469,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public String getBackUrl()
     {
         return navigation.getBrowseUrl();
-    }
-
-    public String initFacets() throws Exception
-    {
-        this.setFacets(new FacetsBean(URLQueryTransformer.parseStringQuery(query)));
-        return "pretty";
     }
 
     public List<SelectItem> getSortMenu()
@@ -627,5 +647,13 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public void setSearchFilter(Filter searchFilter)
     {
         this.searchFilter = searchFilter;
+    }
+
+    /**
+     * @return the searchResult
+     */
+    public SearchResult getSearchResult()
+    {
+        return searchResult;
     }
 }

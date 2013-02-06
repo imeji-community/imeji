@@ -23,6 +23,7 @@ import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -106,31 +107,32 @@ public class URLQueryTransformer
             }
             if (matchSearchMetadataPattern(scString))
             {
-                String[] pairString = scString.split("=");
-                scString = "";
-                String value = pairString[2].trim();
-                String ns = pairString[0].split(",")[0].replace("IMAGE_METADATA[", "").replace(" ", "");
-                value = value.substring(1, value.length() - 1);
+                int indexOp = scString.indexOf("=");
+                int indexValue = scString.indexOf("\"");
+                int indexIndex = scString.indexOf(":");
+                String value = scString.substring(indexValue + 1, scString.length() - 1).trim();
                 if (value.startsWith("\""))
                 {
                     value += "\"";
                 }
-                SearchIndex index = Search.getIndex(pairString[0].split(",")[1].replace("]", "").trim());
-                SearchOperators operator = SearchOperators.valueOf(pairString[1].trim());
-                searchQuery.addPair(new SearchMetadata(index, operator, value, URI.create(ns), not));
+                SearchIndex index = Search.getIndex(scString.substring(indexIndex + 1, indexOp).trim());
+                SearchOperators operator = stringOperator2SearchOperator(scString.substring(indexOp, indexValue).trim());
+                searchQuery.addPair(new SearchMetadata(index, operator, value, URI.create("http://imeji.org/statement/"
+                        + scString.substring(0, indexIndex).trim()), not));
                 not = false;
+                scString = "";
             }
             if (matchSearchPairPattern(scString) && !matchSearchMetadataPattern(scString))
             {
-                String[] pairString = scString.split("=");
-                String value = pairString[2].trim();
-                value = value.substring(1, value.length() - 1);
+                int indexOp = scString.indexOf("=");
+                int indexValue = scString.indexOf("\"");
+                String value = scString.substring(indexValue + 1, scString.length() - 1).trim();
                 if (value.startsWith("\""))
                 {
                     value += "\"";
                 }
-                SearchIndex index = Search.getIndex(pairString[0].trim());
-                SearchOperators operator = SearchOperators.valueOf(pairString[1].trim());
+                SearchIndex index = Search.getIndex(scString.substring(0, indexOp).trim());
+                SearchOperators operator = stringOperator2SearchOperator(scString.substring(indexOp, indexValue).trim());
                 searchQuery.addPair(new SearchPair(index, operator, value, not));
                 scString = "";
                 not = false;
@@ -138,8 +140,8 @@ public class URLQueryTransformer
         }
         if (!"".equals(query) && searchQuery.isEmpty())
         {
-            searchQuery.addPair(new SearchPair(Search.getIndex(SearchIndex.names.FULLTEXT), SearchOperators.REGEX,
-                    query.trim()));
+            searchQuery.addPair(new SearchPair(Search.getIndex(SearchIndex.names.all), SearchOperators.REGEX, query
+                    .trim()));
         }
         return searchQuery;
     }
@@ -152,7 +154,7 @@ public class URLQueryTransformer
      */
     private static boolean matchSearchPairPattern(String str)
     {
-        return str.matches("\\s*[^\\s]+=.*=\".+\"\\s*");
+        return str.trim().matches("\\s*[^\\s]+=.*\".+\"\\s*");
     }
 
     /**
@@ -163,7 +165,26 @@ public class URLQueryTransformer
      */
     private static boolean matchSearchMetadataPattern(String str)
     {
-        return str.matches("\\s*" + SearchIndex.names.IMAGE_METADATA.name() + "\\[[^\\s]+\\]=.*=\".+\"\\s*");
+        return str.trim().matches("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}:[a-z_]+=.*\".+\"\\s*");
+    }
+
+    /**
+     * Transform a {@link String} to a {@link SearchOperators}
+     * 
+     * @param str
+     * @return
+     */
+    private static SearchOperators stringOperator2SearchOperator(String str)
+    {
+        if ("=".equals(str))
+        {
+            return SearchOperators.REGEX;
+        }
+        else if ("==".equals(str))
+        {
+            return SearchOperators.URI;
+        }
+        return null;
     }
 
     /**
@@ -177,7 +198,7 @@ public class URLQueryTransformer
         for (SearchElement element : searchQuery.getElements())
         {
             if (SEARCH_ELEMENTS.PAIR.equals(element.getType())
-                    && ((SearchPair)element).getIndex().getName().equals(SearchIndex.names.FULLTEXT.name()))
+                    && ((SearchPair)element).getIndex().getName().equals(SearchIndex.names.all.name()))
             {
                 return true;
             }
@@ -231,24 +252,61 @@ public class URLQueryTransformer
                     {
                         query += " NOT";
                     }
-                    query += ((SearchPair)se).getIndex().getName() + "=" + ((SearchPair)se).getOperator().name()
-                            + "=\"" + ((SearchPair)se).getValue() + "\"";
+                    query += ((SearchPair)se).getIndex().getName() + operator2URL(((SearchPair)se).getOperator())
+                            + searchValue2URL(((SearchPair)se));
                     break;
                 case METADATA:
                     if (((SearchMetadata)se).isNot())
                     {
                         query += " NOT";
                     }
-                    query += SearchIndex.names.IMAGE_METADATA.name() + "[" + ((SearchMetadata)se).getStatement() + ","
-                            + ((SearchPair)se).getIndex().getName() + "]" + "="
-                            + ((SearchMetadata)se).getOperator().name() + "=\"" + ((SearchMetadata)se).getValue()
-                            + "\"";
+                    query += ObjectHelper.getId(((SearchMetadata)se).getStatement()) + ":"
+                            + ((SearchPair)se).getIndex().getName() + operator2URL(((SearchMetadata)se).getOperator())
+                            + searchValue2URL(((SearchMetadata)se));
                     break;
                 default:
                     break;
             }
         }
         return query.trim();
+    }
+
+    /**
+     * REturn the search value of the {@link SearchMetadata} as string for an url
+     * 
+     * @param md
+     * @return
+     */
+    private static String searchValue2URL(SearchPair pair)
+    {
+        return "\"" + pair.getValue() + "\"";
+    }
+
+    /**
+     * Transform a {@link SearchOperators} to a {@link String} value used in url query
+     * 
+     * @param op
+     * @return
+     */
+    private static String operator2URL(SearchOperators op)
+    {
+        switch (op)
+        {
+            case GREATER_DATE:
+                return ">=";
+            case GREATER_NUMBER:
+                return ">=";
+            case LESSER_DATE:
+                return "<=";
+            case LESSER_NUMBER:
+                return "<=";
+            case REGEX:
+                return "=";
+            case NOT:
+                return "";// to be removed
+            default:
+                return "==";
+        }
     }
 
     /**
@@ -272,7 +330,7 @@ public class URLQueryTransformer
     {
         if (pair.getValue() == null || pair.getValue() == "")
             return "";
-        if (pair.getIndex().getName().equals(SearchIndex.names.FULLTEXT.name()))
+        if (pair.getIndex().getName().equals(SearchIndex.names.all.name()))
         {
             return pair.getValue();
         }

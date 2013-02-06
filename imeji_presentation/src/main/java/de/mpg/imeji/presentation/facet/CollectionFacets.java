@@ -15,12 +15,12 @@ import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.collection.CollectionImagesBean;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -65,7 +65,7 @@ public class CollectionFacets
             List<Facet> group = new ArrayList<Facet>();
             if (st.isPreview() && !fs.isFilter(getName(st.getId())))
             {
-                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_METADATA_STATEMENT),
+                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement),
                         SearchOperators.URI, st.getId().toString());
                 count = getCount(searchQuery, pair, allImages.getResults());
                 if (count > 0 || true)
@@ -115,8 +115,9 @@ public class CollectionFacets
 
     public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
-        ItemController ic = new ItemController(sb.getUser());
-        return ic.search(colURI, searchQuery, new SortCriterion(), null);
+        return ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class)).getSearchResult();
+//        ItemController ic = new ItemController(sb.getUser());
+//        return ic.search(colURI, searchQuery, new SortCriterion(), null);
     }
 
     public List<List<Facet>> getFacets()

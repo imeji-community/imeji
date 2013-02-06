@@ -21,6 +21,7 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersSession;
+import de.mpg.imeji.presentation.image.ImagesBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -47,7 +48,7 @@ public class TechnicalFacets
                 {
                     if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
-                        SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.MY_IMAGES),
+                        SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.my),
                                 SearchOperators.EQUALS, "my");
                         count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
                         if (count > 0)
@@ -62,7 +63,7 @@ public class TechnicalFacets
                     }
                     if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                     {
-                        SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
+                        SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.status),
                                 SearchOperators.URI, Status.PENDING.getUri().toString());
                         count = getCount(searchQuery, privatePair, allImages.getResults());
                         if (count > 0)
@@ -73,7 +74,7 @@ public class TechnicalFacets
                     }
                     if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
                     {
-                        SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
+                        SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.status),
                                 SearchOperators.URI, Status.RELEASED.getUri().toString());
                         count = getCount(searchQuery, publicPair, allImages.getResults());
                         if (count > 0)
@@ -87,7 +88,7 @@ public class TechnicalFacets
                 {
                     if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
                     {
-                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_METADATA_TYPE_RDF),
+                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.rdfType),
                                 SearchOperators.URI, t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());
                         if (count > 0)
@@ -119,8 +120,9 @@ public class TechnicalFacets
      */
     public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
-        ItemController ic = new ItemController(sb.getUser());
-        return ic.search(null, searchQuery, null, null);
+        return ((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class)).getSearchResult();
+//        ItemController ic = new ItemController(sb.getUser());
+//        return ic.search(null, searchQuery, null, null);
     }
 
     /**

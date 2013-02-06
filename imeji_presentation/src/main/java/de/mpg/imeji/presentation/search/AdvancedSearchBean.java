@@ -101,9 +101,10 @@ public class AdvancedSearchBean
      * 
      * @throws Exception
      */
-    public void reset() throws Exception
+    public String reset() throws Exception
     {
         initForm(new SearchQuery());
+        return "";
     }
 
     /**
@@ -172,7 +173,7 @@ public class AdvancedSearchBean
                     .getExternalContext()
                     .redirect(
                             navigation.getBrowseUrl() + "?q="
-                                    + URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery()));
+                                    + URLQueryTransformer.transform2URL(formular.getFormularAsSearchQuery()));
         }
         catch (IOException e)
         {

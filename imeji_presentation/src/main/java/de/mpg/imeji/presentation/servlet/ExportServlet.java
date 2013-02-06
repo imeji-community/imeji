@@ -63,14 +63,14 @@ public class ExportServlet extends HttpServlet
 
     private SessionBean getSessionBean(HttpServletRequest req, HttpServletResponse resp)
     {
-        //FacesContext fc = getFacesContext(req, resp);
-        Object session = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SessionBean");
+        FacesContext fc = getFacesContext(req, resp);
+        Object session = fc.getExternalContext().getSessionMap().get("SessionBean");
         if (session == null)
         {
             try
             {
                 SessionBean newSession = SessionBean.class.newInstance();
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SessionBean", newSession);
+                fc.getExternalContext().getSessionMap().put("SessionBean", newSession);
                 return newSession;
             }
             catch (Exception e)

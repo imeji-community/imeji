@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.image;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -103,14 +102,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     public String getInitPage()
     {
-        searchFilter = null;
-        for (Filter f : filters.getSession().getFilters())
-        {
-            if (FacetType.SEARCH.equals(f.getType()))
-            {
-                searchFilter = f;
-            }
-        }
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseInit();
         initMenus();
@@ -122,8 +113,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     protected void browseInit()
     {
-        getNavigationString();
-        cleanFacets();
         try
         {
             setQuery(URLEncoder.encode(UrlHelper.getParameterValue("q"), "UTF-8"));
@@ -140,7 +129,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         searchResult.setSort(sortCriterion);
         totalNumberOfRecords = searchResult.getNumberOfRecords();
         initMenus();
+        cleanSelectItems();
         initBackPage();
+        initFilters();
+        cleanFacets();
     }
 
     /**
@@ -189,14 +181,18 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return controller.loadItems(uris, limit, offset);
     }
 
-    @Override
-    public String getNavigationString()
+    public void cleanSelectItems()
     {
         if (session.getSelectedImagesContext() != null && !(session.getSelectedImagesContext().equals("pretty:browse")))
         {
             session.getSelected().clear();
         }
         session.setSelectedImagesContext("pretty:browse");
+    }
+
+    @Override
+    public String getNavigationString()
+    {
         return "pretty:browse";
     }
 
@@ -241,6 +237,22 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     }
 
     /**
+     * Init the filters with the new search query
+     */
+    public void initFilters()
+    {
+        filters = new FiltersBean(searchQuery, totalNumberOfRecords);
+        searchFilter = null;
+        for (Filter f : filters.getSession().getFilters())
+        {
+            if (FacetType.SEARCH.equals(f.getType()))
+            {
+                searchFilter = f;
+            }
+        }
+    }
+
+    /**
      * Initialize the page when the page has been called by the browser back button
      */
     public void initBackPage()
@@ -249,13 +261,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
         if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
         {
-            filters = new FiltersBean(searchQuery, totalNumberOfRecords);
             hs.getCurrentPage().setFilters(fs.getFilters());
             hs.getCurrentPage().setQuery(fs.getWholeQuery());
         }
         else
         {
-            filters = new FiltersBean(searchQuery, totalNumberOfRecords);
             hs.getCurrentPage().setFilters(fs.getFilters());
             hs.getCurrentPage().setQuery(fs.getWholeQuery());
         }

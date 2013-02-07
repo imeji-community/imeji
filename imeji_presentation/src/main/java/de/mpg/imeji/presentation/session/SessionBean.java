@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
@@ -22,6 +23,8 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
+import de.mpg.imeji.presentation.lang.InternationalizationBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -58,7 +61,7 @@ public class SessionBean
         selectedCollections = new ArrayList<URI>();
         selectedAlbums = new ArrayList<URI>();
         profileCached = new HashMap<URI, MetadataProfile>();
-        locale = new Locale("en");
+        initLocale();
     }
 
     /**
@@ -119,38 +122,37 @@ public class SessionBean
     }
 
     /**
-     * Change the {@link Locale} in the session
-     * 
-     * @param event
+     * Read the language in the Request, and set it as current local, Called when the session is new
      */
-    public void toggleLocale(ActionEvent event)
+    private void initLocale()
     {
         FacesContext fc = FacesContext.getCurrentInstance();
-        //
-        // toggle the locale
-        Locale locale = null;
-        Map<String, String> map = fc.getExternalContext().getRequestParameterMap();
-        String language = map.get("language");
-        String country = map.get("country");
-        try
+        HttpServletRequest req = (HttpServletRequest)fc.getExternalContext().getRequest();
+        if (req.getLocale() != null)
         {
-            locale = new Locale(language, country);
-            fc.getViewRoot().setLocale(locale);
-            Locale.setDefault(locale);
-            this.locale = locale;
-            logger.debug("New locale: " + language + "_" + country + " : " + locale);
+            locale = req.getLocale();
         }
-        catch (Exception e)
+        else
         {
-            logger.error("unable to switch to locale using language = " + language + " and country = " + country, e);
+            locale = new Locale("en");
         }
     }
 
+    /**
+     * Getter
+     * 
+     * @return
+     */
     public Locale getLocale()
     {
         return locale;
     }
 
+    /**
+     * Setter
+     * 
+     * @param userLocale
+     */
     public void setLocale(final Locale userLocale)
     {
         this.locale = userLocale;
@@ -171,20 +173,6 @@ public class SessionBean
         this.selectedImagesContext = selectedImagesContext;
     }
 
-    /**
-     * reload the active album from the database
-     * 
-     * @return
-     */
-    // public String getReloadActiveAlbum()
-    // {
-    // if (activeAlbum != null)
-    // {
-    // ItemController ic = new ItemController(user);
-    // activeAlbum = (Album)ic.loadContainerItems(activeAlbum, user, -1, 0);
-    // }
-    // return "";
-    // }
     /**
      * @return the user
      */

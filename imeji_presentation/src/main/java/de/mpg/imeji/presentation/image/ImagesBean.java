@@ -118,8 +118,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         try
         {
-            setQuery(URLEncoder.encode(UrlHelper.getParameterValue("q"), "UTF-8"));
-            setSearchQuery(URLQueryTransformer.parseStringQuery(query));
+            String q = UrlHelper.getParameterValue("q");
+            if (q != null)
+            {
+                setQuery(URLEncoder.encode(q, "UTF-8"));
+                setSearchQuery(URLQueryTransformer.parseStringQuery(query));
+            }
         }
         catch (Exception e)
         {

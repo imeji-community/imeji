@@ -20,13 +20,17 @@ import org.apache.log4j.Logger;
 import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.Storage.FileResolution;
+import de.mpg.imeji.logic.storage.UploadResult;
+import de.mpg.imeji.logic.storage.escidoc.EscidocUtils;
+import de.mpg.imeji.logic.storage.util.ImageUtils;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.escidoc.EscidocHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.upload.deposit.DepositController;
-import de.mpg.imeji.presentation.upload.helper.ImageHelper;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.LoginHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -145,7 +149,7 @@ public class UploadBean
                     {
                         format = st.nextToken();
                     }
-                    mimetype = ImageHelper.getMimeType(format);
+                    mimetype = StorageUtils.getMimeType(format);
                     // TODO remove static image description
                     description = "";
                     try
@@ -155,11 +159,11 @@ public class UploadBean
                         try
                         {
                             DepositController controller = new DepositController();
-                            Item escidocItem = controller.createEscidocItem(stream, title, mimetype);
-                            controller.createImejiImage(collection, user, escidocItem.getOriginObjid(), title,
-                                    URI.create(EscidocHelper.getOriginalResolution(escidocItem)),
-                                    URI.create(EscidocHelper.getThumbnailUrl(escidocItem)),
-                                    URI.create(EscidocHelper.getWebResolutionUrl(escidocItem)));
+                            StorageController storageController = new StorageController("escidoc");
+                            UploadResult uploadResult = storageController.upload(title, StorageUtils.toBytes(stream));
+                            controller.createImejiImage(collection, user, "", title,
+                                    URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
+                                    URI.create(uploadResult.getWeb()));
                             sNum += 1;
                             sFiles.add(title);
                         }

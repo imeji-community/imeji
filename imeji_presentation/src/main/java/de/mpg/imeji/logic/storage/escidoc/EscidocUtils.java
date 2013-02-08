@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.escidoc;
+package de.mpg.imeji.logic.storage.escidoc;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -31,7 +31,8 @@ import de.escidoc.core.resources.om.item.component.Component;
 import de.escidoc.core.resources.om.item.component.ComponentContent;
 import de.escidoc.core.resources.om.item.component.ComponentProperties;
 import de.escidoc.core.resources.om.item.component.Components;
-import de.mpg.imeji.presentation.upload.helper.ImageHelper;
+import de.mpg.imeji.logic.storage.Storage.FileResolution;
+import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -41,7 +42,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class EscidocHelper
+public class EscidocUtils
 {
     /**
      * Factory an {@link Item} with imeji values
@@ -133,17 +134,17 @@ public class EscidocHelper
 
     public static String getThumbnailUrl(Item item) throws Exception
     {
-        return getContentUrl(item, ImageHelper.getThumb());
+        return getContentUrl(item, ImageUtils.getThumb());
     }
 
     public static String getWebResolutionUrl(Item item) throws Exception
     {
-        return getContentUrl(item, ImageHelper.getWeb());
+        return getContentUrl(item, ImageUtils.getWeb());
     }
 
     public static String getOriginalResolution(Item item) throws Exception
     {
-        return getContentUrl(item, ImageHelper.getOrig());
+        return getContentUrl(item, ImageUtils.getOrig());
     }
 
     /**
@@ -165,6 +166,69 @@ public class EscidocHelper
             }
         }
         return null;
+    }
+
+    /**
+     * Return the scidoc content-category for a specific {@link FileResolution}
+     * 
+     * @param resolution
+     * @return
+     */
+    public String getContentCategory(FileResolution resolution)
+    {
+        try
+        {
+            switch (resolution)
+            {
+                case ORIGINAL:
+                    return getOrig();
+                case THUMBNAIL:
+                    return getThumb();
+                case WEB:
+                    return getWeb();
+            }
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error reading escidoc Content category for resultion: " + resolution.name());
+        }
+        return null;
+    }
+
+    /**
+     * escidoc content category for Thumbnail resolution
+     * 
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    public static String getThumb() throws IOException, URISyntaxException
+    {
+        return PropertyReader.getProperty("xsd.metadata.content-category.thumbnail");
+    }
+
+    /**
+     * escidoc content category for Web resolution
+     * 
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     **/
+    public static String getWeb() throws IOException, URISyntaxException
+    {
+        return PropertyReader.getProperty("xsd.metadata.content-category.web-resolution");
+    }
+
+    /**
+     * escidoc content category for original resolution
+     * 
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     **/
+    public static String getOrig() throws IOException, URISyntaxException
+    {
+        return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
     }
 
     /**

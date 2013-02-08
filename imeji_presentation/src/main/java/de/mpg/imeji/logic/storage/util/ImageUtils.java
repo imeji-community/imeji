@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.upload.helper;
+package de.mpg.imeji.logic.storage.util;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
@@ -31,6 +32,7 @@ import com.sun.media.jai.codec.PNGDecodeParam;
 import com.sun.media.jai.codec.SeekableStream;
 import com.sun.media.jai.codec.TIFFDecodeParam;
 
+import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 //import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
@@ -41,68 +43,11 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ImageHelper
+public class ImageUtils
 {
     /**
-     * Scale a {@link BufferedImage} to new size. Quality of the images is high. Is slow and resource consuming
-     * 
-     * @param image
-     * @param size
-     * @param resolution
-     * @return
-     * @throws Exception
-     */
-    public static BufferedImage scaleImage(BufferedImage image, int size, String resolution) throws Exception
-    {
-        int width = image.getWidth(null);
-        int height = image.getHeight(null);
-        BufferedImage newImg = null;
-        Image rescaledImage;
-        if (width > height)
-        {
-            if (resolution.equals(getThumb()))
-            {
-                newImg = new BufferedImage(height, height, BufferedImage.TYPE_INT_RGB);
-                Graphics g1 = newImg.createGraphics();
-                g1.drawImage(image, (height - width) / 2, 0, null);
-                if (height > size)
-                    rescaledImage = newImg.getScaledInstance(size, -1, Image.SCALE_SMOOTH);
-                else
-                    rescaledImage = newImg;
-            }
-            else
-                rescaledImage = image.getScaledInstance(size, -1, Image.SCALE_SMOOTH);
-        }
-        else
-        {
-            if (resolution.equals(getThumb()))
-            {
-                newImg = new BufferedImage(width, width, BufferedImage.TYPE_INT_RGB);
-                Graphics g1 = newImg.createGraphics();
-                g1.drawImage(image, 0, (width - height) / 2, null);
-                if (width > size)
-                    rescaledImage = getScaledInstance(newImg, width, size, RenderingHints.VALUE_INTERPOLATION_BILINEAR,
-                            true);
-                else
-                    rescaledImage = newImg;
-                if (width > size)
-                    rescaledImage = newImg.getScaledInstance(-1, size, Image.SCALE_SMOOTH);
-                else
-                    rescaledImage = newImg;
-            }
-            else
-                rescaledImage = image.getScaledInstance(-1, size, Image.SCALE_SMOOTH);
-        }
-        BufferedImage rescaledBufferedImage = new BufferedImage(rescaledImage.getWidth(null),
-                rescaledImage.getHeight(null), BufferedImage.TYPE_INT_RGB);
-        Graphics g2 = rescaledBufferedImage.getGraphics();
-        g2.drawImage(rescaledImage, 0, 0, null);
-        return rescaledBufferedImage;
-    }
-
-    /**
-     * Scale a {@link BufferedImage} to new size. Is faster than the basic {@link ImageHelper}.scaleImage method, has
-     * the same quality
+     * Scale a {@link BufferedImage} to new size. Is faster than the basic {@link ImageUtils}.scaleImage method, has the
+     * same quality
      * 
      * @param image original image
      * @param size the size to be resized to
@@ -110,7 +55,8 @@ public class ImageHelper
      * @return the resized images
      * @throws Exception
      */
-    public static BufferedImage scaleImageFast(BufferedImage image, int size, String resolution) throws Exception
+    public static BufferedImage scaleImageFast(BufferedImage image, int size, FileResolution resolution)
+            throws Exception
     {
         int width = image.getWidth(null);
         int height = image.getHeight(null);
@@ -118,7 +64,7 @@ public class ImageHelper
         Image rescaledImage;
         if (width > height)
         {
-            if (resolution.equals(getThumb()))
+            if (FileResolution.THUMBNAIL.equals(resolution))
             {
                 newImg = new BufferedImage(height, height, BufferedImage.TYPE_INT_RGB);
                 Graphics g1 = newImg.createGraphics();
@@ -135,7 +81,7 @@ public class ImageHelper
         }
         else
         {
-            if (resolution.equals(getThumb()))
+            if (FileResolution.THUMBNAIL.equals(resolution))
             {
                 newImg = new BufferedImage(width, width, BufferedImage.TYPE_INT_RGB);
                 Graphics g1 = newImg.createGraphics();
@@ -348,7 +294,7 @@ public class ImageHelper
      */
     public static String getImageFormat(String mimeType)
     {
-        if (mimeType.equals(getMimeType("tif")))
+        if (mimeType.equals(StorageUtils.getMimeType("tif")))
         {
             return "tif";
         }
@@ -356,19 +302,110 @@ public class ImageHelper
     }
 
     /**
-     * Return the Mime Type of an image according to its format (i.e. file extension)
+     * Prepare the image for the upload: <br/>
+     * if it is original image upload, do nothing <br/>
+     * if it is another resolution, resize it <br/>
+     * if it is a tiff to be resized, transformed it to jpeg and resize it
      * 
+     * @param stream
+     * @param FileResolution
      * @param format
      * @return
+     * @throws IOException
+     * @throws Exception
      */
-    public static String getMimeType(String format)
+    public byte[] prepareImageForUpload(byte[] stream, FileResolution resolution, String mimeType) throws IOException,
+            Exception
     {
-        format = format.toLowerCase();
-        if ("tif".equals(format))
+        if (!FileResolution.ORIGINAL.equals(resolution))
         {
-            format = format + "f";
+            byte[] compressed = compressImage(stream, mimeType);
+            if (!Arrays.equals(compressed, stream))
+            {
+                mimeType = StorageUtils.getMimeType("jpg");
+            }
+            stream = scaleImage(ImageIO.read(new ByteArrayInputStream(compressed)), mimeType, resolution);
         }
-        return "image/" + format;
+        return stream;
+    }
+
+    /**
+     * Compress an image in jpeg. Useful to reduce size of thumbnail and web resolution images
+     * 
+     * @param bytes
+     * @param mimeType
+     * @return
+     */
+    public static byte[] compressImage(byte[] bytes, String mimeType)
+    {
+        if (mimeType.equals(StorageUtils.getMimeType("tif")))
+        {
+            bytes = ImageUtils.tiff2Jpeg(bytes);
+        }
+        else if (mimeType.equals(StorageUtils.getMimeType("png")))
+        {
+            bytes = ImageUtils.png2Jpeg(bytes);
+        }
+        else if (mimeType.equals(StorageUtils.getMimeType("bmp")))
+        {
+            bytes = ImageUtils.bmp2Jpeg(bytes);
+        }
+        else if (mimeType.equals(StorageUtils.getMimeType("gif")))
+        {
+            bytes = ImageUtils.gif2Jpeg(bytes);
+        }
+        return bytes;
+    }
+
+    /**
+     * Scale the image if too big for the size
+     * 
+     * @param image
+     * @param size
+     * @param resolution
+     * @param mimeType
+     * @param contentCategory
+     * @return
+     * @throws Exception
+     */
+    public static byte[] scaleImage(BufferedImage image, String mimeType, FileResolution resolution) throws Exception
+    {
+        BufferedImage bufferedImage = null;
+        int size = getResolution(resolution);
+        if (image.getWidth() > size || image.getHeight() > size)
+        {
+            bufferedImage = scaleImageFast(image, size, resolution);
+        }
+        else
+        {
+            bufferedImage = image;
+        }
+        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+        // use imageIO.write to encode the image back into a byte[]
+        ImageIO.write(bufferedImage, ImageUtils.getImageFormat(mimeType), byteOutput);
+        return byteOutput.toByteArray();
+    }
+
+    /**
+     * Return the maximum size of an image according to its {@link FileResolution}. The values are defined in the
+     * properties
+     * 
+     * @param FileResolution
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    private static int getResolution(FileResolution resolution) throws IOException, URISyntaxException
+    {
+        switch (resolution)
+        {
+            case THUMBNAIL:
+                return Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"));
+            case WEB:
+                return Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web"));
+            default:
+                return 0;
+        }
     }
 
     // public static GifDecoder checkAnimation(byte[] image) throws Exception

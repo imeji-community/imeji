@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -138,6 +139,7 @@ public class UploadBean
         try
         {
             StorageController externalController = new StorageController("external");
+            externalUrl = URLDecoder.decode(externalUrl, "UTF-8");
             URL url = new URL(externalUrl);
             title = url.getPath().substring(url.getPath().lastIndexOf("/") + 1);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

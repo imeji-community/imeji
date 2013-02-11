@@ -56,7 +56,7 @@ public class InternalStorageManager
      */
     private final String storagePath;
     /**
-     * The URL used to access the storage
+     * The URL used to access the storage (this is a dummy url, used by the internal storage to parse file location)
      */
     private final String storageUrl = "http://localhost/imeji/file/";
     private static Logger logger = Logger.getLogger(InternalStorageManager.class);
@@ -88,13 +88,12 @@ public class InternalStorageManager
         InternalStorageItem item = newItem(filename);
         try
         {
-            writeItemFiles(item, bytes);
+            return writeItemFiles(item, bytes);
         }
         catch (Exception e)
         {
             throw new RuntimeException("Error writing file in internal storage " + storagePath, e);
         }
-        return item;
     }
 
     /**
@@ -155,6 +154,16 @@ public class InternalStorageManager
     {
         return url.replace(storageUrl, storagePath);
     }
+    
+    /**
+     * Transform the path of the item into a path
+     * @param path
+     * @return
+     */
+    public String transformPathToUrl(String path)
+    {
+        return path.replace(storagePath, storageUrl).replace("\\", "/");
+    }
 
     /**
      * Write a new file for the 3 resolution of one file
@@ -164,13 +173,17 @@ public class InternalStorageManager
      * @throws IOException
      * @throws Exception
      */
-    private void writeItemFiles(InternalStorageItem item, byte[] bytes) throws IOException, Exception
+    private InternalStorageItem writeItemFiles(InternalStorageItem item, byte[] bytes) throws IOException, Exception
     {
-        write(bytes, item.getOrignalPath());
-        write(ImageUtils.transformImage(bytes, FileResolution.WEB,
-                StorageUtils.getMimeType(StorageUtils.getFileExtension(item.getFileName()))), item.getWebPath());
-        write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
-                StorageUtils.getMimeType(StorageUtils.getFileExtension(item.getFileName()))), item.getThumbnailPath());
+        item.setOrignalPath(write(bytes, item.getOrignalPath()));
+        item.setWebPath(write(
+                ImageUtils.transformImage(bytes, FileResolution.WEB,
+                        StorageUtils.getMimeType(StorageUtils.getFileExtension(item.getFileName()))), item.getWebPath()));
+        item.setThumbnailPath(write(
+                ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
+                        StorageUtils.getMimeType(StorageUtils.getFileExtension(item.getFileName()))),
+                item.getThumbnailPath()));
+        return item;
     }
 
     /**
@@ -181,7 +194,7 @@ public class InternalStorageManager
      * @return
      * @throws IOException
      */
-    private void write(byte[] bytes, String path) throws IOException
+    private String write(byte[] bytes, String path) throws IOException
     {
         File file = new File(storagePath + path);
         if (!file.exists())
@@ -192,6 +205,7 @@ public class InternalStorageManager
             fos.write(bytes);
             fos.flush();
             fos.close();
+            return file.getAbsolutePath();
         }
         else
         {

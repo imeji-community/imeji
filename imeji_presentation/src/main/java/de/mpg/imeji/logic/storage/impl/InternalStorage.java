@@ -65,8 +65,8 @@ public class InternalStorage implements Storage
     public UploadResult upload(String filename, byte[] bytes)
     {
         InternalStorageItem item = manager.addFile(bytes, filename);
-        return new UploadResult(item.getId(), manager.getStorageUrl() + item.getOrignalPath(), manager.getStorageUrl()
-                + item.getWebPath(), manager.getStorageUrl() + item.getThumbnailPath());
+        return new UploadResult(item.getId(), manager.transformPathToUrl(item.getOrignalPath()),
+                manager.transformPathToUrl(item.getWebPath()), manager.transformPathToUrl(item.getThumbnailPath()));
     }
 
     /*

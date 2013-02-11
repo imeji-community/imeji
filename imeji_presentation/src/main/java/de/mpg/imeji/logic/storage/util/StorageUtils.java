@@ -31,6 +31,14 @@ package de.mpg.imeji.logic.storage.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+
+import de.mpg.imeji.presentation.util.ProxyHelper;
 
 /**
  * Util class fore the storage package
@@ -41,10 +49,6 @@ import java.io.InputStream;
  */
 public class StorageUtils
 {
-    public static void doHttpGet()
-    {
-    }
-
     /**
      * Transform an {@link InputStream} to a {@link Byte} array
      * 
@@ -73,6 +77,57 @@ public class StorageUtils
     }
 
     /**
+     * Write an {@link InputStream} to an {@link OutputStream}
+     * 
+     * @param out
+     * @param input
+     * @throws IOException
+     */
+    public static void writeInOut(InputStream in, OutputStream out)
+    {
+        byte[] buffer = new byte[1024];
+        int numRead;
+        try
+        {
+            while ((numRead = in.read(buffer)) != -1)
+            {
+                out.write(buffer, 0, numRead);
+            }
+            in.close();
+            // out.flush();
+            out.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error writing inputstream in outputstream: ", e);
+        }
+    }
+
+    /**
+     * Return a {@link HttpClient} to be used in {@link Get}
+     * 
+     * @return
+     */
+    public static HttpClient getHttpClient()
+    {
+        MultiThreadedHttpConnectionManager conn = new MultiThreadedHttpConnectionManager();
+        HttpConnectionManagerParams connParams = new HttpConnectionManagerParams();
+        connParams.setConnectionTimeout(5000);
+        connParams.setDefaultMaxConnectionsPerHost(50);
+        conn.setParams(connParams);
+        return new HttpClient(conn);
+    }
+
+    public static GetMethod newGetMethod(HttpClient client, String url)
+    {
+        GetMethod method = new GetMethod(url);
+        method.addRequestHeader("Cache-Control", "public");
+        method.setRequestHeader("Connection", "close");
+        ProxyHelper.setProxy(client, url);
+        return method;
+    }
+
+    /**
      * Parse the file extension from its name
      * 
      * @param filename
@@ -87,7 +142,7 @@ public class StorageUtils
         }
         return null;
     }
-    
+
     /**
      * Return the Mime Type of a file according to its format (i.e. file extension)
      * 

@@ -28,8 +28,14 @@
  */
 package de.mpg.imeji.logic.storage.impl;
 
+import java.io.FileInputStream;
+import java.io.OutputStream;
+
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
+import de.mpg.imeji.logic.storage.internal.InternalStorageItem;
+import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**
  * imeji internal {@link Storage}
@@ -41,6 +47,15 @@ import de.mpg.imeji.logic.storage.UploadResult;
 public class InternalStorage implements Storage
 {
     private final String name = "internal";
+    private InternalStorageManager manager;
+
+    /**
+     * Default Constructor
+     */
+    public InternalStorage()
+    {
+        manager = new InternalStorageManager();
+    }
 
     /*
      * (non-Javadoc)
@@ -49,8 +64,9 @@ public class InternalStorage implements Storage
     @Override
     public UploadResult upload(String filename, byte[] bytes)
     {
-        // TODO Auto-generated method stub
-        return null;
+        InternalStorageItem item = manager.addFile(bytes, filename);
+        return new UploadResult(item.getId(), manager.getStorageUrl() + item.getOrignalPath(), manager.getStorageUrl()
+                + item.getWebPath(), manager.getStorageUrl() + item.getThumbnailPath());
     }
 
     /*
@@ -58,10 +74,17 @@ public class InternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#read(java.lang.String)
      */
     @Override
-    public byte[] read(String url)
+    public void read(String url, OutputStream out)
     {
-        // TODO Auto-generated method stub
-        return null;
+        try
+        {
+            FileInputStream fis = new FileInputStream(manager.transformUrlToPath(url));
+            StorageUtils.writeInOut(fis, out);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error reading file " + url + " in internal storage: ", e);
+        }
     }
 
     /*
@@ -69,9 +92,9 @@ public class InternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#delete(java.lang.String)
      */
     @Override
-    public void delete(String url)
+    public void delete(String id)
     {
-        // TODO Auto-generated method stub
+        manager.removeFile(new InternalStorageItem(id));
     }
 
     /*

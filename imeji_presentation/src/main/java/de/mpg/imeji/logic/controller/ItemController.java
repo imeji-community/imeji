@@ -3,7 +3,9 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +27,8 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.storage.Storage;
+import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
@@ -248,12 +252,117 @@ public class ItemController extends ImejiController
     }
 
     /**
+     * Delete a {@link List} of {@link Item} inclusive all files stored in the {@link Storage}
+     * 
+     * @param items
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    public int delete(List<Item> items, User user) throws Exception
+    {
+        int count = 0;
+        Map<String, URI> cMap = new HashMap<String, URI>();
+        List<Object> toDelete = new ArrayList<Object>();
+        for (Item item : items)
+        {
+            if (item != null)
+            {
+                removeFileFromStorage(item.getStorageId());
+                toDelete.add(item);
+                count++;
+                cMap.put(item.getCollection().toString(), item.getCollection());
+            }
+        }
+        imejiBean2RDF.delete(toDelete, user);
+        // Remove items from their collections
+        for (URI uri : cMap.values())
+        {
+            CollectionController cc = new CollectionController(user);
+            CollectionImeji c = cc.retrieveLazy(uri);
+            c = (CollectionImeji)loadContainerItems(c, user, -1, 0);
+            cc.update(c);
+        }
+        return count;
+    }
+
+    /**
+     * Set the status of a {@link List} of {@link Item} to released
+     * 
+     * @param l
+     * @param user
+     * @throws Exception
+     */
+    public void release(List<Item> l, User user) throws Exception
+    {
+        for (Item item : l)
+        {
+            if (Status.PENDING.equals(item.getStatus()))
+            {
+                writeReleaseProperty(item, user);
+                item.setVisibility(Visibility.PUBLIC);
+            }
+        }
+        update(l);
+    }
+
+    /**
+     * Set the status of a {@link List} of {@link Item} to withdraw and delete its files from the {@link Storage}
+     * 
+     * @param items
+     * @param comment
+     * @throws Exception
+     */
+    public void withdraw(List<Item> items, String comment) throws Exception
+    {
+        Map<String, URI> cMap = new HashMap<String, URI>();
+        for (Item item : items)
+        {
+            if (!item.getStatus().equals(Status.RELEASED))
+            {
+                throw new RuntimeException("Error discard " + item.getId() + " must be release (found: "
+                        + item.getStatus() + ")");
+            }
+            else
+            {
+                writeWithdrawProperties(item, comment);
+                item.setVisibility(Visibility.PUBLIC);
+                if (item.getEscidocId() != null)
+                {
+                    removeFileFromStorage(item.getStorageId());
+                    item.setEscidocId(null);
+                }
+            }
+        }
+        update(items);
+        // Remove items from their collections
+        for (URI uri : cMap.values())
+        {
+            CollectionController cc = new CollectionController(user);
+            CollectionImeji c = cc.retrieveLazy(uri);
+            c = (CollectionImeji)loadContainerItems(c, user, -1, 0);
+            cc.update(c);
+        }
+    }
+
+    /**
+     * Remove a file from the current {@link Storage}
+     * 
+     * @param id
+     */
+    private void removeFileFromStorage(String id)
+    {   
+        StorageController storageController = new StorageController();
+        storageController.delete(id);
+    }
+
+    /**
      * Increase performance by restricting grants to the only grants needed
      * 
      * @param user
      * @return
      */
-    public User simplifyUser(URI containerUri)
+    private User simplifyUser(URI containerUri)
     {
         if (user == null)
         {
@@ -287,96 +396,5 @@ public class ItemController extends ImejiController
             }
         }
         return simplifiedUser;
-    }
-
-    public int delete(List<Item> items, User user) throws Exception
-    {
-        int count = 0;
-        Map<String, URI> cMap = new HashMap<String, URI>();
-        List<Object> toDelete = new ArrayList<Object>();
-        for (Item item : items)
-        {
-            if (item != null)
-            {
-                removeImageFromEscidoc(item.getEscidocId());
-                toDelete.add(item);
-                count++;
-                cMap.put(item.getCollection().toString(), item.getCollection());
-            }
-        }
-        imejiBean2RDF.delete(toDelete, user);
-        // Remove items from their collections
-        for (URI uri : cMap.values())
-        {
-            CollectionController cc = new CollectionController(user);
-            CollectionImeji c = cc.retrieveLazy(uri);
-            c = (CollectionImeji)loadContainerItems(c, user, -1, 0);
-            cc.update(c);
-        }
-        return count;
-    }
-
-    public void release(List<Item> l, User user) throws Exception
-    {
-        for (Item item : l)
-        {
-            if (Status.PENDING.equals(item.getStatus()))
-            {
-                writeReleaseProperty(item, user);
-                item.setVisibility(Visibility.PUBLIC);
-            }
-        }
-        update(l);
-    }
-
-    public void withdraw(List<Item> items, String comment) throws Exception
-    {
-        Map<String, URI> cMap = new HashMap<String, URI>();
-        for (Item item : items)
-        {
-            if (!item.getStatus().equals(Status.RELEASED))
-            {
-                throw new RuntimeException("Error discard " + item.getId() + " must be release (found: "
-                        + item.getStatus() + ")");
-            }
-            else
-            {
-                writeWithdrawProperties(item, comment);
-                item.setVisibility(Visibility.PUBLIC);
-                if (item.getEscidocId() != null)
-                {
-                    removeImageFromEscidoc(item.getEscidocId());
-                    item.setEscidocId(null);
-                }
-            }
-        }
-        update(items);
-        // Remove items from their collections
-        for (URI uri : cMap.values())
-        {
-            CollectionController cc = new CollectionController(user);
-            CollectionImeji c = cc.retrieveLazy(uri);
-            c = (CollectionImeji)loadContainerItems(c, user, -1, 0);
-            cc.update(c);
-        }
-    }
-
-    public void removeImageFromEscidoc(String id)
-    {
-        try
-        {
-            String username = PropertyReader.getProperty("imeji.escidoc.user");
-            String password = PropertyReader.getProperty("imeji.escidoc.password");
-            Authentication auth = new Authentication(new URL(
-                    PropertyReader.getProperty("escidoc.framework_access.framework.url")), username, password);
-            ItemHandlerClient handler = new ItemHandlerClient(auth.getServiceAddress());
-            handler.setHandle(auth.getHandle());
-            handler.delete(id);
-        }
-        catch (Exception e)
-        {
-            logger.error("Error removing image from eSciDoc (" + id + ")", e);
-            throw new RuntimeException("Error removing image from eSciDoc (" + id + ")", e);
-        }
     }
 }

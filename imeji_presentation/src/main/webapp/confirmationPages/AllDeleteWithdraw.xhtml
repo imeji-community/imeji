@@ -4,10 +4,10 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<div id="dialogDeleteAll" class="half_area0_p8 bordst0 shadst1 dialogbox" style="display:none;">
 		<div class="half_area0_p8">
-        	<h:outputText value="#{lbl.delete_images}?" rendered="#{bean.deletable}"/>
-       		<h:outputText  value="#{lbl.withdraw_images}?" rendered="#{!bean.deletable and bean.editable}"/>
+        	<h:outputText value="#{lbl.delete_images}?" rendered="#{paginatorListSessionBean.deletable}"/>
+       		<h:outputText  value="#{lbl.withdraw_images}?" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
 	        <h:outputText id="errorMessageA" styleClass="xDouble_area0_p0 messageError" value=""/>
-	        <h:inputTextarea id="discardCommentA" value="#{bean.discardComment}" rows="6" styleClass="quad_area0_p0" valueChangeListener="#{bean.discardCommentListener}" rendered="#{!bean.deletable and bean.editable}"/>
+	        <h:inputTextarea id="discardCommentA" value="#{paginatorListSessionBean.discardComment}" rows="6" styleClass="quad_area0_p0" valueChangeListener="#{paginatorListSessionBean.discardCommentListener}" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}"/>
 	    </div>
 		<div class="half_area0_p8 ">
 			<div class="large_txtBtn">
@@ -17,8 +17,8 @@
       			</div>
 			<div class="xLarge_txtBtn tiny_marginLExcl">
 				<h:form>
-					<h:commandButton onclick="this.disabled=true; this.style.opacity = 0.5; this.value='#{msg.please_wait}';" action="#{bean.deleteAll}" rendered="#{bean.deletable}" value="#{lbl.delete}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
-					<h:commandButton onclick="if(!clickOnDiscard('', 'DeleteAll', '#{msg.error_withdraw_comment}')){return false};" action="#{bean.withdrawAll}" rendered="#{!bean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>    
+					<h:commandButton  action="#{paginatorListSessionBean.deleteAll}" rendered="#{paginatorListSessionBean.deletable}" value="#{lbl.delete}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
+					<h:commandButton action="#{paginatorListSessionBean.withdrawAll}" rendered="#{!paginatorListSessionBean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>    
 			 	</h:form>
 		 	</div>
 		</div>

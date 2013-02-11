@@ -112,7 +112,14 @@
 				</a></div>
 			</div>
 			<br style="clear: both"/>
-				
+			<div class="half_area0_p8" style="width:41.15em;">
+			<h:outputText value ="#{lbl.or_big}" styleClass="full_area0"/>
+			<h:outputText value ="#{lbl.upload_from_link}" styleClass="full_area0"/>
+			<h:form>
+				<h:inputText value="#{UploadBean.externalUrl}" styleClass="full_area0"/>
+				<h:commandButton value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="free_area1_p8 activeButton"/>
+			</h:form>
+			</div>
 			<br />
 			<h:panelGroup styleClass="half_area2_p6 messageArea errorMessageArea"  rendered="#{UploadBean.fNum > 0}">	
 				<br />

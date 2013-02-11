@@ -28,11 +28,8 @@
  */
 package de.mpg.imeji.logic.storage;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import de.mpg.imeji.logic.storage.Storage.FileResolution;
+import java.io.OutputStream;
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Controller for the {@link Storage} objects
@@ -44,6 +41,23 @@ import de.mpg.imeji.logic.storage.Storage.FileResolution;
 public class StorageController
 {
     private Storage storage;
+
+    /**
+     * Create new {@link StorageController} for the {@link Storage} defined in imeji.properties
+     */
+    public StorageController()
+    {
+        String name;
+        try
+        {
+            name = PropertyReader.getProperty("imeji.storage.name");
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error reading storage name property: ", e);
+        }
+        storage = StorageFactory.create(name);
+    }
 
     /**
      * Construct a {@link StorageController} for one {@link Storage}
@@ -70,11 +84,11 @@ public class StorageController
      * Call read method of the controlled {@link Storage}
      * 
      * @param url
-     * @return
+     * @param out
      */
-    public byte[] read(String url)
+    public void read(String url, OutputStream out)
     {
-        return storage.read(url);
+        storage.read(url, out);
     }
 
     /**

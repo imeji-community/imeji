@@ -28,9 +28,14 @@
  */
 package de.mpg.imeji.logic.storage.impl;
 
+import java.io.OutputStream;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.Storage.FileResolution;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**
  * The {@link Storage} implementation for external Storages. Can only read files (if the files are publicly available).
@@ -41,6 +46,16 @@ import de.mpg.imeji.logic.storage.Storage.FileResolution;
  */
 public class ExternalStorage implements Storage
 {
+    private HttpClient client;
+
+    /**
+     * Default constructor
+     */
+    public ExternalStorage()
+    {
+        client = StorageUtils.getHttpClient();
+    }
+
     /*
      * (non-Javadoc)
      * @see de.mpg.imeji.logic.storage.Storage#getName()
@@ -48,8 +63,7 @@ public class ExternalStorage implements Storage
     @Override
     public String getName()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return "external";
     }
 
     /*
@@ -68,10 +82,30 @@ public class ExternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#read(java.lang.String)
      */
     @Override
-    public byte[] read(String url)
+    public void read(String url, OutputStream out)
     {
-        // TODO Auto-generated method stub
-        return null;
+        GetMethod get = StorageUtils.newGetMethod(client, url);
+        get.setFollowRedirects(true);
+        try
+        {
+            client.executeMethod(get);
+            if (get.getStatusCode() == 302)
+            {
+                // Login in escidoc is not valid anymore, log in again an read again
+                get.releaseConnection();
+                get = StorageUtils.newGetMethod(client, url);
+                client.executeMethod(get);
+            }
+            StorageUtils.writeInOut(get.getResponseBodyAsStream(), out);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error reading " + url + " from escidoc: ", e);
+        }
+        finally
+        {
+            get.releaseConnection();
+        }
     }
 
     /*

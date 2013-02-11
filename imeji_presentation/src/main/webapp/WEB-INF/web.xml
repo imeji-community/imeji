@@ -28,8 +28,8 @@
 		<load-on-startup>4</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>Image Servlet</servlet-name>
-		<servlet-class>de.mpg.imeji.presentation.servlet.ImageServlet</servlet-class>
+		<servlet-name>File Servlet</servlet-name>
+		<servlet-class>de.mpg.imeji.presentation.servlet.FileServlet</servlet-class>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
 	<servlet>
@@ -52,8 +52,8 @@
 		<url-pattern>/jsf/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>Image Servlet</servlet-name>
-		<url-pattern>/coreserviceimage</url-pattern>
+		<servlet-name>File Servlet</servlet-name>
+		<url-pattern>/file</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Export Servlet</servlet-name>

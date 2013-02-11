@@ -406,7 +406,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     private void delete(List<String> uris) throws Exception
     {
-        Collection<Item> items = loadImages(uris, getElementsPerPage(), getOffset());
+        Collection<Item> items = loadImages(uris, 0, -1);
         ItemController ic = new ItemController(session.getUser());
         int count = ic.delete((List<Item>)items, session.getUser());
         BeanHelper.info(count + " " + session.getLabel("images_deleted"));

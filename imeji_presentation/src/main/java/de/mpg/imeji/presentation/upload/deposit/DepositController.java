@@ -31,7 +31,7 @@ public class DepositController
      * @return
      * @throws Exception
      */
-    public de.mpg.imeji.logic.vo.Item createImejiImage(CollectionImeji collection, User user, String escidocId,
+    public de.mpg.imeji.logic.vo.Item createImejiImage(CollectionImeji collection, User user, String storageId,
             String title, URI fullImageURI, URI thumbnailURI, URI webURI) throws Exception
     {
         ItemController itemController = new ItemController(user);
@@ -46,9 +46,9 @@ public class DepositController
         item.setWebImageUrl(webURI);
         item.setVisibility(Visibility.PUBLIC);
         item.setFilename(title);
-        if (escidocId != null)
+        if (storageId != null)
         {
-            item.setEscidocId(escidocId);
+            item.setStorageId(storageId);
         }
         if (collection.getStatus() == Status.RELEASED)
         {

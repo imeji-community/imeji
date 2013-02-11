@@ -127,7 +127,6 @@
 							height:20em !important;
 						}
 					</style>
-					 <h:outputText value="#{SessionBean.locale}" />
 					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
 						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
 						<!-- tabs -->
@@ -340,7 +339,7 @@
 							<div id="carousel">
 								<ui:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0">
 									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.applicationUri}#{item.id.path}">
-										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrl}" height="114"/>
+										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}file?id=#{item.thumbnailImageUrl}" height="114"/>
 									</h:outputLink>
 								</ui:repeat>
 							</div>

@@ -3,8 +3,12 @@
  */
 package de.mpg.imeji.presentation.upload;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -55,14 +59,15 @@ public class UploadBean
     private User user;
     private String title;
     private String format;
-    private String mimetype;
-    private String description;
     private String totalNum;
     private int sNum;
     private int fNum;
     private List<String> sFiles;
     private List<String> fFiles;
+    private String externalUrl;
+    private StorageController storageController;
     private static Logger logger = Logger.getLogger(Upload.class);
+    
 
     /**
      * Construct the Bean and initalize the pages
@@ -70,6 +75,7 @@ public class UploadBean
     public UploadBean()
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        storageController = new StorageController("internal");
         try
         {
             escidocContext = PropertyReader.getProperty("escidoc.imeji.context.id");
@@ -94,6 +100,7 @@ public class UploadBean
             fNum = 0;
             sFiles = new ArrayList<String>();
             fFiles = new ArrayList<String>();
+            externalUrl = "";
         }
         else if (UrlHelper.getParameterBoolean("start"))
         {
@@ -122,6 +129,31 @@ public class UploadBean
     }
 
     /**
+     * Upload a file from the web
+     * 
+     * @return
+     */
+    public String uploadFromLink()
+    {
+        try
+        {
+            StorageController externalController = new StorageController("external");
+            URL url = new URL(externalUrl);
+            title = url.getPath().substring(url.getPath().lastIndexOf("/") + 1);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            externalController.read(url.toString(), baos);
+            uploadFile(baos.toByteArray());
+            externalUrl = "";
+        }
+        catch (Exception e)
+        {
+            logger.error("Error uploading file from link: " + externalUrl, e);
+            BeanHelper.error("Error uploading file from link: " + externalUrl);
+        }
+        return "";
+    }
+
+    /**
      * Start the Upload of the items
      * 
      * @throws Exception
@@ -139,7 +171,6 @@ public class UploadBean
             while (iter.hasNext())
             {
                 FileItemStream item = iter.next();
-                String name = item.getFieldName();
                 InputStream stream = item.openStream();
                 if (!item.isFormField())
                 {
@@ -149,37 +180,37 @@ public class UploadBean
                     {
                         format = st.nextToken();
                     }
-                    mimetype = StorageUtils.getMimeType(format);
-                    // TODO remove static image description
-                    description = "";
-                    try
-                    {
-                        UserController uc = new UserController(null);
-                        User user = uc.retrieve(getUser().getEmail());
-                        try
-                        {
-                            DepositController controller = new DepositController();
-                            StorageController storageController = new StorageController("escidoc");
-                            UploadResult uploadResult = storageController.upload(title, StorageUtils.toBytes(stream));
-                            controller.createImejiImage(collection, user, "", title,
-                                    URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
-                                    URI.create(uploadResult.getWeb()));
-                            sNum += 1;
-                            sFiles.add(title);
-                        }
-                        catch (Exception e)
-                        {
-                            fNum += 1;
-                            fFiles.add(title);
-                            logger.error("Error uploading image: ", e);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
+                    uploadFile(StorageUtils.toBytes(stream));
                 }
             }
+        }
+    }
+
+    /**
+     * Upload one File and create the {@link de.mpg.imeji.logic.vo.Item}
+     * 
+     * @param bytes
+     * @throws Exception
+     */
+    private void uploadFile(byte[] bytes)
+    {
+        try
+        {
+            UserController uc = new UserController(null);
+            User user = uc.retrieve(getUser().getEmail());
+            DepositController controller = new DepositController();
+            UploadResult uploadResult = storageController.upload(title, bytes);
+            controller.createImejiImage(collection, user, uploadResult.getId(), title,
+                    URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
+                    URI.create(uploadResult.getWeb()));
+            sNum += 1;
+            sFiles.add(title);
+        }
+        catch (Exception e)
+        {
+            fNum += 1;
+            fFiles.add(title);
+            logger.error("Error uploading image: ", e);
         }
     }
 
@@ -340,5 +371,15 @@ public class UploadBean
     public void setCollectionSize(int collectionSize)
     {
         this.collectionSize = collectionSize;
+    }
+
+    public String getExternalUrl()
+    {
+        return externalUrl;
+    }
+
+    public void setExternalUrl(String externalUrl)
+    {
+        this.externalUrl = externalUrl;
     }
 }

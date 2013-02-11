@@ -26,72 +26,78 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.storage;
+package de.mpg.imeji.logic.storage.internal;
 
 /**
- * Result of an Upload
+ * An item for the internal storage of imeji
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class UploadResult
+public class InternalStorageItem
 {
+    private String orignalPath;
+    private String webPath;
+    private String thumbnailPath;
+    private String fileName;
     private String id;
-    private String orginal;
-    private String web;
-    private String thumb;
 
     /**
      * Default constructor
      */
-    public UploadResult()
+    public InternalStorageItem()
     {
     }
 
     /**
-     * Constructor with the 3 results
+     * Construct a new {@link InternalStorageItem} with an id
      * 
-     * @param orginal
-     * @param web
-     * @param thumb
+     * @param id
      */
-    public UploadResult(String id, String orginal, String web, String thumb)
+    public InternalStorageItem(String id)
     {
         this.id = id;
-        this.orginal = orginal;
-        this.thumb = thumb;
-        this.web = web;
     }
 
-    public String getOrginal()
+    public String getOrignalPath()
     {
-        return orginal;
+        return orignalPath;
     }
 
-    public void setOrginal(String orginal)
+    public void setOrignalPath(String orignalPath)
     {
-        this.orginal = orginal;
+        this.orignalPath = orignalPath;
     }
 
-    public String getWeb()
+    public String getWebPath()
     {
-        return web;
+        return webPath;
     }
 
-    public void setWeb(String web)
+    public void setWebPath(String webPath)
     {
-        this.web = web;
+        this.webPath = webPath;
     }
 
-    public String getThumb()
+    public String getThumbnailPath()
     {
-        return thumb;
+        return thumbnailPath;
     }
 
-    public void setThumb(String thumb)
+    public void setThumbnailPath(String thumbnailPath)
     {
-        this.thumb = thumb;
+        this.thumbnailPath = thumbnailPath;
+    }
+
+    public String getFileName()
+    {
+        return fileName;
+    }
+
+    public void setFileName(String fileName)
+    {
+        this.fileName = fileName;
     }
 
     public String getId()

@@ -33,6 +33,7 @@ import de.escidoc.core.resources.om.item.component.ComponentProperties;
 import de.escidoc.core.resources.om.item.component.Components;
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
+import de.mpg.imeji.presentation.util.LoginHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -250,5 +251,19 @@ public class EscidocUtils
         }
         item.getComponents().add(componentFactory(contentCategory, fileName, mimetype, imageUrl.toExternalForm()));
         return item;
+    }
+
+    /**
+     * Log in eSciDoc and return the userHandle
+     * 
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws Exception
+     */
+    public static String getNewEscidocUserHandle() throws IOException, URISyntaxException, Exception
+    {
+        return LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"),
+                PropertyReader.getProperty("imeji.escidoc.password"));
     }
 }

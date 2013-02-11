@@ -46,6 +46,34 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class ImageUtils
 {
     /**
+     * Prepare the image for the upload: <br/>
+     * if it is original image upload, do nothing <br/>
+     * if it is another resolution, resize it <br/>
+     * if it is a tiff to be resized, transformed it to jpeg and resize it
+     * 
+     * @param stream
+     * @param contentCategory
+     * @param format
+     * @return
+     * @throws IOException
+     * @throws Exception
+     */
+    public static byte[] transformImage(byte[] bytes, FileResolution resolution, String mimeType) throws IOException,
+            Exception
+    {
+        if (!FileResolution.ORIGINAL.equals(resolution))
+        {
+            byte[] compressed = ImageUtils.compressImage(bytes, mimeType);
+            if (!Arrays.equals(compressed, bytes))
+            {
+                mimeType = StorageUtils.getMimeType("jpg");
+            }
+            bytes = ImageUtils.scaleImage(ImageIO.read(new ByteArrayInputStream(compressed)), mimeType, resolution);
+        }
+        return bytes;
+    }
+
+    /**
      * Scale a {@link BufferedImage} to new size. Is faster than the basic {@link ImageUtils}.scaleImage method, has the
      * same quality
      * 

@@ -30,22 +30,17 @@ package de.mpg.imeji.logic.storage.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Arrays;
 
-import javax.imageio.ImageIO;
-
-import org.apache.axis.holders.ImageHolder;
-
-import com.sun.media.jai.util.ImageUtil;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.log4j.Logger;
 
 import de.escidoc.core.client.Authentication;
+import de.escidoc.core.client.ItemHandlerClient;
 import de.escidoc.core.client.StagingHandlerClient;
-import de.escidoc.core.client.exceptions.TransportException;
-import de.escidoc.core.client.exceptions.application.security.AuthenticationException;
 import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
@@ -61,27 +56,23 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class Escidoc implements Storage
+public class EscidocStorage implements Storage
 {
     private final String name = "escidoc";
     private EscidocUtils util;
     private Authentication auth;
     private Item item;
+    private HttpClient client;
+    private static Logger logger = Logger.getLogger(EscidocStorage.class);
 
     /**
-     * Constructor for {@link Escidoc}
+     * Constructor for {@link EscidocStorage}
      */
-    public Escidoc()
+    public EscidocStorage()
     {
         util = new EscidocUtils();
-        try
-        {
-            auth = util.login();
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Error Logging in eSciDoc: ", e);
-        }
+        login();
+        client = StorageUtils.getHttpClient();
     }
 
     /*
@@ -114,7 +105,7 @@ public class Escidoc implements Storage
             // Create the item
             item = util.createItemInEscidoc(item, auth);
             // Create the Upload result
-            UploadResult result = new UploadResult(EscidocUtils.getOriginalResolution(item),
+            UploadResult result = new UploadResult(item.getObjid(), EscidocUtils.getOriginalResolution(item),
                     EscidocUtils.getWebResolutionUrl(item), EscidocUtils.getThumbnailUrl(item));
             return result;
         }
@@ -129,10 +120,32 @@ public class Escidoc implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#read(java.lang.String)
      */
     @Override
-    public byte[] read(String url)
+    public void read(String url, OutputStream out)
     {
-        // TODO Auto-generated method stub
-        return null;
+        GetMethod get = StorageUtils.newGetMethod(client, url);
+        get.addRequestHeader("Cookie", getEscidocCookie());
+        try
+        {
+            client.executeMethod(get);
+            if (get.getStatusCode() == 302)
+            {
+                // Login in escidoc is not valid anymore, log in again an read again
+                get.releaseConnection();
+                login();
+                get = StorageUtils.newGetMethod(client, url);
+                get.addRequestHeader("Cookie", getEscidocCookie());
+                client.executeMethod(get);
+            }
+            StorageUtils.writeInOut(get.getResponseBodyAsStream(), out);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error reading " + url + " from escidoc: ", e);
+        }
+        finally
+        {
+            get.releaseConnection();
+        }
     }
 
     /*
@@ -140,9 +153,18 @@ public class Escidoc implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#delete(java.lang.String)
      */
     @Override
-    public void delete(String url)
+    public void delete(String id)
     {
-        // TODO Auto-generated method stub
+        ItemHandlerClient handler = new ItemHandlerClient(auth.getServiceAddress());
+        handler.setHandle(auth.getHandle());
+        try
+        {
+            handler.delete(id);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error deleting escidoc Item: " + id, e);
+        }
     }
 
     /*
@@ -169,7 +191,7 @@ public class Escidoc implements Storage
             throws IOException, Exception
     {
         // Transform the file if needed (according to the resolution), and uplod it
-        URL url = uploadViaStagingArea(transformFile(bytes, resolution, mimeType));
+        URL url = uploadViaStagingArea(ImageUtils.transformImage(bytes, resolution, mimeType));
         // Update the item with the uploaded file
         util.addImageToEscidocItem(item, url, util.getContentCategory(resolution), filename, mimeType);
     }
@@ -195,30 +217,35 @@ public class Escidoc implements Storage
     }
 
     /**
-     * Prepare the image for the upload: <br/>
-     * if it is original image upload, do nothing <br/>
-     * if it is another resolution, resize it <br/>
-     * if it is a tiff to be resized, transformed it to jpeg and resize it
+     * Get the current handle, if null get a new one
      * 
-     * @param stream
-     * @param contentCategory
-     * @param format
      * @return
      * @throws IOException
+     * @throws URISyntaxException
      * @throws Exception
      */
-    private byte[] transformFile(byte[] bytes, FileResolution resolution, String mimeType) throws IOException,
-            Exception
+    private String getEscidocCookie()
     {
-        if (!FileResolution.ORIGINAL.equals(resolution))
+        if (auth.getHandle() == null)
         {
-            byte[] compressed = ImageUtils.compressImage(bytes, mimeType);
-            if (!Arrays.equals(compressed, bytes))
-            {
-                mimeType = StorageUtils.getMimeType("jpg");
-            }
-            bytes = ImageUtils.scaleImage(ImageIO.read(new ByteArrayInputStream(compressed)), mimeType, resolution);
+            login();
         }
-        return bytes;
+        return "escidocCookie=" + auth.getHandle();
+    }
+
+    /**
+     * Log in in eSciDoc
+     */
+    private void login()
+    {
+        try
+        {
+            logger.info("Logging in escidoc");
+            auth = util.login();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error Logging in eSciDoc: ", e);
+        }
     }
 }

@@ -28,7 +28,7 @@
  */
 package de.mpg.imeji.logic.storage;
 
-import de.mpg.imeji.logic.storage.impl.Escidoc;
+import de.mpg.imeji.logic.storage.impl.EscidocStorage;
 import de.mpg.imeji.logic.storage.impl.ExternalStorage;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 
@@ -56,7 +56,7 @@ public class StorageFactory
         }
         else if ("escidoc".equals(name))
         {
-            return new Escidoc();
+            return new EscidocStorage();
         }
         return new ExternalStorage();
     }

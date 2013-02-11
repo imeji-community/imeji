@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.logic.storage;
 
+import java.io.OutputStream;
+
 /**
  * Interface for imeji storage
  * 
@@ -68,9 +70,9 @@ public interface Storage
      * Read the file stored in the passed url
      * 
      * @param url
-     * @return
+     * @param out
      */
-    public byte[] read(String url);
+    public void read(String url, OutputStream out);
 
     /**
      * Delete the file stored in the passed url

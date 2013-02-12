@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic;
 
+import java.io.File;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
@@ -73,7 +74,12 @@ public class ImejiJena
      */
     public static void init(String path)
     {
-        tdbPath = path;
+        File f = new File(path);
+        if (!f.exists())
+        {
+            f.getParentFile().mkdirs();
+        }
+        tdbPath = f.getAbsolutePath();
         logger.info("Initializing Jena dataset (" + tdbPath + ")...");
         imejiDataSet = TDBFactory.createDataset(tdbPath);
         logger.info("... done!");

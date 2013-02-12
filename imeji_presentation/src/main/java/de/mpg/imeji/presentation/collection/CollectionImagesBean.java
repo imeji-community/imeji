@@ -122,7 +122,7 @@ public class CollectionImagesBean extends ImagesBean
         {
             return "";
         }
-        return navigation.getApplicationUri() + collection.getId().getPath();
+        return navigation.getApplicationUrl() + "collection/" + this.id;
     }
 
     /**

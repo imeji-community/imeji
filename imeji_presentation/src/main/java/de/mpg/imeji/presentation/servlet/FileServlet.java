@@ -50,7 +50,6 @@ public class FileServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         String imageUrl = req.getParameter("id");
-        resp.setHeader("Content-Disposition", "inline; filename=\"TEST BASTIEN" + "\"");
         resp.setContentType(StorageUtils.getMimeType(StorageUtils.getFileExtension(imageUrl)));
         storageController.read(imageUrl, resp.getOutputStream());
     }

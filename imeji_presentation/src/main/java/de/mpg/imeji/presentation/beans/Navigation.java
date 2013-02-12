@@ -4,8 +4,11 @@
 package de.mpg.imeji.presentation.beans;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -52,8 +55,8 @@ public class Navigation
      */
     public Navigation() throws Exception
     {
-        frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.ur");
-        applicationUrl = PropertyReader.getProperty("escidoc.imeji.instance.url");
+        frameworkUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.framework_access.framework.url"));
+        applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
     }
 
     public String getApplicationUrl()

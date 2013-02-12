@@ -240,8 +240,23 @@ public class CollectionController extends ImejiController
      * @param uri
      * @return
      * @throws Exception
+     * @{@link Deprecated}
      */
     public CollectionImeji retrieveLazy(URI uri) throws Exception
+    {
+        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        return (CollectionImeji)imejiRDF2Bean.loadLazy(uri.toString(), user, new CollectionImeji());
+    }
+
+    /**
+     * Retrieve the {@link CollectionImeji} without its {@link Item}
+     * 
+     * @param uri
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    public CollectionImeji retrieveLazy(URI uri, User user) throws Exception
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
         return (CollectionImeji)imejiRDF2Bean.loadLazy(uri.toString(), user, new CollectionImeji());

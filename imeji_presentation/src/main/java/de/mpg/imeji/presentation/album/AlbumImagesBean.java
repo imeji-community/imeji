@@ -196,7 +196,7 @@ public class AlbumImagesBean extends ImagesBean
     {
         if (album == null || album.getId() == null)
             return "";
-        return navigation.getApplicationUri() + album.getId().getPath();
+        return navigation.getApplicationUrl() + "album/" + this.id;
     }
 
     @Override

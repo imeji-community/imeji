@@ -95,7 +95,7 @@
 			}
 			
 		</script>
-		<div class="full_area0 small_marginLExcl infoPage">
+		<div class="full_area0_p8 small_marginLExcl infoPage">
 		<br/>
 			<div class="half_area0_p8 listBackground" style="width:41.15em;">
 				<div id="uploader" class="half_area0_p0">
@@ -112,13 +112,13 @@
 				</a></div>
 			</div>
 			<br style="clear: both"/>
-			<div class="half_area0_p8" style="width:41.15em;">
-			<h:outputText value ="#{lbl.or_big}" styleClass="full_area0"/>
-			<h:outputText value ="#{lbl.upload_from_link}" styleClass="full_area0"/>
-			<h:form>
-				<h:inputText value="#{UploadBean.externalUrl}" styleClass="full_area0"/>
-				<h:commandButton value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="free_area1_p8 activeButton"/>
-			</h:form>
+			<div class="full_area0_p8">
+				<h:outputText value ="#{lbl.or_big}" styleClass="full_area0"/>
+				<h:outputText value ="#{lbl.upload_from_link}" styleClass="full_area0"/>
+				<h:form>
+					<h:inputText value="#{UploadBean.externalUrl}" styleClass="half_area0"/>
+					<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="free_area0_p0"/>
+				</h:form>
 			</div>
 			<br />
 			<h:panelGroup styleClass="half_area2_p6 messageArea errorMessageArea"  rendered="#{UploadBean.fNum > 0}">	

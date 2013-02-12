@@ -67,8 +67,8 @@ public class ObjectLoader
     {
         try
         {
-            CollectionController cl = new CollectionController(user);
-            return cl.retrieveLazy(id);
+            CollectionController cl = new CollectionController();
+            return cl.retrieveLazy(id, user);
         }
         catch (NotFoundException e)
         {

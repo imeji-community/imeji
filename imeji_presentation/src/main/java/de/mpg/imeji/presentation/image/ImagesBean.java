@@ -480,6 +480,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
     }
 
+    /**
+     * The based url used to link to the detail page
+     * 
+     * @return
+     */
     public String getImageBaseUrl()
     {
         return navigation.getApplicationUri();

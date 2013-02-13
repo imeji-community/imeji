@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -34,12 +35,12 @@ public class Java2Jena
     private static Logger logger = Logger.getLogger(Java2Jena.class);
     private boolean lazy = false;
 
-    public Java2Jena(Model model)
-    {
-        this.model = model;
-        literalHelper = new LiteralHelper(model);
-    }
-
+    /**
+     * Construct a {@link Java2Jena} for one {@link Model}
+     * 
+     * @param model
+     * @param lazy - defined whether the write operations will be lazy or not (i.e. skip or not the {@link List})
+     */
     public Java2Jena(Model model, boolean lazy)
     {
         this.model = model;
@@ -47,7 +48,7 @@ public class Java2Jena
         this.lazy = lazy;
     }
 
-    /** 
+    /**
      * Write a {@link Object} in Jena
      * 
      * @param r
@@ -92,7 +93,7 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-        Resource r = createResource(o);
+        Resource r = model.getResource(J2JHelper.getId(o).toString());// createResource(o);
         model.removeAll(r, null, null);
         for (Resource e : getEmbeddedResources(r, o))
         {
@@ -138,10 +139,17 @@ public class Java2Jena
         {
             return false;
         }
-        Resource r = createResource(o);
+        // Resource r = createResource(o); //This seems to be a problem, new method is simpler and faster
+        Resource r = model.getResource(J2JHelper.getId(o).toString());
         return model.contains(r, null);
     }
 
+    /**
+     * Create a new {@link Resource} for one {@link Object}
+     * 
+     * @param o
+     * @return
+     */
     private Resource createResource(Object o)
     {
         if (J2JHelper.hasDataType(o))
@@ -320,13 +328,13 @@ public class Java2Jena
     }
 
     /**
-     * Get all Embedded resources of a {@link RDFResource}
+     * Get all Embedded {@link Resource} of an {@link Object} stored in {@link Jena} as a {@link Resource}
      * 
-     * @param s
-     * @param r
+     * @param s - the {@link Resource}
+     * @param r - {@link Object}
      * @return
      */
-    public List<Resource> getEmbeddedResources(Resource s, Object r)
+    private List<Resource> getEmbeddedResources(Resource s, Object r)
     {
         List<Resource> l = new ArrayList<Resource>();
         for (Field f : J2JHelper.getAllObjectFields(r.getClass()))

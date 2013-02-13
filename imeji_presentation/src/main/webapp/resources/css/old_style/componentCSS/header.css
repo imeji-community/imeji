@@ -1,0 +1,406 @@
+@charset "UTF-8";
+
+/*
+*
+* CDDL HEADER START
+*
+* The contents of this file are subject to the terms of the
+* Common Development and Distribution License, Version 1.0 only
+* (the "License"). You may not use this file except in compliance
+* with the License.
+*
+* You can obtain a copy of the license at license/ESCIDOC.LICENSE
+* or http://www.escidoc.de/license.
+* See the License for the specific language governing permissions
+* and limitations under the License.
+*
+* When distributing Covered Code, include this CDDL HEADER in each
+* file and include the License file at license/ESCIDOC.LICENSE.
+* If applicable, add the following below this CDDL HEADER, with the
+* fields enclosed by brackets "[]" replaced with your own identifying
+* information: Portions Copyright [yyyy] [name of copyright owner]
+*
+* CDDL HEADER END
+*/
+
+/*
+* Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+* für wissenschaftlich-technische Information mbH and Max-Planck-
+* Gesellschaft zur Förderung der Wissenschaft e.V.
+* All rights reserved. Use is subject to license terms.
+*/
+
+@media print {
+	.header * {
+		display: none;
+	}
+	.headerSection .headLine h1, .headerSection .headLine {
+			float: none;
+	}
+}
+
+/*META MENU*/
+
+	.metaMenu {
+		height: 2.9091em;
+		line-height: normal;
+	}
+	
+	.metaMenu .logButton, .metaMenu button, .metaMenu select, .metaMenu label, .metaMenu div, .metaMenu span, .metaMenu a  {
+		float: right;
+		white-space: nowrap;
+		text-decoration: none;
+	}
+	
+	.metaMenu a {
+		text-align: left;
+		padding-top: 0.1818em;
+	}
+
+	.metaMenu .logButton, .metaMenu button, .metaMenu label {
+		text-align: left;
+		margin-top: 0.27em;
+		padding-top: 0px;
+		padding-left: 0.4545em;
+	}
+
+	.metaMenu label {
+		white-space: nowrap;
+		margin-top: 0em;
+	}
+
+	.metaMenu .seperator {
+		display: block;
+		overflow: hidden;
+		width: 0.09em;
+		height: 1.6363em;
+		margin: 0px;
+		padding: 0px;
+		border-right-width: 0px;
+		border-left-width: 0px;
+		border-top-width: 0px;
+		border-top-style: solid;
+		border-bottom-width: 1.45em;
+		border-bottom-style: solid;
+	}
+	
+	.metaMenu input[type=text] {
+		height:1.2727em;
+		font-size:0.75em;
+	}
+	.metaMenu input[type=password] {
+		height:1.2727em;
+		font-size:0.75em;
+	}
+	
+	.metaMenu .selectContainer {
+		margin-right:0.2727em !important;
+	}
+	
+	.metaMenu .medium_area0_p8 {
+		height:1.6363em;
+		max-height:1.6363em;
+		padding-top:0.2727em;
+		padding-bottom:0;
+	}
+	
+	.metaMenu .large_area0_p8 {
+		height:1.6363em;
+		max-height:1.6363em;
+		padding-top:0.2727em !important;
+		padding-bottom:0 !important;
+	}
+	
+	.metaMenu .free_area0_p8 {
+		height:1.6363em;
+		max-height:1.6363em;
+		padding-top:0.2727em !important;
+		padding-bottom:0 !important;
+	}
+	
+	.logoAlternate, .logoAlternate * {
+		float: left !important;
+	}
+
+/*HEADER LOGO*/
+.headerLogo {
+	background-repeat:no-repeat;
+}
+
+.headerLogo, .themePark {
+	height: 5em;
+}
+
+.LogoNSearch {
+	height:5.7272em;
+}
+	
+/*SEARCH MENU*/
+.searchMenu {
+	float: right;
+	margin-top: 2em;
+}
+
+.searchMenu * {
+	white-space: nowrap;
+}
+
+.searchMenu .quickSearchBtn {
+	float: left;
+	margin-left: 0.37em;
+	padding-top:0;
+	height:1.7272em;
+}
+
+.searchMenu .quickSearchIcon {
+	float: left;
+	margin-right: 1em;
+	margin-top:-0.1818em;
+}
+
+.quickSearchCheckBoxMenu > label {
+	margin-top: 0.19em;
+}
+
+.quickSearchTextInput, .quickSearchCheckBoxMenu {
+	text-align: left;
+	float: left;
+	display: inline;
+	text-decoration: none;
+}
+
+.advancedSearchMenu, .organisationSearchMenu {
+	padding-top: 0em;
+	margin-top: 0.1818em;
+}
+
+
+/*MAIN MENU*/
+.mainMenu {
+	padding-left: 5.74em !important;
+	height:2.4545em;
+	max-height:2.4545em;
+	padding-top:0.2727em;
+	display:inline;
+	text-transform:uppercase;
+}
+
+.mainMenu input, .mainMenu a, .mainMenu span {
+	text-align: left;
+	text-decoration: none;
+	font-size: 16px !important;
+	margin-right: 0.8181em;
+}
+
+	
+/*SUB-HEADER SECTION*/
+.subHeaderSection {
+	margin-bottom: 0.4545em;
+}
+
+/*Force IE7 top-margin*/
+*+html .header {
+	margin-bottom: 1em;
+}
+
+/*BREADCRUMB*/
+.breadcrumb {
+	float: right;
+	white-space: nowrap;
+	overflow: hidden;
+	height:1.6363em;
+}
+
+.breadcrumb ol {
+	list-style: none;
+	margin: 0px;
+}
+
+.breadcrumb li {
+	float: left;
+	margin: 0px;
+}
+
+.breadcrumb a {
+	text-decoration: none;
+}
+	
+@media print {
+	.breadcrumb {
+		display: none;
+	}
+}
+
+
+/*PAGE HEADER*/
+.headLine {
+	margin: 0px;
+	line-height: normal;
+}
+
+.headLine h1 {
+	display: block;
+	margin: 0px;
+	margin-bottom: 0.28em;
+	margin-top:-0.11em;
+	height:0.9474em;
+	max-height:0.9474em;
+	line-height: normal;
+	
+}
+	
+@media screen, presentation {
+	.headLine {
+		float: right;
+		text-align: right;
+		white-space: nowrap;
+	}
+}
+
+@media print {
+	
+	.headLine {
+		float: left;
+		text-align: left;
+	}
+		
+	.subHeaderSection {
+		float: left;
+		margin-left: 0px;
+	}
+	
+}
+
+/*CONTENT MENU*/
+.contentHeader {
+	clear:left; 
+	padding-top:0.09em; 
+	padding-bottom:0.4545em;
+	overflow:hidden; 
+	line-height:2.18em;
+}
+
+.contentMenu * {
+	float: left;
+	line-height: normal;
+}
+
+.contentMenu .action * {
+	margin-right: 0.37em;
+}
+
+.contentMenu {
+	margin-top: 0em;
+	padding-top: 1.46em;
+}
+
+.contentMenu .sub {
+	overflow: hidden;
+	height:1.6363em;
+	margin-top:0.0909em;
+	text-transform:uppercase;
+}
+
+.contentMenu .action {
+	overflow: visible;
+	clear: left;
+	padding: 0px;
+	margin: 0px;
+	height:1.6363em;
+	max-height:1.6363em;
+	padding-top:0.1818em;
+	display:inline;
+	white-space:nowrap;
+	text-transform:none;
+}
+
+	/*REPLACEMENT HACK FOR IE LESS THAN 6*/
+	* html .contentMenu .action {
+		margin-top: -1.28em;
+		width: 100%;
+	}
+	* html .contentMenu .ieFilter {
+		width: 50em;
+	}
+	/*REPLACEMENT HACK FOR IE 7*/
+	*:first-child+html .contentMenu .action {
+		margin-top: -1.28em;
+	}
+	*:first-child+html .ieFilter {
+		width: 50em;
+	}
+	
+.contentMenu input, .contentMenu a {
+	float: left;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.contentMenu .seperator  {
+	float: left;
+	width: 0.10em;
+	height: 1.15em;
+	margin: 0px;
+	margin-left: 0.46em;
+	margin-right: 0.46em;
+	padding: 0px;
+	border-right-width: 0px;
+	border-left-width: 0px;
+	border-top-width: 0.18em;
+	border-top-style: solid;
+	border-bottom-width: 0.97em;
+	border-bottom-style: solid;
+}
+
+.bibList ,.gridList {
+	padding-left: 1.36em;
+}
+
+.ascSort, .desSort {
+	padding-right: 1.36em;
+}
+	
+.subHeaderSection .subHeader {
+	float:left;
+/*	margin-top:1.6363em; */
+	padding-top:0.3636em;
+	clear:all;
+}
+	
+.subHeader {
+	clear: both;
+	margin-top: 0.65em;
+}
+
+.singleMessage {
+	list-style-type: none;
+	list-style-position: outside;
+	padding: 0px;
+	margin: 0px;
+}
+
+.singleMessage li{
+	padding: 0px;
+	margin: 0px;
+}
+	
+@media print {
+	.contentMenu .sub {
+		display: none;
+	}
+	
+	/*USE NOT SHOWN CONTENT MENU FOR LOGO REPRESENTATION IN PRINT VERSION*/
+	.contentMenu {
+		position: absolute;
+		top: 0px;
+		left: 59.28em;
+		width: 22.10em;
+		height: 5em;
+		display: list-item;
+		list-style-position: inside;
+	}
+}
+
+.headerDistanceFix {
+	margin-top:-1.4545em;
+}

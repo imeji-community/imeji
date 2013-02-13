@@ -1,12 +1,10 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.logic.controller.exceptions;
 
 public class AuthorizationException extends Exception
 {
-
     public AuthorizationException()
     {
         super();

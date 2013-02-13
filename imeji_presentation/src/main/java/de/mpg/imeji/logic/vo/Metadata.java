@@ -25,19 +25,18 @@ import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * Abstract class for metadata of an {@link Item}.
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name="metadata")
-@XmlSeeAlso({
-	Text.class,
-	Number.class,
-	ConePerson.class,
-	Date.class,
-	Geolocation.class,
-	License.class,
-	Link.class,
-	Publication.class
-})
+@XmlRootElement(name = "metadata")
+@XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class, Geolocation.class, License.class, Link.class,
+        Publication.class })
 public abstract class Metadata
 {
     private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
@@ -54,16 +53,13 @@ public abstract class Metadata
             this.clazz = clazz;
         }
 
-        @XmlElements({
-            @XmlElement(name="text",type=Text.class),
-            @XmlElement(name="number",type=Number.class),
-            @XmlElement(name="conePerson",type=ConePerson.class),
-            @XmlElement(name="date",type=Date.class),
-            @XmlElement(name="geolocation",type=Geolocation.class),
-            @XmlElement(name="license",type=License.class),
-            @XmlElement(name="link",type=Link.class),
-            @XmlElement(name="publication",type=Publication.class)
-        })
+        @XmlElements({ @XmlElement(name = "text", type = Text.class),
+                @XmlElement(name = "number", type = Number.class),
+                @XmlElement(name = "conePerson", type = ConePerson.class),
+                @XmlElement(name = "date", type = Date.class),
+                @XmlElement(name = "geolocation", type = Geolocation.class),
+                @XmlElement(name = "license", type = License.class), @XmlElement(name = "link", type = Link.class),
+                @XmlElement(name = "publication", type = Publication.class) })
         public Class<? extends Metadata> getClazz()
         {
             return clazz;
@@ -74,11 +70,10 @@ public abstract class Metadata
             return clazz.getAnnotation(j2jDataType.class).value();
         }
     }
-    
+
     public Metadata()
     {
     }
-
 
     public String getTypeNamespace()
     {
@@ -127,28 +122,39 @@ public abstract class Metadata
     {
         this.pos = pos;
     }
-    
-    public Object getValueFromMethod(String methodName) {
-    	Method method;
-    	
-    	Object ret = null;    	
-    	try {
-    	      method = this.getClass().getMethod(methodName);
-    	      ret = method.invoke(this);
-    	    } catch (SecurityException e) {
-    	    	e.printStackTrace();
-    	    } catch (NoSuchMethodException e) {
-    	    	e.printStackTrace();
-    	    } catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	return ret;
+
+    public Object getValueFromMethod(String methodName)
+    {
+        Method method;
+        Object ret = null;
+        try
+        {
+            method = this.getClass().getMethod(methodName);
+            ret = method.invoke(this);
+        }
+        catch (SecurityException e)
+        {
+            e.printStackTrace();
+        }
+        catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return ret;
     }
 }

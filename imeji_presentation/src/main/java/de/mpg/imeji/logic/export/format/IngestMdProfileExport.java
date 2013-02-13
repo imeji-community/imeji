@@ -5,18 +5,12 @@ package de.mpg.imeji.logic.export.format;
 
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.Collection;
 
-import javax.xml.bind.JAXBException;
-
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.collection.ViewCollectionBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -36,23 +30,24 @@ public class IngestMdProfileExport extends Export
     @Override
     public void export(OutputStream out, SearchResult sr)
     {
-    	SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);        
-    	ProfileController pc = new ProfileController(session.getUser());
-    	if (sr.getNumberOfRecords() == 1)
-    	{
-    		try {
-				JaxbIngestProfile.writeToOutputStream(pc.retrieve(URI.create(sr.getResults().get(0))),out);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		 
-    	}
-    	else
-    	{
-    		throw new RuntimeException(sr.getNumberOfRecords() + " profile(s) found. Only 1 profile sould be found");
-    	}
-    }       
+        SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        ProfileController pc = new ProfileController();
+        if (sr.getNumberOfRecords() == 1)
+        {
+            try
+            {
+                JaxbUtil.writeToOutputStream(pc.retrieve(URI.create(sr.getResults().get(0)), session.getUser()), out);
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        else
+        {
+            throw new RuntimeException(sr.getNumberOfRecords() + " profile(s) found. Only 1 profile sould be found");
+        }
+    }
 
     @Override
     public String getContentType()

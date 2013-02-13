@@ -15,33 +15,33 @@ import javax.xml.bind.annotation.XmlType;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * Common properties to all imeji objects
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/properties")
-@XmlRootElement(name="properties")
-@XmlType(name="properties")
-@XmlSeeAlso({MetadataProfile.class})
+@XmlRootElement(name = "properties")
+@XmlType(name = "properties")
+@XmlSeeAlso({ MetadataProfile.class })
 public class Properties
 {
     @j2jResource("http://purl.org/dc/terms/creator")
     private URI createdBy;
-    
     @j2jResource("http://imeji.org/terms/modifiedBy")
     private URI modifiedBy;
-    
     @j2jLiteral("http://purl.org/dc/terms/created")
     private Calendar created;
-    
     @j2jLiteral("http://purl.org/dc/terms/modified")
     private Calendar modified;
-    
     @j2jLiteral("http://purl.org/dc/terms/issued")
     private Calendar versionDate;
-    
     @j2jResource("http://imeji.org/terms/status")
     private URI status = Status.PENDING.getUri();
-    
     @j2jLiteral("http://imeji.org/terms/versionNumber")
     private int version = 0;
-    
     @j2jLiteral("http://imeji.org/terms/discardComment")
     private String discardComment;
 
@@ -146,28 +146,39 @@ public class Properties
     {
         this.versionDate = versionDate;
     }
-    
-    public Object getValueFromMethod(String methodName) {
-    	Method method;
-    	
-    	Object ret = null;    	
-    	try {
-    	      method = this.getClass().getMethod(methodName);
-    	      ret = method.invoke(this);
-    	    } catch (SecurityException e) {
-    	    	e.printStackTrace();
-    	    } catch (NoSuchMethodException e) {
-    	    	e.printStackTrace();
-    	    } catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	return ret;
+
+    public Object getValueFromMethod(String methodName)
+    {
+        Method method;
+        Object ret = null;
+        try
+        {
+            method = this.getClass().getMethod(methodName);
+            ret = method.invoke(this);
+        }
+        catch (SecurityException e)
+        {
+            e.printStackTrace();
+        }
+        catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return ret;
     }
 }

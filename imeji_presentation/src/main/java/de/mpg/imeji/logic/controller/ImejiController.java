@@ -30,12 +30,12 @@ import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
- * Abstract class for the controller in imeji dealing with imeji VO: {@link Item} {@link CollectionImeji} {@link Album} {@link User} {@link MetadataProfile}
- *
+ * Abstract class for the controller in imeji dealing with imeji VO: {@link Item} {@link CollectionImeji} {@link Album}
+ * {@link User} {@link MetadataProfile}
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public abstract class ImejiController
 {
@@ -49,12 +49,14 @@ public abstract class ImejiController
     {
         // TODO Auto-generated constructor stub
     }
-    
+
     /**
      * Constructor with a user
+     * 
      * @param user2
-     * @deprecated use rather ImejiController() as constructor. User should be passed as parameter in the methods 
+     * @deprecated use rather ImejiController() as constructor. User should be passed as parameter in the methods
      */
+    @Deprecated
     public ImejiController(User user2)
     {
         this.user = user2;
@@ -116,7 +118,7 @@ public abstract class ImejiController
     public Container loadContainerItems(Container c, User user, int limit, int offset)
     {
         ItemController ic = new ItemController(user);
-        List<String> newUris = ic.searchImagesInContainer(c.getId(), null, null, limit, offset).getResults();
+        List<String> newUris = ic.search(c.getId(), null, null, null).getResults();
         c.getImages().clear();
         for (String s : newUris)
         {
@@ -125,6 +127,13 @@ public abstract class ImejiController
         return c;
     }
 
+    /**
+     * True if at least one {@link Item} is locked by another {@link User}
+     * 
+     * @param uris
+     * @param user
+     * @return
+     */
     public boolean hasImageLocked(List<String> uris, User user)
     {
         for (String uri : uris)
@@ -147,7 +156,6 @@ public abstract class ImejiController
                 ImejiRDF2Bean rdf2Bean = new ImejiRDF2Bean(ImejiJena.counterModel);
                 c = (Counter)rdf2Bean.load(c.getId().toString(), ImejiJena.adminUser, c);
                 int id = c.getCounter();
-                logger.info("Counter : Requested id : " + id);
                 incrementCounter(c);
                 return id;
             }

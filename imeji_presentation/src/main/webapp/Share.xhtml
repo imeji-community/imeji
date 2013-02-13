@@ -1,11 +1,11 @@
-<ui:composition template="templates/template_collection.xhtml"
+<ui:composition template="templates/template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="headline" value="#{lbl.share} #{ShareBean.container.metadata.title}" />
 	<ui:define name="mainContent">
-	
+		<h:outputText value="#{ShareBean.init}"/>
 		<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 		 	<ui:include src="./include/History.xhtml"></ui:include>
 		</h:panelGroup>

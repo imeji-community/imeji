@@ -1,8 +1,8 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	>
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<ui:remove><!-- License: src/main/resources/license/escidoc.license --></ui:remove>
 	
@@ -10,23 +10,26 @@
 		<div class="full_area0 itemList loggedIn collectionList">
 			<div class="full_area0 listHeader">
 				<h:form id="headerForm">
-					<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{SessionBean.user != null}">
-					
-						<input type="button" class="min_imgBtn checkboxSelectButton"/>
-						
-						<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none; width:150px;">
-							<span class="large_area0_p8">
-								<h:outputText value="#{lbl.select_collections}"/>
-							</span>
-							<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" styleClass="large_area0 selectAll">
-								<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
-							</h:commandLink>
-							<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
-								<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
-							</h:commandLink>
-						</div>
-						
-						&#160;
+					<h:panelGroup layout="block" styleClass="free_area0_p8 endline overlayMenu noPaddingTopBottom" rendered="#{SessionBean.user != null}">
+						<h:panelGroup layout="block" styleClass="menuHeader free_area0">
+							<h:panelGroup styleClass="free_area0">
+								<h:outputText styleClass="free_area0" value="#{lbl.select}&#160;"/>
+							</h:panelGroup>
+							<h:panelGroup layout="block" style="margin-top:0.2727em;" class="free_area0 min_imgBtn checkboxSelectButton"/>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="clear menuBody large_area0" style="margin-top:-1.9090em;">
+							<div class="selectMenu large_area2 bordst2">
+								<span class="large_area0_p8"><h:outputText value="#{lbl.select_item}:"/></span>
+								<br />
+								<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
+									<span class="large_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
+								</h:commandLink>
+								<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
+									<span class="large_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
+								</h:commandLink>
+							</div>
+							&#160;
+						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{SessionBean.user == null}">
 						&#160;
@@ -52,19 +55,23 @@
 				</h:form>
 				<span class="seperator"></span>
 				<span class="half_area0_p6 headerSwitchView">
+					<h:form>
 					<a class="expand" title="#{msg.show_all_items_in_medium_view}"><span class="noDisplay"><h:outputText value="#{lbl.show} "/></span><h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/></a>
 					<a class="collapse" title="#{msg.show_all_items_in_short_view}"><span class="noDisplay"><h:outputText value="#{lbl.show} "/></span><h:outputText value="#{lbl.short_view} (#{lbl.all_items})"/></a>
+					</h:form>
 				</span>
 			</div>
 			
 			<ol>
-				<ui:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0" rowKeyVar="index">
+				<ui:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0"  varStatus="index">
 					<li class="full_area0 listItem">
 						<div class="free_area0 itemHeader">
 							<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea">
-								<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{SessionBean.user != null and container.deletable}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
-									<f:ajax event="change"/>
-								</h:selectBooleanCheckbox>
+								<h:form>
+									<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{SessionBean.user != null and container.deletable}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
+										<f:ajax event="change"/>
+									</h:selectBooleanCheckbox>
+								</h:form>
 								&#160;
 							</h:panelGroup>
 							
@@ -193,18 +200,11 @@
 							</div>
 						</div>
 					</li>
-					
-					<ui:include src="../confirmationPages/ContainerRelease.xhtml">
-						<ui:param name="bean" value="#{container}"/>
-					</ui:include>
+					<imjc:DiscardContainer id="dialDiscardContainer" bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>
 					<ui:include src="../confirmationPages/ContainerDelete.xhtml">
 						<ui:param name="bean" value="#{container}"/>
 					</ui:include>
-					<ui:include src="../confirmationPages/ContainerWithdraw.xhtml">
-						<ui:param name="bean" value="#{container}"/>
-						<ui:param name="discardComment" value="#{container.discardComment}"/>
-						<ui:param name="index" value="#{index}"/>
-					</ui:include>
+					
 				</ui:repeat>
 			</ol>
 			
@@ -214,6 +214,7 @@
 		/*	jQuery(document).ready(function(){
 				setTimeout("addItemListFunctions()", 200);
 			}); */
+			
 		</script>
 	</h:panelGroup>
-</html>								
+</ui:composition>						

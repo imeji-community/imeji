@@ -9,6 +9,7 @@ public class ItemValidator
 {
     /**
      * Valid the xml against the profile
+     * 
      * @param itemListXml
      * @param mdp
      */
@@ -17,7 +18,7 @@ public class ItemValidator
         // This must be changed with the real schema object, according to the chosen parser
         ItemSchemaFactory isf = new ItemSchemaFactory();
         Object itemSchema = isf.create(mdp);
-        //TODO
+        // TODO
         // If not valid through an exception
     }
 }

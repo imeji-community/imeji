@@ -27,23 +27,26 @@ All rights reserved. Use is subject to license terms.
     <f:loadBundle var="msg" basename="messages"/>
     <html xmlns="http://www.w3.org/1999/xhtml">
         <h:head>
+       		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
             <meta http-equiv="pragma" content="no-cache"/>
             <meta http-equiv="cache-control" content="no-cache"/>
             <meta http-equiv="expires" content="0"/>
             <title><h:outputText value="imeji - #{HistorySession.currentPage.internationalizedName}"/></title>
             <link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
-            <link rel="stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_darkGrey/styles/theme.css" id="DarkGreyTheme" title="default" type="text/css" media="all"/>
+            <link rel="stylesheet" href="#{Navigation.domain}imeji/resources/css/old_style/themes/skin_darkGrey/styles/theme.css" type="text/css" media="all"/>
+			
+			<h:outputStylesheet library="css" name="basic.css"></h:outputStylesheet>
+			<h:outputStylesheet library="css/theme_default" name="style.css" id="themeDefault"></h:outputStylesheet>
+			
 			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>  
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
-			<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+			<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         </h:head>
         <h:body lang="#{SessionBean.locale}">
             	<style type="text/css">
-            		.metaMenu input:hover, .metaMenu input:focus, .metaMenu button:hover, .metaMenu button:focus, .metaMenu a:hover, .metaMenu a:focus {
-					  background-color:transparent;
-					}
+            		
             	</style>
-                <div id="full_wrapper" class="full wrapper">
+                <h:panelGroup layout="block" styleClass="imj_siteWrapper">
                     <ui:insert name="init"/>
                     <h:inputHidden id="offset" styleClass="offset">
                     </h:inputHidden>
@@ -78,23 +81,12 @@ All rights reserved. Use is subject to license terms.
 										</ui:insert>
 										<!-- content menu upper line ends here -->
 									</div>
-									<ui:remove>
-										<!--  the div container must be inside of the actionsMenu content, for invisibility in case of none content -->
-										<div class="free_area0 sub action">
-											<!-- content menu lower line starts here --><ui:insert name="actionsMenu"/><!-- content menu lower line ends here -->
-										</div>
-									</ui:remove>
-									
-									<h:form id="actionsMenu" >
-										<ui:insert name="actionsMenu"/>
-									</h:form>
-									
+									<ui:insert name="actionsMenu"/>								
 								</div>
 								<ui:insert name="additionalSubheaders">
 									&#160;
 								</ui:insert>
-								
-								<h:panelGroup layout="block" styleClass="full_area0 subHeader">
+								<div class="full_area0 subHeader">
 									<!-- Subheadline starts here -->
 									<h:panelGroup id="subHeader">
 										<h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
@@ -115,30 +107,27 @@ All rights reserved. Use is subject to license terms.
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>
-                                </h:panelGroup>
+                                </div>
                             </div>
                             
                         </div>
                         <div class="clear full_area0">
                             <!-- Main Content -->
-                            <ui:insert name="paginationTop">
-                                &#160;
-                            </ui:insert>
+                            <ui:insert name="paginationTop"></ui:insert>
                             <ui:insert name="searchQuery"/>
                             <ui:insert name="mainContent">
                                 &#160;
                             </ui:insert>
-                            <ui:insert name="paginationBottom">
-                                &#160;
-                            </ui:insert>
+                            <ui:insert name="paginationBottom"></ui:insert>
                         </div>
                     </div>
                     <!-- end: content section -->
                     <div id="dialogs"></div>
-                </div>
+                </h:panelGroup>
                                  
                 <ui:include src="/footerPages/Footer.jspf"/>
                 <script type="text/javascript">
+                /* open a dialog*/
 				function openDialog(id) {
 					/*set the dialog in center of the screen*/
 					var dialog = $(document).find("#" + id);
@@ -154,9 +143,9 @@ All rights reserved. Use is subject to license terms.
 					/* lock the page*/
 					var content = $("#full_wrapper");
 					content.css({ opacity: 0.3});
-					$.lock(dialog);
-					
+					$.lock(dialog);				
 				}
+				/*close a dialog*/
 				function closeDialog(id) {
 					var dialog = $(document).find("#" + id);
 					var content = $("#full_wrapper");
@@ -164,6 +153,9 @@ All rights reserved. Use is subject to license terms.
 					dialog.hide();
 					$.unlock(dialog);
 				}
+				/*
+				* Lock/unlock html elements
+				*/
 				(function($) {
 				    $.extend({
 				lock: function(content){

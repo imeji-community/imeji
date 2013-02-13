@@ -13,19 +13,18 @@ import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
+
 /**
- * 
  * The Date {@link Metadata}. Should be used for {@link Metadata} related to a date
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jDataType("http://imeji.org/terms/metadata#date")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlType(name="date")
+@XmlType(name = "date")
 public class Date extends Metadata
 {
     @j2jLiteral("http://imeji.org/terms/date")

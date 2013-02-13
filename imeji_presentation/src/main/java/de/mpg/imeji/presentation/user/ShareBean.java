@@ -49,16 +49,27 @@ public class ShareBean
     public ShareBean()
     {
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        loadContainer();
-        initMenus();
+    }
+
+    /**
+     * Called when the page is viewed
+     */
+    public String getInit()
+    {
+        URI uri = readURI();
+        if (uri != null)
+        {
+            loadContainer(uri);
+            initMenus(uri);
+        }
+        return "";
     }
 
     /**
      * Load the container (album or collection) to be shared
      */
-    public void loadContainer()
+    public void loadContainer(URI uri)
     {
-        URI uri = URI.create(UrlHelper.getParameterValue("uri"));
         if (isCollection(uri))
         {
             container = ObjectLoader.loadCollectionLazy(uri, session.getUser());
@@ -72,16 +83,17 @@ public class ShareBean
     /**
      * Initialize the menus of the page
      */
-    public void initMenus()
+    public void initMenus(URI uri)
     {
-        selectedGrant = GrantType.PRIVILEGED_VIEWER;
+        selectedGrant = GrantType.VIEWER;
         grantsMenu = new ArrayList<SelectItem>();
-        URI uri = URI.create(UrlHelper.getParameterValue("uri"));
         if (isCollection(uri))
         {
+            grantsMenu.add(new SelectItem(GrantType.VIEWER, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
+                    .getLabel("role_viewer"), "Can view non restricted content for this collection"));
             grantsMenu.add(new SelectItem(GrantType.PRIVILEGED_VIEWER, ((SessionBean)BeanHelper
-                    .getSessionBean(SessionBean.class)).getLabel("role_viewer"),
-                    "Can view all images for this collection"));
+                    .getSessionBean(SessionBean.class)).getLabel("role_privilegedviewer"),
+                    "Can view all content of this collection"));
             grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
                     .getSessionBean(SessionBean.class)).getLabel("role_collection_editor"),
                     "Can edit informations about the collection"));
@@ -166,6 +178,19 @@ public class ShareBean
     private boolean isCollection(URI uri)
     {
         return uri.getPath().contains("/collection/");
+    }
+
+    /**
+     * Read the uri parameter in the url
+     * 
+     * @return
+     */
+    private URI readURI()
+    {
+        String str = UrlHelper.getParameterValue("uri");
+        if (str != null)
+            return URI.create(str);
+        return null;
     }
 
     /**

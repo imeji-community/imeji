@@ -3,6 +3,15 @@
  */
 package de.mpg.imeji.logic.search.vo;
 
+import de.mpg.imeji.logic.search.Search;
+
+/**
+ * A sort criterion for a {@link Search}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SortCriterion
 {
     public enum SortOrder

@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.util;
 
 import javax.faces.application.FacesMessage;
@@ -13,39 +12,27 @@ import org.apache.log4j.Logger;
 
 public class BeanHelper
 {
-    
     private static Logger logger = Logger.getLogger(BeanHelper.class);
 
     /**
      * Return any bean stored in request scope under the specified name.
+     * 
      * @param cls The bean class.
      * @return the actual or new bean instance
      */
     public static synchronized Object getRequestBean(final Class<?> cls)
     {
         String name = null;
-
-        name = (String) cls.getSimpleName();
-
-        Object result = FacesContext
-                .getCurrentInstance()
-                .getExternalContext()
-                .getRequestMap()
-                .get(name);
-        
+        name = cls.getSimpleName();
+        Object result = FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get(name);
         logger.debug("Getting bean " + name + ": " + result);
-
         if (result == null)
         {
             try
             {
                 logger.debug("Creating new request bean: " + name);
                 Object newBean = cls.newInstance();
-                FacesContext
-                        .getCurrentInstance()
-                        .getExternalContext()
-                        .getRequestMap()
-                        .put(name, newBean);
+                FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(name, newBean);
                 return newBean;
             }
             catch (Exception e)
@@ -61,35 +48,23 @@ public class BeanHelper
 
     /**
      * Return any bean stored in session scope under the specified name.
+     * 
      * @param cls The bean class.
      * @return the actual or new bean instance
      */
     public static synchronized Object getSessionBean(final Class<?> cls)
     {
-
         String name = null;
-
-        name = (String) cls.getSimpleName();
-
-        Object result = FacesContext
-                .getCurrentInstance()
-                .getExternalContext()
-                .getSessionMap()
-                .get(name);
-        
+        name = cls.getSimpleName();
+        Object result = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(name);
         logger.debug("Getting bean " + name + ": " + result);
-
         if (result == null)
         {
             try
             {
                 logger.debug("Creating new session bean: " + name);
                 Object newBean = cls.newInstance();
-                FacesContext
-                        .getCurrentInstance()
-                        .getExternalContext()
-                        .getSessionMap()
-                        .put(name, newBean);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(name, newBean);
                 return newBean;
             }
             catch (Exception e)
@@ -105,34 +80,23 @@ public class BeanHelper
 
     /**
      * Return any bean stored in application scope under the specified name.
+     * 
      * @param cls The bean class.
      * @return the actual or new bean instance
      */
     public static synchronized Object getApplicationBean(final Class<?> cls)
     {
         String name = null;
-
-        name = (String) cls.getSimpleName();
-        
-        Object result = FacesContext
-                .getCurrentInstance()
-                .getExternalContext()
-                .getApplicationMap()
-                .get(name);
-        
+        name = cls.getSimpleName();
+        Object result = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(name);
         logger.debug("Getting bean " + name + ": " + result);
-
         if (result == null)
         {
             try
             {
                 logger.debug("Creating new application bean: " + name);
                 Object newBean = cls.newInstance();
-                FacesContext
-                        .getCurrentInstance()
-                        .getExternalContext()
-                        .getApplicationMap()
-                        .put(name, newBean);
+                FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(name, newBean);
                 return newBean;
             }
             catch (Exception e)
@@ -145,7 +109,7 @@ public class BeanHelper
             return result;
         }
     }
-    
+
     /**
      * @param summary summary text
      */
@@ -179,7 +143,7 @@ public class BeanHelper
         message(summary, detail, component, FacesMessage.SEVERITY_INFO);
     }
 
-    /** 
+    /**
      * @param summary summary text
      */
     public static void warn(String summary)
@@ -195,7 +159,7 @@ public class BeanHelper
         warn(summary, detail, null);
     }
 
-    /** 
+    /**
      * @param component associated <code>UIComponent</code>
      * @param summary summary text
      */
@@ -212,7 +176,7 @@ public class BeanHelper
         message(summary, detail, component, FacesMessage.SEVERITY_WARN);
     }
 
-    /** 
+    /**
      * @param summary summary text
      */
     public static void error(String summary)
@@ -228,7 +192,7 @@ public class BeanHelper
         error(summary, detail, null);
     }
 
-    /** 
+    /**
      * @param component associated <code>UIComponent</code>
      * @param summary summary text
      */
@@ -245,7 +209,7 @@ public class BeanHelper
         message(summary, detail, component, FacesMessage.SEVERITY_ERROR);
     }
 
-    /** 
+    /**
      * @param summary summary text
      */
     public static void fatal(String summary)
@@ -278,7 +242,7 @@ public class BeanHelper
         message(summary, detail, component, FacesMessage.SEVERITY_FATAL);
     }
 
-    /** 
+    /**
      * @param summary summary text
      */
     public static void message(String summary, String detail, UIComponent component, Severity severity)
@@ -293,5 +257,4 @@ public class BeanHelper
             FacesContext.getCurrentInstance().addMessage(component.getId(), fm);
         }
     }
-    
 }

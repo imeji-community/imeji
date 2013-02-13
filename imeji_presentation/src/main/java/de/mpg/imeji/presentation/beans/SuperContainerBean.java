@@ -12,15 +12,26 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
+/**
+ * Java Bean for {@link Container} browse pages (collections and albums)
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ * @param <T>
+ */
 public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean<T>
 {
     protected String selectedMenu;
@@ -32,13 +43,16 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     protected List<SelectItem> filterMenu = new ArrayList<SelectItem>();
     private static Logger logger = Logger.getLogger(SuperContainerBean.class);
 
+    /**
+     * Constructor
+     */
     public SuperContainerBean()
     {
         selectedMenu = "SORTING";
         selectedFilter = "all";
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         initMenus();
-        selectedSortCriterion = Search.getIndex("PROPERTIES_LAST_MODIFICATION_DATE").getName();
+        selectedSortCriterion = SearchIndex.names.modified.name();
         selectedSortOrder = SortOrder.DESCENDING.name();
         try
         {
@@ -62,14 +76,15 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         }
     }
 
+    /**
+     * Initialize the menus of the page
+     */
     protected void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem("PROPERTIES_STATUS", sb.getLabel(Search.getIndex("PROPERTIES_STATUS").getName())));
-        sortMenu.add(new SelectItem("CONTAINER_METADATA_TITLE", sb.getLabel(Search.getIndex("CONTAINER_METADATA_TITLE")
-                .getName())));
-        sortMenu.add(new SelectItem("PROPERTIES_LAST_MODIFICATION_DATE", sb.getLabel(Search.indexes.get(
-                "PROPERTIES_LAST_MODIFICATION_DATE").getName())));
+        sortMenu.add(new SelectItem("PROPERTIES_STATUS", sb.getLabel(SearchIndex.names.status.name())));
+        sortMenu.add(new SelectItem("CONTAINER_METADATA_TITLE", sb.getLabel(SearchIndex.names.cont_title.name())));
+        sortMenu.add(new SelectItem("PROPERTIES_LAST_MODIFICATION_DATE", sb.getLabel(SearchIndex.names.modified.name())));
         filterMenu = new ArrayList<SelectItem>();
         filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
         if (sb.getUser() != null)
@@ -81,18 +96,32 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         filterMenu.add(new SelectItem("withdrawn", sb.getLabel("only_withdrawn")));
     }
 
+    /**
+     * Method called from the xhtml page, to initialize the menus
+     * 
+     * @return
+     */
     public String getInitMenus()
     {
         initMenus();
         return "";
     }
 
+    /**
+     * Reset the page, called when url paramenter "init" is set to 1
+     */
+    @Override
     public void reset()
     {
         super.reset();
         initMenus();
     }
 
+    /**
+     * Return the current {@link Filter} for the {@link List} of {@link Container}
+     * 
+     * @return
+     */
     public SearchPair getFilter()
     {
         SearchPair pair = null;
@@ -119,11 +148,21 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         return pair;
     }
 
+    /**
+     * setter
+     * 
+     * @param selectedMenu
+     */
     public void setSelectedMenu(String selectedMenu)
     {
         this.selectedMenu = selectedMenu;
     }
 
+    /**
+     * getter: Return the current tab name in the actions div on the xhtml page
+     * 
+     * @return
+     */
     public String getSelectedMenu()
     {
         if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("tab"))
@@ -133,21 +172,41 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         return selectedMenu;
     }
 
+    /**
+     * select all {@link Container} on the page
+     * 
+     * @return
+     */
     public String selectAll()
     {
         return getNavigationString();
     }
 
+    /**
+     * Unselect all {@link Container} on the page
+     * 
+     * @return
+     */
     public String selectNone()
     {
         return getNavigationString();
     }
 
+    /**
+     * setter
+     * 
+     * @param sortMenu
+     */
     public void setSortMenu(List<SelectItem> sortMenu)
     {
         this.sortMenu = sortMenu;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<SelectItem> getSortMenu()
     {
         return sortMenu;
@@ -158,21 +217,41 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         this.selectedSortOrder = selectedSortOrder;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getSelectedSortOrder()
     {
         return selectedSortOrder;
     }
 
+    /**
+     * setter
+     * 
+     * @param selectedSortCriterion
+     */
     public void setSelectedSortCriterion(String selectedSortCriterion)
     {
         this.selectedSortCriterion = selectedSortCriterion;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getSelectedSortCriterion()
     {
         return selectedSortCriterion;
     }
 
+    /**
+     * Change the sort sort order
+     * 
+     * @return
+     */
     public String toggleSortOrder()
     {
         if (selectedSortOrder.equals("DESCENDING"))
@@ -186,6 +265,11 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         return getNavigationString();
     }
 
+    /**
+     * return the {@link Filter} name defined in the url as a {@link String}
+     * 
+     * @return
+     */
     public String getSelectedFilter()
     {
         if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("f")
@@ -197,21 +281,41 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         return selectedFilter;
     }
 
+    /**
+     * setter
+     * 
+     * @param selectedFilter
+     */
     public void setSelectedFilter(String selectedFilter)
     {
         this.selectedFilter = selectedFilter;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<SelectItem> getFilterMenu()
     {
         return filterMenu;
     }
 
+    /**
+     * setter
+     * 
+     * @param filterMenu
+     */
     public void setFilterMenu(List<SelectItem> filterMenu)
     {
         this.filterMenu = filterMenu;
     }
 
+    /**
+     * return the internationalized labels of the {@link Filter}
+     * 
+     * @return
+     */
     public String getFilterLabel()
     {
         for (SelectItem si : filterMenu)

@@ -11,10 +11,22 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
+/**
+ * Java Bean for the {@link Facet}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class FacetsBean
 {
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
 
+    /**
+     * Initialize the {@link FacetsBean} for one {@link SearchQuery} from the item browse page
+     * 
+     * @param searchQuery
+     */
     public FacetsBean(SearchQuery searchQuery)
     {
         try
@@ -29,6 +41,12 @@ public class FacetsBean
         }
     }
 
+    /**
+     * Initialize the {@link FacetsBean} for one {@link SearchQuery} from the collection browse page
+     * 
+     * @param col
+     * @param searchQuery
+     */
     public FacetsBean(CollectionImeji col, SearchQuery searchQuery)
     {
         try

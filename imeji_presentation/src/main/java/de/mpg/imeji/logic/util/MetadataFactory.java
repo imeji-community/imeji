@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.util;
 
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
@@ -17,8 +18,21 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jDataType;
 
+/**
+ * Factory for {@link Metadata}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class MetadataFactory
 {
+    /**
+     * Create a new {@link Metadata} according to its namespace
+     * 
+     * @param typeNamespace
+     * @return
+     */
     public static Metadata createMetadata(String typeNamespace)
     {
         Metadata md = null;
@@ -62,11 +76,23 @@ public class MetadataFactory
         return md;
     }
 
+    /**
+     * Create a {@link Metadata} according to its {@link Types}
+     * 
+     * @param type
+     * @return
+     */
     public static Metadata createMetadata(Metadata.Types type)
     {
         return createMetadata(type.getClazz().getAnnotation(j2jDataType.class).value());
     }
 
+    /**
+     * Create a new {@link Metadata} from its {@link Statement}
+     * 
+     * @param s
+     * @return
+     */
     public static Metadata createMetadata(Statement s)
     {
         Metadata md = createMetadata(MetadataTypesHelper.getTypesForNamespace(s.getType().toString()));
@@ -74,9 +100,9 @@ public class MetadataFactory
         return md;
     }
 
-    //
     /**
-     * Copy metadata to another, and perform some transformation (add search values, format dates, etc.)
+     * Copy a {@link Metadata} to a new {@link Metadata}, and perform some transformation (add search values, format
+     * dates, etc.)
      * 
      * @param metadata
      * @return

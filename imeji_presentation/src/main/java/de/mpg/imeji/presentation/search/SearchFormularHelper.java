@@ -17,7 +17,7 @@ public class SearchFormularHelper
         for (SearchElement se : searchGroup.getElements())
         {
             if (se.getType().equals(SEARCH_ELEMENTS.PAIR)
-                    && SearchIndex.names.IMAGE_COLLECTION.name().equals(((SearchPair)se).getIndex().getName()))
+                    && SearchIndex.names.col.name().equals(((SearchPair)se).getIndex().getName()))
             {
                 return ((SearchPair)se).getValue();
             }

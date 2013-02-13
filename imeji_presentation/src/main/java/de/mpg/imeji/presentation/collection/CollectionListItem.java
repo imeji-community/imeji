@@ -5,19 +5,19 @@ package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
 import java.util.Collection;
+import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
+import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -47,6 +47,12 @@ public class CollectionListItem
     private boolean editable = false;
     private static Logger logger = Logger.getLogger(CollectionListItem.class);
 
+    /**
+     * Construct a new {@link CollectionListItem} with a {@link CollectionImeji}
+     * 
+     * @param collection
+     * @param user
+     */
     public CollectionListItem(CollectionImeji collection, User user)
     {
         try
@@ -84,6 +90,12 @@ public class CollectionListItem
         }
     }
 
+    /**
+     * Initialize security parameters
+     * 
+     * @param collection
+     * @param user
+     */
     private void initSecurity(CollectionImeji collection, User user)
     {
         Security security = new Security();
@@ -92,12 +104,20 @@ public class CollectionListItem
         editable = security.check(OperationsType.UPDATE, user, collection);
     }
 
+    /**
+     * Count the size of the collection
+     * 
+     * @param user
+     */
     private void initSize(User user)
     {
         ItemController ic = new ItemController(user);
-        size = ic.countImagesInContainer(uri, new SearchQuery());
+        size = ic.search(uri, null, null, null).getNumberOfRecords();
     }
 
+    /**
+     * Chek if the {@link CollectionImeji} is selected in the {@link SessionBean}
+     */
     private void initSelected()
     {
         if (((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSelectedCollections().contains(uri))
@@ -108,6 +128,7 @@ public class CollectionListItem
 
     /**
      * Release the {@link Collection} in the list
+     * 
      * @return
      */
     public String release()
@@ -130,6 +151,7 @@ public class CollectionListItem
 
     /**
      * Delete the {@link CollectionImeji} in the list
+     * 
      * @return
      */
     public String delete()
@@ -138,7 +160,7 @@ public class CollectionListItem
         CollectionController cc = new CollectionController();
         try
         {
-            cc.delete(cc.retrieve(uri), sessionBean.getUser());
+            cc.delete(cc.retrieve(uri, sessionBean.getUser()), sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
         }
         catch (Exception e)
@@ -151,33 +173,37 @@ public class CollectionListItem
 
     /**
      * Withdraw the {@link CollectionImeji} of the list
+     * 
      * @return
      */
     public String withdraw()
     {
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        CollectionController cc = new CollectionController();
-        if ("".equals(discardComment.trim()))
+        try
+        {
+            CollectionController cc = new CollectionController();
+            CollectionImeji c = cc.retrieve(uri);
+            c.setDiscardComment(getDiscardComment());
+            cc.withdraw(c, sessionBean.getUser());
+            BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
+        }
+        catch (Exception e)
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
-            BeanHelper.error(sessionBean.getMessage("errorn_withdraw_discardcomment"));
-        }
-        else
-        {
-            try
-            {
-                CollectionImeji c = cc.retrieve(uri);
-                c.setDiscardComment(discardComment);
-                cc.withdraw(c, sessionBean.getUser());
-                BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
-            }
-            catch (Exception e)
-            {
-                BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
-                logger.error(sessionBean.getMessage("error_collection_withdraw"), e);
-            }
+            BeanHelper.error(e.getMessage());
+            logger.error(sessionBean.getMessage("error_collection_withdraw"), e);
         }
         return "pretty:";
+    }
+
+    /**
+     * Listener for the discard comment
+     * 
+     * @param event
+     */
+    public void discardCommentListener(ValueChangeEvent event)
+    {
+        setDiscardComment(event.getNewValue().toString());
     }
 
     public String getTitle()

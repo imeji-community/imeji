@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.beans;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,7 +137,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public void update()
     {
-        // ImejiJena.printModel(ImejiJena.imageModel);
         try
         {
             if (elementsPerPage == 0)
@@ -210,6 +208,25 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     public int getOffset()
     {
         return ((currentPageNumber - 1) * elementsPerPage);
+    }
+
+    /**
+     * Return the first page of the paginator
+     * 
+     * @return
+     */
+    public int getPageOffset()
+    {
+        if (getFirstPaginatorPageNumber() > 1)
+        {
+            return getFirstPaginatorPageNumber() - 1;
+        }
+        return 0;
+    }
+
+    public void setPageOffset(int i)
+    {
+        //
     }
 
     /*

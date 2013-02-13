@@ -20,6 +20,13 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class Page
 {
+    /**
+     * Enumeration of all imeji {@link Page}
+     * 
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     */
     public enum ImejiPages
     {
         IMAGES("Images.xhtml", "history_images"), COLLECTION_IMAGES("CollectionBrowse.xhtml",
@@ -27,24 +34,41 @@ public class Page
                 "Welcome.xhtml", "history_home"), IMAGE("Image.xhtml", "history_image"), COLLECTIONS(
                 "Collections.xhtml", "history_collections"), ALBUMS("Albums.xhtml", "history_albums"), COLLECTION_HOME(
                 "CollectionEntryPage.xhtml", "collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "Search results"), EDIT(
-                "Edit.xhtml", "Edit images"), COLLECTION_IMAGE("CollectionImage.xhtml", "history_image"), ALBUM_IMAGES(
+                "Edit.xhtml", "edit_images"), COLLECTION_IMAGE("CollectionImage.xhtml", "history_image"), ALBUM_IMAGES(
                 "AlbumBrowse.xhtml", "history_images_album"), ALBUM_HOME("AlbumEntryPage.xhtml", "history_album"), ALBUM_IMAGE(
                 "AlbumImage.xhtml", "history_image"), HELP("Help.xhtml", "help"), COLLECTION_INFO(
-                "CollectionView.xhtml", "history_collection_info"), UPLOAD("Upload.xhtml", "history_upload");
+                "CollectionView.xhtml", "history_collection_info"), UPLOAD("Upload.xhtml", "history_upload"), USER(
+                "User.xhtml", "user");
         private String fileName = "";
         private String label;
 
+        /**
+         * Construct an {@link ImejiPages} object
+         * 
+         * @param fileName
+         * @param label
+         */
         private ImejiPages(String fileName, String label)
         {
             this.fileName = fileName;
             this.label = label;
         }
 
+        /**
+         * The label of the {@link ImejiPages}
+         * 
+         * @return
+         */
         public String getLabel()
         {
             return label;
         }
 
+        /**
+         * The filename of the {@link ImejiPages}
+         * 
+         * @return
+         */
         public String getFileName()
         {
             return fileName;

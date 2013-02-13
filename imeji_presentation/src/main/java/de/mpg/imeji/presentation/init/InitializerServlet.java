@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
@@ -75,7 +76,7 @@ public class InitializerServlet extends HttpServlet
             user.setEmail("imeji@mpdl.mpg.de");
             user.setName("imeji Test User");
             user.setNick("itu");
-            user.setEncryptedPassword(UserController.convertToMD5("test"));
+            user.setEncryptedPassword(StringHelper.convertToMD5("test"));
             user.getGrants().add(new Grant(GrantType.CONTAINER_ADMIN, URI.create("http://test.de")));
             uc.create(user);
             logger.info("Created test user successfully");
@@ -107,6 +108,7 @@ public class InitializerServlet extends HttpServlet
         }
     }
 
+    @Override
     public void destroy()
     {
         super.destroy();

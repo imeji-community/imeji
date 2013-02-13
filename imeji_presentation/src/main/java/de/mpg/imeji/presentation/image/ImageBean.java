@@ -61,7 +61,6 @@ public class ImageBean
     private MetadataLabels labels;
     private SingleImageBrowse browse = null;
 
-
     /**
      * Construct a default {@link ImageBean}
      * 
@@ -186,7 +185,7 @@ public class ImageBean
      */
     public void loadImage()
     {
-        item = ObjectLoader.loadImage(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
+        item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
     }
 
     /**

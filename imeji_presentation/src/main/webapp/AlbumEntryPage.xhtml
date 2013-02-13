@@ -1,4 +1,4 @@
-<ui:composition template="templates/template_album.xhtml" 
+<ui:composition template="templates/template.xhtml" 
 		xmlns="http://www.w3.org/1999/xhtml" 
 		xmlns:ui="http://java.sun.com/jsf/facelets" 
 		xmlns:h="http://java.sun.com/jsf/html" 
@@ -11,9 +11,7 @@
 	
 	<ui:define name="contentMenu">
 	
-		<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}" rendered="true">
-			<h:outputText value="#{lbl.album_home}"/>
-		</h:outputLink>
+		<h:outputText value="#{lbl.album_home}" styleClass="free_area0"/>
 		
 		<h:outputText styleClass="seperator void" />
 		
@@ -58,7 +56,7 @@
 						<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
 							<f:param value="#{AlbumBean.id}"/>
 								<ui:repeat var="thumb" value="#{AlbumBean.thumbnails}" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
-									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{thumb.link}"/>
+									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}file?id=#{thumb.link}"/>
 								</ui:repeat>
 								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
 							</h:outputLink>
@@ -92,7 +90,7 @@
 	
 	
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="free_area0 sub action">
+		<h:panelGroup layout="block" styleClass="half_area0 sub action">
 			<h:panelGroup>
 				<h:outputLink styleClass="free_area0" value="#{Navigation.shareUrl}?uri=#{AlbumBean.album.id}"  rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}">
 					<h:outputText value="#{lbl.album_share}"/>

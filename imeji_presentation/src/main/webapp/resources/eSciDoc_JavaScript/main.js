@@ -1,31 +1,3 @@
-/* 
-CDDL HEADER START
-
-The contents of this file are subject to the terms of the
-Common Development and Distribution License, Version 1.0 only
-(the "License"). You may not use this file except in compliance
-with the License.
-
-You can obtain a copy of the license at license/ESCIDOC.LICENSE
-or http://www.escidoc.de/license.
-See the License for the specific language governing permissions
-and limitations under the License.
-
-When distributing Covered Code, include this CDDL HEADER in each
-file and include the License file at license/ESCIDOC.LICENSE.
-If applicable, add the following below this CDDL HEADER, with the
-fields enclosed by brackets "[]" replaced with your own identifying
-information: Portions Copyright [yyyy] [name of copyright owner]
-
-CDDL HEADER END
-
-
-Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
-fÃƒÂ¼r wissenschaftlich-technische Information mbH and Max-Planck-
-Gesellschaft zur FÃƒÂ¶rderung der Wissenschaft e.V.	
-All rights reserved. Use is subject to license terms.
- */
-
 function autosuggestGoogleGeoAPI(suggestionBox, index, pos, type) {
 	var items = suggestionBox.getSelectedItems();
 	var address, longitude, latitude;
@@ -156,90 +128,123 @@ function collapse(firstPart, secondPart) {
 	return firstPart + '.' + secondPart;
 }
 
-function submitPanel(button, message) {
-	var panel = button.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
-	panel.innerHTML = ' <h2><span class="free_area0_p8 xTiny_marginLExcl">'
-			+ message + '</span></h2>'
-	panel.style.opacity = 0.8;
+/**
+ * When a confirmation is confirmed, make the panel emty until the method called
+ * is done
+ * 
+ * @param button
+ * @param message
+ */
+function submitPanel(panelId, message) {
+	var panel = document.getElementById(panelId);
+	if (panel != null) {
+		panel.innerHTML = '<h2><span class="free_area0_p8 xTiny_marginLExcl">'
+				+ message + '</span></h2>';
+	}
 }
-
-
-function clickOnDiscard(index, panelId, errorMessage)
-{
+/**
+ * When Discard is submitted, check the discard comment
+ * 
+ * @param index
+ * @param panelId
+ * @param errorMessage
+ * @returns {Boolean}
+ */
+function clickOnDiscard(index, button, errorMessage) {
 	var listId = '';
-	if (index != '')
-	{
-		listId = ':list:' + index;	
+	if (index != '') {
+		listId = 'list:' + index + ":";
 	}
-	var textArea = document.getElementById('formular' + listId + ":" + panelId + ':discardComment');
-	var button =  document.getElementById('formular' + listId + ":" + panelId + ':btnDiscard');
-	if (textArea.value != '')
-	{
+	// Get textarea with discard comment
+	var textArea = document.getElementById(listId
+			+ 'dialDiscardContainer:discardForm:discardComment');
+	if (textArea.value != '') {
+		// if discard comment is not empty, then procceed to discard
 		return true;
-	}
-	else
-	{
-		var message = document.getElementById('formular' + listId +  ":" + panelId + ':errorMessage');
-		
-		message.innerHTML= errorMessage;
+	} else {
+		// if discard comment is empty, show error message
+		var message = document.getElementById(listId + 'dialDiscardContainer:discardForm:errorMessage');
+		message.innerHTML = errorMessage;
 		return false;
 	}
+	return false;
 }
 
 
+
+/**
+ * Part of the Patch for jsf
+ */
 var currentViewState;
-jsf.ajax.addOnEvent(function(e){
-    var xml = e.responseXML;
-    var source = e.source;
-    var status = e.status;
-    if(status === 'success'){
-        var response = xml.getElementsByTagName('partial-response')[0];
-        if(response !== null){
-            var changes = response.getElementsByTagName('changes')[0];
-            if(changes != undefined){
-                var updates = changes.getElementsByTagName('update');
-                if(updates != undefined){
-                    for(var i = 0; i< updates.length; i++){
-                        var update = updates[i];
-                        var id = update.getAttribute('id');
-                        if(id === 'javax.faces.ViewState'){
-                            currentViewState = update.firstChild.data;
-                            //update all forms
-                            var forms = document.forms;
-                            for(var j = 0; j < forms.length; j++){
-                                var form = forms[j];
-                                var field = form.elements["javax.faces.ViewState"];
-                                if (typeof field == 'undefined') {
-                                    field = document.createElement("input");
-                                    field.type = "hidden";
-                                    field.name = "javax.faces.ViewState";
-                                    form.appendChild(field);
-                                }
-                                field.value = currentViewState;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
- 
-});
+jsf.ajax
+		.addOnEvent(function(e) {
+			var xml = e.responseXML;
+			var source = e.source;
+			var status = e.status;
+			if (status === 'success') {
+				var response = xml.getElementsByTagName('partial-response')[0];
+				if (response !== null) {
+					var changes = response.getElementsByTagName('changes')[0];
+					if (changes != undefined) {
+						var updates = changes.getElementsByTagName('update');
+						if (updates != undefined) {
+							for ( var i = 0; i < updates.length; i++) {
+								var update = updates[i];
+								var id = update.getAttribute('id');
+								if (id === 'javax.faces.ViewState') {
+									currentViewState = update.firstChild.data;
+									// update all forms
+									var forms = document.forms;
+									for ( var j = 0; j < forms.length; j++) {
+										var form = forms[j];
+										var field = form.elements["javax.faces.ViewState"];
+										if (typeof field == 'undefined') {
+											field = document
+													.createElement("input");
+											field.type = "hidden";
+											field.name = "javax.faces.ViewState";
+											form.appendChild(field);
+										}
+										field.value = currentViewState;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 
+		});
 
-var patchJSF = function () {
-  jsf.ajax.addOnEvent(function (e) {
-    if (e.status === 'success') {
-      $("partial-response:first changes:first update[id='javax.faces.ViewState']", e.responseXML).each(function (i, u) {
-        // update all forms
-        $(document.forms).each(function (i, f) {
-          var field = $("input[name='javax.faces.ViewState']", f);
-          if (field.length == 0) {
-            field = $("<input type=\"hidden\" name=\"javax.faces.ViewState\" />").appendTo(f);
-          }
-          field.val(u.firstChild.data);
-        });
-      });
-    }
-  });
+/**
+ * JSF patch for jsf for reaload of ajax component after ajax request
+ */
+var patchJSF = function() {
+	jsf.ajax
+			.addOnEvent(function(e) {
+				if (e.status === 'success') {
+					$(
+							"partial-response:first changes:first update[id='javax.faces.ViewState']",
+							e.responseXML)
+							.each(
+									function(i, u) {
+										// update all forms
+										$(document.forms)
+												.each(
+														function(i, f) {
+															var field = $(
+																	"input[name='javax.faces.ViewState']",
+																	f);
+															if (field.length == 0) {
+																field = $(
+																		"<input type=\"hidden\" name=\"javax.faces.ViewState\" />")
+																		.appendTo(
+																				f);
+															}
+															field
+																	.val(u.firstChild.data);
+														});
+									});
+				}
+			});
 }

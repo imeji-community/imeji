@@ -9,11 +9,23 @@ import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 
+/**
+ * Class helper for {@link Literal} objects
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class LiteralHelper
 {
     private Model model;
     private static Logger logger = Logger.getLogger(LiteralHelper.class);
 
+    /**
+     * Cosntructor for one model
+     * 
+     * @param model
+     */
     public LiteralHelper(Model model)
     {
         this.model = model;
@@ -33,9 +45,8 @@ public class LiteralHelper
         }
         else if (o instanceof BaseDatatype.TypedValue)
         {
-            System.err.println(" BaseDatatype.TypedValue found, check what's happening: " + o);
+            logger.error(" BaseDatatype.TypedValue found, check what's happening: " + o);
             return o;
-            // return ((BaseDatatype.TypedValue)o).lexicalValue;
         }
         return o;
     }

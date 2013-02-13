@@ -17,50 +17,48 @@ import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.misc.LocalizedString;
 
+/**
+ * Define the properties of a {@link Metadata}. {@link Statement} are defined in a {@link MetadataProfile}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/statement")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name="statement")
-@XmlType(name="statement")
+@XmlRootElement(name = "statement")
+@XmlType(name = "statement")
 public class Statement implements Comparable<Statement>
 {
     // Id: creation to be changed with pretty ids
     private URI id = URI.create("http://imeji.org/statement/" + UUID.randomUUID());
-	
-    @j2jResource("http://purl.org/dc/terms/type")    
+    @j2jResource("http://purl.org/dc/terms/type")
     private URI type = URI.create("http://imeji.org/terms/metadata#text");
-    
-    @j2jList("http://www.w3.org/2000/01/rdf-schema#label")    
+    @j2jList("http://www.w3.org/2000/01/rdf-schema#label")
     private Collection<LocalizedString> labels = new ArrayList<LocalizedString>();
-    
-    @j2jResource("http://purl.org/dc/dcam/VocabularyEncodingScheme")    
+    @j2jResource("http://purl.org/dc/dcam/VocabularyEncodingScheme")
     private URI vocabulary;
-    
-    @j2jList("http://imeji.org/terms/literalConstraint")    
+    @j2jList("http://imeji.org/terms/literalConstraint")
     private Collection<String> literalConstraints = new ArrayList<String>();
-    
-    @j2jLiteral("http://imeji.org/terms/isDescription")    
+    @j2jLiteral("http://imeji.org/terms/isDescription")
     private boolean isDescription = false;
-    
-    @j2jLiteral("http://imeji.org/terms/minOccurs")    
+    @j2jLiteral("http://imeji.org/terms/minOccurs")
     private String minOccurs = "0";
-    
     @j2jLiteral("http://imeji.org/terms/maxOccurs")
-    
     private String maxOccurs = "1";
-        
-    @j2jResource("http://imeji.org/terms/parent")    
+    @j2jResource("http://imeji.org/terms/parent")
     private URI parent = null;
-    
-    @j2jLiteral("http://imeji.org/terms/isPreview")    
+    @j2jLiteral("http://imeji.org/terms/isPreview")
     private boolean isPreview = true;
-        
+    @j2jLiteral("http://imeji.org/terms/position")
     private int pos = 0;
+    @j2jLiteral("http://imeji.org/terms/restricted")
+    private boolean restricted = false;
 
     public Statement()
     {
-        // TODO Auto-generated constructor stub
     }
-    
+
     public URI getType()
     {
         return type;
@@ -70,7 +68,7 @@ public class Statement implements Comparable<Statement>
     {
         this.type = type;
     }
-    
+
     public Collection<LocalizedString> getLabels()
     {
         return labels;
@@ -80,7 +78,7 @@ public class Statement implements Comparable<Statement>
     {
         this.labels = labels;
     }
-    
+
     public URI getVocabulary()
     {
         return vocabulary;
@@ -90,7 +88,7 @@ public class Statement implements Comparable<Statement>
     {
         this.vocabulary = vocabulary;
     }
-    
+
     public Collection<String> getLiteralConstraints()
     {
         return literalConstraints;
@@ -100,7 +98,7 @@ public class Statement implements Comparable<Statement>
     {
         this.literalConstraints = literalConstraints;
     }
-    
+
     public String getMinOccurs()
     {
         return minOccurs;
@@ -110,7 +108,7 @@ public class Statement implements Comparable<Statement>
     {
         this.minOccurs = minOccurs;
     }
-    
+
     public String getMaxOccurs()
     {
         return maxOccurs;
@@ -131,6 +129,7 @@ public class Statement implements Comparable<Statement>
         this.pos = pos;
     }
 
+    @Override
     public int compareTo(Statement o)
     {
         if (o.getPos() > this.pos)
@@ -141,7 +140,6 @@ public class Statement implements Comparable<Statement>
             return 1;
     }
 
-    
     public boolean isDescription()
     {
         return isDescription;
@@ -180,5 +178,15 @@ public class Statement implements Comparable<Statement>
     public boolean isPreview()
     {
         return isPreview;
+    }
+
+    public boolean isRestricted()
+    {
+        return restricted;
+    }
+
+    public void setRestricted(boolean restricted)
+    {
+        this.restricted = restricted;
     }
 }

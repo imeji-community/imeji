@@ -14,29 +14,49 @@ import org.apache.http.client.HttpResponseException;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 
+/**
+ * Manage {@link Export}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class ExportManager
 {
     private OutputStream out;
     private Export export;
     private User user;
 
+    /**
+     * Create a new {@link ExportManager} with url parameters, and perform the {@link Export} in the specified
+     * {@link OutputStream}
+     * 
+     * @param out
+     * @param user
+     * @param params
+     * @throws HttpResponseException
+     */
     public ExportManager(OutputStream out, User user, Map<String, String[]> params) throws HttpResponseException
     {
         this.out = out;
         this.user = user;
         export = Export.factory(params);
+        export.setUser(user);
     }
 
+    /**
+     * Write in {@link OutputStream} the export
+     * 
+     * @param sr
+     */
     public void export(SearchResult sr)
     {
         if (export != null)
@@ -56,6 +76,12 @@ public class ExportManager
         }
     }
 
+    /**
+     * Search the element to export
+     * 
+     * @param searchQuery
+     * @return
+     */
     public SearchResult search(SearchQuery searchQuery)
     {
         String collectionId = export.getParam("col");
@@ -89,18 +115,16 @@ public class ExportManager
             ItemController itemController = new ItemController(user);
             if (collectionId != null)
             {
-                result = itemController.searchImagesInContainer(
-                        ObjectHelper.getURI(CollectionImeji.class, collectionId), searchQuery, null,
-                        maximumNumberOfRecords, 0);
+                result = itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId), searchQuery,
+                        null, null);
             }
             else if (albumId != null)
             {
-                result = itemController.searchImagesInContainer(ObjectHelper.getURI(Album.class, albumId), searchQuery,
-                        null, maximumNumberOfRecords, 0);
+                result = itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery, null, null);
             }
             else
             {
-                result = itemController.searchImages(searchQuery, null);
+                result = itemController.search(null, searchQuery, null, null);
             }
         }
         if (result != null && result.getNumberOfRecords() > 0 && result.getNumberOfRecords() > maximumNumberOfRecords)

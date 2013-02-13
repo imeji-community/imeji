@@ -10,15 +10,20 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.vocabulary.RDF;
+
+import com.hp.hpl.jena.Jena;
+
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
-import de.mpg.imeji.logic.search.util.SortHelper;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchIndex.names;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -31,14 +36,14 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.J2JHelper;
+import de.mpg.j2j.helper.SortHelper;
+
 /**
- * 
  * imeji Search, using sparql query
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class Search
 {
@@ -47,6 +52,13 @@ public class Search
     private static Logger logger = Logger.getLogger(Search.class);
     public static Map<String, SearchIndex> indexes = SearchIndexInitializer.init();
 
+    /**
+     * Types of search (related to the different {@link Jena} {@link Model})
+     * 
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     */
     public static enum SearchType
     {
         ITEM, COLLECTION, ALBUM, PROFILE, ALL;
@@ -54,6 +66,7 @@ public class Search
 
     /**
      * Initialize the search
+     * 
      * @param type
      * @param containerURI
      */
@@ -106,18 +119,42 @@ public class Search
         return sr.getResults();
     }
 
+    /**
+     * Search for complex queries over the complete imeji data
+     * 
+     * @param sq
+     * @param sortCri
+     * @param user
+     * @return
+     */
     private List<String> advanced(SearchQuery sq, SortCriterion sortCri, User user)
     {
         return advanced(new ArrayList<String>(), sq, sortCri, user);
     }
 
+    /**
+     * Search for complex queries over a set of data (defined by the previousResults parameter as a {@link List} of
+     * {@link Object} uris):<br/>
+     * - do a list of simple search and perform logical relations over the results
+     * 
+     * @param previousResults
+     * @param sq
+     * @param sortCri
+     * @param user
+     * @return
+     */
     private List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
     {
+        // Set null parameters
         if (sq == null)
             sq = new SearchQuery();
         if (sortCri == null)
             sortCri = new SortCriterion();
-        List<String> results = new ArrayList<String>(previousResults);
+        List<String> results = null;
+        if (previousResults == null)
+            results = new ArrayList<String>();
+        else
+            results = new ArrayList<String>(previousResults);
         // second case is useless so far, since all query within a container are container specific.
         if (sq.isEmpty() || (containerURI != null && results.isEmpty() && false))
         {
@@ -150,7 +187,7 @@ public class Search
                     logic = ((SearchLogicalRelation)se).getLogicalRelation();
                     break;
                 default:
-                	break;
+                    break;
             }
             if (se.getType() != SearchElement.SEARCH_ELEMENTS.LOGICAL_RELATIONS)
             {
@@ -166,6 +203,29 @@ public class Search
         return results;
     }
 
+    /**
+     * Simple search for search with one {@link SearchPair}
+     * 
+     * @param pair
+     * @param sortCri
+     * @param user
+     * @return
+     */
+    private List<String> simple(SearchPair pair, SortCriterion sortCri, User user)
+    {
+        String sparqlQuery = SimpleQueryFactory.getQuery(getRDFType(type), pair, sortCri, user, (containerURI != null),
+                getSpecificQuery());
+        return ImejiSPARQL.exec(sparqlQuery, getModelName(type));
+    }
+
+    /**
+     * Perform {@link LOGICAL_RELATIONS} between 2 {@link List} of {@link String}
+     * 
+     * @param l1
+     * @param logic
+     * @param l2
+     * @return
+     */
     @SuppressWarnings("unchecked")
     private List<String> doLogicalOperation(List<String> l1, LOGICAL_RELATIONS logic, List<String> l2)
     {
@@ -181,13 +241,11 @@ public class Search
         return l1;
     }
 
-    private List<String> simple(SearchPair pair, SortCriterion sortCri, User user)
-    {
-        String sparqlQuery = SimpleQueryFactory.getQuery(getRDFType(type), pair, sortCri, user, (containerURI != null),
-                getSpecificQuery());
-        return ImejiSPARQL.exec(sparqlQuery, getModelName(type));
-    }
-
+    /**
+     * REturn a sparql query {@link String} to be added to search query in some specific cases
+     * 
+     * @return
+     */
     private String getSpecificQuery()
     {
         String specificQuery = "";
@@ -215,6 +273,12 @@ public class Search
         return specificQuery;
     }
 
+    /**
+     * Return the name of the {@link Model} as a {@link String} according to the current {@link SearchType}
+     * 
+     * @param type
+     * @return
+     */
     private String getModelName(SearchType type)
     {
         switch (type)
@@ -232,6 +296,12 @@ public class Search
         }
     }
 
+    /**
+     * Return the {@link RDF}.type of object searched according to the {@link SearchType}
+     * 
+     * @param type
+     * @return
+     */
     private String getRDFType(SearchType type)
     {
         switch (type)
@@ -247,6 +317,12 @@ public class Search
         }
     }
 
+    /**
+     * Get {@link SearchIndex} from its {@link String} name
+     * 
+     * @param indexName
+     * @return
+     */
     public static SearchIndex getIndex(String indexName)
     {
         SearchIndex index = indexes.get(indexName);
@@ -258,6 +334,12 @@ public class Search
         return index;
     }
 
+    /**
+     * Get {@link SearchIndex} from its {@link names}
+     * 
+     * @param indexname
+     * @return
+     */
     public static SearchIndex getIndex(SearchIndex.names indexname)
     {
         return getIndex(indexname.name());

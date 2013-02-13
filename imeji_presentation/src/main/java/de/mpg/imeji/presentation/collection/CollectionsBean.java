@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 
+import com.hp.hpl.jena.sparql.pfunction.library.container;
+
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
@@ -25,20 +27,23 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+
 /**
- * 
  * Bean for the collections page
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
     private String query = "";
+    /**
+     * The comment required to discard a {@link container}
+     */
+    private String discardComment = "";
 
     /**
      * Bean for the collections page
@@ -95,16 +100,27 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         return ImejiFactory.collectionListToListItem(collections, sb.getUser());
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public SessionBean getSb()
     {
         return sb;
     }
 
+    /**
+     * setter
+     * 
+     * @param sb
+     */
     public void setSb(SessionBean sb)
     {
         this.sb = sb;
     }
 
+    @Override
     public String selectAll()
     {
         for (CollectionListItem bean : getCurrentPartList())
@@ -121,37 +137,78 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         return "";
     }
 
+    @Override
     public String selectNone()
     {
         sb.getSelectedCollections().clear();
         return "";
     }
 
+    /**
+     * Delete all selected {@link CollectionImeji}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String deleteAll() throws Exception
     {
         int count = 0;
         for (URI uri : sb.getSelectedCollections())
         {
-            CollectionController collectionController = new CollectionController(sb.getUser());
-            CollectionImeji collection = collectionController.retrieve(uri);
+            CollectionController collectionController = new CollectionController();
+            CollectionImeji collection = collectionController.retrieve(uri, sb.getUser());
             collectionController.delete(collection, sb.getUser());
             count++;
         }
         sb.getSelectedCollections().clear();
         if (count == 0)
+        {
             BeanHelper.warn(sb.getMessage("error_delete_no_collection_selected"));
+        }
         else
+        {
             BeanHelper.info(count + " " + sb.getMessage("success_collections_delete"));
+        }
         return "pretty:collections";
     }
 
+    /**
+     * setter
+     * 
+     * @param query
+     */
     public void setQuery(String query)
     {
         this.query = query;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getQuery()
     {
         return query;
+    }
+
+    /**
+     * getter
+     * 
+     * @return
+     */
+    public String getDiscardComment()
+    {
+        return discardComment;
+    }
+
+    /**
+     * setter
+     * 
+     * @param discardComment
+     */
+    public void setDiscardComment(String discardComment)
+    {
+        this.discardComment = discardComment;
     }
 }

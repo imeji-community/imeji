@@ -5,19 +5,16 @@ package de.mpg.imeji.logic.search.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.mpg.imeji.logic.search.vo.ComparableSearchResult;
-
 /**
  * Based on {@link org.apache.commons.collections.CollectionUtils} <br/>
- * Introduced order to {@link org.apache.commons.collections.CollectionUtils}
+ * Introduced order to {@link org.apache.commons.collections.CollectionUtils}<br/>
+ * Much faster than other classes
  * 
  * @author saquet
  */
@@ -25,6 +22,13 @@ public class CollectionUtils
 {
     private static Integer INTEGER_ONE = new Integer(1);
 
+    /**
+     * Make UNION operation between 2 {@link Collection}
+     * 
+     * @param a
+     * @param b
+     * @return
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static Collection union(final Collection a, final Collection b)
     {
@@ -45,6 +49,13 @@ public class CollectionUtils
         return list;
     }
 
+    /**
+     * Make INTERSECTION operation between 2 {@link Collection}
+     * 
+     * @param a
+     * @param b
+     * @return
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static Collection intersection(final Collection a, final Collection b)
     {
@@ -95,5 +106,4 @@ public class CollectionUtils
         }
         return 0;
     }
-    
 }

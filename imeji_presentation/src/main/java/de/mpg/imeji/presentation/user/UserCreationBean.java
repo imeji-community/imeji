@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.user;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
@@ -14,6 +15,13 @@ import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.exceptions.NotFoundException;
 
+/**
+ * Java Bean for the Create new user page
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class UserCreationBean
 {
     private User user;
@@ -21,17 +29,24 @@ public class UserCreationBean
     private boolean sendEmail = false;
     private static Logger logger = Logger.getLogger(UserCreationBean.class);
 
+    /**
+     * Construct new bean
+     */
     public UserCreationBean()
     {
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.setUser(new User());
     }
 
-    public String create() throws Exception
+    /**
+     * Method called when user create a new user
+     * 
+     * @return
+     * @throws Exception
+     */
+    public String create()
     {
-        UserController uc = new UserController(sb.getUser());
-        String regexEmailMatch = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
-        if (!user.getEmail().matches(regexEmailMatch))
+        if (!isValidEmail(user.getEmail()))
         {
             BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
         }
@@ -39,24 +54,20 @@ public class UserCreationBean
         {
             try
             {
-                if (uc.retrieve(user.getEmail()) != null)
+                if (userAlreadyExists())
                 {
                     BeanHelper.error(sb.getMessage("error_user_already_exists"));
                 }
-            }
-            catch (NotFoundException e)
-            {
-                logger.info("User not found: will be created");
-                PasswordGenerator generator = new PasswordGenerator();
-                String password = generator.generatePassword();
-                user.setEncryptedPassword(UserController.convertToMD5(password));
-                uc.create(user);
-                if (sendEmail)
+                else
                 {
-                    sendNewAccountEmail(password);
+                    String password = createNewUser();
+                    if (sendEmail)
+                    {
+                        sendNewAccountEmail(password);
+                    }
+                    logger.info("New user created: " + user.getEmail());
+                    BeanHelper.info(sb.getMessage("success_user_create"));
                 }
-                logger.info("New user created: " + user.getEmail());
-                BeanHelper.info(sb.getMessage("success_user_create"));
             }
             catch (Exception e)
             {
@@ -66,6 +77,58 @@ public class UserCreationBean
         return "pretty:";
     }
 
+    /**
+     * Create a new {@link User}
+     * 
+     * @throws Exception
+     */
+    private String createNewUser() throws Exception
+    {
+        UserController uc = new UserController(sb.getUser());
+        PasswordGenerator generator = new PasswordGenerator();
+        String password = generator.generatePassword();
+        user.setEncryptedPassword(StringHelper.convertToMD5(password));
+        uc.create(user);
+        return password;
+    }
+
+    /**
+     * Is true if the Email is valid
+     * 
+     * @return
+     */
+    private boolean isValidEmail(String email)
+    {
+        String regexEmailMatch = "[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
+        return email.matches(regexEmailMatch);
+    }
+
+    /**
+     * True if the {@link User} exists
+     * 
+     * @return
+     * @throws Exception
+     */
+    private boolean userAlreadyExists() throws Exception
+    {
+        try
+        {
+            UserController uc = new UserController(sb.getUser());
+            uc.retrieve(user.getEmail());
+            return true;
+        }
+        catch (NotFoundException e)
+        {
+            logger.info("User not found: " + user.getEmail());
+            return false;
+        }
+    }
+
+    /**
+     * Send an email to the current {@link User}
+     * 
+     * @param password
+     */
     public void sendNewAccountEmail(String password)
     {
         EmailClient emailClient = new EmailClient();
@@ -82,26 +145,51 @@ public class UserCreationBean
         }
     }
 
+    /**
+     * setter
+     * 
+     * @param user
+     */
     public void setUser(User user)
     {
         this.user = user;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public User getUser()
     {
         return user;
     }
 
+    /**
+     * True if the user has sysadmin Rights
+     * 
+     * @return
+     */
     public boolean isSysAdmin()
     {
         return sb.isAdmin();
     }
 
+    /**
+     * getter - True if the selectbox "send email to user" has been selected
+     * 
+     * @return
+     */
     public boolean isSendEmail()
     {
         return sendEmail;
     }
 
+    /**
+     * setter
+     * 
+     * @param sendEmail
+     */
     public void setSendEmail(boolean sendEmail)
     {
         this.sendEmail = sendEmail;

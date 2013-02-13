@@ -93,7 +93,7 @@ public abstract class MetadataEditor
         }
         catch (Exception e)
         {
-            throw new RuntimeException(sb.getMessage("error_metadata_edit") + " " + e);
+            throw new RuntimeException(sb.getMessage("error_metadata_edit") + " ", e);
         }
     }
 

@@ -1,4 +1,5 @@
 package de.mpg.imeji.presentation.beans;
+
 ///**
 // * License: src/main/resources/license/escidoc.license
 // */
@@ -56,4 +57,4 @@ package de.mpg.imeji.presentation.beans;
 //	}
 //	
 //	
-//}
+// }

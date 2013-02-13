@@ -49,7 +49,8 @@ public class CRUDTransaction extends Transaction
     }
 
     /**
-     * Make the CRUD operation for one {@link Object} thanks to the {@link ResourceController} 
+     * Make the CRUD operation for one {@link Object} thanks to the {@link ResourceController}
+     * 
      * @param rc
      * @param o
      * @throws Exception

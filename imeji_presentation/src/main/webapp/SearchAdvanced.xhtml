@@ -126,7 +126,7 @@
 							</ui:repeat>
 						</h:panelGroup>
 						<h:panelGroup styleClass="full_area0_p8">
-							<h:commandButton value="#{lbl.clear_all_values}" action="#{AdvancedSearchBean.initFormular}" styleClass="medium_marginLExcl free_area1_p8 cancelButton">
+							<h:commandButton value="#{lbl.clear_all_values}" action="#{AdvancedSearchBean.reset}" styleClass="medium_marginLExcl free_area1_p8 cancelButton">
 								<f:ajax execute="@form" render="@form :ajaxQuery"/>
 							</h:commandButton>
 							<h:commandButton value="#{lbl.search}" action="#{AdvancedSearchBean.search}" styleClass="free_area1_p8 activeButton advancedSearchButton">

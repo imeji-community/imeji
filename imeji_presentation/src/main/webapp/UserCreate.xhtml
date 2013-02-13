@@ -1,110 +1,71 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="templates/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-<ui:remove>
-	<!--
-
- CDDL HEADER START
-
- The contents of this file are subject to the terms of the
- Common Development and Distribution License, Version 1.0 only
- (the "License"). You may not use this file except in compliance
- with the License.
-
- You can obtain a copy of the license at license/ESCIDOC.LICENSE
- or http://www.escidoc.de/license.
- See the License for the specific language governing permissions
- and limitations under the License.
-
- When distributing Covered Code, include this CDDL HEADER in each
- file and include the License file at license/ESCIDOC.LICENSE.
- If applicable, add the following below this CDDL HEADER, with the
- fields enclosed by brackets "[]" replaced with your own identifying
- information: Portions Copyright [yyyy] [name of copyright owner]
-
- CDDL HEADER END
-
-
- Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
- für wissenschaftlich-technische Information mbH and Max-Planck-
- Gesellschaft zur Förderung der Wissenschaft e.V.
- All rights reserved. Use is subject to license terms.
--->
-</ui:remove>
-	<body>
-		<ui:composition template="templates/template.xhtml">
 			<ui:param name="headline" value="#{lbl.admin_user_new}"/>
 			<ui:define name="mainContent">
 			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!SessionBean.admin}">
 				<h2><h:outputText value="You are not allowed to view this page"/></h2>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{SessionBean.admin}">
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
-					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="#{lbl.admin_user_info}"/>
-					</h3>
-					<span class="seperator"></span>
-					<div class="free_area0 itemBlockContent endline">
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="Email"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:inputText id="inputEmailText" styleClass="quad_txtInput" value="#{UserCreationBean.user.email}" required="true"/>
-							</span>
-						</h:panelGroup>
+				<h:form>
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+						<h3 class="xLarge_area0_p8 endline blockHeader">
+							<h:outputText value="#{lbl.admin_user_info}"/>
+						</h3>
+						<span class="seperator"></span>
+						<div class="free_area0 itemBlockContent endline">
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="Email"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline">
+									<h:inputText id="inputEmailText" styleClass="quad_txtInput" value="#{UserCreationBean.user.email}" required="true"/>
+								</span>
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="Name"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline">
+									<h:inputText id="inputNameText" styleClass="quad_txtInput" value="#{UserCreationBean.user.name}" required="true"/>
+								</span>
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="Nickname"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline">
+									<h:inputText id="inputNickText" styleClass="quad_txtInput" value="#{UserCreationBean.user.nick}" required="true"/>
+								</span>
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="Send an email"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline">
+									<h:selectBooleanCheckbox value="#{UserCreationBean.sendEmail}"/>
+								</span>
+							</h:panelGroup>
+							
+						</div>
+					</h:panelGroup>
+					<div class="full_area0 formButtonArea">
 						
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="Name"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:inputText id="inputNameText" styleClass="quad_txtInput" value="#{UserCreationBean.user.name}" required="true"/>
-							</span>
-						</h:panelGroup>
-						
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="Nickname"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:inputText id="inputNickText" styleClass="quad_txtInput" value="#{UserCreationBean.user.nick}" required="true"/>
-							</span>
-						</h:panelGroup>
-						
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="Send an email"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:selectBooleanCheckbox value="#{UserCreationBean.sendEmail}"/>
-							</span>
-						</h:panelGroup>
-						
+						<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" >
+							<h:outputText value="#{lbl.cancel}" />
+						</h:outputLink>
+						<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
 					</div>
-				</h:panelGroup>
-				<div class="full_area0 formButtonArea">
-					
-					<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" >
-						<h:outputText value="#{lbl.cancel}" />
-					</h:outputLink>
-					<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
-			</div>
+				</h:form>
 			</h:panelGroup>
-			
-		
 		</ui:define>
-		</ui:composition>
-	</body>
-</html>
-
-
-
-
-
+</ui:composition>

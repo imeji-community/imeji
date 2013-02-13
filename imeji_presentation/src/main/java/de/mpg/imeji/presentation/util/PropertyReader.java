@@ -115,18 +115,19 @@ public class PropertyReader
         // First try to search in file system
         try
         {
-            String serverConfDirectory;
-            if (System.getProperty("jboss.server.config.dir") != null)
-            {
-                serverConfDirectory = System.getProperty("jboss.server.config.dir");
-            }
-            else
-            {
-                serverConfDirectory = System.getProperty("catalina.home") + "/conf";
-            }
-            logger.info("loading properties from " + serverConfDirectory + "//" + filepath);
-            instream = new FileInputStream(serverConfDirectory + "//" + filepath);
-            fileLocation = (new File(serverConfDirectory + "//" + filepath)).getAbsolutePath();
+        	String serverConfDirectory;
+        	if (System.getProperty("jboss.server.config.dir") != null)
+        	{
+        		serverConfDirectory = System.getProperty("jboss.server.config.dir");
+        	}
+        	else
+        	{
+        		serverConfDirectory = System.getProperty("catalina.home") + "/conf";
+        	}
+        	
+        	logger.info("loading properties from " + serverConfDirectory + "/" + filepath);
+            instream = new FileInputStream(serverConfDirectory + "/" + filepath);
+            fileLocation = (new File(serverConfDirectory + "/" + filepath)).getAbsolutePath();
         }
         catch (Exception e)
         {

@@ -128,7 +128,7 @@
 		        			<ui:repeat id="imagesList" var="image" value="#{EditImageMetadataBean.editor.items}" rowKeyVar="indexImage">
 		        				<h:panelGroup styleClass="full_area0_p0 preListHeader" >
 			        				<h:panelGroup styleClass="huge_area0_p8">
-										<h:graphicImage alt="#{image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{image.thumbnail}"/>
+										<h:graphicImage alt="#{image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}file?id=#{image.thumbnail}"/>
 			        				</h:panelGroup>
 			        				<h:panelGroup styleClass="half_area0" rendered="#{image.profile == EditImageMetadataBean.profile.id}">
 				        				<ui:repeat id="metadata" var="md" value="#{image.metadata}" rowKeyVar="indexMetadata">

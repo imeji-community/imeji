@@ -94,7 +94,7 @@
 						<!-- COLLECTION IMAGES -->
 						<h:outputLink value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
 							<ui:repeat var="thumb" value="#{ViewCollectionBean.thumbnails}">
-								<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{thumb.link}"/>
+								<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}file?id=#{thumb.link}"/>
 							</ui:repeat>
 						</h:outputLink>
 						

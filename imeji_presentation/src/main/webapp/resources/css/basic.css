@@ -404,12 +404,9 @@ table {
  * imeji style prefix for all classes and ids: imj_ 
  ========================================================================== */
 
-
-
-
-
-
-
+form {
+	display:inline;
+}
 
 
 

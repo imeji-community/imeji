@@ -12,7 +12,7 @@
 				<div id="welcomeInfo" class="imj_cont_2_5 imj_welcomeInfo" style="float:left;">
 					<style type="text/css">
 						img {
-							border:0 none;
+							border:0 none; 
 						}
 						div.LogoNSearch {
 							overflow:visible;
@@ -127,6 +127,7 @@
 							height:20em !important;
 						}
 					</style>
+					 
 					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
 						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
 						<!-- tabs -->
@@ -429,8 +430,8 @@
 					};
 					
 					//add placeholder for login menu
-					jQuery(".metaMenu input[type='text']").attr("placeholder", placeholder_username);
-					jQuery(".metaMenu input[type='password']").attr("placeholder", placeholder_password);
+					jQuery(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
+					jQuery(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
 					jQuery(".quickSearchTextInput").attr("placeholder", placeholder_simpleSearch);
 					
 					//delete the page title on welcome page

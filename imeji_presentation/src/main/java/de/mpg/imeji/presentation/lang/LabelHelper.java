@@ -13,10 +13,10 @@ public class LabelHelper
     {
         String l = "";
         if (labels.hasNext())
-            l = ((LocalizedString)labels.next()).toString();
+            l = labels.next().toString();
         while (labels.hasNext())
         {
-            LocalizedString ls = (LocalizedString)labels.next();
+            LocalizedString ls = labels.next();
             if (ls.getLang().equals("eng"))
             {
                 l = ls.toString();

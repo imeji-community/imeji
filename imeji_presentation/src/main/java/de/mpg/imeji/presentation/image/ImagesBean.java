@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.image;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +12,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.http.HttpRequest;
 
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -60,6 +64,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private SearchQuery searchQuery = new SearchQuery();
     private String discardComment;
     private String selectedImagesContext;
+    private SearchResult searchResult;
 
     /**
      * The bean for all list of images
@@ -70,7 +75,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         filters = new FiltersBean();
-        initMenus();
         selectedSortCriterion = null;
         try
         {
@@ -101,59 +105,101 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     public String getInitPage()
     {
-        getNavigationString();
+        isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
+        browseInit();
         initMenus();
-        if (facets != null)
-        {
-            facets.getFacets().clear();
-        }
-        initBackPage();
+        return "";
+    }
+
+    /**
+     * Initialization for all browse pages for get queries (non ajay queries)
+     */
+    protected void browseInit()
+    {
         try
         {
-            query = UrlHelper.getParameterValue("q");
-            searchQuery = URLQueryTransformer.parseStringQuery(query);
+            String q = UrlHelper.getParameterValue("q");
+            if (q != null)
+            {
+                setQuery(URLEncoder.encode(q, "UTF-8"));
+                setSearchQuery(URLQueryTransformer.parseStringQuery(query));
+            }
         }
         catch (Exception e)
         {
             BeanHelper.error("Error parsing query");
             logger.error("Error parsing query", e);
         }
-        searchFilter = null;
-        for (Filter f : filters.getSession().getFilters())
-        {
-            if (FacetType.SEARCH.equals(f.getType()))
-            {
-                searchFilter = f;
-            }
-        }
-        isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
-        return "";
+        SortCriterion sortCriterion = initSortCriterion();
+        searchResult = search(searchQuery, sortCriterion);
+        searchResult.setQuery(getQuery());
+        searchResult.setSort(sortCriterion);
+        totalNumberOfRecords = searchResult.getNumberOfRecords();
+        initMenus();
+        cleanSelectItems();
+        initBackPage();
+        initFilters();
+        cleanFacets();
     }
 
     /**
      * Init all menus of the page
      */
-    private void initMenus()
+    public void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(null, session.getLabel("default")));
-        sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_CREATION_DATE, session
-                .getLabel(SearchIndex.names.PROPERTIES_CREATION_DATE.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.IMAGE_COLLECTION, session
-                .getLabel(SearchIndex.names.IMAGE_COLLECTION.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE, session
-                .getLabel(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel(SearchIndex.names.created.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel(SearchIndex.names.col.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel(SearchIndex.names.modified.name())));
         selectedSortOrder = SortOrder.DESCENDING.name();
     }
 
     @Override
-    public String getNavigationString()
+    public List<ThumbnailBean> retrieveList(int offset, int limit)
+    {
+        // load images
+        Collection<Item> items = loadImages(searchResult.getResults(), offset, limit);
+        return ImejiFactory.imageListToThumbList(items);
+    }
+
+    /**
+     * Perform the {@link Search}
+     * 
+     * @param searchQuery
+     * @param sortCriterion
+     * @return
+     */
+    public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
+    {
+        ItemController controller = new ItemController(session.getUser());
+        return controller.search(null, searchQuery, sortCriterion, null);
+    }
+
+    /**
+     * load all items (defined by their uri)
+     * 
+     * @param uris
+     * @return
+     */
+    public Collection<Item> loadImages(List<String> uris, int offset, int limit)
+    {
+        ItemController controller = new ItemController(session.getUser());
+        return controller.loadItems(uris, limit, offset);
+    }
+
+    public void cleanSelectItems()
     {
         if (session.getSelectedImagesContext() != null && !(session.getSelectedImagesContext().equals("pretty:browse")))
         {
             session.getSelected().clear();
         }
         session.setSelectedImagesContext("pretty:browse");
+    }
+
+    @Override
+    public String getNavigationString()
+    {
         return "pretty:browse";
     }
 
@@ -183,44 +229,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return sortCriterion;
     }
 
-    @Override
-    public List<ThumbnailBean> retrieveList(int offset, int limit)
-    {
-        SortCriterion sortCriterion = initSortCriterion();
-        SearchResult searchResult = search(searchQuery, sortCriterion);
-        searchResult.setQuery(query);
-        searchResult.setSort(sortCriterion);
-        totalNumberOfRecords = searchResult.getNumberOfRecords();
-        // load images
-        Collection<Item> items = loadImages(searchResult.getResults());
-        return ImejiFactory.imageListToThumbList(items);
-    }
-
-    /**
-     * Perform the {@link Search}
-     * 
-     * @param searchQuery
-     * @param sortCriterion
-     * @return
-     */
-    public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
-    {
-        ItemController controller = new ItemController(session.getUser());
-        return controller.searchImages(searchQuery, sortCriterion);
-    }
-
-    /**
-     * Laod all items (defined by their uri)
-     * 
-     * @param uris
-     * @return
-     */
-    public Collection<Item> loadImages(List<String> uris)
-    {
-        ItemController controller = new ItemController(session.getUser());
-        return controller.loadItems(uris, getElementsPerPage(), getOffset());
-    }
-
     /**
      * return the current {@link SearchQuery} in a user friendly style.
      * 
@@ -236,6 +244,22 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     }
 
     /**
+     * Init the filters with the new search query
+     */
+    public void initFilters()
+    {
+        filters = new FiltersBean(searchQuery, totalNumberOfRecords);
+        searchFilter = null;
+        for (Filter f : filters.getSession().getFilters())
+        {
+            if (FacetType.SEARCH.equals(f.getType()))
+            {
+                searchFilter = f;
+            }
+        }
+    }
+
+    /**
      * Initialize the page when the page has been called by the browser back button
      */
     public void initBackPage()
@@ -244,15 +268,36 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
         if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
         {
-            filters = new FiltersBean(query, totalNumberOfRecords);
             hs.getCurrentPage().setFilters(fs.getFilters());
             hs.getCurrentPage().setQuery(fs.getWholeQuery());
         }
         else
         {
-            filters = new FiltersBean(query, totalNumberOfRecords);
             hs.getCurrentPage().setFilters(fs.getFilters());
             hs.getCurrentPage().setQuery(fs.getWholeQuery());
+        }
+    }
+
+    /**
+     * Methods called at the end of the page loading, which initialize the facets
+     * 
+     * @return
+     * @throws Exception
+     */
+    public String initFacets() throws Exception
+    {
+        this.setFacets(new FacetsBean(URLQueryTransformer.parseStringQuery(query)));
+        return "pretty";
+    }
+
+    /**
+     * When the page starts to load, clean all facets to avoid displaying wrong facets
+     */
+    public void cleanFacets()
+    {
+        if (facets != null)
+        {
+            facets.getFacets().clear();
         }
     }
 
@@ -338,7 +383,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private void withdraw(List<String> uris) throws Exception
     {
         ItemController ic = new ItemController(session.getUser());
-        Collection<Item> items = loadImages(uris);
+        Collection<Item> items = loadImages(uris, getElementsPerPage(), getOffset());
         int count = 0;
         if ("".equals(discardComment.trim()))
         {
@@ -361,7 +406,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     private void delete(List<String> uris) throws Exception
     {
-        Collection<Item> items = loadImages(uris);
+        Collection<Item> items = loadImages(uris, 0, -1);
         ItemController ic = new ItemController(session.getUser());
         int count = ic.delete((List<Item>)items, session.getUser());
         BeanHelper.info(count + " " + session.getLabel("images_deleted"));
@@ -435,6 +480,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
     }
 
+    /**
+     * The based url used to link to the detail page
+     * 
+     * @return
+     */
     public String getImageBaseUrl()
     {
         return navigation.getApplicationUri();
@@ -443,12 +493,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public String getBackUrl()
     {
         return navigation.getBrowseUrl();
-    }
-
-    public String initFacets() throws Exception
-    {
-        this.setFacets(new FacetsBean(URLQueryTransformer.parseStringQuery(query)));
-        return "pretty";
     }
 
     public List<SelectItem> getSortMenu()
@@ -627,5 +671,13 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public void setSearchFilter(Filter searchFilter)
     {
         this.searchFilter = searchFilter;
+    }
+
+    /**
+     * @return the searchResult
+     */
+    public SearchResult getSearchResult()
+    {
+        return searchResult;
     }
 }

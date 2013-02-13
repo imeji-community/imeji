@@ -33,6 +33,7 @@ public class ViewMdProfileBean extends MdProfileBean
     /**
      * Initialize the page
      */
+    @Override
     public String getInit()
     {
         if (this.getId() != null)

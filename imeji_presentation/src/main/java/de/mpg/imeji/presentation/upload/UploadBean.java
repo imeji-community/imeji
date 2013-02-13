@@ -3,11 +3,14 @@
  */
 package de.mpg.imeji.presentation.upload;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -17,21 +20,19 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
-import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.UploadResult;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.escidoc.EscidocHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.upload.deposit.DepositController;
-import de.mpg.imeji.presentation.upload.helper.ImageHelper;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.LoginHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -47,18 +48,16 @@ public class UploadBean
     private int collectionSize = 0;
     private SessionBean sessionBean;
     private String id;
-    private String escidocContext;
-    private String escidocUserHandle;
     private User user;
     private String title;
-    private String format;
-    private String mimetype;
-    private String description;
     private String totalNum;
     private int sNum;
     private int fNum;
     private List<String> sFiles;
     private List<String> fFiles;
+    private String externalUrl;
+    private StorageController storageController;
+    private Collection<Item> itemList;
     private static Logger logger = Logger.getLogger(Upload.class);
 
     /**
@@ -67,15 +66,7 @@ public class UploadBean
     public UploadBean()
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        try
-        {
-            escidocContext = PropertyReader.getProperty("escidoc.imeji.context.id");
-            logInEscidoc();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        storageController = new StorageController("internal");
     }
 
     /**
@@ -85,12 +76,14 @@ public class UploadBean
     {
         if (UrlHelper.getParameterBoolean("init"))
         {
+            removeFiles();
             loadCollection();
             totalNum = "";
             sNum = 0;
             fNum = 0;
             sFiles = new ArrayList<String>();
             fFiles = new ArrayList<String>();
+            externalUrl = "";
         }
         else if (UrlHelper.getParameterBoolean("start"))
         {
@@ -100,22 +93,51 @@ public class UploadBean
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Error upload", e);
             }
         }
         else if (UrlHelper.getParameterBoolean("done"))
         {
             try
             {
+                createItemForFiles();
                 totalNum = UrlHelper.getParameterValue("totalNum");
                 loadCollection();
                 report();
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Error upload", e);
             }
         }
+    }
+
+    /**
+     * Upload a file from the web
+     * 
+     * @return
+     */
+    public String uploadFromLink()
+    {
+        try
+        {
+            StorageController externalController = new StorageController("external");
+            externalUrl = URLDecoder.decode(externalUrl, "UTF-8");
+            URL url = new URL(externalUrl);
+            title = url.getPath().substring(url.getPath().lastIndexOf("/") + 1);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            externalController.read(url.toString(), baos);
+            Item item = uploadFile(baos.toByteArray());
+            ItemController ic = new ItemController(user);
+            ic.create(item, collection.getId());
+            externalUrl = "";
+        }
+        catch (Exception e)
+        {
+            logger.error("Error uploading file from link: " + externalUrl, e);
+            BeanHelper.error("Error uploading file from link: " + externalUrl);
+        }
+        return "";
     }
 
     /**
@@ -125,6 +147,8 @@ public class UploadBean
      */
     public void upload() throws Exception
     {
+        UserController uc = new UserController(null);
+        user = uc.retrieve(getUser().getEmail());
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
                 .getRequest();
         boolean isMultipart = ServletFileUpload.isMultipartContent(req);
@@ -135,49 +159,77 @@ public class UploadBean
             FileItemIterator iter = upload.getItemIterator(req);
             while (iter.hasNext())
             {
-                FileItemStream item = iter.next();
-                String name = item.getFieldName();
-                InputStream stream = item.openStream();
-                if (!item.isFormField())
+                FileItemStream fis = iter.next();
+                InputStream stream = fis.openStream();
+                if (!fis.isFormField())
                 {
-                    title = item.getName();
-                    StringTokenizer st = new StringTokenizer(title, ".");
-                    while (st.hasMoreTokens())
-                    {
-                        format = st.nextToken();
-                    }
-                    mimetype = ImageHelper.getMimeType(format);
-                    // TODO remove static image description
-                    description = "";
-                    try
-                    {
-                        UserController uc = new UserController(null);
-                        User user = uc.retrieve(getUser().getEmail());
-                        try
-                        {
-                            DepositController controller = new DepositController();
-                            Item escidocItem = controller.createEscidocItem(stream, title, mimetype);
-                            controller.createImejiImage(collection, user, escidocItem.getOriginObjid(), title,
-                                    URI.create(EscidocHelper.getOriginalResolution(escidocItem)),
-                                    URI.create(EscidocHelper.getThumbnailUrl(escidocItem)),
-                                    URI.create(EscidocHelper.getWebResolutionUrl(escidocItem)));
-                            sNum += 1;
-                            sFiles.add(title);
-                        }
-                        catch (Exception e)
-                        {
-                            fNum += 1;
-                            fFiles.add(title);
-                            logger.error("Error uploading image: ", e);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        throw new RuntimeException(e);
-                    }
+                    title = fis.getName();
+                    Item item = uploadFile(StorageUtils.toBytes(stream));
+                    if (item != null)
+                        itemList.add(item);
                 }
             }
         }
+    }
+
+    /**
+     * Upload one File and create the {@link de.mpg.imeji.logic.vo.Item}
+     * 
+     * @param bytes
+     * @throws Exception
+     */
+    private Item uploadFile(byte[] bytes)
+    {
+        try
+        {
+            UploadResult uploadResult = storageController.upload(title, bytes);
+            Item item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
+                    URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
+                    URI.create(uploadResult.getWeb()));
+            sNum += 1;
+            sFiles.add(title);
+            return item;
+        }
+        catch (Exception e)
+        {
+            fNum += 1;
+            fFiles.add(title);
+            logger.error("Error uploading image: ", e);
+        }
+        return null;
+    }
+
+    /**
+     * Create the {@link Item} fot the files which have been uploaded
+     */
+    private void createItemForFiles()
+    {
+        ItemController ic = new ItemController(user);
+        try
+        {
+            ic.create(itemList, collection.getId());
+            itemList = new ArrayList<Item>();
+        }
+        catch (Exception e)
+        {
+            logger.error("Error creating files for upload", e);
+        }
+    }
+
+    /**
+     * Rmove the files which don't have been created with an {@link Item}. Ca happen if the upload is interrupted
+     */
+    private void removeFiles()
+    {
+        if (itemList != null)
+        {
+            for (Item item : itemList)
+            {
+                System.out.println("remove file " + item.getStorageId());
+                storageController.delete(item.getStorageId());
+            }
+        }
+        itemList = new ArrayList<Item>();
     }
 
     /**
@@ -192,7 +244,7 @@ public class UploadBean
             if (collection != null && getCollection().getId() != null)
             {
                 ItemController ic = new ItemController(sessionBean.getUser());
-                collectionSize = ic.countImagesInContainer(getCollection().getId(), new SearchQuery());
+                collectionSize = ic.search(getCollection().getId(), null, null, null).getNumberOfRecords();
             }
         }
         else
@@ -267,18 +319,6 @@ public class UploadBean
         this.fFiles = fFiles;
     }
 
-    /**
-     * Log in in escidoc with the escidoc user
-     * 
-     * @throws Exception
-     */
-    public void logInEscidoc() throws Exception
-    {
-        String userName = PropertyReader.getProperty("imeji.escidoc.user");
-        String password = PropertyReader.getProperty("imeji.escidoc.password");
-        escidocUserHandle = LoginHelper.login(userName, password);
-    }
-
     public CollectionImeji getCollection()
     {
         return collection;
@@ -299,26 +339,6 @@ public class UploadBean
         this.id = id;
     }
 
-    public String getEscidocContext()
-    {
-        return escidocContext;
-    }
-
-    public void setEscidocContext(String escidocContext)
-    {
-        this.escidocContext = escidocContext;
-    }
-
-    public String getEscidocUserHandle()
-    {
-        return escidocUserHandle;
-    }
-
-    public void setEscidocUserHandle(String escidocUserHandle)
-    {
-        this.escidocUserHandle = escidocUserHandle;
-    }
-
     public User getUser()
     {
         return sessionBean.getUser();
@@ -337,5 +357,15 @@ public class UploadBean
     public void setCollectionSize(int collectionSize)
     {
         this.collectionSize = collectionSize;
+    }
+
+    public String getExternalUrl()
+    {
+        return externalUrl;
+    }
+
+    public void setExternalUrl(String externalUrl)
+    {
+        this.externalUrl = externalUrl;
     }
 }

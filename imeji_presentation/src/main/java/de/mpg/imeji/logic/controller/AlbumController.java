@@ -15,6 +15,7 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.Album;
@@ -23,14 +24,13 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
+
 /**
- * 
  * Implements CRUD and Search methods for {@link Album}
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class AlbumController extends ImejiController
 {
@@ -46,10 +46,12 @@ public class AlbumController extends ImejiController
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
     }
+
     /**
      * @deprecated
      * @param user
      */
+    @Deprecated
     public AlbumController(User user)
     {
         super(user);
@@ -113,6 +115,7 @@ public class AlbumController extends ImejiController
 
     /**
      * Retrieve an {@link Album} without its {@link Item}
+     * 
      * @param uri
      * @param user
      * @return
@@ -120,11 +123,12 @@ public class AlbumController extends ImejiController
      */
     public Album retrieveLazy(URI uri, User user) throws Exception
     {
-       return (Album)imejiRDF2Bean.loadLazy(uri.toString(), user, new Album());
+        return (Album)imejiRDF2Bean.loadLazy(uri.toString(), user, new Album());
     }
 
     /**
      * Delete the {@link Album}
+     * 
      * @param album
      * @param user
      * @throws Exception
@@ -139,13 +143,14 @@ public class AlbumController extends ImejiController
 
     /**
      * Release and {@link Album}. If one {@link Item} of the {@link Album} is not released, then abort.
+     * 
      * @param album
      * @throws Exception
      */
     public void release(Album album, User user) throws Exception
     {
         ItemController ic = new ItemController(user);
-        List<String> itemUris = ic.searchImagesInContainer(album.getId(), null, null, -1, 0).getResults();
+        List<String> itemUris = ic.search(album.getId(), null, null, null).getResults();
         if (itemUris.isEmpty())
         {
             throw new RuntimeException("An empty album can not be released!");
@@ -167,7 +172,8 @@ public class AlbumController extends ImejiController
     }
 
     /**
-     * Add a list of {@link Item} (as a {@link List} of {@link URI}) to an {@link Album}. Return {@link List} of {@link URI} which were not added to the album.
+     * Add a list of {@link Item} (as a {@link List} of {@link URI}) to an {@link Album}. Return {@link List} of
+     * {@link URI} which were not added to the album.
      * 
      * @param album
      * @param uris
@@ -178,7 +184,7 @@ public class AlbumController extends ImejiController
     public List<String> addToAlbum(Album album, List<String> uris, User user) throws Exception
     {
         ItemController ic = new ItemController(user);
-        List<String> inAlbums = ic.searchImagesInContainer(album.getId(), null, null, -1, 0).getResults();
+        List<String> inAlbums = ic.search(album.getId(), null, null, null).getResults();
         List<String> notAddedUris = new ArrayList<String>();
         for (String uri : uris)
         {
@@ -273,6 +279,15 @@ public class AlbumController extends ImejiController
         return search.search(searchQuery, sortCri, user);
     }
 
+    /**
+     * Load the albums without the images
+     * 
+     * @param uris
+     * @param limit
+     * @param offset
+     * @return
+     * @throws Exception
+     */
     public Collection<Album> loadAlbumsLazy(List<String> uris, int limit, int offset) throws Exception
     {
         List<Album> albs = new ArrayList<Album>();
@@ -289,16 +304,15 @@ public class AlbumController extends ImejiController
         return albs;
     }
 
-    public int countAllAlbums()
-    {
-        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/album>}",
-                ImejiJena.albumModel);
-    }
-
+    /**
+     * Retrieve all imeji {@link Album}
+     * 
+     * @return
+     * @throws Exception
+     */
     public List<Album> retrieveAll() throws Exception
     {
-        List<String> uris = ImejiSPARQL.exec("SELECT ?s WHERE { ?s a <http://imeji.org/terms/album>}",
-                ImejiJena.albumModel);
+        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectAlbumAll(), ImejiJena.albumModel);
         return (List<Album>)loadAlbumsLazy(uris, -1, 0);
     }
 }

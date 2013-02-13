@@ -5,7 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="headline" value="#{lbl.share} #{ShareBean.container.metadata.title}" />
 	<ui:define name="mainContent">
-	
+		<h:outputText value="#{ShareBean.init}"/>
 		<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 		 	<ui:include src="./include/History.xhtml"></ui:include>
 		</h:panelGroup>

@@ -29,9 +29,10 @@
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/plupload.full.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload/jquery.plupload.queue.js"></script>
-			
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.full.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/i18n/#{Internationalization.currentLanguage}.js"></script>
+	
 		<script>
 		
 			$(function() {
@@ -44,58 +45,37 @@
 					multi_selection : true,
 					//chunk_size : '1mb',
 					unique_names : false,
-					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.flash.swf',
-					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.silverlight.xap',
+					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.flash.swf',
+					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.silverlight.xap',
 					filters : [{
-						title : "Image files", 
+						title : "imeji files", 
 						extensions : "jpg,jpeg,png,bmp,gif,tif,JPG,JPEG,PNG,TIF,GIF"}
 						//{title : "Zip files", extensions : "zip"}
 					],
 			
 					// Resize images on clientside
 					//resize : {width : 320, height : 240, quality : 90},
+					 init : {
+						 StateChanged: function(up) {
+								// Called when the state of the queue is changed
+								if( up.state == plupload.STOPPED){
+									report();
+								}
+								if( up.state == plupload.STARTED){
+									openDialog('dialogWait');
+								}
+							},
+					 }
 					});
 			});
+
+			function report(){
+				window.location.href = location.pathname + "?done=1";
+			}
 			
-			function getUploadTitle()
-			{
-				return '<h:outputText value="#{lbl.upload_title}"/>';
-			}				
-			function getUploadDescription()
-			{
-				return '<h:outputText value="#{lbl.upload_description}"/>';
-			}
-			function getUploadFilename()
-			{
-				return '<h:outputText value="#{lbl.filename}"/>';
-			}
-			function getUploadStatus()
-			{
-				return '<h:outputText value="#{lbl.status}"/>';
-			}
-			function getUploadSize()
-			{
-				return '<h:outputText value="#{lbl.size}"/>';
-			}
-			function getUploadAddFiles()
-			{
-				return '<h:outputText value="#{lbl.upload_add_files}"/>';
-			}
-			function getUploadStart()
-			{
-				return '<h:outputText value="#{lbl.upload_start}"/>';
-			}
-			function getDragHere()
-			{
-				return '<h:outputText value="#{lbl.upload_drag_files_here}"/>';
-			}
-			function getUsingRuntime()
-			{
-				return '<h:outputText value="#{lbl.upload_using_runtime}"/>';
-			}
 			
 		</script>
-		<div class="full_area0 small_marginLExcl infoPage">
+		<div class="full_area0_p8 small_marginLExcl infoPage">
 		<br/>
 			<div class="half_area0_p8 listBackground" style="width:41.15em;">
 				<div id="uploader" class="half_area0_p0">
@@ -112,7 +92,14 @@
 				</a></div>
 			</div>
 			<br style="clear: both"/>
-				
+			<div class="full_area0_p8">
+				<h:outputText value ="#{lbl.or_big}" styleClass="full_area0"/>
+				<h:outputText value ="#{lbl.upload_from_link}" styleClass="full_area0"/>
+				<h:form>
+					<h:inputText value="#{UploadBean.externalUrl}" styleClass="half_area0"/>
+					<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="free_area0_p0"/>
+				</h:form>
+			</div>
 			<br />
 			<h:panelGroup styleClass="half_area2_p6 messageArea errorMessageArea"  rendered="#{UploadBean.fNum > 0}">	
 				<br />

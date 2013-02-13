@@ -3,50 +3,21 @@
  */
 package de.mpg.imeji.presentation.upload.deposit;
 
-import java.io.InputStream;
 import java.net.URI;
 
-import de.escidoc.core.client.Authentication;
 import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.escidoc.EscidocHelper;
-import de.mpg.imeji.presentation.upload.UploadManager;
-import de.mpg.imeji.presentation.upload.uploader.EscidocUploader;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * @author yu
  */
 public class DepositController
 {
-    /**
-     * Create the escidoc item with the images as components (for version from 1.3)
-     * 
-     * @param inputStream
-     * @param title
-     * @param mimetype - the mime-type of the file
-     * @param format
-     * @return
-     * @throws Exception
-     */
-    public Item createEscidocItem(InputStream inputStream, String title, String mimetype)
-            throws Exception
-    {
-        EscidocHelper escidocHelper = new EscidocHelper();
-        Authentication auth = escidocHelper.login();
-        Item item = escidocHelper.itemFactory(PropertyReader.getProperty("escidoc.imeji.content-model.id"),
-                PropertyReader.getProperty("escidoc.imeji.context.id"));
-        UploadManager uploadManager = new UploadManager(new EscidocUploader(item, title, mimetype, auth));
-        uploadManager.uploadItemFiles(inputStream);
-        item = ((EscidocUploader)uploadManager.getUploader()).getItem();
-        return escidocHelper.createItemInEscidoc(item, auth);
-    }
-
     /**
      * Create the {@link Item} in Jena.
      * 
@@ -60,7 +31,7 @@ public class DepositController
      * @return
      * @throws Exception
      */
-    public de.mpg.imeji.logic.vo.Item createImejiImage(CollectionImeji collection, User user, String escidocId,
+    public de.mpg.imeji.logic.vo.Item createImejiImage(CollectionImeji collection, User user, String storageId,
             String title, URI fullImageURI, URI thumbnailURI, URI webURI) throws Exception
     {
         ItemController itemController = new ItemController(user);
@@ -75,9 +46,9 @@ public class DepositController
         item.setWebImageUrl(webURI);
         item.setVisibility(Visibility.PUBLIC);
         item.setFilename(title);
-        if (escidocId != null)
+        if (storageId != null)
         {
-            item.setEscidocId(escidocId);
+            item.setStorageId(storageId);
         }
         if (collection.getStatus() == Status.RELEASED)
         {

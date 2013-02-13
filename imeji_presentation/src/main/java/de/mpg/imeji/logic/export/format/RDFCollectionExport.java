@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link RDFExport} for {@link Collection}
@@ -47,5 +49,11 @@ public class RDFCollectionExport extends RDFExport
     protected String closeTagResource()
     {
         return "</imeji:collection>";
+    }
+
+    @Override
+    protected void filterResources(SearchResult sr, User user)
+    {
+        // TODO Auto-generated method stub
     }
 }

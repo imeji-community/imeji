@@ -37,15 +37,24 @@ public class ObjectHelper
      */
     public static URI getURI(Class<?> c, String id)
     {
-        String baseURI;
+        String baseURI = null;
+        String applicationURL = null;
         try
         {
-            baseURI = PropertyReader.getProperty("imeji.jena.resource.base_uri");
+            applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
+            baseURI = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.jena.resource.base_uri"));
         }
         catch (Exception e)
         {
-            baseURI = "http://imeji.org/";
-            logger.error("Property imeji.jena.resource.base_uri not found in imeji.properties, using default value: http://imeji.org/. Check your property and your data in jena TDB!!!");
+            logger.error("Error reading properties:", e);
+        }
+        if (baseURI == null || baseURI.trim().equals("/"))
+        {
+            baseURI = applicationURL;
+        }
+        if (baseURI == null)
+        {
+            throw new RuntimeException("Error in properties. Check property: escidoc.imeji.instance.url");
         }
         j2jModel modelName = c.getAnnotation(j2jModel.class);
         if (modelName != null)

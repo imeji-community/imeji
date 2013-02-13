@@ -6,7 +6,9 @@ package de.mpg.imeji.logic.export.format;
 import java.util.HashMap;
 
 import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link RDFExport} for {@link Album}
@@ -46,5 +48,11 @@ public class RDFAlbumExport extends RDFExport
     protected String closeTagResource()
     {
         return "</imeji:album>";
+    }
+
+    @Override
+    protected void filterResources(SearchResult sr, User user)
+    {
+        // TODO Auto-generated method stub
     }
 }

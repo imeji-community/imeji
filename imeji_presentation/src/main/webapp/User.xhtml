@@ -4,12 +4,12 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 			<ui:param name="headline" value="User Page"/>
-			
 			<ui:define name="mainContent">
 			<h:outputText value="#{UserBean.init}"/>
 			
 				<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+					<h:form>
 						<h:panelGroup styleClass="small_marginLExcl full_area0" rendered="#{UserBean.admin}">
 							<h:panelGroup styleClass="full_area0" rendered="#{UserBean.admin}">
 								<h:panelGroup styleClass="full_area0">
@@ -73,6 +73,7 @@
 								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
+						</h:form>
 						<h:panelGroup rendered="#{!UserBean.admin and SessionBean.user == null}">
 							<ui:include src="./include/LoginFormular.xhtml" />
 						</h:panelGroup>

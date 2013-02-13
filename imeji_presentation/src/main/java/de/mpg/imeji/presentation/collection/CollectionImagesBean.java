@@ -25,14 +25,11 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ImagesBean;
-import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * {@link ImagesBean} to browse {@link Item} of a {@link CollectionImeji}
@@ -43,7 +40,6 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 public class CollectionImagesBean extends ImagesBean
 {
-    private int totalNumberOfRecords;
     private String id = null;
     private URI uri;
     private SessionBean sb = null;
@@ -66,19 +62,30 @@ public class CollectionImagesBean extends ImagesBean
      * 
      * @return
      */
-    public String getInit()
+    @Override
+    public String getInitPage()
     {
-        getNavigationString();
-        setQuery(UrlHelper.getParameterValue("q"));
-        collection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), sb.getUser());
+        uri = ObjectHelper.getURI(CollectionImeji.class, id);
+        collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
+        browseInit();
+        return "";
+    }
+
+    @Override
+    public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
+    {
+        ItemController controller = new ItemController(sb.getUser());
+        return controller.search(uri, searchQuery, sortCriterion, null);
+    }
+
+    @Override
+    public void initMenus()
+    {
         List<SelectItem> sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(null, sb.getLabel("default")));
-        sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_CREATION_DATE, sb
-                .getLabel(SearchIndex.names.PROPERTIES_CREATION_DATE.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE, sb
-                .getLabel(SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.created, sb.getLabel(SearchIndex.names.created.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.modified, sb.getLabel(SearchIndex.names.modified.name())));
         setSortMenu(sortMenu);
-        return "";
     }
 
     @Override
@@ -98,45 +105,6 @@ public class CollectionImagesBean extends ImagesBean
     }
 
     @Override
-    public int getTotalNumberOfRecords()
-    {
-        return totalNumberOfRecords;
-    }
-
-    @Override
-    public List<ThumbnailBean> retrieveList(int offset, int limit)
-    {
-        if (getFacets() != null)
-        {
-            getFacets().getFacets().clear();
-        }
-        SortCriterion sortCriterion = initSortCriterion();
-        initBackPage();
-        try
-        {
-            searchQuery = URLQueryTransformer.parseStringQuery(getQuery());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        uri = ObjectHelper.getURI(CollectionImeji.class, id);
-        SearchResult results = search(searchQuery, sortCriterion);
-        totalNumberOfRecords = results.getNumberOfRecords();
-        results.setQuery(getQuery());
-        results.setSort(sortCriterion);
-        List<Item> items = (List<Item>)loadImages(results.getResults());
-        return ImejiFactory.imageListToThumbList(items);
-    }
-
-    @Override
-    public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
-    {
-        ItemController controller = new ItemController(sb.getUser());
-        return controller.searchImagesInContainer(uri, searchQuery, sortCriterion, getElementsPerPage(), getOffset());
-    }
-
-    @Override
     public String initFacets() throws Exception
     {
         searchQuery = URLQueryTransformer.parseStringQuery(getQuery());
@@ -147,18 +115,20 @@ public class CollectionImagesBean extends ImagesBean
     /**
      * return the url of the collection
      */
+    @Override
     public String getImageBaseUrl()
     {
         if (collection == null)
         {
             return "";
         }
-        return navigation.getApplicationUri() + collection.getId().getPath();
+        return navigation.getApplicationUrl() + "collection/" + this.id;
     }
 
     /**
      * return the url of the collection
      */
+    @Override
     public String getBackUrl()
     {
         return navigation.getBrowseUrl() + "/collection" + "/" + this.id;
@@ -256,6 +226,7 @@ public class CollectionImagesBean extends ImagesBean
     /**
      * True if the {@link CollectionImeji} is updatable for this {@link User}
      */
+    @Override
     public boolean isEditable()
     {
         Security security = new Security();
@@ -265,18 +236,21 @@ public class CollectionImagesBean extends ImagesBean
     /**
      * Check that at least one image is editable and if the profile is not empty
      */
+    @Override
     public boolean isImageEditable()
     {
         return super.isImageDeletable()
                 && ObjectCachedLoader.loadProfile(collection.getProfile()).getStatements().size() > 0;
     }
 
+    @Override
     public boolean isVisible()
     {
         Security security = new Security();
         return security.check(OperationsType.READ, sb.getUser(), collection);
     }
 
+    @Override
     public boolean isDeletable()
     {
         Security security = new Security();

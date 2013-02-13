@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -54,6 +55,7 @@ public class CollectionController extends ImejiController
      * @deprecated
      * @param user
      */
+    @Deprecated
     public CollectionController(User user)
     {
         super(user);
@@ -83,6 +85,7 @@ public class CollectionController extends ImejiController
      * @param user
      * @deprecated
      */
+    @Deprecated
     public void update(CollectionImeji ic) throws Exception
     {
         writeUpdateProperties(ic, user);
@@ -125,8 +128,7 @@ public class CollectionController extends ImejiController
     public void delete(CollectionImeji collection, User user) throws Exception
     {
         ItemController itemController = new ItemController(user);
-        List<String> itemUris = itemController.searchImagesInContainer(collection.getId(), null, null, -1, 0)
-                .getResults();
+        List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
             throw new RuntimeException("Collection has at least one image locked by another user.");
@@ -155,8 +157,7 @@ public class CollectionController extends ImejiController
     public void release(CollectionImeji collection, User user) throws Exception
     {
         ItemController itemController = new ItemController(user);
-        List<String> itemUris = itemController.searchImagesInContainer(collection.getId(), null, null, -1, 0)
-                .getResults();
+        List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
             throw new RuntimeException("Collection has at least one image locked by another user.");
@@ -185,8 +186,7 @@ public class CollectionController extends ImejiController
     public void withdraw(CollectionImeji collection, User user) throws Exception
     {
         ItemController itemController = new ItemController(user);
-        List<String> itemUris = itemController.searchImagesInContainer(collection.getId(), null, null, -1, 0)
-                .getResults();
+        List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
             throw new RuntimeException("Collection has at least one image locked by another user.");
@@ -240,6 +240,7 @@ public class CollectionController extends ImejiController
      * @param uri
      * @return
      * @throws Exception
+     * @{@link Deprecated}
      */
     public CollectionImeji retrieveLazy(URI uri) throws Exception
     {
@@ -248,14 +249,17 @@ public class CollectionController extends ImejiController
     }
 
     /**
-     * Count all {@link CollectionImeji} in imeji
+     * Retrieve the {@link CollectionImeji} without its {@link Item}
      * 
+     * @param uri
+     * @param user
      * @return
+     * @throws Exception
      */
-    public int countAllCollections()
+    public CollectionImeji retrieveLazy(URI uri, User user) throws Exception
     {
-        return ImejiSPARQL.execCount("SELECT count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/collection>}",
-                ImejiJena.collectionModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        return (CollectionImeji)imejiRDF2Bean.loadLazy(uri.toString(), user, new CollectionImeji());
     }
 
     /**
@@ -266,8 +270,7 @@ public class CollectionController extends ImejiController
      */
     public List<CollectionImeji> retrieveAllCollections() throws Exception
     {
-        List<String> uris = ImejiSPARQL.exec("SELECT ?s WHERE { ?s a <http://imeji.org/terms/collection>}",
-                ImejiJena.collectionModel);
+        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectCollectionAll(), ImejiJena.collectionModel);
         return (List<CollectionImeji>)loadCollectionsLazy(uris, -1, 0);
     }
 

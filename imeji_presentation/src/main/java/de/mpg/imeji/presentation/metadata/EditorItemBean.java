@@ -21,15 +21,17 @@ public class EditorItemBean
 
     /**
      * Bean for item element in the metadata editors
+     * 
      * @param item
      */
     public EditorItemBean(Item item)
     {
         init(item);
     }
-    
+
     /**
      * Intialize the {@link EditorItemBean} with an {@link Item}
+     * 
      * @param item
      */
     public void init(Item item)
@@ -44,6 +46,7 @@ public class EditorItemBean
 
     /**
      * Get {@link EditorItemBean} as {@link Item}
+     * 
      * @return
      */
     public Item asItem()

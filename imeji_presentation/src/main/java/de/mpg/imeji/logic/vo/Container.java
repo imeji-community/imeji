@@ -71,16 +71,19 @@ public class Container extends Properties implements FulltextIndex
         return images;
     }
 
+    @Override
     public void setFulltextIndex(String fulltext)
     {
         this.fulltext = fulltext;
     }
 
+    @Override
     public String getFulltextIndex()
     {
         return fulltext;
     }
 
+    @Override
     public void indexFulltext()
     {
         fulltext = metadata.getTitle();

@@ -10,7 +10,6 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.StringHelper;

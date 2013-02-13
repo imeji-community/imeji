@@ -53,7 +53,7 @@ public class Search
     public static Map<String, SearchIndex> indexes = SearchIndexInitializer.init();
 
     /**
-     * Types of search (related to the different {@link Jena} {@link Model}) TODO Description
+     * Types of search (related to the different {@link Jena} {@link Model})
      * 
      * @author saquet (initial creation)
      * @author $Author$ (last modification)
@@ -145,11 +145,16 @@ public class Search
      */
     private List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
     {
+        // Set null parameters
         if (sq == null)
             sq = new SearchQuery();
         if (sortCri == null)
             sortCri = new SortCriterion();
-        List<String> results = new ArrayList<String>(previousResults);
+        List<String> results = null;
+        if (previousResults == null)
+            results = new ArrayList<String>();
+        else
+            results = new ArrayList<String>(previousResults);
         // second case is useless so far, since all query within a container are container specific.
         if (sq.isEmpty() || (containerURI != null && results.isEmpty() && false))
         {
@@ -214,7 +219,7 @@ public class Search
     }
 
     /**
-     * Perform {@link LOGICAL_RELATIONS} betweern 2 {@link List} of {@link String}
+     * Perform {@link LOGICAL_RELATIONS} between 2 {@link List} of {@link String}
      * 
      * @param l1
      * @param logic

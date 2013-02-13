@@ -26,17 +26,17 @@ public class IngestBean
     private String collectionId;
     private CollectionImeji collection;
     private static Logger logger = Logger.getLogger(IngestBean.class);
-    
-    public IngestBean() 
-    {
-    	session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-	}
 
-    public void status() 
+    public IngestBean()
+    {
+        session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    }
+
+    public void status()
     {
         if (UrlHelper.getParameterBoolean("init"))
         {
-        	 loadCollection();
+            loadCollection();
         }
         else if ("itemlist".equals(UrlHelper.getParameterValue("start")))
         {
@@ -49,25 +49,23 @@ public class IngestBean
             {
                 e.printStackTrace();
             }
-            
         }
         else if ("profile".equals(UrlHelper.getParameterValue("start")))
         {
-        	 try
-             {
-                 IngestController ic = new IngestController(session.getUser(), collection);
-                 ic.ingest(null, upload());
-             }
-             catch (Exception e)
-             {
-                 e.printStackTrace();
-             }
+            try
+            {
+                IngestController ic = new IngestController(session.getUser(), collection);
+                ic.ingest(null, upload());
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
         else if (UrlHelper.getParameterBoolean("done"))
         {
             try
             {
-                
             }
             catch (Exception e)
             {
@@ -92,8 +90,8 @@ public class IngestBean
                 FileItemStream item = iter.next();
                 if (item != null && item.getName() != null)
                 {
-                	logger.info("Ingesting file  " + item.getName());
-                	f = write2File("itemListXml", item.openStream());
+                    logger.info("Ingesting file  " + item.getName());
+                    f = write2File("itemListXml", item.openStream());
                 }
             }
         }
@@ -113,31 +111,31 @@ public class IngestBean
             BeanHelper.error(session.getLabel("error") + " No ID in URL");
         }
     }
-    
+
     private File write2File(String fileName, InputStream is) throws Exception
     {
-    	 File f= new File(fileName);
-    	 try 
-    	 {  
-    		 OutputStream os = new FileOutputStream(f);  
-    	     try 
-    	     {  
-    	    	 byte[] buffer = new byte[4096];  
-    	         for (int n; (n = is.read(buffer)) != -1; )   
-    	         {
-    	        	 os.write(buffer, 0, n);  
-    	         }
-    	     }   
-    	     finally 
-    	     { 
-    	    	 os.close(); 
-    	     }  
-    	 }
-    	 finally 
-    	 { 
-    		 is.close(); 
-    	 }  
-    	 return f;
+        File f = new File(fileName);
+        try
+        {
+            OutputStream os = new FileOutputStream(f);
+            try
+            {
+                byte[] buffer = new byte[4096];
+                for (int n; (n = is.read(buffer)) != -1;)
+                {
+                    os.write(buffer, 0, n);
+                }
+            }
+            finally
+            {
+                os.close();
+            }
+        }
+        finally
+        {
+            is.close();
+        }
+        return f;
     }
 
     public CollectionImeji getCollection()

@@ -45,11 +45,11 @@ public class SimpleQueryFactory
         PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
                 + " ?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
         return PATTERN_SELECT
-                .replaceAll("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.queryFactory(user, pair, rdfType, false))
-                .replaceAll("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair))
-                .replaceAll("XXX_SEARCH_TYPE_ELEMENT_XXX", rdfType)
-                .replaceAll("XXX_SORT_ELEMENT_XXX", getSortElement(sortCriterion))
-                .replaceAll("XXX_SPECIFIC_QUERY_XXX", specificQuery);
+                .replace("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.queryFactory(user, pair, rdfType, false))
+                .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair))
+                .replace("XXX_SEARCH_TYPE_ELEMENT_XXX", rdfType)
+                .replace("XXX_SORT_ELEMENT_XXX", getSortElement(sortCriterion))
+                .replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
     }
 
     /**
@@ -66,60 +66,60 @@ public class SimpleQueryFactory
         {
             return "";
         }
-        else if (SearchIndex.names.FULLTEXT.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.all.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " ?s <" + pair.getIndex().getNamespace() + "> ?el";
         }
-        else if (SearchIndex.names.IMAGE_FILENAME.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.filename.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " ?s <" + pair.getIndex().getNamespace() + "> ?el";
         }
-        else if (SearchIndex.names.ID_URI.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.item.name().equals(pair.getIndex().getName()))
         {
             searchQuery = "";
             variable = "s";
         }
-        else if (SearchIndex.names.PROPERTIES_STATUS.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.status.name().equals(pair.getIndex().getName()))
         {
             return "";
         }
-        else if (SearchIndex.names.IMAGE_COLLECTION.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.col.name().equals(pair.getIndex().getName()))
         {
             return "";
         }
-        else if (SearchIndex.names.MY_IMAGES.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
             return "";
         }
-        else if (SearchIndex.names.CONTAINER_METADATA_TITLE.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.cont_title.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " .OPTIONAL {?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/dc/elements/1.1/title> ?el}}";
         }
-        else if (SearchIndex.names.CONTAINER_METADATA_DESCRIPTION.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.cont_description.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " .OPTIONAL {?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/dc/elements/1.1/description> ?el}}";
         }
-        else if (SearchIndex.names.CONTAINER_METADATA_PERSON_FAMILY_NAME.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.cont_person_family.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " .OPTIONAL {?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?el}}}";
         }
-        else if (SearchIndex.names.CONTAINER_METADATA_PERSON_COMPLETE_NAME.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.cont_person_name.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " .OPTIONAL {?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?el}}}";
         }
-        else if (SearchIndex.names.CONTAINER_METADATA_PERSON_GIVEN_NAME.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.cont_person_given.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " .OPTIONAL {?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/terms/0.1/given-name> ?el}}}";
         }
-        else if (SearchIndex.names.CONTAINER_METADATA_PERSON_ORGANIZATION_NAME.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.cont_person_org_name.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " .OPTIONAL {?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit> ?org .OPTIONAL{?org <http://purl.org/dc/elements/1.1/title> ?el}}}}";
         }
-        else if (SearchIndex.names.COLLECTION_PROFILE.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.profile.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " .?s <http://imeji.org/terms/mdprofile> ?el";
         }
-        else if (SearchIndex.names.IMAGE_METADATA_TYPE_RDF.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.type.name().equals(pair.getIndex().getName()))
         {
             return "?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md a <"
                     + pair.getValue() + "> .";
@@ -170,20 +170,20 @@ public class SimpleQueryFactory
     {
         if (sortCriterion != null && sortCriterion.getIndex() != null)
         {
-            if (SearchIndex.names.PROPERTIES_CREATION_DATE.name().equals(sortCriterion.getIndex().getName()))
+            if (SearchIndex.names.created.name().equals(sortCriterion.getIndex().getName()))
             {
                 return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
-            else if (SearchIndex.names.PROPERTIES_LAST_MODIFICATION_DATE.name().equals(
+            else if (SearchIndex.names.modified.name().equals(
                     sortCriterion.getIndex().getName()))
             {
                 return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
-            else if (SearchIndex.names.PROPERTIES_STATUS.name().equals(sortCriterion.getIndex().getName()))
+            else if (SearchIndex.names.status.name().equals(sortCriterion.getIndex().getName()))
             {
                 return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
-            else if (SearchIndex.names.CONTAINER_METADATA_TITLE.name().equals(sortCriterion.getIndex().getName()))
+            else if (SearchIndex.names.cont_title.name().equals(sortCriterion.getIndex().getName()))
             {
                 return "?s <http://imeji.org/terms/container/metadata> ?cmd. ?cmd <"
                         + sortCriterion.getIndex().getNamespace() + "> ?sort0";
@@ -201,7 +201,7 @@ public class SimpleQueryFactory
      */
     private static String getSimpleFilter(SearchPair pair, String variable)
     {
-        if (pair.getIndex().equals(Search.getIndex(SearchIndex.names.FULLTEXT)))
+        if (pair.getIndex().equals(Search.getIndex(SearchIndex.names.all)))
         {
             return getTextSearchFilter(pair, variable);
         }

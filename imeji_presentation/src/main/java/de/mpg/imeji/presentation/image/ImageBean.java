@@ -61,7 +61,6 @@ public class ImageBean
     private MetadataLabels labels;
     private SingleImageBrowse browse = null;
 
-
     /**
      * Construct a default {@link ImageBean}
      * 

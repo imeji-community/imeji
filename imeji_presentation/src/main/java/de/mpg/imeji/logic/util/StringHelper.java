@@ -30,4 +30,18 @@ public class StringHelper
         }
         return hexString.toString();
     }
+    
+    /**
+     * Format a uri (URL, System path): add a / if the uri doesn't end with it
+     * 
+     * @return
+     */
+    public static String normalizeURI(String uri)
+    {
+        if (!uri.endsWith("/"))
+        {
+            uri += "/";
+        }
+        return uri;
+    }
 }

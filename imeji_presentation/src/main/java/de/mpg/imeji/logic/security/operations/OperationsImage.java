@@ -28,6 +28,7 @@ public class OperationsImage implements Operations
      * - Collection Editor <br/>
      * - Collection Administrator
      */
+    @Override
     public boolean create(User user, Object object)
     {
         return (auth.isPictureEditor(user, (Item)object) || auth.isContainerEditor(user, ((Item)object)) || auth
@@ -43,6 +44,7 @@ public class OperationsImage implements Operations
      * - Collection Editor <br/>
      * - Collection Administrator
      */
+    @Override
     public boolean read(User user, Object object)
     {
         return (Visibility.PUBLIC.equals(((Item)object).getVisibility()) || auth.isViewerFor(user, (Item)object)
@@ -57,6 +59,7 @@ public class OperationsImage implements Operations
      * - Collection Editor <br/>
      * - Collection Administrator
      */
+    @Override
     public boolean update(User user, Object object)
     {
         return ( // !Status.WITHDRAWN.equals(((Image)object).getStatus()) &&
@@ -68,9 +71,24 @@ public class OperationsImage implements Operations
      * Delete {@link Item} (Not specified!!!!): <br/>
      * - Nobody
      */
+    @Override
     public boolean delete(User user, Object object)
     {
         return ((auth.isPictureEditor(user, (Item)object) || auth.isContainerEditor(user, ((Item)object)) || auth
                 .isContainerAdmin(user, ((Item)object))) && Status.PENDING.equals(((Item)object).getStatus()));
+    }
+
+    /**
+     * Has privileged view role (this means, is not simple viewer, and check even if the item is public). Used to check
+     * the visibility of the restricted metadata
+     * 
+     * @param user
+     * @param object
+     * @return
+     */
+    public boolean readRestricted(User user, Object object)
+    {
+        return auth.isPrivilegedViewer(user, (Item)object) || auth.isPictureEditor(user, (Item)object)
+                || auth.isContainerEditor(user, ((Item)object)) || auth.isContainerAdmin(user, ((Item)object));
     }
 }

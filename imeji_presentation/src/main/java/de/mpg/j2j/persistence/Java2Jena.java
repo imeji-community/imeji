@@ -93,7 +93,7 @@ public class Java2Jena
         {
             throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
         }
-        Resource r = createResource(o);
+        Resource r = model.getResource(J2JHelper.getId(o).toString());// createResource(o);
         model.removeAll(r, null, null);
         for (Resource e : getEmbeddedResources(r, o))
         {
@@ -139,7 +139,8 @@ public class Java2Jena
         {
             return false;
         }
-        Resource r = createResource(o);
+        // Resource r = createResource(o); //This seems to be a problem, new method is simpler and faster
+        Resource r = model.getResource(J2JHelper.getId(o).toString());
         return model.contains(r, null);
     }
 

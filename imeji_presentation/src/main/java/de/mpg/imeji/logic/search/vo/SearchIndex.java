@@ -21,7 +21,11 @@ public class SearchIndex
      */
     public static enum names
     {
-        ID_URI, MY_IMAGES, PROPERTIES, PROPERTIES_CREATED_BY, PROPERTIES_MODIFIED_BY, PROPERTIES_CREATION_DATE, PROPERTIES_LAST_MODIFICATION_DATE, PROPERTIES_STATUS, PROPERTIES_CREATED_BY_USER_GRANT, PROPERTIES_CREATED_BY_USER_GRANT_TYPE, PROPERTIES_CREATED_BY_USER_GRANT_FOR, IMAGE_FILENAME, IMAGE_VISIBILITY, IMAGE_METADATA_SET, IMAGE_COLLECTION, IMAGE_COLLECTION_PROFILE, IMAGE_METADATA_TYPE_RDF, CONTAINER_METADATA, CONTAINER_METADATA_TITLE, CONTAINER_METADATA_DESCRIPTION, CONTAINER_METADATA_PERSON, CONTAINER_METADATA_PERSON_FAMILY_NAME, CONTAINER_METADATA_PERSON_GIVEN_NAME, CONTAINER_METADATA_PERSON_COMPLETE_NAME, CONTAINER_METADATA_PERSON_ORGANIZATION, CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, COLLECTION_PROFILE, IMAGE_METADATA, IMAGE_METADATA_STATEMENT, FULLTEXT, IMAGE_METADATA_TEXT, IMAGE_METADATA_NUMBER, IMAGE_METADATA_DATE, IMAGE_METADATA_TIME, IMAGE_METADATA_TITLE, IMAGE_METADATA_LONGITUDE, IMAGE_METADATA_LATITUTE, IMAGE_METADATA_LICENSE, IMAGE_METADATA_URI, IMAGE_METADATA_LABEL, IMAGE_METADATA_CITATION, IMAGE_METADATA_CITATIONSTYLE, IMAGE_METADATA_CONEID, IMAGE_METADATA_PERSON, IMAGE_METADATA_PERSON_FAMLILYNAME, IMAGE_METADATA_PERSON_GIVENNAME, IMAGE_METADATA_PERSON_IDENTIFIER, IMAGE_METADATA_PERSON_ROLE, IMAGE_METADATA_PERSON_ORGANIZATION, IMAGE_METADATA_PERSON_ORGANIZATION_TITLE, IMAGE_METADATA_PERSON_ORGANIZATION_IDENTIFIER, IMAGE_METADATA_PERSON_ORGANIZATION_DESCRIPTION, IMAGE_METADATA_PERSON_ORGANIZATION_CITY, IMAGE_METADATA_PERSON_ORGANIZATION_COUNTRY;
+        item, user, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, prof, type, cont_md, cont_title, 
+        cont_description, cont_person, cont_person_family, cont_person_given, cont_person_name, cont_person_org, cont_person_org_name, profile, 
+        md, statement, all, text, number, date, time, title, longitude, latitude, license, link, label, citation, citation_style, cone, 
+        person, person_family, person_given, person_id, person_role, person_org, person_org_title, person_org_id, person_org_description, 
+        person_org_city, person_org_country;
     }
 
     private String name;
@@ -30,12 +34,23 @@ public class SearchIndex
     private List<SearchIndex> children = new ArrayList<SearchIndex>();
     private boolean listType = false;
 
+    /**
+     * Construct a new {@link SearchIndex} with a name and a namespace
+     * @param name
+     * @param namespace
+     */
     public SearchIndex(String name, String namespace)
     {
         this.name = name;
         this.namespace = namespace;
     }
 
+    /**
+     * Construct a new {@link SearchIndex} with a name and a namespace and parent {@link SearchIndex}
+     * @param name
+     * @param namespace
+     * @param parent
+     */
     public SearchIndex(String name, String namespace, SearchIndex parent)
     {
         this(name, namespace);
@@ -46,6 +61,12 @@ public class SearchIndex
         }
     }
 
+    /**
+     * Construct a new {@link SearchIndex} for a list element with a namespace and parent {@link SearchIndex}
+     * @param namespace
+     * @param parent
+     * @param listType
+     */
     public SearchIndex(String namespace, SearchIndex parent, boolean listType)
     {
         this.setNamespace(namespace);

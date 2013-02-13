@@ -22,11 +22,9 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ImagesBean;
-import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
@@ -38,7 +36,6 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  */
 public class AlbumImagesBean extends ImagesBean
 {
-    private int totalNumberOfRecords;
     private String id = null;
     private Album album;
     private URI uri;
@@ -54,11 +51,12 @@ public class AlbumImagesBean extends ImagesBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
-    public String getInit()
+    public String getInitPage()
     {
         getNavigationString();
-        readUrl();
+        uri = ObjectHelper.getURI(Album.class, id);
         loadAlbum();
+        browseInit();
         return "";
     }
 
@@ -78,33 +76,10 @@ public class AlbumImagesBean extends ImagesBean
     }
 
     @Override
-    public int getTotalNumberOfRecords()
+    public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
     {
-        return totalNumberOfRecords;
-    }
-
-    @Override
-    public List<ThumbnailBean> retrieveList(int offset, int limit)
-    {
-        // readUrl();
-        // loadAlbum();
-        SortCriterion sortCriterion = initSortCriterion();
         ItemController controller = new ItemController(session.getUser());
-        SearchResult result = controller.searchImagesInContainer(uri, new SearchQuery(), sortCriterion, limit, offset);
-        setAlbumItems(result.getResults());
-        totalNumberOfRecords = result.getNumberOfRecords();
-        itemsUris = result.getResults();
-        result.setQuery(getQuery());
-        result.setSort(sortCriterion);
-        return ImejiFactory.imageListToThumbList(loadImages(result.getResults()));
-    }
-
-    /**
-     * Read parameters in the url
-     */
-    public void readUrl()
-    {
-        uri = ObjectHelper.getURI(Album.class, id);
+        return controller.search(uri, searchQuery, sortCriterion, null);
     }
 
     /**
@@ -132,7 +107,7 @@ public class AlbumImagesBean extends ImagesBean
     public String initFacets() throws Exception
     {
         // NO FACETs FOR ALBUMS
-        return "pretty";
+        return "";
     }
 
     public String removeFromAlbum() throws Exception
@@ -216,13 +191,15 @@ public class AlbumImagesBean extends ImagesBean
         BeanHelper.info(deleted + " " + session.getMessage("success_album_remove_images"));
     }
 
+    @Override
     public String getImageBaseUrl()
     {
         if (album == null || album.getId() == null)
             return "";
-        return navigation.getApplicationUri() + album.getId().getPath();
+        return navigation.getApplicationUrl() + "album/" + this.id;
     }
 
+    @Override
     public String getBackUrl()
     {
         return navigation.getBrowseUrl() + "/album" + "/" + this.id;
@@ -270,12 +247,14 @@ public class AlbumImagesBean extends ImagesBean
         return "pretty:";
     }
 
+    @Override
     public boolean isEditable()
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, session.getUser(), album);
     }
 
+    @Override
     public boolean isDeletable()
     {
         Security security = new Security();

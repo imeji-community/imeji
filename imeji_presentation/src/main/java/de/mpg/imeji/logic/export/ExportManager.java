@@ -49,8 +49,14 @@ public class ExportManager
         this.out = out;
         this.user = user;
         export = Export.factory(params);
+        export.setUser(user);
     }
 
+    /**
+     * Write in {@link OutputStream} the export
+     * 
+     * @param sr
+     */
     public void export(SearchResult sr)
     {
         if (export != null)
@@ -70,6 +76,12 @@ public class ExportManager
         }
     }
 
+    /**
+     * Search the element to export
+     * 
+     * @param searchQuery
+     * @return
+     */
     public SearchResult search(SearchQuery searchQuery)
     {
         String collectionId = export.getParam("col");
@@ -103,18 +115,16 @@ public class ExportManager
             ItemController itemController = new ItemController(user);
             if (collectionId != null)
             {
-                result = itemController.searchImagesInContainer(
-                        ObjectHelper.getURI(CollectionImeji.class, collectionId), searchQuery, null,
-                        maximumNumberOfRecords, 0);
+                result = itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId), searchQuery,
+                        null, null);
             }
             else if (albumId != null)
             {
-                result = itemController.searchImagesInContainer(ObjectHelper.getURI(Album.class, albumId), searchQuery,
-                        null, maximumNumberOfRecords, 0);
+                result = itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery, null, null);
             }
             else
             {
-                result = itemController.searchImages(searchQuery, null);
+                result = itemController.search(null, searchQuery, null, null);
             }
         }
         if (result != null && result.getNumberOfRecords() > 0 && result.getNumberOfRecords() > maximumNumberOfRecords)

@@ -18,7 +18,7 @@ import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 public class SortHelper
 {
     public final static String SORT_VALUE_REGEX = "XXX_SORT_VALUE_PATTERN_XXX";
-    private static Pattern SORT_VALUE_PATTERN = Pattern.compile(SORT_VALUE_REGEX);
+    public static Pattern SORT_VALUE_PATTERN = Pattern.compile(SORT_VALUE_REGEX);
 
     /**
      * If a list has a sortValue parameter, sort it, otherwise remove the sortValue pattern

@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.logic.security;
 
+import java.net.URI;
+
 import javax.wsdl.OperationType;
 
 import org.apache.log4j.Logger;
@@ -82,6 +84,19 @@ public class Security
         if (user != null)
             return auth.isSysAdmin(user);
         return false;
+    }
+
+    /**
+     * True if the {@link User} has privileged viewer role for this {@link Container}
+     * 
+     * @param user
+     * @param uriContainer
+     * @return
+     */
+    public boolean isPrivilegedViewer(User user, Item item)
+    {
+        OperationsImage op = new OperationsImage();
+        return op.readRestricted(user, item);
     }
 
     /**

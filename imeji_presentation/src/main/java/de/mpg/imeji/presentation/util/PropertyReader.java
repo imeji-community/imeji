@@ -84,7 +84,6 @@ public class PropertyReader
             Logger.getLogger(PropertyReader.class).info("Solution URI is " + solution.toString());
             InputStream in = getInputStream("solution.properties");
             solProperties.load(in);
-           
             String appname = solProperties.getProperty("appname");
             version = solProperties.getProperty("escidoc.application.version");
             propertiesFile = appname + ".properties";
@@ -110,7 +109,7 @@ public class PropertyReader
      * @throws IOException If the file could not be found neither in the file system nor in the classpath.
      */
     @SuppressWarnings("resource")
-	public static InputStream getInputStream(String filepath) throws IOException
+    public static InputStream getInputStream(String filepath) throws IOException
     {
         InputStream instream = null;
         // First try to search in file system

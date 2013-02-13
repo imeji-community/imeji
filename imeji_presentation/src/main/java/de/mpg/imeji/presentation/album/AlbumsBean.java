@@ -5,9 +5,6 @@ package de.mpg.imeji.presentation.album;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
@@ -88,6 +85,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
         this.sb = sb;
     }
 
+    @Override
     public String selectAll()
     {
         for (AlbumBean bean : getCurrentPartList())
@@ -104,6 +102,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
         return "";
     }
 
+    @Override
     public String selectNone()
     {
         sb.getSelectedAlbums().clear();

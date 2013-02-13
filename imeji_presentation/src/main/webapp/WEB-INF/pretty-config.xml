@@ -3,8 +3,10 @@
 	xsi:schemaLocation="http://ocpsoft.org/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.3.xsd">
 
 
+
 	<!-- Begin RewriteRules -->
 	<rewrite trailingSlash="remove" />
+		
 	<!-- <rewrite match="^/old-url/(\w+)/$" substitute="/new_url/$1/" redirect="301" 
 		/> -->
 	<!-- Begin UrlMappings -->

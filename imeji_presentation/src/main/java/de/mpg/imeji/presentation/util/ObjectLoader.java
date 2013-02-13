@@ -4,9 +4,6 @@
 package de.mpg.imeji.presentation.util;
 
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.AlbumController;
@@ -18,7 +15,6 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.j2j.exceptions.NotFoundException;
@@ -71,8 +67,8 @@ public class ObjectLoader
     {
         try
         {
-            CollectionController cl = new CollectionController(user);
-            return cl.retrieveLazy(id);
+            CollectionController cl = new CollectionController();
+            return cl.retrieveLazy(id, user);
         }
         catch (NotFoundException e)
         {
@@ -198,7 +194,6 @@ public class ObjectLoader
         {
             ProfileController pc = new ProfileController();
             MetadataProfile p = pc.retrieve(id, user);
-            Collections.sort((List<Statement>)p.getStatements());
             return p;
         }
         catch (NotFoundException e)

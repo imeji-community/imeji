@@ -2,6 +2,8 @@ package de.mpg.imeji.logic.export.format;
 
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.hp.hpl.jena.query.ReadWrite;
@@ -13,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Export} in rdf
@@ -24,6 +27,7 @@ import de.mpg.imeji.logic.search.SearchResult;
 public abstract class RDFExport extends Export
 {
     protected String[] filteredTriples = {};
+    protected List<String> filteredResources = new ArrayList<String>();
     protected Map<String, String> namespaces;
     protected String modelURI;
 
@@ -31,6 +35,7 @@ public abstract class RDFExport extends Export
     public void export(OutputStream out, SearchResult sr)
     {
         initNamespaces();
+        filterResources(sr, super.user);
         exportIntoOut(sr, out);
     }
 
@@ -43,17 +48,21 @@ public abstract class RDFExport extends Export
     @Override
     public abstract void init();
 
+    /**
+     * Initialize the namespaces used for the export
+     */
     protected abstract void initNamespaces();
 
     private void exportIntoOut(SearchResult sr, OutputStream out)
     {
+        namespaces.put("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf");
         ImejiJena.imejiDataSet.begin(ReadWrite.READ);
         try
         {
             Model model = ImejiJena.imejiDataSet.getNamedModel(modelURI);
             StringWriter writer = new StringWriter();
             writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            writer.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"");
+            writer.append("<rdf:RDF");
             for (String key : namespaces.keySet())
             {
                 writer.append(" xmlns:" + namespaces.get(key) + "=\"" + key + "\"");
@@ -91,6 +100,10 @@ public abstract class RDFExport extends Export
     private StringWriter exportResource(Resource r)
     {
         StringWriter writer = new StringWriter();
+        if (isFilteredResource(r))
+        {
+            return writer;
+        }
         newLine(writer);
         for (StmtIterator iterator = r.listProperties(); iterator.hasNext();)
         {
@@ -160,8 +173,15 @@ public abstract class RDFExport extends Export
         writer.append("\n");
     }
 
+    /**
+     * If the {@link Statement} is filtered (namespace has been defined as to be filtered), then return false
+     * 
+     * @param st
+     * @return
+     */
     private boolean isFiltered(Statement st)
     {
+        // Check if the triple is filtered
         for (String s : filteredTriples)
         {
             if (s.equals(st.getPredicate().getURI()))
@@ -171,4 +191,31 @@ public abstract class RDFExport extends Export
         }
         return false;
     }
+
+    /**
+     * If the {@link Resource} is filtered (for instance a metadata which should not be displayed, because restricted to
+     * current user), return true
+     * 
+     * @param r
+     * @return
+     */
+    private boolean isFilteredResource(Resource r)
+    {
+        for (String s : filteredResources)
+        {
+            if (s.equals(r.getURI().toString()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check which {@link Resource} should be filtered
+     * 
+     * @param sr
+     * @param user
+     */
+    protected abstract void filterResources(SearchResult sr, User user);
 }

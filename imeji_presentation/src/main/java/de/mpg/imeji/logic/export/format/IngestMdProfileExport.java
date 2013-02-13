@@ -9,6 +9,7 @@ import java.net.URI;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -35,8 +36,7 @@ public class IngestMdProfileExport extends Export
         {
             try
             {
-                JaxbIngestProfile.writeToOutputStream(
-                        pc.retrieve(URI.create(sr.getResults().get(0)), session.getUser()), out);
+                JaxbUtil.writeToOutputStream(pc.retrieve(URI.create(sr.getResults().get(0)), session.getUser()), out);
             }
             catch (Exception e)
             {

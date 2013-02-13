@@ -26,8 +26,8 @@
 				<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl"> 
 					<h:panelGroup layout="block" styleClass="full_area detailedItem">
 						<span>
-							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{imageBean.image.fullImageUrl}" target="_blank">
-								<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{imageBean.image.webImageUrl}" />
+							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank">
+								<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>			
 						</span>
 					</h:panelGroup>

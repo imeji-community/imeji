@@ -18,11 +18,11 @@ public class ItemParser
      * 
      * @param itemListXml
      * @return
-     * @throws SAXException 
-     * @throws JAXBException 
+     * @throws SAXException
+     * @throws JAXBException
      */
     public List<Item> parseItemList(File itemListXmlFile) throws JAXBException, SAXException
-    {	
+    {
         return new JaxbIngestProfile().unmarshalItems(itemListXmlFile).getItem();
     }
 
@@ -31,25 +31,23 @@ public class ItemParser
      * 
      * @param itemXml
      * @return
-     * @throws SAXException 
-     * @throws JAXBException 
+     * @throws SAXException
+     * @throws JAXBException
      */
     public Item parseItem(String itemXml) throws JAXBException, SAXException
     {
         return new JaxbIngestProfile().unmarshalItem(itemXml);
     }
 
-	@SuppressWarnings("unused")
-	private List<String> parseItemList2ListOfItems(File itemListXmlFile) throws JAXBException, SAXException
+    @SuppressWarnings("unused")
+    private List<String> parseItemList2ListOfItems(File itemListXmlFile) throws JAXBException, SAXException
     {
         List<String> l = new ArrayList<String>();
-        
         List<Item> items = parseItemList(itemListXmlFile);
-       
-        for (Item item : items) {
-			l.add(item.getId().toString());
-		}
-        
+        for (Item item : items)
+        {
+            l.add(item.getId().toString());
+        }
         return l;
     }
 }

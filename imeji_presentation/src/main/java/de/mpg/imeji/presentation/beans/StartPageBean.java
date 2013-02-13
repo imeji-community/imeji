@@ -42,7 +42,7 @@ public class StartPageBean
     {
         carousselImages = new ArrayList<Item>();
         ItemController ic = new ItemController(session.getUser());
-        List<Item> items = (List<Item>)ic.loadItems(getRandomResults(ic.searchImages(null, null)), -1, 0);
+        List<Item> items = (List<Item>)ic.loadItems(getRandomResults(ic.search(null, null, null, null)), -1, 0);
         carousselImages = new ArrayList<Item>(items);
     }
 
@@ -53,9 +53,9 @@ public class StartPageBean
     {
         carousselImages = new ArrayList<Item>();
         ItemController ic = new ItemController(session.getUser());
-        SortCriterion sc = new SortCriterion(Search.getIndex(SearchIndex.names.PROPERTIES_CREATION_DATE),
+        SortCriterion sc = new SortCriterion(Search.getIndex(SearchIndex.names.created),
                 SortOrder.DESCENDING);
-        List<Item> items = (List<Item>)ic.loadItems(ic.searchImages(null, sc).getResults(), CAROUSSEL_SIZE, 0);
+        List<Item> items = (List<Item>)ic.loadItems(ic.search(null, null, sc, null).getResults(), CAROUSSEL_SIZE, 0);
         carousselImages = new ArrayList<Item>(items);
     }
 

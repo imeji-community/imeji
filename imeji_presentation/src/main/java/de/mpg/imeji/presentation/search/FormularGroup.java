@@ -53,7 +53,7 @@ public class FormularGroup
     public SearchGroup getAsSearchGroup()
     {
         SearchGroup searchGroup = new SearchGroup();
-        searchGroup.addPair(new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_COLLECTION), SearchOperators.URI,
+        searchGroup.addPair(new SearchPair(Search.getIndex(SearchIndex.names.col), SearchOperators.URI,
                 collectionId));
         searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
         for (FormularElement e : elements)

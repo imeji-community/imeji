@@ -4,15 +4,13 @@
 package de.mpg.imeji.presentation.upload;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -22,24 +20,19 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
-import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.escidoc.EscidocUtils;
-import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.upload.deposit.DepositController;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.LoginHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -55,11 +48,8 @@ public class UploadBean
     private int collectionSize = 0;
     private SessionBean sessionBean;
     private String id;
-    private String escidocContext;
-    private String escidocUserHandle;
     private User user;
     private String title;
-    private String format;
     private String totalNum;
     private int sNum;
     private int fNum;
@@ -67,8 +57,8 @@ public class UploadBean
     private List<String> fFiles;
     private String externalUrl;
     private StorageController storageController;
+    private Collection<Item> itemList;
     private static Logger logger = Logger.getLogger(Upload.class);
-    
 
     /**
      * Construct the Bean and initalize the pages
@@ -77,15 +67,6 @@ public class UploadBean
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         storageController = new StorageController("internal");
-        try
-        {
-            escidocContext = PropertyReader.getProperty("escidoc.imeji.context.id");
-            logInEscidoc();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -95,6 +76,7 @@ public class UploadBean
     {
         if (UrlHelper.getParameterBoolean("init"))
         {
+            removeFiles();
             loadCollection();
             totalNum = "";
             sNum = 0;
@@ -111,20 +93,21 @@ public class UploadBean
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Error upload", e);
             }
         }
         else if (UrlHelper.getParameterBoolean("done"))
         {
             try
             {
+                createItemForFiles();
                 totalNum = UrlHelper.getParameterValue("totalNum");
                 loadCollection();
                 report();
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Error upload", e);
             }
         }
     }
@@ -144,7 +127,9 @@ public class UploadBean
             title = url.getPath().substring(url.getPath().lastIndexOf("/") + 1);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             externalController.read(url.toString(), baos);
-            uploadFile(baos.toByteArray());
+            Item item = uploadFile(baos.toByteArray());
+            ItemController ic = new ItemController(user);
+            ic.create(item, collection.getId());
             externalUrl = "";
         }
         catch (Exception e)
@@ -162,6 +147,8 @@ public class UploadBean
      */
     public void upload() throws Exception
     {
+        UserController uc = new UserController(null);
+        user = uc.retrieve(getUser().getEmail());
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
                 .getRequest();
         boolean isMultipart = ServletFileUpload.isMultipartContent(req);
@@ -172,17 +159,14 @@ public class UploadBean
             FileItemIterator iter = upload.getItemIterator(req);
             while (iter.hasNext())
             {
-                FileItemStream item = iter.next();
-                InputStream stream = item.openStream();
-                if (!item.isFormField())
+                FileItemStream fis = iter.next();
+                InputStream stream = fis.openStream();
+                if (!fis.isFormField())
                 {
-                    title = item.getName();
-                    StringTokenizer st = new StringTokenizer(title, ".");
-                    while (st.hasMoreTokens())
-                    {
-                        format = st.nextToken();
-                    }
-                    uploadFile(StorageUtils.toBytes(stream));
+                    title = fis.getName();
+                    Item item = uploadFile(StorageUtils.toBytes(stream));
+                    if (item != null)
+                        itemList.add(item);
                 }
             }
         }
@@ -194,19 +178,17 @@ public class UploadBean
      * @param bytes
      * @throws Exception
      */
-    private void uploadFile(byte[] bytes)
+    private Item uploadFile(byte[] bytes)
     {
         try
         {
-            UserController uc = new UserController(null);
-            User user = uc.retrieve(getUser().getEmail());
-            DepositController controller = new DepositController();
             UploadResult uploadResult = storageController.upload(title, bytes);
-            controller.createImejiImage(collection, user, uploadResult.getId(), title,
+            Item item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
                     URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
                     URI.create(uploadResult.getWeb()));
             sNum += 1;
             sFiles.add(title);
+            return item;
         }
         catch (Exception e)
         {
@@ -214,6 +196,40 @@ public class UploadBean
             fFiles.add(title);
             logger.error("Error uploading image: ", e);
         }
+        return null;
+    }
+
+    /**
+     * Create the {@link Item} fot the files which have been uploaded
+     */
+    private void createItemForFiles()
+    {
+        ItemController ic = new ItemController(user);
+        try
+        {
+            ic.create(itemList, collection.getId());
+            itemList = new ArrayList<Item>();
+        }
+        catch (Exception e)
+        {
+            logger.error("Error creating files for upload", e);
+        }
+    }
+
+    /**
+     * Rmove the files which don't have been created with an {@link Item}. Ca happen if the upload is interrupted
+     */
+    private void removeFiles()
+    {
+        if (itemList != null)
+        {
+            for (Item item : itemList)
+            {
+                System.out.println("remove file " + item.getStorageId());
+                storageController.delete(item.getStorageId());
+            }
+        }
+        itemList = new ArrayList<Item>();
     }
 
     /**
@@ -303,18 +319,6 @@ public class UploadBean
         this.fFiles = fFiles;
     }
 
-    /**
-     * Log in in escidoc with the escidoc user
-     * 
-     * @throws Exception
-     */
-    public void logInEscidoc() throws Exception
-    {
-        String userName = PropertyReader.getProperty("imeji.escidoc.user");
-        String password = PropertyReader.getProperty("imeji.escidoc.password");
-        escidocUserHandle = LoginHelper.login(userName, password);
-    }
-
     public CollectionImeji getCollection()
     {
         return collection;
@@ -333,26 +337,6 @@ public class UploadBean
     public void setId(String id)
     {
         this.id = id;
-    }
-
-    public String getEscidocContext()
-    {
-        return escidocContext;
-    }
-
-    public void setEscidocContext(String escidocContext)
-    {
-        this.escidocContext = escidocContext;
-    }
-
-    public String getEscidocUserHandle()
-    {
-        return escidocUserHandle;
-    }
-
-    public void setEscidocUserHandle(String escidocUserHandle)
-    {
-        this.escidocUserHandle = escidocUserHandle;
     }
 
     public User getUser()

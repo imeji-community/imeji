@@ -94,7 +94,7 @@ public class StorageUtils
                 out.write(buffer, 0, numRead);
             }
             in.close();
-            // out.flush();
+            out.flush();
             out.close();
         }
         catch (Exception e)

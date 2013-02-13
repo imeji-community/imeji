@@ -20,6 +20,8 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.Item.Visibility;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
@@ -90,11 +92,51 @@ public class ImejiFactory
         return mds;
     }
 
+    /**
+     * Create a new emtpy {@link Item}
+     * @param collection
+     * @return
+     */
     public static Item newItem(CollectionImeji collection)
     {
         Item item = new Item();
+        if (collection == null || collection.getId() == null)
+        {
+            throw new RuntimeException("Can not create item with a collection null");
+        }
         item.setCollection(collection.getId());
         item.getMetadataSets().add(newMetadataSet(collection.getProfile()));
+        return item;
+    }
+
+    /**
+     * Factory Method used during the upload
+     * @param collection
+     * @param user
+     * @param storageId
+     * @param title
+     * @param fullImageURI
+     * @param thumbnailURI
+     * @param webURI
+     * @return
+     */
+    public static Item newItem(CollectionImeji collection, User user, String storageId, String title, URI fullImageURI,
+            URI thumbnailURI, URI webURI)
+    {
+        Item item = ImejiFactory.newItem(collection);
+        item.setFullImageUrl(fullImageURI);
+        item.setThumbnailImageUrl(thumbnailURI);
+        item.setWebImageUrl(webURI);
+        item.setVisibility(Visibility.PUBLIC);
+        item.setFilename(title);
+        if (storageId != null)
+        {
+            item.setStorageId(storageId);
+        }
+        if (collection.getStatus() == Status.RELEASED)
+        {
+            item.setStatus(Status.RELEASED);
+        }
         return item;
     }
 

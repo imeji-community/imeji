@@ -141,14 +141,14 @@ All rights reserved. Use is subject to license terms.
 					/*open the dialog*/
 					dialog.show();
 					/* lock the page*/
-					var content = $("#full_wrapper");
+					var content = $(".imj_siteWrapper");
 					content.css({ opacity: 0.3});
 					$.lock(dialog);				
 				}
 				/*close a dialog*/
 				function closeDialog(id) {
 					var dialog = $(document).find("#" + id);
-					var content = $("#full_wrapper");
+					var content = $(".imj_siteWrapper");
 					content.css({ opacity: 1});
 					dialog.hide();
 					$.unlock(dialog);

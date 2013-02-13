@@ -54,7 +54,14 @@ public class InternalStorage implements Storage
      */
     public InternalStorage()
     {
-        manager = new InternalStorageManager();
+        try
+        {
+            manager = new InternalStorageManager();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error initialising InternalStorageManager: ", e);
+        }
     }
 
     /*

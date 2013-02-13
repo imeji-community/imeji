@@ -32,7 +32,7 @@ public class StringHelper
     }
     
     /**
-     * Format a uri (URL, System path): add a / if the uri doesn't end with it
+     * Format a uri (URL): add a / if the uri doesn't end with it
      * 
      * @return
      */
@@ -43,5 +43,19 @@ public class StringHelper
             uri += "/";
         }
         return uri;
+    }
+    
+    /**
+     * Format a system path
+     * @param path
+     * @return
+     */
+    public static String normalizePath(String path)
+    {
+        if (!path.endsWith("\\"))
+        {
+            path += "\\";
+        }
+        return path;
     }
 }

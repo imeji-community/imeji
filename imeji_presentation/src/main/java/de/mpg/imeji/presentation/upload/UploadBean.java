@@ -182,6 +182,7 @@ public class UploadBean
     {
         try
         {
+            storageController = new StorageController();
             UploadResult uploadResult = storageController.upload(title, bytes);
             Item item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
                     URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),

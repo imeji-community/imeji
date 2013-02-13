@@ -147,7 +147,7 @@ public class ImejiJena
         adminUser.setNick("sysadmin");
         try
         {
-            adminUser.setEncryptedPassword(StringHelper.convertToMD5(ADMIN_EMAIL_INIT));
+            adminUser.setEncryptedPassword(StringHelper.convertToMD5(ADMIN_PASSWORD_INIT));
         }
         catch (Exception e)
         {

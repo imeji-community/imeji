@@ -31,6 +31,7 @@ package de.mpg.imeji.logic.storage.internal;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -62,14 +63,17 @@ public class InternalStorageManager
     private static Logger logger = Logger.getLogger(InternalStorageManager.class);
 
     /**
-     * Default Constructor
+     * Constructor for a specific path and url
+     * 
+     * @param path
+     * @param url
      */
     public InternalStorageManager()
     {
         try
         {
-            File storarageDirectory = new File(StringHelper.normalizeURI(PropertyReader.getProperty("imeji.storage.path")));
-            storagePath = storarageDirectory.getAbsolutePath();
+            File storageDir = new File(PropertyReader.getProperty("imeji.storage.path"));
+            storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
             storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url")) + "file/";
         }
         catch (Exception e)

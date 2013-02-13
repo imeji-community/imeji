@@ -120,9 +120,13 @@ public class PropertyReader
         	{
         		serverConfDirectory = System.getProperty("jboss.server.config.dir");
         	}
-        	else
+        	else if( System.getProperty("catalina.home") != null)
         	{
         		serverConfDirectory = System.getProperty("catalina.home") + "/conf";
+        	}
+        	else
+        	{
+        	    serverConfDirectory = "/src/test/resources";
         	}
         	
         	logger.info("loading properties from " + serverConfDirectory + "/" + filepath);

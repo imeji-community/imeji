@@ -156,7 +156,6 @@ public abstract class ImejiController
                 ImejiRDF2Bean rdf2Bean = new ImejiRDF2Bean(ImejiJena.counterModel);
                 c = (Counter)rdf2Bean.load(c.getId().toString(), ImejiJena.adminUser, c);
                 int id = c.getCounter();
-                logger.info("Counter : Requested id : " + id);
                 incrementCounter(c);
                 return id;
             }

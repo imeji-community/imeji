@@ -6,6 +6,8 @@ package de.mpg.imeji.logic;
 import java.io.File;
 import java.net.URI;
 
+import javax.management.RuntimeErrorException;
+
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.Jena;
@@ -48,6 +50,8 @@ public class ImejiJena
     public static URI counterID = URI.create("http://imeji.org/counter/0");
     private static Logger logger = Logger.getLogger(ImejiJena.class);
     public static User adminUser;
+    private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
+    private static final String ADMIN_PASSWORD_INIT = "admin";
 
     /**
      * Initialize the {@link Jena} database according to imeji.properties<br/>
@@ -137,36 +141,19 @@ public class ImejiJena
      */
     private static void initadminUser()
     {
+        adminUser = new User();
+        adminUser.setEmail(ADMIN_EMAIL_INIT);
+        adminUser.setName("imeji Sysadmin");
+        adminUser.setNick("sysadmin");
         try
         {
-            if (PropertyReader.getProperty("imeji.sysadmin.email") != null)
-            {
-                adminUser = new User();
-                adminUser.setEmail(PropertyReader.getProperty("imeji.sysadmin.email"));
-                adminUser.setName("imeji Sysadmin");
-                adminUser.setNick("sysadmin");
-                adminUser.setEncryptedPassword(StringHelper.convertToMD5(PropertyReader
-                        .getProperty("imeji.sysadmin.password")));
-                adminUser.getGrants().add(new Grant(GrantType.SYSADMIN, URI.create("http://imeji.org/")));
-            }
+            adminUser.setEncryptedPassword(StringHelper.convertToMD5(ADMIN_EMAIL_INIT));
         }
         catch (Exception e)
         {
-            adminUser = new User();
-            adminUser.setEmail("admin@imeji.org");
-            adminUser.setName("imeji Sysadmin");
-            adminUser.setNick("sysadmin");
-            try
-            {
-                adminUser.setEncryptedPassword(StringHelper.convertToMD5("password"));
-            }
-            catch (Exception e1)
-            {
-                throw new RuntimeException(e1);
-            }
-            adminUser.getGrants().add(new Grant(GrantType.SYSADMIN, URI.create("http://imeji.org/")));
-            // throw new RuntimeException("Error initializing admin user, check your properties", e);
+            throw new RuntimeException("error creating admin user: ", e);
         }
+        adminUser.getGrants().add(new Grant(GrantType.SYSADMIN, URI.create("http://imeji.org/")));
     }
 
     /**

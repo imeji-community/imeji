@@ -54,6 +54,16 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 public class StorageTest
 {
     private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
+    private static final String FILENAME = "test";
+    private static final String INTERNATIONAL_CHARACHTERS = "japanese:テスト  chinese:實驗 yiddish:פּראָבע arab:اختبار bengali: পরীক্ষা";
+    private static final String LONG_NAME = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+    		"0123456789012345678901234567890adasd dsdfdj ghdjghfdgh gfhg df gfhdfghdgf hisfgshdfghsdi gfhsdigf sdi gfidsf gsidfhsidf gsdih " +
+    		"hsgfhidsgfhdsg fh dsfshdgfhidsgfihsdgfiwuzfgisdh fg shdfg sdihfg sdihgfisdgfhsdgf ihsdg fhsdgfizsdgf zidsgfizsd fi fhsdhfgsdhfg" +
+    		"hgf dhfgdshfgdshfghsdg fhsdf ghsdg fsdhf gsdjgf sdjgfsd fgdszfg sdfzgsdzgf sdfg dgfhisgfigifg i";
+    /**
+     * Not working: *
+     */
+    private static final String SPECIAL_CHARACHTERS = "!\"§$%&/()=? '#_-.,";
 
     /**
      * Test for {@link InternalStorage}
@@ -61,10 +71,33 @@ public class StorageTest
      * @throws FileNotFoundException
      */
     @Test
-    public void internaStorage()
+    public void internalStorageBasic()
+    {
+        uploadReadDelete(FILENAME + ".png");
+    }
+
+    @Test
+    public void internalStorageSpecialFileName()
+    {
+        uploadReadDelete(SPECIAL_CHARACHTERS + ".png");
+    }
+
+    @Test
+    public void internalStorageInternationalFileName()
+    {
+        uploadReadDelete(INTERNATIONAL_CHARACHTERS + ".png");
+    }
+
+    @Test
+    public void internalStorageLongFileName()
+    {
+        uploadReadDelete(LONG_NAME + ".png");
+    }
+
+    private void uploadReadDelete(String filename)
     {
         StorageController sc = new StorageController("internal");
-        InternalStorageManager ism = new InternalStorageManager();
+        InternalStorageManager manager = new InternalStorageManager();
         byte[] original = null;
         try
         {
@@ -74,35 +107,19 @@ public class StorageTest
         {
             e.printStackTrace();
         }
-        String filename = getFilename(TEST_IMAGE);
         // UPLOAD
         UploadResult res = sc.upload(filename, original);
         Assert.assertFalse(res.getOrginal() + " url is same as path",
-                res.getOrginal() == ism.transformUrlToPath(res.getOrginal()));
+                res.getOrginal() == manager.transformUrlToPath(res.getOrginal()));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         // READ THE URL
         sc.read(res.getOrginal(), baos);
         byte[] stored = baos.toByteArray();
         // DELETE THE FILE
         sc.delete(res.getId());
-        baos = new ByteArrayOutputStream();
-        try
-        {
-            // READ TO CHECK IF THE FILE HAS BEEN DELETED
-            readFile(ism.transformUrlToPath(res.getOrginal()));
-            Assert.fail("File has not been deleted: " + res.getOrginal());
-        }
-        catch (FileNotFoundException e)
-        {
-            // OK, file should not be found
-        }
+        Assert.assertEquals(0, manager.getNumberOfFiles());
         Assert.assertTrue(Arrays.equals(original, stored));
         Assert.assertTrue(Arrays.hashCode(original) == Arrays.hashCode(stored));
-    }
-
-    private String getFilename(String path)
-    {
-        return path.substring(path.lastIndexOf("/") + 1);
     }
 
     private byte[] readFile(String path) throws FileNotFoundException

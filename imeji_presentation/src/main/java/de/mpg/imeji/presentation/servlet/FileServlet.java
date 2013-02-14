@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.StringHelper;
 
 /**
  * The Servlet to Read files from imeji {@link Storage}
@@ -50,7 +52,7 @@ public class FileServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         String imageUrl = req.getParameter("id");
-        resp.setContentType(StorageUtils.getMimeType(StorageUtils.getFileExtension(imageUrl)));
+        resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(imageUrl)));
         storageController.read(imageUrl, resp.getOutputStream());
     }
 

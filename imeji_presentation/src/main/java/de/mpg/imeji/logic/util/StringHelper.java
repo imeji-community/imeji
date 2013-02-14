@@ -1,5 +1,7 @@
 package de.mpg.imeji.logic.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 
 /**
@@ -19,6 +21,10 @@ public class StringHelper
      * Character that separates components of a file path. This is "/" on UNIX and "\" on Windows.
      */
     public static final String fileSeparator = System.getProperty("file.separator");
+    /**
+     * Tha maximum size of a file: Theorically, the max length could be 255. For security, imeji uses qa lower count.
+     */
+    public static final int FILENAME_MAX_LENGTH = 200;
 
     /**
      * Encode a {@link String} to MD5
@@ -67,5 +73,46 @@ public class StringHelper
             path += fileSeparator;
         }
         return path;
+    }
+
+    /**
+     * Transform a filename to a correct filename, which can be used by the internal storage to store a file
+     * 
+     * @param filename
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public static String normalizeFilename(String filename)
+    {
+        try
+        {
+            String filextension = getFileExtension(filename);
+            filename = URLEncoder.encode(filename.replace(" ", "_"), "UTF-8");
+            if (filename.length() > FILENAME_MAX_LENGTH)
+            {
+                return filename.substring(0, FILENAME_MAX_LENGTH) + "." + filextension;
+            }
+            return filename;
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            throw new RuntimeException("Error with filename: " + filename, e);
+        }
+    }
+
+    /**
+     * Parse the file extension from its name
+     * 
+     * @param filename
+     * @return
+     */
+    public static String getFileExtension(String filename)
+    {
+        int i = filename.lastIndexOf('.');
+        if (i > 0)
+        {
+            return filename.substring(i + 1);
+        }
+        return null;
     }
 }

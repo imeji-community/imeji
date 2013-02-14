@@ -22,6 +22,7 @@ import java.util.Arrays;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.jai.codec.ImageCodec;
@@ -45,6 +46,12 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 public class ImageUtils
 {
+    private static Logger logger = Logger.getLogger(ImageUtils.class);
+    /**
+     * If true, the rescale will keep the better quality of the images
+     */
+    private static boolean RESCALE_HIGH_QUALITY = true;
+
     /**
      * Prepare the image for the upload: <br/>
      * if it is original image upload, do nothing <br/>
@@ -99,13 +106,13 @@ public class ImageUtils
                 g1.drawImage(image, (height - width) / 2, 0, null);
                 if (height > size)
                     rescaledImage = getScaledInstance(newImg, size, size, RenderingHints.VALUE_INTERPOLATION_BILINEAR,
-                            true);
+                            RESCALE_HIGH_QUALITY);
                 else
                     rescaledImage = newImg;
             }
             else
                 rescaledImage = getScaledInstance(image, size, height * size / width,
-                        RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
+                        RenderingHints.VALUE_INTERPOLATION_BILINEAR, RESCALE_HIGH_QUALITY);
         }
         else
         {
@@ -116,13 +123,13 @@ public class ImageUtils
                 g1.drawImage(image, 0, (width - height) / 2, null);
                 if (width > size)
                     rescaledImage = getScaledInstance(newImg, size, size, RenderingHints.VALUE_INTERPOLATION_BILINEAR,
-                            true);
+                            RESCALE_HIGH_QUALITY);
                 else
                     rescaledImage = newImg;
             }
             else
                 rescaledImage = getScaledInstance(image, width * size / height, size,
-                        RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
+                        RenderingHints.VALUE_INTERPOLATION_BILINEAR, RESCALE_HIGH_QUALITY);
         }
         BufferedImage rescaledBufferedImage = new BufferedImage(rescaledImage.getWidth(null),
                 rescaledImage.getHeight(null), BufferedImage.TYPE_INT_RGB);
@@ -366,21 +373,28 @@ public class ImageUtils
      */
     public static byte[] compressImage(byte[] bytes, String mimeType)
     {
-        if (mimeType.equals(StorageUtils.getMimeType("tif")))
+        try
         {
-            bytes = ImageUtils.tiff2Jpeg(bytes);
+            if (mimeType.equals(StorageUtils.getMimeType("tif")))
+            {
+                bytes = ImageUtils.tiff2Jpeg(bytes);
+            }
+            else if (mimeType.equals(StorageUtils.getMimeType("png")))
+            {
+                bytes = ImageUtils.png2Jpeg(bytes);
+            }
+            else if (mimeType.equals(StorageUtils.getMimeType("bmp")))
+            {
+                bytes = ImageUtils.bmp2Jpeg(bytes);
+            }
+            else if (mimeType.equals(StorageUtils.getMimeType("gif")))
+            {
+                bytes = ImageUtils.gif2Jpeg(bytes);
+            }
         }
-        else if (mimeType.equals(StorageUtils.getMimeType("png")))
+        catch (Exception e)
         {
-            bytes = ImageUtils.png2Jpeg(bytes);
-        }
-        else if (mimeType.equals(StorageUtils.getMimeType("bmp")))
-        {
-            bytes = ImageUtils.bmp2Jpeg(bytes);
-        }
-        else if (mimeType.equals(StorageUtils.getMimeType("gif")))
-        {
-            bytes = ImageUtils.gif2Jpeg(bytes);
+            logger.info("Image could not be compressed: " + e.getMessage());
         }
         return bytes;
     }

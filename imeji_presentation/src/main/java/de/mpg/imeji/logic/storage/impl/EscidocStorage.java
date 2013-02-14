@@ -47,6 +47,7 @@ import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.escidoc.EscidocUtils;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -92,7 +93,7 @@ public class EscidocStorage implements Storage
     @Override
     public UploadResult upload(String filename, byte[] bytes)
     {
-        String mimeType = StorageUtils.getMimeType(StorageUtils.getFileExtension(filename));
+        String mimeType = StorageUtils.getMimeType(StringHelper.getFileExtension(filename));
         try
         {
             // Construct the Item

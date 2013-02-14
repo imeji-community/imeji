@@ -31,6 +31,7 @@ package de.mpg.imeji.logic.storage.internal;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -91,14 +92,15 @@ public class InternalStorageManager
      */
     public InternalStorageItem addFile(byte[] bytes, String filename)
     {
-        InternalStorageItem item = newItem(filename);
         try
         {
+            InternalStorageItem item = newItem(StringHelper.normalizeFilename(filename));
             return writeItemFiles(item, bytes);
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error writing file in internal storage " + storagePath, e);
+            throw new RuntimeException("Error writing file in internal storage " + storagePath + " for file "
+                    + StringHelper.normalizeFilename(filename), e);
         }
     }
 
@@ -152,7 +154,7 @@ public class InternalStorageManager
     }
 
     /**
-     * Extract the file system path from the url
+     * Transform and url to a file system path
      * 
      * @param url
      * @return
@@ -186,10 +188,10 @@ public class InternalStorageManager
         item.setOrignalPath(write(bytes, item.getOrignalPath()));
         item.setWebPath(write(
                 ImageUtils.transformImage(bytes, FileResolution.WEB,
-                        StorageUtils.getMimeType(StorageUtils.getFileExtension(item.getFileName()))), item.getWebPath()));
+                        StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))), item.getWebPath()));
         item.setThumbnailPath(write(
                 ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
-                        StorageUtils.getMimeType(StorageUtils.getFileExtension(item.getFileName()))),
+                        StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
                 item.getThumbnailPath()));
         return item;
     }
@@ -221,11 +223,25 @@ public class InternalStorageManager
         }
     }
 
+    public int getNumberOfFiles()
+    {
+        File f = new File(storagePath);
+        return f.list().length;
+    }
+
     /**
      * @return the storageUrl
      */
     public String getStorageUrl()
     {
         return storageUrl;
+    }
+
+    /**
+     * @return the storagePath
+     */
+    public String getStoragePath()
+    {
+        return storagePath;
     }
 }

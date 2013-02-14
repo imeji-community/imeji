@@ -7,20 +7,20 @@
 			<h:outputText rendered="#{SessionBean.user == null}" styleClass="free_area0_p8" value="To view this page you need to login!"/>
 			<h:outputText rendered="#{SessionBean.user != null}" styleClass="free_area0_p8" value="You are not allowed to see this page with your account. You can try with another account."/>
 		</h3>
-		
-		<h:panelGroup styleClass="full_area0_p8">
-			<h:panelGroup styleClass="double_area0">
-				<h:outputLabel for="inputEmail" styleClass="free_label" value="Email"/>
-				<h:inputText id="inputEmail" styleClass="double_txtInput" value="#{LoginBean.login}"/>
+		<h:form>
+			<h:panelGroup styleClass="full_area0_p8">
+				<h:panelGroup styleClass="double_area0">
+					<h:outputLabel for="inputEmail" styleClass="free_label" value="Email"/>
+					<h:inputText id="inputEmail" styleClass="double_txtInput" value="#{LoginBean.login}"/>
+				</h:panelGroup>
+				<h:panelGroup styleClass="double_area0 tiny_marginLExcl">
+					<h:outputLabel for="inputPasswd" styleClass="free_label " value="Password"/>
+					<h:inputSecret id="inputPasswd" styleClass="double_txtInput" value="#{LoginBean.passwd}"/>
+				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup styleClass="double_area0 tiny_marginLExcl">
-				<h:outputLabel for="inputPasswd" styleClass="free_label " value="Password"/>
-				<h:inputSecret id="inputPasswd" styleClass="double_txtInput" value="#{LoginBean.passwd}" onkeypress="return loginOnEnter(event)"/>
+			<h:panelGroup styleClass="quad_area0_p8">
+				<h:commandLink id="lnkLogin" styleClass="small_area1_p8 activeButton" value="#{lbl.login}" action ="#{LoginBean.doLogin}"/>
 			</h:panelGroup>
-		</h:panelGroup>
-		
-		<h:panelGroup styleClass="quad_area0_p8">
-			<h:commandLink id="lnkLogin" styleClass="small_area1_p8 activeButton" value="#{lbl.login}" action ="#{LoginBean.login}"/>
-		</h:panelGroup>
+		</h:form>
 	</h:panelGroup>
 </ui:composition>

@@ -3,7 +3,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       >
-
+   <!-- Add Juery UI auto-complete lib, user code in \js\autocomplete.js -->
+   <h:outputScript library="js" name="jquery-ui-1.10.0.custom.min.js" /> 
+   <h:outputScript library="js" name="autocomplete.js" /> 
 	<h:panelGroup layout="block" styleClass="free_area0">
 				
 		<h:outputLabel value="#{MetadataLabels.internationalizedLabels[metadata.statement]} (#{MetadataLabels.lang})" rendered="#{hideLabel != true}" styleClass="huge_label"/>

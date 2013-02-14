@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -23,8 +22,6 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
-import de.mpg.imeji.presentation.lang.InternationalizationBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**

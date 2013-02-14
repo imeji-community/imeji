@@ -68,7 +68,7 @@
 			
 			<!-- Language -->
 			<h:form id="langForm">
-				<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit(); return false;" rendered="true" styleClass="imj_metaMenuItem">
+				<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItem">
 					<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
 				</h:selectOneMenu>
 			</h:form>

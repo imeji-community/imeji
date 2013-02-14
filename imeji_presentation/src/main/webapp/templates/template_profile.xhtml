@@ -1,4 +1,4 @@
-<ui:composition template="template_collection.xhtml"
+<ui:composition template="template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -35,7 +35,7 @@
 								<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl" >
 									<h:outputText value=" #{lbl.profile_use_template} "/>
 									<span class="xTiny_marginLExcl">
-										<h:selectOneMenu value="#{FormularBean.template}" onchange="getElementById('formular:changeTemplate').click();" valueChangeListener="#{FormularBean.templateListener}">
+										<h:selectOneMenu value="#{FormularBean.template}" onchange="getElementById('profileForm:changeTemplate').click();" valueChangeListener="#{FormularBean.templateListener}">
 											<f:selectItems value="#{FormularBean.profilesMenu}"/>
 										</h:selectOneMenu>
 										<h:commandButton id="changeTemplate" action="#{FormularBean.changeTemplate}" style="visibility:hidden"/>
@@ -76,7 +76,7 @@
 										
 											<h:panelGroup styleClass="medium_area0 clear">
 												<h:outputLabel styleClass="medium_label" value="#{lbl.type}"/>										
-												<h:selectOneMenu  requiredMessage="Please choose a type!"  id="selStatementType" styleClass="medium_select" onchange="getElementById('formular:profile:#{position.index}:changeType').click();" value="#{wrapper.statement.type}" valueChangeListener="#{wrapper.typeListener}">
+												<h:selectOneMenu  requiredMessage="Please choose a type!"  id="selStatementType" styleClass="medium_select" onchange="getElementById('profileForm:profile:#{position.index}:changeType').click();" value="#{wrapper.statement.type}" valueChangeListener="#{wrapper.typeListener}">
 													<f:converter converterId="URIConverter" />
 													<f:selectItems value="#{FormularBean.mdTypesMenu}"/>
 												</h:selectOneMenu>

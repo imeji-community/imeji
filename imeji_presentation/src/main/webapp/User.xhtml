@@ -9,7 +9,7 @@
 			
 				<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
-					<h:form>
+					<h:form id ="userForm">
 						<h:panelGroup styleClass="small_marginLExcl full_area0" rendered="#{UserBean.admin}">
 							<h:panelGroup styleClass="full_area0" rendered="#{UserBean.admin}">
 								<h:panelGroup styleClass="full_area0">
@@ -19,7 +19,7 @@
 								<h:panelGroup styleClass="full_area0">
 									<h:outputText styleClass="double_area0_p4" value="#{lbl.complete_name}"/>
 									<h:outputText styleClass="free_area0_p4" value="#{UserBean.user.name}"/>
-									<h:outputLink id="lnkEditName" value="#" onclick="document.getElementById('formular:pnlEditName').style.display = 'block';document.getElementById('formular:lnkEditNick').style.display = 'none'; this.style.visibility ='hidden';">
+									<h:outputLink id="lnkEditName" value="#" onclick="document.getElementById('userForm:pnlEditName').style.display = 'block';document.getElementById('userForm:lnkEditNick').style.display = 'none'; this.style.visibility ='hidden';">
 										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
 									</h:outputLink>
 									<h:panelGroup styleClass="full_area0_p4" id="pnlEditName" style="display:none;">
@@ -31,7 +31,7 @@
 					            <h:panelGroup styleClass="full_area0">
 									<h:outputText styleClass="double_area0_p4" value="#{lbl.nickname}"/>
 									<h:outputText styleClass="free_area0_p4" value="#{UserBean.user.nick}"/>
-									<h:outputLink id="lnkEditNick" value="#" onclick="document.getElementById('formular:pnlEditNick').style.display = 'block'; document.getElementById('formular:lnkEditName').style.display = 'none'; this.style.visibility ='hidden';">
+									<h:outputLink id="lnkEditNick" value="#" onclick="document.getElementById('userForm:pnlEditNick').style.display = 'block'; document.getElementById('userForm:lnkEditName').style.display = 'none'; this.style.visibility ='hidden';">
 										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
 									</h:outputLink>
 									<h:panelGroup styleClass="full_area0_p4" id="pnlEditNick" style="display:none;">

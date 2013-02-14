@@ -314,11 +314,17 @@ public class MdProfileBean
         return wrappers.size();
     }
 
+    /**
+     * Move a statement up in statement list
+     */
     public void moveUp()
     {
         Collections.swap(wrappers, getStatementPosition(), getStatementPosition() + 1);
     }
 
+    /**
+     * Move a statement down in statement list
+     */
     public void moveDown()
     {
         Collections.swap(wrappers, getStatementPosition() + 1, getStatementPosition());

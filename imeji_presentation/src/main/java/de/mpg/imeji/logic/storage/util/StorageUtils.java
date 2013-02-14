@@ -127,21 +127,7 @@ public class StorageUtils
         return method;
     }
 
-    /**
-     * Parse the file extension from its name
-     * 
-     * @param filename
-     * @return
-     */
-    public static String getFileExtension(String filename)
-    {
-        int i = filename.lastIndexOf('.');
-        if (i > 0)
-        {
-            return filename.substring(i + 1);
-        }
-        return null;
-    }
+   
 
     /**
      * Return the Mime Type of a file according to its format (i.e. file extension)

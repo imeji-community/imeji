@@ -31,7 +31,6 @@ package de.mpg.imeji.logic.storage.internal;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -74,7 +73,8 @@ public class InternalStorageManager
         {
             File storageDir = new File(PropertyReader.getProperty("imeji.storage.path"));
             storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
-            storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url")) + "file/";
+            storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url")) + "file"
+                    + StringHelper.urlSeparator;
         }
         catch (Exception e)
         {
@@ -147,7 +147,8 @@ public class InternalStorageManager
      */
     private String getPath(String id, String filename, FileResolution resolution)
     {
-        return id + "/" + resolution.name().toLowerCase() + "/" + filename;
+        return id + StringHelper.fileSeparator + resolution.name().toLowerCase() + StringHelper.fileSeparator
+                + filename;
     }
 
     /**
@@ -158,7 +159,7 @@ public class InternalStorageManager
      */
     public String transformUrlToPath(String url)
     {
-        return url.replace(storageUrl, storagePath);
+        return url.replace(storageUrl, storagePath).replace(StringHelper.urlSeparator, StringHelper.fileSeparator);
     }
 
     /**
@@ -169,7 +170,7 @@ public class InternalStorageManager
      */
     public String transformPathToUrl(String path)
     {
-        return path.replace(storagePath, storageUrl).replace("\\", "/");
+        return path.replace(storagePath, storageUrl).replace(StringHelper.fileSeparator, StringHelper.urlSeparator);
     }
 
     /**

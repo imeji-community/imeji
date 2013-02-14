@@ -12,6 +12,15 @@ import java.security.MessageDigest;
 public class StringHelper
 {
     /**
+     * Character that separates components of an url
+     */
+    public static final String urlSeparator = "/";
+    /**
+     * Character that separates components of a file path. This is "/" on UNIX and "\" on Windows.
+     */
+    public static final String fileSeparator = System.getProperty("file.separator");
+
+    /**
      * Encode a {@link String} to MD5
      * 
      * @param pass
@@ -30,7 +39,7 @@ public class StringHelper
         }
         return hexString.toString();
     }
-    
+
     /**
      * Format a uri (URL): add a / if the uri doesn't end with it
      * 
@@ -38,23 +47,24 @@ public class StringHelper
      */
     public static String normalizeURI(String uri)
     {
-        if (!uri.endsWith("/"))
+        if (!uri.endsWith(urlSeparator))
         {
-            uri += "/";
+            uri += urlSeparator;
         }
         return uri;
     }
-    
+
     /**
      * Format a system path
+     * 
      * @param path
      * @return
      */
     public static String normalizePath(String path)
     {
-        if (!path.endsWith("\\"))
+        if (!path.endsWith(fileSeparator))
         {
-            path += "\\";
+            path += fileSeparator;
         }
         return path;
     }

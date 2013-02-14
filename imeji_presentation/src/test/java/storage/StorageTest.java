@@ -29,16 +29,13 @@
 package storage;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
-import javax.validation.constraints.AssertFalse;
+import junit.framework.Assert;
 
 import org.junit.Test;
-
-import junit.framework.Assert;
 
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
@@ -80,16 +77,18 @@ public class StorageTest
         String filename = getFilename(TEST_IMAGE);
         // UPLOAD
         UploadResult res = sc.upload(filename, original);
-        Assert.assertFalse("Error transformation path to url. Got following url " + res.getOrginal(), res.getOrginal()
-                .equals(ism.transformUrlToPath(res.getOrginal())));
+        Assert.assertFalse(res.getOrginal() + " url is same as path",
+                res.getOrginal() == ism.transformUrlToPath(res.getOrginal()));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         // READ THE URL
         sc.read(res.getOrginal(), baos);
         byte[] stored = baos.toByteArray();
+        // DELETE THE FILE
         sc.delete(res.getId());
         baos = new ByteArrayOutputStream();
         try
         {
+            // READ TO CHECK IF THE FILE HAS BEEN DELETED
             readFile(ism.transformUrlToPath(res.getOrginal()));
             Assert.fail("File has not been deleted: " + res.getOrginal());
         }

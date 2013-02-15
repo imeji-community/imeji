@@ -173,6 +173,7 @@ public class StatementWrapper
      */
     public void typeListener(ValueChangeEvent event)
     {
+        System.out.println("listener");
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
             statement.setType(URI.create(event.getNewValue().toString()));

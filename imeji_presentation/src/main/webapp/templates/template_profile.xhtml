@@ -76,13 +76,12 @@
 										
 											<h:panelGroup styleClass="medium_area0 clear">
 												<h:outputLabel styleClass="medium_label" value="#{lbl.type}"/>										
-												<h:selectOneMenu  requiredMessage="Please choose a type!"  id="selStatementType" styleClass="medium_select" onchange="getElementById('profileForm:profile:#{position.index}:changeType').click();" value="#{wrapper.statement.type}" valueChangeListener="#{wrapper.typeListener}">
+												<h:selectOneMenu  id="selStatementType" styleClass="medium_select" onchange="getElementById('profileForm:profile:#{position.index}:changeType').click();" value="#{wrapper.statement.type}" valueChangeListener="#{wrapper.typeListener}">
 													<f:converter converterId="URIConverter" />
 													<f:selectItems value="#{FormularBean.mdTypesMenu}"/>
 												</h:selectOneMenu>
-												<h:message for="selStatementType" styleClass="xLarge_label endline clean" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" globalOnly="false" showDetail="false" showSummary="true"/>
 												<h:commandButton id="changeType" action="#{wrapper.reset}"  style="visibility:hidden;">
-													<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+													<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 												</h:commandButton>
 											</h:panelGroup>
 											

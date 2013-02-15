@@ -31,6 +31,7 @@ package de.mpg.imeji.logic.storage;
 import java.io.OutputStream;
 
 import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 
 /**
  * Interface for imeji storage
@@ -97,4 +98,12 @@ public interface Storage
      * @return
      */
     public StorageAdministrator getAdministrator();
+
+    /**
+     * Return the id of the {@link CollectionImeji} related to this file
+     * 
+     * @param url
+     * @return
+     */
+    public String getCollectionId(String url);
 }

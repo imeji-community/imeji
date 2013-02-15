@@ -260,4 +260,14 @@ public class EscidocStorage implements Storage
         // TODO Auto-generated method stub
         return null;
     }
+
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#getCollectionId(java.lang.String)
+     */
+    @Override
+    public String getCollectionId(String url)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

@@ -135,4 +135,14 @@ public class InternalStorage implements Storage
     {
         return new InternalStorageAdministrator(manager.getStoragePath());
     }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#getCollectionId(java.lang.String)
+     */
+    @Override
+    public String getCollectionId(String url)
+    {
+        return url.replace(manager.getStorageUrl(), "").split("/", 2)[0];
+    }
 }

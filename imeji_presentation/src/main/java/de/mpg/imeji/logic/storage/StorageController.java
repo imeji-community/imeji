@@ -29,6 +29,8 @@
 package de.mpg.imeji.logic.storage;
 
 import java.io.OutputStream;
+
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -112,5 +114,15 @@ public class StorageController
     public void update(String url, byte[] bytes)
     {
         storage.update(url, bytes);
+    }
+
+    /**
+     * Return the id of the {@link CollectionImeji} of this file
+     * 
+     * @return
+     */
+    public String getCollectionId(String url)
+    {
+        return storage.getCollectionId(url);
     }
 }

@@ -62,17 +62,11 @@ public class InternalStorageManager
      */
     private String storageUrl = null;
     /**
-     * The id of a directory: each collection id defined under 1 directory. This directory is then diveded in
-     * subdirectories. A subdirectory is created when the count of files in the current subdirectory has reached the
-     * DIRECTOY_MAXIMUN_SIZE
-     */
-    private int subDirectoryNumber = 1;
-    /**
      * The maximum number of files within a sub directory: each collection id defined under 1 directory. This directory
      * is then divided in subdirectories. A subdirectory is created when the count of its files has reached the
      * DIRECTORY_MAXIMUN_SIZE
      */
-    private static final int DIRECTORY_MAXIMUN_SIZE = 5;
+    private static final int DIRECTORY_MAXIMUN_SIZE = 1000;
     private InternalStorageAdministrator administrator;
     private static Logger logger = Logger.getLogger(InternalStorageManager.class);
 

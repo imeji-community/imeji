@@ -77,9 +77,6 @@ public class UploadBean
     {
         if (UrlHelper.getParameterBoolean("init"))
         {
-            InternalStorage is = new InternalStorage();
-            System.out.println("Number of Files: " + is.getAdministrator().getNumberOfFiles() + " Total size = "
-                    + is.getAdministrator().getSizeOfFiles() + " free space= " + is.getAdministrator().getFreeSpace());
             removeFiles();
             loadCollection();
             totalNum = "";

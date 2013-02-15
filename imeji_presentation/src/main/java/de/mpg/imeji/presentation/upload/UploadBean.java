@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
+import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -183,7 +184,7 @@ public class UploadBean
         try
         {
             storageController = new StorageController();
-            UploadResult uploadResult = storageController.upload(title, bytes);
+            UploadResult uploadResult = storageController.upload(title, bytes, id);
             Item item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
                     URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
                     URI.create(uploadResult.getWeb()));

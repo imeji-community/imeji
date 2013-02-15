@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -33,6 +35,7 @@ public class ImejiRDF2Bean
     private String modelURI;
     private boolean lazy = false;
     private Security security = null;
+    private static Logger logger = Logger.getLogger(ImejiRDF2Bean.class);
 
     /**
      * imeji object loader for one {@link Model}
@@ -131,8 +134,9 @@ public class ImejiRDF2Bean
                 String email = "Not logged in";
                 if (user != null)
                     email = user.getEmail();
-                throw new RuntimeException("imeji Security exception: " + email + " not allowed to " + opType.name()
-                        + " " + id);
+                logger.error("imeji Security exception: " + email + " not allowed to " + opType.name() + " " + id);
+                // throw new RuntimeException("imeji Security exception: " + email + " not allowed to " + opType.name()
+                // + " " + id);
             }
         }
     }

@@ -30,6 +30,9 @@ package de.mpg.imeji.logic.storage;
 
 import java.io.OutputStream;
 
+import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+
 /**
  * Interface for imeji storage
  * 
@@ -64,7 +67,7 @@ public interface Storage
      * @param bytes
      * @return - the url of the uploaded File
      */
-    public UploadResult upload(String filename, byte[] bytes);
+    public UploadResult upload(String filename, byte[] bytes, String collectionId);
 
     /**
      * Read the file stored in the passed url
@@ -88,4 +91,19 @@ public interface Storage
      * @param bytes
      */
     public void update(String url, byte[] bytes);
+
+    /**
+     * Return a {@link StorageAdministrator} for this {@link Storage}
+     * 
+     * @return
+     */
+    public StorageAdministrator getAdministrator();
+
+    /**
+     * Return the id of the {@link CollectionImeji} related to this file
+     * 
+     * @param url
+     * @return
+     */
+    public String getCollectionId(String url);
 }

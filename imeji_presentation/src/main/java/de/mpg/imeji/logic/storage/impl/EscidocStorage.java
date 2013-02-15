@@ -44,6 +44,7 @@ import de.escidoc.core.client.StagingHandlerClient;
 import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
+import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.escidoc.EscidocUtils;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -91,7 +92,7 @@ public class EscidocStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#upload(byte[])
      */
     @Override
-    public UploadResult upload(String filename, byte[] bytes)
+    public UploadResult upload(String filename, byte[] bytes, String collectionId)
     {
         String mimeType = StorageUtils.getMimeType(StringHelper.getFileExtension(filename));
         try
@@ -248,5 +249,25 @@ public class EscidocStorage implements Storage
         {
             throw new RuntimeException("Error Logging in eSciDoc: ", e);
         }
+    }
+
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#getAdminstrator()
+     */
+    @Override
+    public StorageAdministrator getAdministrator()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#getCollectionId(java.lang.String)
+     */
+    @Override
+    public String getCollectionId(String url)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

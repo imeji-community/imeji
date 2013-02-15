@@ -28,12 +28,13 @@
  */
 package de.mpg.imeji.logic.storage.impl;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
+import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.adminstrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.internal.InternalStorageItem;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -70,9 +71,9 @@ public class InternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#upload(byte[])
      */
     @Override
-    public UploadResult upload(String filename, byte[] bytes)
+    public UploadResult upload(String filename, byte[] bytes, String collectionId)
     {
-        InternalStorageItem item = manager.addFile(bytes, filename);
+        InternalStorageItem item = manager.addFile(bytes, filename, collectionId);
         return new UploadResult(item.getId(), manager.transformPathToUrl(item.getOrignalPath()),
                 manager.transformPathToUrl(item.getWebPath()), manager.transformPathToUrl(item.getThumbnailPath()));
     }
@@ -123,5 +124,25 @@ public class InternalStorage implements Storage
     public String getName()
     {
         return name;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#getAdminstrator()
+     */
+    @Override
+    public StorageAdministrator getAdministrator()
+    {
+        return new InternalStorageAdministrator(manager.getStoragePath());
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#getCollectionId(java.lang.String)
+     */
+    @Override
+    public String getCollectionId(String url)
+    {
+        return url.replace(manager.getStorageUrl(), "").split("/", 2)[0];
     }
 }

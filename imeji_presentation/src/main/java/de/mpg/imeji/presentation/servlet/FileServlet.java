@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 
@@ -26,6 +27,8 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * The Servlet to Read files from imeji {@link Storage}
@@ -64,7 +67,8 @@ public class FileServlet extends HttpServlet
     {
         String url = req.getParameter("id");
         resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
-        if (security.check(OperationsType.READ, getUser(req), getCollection(url)))
+        SessionBean session = getSession(req);
+        if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
         {
             storageController.read(url, resp.getOutputStream());
         }
@@ -74,11 +78,30 @@ public class FileServlet extends HttpServlet
         }
     }
 
-    private CollectionImeji getCollection(String url)
+    /**
+     * Load a {@link CollectionImeji} from the session if possible, otherwise from jena
+     * 
+     * @param uri
+     * @param user
+     * @return
+     */
+    private CollectionImeji loadCollection(String url, SessionBean session)
     {
-        CollectionImeji col = new CollectionImeji();
-        col.setId(ObjectHelper.getURI(CollectionImeji.class, storageController.getCollectionId(url)));
-        return col;
+        URI collectionURI = ObjectHelper.getURI(CollectionImeji.class, storageController.getCollectionId(url));
+        CollectionImeji collection = session.getCollectionCached().get(collectionURI);
+        if (collection == null)
+        {
+            try
+            {
+                collection = ObjectLoader.loadCollection(collectionURI, session.getUser());
+                session.getCollectionCached().put(collection.getId(), collection);
+            }
+            catch (Exception e)
+            {
+                /* user is not allowed to view this collection */
+            }
+        }
+        return collection;
     }
 
     /**
@@ -87,14 +110,24 @@ public class FileServlet extends HttpServlet
      * @param req
      * @return
      */
-    private User getUser(HttpServletRequest req)
+    private User getUser(SessionBean sessionBean)
     {
-        SessionBean sessionBean = (SessionBean)req.getSession().getAttribute(SessionBean.class.getSimpleName());
         if (sessionBean != null)
         {
             return sessionBean.getUser();
         }
         return null;
+    }
+
+    /**
+     * Return the {@link SessionBean} form the {@link HttpSession}
+     * 
+     * @param req
+     * @return
+     */
+    private SessionBean getSession(HttpServletRequest req)
+    {
+        return (SessionBean)req.getSession().getAttribute(SessionBean.class.getSimpleName());
     }
 
     /**

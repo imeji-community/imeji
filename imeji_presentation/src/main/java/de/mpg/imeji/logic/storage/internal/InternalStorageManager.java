@@ -31,13 +31,14 @@ package de.mpg.imeji.logic.storage.internal;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
+import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.adminstrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -60,6 +61,19 @@ public class InternalStorageManager
      * The URL used to access the storage (this is a dummy url, used by the internal storage to parse file location)
      */
     private String storageUrl = null;
+    /**
+     * The id of a directory: each collection id defined under 1 directory. This directory is then diveded in
+     * subdirectories. A subdirectory is created when the count of files in the current subdirectory has reached the
+     * DIRECTOY_MAXIMUN_SIZE
+     */
+    private int subDirectoryNumber = 1;
+    /**
+     * The maximum number of files within a sub directory: each collection id defined under 1 directory. This directory
+     * is then divided in subdirectories. A subdirectory is created when the count of its files has reached the
+     * DIRECTORY_MAXIMUN_SIZE
+     */
+    private static final int DIRECTORY_MAXIMUN_SIZE = 5;
+    private InternalStorageAdministrator administrator;
     private static Logger logger = Logger.getLogger(InternalStorageManager.class);
 
     /**
@@ -76,6 +90,7 @@ public class InternalStorageManager
             storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
             storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url")) + "file"
                     + StringHelper.urlSeparator;
+            administrator = new InternalStorageAdministrator(storagePath);
         }
         catch (Exception e)
         {
@@ -90,11 +105,11 @@ public class InternalStorageManager
      * @param filename
      * @return
      */
-    public InternalStorageItem addFile(byte[] bytes, String filename)
+    public InternalStorageItem addFile(byte[] bytes, String filename, String collectionId)
     {
         try
         {
-            InternalStorageItem item = newItem(StringHelper.normalizeFilename(filename));
+            InternalStorageItem item = newItem(StringHelper.normalizeFilename(filename), collectionId);
             return writeItemFiles(item, bytes);
         }
         catch (Exception e)
@@ -127,9 +142,10 @@ public class InternalStorageManager
      * @param filename
      * @return
      */
-    private InternalStorageItem newItem(String filename)
+    private InternalStorageItem newItem(String filename, String collectionId)
     {
-        String id = UUID.randomUUID().toString();
+        String id = collectionId + StringHelper.fileSeparator + calculateSubdirectoryNumber(collectionId)
+                + StringHelper.fileSeparator + UUID.randomUUID().toString();
         InternalStorageItem item = new InternalStorageItem();
         item.setId(id);
         item.setFileName(filename);
@@ -223,10 +239,9 @@ public class InternalStorageManager
         }
     }
 
-    public int getNumberOfFiles()
+    private int calculateSubdirectoryNumber(String collectionId)
     {
-        File f = new File(storagePath);
-        return f.list().length;
+        return (int)(administrator.getNumberOfFilesOfCollection(collectionId) / DIRECTORY_MAXIMUN_SIZE);
     }
 
     /**
@@ -243,5 +258,13 @@ public class InternalStorageManager
     public String getStoragePath()
     {
         return storagePath;
+    }
+
+    /**
+     * @return the administrator
+     */
+    public StorageAdministrator getAdministrator()
+    {
+        return administrator;
     }
 }

@@ -5,7 +5,9 @@ package de.mpg.imeji.presentation.util;
 
 import java.net.URI;
 
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
@@ -32,5 +34,24 @@ public class ObjectCachedLoader
             sessionBean.getProfileCached().put(profile.getId(), profile);
         }
         return profile;
+    }
+
+    /**
+     * Load a {@link CollectionImeji} from the session if possible, otherwise from jena
+     * 
+     * @param uri
+     * @param user
+     * @return
+     */
+    public static CollectionImeji loadCollection(URI uri)
+    {
+        SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        CollectionImeji collection = sessionBean.getCollectionCached().get(uri);
+        if (collection == null)
+        {
+            collection = ObjectLoader.loadCollection(uri, sessionBean.getUser());
+            sessionBean.getCollectionCached().put(collection.getId(), collection);
+        }
+        return collection;
     }
 }

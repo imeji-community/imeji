@@ -35,6 +35,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
+import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**
@@ -71,7 +72,7 @@ public class ExternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#upload(byte[])
      */
     @Override
-    public UploadResult upload(String filename, byte[] bytes)
+    public UploadResult upload(String filename, byte[] bytes, String collectionId)
     {
         // TODO Auto-generated method stub
         return null;
@@ -126,5 +127,25 @@ public class ExternalStorage implements Storage
     public void update(String url, byte[] bytes)
     {
         // TODO Auto-generated method stub
+    }
+
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#getAdminstrator()
+     */
+    @Override
+    public StorageAdministrator getAdministrator()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#getCollectionId(java.lang.String)
+     */
+    @Override
+    public String getCollectionId(String url)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

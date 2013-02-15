@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -20,11 +19,10 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
-import de.mpg.imeji.presentation.lang.InternationalizationBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -42,7 +40,7 @@ public class SessionBean
     public static final String LABEL_BUNDLE = "labels";
     public static final String MESSAGES_BUNDLE = "messages";
     public static final String METADATA_BUNDLE = "metadata";
-    // His locale
+    // imeji locale
     private Locale locale;
     private Page currentPage;
     private List<String> selected;
@@ -50,6 +48,7 @@ public class SessionBean
     private List<URI> selectedAlbums;
     private Album activeAlbum;
     private Map<URI, MetadataProfile> profileCached;
+    private Map<URI, CollectionImeji> collectionCached;
     private String selectedImagesContext = null;
 
     /**
@@ -61,6 +60,7 @@ public class SessionBean
         selectedCollections = new ArrayList<URI>();
         selectedAlbums = new ArrayList<URI>();
         profileCached = new HashMap<URI, MetadataProfile>();
+        collectionCached = new HashMap<URI, CollectionImeji>();
         initLocale();
     }
 
@@ -278,5 +278,21 @@ public class SessionBean
     public void setProfileCached(Map<URI, MetadataProfile> profileCached)
     {
         this.profileCached = profileCached;
+    }
+
+    /**
+     * @return the collectionCached
+     */
+    public Map<URI, CollectionImeji> getCollectionCached()
+    {
+        return collectionCached;
+    }
+
+    /**
+     * @param collectionCached the collectionCached to set
+     */
+    public void setCollectionCached(Map<URI, CollectionImeji> collectionCached)
+    {
+        this.collectionCached = collectionCached;
     }
 }

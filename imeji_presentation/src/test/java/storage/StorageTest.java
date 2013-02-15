@@ -108,7 +108,7 @@ public class StorageTest
             e.printStackTrace();
         }
         // UPLOAD
-        UploadResult res = sc.upload(filename, original);
+        UploadResult res = sc.upload(filename, original, "1");
         Assert.assertFalse(res.getOrginal() + " url is same as path",
                 res.getOrginal() == manager.transformUrlToPath(res.getOrginal()));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -117,7 +117,7 @@ public class StorageTest
         byte[] stored = baos.toByteArray();
         // DELETE THE FILE
         sc.delete(res.getId());
-        Assert.assertEquals(0, manager.getNumberOfFiles());
+        Assert.assertEquals(0, manager.getAdministrator().getNumberOfFiles());
         Assert.assertTrue(Arrays.equals(original, stored));
         Assert.assertTrue(Arrays.hashCode(original) == Arrays.hashCode(stored));
     }

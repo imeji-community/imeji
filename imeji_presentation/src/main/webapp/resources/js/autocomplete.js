@@ -1,3 +1,9 @@
+var datasourceUrl;
+function getDatasourceUrl(url){
+	datasourceUrl=url
+}
+
+
 $(function() {
     function split( val ) {
       return val.split( /,\s*/ );
@@ -16,9 +22,18 @@ $(function() {
       })
       .autocomplete({
         source: function( request, response ) {
+        	//alert("datasourceUrl:"+datasourceUrl)
           $.getJSON( "http://localhost:8888/imeji/autocompleter", {
-            term: extractLast( request.term )
-          }, response );
+            term: extractLast( request.term ),datasource:datasourceUrl
+          }, function(data) { 
+        	  var suggestions = [];
+        	  suggestions.push("ye cao")
+        	  suggestions.push("yunze li")
+          } 
+          ////pass array to callback 
+          response(suggestions);
+          );
+         
         },
         search: function() {       
           // custom minLength, currently start query after entering 2 characters,

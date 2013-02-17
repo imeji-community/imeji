@@ -5,6 +5,31 @@ function getDatasourceUrl(url){
 
 
 $(function() {
+	//test data
+	var availableTags = [
+		      "ActionScript",
+		      "AppleScript",
+		      "Asp",
+		      "BASIC",
+		      "C",
+		      "C++",
+		      "Clojure",
+		      "COBOL",
+		      "ColdFusion",
+		      "Erlang",
+		      "Fortran",
+		      "Groovy",
+		      "Haskell",
+		      "Java",
+		      "JavaScript",
+		      "Lisp",
+		      "Perl",
+		      "PHP",
+		      "Python",
+		      "Ruby",
+		      "Scala",
+		      "Scheme"
+		    ];
     function split( val ) {
       return val.split( /,\s*/ );
     }
@@ -12,6 +37,11 @@ $(function() {
       return split( term ).pop();
     }
  //@Ye: Selector for adding auto-complete ability, currently add to all input text with class "xHuge_txtInput"
+    /*
+     * http://net.tutsplus.com/tutorials/javascript-ajax/how-to-use-the-jquery-ui-autocomplete-widget/
+     * http://api.jquery.com/jQuery.getJSON/
+     * http://api.jqueryui.com/autocomplete/#option-source
+     */
     $( ".xHuge_txtInput" )
       // don't navigate away from the field on tab when selecting an item
       .bind( "keydown", function( event ) {
@@ -22,19 +52,16 @@ $(function() {
       })
       .autocomplete({
         source: function( request, response ) {
-        	//alert("datasourceUrl:"+datasourceUrl)
-          $.getJSON( "http://localhost:8888/imeji/autocompleter", {
-            term: extractLast( request.term ),datasource:datasourceUrl
-          }, function(data) { 
-        	  var suggestions = [];
-        	  suggestions.push("ye cao")
-        	  suggestions.push("yunze li")
-          } 
-          ////pass array to callback 
-          response(suggestions);
-          );
-         
-        },
+        	$.getJSON( "http://localhost:8888/imeji/autocompleter", {
+        		 term: extractLast( request.term ),datasource:datasourceUrl
+              }, function(data){
+            	  console.log("Bob!")
+            	 
+              	 }
+              );
+        	//response(data) 
+        	
+          },
         search: function() {       
           // custom minLength, currently start query after entering 2 characters,
           var term = extractLast( this.value );

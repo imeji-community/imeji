@@ -82,7 +82,8 @@ public class LoginBean
             BeanHelper.error(sb.getMessage("error_log_in_description"));
             logger.error("Problem logging in User", e);
         }
-        String redirectAfterLogin = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage().getUri().toString();
+        String redirectAfterLogin = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage()
+                .getUri().toString();
         FacesContext.getCurrentInstance().getExternalContext().redirect(redirectAfterLogin);
     }
 

@@ -45,7 +45,7 @@ public class HistoryFilter implements Filter
     public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain) throws IOException,
             ServletException
     {
-        // Limit the case to filter:  dispachertype only forward, and only HTTP GET method 
+        // Limit the case to filter: dispachertype only forward, and only HTTP GET method
         if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0)
         {
             HttpServletRequest request = (HttpServletRequest)serv;
@@ -86,7 +86,6 @@ public class HistoryFilter implements Filter
             if (h == null)
             {
                 // if h not defined, then it is a new page
-               
                 hs.add(request.getPathInfo().replaceAll("/", ""), q, ids);
             }
             else if (!"".equals(h))

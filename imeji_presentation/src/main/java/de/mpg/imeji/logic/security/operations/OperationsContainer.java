@@ -47,9 +47,9 @@ public class OperationsContainer implements Operations
     {
         return (Status.RELEASED.equals(((Container)object).getStatus())
                 || Status.WITHDRAWN.equals(((Container)object).getStatus())
-                || auth.isPrivilegedViewer(user, (Container)object)
-                || auth.isViewerFor(user, (Container)object) || auth.isPictureEditor(user, (Container)object)
-                || auth.isContainerEditor(user, (Container)object) || auth.isContainerAdmin(user, (Container)object));
+                || auth.isPrivilegedViewer(user, (Container)object) || auth.isViewerFor(user, (Container)object)
+                || auth.isPictureEditor(user, (Container)object) || auth.isContainerEditor(user, (Container)object) || auth
+                    .isContainerAdmin(user, (Container)object));
     }
 
     /**

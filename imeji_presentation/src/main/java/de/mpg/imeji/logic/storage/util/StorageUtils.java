@@ -127,8 +127,6 @@ public class StorageUtils
         return method;
     }
 
-   
-
     /**
      * Return the Mime Type of a file according to its format (i.e. file extension)
      * 

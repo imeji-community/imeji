@@ -3,8 +3,6 @@
  */
 package de.mpg.imeji.logic.security;
 
-import java.net.URI;
-
 import javax.wsdl.OperationType;
 
 import org.apache.log4j.Logger;

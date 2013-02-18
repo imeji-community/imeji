@@ -31,8 +31,6 @@ package de.mpg.imeji.logic.storage.internal;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.UUID;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -41,6 +39,7 @@ import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.adminstrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -62,11 +61,8 @@ public class InternalStorageManager
      */
     private String storageUrl = null;
     /**
-     * The maximum number of files within a sub directory: each collection id defined under 1 directory. This directory
-     * is then divided in subdirectories. A subdirectory is created when the count of its files has reached the
-     * DIRECTORY_MAXIMUN_SIZE
+     * The {@link InternalStorageAdministrator}
      */
-    private static final int DIRECTORY_MAXIMUN_SIZE = 1000;
     private InternalStorageAdministrator administrator;
     private static Logger logger = Logger.getLogger(InternalStorageManager.class);
 
@@ -138,8 +134,11 @@ public class InternalStorageManager
      */
     private InternalStorageItem newItem(String filename, String collectionId)
     {
-        String id = collectionId + StringHelper.fileSeparator + calculateSubdirectoryNumber(collectionId)
-                + StringHelper.fileSeparator + UUID.randomUUID().toString();
+        String uuid = IdentifierUtil.newUniversalUniqueId();
+        // split the uuid to split the number of subdirectories for each collection
+        String id = collectionId + StringHelper.fileSeparator + uuid.substring(0, 2) + StringHelper.fileSeparator
+                + uuid.substring(2, 4) + StringHelper.fileSeparator + uuid.substring(4, 6) + StringHelper.fileSeparator
+                + uuid.substring(6);
         InternalStorageItem item = new InternalStorageItem();
         item.setId(id);
         item.setFileName(filename);
@@ -231,11 +230,6 @@ public class InternalStorageManager
         {
             throw new RuntimeException("File " + path + " already exists in internal storage!");
         }
-    }
-
-    private int calculateSubdirectoryNumber(String collectionId)
-    {
-        return (int)(administrator.getNumberOfFilesOfCollection(collectionId) / DIRECTORY_MAXIMUN_SIZE);
     }
 
     /**

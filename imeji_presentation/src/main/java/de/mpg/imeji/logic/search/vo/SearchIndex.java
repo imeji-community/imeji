@@ -21,11 +21,7 @@ public class SearchIndex
      */
     public static enum names
     {
-        item, user, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, prof, type, cont_md, cont_title, 
-        cont_description, cont_person, cont_person_family, cont_person_given, cont_person_name, cont_person_org, cont_person_org_name, profile, 
-        md, statement, all, text, number, date, time, title, longitude, latitude, license, link, label, citation, citation_style, cone, 
-        person, person_family, person_given, person_id, person_role, person_org, person_org_title, person_org_id, person_org_description, 
-        person_org_city, person_org_country;
+        item, user, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, prof, type, cont_md, cont_title, cont_description, cont_person, cont_person_family, cont_person_given, cont_person_name, cont_person_org, cont_person_org_name, profile, md, statement, all, text, number, date, time, title, longitude, latitude, license, link, label, citation, citation_style, cone, person, person_family, person_given, person_id, person_role, person_org, person_org_title, person_org_id, person_org_description, person_org_city, person_org_country;
     }
 
     private String name;
@@ -36,6 +32,7 @@ public class SearchIndex
 
     /**
      * Construct a new {@link SearchIndex} with a name and a namespace
+     * 
      * @param name
      * @param namespace
      */
@@ -47,6 +44,7 @@ public class SearchIndex
 
     /**
      * Construct a new {@link SearchIndex} with a name and a namespace and parent {@link SearchIndex}
+     * 
      * @param name
      * @param namespace
      * @param parent
@@ -63,6 +61,7 @@ public class SearchIndex
 
     /**
      * Construct a new {@link SearchIndex} for a list element with a namespace and parent {@link SearchIndex}
+     * 
      * @param namespace
      * @param parent
      * @param listType

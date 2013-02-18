@@ -6,8 +6,7 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
-
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -30,7 +29,7 @@ public class ContainerMetadata
     private String description;
     @j2jList("http://xmlns.com/foaf/0.1/person")
     protected Collection<Person> persons = new ArrayList<Person>();
-    private URI id = URI.create("http://imeji.org/terms/container/metadata/" + UUID.randomUUID());
+    private URI id = IdentifierUtil.newURI(ContainerMetadata.class);
 
     public String getTitle()
     {

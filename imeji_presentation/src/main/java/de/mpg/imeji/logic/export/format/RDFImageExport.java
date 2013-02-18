@@ -3,21 +3,11 @@
  */
 package de.mpg.imeji.logic.export.format;
 
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 import de.mpg.imeji.logic.ImejiJena;
-import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.helper.SortHelper;
 
 /**
  * {@link RDFExport} for {@link Item}

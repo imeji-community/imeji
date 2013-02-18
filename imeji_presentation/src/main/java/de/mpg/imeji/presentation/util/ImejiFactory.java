@@ -14,14 +14,14 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Item.Visibility;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
@@ -94,6 +94,7 @@ public class ImejiFactory
 
     /**
      * Create a new emtpy {@link Item}
+     * 
      * @param collection
      * @return
      */
@@ -111,6 +112,7 @@ public class ImejiFactory
 
     /**
      * Factory Method used during the upload
+     * 
      * @param collection
      * @param user
      * @param storageId

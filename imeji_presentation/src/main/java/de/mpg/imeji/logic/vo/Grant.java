@@ -4,8 +4,8 @@
 package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
-import java.util.UUID;
 
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -36,17 +36,24 @@ public class Grant
     private URI grantType;
     @j2jResource("http://imeji.org/terms/grantFor")
     private URI grantFor;
-    private URI id = URI.create("http://imeji.org/grant/" + UUID.randomUUID());
+    private URI id;
 
     /**
-     * Constructor
+     * Constructor: no ids is created with this constructor
      */
     public Grant()
     {
     }
 
+    /**
+     * Create a {@link Grant} of type {@link GrantType} for the object with the {@link URI} grantfor. Define the id
+     * 
+     * @param gt
+     * @param gf
+     */
     public Grant(GrantType gt, URI gf)
     {
+        id = IdentifierUtil.newURI(Grant.class);
         if (gt == null || gf == null)
         {
             throw new NullPointerException("Impossible to created a grant with a null value! Granttype: " + gt

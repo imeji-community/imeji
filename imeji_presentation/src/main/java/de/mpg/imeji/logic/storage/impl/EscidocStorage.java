@@ -251,7 +251,8 @@ public class EscidocStorage implements Storage
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see de.mpg.imeji.logic.storage.Storage#getAdminstrator()
      */
     @Override
@@ -261,7 +262,8 @@ public class EscidocStorage implements Storage
         return null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see de.mpg.imeji.logic.storage.Storage#getCollectionId(java.lang.String)
      */
     @Override

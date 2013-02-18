@@ -10,14 +10,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
-
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -199,7 +198,7 @@ public class MdProfileBean
         }
         for (Statement s : profile.getStatements())
         {
-            s.setId(URI.create("http://imeji.org/statement/" + UUID.randomUUID()));
+            s.setId(IdentifierUtil.newURI(Statement.class));
         }
         collectionSession.setProfile(profile);
         initStatementWrappers(profile);
@@ -302,7 +301,6 @@ public class MdProfileBean
         else
             return "";
     }
-
 
     protected String getNavigationString()
     {

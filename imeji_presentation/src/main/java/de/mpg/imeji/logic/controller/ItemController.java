@@ -3,10 +3,7 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,8 +12,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import de.escidoc.core.client.Authentication;
-import de.escidoc.core.client.ItemHandlerClient;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
@@ -39,7 +34,6 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -351,7 +345,7 @@ public class ItemController extends ImejiController
      * @param id
      */
     private void removeFileFromStorage(String id)
-    {   
+    {
         StorageController storageController = new StorageController();
         storageController.delete(id);
     }

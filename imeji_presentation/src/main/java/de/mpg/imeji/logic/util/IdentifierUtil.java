@@ -29,7 +29,11 @@
 package de.mpg.imeji.logic.util;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -44,7 +48,12 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class IdentifierUtil
 {
     private static String method;
-    private static AtomicLong counter = null;
+    private static AtomicInteger counter = new AtomicInteger();
+    private static Random rand = new Random();
+    /**
+     * When this value is reached, initialize the conter to 0. Since id use timestamp, the id will still be unique
+     */
+    private static final int COUNTER_MAXIMUM_VALUE = 1000000;
 
     /**
      * Initialize the static value for the identifier method
@@ -62,16 +71,6 @@ public class IdentifierUtil
     }
 
     /**
-     * Initialize the counter
-     * 
-     * @param initial
-     */
-    public static void initCounter(int initial)
-    {
-        counter = new AtomicLong(initial);
-    }
-
-    /**
      * Return an identifier according to the method set in the properties
      * 
      * @return
@@ -81,6 +80,10 @@ public class IdentifierUtil
         if ("universal".equals(method))
         {
             return newUniversalUniqueId();
+        }
+        else if ("random".equals(method))
+        {
+            return newRandomId();
         }
         else
         {
@@ -99,6 +102,43 @@ public class IdentifierUtil
         return ObjectHelper.getURI(c, newId());
     }
 
+    // public static void main(String[] a)
+    // {
+    // String start = Long.toHexString(System.currentTimeMillis());
+    // String current = start;
+    // int count = 0;
+    // while (start.equals(current))
+    // {
+    // newLocalUniqueId();
+    // current = Long.toHexString(System.currentTimeMillis());
+    // count++;
+    // }
+    // System.out.println(current + " - " + start + " time has changed after " + count);
+    // counter = new AtomicInteger(0);
+    // long t1 = System.currentTimeMillis();
+    // List<String> l = new ArrayList<String>();
+    // for (int i = 0; i < 20000; i++)
+    // {
+    // l.add(newLocalUniqueId());
+    // }
+    // long t2 = System.currentTimeMillis();
+    // int duplicate = 0;
+    // List<String> l2 = new ArrayList<String>();
+    // int i = 0;
+    // while (duplicate == 0 && i < l.size())
+    // {
+    // if (l2.contains(l.get(i)))
+    // {
+    // System.out.println("Duplicate: " + l.get(i) + " at " + i);
+    // duplicate++;
+    // }
+    // l2.add(l.get(i));
+    // i++;
+    // }
+    // System.out.println(l.get(0));
+    // System.out.println(l.get(l.size() - 1));
+    // System.out.println(duplicate + " duplicates in " + (t2 - t1));
+    // }
     /**
      * Create a new identifier unique for the local instance of imeji
      * 
@@ -106,7 +146,18 @@ public class IdentifierUtil
      */
     public static String newLocalUniqueId()
     {
-        return Long.toHexString(counter.incrementAndGet());
+        counter.compareAndSet(100000, 0);
+        return Long.toHexString(System.currentTimeMillis()) + "-" + Long.toHexString(counter.getAndIncrement());
+    }
+
+    /**
+     * Create a random id. No assurance of uniqueness, even if probability is small. Generated id are smaller...
+     * 
+     * @return
+     */
+    public static String newRandomId()
+    {
+        return Long.toHexString(rand.nextLong());
     }
 
     /**

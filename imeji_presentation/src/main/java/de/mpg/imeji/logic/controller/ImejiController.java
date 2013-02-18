@@ -127,7 +127,6 @@ public abstract class ImejiController
     {
         GrantController gc = new GrantController(user);
         Grant grant = new Grant(GrantType.CONTAINER_ADMIN, id);
-        System.out.println(grant.getId());
         gc.addGrant(user, grant);
         UserController uc = new UserController(user);
         return uc.retrieve(user.getEmail());

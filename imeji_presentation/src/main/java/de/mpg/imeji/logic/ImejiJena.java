@@ -193,7 +193,6 @@ public class ImejiJena
         {
             throw new RuntimeException(e);
         }
-        IdentifierUtil.initCounter(c.getCounter());
     }
 
     /**

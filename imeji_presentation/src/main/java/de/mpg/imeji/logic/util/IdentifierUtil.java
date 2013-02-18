@@ -29,12 +29,9 @@
 package de.mpg.imeji.logic.util;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -51,7 +48,7 @@ public class IdentifierUtil
     private static AtomicInteger counter = new AtomicInteger();
     private static Random rand = new Random();
     /**
-     * When this value is reached, initialize the conter to 0. Since id use timestamp, the id will still be unique
+     * When this value is reached, initialize the counter to 0. Since id use timestamp, the id will still be unique
      */
     private static final int COUNTER_MAXIMUM_VALUE = 1000000;
 
@@ -146,8 +143,8 @@ public class IdentifierUtil
      */
     public static String newLocalUniqueId()
     {
-        counter.compareAndSet(100000, 0);
-        return Long.toHexString(System.currentTimeMillis()) + "-" + Long.toHexString(counter.getAndIncrement());
+        counter.compareAndSet(COUNTER_MAXIMUM_VALUE, 0);
+        return Long.toHexString(System.currentTimeMillis()) + "" + Long.toHexString(counter.getAndIncrement());
     }
 
     /**

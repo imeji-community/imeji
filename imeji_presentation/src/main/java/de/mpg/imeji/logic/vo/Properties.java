@@ -147,6 +147,12 @@ public class Properties
         this.versionDate = versionDate;
     }
 
+    /**
+     * TODO : check this method
+     * 
+     * @param methodName
+     * @return
+     */
     public Object getValueFromMethod(String methodName)
     {
         Method method;

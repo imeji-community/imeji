@@ -52,6 +52,10 @@ public class IdentifierUtil
      * the timestamp will have changed in the meantime
      */
     private static final int COUNTER_MAXIMUM_VALUE = 100000;
+    /**
+     * The counter identifier is composed with a first random part, to avoid easy identifier guess 
+     */
+    private static final int COUNTER_PREFIX_RANGE = 1000;
 
     /**
      * Initialize the static value for the identifier method
@@ -112,7 +116,7 @@ public class IdentifierUtil
         {
             counter.set(0);
         }
-        return Integer.toString(rand.nextInt(100), Character.MAX_RADIX) + "-"
+        return Integer.toString(rand.nextInt(COUNTER_PREFIX_RANGE), Character.MAX_RADIX) + "-"
                 + Long.toString(System.currentTimeMillis(), Character.MAX_RADIX) + "-"
                 + Long.toString(value, Character.MAX_RADIX);
     }

@@ -88,7 +88,8 @@ public class FileServlet extends HttpServlet
         {
             try
             {
-                collection = ObjectLoader.loadCollection(collectionURI, session.getUser());
+                // important to use lazy load, otherwise high performance issue
+                collection = ObjectLoader.loadCollectionLazy(collectionURI, session.getUser());
                 session.getCollectionCached().put(collection.getId(), collection);
             }
             catch (Exception e)

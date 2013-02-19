@@ -3,16 +3,18 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       >
-   <!-- Add Juery UI auto-complete lib, user code in \js\autocomplete.js -->
+      
+   <!-- Juery UI lib with auto-complete component,  -->
    <h:outputScript library="js" name="jquery-ui-1.10.0.custom.min.js" /> 
+   <!-- User code for auto complete component  -->
    <h:outputScript library="js" name="autocomplete.js" /> 
-	<h:panelGroup layout="block" styleClass="free_area0">
-				
+   
+	<h:panelGroup layout="block" styleClass="free_area0">				
 		<h:outputLabel value="#{MetadataLabels.internationalizedLabels[metadata.statement]} (#{MetadataLabels.lang})" rendered="#{hideLabel != true}" styleClass="huge_label"/>
 		
 		<!-- METADATA TYPE TEXT -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#text'}">
-			<h:inputTextarea id="inputText" name="inputText" styleClass="#{areaClass} inputTxtArea" value="#{metadata.text}" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
+			<h:inputTextarea id="inputText" name="inputText" styleClass="#{areaClass} inputTxtArea" value="#{metadata.text}" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}" onfocus="getDatasourceUrl('#{statement.vocabulary}')">
 				<ui:remove><!--<rich:autocomplete styleClass="preListHeader" entryClass="listItem" cellpadding="5" width="400" shadowDepth="0" shadowOpacity="0" height="250" border="0" frequency="0.001" rendered="#{SuggestBean.suggests[metadata.statement].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.statement].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" for="inputText" var="results" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
@@ -26,7 +28,7 @@
 		<!-- METADATA TYPE LINK -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#link'}">
 			<h:outputLabel value="#{lbl.title}" styleClass="huge_label" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}"/>
-			<h:inputText id="inputLinkLabel" styleClass="xHuge_txtInput" value="#{metadata.label}" immediate="true" onfocus="this.select();" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
+			<h:inputText id="inputLinkLabel" styleClass="xHuge_txtInput" value="#{metadata.label}" immediate="true" onfocus="this.select();" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}" onfocus="getDatasourceUrl('#{statement.vocabulary}')">
 					<ui:remove><!--<rich:autocomplete styleClass="preListHeader" entryClass="listItem" cellpadding="5" width="400" shadowDepth="0" shadowOpacity="0" height="250" border="1" frequency="0.0001" rendered="#{SuggestBean.suggests[metadata.statement].doAutoComplete}" for="inputLinkLabel" var="results" suggestionAction="#{SuggestBean.suggests[metadata.statement].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 						<h:column>
 							<h:outputText value="#{results.http_purl_org_dc_elements_1_1_title}" />
@@ -51,7 +53,7 @@
 		
 		<!-- METADATA TYPE PUBLICATION -->
 		<h:panelGroup rendered="#{metadata.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
-			<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" onfocus="this.select();" rendered="#{SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
+			<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" onfocus="this.select();" rendered="#{SuggestBean.suggests[metadata.statement].hasRestrictedValues}" onfocus="getDatasourceUrl('#{statement.vocabulary}')">
 				<f:converter converterId="URIConverter" />
 				<ui:remove><!--<rich:autocomplete styleClass="preListHeader" entryClass="listItem" cellpadding="5" width="400" shadowDepth="0" shadowOpacity="0" height="250" border="1" frequency="0.0001" rendered="#{SuggestBean.suggests[metadata.statement].doAutoComplete}" for="inputPublicationURI" var="results" suggestionAction="#{SuggestBean.suggests[metadata.statement].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
@@ -81,7 +83,7 @@
 		
 		<!-- METADATA TYPE LICENSE -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#license'}">
-			<h:inputText id="inputLicense" styleClass="huge_txtInput" value="#{metadata.license}" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}" immediate="true">
+			<h:inputText id="inputLicense" styleClass="huge_txtInput" value="#{metadata.license}" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}')">
 				<ui:remove><!--<rich:autocomplete styleClass="preListHeader" entryClass="listItem" cellpadding="5" width="400" shadowDepth="0" shadowOpacity="0" height="250" border="1" frequency="0.0001" rendered="#{SuggestBean.suggests[metadata.statement].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.statement].autoComplete}"  for="inputLicense" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{result.http_purl_org_dc_elements_1_1_title}" />
@@ -130,7 +132,7 @@
 			</h:inputText>
 
 			<h:outputLabel value="#{lbl.alternative_name}" styleClass="huge_label" />
-			<h:inputText id="inputAlternative" styleClass="xHuge_txtInput" value="#{metadata.person.alternativeName}" immediate="true">
+			<h:inputText id="inputAlternative" styleClass="xHuge_txtInput" value="#{metadata.person.alternativeName}" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}')">
 				<ui:remove><!--<rich:autocomplete styleClass="preListHeader" entryClass="listItem" cellpadding="5" width="400" shadowDepth="0" shadowOpacity="0" height="250" border="1" frequency="0.001" rendered="#{SuggestBean.suggests[metadata.statement].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.statement].autoComplete}"   for="inputAlternative" var="result"	onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
@@ -152,7 +154,7 @@
 			</h:inputText>
 
 			<h:outputLabel value="#{lbl.organization}" styleClass="huge_label" />
-			<h:inputText id="inputOrganization" styleClass="xHuge_txtInput" value="#{metadata.person.organizations[0].name}" immediate="true">
+			<h:inputText id="inputOrganization" styleClass="xHuge_txtInput" value="#{metadata.person.organizations[0].name}" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}')">
 				<ui:remove><!--<rich:autocomplete styleClass="preListHeader" entryClass="listItem" cellpadding="5" width="400" shadowDepth="0" shadowOpacity="0" height="250" border="1"  frequency="0.001" rendered="#{SuggestBean.suggests[metadata.statement].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.statement].autoComplete}"  for="inputOrganization" var="result" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})"  nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{result.http_xmlns_com_foaf_0_1_family_name}" />
@@ -189,7 +191,7 @@
 				</rich:autocomplete>--></ui:remove>
 			</h:inputText>
 			<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="huge_label" />
-			<h:inputText id="inputLongitude" styleClass="xHuge_txtInput" value="#{metadata.longitude}" immediate="true">
+			<h:inputText id="inputLongitude" styleClass="xHuge_txtInput" value="#{metadata.longitude}" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}')">
 				<ui:remove><!--<rich:autocomplete frequency="0.001" rendered="#{SuggestBean.suggests[metadata.statement].doAutoComplete}" suggestionAction="#{SuggestBean.suggests[metadata.statement].autoComplete}" onobjectchange="autoSuggestWrite(suggestion, #{indexMetadata}, #{indexStatement}, #{type})" for="inputLongitude" var="results" nothingLabel="#{lbl.suggest_not_found}" usingSuggestObjects="true">
 					<h:column>
 						<h:outputText value="#{results.longitude}" />

@@ -29,12 +29,9 @@
 package de.mpg.imeji.logic.util;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -48,10 +45,11 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class IdentifierUtil
 {
     private static String method;
-    private static AtomicInteger counter = new AtomicInteger();;
+    private static AtomicInteger counter = new AtomicInteger();
     private static Random rand = new Random();
     /**
-     * When this value is reached, initialize the counter to 0. Since id use timestamp, the id will still be unique
+     * When this value is reached, initialize the counter to 0. Since id use timestamp, the id will still be unique as
+     * the timestamp will have changed in the meantime
      */
     private static final int COUNTER_MAXIMUM_VALUE = 100000;
 
@@ -114,7 +112,8 @@ public class IdentifierUtil
         {
             counter.set(0);
         }
-        return Long.toString(System.currentTimeMillis(), Character.MAX_RADIX) + "-"
+        return Integer.toString(rand.nextInt(100), Character.MAX_RADIX) + "-"
+                + Long.toString(System.currentTimeMillis(), Character.MAX_RADIX) + "-"
                 + Long.toString(value, Character.MAX_RADIX);
     }
 

@@ -42,6 +42,7 @@ public class InternalStorageItem
     private String thumbnailPath;
     private String fileName;
     private String id;
+    private int version;
 
     /**
      * Default constructor
@@ -108,5 +109,15 @@ public class InternalStorageItem
     public void setId(String id)
     {
         this.id = id;
+    }
+
+    public int getVersion()
+    {
+        return version;
+    }
+
+    public void setVersion(int version)
+    {
+        this.version = version;
     }
 }

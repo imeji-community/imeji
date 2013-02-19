@@ -99,7 +99,8 @@ public class InternalStorageManager
     {
         try
         {
-            InternalStorageItem item = newItem(StringHelper.normalizeFilename(filename), collectionId);
+            InternalStorageItem item = generateInternalStorageItem(StringHelper.normalizeFilename(filename),
+                    collectionId);
             return writeItemFiles(item, bytes);
         }
         catch (Exception e)
@@ -127,42 +128,6 @@ public class InternalStorageManager
     }
 
     /**
-     * Create an {@link InternalStorageItem} for one file
-     * 
-     * @param filename
-     * @return
-     */
-    private InternalStorageItem newItem(String filename, String collectionId)
-    {
-        String uuid = IdentifierUtil.newUniversalUniqueId();
-        // split the uuid to split the number of subdirectories for each collection
-        String id = collectionId + StringHelper.fileSeparator + uuid.substring(0, 2) + StringHelper.fileSeparator
-                + uuid.substring(2, 4) + StringHelper.fileSeparator + uuid.substring(4, 6) + StringHelper.fileSeparator
-                + uuid.substring(6);
-        InternalStorageItem item = new InternalStorageItem();
-        item.setId(id);
-        item.setFileName(filename);
-        item.setOrignalPath(getPath(id, filename, FileResolution.ORIGINAL));
-        item.setThumbnailPath(getPath(id, filename, FileResolution.THUMBNAIL));
-        item.setWebPath(getPath(id, filename, FileResolution.WEB));
-        return item;
-    }
-
-    /**
-     * Create a path for a file according to its {@link FileResolution}
-     * 
-     * @param id
-     * @param filename
-     * @param resolution
-     * @return
-     */
-    private String getPath(String id, String filename, FileResolution resolution)
-    {
-        return id + StringHelper.fileSeparator + resolution.name().toLowerCase() + StringHelper.fileSeparator
-                + filename;
-    }
-
-    /**
      * Transform and url to a file system path
      * 
      * @param url
@@ -182,6 +147,86 @@ public class InternalStorageManager
     public String transformPathToUrl(String path)
     {
         return path.replace(storagePath, storageUrl).replace(StringHelper.fileSeparator, StringHelper.urlSeparator);
+    }
+
+    /**
+     * @return the storageUrl
+     */
+    public String getStorageUrl()
+    {
+        return storageUrl;
+    }
+
+    /**
+     * @return the administrator
+     */
+    public StorageAdministrator getAdministrator()
+    {
+        return administrator;
+    }
+
+    /**
+     * Create an {@link InternalStorageItem} for this file. Set the correct version.
+     * 
+     * @param filename
+     * @return
+     */
+    private InternalStorageItem generateInternalStorageItem(String filename, String collectionId)
+    {
+        String id = generateIdWithVersion(collectionId);
+        InternalStorageItem item = new InternalStorageItem();
+        item.setId(id);
+        item.setFileName(filename);
+        item.setOrignalPath(generateFileSystemPath(id, filename, FileResolution.ORIGINAL));
+        item.setThumbnailPath(generateFileSystemPath(id, filename, FileResolution.THUMBNAIL));
+        item.setWebPath(generateFileSystemPath(id, filename, FileResolution.WEB));
+        return item;
+    }
+    
+    /**
+     * Generate the id of a file with the correct version, i.e.
+     * @param collectionId
+     * @return
+     */
+    private String generateIdWithVersion(String collectionId)
+    {
+        int version = 0;
+        String id = generateId(collectionId, version);
+        while (exists(id))
+        {
+            version++;
+            id = generateId(collectionId, version);
+        }
+        return id;
+    }
+
+    /**
+     * Generate the id of a file. This id is used to store the file in the filesystem
+     * 
+     * @param collectionId
+     * @return
+     */
+    private String generateId(String collectionId, int version)
+    {
+        String uuid = IdentifierUtil.newUniversalUniqueId();
+        // split the uuid to split the number of subdirectories for each collection
+        return collectionId + StringHelper.fileSeparator + uuid.substring(0, 2) + StringHelper.fileSeparator
+                + uuid.substring(2, 4) + StringHelper.fileSeparator + uuid.substring(4, 6) + StringHelper.fileSeparator
+                + uuid.substring(6) + StringHelper.fileSeparator + version;
+    }
+
+    /**
+     * Create a path for a file according to its {@link FileResolution}
+     * 
+     * @param id
+     * @param filename
+     * @param resolution
+     * @return
+     */
+    private String generateFileSystemPath(String id, String filename, FileResolution resolution)
+    {
+        return id + StringHelper.fileSeparator + resolution.name().toLowerCase() + StringHelper.fileSeparator
+                + filename;
     }
 
     /**
@@ -233,26 +278,13 @@ public class InternalStorageManager
     }
 
     /**
-     * @return the storageUrl
+     * Return true if an id (i.e. a file) already exists, otherwise false
+     * 
+     * @param item
+     * @return
      */
-    public String getStorageUrl()
+    private boolean exists(String id)
     {
-        return storageUrl;
-    }
-
-    /**
-     * @return the storagePath
-     */
-    public String getStoragePath()
-    {
-        return storagePath;
-    }
-
-    /**
-     * @return the administrator
-     */
-    public StorageAdministrator getAdministrator()
-    {
-        return administrator;
+        return new File(id).exists();
     }
 }

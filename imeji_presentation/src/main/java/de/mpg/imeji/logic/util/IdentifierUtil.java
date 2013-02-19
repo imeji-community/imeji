@@ -53,7 +53,7 @@ public class IdentifierUtil
      */
     private static final int COUNTER_MAXIMUM_VALUE = 100000;
     /**
-     * The counter identifier is composed with a first random part, to avoid easy identifier guess 
+     * The counter identifier is composed with a first random part, to avoid easy identifier guess
      */
     private static final int COUNTER_PREFIX_RANGE = 1000;
 
@@ -114,6 +114,7 @@ public class IdentifierUtil
         int value = counter.getAndIncrement();
         if (value > COUNTER_MAXIMUM_VALUE)
         {
+            // Set to the minimum value
             counter.set(0);
         }
         return Integer.toString(rand.nextInt(COUNTER_PREFIX_RANGE), Character.MAX_RADIX) + "-"

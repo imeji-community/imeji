@@ -26,13 +26,13 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.storage.adminstrator.impl;
+package de.mpg.imeji.logic.storage.administrator.impl;
 
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 
-import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.util.StringHelper;
 

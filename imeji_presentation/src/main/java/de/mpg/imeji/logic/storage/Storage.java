@@ -30,7 +30,7 @@ package de.mpg.imeji.logic.storage;
 
 import java.io.OutputStream;
 
-import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 
 /**

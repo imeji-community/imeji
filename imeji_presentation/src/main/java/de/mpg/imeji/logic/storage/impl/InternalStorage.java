@@ -33,8 +33,8 @@ import java.io.OutputStream;
 
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
-import de.mpg.imeji.logic.storage.adminstrator.impl.InternalStorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.internal.InternalStorageItem;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;

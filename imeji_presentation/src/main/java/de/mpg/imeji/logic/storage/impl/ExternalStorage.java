@@ -35,7 +35,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**

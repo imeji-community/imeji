@@ -35,8 +35,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
-import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
-import de.mpg.imeji.logic.storage.adminstrator.impl.InternalStorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;

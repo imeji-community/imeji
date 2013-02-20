@@ -5,13 +5,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 	<ui:define name="mainContent">
 	<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-	 <script>
-	$(function() {
-		$( "#sortable" ).sortable({
-		});
-	});
-	</script>
+	
+	
 		<h:form id="profileForm">
+		
 			<h:panelGroup layout="block" styleClass="full_area0">
 				<h:panelGroup layout="block" styleClass="full_area0">					
 					<h:panelGroup layout="block" styleClass="full_area0">
@@ -44,12 +41,33 @@
 									</span>
 								</h:panelGroup>
 							</h:panelGroup>
-							
-							
 							<h:panelGroup id="ajaxArea">
+							 <style>
+							     #sortable { list-style-type: none; margin-top: 50px; padding: 0px; width: 100%; }
+								 #sortable li { margin: 0px 0px 0px 0px; padding: 0px; height:10px;}
+								 html>body #sortable li {  height:100px; line-height: 1.2em; }
+								.ui-state-highlight {height:100px; line-height: 1.2em; padding: 10px; background-color:#494949}
+							</style>
+							<script>
+								$(function() {
+									$( "#sortable" ).sortable({
+										placeholder: "ui-state-highlight"
+										});
+									$( "#sortable" ).on( "sortstop", function( event, ui ) {
+										$( ".positionStatement" ).each(function(i, el) {
+											 $(this).val(i);
+											});
+										$(".buttonSort").click();
+									} );
+								});
+							</script>
+							<h:commandButton style="display:none" id="sort" styleClass="buttonSort" value="Sort" action="#{FormularBean.sort}">
+								<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+							</h:commandButton>
 							<ul id="sortable">
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
-								<li class="free_area0">
+								<li class="ui-state-default">
+								<h:inputText id="position" styleClass="positionStatement" value="#{wrapper.statement.pos}" style="display:none;" />
 	                            <h:panelGroup layout="block" style="margin-left:#{wrapper.level}px; margin-top:10px" styleClass="full_area0_p0 noTopBorder">
 	                           	
 									<h:panelGroup layout="block" styleClass="full_area0 endline clear">
@@ -58,7 +76,6 @@
 											<h:outputText value="&#160;"/>
 											<span class="noDisplay">: </span>
 										</b>
-										
 										<h:panelGroup styleClass="half_area0 clean">
 											<h:panelGroup styleClass="free_area0">
 												<h:selectOneRadio styleClass="free_area0" id="radioDescription" readonly="true" value="#{wrapper.statement.description}" converter="javax.faces.Boolean" onclick="unSelectUnique(#{position.index});">

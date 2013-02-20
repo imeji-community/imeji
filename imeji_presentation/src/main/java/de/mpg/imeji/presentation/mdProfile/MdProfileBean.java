@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -133,6 +134,30 @@ public class MdProfileBean
         {
             wrappers.add(new StatementWrapper(st, mdp.getId(), getLevel(st)));
         }
+    }
+
+    /**
+     * When the statement are sorted via drag and drop, this method is called to reset all order value as defined by the
+     * user
+     */
+    public void sort()
+    {
+        List<Statement> list = getUnwrappedStatements();
+        for (Statement parent : list)
+        {
+            List<Statement> childs = findAllChilds(parent);
+            Collections.sort(childs);
+            int i = 1;
+            for (Statement child : childs)
+            {
+                System.out.println(parent.getPos() + i);
+                child.setPos(parent.getPos() + i);
+                i++;
+            }
+        }
+        Collections.sort(list);
+        getProfile().setStatements(list);
+        initStatementWrappers(getProfile());
     }
 
     /**
@@ -397,6 +422,47 @@ public class MdProfileBean
         }
         // We reached the end of the list
         return i;
+    }
+
+    /**
+     * Find all childs {@link Statement} of one {@link Statement}
+     * 
+     * @param parent
+     * @return
+     */
+    private List<Statement> findAllChilds(Statement statement)
+    {
+        List<Statement> childs = new ArrayList<Statement>();
+        for (StatementWrapper sw : wrappers)
+        {
+            URI parent = sw.getStatement().getParent();
+            if (parent != null && statement.getId().compareTo(parent) == 0)
+            {
+                childs.add(sw.getStatement());
+            }
+        }
+        return childs;
+    }
+
+    /**
+     * Find the parent {@link Statement}
+     * 
+     * @param st
+     * @return
+     */
+    private Statement findParentStatement(Statement st)
+    {
+        if (st.getParent() != null)
+        {
+            for (StatementWrapper sw : wrappers)
+            {
+                if (st.getParent().compareTo(sw.getStatement().getId()) == 0)
+                {
+                    return sw.getStatement();
+                }
+            }
+        }
+        return null;
     }
 
     /**

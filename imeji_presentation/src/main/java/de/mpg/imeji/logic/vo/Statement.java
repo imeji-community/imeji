@@ -54,6 +54,10 @@ public class Statement implements Comparable<Statement>
     private int pos = 0;
     @j2jLiteral("http://imeji.org/terms/restricted")
     private boolean restricted = false;
+    /**
+     * True if this {@link Statement} is the first child (according to the order of the list) of its parent
+     */
+    private boolean isFirstChild = false;
 
     public Statement()
     {
@@ -188,5 +192,21 @@ public class Statement implements Comparable<Statement>
     public void setRestricted(boolean restricted)
     {
         this.restricted = restricted;
+    }
+    
+    /**
+     * @param isFirstChild the isFirstChild to set
+     */
+    public void setFirstChild(boolean isFirstChild)
+    {
+        this.isFirstChild = isFirstChild;
+    }
+
+    /**
+     * @return the isFirstChild
+     */
+    public boolean isFirstChild()
+    {
+        return isFirstChild;
     }
 }

@@ -60,10 +60,29 @@ public class ImejiFactory
         return cm;
     }
 
+    /**
+     * Crate a new emtpy {@link Statement}
+     * 
+     * @return
+     */
     public static Statement newStatement()
     {
         Statement s = new Statement();
         s.getLabels().add(new LocalizedString("", null));
+        return s;
+    }
+
+    /**
+     * Create an emtpy {@link Statement} as a child of another {@link Statement}
+     * 
+     * @param parent
+     * @param isFirstChild
+     * @return
+     */
+    public static Statement newStatement(URI parent)
+    {
+        Statement s = newStatement();
+        s.setParent(parent);
         return s;
     }
 

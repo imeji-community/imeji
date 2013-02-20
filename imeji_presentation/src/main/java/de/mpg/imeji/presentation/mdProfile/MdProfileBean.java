@@ -9,7 +9,10 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
@@ -46,6 +49,7 @@ public class MdProfileBean
     private CollectionSessionBean collectionSession = null;
     private List<StatementWrapper> wrappers = null;
     private List<SelectItem> mdTypesMenu = null;
+    private Map<URI, Integer> levels;
     private String id = null;
     private List<SelectItem> profilesMenu = null;
     private SessionBean sessionBean;
@@ -53,6 +57,7 @@ public class MdProfileBean
     private int statementPosition = 0;
     private int constraintPosition = 0;
     private int labelPosition = 0;
+    private static final int MARGIN_PIXELS_FOR_STATEMENT_CHILD = 30;
 
     /**
      * initialize a default {@link MdProfileBean}
@@ -67,6 +72,7 @@ public class MdProfileBean
         }
         profile = collectionSession.getProfile();
         wrappers = new ArrayList<StatementWrapper>();
+        levels = new HashMap<URI, Integer>();
         initMenus();
     }
 
@@ -125,7 +131,7 @@ public class MdProfileBean
         wrappers.clear();
         for (Statement st : mdp.getStatements())
         {
-            wrappers.add(new StatementWrapper(st, mdp.getId()));
+            wrappers.add(new StatementWrapper(st, mdp.getId(), getLevel(st)));
         }
     }
 
@@ -345,6 +351,57 @@ public class MdProfileBean
     }
 
     /**
+     * Get the level (how many parents does it have) of a {@link Statement}
+     * 
+     * @param st
+     */
+    protected int getLevel(Statement st)
+    {
+        if (!levels.containsKey(st.getId()))
+        {
+            if (st.getParent() != null)
+            {
+                levels.put(st.getId(), (levels.get(st.getParent()) + MARGIN_PIXELS_FOR_STATEMENT_CHILD));
+            }
+            else
+            {
+                levels.put(st.getId(), 0);
+            }
+        }
+        return levels.get(st.getId());
+    }
+
+    /**
+     * Find the next {@link Statement} in the {@link Statement} list which have the same level, which means, the first
+     * {@link Statement} which is not a child
+     * 
+     * @param st
+     * @return
+     */
+    private int findNextSatementWithSameLevel(Statement st)
+    {
+        int i = 0;
+        for (i = getStatementPosition() + 1; i < wrappers.size(); i++)
+        {
+            if (wrappers.get(i).getLevel() == getLevel(st))
+            {
+                // a statement with the same level have been found, return position
+                return i;
+            }
+            else if (wrappers.get(i).getLevel() < getLevel(st))
+            {
+                // in statement with an higher posotion hsa been found, i.e. we reached the end of the list of childs.
+                // Return then this current position
+                System.out.println("st lev : " + getLevel(st));
+                System.out.println(wrappers.get(i).getLevel());
+                return i;
+            }
+        }
+        // We reached the end of the list
+        return i;
+    }
+
+    /**
      * Called by add statement button. Add a new statement to the profile. The position of the new statement is defined
      * by the button position
      */
@@ -352,11 +409,14 @@ public class MdProfileBean
     {
         if (wrappers.isEmpty())
         {
-            wrappers.add(new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
+            wrappers.add(new StatementWrapper(ImejiFactory.newStatement(), profile.getId(), 0));
         }
         else
         {
-            wrappers.add(getStatementPosition() + 1, new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
+            Statement previousStatement = wrappers.get(getStatementPosition()).getStatement();
+            Statement newStatement = ImejiFactory.newStatement(previousStatement.getParent());
+            wrappers.add(findNextSatementWithSameLevel(previousStatement),
+                    new StatementWrapper(newStatement, profile.getId(), getLevel(newStatement)));
         }
     }
 
@@ -373,6 +433,30 @@ public class MdProfileBean
         else
         {
             wrappers.get(getStatementPosition()).setShowRemoveWarning(true);
+        }
+    }
+
+    /**
+     * Called by add statement child button. Add a new statement to the profile as a child of the previous statement.
+     * The position of the new statement is defined by the button position
+     */
+    public void addStatementChild()
+    {
+        if (!wrappers.isEmpty())
+        {
+            URI parent = wrappers.get(getStatementPosition()).getStatement().getId();
+            Statement newChild = ImejiFactory.newStatement(parent);
+            if (wrappers.size() > getStatementPosition() + 1)
+            {
+                Statement nextStatement = wrappers.get(getStatementPosition() + 1).getStatement();
+                if (nextStatement.isFirstChild() && parent.compareTo(nextStatement.getParent()) == 0)
+                {
+                    nextStatement.setFirstChild(false);
+                }
+            }
+            newChild.setFirstChild(true);
+            wrappers.add(getStatementPosition() + 1,
+                    new StatementWrapper(newChild, profile.getId(), getLevel(newChild)));
         }
     }
 

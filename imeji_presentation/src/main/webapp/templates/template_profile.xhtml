@@ -4,6 +4,13 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 	<ui:define name="mainContent">
+	<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+	 <script>
+	$(function() {
+		$( "#sortable" ).sortable({
+		});
+	});
+	</script>
 		<h:form id="profileForm">
 			<h:panelGroup layout="block" styleClass="full_area0">
 				<h:panelGroup layout="block" styleClass="full_area0">					
@@ -40,8 +47,9 @@
 							
 							
 							<h:panelGroup id="ajaxArea">
+							<ul id="sortable">
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
-								
+								<li class="free_area0">
 	                            <h:panelGroup layout="block" style="margin-left:#{wrapper.level}px; margin-top:10px" styleClass="full_area0_p0 noTopBorder">
 	                           	
 									<h:panelGroup layout="block" styleClass="full_area0 endline clear">
@@ -71,17 +79,17 @@
 												<h:outputLabel styleClass="free_area0" value="#{lbl.restricted}"/>
 											</h:panelGroup>
 										</h:panelGroup>
-								
 										<h:panelGroup class="full_area0">
-											<h:panelGroup styleClass="small_area0_p8">
-												<h:commandButton styleClass="free_area0" value="#{lbl.move_up}" title="#{lbl.move_up}" action="#{FormularBean.moveUp}">
+											
+											<h:panelGroup styleClass="small_area0_p8" rendered="false">
+												<h:commandLink styleClass="free_area0" value="#{lbl.move_up}" title="#{lbl.move_up}" action="#{FormularBean.moveUp}">
 													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 													<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-												</h:commandButton>
-												<h:commandButton styleClass="free_area0" value="#{lbl.move_down}" title="#{lbl.move_down}" action="#{FormularBean.moveDown}">
+												</h:commandLink>
+												<h:commandLink styleClass="free_area0" value="#{lbl.move_down}" title="#{lbl.move_down}" action="#{FormularBean.moveDown}">
 													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 													<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-												</h:commandButton>
+												</h:commandLink>
 											</h:panelGroup>
 											<h:panelGroup styleClass="medium_area0 xTiny_marginLIncl">
 												<h:outputLabel styleClass="medium_label" value="#{lbl.type}"/>										
@@ -216,7 +224,9 @@
 										</span>
 									</h:panelGroup>
 								</h:panelGroup>
+								</li>
 								</ui:repeat>
+								</ul>
 							</h:panelGroup>
 						</div>
 					</h:panelGroup>

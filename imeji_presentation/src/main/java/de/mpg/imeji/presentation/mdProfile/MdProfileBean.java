@@ -378,7 +378,7 @@ public class MdProfileBean
      * @param st
      * @return
      */
-    private int findNextSatementWithSameLevel(Statement st)
+    private int findNextStatementWithSameLevel(Statement st)
     {
         int i = 0;
         for (i = getStatementPosition() + 1; i < wrappers.size(); i++)
@@ -392,8 +392,6 @@ public class MdProfileBean
             {
                 // in statement with an higher posotion hsa been found, i.e. we reached the end of the list of childs.
                 // Return then this current position
-                System.out.println("st lev : " + getLevel(st));
-                System.out.println(wrappers.get(i).getLevel());
                 return i;
             }
         }
@@ -415,7 +413,7 @@ public class MdProfileBean
         {
             Statement previousStatement = wrappers.get(getStatementPosition()).getStatement();
             Statement newStatement = ImejiFactory.newStatement(previousStatement.getParent());
-            wrappers.add(findNextSatementWithSameLevel(previousStatement),
+            wrappers.add(findNextStatementWithSameLevel(previousStatement),
                     new StatementWrapper(newStatement, profile.getId(), getLevel(newStatement)));
         }
     }

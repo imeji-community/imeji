@@ -49,7 +49,7 @@
 									margin: 2px 2px 2px 40px;
 									border-width:1px !important;
 									width:300px;
-									height:50px;
+									height:40px;
 								}
 								.drop-hover{
 									background-color:#494949;
@@ -64,8 +64,7 @@
 								 	$( ".draggable" ).draggable({
 								 			zIndex: 100,
 								 			opacity: 0.35,
-								 			cursor: "move", 
-								 			cursorAt: { top: 100, left: 450 }
+								 			 cursor: "move",
 								 		});		
 								 	$( ".draggable" ).on( "dragstart", function( event, ui ) {
 									 		$(".dropArea").show();
@@ -217,9 +216,9 @@
 											
 											<h:panelGroup styleClass="full_area0 medium_marginLExcl" rendered="#{wrapper.constraintsSize > 0}">
 												<h:outputLabel styleClass="huge_label" value="#{lbl.constraints}" />
-												<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}" rowKeyVar="constraintPosition">
+												<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}" varStatus="constraintPosition">
 													<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
-														<h:inputText styleClass="huge_txtInput endline" value="#{constraint}"  valueChangeListener="#{wrapper.constraintListener}">
+														<h:inputText styleClass="huge_txtInput endline" value="#{constraint}" valueChangeListener="#{wrapper.constraintListener}">
 															<f:attribute name="position" value="#{constraintPosition.index}"/>
 														</h:inputText>
 														<h:panelGroup styleClass="large_area0 endline">
@@ -256,7 +255,7 @@
 	                                </h:panelGroup>
 	                               
 									<h:panelGroup layout="block" styleClass="free_area0 itemLine endline clear">
-										<span class="full_area0">
+										<span class="full_area0_p8">
 											<h:commandButton styleClass="free_area0 min_imgBtn add groupTool" title="#{lbl.add_metadata}" action="#{FormularBean.addStatement}">
 												<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 												<f:ajax execute="@form" render=":profileForm:ajaxArea"/>

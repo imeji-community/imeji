@@ -7,7 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -56,6 +55,10 @@ public class MdProfileBean
     private SessionBean sessionBean;
     private String template;
     private int statementPosition = 0;
+    /**
+     * Position of the dragged element at the start
+     */
+    private int draggedStatementPosition = 0;
     private int constraintPosition = 0;
     private int labelPosition = 0;
     private static final int MARGIN_PIXELS_FOR_STATEMENT_CHILD = 30;
@@ -73,7 +76,6 @@ public class MdProfileBean
         }
         profile = collectionSession.getProfile();
         wrappers = new ArrayList<StatementWrapper>();
-        levels = new HashMap<URI, Integer>();
         initMenus();
     }
 
@@ -130,6 +132,7 @@ public class MdProfileBean
     private void initStatementWrappers(MetadataProfile mdp)
     {
         wrappers.clear();
+        levels = new HashMap<URI, Integer>();
         for (Statement st : mdp.getStatements())
         {
             wrappers.add(new StatementWrapper(st, mdp.getId(), getLevel(st)));
@@ -142,22 +145,22 @@ public class MdProfileBean
      */
     public void sort()
     {
+        setStatementPositionLikeInList();
         List<Statement> list = getUnwrappedStatements();
-        for (Statement parent : list)
-        {
-            List<Statement> childs = findAllChilds(parent);
-            Collections.sort(childs);
-            int i = 1;
-            for (Statement child : childs)
-            {
-                System.out.println(parent.getPos() + i);
-                child.setPos(parent.getPos() + i);
-                i++;
-            }
-        }
         Collections.sort(list);
         getProfile().setStatements(list);
         initStatementWrappers(getProfile());
+    }
+
+    /**
+     * Set the position of the {@link Statement} in the list according to their place in the list
+     */
+    public void setStatementPositionLikeInList()
+    {
+        for (int i = 0; i < wrappers.size(); i++)
+        {
+            wrappers.get(i).getStatement().setPos(i);
+        }
     }
 
     /**
@@ -344,6 +347,64 @@ public class MdProfileBean
     }
 
     /**
+     * Method called when the user drop a metadata in "insert metadata" area
+     */
+    public void insertMetadata()
+    {
+        StatementWrapper dragged = wrappers.get(getDraggedStatementPosition());
+        StatementWrapper insertedIn = wrappers.get(getStatementPosition());
+        dragged.getStatement().setParent(insertedIn.getStatement().getParent());
+        moveWrapper(dragged, getDraggedStatementPosition(), getStatementPosition());
+    }
+
+    /**
+     * Method called when the user drop a metadata in "insert child" area
+     */
+    public void insertChild()
+    {
+        StatementWrapper dragged = wrappers.get(getDraggedStatementPosition());
+        StatementWrapper insertedIn = wrappers.get(getStatementPosition());
+        URI parentOfInsertIn = insertedIn.getStatement().getParent();
+        if (parentOfInsertIn != null && dragged.getStatement().getId().compareTo(parentOfInsertIn) == 0)
+        {
+            // The user try to add the parent as a child of its own child!!!
+            // Therefore replace the parent of the child, with the parent of the parent
+            insertedIn.getStatement().setParent(dragged.getStatement().getParent());
+        }
+        dragged.getStatement().setParent(insertedIn.getStatement().getId());
+        moveWrapper(dragged, getDraggedStatementPosition(), getStatementPosition());
+    }
+
+    /**
+     * Move a {@link StatementWrapper} in a list from one position to another
+     * 
+     * @param wrapper
+     * @param from
+     * @param to
+     */
+    private void moveWrapper(StatementWrapper wrapper, int from, int to)
+    {
+        wrappers.add(to + 1, wrapper);
+        if (to < from)
+        {
+            wrappers.remove(from + 1);
+        }
+        else
+        {
+            wrappers.remove(from);
+        }
+        setStatementPositionLikeInList();
+    }
+
+    /**
+     * Methods called when the user start to drag a metadata
+     */
+    public void dragStart()
+    {
+        // do nothing, the draggedStatementPosition is set
+    }
+
+    /**
      * Move a statement up in statement list
      */
     public void moveUp()
@@ -425,47 +486,6 @@ public class MdProfileBean
     }
 
     /**
-     * Find all childs {@link Statement} of one {@link Statement}
-     * 
-     * @param parent
-     * @return
-     */
-    private List<Statement> findAllChilds(Statement statement)
-    {
-        List<Statement> childs = new ArrayList<Statement>();
-        for (StatementWrapper sw : wrappers)
-        {
-            URI parent = sw.getStatement().getParent();
-            if (parent != null && statement.getId().compareTo(parent) == 0)
-            {
-                childs.add(sw.getStatement());
-            }
-        }
-        return childs;
-    }
-
-    /**
-     * Find the parent {@link Statement}
-     * 
-     * @param st
-     * @return
-     */
-    private Statement findParentStatement(Statement st)
-    {
-        if (st.getParent() != null)
-        {
-            for (StatementWrapper sw : wrappers)
-            {
-                if (st.getParent().compareTo(sw.getStatement().getId()) == 0)
-                {
-                    return sw.getStatement();
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
      * Called by add statement button. Add a new statement to the profile. The position of the new statement is defined
      * by the button position
      */
@@ -510,15 +530,6 @@ public class MdProfileBean
         {
             URI parent = wrappers.get(getStatementPosition()).getStatement().getId();
             Statement newChild = ImejiFactory.newStatement(parent);
-            if (wrappers.size() > getStatementPosition() + 1)
-            {
-                Statement nextStatement = wrappers.get(getStatementPosition() + 1).getStatement();
-                if (nextStatement.isFirstChild() && parent.compareTo(nextStatement.getParent()) == 0)
-                {
-                    nextStatement.setFirstChild(false);
-                }
-            }
-            newChild.setFirstChild(true);
             wrappers.add(getStatementPosition() + 1,
                     new StatementWrapper(newChild, profile.getId(), getLevel(newChild)));
         }
@@ -826,5 +837,21 @@ public class MdProfileBean
     public void setLabelPosition(int labelPosition)
     {
         this.labelPosition = labelPosition;
+    }
+
+    /**
+     * @param draggedStatementPosition the draggedStatementPosition to set
+     */
+    public void setDraggedStatementPosition(int draggedStatementPosition)
+    {
+        this.draggedStatementPosition = draggedStatementPosition;
+    }
+
+    /**
+     * @return the draggedStatementPosition
+     */
+    public int getDraggedStatementPosition()
+    {
+        return draggedStatementPosition;
     }
 }

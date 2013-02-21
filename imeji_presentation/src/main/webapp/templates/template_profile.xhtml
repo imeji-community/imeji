@@ -43,33 +43,67 @@
 							</h:panelGroup>
 							<h:panelGroup id="ajaxArea">
 							 <style>
-							     #sortable { list-style-type: none; margin-top: 50px; padding: 0px; width: 100%; }
-								 #sortable li { margin: 0px 0px 0px 0px; padding: 0px; height:10px;}
-								 html>body #sortable li {  height:100px; line-height: 1.2em; }
-								.ui-state-highlight {height:100px; line-height: 1.2em; padding: 10px; background-color:#494949}
+							 	.dropMetadata , .dropChild{
+									border-color:green; 
+									border-style:dashed;
+									margin: 2px 2px 2px 40px;
+									border-width:1px !important;
+									width:300px;
+									height:50px;
+								}
+								.drop-hover{
+									background-color:#494949;
+								}
+								.dropArea{
+									display:none;
+								}
 							</style>
 							<script>
-								$(function() {
-									$( "#sortable" ).sortable({
-										placeholder: "ui-state-highlight"
-										});
-									$( "#sortable" ).on( "sortstop", function( event, ui ) {
-										$( ".positionStatement" ).each(function(i, el) {
-											 $(this).val(i);
-											});
-										$(".buttonSort").click();
-									} );
-								});
+								 $(function() {
+									 var dragged;
+								 	$( ".draggable" ).draggable({
+								 			zIndex: 100,
+								 			opacity: 0.35,
+								 			cursor: "move", 
+								 			cursorAt: { top: 100, left: 450 }
+								 		});		
+								 	$( ".draggable" ).on( "dragstart", function( event, ui ) {
+									 		$(".dropArea").show();
+								 			dragged = $(this).attr('id') + 'DragButton';
+									 	} );
+								 	 $( ".dropMetadata" ).droppable({
+								 		 hoverClass: "drop-hover",
+										 drop: function( event, ui ) {
+											var id = $(this).attr('id') + 'Button';
+											document.getElementById(dragged).click();
+											document.getElementById(id).click();
+										 	}
+										 });
+									 $( ".dropChild" ).droppable({
+										 hoverClass: "drop-hover",
+										 drop: function( event, ui ) {
+											 var id = $(this).attr('id') + 'Button';
+											 document.getElementById(dragged).click();
+											 document.getElementById(id).click();
+										 	}
+										 });
+									 $( ".draggable" ).on( "dragstop", function( event, ui ) {
+										 document.getElementById("profileForm:sort").click();
+										 $(".dropArea").hide();
+									 	} );
+									});
 							</script>
 							<h:commandButton style="display:none" id="sort" styleClass="buttonSort" value="Sort" action="#{FormularBean.sort}">
-								<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+								<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
 							</h:commandButton>
-							<ul id="sortable">
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
-								<li class="ui-state-default">
-								<h:inputText id="position" styleClass="positionStatement" value="#{wrapper.statement.pos}" style="display:none;" />
-	                            <h:panelGroup layout="block" style="margin-left:#{wrapper.level}px; margin-top:10px" styleClass="full_area0_p0 noTopBorder">
-	                           	
+								
+	                            <h:panelGroup id="metadata" layout="block" style="margin-left:#{wrapper.level}px; margin-top:10px" styleClass="full_area0_p0 noTopBorder draggable">
+	                           		<h:commandButton id="metadataDragButton" value="Insert metadata" action="#{FormularBean.dragStart}" style="display:none;">
+										<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.draggedStatementPosition}"/>
+										<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+									</h:commandButton>
+									
 									<h:panelGroup layout="block" styleClass="full_area0 endline clear">
 										<b class="medium_area0_p2 endline labelLine clear">
 											<h:outputText value="#{lbl.metadata}"/>
@@ -150,7 +184,8 @@
 												</h:panelGroup>
 											</h:panelGroup>	
 											
-											<h:panelGroup styleClass="free_area0 xSmall_marginLExcl endline" rendered="#{wrapper.constraintsSize == 0 and wrapper.vocabularyString == null}">
+											
+											<h:panelGroup styleClass="full_area0 medium_marginLExcl endline" rendered="#{wrapper.constraintsSize == 0 and wrapper.vocabularyString == null}">
 												<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}">
 													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 													<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
@@ -166,7 +201,7 @@
 												</h:panelGroup>
 											</h:panelGroup>
 											
-											<h:panelGroup styleClass="free_area0" rendered="#{wrapper.vocabularyString != null}">
+											<h:panelGroup styleClass="full_area0 medium_marginLExcl" rendered="#{wrapper.vocabularyString != null}">
 												<h:panelGroup styleClass="huge_area0 tiny_marginRIncl clear">
 													<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}"  styleClass="free_txtInput" >
 														 <f:selectItems value="#{wrapper.vocabularyHelper.vocabularies}"/>
@@ -180,22 +215,22 @@
 												</h:panelGroup>
 											</h:panelGroup>	
 											
-											<h:panelGroup styleClass="free_area0" rendered="#{wrapper.constraintsSize > 0}">
+											<h:panelGroup styleClass="full_area0 medium_marginLExcl" rendered="#{wrapper.constraintsSize > 0}">
 												<h:outputLabel styleClass="huge_label" value="#{lbl.constraints}" />
-												<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}" rowKeyVar="index">
+												<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}" rowKeyVar="constraintPosition">
 													<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
-														<h:inputText styleClass="huge_txtInput endline" value="#{constraint}"  valueChangeListener="#{statement.constraintListener}">
-															<f:attribute name="position" value="#{index}"/>
+														<h:inputText styleClass="huge_txtInput endline" value="#{constraint}"  valueChangeListener="#{wrapper.constraintListener}">
+															<f:attribute name="position" value="#{constraintPosition.index}"/>
 														</h:inputText>
 														<h:panelGroup styleClass="large_area0 endline">
 														<span style="padding-left:10px"></span>
 															<h:commandButton styleClass="min_imgBtn add groupTool" title="#{lbl.add_constraint}" action="#{FormularBean.addConstraint}" >
-																<f:setPropertyActionListener value="#{index}" target="#{FormularBean.constraintPosition}"/>
+																<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{FormularBean.constraintPosition}"/>
 																<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 																<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 															</h:commandButton>
 															<h:commandButton styleClass="min_imgBtn remove groupTool" title="#{lbl.remove_constraint}" action="#{FormularBean.removeConstraint}">
-																<f:setPropertyActionListener value="#{index}" target="#{FormularBean.constraintPosition}"/>
+																<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{FormularBean.constraintPosition}"/>
 																<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 																<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 															</h:commandButton>
@@ -240,10 +275,25 @@
 											<h:outputLabel styleClass="free_area0 " value="#{lbl.statement_remove}" rendered="#{FormularBean.size &gt; 1}" />
 										</span>
 									</h:panelGroup>
+									<div class="full_area0 dropArea">
+										<h:panelGroup id="dropMetadata" layout="block" styleClass="full_area0 dropMetadata" >
+											<h:outputText styleClass="full_area0" value="#{lbl.add_metadata} " />
+											<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{FormularBean.insertMetadata}" style="display:none;">
+												<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+												<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+											</h:commandButton>
+										</h:panelGroup>
+										<h:panelGroup id="dropChild" layout="block" styleClass="full_area0 dropChild">
+											<h:outputText styleClass="full_area0" value="Add Child here" />
+											<h:commandButton  id="dropChildButton" value="Insert metadata" action="#{FormularBean.insertChild}" style="display:none;">
+												<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+												<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+											</h:commandButton>
+										</h:panelGroup>
+									</div>
 								</h:panelGroup>
-								</li>
+								
 								</ui:repeat>
-								</ul>
 							</h:panelGroup>
 						</div>
 					</h:panelGroup>

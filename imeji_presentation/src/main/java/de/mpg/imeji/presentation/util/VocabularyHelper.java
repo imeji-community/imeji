@@ -24,7 +24,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 public class VocabularyHelper
 {
     private List<SelectItem> vocabularies;
-    private Properties properties;
+    private static Properties properties;
 
     /**
      * Load the properties and initialize the vocabularies
@@ -64,22 +64,25 @@ public class VocabularyHelper
      */
     public void loadProperties() throws IOException
     {
-        InputStream instream = null;
-        try
+        if (properties == null)
         {
-            instream = PropertyReader.getInputStream("vocabulary.properties");
-            properties = new Properties();
-            properties.load(instream);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-        finally
-        {
-            if (instream != null)
+            InputStream instream = null;
+            try
             {
-                instream.close();
+                instream = PropertyReader.getInputStream("vocabulary.properties");
+                properties = new Properties();
+                properties.load(instream);
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+            finally
+            {
+                if (instream != null)
+                {
+                    instream.close();
+                }
             }
         }
     }

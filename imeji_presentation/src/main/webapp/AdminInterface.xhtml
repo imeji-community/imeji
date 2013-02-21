@@ -1,16 +1,45 @@
-<ui:composition template="templates/template.xhtml" 
+<ui:composition template="templates/template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline" value="AdminInterface" />
-	
+	<ui:param name="headline" value="Administration" />
+
 	<ui:define name="mainContent">
-		<h:outputLabel value="#{lbl.admin_user}:"/>
-		<h:inputText value="#{AdminInterfaceBean.username}"/>
-		
-		<h:outputLabel value="#{lbl.admin_user}:"/>
-		<h:inputSecret value="#{AdminInterfaceBean.password}"/>
-	
+		<h:panelGroup layout="block" styleClass="full_area0 endline" rendered="#{SessionBean.admin}">
+			<div class="full_area0">
+				<h2>
+					<h:outputText value="#{lbl.database_infos}" />
+				</h2>
+				<h:outputText
+					value="#{AdminBean.allImagesSize} #{lbl.admin_info_sys2}"
+					styleClass="full_area0 endline" />
+				<h:outputText
+					value="#{AdminBean.allUsersSize} #{lbl.admin_info_users}"
+					styleClass="full_area0 endline" />
+				<h:outputText
+					value="#{AdminBean.allCollectionsSize} #{lbl.admin_info_col}"
+					styleClass="full_area0 endline" />
+				<h:outputText
+					value="#{AdminBean.allAlbumsSize} #{lbl.admin_info_alb}"
+					styleClass="full_area0 endline" />
+
+			</div>
+			<div class="full_area0">
+				<h2>
+					<h:outputText value="#{lbl.storage_infos}" />
+				</h2>
+				<h:outputText
+					value="#{AdminBean.numberOfFiles} #{lbl.storage_number_of_files}"
+					styleClass="full_area0 endline" />
+				<h:outputText
+					value="#{AdminBean.sizeOfFiles} #{lbl.storage_size_of_files}"
+					styleClass="full_area0 endline" />
+				<h:outputText
+					value="#{AdminBean.storageFreeSpace} #{lbl.storage_free_space}"
+					styleClass="full_area0 endline" />
+			</div>
+		</h:panelGroup>
+
 	</ui:define>
 </ui:composition>

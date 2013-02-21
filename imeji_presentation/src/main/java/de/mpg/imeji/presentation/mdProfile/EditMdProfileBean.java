@@ -163,7 +163,8 @@ public class EditMdProfileBean extends MdProfileBean
      */
     public String addFirstStatement()
     {
-        getWrappers().add(new StatementWrapper(ImejiFactory.newStatement(), getProfile().getId()));
+        Statement firstStatement = ImejiFactory.newStatement();
+        getWrappers().add(new StatementWrapper(firstStatement, getProfile().getId(),getLevel(firstStatement)));
         return getNavigationString();
     }
 

@@ -339,7 +339,7 @@
 							<!-- Define elements to accept the alt and title text from the images. -->
 							<div id="carousel">
 								<ui:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0">
-									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.applicationUri}#{item.id.path}">
+									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.applicationUrl}#{Navigation.itemPath}#{item.idString}">
 										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}file?id=#{item.thumbnailImageUrl}" height="114"/>
 									</h:outputLink>
 								</ui:repeat>

@@ -5,9 +5,6 @@ package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLDecoder;
-import java.util.Enumeration;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +23,6 @@ import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
@@ -93,7 +88,8 @@ public class FileServlet extends HttpServlet
         {
             try
             {
-                collection = ObjectLoader.loadCollection(collectionURI, session.getUser());
+                // important to use lazy load, otherwise high performance issue
+                collection = ObjectLoader.loadCollectionLazy(collectionURI, session.getUser());
                 session.getCollectionCached().put(collection.getId(), collection);
             }
             catch (Exception e)

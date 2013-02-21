@@ -14,6 +14,7 @@ import javax.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.ingest.vo.MetadataProfiles;
 import de.mpg.imeji.logic.vo.Item;
@@ -66,7 +67,7 @@ public class JaxbIngestProfileTest
             // txt.setStatement(new URI("http://imeji.org/statement/98273493123"));
             // md.add(txt);
             // jmp.marshalItem(xmlFile + "-output.xml", item);
-            JaxbIngestProfile.toString(item);
+            JaxbUtil.toString(item);
         }
         catch (JAXBException e)
         {
@@ -90,7 +91,7 @@ public class JaxbIngestProfileTest
             JaxbIngestProfile jmp = new JaxbIngestProfile();
             Items items = jmp.unmarshalItems(xmlFilename);
             // jmp.marshalItem(xmlFile + "-output.xml", item);
-            jmp.toString(items);
+            JaxbUtil.toString(items);
         }
         catch (JAXBException e)
         {
@@ -119,7 +120,7 @@ public class JaxbIngestProfileTest
                 fail("no statements...");
             }
             // jmp.marshalMdProfile(xmlFile + "-output.xml", mpd);
-            jmp.toString(mpd);
+            JaxbUtil.toString(mpd);
         }
         catch (JAXBException e)
         {
@@ -148,7 +149,7 @@ public class JaxbIngestProfileTest
                 fail("no profiles...");
             }
             // jmp.marshalMdProfile(xmlFilename + "-output.xml", mpd);
-            JaxbIngestProfile.toString(mdps);
+            JaxbUtil.toString(mdps);
         }
         catch (JAXBException e)
         {
@@ -181,7 +182,7 @@ public class JaxbIngestProfileTest
             //
             // mdp.setStatements(statements);
             // jmp.marshalMdProfiles(xmlFile + "-output.xml", mdps);
-            JaxbIngestProfile.toString(mdp);
+            JaxbUtil.toString(mdp);
             // System.out.println(mpd.toString());
         }
         catch (JAXBException e)

@@ -4,15 +4,11 @@
 package de.mpg.imeji.presentation.search;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.beans.Navigation;

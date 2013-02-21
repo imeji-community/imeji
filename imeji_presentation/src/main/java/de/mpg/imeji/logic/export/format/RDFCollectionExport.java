@@ -35,7 +35,9 @@ public class RDFCollectionExport extends RDFExport
         super.namespaces.put("http://imeji.org/terms/", "imeji");
         super.namespaces.put("http://imeji.org/terms/container/", "imeji-metadata");
         super.namespaces.put("http://purl.org/escidoc/metadata/terms/0.1/", "eterms");
-        super.namespaces.put("http://purl.org/dc/elements/1.1/", "dcterms");
+        super.namespaces.put("http://purl.org/dc/elements/1.1/", "dc");
+        super.namespaces.put("http://purl.org/dc/terms/", "dcterms");
+        super.namespaces.put("http://xmlns.com/foaf/0.1/", "foaf");
         super.namespaces.put("http://purl.org/escidoc/metadata/profiles/0.1/", "eprofiles");
     }
 

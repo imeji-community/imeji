@@ -65,8 +65,8 @@ public class CollectionFacets
             List<Facet> group = new ArrayList<Facet>();
             if (st.isPreview() && !fs.isFilter(getName(st.getId())))
             {
-                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement),
-                        SearchOperators.URI, st.getId().toString());
+                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement), SearchOperators.URI, st
+                        .getId().toString());
                 count = getCount(searchQuery, pair, allImages.getResults());
                 if (count > 0 || true)
                 {
@@ -116,8 +116,8 @@ public class CollectionFacets
     public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
         return ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class)).getSearchResult();
-//        ItemController ic = new ItemController(sb.getUser());
-//        return ic.search(colURI, searchQuery, new SortCriterion(), null);
+        // ItemController ic = new ItemController(sb.getUser());
+        // return ic.search(colURI, searchQuery, new SortCriterion(), null);
     }
 
     public List<List<Facet>> getFacets()

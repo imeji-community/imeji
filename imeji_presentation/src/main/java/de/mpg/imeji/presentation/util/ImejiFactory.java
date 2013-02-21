@@ -14,14 +14,14 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Item.Visibility;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
@@ -60,10 +60,29 @@ public class ImejiFactory
         return cm;
     }
 
+    /**
+     * Crate a new emtpy {@link Statement}
+     * 
+     * @return
+     */
     public static Statement newStatement()
     {
         Statement s = new Statement();
         s.getLabels().add(new LocalizedString("", null));
+        return s;
+    }
+
+    /**
+     * Create an emtpy {@link Statement} as a child of another {@link Statement}
+     * 
+     * @param parent
+     * @param isFirstChild
+     * @return
+     */
+    public static Statement newStatement(URI parent)
+    {
+        Statement s = newStatement();
+        s.setParent(parent);
         return s;
     }
 
@@ -94,6 +113,7 @@ public class ImejiFactory
 
     /**
      * Create a new emtpy {@link Item}
+     * 
      * @param collection
      * @return
      */
@@ -111,6 +131,7 @@ public class ImejiFactory
 
     /**
      * Factory Method used during the upload
+     * 
      * @param collection
      * @param user
      * @param storageId

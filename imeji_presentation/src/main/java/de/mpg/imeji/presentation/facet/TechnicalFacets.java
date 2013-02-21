@@ -88,8 +88,8 @@ public class TechnicalFacets
                 {
                     if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
                     {
-                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.type),
-                                SearchOperators.URI, t.getClazzNamespace());
+                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.type), SearchOperators.URI,
+                                t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());
                         if (count > 0)
                         {

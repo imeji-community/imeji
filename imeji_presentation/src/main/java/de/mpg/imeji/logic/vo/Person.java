@@ -6,11 +6,10 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
-
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -29,7 +28,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlType(name = "person")
 public class Person
 {
-    private URI id = URI.create("http://imeji.org/person/" + UUID.randomUUID());
+    private URI id = IdentifierUtil.newURI(Person.class);
     @j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/family-name")
     private String familyName;
     @j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/given-name")

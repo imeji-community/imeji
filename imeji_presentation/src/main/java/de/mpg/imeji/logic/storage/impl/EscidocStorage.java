@@ -44,7 +44,7 @@ import de.escidoc.core.client.StagingHandlerClient;
 import de.escidoc.core.resources.om.item.Item;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.escidoc.EscidocUtils;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -251,7 +251,8 @@ public class EscidocStorage implements Storage
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see de.mpg.imeji.logic.storage.Storage#getAdminstrator()
      */
     @Override
@@ -261,7 +262,8 @@ public class EscidocStorage implements Storage
         return null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see de.mpg.imeji.logic.storage.Storage#getCollectionId(java.lang.String)
      */
     @Override

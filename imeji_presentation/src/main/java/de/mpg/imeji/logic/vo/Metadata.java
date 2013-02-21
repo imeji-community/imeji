@@ -6,13 +6,13 @@ package de.mpg.imeji.logic.vo;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
@@ -39,7 +39,8 @@ import de.mpg.j2j.annotations.j2jResource;
         Publication.class })
 public abstract class Metadata
 {
-    private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
+    // private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
+    private URI id = IdentifierUtil.newURI(Metadata.class);
     private int pos = 0;
 
     public enum Types

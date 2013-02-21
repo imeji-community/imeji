@@ -52,7 +52,7 @@ public class InitializerServlet extends HttpServlet
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error Initializing model: " + e);
+            throw new RuntimeException("Error Initializing model: ", e);
         }
     }
 

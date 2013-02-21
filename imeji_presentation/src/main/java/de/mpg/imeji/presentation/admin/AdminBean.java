@@ -21,6 +21,8 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.storage.Storage;
+import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -134,7 +136,7 @@ public class AdminBean
     }
 
     /**
-     * Clean {@link Metadata} which are not attached to a {@link Statement}
+     * Clean {@link Metadata} which are not attached to a {@link Statement} .NOT WORKING SO FAR
      * 
      * @throws Exception
      */
@@ -271,6 +273,39 @@ public class AdminBean
     {
         Search search = new Search(SearchType.ITEM, null);
         return search.searchSimpleForQuery(SPARQLQueries.selectItemAll(), null).size();
+    }
+
+    /**
+     * Return the number of files stored in the {@link Storage}
+     * 
+     * @return
+     */
+    public int getNumberOfFiles()
+    {
+        StorageController sc = new StorageController();
+        return (int)sc.getAdministrator().getNumberOfFiles();
+    }
+
+    /**
+     * Return the free space in the {@link Storage} in bytes
+     * 
+     * @return
+     */
+    public long getStorageFreeSpace()
+    {
+        StorageController sc = new StorageController();
+        return sc.getAdministrator().getFreeSpace();
+    }
+
+    /**
+     * Return the Size in bytes of all files in the {@link Storage}
+     * 
+     * @return
+     */
+    public long getSizeOfFiles()
+    {
+        StorageController sc = new StorageController();
+        return sc.getAdministrator().getSizeOfFiles();
     }
 
     /**

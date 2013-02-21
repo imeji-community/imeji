@@ -8,7 +8,6 @@ import java.net.URI;
 
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.presentation.session.SessionBean;

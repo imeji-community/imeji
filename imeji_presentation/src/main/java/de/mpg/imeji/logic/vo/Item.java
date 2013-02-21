@@ -253,4 +253,18 @@ public class Item extends Properties implements FulltextIndex
         }
         fulltext = fulltext.trim();
     }
+
+    /**
+     * return the {@link URI} of this {@link Item} as a String. Return only the number, not the complete {@link URI}
+     * 
+     * @return
+     */
+    public String getIdString()
+    {
+        if (id != null)
+        {
+            return id.getPath().substring(id.getPath().lastIndexOf("/"));
+        }
+        return "";
+    }
 }

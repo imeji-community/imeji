@@ -51,6 +51,7 @@ public class AlbumImagesBean extends ImagesBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
+    @Override
     public String getInitPage()
     {
         getNavigationString();

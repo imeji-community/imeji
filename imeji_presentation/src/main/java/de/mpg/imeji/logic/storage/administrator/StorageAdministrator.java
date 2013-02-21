@@ -26,7 +26,7 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.storage.adminstrator;
+package de.mpg.imeji.logic.storage.administrator;
 
 import de.mpg.imeji.logic.storage.Storage;
 

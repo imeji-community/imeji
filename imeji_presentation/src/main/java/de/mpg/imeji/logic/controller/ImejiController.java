@@ -6,20 +6,20 @@ package de.mpg.imeji.logic.controller;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.List;
-
 import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.Counter;
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties;
@@ -47,7 +47,6 @@ public abstract class ImejiController
      */
     public ImejiController()
     {
-        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -62,9 +61,15 @@ public abstract class ImejiController
         this.user = user2;
     }
 
+    /**
+     * Add the {@link Properties} to an imeji object when it is created
+     * 
+     * @param properties
+     * @param user
+     */
     protected void writeCreateProperties(Properties properties, User user)
     {
-        J2JHelper.setId(properties, ObjectHelper.getURI(properties.getClass(), Integer.toString(getUniqueId())));
+        J2JHelper.setId(properties, IdentifierUtil.newURI(properties.getClass()));
         Calendar now = DateHelper.getCurrentDate();
         properties.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail()));
         properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
@@ -74,12 +79,24 @@ public abstract class ImejiController
             properties.setStatus(Status.PENDING);
     }
 
+    /**
+     * Add the {@link Properties} to an imeji object when it is updated
+     * 
+     * @param properties
+     * @param user
+     */
     protected void writeUpdateProperties(Properties properties, User user)
     {
         properties.setModifiedBy(ObjectHelper.getURI(User.class, user.getEmail()));
         properties.setModified(DateHelper.getCurrentDate());
     }
 
+    /**
+     * Add the {@link Properties} to an imeji object when it is released
+     * 
+     * @param properties
+     * @param user
+     */
     protected void writeReleaseProperty(Properties properties, User user)
     {
         properties.setVersion(1);
@@ -87,6 +104,12 @@ public abstract class ImejiController
         properties.setStatus(Status.RELEASED);
     }
 
+    /**
+     * Add the {@link Properties} to an imeji object when it is withdrawn
+     * 
+     * @param properties
+     * @param comment
+     */
     protected void writeWithdrawProperties(Properties properties, String comment)
     {
         if (comment != null && !"".equals(comment))
@@ -146,7 +169,21 @@ public abstract class ImejiController
         return false;
     }
 
-    public synchronized static int getUniqueId()
+    // /**
+    // * Create universal unique id (no counter involved)
+    // *
+    // * @return
+    // */
+    // public static String getUniqueId()
+    // {
+    // return UUID.randomUUID().toString();
+    // }
+    /**
+     * Create a unique id for this instance based on a counter
+     * 
+     * @return
+     */
+    public synchronized static int getUniqueIdOld()
     {
         Counter c = new Counter();
         if (Locks.tryLockCounter())

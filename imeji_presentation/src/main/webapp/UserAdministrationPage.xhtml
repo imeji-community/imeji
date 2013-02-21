@@ -1,46 +1,58 @@
-<ui:composition template="templates/template.xhtml" 
+<ui:composition template="templates/template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-		<ui:param name="headline" value="imeji Administration" />
-		<ui:define name="mainContent">
+	<ui:param name="headline" value="imeji Administration" />
+	<ui:define name="mainContent">
+		<h:panelGroup layout="block"
+			styleClass="full_area0 endline itemLine noTopBorder"
+			rendered="#{!UserCreationBean.sysAdmin}">
+			<h2>
+				<h:outputText value="You are not allowed to view this page" />
+			</h2>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="#{SessionBean.admin}">
 			<h:panelGroup layout="block"
-				styleClass="full_area0 endline itemLine noTopBorder"
-				rendered="#{!UserCreationBean.sysAdmin}">
+				styleClass="full_area0_p8 endline medium_marginLExcl">
 				<h2>
-					<h:outputText value="You are not allowed to view this page" />
+					<h:outputLink styleClass="free_area0 "
+						value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml">
+						<h:outputText value="#{lbl.admin_user_new}" />
+					</h:outputLink>
+					<h:outputLink value="#{Navigation.applicationUrl}jsf/Users.xhtml"
+						styleClass="free_area0 xSmall_marginLExcl">
+						<h:outputText value="#{lbl.admin_user_view}" />
+					</h:outputLink>
 				</h2>
 			</h:panelGroup>
 			<h:panelGroup layout="block"
-				styleClass="full_area0 endline itemLine noTopBorder"
-				rendered="#{UserCreationBean.sysAdmin}">
-
-				<h:panelGroup layout="block" styleClass="full_area0 endline">
-					<h2>
-						<h:outputLink styleClass="free_area0"
-							value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml">
-							<h:outputText value="#{lbl.admin_user_new}" />
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}jsf/Users.xhtml"
-							styleClass="free_area0 xTiny_marginLExcl">
-							<h:outputText value="#{lbl.admin_user_view}" />
-						</h:outputLink>
-						<h:form>
-						<h:commandLink styleClass="free_area0 xTiny_marginLExcl" action="#{AdminBean.reIndex}" value="ReIndex"/>
-						<h:commandLink styleClass="free_area0 xTiny_marginLExcl" action="#{AdminBean.status}" value="Status"/>
-						<h:commandLink styleClass="free_area0 xTiny_marginLExcl" action="#{AdminBean.clean}" value="!!Clean!!"/>
-						</h:form>
-
-					</h2>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="full_area0 endline">
-					<h2>
-						<h:outputText
-							value="#{lbl.admin_info_sys1} #{AdminBean.allImagesSize} #{lbl.admin_info_sys2}, #{AdminBean.allUsersSize} #{lbl.admin_info_users}, #{AdminBean.allCollectionsSize} #{lbl.admin_info_col}, #{AdminBean.allAlbumsSize} #{lbl.admin_info_alb}." />
-					</h2>
-				</h:panelGroup>
+				styleClass="full_area0_p8 endline medium_marginLExcl">
+				<h2>
+					<h:outputText value="#{lbl.administration_storage}"
+						styleClass="full_area0" />
+				</h2>
+				<h:outputLink
+					value="#{Navigation.applicationUri}/jsf/AdminInterface.xhtml" target="_blank">
+					<h:outputText value="#{lbl.view_detail}" />
+				</h:outputLink>
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="full_area0_p8 endline medium_marginLExcl">
+				<h2>
+					<h:outputText value="#{lbl.administration_advanced}"
+						styleClass="full_area0" />
+				</h2>
+				<h:form>
+					<h:commandLink styleClass="free_area0"
+						action="#{AdminBean.reIndex}" value="ReIndex" />
+					<h:commandLink styleClass="free_area0 xTiny_marginLExcl"
+						action="#{AdminBean.status}" value="Status" />
+					<h:commandLink styleClass="free_area0 xTiny_marginLExcl"
+						action="#{AdminBean.clean}" value="!!Clean!!" />
+				</h:form>
 			</h:panelGroup>
 
-		</ui:define>
+		</h:panelGroup>
+	</ui:define>
 </ui:composition>

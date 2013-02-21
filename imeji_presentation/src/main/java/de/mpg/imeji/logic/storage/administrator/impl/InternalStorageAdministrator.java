@@ -26,13 +26,16 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.storage.adminstrator.impl;
+package de.mpg.imeji.logic.storage.administrator.impl;
 
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
-import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.util.StringHelper;
 
@@ -65,17 +68,7 @@ public class InternalStorageAdministrator implements StorageAdministrator
     @Override
     public long getNumberOfFiles()
     {
-        int count = 0;
-        // Get all collection directories
-        String[] cols = storageDir.list();
-        if (cols != null)
-        {
-            for (String col : cols)
-            {
-                count += getNumberOfFilesOfCollection(col);
-            }
-        }
-        return count;
+        return getNumberOfFiles(storageDir.getAbsolutePath());
     }
 
     /**
@@ -86,20 +79,20 @@ public class InternalStorageAdministrator implements StorageAdministrator
      */
     public long getNumberOfFilesOfCollection(String collectionId)
     {
-        int count = 0;
-        File col = new File(storageDir.getAbsolutePath() + StringHelper.fileSeparator + collectionId);
-        // get all subdirectories of a collection
-        String[] subs = col.list();
-        if (subs != null)
-        {
-            for (String sub : subs)
-            {
-                // add to count all directories found in this subdirectory
-                File f = new File(col.getAbsolutePath() + StringHelper.fileSeparator + sub);
-                count += f.list().length;
-            }
-        }
-        return count;
+        return getNumberOfFiles(storageDir.getAbsolutePath() + StringHelper.fileSeparator + collectionId);
+        
+    }
+
+    /**
+     * Count the number of files for one path
+     * 
+     * @param directory
+     * @return
+     */
+    private long getNumberOfFiles(String directory)
+    {
+        File f = new File(directory);
+        return FileUtils.listFiles(f, FileFilterUtils.fileFileFilter(), TrueFileFilter.INSTANCE).size();
     }
 
     /*

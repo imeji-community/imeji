@@ -352,9 +352,11 @@ public class MdProfileBean
     public void insertMetadata()
     {
         StatementWrapper dragged = wrappers.get(getDraggedStatementPosition());
-        StatementWrapper insertedIn = wrappers.get(getStatementPosition());
-        dragged.getStatement().setParent(insertedIn.getStatement().getParent());
-        moveWrapper(dragged, getDraggedStatementPosition(), getStatementPosition());
+        StatementWrapper dropped = wrappers.get(getStatementPosition());
+        dropped = setParentOfDropped(dragged, dropped);
+        dragged.getStatement().setParent(dropped.getStatement().getParent());
+        // Insert BEFORE the next statement with the same level
+        moveWrapper(dragged, getDraggedStatementPosition(), findNextStatementWithSameLevel(dropped.getStatement()) - 1);
     }
 
     /**
@@ -363,16 +365,71 @@ public class MdProfileBean
     public void insertChild()
     {
         StatementWrapper dragged = wrappers.get(getDraggedStatementPosition());
-        StatementWrapper insertedIn = wrappers.get(getStatementPosition());
-        URI parentOfInsertIn = insertedIn.getStatement().getParent();
-        if (parentOfInsertIn != null && dragged.getStatement().getId().compareTo(parentOfInsertIn) == 0)
-        {
-            // The user try to add the parent as a child of its own child!!!
-            // Therefore replace the parent of the child, with the parent of the parent
-            insertedIn.getStatement().setParent(dragged.getStatement().getParent());
-        }
-        dragged.getStatement().setParent(insertedIn.getStatement().getId());
+        StatementWrapper dropped = wrappers.get(getStatementPosition());
+        dropped = setParentOfDropped(dragged, dropped);
+        dragged.getStatement().setParent(dropped.getStatement().getId());
         moveWrapper(dragged, getDraggedStatementPosition(), getStatementPosition());
+    }
+
+    /**
+     * The the parent {@link StatementWrapper} of the dropped {@link StatementWrapper}. This might change if its parent
+     * is the one being dragged
+     * 
+     * @param dragged
+     * @param dropped
+     * @return
+     */
+    private StatementWrapper setParentOfDropped(StatementWrapper dragged, StatementWrapper dropped)
+    {
+        if (isAParent(dragged, dropped))
+        {
+            StatementWrapper firstChild = findFirstChild(dragged);
+            firstChild.getStatement().setParent(dragged.getStatement().getParent());
+        }
+        return dropped;
+    }
+
+    /**
+     * True if the {@link StatementWrapper} parent is one of the parent of the {@link StatementWrapper} child
+     * 
+     * @param parent
+     * @param child
+     * @return
+     */
+    private boolean isAParent(StatementWrapper parent, StatementWrapper child)
+    {
+        while (child.getStatement().getParent() != null)
+        {
+            if (child.getStatement().getParent().compareTo(parent.getStatement().getId()) == 0)
+            {
+                return true;
+            }
+            else
+            {
+                StatementWrapper parentOfChild = wrappers.get(child.getStatement().getPos() - 1);
+                return isAParent(parent, parentOfChild);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Find the first Child of a {@link StatementWrapper} in the list
+     * 
+     * @param parent
+     * @return
+     */
+    private StatementWrapper findFirstChild(StatementWrapper parent)
+    {
+        for (StatementWrapper wrapper : wrappers)
+        {
+            if (wrapper.getStatement().getParent() != null
+                    && wrapper.getStatement().getParent().compareTo(parent.getStatement().getId()) == 0)
+            {
+                return wrapper;
+            }
+        }
+        return null;
     }
 
     /**
@@ -382,9 +439,9 @@ public class MdProfileBean
      * @param from
      * @param to
      */
-    private void moveWrapper(StatementWrapper wrapper, int from, int to)
+    private void moveWrapper(StatementWrapper dragged, int from, int to)
     {
-        wrappers.add(to + 1, wrapper);
+        wrappers.add(to + 1, dragged);
         if (to < from)
         {
             wrappers.remove(from + 1);

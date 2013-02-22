@@ -88,7 +88,7 @@
 									 	} );
 									});
 							</script>
-								<h:commandButton style="display:none" id="sort" styleClass="buttonSort" value="Sort" action="#{FormularBean.sort}">
+								<h:commandButton style="display:none" id="sort" value="Sort" action="#{FormularBean.sort}" onclick="alert('sort');">
 									<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
 								</h:commandButton>
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
@@ -102,7 +102,7 @@
 										</h:commandButton>
 		                           		<h:commandButton id="metadataDragButton" value="Insert metadata" action="#{FormularBean.dragStart}" style="display:none;">
 											<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.draggedStatementPosition}"/>
-											<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+											<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 										</h:commandButton>
 									
 									<h:panelGroup layout="block" styleClass="full_area0 endline clear">
@@ -132,17 +132,6 @@
 											</h:panelGroup>
 										</h:panelGroup>
 										<h:panelGroup class="full_area0">
-											
-											<h:panelGroup styleClass="small_area0_p8" rendered="false">
-												<h:commandLink styleClass="free_area0" value="#{lbl.move_up}" title="#{lbl.move_up}" action="#{FormularBean.moveUp}">
-													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
-													<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-												</h:commandLink>
-												<h:commandLink styleClass="free_area0" value="#{lbl.move_down}" title="#{lbl.move_down}" action="#{FormularBean.moveDown}">
-													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
-													<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-												</h:commandLink>
-											</h:panelGroup>
 											<h:panelGroup styleClass="medium_area0 xTiny_marginLIncl">
 												<h:outputLabel styleClass="medium_label" value="#{lbl.type}"/>										
 												<h:selectOneMenu  id="selStatementType" styleClass="medium_select" onchange="getElementById('profileForm:profile:#{position.index}:changeType').click();" value="#{wrapper.statement.type}" valueChangeListener="#{wrapper.typeListener}">
@@ -153,11 +142,8 @@
 													<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 												</h:commandButton>
 											</h:panelGroup>
-											
 											<h:panelGroup styleClass="quad_area0 xTiny_marginLIncl">
-												
 												<h:outputLabel styleClass="xLarge_label" value="#{lbl.name}"/>
-											
 												<ui:repeat id="labels" var="label" value="#{wrapper.statement.labels}" varStatus="labelPosition">
 													<h:panelGroup styleClass="free_area0 xSmall_marginRIncl">
 														<h:inputText id="inputLabel" value="#{label.value}" styleClass="xLarge_txtInput"/>
@@ -172,10 +158,8 @@
 														<h:selectOneMenu value="#{label.lang}" immediate="true" styleClass="medium_txtInput xTiny_marginLExcl" >
 															<f:selectItems value="#{Internationalization.languages}"/>
 			  											</h:selectOneMenu>
-			  											
 			  										</h:panelGroup>
 												</ui:repeat>
-												
 												<h:panelGroup styleClass="xDouble_area1 xSmall_marginRIncl">
 													<h:commandButton id="addLabel" styleClass="free_area0 min_imgBtn add" action="#{FormularBean.addLabel}" title="#{lbl.label_add}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
@@ -184,8 +168,6 @@
 													<h:outputLabel styleClass="free_area0" value="#{lbl.label_add}" />
 												</h:panelGroup>
 											</h:panelGroup>	
-											
-											
 											<h:panelGroup styleClass="full_area0 medium_marginLExcl endline" rendered="#{wrapper.constraintsSize == 0 and wrapper.vocabularyString == null}">
 												<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}">
 													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
@@ -239,11 +221,8 @@
 													</h:panelGroup>
 												</ui:repeat>
 											</h:panelGroup>
-													
 										</h:panelGroup>
-												
 									</h:panelGroup>
-							
 									<h:panelGroup layout="block" styleClass="quad_area2_p0 messageArea warnMessageArea" rendered="#{wrapper.showRemoveWarning}">
 	                                	<h:outputText styleClass="free_area0_p0" value="#{msg.remove_statement_used}"/><br/><br/>
 	                                	<h:commandButton action="#{FormularBean.closeRemoveWarning}" value="#{lbl.no}" styleClass="free_area1_p8 cancelButton">
@@ -255,7 +234,6 @@
 											<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 										</h:commandButton>
 	                                </h:panelGroup>
-	                               
 									<h:panelGroup layout="block" styleClass="free_area0 itemLine endline clear">
 										<span class="full_area0_p8">
 											<h:commandButton styleClass="free_area0 min_imgBtn add groupTool" title="#{lbl.add_metadata}" action="#{FormularBean.addStatement}">
@@ -272,7 +250,7 @@
 												<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 												<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 											</h:commandButton>
-											<h:outputLabel styleClass="free_area0 " value="#{lbl.statement_remove}" rendered="#{FormularBean.size &gt; 1}" />
+											<h:outputLabel styleClass="free_area0" value="#{lbl.statement_remove}" rendered="#{FormularBean.size &gt; 1}" />
 										</span>
 									</h:panelGroup>
 									</div>

@@ -1,5 +1,17 @@
-/*theme_default*/
+/* ========================================================================== 
+ ************************* imeji theme_default styles *********************** 
+ * 
+ *** imeji style prefix for all classes and ids: imj_ 
+ * 
+ ========================================================================== */
 
+/* 
+ * imeji basic - global - styles 
+ */
+
+.imj_clear {
+    clear: both;
+}
 
 a:hover {
 	color:#FFFFFF;
@@ -87,14 +99,22 @@ div.searchMenu {
 
 
 .imj_startpage_carouselWrapper {
-    float: left;
-    margin-top: 3em;
+    float:left;
+    margin-top:3em;
 }
 
 .imj_startpage_carousel {
 	min-height:33.333333em; 
 	overflow:hidden;
 }
+
+.imj_startpage_carouselContainer {
+	max-height:400px; 
+	overflow:visible; 
+	min-width:350px; 
+	width:40%; 
+	margin:0 auto;
+}	
 
 .imj_startpage_carousel #carousel {
 	height:26.66666666em; 
@@ -170,12 +190,18 @@ iframe#twitter-widget-0 div.root div.stream{
 	text-align:center;
 }
 
+.imj_community_logo {
+	background-color:#ffffff; 
+	-moz-border-radius: 7px; 
+	border-radius: 7px; 
+	padding:1%; 
+	margin-right:5%;
+}
+
 .imj_build_date {
 	text-align:center;
 	font-size:75%;
 }
-
-
 
 
 /*

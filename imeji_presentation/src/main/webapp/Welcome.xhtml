@@ -217,11 +217,10 @@
 				<!-- carousel -->
 				<div class="imj_cont_3_5 imj_startpage_carouselWrapper">
 					<div class="imj_cont_1 imj_startpage_carousel">
-						<div style="max-height:400px; overflow:visible; min-width:350px; width:40%; margin:0 auto;">
-							
+						<div class="imj_startpage_carouselContainer">							
 							<!-- Define elements to accept the alt and title text from the images. -->
 							<div id="carousel">
-								<ui:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0">
+								<ui:repeat var="item" value="#{StartPageBean.carousselImages}" rows="0">
 									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.applicationUrl}#{Navigation.itemPath}#{item.idString}">
 										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}file?id=#{item.thumbnailImageUrl}" height="114"/>
 									</h:outputLink>
@@ -238,14 +237,14 @@
                 
 				
 				
-				<div class="clear imj_cont_1 imj_footer small_negMarginLExcl">
+				<div class="imj_clear imj_cont_1 imj_footer small_negMarginLExcl">
 				<!-- begin: footer section-->
 					<div class="imj_cont_1 imj_poweredby">
-						<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank"> 
-							<img alt="imeji community logo" width="150em" style="background-color:#ffffff; -moz-border-radius: 7px; border-radius: 7px; padding:1%; margin-right:5%;" src="http://imeji.org/Imeji-Community.png"/> 
+						<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank" title="imeji community"> 
+							<img alt="imeji community logo" src="http://imeji.org/Imeji-Community.png" width="150em" class="imj_community_logo"/> 
 						</a> 
 						<br/><br/>
-						<a href="http://www.escidoc.org/" target="_blank"> 
+						<a href="http://www.escidoc.org/" target="_blank" title="eSciDoc"> 
 							<img alt="eSciDoc logo" src="https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/escidoc_new.png" height="32em"/> 
 						</a>
 					</div>

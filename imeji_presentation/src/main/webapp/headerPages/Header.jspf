@@ -51,7 +51,7 @@
 		</h:outputLink>
 		<!-- end: skip link navigation -->
 	
-		<div class="full_area0 header clear">
+		<div class="full_area0 header imj_clear">
 		<!-- begin: header section (including meta menu, logo, searchMenu and main menu)-->
 		
 			<!-- import meta menu here -->

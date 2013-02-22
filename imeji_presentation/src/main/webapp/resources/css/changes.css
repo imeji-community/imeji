@@ -1,0 +1,23 @@
+/* ========================================================================== 
+ ******************** documentation of new imeji styles ******************** 
+ * 
+ * new naming - list of the renamed styles (old version -> new version) 
+ * 
+ * new active imeji styles can be found in 
+ * webapp/resources/css/theme_default/style.css 
+ *
+ * check also webapp/resources/css/basic.css - for imeji we use normalize.css 
+ * as a base, customised with own imeji styles
+ *
+ * imeji style prefix for all new classes and ids: imj_ 
+ *
+ * this documentation is in progress!
+ ========================================================================== */
+
+ 
+ .clear -> .imj_clear
+ 
+ .wrapper -> .imj_siteWrapper
+ 
+ 
+ 

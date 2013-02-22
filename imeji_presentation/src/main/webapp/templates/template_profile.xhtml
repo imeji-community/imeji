@@ -41,16 +41,13 @@
 							</h:panelGroup>
 							<h:panelGroup id="ajaxArea">
 							 <style>
-							 	.dropMetadata , .dropChild{
+							 	.dropMetadataActive , .dropChildActive{
 									border-color:green; 
-									border-style:dashed;
-									margin: 2px 2px 2px 40px;
+									border-style:dotted;
 									border-width:1px !important;
-									width:300px;
-									height:40px;
 								}
 								.drop-hover{
-									background-color:#494949;
+									background-color:#494949 !important;
 								}
 								.dropArea{
 									display:none;
@@ -61,49 +58,56 @@
 									 var dragged;
 								 	$( ".draggable" ).draggable({
 								 			zIndex: 100,
-								 			opacity: 0.35,
-								 			 cursor: "move",
+								 			opacity: 0.01,
+								 			cursor: "move",
+								 			axis: "y",								 
 								 		});		
 								 	$( ".draggable" ).on( "dragstart", function( event, ui ) {
-									 		$(".dropArea").show();
 								 			dragged = $(this).attr('id') + 'DragButton';
 									 	} );
 								 	 $( ".dropMetadata" ).droppable({
 								 		 hoverClass: "drop-hover",
+								 		 activClass: "dropMetadataActive",
 										 drop: function( event, ui ) {
-											var id = $(this).attr('id') + 'Button';
+											var id = $(this).attr('id') + "Button";
 											document.getElementById(dragged).click();
 											document.getElementById(id).click();
 										 	}
 										 });
 									 $( ".dropChild" ).droppable({
 										 hoverClass: "drop-hover",
+										 activeClass :"dropChildActive",
 										 drop: function( event, ui ) {
-											 var id = $(this).attr('id') + 'Button';
+											 var id = $(this).attr('id').replace("metadata","dropChildButton");
 											 document.getElementById(dragged).click();
 											 document.getElementById(id).click();
 										 	}
 										 });
 									 $( ".draggable" ).on( "dragstop", function( event, ui ) {
 										 document.getElementById("profileForm:sort").click();
-										 $(".dropArea").hide();
 									 	} );
 									});
 							</script>
-							<h:commandButton style="display:none" id="sort" styleClass="buttonSort" value="Sort" action="#{FormularBean.sort}">
-								<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
-							</h:commandButton>
+								<h:commandButton style="display:none" id="sort" styleClass="buttonSort" value="Sort" action="#{FormularBean.sort}">
+									<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+								</h:commandButton>
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
 								
-	                            <h:panelGroup id="metadata" layout="block" style="margin-left:#{wrapper.level}px; margin-top:10px" styleClass="full_area0_p0 noTopBorder draggable">
-	                           		<h:commandButton id="metadataDragButton" value="Insert metadata" action="#{FormularBean.dragStart}" style="display:none;">
-										<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.draggedStatementPosition}"/>
-										<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
-									</h:commandButton>
+	                            <h:panelGroup id="metadata" layout="block" style="margin-left:#{wrapper.level}px; margin-top:10px" styleClass="full_area0_p0 noTopBorder draggable dropChild ">
+	                            	<div class="free_area0">
+										<h:outputText styleClass="full_area0" value="Add Child here" style="display:none;"/>
+										<h:commandButton  id="dropChildButton" value="Insert metadata" action="#{FormularBean.insertChild}" style="display:none;">
+											<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+											<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+										</h:commandButton>
+		                           		<h:commandButton id="metadataDragButton" value="Insert metadata" action="#{FormularBean.dragStart}" style="display:none;">
+											<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.draggedStatementPosition}"/>
+											<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+										</h:commandButton>
 									
 									<h:panelGroup layout="block" styleClass="full_area0 endline clear">
 										<b class="medium_area0_p2 endline labelLine clear">
-											<h:outputText value="#{lbl.metadata}"/>
+											<h:outputText value="#{lbl.metadata}#{wrapper.level}"/>
 											<h:outputText value="&#160;"/>
 											<span class="noDisplay">: </span>
 										</b>
@@ -268,28 +272,18 @@
 												<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 												<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 											</h:commandButton>
-											
 											<h:outputLabel styleClass="free_area0 " value="#{lbl.statement_remove}" rendered="#{FormularBean.size &gt; 1}" />
 										</span>
 									</h:panelGroup>
-									<div class="full_area0 dropArea">
-										<h:panelGroup id="dropMetadata" layout="block" styleClass="full_area0 dropMetadata" >
-											<h:outputText styleClass="full_area0" value="#{lbl.add_metadata} " />
-											<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{FormularBean.insertMetadata}" style="display:none;">
-												<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
-												<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-											</h:commandButton>
-										</h:panelGroup>
-										<h:panelGroup id="dropChild" layout="block" styleClass="full_area0 dropChild">
-											<h:outputText styleClass="full_area0" value="Add Child here" />
-											<h:commandButton  id="dropChildButton" value="Insert metadata" action="#{FormularBean.insertChild}" style="display:none;">
-												<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
-												<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-											</h:commandButton>
-										</h:panelGroup>
 									</div>
 								</h:panelGroup>
-								
+								<h:panelGroup id="dropMetadata" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8 dropMetadata">
+									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
+									<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{FormularBean.insertMetadata}" style="display:none;">
+										<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+										<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+									</h:commandButton>
+								</h:panelGroup>
 								</ui:repeat>
 							</h:panelGroup>
 						</div>

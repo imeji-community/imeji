@@ -13,7 +13,10 @@ input:focus {
 	color:#000000;
 	background-color:#FFFFFF;
 }
-	
+
+/*
+ * site wrapper
+ */
 .imj_siteWrapper {
     width: 84.0909em;
     height: auto !important;
@@ -25,7 +28,7 @@ input:focus {
     border-left: 1px dotted #6CAD2F;
 	border-right: 1px dotted #6CAD2F;
 }
-.imj_siteWrapper input[type="text"], textarea {
+.imj_siteWrapper input[type="text"], input[type="password"], textarea {
 	font-family: Courier,"Courier New",serif;
 }
 

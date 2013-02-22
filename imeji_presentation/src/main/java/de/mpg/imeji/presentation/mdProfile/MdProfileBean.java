@@ -384,7 +384,8 @@ public class MdProfileBean
         if (isAParent(dragged, dropped))
         {
             StatementWrapper firstChild = findFirstChild(dragged);
-            firstChild.getStatement().setParent(dragged.getStatement().getParent());
+            if (firstChild != null)
+                firstChild.getStatement().setParent(dragged.getStatement().getParent());
         }
         return dropped;
     }
@@ -404,7 +405,7 @@ public class MdProfileBean
             {
                 return true;
             }
-            else
+            else if (child.getStatement().getPos() - 1 >= 0)
             {
                 StatementWrapper parentOfChild = wrappers.get(child.getStatement().getPos() - 1);
                 return isAParent(parent, parentOfChild);
@@ -441,14 +442,17 @@ public class MdProfileBean
      */
     private void moveWrapper(StatementWrapper dragged, int from, int to)
     {
-        wrappers.add(to + 1, dragged);
-        if (to < from)
+        if (to + 1 < wrappers.size())
         {
-            wrappers.remove(from + 1);
-        }
-        else
-        {
-            wrappers.remove(from);
+            wrappers.add(to + 1, dragged);
+            if (to < from)
+            {
+                wrappers.remove(from + 1);
+            }
+            else
+            {
+                wrappers.remove(from);
+            }
         }
         setStatementPositionLikeInList();
     }
@@ -502,7 +506,7 @@ public class MdProfileBean
     {
         if (!levels.containsKey(st.getId()))
         {
-            if (st.getParent() != null)
+            if (st.getParent() != null && levels.get(st.getParent()) != null)
             {
                 levels.put(st.getId(), (levels.get(st.getParent()) + MARGIN_PIXELS_FOR_STATEMENT_CHILD));
             }

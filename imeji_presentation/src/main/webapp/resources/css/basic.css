@@ -222,7 +222,7 @@ Embedded content
 */
 
 img {
-    border: 0;
+    border:0 none;
 }
 
 /**

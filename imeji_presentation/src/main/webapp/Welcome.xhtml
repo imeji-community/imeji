@@ -9,125 +9,8 @@
 			<div class="imj_cont_1 infoPage small_marginLExcl" >
 				<!-- Main Content -->
 				
-				<div id="welcomeInfo" class="imj_cont_2_5 imj_welcomeInfo" style="float:left;">
-					<style type="text/css">
-						img {
-							border:0 none; 
-						}
-						div.LogoNSearch {
-							overflow:visible;
-						}
-						div.header {
-							overflow:visible;
-						}
-						div.searchMenu {
-							position:absolute;
-							margin-top:5.5em;
-							margin-left:5.5em;
-						}
-						.imj_cont_1 {
-							width:100%;
-						}
-						.imj_cont_1_2 {
-							width:49.85%;
-						}
-						.imj_cont_2_5 {
-							width:39.85%;
-						}
-						.imj_cont_3_5 {
-							width:59.85%;
-						}
-						.imj_welcomeInfo {
-							min-height:34.8333333em;
-							overflow:hidden;
-						}
-						
-						.imj_welcomeInfo .id_tabs ul {
-							padding:0;
-							margin-top:0;
-							padding-top:0.333333em;
-							text-align:right;
-							list-style-type:none;
-						}
-						.imj_welcomeInfo .id_tabs ul li {
-							margin-left:1%;
-							padding:1%;
-							display:inline;
-							font-size:1.0909em;
-							background-color:#323232;
-							border-radius:0.41666666em;
-							-webkit-border-radius:0.41666666em;
-							-moz-border-radius:0.41666666em;
-							-o-border-radius:0.41666666em;
-							-ms-border-radius:0.41666666em;
-						}
-						.imj_welcomeInfo .id_tabs .tab_content {
-							float:left;
-							height:90%;
-							overflow:auto;
-							font-size:1.0909em;
-						}
-						.imj_welcomeInfo .id_tabs li.ui-state-active {
-							background-color:#383838;
-							color:#F0F0F0;
-						}
-						.imj_welcomeInfo .id_tabs li.ui-state-active a {
-							color:#F0F0F0;
-						}
-						.imj_welcomeInfo .id_tabs div.ui-tabs-hide {
-							display:none;
-						}
-						
-						
-						.imj_startpage_carousel {
-							min-height:33.333333em; 
-							overflow:hidden;
-						}
-						.imj_startpage_carousel #carousel {
-							height:26.66666666em; 
-							width:90%; 
-							margin:0 auto;
-							background:transparent; 
-							overflow:visible !important; 
-						}
-						.imj_startpage_carousel #cloudinfoText {
-							display:none;
-						}
-						.dynamicCloudinfo {
-							position:absolute;
-							z-index:5600;
-							background-color:#292929;
-							padding:0.75em;
-						}
-						.imj_startpage_carousel #title-text {
-							margin:0;
-						}
-						.imj_startpage_carousel #alt-text {
-							margin:0;
-						}
-						
-						/* footer */
-						.imj_footer img {
-							border:0 none;
-							margin:0 1%;
-						}
-						.imj_poweredby {
-							padding: 1em 1.25em 1.25em 1em; 
-							text-align:center;
-						}
-						.imj_build_date {
-							text-align:center;
-							font-size:75%;
-						}
-						iframe#twitter-widget-0 {
-							width:99.5%;
-							height:43em;
-						}
-						iframe#twitter-widget-0 div.root div.stream{
-							height:20em !important;
-						}
-					</style>
-					 
+				<div id="imj_welcomeInfoWrapper" class="imj_cont_2_5 imj_welcomeInfo">
+								 
 					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
 						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
 						<!-- tabs -->
@@ -332,7 +215,7 @@
 					<!-- end of tabs international -->
 				
 				<!-- carousel -->
-				<div class="imj_cont_3_5" style="margin-top:3em; float:left;">
+				<div class="imj_cont_3_5 imj_startpage_carouselWrapper">
 					<div class="imj_cont_1 imj_startpage_carousel">
 						<div style="max-height:400px; overflow:visible; min-width:350px; width:40%; margin:0 auto;">
 							

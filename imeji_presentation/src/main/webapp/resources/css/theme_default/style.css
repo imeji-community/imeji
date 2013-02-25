@@ -311,6 +311,7 @@ iframe#twitter-widget-0 div.root div.stream{
 .imj_logoNSearch .imj_simpleSearch {
 	float:right;
 	margin-top:2em;
+	overflow:visible;
 }
 .imj_simpleSearch {
 	

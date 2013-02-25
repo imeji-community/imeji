@@ -54,6 +54,29 @@
  .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover
  
  
+ /*
+ * simple search menu (SearchMenu.xhtml - Welcome.xhtml)
+ */
+ 
+ .free_area0 .searchMenu -> .imj_simpleSearch
+ 
+ .std_imgArea .quickSearchIcon -> .imj_icoMagnifier_ffffff_23 .std_imgArea .quickSearchIcon
+ 
+ .xLarge_area0 .quickSearchMenu -> .imj_simpleSearchInputWrapper
+ 
+ .xLarge_txtInput .quickSearchTextInput -> .imj_simpleSearchInput
+ 
+ .xLarge_area0" style="text-align:left; -> .imj_simpleSearchInputWrapper
+ 
+ .small_txtBtn .activeButton .quickSearchBtn -> .imj_simpleSearchButtonSubmit
+ 
+ .free_area0 .advancedSearchMenu .tiny_marginLExcl -> .imj_simpleSearchLinkAdvancedsearch
+ 
+ + new styles
+ .imj_simpleSearchButtonSubmit:hover
+ .imj_simpleSearch input[type=radio]
+ .imj_simpleSearch input[type=radio]+label
+  
   
  /*
  * breadcrump component (History.xhtml)

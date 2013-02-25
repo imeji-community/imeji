@@ -36,12 +36,6 @@
 
 <style type="text/css">
 
-.imj_header {
-  clear: both;
-  width: 40.5454em;
-  margin-top: 0.5454em;
-  margin-bottom: 0.9090em;
-
 
 
 }
@@ -65,16 +59,15 @@
 		</h:outputLink>
 		<!-- end: skip link navigation -->
 	
-		<div class="full_area0 header imj_clear">
+		<div class="imj_siteHeader">
 		<!-- begin: header section (including meta menu, logo, searchMenu and main menu)-->
 		
 			<!-- import meta menu here -->
 			<ui:include src="ui/MetaMenu.jspf"/>
 		
-			<div class="imj_logoSearchLine imj_simpleSearch">
+			<div class="imj_siteHeaderLogoSearchSection imj_simpleSearch">
 				<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage }" value="#{Navigation.applicationUrl}">
-					<h:panelGroup styleClass="xTiny_marginLExcl half_area0 headerLogo">
-						<h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
+					<h:panelGroup styleClass="imj_siteHeaderLogo"> 
 					</h:panelGroup>
 				</h:outputLink>
 		

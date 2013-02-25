@@ -30,7 +30,7 @@ input:focus {
 
 
 /*
- * content container 
+ * new content container for Welcome.xhtml 
  */
 
 .imj_cont_1 {
@@ -49,6 +49,10 @@ input:focus {
 	width: 59.85%;
 }
 
+
+/* 
+ * imeji template styles (template.xhtml)  
+ */
 
 
 /*
@@ -71,44 +75,101 @@ input:focus {
 
 
 /*
- * header wrapper (header.jspf - template.xhtml)
- */
- 
-
-
-
-/*
  * welcome-page - start-page - infos, tabs, carousel, twitter-widget (Welcome.xhtml) 
- */
+ 
+ .imj_header {
+  clear: both;
+  width: 40.5454em;
+  margin-top: 0.5454em;
+  margin-bottom: 0.9090em;
+  }
+  */
+  
+ 
+ /* header wrapper (header.jspf - template.xhtml) */
 
+
+
+
+/* full_area0 header imj_clear - header.jspf 
+
+margin-top: 0.5454em;
+    margin-bottom: 0.9090em;
+
+ */
 
 .imj_siteHeader {
-	margin-top: 0.5454em;
-    margin-bottom: 0.9090em;
+	float: left;
+	width: 81.3636em;
+	margin: 0 0.0909em 0 0;
+	
+	clear: both;
+	border-width: 0;
+    display: inline;
+    margin: 0 0.0909em 0 0;
+    overflow: hidden;
+    padding: 0;
 }
 
 
+/* full_area0 LogoNSearch */
 
-.imj_logoSearchLine {
+.imj_siteHeaderLogoSearchSection {
+	display: inline;
 	width: 81.3636em; 
 	height: 5.7272em;
+	border-width: 0;
+	padding: 0;
 }
 
 
-/* div.LogoNSearch {
-	width: 81.3636em;
-	height:5.7272em;
-	display: inline;
-	float: left;
-	overflow: visible;
-		
-    margin: 0 0.0909em 0 0;
+/* xTiny_marginLExcl half_area0 headerLogo 
+cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
+*/
+
+.imj_siteHeaderLogo {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif"); 
+	/* ?!? url("../../imj_iconset/logo_imeji.giff"); ?!? */
+	background-position: left top;
+    background-repeat: no-repeat;
+    display: inline;
+    float: left;
+	width: 40.6363em;
+	height: 5em;
+	overflow: hidden;
+	border-width: 0;
+    margin: 0 0.0909em 0 1.3636em;
     padding: 0;
-    
-    border-width: 0; 
-    
-    
-} */
+}
+
+
+
+
+/* id="content" class="imj_clear full_area0" 
+
+clear: both;
+float: left;
+*/
+
+.imj_siteContentSection {   
+	width: 81.3636em;
+	margin-top: 0.5454em;
+    margin-bottom: 0.9090em;
+    padding-bottom: 2.001em;
+}
+
+
+/* imj_clear full_area0 */
+
+.imj_siteContentSubSection { 
+	clear: both;
+	float: left;
+	width: 81.3636em;
+	display: inline;
+	margin: 0 0.0909em 0 0;
+}
+
+
 
 
 
@@ -118,7 +179,7 @@ input:focus {
  */
 .imj_simpleSearch {
 	float: right;
-	margin: 2em 0 0 0; 
+	margin: 1em 0 0 0; 
 	overflow: visible;
 
 }
@@ -176,24 +237,7 @@ input:focus {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*
 
 div.header {
 	overflow: visible;
@@ -204,6 +248,9 @@ div.searchMenu {
 	margin-top: 5.5em;
 	margin-left: 5.5em;
 }
+
+*** welcome-page - start-page - infos, tabs, carousel, twitter-widget (Welcome.xhtml) *** 
+*/
 
 #imj_welcomeInfoWrapper {
 	float: left;

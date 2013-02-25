@@ -61,6 +61,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private String discardComment;
     private String selectedImagesContext;
     private SearchResult searchResult;
+    /**
+     * The context of the browse page (browse, collection browse, album browse)
+     */
+    protected String browseContext;
 
     /**
      * The bean for all list of images
@@ -103,6 +107,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseInit();
+        browseContext = getNavigationString();
         initMenus();
         return "";
     }
@@ -184,13 +189,17 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return controller.loadItems(uris, limit, offset);
     }
 
+    /**
+     * Clean the list of select {@link Item} in the session if the selected images context is not "pretty:browse"
+     */
     public void cleanSelectItems()
     {
-        if (session.getSelectedImagesContext() != null && !(session.getSelectedImagesContext().equals("pretty:browse")))
+        if (session.getSelectedImagesContext() != null
+                && !(session.getSelectedImagesContext().equals(browseContext)))
         {
             session.getSelected().clear();
         }
-        session.setSelectedImagesContext("pretty:browse");
+        session.setSelectedImagesContext(browseContext);
     }
 
     @Override

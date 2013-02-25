@@ -83,14 +83,8 @@
 											 document.getElementById(id).click();
 										 	}
 										 });
-									 $( ".draggable" ).on( "dragstop", function( event, ui ) {
-										 document.getElementById("profileForm:sort").click();
-									 	} );
 									});
 							</script>
-								<h:commandButton style="display:none" id="sort" value="Sort" action="#{FormularBean.sort}" onclick="alert('sort');">
-									<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
-								</h:commandButton>
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
 								
 	                            <h:panelGroup id="metadata" layout="block" style="margin-left:#{wrapper.level}px; margin-top:10px" styleClass="full_area0_p0 noTopBorder draggable dropChild ">

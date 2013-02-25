@@ -454,7 +454,8 @@ public class MdProfileBean
                 wrappers.remove(from);
             }
         }
-        setStatementPositionLikeInList();
+       // setStatementPositionLikeInList();
+        sort();
     }
 
     /**

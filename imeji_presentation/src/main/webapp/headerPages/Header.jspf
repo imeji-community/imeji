@@ -34,6 +34,20 @@
 -->
 </ui:remove>
 
+<style type="text/css">
+
+.imj_header {
+  clear: both;
+  width: 40.5454em;
+  margin-top: 0.5454em;
+  margin-bottom: 0.9090em;
+
+
+
+}
+
+</style>
+
 	<f:subview id="Header">
 	
 		<!-- start: skip link navigation -->
@@ -57,7 +71,7 @@
 			<!-- import meta menu here -->
 			<ui:include src="ui/MetaMenu.jspf"/>
 		
-			<div class="full_area0 LogoNSearch imj_logoNSearch">
+			<div class="imj_logoSearchLine imj_simpleSearch">
 				<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage }" value="#{Navigation.applicationUrl}">
 					<h:panelGroup styleClass="xTiny_marginLExcl half_area0 headerLogo">
 						<h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>

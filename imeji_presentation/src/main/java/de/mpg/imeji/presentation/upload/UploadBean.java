@@ -226,7 +226,6 @@ public class UploadBean
         {
             for (Item item : itemList)
             {
-                System.out.println("remove file " + item.getStorageId());
                 storageController.delete(item.getStorageId());
             }
         }

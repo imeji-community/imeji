@@ -43,7 +43,7 @@ public class ObjectLoader
         try
         {
             CollectionController cl = new CollectionController(user);
-            return cl.retrieve(id);
+            return cl.retrieve(id, user);
         }
         catch (NotFoundException e)
         {

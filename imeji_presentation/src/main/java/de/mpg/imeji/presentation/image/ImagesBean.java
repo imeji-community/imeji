@@ -564,6 +564,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         this.filters = filters;
     }
 
+    /**
+     * Select all item on the current page
+     * 
+     * @return
+     */
     public String selectAll()
     {
         for (ThumbnailBean bean : getCurrentPartList())

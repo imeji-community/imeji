@@ -87,7 +87,7 @@ public class ItemController extends ImejiController
     public void create(Collection<Item> items, URI coll) throws Exception
     {
         CollectionController cc = new CollectionController(user);
-        CollectionImeji ic = cc.retrieve(coll);
+        CollectionImeji ic = cc.retrieve(coll, user);
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
         for (Item img : items)
         {

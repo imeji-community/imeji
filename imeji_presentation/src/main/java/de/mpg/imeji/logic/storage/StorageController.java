@@ -29,7 +29,12 @@
 package de.mpg.imeji.logic.storage;
 
 import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -81,7 +86,9 @@ public class StorageController
      */
     public UploadResult upload(String filename, byte[] bytes, String collectionId)
     {
-        return storage.upload(filename, bytes, collectionId);
+        UploadResult result = storage.upload(filename, bytes, collectionId);
+        result.setChecksum(calculateChecksum(bytes));
+        return result;
     }
 
     /**
@@ -117,6 +124,16 @@ public class StorageController
     }
 
     /**
+     * Return the {@link StorageAdministrator} of the current {@link Storage}
+     * 
+     * @return
+     */
+    public StorageAdministrator getAdministrator()
+    {
+        return storage.getAdministrator();
+    }
+
+    /**
      * Return the id of the {@link CollectionImeji} of this file
      * 
      * @return
@@ -124,5 +141,16 @@ public class StorageController
     public String getCollectionId(String url)
     {
         return storage.getCollectionId(url);
+    }
+
+    /**
+     * Calculate the Checksum of a byte array with MD5 algorithm displayed in Hexadecimal
+     * 
+     * @param bytes
+     * @return
+     */
+    public String calculateChecksum(byte[] bytes)
+    {
+        return DigestUtils.md5Hex(bytes);
     }
 }

@@ -1,0 +1,93 @@
+/* ========================================================================== 
+ ******************** documentation of new imeji styles ******************** 
+ * 
+ * new naming - list of the renamed styles 
+ * old version -> new version (file.name) 
+ * 
+ * new active imeji styles can be found in 
+ * webapp/resources/css/theme_default/style.css 
+ *
+ * check also webapp/resources/css/basic.css - for imeji we use normalize.css 
+ * as a base, customised with own imeji styles
+ *
+ * imeji style prefix for all new classes and ids: imj_ 
+ *
+ * this documentation is in progress!
+ ========================================================================== */
+
+/* 
+ * imeji basic - global - styles 
+ */
+ 
+ .clear -> .imj_clear
+ 
+ 
+ /*
+ * site wrapper (template.xhtml)
+ */
+ 
+ .wrapper -> .imj_siteWrapper 
+  
+  
+ /*
+ * metaMenuStandard (MetaMenu.jspf + Welcome.xhtml)
+ */
+  
+ .full_area0 .metaMenu -> .imj_metaMenuStandardSingleLine
+ 
+ .metaMenu -> .imj_metaMenuStandardSingleLine .imj_metaMenuItemsAlign
+ 
+ .seperator -> .imj_metaMenuStandardSingleLine .imj_metaMenuSeparator
+  
+ input .medium_txtInput -> .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"], .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] 
+ 
+ input .medium_area0 .endline -> .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]
+  
+ .medium_area0_p8 .endline -> .imj_metaMenuItem
+ 
+ .metaMenu select -> .imj_metaMenuStandardSingleLine select.imj_metaMenuItem 
+ 
+ + new styles
+ .imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select]
+ .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:hover, .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:hover
+ .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:focus, .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:focus
+ .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover
+ 
+ 
+ /*
+ * simple search menu (SearchMenu.xhtml - Welcome.xhtml)
+ */
+ 
+ .free_area0 .searchMenu -> .imj_simpleSearch
+ 
+ .std_imgArea .quickSearchIcon -> .imj_icoMagnifier_ffffff_23 .std_imgArea .quickSearchIcon
+ 
+ .xLarge_area0 .quickSearchMenu -> .imj_simpleSearchInputWrapper
+ 
+ .xLarge_txtInput .quickSearchTextInput -> .imj_simpleSearchInput
+ 
+ .xLarge_area0" style="text-align:left; -> .imj_simpleSearchInputWrapper
+ 
+ .small_txtBtn .activeButton .quickSearchBtn -> .imj_simpleSearchButtonSubmit
+ 
+ .free_area0 .advancedSearchMenu .tiny_marginLExcl -> .imj_simpleSearchLinkAdvancedsearch
+ 
+ + new styles
+ .imj_simpleSearchButtonSubmit:hover
+ .imj_simpleSearch input[type=radio]
+ .imj_simpleSearch input[type=radio]+label
+  
+  
+ /*
+ * breadcrump component (History.xhtml)
+ */
+ 
+ .full_area0 .small_marginLIncl -> .imj_breadcrumpHistory 
+ 
+ .free_area0 -> .imj_breadcrumpHistory .imj_breadcrumpTitle 
+ 
+ no class span for separator ->.imj_breadcrumpHistory .imj_breadcrumpSeparator 
+ 
+ .historyText -> .imj_breadcrumpHistory .imj_breadcrumpItem
+ 
+ 

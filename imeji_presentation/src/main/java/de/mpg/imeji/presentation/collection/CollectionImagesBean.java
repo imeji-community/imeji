@@ -68,6 +68,7 @@ public class CollectionImagesBean extends ImagesBean
         uri = ObjectHelper.getURI(CollectionImeji.class, id);
         collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
         browseInit();
+        browseContext = getNavigationString() + id;
         return "";
     }
 
@@ -91,16 +92,6 @@ public class CollectionImagesBean extends ImagesBean
     @Override
     public String getNavigationString()
     {
-        if (collection != null)
-        {
-            if (sb.getSelectedImagesContext() != null
-                    && !(sb.getSelectedImagesContext()
-                            .equals("pretty:collectionBrowse" + collection.getId().toString())))
-            {
-                sb.getSelected().clear();
-            }
-            sb.setSelectedImagesContext("pretty:collectionBrowse" + collection.getId().toString());
-        }
         return "pretty:collectionBrowse";
     }
 
@@ -173,7 +164,7 @@ public class CollectionImagesBean extends ImagesBean
         {
             BeanHelper.error(sb.getMessage("error_collection_release"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error releasing collection", e);
         }
         return "pretty:";
     }
@@ -195,7 +186,7 @@ public class CollectionImagesBean extends ImagesBean
         {
             BeanHelper.error(sb.getMessage("success_collection_delete"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error deleting collection", e);
         }
         return "pretty:collections";
     }
@@ -218,7 +209,7 @@ public class CollectionImagesBean extends ImagesBean
         {
             BeanHelper.error(sb.getMessage("error_collection_withdraw"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error discarding collection", e);
         }
         return "pretty:";
     }

@@ -51,27 +51,20 @@ public class AlbumImagesBean extends ImagesBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
+    @Override
     public String getInitPage()
     {
         getNavigationString();
         uri = ObjectHelper.getURI(Album.class, id);
         loadAlbum();
         browseInit();
+        browseContext = getNavigationString() + id;
         return "";
     }
 
     @Override
     public String getNavigationString()
     {
-        if (album != null && album.getId() != null)
-        {
-            if (session.getSelectedImagesContext() != null
-                    && !(session.getSelectedImagesContext().equals("pretty:albumBrowse" + album.getId().toString())))
-            {
-                session.getSelected().clear();
-            }
-            session.setSelectedImagesContext("pretty:albumBrowse" + album.getId().toString());
-        }
         return "pretty:albumBrowse";
     }
 

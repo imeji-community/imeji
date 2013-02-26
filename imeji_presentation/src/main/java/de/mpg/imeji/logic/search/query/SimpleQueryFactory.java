@@ -174,8 +174,7 @@ public class SimpleQueryFactory
             {
                 return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
-            else if (SearchIndex.names.modified.name().equals(
-                    sortCriterion.getIndex().getName()))
+            else if (SearchIndex.names.modified.name().equals(sortCriterion.getIndex().getName()))
             {
                 return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }

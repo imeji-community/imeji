@@ -1,19 +1,63 @@
-/*theme_default*/
+/* ========================================================================== 
+ ************************* imeji theme_default styles *********************** 
+ * 
+ *** imeji style prefix for all classes and ids: imj_ 
+ * 
+ ========================================================================== */
+
+/* 
+ * imeji basic - global - styles 
+ */
+
+.imj_clear {
+    clear: both;
+}
+
 a:hover {
-	color:#FFFFFF;
+	color: #FFFFFF;
 }
 input {
-	background-color:#CCCCCC;
+	background-color: #CCCCCC;
 }
 input:hover {
 	color:000000;
-	background-color:#FFFFFF;
+	background-color: #FFFFFF;
 }
 input:focus {
-	color:#000000;
-	background-color:#FFFFFF;
+	color: #000000;
+	background-color: #FFFFFF;
 }
-	
+
+
+/*
+ * new content container for Welcome.xhtml 
+ */
+
+.imj_cont_1 {
+	width: 100%;
+}
+
+.imj_cont_1_2 {
+	width: 49.85%;
+}
+
+.imj_cont_2_5 {
+	width: 39.85%;
+}
+
+.imj_cont_3_5 {
+	width: 59.85%;
+}
+
+
+/* 
+ * imeji template styles (template.xhtml)  
+ */
+
+
+/*
+ * site wrapper (template.xhtml)
+ */
 .imj_siteWrapper {
     width: 84.0909em;
     height: auto !important;
@@ -25,89 +69,121 @@ input:focus {
     border-left: 1px dotted #6CAD2F;
 	border-right: 1px dotted #6CAD2F;
 }
-.imj_siteWrapper input[type="text"], textarea {
+.imj_siteWrapper input[type="text"], input[type="password"], textarea {
 	font-family: Courier,"Courier New",serif;
 }
 
 
 /*
- * breadcrump component
- */ 
-.imj_breadcrumpHistory {
-	width:92.75%;
-	padding-left:7%;
-}
-.imj_breadcrumpHistory .imj_breadcrumpTitle {
-	margin-right:0.3636em;
-}
-.imj_breadcrumpHistory .imj_breadcrumpSeparator {
-	margin-left:0.3636em;
-	margin-right:0.3636em;
+ * welcome-page - start-page - infos, tabs, carousel, twitter-widget (Welcome.xhtml) 
+ 
+ .imj_header {
+  clear: both;
+  width: 40.5454em;
+  margin-top: 0.5454em;
+  margin-bottom: 0.9090em;
+  }
+  */
+  
+ 
+ /* header wrapper (header.jspf - template.xhtml) */
+
+
+
+
+/* full_area0 header imj_clear - header.jspf 
+
+margin-top: 0.5454em;
+    margin-bottom: 0.9090em;
+
+ */
+
+.imj_siteHeader {
+	float: left;
+	width: 81.3636em;
+	margin: 0 0.0909em 0 0;
+	
+	clear: both;
+	border-width: 0;
+    display: inline;
+    margin: 0 0.0909em 0 0;
+    overflow: hidden;
+    padding: 0;
 }
 
-/*
- * metaMenuStandard
- */
-.imj_metaMenuStandardSingleLine {
-	width:100%;
+
+/* full_area0 LogoNSearch */
+
+.imj_siteHeaderLogoSearchSection {
+	display: inline;
+	width: 81.3636em; 
+	height: 5.7272em;
+	border-width: 0;
+	padding: 0;
 }
-.imj_metaMenuStandardSingleLine .imj_metaMenuItemsAlign {
-	float:right;
+
+
+/* xTiny_marginLExcl half_area0 headerLogo 
+cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
+*/
+
+.imj_siteHeaderLogo {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif"); 
+	/* ?!? url("../../imj_iconset/logo_imeji.giff"); ?!? */
+	background-position: left top;
+    background-repeat: no-repeat;
+    display: inline;
+    float: left;
+	width: 40.6363em;
+	height: 5em;
+	overflow: hidden;
+	border-width: 0;
+    margin: 0 0.0909em 0 1.3636em;
+    padding: 0;
 }
-.imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {
-	height:1.5454em;
-	width:0.0909em;
-	margin:0 0.72727em;
-	border-right:solid #6CAD2F 0.090909em;
-	display:inline-block;
+
+
+
+
+/* id="content" class="imj_clear full_area0" 
+
+clear: both;
+float: left;
+*/
+
+.imj_siteContentSection {   
+	width: 81.3636em;
+	margin-top: 0.5454em;
+    margin-bottom: 0.9090em;
+    padding-bottom: 2.001em;
 }
-.imj_metaMenuStandardSingleLine select.imj_metaMenuItem {
-	color:#000000;
+
+
+/* imj_clear full_area0 */
+
+.imj_siteContentSubSection { 
+	clear: both;
+	float: left;
+	width: 81.3636em;
+	display: inline;
+	margin: 0 0.0909em 0 0;
 }
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] {
-	color: #6CAD2F;
-	display:inline;
-}
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"],
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] {
-	background-color:#292929;
-    color: #6CAD2F;
-    font-size: 0.75em;
-   	height: 1.4545em;
-   	width:10.2727em;
-   	border:solid #6CAD2F 0.0909em;
-   	margin-right:0.1818em;
-}
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:hover,
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:hover {
-	color:#FFFFFF;
-}
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:focus,
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:focus {
-	color:#FFFFFF;
-}
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {
-	background-color:#292929;
-	color: #6CAD2F;
-	padding:0;
-	height:1.4545em;
-	border:none 0;
-	padding-top:0.1818em;
-}
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {
-	color:#FFFFFF;
-}
+
+
+
+
+
 
 /*
  * simple search menu
  */
-.imj_logoNSearch .imj_simpleSearch {
-	float:right;
-	margin-top:2em;
-}
 .imj_simpleSearch {
-	
+	float: right;
+	margin: 1em 0 0 0; 
+	overflow: visible;
+
 }
+
 .imj_icoMagnifier_ffffff_23 {
 /*	float: left;
 	width:2em;
@@ -117,15 +193,21 @@ input:focus {
 	background-image: url("../BBBBBB/All_Search_LensStart_23_Static.png");
 	background-position: center center;
 	background-repeat: no-repeat;  */
-	display:inline-block;
+	display: inline-block;
+	height: 2.091em;
+    width: 2.091em;
 	margin-right:0.636363em; 
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/All_Search_LensStart_23_Static.gif"); 
+	/* ?!? url("../../imj_iconset/All_Search_LensStart_23_Static.gif"); ?!? */
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 .imj_simpleSearchInputWrapper {
-	display:inline-block;
-	vertical-align:top;
+	display: inline-block;
+	vertical-align: top;
 }
 .imj_simpleSearchInput {
-	width:17em;
+	width: 17em;
 }
 .imj_simpleSearchButtonSubmit {
 	height: 1.7272em;
@@ -138,19 +220,251 @@ input:focus {
 .imj_simpleSearchButtonSubmit:hover {
 	background-color: #393939;
 	border-color:#393939;
-	color:#FFFFFF;
+	color: #FFFFFF;
 }
 .imj_simpleSearch input[type=radio] {
-	border:0 none;
+	border: 0 none;
 }
 .imj_simpleSearch input[type=radio]+label {
-	margin-right:1em;
+	margin-right: 1em;
 }
 .imj_simpleSearchLinkAdvancedsearch {
 	margin-top: 0.18em;
 	margin-left: 2.0909em;
-	white-space:nowrap;
-	display:inline-block;
+	white-space: nowrap;
+	display: inline-block;
 }
 
+
+
+/*
+
+div.header {
+	overflow: visible;
+}
+
+div.searchMenu {
+	position: absolute;
+	margin-top: 5.5em;
+	margin-left: 5.5em;
+}
+
+*** welcome-page - start-page - infos, tabs, carousel, twitter-widget (Welcome.xhtml) *** 
+*/
+
+#imj_welcomeInfoWrapper {
+	float: left;
+}
+
+
+.imj_welcomeInfo {
+	min-height: 34.8333333em;
+	overflow: hidden;
+}
+						
+.imj_welcomeInfo .id_tabs ul {
+	padding: 0;
+	margin-top: 0;
+	padding-top: 0.333333em;
+	text-align: right;
+	list-style-type: none;
+}
+						
+.imj_welcomeInfo .id_tabs ul li {
+	margin-left: 1%;
+	padding: 1%;
+	display: inline;
+	font-size: 1.0909em;
+	background-color: #323232;
+	border-radius: 0.41666666em;
+	-webkit-border-radius: 0.41666666em;
+	-moz-border-radius: 0.41666666em;
+	-o-border-radius: 0.41666666em;
+	-ms-border-radius: 0.41666666em;
+}
+
+.imj_welcomeInfo .id_tabs .tab_content {
+	float: left;
+	height: 90%;
+	overflow: auto;
+	font-size: 1.0909em;
+}
+
+.imj_welcomeInfo .id_tabs li.ui-state-active {
+	background-color: #383838;
+	color: #F0F0F0;
+}
+
+.imj_welcomeInfo .id_tabs li.ui-state-active a {
+	color: #F0F0F0;
+}
+
+.imj_welcomeInfo .id_tabs div.ui-tabs-hide {
+	display: none;
+}
+
+
+.imj_startpage_carouselWrapper {
+    float: left;
+    margin-top:3em;
+}
+
+.imj_startpage_carousel {
+	min-height: 33.333333em; 
+	overflow: hidden;
+}
+
+.imj_startpage_carouselContainer {
+	max-height: 400px; 
+	overflow: visible; 
+	min-width: 350px; 
+	width: 40%; 
+	margin: 0 auto;
+}	
+
+.imj_startpage_carousel #carousel {
+	height: 26.66666666em; 
+	width: 90%; 
+	margin: 0 auto;
+	background: transparent; 
+	overflow: visible !important; 
+}
+
+.imj_startpage_carousel #cloudinfoText {
+	display: none;
+}
+
+.dynamicCloudinfo {
+	position: absolute;
+	z-index: 5600;
+	background-color: #292929;
+	padding: 0.75em;
+}
+
+.imj_startpage_carousel #title-text {
+	margin: 0;
+}
+
+.imj_startpage_carousel #alt-text {
+	margin: 0;
+}
+
+iframe#twitter-widget-0 {
+	width: 99.5%;
+	height: 43em;
+}
+
+iframe#twitter-widget-0 div.root div.stream{
+	height: 20em !important;
+}
+
+
+
+
+
+
+/*
+ * footer - info, image
+ */
+
+.imj_footer img {
+	border: 0 none;
+	margin: 0 1%;
+}
+
+.imj_poweredby {
+	padding: 1em 1.25em 1.25em 1em; 
+	text-align: center;
+}
+
+.imj_community_logo {
+	background-color: #ffffff; 
+	-moz-border-radius: 7px; 
+	border-radius: 7px; 
+	padding: 1%; 
+	margin-right: 5%;
+}
+
+.imj_build_date {
+	text-align: center;
+	font-size: 75%;
+}
+
+
+
+
+
+/*
+ * breadcrump component (History.xhtml)
+ */ 
+.imj_breadcrumpHistory {
+	width: 92.75%;
+	padding-left: 7%;
+}
+.imj_breadcrumpHistory .imj_breadcrumpTitle {
+	margin-right: 0.3636em;
+}
+
+.imj_breadcrumpHistory .imj_breadcrumpItem {
+	line-height: 2.18em;
+}
+.imj_breadcrumpHistory .imj_breadcrumpSeparator {
+	margin-left: 0.3636em;
+	margin-right: 0.3636em;
+}
+
+
+
+/*
+ * metaMenuStandard
+ */
+.imj_metaMenuStandardSingleLine {
+	width: 100%;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItemsAlign {
+	float: right;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {
+	height: 1.5454em;
+	width: 0.0909em;
+	margin: 0 0.72727em;
+	border-right: solid #6CAD2F 0.090909em;
+	display: inline-block;
+}
+.imj_metaMenuStandardSingleLine select.imj_metaMenuItem {
+	color: #000000;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] {
+	color: #6CAD2F;
+	display: inline;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"],
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] {
+	background-color: #292929;
+    color: #6CAD2F;
+    font-size: 0.75em;
+   	height: 1.4545em;
+   	width: 10.2727em;
+   	border: solid #6CAD2F 0.0909em;
+   	margin-right: 0.1818em;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:hover,
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:hover {
+	color: #FFFFFF;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:focus,
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:focus {
+	color: #FFFFFF;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {
+	background-color: #292929;
+	color: #6CAD2F;
+	padding: 0;
+	height: 1.4545em;
+	border: none 0;
+	padding-top: 0.1818em;
+}
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {
+	color: #FFFFFF;
+}
 

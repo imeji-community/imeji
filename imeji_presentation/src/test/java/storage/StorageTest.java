@@ -56,10 +56,10 @@ public class StorageTest
     private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
     private static final String FILENAME = "test";
     private static final String INTERNATIONAL_CHARACHTERS = "japanese:テスト  chinese:實驗 yiddish:פּראָבע arab:اختبار bengali: পরীক্ষা";
-    private static final String LONG_NAME = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
-    		"0123456789012345678901234567890adasd dsdfdj ghdjghfdgh gfhg df gfhdfghdgf hisfgshdfghsdi gfhsdigf sdi gfidsf gsidfhsidf gsdih " +
-    		"hsgfhidsgfhdsg fh dsfshdgfhidsgfihsdgfiwuzfgisdh fg shdfg sdihfg sdihgfisdgfhsdgf ihsdg fhsdgfizsdgf zidsgfizsd fi fhsdhfgsdhfg" +
-    		"hgf dhfgdshfgdshfghsdg fhsdf ghsdg fsdhf gsdjgf sdjgfsd fgdszfg sdfzgsdzgf sdfg dgfhisgfigifg i";
+    private static final String LONG_NAME = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
+            + "0123456789012345678901234567890adasd dsdfdj ghdjghfdgh gfhg df gfhdfghdgf hisfgshdfghsdi gfhsdigf sdi gfidsf gsidfhsidf gsdih "
+            + "hsgfhidsgfhdsg fh dsfshdgfhidsgfihsdgfiwuzfgisdh fg shdfg sdihfg sdihgfisdgfhsdgf ihsdg fhsdgfizsdgf zidsgfizsd fi fhsdhfgsdhfg"
+            + "hgf dhfgdshfgdshfghsdg fhsdf ghsdg fsdhf gsdjgf sdjgfsd fgdszfg sdfzgsdzgf sdfg dgfhisgfigifg i";
     /**
      * Not working: *
      */

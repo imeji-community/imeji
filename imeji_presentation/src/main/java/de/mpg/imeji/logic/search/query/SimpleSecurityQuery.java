@@ -3,8 +3,6 @@
  */
 package de.mpg.imeji.logic.search.query;
 
-import java.net.URI;
-
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.vo.Album;
@@ -122,8 +120,7 @@ public class SimpleSecurityQuery
         if (!"".equals(uf.trim()))
         {
             f = " .FILTER(" + f + op + "(";
-            if (pair == null
-                    || (pair != null && !SearchIndex.names.user.toString().equals(pair.getIndex().getName())))
+            if (pair == null || (pair != null && !SearchIndex.names.user.toString().equals(pair.getIndex().getName())))
             {
                 f += "?status=<" + Status.RELEASED.getUri() + "> || ";
             }

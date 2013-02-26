@@ -34,6 +34,14 @@
 -->
 </ui:remove>
 
+<style type="text/css">
+
+
+
+}
+
+</style>
+
 	<f:subview id="Header">
 	
 		<!-- start: skip link navigation -->
@@ -51,16 +59,15 @@
 		</h:outputLink>
 		<!-- end: skip link navigation -->
 	
-		<div class="full_area0 header clear">
+		<div class="imj_siteHeader">
 		<!-- begin: header section (including meta menu, logo, searchMenu and main menu)-->
 		
 			<!-- import meta menu here -->
 			<ui:include src="ui/MetaMenu.jspf"/>
 		
-			<div class="full_area0 LogoNSearch imj_logoNSearch">
+			<div class="imj_siteHeaderLogoSearchSection imj_simpleSearch">
 				<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage }" value="#{Navigation.applicationUrl}">
-					<h:panelGroup styleClass="xTiny_marginLExcl half_area0 headerLogo">
-						<h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
+					<h:panelGroup styleClass="imj_siteHeaderLogo"> 
 					</h:panelGroup>
 				</h:outputLink>
 		

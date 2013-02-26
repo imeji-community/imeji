@@ -59,11 +59,11 @@ public class ObjectHelper
         j2jModel modelName = c.getAnnotation(j2jModel.class);
         if (modelName != null)
         {
-            baseURI += modelName.value();
+            baseURI = StringHelper.normalizeURI(baseURI + modelName.value());
         }
         else
         {
-            baseURI = c.getAnnotation(j2jResource.class).value();
+             baseURI = StringHelper.normalizeURI(c.getAnnotation(j2jResource.class).value());
         }
         String encodedId = id;
         try
@@ -74,7 +74,7 @@ public class ObjectHelper
         {
             throw new RuntimeException(e);
         }
-        return URI.create(baseURI + "/" + encodedId);
+        return URI.create(baseURI + encodedId);
     }
 
     /**

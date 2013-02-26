@@ -33,8 +33,7 @@ import java.io.OutputStream;
 
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
-import de.mpg.imeji.logic.storage.adminstrator.impl.InternalStorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.internal.InternalStorageItem;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -113,7 +112,7 @@ public class InternalStorage implements Storage
     @Override
     public void update(String url, byte[] bytes)
     {
-        // TODO Auto-generated method stub
+        //return upload(url, bytes);
     }
 
     /*
@@ -133,7 +132,7 @@ public class InternalStorage implements Storage
     @Override
     public StorageAdministrator getAdministrator()
     {
-        return new InternalStorageAdministrator(manager.getStoragePath());
+        return manager.getAdministrator();
     }
 
     /*

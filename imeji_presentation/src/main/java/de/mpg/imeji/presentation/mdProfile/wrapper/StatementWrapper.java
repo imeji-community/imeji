@@ -31,6 +31,7 @@ public class StatementWrapper
     private String vocabularyString;
     private VocabularyHelper vocabularyHelper;
     private boolean showRemoveWarning = false;
+    private int level = 0;
 
     /**
      * Create a new {@link StatementWrapper}
@@ -38,9 +39,10 @@ public class StatementWrapper
      * @param st
      * @param profile
      */
-    public StatementWrapper(Statement st, URI profile)
+    public StatementWrapper(Statement st, URI profile, int level)
     {
         init(st);
+        this.level = level;
     }
 
     /**
@@ -173,7 +175,6 @@ public class StatementWrapper
      */
     public void typeListener(ValueChangeEvent event)
     {
-        System.out.println("listener");
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
             statement.setType(URI.create(event.getNewValue().toString()));
@@ -334,5 +335,21 @@ public class StatementWrapper
     public boolean isShowRemoveWarning()
     {
         return showRemoveWarning;
+    }
+
+    /**
+     * @param level the level to set
+     */
+    public void setLevel(int level)
+    {
+        this.level = level;
+    }
+
+    /**
+     * @return the level
+     */
+    public int getLevel()
+    {
+        return level;
     }
 }

@@ -9,8 +9,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -18,6 +19,7 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -47,13 +49,19 @@ public class MdProfileBean
     private CollectionSessionBean collectionSession = null;
     private List<StatementWrapper> wrappers = null;
     private List<SelectItem> mdTypesMenu = null;
+    private Map<URI, Integer> levels;
     private String id = null;
     private List<SelectItem> profilesMenu = null;
     private SessionBean sessionBean;
     private String template;
     private int statementPosition = 0;
+    /**
+     * Position of the dragged element at the start
+     */
+    private int draggedStatementPosition = 0;
     private int constraintPosition = 0;
     private int labelPosition = 0;
+    private static final int MARGIN_PIXELS_FOR_STATEMENT_CHILD = 30;
 
     /**
      * initialize a default {@link MdProfileBean}
@@ -124,9 +132,34 @@ public class MdProfileBean
     private void initStatementWrappers(MetadataProfile mdp)
     {
         wrappers.clear();
+        levels = new HashMap<URI, Integer>();
         for (Statement st : mdp.getStatements())
         {
-            wrappers.add(new StatementWrapper(st, mdp.getId()));
+            wrappers.add(new StatementWrapper(st, mdp.getId(), getLevel(st)));
+        }
+    }
+
+    /**
+     * When the statement are sorted via drag and drop, this method is called to reset all order value as defined by the
+     * user
+     */
+    public void sort()
+    {
+        setStatementPositionLikeInList();
+        List<Statement> list = getUnwrappedStatements();
+        Collections.sort(list);
+        getProfile().setStatements(list);
+        initStatementWrappers(getProfile());
+    }
+
+    /**
+     * Set the position of the {@link Statement} in the list according to their place in the list
+     */
+    public void setStatementPositionLikeInList()
+    {
+        for (int i = 0; i < wrappers.size(); i++)
+        {
+            wrappers.get(i).getStatement().setPos(i);
         }
     }
 
@@ -199,7 +232,7 @@ public class MdProfileBean
         }
         for (Statement s : profile.getStatements())
         {
-            s.setId(URI.create("http://imeji.org/statement/" + UUID.randomUUID()));
+            s.setId(IdentifierUtil.newURI(Statement.class));
         }
         collectionSession.setProfile(profile);
         initStatementWrappers(profile);
@@ -303,7 +336,6 @@ public class MdProfileBean
             return "";
     }
 
-
     protected String getNavigationString()
     {
         return "pretty:";
@@ -312,6 +344,126 @@ public class MdProfileBean
     public int getSize()
     {
         return wrappers.size();
+    }
+
+    /**
+     * Method called when the user drop a metadata in "insert metadata" area
+     */
+    public void insertMetadata()
+    {
+        StatementWrapper dragged = wrappers.get(getDraggedStatementPosition());
+        StatementWrapper dropped = wrappers.get(getStatementPosition());
+        dropped = setParentOfDropped(dragged, dropped);
+        dragged.getStatement().setParent(dropped.getStatement().getParent());
+        // Insert BEFORE the next statement with the same level
+        moveWrapper(dragged, getDraggedStatementPosition(), findNextStatementWithSameLevel(dropped.getStatement()) - 1);
+    }
+
+    /**
+     * Method called when the user drop a metadata in "insert child" area
+     */
+    public void insertChild()
+    {
+        StatementWrapper dragged = wrappers.get(getDraggedStatementPosition());
+        StatementWrapper dropped = wrappers.get(getStatementPosition());
+        dropped = setParentOfDropped(dragged, dropped);
+        dragged.getStatement().setParent(dropped.getStatement().getId());
+        moveWrapper(dragged, getDraggedStatementPosition(), getStatementPosition());
+    }
+
+    /**
+     * The the parent {@link StatementWrapper} of the dropped {@link StatementWrapper}. This might change if its parent
+     * is the one being dragged
+     * 
+     * @param dragged
+     * @param dropped
+     * @return
+     */
+    private StatementWrapper setParentOfDropped(StatementWrapper dragged, StatementWrapper dropped)
+    {
+        if (isAParent(dragged, dropped))
+        {
+            StatementWrapper firstChild = findFirstChild(dragged);
+            if (firstChild != null)
+                firstChild.getStatement().setParent(dragged.getStatement().getParent());
+        }
+        return dropped;
+    }
+
+    /**
+     * True if the {@link StatementWrapper} parent is one of the parent of the {@link StatementWrapper} child
+     * 
+     * @param parent
+     * @param child
+     * @return
+     */
+    private boolean isAParent(StatementWrapper parent, StatementWrapper child)
+    {
+        while (child.getStatement().getParent() != null)
+        {
+            if (child.getStatement().getParent().compareTo(parent.getStatement().getId()) == 0)
+            {
+                return true;
+            }
+            else if (child.getStatement().getPos() - 1 >= 0)
+            {
+                StatementWrapper parentOfChild = wrappers.get(child.getStatement().getPos() - 1);
+                return isAParent(parent, parentOfChild);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Find the first Child of a {@link StatementWrapper} in the list
+     * 
+     * @param parent
+     * @return
+     */
+    private StatementWrapper findFirstChild(StatementWrapper parent)
+    {
+        for (StatementWrapper wrapper : wrappers)
+        {
+            if (wrapper.getStatement().getParent() != null
+                    && wrapper.getStatement().getParent().compareTo(parent.getStatement().getId()) == 0)
+            {
+                return wrapper;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Move a {@link StatementWrapper} in a list from one position to another
+     * 
+     * @param wrapper
+     * @param from
+     * @param to
+     */
+    private void moveWrapper(StatementWrapper dragged, int from, int to)
+    {
+        if (to + 1 < wrappers.size())
+        {
+            wrappers.add(to + 1, dragged);
+            if (to < from)
+            {
+                wrappers.remove(from + 1);
+            }
+            else
+            {
+                wrappers.remove(from);
+            }
+        }
+       // setStatementPositionLikeInList();
+        sort();
+    }
+
+    /**
+     * Methods called when the user start to drag a metadata
+     */
+    public void dragStart()
+    {
+        // do nothing, the draggedStatementPosition is set
     }
 
     /**
@@ -347,6 +499,55 @@ public class MdProfileBean
     }
 
     /**
+     * Get the level (how many parents does it have) of a {@link Statement}
+     * 
+     * @param st
+     */
+    protected int getLevel(Statement st)
+    {
+        if (!levels.containsKey(st.getId()))
+        {
+            if (st.getParent() != null && levels.get(st.getParent()) != null)
+            {
+                levels.put(st.getId(), (levels.get(st.getParent()) + MARGIN_PIXELS_FOR_STATEMENT_CHILD));
+            }
+            else
+            {
+                levels.put(st.getId(), 0);
+            }
+        }
+        return levels.get(st.getId());
+    }
+
+    /**
+     * Find the next {@link Statement} in the {@link Statement} list which have the same level, which means, the first
+     * {@link Statement} which is not a child
+     * 
+     * @param st
+     * @return
+     */
+    private int findNextStatementWithSameLevel(Statement st)
+    {
+        int i = 0;
+        for (i = getStatementPosition() + 1; i < wrappers.size(); i++)
+        {
+            if (wrappers.get(i).getLevel() == getLevel(st))
+            {
+                // a statement with the same level have been found, return position
+                return i;
+            }
+            else if (wrappers.get(i).getLevel() < getLevel(st))
+            {
+                // in statement with an higher posotion hsa been found, i.e. we reached the end of the list of childs.
+                // Return then this current position
+                return i;
+            }
+        }
+        // We reached the end of the list
+        return i;
+    }
+
+    /**
      * Called by add statement button. Add a new statement to the profile. The position of the new statement is defined
      * by the button position
      */
@@ -354,11 +555,14 @@ public class MdProfileBean
     {
         if (wrappers.isEmpty())
         {
-            wrappers.add(new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
+            wrappers.add(new StatementWrapper(ImejiFactory.newStatement(), profile.getId(), 0));
         }
         else
         {
-            wrappers.add(getStatementPosition() + 1, new StatementWrapper(ImejiFactory.newStatement(), profile.getId()));
+            Statement previousStatement = wrappers.get(getStatementPosition()).getStatement();
+            Statement newStatement = ImejiFactory.newStatement(previousStatement.getParent());
+            wrappers.add(findNextStatementWithSameLevel(previousStatement),
+                    new StatementWrapper(newStatement, profile.getId(), getLevel(newStatement)));
         }
     }
 
@@ -375,6 +579,21 @@ public class MdProfileBean
         else
         {
             wrappers.get(getStatementPosition()).setShowRemoveWarning(true);
+        }
+    }
+
+    /**
+     * Called by add statement child button. Add a new statement to the profile as a child of the previous statement.
+     * The position of the new statement is defined by the button position
+     */
+    public void addStatementChild()
+    {
+        if (!wrappers.isEmpty())
+        {
+            URI parent = wrappers.get(getStatementPosition()).getStatement().getId();
+            Statement newChild = ImejiFactory.newStatement(parent);
+            wrappers.add(getStatementPosition() + 1,
+                    new StatementWrapper(newChild, profile.getId(), getLevel(newChild)));
         }
     }
 
@@ -680,5 +899,21 @@ public class MdProfileBean
     public void setLabelPosition(int labelPosition)
     {
         this.labelPosition = labelPosition;
+    }
+
+    /**
+     * @param draggedStatementPosition the draggedStatementPosition to set
+     */
+    public void setDraggedStatementPosition(int draggedStatementPosition)
+    {
+        this.draggedStatementPosition = draggedStatementPosition;
+    }
+
+    /**
+     * @return the draggedStatementPosition
+     */
+    public int getDraggedStatementPosition()
+    {
+        return draggedStatementPosition;
     }
 }

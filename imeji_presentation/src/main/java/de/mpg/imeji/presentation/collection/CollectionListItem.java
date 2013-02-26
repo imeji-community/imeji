@@ -137,7 +137,7 @@ public class CollectionListItem
         CollectionController cc = new CollectionController();
         try
         {
-            cc.release(cc.retrieve(uri), sessionBean.getUser());
+            cc.release(cc.retrieve(uri, sessionBean.getUser()), sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_release"));
         }
         catch (Exception e)
@@ -182,7 +182,7 @@ public class CollectionListItem
         try
         {
             CollectionController cc = new CollectionController();
-            CollectionImeji c = cc.retrieve(uri);
+            CollectionImeji c = cc.retrieve(uri, sessionBean.getUser());
             c.setDiscardComment(getDiscardComment());
             cc.withdraw(c, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));

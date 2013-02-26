@@ -6,11 +6,11 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -31,7 +31,7 @@ import de.mpg.j2j.misc.LocalizedString;
 public class Statement implements Comparable<Statement>
 {
     // Id: creation to be changed with pretty ids
-    private URI id = URI.create("http://imeji.org/statement/" + UUID.randomUUID());
+    private URI id = IdentifierUtil.newURI(Statement.class);
     @j2jResource("http://purl.org/dc/terms/type")
     private URI type = URI.create("http://imeji.org/terms/metadata#text");
     @j2jList("http://www.w3.org/2000/01/rdf-schema#label")

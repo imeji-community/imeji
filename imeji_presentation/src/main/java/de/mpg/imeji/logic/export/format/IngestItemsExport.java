@@ -10,7 +10,6 @@ import javax.xml.bind.JAXBException;
 
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.search.SearchResult;

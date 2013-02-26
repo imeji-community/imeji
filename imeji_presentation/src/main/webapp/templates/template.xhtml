@@ -41,6 +41,8 @@ All rights reserved. Use is subject to license terms.
 			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>  
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
 			<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+			<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+			
         </h:head>
         <h:body lang="#{SessionBean.locale}">
             	<style type="text/css">
@@ -55,12 +57,12 @@ All rights reserved. Use is subject to license terms.
                     <!-- import header -->
                     <ui:include src="/headerPages/Header.jspf"/>
                     
-                    <div id="content" class="full_area0 clear">
+                    <div class="imj_siteContentSection">
                         <!-- begin: content section (including elements that visually belong to the header (breadcrumb, headline, subheader and content menu)) -->
-						<div class="clear full_area0">
+						<div class="imj_clear full_area0">
 							<ui:remove>
 								<div class="headerSection">
-									<div class="clear breadcrumb"></div>
+									<div class="imj_clear breadcrumb"></div>
 								</div>
 							</ui:remove>
 							
@@ -111,7 +113,7 @@ All rights reserved. Use is subject to license terms.
                             </div>
                             
                         </div>
-                        <div class="clear full_area0">
+                        <div class="imj_clear full_area0">
                             <!-- Main Content -->
                             <ui:insert name="paginationTop"></ui:insert>
                             <ui:insert name="searchQuery"/>

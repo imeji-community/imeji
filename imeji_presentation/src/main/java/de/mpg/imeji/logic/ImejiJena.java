@@ -6,8 +6,6 @@ package de.mpg.imeji.logic;
 import java.io.File;
 import java.net.URI;
 
-import javax.management.RuntimeErrorException;
-
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.Jena;
@@ -18,6 +16,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.imeji.logic.util.Counter;
+import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -153,7 +153,10 @@ public class ImejiJena
         {
             throw new RuntimeException("error creating admin user: ", e);
         }
-        adminUser.getGrants().add(new Grant(GrantType.SYSADMIN, URI.create("http://imeji.org/")));
+        Grant grant = new Grant();
+        grant.setGrantType(URI.create("http://imeji.org/terms/grantType#" + GrantType.SYSADMIN.name()));
+        grant.setGrantFor(URI.create("http://imeji.org/"));
+        adminUser.getGrants().add(grant);
     }
 
     /**

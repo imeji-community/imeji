@@ -35,7 +35,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**
@@ -129,7 +129,8 @@ public class ExternalStorage implements Storage
         // TODO Auto-generated method stub
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see de.mpg.imeji.logic.storage.Storage#getAdminstrator()
      */
     @Override
@@ -139,7 +140,8 @@ public class ExternalStorage implements Storage
         return null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see de.mpg.imeji.logic.storage.Storage#getCollectionId(java.lang.String)
      */
     @Override

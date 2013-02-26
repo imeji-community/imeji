@@ -14,14 +14,14 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Item.Visibility;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
@@ -60,10 +60,29 @@ public class ImejiFactory
         return cm;
     }
 
+    /**
+     * Crate a new emtpy {@link Statement}
+     * 
+     * @return
+     */
     public static Statement newStatement()
     {
         Statement s = new Statement();
         s.getLabels().add(new LocalizedString("", null));
+        return s;
+    }
+
+    /**
+     * Create an emtpy {@link Statement} as a child of another {@link Statement}
+     * 
+     * @param parent
+     * @param isFirstChild
+     * @return
+     */
+    public static Statement newStatement(URI parent)
+    {
+        Statement s = newStatement();
+        s.setParent(parent);
         return s;
     }
 
@@ -94,6 +113,7 @@ public class ImejiFactory
 
     /**
      * Create a new emtpy {@link Item}
+     * 
      * @param collection
      * @return
      */
@@ -111,6 +131,7 @@ public class ImejiFactory
 
     /**
      * Factory Method used during the upload
+     * 
      * @param collection
      * @param user
      * @param storageId
@@ -140,6 +161,13 @@ public class ImejiFactory
         return item;
     }
 
+    /**
+     * Transform a {@link List} of {@link CollectionImeji} to a {@link List} of {@link CollectionListItem}
+     * 
+     * @param collList
+     * @param user
+     * @return
+     */
     public static List<CollectionListItem> collectionListToListItem(Collection<CollectionImeji> collList, User user)
     {
         List<CollectionListItem> l = new ArrayList<CollectionListItem>();
@@ -150,16 +178,12 @@ public class ImejiFactory
         return l;
     }
 
-    public static List<ViewCollectionBean> collectionListToBeanList(Collection<CollectionImeji> collList)
-    {
-        List<ViewCollectionBean> beanList = new ArrayList<ViewCollectionBean>();
-        for (CollectionImeji coll : collList)
-        {
-            beanList.add(new ViewCollectionBean(coll));
-        }
-        return beanList;
-    }
-
+    /**
+     * Transform a {@link List} of {@link Album} to a {@link List} of {@link AlbumBean}
+     * 
+     * @param albumList
+     * @return
+     */
     public static List<AlbumBean> albumListToBeanList(Collection<Album> albumList)
     {
         List<AlbumBean> beanList = new ArrayList<AlbumBean>();

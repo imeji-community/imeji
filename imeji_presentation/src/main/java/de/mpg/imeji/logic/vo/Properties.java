@@ -159,7 +159,7 @@ public class Properties
     }
 
     /**
-     * return the {@link URI} of this {@link Item} as a String. Return only the number, not the complete {@link URI}
+     * return the id of this object defined in the last number in its {@link URI}.
      * 
      * @return
      */
@@ -167,7 +167,7 @@ public class Properties
     {
         if (id != null)
         {
-            return id.getPath().substring(id.getPath().lastIndexOf("/"));
+            return id.getPath().substring(id.getPath().lastIndexOf("/")+1);
         }
         return "";
     }

@@ -26,4 +26,14 @@ public class Album extends Container
 {
     @j2jLazyList("http://imeji.org/terms/item")
     private Collection<URI> images = new ArrayList<URI>();
+    
+    public void setImages(Collection<URI> images)
+    {
+        this.images = images;
+    }
+
+    public Collection<URI> getImages()
+    {
+        return images;
+    }
 }

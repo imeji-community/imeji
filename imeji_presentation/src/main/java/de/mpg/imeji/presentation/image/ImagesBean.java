@@ -194,8 +194,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     public void cleanSelectItems()
     {
-        if (session.getSelectedImagesContext() != null
-                && !(session.getSelectedImagesContext().equals(browseContext)))
+        if (session.getSelectedImagesContext() != null && !(session.getSelectedImagesContext().equals(browseContext)))
         {
             session.getSelected().clear();
         }
@@ -449,15 +448,19 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         int added = sizeAfter - sizeBefore;
         int notAdded = sizeToAdd - added;
         String message = "";
+        String error = "";
         if (added > 0)
         {
             message = " " + added + " " + session.getMessage("images_added_to_active_album");
         }
         if (notAdded > 0)
         {
-            message += " " + notAdded + " " + session.getMessage("already_in_active_album");
+            error += " " + notAdded + " " + session.getMessage("already_in_active_album");
         }
-        BeanHelper.info(message);
+        if (message != "")
+            BeanHelper.info(message);
+        if (error != "")
+            BeanHelper.error(error);
     }
 
     public String getInitComment()

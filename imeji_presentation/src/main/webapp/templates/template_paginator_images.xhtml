@@ -107,6 +107,7 @@
 						<h:panelGroup layout="block" styleClass="menuHeader free_area0" style="float:right;">
 							<h:panelGroup id="preListHeaderSelected" styleClass="free_area0">
 								<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}&#160;" styleClass="free_area0"/>
+								<h:panelGroup layout="block" style="margin-top:0.2727em;" styleClass="free_area0 min_imgBtn checkboxSelectButton" rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse'}"/>
 							</h:panelGroup>
 							<h:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
 								<h:outputText styleClass="free_area0" value="#{lbl.add_to_active_album}"/>

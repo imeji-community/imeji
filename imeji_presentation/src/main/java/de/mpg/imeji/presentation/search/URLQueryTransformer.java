@@ -109,7 +109,6 @@ public class URLQueryTransformer
             }
             if (matchSearchMetadataPattern(scString))
             {
-                System.out.println(scString);
                 int indexOp = scString.indexOf("=");
                 int indexValue = scString.indexOf("\"");
                 int indexIndex = scString.indexOf(":");

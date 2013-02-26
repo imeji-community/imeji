@@ -46,7 +46,6 @@ All rights reserved. Use is subject to license terms.
         </h:head>
         <h:body lang="#{SessionBean.locale}">
             	<style type="text/css">
-            		
             	</style>
                 <h:panelGroup layout="block" styleClass="imj_siteWrapper">
                     <ui:insert name="init"/>
@@ -141,11 +140,12 @@ All rights reserved. Use is subject to license terms.
 					dialog.css("left", Math.max(0, (($(window).width() - $(dialog).outerWidth()) / 2) + 
 				                                                $(window).scrollLeft()) + "px");
 					/*open the dialog*/
-					dialog.show();
+					dialog.show();		
 					/* lock the page*/
 					var content = $(".imj_siteWrapper");
 					content.css({ opacity: 0.3});
-					$.lock(dialog);				
+					$.lock(dialog);	
+					
 				}
 				/*close a dialog*/
 				function closeDialog(id) {
@@ -162,7 +162,7 @@ All rights reserved. Use is subject to license terms.
 				    $.extend({
 				lock: function(content){
 				            if(content == 'undefined') content = '';
-				            $("&amp;&lt;div&amp;gt;&amp;&lt;/div&amp;&gt;").attr('id', 'uiLockId').css({
+				            $("&lt;div&gt;&lt;/div&gt;").attr('id', 'uiLockId').css({
 				                'position': 'absolute',
 				                'top': 0,
 				                'left': 0,

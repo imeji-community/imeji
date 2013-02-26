@@ -89,8 +89,6 @@ input:focus {
  /* header wrapper (header.jspf - template.xhtml) */
 
 
-
-
 /* full_area0 header imj_clear - header.jspf 
 
 margin-top: 0.5454em;
@@ -99,25 +97,26 @@ margin-top: 0.5454em;
  */
 
 .imj_siteHeader {
+	clear: both;
 	float: left;
+	display: inline;
+	overflow: hidden;
 	width: 81.3636em;
 	margin: 0 0.0909em 0 0;
-	
-	clear: both;
+	padding: 0;
 	border-width: 0;
-    display: inline;
-    margin: 0 0.0909em 0 0;
-    overflow: hidden;
-    padding: 0;
 }
 
 
 /* full_area0 LogoNSearch */
 
 .imj_siteHeaderLogoSearchSection {
+	float: left;
 	display: inline;
+	overflow: hidden;
 	width: 81.3636em; 
 	height: 5.7272em;
+	margin: 0 0.0909em 0 0;
 	border-width: 0;
 	padding: 0;
 }
@@ -127,35 +126,69 @@ margin-top: 0.5454em;
 cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
 */
 
+/* Logo - Container */
+
 .imj_siteHeaderLogo {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif"); 
 	/* ?!? url("../../imj_iconset/logo_imeji.giff"); ?!? */
 	background-position: left top;
     background-repeat: no-repeat;
-    display: inline;
     float: left;
+	display: inline;
+	overflow: hidden;
 	width: 40.6363em;
 	height: 5em;
-	overflow: hidden;
-	border-width: 0;
-    margin: 0 0.0909em 0 1.3636em;
+	margin: 0 0.0909em 0 1.3636em;
     padding: 0;
+    border-width: 0;
 }
 
 
+/* half_area0 themePark - header.jspf */
+
+/* 
+.themePark {
+    background-attachment: inherit;
+    background-clip: inherit;
+    background-color: inherit;
+    background-image: inherit;
+    background-origin: inherit;
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-size: inherit;
+}
+
+*/
+
+.imj_siteHeaderLogoTheme {
+	 float: left;
+	 display: inline;
+	 overflow: hidden;
+	 width: 40.6363em;
+	 height: 5em;
+	 margin: 0 0.0909em 0 0;
+     padding: 0;
+	 border-width: 0; 	 
+}
 
 
 /* id="content" class="imj_clear full_area0" 
 
-clear: both;
-float: left;
+	margin-top: 0.5454em;
+    margin-bottom: 0.9090em;
+
 */
 
 .imj_siteContentSection {   
+	clear: both;
+	float: left;
+	display: inline;
+	overflow: hidden;
 	width: 81.3636em;
-	margin-top: 0.5454em;
-    margin-bottom: 0.9090em;
-    padding-bottom: 2.001em;
+	margin: 0 0.0909em 0 0;
+    padding: 0 0 2.001em 0;
+    border-width: 0; 
+        
 }
 
 
@@ -164,11 +197,107 @@ float: left;
 .imj_siteContentSubSection { 
 	clear: both;
 	float: left;
+	display: inline; 
+	overflow: hidden;
 	width: 81.3636em;
-	display: inline;
 	margin: 0 0.0909em 0 0;
+	padding: 0;
+	border-width: 0; 
+}
+   
+
+
+/* small_marginLIncl subHeaderSection */
+
+.imj_siteContentSubHeaderSection {
+	margin-bottom: 0.4545em;
+	margin-left: 5.8181em;
 }
 
+/* contentMenu */
+
+.imj_siteContentMenu {
+	margin-top: 0;
+	padding-top: 0;
+		
+}
+
+
+/* id="contentSkipLinkAnchor" class="headLine"*/
+
+.imj_siteContentHeadline {
+	float: right;
+    text-align: right;
+    white-space: nowrap;
+	line-height: normal;
+    margin: 0;    
+}
+
+/* .headLine h1 */
+
+.imj_siteContentHeadline h1 {
+	color: #F0F0F0;
+	font-size: 3em;
+    display: block;
+    height: 0.9474em;
+    line-height: normal;
+    margin: -0.11em 0 0.28em;
+    max-height: 0.9474em;
+}
+
+
+/*
+ * mainMenuStandard  - MainMenu.jspf
+ */
+
+/* full_area0 mainMenu */
+
+.imj_mainMenuStandard {
+	float: left;
+	display: inline;
+	overflow: hidden;
+	width: 81.3636em;
+    height: 2.4545em;
+    margin: 0 0.0909em 0 5.74em; 
+    max-height: 2.4545em;
+    padding: 0.2727em 0 0 0;
+    border-width: 0;
+    text-transform: uppercase; 
+}
+
+
+/* styleClass="free_area0" */
+
+.imj_mainMenuStandardItem {
+	float: left;
+	display: inline;
+	overflow: hidden;
+	padding: 0;
+	border-width: 0;
+}
+
+
+/* .mainMenu input, .mainMenu a, .mainMenu span */
+
+.imj_mainMenuStandard input, .imj_mainMenuStandard a, .imj_mainMenuStandard span {
+	font-size: 1.455em;
+    margin-right: 0.500em; /*0.8181em;*/
+    text-align: left;
+    text-decoration: none;
+}
+
+
+.imj_mainMenuStandard input, .imj_mainMenuStandard a {
+    background-color: #292929;
+    color: #6CAD2F;
+}
+
+
+/* .mainMenu input:hover, .mainMenu input:focus, .mainMenu a:hover, .mainMenu a:focus */
+	
+.imj_mainMenuStandard input:hover, .imj_mainMenuStandard input:focus, .imj_mainMenuStandard a:hover, .imj_mainMenuStandard a:focus {
+		color: #f0f0f0;
+}
 
 
 
@@ -185,20 +314,16 @@ float: left;
 }
 
 .imj_icoMagnifier_ffffff_23 {
-/*	float: left;
-	width:2em;
-	height:2em;
-	margin-right: 1em;
-	margin-top: -0.1818em;
-	background-image: url("../BBBBBB/All_Search_LensStart_23_Static.png");
-	background-position: center center;
-	background-repeat: no-repeat;  */
+	float: left;
 	display: inline-block;
-	height: 2.091em;
-    width: 2.091em;
-	margin-right:0.636363em; 
+	height: 2em;
+    width: 2em;
+	margin-right: 1em;  /*0.636363em;*/ 
+	margin-top: -0.1818em;
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/All_Search_LensStart_23_Static.gif"); 
-	/* ?!? url("../../imj_iconset/All_Search_LensStart_23_Static.gif"); ?!? */
+	/* ?!? url("../../imj_iconset/All_Search_LensStart_23_Static.gif"); - relative path does not work! 
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png"); 
+	- produces a 'border' - is not transparent! */
     background-position: center center;
     background-repeat: no-repeat;
 }
@@ -210,9 +335,9 @@ float: left;
 	width: 17em;
 }
 .imj_simpleSearchButtonSubmit {
-	height: 1.7272em;
-	margin-left: 0.37em;
-    padding: 0.0909em 1em;
+	height: 1.818em; /*1.7272em;*/
+	margin-left: 0.455em; /*0.37em;*/
+    padding: 0.091em 1em; /* 0.0909em 1em; */
     background-color: #6CAD2F;
     border-color: #6CAD2F;
     color: #F0F0F0;

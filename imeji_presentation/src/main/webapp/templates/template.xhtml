@@ -58,23 +58,23 @@ All rights reserved. Use is subject to license terms.
                     <ui:include src="/headerPages/Header.jspf"/>
                     
                     <div class="imj_siteContentSection">
-                        <!-- begin: content section (including elements that visually belong to the header (breadcrumb, headline, subheader and content menu)) -->
-						<div class="imj_clear full_area0">
+                        <!-- begin: content section (including elements that visually belong to the header (breadcrumb, headline, subheader and content menu)) - removed id="content" -->
+						<div class="imj_siteContentSubSection">
 							<ui:remove>
 								<div class="headerSection">
 									<div class="imj_clear breadcrumb"></div>
 								</div>
 							</ui:remove>
 							
-							<div id="contentSkipLinkAnchor" class="headLine">
+							<div id="contentSkipLinkAnchor" class="imj_siteContentHeadline">
 								<!-- Headline starts here, taken from facelets parameter -->
 								<ui:insert name="headline">
 									<h1><h:outputText value="#{headline}"/></h1>
 								</ui:insert><!-- Headline ends here -->
 							</div>
 							
-							<div class="small_marginLIncl subHeaderSection">
-								<div class="contentMenu">
+							<div class="imj_siteContentSubHeaderSection">
+								<div class="imj_siteContentMenu">
 									<!-- content menu starts here -->
 									<div class="free_area0 sub">
 										<!-- content menu upper line starts here -->

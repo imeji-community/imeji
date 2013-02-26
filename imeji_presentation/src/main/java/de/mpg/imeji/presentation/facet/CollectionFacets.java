@@ -15,6 +15,7 @@ import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -54,7 +55,7 @@ public class CollectionFacets
         this.colURI = col.getId();
         MetadataProfile profile = ObjectCachedLoader.loadProfile(col.getProfile());
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        String baseURI = nav.getApplicationUri() + col.getId().getPath() + "/" + nav.getBrowsePath() + "?q=";
+        String baseURI = nav.getCollectionUrl() + ObjectHelper.getId(colURI) + "/" + nav.getBrowsePath() + "?q=";
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
         FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
         int count = 0;

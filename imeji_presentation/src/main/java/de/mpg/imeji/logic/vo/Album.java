@@ -3,9 +3,12 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -21,4 +24,6 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class Album extends Container
 {
+    @j2jLazyList("http://imeji.org/terms/item")
+    private Collection<URI> images = new ArrayList<URI>();
 }

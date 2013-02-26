@@ -109,6 +109,7 @@ public class URLQueryTransformer
             }
             if (matchSearchMetadataPattern(scString))
             {
+                System.out.println(scString);
                 int indexOp = scString.indexOf("=");
                 int indexValue = scString.indexOf("\"");
                 int indexIndex = scString.indexOf(":");
@@ -167,7 +168,7 @@ public class URLQueryTransformer
      */
     private static boolean matchSearchMetadataPattern(String str)
     {
-        return str.trim().matches("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}:[a-z_]+=.*\".+\"\\s*");
+        return str.trim().matches("[a-z0-9-]+:[a-z_]+=.*\".+\"\\s*");
     }
 
     /**

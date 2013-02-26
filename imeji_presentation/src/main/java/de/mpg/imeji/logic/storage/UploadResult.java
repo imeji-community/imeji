@@ -41,6 +41,7 @@ public class UploadResult
     private String orginal;
     private String web;
     private String thumb;
+    private String checksum;
 
     /**
      * Default constructor
@@ -102,5 +103,21 @@ public class UploadResult
     public void setId(String id)
     {
         this.id = id;
+    }
+
+    /**
+     * @param checksum the checksum to set
+     */
+    public void setChecksum(String checksum)
+    {
+        this.checksum = checksum;
+    }
+
+    /**
+     * @return the checksum
+     */
+    public String getChecksum()
+    {
+        return checksum;
     }
 }

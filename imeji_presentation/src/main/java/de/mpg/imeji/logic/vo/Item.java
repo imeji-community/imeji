@@ -60,6 +60,8 @@ public class Item extends Properties implements FulltextIndex
     private String storageId;
     @j2jLiteral("http://imeji.org/terms/fulltext")
     private String fulltext;
+    @j2jLiteral("http://imeji.org/terms/checksum")
+    private String checksum;
 
     public Item()
     {
@@ -125,16 +127,6 @@ public class Item extends Properties implements FulltextIndex
         if (metadataSets.size() > 0)
             return metadataSets.get(0);
         return null;
-    }
-
-    public void setId(URI id)
-    {
-        this.id = id;
-    }
-
-    public URI getId()
-    {
-        return id;
     }
 
     public void setCollection(URI collection)
@@ -255,16 +247,20 @@ public class Item extends Properties implements FulltextIndex
     }
 
     /**
-     * return the {@link URI} of this {@link Item} as a String. Return only the number, not the complete {@link URI}
-     * 
-     * @return
+     * @return the checksum
      */
-    public String getIdString()
+    public String getChecksum()
     {
-        if (id != null)
-        {
-            return id.getPath().substring(id.getPath().lastIndexOf("/"));
-        }
-        return "";
+        return checksum;
     }
+
+    /**
+     * @param checksum the checksum to set
+     */
+    public void setChecksum(String checksum)
+    {
+        this.checksum = checksum;
+    }
+
+    
 }

@@ -161,6 +161,13 @@ public class ImejiFactory
         return item;
     }
 
+    /**
+     * Transform a {@link List} of {@link CollectionImeji} to a {@link List} of {@link CollectionListItem}
+     * 
+     * @param collList
+     * @param user
+     * @return
+     */
     public static List<CollectionListItem> collectionListToListItem(Collection<CollectionImeji> collList, User user)
     {
         List<CollectionListItem> l = new ArrayList<CollectionListItem>();
@@ -171,16 +178,12 @@ public class ImejiFactory
         return l;
     }
 
-    public static List<ViewCollectionBean> collectionListToBeanList(Collection<CollectionImeji> collList)
-    {
-        List<ViewCollectionBean> beanList = new ArrayList<ViewCollectionBean>();
-        for (CollectionImeji coll : collList)
-        {
-            beanList.add(new ViewCollectionBean(coll));
-        }
-        return beanList;
-    }
-
+    /**
+     * Transform a {@link List} of {@link Album} to a {@link List} of {@link AlbumBean}
+     * 
+     * @param albumList
+     * @return
+     */
     public static List<AlbumBean> albumListToBeanList(Collection<Album> albumList)
     {
         List<AlbumBean> beanList = new ArrayList<AlbumBean>();

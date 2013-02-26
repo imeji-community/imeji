@@ -350,7 +350,7 @@ public class Java2Jena
                         l.add(o);
                         l.addAll(getEmbeddedResources(o, r2));
                     }
-                    else if (r2 instanceof ArrayList<?>)
+                    else if (J2JHelper.isLazyList(f) || J2JHelper.isList(f) )//r2 instanceof ArrayList<?>)
                     {
                         String predicate = J2JHelper.getNamespace(r2, f);
                         Resource resource = model.getResource(J2JHelper.getId(r).toString());

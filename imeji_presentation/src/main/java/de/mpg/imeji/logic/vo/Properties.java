@@ -28,6 +28,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlSeeAlso({ MetadataProfile.class })
 public class Properties
 {
+    private URI id;
     @j2jResource("http://purl.org/dc/terms/creator")
     private URI createdBy;
     @j2jResource("http://imeji.org/terms/modifiedBy")
@@ -145,6 +146,30 @@ public class Properties
     public void setVersionDate(Calendar versionDate)
     {
         this.versionDate = versionDate;
+    }
+
+    public void setId(URI id)
+    {
+        this.id = id;
+    }
+
+    public URI getId()
+    {
+        return id;
+    }
+
+    /**
+     * return the {@link URI} of this {@link Item} as a String. Return only the number, not the complete {@link URI}
+     * 
+     * @return
+     */
+    public String getIdString()
+    {
+        if (id != null)
+        {
+            return id.getPath().substring(id.getPath().lastIndexOf("/"));
+        }
+        return "";
     }
 
     /**

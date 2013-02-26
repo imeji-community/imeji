@@ -23,7 +23,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class Container extends Properties implements FulltextIndex
 {
-    private URI id;
+   // private URI id;
     // @j2jLazyList("http://imeji.org/terms/item")
     private Collection<URI> images = new ArrayList<URI>();
     @j2jResource("http://imeji.org/terms/container/metadata")
@@ -31,15 +31,15 @@ public class Container extends Properties implements FulltextIndex
     @j2jLiteral("http://imeji.org/terms/fulltext")
     private String fulltext;
 
-    public void setId(URI id)
-    {
-        this.id = id;
-    }
-
-    public URI getId()
-    {
-        return id;
-    }
+//    public void setId(URI id)
+//    {
+//        this.id = id;
+//    }
+//
+//    public URI getId()
+//    {
+//        return id;
+//    }
 
     public void setMetadata(ContainerMetadata metadata)
     {

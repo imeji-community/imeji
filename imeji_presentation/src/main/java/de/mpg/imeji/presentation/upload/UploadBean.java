@@ -187,6 +187,7 @@ public class UploadBean
             Item item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
                     URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
                     URI.create(uploadResult.getWeb()));
+            item.setChecksum(uploadResult.getChecksum());
             sNum += 1;
             sFiles.add(title);
             return item;

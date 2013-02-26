@@ -2,27 +2,25 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-		<ui:define name="mainContent" >
-			<h:outputText value="#{imageBean.init}"/>
-			<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
-              <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
-          	</h:panelGroup>
-			<h:panelGroup rendered="#{imageBean.image != null}">
+	<ui:define name="mainContent" >
+		<h:outputText value="#{imageBean.init}"/>
+		<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
+            <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
+        </h:panelGroup>
+		<h:panelGroup rendered="#{imageBean.image != null}">
 			<div class="full_area0 paginator">
-			<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
-				<h:outputLink value="#{imageBean.browse.previous}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
-					<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
-				</h:outputLink>
-				<h:outputText value=" " styleClass="small_area0"/>
-				<h:outputLink value="#{imageBean.browse.next}" styleClass="forward small_marginLExcl"  disabled="#{imageBean.browse.next == null}">
-					<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
-				</h:outputLink>
-			</h:panelGroup>
+				<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
+					<h:outputLink value="#{imageBean.browse.previous}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
+						<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
+					</h:outputLink>
+					<h:outputText value=" " styleClass="small_area0"/>
+					<h:outputLink value="#{imageBean.browse.next}" styleClass="forward small_marginLExcl"  disabled="#{imageBean.browse.next == null}">
+						<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
+					</h:outputLink>
+				</h:panelGroup>
 			</div>
 			<ui:insert name="preListHeader"/>
-			
 			<h:panelGroup styleClass="full_area0 fullItem">
-					
 				<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl"> 
 					<h:panelGroup layout="block" styleClass="full_area detailedItem">
 						<span>
@@ -47,7 +45,6 @@
 							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.navigationString == 'pretty:albumItem'}">
 								<h:outputText value="#{lbl.remove_from_album}" />
 							</h:commandLink>
-							
 							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
 								<h:outputText value="#{lbl.add_to_active_album}" />
 							</h:commandLink>
@@ -66,36 +63,26 @@
 						</h:form>
 					</h:panelGroup>
 				</h:panelGroup>
-				
 				<div class="full_area0 fullItem">
 					<div class="fullItemControls">
 						<h:panelGroup styleClass="seperator" />
-						
 						<h:outputLink id="lnkViewItemMdPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}?tab=techmd" rendered="#{imageBean.tab == 'techmd'}">
 							<h:outputText value="#{lbl.view_tech_md}"/>
 						</h:outputLink>
-						
 						<h:outputLink id="lnkViewItemMdPage2" styleClass="free_area0" value="#{imageBean.pageUrl}?tab=techmd" rendered="#{imageBean.tab != 'techmd'}">
 							<h:outputText value="#{lbl.view_tech_md}"/>
 						</h:outputLink>
-									
 						<h:panelGroup styleClass="seperator" />
-									
 						<h:outputLink id="lnkViewItemPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab != 'techmd'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
 						<h:outputLink id="lnkViewItemPage2" styleClass="free_area0" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab == 'techmd'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
-						
 					</div>
 				</div>
-			
-			
 				<h:outputText value="#{imageBean.edit.checkToggleState}"/>
-				
 				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab != 'techmd'}">	
-					
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata}" /><br/>
@@ -107,13 +94,9 @@
 							<h:outputText value="Image locked " rendered="#{imageBean.editable and imageBean.locked}"/>
 							<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
 							<br/>
-							
 						</h3>
-						
 						<span class="seperator"></span>
-		
 						<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
-
 							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
 								<b class="xLarge_area0_p8 endline labelLine clear">
 									<h:outputText value="#{lbl.withdraw_comment}" /> 
@@ -123,7 +106,6 @@
 									<h:outputText value="#{imageBean.image.discardComment}" /> 
 								</span>
 							</h:panelGroup>
-
 							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 								<b class="xLarge_area0_p8 endline labelLine clear">
 									 <h:outputText value="#{lbl.filename} " /> 
@@ -133,7 +115,6 @@
 									<h:outputText id="txtUrl" value="#{imageBean.image.filename}" /> 
 								</span>
 							</h:panelGroup>
-		
 							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 								<b class="xLarge_area0_p8 endline labelLine clear">
 									<h:outputText value="#{lbl.collection }" /> 
@@ -145,7 +126,15 @@
 									</h:outputLink>
 								</span>
 							</h:panelGroup>
-							
+							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="#{lbl.checksum} (MD5)" /> 
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+									<h:outputText value="#{imageBean.image.checksum}" />
+								</span>
+							</h:panelGroup>
 							<h:panelGroup id="singleEditPanel" style="border-width:0px;" styleClass="free_area0" bodyClass="free_area0" headerClass="free_area0">
 							 	<h:panelGroup layout="block" rendered="#{imageBean.edit.toggleState == 'displayMd'}">
 							 		<ui:repeat var="statement" value="#{imageBean.edit.profile.statements}" rows="0">
@@ -175,11 +164,8 @@
 													<span class="noDisplay">: </span> 
 												</b>
 												<h:panelGroup layout="block" styleClass="huge_area0 xTiny_marginLExcl endline">
-													
 													<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.metadataList}" rows="0" varStatus="indexMetadata">
-														
 														<h:panelGroup rendered="#{metadata.statement == statement.id}">
-													
 															<div class="free_area0">
 																<ui:include src="../picturesPages/ui/MetadataInput.xhtml">
 																	<ui:param name="statement" value="#{statement}"/>
@@ -190,7 +176,6 @@
 																	<ui:param name="hideLabel" value="true"/>
 																</ui:include>
 															</div>
-											
 															<div class="free_area0">
 																<h:commandButton styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
 																	<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
@@ -208,9 +193,7 @@
 												<ui:remove>
 													<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0" varStatus="indexMetadata">
 														<h:panelGroup rendered="#{md.statement == statement.id}">
-													
 															<div class="free_area0">
-															
 																<ui:include src="../picturesPages/ui/MetadataInput.xhtml">
 																	<ui:param name="metadata" value="#{metadata}"/>
 																	<ui:param name="editor" value="#{imageBean.edit.editor}"/>
@@ -218,9 +201,7 @@
 																	<ui:param name="type" value="1"/>
 																	<ui:param name="hideLabel" value="true"/>
 																</ui:include>
-																
 															</div>
-											
 															<div class="free_area0">
 																<h:commandButton styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
 																	<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
@@ -239,9 +220,7 @@
 												</h:panelGroup>
 											</h:panelGroup>
 										</ui:repeat>
-										
 										<div class="vertDist050 linebreak"></div>
-										
 										<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd'}" layout="block" styleClass="quad_area0_p1">
 											<div class="large_marginLExcl marginTExcl025">
 												<div class="small_txtBtn">
@@ -263,7 +242,6 @@
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
-				
 				</h:panelGroup>
 				<h:panelGroup id="techmetadata" styleClass="full_area0_p4" style="background-color:#494949" rendered="#{imageBean.tab == 'techmd'}">
 					<ui:repeat id="techMd" var="techMd" value="#{imageBean.techMd}">
@@ -272,10 +250,7 @@
 						</h:panelGroup>
 					</ui:repeat>
 				</h:panelGroup>
-				
 			</h:panelGroup>
-			</h:panelGroup> 
-			
-		</ui:define>
-						
+		</h:panelGroup> 
+	</ui:define>
 </ui:composition>

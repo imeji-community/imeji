@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -262,15 +263,26 @@ public class URLQueryTransformer
                     {
                         query += " NOT";
                     }
-                    query += ObjectHelper.getId(((SearchMetadata)se).getStatement()) + ":"
-                            + ((SearchPair)se).getIndex().getName() + operator2URL(((SearchMetadata)se).getOperator())
-                            + searchValue2URL(((SearchMetadata)se));
+                    query += transformStatementToIndex(((SearchMetadata)se).getStatement(), ((SearchPair)se).getIndex())
+                            + operator2URL(((SearchMetadata)se).getOperator()) + searchValue2URL(((SearchMetadata)se));
                     break;
                 default:
                     break;
             }
         }
         return query.trim();
+    }
+
+    /**
+     * Transform a {@link Statement} to an index
+     * 
+     * @param statement
+     * @param index
+     * @return
+     */
+    public static String transformStatementToIndex(URI statement, SearchIndex index)
+    {
+        return ObjectHelper.getId(statement) + ":" + index.getName();
     }
 
     /**

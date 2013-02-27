@@ -3,6 +3,12 @@ package de.mpg.imeji.logic.search.vo;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
+
 /**
  * Element of a {@link SearchPair}, defines the index of the searched elements
  * 
@@ -75,6 +81,47 @@ public class SearchIndex
         {
             parent.getChildren().add(this);
         }
+    }
+
+    /**
+     * Return all the necessary {@link SearchIndex} to search for a {@link Metadata} defined with a {@link Statement}
+     * 
+     * @param st
+     * @return
+     */
+    public static List<SearchIndex> getAllIndexForStatement(Statement st)
+    {
+        List<SearchIndex> list = new ArrayList<SearchIndex>();
+        switch (MetadataTypesHelper.getTypesForNamespace(st.getType().toString()))
+        {
+            case DATE:
+                list.add(Search.getIndex(SearchIndex.names.time.name()));
+                break;
+            case GEOLOCATION:
+                list.add(Search.getIndex(SearchIndex.names.title.name()));
+                break;
+            case LICENSE:
+                list.add(Search.getIndex(SearchIndex.names.license.name()));
+                break;
+            case NUMBER:
+                list.add(Search.getIndex(SearchIndex.names.number.name()));
+                break;
+            case CONE_PERSON:
+                list.add(Search.getIndex(SearchIndex.names.person_family.name()));
+                list.add(Search.getIndex(SearchIndex.names.person_given.name()));
+                list.add(Search.getIndex(SearchIndex.names.person_org_title.name()));
+                break;
+            case PUBLICATION:
+                list.add(Search.getIndex(SearchIndex.names.citation.name()));
+                break;
+            case TEXT:
+                list.add(Search.getIndex(SearchIndex.names.text.name()));
+                break;
+            case LINK:
+                list.add(Search.getIndex(SearchIndex.names.link.name()));
+                break;
+        }
+        return list;
     }
 
     public boolean hasParent()

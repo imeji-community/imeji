@@ -30,9 +30,15 @@ package de.mpg.imeji.logic.export.format.explain;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.URI;
 
 import de.mpg.imeji.logic.export.format.ExplainExport;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 
 /**
  * {@link ExplainExport} for the metadata search index
@@ -52,6 +58,18 @@ public class MetadataExplainExport extends ExplainExport
     {
         PrintWriter writer = new PrintWriter(out);
         writer.append(getRDFTagOpen());
+        for (String colURI : sr.getResults())
+        {
+            CollectionImeji col = ObjectCachedLoader.loadCollection(URI.create(colURI));
+            for (Statement st : ObjectCachedLoader.loadProfile(col.getProfile()).getStatements())
+            {
+                for (SearchIndex index : SearchIndex.getAllIndexForStatement(st))
+                {
+                    writer.append(getIndexTag(URLQueryTransformer.transformStatementToIndex(st.getId(), index),
+                            index.getNamespace()));
+                }
+            }
+        }
         writer.append(getRDFTagClose());
         writer.close();
     }

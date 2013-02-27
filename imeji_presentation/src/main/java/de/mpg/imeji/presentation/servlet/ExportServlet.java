@@ -16,6 +16,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.client.HttpResponseException;
 
@@ -61,6 +62,13 @@ public class ExportServlet extends HttpServlet
         }
     }
 
+    /**
+     * Get the {@link SessionBean} from the {@link HttpSession}
+     * 
+     * @param req
+     * @param resp
+     * @return
+     */
     private SessionBean getSessionBean(HttpServletRequest req, HttpServletResponse resp)
     {
         FacesContext fc = getFacesContext(req, resp);

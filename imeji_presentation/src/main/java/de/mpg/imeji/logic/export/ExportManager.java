@@ -89,13 +89,13 @@ public class ExportManager
         String albumId = export.getParam("alb");
         String id = export.getParam("id");
         String searchType = export.getParam("type");
-        int maximumNumberOfRecords = 20;
+        int maximumNumberOfRecords = 100;
         if (export.getParam("n") != null)
         {
             maximumNumberOfRecords = Integer.parseInt(export.getParam("n"));
         }
         SearchResult result = null;
-        if ("collection".equals(searchType))
+        if ("collection".equals(searchType) || "metadata".equals(searchType))
         {
             CollectionController collectionController = new CollectionController(user);
             result = collectionController.search(searchQuery, null, maximumNumberOfRecords, 0);

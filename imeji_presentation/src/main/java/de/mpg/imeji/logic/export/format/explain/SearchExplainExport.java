@@ -56,12 +56,7 @@ public class SearchExplainExport extends ExplainExport
         writer.append(getRDFTagOpen());
         for (SearchIndex index : Search.indexes.values())
         {
-            String parent = null;
-            if (index.getParent() != null)
-            {
-                parent = index.getParent().getNamespace();
-            }
-            writer.append(getIndexTag(index.getName(), index.getNamespace(), parent));
+            writer.append(getIndexTag(index.getName(), index.getNamespace()));
         }
         writer.append(getRDFTagClose());
         writer.close();

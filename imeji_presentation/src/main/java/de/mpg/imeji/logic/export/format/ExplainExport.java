@@ -72,14 +72,10 @@ public abstract class ExplainExport extends Export
      * @param parent
      * @return
      */
-    protected String getIndexTag(String title, String namespace, String parent)
+    protected String getIndexTag(String title, String namespace)
     {
-        String s = "<imeji:index rdf:about=\"" + namespace + "\">" + "<dcterms:title>" + title + "</dcterms:title>";
-        if (parent != null)
-        {
-            s += "<imeji:parent rdf:about=\">" + parent + "\"/>";
-        }
-        s += "</imeji:index>";
+        String s = "<imeji:index>" + "<dcterms:title>" + title + "</dcterms:title>" + "<imeji:namespace>" + namespace
+                + "</imeji:namespace>" + "</imeji:index>";
         return s;
     }
 

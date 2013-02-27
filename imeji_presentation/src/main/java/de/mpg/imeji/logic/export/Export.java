@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.http.client.HttpResponseException;
 
+import de.mpg.imeji.logic.export.format.ExplainSearch;
 import de.mpg.imeji.logic.export.format.IngestItemsExport;
 import de.mpg.imeji.logic.export.format.IngestMdProfileExport;
 import de.mpg.imeji.logic.export.format.JenaExport;
@@ -76,32 +77,28 @@ public abstract class Export
         if ("rdf".equals(format))
         {
             supportedFormat = true;
-            if (type == null || type.equals(""))
-            {
-                throw new HttpResponseException(400, "Required parameter 'type' is missing.");
-            }
-            if (type.equalsIgnoreCase("image"))
+            if ("image".equalsIgnoreCase(type))
             {
                 supportedType = true;
                 export = new RDFImageExport();
             }
-            else if (type.equalsIgnoreCase("collection"))
+            else if ("collection".equalsIgnoreCase(type))
             {
                 supportedType = true;
                 export = new RDFCollectionExport();
             }
-            else if (type.equalsIgnoreCase("album"))
+            else if ("album".equalsIgnoreCase(type))
             {
                 supportedType = true;
                 export = new RDFAlbumExport();
             }
-            else if (type.equals("profile"))
+            else if ("profile".equals(type))
             {
                 supportedType = true;
                 export = new RDFProfileExport();
             }
         }
-        else if ("jena".equals(format) || format == null)
+        else if ("jena".equals(format))
         {
             supportedFormat = true;
             supportedType = true; // default, no type necessary here
@@ -116,28 +113,33 @@ public abstract class Export
         else if ("xml".equals(format))
         {
             supportedFormat = true;
-            if (type == null || type.equals(""))
-            {
-                throw new HttpResponseException(400, "Required parameter 'type' is missing.");
-            }
-            else if (type.equals("image"))
+            if ("image".equals(type))
             {
                 supportedType = true;
                 export = new IngestItemsExport();
             }
-            else if (type.equals("profile"))
+            else if ("profile".equals(type))
             {
                 supportedType = true;
                 export = new IngestMdProfileExport();
             }
         }
-        if (!supportedFormat)
+        else if ("explain".equals(format))
         {
-            throw new HttpResponseException(400, "Format " + format + " is not supported.");
+            supportedFormat = true;
+            if ("search".equals(type))
+            {
+                supportedType = true;
+                export = new ExplainSearch();
+            }
         }
         if (!supportedType)
         {
             throw new HttpResponseException(400, "Type " + type + " is not supported.");
+        }
+        else if (!supportedFormat)
+        {
+            throw new HttpResponseException(400, "Format " + format + " is not supported.");
         }
         export.setParams(params);
         export.init();

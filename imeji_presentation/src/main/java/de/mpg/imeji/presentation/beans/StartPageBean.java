@@ -1,5 +1,7 @@
 package de.mpg.imeji.presentation.beans;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -7,12 +9,14 @@ import java.util.Random;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * the Java Bean for the Start Page
@@ -23,38 +27,93 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class StartPageBean
 {
-    private List<Item> carousselImages;
+    private List<Item> carousselImages = new ArrayList<Item>();
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private final static int CAROUSSEL_SIZE = 6;
 
     /**
      * Constructor for the bean
+     * 
+     * @throws IOException
+     * @throws URISyntaxException
      */
-    public StartPageBean()
+    public StartPageBean() throws IOException, URISyntaxException
     {
-        loadCarrousselImages();
+        SearchQuery query = readSearchQueryInProperty();
+        SortCriterion order = readSortCriterionInProperty();
+        SearchResult result = searchItems(query, order);
+        loadItemInCaroussel(result, order == null);// if order is null, then it is random
     }
 
     /**
-     * Load the images for the caroussel, and init the bean objects with it
+     * Read the search query defined in the imeji.properties
+     * 
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
      */
-    private void loadCarrousselImages()
+    private SearchQuery readSearchQueryInProperty() throws IOException, URISyntaxException
     {
-        carousselImages = new ArrayList<Item>();
-        ItemController ic = new ItemController(session.getUser());
-        List<Item> items = (List<Item>)ic.loadItems(getRandomResults(ic.search(null, null, null, null)), -1, 0);
-        carousselImages = new ArrayList<Item>(items);
+        String prop = PropertyReader.getProperty("imeji.home.caroussel.query");
+        if (prop != null)
+        {
+            return URLQueryTransformer.parseStringQuery(prop);
+        }
+        return null;
     }
 
     /**
-     * Load the last images uploaded
+     * Read the order defined in the imeji.properties
+     * 
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
      */
-    private void loadLastImagesUploaded()
+    private SortCriterion readSortCriterionInProperty() throws IOException, URISyntaxException
     {
-        carousselImages = new ArrayList<Item>();
+        try
+        {
+            String[] prop = PropertyReader.getProperty("imeji.home.caroussel.sort").split("-");
+            return new SortCriterion(Search.getIndex(prop[0]), SortOrder.valueOf(prop[1].toUpperCase()));
+        }
+        catch (Exception e)
+        {
+            return null; // no sort order defined
+        }
+    }
+
+    /**
+     * Search the item for the caroussel
+     * 
+     * @param sq
+     * @param sc
+     * @return
+     */
+    private SearchResult searchItems(SearchQuery sq, SortCriterion sc)
+    {
         ItemController ic = new ItemController(session.getUser());
-        SortCriterion sc = new SortCriterion(Search.getIndex(SearchIndex.names.created), SortOrder.DESCENDING);
-        List<Item> items = (List<Item>)ic.loadItems(ic.search(null, null, sc, null).getResults(), CAROUSSEL_SIZE, 0);
+        return ic.search(null, sq, sc, null);
+    }
+
+    /**
+     * Load the item the {@link SearchResult} in the caroussel. If random true, will load some random items
+     * 
+     * @param sr
+     * @param random
+     */
+    private void loadItemInCaroussel(SearchResult sr, boolean random)
+    {
+        ItemController ic = new ItemController(session.getUser());
+        List<String> uris;
+        if (random)
+        {
+            uris = getRandomResults(sr);
+        }
+        else
+        {
+            uris = sr.getResults().subList(0, CAROUSSEL_SIZE - 1);
+        }
+        List<Item> items = (List<Item>)ic.loadItems(uris, -1, 0);
         carousselImages = new ArrayList<Item>(items);
     }
 

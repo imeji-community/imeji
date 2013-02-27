@@ -82,12 +82,11 @@ public abstract class RDFExport extends Export
         }
         catch (Exception e)
         {
-            ImejiJena.imejiDataSet.commit();
             throw new RuntimeException("Error in export", e);
         }
         finally
         {
-            ImejiJena.imejiDataSet.commit();
+            ImejiJena.imejiDataSet.end();
         }
     }
 

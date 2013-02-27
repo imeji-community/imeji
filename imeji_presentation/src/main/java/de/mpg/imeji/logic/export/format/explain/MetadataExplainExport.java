@@ -29,6 +29,7 @@
 package de.mpg.imeji.logic.export.format.explain;
 
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import de.mpg.imeji.logic.export.format.ExplainExport;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -49,7 +50,10 @@ public class MetadataExplainExport extends ExplainExport
     @Override
     public void export(OutputStream out, SearchResult sr)
     {
-        // TODO Auto-generated method stub
+        PrintWriter writer = new PrintWriter(out);
+        writer.append(getRDFTagOpen());
+        writer.append(getRDFTagClose());
+        writer.close();
     }
 
     /*
@@ -59,8 +63,7 @@ public class MetadataExplainExport extends ExplainExport
     @Override
     public String getContentType()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return "application/xml";
     }
 
     /*

@@ -33,9 +33,10 @@ import org.apache.http.client.HttpResponseException;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.export.format.explain.MetadataExplainExport;
 import de.mpg.imeji.logic.export.format.explain.SearchExplainExport;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 
 /**
- * TODO Description
+ * {@link Export} for explain
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -63,8 +64,42 @@ public abstract class ExplainExport extends Export
         throw new HttpResponseException(400, "Type " + type + " is not supported.");
     }
 
-    protected String addIndex(String title, String namespace, String parent)
+    /**
+     * Return a {@link SearchIndex} in rdf
+     * 
+     * @param title
+     * @param namespace
+     * @param parent
+     * @return
+     */
+    protected String getIndexTag(String title, String namespace, String parent)
     {
-        return "";
+        String s = "<imeji:index rdf:about=\"" + namespace + "\">" + "<dcterms:title>" + title + "</dcterms:title>";
+        if (parent != null)
+        {
+            s += "<imeji:parent rdf:about=\">" + parent + "\"/>";
+        }
+        s += "</imeji:index>";
+        return s;
+    }
+
+    /**
+     * Return the rdf tag with all namespaces
+     * 
+     * @return
+     */
+    protected String getRDFTagOpen()
+    {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:imeji=\"http://imeji.org/terms/\" xmlns:dcterms=\"http://purl.org/dc/terms/\">";
+    }
+
+    /**
+     * Return the tag to close the rdf file
+     * 
+     * @return
+     */
+    protected String getRDFTagClose()
+    {
+        return "</rdf:RDF>";
     }
 }

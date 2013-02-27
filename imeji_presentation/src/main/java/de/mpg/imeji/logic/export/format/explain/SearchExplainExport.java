@@ -31,7 +31,6 @@ package de.mpg.imeji.logic.export.format.explain;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.export.format.ExplainExport;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -54,21 +53,17 @@ public class SearchExplainExport extends ExplainExport
     public void export(OutputStream out, SearchResult sr)
     {
         PrintWriter writer = new PrintWriter(out);
-        writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        writer.println();
-        writer.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:imeji=\"http://imeji.org/terms/\" xmlns:dcterms=\"http://purl.org/dc/terms/\">\n");
+        writer.append(getRDFTagOpen());
         for (SearchIndex index : Search.indexes.values())
         {
-            writer.append("<imeji:index rdf:about=\"" + index.getNamespace() + "\">");
-            writer.append("<dcterms:title>" + index.getName() + "</dcterms:title>");
+            String parent = null;
             if (index.getParent() != null)
             {
-                writer.append("<imeji:parent rdf:about=\">" + index.getParent().getNamespace() + "\"/>");
+                parent = index.getParent().getNamespace();
             }
-            writer.append("</imeji:index>");
+            writer.append(getIndexTag(index.getName(), index.getNamespace(), parent));
         }
-        writer.append("</rdf:RDF>");
-        writer.flush();
+        writer.append(getRDFTagClose());
         writer.close();
     }
 

@@ -8,15 +8,11 @@ import java.util.Map;
 
 import org.apache.http.client.HttpResponseException;
 
-import de.mpg.imeji.logic.export.format.ExplainSearch;
-import de.mpg.imeji.logic.export.format.IngestItemsExport;
-import de.mpg.imeji.logic.export.format.IngestMdProfileExport;
+import de.mpg.imeji.logic.export.format.ExplainExport;
 import de.mpg.imeji.logic.export.format.JenaExport;
-import de.mpg.imeji.logic.export.format.RDFAlbumExport;
-import de.mpg.imeji.logic.export.format.RDFCollectionExport;
-import de.mpg.imeji.logic.export.format.RDFImageExport;
-import de.mpg.imeji.logic.export.format.RDFProfileExport;
+import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.export.format.SitemapExport;
+import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 
@@ -63,81 +59,32 @@ public abstract class Export
      * @return
      * @throws HttpResponseException
      */
-    public static Export factory(Map<String, String[]> params) throws HttpResponseException
+    public final static Export factory(Map<String, String[]> params) throws HttpResponseException
     {
         Export export = null;
-        boolean supportedFormat = false;
-        boolean supportedType = false;
         String format = getParam(params, "format");
         String type = getParam(params, "type");
-        if (format == null || format.equals(""))
-        {
-            throw new HttpResponseException(400, "Required parameter 'format' is missing.");
-        }
         if ("rdf".equals(format))
         {
-            supportedFormat = true;
-            if ("image".equalsIgnoreCase(type))
-            {
-                supportedType = true;
-                export = new RDFImageExport();
-            }
-            else if ("collection".equalsIgnoreCase(type))
-            {
-                supportedType = true;
-                export = new RDFCollectionExport();
-            }
-            else if ("album".equalsIgnoreCase(type))
-            {
-                supportedType = true;
-                export = new RDFAlbumExport();
-            }
-            else if ("profile".equals(type))
-            {
-                supportedType = true;
-                export = new RDFProfileExport();
-            }
+            export = RDFExport.factory(type);
         }
         else if ("jena".equals(format))
         {
-            supportedFormat = true;
-            supportedType = true; // default, no type necessary here
             export = new JenaExport();
         }
         else if ("sitemap".equals(format))
         {
-            supportedFormat = true;
-            supportedType = true;// default, no type necessary here
             export = new SitemapExport();
         }
         else if ("xml".equals(format))
         {
-            supportedFormat = true;
-            if ("image".equals(type))
-            {
-                supportedType = true;
-                export = new IngestItemsExport();
-            }
-            else if ("profile".equals(type))
-            {
-                supportedType = true;
-                export = new IngestMdProfileExport();
-            }
+            export = XMLExport.factory(type);
         }
         else if ("explain".equals(format))
         {
-            supportedFormat = true;
-            if ("search".equals(type))
-            {
-                supportedType = true;
-                export = new ExplainSearch();
-            }
+            export = ExplainExport.factory(type);
         }
-        if (!supportedType)
-        {
-            throw new HttpResponseException(400, "Type " + type + " is not supported.");
-        }
-        else if (!supportedFormat)
+        else
         {
             throw new HttpResponseException(400, "Format " + format + " is not supported.");
         }
@@ -146,11 +93,24 @@ public abstract class Export
         return export;
     }
 
+    /**
+     * REturn the value of a paramter as it has been used for this export
+     * 
+     * @param s
+     * @return
+     */
     public String getParam(String s)
     {
         return getParam(params, s);
     }
 
+    /**
+     * REturn the value of a Param as defined in a string array
+     * 
+     * @param params
+     * @param s
+     * @return
+     */
     public static String getParam(Map<String, String[]> params, String s)
     {
         String[] values = params.get(s);

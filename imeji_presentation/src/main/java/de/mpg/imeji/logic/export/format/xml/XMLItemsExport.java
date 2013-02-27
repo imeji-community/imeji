@@ -1,15 +1,19 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.export.format;
+package de.mpg.imeji.logic.export.format.xml;
 
 import java.io.OutputStream;
-import java.net.URI;
+import java.util.Collection;
 
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.export.Export;
+import javax.xml.bind.JAXBException;
+
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
+import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -18,7 +22,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * 
  * @author hnguyen
  */
-public class IngestMdProfileExport extends Export
+public class XMLItemsExport extends XMLExport
 {
     @Override
     public void init()
@@ -30,21 +34,17 @@ public class IngestMdProfileExport extends Export
     public void export(OutputStream out, SearchResult sr)
     {
         SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        ProfileController pc = new ProfileController();
-        if (sr.getNumberOfRecords() == 1)
+        ItemController ic = new ItemController(session.getUser());
+        Collection<Item> itemList = ic.loadItems(sr.getResults(), -1, 0);
+        Items items = new Items(itemList);
+        try
         {
-            try
-            {
-                JaxbUtil.writeToOutputStream(pc.retrieve(URI.create(sr.getResults().get(0)), session.getUser()), out);
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e);
-            }
+            JaxbUtil.writeToOutputStream(items, out);
         }
-        else
+        catch (JAXBException e)
         {
-            throw new RuntimeException(sr.getNumberOfRecords() + " profile(s) found. Only 1 profile sould be found");
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 

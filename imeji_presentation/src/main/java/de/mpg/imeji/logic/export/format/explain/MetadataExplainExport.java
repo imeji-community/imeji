@@ -26,25 +26,21 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.export.format;
+package de.mpg.imeji.logic.export.format.explain;
 
 import java.io.OutputStream;
-import java.io.PrintWriter;
 
-import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.export.format.ExplainExport;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
 
 /**
- * Explain the index for the search
+ * {@link ExplainExport} for the metadata search index
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ExplainSearch extends Export
+public class MetadataExplainExport extends ExplainExport
 {
     /*
      * (non-Javadoc)
@@ -53,23 +49,7 @@ public class ExplainSearch extends Export
     @Override
     public void export(OutputStream out, SearchResult sr)
     {
-        PrintWriter writer = new PrintWriter(out);
-        writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        writer.println();
-        writer.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:imeji=\"http://imeji.org/terms/\" xmlns:dcterms=\"http://purl.org/dc/terms/\">\n");
-        for (SearchIndex index : Search.indexes.values())
-        {
-            writer.append("<imeji:index rdf:about=\"" + index.getNamespace() + "\">");
-            writer.append("<dcterms:title>" + index.getName() + "</dcterms:title>");
-            if (index.getParent() != null)
-            {
-                writer.append("<imeji:parent rdf:about=\">" + index.getParent().getNamespace() + "\"/>");
-            }
-            writer.append("</imeji:index>");
-        }
-        writer.append("</rdf:RDF>");
-        writer.flush();
-        writer.close();
+        // TODO Auto-generated method stub
     }
 
     /*
@@ -79,7 +59,8 @@ public class ExplainSearch extends Export
     @Override
     public String getContentType()
     {
-        return "application/xml";
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /*

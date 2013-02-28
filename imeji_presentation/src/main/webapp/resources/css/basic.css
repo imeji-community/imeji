@@ -405,9 +405,16 @@ table {
  ========================================================================== */
 
 form {
-	display:inline;
+	display: inline;
 }
 
+div {
+	border-width: 0;	
+}
+
+span {
+	border-width: 0;	
+}
 
 
 

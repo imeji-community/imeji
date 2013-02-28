@@ -55,6 +55,14 @@ input:focus {
  */
 
 
+/* *LINE HEIGHTS*
+.full, .full_txtBtn, .full_txtInput, .full_txtArea, .full_select, .full_label, .full_radioBtn, .full_checkbox, .full_area0, .full_area0_p0, 
+.full_area0_p1, .full_area0_p2, .full_area0_p3, .full_area0_p4, .full_area0_p6, .full_area0_p7, .full_area0_p8, .full_area1, .full_area1_p0, .full_area1_p1, .full_area1_p2, .full_area1_p3, .full_area1_p4, .full_area1_p6, .full_area1_p7, .full_area1_p8, .full_area2, .full_area2_p0, .full_area2_p1, .full_area2_p2, .full_area2_p3, .full_area2_p4, .full_area2_p6, .full_area2_p7, .full_area2_p8 {
+    margin-top: 0.5454em;
+    margin-bottom: 0.9090em;
+} */
+
+
 /*
  * site wrapper (template.xhtml)
  */
@@ -123,10 +131,10 @@ margin-top: 0.5454em;
 
 
 /* xTiny_marginLExcl half_area0 headerLogo 
-cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
+cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 */
 
-/* Logo - Container */
+/* Logo - Header */
 
 .imj_siteHeaderLogo {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif"); 
@@ -138,7 +146,7 @@ cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
 	overflow: hidden;
 	width: 40.6363em;
 	height: 5em;
-	margin: 0 0.0909em 0 1.3636em;
+	margin: -0.500em 0.0909em 0 1.3636em;
     padding: 0;
     border-width: 0;
 }
@@ -219,8 +227,109 @@ cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
 .imj_siteContentMenu {
 	margin-top: 0;
 	padding-top: 0;
-		
 }
+
+/* .contentMenu * !!!
+
+.imj_siteContentMenu * {
+    float: left;
+    line-height: normal;
+}
+
+*/
+
+/* .contentMenu .sub 
+
+.imj_siteContentMenu .imj_siteContentSubMenu
+
+*/
+
+.imj_siteContentSubMenu {
+	float: left;
+	display: inline;
+    overflow: hidden;
+    height: 1.6363em;
+    margin: 0.0909em 1em 0 0;
+    padding: 0;
+    border-width: 0;
+    text-transform: uppercase;
+    line-height: normal;		
+}
+
+
+/* free_area0 span */
+
+.imj_siteContenSubMenuItem {
+	float: left;
+	display: inline;
+	overflow: hidden;
+	margin: 0 0.0909em 0 0;
+	padding: 0;
+	border-width: 0;
+}
+
+
+.contentMenu input, .contentMenu a {
+	float: left;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+
+
+
+.contentMenu .seperator  {
+	float: left;
+	width: 0.10em;
+	height: 1.15em;
+	margin: 0px;
+	margin-left: 0.46em;
+	margin-right: 0.46em;
+	padding: 0px;
+	border-right-width: 0px;
+	border-left-width: 0px;
+	border-top-width: 0.18em;
+	border-top-style: solid;
+	border-bottom-width: 0.97em;
+	border-bottom-style: solid;
+}
+
+
+
+
+/* .contentMenu .action * */ 
+
+.imj_siteContentMenu 
+{
+	margin-right: 0.37em;
+}
+
+.contentMenu {
+	margin-top: 0em;
+	padding-top: 1.46em;
+}
+
+.contentMenu .sub {
+	overflow: hidden;
+	height:1.6363em;
+	margin-top:0.0909em;
+	text-transform:uppercase;
+}
+
+.contentMenu .action {
+	overflow: visible;
+	clear: left;
+	padding: 0px;
+	margin: 0px;
+	height:1.6363em;
+	max-height:1.6363em;
+	padding-top:0.1818em;
+	display:inline;
+	white-space:nowrap;
+	text-transform:none;
+}
+
+
 
 
 /* id="contentSkipLinkAnchor" class="headLine"*/
@@ -240,9 +349,9 @@ cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
 	font-size: 3em;
     display: block;
     height: 0.9474em;
-    line-height: normal;
-    margin: -0.11em 0 0.28em;
     max-height: 0.9474em;
+    line-height: normal;
+    margin: -0.11em 0 0.28em;   
 }
 
 
@@ -258,7 +367,7 @@ cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
 	overflow: hidden;
 	width: 81.3636em;
     height: 2.4545em;
-    margin: 0 0.0909em 0 5.74em; 
+    margin: -0.500em 0.0909em 0 5.74em; 
     max-height: 2.4545em;
     padding: 0.2727em 0 0 0;
     border-width: 0;
@@ -286,7 +395,6 @@ cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
     text-decoration: none;
 }
 
-
 .imj_mainMenuStandard input, .imj_mainMenuStandard a {
     background-color: #292929;
     color: #6CAD2F;
@@ -303,6 +411,9 @@ cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
 
 
 
+
+
+
 /*
  * simple search menu
  */
@@ -310,7 +421,6 @@ cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
 	float: right;
 	margin: 1em 0 0 0; 
 	overflow: visible;
-
 }
 
 .imj_icoMagnifier_ffffff_23 {
@@ -323,17 +433,20 @@ cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/All_Search_LensStart_23_Static.gif"); 
 	/* ?!? url("../../imj_iconset/All_Search_LensStart_23_Static.gif"); - relative path does not work! 
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png"); 
-	- produces a 'border' - is not transparent! */
+	- produces a 'bottom-line' - is not transparent! */
     background-position: center center;
     background-repeat: no-repeat;
 }
+
 .imj_simpleSearchInputWrapper {
 	display: inline-block;
 	vertical-align: top;
 }
+
 .imj_simpleSearchInput {
 	width: 17em;
 }
+
 .imj_simpleSearchButtonSubmit {
 	height: 1.818em; /*1.7272em;*/
 	margin-left: 0.455em; /*0.37em;*/
@@ -342,17 +455,21 @@ cut second <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
     border-color: #6CAD2F;
     color: #F0F0F0;
 }
+
 .imj_simpleSearchButtonSubmit:hover {
 	background-color: #393939;
 	border-color:#393939;
 	color: #FFFFFF;
 }
+
 .imj_simpleSearch input[type=radio] {
 	border: 0 none;
 }
+
 .imj_simpleSearch input[type=radio]+label {
 	margin-right: 1em;
 }
+
 .imj_simpleSearchLinkAdvancedsearch {
 	margin-top: 0.18em;
 	margin-left: 2.0909em;

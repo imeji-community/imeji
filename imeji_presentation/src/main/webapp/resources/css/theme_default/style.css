@@ -29,8 +29,137 @@ input:focus {
 }
 
 
+
+
+
+
+
 /*
- * new content container for Welcome.xhtml 
+*** special styles for welcome-page - start-page - infos, tabs, carousel, twitter-widget - Welcome.xhtml *** 
+*/
+
+
+/*
+div.header {
+	overflow: visible;
+}
+
+div.searchMenu {
+	position: absolute;
+	margin-top: 5.5em;
+	margin-left: 5.5em;
+}
+*/
+
+#imj_welcomeInfoWrapper {
+	float: left;
+}
+
+
+.imj_welcomeInfo {
+	min-height: 34.8333333em;
+	overflow: hidden;
+}
+						
+.imj_welcomeInfo .id_tabs ul {
+	padding: 0;
+	margin-top: 0;
+	padding-top: 0.333333em;
+	text-align: right;
+	list-style-type: none;
+}
+						
+.imj_welcomeInfo .id_tabs ul li {
+	margin-left: 1%;
+	padding: 1%;
+	display: inline;
+	font-size: 1.0909em;
+	background-color: #323232;
+	border-radius: 0.41666666em;
+	-webkit-border-radius: 0.41666666em;
+	-moz-border-radius: 0.41666666em;
+	-o-border-radius: 0.41666666em;
+	-ms-border-radius: 0.41666666em;
+}
+
+.imj_welcomeInfo .id_tabs .tab_content {
+	float: left;
+	height: 90%;
+	overflow: auto;
+	font-size: 1.0909em;
+}
+
+.imj_welcomeInfo .id_tabs li.ui-state-active {
+	background-color: #383838;
+	color: #F0F0F0;
+}
+
+.imj_welcomeInfo .id_tabs li.ui-state-active a {
+	color: #F0F0F0;
+}
+
+.imj_welcomeInfo .id_tabs div.ui-tabs-hide {
+	display: none;
+}
+
+
+.imj_startpage_carouselWrapper {
+    float: left;
+    margin-top: 3em;
+}
+
+.imj_startpage_carousel {
+	min-height: 33.333333em; 
+	overflow: hidden;
+}
+
+.imj_startpage_carouselContainer {
+	max-height: 400px; 
+	overflow: visible; 
+	min-width: 350px; 
+	width: 40%; 
+	margin: 0 auto;
+}	
+
+.imj_startpage_carousel #carousel {
+	height: 26.66666666em; 
+	width: 90%; 
+	margin: 0 auto;
+	background: transparent; 
+	overflow: visible !important; 
+}
+
+.imj_startpage_carousel #cloudinfoText {
+	display: none;
+}
+
+.dynamicCloudinfo {
+	position: absolute;
+	z-index: 5600;
+	background-color: #292929;
+	padding: 0.75em;
+}
+
+.imj_startpage_carousel #title-text {
+	margin: 0;
+}
+
+.imj_startpage_carousel #alt-text {
+	margin: 0;
+}
+
+iframe#twitter-widget-0 {
+	width: 99.5%;
+	height: 43em;
+}
+
+iframe#twitter-widget-0 div.root div.stream{
+	height: 20em !important;
+}
+
+
+/*
+ * content container for Welcome.xhtml 
  */
 
 .imj_cont_1 {
@@ -64,7 +193,7 @@ input:focus {
 
 
 /*
- * site wrapper (template.xhtml)
+ * site wrapper  - template.xhtml *
  */
 .imj_siteWrapper {
     width: 84.0909em;
@@ -187,7 +316,7 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 
 */
 
-.imj_siteContentSection {   
+.imj_siteContent {   
 	clear: both;
 	float: left;
 	display: inline;
@@ -202,7 +331,7 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 
 /* imj_clear full_area0 */
 
-.imj_siteContentSubSection { 
+.imj_siteContentSection { 
 	clear: both;
 	float: left;
 	display: inline; 
@@ -215,41 +344,114 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
    
 
 
+
+
+/*
+ * mainMenuStandard  - MainMenu.jspf
+ */
+
+/* full_area0 mainMenu */
+
+.imj_mainMenuStandard {
+	float: left;
+	display: inline;
+	overflow: hidden;
+	width: 81.3636em;
+    height: 2.4545em;
+    margin: -0.500em 0.0909em 0 5.74em; 
+    max-height: 2.4545em;
+    padding: 0.2727em 0 0 0;
+    border-width: 0;
+    /* text-transform: uppercase;*/ 
+}
+
+
+/* styleClass="free_area0" 
+
+.imj_mainMenuStandardItem {
+	float: left;
+	display: inline;
+	overflow: hidden;
+	padding: 0;
+	border-width: 0;
+}
+
+*/
+
+
+/* Main Menu */
+
+/* .mainMenu input, .mainMenu a, .mainMenu span */
+
+.imj_mainMenuStandard input, .imj_mainMenuStandard a, .imj_mainMenuStandard span {
+	font-size: 1.273em; /*1.455em;*/
+    margin-right: 0.636em; /*0.8181em;*/
+    text-align: left;
+    letter-spacing: 0.091em;
+ }
+
+.imj_mainMenuStandard input, .imj_mainMenuStandard a {
+    background-color: #292929;
+    color: #6CAD2F;
+}
+
+.imj_mainMenuStandard a {
+	text-decoration: none;
+}
+
+
+/* .mainMenu input:hover, .mainMenu input:focus, .mainMenu a:hover, .mainMenu a:focus */
+	
+.imj_mainMenuStandard input:hover, .imj_mainMenuStandard input:focus, .imj_mainMenuStandard a:hover, .imj_mainMenuStandard a:focus {
+		color: #f0f0f0;
+}
+
+
+
+/* Content */ 
+
 /* small_marginLIncl subHeaderSection */
 
-.imj_siteContentSubHeaderSection {
+.imj_siteContentSubSection {
 	margin-bottom: 0.4545em;
 	margin-left: 5.8181em;
 }
 
 /* contentMenu */
 
-.imj_siteContentMenu {
+.imj_contentMenuWrapper {
 	margin-top: 0;
 	padding-top: 0;
 }
 
+
+.imj_contentMenuWrapper * {
+    float: left;
+    line-height: normal;
+}
+
+
 /* .contentMenu * !!!
 
-.imj_siteContentMenu * {
+.imj_contentMenu * {
     float: left;
     line-height: normal;
 }
 
 */
 
-/* .contentMenu .sub 
 
-.imj_siteContentMenu .imj_siteContentSubMenu
+
+/* .contentMenu .sub 
 
 */
 
-.imj_siteContentSubMenu {
+.imj_contentMenu {
 	float: left;
 	display: inline;
     overflow: hidden;
     height: 1.6363em;
-    margin: 0.0909em 1em 0 0;
+    margin: 0.0909em 0 0 0;
     padding: 0;
     border-width: 0;
     text-transform: uppercase;
@@ -257,9 +459,68 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 }
 
 
+
+/* .contentMenu .action *  xHuge_area0 sub action - template_paginator_containers.xhtml */
+
+
+.imj_contentSubMenu {
+	overflow: visible;
+	clear: left;
+	display:inline;
+	margin: 0;
+	padding: 0.1818em 0 0 0;
+	
+	height: 1.6363em;
+	max-height: 1.6363em;
+	
+	white-space:nowrap;
+	text-transform:none;
+}
+
+
+.contentMenu {
+	margin-top: 0em;
+	padding-top: 1.46em;
+}
+
+.contentMenu .sub {
+	overflow: hidden;
+	height:1.6363em;
+	margin-top:0.0909em;
+	text-transform:uppercase;
+}
+
+.contentMenu .action {
+	overflow: visible;
+	clear: left;
+	padding: 0px;
+	margin: 0px;
+	height:1.6363em;
+	max-height:1.6363em;
+	padding-top:0.1818em;
+	display:inline;
+	white-space:nowrap;
+	text-transform:none;
+}
+
+
+
+
+
+
+.imj_contenSubMenu input, .imj_siteContenSubMenu a, .imj_siteContenSubMenu span {
+	font-size: 1.273em; /*1.455em;*/
+    margin-right: 0.636em; /*0.8181em;*/
+    text-align: left;
+    text-decoration: none;
+}
+
+
+
+
 /* free_area0 span */
 
-.imj_siteContenSubMenuItem {
+.imj_contenMenuItem {
 	float: left;
 	display: inline;
 	overflow: hidden;
@@ -267,6 +528,10 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 	padding: 0;
 	border-width: 0;
 }
+
+
+
+
 
 
 .contentMenu input, .contentMenu a {
@@ -297,37 +562,7 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 
 
 
-/* .contentMenu .action * */ 
 
-.imj_siteContentMenu 
-{
-	margin-right: 0.37em;
-}
-
-.contentMenu {
-	margin-top: 0em;
-	padding-top: 1.46em;
-}
-
-.contentMenu .sub {
-	overflow: hidden;
-	height:1.6363em;
-	margin-top:0.0909em;
-	text-transform:uppercase;
-}
-
-.contentMenu .action {
-	overflow: visible;
-	clear: left;
-	padding: 0px;
-	margin: 0px;
-	height:1.6363em;
-	max-height:1.6363em;
-	padding-top:0.1818em;
-	display:inline;
-	white-space:nowrap;
-	text-transform:none;
-}
 
 
 
@@ -346,67 +581,15 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 
 .imj_siteContentHeadline h1 {
 	color: #F0F0F0;
-	font-size: 3em;
+	font-size: 2.364em;
+    letter-spacing: 0.091em;
     display: block;
     height: 0.9474em;
     max-height: 0.9474em;
     line-height: normal;
-    margin: -0.11em 0 0.28em;   
+    margin: -0.11em 0 0.28em;  
+     
 }
-
-
-/*
- * mainMenuStandard  - MainMenu.jspf
- */
-
-/* full_area0 mainMenu */
-
-.imj_mainMenuStandard {
-	float: left;
-	display: inline;
-	overflow: hidden;
-	width: 81.3636em;
-    height: 2.4545em;
-    margin: -0.500em 0.0909em 0 5.74em; 
-    max-height: 2.4545em;
-    padding: 0.2727em 0 0 0;
-    border-width: 0;
-    text-transform: uppercase; 
-}
-
-
-/* styleClass="free_area0" */
-
-.imj_mainMenuStandardItem {
-	float: left;
-	display: inline;
-	overflow: hidden;
-	padding: 0;
-	border-width: 0;
-}
-
-
-/* .mainMenu input, .mainMenu a, .mainMenu span */
-
-.imj_mainMenuStandard input, .imj_mainMenuStandard a, .imj_mainMenuStandard span {
-	font-size: 1.455em;
-    margin-right: 0.500em; /*0.8181em;*/
-    text-align: left;
-    text-decoration: none;
-}
-
-.imj_mainMenuStandard input, .imj_mainMenuStandard a {
-    background-color: #292929;
-    color: #6CAD2F;
-}
-
-
-/* .mainMenu input:hover, .mainMenu input:focus, .mainMenu a:hover, .mainMenu a:focus */
-	
-.imj_mainMenuStandard input:hover, .imj_mainMenuStandard input:focus, .imj_mainMenuStandard a:hover, .imj_mainMenuStandard a:focus {
-		color: #f0f0f0;
-}
-
 
 
 
@@ -478,127 +661,6 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 }
 
 
-
-/*
-
-div.header {
-	overflow: visible;
-}
-
-div.searchMenu {
-	position: absolute;
-	margin-top: 5.5em;
-	margin-left: 5.5em;
-}
-
-*** welcome-page - start-page - infos, tabs, carousel, twitter-widget (Welcome.xhtml) *** 
-*/
-
-#imj_welcomeInfoWrapper {
-	float: left;
-}
-
-
-.imj_welcomeInfo {
-	min-height: 34.8333333em;
-	overflow: hidden;
-}
-						
-.imj_welcomeInfo .id_tabs ul {
-	padding: 0;
-	margin-top: 0;
-	padding-top: 0.333333em;
-	text-align: right;
-	list-style-type: none;
-}
-						
-.imj_welcomeInfo .id_tabs ul li {
-	margin-left: 1%;
-	padding: 1%;
-	display: inline;
-	font-size: 1.0909em;
-	background-color: #323232;
-	border-radius: 0.41666666em;
-	-webkit-border-radius: 0.41666666em;
-	-moz-border-radius: 0.41666666em;
-	-o-border-radius: 0.41666666em;
-	-ms-border-radius: 0.41666666em;
-}
-
-.imj_welcomeInfo .id_tabs .tab_content {
-	float: left;
-	height: 90%;
-	overflow: auto;
-	font-size: 1.0909em;
-}
-
-.imj_welcomeInfo .id_tabs li.ui-state-active {
-	background-color: #383838;
-	color: #F0F0F0;
-}
-
-.imj_welcomeInfo .id_tabs li.ui-state-active a {
-	color: #F0F0F0;
-}
-
-.imj_welcomeInfo .id_tabs div.ui-tabs-hide {
-	display: none;
-}
-
-
-.imj_startpage_carouselWrapper {
-    float: left;
-    margin-top:3em;
-}
-
-.imj_startpage_carousel {
-	min-height: 33.333333em; 
-	overflow: hidden;
-}
-
-.imj_startpage_carouselContainer {
-	max-height: 400px; 
-	overflow: visible; 
-	min-width: 350px; 
-	width: 40%; 
-	margin: 0 auto;
-}	
-
-.imj_startpage_carousel #carousel {
-	height: 26.66666666em; 
-	width: 90%; 
-	margin: 0 auto;
-	background: transparent; 
-	overflow: visible !important; 
-}
-
-.imj_startpage_carousel #cloudinfoText {
-	display: none;
-}
-
-.dynamicCloudinfo {
-	position: absolute;
-	z-index: 5600;
-	background-color: #292929;
-	padding: 0.75em;
-}
-
-.imj_startpage_carousel #title-text {
-	margin: 0;
-}
-
-.imj_startpage_carousel #alt-text {
-	margin: 0;
-}
-
-iframe#twitter-widget-0 {
-	width: 99.5%;
-	height: 43em;
-}
-
-iframe#twitter-widget-0 div.root div.stream{
-	height: 20em !important;
-}
 
 
 
@@ -709,4 +771,34 @@ iframe#twitter-widget-0 div.root div.stream{
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {
 	color: #FFFFFF;
 }
+
+
+
+
+/*Dialog - .messageArea - .messageArea .half_area2_p6 */
+
+.messageArea {
+	width: 39.1818em;
+
+	display: inline;
+    float: left;
+    
+    background-color: #f0f0f0;
+    color: 
+    border-style: solid;
+    border-width: 0.091em;
+
+	
+	margin-bottom: 1em;
+	padding: 0.83em 0.92em 1.37em 0.92em  !important;
+	
+}
+
+
+.errorMessageArea {
+    border-color: #D80000;
+}
+
+
+
 

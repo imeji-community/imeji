@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.search.query;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -210,32 +211,59 @@ public class SimpleQueryFactory
         {
             switch (pair.getOperator())
             {
-                case URI:
-                    filter += variable + "=<" + pair.getValue() + ">";
-                    break;
                 case REGEX:
                     filter += "regex(" + variable + ", '" + pair.getValue() + "', 'i')";
                     break;
                 case EQUALS:
-                    filter += variable + "='" + pair.getValue() + "'";
-                    break;
-                case NOT:
-                    filter += variable + "!='" + pair.getValue() + "'";
-                    break;
-                case BOUND:
-                    filter += "bound(" + variable + ")=" + pair.getValue() + "";
-                    break;
-                case EQUALS_NUMBER:
+                    String value = "'" + pair.getValue() + "'";
                     try
                     {
-                        Double d = Double.valueOf(pair.getValue());
-                        filter += variable + "='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+                        URI.create(value);
+                        value = "<" + value + ">";
                     }
                     catch (Exception e)
-                    {/* Not a double */
+                    {
+                        // not a URI
                     }
+                    try
+                    {
+                        Double.valueOf(value);
+                        value = "'" + value + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+                    }
+                    catch (Exception e)
+                    {
+                        // not a double
+                    }
+                    try
+                    {
+                        double t = DateFormatter.getTime(pair.getValue());
+                        value = "'" + t + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+                    }
+                    catch (Exception e)
+                    {
+                        // not a date
+                    }
+                    filter += variable + "=" + value;
                     break;
-                case GREATER_NUMBER:
+                // case NOT:
+                // filter += variable + "!='" + pair.getValue() + "'";
+                // break;
+                // case BOUND:
+                // filter += "bound(" + variable + ")=" + pair.getValue() + "";
+                // break;
+                // case EQUALS_NUMBER:
+                // try
+                // {
+                // Double d = Double.valueOf(pair.getValue());
+                // filter += variable + "='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+                // }
+                // catch (Exception e)
+                // {/* Not a double */
+                // filter += variable + "='" + DateFormatter.getTime(pair.getValue())
+                // + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+                // }
+                // break;
+                case GREATER:
                     try
                     {
                         Double d = Double.valueOf(pair.getValue());
@@ -243,9 +271,11 @@ public class SimpleQueryFactory
                     }
                     catch (Exception e)
                     {/* Not a double */
+                        filter += variable + ">='" + DateFormatter.getTime(pair.getValue())
+                                + "'^^<http://www.w3.org/2001/XMLSchema#double>";
                     }
                     break;
-                case LESSER_NUMBER:
+                case LESSER:
                     try
                     {
                         Double d = Double.valueOf(pair.getValue());
@@ -253,20 +283,22 @@ public class SimpleQueryFactory
                     }
                     catch (Exception e)
                     {/* Not a double */
+                        filter += variable + "<='" + DateFormatter.getTime(pair.getValue())
+                                + "'^^<http://www.w3.org/2001/XMLSchema#double>";
                     }
                     break;
-                case EQUALS_DATE:
-                    filter += variable + "='" + DateFormatter.getTime(pair.getValue())
-                            + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                    break;
-                case GREATER_DATE:
-                    filter += variable + ">='" + DateFormatter.getTime(pair.getValue())
-                            + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                    break;
-                case LESSER_DATE:
-                    filter += variable + "<='" + DateFormatter.getTime(pair.getValue())
-                            + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                    break;
+//                case EQUALS_DATE:
+//                    filter += variable + "='" + DateFormatter.getTime(pair.getValue())
+//                            + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+//                    break;
+//                case GREATER_DATE:
+//                    filter += variable + ">='" + DateFormatter.getTime(pair.getValue())
+//                            + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+//                    break;
+//                case LESSER_DATE:
+//                    filter += variable + "<='" + DateFormatter.getTime(pair.getValue())
+//                            + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+//                    break;
                 default:
                     if (pair.getValue().startsWith("\"") && pair.getValue().endsWith("\""))
                     {

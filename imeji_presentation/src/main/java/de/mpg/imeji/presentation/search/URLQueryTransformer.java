@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -120,8 +121,7 @@ public class URLQueryTransformer
                 }
                 SearchIndex index = Search.getIndex(scString.substring(indexIndex + 1, indexOp).trim());
                 SearchOperators operator = stringOperator2SearchOperator(scString.substring(indexOp, indexValue).trim());
-                searchQuery.addPair(new SearchMetadata(index, operator, value, URI.create("http://imeji.org/statement/"
-                        + scString.substring(0, indexIndex).trim()), not));
+                searchQuery.addPair(new SearchMetadata(index, operator, value, ObjectHelper.getURI(Statement.class, scString.substring(0, indexIndex).trim()), not));
                 not = false;
                 scString = "";
             }
@@ -185,7 +185,15 @@ public class URLQueryTransformer
         }
         else if ("==".equals(str))
         {
-            return SearchOperators.URI;
+            return SearchOperators.EQUALS;
+        }
+        else if(">".equals(str))
+        {
+            return SearchOperators.GREATER;
+        }
+        else if("<".equals(str))
+        {
+            return SearchOperators.LESSER;
         }
         return null;
     }
@@ -306,18 +314,16 @@ public class URLQueryTransformer
     {
         switch (op)
         {
-            case GREATER_DATE:
+//            case GREATER_DATE:
+//                return ">=";
+            case GREATER:
                 return ">=";
-            case GREATER_NUMBER:
-                return ">=";
-            case LESSER_DATE:
-                return "<=";
-            case LESSER_NUMBER:
+//            case LESSER_DATE:
+//                return "<=";
+            case LESSER:
                 return "<=";
             case REGEX:
                 return "=";
-            case NOT:
-                return "";// to be removed
             default:
                 return "==";
         }
@@ -494,14 +500,16 @@ public class URLQueryTransformer
     {
         switch (op)
         {
-            case GREATER_DATE:
+//            case GREATER_DATE:
+//                return ">=";
+            case GREATER:
                 return ">=";
-            case GREATER_NUMBER:
-                return ">=";
-            case LESSER_DATE:
+//            case LESSER_DATE:
+//                return "<=";
+            case LESSER:
                 return "<=";
-            case LESSER_NUMBER:
-                return "<=";
+            case EQUALS:
+                return "==";
             default:
                 return "=";
         }

@@ -15,6 +15,7 @@ import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -23,20 +24,37 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
-public class FormularGroup
+/**
+ * A {@link SearchGroupForm} is a group of {@link SearchMetadataForm}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
+public class SearchGroupForm
 {
-    private List<FormularElement> elements;
+    private List<SearchMetadataForm> elements;
     private String collectionId;
     private List<SelectItem> statementMenu;
-    private static Logger logger = Logger.getLogger(FormularGroup.class);
+    private static Logger logger = Logger.getLogger(SearchGroupForm.class);
 
-    public FormularGroup()
+    /**
+     * Default Constructor
+     */
+    public SearchGroupForm()
     {
-        elements = new ArrayList<FormularElement>();
+        elements = new ArrayList<SearchMetadataForm>();
         statementMenu = new ArrayList<SelectItem>();
     }
 
-    public FormularGroup(SearchGroup searchGroup, MetadataProfile profile, String collectionId)
+    /**
+     * Constructor for a {@link SearchGroup} and {@link MetadataProfile}
+     * 
+     * @param searchGroup
+     * @param profile
+     * @param collectionId
+     */
+    public SearchGroupForm(SearchGroup searchGroup, MetadataProfile profile, String collectionId)
     {
         this();
         this.collectionId = collectionId;
@@ -44,28 +62,51 @@ public class FormularGroup
         {
             if (se.getType().equals(SEARCH_ELEMENTS.GROUP))
             {
-                elements.add(new FormularElement((SearchGroup)se, profile));
+                // Go through the search group with the collection
+                for (SearchElement mde : se.getElements())
+                {
+                    // Add the group with the metadata
+                    if (mde.getType().equals(SEARCH_ELEMENTS.GROUP))
+                    {
+                        elements.add(new SearchMetadataForm((SearchGroup)mde, profile));
+                    }
+                    else if (elements.size() > 0 && mde.getType().equals(SEARCH_ELEMENTS.LOGICAL_RELATIONS))
+                    {
+                        elements.get(elements.size() - 1).setLogicalRelation(
+                                ((SearchLogicalRelation)mde).getLogicalRelation());
+                    }
+                }
             }
         }
         initStatementsMenu(profile);
     }
 
+    /**
+     * Return the {@link SearchGroupForm} as a {@link SearchGroup}
+     * 
+     * @return
+     */
     public SearchGroup getAsSearchGroup()
     {
         SearchGroup searchGroup = new SearchGroup();
-        searchGroup.addPair(new SearchPair(Search.getIndex(SearchIndex.names.col), SearchOperators.URI, collectionId));
+//        searchGroup.addPair(new SearchPair(Search.getIndex(SearchIndex.names.col), SearchOperators.URI, collectionId));
+        searchGroup.addPair(new SearchPair(Search.getIndex(SearchIndex.names.col), SearchOperators.EQUALS, collectionId));
         searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
-        for (FormularElement e : elements)
+        SearchGroup groupWithAllMetadata = new SearchGroup();
+        for (SearchMetadataForm e : elements)
         {
-            searchGroup.addGroup(e.getAsSearchGroupNew());
-            if (!searchGroup.isEmpty())
-            {
-                searchGroup.addLogicalRelation(e.getLogicalRelation());
-            }
+            groupWithAllMetadata.addGroup(e.getAsSearchGroup());
+            groupWithAllMetadata.addLogicalRelation(e.getLogicalRelation());
         }
+        searchGroup.addGroup(groupWithAllMetadata);
         return searchGroup;
     }
 
+    /**
+     * Initialize the {@link Statement} for the select menu in the form
+     * 
+     * @param p
+     */
     public void initStatementsMenu(MetadataProfile p)
     {
         if (p.getStatements() != null)
@@ -84,12 +125,12 @@ public class FormularGroup
         return elements.size();
     }
 
-    public List<FormularElement> getElements()
+    public List<SearchMetadataForm> getSearchElementForms()
     {
         return elements;
     }
 
-    public void setElements(List<FormularElement> elements)
+    public void setSearchElementForms(List<SearchMetadataForm> elements)
     {
         this.elements = elements;
     }

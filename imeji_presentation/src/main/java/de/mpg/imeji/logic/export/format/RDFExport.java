@@ -79,9 +79,6 @@ public abstract class RDFExport extends Export
         return "application/xml";
     }
 
-    @Override
-    public abstract void init();
-
     /**
      * Initialize the namespaces used for the export
      */

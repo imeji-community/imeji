@@ -43,14 +43,7 @@ public class XMLItemsExport extends XMLExport
         }
         catch (JAXBException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public String getContentType()
-    {
-        return "application/xml";
     }
 }

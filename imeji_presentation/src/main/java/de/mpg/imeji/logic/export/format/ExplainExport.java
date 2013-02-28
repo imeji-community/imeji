@@ -44,6 +44,16 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
  */
 public abstract class ExplainExport extends Export
 {
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.logic.export.Export#getContentType()
+     */
+    @Override
+    public String getContentType()
+    {
+        return "application/xml";
+    }
+
     /**
      * Factory for {@link ExplainExport}
      * 

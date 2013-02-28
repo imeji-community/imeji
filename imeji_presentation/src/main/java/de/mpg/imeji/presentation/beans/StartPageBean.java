@@ -104,14 +104,18 @@ public class StartPageBean
     private void loadItemInCaroussel(SearchResult sr, boolean random)
     {
         ItemController ic = new ItemController(session.getUser());
-        List<String> uris;
+        List<String> uris = new ArrayList<String>();
         if (random)
         {
             uris = getRandomResults(sr);
         }
         else
         {
-            uris = sr.getResults().subList(0, CAROUSSEL_SIZE - 1);
+            int sublistSize = CAROUSSEL_SIZE;
+            if (sr.getResults().size() < CAROUSSEL_SIZE)
+                sublistSize = sr.getResults().size();
+            if (sublistSize > 0)
+                uris = sr.getResults().subList(0, sublistSize - 1);
         }
         List<Item> items = (List<Item>)ic.loadItems(uris, -1, 0);
         carousselImages = new ArrayList<Item>(items);

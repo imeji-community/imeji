@@ -47,10 +47,4 @@ public class XMLMdProfileExport extends XMLExport
             throw new RuntimeException(sr.getNumberOfRecords() + " profile(s) found. Only 1 profile sould be found");
         }
     }
-
-    @Override
-    public String getContentType()
-    {
-        return "application/xml";
-    }
 }

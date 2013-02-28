@@ -22,6 +22,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.search.URLQueryTransformer;
 
 /**
  * Manage {@link Export}
@@ -82,14 +83,18 @@ public class ExportManager
      * 
      * @param searchQuery
      * @return
+     * @throws IOException 
      */
-    public SearchResult search(SearchQuery searchQuery)
+    public SearchResult search() throws IOException
     {
         String collectionId = export.getParam("col");
+        System.out.println(collectionId);
         String albumId = export.getParam("alb");
+        String query = export.getParam("q");
         String id = export.getParam("id");
         String searchType = export.getParam("type");
         int maximumNumberOfRecords = 100;
+        SearchQuery searchQuery = URLQueryTransformer.parseStringQuery(query);
         if (export.getParam("n") != null)
         {
             maximumNumberOfRecords = Integer.parseInt(export.getParam("n"));

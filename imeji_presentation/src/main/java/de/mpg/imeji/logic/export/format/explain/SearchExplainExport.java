@@ -61,17 +61,7 @@ public class SearchExplainExport extends ExplainExport
         writer.append(getRDFTagClose());
         writer.close();
     }
-
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.export.Export#getContentType()
-     */
-    @Override
-    public String getContentType()
-    {
-        return "application/xml";
-    }
-
+    
     /*
      * (non-Javadoc)
      * @see de.mpg.imeji.logic.export.Export#init()
@@ -79,6 +69,6 @@ public class SearchExplainExport extends ExplainExport
     @Override
     public void init()
     {
-        // TODO Auto-generated method stub
+        // Nothing to to
     }
 }

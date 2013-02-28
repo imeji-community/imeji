@@ -40,16 +40,16 @@ public class ExportServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
-        String query = req.getParameter("q");
+        //String query = req.getParameter("q");
         User user = getSessionBean(req, resp).getUser();
-        SearchQuery searchQuery = new SearchQuery();
+      //  SearchQuery searchQuery = new SearchQuery();
         try
         {
-            searchQuery = URLQueryTransformer.parseStringQuery(query);
+            //searchQuery = URLQueryTransformer.parseStringQuery(query);
             ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap());
             resp.setHeader("Connection", "close");
             resp.setHeader("Content-Type", exportManager.getContentType());
-            SearchResult result = exportManager.search(searchQuery);
+            SearchResult result = exportManager.search();
             exportManager.export(result);
         }
         catch (HttpResponseException he)

@@ -60,7 +60,9 @@ public class MetadataExplainExport extends ExplainExport
         writer.append(getRDFTagOpen());
         for (String colURI : sr.getResults())
         {
+            System.out.println(colURI);
             CollectionImeji col = ObjectCachedLoader.loadCollection(URI.create(colURI));
+            System.out.println(col.getProfile());
             for (Statement st : ObjectCachedLoader.loadProfile(col.getProfile()).getStatements())
             {
                 for (SearchIndex index : SearchIndex.getAllIndexForStatement(st))
@@ -76,21 +78,11 @@ public class MetadataExplainExport extends ExplainExport
 
     /*
      * (non-Javadoc)
-     * @see de.mpg.imeji.logic.export.Export#getContentType()
-     */
-    @Override
-    public String getContentType()
-    {
-        return "application/xml";
-    }
-
-    /*
-     * (non-Javadoc)
      * @see de.mpg.imeji.logic.export.Export#init()
      */
     @Override
     public void init()
     {
-        // TODO Auto-generated method stub
+        // Nothing to to
     }
 }

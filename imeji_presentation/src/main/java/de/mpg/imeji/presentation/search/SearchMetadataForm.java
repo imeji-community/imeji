@@ -100,13 +100,11 @@ public class SearchMetadataForm
         switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
         {
             case DATE:
-                //this.operator = SearchOperators.EQUALS;
                 operatorMenu.add(new SelectItem(SearchOperators.EQUALS, "="));
                 operatorMenu.add(new SelectItem(SearchOperators.GREATER, ">="));
                 operatorMenu.add(new SelectItem(SearchOperators.LESSER, "<="));
                 break;
             case NUMBER:
-               // this.operator = SearchOperators.EQUALS;
                 operatorMenu.add(new SelectItem(SearchOperators.EQUALS, "="));
                 operatorMenu.add(new SelectItem(SearchOperators.GREATER, ">="));
                 operatorMenu.add(new SelectItem(SearchOperators.LESSER, "<="));

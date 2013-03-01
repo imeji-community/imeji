@@ -457,9 +457,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         {
             error += " " + notAdded + " " + session.getMessage("already_in_active_album");
         }
-        if (message != "")
+        if ("".equals(message))
             BeanHelper.info(message);
-        if (error != "")
+        if ("".equals(error))
             BeanHelper.error(error);
     }
 

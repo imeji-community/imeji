@@ -12,15 +12,15 @@
    ================================================== */
 
 .imj_clear {
-    clear: both
+    clear: both;
 }
 
 a:hover {
-    color: #FFFFFF
+    color: #FFFFFF;
 }
 
 input {
-    background-color: #CCCCCC
+    background-color: #CCCCCC;
 }
 
 input:hover {
@@ -400,7 +400,7 @@ cut second ?  ?
 .imj_mainMenuStandard input:focus,
 .imj_mainMenuStandard a:hover,
 .imj_mainMenuStandard a:focus {
-    color: #f0f0f0
+    color: #F0F0F0;
 }
 
 /* ===[ Content ]=== */
@@ -477,7 +477,14 @@ cut second ?  ?
     letter-spacing: 0.091em;
 }
 
-/* free_area0 - template_paginator_containers.xhtml - Images.xhtml  */
+
+.imj_contentSubMenu a {
+    margin-right: 0.364em
+}
+
+
+/* free_area0 - template_paginator_containers.xhtml - Images.xhtml 
+ * free_area0 xTiny_marginLInc - AlbumEntryPage.xhtml */
 
 .imj_contentSubMenuItem {
     display: inline;
@@ -503,7 +510,8 @@ cut second ?  ?
     text-decoration: none;
 }  */
 
-.imj_contentSubMenuItem span {
+.imj_contentSubMenuItem span,
+.imj_contentSubMenuItem a {
     margin-right: 0.364em
 }
 
@@ -543,53 +551,6 @@ cut second ?  ?
     padding: 0;
 }
 
-.contentMenu {
-    margin-top: 0em;
-    padding-top: 1.46em;
-}
-
-.contentMenu .sub {
-    overflow: hidden;
-    height: 1.6363em;
-    margin-top: 0.0909em;
-    text-transform: uppercase;
-}
-
-.contentMenu .action {
-    overflow: visible;
-    clear: left;
-    padding: 0px;
-    margin: 0px;
-    height: 1.6363em;
-    max-height: 1.6363em;
-    padding-top: 0.1818em;
-    display: inline;
-    white-space: nowrap;
-    text-transform: none;
-}
-
-.contentMenu input,
-.contentMenu a {
-    float: left;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.contentMenu .seperator {
-    float: left;
-    width: 0.10em;
-    height: 1.15em;
-    margin: 0px;
-    margin-left: 0.46em;
-    margin-right: 0.46em;
-    padding: 0px;
-    border-right-width: 0px;
-    border-left-width: 0px;
-    border-top-width: 0.18em;
-    border-top-style: solid;
-    border-bottom-width: 0.97em;
-    border-bottom-style: solid;
-}
 
 /* id="contentSkipLinkAnchor" class="headLine" */
 

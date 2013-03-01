@@ -11,24 +11,24 @@
 			</ui:define>
 			
 			<ui:define name="contentMenu">
-				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}" rendered="true">
+				<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}" rendered="true">
 					<h:outputText value="#{lbl.collection_home}"/>
 				</h:outputLink>			
 				
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="imj_contentMenuSeparator" />
 				
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
 					<h:outputText value="#{lbl.view_images}"/>
 				</h:outputLink>
 				
-				<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
+				<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{ViewCollectionBean.size > 0}"/>
 				
 				
-				<h:outputText styleClass="free_area0" value="#{lbl.collection_metadata}"/>
+				<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.collection_metadata}"/>
 				
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="imj_contentMenuSeparator" />
 
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
+				<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
 			</ui:define>

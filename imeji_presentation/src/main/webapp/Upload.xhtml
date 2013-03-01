@@ -5,19 +5,19 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="headline" value="#{UploadBean.collection.metadata.title}"/>
 	<ui:define name="contentMenu">
-		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.collectionUrl}#{UploadBean.id}" >
+		<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}" >
 			<h:outputText value="#{lbl.collection_home}"/>
 		</h:outputLink>			
-		<h:outputText styleClass="seperator void" />
-		<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.browsePath}?q=" rendered="#{UploadBean.collectionSize > 0}">
+		<h:outputText styleClass="imj_contentMenuSeparator" />
+		<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.browsePath}?q=" rendered="#{UploadBean.collectionSize > 0}">
 			<h:outputText value="#{lbl.view_images}"/>
 		</h:outputLink>
-		<h:outputText styleClass="seperator void" rendered="#{UploadBean.collectionSize > 0}"/>
-		<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.infosPath}?init=1">
+		<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{UploadBean.collectionSize > 0}"/>
+		<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.infosPath}?init=1">
 			<h:outputText value="#{lbl.collection_metadata}"/>
 		</h:outputLink>
-		<h:outputText styleClass="seperator void" />
-		<h:outputText styleClass="free_area0" value="#{lbl.upload_images}"/>
+		<h:outputText styleClass="imj_contentMenuSeparator" />
+		<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.upload_images}"/>
 	</ui:define>
 	
 	<ui:define name="mainContent">

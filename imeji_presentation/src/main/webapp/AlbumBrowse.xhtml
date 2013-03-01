@@ -10,7 +10,7 @@
 		<ui:define name="contentMenu">
 			<h:outputText value="#{AlbumImagesBean.initPage}"/>
 			
-			<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}" rendered="true">
+			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}" rendered="true">
 				<h:outputText value="#{lbl.album_home}"/>
 			</h:outputLink>
 			
@@ -20,16 +20,16 @@
 			
 			<h:outputText styleClass="imj_contentMenuSeparator" />
 			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
 				<h:outputText value="#{lbl.album_metadata}"/>
 			</h:outputLink>
 			
 		</ui:define>
 		
 		<ui:define name="actionsMenu">
-			<h:panelGroup layout="block" styleClass="half_area0 sub action">
+			<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 				<h:panelGroup>
-					<h:panelGroup styleClass="free_area0">
+					<h:panelGroup styleClass="imj_contentSubMenuItem">
 						<!-- SORTING content menu lower line starts here -->
 						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" />
 						<h:selectOneMenu id="selSort" value="#{AlbumImagesBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
@@ -43,19 +43,19 @@
 						<!-- SORTING content menu lower line ends here -->
 					</h:panelGroup>
 					
-					<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogRelease');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='PENDING'}">
+					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='PENDING'}">
 						<h:outputText value="#{lbl.release}"/>
 					</h:outputLink>
 					
-					<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogWithdraw');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='RELEASED'}">
+					<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogWithdraw');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='RELEASED'}">
 						<h:outputText value="#{lbl.withdraw}"/>
 					</h:outputLink>
 					
-					<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogDelete');" rendered="#{AlbumImagesBean.deletable}">
+					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{AlbumImagesBean.deletable}">
 						<h:outputText value="#{lbl.delete}"/>
 					</h:outputLink>
 					
-					<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
+					<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="imj_contentSubMenuItem" target="_blank">
 						<h:outputText value="#{lbl.export_metadata}"/>
 					</h:outputLink>
 				</h:panelGroup>	

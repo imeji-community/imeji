@@ -12,27 +12,27 @@
 	<ui:define name="contentMenu">
 		<h:outputText value="#{CollectionImagesBean.initPage}" />
 
-		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0"
+		<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}"
 			rendered="true">
 			<h:outputText value="#{lbl.collection_home}" />
 		</h:outputLink>
 
-		<h:outputText styleClass="seperator void" />
+		<h:outputText styleClass="imj_contentMenuSeparator" />
 
-		<h:outputText value="#{lbl.view_images}" styleClass="free_area0" />
+		<h:outputText value="#{lbl.view_images}" styleClass="imj_contentMenuItem" />
 
-		<h:outputText styleClass="seperator void" />
+		<h:outputText styleClass="imj_contentMenuSeparator" />
 
-		<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0"
+		<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.infosPath}?init=1"
 			rendered="true">
 			<h:outputText value="#{lbl.collection_metadata}" />
 		</h:outputLink>
 
-		<h:outputText styleClass="seperator void" />
+		<h:outputText styleClass="imj_contentMenuSeparator" />
 
-		<h:outputLink id="lnkUploadImages" styleClass="free_area0"
+		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.uploadPath}?init=1"
 			rendered="#{CollectionImagesBean.editable}">
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
@@ -40,12 +40,12 @@
 	</ui:define>
 
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="half_area0 sub action">
+		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 
-			<h:panelGroup styleClass="free_area0">
+			<h:panelGroup styleClass="imj_contentSubMenuItem">
 				<!-- SORTING content menu lower line starts here -->
 				<h:outputText id="txtSort" value="#{lbl.sort_by}"
-					styleClass="free_area0" />
+					styleClass="imj_contentSubMenuItem" />
 				<h:form>
 					<h:selectOneMenu id="selSort"
 						value="#{CollectionImagesBean.selectedSortCriterion}"
@@ -60,24 +60,24 @@
 						action="#{CollectionImagesBean.toggleSortOrder}"
 						rendered="#{CollectionImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
 				</h:form>
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="imj_contentMenuSeparator" />
 				<!-- SORTING content menu lower line ends here -->
 			</h:panelGroup>
 
-			<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#"
+			<h:outputLink styleClass="imj_SubMenuItem" value="#"
 				onclick="openDialog('dialogRelease');"
 				rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
 				<h:outputText value="#{lbl.collection_release}" />
 			</h:outputLink>
 
 			<h:outputLink id="lnkWithdrawCollection"
-				styleClass="free_area0 xTiny_marginLIncl" value="#"
+				styleClass="imj_SubMenuItem" value="#"
 				onclick="openDialog('dialogWithdraw');"
 				rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
 				<h:outputText value="#{lbl.withdraw}" />
 			</h:outputLink>
 
-			<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#"
+			<h:outputLink styleClass="imj_SubMenuIteml" value="#"
 				onclick="openDialog('dialogDelete');"
 				rendered="#{CollectionImagesBean.deletable}">
 				<h:outputText value="#{lbl.delete}" />
@@ -85,13 +85,13 @@
 
 			<h:outputLink
 				value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-				styleClass="free_area0 xTiny_marginLIncl" target="_blank">
+				styleClass="imj_SubMenuItem" target="_blank">
 				<h:outputText value="#{lbl.export_metadata}" />
 			</h:outputLink>
 
 			<h:outputLink
 				value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-				styleClass="free_area0 xTiny_marginLIncl" target="_blank">
+				styleClass="imj_SubMenuItem" target="_blank">
 				<h:outputText value="Export for ingest " />
 			</h:outputLink>
 		</h:panelGroup>

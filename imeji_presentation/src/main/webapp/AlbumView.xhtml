@@ -7,19 +7,19 @@
 	
 	<ui:define name="contentMenu">
 	
-		<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}" rendered="true">
+		<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}" rendered="true">
 			<h:outputText value="#{lbl.album_home}"/>
 		</h:outputLink>
 		
-		<h:outputText styleClass="seperator void" />
+		<h:outputText styleClass="imj_contentMenuSeparator" />
 		
-		<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
+		<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
 			<h:outputText value="#{lbl.view_images}"/>
 		</h:outputLink>
 		
-		<h:outputText styleClass="seperator void" rendered="#{AlbumBean.size > 0}"/>
+		<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{AlbumBean.size > 0}"/>
 		
-		<h:outputText value="#{lbl.album_metadata}" styleClass="free_area0"/>
+		<h:outputText value="#{lbl.album_metadata}" styleClass="imj_contentMenuItem"/>
 		
 	</ui:define>
 	

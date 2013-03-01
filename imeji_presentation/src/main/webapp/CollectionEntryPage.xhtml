@@ -12,45 +12,47 @@
 	</ui:define>
 	
 	<ui:define name="contentMenu">
-		<h:panelGroup rendered="#{ViewCollectionBean.visible}" styleClass="half_area0">
+		<h:panelGroup rendered="#{ViewCollectionBean.visible}">
+		<!-- removed styleClass="half_area0" -->
 			
-			<h:outputText styleClass="free_area0" value="#{lbl.collection_home}"/>
+			<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.collection_home}"/>
 			
-			<h:outputText styleClass="seperator void"/>
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
 			
-			<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
 				<h:outputText value="#{lbl.view_images}"/>
 			</h:outputLink>
 			
-			<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
+			<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{ViewCollectionBean.size > 0}"/>
 			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/infos?init=1" rendered="true">
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/infos?init=1" rendered="true">
 				<h:outputText value="#{lbl.collection_metadata}"/>
 			</h:outputLink>
 			
-			<h:outputText styleClass="seperator void"/>
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
 			
-			<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
+			<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 				<h:outputText value="#{lbl.upload_images}"></h:outputText>
 			</h:outputLink>
 		</h:panelGroup>
 	</ui:define>
 	
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="half_area0 sub action" rendered="#{ViewCollectionBean.visible}">
-      		<h:outputLink styleClass="free_area0" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" >
+		<h:panelGroup layout="block" styleClass="imj_contentSubMenu" rendered="#{ViewCollectionBean.visible}">
+		
+      		<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" >
 				<h:outputText value="#{lbl.collection_share}"/>		
 			</h:outputLink>
       
-			<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogRelease');"  rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='PENDING'}">
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');"  rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='PENDING'}">
 				<h:outputText value="#{lbl.collection_release}"/>
 			</h:outputLink>
 			
-			<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" onclick="openDialog('dialogWithdraw');"  value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='RELEASED'}">
+			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" onclick="openDialog('dialogWithdraw');"  value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='RELEASED'}">
 				<h:outputText value="#{lbl.withdraw}"/>
 			</h:outputLink>
 			
-			<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogDelete');" rendered="#{ViewCollectionBean.deletable}">
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{ViewCollectionBean.deletable}">
 				<h:outputText value="#{lbl.delete}"/>
 			</h:outputLink>
 				

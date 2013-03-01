@@ -241,7 +241,6 @@ margin-top: 0.5454em;
 	width: 81.3636em;
 	margin: 0 0.0909em 0 0;
 	padding: 0;
-	border-width: 0;
 }
 
 
@@ -254,7 +253,6 @@ margin-top: 0.5454em;
 	width: 81.3636em; 
 	height: 5.7272em;
 	margin: 0 0.0909em 0 0;
-	border-width: 0;
 	padding: 0;
 }
 
@@ -275,9 +273,8 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 	overflow: hidden;
 	width: 40.6363em;
 	height: 5em;
-	margin: -0.500em 0.0909em 0 1.3636em;
+	margin: -1.500em 0.0909em 0 1.3636em;
     padding: 0;
-    border-width: 0;
 }
 
 
@@ -305,7 +302,6 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 	 height: 5em;
 	 margin: 0 0.0909em 0 0;
      padding: 0;
-	 border-width: 0; 	 
 }
 
 
@@ -323,9 +319,7 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 	overflow: hidden;
 	width: 81.3636em;
 	margin: 0 0.0909em 0 0;
-    padding: 0 0 2.001em 0;
-    border-width: 0; 
-        
+    padding: 0 0 2.001em 0;        
 }
 
 
@@ -339,7 +333,6 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 	width: 81.3636em;
 	margin: 0 0.0909em 0 0;
 	padding: 0;
-	border-width: 0; 
 }
    
 
@@ -355,14 +348,14 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 .imj_mainMenuStandard {
 	float: left;
 	display: inline;
-	overflow: hidden;
+	/*overflow: hidden;*/
 	width: 81.3636em;
     height: 2.4545em;
-    margin: -0.500em 0.0909em 0 5.74em; 
     max-height: 2.4545em;
+    margin: -0.500em 0.0909em 0 5.273em; /*5.74em;* 
     padding: 0.2727em 0 0 0;
-    border-width: 0;
     /* text-transform: uppercase;*/ 
+ 
 }
 
 
@@ -373,7 +366,6 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 	display: inline;
 	overflow: hidden;
 	padding: 0;
-	border-width: 0;
 }
 
 */
@@ -388,10 +380,25 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
     margin-right: 0.636em; /*0.8181em;*/
     text-align: left;
     letter-spacing: 0.091em;
+    
+    	/* margin-left: 1%;
+	padding: 1%;
+	display: inline;
+	font-size: 1.0909em; */
+	
+	padding: 0.5%;
+	background-color: #323232;
+	border-radius: 0.41666666em;
+	-webkit-border-radius: 0.41666666em;
+	-moz-border-radius: 0.41666666em;
+	-o-border-radius: 0.41666666em;
+	-ms-border-radius: 0.41666666em; 
+    
+    
  }
 
 .imj_mainMenuStandard input, .imj_mainMenuStandard a {
-    background-color: #292929;
+  /*  background-color: #292929; */
     color: #6CAD2F;
 }
 
@@ -453,10 +460,21 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
     height: 1.6363em;
     margin: 0.0909em 0 0 0;
     padding: 0;
-    border-width: 0;
     text-transform: uppercase;
     line-height: normal;		
 }
+
+
+/* free_area0 - template_paginator_containers.xhtml */
+
+.imj_contentMenuItem {
+	display: inline;
+    float: left;
+    margin: 0 0.0909em 0 0;
+    overflow: hidden;
+    padding: 0;
+}
+   
 
 
 
@@ -477,6 +495,90 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 	text-transform:none;
 }
 
+
+/* free_area0 - template_paginator_containers.xhtml */
+
+.imj_contentSubMenuItem {
+	display: inline;
+    float: left;
+    margin: 0 0.0909em 0 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* .contentMenu .action *  - 
+.imj_contentSubMenuItem * {
+    margin-right: 0.364em;
+}
+*/
+
+.imj_contentSubMenuItem span {
+	margin-right: 0.364em;
+}
+    
+
+
+/* hard-coded span style - style="margin-top:0.18em; - template_paginator_containers.xhtml */
+
+.imj_contentSubMenuItemSorting {
+	margin: 0.18em 0 0 0;
+}
+
+  
+
+
+
+
+/* .contentMenu .seperator - template_paginator_containers.xhtml *    
+
+    margin-left: 0.46em;
+	margin-right: 0.46em;
+	
+	background-color: #292929;
+	 
+	border-right-width: 0px;
+	border-left-width: 0px;
+	border-top-width: 0.18em;
+	border-top-style: solid;
+	border-bottom-width: 0.97em;
+	border-bottom-style: solid; 
+	border-color: #292929;
+*/ 
+
+
+.imj_contentMenuWrapper .imj_contentMenuSeperator  {
+	float: left;
+	width: 0.091em; /*0.10em;*/
+	height: 1.091em; /* 1.15em; */
+	
+	margin: 0 0.455em;
+	padding: 0;
+}
+
+
+
+
+	
+	
+	
+}
+
+
+
+
+
+
+.imj_contentSubMenuItem {
+	display: inline;
+    float: left;
+    margin: 0 0.0909em 0 0;
+    overflow: hidden;
+    padding-bottom: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0;
+
+}
 
 .contentMenu {
 	margin-top: 0em;
@@ -526,7 +628,6 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 	overflow: hidden;
 	margin: 0 0.0909em 0 0;
 	padding: 0;
-	border-width: 0;
 }
 
 
@@ -574,7 +675,16 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
     text-align: right;
     white-space: nowrap;
 	line-height: normal;
-    margin: 0;    
+    margin: 0;  
+    
+    padding: 0.5%;
+	background-color: #323232;
+	border-radius: 0.41666666em;
+	-webkit-border-radius: 0.41666666em;
+	-moz-border-radius: 0.41666666em;
+	-o-border-radius: 0.41666666em;
+	-ms-border-radius: 0.41666666em; 
+       
 }
 
 /* .headLine h1 */
@@ -587,7 +697,9 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
     height: 0.9474em;
     max-height: 0.9474em;
     line-height: normal;
-    margin: -0.11em 0 0.28em;  
+    margin: -0.11em 0 0.28em; 
+    
+   
      
 }
 
@@ -602,7 +714,7 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
  */
 .imj_simpleSearch {
 	float: right;
-	margin: 1em 0 0 0; 
+	margin: 1.5em 0 0 0; 
 	overflow: visible;
 }
 

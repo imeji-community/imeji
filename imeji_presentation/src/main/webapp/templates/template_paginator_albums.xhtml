@@ -6,29 +6,29 @@
 
 			<ui:define name="contentMenu">
 							
-				<h:outputLink id="lnkSort" styleClass="free_area0" value="#{Navigation.albumsUrl}?tab=SORTING" rendered="#{paginatorListSessionBean.selectedMenu != 'SORTING'}">
+				<h:outputLink id="lnkSort" styleClass="imj_contentMenuItem" value="#{Navigation.albumsUrl}?tab=SORTING" rendered="#{paginatorListSessionBean.selectedMenu != 'SORTING'}">
 					<h:outputText value="#{lbl.sorting}"/>
 				</h:outputLink>
-				<h:outputText id="txtSortLink" styleClass="free_area0" value="#{lbl.sorting}" rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"/>
-				<h:outputText styleClass="seperator void"/>
+				<h:outputText id="txtSortLink" styleClass="imj_contentMenuItem" value="#{lbl.sorting}" rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"/>
+				<h:outputText styleClass="imj_contentMenuSeparator"/>
 				
-				<h:outputLink id="lnkFilter" styleClass="free_area0" value="?tab=FILTER" rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER' and SessionBean.user != null}">
+				<h:outputLink id="lnkFilter" styleClass="imj_contentMenuItem" value="?tab=FILTER" rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER' and SessionBean.user != null}">
 					<h:outputText value="#{lbl.filter}"/>
 				</h:outputLink>
-				<h:outputText id="txtFilterLink" styleClass="free_area0" value="#{lbl.filter}" rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}"/>
-				<h:outputText styleClass="seperator void"/>
+				<h:outputText id="txtFilterLink" styleClass="imj_contentMenuItem" value="#{lbl.filter}" rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER'}"/>
+				<h:outputText styleClass="imj_contentMenuSeparator"/>
 				
-				<h:outputLink value="#{Navigation.createAlbumUrl}" rendered="#{SessionBean.user != null}" styleClass="free_area0">
+				<h:outputLink value="#{Navigation.createAlbumUrl}" rendered="#{SessionBean.user != null}" styleClass="imj_contentMenuItemCreateAlbum">
 					<h:outputText value="#{lbl.album_create}"/>
 				</h:outputLink>
-				<h:outputText styleClass="seperator void"/>
+				<h:outputText styleClass="imj_contentMenuSeparator"/>
 			</ui:define>
 
 			<ui:define name="actionsMenu">
-				<h:panelGroup layout="block" styleClass="free_area0 sub action">
+				<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 					<h:outputText value="#{paginatorListSessionBean.initMenus}"/>
 					<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}">
-						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" style="margin-top:0.18em;"/>
+						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="imj_contentSubMenuItemSorting"/>
 						<h:form>
 							<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
 								<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}"/>
@@ -36,15 +36,15 @@
 							<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
 							<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
 						</h:form>
-						<h:outputText styleClass="seperator void"/>
+						<h:outputText styleClass="imj_contentMenuSeparator"/>
 					</h:panelGroup>
 					
 					<h:panelGroup rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' and SessionBean.user != null}">
-						<h:outputText id="txtFilter" value="#{lbl.filter_by}" styleClass="free_area0"/>
+						<h:outputText id="txtFilter" value="#{lbl.filter_by}" styleClass="imj_contentSubMenuItemFiltering"/>
 						<h:selectOneMenu id="selFilter" value="#{paginatorListSessionBean.selectedFilter}" styleClass="free_select" onchange="window.location.href = '?f=' + this.value">
 							<f:selectItems id="filterItem" value="#{paginatorListSessionBean.filterMenu}"/>
 						</h:selectOneMenu>
-						<h:outputText styleClass="seperator void"/>
+						<h:outputText styleClass="imj_contentMenuSeparator"/>
 					</h:panelGroup>
 				</h:panelGroup>
 			</ui:define>

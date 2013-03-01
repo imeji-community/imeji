@@ -28,8 +28,15 @@ input:focus {
 	background-color: #FFFFFF;
 }
 
+input, textarea, select {
+    border-color: #6CAD2F;
+    border-style: solid;
+    background-color: #F0F0F0; /*#F3F8FA;*/
+}
 
-
+input[type="text"], textarea, select {
+    background-color: #F0F0F0; /*#F3F8FA;*/
+}
 
 
 
@@ -415,26 +422,59 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 
 
 
-/* Content */ 
+/* Content */
+
 
 /* small_marginLIncl subHeaderSection */
 
 .imj_siteContentSubSection {
 	margin-bottom: 0.4545em;
-	margin-left: 5.8181em;
+	margin-left: 5.636em; /* 5.8181em;*/
 }
+
 
 /* contentMenu */
 
 .imj_contentMenuWrapper {
-	margin-top: 0;
+	margin-top: 0.500em;
 	padding-top: 0;
 }
-
 
 .imj_contentMenuWrapper * {
     float: left;
     line-height: normal;
+}
+
+
+
+/* .contentMenu .sub  */
+
+.imj_contentMenu {
+	float: left;
+	display: inline;
+    overflow: hidden;
+    height: 1.6363em;
+    margin: 0.0909em 0 0 0;
+    padding: 0;
+    text-transform: uppercase;
+    line-height: normal;
+    letter-spacing: 0.091em;		
+}
+
+
+/* free_area0 span - template_paginator_containers.xhtml */
+
+.imj_contentMenuItem {
+	display: inline;
+    float: left;
+    overflow: hidden;
+    margin: 0 0.0909em 0 0;
+    padding: 0;
+}
+   
+
+.imj_contentMenuItemCreateAlbum {
+	margin-left: 10.455em;
 }
 
 
@@ -448,37 +488,7 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 */
 
 
-
-/* .contentMenu .sub 
-
-*/
-
-.imj_contentMenu {
-	float: left;
-	display: inline;
-    overflow: hidden;
-    height: 1.6363em;
-    margin: 0.0909em 0 0 0;
-    padding: 0;
-    text-transform: uppercase;
-    line-height: normal;		
-}
-
-
-/* free_area0 - template_paginator_containers.xhtml */
-
-.imj_contentMenuItem {
-	display: inline;
-    float: left;
-    margin: 0 0.0909em 0 0;
-    overflow: hidden;
-    padding: 0;
-}
-   
-
-
-
-/* .contentMenu .action *  xHuge_area0 sub action - template_paginator_containers.xhtml */
+/* .contentMenu .action *  xHuge_area0 sub action - template_paginator_containers.xhtml - Images.xhtml */
 
 
 .imj_contentSubMenu {
@@ -493,10 +503,12 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 	
 	white-space:nowrap;
 	text-transform:none;
+	
+	letter-spacing: 0.091em;
 }
 
 
-/* free_area0 - template_paginator_containers.xhtml */
+/* free_area0 - template_paginator_containers.xhtml - Images.xhtml */
 
 .imj_contentSubMenuItem {
 	display: inline;
@@ -506,30 +518,43 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
     padding: 0;
 }
 
+
+
 /* .contentMenu .action *  - 
 .imj_contentSubMenuItem * {
     margin-right: 0.364em;
 }
 */
 
+/* .imj_contenSubMenu input, .imj_siteContenSubMenu a, .imj_siteContenSubMenu span {
+	font-size: 1.273em; /*1.455em;*/
+   /* margin-right: 0.636em; /*0.8181em;*/
+   /* text-align: left;
+    text-decoration: none;
+} */
+
+
+
 .imj_contentSubMenuItem span {
 	margin-right: 0.364em;
 }
     
 
-
-/* hard-coded span style - style="margin-top:0.18em; - template_paginator_containers.xhtml */
+/* hard-coded span style - style="margin-top:0.18em; - template_paginator_containers.xhtml - Images.xhtml */
 
 .imj_contentSubMenuItemSorting {
-	margin: 0.18em 0 0 0;
+	margin: 0.18em 0.364em 0 0;
 }
 
+
+/* free_area0 - template_paginator_containers.xhtml - template_paginator_albums.xhtml */
+
+.imj_contentSubMenuItemFiltering {
+	margin: 0.18em 0.364em 0 6.000em;
+}
   
 
-
-
-
-/* .contentMenu .seperator - template_paginator_containers.xhtml *    
+/* .contentMenu .seperator .void- template_paginator_containers.xhtml - Images.xhtml - template_paginator_albums.xhtml *    
 
     margin-left: 0.46em;
 	margin-right: 0.46em;
@@ -545,40 +570,21 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 	border-color: #292929;
 */ 
 
-
-.imj_contentMenuWrapper .imj_contentMenuSeperator  {
+.imj_contentMenuWrapper .imj_contentMenuSeparator  {
 	float: left;
 	width: 0.091em; /*0.10em;*/
 	height: 1.091em; /* 1.15em; */
 	
-	margin: 0 0.455em;
+	margin: 0 0.636em; /*0.455em;*/
 	padding: 0;
 }
 
 
 
 
-	
-	
-	
-}
 
 
 
-
-
-
-.imj_contentSubMenuItem {
-	display: inline;
-    float: left;
-    margin: 0 0.0909em 0 0;
-    overflow: hidden;
-    padding-bottom: 0;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    padding-top: 0;
-
-}
 
 .contentMenu {
 	margin-top: 0em;
@@ -610,25 +616,9 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 
 
 
-.imj_contenSubMenu input, .imj_siteContenSubMenu a, .imj_siteContenSubMenu span {
-	font-size: 1.273em; /*1.455em;*/
-    margin-right: 0.636em; /*0.8181em;*/
-    text-align: left;
-    text-decoration: none;
-}
 
 
 
-
-/* free_area0 span */
-
-.imj_contenMenuItem {
-	float: left;
-	display: inline;
-	overflow: hidden;
-	margin: 0 0.0909em 0 0;
-	padding: 0;
-}
 
 
 
@@ -691,7 +681,7 @@ cut second ? <h:panelGroup styleClass="half_area0 themePark"></h:panelGroup> ?
 
 .imj_siteContentHeadline h1 {
 	color: #F0F0F0;
-	font-size: 2.364em;
+	font-size: 2.182em; /*2.364em;*/
     letter-spacing: 0.091em;
     display: block;
     height: 0.9474em;

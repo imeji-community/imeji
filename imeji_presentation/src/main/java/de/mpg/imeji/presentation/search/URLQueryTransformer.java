@@ -24,7 +24,6 @@ import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -38,6 +37,15 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class URLQueryTransformer
 {
+    /**
+     * The Pattern to match a metadata search
+     */
+    private static String SEARCH_METADATA_PATTERN = "[a-z0-9-]+:[a-z_]+[=<>]{1,2}\".+\"\\s*";
+    /**
+     * The Pattern to match a search pair
+     */
+    private static String SEARCH_PAIR_PATTERN = "\\s*[^\\s]+[=<>]{1,2}\".+\"\\s*";
+
     /**
      * Parse a url search query into a {@link SearchQuery}. Decode the query with UTF-8
      * 
@@ -111,7 +119,8 @@ public class URLQueryTransformer
             }
             if (matchSearchMetadataPattern(scString))
             {
-                int indexOp = scString.indexOf("=");
+                String op = parseOperatorInSearchPattern(scString, SEARCH_METADATA_PATTERN);
+                int indexOp = scString.indexOf(op);
                 int indexValue = scString.indexOf("\"");
                 int indexIndex = scString.indexOf(":");
                 String value = scString.substring(indexValue + 1, scString.length() - 1).trim();
@@ -120,14 +129,16 @@ public class URLQueryTransformer
                     value += "\"";
                 }
                 SearchIndex index = Search.getIndex(scString.substring(indexIndex + 1, indexOp).trim());
-                SearchOperators operator = stringOperator2SearchOperator(scString.substring(indexOp, indexValue).trim());
-                searchQuery.addPair(new SearchMetadata(index, operator, value, ObjectHelper.getURI(Statement.class, scString.substring(0, indexIndex).trim()), not));
+                SearchOperators operator = stringOperator2SearchOperator(op);
+                searchQuery.addPair(new SearchMetadata(index, operator, value, ObjectHelper.getURI(Statement.class,
+                        scString.substring(0, indexIndex).trim()), not));
                 not = false;
                 scString = "";
             }
             else if (matchSearchPairPattern(scString))
             {
-                int indexOp = scString.indexOf("=");
+                String op = parseOperatorInSearchPattern(scString, SEARCH_PAIR_PATTERN);
+                int indexOp = scString.indexOf(op);
                 int indexValue = scString.indexOf("\"");
                 String value = scString.substring(indexValue + 1, scString.length() - 1).trim();
                 if (value.startsWith("\""))
@@ -135,7 +146,7 @@ public class URLQueryTransformer
                     value += "\"";
                 }
                 SearchIndex index = Search.getIndex(scString.substring(0, indexOp).trim());
-                SearchOperators operator = stringOperator2SearchOperator(scString.substring(indexOp, indexValue).trim());
+                SearchOperators operator = stringOperator2SearchOperator(op);
                 searchQuery.addPair(new SearchPair(index, operator, value, not));
                 scString = "";
                 not = false;
@@ -150,6 +161,24 @@ public class URLQueryTransformer
     }
 
     /**
+     * Parse the operator (=, ==, =<, >=) in the search pattern
+     * 
+     * @param pattern
+     * @return
+     */
+    private static String parseOperatorInSearchPattern(String str, String pattern)
+    {
+        for (SearchOperators op : SearchOperators.values())
+        {
+            String opString = operator2URL(op);
+            String opPattern = pattern.replace("[=<>]{1,2}", opString);
+            if (str.trim().matches(opPattern))
+                return opString;
+        }
+        throw new RuntimeException("Operator not found in " + pattern);
+    }
+
+    /**
      * Pattern to parse a {@link SearchPair} from an url query
      * 
      * @param str
@@ -157,7 +186,7 @@ public class URLQueryTransformer
      */
     private static boolean matchSearchPairPattern(String str)
     {
-        return str.trim().matches("\\s*[^\\s]+=.*\".+\"\\s*");
+        return str.trim().matches(SEARCH_PAIR_PATTERN);
     }
 
     /**
@@ -168,7 +197,7 @@ public class URLQueryTransformer
      */
     private static boolean matchSearchMetadataPattern(String str)
     {
-        return str.trim().matches("[a-z0-9-]+:[a-z_]+=.*\".+\"\\s*");
+        return str.trim().matches(SEARCH_METADATA_PATTERN);
     }
 
     /**
@@ -187,11 +216,11 @@ public class URLQueryTransformer
         {
             return SearchOperators.EQUALS;
         }
-        else if(">".equals(str))
+        else if (">=".equals(str))
         {
             return SearchOperators.GREATER;
         }
-        else if("<".equals(str))
+        else if ("<=".equals(str))
         {
             return SearchOperators.LESSER;
         }
@@ -314,12 +343,8 @@ public class URLQueryTransformer
     {
         switch (op)
         {
-//            case GREATER_DATE:
-//                return ">=";
             case GREATER:
                 return ">=";
-//            case LESSER_DATE:
-//                return "<=";
             case LESSER:
                 return "<=";
             case REGEX:
@@ -500,12 +525,8 @@ public class URLQueryTransformer
     {
         switch (op)
         {
-//            case GREATER_DATE:
-//                return ">=";
             case GREATER:
                 return ">=";
-//            case LESSER_DATE:
-//                return "<=";
             case LESSER:
                 return "<=";
             case EQUALS:

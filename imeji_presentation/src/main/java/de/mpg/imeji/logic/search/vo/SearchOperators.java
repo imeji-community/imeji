@@ -10,5 +10,4 @@ package de.mpg.imeji.logic.search.vo;
 public enum SearchOperators
 {
     REGEX, EQUALS, GREATER, LESSER;
-   // REGEX, EQUALS, GREATER_NUMBER, LESSER_NUMBER, URI, BOUND, EQUALS_NUMBER, EQUALS_DATE, GREATER_DATE, LESSER_DATE, NOT;
 }

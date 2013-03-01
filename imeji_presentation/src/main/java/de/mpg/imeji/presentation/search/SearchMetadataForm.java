@@ -20,6 +20,7 @@ import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
@@ -99,13 +100,13 @@ public class SearchMetadataForm
         switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
         {
             case DATE:
-                this.operator = SearchOperators.EQUALS;
+                //this.operator = SearchOperators.EQUALS;
                 operatorMenu.add(new SelectItem(SearchOperators.EQUALS, "="));
                 operatorMenu.add(new SelectItem(SearchOperators.GREATER, ">="));
                 operatorMenu.add(new SelectItem(SearchOperators.LESSER, "<="));
                 break;
             case NUMBER:
-                this.operator = SearchOperators.EQUALS;
+               // this.operator = SearchOperators.EQUALS;
                 operatorMenu.add(new SelectItem(SearchOperators.EQUALS, "="));
                 operatorMenu.add(new SelectItem(SearchOperators.GREATER, ">="));
                 operatorMenu.add(new SelectItem(SearchOperators.LESSER, "<="));
@@ -180,7 +181,7 @@ public class SearchMetadataForm
             {
                 case DATE:
                     group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.time.name()), operator,
-                            searchValue, ns, not));
+                            DateFormatter.format(searchValue), ns, not));
                     break;
                 case GEOLOCATION:
                     group.setNot(not);

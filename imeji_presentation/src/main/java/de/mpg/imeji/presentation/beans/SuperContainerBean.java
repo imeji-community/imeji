@@ -125,26 +125,26 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     public SearchPair getFilter()
     {
         SearchPair pair = null;
-//        if ("my".equals(selectedFilter))
-//        {
-//            pair = new SearchPair(Search.getIndex("MY_IMAGES"), SearchOperators.URI, ObjectHelper.getURI(User.class,
-//                    sb.getUser().getEmail()).toString());
-//        }
-//        else if ("private".equals(selectedFilter))
-//        {
-//            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.URI,
-//                    "http://imeji.org/terms/status#PENDING");
-//        }
-//        else if ("public".equals(selectedFilter))
-//        {
-//            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.URI,
-//                    "http://imeji.org/terms/status#RELEASED");
-//        }
-//        else if ("withdrawn".equals(selectedFilter))
-//        {
-//            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.URI,
-//                    "http://imeji.org/terms/status#WITHDRAWN");
-//        }
+        if ("my".equals(selectedFilter))
+        {
+            pair = new SearchPair(Search.getIndex("MY_IMAGES"), SearchOperators.EQUALS, ObjectHelper.getURI(User.class,
+                    sb.getUser().getEmail()).toString());
+        }
+        else if ("private".equals(selectedFilter))
+        {
+            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.EQUALS,
+                    "http://imeji.org/terms/status#PENDING");
+        }
+        else if ("public".equals(selectedFilter))
+        {
+            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.EQUALS,
+                    "http://imeji.org/terms/status#RELEASED");
+        }
+        else if ("withdrawn".equals(selectedFilter))
+        {
+            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.EQUALS,
+                    "http://imeji.org/terms/status#WITHDRAWN");
+        }
         return pair;
     }
 

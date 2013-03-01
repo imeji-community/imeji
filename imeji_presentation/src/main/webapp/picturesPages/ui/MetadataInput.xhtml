@@ -73,7 +73,7 @@
 		
 		<!-- METADATA TYPE DATE -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and !SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
-			<h:inputText styleClass="huge_txtInput" value="#{metadata.date}" immediate="true"/>
+			<h:inputText styleClass="huge_txtInput" value="#{metadata.date}" immediate="false"/>
 			<h:outputLabel value="YYYY-MM-DD" styleClass="medium_label"/>		
 		</h:panelGroup>
 		<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.date}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and SuggestBean.suggests[metadata.statement].hasRestrictedValues}">

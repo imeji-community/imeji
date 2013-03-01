@@ -6,7 +6,9 @@ package de.mpg.imeji.logic.search.query;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.mpg.imeji.logic.search.Search;
@@ -215,90 +217,14 @@ public class SimpleQueryFactory
                     filter += "regex(" + variable + ", '" + pair.getValue() + "', 'i')";
                     break;
                 case EQUALS:
-                    String value = "'" + pair.getValue() + "'";
-                    try
-                    {
-                        URI.create(value);
-                        value = "<" + value + ">";
-                    }
-                    catch (Exception e)
-                    {
-                        // not a URI
-                    }
-                    try
-                    {
-                        Double.valueOf(value);
-                        value = "'" + value + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                    }
-                    catch (Exception e)
-                    {
-                        // not a double
-                    }
-                    try
-                    {
-                        double t = DateFormatter.getTime(pair.getValue());
-                        value = "'" + t + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                    }
-                    catch (Exception e)
-                    {
-                        // not a date
-                    }
-                    filter += variable + "=" + value;
+                    filter += variable + "=" + getSearchValueInSPARQL(pair.getValue());
                     break;
-                // case NOT:
-                // filter += variable + "!='" + pair.getValue() + "'";
-                // break;
-                // case BOUND:
-                // filter += "bound(" + variable + ")=" + pair.getValue() + "";
-                // break;
-                // case EQUALS_NUMBER:
-                // try
-                // {
-                // Double d = Double.valueOf(pair.getValue());
-                // filter += variable + "='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                // }
-                // catch (Exception e)
-                // {/* Not a double */
-                // filter += variable + "='" + DateFormatter.getTime(pair.getValue())
-                // + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                // }
-                // break;
                 case GREATER:
-                    try
-                    {
-                        Double d = Double.valueOf(pair.getValue());
-                        filter += variable + ">='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                    }
-                    catch (Exception e)
-                    {/* Not a double */
-                        filter += variable + ">='" + DateFormatter.getTime(pair.getValue())
-                                + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                    }
+                    filter += variable + ">=" + getSearchValueInSPARQL(pair.getValue());
                     break;
                 case LESSER:
-                    try
-                    {
-                        Double d = Double.valueOf(pair.getValue());
-                        filter += variable + "<='" + d + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                    }
-                    catch (Exception e)
-                    {/* Not a double */
-                        filter += variable + "<='" + DateFormatter.getTime(pair.getValue())
-                                + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-                    }
+                    filter += variable + "<=" + getSearchValueInSPARQL(pair.getValue());
                     break;
-//                case EQUALS_DATE:
-//                    filter += variable + "='" + DateFormatter.getTime(pair.getValue())
-//                            + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-//                    break;
-//                case GREATER_DATE:
-//                    filter += variable + ">='" + DateFormatter.getTime(pair.getValue())
-//                            + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-//                    break;
-//                case LESSER_DATE:
-//                    filter += variable + "<='" + DateFormatter.getTime(pair.getValue())
-//                            + "'^^<http://www.w3.org/2001/XMLSchema#double>";
-//                    break;
                 default:
                     if (pair.getValue().startsWith("\"") && pair.getValue().endsWith("\""))
                     {
@@ -316,6 +242,62 @@ public class SimpleQueryFactory
             filter += " && ?el1=<" + ((SearchMetadata)pair).getStatement().toString() + ">";
         }
         return filter;
+    }
+
+    /**
+     * Return the search value in SPARQL
+     * 
+     * @param str
+     * @return
+     */
+    private static String getSearchValueInSPARQL(String str)
+    {
+        if (isURL(str))
+        {
+            return "<" + URI.create(str) + ">";
+        }
+        else if (isDate(str))
+        {
+            return "'" + DateFormatter.getTime(str) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+        }
+        else if (isNumber(str))
+        {
+            return "'" + Double.valueOf(str) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+        }
+        return "'" + str + "'";
+    }
+
+    /**
+     * True if the {@link String} is an URL
+     * 
+     * @param str
+     * @return
+     */
+    private static boolean isURL(String str)
+    {
+        return str.matches("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    }
+
+    /**
+     * True if the String is a {@link Date}
+     * 
+     * @param str
+     * @return
+     */
+    private static boolean isDate(String str)
+    {
+        return DateFormatter.parseDate(str, "yyyy-MM-dd") != null;
+    }
+
+    /**
+     * True if it is a Number
+     * 
+     * @param str
+     * @return
+     */
+    private static boolean isNumber(String str)
+    {
+        return str.matches("[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?");
     }
 
     /**

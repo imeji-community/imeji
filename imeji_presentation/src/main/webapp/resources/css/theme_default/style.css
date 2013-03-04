@@ -651,7 +651,8 @@ span.imj_contentMenuItem {
 }
 
 .imj_simpleSearch input[type=radio] {
-    border: 0 none
+    border: 0 none;
+    margin: 0.091em 0 0 0.091em;
 }
 
 .imj_simpleSearch input[type=radio]+label {
@@ -700,16 +701,18 @@ span.imj_contentMenuItem {
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpTitle {
-    margin-right: 0.3636em
+    margin-right: 0.3636em;
+    font-size: 1.091em;
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpItem {
-    line-height: 2.18em
+    line-height: 2.000em; /*2.18em*/
+    font-size: 1.091em;
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpSeparator {
-    margin-left: 0.3636em;
-    margin-right: 0.3636em;
+    margin-left: 0.364em; /*0.3636em;*/
+    margin-right: 0.364em;
 }
 
 /* * metaMenuStandard

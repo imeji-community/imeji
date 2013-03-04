@@ -11,6 +11,12 @@
 /* imeji basic - global - styles for theme_default
    ================================================== */
 
+
+body * {
+	font-family: 'Open Sans',sans-serif;
+}
+
+
 .imj_clear {
     clear: both;
 }
@@ -527,7 +533,7 @@ cut second ?  ?
     padding: 1%;
     display: inline;
     font-size: 1.0909em;*/
-    padding: 0.5%;
+    padding: 0.4%;
     background-color: #323232;
     border-radius: 0.41666666em;
     -webkit-border-radius: 0.41666666em;
@@ -591,7 +597,7 @@ cut second ?  ?
     margin: 0;
     padding: 0;
     text-transform: uppercase;
-    line-height: normal;
+    /*line-height: normal;*/
     letter-spacing: 0.091em;
 }
 
@@ -606,7 +612,7 @@ cut second ?  ?
 }
 
 .imj_contentMenuItemCreateAlbum {
-    margin-left: 10.455em
+    margin-left: 11.455em; /*10.455em*/
 }
 
 span.imj_contentMenuItem {
@@ -706,19 +712,19 @@ span.imj_contentMenuItem {
 
 .imj_contentSubMenuItem span,
 .imj_contentSubMenuItem a {
-    margin-right: 0.364em
+    margin-right: 0.364em;
 }
 
 /* hard-coded span style - style="margin-top:0.18em; - template_paginator_containers.xhtml - Images.xhtml */
 
 .imj_contentSubMenuItemSorting {
-    margin: 0.18em 0.364em 0 0
+    margin: 0.18em 0.364em 0 0;
 }
 
 /* free_area0 - template_paginator_containers.xhtml - template_paginator_albums.xhtml  */
 
-.imj_contentSubMenuItemFiltering {
-    margin: 0.18em 0.364em 0 6.000em
+span.imj_contentSubMenuItemFiltering {
+    margin: 0.18em 0.364em 0 6.364em; /*6.000em*/
 }
 
 
@@ -747,7 +753,8 @@ span.imj_contentMenuItem {
 
 .imj_siteContentHeadline h1 {
     color: #F0F0F0;
-    font-size: 2.182em; /*2.364em*/
+    font-size: 1.455em; /*2.182em; 2.364em*/
+    font-weight: bold;
     letter-spacing: 0.091em;
     display: block;
     height: 0.9474em;
@@ -929,12 +936,12 @@ OLD:
 .imj_breadcrumpHistory .imj_breadcrumpTitle {
     margin-right: 0.3636em;
     font-size: 1.091em;
-    background-color: #323232;
+    /*background-color: #292929;
     border-radius: 0.41666666em;
     -webkit-border-radius: 0.41666666em;
     -moz-border-radius: 0.41666666em;
     -o-border-radius: 0.41666666em;
-    -ms-border-radius: 0.41666666em;
+    -ms-border-radius: 0.41666666em; */
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpItem {

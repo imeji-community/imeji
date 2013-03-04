@@ -88,9 +88,9 @@ All rights reserved. Use is subject to license terms.
 								<ui:insert name="additionalSubheaders">
 									&#160;
 								</ui:insert>
-								<div class="full_area0 subHeader">
-									<!-- Subheadline starts here -->
-									<h:panelGroup id="subHeader">
+								<div class="imj_subHeaderMessageSpace">
+									<!-- Subheadline starts here  - old: id="subHeader" -->
+									<h:panelGroup id="imj_subHeaderMessage">
 										<h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
 										<h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
 											<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>

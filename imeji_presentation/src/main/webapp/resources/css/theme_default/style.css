@@ -226,14 +226,15 @@ textarea {
   }
    ================================================== */
 
-/* header wrapper (header.jspf - template.xhtml)  */
 
+
+/* ===[ SiteHeader ]=== */
+
+/* header wrapper (header.jspf - template.xhtml)  */
 /* full_area0 header imj_clear - header.jspf 
 
 margin-top: 0.5454em;
-    margin-bottom: 0.9090em;
-
-*/
+margin-bottom: 0.9090em; */
 
 .imj_siteHeader {
     clear: both;
@@ -244,6 +245,80 @@ margin-top: 0.5454em;
     margin: 0 0.0909em 0 0;
     padding: 0;
 }
+
+
+/* ===[ MetaMenu - SiteHeader top right]=== */
+
+/* * metaMenuStandard
+   ================================================== */
+
+.imj_metaMenuStandardSingleLine {
+    width: 100%
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItemsAlign {
+    float: right
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {
+    height: 1.5454em;
+    width: 0.0909em;
+    margin: 0 0.72727em;
+    border-right: solid #6CAD2F 0.090909em;
+    display: inline-block;
+}
+
+.imj_metaMenuStandardSingleLine select.imj_metaMenuItem {
+    color: #000000
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] {
+    color: #6CAD2F;
+    display: inline;
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"],
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] {
+    background-color: #292929;
+    color: #6CAD2F;
+    font-size: 0.75em;
+    height: 1.4545em;
+    width: 10.2727em;
+    border: solid #6CAD2F 0.0909em;
+    margin-right: 0.1818em;
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:hover,
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:hover {
+    color: #FFFFFF
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:focus,
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:focus {
+    color: #FFFFFF
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {
+    background-color: #292929;
+    color: #6CAD2F;
+    padding: 0;
+    height: 1.4545em;
+    border: none 0;
+    padding-top: 0.1818em;
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {
+    color: #FFFFFF
+}
+
+
+
+
+
+
+
+/* ===[ SiteHeader - Logo + Search Area]=== */
+
 
 /* full_area0 LogoNSearch  */
 
@@ -261,7 +336,7 @@ margin-top: 0.5454em;
 cut second ?  ?
  */
 
-/* ===[ Logo - Header ]=== */
+/* ===[ SiteHeader - Logo ]=== */
 
 .imj_siteHeaderLogo {
     background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif");
@@ -301,6 +376,81 @@ cut second ?  ?
     padding: 0;
 }
 
+
+
+/* ===[ SiteHeader - SimpleSearch ]=== */
+
+.imj_simpleSearch {
+    float: right;
+    margin: 1.5em 0 0 0;
+    overflow: visible;
+}
+
+.imj_icoMagnifier_ffffff_23 {
+    float: left;
+    display: inline-block;
+    height: 2em;
+    width: 2em;
+    margin-right: 1em; /*0.636363em*/
+    margin-top: -0.1818em;
+    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/All_Search_LensStart_23_Static.gif");
+    /* ?!? url("../../imj_iconset/All_Search_LensStart_23_Static.gif"); - relative path does not work! *** 
+    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png");
+    - produces a 'bottom-line' - is not transparent! *** */
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.imj_simpleSearchInputWrapper {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.imj_simpleSearchInput {
+    width: 17em;
+}
+
+.imj_simpleSearchButtonSubmit {
+    height: 1.818em; /*1.7272em*/
+    margin-left: 0.455em; /*0.37em*/
+    padding: 0.091em 1em; /* 0.0909em 1em*/
+    background-color: #6CAD2F;
+    border-color: #6CAD2F;
+    color: #F0F0F0;
+}
+
+.imj_simpleSearchButtonSubmit:hover {
+    background-color: #393939;
+    border-color: #393939;
+    color: #FFFFFF;
+}
+
+.imj_simpleSearch input[type=radio] {
+    border: 0 none;
+    margin: 0.091em 0 0 0.091em;
+}
+
+.imj_simpleSearch input[type=radio]+label {
+    margin-right: 1em;
+}
+
+.imj_simpleSearchLinkAdvancedsearch {
+    margin-top: 0.18em;
+    margin-left: 2.0909em;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+
+
+
+/* ===[ Site Content ]=== */
+
+/* * site content - sections - header
+   * mainMenu, metaMenu, contentMenu, contentSubMenu 
+   ================================================== */
+
+
 /* id="content" class="imj_clear full_area0" 
 
     margin-top: 0.5454em;
@@ -330,6 +480,10 @@ cut second ?  ?
     padding: 0;
 }
 
+
+
+/* ===[ Main Menu ]=== */
+
 /* * mainMenuStandard  - MainMenu.jspf
    ================================================== */
 
@@ -358,7 +512,6 @@ cut second ?  ?
 
  */
 
-/* ===[ Main Menu ]=== */
 
 /* .mainMenu input, .mainMenu a, .mainMenu span
    ================================================== */
@@ -403,7 +556,9 @@ cut second ?  ?
     color: #F0F0F0;
 }
 
-/* ===[ Content ]=== */
+
+/* ===[ SiteHeader - Content Sub Section (Content-Menus) ]=== */
+
 
 /* small_marginLIncl subHeaderSection  */
 
@@ -412,7 +567,8 @@ cut second ?  ?
     margin-left: 5.636em; /* 5.8181em*/
 }
 
-/* contentMenu  */
+
+/* ===[ Content - Menu ]=== */
 
 .imj_contentMenuWrapper {
     margin-top: 0.500em;
@@ -490,10 +646,9 @@ span.imj_contentMenuItem {
 }
 
 
-
+/* ===[ Content - SubMenu ]=== */
 
 /* .contentMenu * !!!
-
 .imj_contentMenu * {
     float: left;
     line-height: normal;
@@ -568,8 +723,7 @@ span.imj_contentMenuItem {
 
 
 
-
-
+/* ===[ Content Headline ]=== */
 
 /* id="contentSkipLinkAnchor" class="headLine" */
 
@@ -602,69 +756,104 @@ span.imj_contentMenuItem {
     margin: -0.11em 0 0.28em;
 }
 
-/* * simple search menu
+
+/* ===[ Content - Sub Header Message Space ]=== */
+
+/* div - .subHeader - header.css - template.xhtml */
+
+.imj_subHeaderMessageSpace {
+    clear: both;
+    float: left;
+    display: inline;
+    overflow: hidden;
+    margin: 0.65em 0.0909em 0 0;
+    width: 81.3636em;
+}
+
+/* span .subHeader - no style */ 
+
+/* Messages */
+
+.singleMessage {
+    list-style-position: outside;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.singleMessage li {
+    margin: 0;
+    padding: 0;
+}
+.messageStatus {
+    color: #00712B;
+}
+
+
+
+
+
+.subHeaderSection .subHeader {
+	float:left;
+/*	margin-top:1.6363em; */
+	padding-top:0.3636em;
+	clear:all;
+}
+	
+
+
+.fullItem .itemBlockSubHeader {
+	float: left;
+	white-space: nowrap;
+	margin-left: -0.74em;
+}
+
+
+
+
+
+/* ===[ Content - Breadcrump History Navigation ]=== */
+
+/* * breadcrump component (History.xhtml)
    ================================================== */
 
-.imj_simpleSearch {
-    float: right;
-    margin: 1.5em 0 0 0;
-    overflow: visible;
+.imj_breadcrumpHistory {
+    width: 92.75%;
+    padding-left: 7%;
 }
 
-.imj_icoMagnifier_ffffff_23 {
-    float: left;
-    display: inline-block;
-    height: 2em;
-    width: 2em;
-    margin-right: 1em; /*0.636363em*/
-    margin-top: -0.1818em;
-    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/All_Search_LensStart_23_Static.gif");
-    /* ?!? url("../../imj_iconset/All_Search_LensStart_23_Static.gif"); - relative path does not work! *** 
-    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png");
-    - produces a 'bottom-line' - is not transparent! *** */
-    background-position: center center;
-    background-repeat: no-repeat;
+.imj_breadcrumpHistory .imj_breadcrumpTitle {
+    margin-right: 0.3636em;
+    font-size: 1.091em;
 }
 
-.imj_simpleSearchInputWrapper {
-    display: inline-block;
-    vertical-align: top;
+.imj_breadcrumpHistory .imj_breadcrumpItem {
+    line-height: 2.000em; /*2.18em*/
+    font-size: 1.091em;
 }
 
-.imj_simpleSearchInput {
-    width: 17em
+.imj_breadcrumpHistory .imj_breadcrumpSeparator {
+    margin-left: 0.364em; /*0.3636em;*/
+    margin-right: 0.364em;
 }
 
-.imj_simpleSearchButtonSubmit {
-    height: 1.818em; /*1.7272em*/
-    margin-left: 0.455em; /*0.37em*/
-    padding: 0.091em 1em; /* 0.0909em 1em*/
-    background-color: #6CAD2F;
-    border-color: #6CAD2F;
-    color: #F0F0F0;
-}
 
-.imj_simpleSearchButtonSubmit:hover {
-    background-color: #393939;
-    border-color: #393939;
-    color: #FFFFFF;
-}
 
-.imj_simpleSearch input[type=radio] {
-    border: 0 none;
-    margin: 0.091em 0 0 0.091em;
-}
 
-.imj_simpleSearch input[type=radio]+label {
-    margin-right: 1em
-}
 
-.imj_simpleSearchLinkAdvancedsearch {
-    margin-top: 0.18em;
-    margin-left: 2.0909em;
-    white-space: nowrap;
-    display: inline-block;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===[ Footer ]=== */
 
 /* * footer - info, image
    ================================================== */
@@ -692,90 +881,7 @@ span.imj_contentMenuItem {
     font-size: 75%;
 }
 
-/* * breadcrump component (History.xhtml)
-   ================================================== */
 
-.imj_breadcrumpHistory {
-    width: 92.75%;
-    padding-left: 7%;
-}
-
-.imj_breadcrumpHistory .imj_breadcrumpTitle {
-    margin-right: 0.3636em;
-    font-size: 1.091em;
-}
-
-.imj_breadcrumpHistory .imj_breadcrumpItem {
-    line-height: 2.000em; /*2.18em*/
-    font-size: 1.091em;
-}
-
-.imj_breadcrumpHistory .imj_breadcrumpSeparator {
-    margin-left: 0.364em; /*0.3636em;*/
-    margin-right: 0.364em;
-}
-
-/* * metaMenuStandard
-   ================================================== */
-
-.imj_metaMenuStandardSingleLine {
-    width: 100%
-}
-
-.imj_metaMenuStandardSingleLine .imj_metaMenuItemsAlign {
-    float: right
-}
-
-.imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {
-    height: 1.5454em;
-    width: 0.0909em;
-    margin: 0 0.72727em;
-    border-right: solid #6CAD2F 0.090909em;
-    display: inline-block;
-}
-
-.imj_metaMenuStandardSingleLine select.imj_metaMenuItem {
-    color: #000000
-}
-
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] {
-    color: #6CAD2F;
-    display: inline;
-}
-
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"],
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] {
-    background-color: #292929;
-    color: #6CAD2F;
-    font-size: 0.75em;
-    height: 1.4545em;
-    width: 10.2727em;
-    border: solid #6CAD2F 0.0909em;
-    margin-right: 0.1818em;
-}
-
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:hover,
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:hover {
-    color: #FFFFFF
-}
-
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:focus,
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:focus {
-    color: #FFFFFF
-}
-
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {
-    background-color: #292929;
-    color: #6CAD2F;
-    padding: 0;
-    height: 1.4545em;
-    border: none 0;
-    padding-top: 0.1818em;
-}
-
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {
-    color: #FFFFFF
-}
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]=== */
 

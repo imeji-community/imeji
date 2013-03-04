@@ -22,16 +22,16 @@ $(function() {
 	// This add auto-complete to all input fields on page,
 	// i.e, field has class "xHuge_txtInput"
 	$(":input")
-	// don't navigate away from the field on tab when selecting an item
+			// don't navigate away from the field on tab when selecting an item
 
-	.bind(
-			"keydown",
-			function(event) {
-				if (event.keyCode === $.ui.keyCode.TAB
-						&& $(this).data("autocomplete").menu.active) {
-					event.preventDefault();
-				}
-			})
+			.bind(
+					"keydown",
+					function(event) {
+						if (event.keyCode === $.ui.keyCode.TAB
+								&& $(this).data("autocomplete").menu.active) {
+							event.preventDefault();
+						}
+					})
 			.autocomplete(
 					{
 						// source: datasourceUrl,
@@ -56,6 +56,11 @@ $(function() {
 								response(result);
 							});
 						},
+						messages : {
+							noResults : '',
+							results : function() {return '';
+							}
+						},
 						// this search event fired before search beginning
 						// and it is used to cancel "unqualified" search,
 						// i.e.,return false;
@@ -72,25 +77,58 @@ $(function() {
 							// prevent value inserted on focus
 							return false;
 						},
-						// Action fired when use select a value from popup
-						// fill-in inputLatitude and inputLongitude fields for
-						// geolocation search
-						// fill-in all names, institute fields... for name
-						// search
-						// Ref; http://jqueryui.com/autocomplete/#custom-data
+						/**
+						 * Action triggered when a value is selected in the
+						 * autocomplete. Fill in the input values
+						 * 
+						 * @param event
+						 * @param ui
+						 * @returns {Boolean}
+						 */
 						select : function(event, ui) {
-							if (this.id.indexOf("inputLocationName") != -1) {
-								// FIXME how to get complete ids for input
-								// fields below?
-								// $( "#inputLatitude" ).val(
-								// ui.item.location.lat );
-								// $( "#inputLongitude" ).val(
-								// ui.item.location.lat );
-								alert("TODO: fillin Lat and Long fields with:"
-										+ [ ui.item.location.lat,
-												ui.item.location.lat ])
+							/*
+							 * User the id of the current input to set the
+							 * values of the others input
+							 */
+							var idEls = this.id.split(":");
+							var inputId = "";
+
+							for ( var i = 0; i < idEls.length - 1; i++) {
+								inputId = inputId + idEls[i] + ":";
 							}
-							return;
+							// Write the value of the current input
+							if (ui.item.value != null) {
+								document.getElementById(this.id).value = ui.item.value;
+							}
+							if (ui.item.family != null) {
+								document.getElementById(inputId
+										+ "inputFamilyName").value = ui.item.family;
+							}
+							if (ui.item.givenname != null) {
+								document.getElementById(inputId
+										+ "inputFirstName").value = ui.item.givenname;
+							}
+							if (ui.item.alternatives) {
+								document.getElementById(inputId
+										+ "inputAlternative").value = ui.item.alternatives;
+							}
+							if (ui.item.id != null) {
+								document.getElementById(inputId
+										+ "inputIdentifier").value = ui.item.id;
+							}
+							if (ui.item.orgs != null) {
+								document.getElementById(inputId
+										+ "inputOrganization").value = ui.item.orgs;
+							}
+							if (ui.item.latitude != null) {
+								document.getElementById(inputId
+										+ "inputLatitude").value = ui.item.latitude;
+							}
+							if (ui.item.longitude != null) {
+								document.getElementById(inputId
+										+ "inputLongitude").value = ui.item.longitude;
+							}
+							return false;
 						}
 					});
 });

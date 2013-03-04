@@ -222,7 +222,7 @@
 										</ui:repeat>
 										<div class="vertDist050 linebreak"></div>
 										<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd'}" layout="block" styleClass="quad_area0_p1">
-											<div class="large_marginLExcl marginTExcl025">
+											<div class="free_area0_p4 large_marginLExcl marginTExcl025">
 												<div class="small_txtBtn">
 													<h:commandLink styleClass="small_txtBtn dialogCancelButton"  action="#{imageBean.edit.cancel}">
 														<f:ajax execute="@this" render=":metadata"/>
@@ -230,7 +230,7 @@
 													</h:commandLink>
 												</div>
 												<div class="small_txtBtn xTiny_marginLExcl">
-													<h:commandButton  styleClass="free_area0_p0 medium_marginLExcl small_txtBtn dialogActiveButton"  action="#{imageBean.edit.save}" value="#{lbl.save}">
+													<h:commandButton styleClass="free_area0_p0 medium_marginLExcl small_txtBtn dialogActiveButton"  action="#{imageBean.edit.save}" value="#{lbl.save}">
 														<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 													</h:commandButton>
 												</div>

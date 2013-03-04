@@ -6,16 +6,15 @@
  *** imeji style prefix for all classes and ids: imj_ 
  * 
  ==========================================================================
+   ==================================================
    ================================================== */
 
 /* imeji basic - global - styles for theme_default
-   ================================================== */
-
+   ==================================================  */
 
 body * {
-	font-family: 'Open Sans',sans-serif;
+    font-family: 'Open Sans',sans-serif;
 }
-
 
 .imj_clear {
     clear: both;
@@ -54,6 +53,7 @@ select {
 }
 
 /* *** special styles for welcome-page - start-page - infos, tabs, carousel, twitter-widget - Welcome.xhtml ***
+   ==================================================
    ================================================== */
 
 /* div.header {
@@ -65,10 +65,10 @@ div.searchMenu {
     margin-top: 5.5em;
     margin-left: 5.5em;
 }
- */
+  */
 
 #imj_welcomeInfoWrapper {
-    float: left
+    float: left;
 }
 
 .imj_welcomeInfo {
@@ -110,11 +110,11 @@ div.searchMenu {
 }
 
 .imj_welcomeInfo .id_tabs li.ui-state-active a {
-    color: #F0F0F0
+    color: #F0F0F0;
 }
 
 .imj_welcomeInfo .id_tabs div.ui-tabs-hide {
-    display: none
+    display: none;
 }
 
 .imj_startpage_carouselWrapper {
@@ -144,7 +144,7 @@ div.searchMenu {
 }
 
 .imj_startpage_carousel #cloudinfoText {
-    display: none
+    display: none;
 }
 
 .dynamicCloudinfo {
@@ -155,11 +155,11 @@ div.searchMenu {
 }
 
 .imj_startpage_carousel #title-text {
-    margin: 0
+    margin: 0;
 }
 
 .imj_startpage_carousel #alt-text {
-    margin: 0
+    margin: 0;
 }
 
 iframe#twitter-widget-0 {
@@ -168,29 +168,31 @@ iframe#twitter-widget-0 {
 }
 
 iframe#twitter-widget-0 div.root div.stream {
-    height: 20em !important
+    height: 20em !important;
 }
 
 /* * content container for Welcome.xhtml
+   ==================================================
    ================================================== */
 
 .imj_cont_1 {
-    width: 100%
+    width: 100%;
 }
 
 .imj_cont_1_2 {
-    width: 49.85%
+    width: 49.85%;
 }
 
 .imj_cont_2_5 {
-    width: 39.85%
+    width: 39.85%;
 }
 
 .imj_cont_3_5 {
-    width: 59.85%
+    width: 59.85%;
 }
 
 /* * imeji template styles (template.xhtml)
+   ==================================================
    ================================================== */
 
 /* *LINE HEIGHTS*
@@ -199,10 +201,11 @@ iframe#twitter-widget-0 div.root div.stream {
     margin-top: 0.5454em;
     margin-bottom: 0.9090em;
 }
+   ==================================================
    ================================================== */
 
-
 /* * site wrapper  - template.xhtml *
+   ==================================================
    ================================================== */
 
 .imj_siteWrapper {
@@ -219,7 +222,7 @@ iframe#twitter-widget-0 div.root div.stream {
 .imj_siteWrapper input[type="text"],
 input[type="password"],
 textarea {
-    font-family: Courier,"Courier New",serif
+    font-family: Courier,"Courier New",serif;
 }
 
 /* * welcome-page - start-page - infos, tabs, carousel, twitter-widget (Welcome.xhtml) 
@@ -230,17 +233,18 @@ textarea {
   margin-top: 0.5454em;
   margin-bottom: 0.9090em;
   }
+   ==================================================
    ================================================== */
 
+/* ===[ SiteHeader ]===
+   ================================================== */
 
+/* header wrapper (header.jspf - template.xhtml)   */
 
-/* ===[ SiteHeader ]=== */
-
-/* header wrapper (header.jspf - template.xhtml)  */
 /* full_area0 header imj_clear - header.jspf 
 
 margin-top: 0.5454em;
-margin-bottom: 0.9090em; */
+margin-bottom: 0.9090em;  */
 
 .imj_siteHeader {
     clear: both;
@@ -252,18 +256,19 @@ margin-bottom: 0.9090em; */
     padding: 0;
 }
 
-
-/* ===[ MetaMenu - SiteHeader top right]=== */
+/* ===[ MetaMenu - SiteHeader top right]===
+   ================================================== */
 
 /* * metaMenuStandard
+   ==================================================
    ================================================== */
 
 .imj_metaMenuStandardSingleLine {
-    width: 100%
+    width: 100%;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItemsAlign {
-    float: right
+    float: right;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {
@@ -275,7 +280,7 @@ margin-bottom: 0.9090em; */
 }
 
 .imj_metaMenuStandardSingleLine select.imj_metaMenuItem {
-    color: #000000
+    color: #000000;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] {
@@ -296,12 +301,12 @@ margin-bottom: 0.9090em; */
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:hover,
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:hover {
-    color: #FFFFFF
+    color: #FFFFFF;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:focus,
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:focus {
-    color: #FFFFFF
+    color: #FFFFFF;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {
@@ -317,16 +322,10 @@ margin-bottom: 0.9090em; */
     color: #FFFFFF
 }
 
+/* ===[ SiteHeader - Logo + Search Area]===
+   ================================================== */
 
-
-
-
-
-
-/* ===[ SiteHeader - Logo + Search Area]=== */
-
-
-/* full_area0 LogoNSearch  */
+/* full_area0 LogoNSearch   */
 
 .imj_siteHeaderLogoSearchSection {
     float: left;
@@ -340,13 +339,14 @@ margin-bottom: 0.9090em; */
 
 /* xTiny_marginLExcl half_area0 headerLogo 
 cut second ?  ?
- */
+  */
 
-/* ===[ SiteHeader - Logo ]=== */
+/* ===[ SiteHeader - Logo ]===
+   ================================================== */
 
 .imj_siteHeaderLogo {
     background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif");
-    /* ?!? url("../../imj_iconset/logo_imeji.giff"); ?!?*/
+    /* ?!? url("../../imj_iconset/logo_imeji.giff"); ?!?_NO__DOTCOMMA__AFTER__*/
     background-position: left top;
     background-repeat: no-repeat;
     float: left;
@@ -358,7 +358,7 @@ cut second ?  ?
     padding: 0;
 }
 
-/* half_area0 themePark - header.jspf  */
+/* half_area0 themePark - header.jspf   */
 
 /* .themePark {
     background-attachment: inherit;
@@ -370,6 +370,7 @@ cut second ?  ?
     background-repeat: no-repeat;
     background-size: inherit;
 }
+   ==================================================
    ================================================== */
 
 .imj_siteHeaderLogoTheme {
@@ -382,9 +383,8 @@ cut second ?  ?
     padding: 0;
 }
 
-
-
-/* ===[ SiteHeader - SimpleSearch ]=== */
+/* ===[ SiteHeader - SimpleSearch ]===
+   ================================================== */
 
 .imj_simpleSearch {
     float: right;
@@ -400,7 +400,7 @@ cut second ?  ?
     margin-right: 1em; /*0.636363em*/
     margin-top: -0.1818em;
     background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/All_Search_LensStart_23_Static.gif");
-    /* ?!? url("../../imj_iconset/All_Search_LensStart_23_Static.gif"); - relative path does not work! *** 
+    /* ?!? url("../../imj_iconset/All_Search_LensStart_23_Static.gif"); - relative path does not work! *** : ;
     background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png");
     - produces a 'bottom-line' - is not transparent! *** */
     background-position: center center;
@@ -414,6 +414,7 @@ cut second ?  ?
 
 .imj_simpleSearchInput {
     width: 17em;
+    padding: 0.1em;
 }
 
 .imj_simpleSearchButtonSubmit {
@@ -437,7 +438,7 @@ cut second ?  ?
 }
 
 .imj_simpleSearch input[type=radio]+label {
-    margin-right: 1em;
+    margin-right: 1em
 }
 
 .imj_simpleSearchLinkAdvancedsearch {
@@ -447,15 +448,13 @@ cut second ?  ?
     display: inline-block;
 }
 
-
-
-
-/* ===[ Site Content ]=== */
+/* ===[ Site Content ]===
+   ================================================== */
 
 /* * site content - sections - header
    * mainMenu, metaMenu, contentMenu, contentSubMenu 
+   ==================================================
    ================================================== */
-
 
 /* id="content" class="imj_clear full_area0" 
 
@@ -474,7 +473,7 @@ cut second ?  ?
     padding: 0 0 2.001em 0;
 }
 
-/* imj_clear full_area0  */
+/* imj_clear full_area0   */
 
 .imj_siteContentSection {
     clear: both;
@@ -486,14 +485,14 @@ cut second ?  ?
     padding: 0;
 }
 
-
-
-/* ===[ Main Menu ]=== */
-
-/* * mainMenuStandard  - MainMenu.jspf
+/* ===[ Main Menu ]===
    ================================================== */
 
-/* full_area0 mainMenu  */
+/* * mainMenuStandard  - MainMenu.jspf
+   ==================================================
+   ================================================== */
+
+/* full_area0 mainMenu   */
 
 .imj_mainMenuStandard {
     float: left;
@@ -516,10 +515,10 @@ cut second ?  ?
     padding: 0;
 }
 
- */
-
+  */
 
 /* .mainMenu input, .mainMenu a, .mainMenu span
+   ==================================================
    ================================================== */
 
 .imj_mainMenuStandard input,
@@ -529,7 +528,7 @@ cut second ?  ?
     margin-right: 0.636em; /*0.8181em*/
     text-align: left;
     letter-spacing: 0.091em;
-    /* margin-left: 1%;;
+    /* margin-left: 1%;;;
     padding: 1%;
     display: inline;
     font-size: 1.0909em;*/
@@ -549,10 +548,11 @@ cut second ?  ?
 }
 
 .imj_mainMenuStandard a {
-    text-decoration: none
+    text-decoration: none;
 }
 
 /* .mainMenu input:hover, .mainMenu input:focus, .mainMenu a:hover, .mainMenu a:focus
+   ==================================================
    ================================================== */
 
 .imj_mainMenuStandard input:hover,
@@ -562,19 +562,18 @@ cut second ?  ?
     color: #F0F0F0;
 }
 
+/* ===[ SiteHeader - Content Sub Section (Content-Menus) ]===
+   ================================================== */
 
-/* ===[ SiteHeader - Content Sub Section (Content-Menus) ]=== */
-
-
-/* small_marginLIncl subHeaderSection  */
+/* small_marginLIncl subHeaderSection   */
 
 .imj_siteContentSubSection {
     margin-bottom: 0.4545em;
     margin-left: 5.636em; /* 5.8181em*/
 }
 
-
-/* ===[ Content - Menu ]=== */
+/* ===[ Content - Menu ]===
+   ================================================== */
 
 .imj_contentMenuWrapper {
     margin-top: 0.500em;
@@ -587,6 +586,7 @@ cut second ?  ?
 }
 
 /* .contentMenu .sub
+   ==================================================
    ================================================== */
 
 .imj_contentMenu {
@@ -601,7 +601,7 @@ cut second ?  ?
     letter-spacing: 0.091em;
 }
 
-/* free_area0 span - template_paginator_containers.xhtml  */
+/* free_area0 span - template_paginator_containers.xhtml   */
 
 .imj_contentMenuItem {
     display: inline;
@@ -612,8 +612,9 @@ cut second ?  ?
 }
 
 .imj_contentMenuItemCreateAlbum {
-    margin-left: 11.455em; /*10.455em*/
-}
+    /* margin-left: 11.455em; 10.455em*/
+} 
+ 
 
 span.imj_contentMenuItem {
     background-color: #323232;
@@ -621,10 +622,9 @@ span.imj_contentMenuItem {
     -webkit-border-radius: 0.41666666em;
     -moz-border-radius: 0.41666666em;
     -o-border-radius: 0.41666666em;
-    -ms-border-radius: 0.41666666em; 
+    -ms-border-radius: 0.41666666em;
     /* border-bottom: 0.091em dotted #6CAD2F;*/ 
 }
-
 
 /* .contentMenu .seperator .void- template_paginator_containers.xhtml - Images.xhtml - template_paginator_albums.xhtml *    
 
@@ -640,28 +640,31 @@ span.imj_contentMenuItem {
     border-bottom-width: 0.97em;
     border-bottom-style: solid; 
     border-color: #292929;
+   ==================================================
    ================================================== */
 
 .imj_contentMenuWrapper .imj_contentMenuSeparator {
     float: left;
     width: 0.091em; /*0.10em*/
-    height: 1.091em; /* 1.15em;*/
+    height: 1.091em; /* 1.15em;_NO__DOTCOMMA__AFTER__*/
     margin: 0 0.636em; /*0.455em*/
     padding: 0;
     /* background-color: #6CAD2F; */
 }
 
-
-/* ===[ Content - SubMenu ]=== */
+/* ===[ Content - SubMenu ]===
+   ================================================== */
 
 /* .contentMenu * !!!
 .imj_contentMenu * {
     float: left;
     line-height: normal;
 }
+   ==================================================
    ================================================== */
 
 /* .contentMenu .action *  xHuge_area0 sub action - template_paginator_containers.xhtml - Images.xhtml
+   ==================================================
    ================================================== */
 
 .imj_contentSubMenu {
@@ -677,14 +680,12 @@ span.imj_contentMenuItem {
     letter-spacing: 0.091em;
 }
 
-
 .imj_contentSubMenu a {
     margin-right: 1.000em; /*0.364em*/
 }
 
-
 /* free_area0 - template_paginator_containers.xhtml - Images.xhtml 
- * free_area0 xTiny_marginLInc - AlbumEntryPage.xhtml - AlbumBrowse.xhtml */
+ * free_area0 xTiny_marginLInc - AlbumEntryPage.xhtml - AlbumBrowse.xhtml  */
 
 .imj_contentSubMenuItem {
     display: inline;
@@ -698,48 +699,51 @@ span.imj_contentMenuItem {
 .imj_contentSubMenuItem * {
     margin-right: 0.364em;
 }
+   ==================================================
    ================================================== */
 
 /* .imj_contenSubMenu input, .imj_siteContenSubMenu a, .imj_siteContenSubMenu span {
     font-size: 1.273em; /*1.455em
+   ==================================================
    ================================================== */
 
-/* margin-right: 0.636em; /*0.8181em */
+/* margin-right: 0.636em; /*0.8181em _NO__DOTCOMMA__AFTER__ */
 
 /* text-align: left;
     text-decoration: none;
-}  */
+}   */
 
 .imj_contentSubMenuItem span,
 .imj_contentSubMenuItem a {
     margin-right: 0.364em;
 }
 
-/* hard-coded span style - style="margin-top:0.18em; - template_paginator_containers.xhtml - Images.xhtml */
+/* hard-coded span style - style="margin-top:0.18em; - template_paginator_containers.xhtml - Images.xhtml _NO__DOTCOMMA__AFTER__ */
 
 .imj_contentSubMenuItemSorting {
     margin: 0.18em 0.364em 0 0;
 }
 
-/* free_area0 - template_paginator_containers.xhtml - template_paginator_albums.xhtml  */
+/* free_area0 - template_paginator_containers.xhtml - template_paginator_albums.xhtml   */
 
 span.imj_contentSubMenuItemFiltering {
     margin: 0.18em 0.364em 0 6.364em; /*6.000em*/
 }
 
+/* ===[ Content Headline ]===
+   ================================================== */
 
-
-/* ===[ Content Headline ]=== */
-
-/* id="contentSkipLinkAnchor" class="headLine" */
+/* id="contentSkipLinkAnchor" class="headLine"  */
 
 .imj_siteContentHeadline {
     float: right;
     text-align: right;
-    white-space: nowrap;
-    line-height: normal;
+    /*white-space: nowrap;*/
+    /*word-break: break-all;*/
+    word-break: hyphenate;
+    max-width: 25.000em;
     margin: 0;
-    padding: 0.5%;
+    padding: 0.4%;
     background-color: #323232;
     border-radius: 0.41666666em;
     -webkit-border-radius: 0.41666666em;
@@ -748,25 +752,25 @@ span.imj_contentSubMenuItemFiltering {
     -ms-border-radius: 0.41666666em;
 }
 
-/* .headLine h1
-   ================================================== */
+/* .headLine h1 */
 
 .imj_siteContentHeadline h1 {
+	display: block;
     color: #F0F0F0;
     font-size: 1.455em; /*2.182em; 2.364em*/
     font-weight: bold;
     letter-spacing: 0.091em;
-    display: block;
-    height: 0.9474em;
+    line-height: 130%;
+  
+    /*height: 0.9474em;
     max-height: 0.9474em;
-    line-height: normal;
-    margin: -0.11em 0 0.28em;
+    margin: -0.11em 0 0 0.28em; */
 }
 
+/* ===[ Content - Sub Header Message Space ]===
+   ================================================== */
 
-/* ===[ Content - Sub Header Message Space ]=== */
-
-/* div - .subHeader - header.css - template.xhtml */
+/* div - .subHeader - header.css - template.xhtml  */
 
 .imj_subHeaderMessageSpace {
     clear: both;
@@ -782,22 +786,22 @@ span.imj_contentSubMenuItemFiltering {
 OLD: 
 
 .subHeaderSection .subHeader {
-	float:left;
-	margin-top:1.6363em; 
-	padding-top:0.3636em;
-	clear:all;
+    float:left;
+    margin-top:1.6363em; 
+    padding-top:0.3636em;
+    clear:all;
 }
-	
+    
 /* 
 .fullItem .itemBlockSubHeader {
-	float: left;
-	white-space: nowrap;
-	margin-left: -0.74em;
+    float: left;
+    white-space: nowrap;
+    margin-left: -0.74em;
 }
 
- */ 
+  */
 
-/* Messages */
+/* ===[ Messages ]=== */
 
 .singleMessage {
     list-style-position: outside;
@@ -810,121 +814,105 @@ OLD:
     margin: 0;
     padding: 0;
 }
+
 .messageStatus {
     color: #00712B;
 }
 
+/* ===[ Content - Main Content - Content Header]===
+   ================================================== */
 
-/* ===[ Content - Main Content - Content Header]=== */
-
-
-/* clear full_area0 - template.xhtml */
+/* clear full_area0 - template.xhtml  */
 
 .imj_mainContentWrapper {
-	clear: both;
-	float: left;
-	display: inline;
-	overflow: hidden;
-	width: 81.3636em;
-	margin: 0 0.0909em 0 0;	
+    clear: both;
+    float: left;
+    display: inline;
+    overflow: hidden;
+    width: 81.3636em;
+    margin: 0 0.0909em 0 0;
 }
 
+/* ===[ Content - Content Header]===
+   ================================================== */
 
-
-/* ===[ Content - Content Header]=== */
-
-/* contentHeader - template_paginator.xhtml - header.css + appearance.css */
-
+/* contentHeader - template_paginator.xhtml - header.css + appearance.css  */
 
 .imj_mainContentHeader {
-	clear:left; 
-	overflow: hidden; 
-	line-height: 2.000em; /*2.18em;*/
-	padding: 0 0 0.455em 0;
-	/*padding-top: 0.09em; 
-	padding-bottom: 0.4545em;*/
-	border-top: 0.182em /*0.1818em*/ solid #6CAD2F;
-	background-color: #313131;
+    clear: left;
+    overflow: hidden;
+    line-height: 2.000em; /*2.18em;_NO__DOTCOMMA__AFTER__*/
+    padding: 0 0 0.455em 0;
+    /*padding-top: 0.09em; ;
+    padding-bottom: 0.4545em;*/
+    border-top: 0.182em /*0.1818em*/ solid #6CAD2F; background-color: #313131;
 }
 
-
-/* ===[ Content - Content Header]=== */
-
+/* ===[ Content - Content Header]===
+   ================================================== */
 
 /* prelistHeader - free_area0 small_marginLExcl *
    hardcoded style - style="margin-right:0.36em; 
-   in template_paginator_albums.xhtml and template_paginator_containers.xhtml */
-   
-   
-   
-   .preListHeader {
+   in template_paginator_albums.xhtml and template_paginator_containers.xhtml  */
+
+.preListHeader {
     background-color: #313131;
-	border-top: 0.09em solid #6CAD2F; /*#292929*/
-	padding: 0.19em 0 0.19em 0;
+    border-top: 0.09em solid #6CAD2F; /*#292929*/
+    padding: 0.19em 0 0.19em 0;
 }
-   
- 
-   
-   .contentHeader .preListHeader {
-	border:0;
+
+.contentHeader .preListHeader {
+    border: 0;
 }
-     
-     
 
 /* element.style - hardcoded - margin-right: 0.36em;
  * div - free_area0 - small_marginLExcl 
- * template_paginator_albums.xhtml - template_paginator_containers.xhtml  */
-
+ * template_paginator_albums.xhtml - template_paginator_containers.xhtml   */
 
 .imj_mainContentPreListHeaderItemAll {
-	display: inline;
-	float: left;
-	overflow: hidden;
-	margin: 0 0.364em 0 7%;/*5.455em*/	
-	font-size: 1.045em; /*1.091em*/
+    display: inline;
+    float: left;
+    overflow: hidden;
+    margin: 0 0.364em 0 7%; /*5.455em*/
+    font-size: 1.045em; /*1.091em*/
 }
 
-
-/* free_area0 xTiny_marginLExcl - template_paginator_containers.xhtml */
-
+/* free_area0 xTiny_marginLExcl - template_paginator_containers.xhtml  */
 
 .imj_mainContentPreListHeaderItemFilter {
-	display: inline;
-	float: left;
-	overflow: hidden;
-	margin: 0 0.091em; /*left: 1.636em  0.182em */
-	font-size: 1.045em; /*1.091em*/
+    display: inline;
+    float: left;
+    overflow: hidden;
+    margin: 0 0.091em; /*left: 1.636em  0.182em */;
+    font-size: 1.045em; /*1.091em*/
 }
 
-
-/* span - free_area0  -  template_paginator_albums.xhtml - template_paginator_containers.xhtml */
+/* span - free_area0  -  template_paginator_albums.xhtml - template_paginator_containers.xhtml  */
 
 .imj_mainContentPreListHeaderItemCounter {
-	display: inline;
-	float: left;
-	overflow: hidden;
-	margin: 0 0.091em;
-	font-size: 1.045em; /*1.091em*/
+    display: inline;
+    float: left;
+    overflow: hidden;
+    margin: 0 0.091em;
+    font-size: 1.045em; /*1.091em*/
 }
-
 
 /* element.style - hardcoded - float: right; 
 * free_area0 xTiny_marginRIncl
-* template_paginator_albums.xhtml - template_paginator_containers.xhtml */
+* template_paginator_albums.xhtml - template_paginator_containers.xhtml  */
 
 .imj_mainContentPreListHeaderItemDelete {
-	display: inline;
-	float: right;
-	overflow: hidden;
-	margin: 0 3% /*1.4545em*/ 0 0; /*5.636em*/	
-	font-size: 1.045em; /*1.091em*/
+    display: inline;
+    float: right;
+    overflow: hidden;
+    margin: 0 3% /*1.4545em*/ 0 0; /*5.636em_NO__DOTCOMMA__AFTER__*/ font-size: 1.045em; /*1.091em*/
 }
-	
 
-
-/* ===[ Content - Breadcrump History Navigation ]=== */
+/* ===[ Content - Breadcrump History Navigation ]===
+   ================================================== */
 
 /* * breadcrump component (History.xhtml)
+   ==================================================
    ================================================== */
 
 .imj_breadcrumpHistory {
@@ -936,12 +924,12 @@ OLD:
 .imj_breadcrumpHistory .imj_breadcrumpTitle {
     margin-right: 0.3636em;
     font-size: 1.091em;
-    /*background-color: #292929;
+    /*background-color: #292929;;
     border-radius: 0.41666666em;
     -webkit-border-radius: 0.41666666em;
     -moz-border-radius: 0.41666666em;
     -o-border-radius: 0.41666666em;
-    -ms-border-radius: 0.41666666em; */
+    -ms-border-radius: 0.41666666em;*/
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpItem {
@@ -950,29 +938,15 @@ OLD:
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpSeparator {
-    margin-left: 0.364em; /*0.3636em;*/
+    margin-left: 0.364em; /*0.3636em;_NO__DOTCOMMA__AFTER__*/
     margin-right: 0.364em;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ===[ Footer ]=== */
+/* ===[ Footer ]===
+   ================================================== */
 
 /* * footer - info, image
+   ==================================================
    ================================================== */
 
 .imj_footer img {
@@ -998,9 +972,8 @@ OLD:
     font-size: 75%;
 }
 
-
-
-/* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]=== */
+/* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
+   ================================================== */
 
 .messageArea {
     width: 39.1818em;
@@ -1014,8 +987,6 @@ OLD:
 }
 
 .errorMessageArea {
-    border-color: #D80000
+    border-color: #D80000;
 }
-
-
 

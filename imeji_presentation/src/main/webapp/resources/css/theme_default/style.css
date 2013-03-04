@@ -770,7 +770,25 @@ span.imj_contentMenuItem {
     width: 81.3636em;
 }
 
-/* span .subHeader - no style */ 
+/* span .subHeader - no style
+
+OLD: 
+
+.subHeaderSection .subHeader {
+	float:left;
+	margin-top:1.6363em; 
+	padding-top:0.3636em;
+	clear:all;
+}
+	
+/* 
+.fullItem .itemBlockSubHeader {
+	float: left;
+	white-space: nowrap;
+	margin-left: -0.74em;
+}
+
+ */ 
 
 /* Messages */
 
@@ -790,26 +808,111 @@ span.imj_contentMenuItem {
 }
 
 
+/* ===[ Content - Main Content - Content Header]=== */
+
+
+/* clear full_area0 - template.xhtml */
+
+.imj_mainContentWrapper {
+	clear: both;
+	float: left;
+	display: inline;
+	overflow: hidden;
+	width: 81.3636em;
+	margin: 0 0.0909em 0 0;	
+}
 
 
 
-.subHeaderSection .subHeader {
-	float:left;
-/*	margin-top:1.6363em; */
-	padding-top:0.3636em;
-	clear:all;
+/* ===[ Content - Content Header]=== */
+
+/* contentHeader - template_paginator.xhtml - header.css + appearance.css */
+
+
+.imj_mainContentHeader {
+	clear:left; 
+	overflow: hidden; 
+	line-height: 2.000em; /*2.18em;*/
+	padding: 0 0 0.455em 0;
+	/*padding-top: 0.09em; 
+	padding-bottom: 0.4545em;*/
+	border-top: 0.182em /*0.1818em*/ solid #6CAD2F;
+	background-color: #313131;
+}
+
+
+/* ===[ Content - Content Header]=== */
+
+
+/* prelistHeader - free_area0 small_marginLExcl *
+   hardcoded style - style="margin-right:0.36em; 
+   in template_paginator_albums.xhtml and template_paginator_containers.xhtml */
+   
+   
+   
+   .preListHeader {
+    background-color: #313131;
+	border-top: 0.09em solid #6CAD2F; /*#292929*/
+	padding: 0.19em 0 0.19em 0;
+}
+   
+ 
+   
+   .contentHeader .preListHeader {
+	border:0;
+}
+     
+     
+
+/* element.style - hardcoded - margin-right: 0.36em;
+ * div - free_area0 - small_marginLExcl 
+ * template_paginator_albums.xhtml - template_paginator_containers.xhtml  */
+
+
+.imj_mainContentPreListHeaderItemAll {
+	display: inline;
+	float: left;
+	overflow: hidden;
+	margin: 0 0.364em 0 7%;/*5.455em*/	
+	font-size: 1.045em; /*1.091em*/
+}
+
+
+/* free_area0 xTiny_marginLExcl - template_paginator_containers.xhtml */
+
+
+.imj_mainContentPreListHeaderItemFilter {
+	display: inline;
+	float: left;
+	overflow: hidden;
+	margin: 0 0.091em; /*left: 1.636em  0.182em */
+	font-size: 1.045em; /*1.091em*/
+}
+
+
+/* span - free_area0  -  template_paginator_albums.xhtml - template_paginator_containers.xhtml */
+
+.imj_mainContentPreListHeaderItemCounter {
+	display: inline;
+	float: left;
+	overflow: hidden;
+	margin: 0 0.091em;
+	font-size: 1.045em; /*1.091em*/
+}
+
+
+/* element.style - hardcoded - float: right; 
+* free_area0 xTiny_marginRIncl
+* template_paginator_albums.xhtml - template_paginator_containers.xhtml */
+
+.imj_mainContentPreListHeaderItemDelete {
+	display: inline;
+	float: right;
+	overflow: hidden;
+	margin: 0 3% /*1.4545em*/ 0 0; /*5.636em*/	
+	font-size: 1.045em; /*1.091em*/
 }
 	
-
-
-.fullItem .itemBlockSubHeader {
-	float: left;
-	white-space: nowrap;
-	margin-left: -0.74em;
-}
-
-
-
 
 
 /* ===[ Content - Breadcrump History Navigation ]=== */
@@ -819,12 +922,19 @@ span.imj_contentMenuItem {
 
 .imj_breadcrumpHistory {
     width: 92.75%;
-    padding-left: 7%;
+    margin-left: 7%;
+    /*padding-left: 5.636em; 7%; */
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpTitle {
     margin-right: 0.3636em;
     font-size: 1.091em;
+    background-color: #323232;
+    border-radius: 0.41666666em;
+    -webkit-border-radius: 0.41666666em;
+    -moz-border-radius: 0.41666666em;
+    -o-border-radius: 0.41666666em;
+    -ms-border-radius: 0.41666666em;
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpItem {

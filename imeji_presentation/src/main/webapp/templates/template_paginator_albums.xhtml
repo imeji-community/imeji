@@ -51,17 +51,17 @@
 			
 			
 			<ui:define name="prelistHeader">
-				<h:outputLink styleClass="free_area0 small_marginLExcl" value="?q=&amp;f=all" style="margin-right:0.36em;">
+				<h:outputLink styleClass="imj_mainContentPreListHeaderItemAll" value="?q=&amp;f=all">
 					<h:outputText value="#{lbl.all}"/>
 				</h:outputLink>
 				
-				<h:outputText value="#{paginatorListSessionBean.filterLabel}"  styleClass="free_area0 xTiny_marginLExcl" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}"/>
-				<h:outputLink value="?f=all" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}" styleClass="free_area0">
-					<h:outputText value="[x]" styleClass="free_area0 "/>
+				<h:outputText value="#{paginatorListSessionBean.filterLabel}"  styleClass="imj_mainContentPreListHeaderItemFilter" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}"/>
+				<h:outputLink value="?f=all" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}" styleClass="imj_mainContentPreListHeaderItemFilter">
+					<h:outputText value="[x]" styleClass="imj_mainContentPreListHeaderItemFilter"/>
 				</h:outputLink>
-				<h:outputText styleClass="free_area0" value=" (#{paginatorListSessionBean.totalNumberOfElements})"/>
+				<h:outputText styleClass="imj_mainContentPreListHeaderItemCounter" value=" (#{paginatorListSessionBean.totalNumberOfElements})"/>
 				
-				<h:outputLink styleClass="free_area0 xTiny_marginRIncl" style="float:right" value="#" onclick="openDialog('dialogDeleteSelectedContainer');">
+				<h:outputLink styleClass="imj_mainContentPreListHeaderItemDelete" value="#" onclick="openDialog('dialogDeleteSelectedContainer');">
 					<h:outputText value="#{lbl.delete_selected_albums}" rendered="#{SessionBean.user != null}"/>
 				</h:outputLink>
 			</ui:define>

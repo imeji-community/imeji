@@ -50,7 +50,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private SessionBean session;
     private List<SelectItem> sortMenu;
     private String selectedSortCriterion;
-    private String selectedSortOrder;
+    private String selectedSortOrder = SortOrder.DESCENDING.name();
     private FacetsBean facets;
     protected FiltersBean filters;
     private String query;
@@ -108,12 +108,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseInit();
         browseContext = getNavigationString();
-        initMenus();
+        // initMenus();
         return "";
     }
 
     /**
-     * Initialization for all browse pages for get queries (non ajay queries)
+     * Initialization for all browse pages for get queries (non ajax queries)
      */
     protected void browseInit()
     {
@@ -153,7 +153,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel(SearchIndex.names.created.name())));
         sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel(SearchIndex.names.col.name())));
         sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel(SearchIndex.names.modified.name())));
-        selectedSortOrder = SortOrder.DESCENDING.name();
     }
 
     @Override
@@ -533,6 +532,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         this.selectedSortOrder = selectedSortOrder;
     }
 
+    /**
+     * Method called when user toggle the sort order
+     * 
+     * @return
+     */
     public String toggleSortOrder()
     {
         if (selectedSortOrder.equals("DESCENDING"))

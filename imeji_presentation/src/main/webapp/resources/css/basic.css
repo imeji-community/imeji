@@ -412,34 +412,35 @@ form {
 
 
 div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,input,textarea,blockquote,th,td { 
-	margin:0;
-	padding:0;
+	margin: 0;
+	padding: 0;
 }
 
 
 address,caption,cite,code,dfn,em,strong,th,var {
-	font-style:normal;
-	font-weight:normal;
+	font-style: normal;
+	font-weight: normal;
 }
 
 ol,ul {
-	list-style:none;
+	list-style: none;
 }
 
 caption,th {
-	text-align:left;
+	text-align: left;
 }
 
 h1,h2,h3,h4,h5,h6 {
-	font-size:100%;
-	font-weight:normal;
+	font-size: 100%;
+	font-weight: normal;
 }
 
 q:before,q:after {
 	content:'';
 }
 
-abbr,acronym { border:0;
+abbr,acronym { 
+	border: 0;
 }
 
 

@@ -38,7 +38,6 @@
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
 		</h:outputLink>
 	</ui:define>
-
 	<ui:define name="actionsMenu">
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 
@@ -69,7 +68,6 @@
 				rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
 				<h:outputText value="#{lbl.collection_release}" />
 			</h:outputLink>
-
 			<h:outputLink id="lnkWithdrawCollection"
 				styleClass="imj_SubMenuItem" value="#"
 				onclick="openDialog('dialogWithdraw');"
@@ -82,27 +80,23 @@
 				rendered="#{CollectionImagesBean.deletable}">
 				<h:outputText value="#{lbl.delete}" />
 			</h:outputLink>
-
 			<h:outputLink
 				value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
 				styleClass="imj_SubMenuItem" target="_blank">
 				<h:outputText value="#{lbl.export_metadata}" />
 			</h:outputLink>
-
 			<h:outputLink
 				value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
 				styleClass="imj_SubMenuItem" target="_blank">
 				<h:outputText value="Export for ingest " />
 			</h:outputLink>
 		</h:panelGroup>
-
 		<ui:include src="confirmationPages/ContainerRelease.xhtml">
 			<ui:param name="bean" value="#{CollectionImagesBean}" />
 		</ui:include>
 		<ui:include src="confirmationPages/ContainerDelete.xhtml">
 			<ui:param name="bean" value="#{CollectionImagesBean}" />
 		</ui:include>
-
 		<imjc:DiscardContainer id="dialDiscardContainer"
 			bean="#{CollectionImagesBean}"
 			discardComment="#{CollectionImagesBean.collection.discardComment}" />

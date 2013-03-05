@@ -9,7 +9,6 @@
 				<h:outputText value="#{paginatorListSessionBean.urlParameters}" style="visibility:hidden;"/>
 				<h:panelGroup id="ajaxPaginatorTop">
 					<h:outputText value="#{paginatorListSessionBean.initPaginator}" style="visibility:hidden;"/>
-					
 				 	<div class="large_area0 small_marginLIncl rangeSelector">
 				 		<h:selectOneMenu id="extSelectTop" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageTop}" onchange="getElementById('navTop:btnChangeElementsPerPageTop').click();">
 				 			<f:selectItems value="#{paginatorListSessionBean.elementsPerPageSelectItems}"/>
@@ -17,11 +16,8 @@
 						<h:commandButton id="btnChangeElementsPerPageTop" title="#{lbl.paginator_go}" styleClass="xTiny_txtBtn paginatorFallbackGoBtn hiddenElementsNumberChangedButton"  value=""  action="#{paginatorListSessionBean.changeElementsPerPageTop}"/>
 				 		<h:outputLabel id="lblItemList_ObjectsPerPage" for="extSelectTop" styleClass="free_label hitsLabel" value=" #{lbl.paginator_objectsPerPage}" />
 				 	</div>
-					
 				 	<div class="small_marginLExcl pageBrowser">
 				 		<label id="lblPage" class="noDisplay pageLabel">Page</label>
-				 		
-				 		
 				 		<!-- ajax mode -->
 				 		<h:commandButton id="btPartListSizeAjax" onclick="setOpacityToImages();"  styleClass="min_imgBtn skipToFirst" value=" " title="#{lbl.paginator_results} 1 - #{paginatorListSessionBean.partListSize}" action="#{paginatorListSessionBean.goToFirstPage}" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber != 1}">
 				 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>

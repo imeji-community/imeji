@@ -3,10 +3,12 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
@@ -19,6 +21,7 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
@@ -130,6 +133,16 @@ public class ShareBean
             {
                 shareAlbum(container.getId().toString(), container.getMetadata().getTitle());
             }
+        }
+        HistorySession historySession = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
+        try
+        {
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(historySession.getCurrentPage().getUri().toString());
+        }
+        catch (IOException e)
+        {
+            logger.error("Error redirecting to previous page");
         }
     }
 
@@ -263,7 +276,7 @@ public class ShareBean
 
     public Album retrieveAlbum(String albId)
     {
-        return ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, albId), session.getUser());
+        return ObjectLoader.loadAlbumLazy(URI.create(albId), session.getUser());
     }
 
     public String getEmail()

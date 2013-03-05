@@ -66,7 +66,7 @@ public class CollectionFacets
             List<Facet> group = new ArrayList<Facet>();
             if (st.isPreview() && !fs.isFilter(getName(st.getId())))
             {
-                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement), SearchOperators.URI, st
+                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement), SearchOperators.EQUALS, st
                         .getId().toString());
                 count = getCount(searchQuery, pair, allImages.getResults());
                 if (count > 0 || true)

@@ -2,10 +2,10 @@ package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URLEncoder;
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,90 +23,211 @@ import org.json.simple.JSONValue;
  * Servlet implementation class autocompleter
  */
 @WebServlet(description = "act as bridge for front javascript query since javascript cannot query cross domain, e.g., from imeji to google", urlPatterns = { "/autocompleter" })
-public class autocompleter extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	String nameUri = "http://pubman.mpdl.mpg.de/cone/persons/query?format=json&n=10&m=full&q=";
-	String googleAPIUri = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=";
+public class autocompleter extends HttpServlet
+{
+    private static final long serialVersionUID = 1L;
+    private Pattern conePattern = Pattern.compile("http.*/cone/.*?format=json.*", Pattern.CASE_INSENSITIVE);
+    private Pattern coneAuthorPattern = Pattern.compile("http.*/cone/persons/.*?format=json.*",
+            Pattern.CASE_INSENSITIVE);
+    private Pattern googleGeoAPIPattern = Pattern.compile(
+            "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=", Pattern.CASE_INSENSITIVE);
+    private String coneAuthorUri = "cone/persons/query?format=json&n=10&m=full&q=";
+    private String googleAPIUri = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=";
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public autocompleter() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request,
-		HttpServletResponse response) throws ServletException, IOException {
-		String suggest = request.getParameter("searchkeyword");
-		String datasource = request.getParameter("datasource");
-		String responseString = "";
-		if (suggest.toString().isEmpty()) {
-			suggest = "a";
-		} else if (!suggest.toString().isEmpty()) {
-			try {
-				HttpClient client = new HttpClient();
-				GetMethod getMethod = new GetMethod(datasource
-						+ URLEncoder.encode(suggest.toString(), "UTF-8"));
-				client.executeMethod(getMethod);
-				responseString = getMethod.getResponseBodyAsString().trim();
-				responseString = passResult(responseString, datasource);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
-		response.setContentType("application/json");
-		PrintWriter out = response.getWriter();
-		out.print(responseString);
-		out.flush();
-	}
-	/*
-	 * parse JSON string returned from remote source by JSON-simple
-	 * add properties [ { label: "Choice1", value: "value1" }, ... ]
-	 *  to fit JQuery UI auto-complete pop format
-	 */
-	private String passResult(String s, String source) throws IOException {
-		if (source.equals(nameUri)) {
-			Object obj = JSONValue.parse(s);
-			JSONArray array = (JSONArray) obj;
-			JSONArray result = new JSONArray();
-			for (int i = 0; i < array.size(); ++i) {
-				JSONObject object = (JSONObject) array.get(i);
-				// JQuery UI auto-complete required format:
-				// An array of objects with label and value properties: [ { label: "Choice1", value: "value1" }, ... ]
-				object.put("label",
-						object.get("http_purl_org_dc_elements_1_1_title"));
-				object.put("value",
-						object.get("http_xmlns_com_foaf_0_1_family_name"));
-				result.add(object);
-			}
-			StringWriter out = new StringWriter();
-			result.writeJSONString(out);
-			String jsonText = out.toString();
-			return jsonText;
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public autocompleter()
+    {
+        super();
+    }
 
-		} else if (source.equals(googleAPIUri)) {
-			JSONObject obj = (JSONObject) JSONValue.parse(s);
-			JSONArray array = (JSONArray) obj.get("results");
-			JSONArray result = new JSONArray();
-			for (int i = 0; i < array.size(); ++i) {
-				JSONObject object = (JSONObject) array.get(i);
-				// JQuery UI auto-complete required format:
-				// An array of objects with label and value properties: [ { label: "Choice1", value: "value1" }, ... ]
-				object.put("label", object.get("formatted_address"));
-				object.put("value", object.get("formatted_address"));
-				result.add(object);
-			}
-			StringWriter out = new StringWriter();
-			result.writeJSONString(out);
-			String jsonText = out.toString();
-			return jsonText;
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        String suggest = request.getParameter("searchkeyword");
+        String datasource = request.getParameter("datasource");
+        String responseString = "";
+        if (suggest.toString().isEmpty())
+        {
+            suggest = "a";
+        }
+        else if (!suggest.toString().isEmpty())
+        {
+            HttpClient client = new HttpClient();
+            GetMethod getMethod = new GetMethod(datasource + URLEncoder.encode(suggest.toString(), "UTF-8"));
+            try
+            {
+                client.executeMethod(getMethod);
+                responseString = getMethod.getResponseBodyAsString().trim();
+                if (datasource != null && responseString != null)
+                    responseString = passResult(responseString, datasource);
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+            finally
+            {
+                getMethod.releaseConnection();
+            }
+        }
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        out.print(responseString);
+        out.flush();
+        out.close();
+    }
 
-		}
-		return s;
+    /**
+     * parse JSON string returned from remote source by JSON-simple add properties [ { label: "Choice1", value: "value1"
+     * }, ... ] to fit JQuery UI auto-complete pop format
+     * 
+     * @param input
+     * @param source
+     * @return
+     * @throws IOException
+     */
+    private String passResult(String input, String source) throws IOException
+    {
+        if (conePattern.matcher(source).matches())
+        {
+            if (coneAuthorPattern.matcher(source).matches())
+            {
+                return parseConeAuthor(input);
+            }
+            else
+            {
+                return parseConeVocabulary(input);
+            }
+        }
+        else if (source.contains(googleAPIUri))
+        {
+            return parseGoogleGeoAPI(input);
+        }
+        return input;
+    }
 
-	}
+    /**
+     * Parse a CoNE Vocabulary (read the title value)
+     * 
+     * @param cone
+     * @return
+     * @throws IOException
+     */
+    @SuppressWarnings("unchecked")
+    private String parseConeVocabulary(String cone) throws IOException
+    {
+        Object obj = JSONValue.parse(cone);
+        JSONArray array = (JSONArray)obj;
+        JSONArray result = new JSONArray();
+        for (int i = 0; i < array.size(); ++i)
+        {
+            JSONObject parseObject = (JSONObject)array.get(i);
+            JSONObject sendObject = new JSONObject();
+            sendObject.put("label", parseObject.get("http_purl_org_dc_elements_1_1_title"));
+            sendObject.put("value", parseObject.get("http_purl_org_dc_elements_1_1_title"));
+            result.add(sendObject);
+        }
+        StringWriter out = new StringWriter();
+        result.writeJSONString(out);
+        return out.toString();
+    }
+
+    /**
+     * Parse a json input from Google Geo API
+     * 
+     * @param google
+     * @return
+     * @throws IOException
+     */
+    @SuppressWarnings("unchecked")
+    private String parseGoogleGeoAPI(String google) throws IOException
+    {
+        JSONObject obj = (JSONObject)JSONValue.parse(google);
+        JSONArray array = (JSONArray)obj.get("results");
+        JSONArray result = new JSONArray();
+        for (int i = 0; i < array.size(); ++i)
+        {
+            JSONObject parseObject = (JSONObject)array.get(i);
+            JSONObject sendObject = new JSONObject();
+            sendObject.put("label", parseObject.get("formatted_address"));
+            sendObject.put("value", parseObject.get("formatted_address"));
+            JSONObject location = (JSONObject)((JSONObject)parseObject.get("geometry")).get("location");
+            sendObject.put("latitude", location.get("lat"));
+            sendObject.put("longitude", location.get("lng"));
+            result.add(sendObject);
+        }
+        StringWriter out = new StringWriter();
+        result.writeJSONString(out);
+        return out.toString();
+    }
+
+    /**
+     * Parse a JSON file from CoNE with authors, and return a JSON which can be read by imeji autocomplete
+     * 
+     * @param cone
+     * @return
+     * @throws IOException
+     */
+    @SuppressWarnings("unchecked")
+    private String parseConeAuthor(String cone) throws IOException
+    {
+        Object obj = JSONValue.parse(cone);
+        JSONArray array = (JSONArray)obj;
+        JSONArray result = new JSONArray();
+        for (int i = 0; i < array.size(); ++i)
+        {
+            JSONObject parseObject = (JSONObject)array.get(i);
+            JSONObject sendObject = new JSONObject();
+            sendObject.put("label", parseObject.get("http_purl_org_dc_elements_1_1_title"));
+            sendObject.put("family", parseObject.get("http_xmlns_com_foaf_0_1_family_name"));
+            sendObject.put("givenname", parseObject.get("http_xmlns_com_foaf_0_1_givenname"));
+            sendObject.put("id", parseObject.get("id"));
+            sendObject.put(
+                    "orgs",
+                    writeJsonArrayToOneString(parseObject.get("http_purl_org_escidoc_metadata_terms_0_1_position"),
+                            "http_purl_org_eprint_terms_affiliatedInstitution"));
+            sendObject.put("alternatives",
+                    writeJsonArrayToOneString(parseObject.get("http_purl_org_dc_terms_alternative"), ""));
+            result.add(sendObject);
+        }
+        StringWriter out = new StringWriter();
+        JSONArray.writeJSONString(result, out);
+        return out.toString();
+    }
+
+    /**
+     * Read a JSON Object as a String, whether it is an {@link JSONArray}, a {@link String} or a {@link JSONObject}
+     * 
+     * @param jsonObj
+     * @param jsonName
+     * @return
+     */
+    private String writeJsonArrayToOneString(Object jsonObj, String jsonName)
+    {
+        String str = "";
+        if (jsonObj instanceof JSONArray)
+        {
+            for (Iterator<?> iterator = ((JSONArray)jsonObj).iterator(); iterator.hasNext();)
+            {
+                if (!"".equals(str))
+                {
+                    str += ", ";
+                }
+                str += writeJsonArrayToOneString(iterator.next(), jsonName);
+            }
+        }
+        else if (jsonObj instanceof JSONObject)
+        {
+            str = (String)((JSONObject)jsonObj).get(jsonName);
+        }
+        else if (jsonObj instanceof String)
+        {
+            str = (String)jsonObj;
+        }
+        return str;
+    }
 }

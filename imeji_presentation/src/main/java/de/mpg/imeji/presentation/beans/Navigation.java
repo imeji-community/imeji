@@ -21,7 +21,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class Navigation
 {
     // Url of the FW
-    public final String frameworkUrl;
+    public String frameworkUrl;
     // Url of the application
     public final String applicationUrl;
     // Pages of imeji
@@ -52,7 +52,9 @@ public class Navigation
      */
     public Navigation() throws Exception
     {
-        frameworkUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.framework_access.framework.url"));
+        frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.url");
+        if (frameworkUrl != null)
+            frameworkUrl = StringHelper.normalizeURI(frameworkUrl);
         applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
     }
 

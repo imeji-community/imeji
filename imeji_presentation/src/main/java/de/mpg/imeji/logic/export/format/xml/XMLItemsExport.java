@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.export.format;
+package de.mpg.imeji.logic.export.format.xml;
 
 import java.io.OutputStream;
 import java.util.Collection;
@@ -9,7 +9,7 @@ import java.util.Collection;
 import javax.xml.bind.JAXBException;
 
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.export.Export;
+import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -22,7 +22,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * 
  * @author hnguyen
  */
-public class IngestItemsExport extends Export
+public class XMLItemsExport extends XMLExport
 {
     @Override
     public void init()
@@ -43,14 +43,7 @@ public class IngestItemsExport extends Export
         }
         catch (JAXBException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public String getContentType()
-    {
-        return "application/xml";
     }
 }

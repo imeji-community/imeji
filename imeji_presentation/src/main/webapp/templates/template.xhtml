@@ -34,19 +34,15 @@ All rights reserved. Use is subject to license terms.
             <title><h:outputText value="imeji - #{HistorySession.currentPage.internationalizedName}"/></title>
             <link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
             <link rel="stylesheet" href="#{Navigation.domain}imeji/resources/css/old_style/themes/skin_darkGrey/styles/theme.css" type="text/css" media="all"/>
-			
 			<h:outputStylesheet library="css" name="basic.css"></h:outputStylesheet>
 			<h:outputStylesheet library="css/theme_default" name="style.css" id="themeDefault"></h:outputStylesheet>
-			
 			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>  
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
 			<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 			<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-			
         </h:head>
         <h:body lang="#{SessionBean.locale}">
             	<style type="text/css">
-            		
             	</style>
                 <h:panelGroup layout="block" styleClass="imj_siteWrapper">
                     <ui:insert name="init"/>
@@ -126,8 +122,8 @@ All rights reserved. Use is subject to license terms.
                     <!-- end: content section -->
                     <div id="dialogs"></div>
                 </h:panelGroup>
-                                 
-                <ui:include src="/footerPages/Footer.jspf"/>
+                  &#160;
+               	<ui:include src="/footerPages/Footer.xhtml"/>
                 <script type="text/javascript">
                 /* open a dialog*/
 				function openDialog(id) {
@@ -141,11 +137,12 @@ All rights reserved. Use is subject to license terms.
 					dialog.css("left", Math.max(0, (($(window).width() - $(dialog).outerWidth()) / 2) + 
 				                                                $(window).scrollLeft()) + "px");
 					/*open the dialog*/
-					dialog.show();
+					dialog.show();		
 					/* lock the page*/
 					var content = $(".imj_siteWrapper");
 					content.css({ opacity: 0.3});
-					$.lock(dialog);				
+					$.lock(dialog);	
+					
 				}
 				/*close a dialog*/
 				function closeDialog(id) {
@@ -162,7 +159,7 @@ All rights reserved. Use is subject to license terms.
 				    $.extend({
 				lock: function(content){
 				            if(content == 'undefined') content = '';
-				            $("&amp;&lt;div&amp;gt;&amp;&lt;/div&amp;&gt;").attr('id', 'uiLockId').css({
+				            $("&lt;div&gt;&lt;/div&gt;").attr('id', 'uiLockId').css({
 				                'position': 'absolute',
 				                'top': 0,
 				                'left': 0,

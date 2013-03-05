@@ -50,7 +50,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private SessionBean session;
     private List<SelectItem> sortMenu;
     private String selectedSortCriterion;
-    private String selectedSortOrder;
+    private String selectedSortOrder = SortOrder.DESCENDING.name();
     private FacetsBean facets;
     protected FiltersBean filters;
     private String query;
@@ -108,12 +108,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseInit();
         browseContext = getNavigationString();
-        initMenus();
+        // initMenus();
         return "";
     }
 
     /**
-     * Initialization for all browse pages for get queries (non ajay queries)
+     * Initialization for all browse pages for get queries (non ajax queries)
      */
     protected void browseInit()
     {
@@ -153,7 +153,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel(SearchIndex.names.created.name())));
         sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel(SearchIndex.names.col.name())));
         sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel(SearchIndex.names.modified.name())));
-        selectedSortOrder = SortOrder.DESCENDING.name();
     }
 
     @Override
@@ -194,8 +193,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     public void cleanSelectItems()
     {
-        if (session.getSelectedImagesContext() != null
-                && !(session.getSelectedImagesContext().equals(browseContext)))
+        if (session.getSelectedImagesContext() != null && !(session.getSelectedImagesContext().equals(browseContext)))
         {
             session.getSelected().clear();
         }
@@ -449,15 +447,19 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         int added = sizeAfter - sizeBefore;
         int notAdded = sizeToAdd - added;
         String message = "";
+        String error = "";
         if (added > 0)
         {
             message = " " + added + " " + session.getMessage("images_added_to_active_album");
         }
         if (notAdded > 0)
         {
-            message += " " + notAdded + " " + session.getMessage("already_in_active_album");
+            error += " " + notAdded + " " + session.getMessage("already_in_active_album");
         }
-        BeanHelper.info(message);
+        if ("".equals(message))
+            BeanHelper.info(message);
+        if ("".equals(error))
+            BeanHelper.error(error);
     }
 
     public String getInitComment()
@@ -530,6 +532,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         this.selectedSortOrder = selectedSortOrder;
     }
 
+    /**
+     * Method called when user toggle the sort order
+     * 
+     * @return
+     */
     public String toggleSortOrder()
     {
         if (selectedSortOrder.equals("DESCENDING"))

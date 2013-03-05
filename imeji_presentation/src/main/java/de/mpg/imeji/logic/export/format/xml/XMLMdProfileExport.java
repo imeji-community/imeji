@@ -1,13 +1,13 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.export.format;
+package de.mpg.imeji.logic.export.format.xml;
 
 import java.io.OutputStream;
 import java.net.URI;
 
 import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.export.Export;
+import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -18,7 +18,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * 
  * @author hnguyen
  */
-public class IngestMdProfileExport extends Export
+public class XMLMdProfileExport extends XMLExport
 {
     @Override
     public void init()
@@ -46,11 +46,5 @@ public class IngestMdProfileExport extends Export
         {
             throw new RuntimeException(sr.getNumberOfRecords() + " profile(s) found. Only 1 profile sould be found");
         }
-    }
-
-    @Override
-    public String getContentType()
-    {
-        return "application/xml";
     }
 }

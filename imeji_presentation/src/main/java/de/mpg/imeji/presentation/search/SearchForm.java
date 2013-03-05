@@ -18,21 +18,38 @@ import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
-public class SearchFormular
+/**
+ * The form for the Advanced search. Is composed of {@link SearchGroupForm}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
+public class SearchForm
 {
     private Map<String, CollectionImeji> collectionsMap;
     private Map<String, MetadataProfile> profilesMap;
-    private List<FormularGroup> groups;
-    private static Logger logger = Logger.getLogger(SearchFormular.class);
+    private List<SearchGroupForm> groups;
+    private static Logger logger = Logger.getLogger(SearchForm.class);
 
-    public SearchFormular()
+    /**
+     * Default Constructor
+     */
+    public SearchForm()
     {
-        groups = new ArrayList<FormularGroup>();
+        groups = new ArrayList<SearchGroupForm>();
         collectionsMap = new HashMap<String, CollectionImeji>();
         profilesMap = new HashMap<String, MetadataProfile>();
     }
 
-    public SearchFormular(SearchQuery searchQuery, Map<String, CollectionImeji> collectionsMap,
+    /**
+     * Constructor for a {@link SearchQuery}: initialize the form from a query
+     * 
+     * @param searchQuery
+     * @param collectionsMap
+     * @param profilesMap
+     */
+    public SearchForm(SearchQuery searchQuery, Map<String, CollectionImeji> collectionsMap,
             Map<String, MetadataProfile> profilesMap)
     {
         this();
@@ -43,28 +60,38 @@ public class SearchFormular
             if (se.getType().equals(SEARCH_ELEMENTS.GROUP))
             {
                 String collectionId = SearchFormularHelper.getCollectionId((SearchGroup)se);
-                groups.add(new FormularGroup((SearchGroup)se, profilesMap.get(collectionId), collectionId));
+                groups.add(new SearchGroupForm((SearchGroup)se, profilesMap.get(collectionId), collectionId));
             }
         }
     }
 
+    /**
+     * Transform the {@link SearchForm} in a {@link SearchQuery}
+     * 
+     * @return
+     */
     public SearchQuery getFormularAsSearchQuery()
     {
         SearchQuery searchQuery = new SearchQuery();
-        for (FormularGroup g : groups)
+        for (SearchGroupForm g : groups)
         {
             if (!searchQuery.isEmpty())
             {
-                searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                searchQuery.addLogicalRelation(LOGICAL_RELATIONS.OR);
             }
             searchQuery.addGroup(g.getAsSearchGroup());
         }
         return searchQuery;
     }
 
+    /**
+     * Add a {@link SearchGroup} to the form
+     * 
+     * @param pos
+     */
     public void addSearchGroup(int pos)
     {
-        FormularGroup fg = new FormularGroup();
+        SearchGroupForm fg = new SearchGroupForm();
         if (pos >= groups.size())
         {
             groups.add(fg);
@@ -75,11 +102,16 @@ public class SearchFormular
         }
     }
 
+    /**
+     * Method called when the selected collection is changed in the select menu
+     * 
+     * @param pos
+     */
     public void changeSearchGroup(int pos)
     {
-        FormularGroup fg = groups.get(pos);
+        SearchGroupForm fg = groups.get(pos);
         fg.getStatementMenu().clear();
-        fg.setElements(new ArrayList<FormularElement>());
+        fg.setSearchElementForms(new ArrayList<SearchMetadataForm>());
         if (fg.getCollectionId() != null)
         {
             fg.initStatementsMenu(profilesMap.get(fg.getCollectionId()));
@@ -87,26 +119,37 @@ public class SearchFormular
         }
     }
 
+    /**
+     * Method called when the buttom remove group is called
+     * 
+     * @param pos
+     */
     public void removeSearchGroup(int pos)
     {
         groups.remove(pos);
     }
 
+    /**
+     * Method called when the button add element is called
+     * 
+     * @param groupPos
+     * @param elPos
+     */
     public void addElement(int groupPos, int elPos)
     {
-        FormularGroup group = groups.get(groupPos);
-        FormularElement fe = new FormularElement();
+        SearchGroupForm group = groups.get(groupPos);
+        SearchMetadataForm fe = new SearchMetadataForm();
         String namespace = (String)group.getStatementMenu().get(0).getValue();
         fe.setNamespace(namespace);
         fe.initStatement(profilesMap.get(group.getCollectionId()), namespace);
-        fe.initFiltersMenu();
-        if (elPos >= group.getElements().size())
+        fe.initOperatorMenu();
+        if (elPos >= group.getSearchElementForms().size())
         {
-            group.getElements().add(fe);
+            group.getSearchElementForms().add(fe);
         }
         else
         {
-            group.getElements().add(elPos + 1, fe);
+            group.getSearchElementForms().add(elPos + 1, fe);
         }
     }
 
@@ -118,12 +161,12 @@ public class SearchFormular
      */
     public void changeElement(int groupPos, int elPos, boolean keepValue)
     {
-        FormularGroup group = groups.get(groupPos);
-        FormularElement fe = group.getElements().get(elPos);
+        SearchGroupForm group = groups.get(groupPos);
+        SearchMetadataForm fe = (SearchMetadataForm)group.getSearchElementForms().get(elPos);
         String collectionId = group.getCollectionId();
         String namespace = fe.getNamespace();
         fe.initStatement(profilesMap.get(collectionId), namespace);
-        fe.initFiltersMenu();
+        fe.initOperatorMenu();
         if (!keepValue)
         {
             fe.setSearchValue("");
@@ -132,15 +175,15 @@ public class SearchFormular
 
     public void removeElement(int groupPos, int elPos)
     {
-        groups.get(groupPos).getElements().remove(elPos);
+        groups.get(groupPos).getSearchElementForms().remove(elPos);
     }
 
-    public List<FormularGroup> getGroups()
+    public List<SearchGroupForm> getGroups()
     {
         return groups;
     }
 
-    public void setGroups(List<FormularGroup> groups)
+    public void setGroups(List<SearchGroupForm> groups)
     {
         this.groups = groups;
     }

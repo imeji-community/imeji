@@ -45,11 +45,11 @@ public class Date extends Metadata
 
     public void setDate(String date)
     {
-        if (date != null && "".equals(date))
+        if (date != null && !"".equals(date))
         {
             time = DateFormatter.getTime(date);
+            this.date = date;
         }
-        this.date = date;
     }
 
     public long getTime()
@@ -79,8 +79,7 @@ public class Date extends Metadata
     {
         if (metadata instanceof Date)
         {
-            this.date = ((Date)metadata).getDate();
-            this.time = ((Date)metadata).getTime();
+            setDate(((Date)metadata).getDate());
             this.statement = metadata.getStatement();
         }
     }

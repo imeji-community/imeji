@@ -5,6 +5,8 @@ package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +15,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.storage.Storage;
@@ -82,7 +87,9 @@ public class FileServlet extends HttpServlet
      */
     private CollectionImeji loadCollection(String url, SessionBean session)
     {
-        URI collectionURI = ObjectHelper.getURI(CollectionImeji.class, storageController.getCollectionId(url));
+        URI collectionURI = getCollectionURI(url);
+        if (collectionURI == null)
+            return null;
         CollectionImeji collection = session.getCollectionCached().get(collectionURI);
         if (collection == null)
         {
@@ -98,6 +105,30 @@ public class FileServlet extends HttpServlet
             }
         }
         return collection;
+    }
+
+    /**
+     * Return the uri of the {@link CollectionImeji} of the file with this url
+     * 
+     * @param url
+     * @return
+     */
+    private URI getCollectionURI(String url)
+    {
+        String id = storageController.getCollectionId(url);
+        if (id != null)
+        {
+            return ObjectHelper.getURI(CollectionImeji.class, id);
+        }
+        else
+        {
+            Search s = new Search(SearchType.ALL, null);
+            List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectCollectionIdOfFile(url), null);
+            if (!r.isEmpty())
+                return URI.create(r.get(0));
+            else
+                return null;
+        }
     }
 
     /**

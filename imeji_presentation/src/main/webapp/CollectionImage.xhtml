@@ -5,7 +5,6 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="imageBean" value="#{CollectionImageBean}" />
 	<ui:param name="headline" value="#{lbl.details}" />
-	
 	<ui:define name="contentMenu">
 		<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}" rendered="true">
 			<h:outputText value="#{lbl.collection_home}"/>
@@ -28,9 +27,7 @@
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
 		</h:outputLink>
 	</ui:define>
-	
 	<ui:define name="preListHeader">
-		
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 			<ui:include src="./include/History.xhtml"></ui:include><br/>
 			<h:outputLink value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/#{Navigation.browsePath}" styleClass="free_area1_p6 small_marginLIncl">
@@ -39,5 +36,4 @@
 			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})"  styleClass="free_area2_p6 xHuge_marginLIncl"/>
 		</h:panelGroup>
 	</ui:define>
-	
 </ui:composition>

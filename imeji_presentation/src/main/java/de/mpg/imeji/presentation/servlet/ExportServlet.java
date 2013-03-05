@@ -16,6 +16,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.client.HttpResponseException;
 
@@ -39,16 +40,16 @@ public class ExportServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
-        String query = req.getParameter("q");
+        //String query = req.getParameter("q");
         User user = getSessionBean(req, resp).getUser();
-        SearchQuery searchQuery = new SearchQuery();
+      //  SearchQuery searchQuery = new SearchQuery();
         try
         {
-            searchQuery = URLQueryTransformer.parseStringQuery(query);
+            //searchQuery = URLQueryTransformer.parseStringQuery(query);
             ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap());
             resp.setHeader("Connection", "close");
             resp.setHeader("Content-Type", exportManager.getContentType());
-            SearchResult result = exportManager.search(searchQuery);
+            SearchResult result = exportManager.search();
             exportManager.export(result);
         }
         catch (HttpResponseException he)
@@ -61,6 +62,13 @@ public class ExportServlet extends HttpServlet
         }
     }
 
+    /**
+     * Get the {@link SessionBean} from the {@link HttpSession}
+     * 
+     * @param req
+     * @param resp
+     * @return
+     */
     private SessionBean getSessionBean(HttpServletRequest req, HttpServletResponse resp)
     {
         FacesContext fc = getFacesContext(req, resp);

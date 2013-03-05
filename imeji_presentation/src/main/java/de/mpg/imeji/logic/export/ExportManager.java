@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpResponseException;
 
 import de.mpg.imeji.logic.controller.AlbumController;
@@ -21,6 +22,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.search.URLQueryTransformer;
 
 /**
  * Manage {@link Export}
@@ -81,20 +83,24 @@ public class ExportManager
      * 
      * @param searchQuery
      * @return
+     * @throws IOException 
      */
-    public SearchResult search(SearchQuery searchQuery)
+    public SearchResult search() throws IOException
     {
         String collectionId = export.getParam("col");
+        System.out.println(collectionId);
         String albumId = export.getParam("alb");
+        String query = export.getParam("q");
         String id = export.getParam("id");
         String searchType = export.getParam("type");
-        int maximumNumberOfRecords = 20;
+        int maximumNumberOfRecords = 100;
+        SearchQuery searchQuery = URLQueryTransformer.parseStringQuery(query);
         if (export.getParam("n") != null)
         {
             maximumNumberOfRecords = Integer.parseInt(export.getParam("n"));
         }
         SearchResult result = null;
-        if ("collection".equals(searchType))
+        if ("collection".equals(searchType) || "metadata".equals(searchType))
         {
             CollectionController collectionController = new CollectionController(user);
             result = collectionController.search(searchQuery, null, maximumNumberOfRecords, 0);
@@ -135,77 +141,10 @@ public class ExportManager
     }
 
     /**
-     * Implements search for export
+     * REturn the content type of the {@link HttpResponse}
      * 
-     * @param scList
-     * @param searchType
-     * @param collectionId
-     * @param albumId
-     * @param maximumNumberOfRecords
      * @return
      */
-    // public SearchResult search(List<SearchCriterion> scList)
-    // {
-    // String collectionId = export.getParam("col");
-    // String albumId = export.getParam("alb");
-    // String searchType = export.getParam("type");
-    // int maximumNumberOfRecords = 20;
-    //
-    // if ( export.getParam("n") != null)
-    // {
-    // maximumNumberOfRecords = Integer.parseInt(export.getParam("n"));
-    // }
-    //
-    // SearchResult result = null;
-    //
-    // if ("collection".equals(searchType))
-    // {
-    // CollectionController collectionController = new CollectionController(user);
-    // result = collectionController.search(scList, null, maximumNumberOfRecords, 0);
-    // }
-    // else if ("album".equals(searchType))
-    // {
-    // AlbumController albumController = new AlbumController(user);
-    // result = albumController.search(scList, null, maximumNumberOfRecords, 0);
-    // }
-    // else if ("profile".equals(searchType))
-    // {
-    // //TODO Change the search for profiles!!!!!!!!!!!!
-    // ProfileController pc = new ProfileController(user);
-    // List<String> uris = new ArrayList<String>();
-    // for (MetadataProfile mdp : pc.search())
-    // {
-    // uris.add(mdp.getId().toString());
-    // }
-    // result = new SearchResult(uris);
-    // }
-    // else if ("image".equals(searchType))
-    // {
-    // ItemController itemController = new ItemController(user);
-    //
-    // if (collectionId != null)
-    // {
-    // result = itemController.searchImagesInContainer(ObjectHelper.getURI(CollectionImeji.class, collectionId), scList,
-    // null, maximumNumberOfRecords, 0);
-    // }
-    // else if (albumId != null)
-    // {
-    // result = itemController.searchImagesInContainer(ObjectHelper.getURI(Album.class, albumId), scList, null,
-    // maximumNumberOfRecords, 0);
-    // }
-    // else
-    // {
-    // result = itemController.searchImages(scList, null);
-    // }
-    // }
-    //
-    // if (result != null && result.getNumberOfRecords() > 0 && result.getNumberOfRecords() > maximumNumberOfRecords)
-    // {
-    // result.setResults(result.getResults().subList(0, maximumNumberOfRecords));
-    // }
-    //
-    // return result;
-    // }
     public String getContentType()
     {
         return export.getContentType();

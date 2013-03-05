@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.HttpResponseException;
+
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -14,6 +16,10 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.export.Export;
+import de.mpg.imeji.logic.export.format.rdf.RDFAlbumExport;
+import de.mpg.imeji.logic.export.format.rdf.RDFCollectionExport;
+import de.mpg.imeji.logic.export.format.rdf.RDFImageExport;
+import de.mpg.imeji.logic.export.format.rdf.RDFProfileExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 
@@ -31,6 +37,34 @@ public abstract class RDFExport extends Export
     protected Map<String, String> namespaces;
     protected String modelURI;
 
+    /**
+     * Factory for {@link RDFExport}
+     * 
+     * @param type
+     * @return
+     * @throws HttpResponseException
+     */
+    public static RDFExport factory(String type) throws HttpResponseException
+    {
+        if ("image".equalsIgnoreCase(type))
+        {
+            return new RDFImageExport();
+        }
+        else if ("collection".equalsIgnoreCase(type))
+        {
+            return new RDFCollectionExport();
+        }
+        else if ("album".equalsIgnoreCase(type))
+        {
+            return new RDFAlbumExport();
+        }
+        else if ("profile".equals(type))
+        {
+            return new RDFProfileExport();
+        }
+        throw new HttpResponseException(400, "Type " + type + " is not supported.");
+    }
+
     @Override
     public void export(OutputStream out, SearchResult sr)
     {
@@ -44,9 +78,6 @@ public abstract class RDFExport extends Export
     {
         return "application/xml";
     }
-
-    @Override
-    public abstract void init();
 
     /**
      * Initialize the namespaces used for the export
@@ -82,12 +113,11 @@ public abstract class RDFExport extends Export
         }
         catch (Exception e)
         {
-            ImejiJena.imejiDataSet.commit();
             throw new RuntimeException("Error in export", e);
         }
         finally
         {
-            ImejiJena.imejiDataSet.commit();
+            ImejiJena.imejiDataSet.end();
         }
     }
 

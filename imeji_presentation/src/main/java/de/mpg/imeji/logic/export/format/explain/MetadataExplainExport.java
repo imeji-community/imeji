@@ -60,9 +60,7 @@ public class MetadataExplainExport extends ExplainExport
         writer.append(getRDFTagOpen());
         for (String colURI : sr.getResults())
         {
-            System.out.println(colURI);
             CollectionImeji col = ObjectCachedLoader.loadCollection(URI.create(colURI));
-            System.out.println(col.getProfile());
             for (Statement st : ObjectCachedLoader.loadProfile(col.getProfile()).getStatements())
             {
                 for (SearchIndex index : SearchIndex.getAllIndexForStatement(st))

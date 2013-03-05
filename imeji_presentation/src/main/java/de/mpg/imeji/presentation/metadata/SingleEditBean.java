@@ -29,6 +29,13 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
+/**
+ * Metadata Editor for the detail item page
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SingleEditBean
 {
     private Item item = null;
@@ -40,6 +47,13 @@ public class SingleEditBean
     private String pageUrl = "";
     private List<SuperMetadataBean> metadataList;
 
+    /**
+     * Constructor
+     * 
+     * @param im
+     * @param profile
+     * @param pageUrl
+     */
     public SingleEditBean(Item im, MetadataProfile profile, String pageUrl)
     {
         item = im;
@@ -87,6 +101,12 @@ public class SingleEditBean
         }
     }
 
+    /**
+     * Save the {@link Item} with its {@link Metadata}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String save() throws Exception
     {
         copySuperMetadatatoItem();
@@ -99,6 +119,9 @@ public class SingleEditBean
         return "";
     }
 
+    /**
+     * Transform all {@link SuperMetadataBean} to {@link Metadata} which are going to be saved
+     */
     private void copySuperMetadatatoItem()
     {
         item.getMetadataSet().getMetadata().clear();
@@ -108,6 +131,12 @@ public class SingleEditBean
         }
     }
 
+    /**
+     * Cancel the editing, and reset original values
+     * 
+     * @return
+     * @throws Exception
+     */
     public String cancel() throws Exception
     {
         this.toggleState = "displayMd";

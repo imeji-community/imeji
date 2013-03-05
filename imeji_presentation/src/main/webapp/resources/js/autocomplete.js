@@ -128,6 +128,10 @@ $(function() {
 								document.getElementById(inputId
 										+ "inputLongitude").value = ui.item.longitude;
 							}
+							if (ui.item.licenseId != null) {
+								document.getElementById(inputId
+										+ "inputLicenseId").value = ui.item.licenseId;
+							}
 							return false;
 						}
 					});

@@ -27,6 +27,7 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Bean for the collections page
@@ -78,10 +79,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         CollectionController controller = new CollectionController(sb.getUser());
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         SearchQuery searchQuery = new SearchQuery();
-        if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("q"))
-        {
-            query = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("q");
-        }
+        query = UrlHelper.getParameterValue("q");
         if (!"".equals(query))
         {
             searchQuery = URLQueryTransformer.parseStringQuery(query);

@@ -311,10 +311,7 @@ public class EditImageMetadataBean
     public String addToAllSaveAndRedirect() throws IOException
     {
         addToAll();
-        long before = System.currentTimeMillis();
         editor.save();
-        long after = System.currentTimeMillis();
-        logger.info("saving = " + Long.valueOf(after - before));
         redirectToView();
         return "";
     }
@@ -327,10 +324,7 @@ public class EditImageMetadataBean
      */
     public String saveAndRedirect() throws IOException
     {
-        long before = System.currentTimeMillis();
         editor.save();
-        long after = System.currentTimeMillis();
-        logger.info("saving = " + Long.valueOf(after - before));
         redirectToView();
         return "";
     }

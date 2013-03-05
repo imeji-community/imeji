@@ -203,7 +203,6 @@ public class AlbumBean
 
     public String addOrganization()
     {
-        System.out.println("add org");
         Collection<Person> persons = getAlbum().getMetadata().getPersons();
         List<Organization> orgs = (List<Organization>)((List<Person>)persons).get(authorPosition).getOrganizations();
         orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());

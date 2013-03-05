@@ -4,7 +4,7 @@
  * New imeji styles for theme_default 
  * 
  * Please note: this style sheet is a revision, a workaround in progress (!) 
- * of the original imeji theme based on the eSciDoc Core CSS
+ * of the original imeji theme based on the eSciDoc core and appearance CSS
  *
  * Please check the new base.css with normalize.css and additional CSS-resets
  * 
@@ -15,6 +15,7 @@
  * are documented in changes.css 
  * 
  * ========================================================================  */
+
 
 /* overwrite of the old font-family style (in apperance.css) 
  * with font-family: 'Open Sans',sans-serif; 

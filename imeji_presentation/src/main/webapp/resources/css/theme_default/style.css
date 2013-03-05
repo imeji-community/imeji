@@ -16,6 +16,11 @@ body * {
     font-family: 'Open Sans',sans-serif;
 }
 
+p {
+	margin: 5% 0;
+}
+
+
 .imj_clear {
     clear: both;
 }
@@ -102,8 +107,9 @@ div.searchMenu {
     height: 90%;
     overflow: auto;
     font-size: 1.0909em;
-    margin-top: 5%;
+    /*margin-top: 5%;*/
 }
+
 
 .imj_welcomeInfo .id_tabs li.ui-state-active {
     background-color: #383838;
@@ -320,7 +326,7 @@ margin-bottom: 0.9090em;  */
     background-color: #292929;
     color: #6CAD2F;
     padding: 0;
-    height: 1.4545em;
+    height: 1.5454em; /*1.4545em*/
     border: none 0;
     padding-top: 0.1818em;
 }
@@ -748,7 +754,7 @@ span.imj_contentSubMenuItemFiltering {
     /*white-space: nowrap;*/
     /*word-break: break-all;*/
     word-break: hyphenate;
-    max-width: 25.000em;
+    max-width: 20.000em;
     margin: 0;
     padding: 0.4%;
     background-color: #323232;

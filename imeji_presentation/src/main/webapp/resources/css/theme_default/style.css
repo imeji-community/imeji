@@ -5,16 +5,19 @@
  * 
  *** imeji style prefix for all classes and ids: imj_ 
  * 
- ==========================================================================
-   ==================================================
-   ================================================== */
+ ========================================================================= */
 
 /* imeji basic - global - styles for theme_default
    ==================================================  */
 
-body * {
+/* overwrite old font-family styles in apperance.css with new font-family 'Open Sans' which is loaded via Google-Webfonts in template.xhtml head 
+ * for testing on all elements: body * { font-family: 'Open Sans',sans-serif; } 
+   ==================================================  */ 
+
+body,label,input,textarea,select,button,input.numberLabel,h1,h2,h3,h4,h5,h6,a,p {
     font-family: 'Open Sans',sans-serif;
 }
+
 
 p {
 	margin: 5% 0;

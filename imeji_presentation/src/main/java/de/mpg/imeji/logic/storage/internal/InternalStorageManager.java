@@ -31,6 +31,10 @@ package de.mpg.imeji.logic.storage.internal;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -99,7 +103,7 @@ public class InternalStorageManager
     {
         try
         {
-            InternalStorageItem item = generateInternalStorageItem(StringHelper.normalizeFilename(filename),
+            InternalStorageItem item = generateInternalStorageItem(filename,
                     collectionId);
             return writeItemFiles(item, bytes);
         }
@@ -176,7 +180,7 @@ public class InternalStorageManager
         String id = generateIdWithVersion(collectionId);
         InternalStorageItem item = new InternalStorageItem();
         item.setId(id);
-        item.setFileName(filename);
+        item.setFileName(StringHelper.normalizeFilename(filename));
         item.setOrignalPath(generateFileSystemPath(id, filename, FileResolution.ORIGINAL));
         item.setThumbnailPath(generateFileSystemPath(id, filename, FileResolution.THUMBNAIL));
         item.setWebPath(generateFileSystemPath(id, filename, FileResolution.WEB));

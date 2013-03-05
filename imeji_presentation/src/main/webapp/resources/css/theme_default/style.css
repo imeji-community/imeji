@@ -102,6 +102,7 @@ div.searchMenu {
     height: 90%;
     overflow: auto;
     font-size: 1.0909em;
+    margin-top: 5%;
 }
 
 .imj_welcomeInfo .id_tabs li.ui-state-active {
@@ -116,6 +117,12 @@ div.searchMenu {
 .imj_welcomeInfo .id_tabs div.ui-tabs-hide {
     display: none;
 }
+
+
+.imj_welcomeInfoTabContentText {
+	margin-bottom: 1%;
+}
+
 
 .imj_startpage_carouselWrapper {
     float: left;
@@ -528,7 +535,7 @@ cut second ?  ?
     margin-right: 0.636em; /*0.8181em*/
     text-align: left;
     letter-spacing: 0.091em;
-    /* margin-left: 1%;;;
+    /* margin-left: 1%;
     padding: 1%;
     display: inline;
     font-size: 1.0909em;*/
@@ -598,7 +605,7 @@ cut second ?  ?
     padding: 0;
     text-transform: uppercase;
     /*line-height: normal;*/
-    letter-spacing: 0.091em;
+    /*letter-spacing: 0.091em;*/
 }
 
 /* free_area0 span - template_paginator_containers.xhtml   */

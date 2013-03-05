@@ -7,12 +7,13 @@
  * new active imeji styles can be found in 
  * webapp/resources/css/theme_default/style.css 
  *
- * check also webapp/resources/css/basic.css - for imeji we use normalize.css 
- * as a base, customised with own imeji styles
+ * please check the new base.css with normalize.css and additional CSS-resets
  *
  * imeji style prefix for all new classes and ids: imj_ 
  *
  * this documentation is in progress!
+ *
+ * K. Asshauer 2013-03-03
  ========================================================================== */
 
 /* 

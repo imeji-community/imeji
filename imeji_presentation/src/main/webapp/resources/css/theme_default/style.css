@@ -1,12 +1,13 @@
-/* ========================================================================== 
- ************************* imeji theme_default styles *********************** 
+/* =====================================================================================
+ ****************************** imeji theme_default styles ***************************** 
  * 
  * New imeji styles for theme_default 
  * 
- * Please note: this style sheet is a revision, a workaround in progress (!) 
- * of the original imeji theme based on the eSciDoc core and appearance CSS
+ * Please note: This style sheet is a first revision, a workaround in progress (!) 
+ * of the original imeji theme/template based on the eSciDoc GUI V2 (core and appearance 
+ * styles - http://colab.mpdl.mpg.de/mediawiki/images/0/02/MPDL_StyleGuide.pdf).
  *
- * Please check the new base.css with normalize.css and additional CSS-resets
+ * Please check the new base.css with normalize.css and additional CSS-resets.
  * 
  * New imeji style prefix for all classes and ids: imj_
  *
@@ -14,7 +15,7 @@
  * old version -> new version (file.name)
  * are documented in changes.css 
  * 
- * ========================================================================  */
+ * ====================================================================================  */
 
 
 /* overwrite of the old font-family style (in apperance.css) 

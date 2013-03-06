@@ -173,7 +173,7 @@ public class AdvancedSearchBean
                     .getExternalContext()
                     .redirect(
                             navigation.getBrowseUrl() + "?q="
-                                    + URLQueryTransformer.transform2URL(formular.getFormularAsSearchQuery()));
+                                    + URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery()));
         }
         catch (IOException e)
         {

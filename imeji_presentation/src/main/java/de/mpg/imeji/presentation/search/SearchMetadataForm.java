@@ -164,14 +164,6 @@ public class SearchMetadataForm
         {
             return group;
         }
-        try
-        {
-            searchValue = URLEncoder.encode(searchValue, "UTF-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new RuntimeException("Error encoding search value: " + searchValue, e);
-        }
         if (namespace != null)
         {
             URI ns = URI.create(namespace);

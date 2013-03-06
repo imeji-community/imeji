@@ -50,7 +50,7 @@ public class AlbumImageBean extends ImageBean
 
     private Album loadAlbum()
     {
-        return ObjectLoader.loadAlbum(ObjectHelper.getURI(Album.class, albumId), session.getUser());
+        return ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, albumId), session.getUser());
     }
 
     /**

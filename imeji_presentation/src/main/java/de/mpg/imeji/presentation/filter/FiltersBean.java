@@ -124,13 +124,6 @@ public class FiltersBean
         return null;
     }
 
-    public static void main(String[] args)
-    {
-        String s1 = "+AND+type%3D%3D%22http%3A%2F%2Fimeji.org%2Fterms%2Fmetadata%23geolocation%22";
-        String s2 = "+AND+type%3D%3D%22http%3A%2F%2Fimeji.org%2Fterms%2Fmetadata%23geolocation%22+AND+type%3D%3D%22http%3A%2F%2Fimeji.org%2Fterms%2Fmetadata%23link%22";
-        System.out.println(s2.contains(s1));
-    }
-
     /**
      * Find the filters which were already defined (in previous queries)
      * 

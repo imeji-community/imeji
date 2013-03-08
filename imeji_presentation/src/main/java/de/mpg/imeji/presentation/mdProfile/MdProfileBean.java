@@ -275,7 +275,7 @@ public class MdProfileBean
                 BeanHelper.error(s.getId() + " " + sessionBean.getMessage("error_profile_name_not_valid"));
                 return false;
             }
-            else if (s.getLabels().isEmpty() || "".equals(((List<LocalizedString>)s.getLabels()).get(0).toString()))
+            else if (s.getLabels().isEmpty() || "".equals(((List<LocalizedString>)s.getLabels()).get(0).getValue()))
             {
                 BeanHelper.error(sessionBean.getMessage("error_profile_name_required"));
                 return false;

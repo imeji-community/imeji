@@ -40,28 +40,24 @@
 			<h:outputText styleClass="free_area0 endline" value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number' and md.number != null}"/>
 			<h:outputText styleClass="free_area0 endline" value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'  and md.date != null}"/>
 			<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
-					<h:outputText value="#{md.uri}" rendered="#{md.label == ''}"/>
-					<h:outputText value="#{md.label}" rendered="#{md.label != ''}"/>
+				<h:outputText value="#{md.uri}" rendered="#{md.label == ''}"/>
+				<h:outputText value="#{md.label}" rendered="#{md.label != ''}"/>
+			</h:outputLink>
+			<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}">
+				<h:outputText styleClass="free_area0 endline" value="#{md.license}" rendered="#{md.externalUri== null and md.license != null}"/>
+				<h:outputLink rendered="#{md.externalUri != null}" value="#{md.externalUri}">
+					<h:outputText styleClass="free_area0 endline" value="#{md.license}" rendered="#{md.license != null}"/>
+					<h:outputText styleClass="free_area0 endline" value="#{md.externalUri}" rendered="#{md.license == null}"/>
 				</h:outputLink>
-			<h:outputText styleClass="free_area0 endline" value="#{md.license}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license' and md.license != null}"/>
-			
+			</h:panelGroup>	
 			<h:outputLink value="#{md.coneId}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId != null}" >
-				<h:panelGroup styleClass="free_area0 endline" rendered="#{md.person.familyName != null}">
-				<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
-				<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
-					<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
-					<h:outputText value="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''"/>
-				</h:panelGroup>
-			</h:panelGroup>
+				<h:outputText styleClass="free_area0" value="#{md.person.familyName}, #{md.person.givenName}"/>
+				<h:outputText  styleClass="free_area0" value="(#{md.person.organizationString})" rendered="#{md.person.organizationString != ''}"/>
 			</h:outputLink>
 			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId == null and md.person.familyName != null}">
-				<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
-				<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
-					<h:outputText value="#{md.person.familyName}, #{md.person.givenName}"/>
-					<h:outputText value="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''"/>
-				</h:panelGroup>
+				<h:outputText styleClass="free_area0" value="#{md.person.familyName}, #{md.person.givenName}"/>
+				<h:outputText styleClass="free_area0" value=" (#{md.person.organizationString})" rendered="#{md.person.organizationString != ''}"/>
 			</h:panelGroup>
-			
 			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">
 				<h:outputText value="#{md.name} (" rendered="#{md.name != null}"/>
 				<h:outputText value="#{md.longitude}/#{md.latitude}"/>

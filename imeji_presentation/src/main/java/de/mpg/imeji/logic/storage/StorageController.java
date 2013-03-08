@@ -29,6 +29,8 @@
 package de.mpg.imeji.logic.storage;
 
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 

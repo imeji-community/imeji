@@ -31,6 +31,10 @@ package de.mpg.imeji.logic.storage.internal;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -99,8 +103,7 @@ public class InternalStorageManager
     {
         try
         {
-            InternalStorageItem item = generateInternalStorageItem(StringHelper.normalizeFilename(filename),
-                    collectionId);
+            InternalStorageItem item = generateInternalStorageItem(filename, collectionId);
             return writeItemFiles(item, bytes);
         }
         catch (Exception e)
@@ -135,7 +138,9 @@ public class InternalStorageManager
      */
     public String transformUrlToPath(String url)
     {
+        String filename = getFileName(url, StringHelper.urlSeparator);
         return url.replace(storageUrl, storagePath).replace(StringHelper.urlSeparator, StringHelper.fileSeparator);
+        // .replace(filename, StringHelper.normalizeFilename(filename));
     }
 
     /**
@@ -147,6 +152,21 @@ public class InternalStorageManager
     public String transformPathToUrl(String path)
     {
         return path.replace(storagePath, storageUrl).replace(StringHelper.fileSeparator, StringHelper.urlSeparator);
+    }
+
+    /**
+     * Extract the filename out of a path (then use StringHelper.fileSeparator as separator), or of an url(then use
+     * StringHelper.urlSeparator as separator)
+     * 
+     * @param pathOrUrl
+     * @param separator
+     * @return
+     */
+    public String getFileName(String pathOrUrl, String separator)
+    {
+        if (pathOrUrl.endsWith(separator))
+            pathOrUrl = pathOrUrl.substring(0, pathOrUrl.lastIndexOf(separator));
+        return pathOrUrl.substring(pathOrUrl.lastIndexOf(separator) + 1);
     }
 
     /**
@@ -170,6 +190,7 @@ public class InternalStorageManager
      * 
      * @param filename
      * @return
+     * @throws UnsupportedEncodingException
      */
     private InternalStorageItem generateInternalStorageItem(String filename, String collectionId)
     {
@@ -177,14 +198,15 @@ public class InternalStorageManager
         InternalStorageItem item = new InternalStorageItem();
         item.setId(id);
         item.setFileName(filename);
-        item.setOrignalPath(generateFileSystemPath(id, filename, FileResolution.ORIGINAL));
-        item.setThumbnailPath(generateFileSystemPath(id, filename, FileResolution.THUMBNAIL));
-        item.setWebPath(generateFileSystemPath(id, filename, FileResolution.WEB));
+        item.setOriginalUrl(generateUrl(id, filename, FileResolution.ORIGINAL));
+        item.setThumbnailUrl(generateUrl(id, filename, FileResolution.THUMBNAIL));
+        item.setWebUrl(generateUrl(id, filename, FileResolution.WEB));
         return item;
     }
-    
+
     /**
      * Generate the id of a file with the correct version, i.e.
+     * 
      * @param collectionId
      * @return
      */
@@ -210,23 +232,26 @@ public class InternalStorageManager
     {
         String uuid = IdentifierUtil.newUniversalUniqueId();
         // split the uuid to split the number of subdirectories for each collection
-        return collectionId + StringHelper.fileSeparator + uuid.substring(0, 2) + StringHelper.fileSeparator
-                + uuid.substring(2, 4) + StringHelper.fileSeparator + uuid.substring(4, 6) + StringHelper.fileSeparator
-                + uuid.substring(6) + StringHelper.fileSeparator + version;
+        return collectionId + StringHelper.urlSeparator + uuid.substring(0, 2) + StringHelper.urlSeparator
+                + uuid.substring(2, 4) + StringHelper.urlSeparator + uuid.substring(4, 6) + StringHelper.urlSeparator
+                + uuid.substring(6) + StringHelper.urlSeparator + version;
     }
 
     /**
-     * Create a path for a file according to its {@link FileResolution}
+     * Create the URL of the file from its filename, its id, and its resolution. Important: the filename is decoded, to
+     * avoid problems by reading this url
      * 
      * @param id
      * @param filename
      * @param resolution
      * @return
+     * @throws UnsupportedEncodingException
      */
-    private String generateFileSystemPath(String id, String filename, FileResolution resolution)
+    private String generateUrl(String id, String filename, FileResolution resolution)
     {
-        return id + StringHelper.fileSeparator + resolution.name().toLowerCase() + StringHelper.fileSeparator
-                + filename;
+        filename = StringHelper.normalizeFilename(filename);
+        return storageUrl + id + StringHelper.urlSeparator + resolution.name().toLowerCase()
+                + StringHelper.urlSeparator + filename;
     }
 
     /**
@@ -239,14 +264,13 @@ public class InternalStorageManager
      */
     private InternalStorageItem writeItemFiles(InternalStorageItem item, byte[] bytes) throws IOException, Exception
     {
-        item.setOrignalPath(write(bytes, item.getOrignalPath()));
-        item.setWebPath(write(
-                ImageUtils.transformImage(bytes, FileResolution.WEB,
-                        StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))), item.getWebPath()));
-        item.setThumbnailPath(write(
-                ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
-                        StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-                item.getThumbnailPath()));
+        write(bytes, transformUrlToPath(item.getOriginalUrl()));
+        write(ImageUtils.transformImage(bytes, FileResolution.WEB,
+                StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
+                transformUrlToPath(item.getWebUrl()));
+        write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
+                StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
+                transformUrlToPath(item.getThumbnailUrl()));
         return item;
     }
 
@@ -260,7 +284,7 @@ public class InternalStorageManager
      */
     private String write(byte[] bytes, String path) throws IOException
     {
-        File file = new File(storagePath + path);
+        File file = new File(path);
         if (!file.exists())
         {
             file.getParentFile().mkdirs();

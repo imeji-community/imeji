@@ -61,6 +61,12 @@ public class MetadataHelper
         return false;
     }
 
+    /**
+     * Set the CoNE id of a {@link ConePerson}
+     * 
+     * @param md
+     * @return
+     */
     public static Metadata setConeID(Metadata md)
     {
         if (md.getTypeNamespace().equals(Metadata.Types.CONE_PERSON.getClazzNamespace()))

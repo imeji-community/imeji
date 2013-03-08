@@ -1,6 +1,9 @@
 package de.mpg.imeji.presentation.servlet;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URLEncoder;
@@ -12,12 +15,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.openjena.atlas.json.JsonArray;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**
  * Servlet implementation class autocompleter
@@ -30,7 +42,8 @@ public class autocompleter extends HttpServlet
     private Pattern coneAuthorPattern = Pattern.compile("http.*/cone/persons/.*?format=json.*",
             Pattern.CASE_INSENSITIVE);
     private Pattern googleGeoAPIPattern = Pattern.compile(
-            "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=", Pattern.CASE_INSENSITIVE);
+            "https://maps.googleapis.com/maps/api/geocode/json.*address=", Pattern.CASE_INSENSITIVE);
+    private Pattern ccLicensePattern = Pattern.compile("http://api.creativecommons.org/rest/.*/simple/chooser.*");
     private String coneAuthorUri = "cone/persons/query?format=json&n=10&m=full&q=";
     private String googleAPIUri = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=";
 
@@ -50,18 +63,18 @@ public class autocompleter extends HttpServlet
         String suggest = request.getParameter("searchkeyword");
         String datasource = request.getParameter("datasource");
         String responseString = "";
-        if (suggest.toString().isEmpty())
+        if (suggest.isEmpty())
         {
             suggest = "a";
         }
-        else if (!suggest.toString().isEmpty())
+        else if (!datasource.isEmpty())
         {
             HttpClient client = new HttpClient();
             GetMethod getMethod = new GetMethod(datasource + URLEncoder.encode(suggest.toString(), "UTF-8"));
             try
             {
                 client.executeMethod(getMethod);
-                responseString = getMethod.getResponseBodyAsString().trim();
+                responseString = new String(StorageUtils.toBytes(getMethod.getResponseBodyAsStream()), "UTF-8");
                 if (datasource != null && responseString != null)
                     responseString = passResult(responseString, datasource);
             }
@@ -103,9 +116,13 @@ public class autocompleter extends HttpServlet
                 return parseConeVocabulary(input);
             }
         }
-        else if (source.contains(googleAPIUri))
+        else if (googleGeoAPIPattern.matcher(source).matches())
         {
             return parseGoogleGeoAPI(input);
+        }
+        else if (ccLicensePattern.matcher(source).matches())
+        {
+            return parseCCLicense(input);
         }
         return input;
     }
@@ -197,6 +214,41 @@ public class autocompleter extends HttpServlet
         StringWriter out = new StringWriter();
         JSONArray.writeJSONString(result, out);
         return out.toString();
+    }
+
+    private String parseCCLicense(String str)
+    {
+        str = "<licences>" + str + "</licences>";
+        try
+        {
+            JSONArray json = new JSONArray();
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            org.w3c.dom.Document doc = dBuilder.parse(new ByteArrayInputStream(str.getBytes()));
+            doc.getDocumentElement().normalize();
+            NodeList nList = ((org.w3c.dom.Document)doc).getElementsByTagName("option");
+            for (int i = 0; i < nList.getLength(); i++)
+            {
+                Node nNode = nList.item(i);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE)
+                {
+                    JSONObject license = new JSONObject();
+                    Element eElement = (Element)nNode;
+                    license.put("label", eElement.getTextContent());
+                    license.put("value", eElement.getTextContent());
+                    license.put("licenseId", eElement.getAttribute("value"));
+                    json.add(license);
+                }
+            }
+            StringWriter out = new StringWriter();
+            JSONArray.writeJSONString(json, out);
+            return out.toString();
+        }
+        catch (Exception e)
+        {
+            log("Error Parsing CC License", e);
+        }
+        return str;
     }
 
     /**

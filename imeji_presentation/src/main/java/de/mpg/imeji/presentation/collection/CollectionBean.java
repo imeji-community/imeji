@@ -389,7 +389,6 @@ public abstract class CollectionBean
         CollectionController cc = new CollectionController();
         try
         {
-            System.out.println("release collecionbean");
             cc.release(collection, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_release"));
         }

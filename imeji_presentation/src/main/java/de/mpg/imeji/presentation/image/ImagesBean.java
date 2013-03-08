@@ -108,7 +108,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseInit();
         browseContext = getNavigationString();
-        // initMenus();
         return "";
     }
 
@@ -149,7 +148,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(null, session.getLabel("default")));
+        sortMenu.add(new SelectItem(null, "--"));
         sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel(SearchIndex.names.created.name())));
         sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel(SearchIndex.names.col.name())));
         sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel(SearchIndex.names.modified.name())));

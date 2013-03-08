@@ -90,7 +90,7 @@ public class AlbumBean
             {
                 Album a = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
                 ItemController ic = new ItemController(sessionBean.getUser());
-                ic.loadContainerItems(a, sessionBean.getUser(), 5, 0);
+                ic.loadContainerItems(a, sessionBean.getUser(), 1, 0);
                 setAlbum(a);
                 if (album != null)
                 {
@@ -203,7 +203,6 @@ public class AlbumBean
 
     public String addOrganization()
     {
-        System.out.println("add org");
         Collection<Person> persons = getAlbum().getMetadata().getPersons();
         List<Organization> orgs = (List<Organization>)((List<Person>)persons).get(authorPosition).getOrganizations();
         orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());

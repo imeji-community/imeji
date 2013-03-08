@@ -51,11 +51,9 @@ public class SimpleImageEditor extends MetadataEditor
                 {
                     eib.getMetadata().remove(i);
                 }
-                eib.getMetadata().get(i).setPos(i);
-                if (eib.getMetadata().get(i).getPerson() != null)
+                else
                 {
-                    eib.getMetadata().get(i).getPerson()
-                            .setId(URI.create(eib.getMetadata().get(i).getPerson().getIdentifier()));
+                    eib.getMetadata().get(i).setPos(i);
                 }
             }
         }

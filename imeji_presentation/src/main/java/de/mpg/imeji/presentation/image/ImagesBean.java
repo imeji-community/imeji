@@ -149,9 +149,9 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(null, "--"));
-        sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel(SearchIndex.names.created.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel(SearchIndex.names.col.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel(SearchIndex.names.modified.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel("sort_img_date_created")));
+        sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel("sort_img_date_mod")));
+        sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel("sort_img_collection")));
     }
 
     @Override

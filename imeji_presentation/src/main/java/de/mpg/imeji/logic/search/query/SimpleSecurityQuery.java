@@ -72,7 +72,6 @@ public class SimpleSecurityQuery
                     if (GrantType.CONTAINER_ADMIN.equals(g.asGrantType())
                             || GrantType.CONTAINER_EDITOR.equals(g.asGrantType())
                             || GrantType.VIEWER.equals(g.asGrantType())
-                            || GrantType.PRIVILEGED_VIEWER.equals(g.asGrantType())
                             || GrantType.IMAGE_EDITOR.equals(g.asGrantType())
                             || (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType) && GrantType.PROFILE_ADMIN
                                     .equals(g.asGrantType())))

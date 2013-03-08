@@ -6,13 +6,13 @@
 		class="half_area0_p8 bordst0 shadst1 dialogbox" style="display: none;">
 		<h:form id="discardForm">
 			<div class="half_area0_p8">
-				<h:outputText value="#{msg.confirmation_withdraw_collection}?"
+				<h:outputText value="#{msg.confirmation_withdraw_collection}"
 					rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}" />
-				<h:outputText value="#{msg.confirmation_withdraw_album}?"
+				<h:outputText value="#{msg.confirmation_withdraw_album}"
 					rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}" />
 				<h:outputText id="errorMessage"
-					styleClass="quad_area0_p0 messageError" value="" />
-				<h:inputTextarea id="discardComment" value="#{discardComment}"
+					styleClass="quad_area0_p0 messageError" value="#{lbl.discardComment}" />
+				<h:inputTextarea id="discardComment" value="#{discardComment}" 
 					rows="6" styleClass="quad_area0_p0"
 					valueChangeListener="#{bean.discardCommentListener}" />
 			</div>

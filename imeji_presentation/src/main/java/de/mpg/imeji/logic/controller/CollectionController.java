@@ -26,6 +26,8 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -40,6 +42,7 @@ public class CollectionController extends ImejiController
     private static ImejiRDF2Bean imejiRDF2Bean = null;
     private static ImejiBean2RDF imejiBean2RDF = null;
     private static Logger logger = Logger.getLogger(CollectionController.class);
+    private SessionBean sessionBean;
 
     /**
      * Default constructor
@@ -49,6 +52,8 @@ public class CollectionController extends ImejiController
         super();
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
     /**
@@ -131,7 +136,7 @@ public class CollectionController extends ImejiController
         List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
-            throw new RuntimeException("Collection has at least one image locked by another user.");
+            throw new RuntimeException(sessionBean.getMessage("collection_locked"));
         }
         else
         {
@@ -160,7 +165,7 @@ public class CollectionController extends ImejiController
         List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
-            throw new RuntimeException("Collection has at least one image locked by another user.");
+        	throw new RuntimeException(sessionBean.getMessage("collection_locked"));
         }
         else if (itemUris.isEmpty())
         {
@@ -189,7 +194,7 @@ public class CollectionController extends ImejiController
         List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
-            throw new RuntimeException("Collection has at least one image locked by another user.");
+        	throw new RuntimeException(sessionBean.getMessage("collection_locked"));
         }
         else if (!Status.RELEASED.equals(collection.getStatus()))
         {

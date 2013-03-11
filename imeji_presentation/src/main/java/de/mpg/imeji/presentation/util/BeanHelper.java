@@ -28,25 +28,34 @@ public class BeanHelper
         logger.debug("Getting bean " + name + ": " + result);
         if (result == null)
         {
-            synchronized (result)
-            {
-                if (result == null)
-                {
-                    try
-                    {
-                        logger.debug("Creating new request bean: " + name);
-                        Object newBean = cls.newInstance();
-                        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(name, newBean);
-                        return newBean;
-                    }
-                    catch (Exception e)
-                    {
-                        throw new RuntimeException("Error creating new bean of type " + cls, e);
-                    }
-                }
-            }
+            result = addRequestBean(cls, name);
         }
         return result;
+    }
+
+    /**
+     * Add a class to the request map
+     * 
+     * @param cls
+     * @param name
+     * @return
+     */
+    private static synchronized Object addRequestBean(final Class<?> cls, String name)
+    {
+        Object result = FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get(name);
+        if (result != null)
+            return result;
+        try
+        {
+            logger.debug("Creating new session bean: " + name);
+            Object newBean = cls.newInstance();
+            FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(name, newBean);
+            return newBean;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error creating new bean of type " + cls, e);
+        }
     }
 
     /**
@@ -63,25 +72,34 @@ public class BeanHelper
         logger.debug("Getting bean " + name + ": " + result);
         if (result == null)
         {
-            synchronized (result)
-            {
-                if (result == null)
-                {
-                    try
-                    {
-                        logger.debug("Creating new session bean: " + name);
-                        Object newBean = cls.newInstance();
-                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(name, newBean);
-                        return newBean;
-                    }
-                    catch (Exception e)
-                    {
-                        throw new RuntimeException("Error creating new bean of type " + cls, e);
-                    }
-                }
-            }
+            result = addSessionBean(cls, name);
         }
         return result;
+    }
+
+    /**
+     * Add a class to the session map
+     * 
+     * @param cls
+     * @param name
+     * @return
+     */
+    private static synchronized Object addSessionBean(final Class<?> cls, String name)
+    {
+        Object result = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(name);
+        if (result != null)
+            return result;
+        try
+        {
+            logger.debug("Creating new session bean: " + name);
+            Object newBean = cls.newInstance();
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(name, newBean);
+            return newBean;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error creating new bean of type " + cls, e);
+        }
     }
 
     /**
@@ -98,25 +116,34 @@ public class BeanHelper
         logger.debug("Getting bean " + name + ": " + result);
         if (result == null)
         {
-            synchronized (result)
-            {
-                if (result == null)
-                {
-                    try
-                    {
-                        logger.debug("Creating new application bean: " + name);
-                        Object newBean = cls.newInstance();
-                        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(name, newBean);
-                        return newBean;
-                    }
-                    catch (Exception e)
-                    {
-                        throw new RuntimeException("Error creating new bean of type " + cls, e);
-                    }
-                }
-            }
+            result = addApplicationBean(cls, name);
         }
         return result;
+    }
+
+    /**
+     * Add a class to the application map
+     * 
+     * @param cls
+     * @param name
+     * @return
+     */
+    private static synchronized Object addApplicationBean(final Class<?> cls, String name)
+    {
+        Object result = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(name);
+        if (result != null)
+            return result;
+        try
+        {
+            logger.debug("Creating new session bean: " + name);
+            Object newBean = cls.newInstance();
+            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(name, newBean);
+            return newBean;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error creating new bean of type " + cls, e);
+        }
     }
 
     /**

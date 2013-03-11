@@ -128,12 +128,11 @@ All rights reserved. Use is subject to license terms.
                 /* open a dialog*/
 				function openDialog(id) {
 					/*set the dialog in center of the screen*/
-					var dialog = $(document).find("#" + id);
+					var dialog = $(document.getElementById(id));
 					dialog.css("position","absolute");
 					dialog.css("z-index", 1000);
 					dialog.css("background-color","#434343");
-					dialog.css("top", Math.max(0, (($(window).height() - $(dialog).outerHeight()) / 2) + 
-				                                                $(window).scrollTop()) + "px");
+					dialog.css("top", 250+"px");
 					dialog.css("left", Math.max(0, (($(window).width() - $(dialog).outerWidth()) / 2) + 
 				                                                $(window).scrollLeft()) + "px");
 					/*open the dialog*/

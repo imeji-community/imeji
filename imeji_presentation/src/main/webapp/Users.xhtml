@@ -16,7 +16,7 @@
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="quad_area0_p1">
 							<ui:repeat id="grantList" var="grant" value="#{user.grants}" rows="0" >
-								<h:outputText  styleClass="xHuge_area0_p0" value="#{grant.grantType} for #{grant.grantFor}"/>
+								<h:outputText  styleClass="xHuge_area0_p0" value="#{UsersBean.grantsString(grant)}"/>
 							</ui:repeat>
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="large_area0_p0">

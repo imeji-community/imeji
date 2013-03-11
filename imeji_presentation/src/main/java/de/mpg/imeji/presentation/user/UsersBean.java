@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
@@ -105,6 +107,36 @@ public class UsersBean
         }
     }
 
+    public String grantsString (Grant grant)
+    {
+    	String grantStr = "";   	
+        String role = "";
+        
+        if (grant.getGrantFor().toString().contains("album") && grant.getGrantType().getFragment().equals(GrantType.CONTAINER_EDITOR.name()))
+        {
+        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_album_editor");
+        }
+        else
+        {       
+	        if (grant.getGrantType().getFragment().equals(GrantType.VIEWER.name())) {
+	        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_viewer");
+	        }
+	        if (grant.getGrantType().getFragment().equals(GrantType.CONTAINER_EDITOR.name())) {
+	        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_collection_editor");
+	        }
+	        if (grant.getGrantType().getFragment().equals(GrantType.IMAGE_EDITOR.name())) {
+	        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_image_editor");
+	        }
+	        if (grant.getGrantType().getFragment().equals(GrantType.PROFILE_EDITOR.name())) {
+	        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_profile_editor");
+	        }
+        }
+    	
+        grantStr += role + " "+  ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("for") + " " + grant.getGrantFor();
+        
+    	return grantStr;
+    }
+    
     /**
      * Delete a {@link User}
      * 

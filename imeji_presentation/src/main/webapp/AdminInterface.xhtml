@@ -25,7 +25,7 @@
 					styleClass="full_area0 endline" />
 
 			</div>
-			<div class="full_area0">
+			<h:panelGroup class="full_area0" rendered="#{AdminBean.administrate}">
 				<h2>
 					<h:outputText value="#{lbl.storage_infos}" />
 				</h2>
@@ -38,7 +38,7 @@
 				<h:outputText
 					value="#{AdminBean.storageFreeSpace} #{lbl.storage_free_space}"
 					styleClass="full_area0 endline" />
-			</div>
+			</h:panelGroup>
 		</h:panelGroup>
 
 	</ui:define>

@@ -23,6 +23,7 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -273,6 +274,17 @@ public class AdminBean
     {
         Search search = new Search(SearchType.ITEM, null);
         return search.searchSimpleForQuery(SPARQLQueries.selectItemAll(), null).size();
+    }
+
+    /**
+     * True if the current {@link Storage} has implemted a {@link StorageAdministrator}
+     * 
+     * @return
+     */
+    public boolean isAdministrate()
+    {
+        StorageController sc = new StorageController();
+        return sc.getAdministrator() != null;
     }
 
     /**

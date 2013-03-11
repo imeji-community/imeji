@@ -49,7 +49,10 @@ public class AlbumBean
     private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
     private boolean active;
-    private boolean save;
+    /**
+     * True if the {@link AlbumBean} is used for the crete page, else false
+     */
+    private boolean create;
     private boolean selected;
     private static Logger logger = Logger.getLogger(AlbumBean.class);
 
@@ -118,7 +121,7 @@ public class AlbumBean
         try
         {
             setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
-            save = false;
+            create = false;
             if (sessionBean.getActiveAlbum() != null
                     && sessionBean.getActiveAlbum().getId().toString().equals(album.getId().toString()))
             {
@@ -139,7 +142,22 @@ public class AlbumBean
         getAlbum().getMetadata().setDescription("");
         getAlbum().getMetadata().getPersons().clear();
         getAlbum().getMetadata().getPersons().add(ImejiFactory.newPerson());
-        save = true;
+        create = true;
+    }
+
+    /**
+     * Return the link for the Cancel button
+     * 
+     * @return
+     */
+    public String getCancel()
+    {
+        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        if (create)
+        {
+            return nav.getAlbumsUrl();
+        }
+        return nav.getAlbumUrl() + id + "/" + nav.getInfosPath();
     }
 
     public boolean valid()
@@ -321,7 +339,7 @@ public class AlbumBean
      */
     public String save() throws Exception
     {
-        if (save)
+        if (create)
         {
             AlbumController ac = new AlbumController();
             if (valid())

@@ -19,8 +19,10 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
+import de.mpg.imeji.presentation.user.util.GrantHelper;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.LocalizedStringHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
@@ -110,29 +112,9 @@ public class UsersBean
     public String grantsString (Grant grant)
     {
     	String grantStr = "";   	
-        String role = "";
-        
-        if (grant.getGrantFor().toString().contains("album") && grant.getGrantType().getFragment().equals(GrantType.CONTAINER_EDITOR.name()))
-        {
-        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_album_editor");
-        }
-        else
-        {       
-	        if (grant.getGrantType().getFragment().equals(GrantType.VIEWER.name())) {
-	        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_viewer");
-	        }
-	        if (grant.getGrantType().getFragment().equals(GrantType.CONTAINER_EDITOR.name())) {
-	        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_collection_editor");
-	        }
-	        if (grant.getGrantType().getFragment().equals(GrantType.IMAGE_EDITOR.name())) {
-	        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_image_editor");
-	        }
-	        if (grant.getGrantType().getFragment().equals(GrantType.PROFILE_EDITOR.name())) {
-	        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_profile_editor");
-	        }
-        }
+        String role = GrantHelper.grantString(grant);
     	
-        grantStr += role + " "+  ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("for") + " " + grant.getGrantFor();
+        grantStr = role + " "+  ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("for") + " " + grant.getGrantFor();
         
     	return grantStr;
     }

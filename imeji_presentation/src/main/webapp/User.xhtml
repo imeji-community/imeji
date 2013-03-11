@@ -53,24 +53,21 @@
 								</h:panelGroup>
 								<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="large_area1_p0 activeButton"/>
 							</h:panelGroup>
-							
-							<h:panelGroup styleClass="full_area0_p4">
-								<h:outputText styleClass="double_area0_p0" value="#{UserBean.user.name} #{lbl.grants_has_following}:"/>
-								<h:panelGroup styleClass="xHuge_area0">
-									<ui:repeat id="grantList" var="grant" value="#{UserBean.user.grants}" rows="0">
-									<h:panelGroup styleClass="full_area0" rendered="#{grant.grantFor != null}">
-										<h:outputText value="#{grant.grantType.fragment}" styleClass="large_area0"/>
-										<h:outputText value="for" styleClass="xSmall_area0"/>
-										<h:outputLink value="#{Navigation.applicationUri}#{grant.grantFor.path}" styleClass="large_area0">
-											<h:outputText value="#{grant.grantFor.path}" />
-										</h:outputLink>
-										<h:commandLink action="#{UserBean.revokeGrant}" value="#{lbl.revoke}" styleClass="xTiny_marginLExcl free_area0" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
-											<f:param name="grantType" value="#{grant.grantType}" />  
-											<f:param name="grantFor" value="#{grant.grantFor}" />  
-										</h:commandLink>
-									</h:panelGroup>
-								</ui:repeat>
+							<br/><br/>
+							<h:panelGroup styleClass="full_area0_p4 listItem noTopBorder">
+								<b>
+									<h:outputText styleClass="xHuge_area0_p0" value="#{UserBean.user.name} #{lbl.grants_has_following}:"/>
+								</b>
+								<br/>
+								<ui:repeat id="grantList" var="grant" value="#{UserBean.user.grants}" rows="0">
+								<h:panelGroup rendered="#{grant.grantFor != null}">
+									<h:outputText value="#{UsersBean.grantsString(grant)}" styleClass="xHuge_area0_p0"/>										
+									<h:commandLink action="#{UserBean.revokeGrant}" value="#{lbl.revoke}" styleClass="xTiny_marginLExcl free_area0" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
+										<f:param name="grantType" value="#{grant.grantType}" />  
+										<f:param name="grantFor" value="#{grant.grantFor}" />  
+									</h:commandLink>
 								</h:panelGroup>
+								</ui:repeat>
 							</h:panelGroup>
 						</h:panelGroup>
 						</h:form>

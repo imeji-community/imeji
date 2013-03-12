@@ -76,12 +76,12 @@ public class ShareBean
     {
         if (isCollection(uri))
         {
-        	this.isAlbum = false;
+            this.isAlbum = false;
             container = ObjectLoader.loadCollectionLazy(uri, session.getUser());
         }
         else
         {
-        	this.isAlbum = true;
+            this.isAlbum = true;
             container = ObjectLoader.loadAlbumLazy(uri, session.getUser());
         }
     }
@@ -109,9 +109,8 @@ public class ShareBean
         }
         else
         {
-            grantsMenu.add(new SelectItem(GrantType.VIEWER, ((SessionBean)BeanHelper
-                    .getSessionBean(SessionBean.class)).getLabel("role_viewer"),
-                    "Can view all images for this collection"));
+            grantsMenu.add(new SelectItem(GrantType.VIEWER, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
+                    .getLabel("role_viewer"), "Can view all images for this collection"));
             grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
                     .getSessionBean(SessionBean.class)).getLabel("role_album_editor"),
                     "Can edit information about the collection"));
@@ -158,21 +157,22 @@ public class ShareBean
         boolean shared = false;
         String message = "";
         String role = "";
-        
-        if (selectedGrant.toString() == GrantType.VIEWER.name()) {
-        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_viewer");
+        if (selectedGrant.toString() == GrantType.VIEWER.name())
+        {
+            role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_viewer");
         }
-        if (selectedGrant.toString() == GrantType.CONTAINER_EDITOR.name()) {
-        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_collection_editor");
+        if (selectedGrant.toString() == GrantType.CONTAINER_EDITOR.name())
+        {
+            role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_collection_editor");
         }
-        if (selectedGrant.toString() == GrantType.IMAGE_EDITOR.name()) {
-        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_image_editor");
+        if (selectedGrant.toString() == GrantType.IMAGE_EDITOR.name())
+        {
+            role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_image_editor");
         }
-        if (selectedGrant.toString() == GrantType.PROFILE_EDITOR.name()) {
-        	role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_profile_editor");
+        if (selectedGrant.toString() == GrantType.PROFILE_EDITOR.name())
+        {
+            role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_profile_editor");
         }
-
-        
         if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
         {
             shared = sm.share(retrieveCollection(id), session.getUser(), email, selectedGrant, true);
@@ -276,7 +276,10 @@ public class ShareBean
     public String getContainerHome()
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        return navigation.getApplicationUri() + container.getId().getPath();
+        String id = ObjectHelper.getId(container.getId());
+        if (isAlbum)
+            return navigation.getAlbumUrl() + id;
+        return navigation.getCollectionUrl() + id;
     }
 
     public CollectionImeji retrieveCollection(String id)
@@ -338,9 +341,9 @@ public class ShareBean
     {
         this.container = container;
     }
-    
+
     public boolean isAlbum()
     {
-    	return this.isAlbum;
+        return this.isAlbum;
     }
 }

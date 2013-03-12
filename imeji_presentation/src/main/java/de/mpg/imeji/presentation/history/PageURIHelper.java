@@ -76,6 +76,8 @@ public class PageURIHelper
                 return URI.create(navigation.getHelpUrl() + "?h=");
             case EDIT:
                 return URI.create(navigation.getApplicationUrl() + navigation.getEditPath());
+            case ADMIN:
+                return URI.create(navigation.getAdminUrl() + "?h=");
             default:
                 return URI.create(navigation.getHomeUrl());
         }

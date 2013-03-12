@@ -42,6 +42,7 @@ public class Navigation
     public final Page UPLOAD = new Page("Upload collection", "upload");
     public final Page SHARE = new Page("Share", "share");
     public final Page USER = new Page("User", "user");
+    public final Page ADMIN = new Page("Admin", "admin");
     // session
     private SessionBean sessionBean = null;
 
@@ -151,6 +152,11 @@ public class Navigation
     public String getUserUrl()
     {
         return applicationUrl + USER.getPath();
+    }
+
+    public String getAdminUrl()
+    {
+        return applicationUrl + ADMIN.getPath();
     }
 
     /*

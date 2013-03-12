@@ -57,7 +57,7 @@
 										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" onclick="openDialog('dialogDeleteAll')" rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
 											<h:outputText value="#{lbl.delete_all}"/>
 										</h:outputLink>
-										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" onclick="openDialog('dialogDeleteAll')" rendered="#{paginatorListSessionBean.imageEditable  and paginatorListSessionBean.collection.status == 'RELEASED'}">
+										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" onclick="openDialog('dialogDeleteAll')" rendered="#{paginatorListSessionBean.editable  and paginatorListSessionBean.collection.status == 'RELEASED'}">
 											<h:outputText value="#{lbl.withdraw_all}"/>
 										</h:outputLink>
 									</h:panelGroup>
@@ -135,7 +135,7 @@
 											<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#"  rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
 												<h:outputText value="#{lbl.delete_selectedImages}"/>
 											</h:outputLink>
-											<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#"  onclick="openDialog('dialogDeleteSelected')" rendered="#{paginatorListSessionBean.imageEditable and paginatorListSessionBean.collection.status == 'RELEASED'}">
+											<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#"  onclick="openDialog('dialogDeleteSelected')" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.collection.status == 'RELEASED'}">
 												<h:outputText value="#{lbl.withdraw_selected}"/>
 											</h:outputLink>
 										</h:panelGroup>

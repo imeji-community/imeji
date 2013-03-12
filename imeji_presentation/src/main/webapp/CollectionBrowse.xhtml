@@ -70,7 +70,7 @@
 			</h:outputLink>
 			<h:outputLink id="lnkWithdrawCollection"
 				styleClass="imj_SubMenuItem" value="#"
-				onclick="openDialog('dialogWithdraw');"
+				onclick="openDialog('dialDiscardContainer:dialogWithdraw');"
 				rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
 				<h:outputText value="#{lbl.withdraw}" />
 			</h:outputLink>

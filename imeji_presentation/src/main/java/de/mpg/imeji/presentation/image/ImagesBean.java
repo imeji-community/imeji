@@ -385,8 +385,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private void withdraw(List<String> uris) throws Exception
     {
         ItemController ic = new ItemController(session.getUser());
-        Collection<Item> items = loadImages(uris, getElementsPerPage(), getOffset());
-        int count = 0;
+        Collection<Item> items = loadImages(uris, 0, -1);
+        int count = items.size();
         if ("".equals(discardComment.trim()))
         {
             BeanHelper.error(session.getMessage("error_image_withdraw_discardComment"));

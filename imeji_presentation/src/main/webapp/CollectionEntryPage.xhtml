@@ -48,7 +48,7 @@
 				<h:outputText value="#{lbl.collection_release}"/>
 			</h:outputLink>
 			
-			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" onclick="openDialog('dialogWithdraw');"  value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='RELEASED'}">
+			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" onclick="openDialog('dialDiscardContainer:dialogWithdraw');"  value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='RELEASED'}">
 				<h:outputText value="#{lbl.withdraw}"/>
 			</h:outputLink>
 			

@@ -1,20 +1,50 @@
-
-
-/* ========================================================================== 
- ************************* imeji theme_default styles *********************** 
+/* =====================================================================================
+ ****************************** imeji theme_default styles ***************************** 
  * 
- *** imeji style prefix for all classes and ids: imj_ 
+ * New imeji styles for theme_default 
  * 
- ==========================================================================
-   ==================================================
-   ================================================== */
+ * Please note: This style sheet is a first revision, a workaround in progress (!) 
+ * of the original imeji theme/template based on the eSciDoc GUI V2 (core and appearance 
+ * styles - http://colab.mpdl.mpg.de/mediawiki/images/0/02/MPDL_StyleGuide.pdf).
+ *
+ * Please check the new base.css with normalize.css and additional CSS-resets.
+ * 
+ * New imeji style prefix for all classes and ids: imj_
+ *
+ * New naming - list of the renamed styles 
+ * old version -> new version (file.name)
+ * are documented in changes.css 
+ * 
+ * ====================================================================================  */
 
-/* imeji basic - global - styles for theme_default
-   ==================================================  */
 
-body * {
+/* overwrite of the old font-family style (in apperance.css) 
+ * with font-family: 'Open Sans',sans-serif; 
+ * loaded via Google-Webfonts 
+   =========================================================================  */
+   
+@import url(http://fonts.googleapis.com/css?family=Open+Sans); 
+
+body, label, input, textarea, select, button, input.numberLabel, h1, h2, h3, h4, h5, h6, a, p {
     font-family: 'Open Sans',sans-serif;
 }
+
+
+body {
+    color: #F0F0F0;
+    line-height: 145%;
+}
+
+body, label, input, button, select, textarea {
+    font-size: 11px; 
+}
+
+
+p {
+	display: block;
+	margin: 1em 0;
+}
+
 
 .imj_clear {
     clear: both;
@@ -52,8 +82,10 @@ select {
     background-color: #F0F0F0; /*#F3F8FA*/
 }
 
-/* *** special styles for welcome-page - start-page - infos, tabs, carousel, twitter-widget - Welcome.xhtml ***
-   ==================================================
+
+
+/* special styles for welcome-page - start-page 
+ * infos, tabs, carousel, twitter-widget - Welcome.xhtml 
    ================================================== */
 
 /* div.header {
@@ -65,7 +97,16 @@ div.searchMenu {
     margin-top: 5.5em;
     margin-left: 5.5em;
 }
-  */
+ 
+ .imj_header {
+  clear: both;
+  width: 40.5454em;
+  margin-top: 0.5454em;
+  margin-bottom: 0.9090em;
+  }
+   ==================================================
+   ================================================== */
+  
 
 #imj_welcomeInfoWrapper {
     float: left;
@@ -102,7 +143,9 @@ div.searchMenu {
     height: 90%;
     overflow: auto;
     font-size: 1.0909em;
+    /*margin-top: 5%;*/
 }
+
 
 .imj_welcomeInfo .id_tabs li.ui-state-active {
     background-color: #383838;
@@ -116,6 +159,12 @@ div.searchMenu {
 .imj_welcomeInfo .id_tabs div.ui-tabs-hide {
     display: none;
 }
+
+
+.imj_welcomeInfoTabContentText {
+	margin-bottom: 1%;
+}
+
 
 .imj_startpage_carouselWrapper {
     float: left;
@@ -191,22 +240,16 @@ iframe#twitter-widget-0 div.root div.stream {
     width: 59.85%;
 }
 
+
 /* * imeji template styles (template.xhtml)
    ==================================================
    ================================================== */
 
-/* *LINE HEIGHTS*
-.full, .full_txtBtn, .full_txtInput, .full_txtArea, .full_select, .full_label, .full_radioBtn, .full_checkbox, .full_area0, .full_area0_p0, 
-.full_area0_p1, .full_area0_p2, .full_area0_p3, .full_area0_p4, .full_area0_p6, .full_area0_p7, .full_area0_p8, .full_area1, .full_area1_p0, .full_area1_p1, .full_area1_p2, .full_area1_p3, .full_area1_p4, .full_area1_p6, .full_area1_p7, .full_area1_p8, .full_area2, .full_area2_p0, .full_area2_p1, .full_area2_p2, .full_area2_p3, .full_area2_p4, .full_area2_p6, .full_area2_p7, .full_area2_p8 {
-    margin-top: 0.5454em;
-    margin-bottom: 0.9090em;
-}
-   ==================================================
+
+/* ===[ SiteWrapper ]===
    ================================================== */
 
-/* * site wrapper  - template.xhtml *
-   ==================================================
-   ================================================== */
+/* site wrapper  - template.xhtml */
 
 .imj_siteWrapper {
     overflow: hidden;
@@ -225,16 +268,7 @@ textarea {
     font-family: Courier,"Courier New",serif;
 }
 
-/* * welcome-page - start-page - infos, tabs, carousel, twitter-widget (Welcome.xhtml) 
- 
- .imj_header {
-  clear: both;
-  width: 40.5454em;
-  margin-top: 0.5454em;
-  margin-bottom: 0.9090em;
-  }
-   ==================================================
-   ================================================== */
+
 
 /* ===[ SiteHeader ]===
    ================================================== */
@@ -313,7 +347,7 @@ margin-bottom: 0.9090em;  */
     background-color: #292929;
     color: #6CAD2F;
     padding: 0;
-    height: 1.4545em;
+    height: 1.5454em; /*1.4545em*/
     border: none 0;
     padding-top: 0.1818em;
 }
@@ -338,7 +372,7 @@ margin-bottom: 0.9090em;  */
 }
 
 /* xTiny_marginLExcl half_area0 headerLogo 
-cut second ?  ?
+cut second ?  
   */
 
 /* ===[ SiteHeader - Logo ]===
@@ -346,7 +380,7 @@ cut second ?  ?
 
 .imj_siteHeaderLogo {
     background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif");
-    /* ?!? url("../../imj_iconset/logo_imeji.giff"); ?!?_NO__DOTCOMMA__AFTER__*/
+    /* ?!? url("../../imj_iconset/logo_imeji.giff"); ?!? */
     background-position: left top;
     background-repeat: no-repeat;
     float: left;
@@ -448,12 +482,15 @@ cut second ?  ?
     display: inline-block;
 }
 
-/* ===[ Site Content ]===
-   ================================================== */
+
 
 /* * site content - sections - header
    * mainMenu, metaMenu, contentMenu, contentSubMenu 
    ==================================================
+   ================================================== */
+
+
+/* ===[ Site Content ]===
    ================================================== */
 
 /* id="content" class="imj_clear full_area0" 
@@ -528,7 +565,7 @@ cut second ?  ?
     margin-right: 0.636em; /*0.8181em*/
     text-align: left;
     letter-spacing: 0.091em;
-    /* margin-left: 1%;;;
+    /* margin-left: 1%;
     padding: 1%;
     display: inline;
     font-size: 1.0909em;*/
@@ -551,9 +588,7 @@ cut second ?  ?
     text-decoration: none;
 }
 
-/* .mainMenu input:hover, .mainMenu input:focus, .mainMenu a:hover, .mainMenu a:focus
-   ==================================================
-   ================================================== */
+/* .mainMenu input:hover, .mainMenu input:focus, .mainMenu a:hover, .mainMenu a:focus  */
 
 .imj_mainMenuStandard input:hover,
 .imj_mainMenuStandard input:focus,
@@ -585,9 +620,7 @@ cut second ?  ?
     /*line-height: normal;*/
 }
 
-/* .contentMenu .sub
-   ==================================================
-   ================================================== */
+/* .contentMenu .sub  */
 
 .imj_contentMenu {
     float: left;
@@ -598,7 +631,7 @@ cut second ?  ?
     padding: 0;
     text-transform: uppercase;
     /*line-height: normal;*/
-    letter-spacing: 0.091em;
+    letter-spacing: 0.045em; /*0.091em;*/
 }
 
 /* free_area0 span - template_paginator_containers.xhtml   */
@@ -607,7 +640,7 @@ cut second ?  ?
     display: inline;
     float: left;
     overflow: hidden;
-    margin: 0 0.0909em 0 0;
+    margin: 0;
     padding: 0;
 }
 
@@ -646,8 +679,8 @@ span.imj_contentMenuItem {
 .imj_contentMenuWrapper .imj_contentMenuSeparator {
     float: left;
     width: 0.091em; /*0.10em*/
-    height: 1.091em; /* 1.15em;_NO__DOTCOMMA__AFTER__*/
-    margin: 0 0.636em; /*0.455em*/
+    height: 1.091em; /* 1.15em*/
+    margin: 0 0.318em; /* 0.364 0.636em 0.455em*/
     padding: 0;
     /* background-color: #6CAD2F; */
 }
@@ -660,12 +693,10 @@ span.imj_contentMenuItem {
     float: left;
     line-height: normal;
 }
-   ==================================================
-   ================================================== */
 
-/* .contentMenu .action *  xHuge_area0 sub action - template_paginator_containers.xhtml - Images.xhtml
-   ==================================================
-   ================================================== */
+*/
+
+/* .contentMenu .action *  xHuge_area0 sub action - template_paginator_containers.xhtml - Images.xhtml */
 
 .imj_contentSubMenu {
     overflow: visible;
@@ -677,7 +708,7 @@ span.imj_contentMenuItem {
     max-height: 1.6363em;
     white-space: nowrap;
     text-transform: none;
-    letter-spacing: 0.091em;
+    letter-spacing: 0.045em; /*0.091em*/
 }
 
 .imj_contentSubMenu a {
@@ -699,26 +730,27 @@ span.imj_contentMenuItem {
 .imj_contentSubMenuItem * {
     margin-right: 0.364em;
 }
-   ==================================================
-   ================================================== */
+ */
 
 /* .imj_contenSubMenu input, .imj_siteContenSubMenu a, .imj_siteContenSubMenu span {
     font-size: 1.273em; /*1.455em
-   ==================================================
-   ================================================== */
+ */
 
-/* margin-right: 0.636em; /*0.8181em _NO__DOTCOMMA__AFTER__ */
+/* margin-right: 0.636em; /*0.8181em */
 
 /* text-align: left;
-    text-decoration: none;
-}   */
+   text-decoration: none;
+}   
+*/
 
+/* SubMenu - Sort by - Filter by */
 .imj_contentSubMenuItem span,
 .imj_contentSubMenuItem a {
     margin-right: 0.364em;
-}
+} 
 
-/* hard-coded span style - style="margin-top:0.18em; - template_paginator_containers.xhtml - Images.xhtml _NO__DOTCOMMA__AFTER__ */
+
+/* hard-coded span style - style="margin-top:0.18em; - template_paginator_containers.xhtml - Images.xhtml */
 
 .imj_contentSubMenuItemSorting {
     margin: 0.18em 0.364em 0 0;
@@ -727,7 +759,7 @@ span.imj_contentMenuItem {
 /* free_area0 - template_paginator_containers.xhtml - template_paginator_albums.xhtml   */
 
 span.imj_contentSubMenuItemFiltering {
-    margin: 0.18em 0.364em 0 6.364em; /*6.000em*/
+    margin: 0.18em 0.364em 0 0; /*6.364em 6.000em*/
 }
 
 /* ===[ Content Headline ]===
@@ -741,7 +773,7 @@ span.imj_contentSubMenuItemFiltering {
     /*white-space: nowrap;*/
     /*word-break: break-all;*/
     word-break: hyphenate;
-    max-width: 25.000em;
+    max-width: 23.000em;
     margin: 0;
     padding: 0.4%;
     background-color: #323232;
@@ -759,7 +791,7 @@ span.imj_contentSubMenuItemFiltering {
     color: #F0F0F0;
     font-size: 1.455em; /*2.182em; 2.364em*/
     font-weight: bold;
-    letter-spacing: 0.091em;
+    letter-spacing: 0.045em; /*0.091em*/
     line-height: 130%;
   
     /*height: 0.9474em;
@@ -819,6 +851,9 @@ OLD:
     color: #00712B;
 }
 
+
+
+
 /* ===[ Content - Main Content - Content Header]===
    ================================================== */
 
@@ -841,7 +876,7 @@ OLD:
 .imj_mainContentHeader {
     clear: left;
     overflow: hidden;
-    line-height: 2.000em; /*2.18em;_NO__DOTCOMMA__AFTER__*/
+    line-height: 2.000em; /*2.18em*/
     padding: 0 0 0.455em 0;
     /*padding-top: 0.09em; ;
     padding-bottom: 0.4545em;*/
@@ -905,7 +940,8 @@ OLD:
     display: inline;
     float: right;
     overflow: hidden;
-    margin: 0 3% /*1.4545em*/ 0 0; /*5.636em_NO__DOTCOMMA__AFTER__*/ font-size: 1.045em; /*1.091em*/
+    margin: 0 3% /*1.4545em*/ 0 0; /*5.636em*/ 
+    font-size: 1.045em; /*1.091em*/
 }
 
 /* ===[ Content - Breadcrump History Navigation ]===
@@ -938,7 +974,7 @@ OLD:
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpSeparator {
-    margin-left: 0.364em; /*0.3636em;_NO__DOTCOMMA__AFTER__*/
+    margin-left: 0.364em; /*0.3636em*/
     margin-right: 0.364em;
 }
 
@@ -979,11 +1015,13 @@ OLD:
     width: 39.1818em;
     display: inline;
     float: left;
-    background-color: #f0f0f0;
-    color: border-style: solid;
+    background-color: #F0F0F0;
+    border-style: solid;
     border-width: 0.091em;
     margin-bottom: 1em;
     padding: 0.83em 0.92em 1.37em 0.92em  !important;
+       
+    
 }
 
 .errorMessageArea {

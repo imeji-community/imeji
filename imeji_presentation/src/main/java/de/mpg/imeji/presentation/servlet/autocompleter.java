@@ -67,7 +67,7 @@ public class autocompleter extends HttpServlet
         {
             suggest = "a";
         }
-        else if (!datasource.isEmpty())
+        else if (datasource != null && !datasource.isEmpty())
         {
             HttpClient client = new HttpClient();
             GetMethod getMethod = new GetMethod(datasource + URLEncoder.encode(suggest.toString(), "UTF-8"));

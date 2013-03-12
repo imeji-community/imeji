@@ -4,6 +4,8 @@
 package de.mpg.imeji.presentation.metadata.editors;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.mpg.imeji.logic.util.MetadataFactory;
@@ -33,6 +35,18 @@ public class SimpleImageEditor extends MetadataEditor
     public SimpleImageEditor(List<Item> items, MetadataProfile profile, Statement statement)
     {
         super(items, profile, statement);
+    }
+
+    /**
+     * Convenient constructor for one {@link Item}
+     * 
+     * @param item
+     * @param profile
+     * @param statement
+     */
+    public SimpleImageEditor(Item item, MetadataProfile profile, Statement statement)
+    {
+        super(Arrays.asList(item), profile, statement);
     }
 
     @Override

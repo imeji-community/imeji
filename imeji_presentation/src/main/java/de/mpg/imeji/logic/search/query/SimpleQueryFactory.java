@@ -193,7 +193,7 @@ public class SimpleQueryFactory
             }
             else if (SearchIndex.names.cont_title.name().equals(sortCriterion.getIndex().getName()))
             {
-                return "?s <http://imeji.org/terms/container/metadata> ?cmd. ?cmd <"
+                return ". ?s <http://imeji.org/terms/container/metadata> ?cmd . ?cmd <"
                         + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
         }

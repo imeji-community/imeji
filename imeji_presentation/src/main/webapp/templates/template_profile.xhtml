@@ -218,7 +218,7 @@
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="quad_area2_p0 messageArea warnMessageArea" rendered="#{wrapper.showRemoveWarning}">
-	                                	<h:outputText styleClass="free_area0_p0" value="#{msg.remove_statement_used}"/><br/><br/>
+	                                	<h:outputText styleClass="free_area0_p0 messageWarn" value="#{msg.remove_statement_used}"/><br/><br/>
 	                                	<h:commandButton action="#{FormularBean.closeRemoveWarning}" value="#{lbl.no}" styleClass="free_area1_p8 cancelButton">
 	                                		<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 	                                		<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>

@@ -17,7 +17,11 @@ import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.DateFormatter;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Factory to created Sparql query from a {@link SearchPair}
@@ -46,10 +50,10 @@ public class SimpleQueryFactory
             boolean isCollection, String specificQuery)
     {
         PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
-                + " ?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
+                + "?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
         return PATTERN_SELECT
-                .replace("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.queryFactory(user, pair, rdfType, false))
-                .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair))
+                .replace("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.queryFactory(user, rdfType, false))
+                .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType))
                 .replace("XXX_SEARCH_TYPE_ELEMENT_XXX", rdfType)
                 .replace("XXX_SORT_ELEMENT_XXX", getSortElement(sortCriterion))
                 .replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
@@ -61,7 +65,7 @@ public class SimpleQueryFactory
      * @param pair
      * @return
      */
-    private static String getSearchElement(SearchPair pair)
+    private static String getSearchElement(SearchPair pair, String rdfType)
     {
         String searchQuery = "";
         String variable = "el";
@@ -84,7 +88,7 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.status.name().equals(pair.getIndex().getName()))
         {
-            return "";
+            return "FILTER(" + getSimpleFilter(pair, "status") + ")";
         }
         else if (SearchIndex.names.col.name().equals(pair.getIndex().getName()))
         {
@@ -92,7 +96,9 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
-            return "";
+            return "<" + pair.getValue() + ">"
+                    + " <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> "
+                    + SimpleSecurityQuery.getVariableName(rdfType) + " .";
         }
         else if (SearchIndex.names.cont_title.name().equals(pair.getIndex().getName()))
         {
@@ -187,7 +193,7 @@ public class SimpleQueryFactory
             }
             else if (SearchIndex.names.cont_title.name().equals(sortCriterion.getIndex().getName()))
             {
-                return "?s <http://imeji.org/terms/container/metadata> ?cmd. ?cmd <"
+                return ". ?s <http://imeji.org/terms/container/metadata> ?cmd . ?cmd <"
                         + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
         }

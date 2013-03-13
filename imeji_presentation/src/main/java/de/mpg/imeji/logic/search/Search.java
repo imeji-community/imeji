@@ -18,6 +18,7 @@ import com.hp.hpl.jena.Jena;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
+import de.mpg.imeji.logic.search.query.SimpleSecurityQuery;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.search.vo.SearchElement;
@@ -215,7 +216,7 @@ public class Search
     {
         String sparqlQuery = SimpleQueryFactory.getQuery(getRDFType(type), pair, sortCri, user, (containerURI != null),
                 getSpecificQuery());
-        return ImejiSPARQL.exec(sparqlQuery, getModelName(type));
+        return ImejiSPARQL.exec(sparqlQuery, null);
     }
 
     /**

@@ -38,7 +38,7 @@ public class Page
                 "AlbumBrowse.xhtml", "history_images_album"), ALBUM_HOME("AlbumEntryPage.xhtml", "history_album"), ALBUM_IMAGE(
                 "AlbumImage.xhtml", "history_image"), HELP("Help.xhtml", "help"), COLLECTION_INFO(
                 "CollectionView.xhtml", "history_collection_info"), UPLOAD("Upload.xhtml", "history_upload"), USER(
-                "User.xhtml", "user");
+                "User.xhtml", "user"), ADMIN("UserAdministrationPage.xhtml", "Admin");
         private String fileName = "";
         private String label;
 

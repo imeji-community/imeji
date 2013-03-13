@@ -145,7 +145,7 @@ All rights reserved. Use is subject to license terms.
 				}
 				/*close a dialog*/
 				function closeDialog(id) {
-					var dialog = $(document).find("#" + id);
+					var dialog = $(document.getElementById(id));
 					var content = $(".imj_siteWrapper");
 					content.css({ opacity: 1});
 					dialog.hide();

@@ -59,7 +59,7 @@
 		<h:outputText id="lnkAlbumssInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_albums}" rendered="#{HistorySession.currentPage.type.fileName == 'Albums.xhtml'}" />
 		
 		
-		<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" rendered="#{SessionBean.admin}">
+		<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{Navigation.adminUrl}" rendered="#{SessionBean.admin}">
 			<h:outputText value="ADMIN"></h:outputText>
 		</h:outputLink>
 		

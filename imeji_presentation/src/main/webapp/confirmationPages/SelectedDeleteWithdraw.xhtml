@@ -2,27 +2,45 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<div id="dialogDeleteSelected" class="half_area0_p8 bordst0 shadst1 dialogbox" style="display:none;">
-       <div class="half_area0_p8">
-       		<h:outputText value="#{lbl.delete_images}?" rendered="#{bean.deletable}"/>
-      			<h:outputText value="#{lbl.withdraw_images}? #{lbl.images_withdraw_comment}" rendered="#{!bean.deletable and bean.editable}"/>
-       		<h:outputText value="#{paginatorListSessionBean.initComment}"/>
-       		<h:outputText id="errorMessageS" styleClass="xDouble_area0_p0 messageError" value=""/>
-       		<h:inputTextarea id="discardCommentS" value="#{paginatorListSessionBean.discardComment}" valueChangeListener="#{paginatorListSessionBean.discardCommentListener}" rows="6" styleClass="quad_area0_p0" rendered="#{!bean.deletable and bean.editable}"/>
-       	</div>
-      
-		<div class="half_area0_p8">
-			<div class="large_txtBtn">
-      			<a href="#" class="large_txtBtn dialogCancelButton" onclick="closeDialog('confirmDeleteSelected');">
-					<h:outputText value="#{lbl.cancel}"/>
-				</a>
-      			</div>
-			<div class="xLarge_txtBtn tiny_marginLExcl">
-				<h:form>
-					<h:commandButton id="btnDelete" action="#{paginatorListSessionBean.deleteSelected}" rendered="#{bean.deletable}" value="#{lbl.delete}"  styleClass="xLarge_area0_p0  xLarge_txtBtn activeButton"/>
-					<h:commandButton id="btnDiscard" onclick="if(!clickOnDiscard('', 'DeleteSelected', '#{msg.error_withdraw_comment}')){return false};" action="#{paginatorListSessionBean.withdrawSelected}" rendered="#{!bean.deletable and paginatorListSessionBean.editable}" value="#{lbl.withdraw}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
-				</h:form>
+	<div id="dialogDeleteSelected"
+		class="half_area0_p8 bordst0 shadst1 dialogbox" style="display: none;">
+		<h:form>
+			<div class="half_area0_p8">
+				<h:outputText value="#{lbl.delete_images}?"
+					rendered="#{bean.deletable}" />
+				<h:outputText
+					value="#{lbl.withdraw_images}? #{lbl.images_withdraw_comment}"
+					rendered="#{!bean.deletable and bean.editable}" />
+				<h:outputText value="#{paginatorListSessionBean.initComment}" />
+				<h:outputText id="errorMessageS"
+					styleClass="xDouble_area0_p0 messageError" value="" />
+				<h:inputTextarea id="discardCommentS"
+					value="#{paginatorListSessionBean.discardComment}"
+					valueChangeListener="#{paginatorListSessionBean.discardCommentListener}"
+					rows="6" styleClass="quad_area0_p0"
+					rendered="#{!bean.deletable and bean.editable}">
+					<f:ajax execute="@this" render="buttonDiscard" event="keyup" />
+				</h:inputTextarea>
 			</div>
-		</div>
+			<div class="half_area0_p8">
+				<div class="large_txtBtn">
+					<a href="#" class="large_txtBtn dialogCancelButton"
+						onclick="closeDialog('dialogDeleteSelected');"> <h:outputText
+							value="#{lbl.cancel}" />
+					</a>
+				</div>
+				<h:panelGroup id="buttonDiscard" class="xLarge_txtBtn tiny_marginLExcl">
+					<h:commandButton id="btnDelete"
+						action="#{paginatorListSessionBean.deleteSelected}"
+						rendered="#{bean.deletable}" value="#{lbl.delete}"
+						styleClass="xLarge_area0_p0  xLarge_txtBtn activeButton" />
+					<h:commandButton id="btnDiscard"
+						action="#{paginatorListSessionBean.withdrawSelected}"
+						rendered="#{paginatorListSessionBean.discardComment != '' and !bean.deletable and paginatorListSessionBean.editable}"
+						value="#{lbl.withdraw}"
+						styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton" />
+				</h:panelGroup>
+			</div>
+		</h:form>
 	</div>
 </ui:composition>

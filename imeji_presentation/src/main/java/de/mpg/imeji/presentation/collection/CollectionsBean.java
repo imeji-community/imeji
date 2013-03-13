@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
-
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -80,6 +78,8 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         SearchQuery searchQuery = new SearchQuery();
         query = UrlHelper.getParameterValue("q");
+        if (query == null)
+            query = "";
         if (!"".equals(query))
         {
             searchQuery = URLQueryTransformer.parseStringQuery(query);

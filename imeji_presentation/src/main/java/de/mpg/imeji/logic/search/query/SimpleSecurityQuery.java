@@ -3,8 +3,6 @@
  */
 package de.mpg.imeji.logic.search.query;
 
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
@@ -33,106 +31,98 @@ public class SimpleSecurityQuery
      * @param includeWithdrawn
      * @return
      */
-    public static String queryFactory(User user, SearchPair pair, String rdfType, boolean includeWithdrawn)
+    public static String queryFactory(User user, String rdfType, boolean includeWithdrawn)
     {
-        String f = "?status!=<" + Status.WITHDRAWN.getUri() + "> && (";
-        if (includeWithdrawn)
-        {
-            f = "(";
-        }
-        String op = " ";
+        // if user is null or has no rights, return default security
         if (user == null || user.getGrants().isEmpty())
         {
             if (includeWithdrawn)
             {
-                return " .FILTER(?status!=<" + Status.PENDING.getUri() + ">)";
+                return " .FILTER(?status!=<" + Status.PENDING.getUri() + ">) . ?s a <" + rdfType + ">";
             }
-            return " .FILTER(?status=<" + Status.RELEASED.getUri() + ">)";
+            return " .FILTER(?status=<" + Status.RELEASED.getUri() + ">) . ?s a <" + rdfType + ">";
         }
-        if (pair != null && SearchIndex.names.status.name().equals(pair.getIndex().getName()))
+        // else...
+        String status = getStatusAsFilter(includeWithdrawn);
+        String grants = getUserGrantsAsFilter(user, rdfType);
+        return grants + status + " . ?s a <" + rdfType + "> ";
+    }
+
+    /**
+     * Return a SPARQL Filter with the allowed status of an object
+     * 
+     * @param includeWithdrawn
+     * @return
+     */
+    private static String getStatusAsFilter(boolean includeWithdrawn)
+    {
+        String status = "";
+        if (!includeWithdrawn)
         {
-            f = "?status=<" + pair.getValue() + ">";
-            op = " && (";
+            status = " . FILTER (?status!=<" + Status.WITHDRAWN.getUri() + ">)";
         }
-        String uf = "";
-        String imageCollection = null;
-        if (pair != null && SearchIndex.names.col.name().equals(pair.getIndex().getName()))
-        {
-            imageCollection = pair.getValue();
-        }
-        boolean myImages = (pair != null && SearchIndex.names.user.name().equals(pair.getIndex().getName()));
-        boolean hasGrantForCollection = false;
+        return status;
+    }
+
+    /**
+     * Return a SPARQL Filter with all Grants of one {@link User}
+     * 
+     * @param user
+     * @param rdfType
+     * @return
+     */
+    public static String getUserGrantsAsFilter(User user, String rdfType)
+    {
+        String privileges = "";
         if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
         {
             for (Grant g : user.getGrants())
             {
-                if (imageCollection == null || imageCollection.equals(g.getGrantFor().toString())
-                        || GrantType.SYSADMIN.equals(g.asGrantType()))
+                if (GrantType.CONTAINER_ADMIN.equals(g.asGrantType())
+                        || GrantType.CONTAINER_EDITOR.equals(g.asGrantType())
+                        || GrantType.VIEWER.equals(g.asGrantType())
+                        || GrantType.IMAGE_EDITOR.equals(g.asGrantType())
+                        || (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType) && GrantType.PROFILE_ADMIN
+                                .equals(g.asGrantType())))
                 {
-                    if (GrantType.CONTAINER_ADMIN.equals(g.asGrantType())
-                            || GrantType.CONTAINER_EDITOR.equals(g.asGrantType())
-                            || GrantType.VIEWER.equals(g.asGrantType())
-                            || GrantType.IMAGE_EDITOR.equals(g.asGrantType())
-                            || (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType) && GrantType.PROFILE_ADMIN
-                                    .equals(g.asGrantType())))
+                    if (!"".equals(privileges))
                     {
-                        if (!"".equals(uf))
-                        {
-                            uf += " || ";
-                        }
-                        if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType)
-                                || J2JHelper.getResourceNamespace(new Album()).equals(rdfType)
-                                || J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType))
-                        {
-                            uf += "?s";
-                        }
-                        else
-                        {
-                            uf += "?c";
-                        }
-                        uf += "=<" + g.getGrantFor() + ">";
-                        hasGrantForCollection = true;
+                        privileges += " || ";
                     }
-                    else if (GrantType.SYSADMIN.equals(g.asGrantType()) && imageCollection == null)
-                    {
-                        if (!"".equals(uf))
-                            uf += " || ";
-                        uf += " true";
-                        hasGrantForCollection = true;
-                    }
-                    else if (imageCollection != null)
-                    {
-                        uf = "?c=<" + imageCollection + ">";
-                    }
+                    privileges += getVariableName(rdfType) + "=<" + g.getGrantFor() + ">";
+                }
+                else if (GrantType.SYSADMIN.equals(g.asGrantType()))
+                {
+                    if (!"".equals(privileges))
+                        privileges += " || ";
+                    privileges += "true";
                 }
             }
         }
-        if (imageCollection != null && !hasGrantForCollection)
+        if (!"".equals(privileges))
         {
-            uf += "?c=<" + imageCollection + "> && ?status=<" + Status.RELEASED.getUri() + ">";
+            return " . FILTER(" + privileges + " || ?status=<http://imeji.org/terms/status#RELEASED>)";
         }
-        else if (user != null && user.getGrants() != null && user.getGrants().isEmpty() && myImages)
+        return "";
+    }
+
+    /**
+     * Return the variable name of for the object on with the security is checked
+     * 
+     * @param rdfType
+     * @return
+     */
+    public static String getVariableName(String rdfType)
+    {
+        if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType)
+                || J2JHelper.getResourceNamespace(new Album()).equals(rdfType)
+                || J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType))
         {
-            f = " false ";
+            return "?s";
         }
-        uf += ")";
-        if (!"".equals(uf.trim()))
+        else
         {
-            f = " .FILTER(" + f + op + "(";
-            if (pair == null || (pair != null && !SearchIndex.names.user.toString().equals(pair.getIndex().getName())))
-            {
-                f += "?status=<" + Status.RELEASED.getUri() + "> || ";
-            }
-            f += uf + "))";
+            return "?c";
         }
-        else if (!"".equals(f.trim()))
-        {
-            f = " .FILTER(" + f + ")";
-        }
-        else if ("".equals(f))
-        {
-            f = " .FILTER(?status=" + Status.RELEASED.getUri() + ">)";
-        }
-        return f;
     }
 }

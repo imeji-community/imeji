@@ -239,7 +239,10 @@ public abstract class CollectionBean
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-        collection.setDiscardComment(event.getNewValue().toString());
+        if (event.getNewValue() != null)
+        {
+            collection.setDiscardComment(event.getNewValue().toString());
+        }
     }
 
     /**

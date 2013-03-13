@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -246,6 +247,16 @@ public class AlbumImagesBean extends ImagesBean
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).getAlbum().setDiscardComment(dc);
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
         return "pretty:";
+    }
+    
+    /**
+     * Listener for the discard comment
+     * 
+     * @param event
+     */
+    public void discardCommentListener(ValueChangeEvent event)
+    {
+        album.setDiscardComment(event.getNewValue().toString());
     }
 
     @Override

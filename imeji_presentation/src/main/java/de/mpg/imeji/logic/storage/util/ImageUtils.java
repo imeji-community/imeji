@@ -72,9 +72,11 @@ public class ImageUtils
     {
         if (!FileResolution.ORIGINAL.equals(resolution))
         {
+            // compress the image, i.e. transform it to jpg
             byte[] compressed = ImageUtils.compressImage(bytes, mimeType);
             if (!Arrays.equals(compressed, bytes))
             {
+                // if the image has been compressed, change the mimetype
                 mimeType = StorageUtils.getMimeType("jpg");
             }
             bytes = ImageUtils.scaleImage(ImageIO.read(new ByteArrayInputStream(compressed)), mimeType, resolution);
@@ -493,7 +495,6 @@ public class ImageUtils
     {
         return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
     }
-
     /**
      * for reading CMYK images Creates new RGB images from all the CMYK images passed in on the command line.
      */

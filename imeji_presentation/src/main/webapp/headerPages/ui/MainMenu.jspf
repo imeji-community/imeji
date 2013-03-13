@@ -36,7 +36,7 @@
 	<div id="mainMenuSkipLinkAnchor" class="imj_mainMenuStandard">
 
 		<!-- main Menu starts here -->
-		<h:outputLink id="lnkHome" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_startpage}" value="#{Navigation.applicationUrl}" rendered="#{HistorySession.currentPage.type.fileName != 'Welcome.xhtml'}">
+		<h:outputLink id="lnkHome" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_startpage}" value="#{Navigation.homeUrl}" rendered="#{HistorySession.currentPage.type.fileName != 'Welcome.xhtml'}">
 			<h:outputText value="#{lbl.home}"/>
 		</h:outputLink>
 		<h:outputText id="txtHomeInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.home}" rendered="#{HistorySession.currentPage.type.fileName == 'Welcome.xhtml'}" />

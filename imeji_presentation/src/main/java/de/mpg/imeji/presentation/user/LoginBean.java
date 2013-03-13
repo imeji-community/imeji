@@ -88,12 +88,6 @@ public class LoginBean
         if (current != null)
         {
             redirectAfterLogin = current.getUri().toString().replace("?h=", "");
-            if (redirectAfterLogin.endsWith("/"))
-            {
-                // for IE, if the login url is with http://domain.org/imeji/ at the end, it will log out for
-                // http://domain.org/imeji
-                redirectAfterLogin = redirectAfterLogin.substring(0, redirectAfterLogin.length() - 1);
-            }
         }
         FacesContext.getCurrentInstance().getExternalContext().redirect(redirectAfterLogin);
     }

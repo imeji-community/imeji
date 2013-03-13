@@ -77,7 +77,6 @@ $(function() {
 							// custom minLength, currently start query after
 							// entering x
 							// characters,
-							// alert('dsd');
 							var term = extractLast(this.value);
 							if (term.length < offset) {
 								return false;

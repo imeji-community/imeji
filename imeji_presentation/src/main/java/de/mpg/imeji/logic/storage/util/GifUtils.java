@@ -116,7 +116,8 @@ public class GifUtils
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             gifEncoder.start(bos);
             gifEncoder.setRepeat(0);
-            //gifEncoder.setDelay(getAnimationDelay(reader, minIndex));
+            //out commented since the result is sometimes too fast
+            // gifEncoder.setDelay(getAnimationDelay(reader, minIndex));
             for (int i = minIndex; i < numberOfImages; i++)
             {
                 BufferedImage bi = reader.read(i);
@@ -131,6 +132,26 @@ public class GifUtils
             return bytes;
         }
         return bytes;
+    }
+
+    /**
+     * Check if a an image is a gif and if is contains more than one image (i.e is animated)
+     * 
+     * @param bytes
+     * @return
+     */
+    public static boolean isAnimatedGif(byte[] bytes)
+    {
+        ImageReader reader = ImageIO.getImageReadersBySuffix("gif").next();
+        try
+        {
+            reader.setInput(ImageIO.createImageInputStream(new ByteArrayInputStream(bytes)));
+            return reader.getNumImages(true) > 1;
+        }
+        catch (IOException e)
+        {
+            return false;
+        }
     }
 
     /**

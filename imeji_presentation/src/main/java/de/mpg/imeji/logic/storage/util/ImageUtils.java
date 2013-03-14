@@ -21,10 +21,9 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.media.jai.JAI;
-import javax.media.jai.PlanarImage;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.hamcrest.core.IsAnything;
 
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.jai.codec.ImageCodec;
@@ -71,7 +70,7 @@ public class ImageUtils
     {
         if (!FileResolution.ORIGINAL.equals(resolution))
         {
-            if (FileResolution.THUMBNAIL.equals(resolution))
+            if (FileResolution.THUMBNAIL.equals(resolution) || StorageUtils.getMimeType("tif").equals(mimeType))
             {
                 byte[] compressed = compressImage(bytes, mimeType);
                 if (!Arrays.equals(compressed, bytes))
@@ -89,7 +88,7 @@ public class ImageUtils
             {
                 image = ImageIO.read(new ByteArrayInputStream(bytes));
             }
-            if (StorageUtils.getMimeType("gif").equals(mimeType))
+            if (StorageUtils.getMimeType("gif").equals(mimeType) && GifUtils.isAnimatedGif(bytes))
             {
                 bytes = GifUtils.resizeAnimatedGif(bytes, resolution);
             }

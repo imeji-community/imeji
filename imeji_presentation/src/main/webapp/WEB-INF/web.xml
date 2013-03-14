@@ -56,6 +56,10 @@
 		<url-pattern>/file</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
+		<servlet-name>File Servlet</servlet-name>
+		<url-pattern>/file/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>Export Servlet</servlet-name>
 		<url-pattern>/export</url-pattern>
 	</servlet-mapping>

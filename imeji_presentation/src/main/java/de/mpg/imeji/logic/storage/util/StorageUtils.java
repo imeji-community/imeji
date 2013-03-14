@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.imageio.stream.ImageInputStream;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -56,6 +58,27 @@ public class StorageUtils
      * @return
      */
     public static byte[] toBytes(InputStream stream)
+    {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        int b;
+        try
+        {
+            while ((b = stream.read()) != -1)
+            {
+                bos.write(b);
+            }
+            byte[] ba = bos.toByteArray();
+            bos.flush();
+            bos.close();
+            return ba;
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Error transforming inputstream to bytearryoutputstream", e);
+        }
+    }
+    
+    public static byte[] toBytes(ImageInputStream stream)
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         int b;

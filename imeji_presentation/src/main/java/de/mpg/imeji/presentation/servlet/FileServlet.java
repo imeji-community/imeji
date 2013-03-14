@@ -5,7 +5,6 @@ package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -19,8 +18,8 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
+import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -28,6 +27,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -44,6 +44,8 @@ public class FileServlet extends HttpServlet
     private static Logger logger = Logger.getLogger(FileServlet.class);
     private StorageController storageController;
     private Security security;
+    private Navigation navivation;
+    private String domain;
 
     @Override
     public void init()
@@ -53,6 +55,9 @@ public class FileServlet extends HttpServlet
             storageController = new StorageController();
             logger.info("ImageServlet initialized");
             security = new Security();
+            navivation = new Navigation();
+            domain = StringHelper.normalizeURI(navivation.getDomain());
+            domain = domain.substring(0, domain.length() - 1);
         }
         catch (Exception e)
         {
@@ -67,6 +72,12 @@ public class FileServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         String url = req.getParameter("id");
+        if (url == null)
+        {
+            // if the id parameter is null, interpret the whole url as a direct to the file (can only work if the
+            // internal storage is used)
+            url = domain + req.getRequestURI();
+        }
         resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
         SessionBean session = getSession(req);
         if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))

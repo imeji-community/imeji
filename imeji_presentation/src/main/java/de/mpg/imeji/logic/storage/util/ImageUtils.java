@@ -21,11 +21,9 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import org.apache.axis.encoding.ser.ImageDataHandlerDeserializer;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.query.BIOInput;
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageDecoder;
@@ -79,7 +77,8 @@ public class ImageUtils
                 // if the image has been compressed, change the mimetype
                 mimeType = StorageUtils.getMimeType("jpg");
             }
-            bytes = ImageUtils.scaleImage(ImageIO.read(new ByteArrayInputStream(compressed)), mimeType, resolution);
+            BufferedImage image = JpegUtils.readJpeg(compressed);
+            bytes = ImageUtils.scaleImage(image, mimeType, resolution);
         }
         return bytes;
     }

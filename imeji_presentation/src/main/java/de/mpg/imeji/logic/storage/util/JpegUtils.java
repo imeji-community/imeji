@@ -101,7 +101,7 @@ public class JpegUtils
         {
             ImageReader reader = iter.next();
             reader.setInput(stream);
-            BufferedImage image;
+            BufferedImage image = null;
             ICC_Profile profile = null;
             try
             {

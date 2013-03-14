@@ -20,6 +20,8 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+import javax.media.jai.JAI;
+import javax.media.jai.PlanarImage;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -36,7 +38,6 @@ import com.sun.media.jai.codec.TIFFDecodeParam;
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
-//import org.ajax4jsf.resource.image.animatedgif.GifDecoder;
 /**
  * Mehtods to help wotk with images
  * 
@@ -70,15 +71,32 @@ public class ImageUtils
     {
         if (!FileResolution.ORIGINAL.equals(resolution))
         {
-            // compress the image, i.e. transform it to jpg
-            byte[] compressed = ImageUtils.compressImage(bytes, mimeType);
-            if (!Arrays.equals(compressed, bytes))
+            if (FileResolution.THUMBNAIL.equals(resolution))
             {
-                // if the image has been compressed, change the mimetype
-                mimeType = StorageUtils.getMimeType("jpg");
+                byte[] compressed = compressImage(bytes, mimeType);
+                if (!Arrays.equals(compressed, bytes))
+                {
+                    mimeType = StorageUtils.getMimeType("jpg");
+                }
+                bytes = compressed;
             }
-            BufferedImage image = JpegUtils.readJpeg(compressed);
-            bytes = ImageUtils.scaleImage(image, mimeType, resolution);
+            BufferedImage image;
+            if (StorageUtils.getMimeType("jpg").equals(mimeType))
+            {
+                image = JpegUtils.readJpeg(bytes);
+            }
+            else
+            {
+                image = ImageIO.read(new ByteArrayInputStream(bytes));
+            }
+            if (StorageUtils.getMimeType("gif").equals(mimeType))
+            {
+                bytes = GifUtils.resizeAnimatedGif(bytes, resolution);
+            }
+            else
+            {
+                bytes = toBytes(scaleImage(image, resolution), mimeType);
+            }
         }
         return bytes;
     }
@@ -340,34 +358,6 @@ public class ImageUtils
     }
 
     /**
-     * Prepare the image for the upload: <br/>
-     * if it is original image upload, do nothing <br/>
-     * if it is another resolution, resize it <br/>
-     * if it is a tiff to be resized, transformed it to jpeg and resize it
-     * 
-     * @param stream
-     * @param FileResolution
-     * @param format
-     * @return
-     * @throws IOException
-     * @throws Exception
-     */
-    public byte[] prepareImageForUpload(byte[] stream, FileResolution resolution, String mimeType) throws IOException,
-            Exception
-    {
-        if (!FileResolution.ORIGINAL.equals(resolution))
-        {
-            byte[] compressed = compressImage(stream, mimeType);
-            if (!Arrays.equals(compressed, stream))
-            {
-                mimeType = StorageUtils.getMimeType("jpg");
-            }
-            stream = scaleImage(ImageIO.read(new ByteArrayInputStream(compressed)), mimeType, resolution);
-        }
-        return stream;
-    }
-
-    /**
      * Compress an image in jpeg. Useful to reduce size of thumbnail and web resolution images
      * 
      * @param bytes
@@ -392,7 +382,7 @@ public class ImageUtils
             }
             else if (mimeType.equals(StorageUtils.getMimeType("gif")))
             {
-                bytes = ImageUtils.gif2Jpeg(bytes);
+                bytes = GifUtils.toJPEG(bytes);
             }
         }
         catch (Exception e)
@@ -403,17 +393,30 @@ public class ImageUtils
     }
 
     /**
-     * Scale the image if too big for the size
+     * TRansform a {@link BufferedImage} to a {@link Byte} array
      * 
      * @param image
-     * @param size
-     * @param resolution
      * @param mimeType
-     * @param contentCategory
+     * @return
+     * @throws IOException
+     */
+    public static byte[] toBytes(BufferedImage image, String mimeType) throws IOException
+    {
+        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+        // use imageIO.write to encode the image back into a byte[]
+        ImageIO.write(image, ImageUtils.getImageFormat(mimeType), byteOutput);
+        return byteOutput.toByteArray();
+    }
+
+    /**
+     * cale the image if too big for the size
+     * 
+     * @param image
+     * @param resolution
      * @return
      * @throws Exception
      */
-    public static byte[] scaleImage(BufferedImage image, String mimeType, FileResolution resolution) throws Exception
+    public static BufferedImage scaleImage(BufferedImage image, FileResolution resolution) throws Exception
     {
         BufferedImage bufferedImage = null;
         int size = getResolution(resolution);
@@ -425,10 +428,7 @@ public class ImageUtils
         {
             bufferedImage = image;
         }
-        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-        // use imageIO.write to encode the image back into a byte[]
-        ImageIO.write(bufferedImage, ImageUtils.getImageFormat(mimeType), byteOutput);
-        return byteOutput.toByteArray();
+        return bufferedImage;
     }
 
     /**
@@ -453,33 +453,6 @@ public class ImageUtils
         }
     }
 
-    // public static GifDecoder checkAnimation(byte[] image) throws Exception
-    // {
-    // GifDecoder gifDecoder = new GifDecoder();
-    // gifDecoder.read(new ByteArrayInputStream(image));
-    // return gifDecoder;
-    // }
-    //
-    // public static byte[] scaleAnimation(byte[] image, GifDecoder gifDecoder, int width) throws Exception
-    // {
-    // ByteArrayOutputStream outputStream =new ByteArrayOutputStream();
-    // outputStream.write("".getBytes());
-    // AnimatedGifEncoder animatedGifEncoder = new AnimatedGifEncoder();
-    // int frameCount = gifDecoder.getFrameCount();
-    // int loopCount = gifDecoder.getLoopCount();
-    // animatedGifEncoder.setRepeat(loopCount);
-    // animatedGifEncoder.start(outputStream);
-    // for (int frameNumber = 0; frameNumber < frameCount; frameNumber++) {
-    //
-    // BufferedImage frame = gifDecoder.getFrame(frameNumber); // frame i
-    // int delay = gifDecoder.getDelay(frameNumber); // display duration of frame in milliseconds
-    // animatedGifEncoder.setDelay(delay); // frame delay per sec
-    // BufferedImage scaleImage = scaleImage(frame, width, getWeb());
-    // animatedGifEncoder.addFrame( scaleImage );
-    // }
-    // animatedGifEncoder.finish();
-    // return outputStream.toByteArray();
-    // }
     public static String getThumb() throws IOException, URISyntaxException
     {
         return PropertyReader.getProperty("xsd.metadata.content-category.thumbnail");
@@ -494,63 +467,4 @@ public class ImageUtils
     {
         return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
     }
-    /**
-     * for reading CMYK images Creates new RGB images from all the CMYK images passed in on the command line.
-     */
-    // public static BufferedImage cmykRasterToSRGB(byte[] inputStream, String format)throws Exception{
-    // //Find a suitable ImageReader
-    // Iterator readers = ImageIO.getImageReadersByFormatName(format);
-    // ImageReader reader = null;
-    // while(readers.hasNext()) {
-    // reader = (ImageReader)readers.next();
-    // if(reader.canReadRaster()) {
-    // break;
-    // }
-    // }
-    // //Stream the image file (the original CMYK image)
-    // ImageInputStream input = ImageIO.createImageInputStream(new ByteArrayInputStream(inputStream));
-    // reader.setInput(input);
-    // // Create the image.
-    // BufferedImage image;
-    // Raster raster = reader.readRaster(0, null);
-    // // Arbitrarily select a BufferedImage type.
-    // int imageType;
-    // switch(raster.getNumBands())
-    // {
-    // case 1:
-    // imageType = BufferedImage.TYPE_BYTE_GRAY;
-    // break;
-    // case 3:
-    // imageType = BufferedImage.TYPE_3BYTE_BGR;
-    // break;
-    // case 4:
-    // imageType = BufferedImage.TYPE_4BYTE_ABGR;
-    // break;
-    // default:
-    // throw new UnsupportedOperationException();
-    // }
-    // // Create a BufferedImage.
-    // image = new BufferedImage(raster.getWidth(),raster.getHeight(),imageType);
-    // // Set the image data.
-    // image.getRaster().setRect(raster);
-    // return image;
-    // }
-    //
-    // public static BufferedImage readCMYKwithJAI(byte[] inputStream, String format)throws Exception
-    // {
-    // ByteArrayInputStream bais = new ByteArrayInputStream(inputStream);
-    // SeekableStream seekableStream = SeekableStream.wrapInputStream(bais,false);
-    // PlanarImage src = JAI.create("Stream", seekableStream);
-    // BufferedImage image = src.getAsBufferedImage();
-    // return image;
-    // }
-    //
-    // public static BufferedImage readCMYKwithjm4java(byte[] inputStream, String format)throws Exception
-    // {
-    // ByteArrayInputStream bais = new ByteArrayInputStream(inputStream);
-    // Stream2BufferedImage stream4Image= new Stream2BufferedImage();
-    // stream4Image.consumeOutput(bais);
-    // BufferedImage image = stream4Image.getImage();
-    // return image;
-    // }
 }

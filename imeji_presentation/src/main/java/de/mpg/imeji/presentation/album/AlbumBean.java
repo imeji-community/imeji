@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
@@ -238,6 +239,16 @@ public class AlbumBean
         return "";
     }
 
+    /**
+     * Listener for the discard comment
+     * 
+     * @param event
+     */
+    public void discardCommentListener(ValueChangeEvent event)
+    {
+        album.setDiscardComment(event.getNewValue().toString());
+    }
+
     protected String getNavigationString()
     {
         return "pretty:";
@@ -442,6 +453,11 @@ public class AlbumBean
         return "pretty:";
     }
 
+    /**
+     * delete an {@link Album}
+     * 
+     * @return
+     */
     public String delete()
     {
         AlbumController c = new AlbumController();
@@ -460,6 +476,12 @@ public class AlbumBean
         return "pretty:albums";
     }
 
+    /**
+     * Withdraw an {@link Album}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String withdraw() throws Exception
     {
         AlbumController c = new AlbumController();
@@ -477,6 +499,11 @@ public class AlbumBean
         return "pretty:";
     }
 
+    /**
+     * True if the {@link Album} is selected in the album list
+     * 
+     * @return
+     */
     public boolean getSelected()
     {
         if (sessionBean.getSelectedAlbums().contains(album.getId()))

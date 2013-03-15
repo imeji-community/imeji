@@ -31,21 +31,28 @@ public class SimpleSecurityQuery
      * @param includeWithdrawn
      * @return
      */
-    public static String queryFactory(User user, String rdfType, boolean includeWithdrawn)
+    public static String queryFactory(User user, String rdfType, Status status)
     {
-        // if user is null or has no rights, return default security
-        if (user == null || user.getGrants().isEmpty())
+        String statusFilter = getStatusAsFilter(status);
+        if (Status.RELEASED.equals(status) || Status.WITHDRAWN.equals(status))
         {
-            if (includeWithdrawn)
-            {
-                return " .FILTER(?status!=<" + Status.PENDING.getUri() + ">) . ?s a <" + rdfType + ">";
-            }
+            // If searching for released or withdrawn objects, no grant filter is needed (released and withdrawn objects
+            // are all public)
+            return statusFilter + " . ?s a <" + rdfType + "> ";
+        }
+        else if (user != null && user.getGrants().isEmpty() && Status.PENDING.equals(status))
+        {
+            // special case: a user without grants wants to see private objects: not possible
+            return ".FILTER(false)";
+        }
+        //
+        else if ((user == null || user.getGrants().isEmpty()))
+        {
+            // if user is null or has no rights, then can only see the released objects
             return " .FILTER(?status=<" + Status.RELEASED.getUri() + ">) . ?s a <" + rdfType + ">";
         }
-        // else...
-        String status = getStatusAsFilter(includeWithdrawn);
-        String grants = getUserGrantsAsFilter(user, rdfType);
-        return grants + status + " . ?s a <" + rdfType + "> ";
+        // else, check the grant and add the status filter...
+        return getUserGrantsAsFilter(user, rdfType) + statusFilter + " . ?s a <" + rdfType + "> ";
     }
 
     /**
@@ -54,14 +61,16 @@ public class SimpleSecurityQuery
      * @param includeWithdrawn
      * @return
      */
-    private static String getStatusAsFilter(boolean includeWithdrawn)
+    private static String getStatusAsFilter(Status status)
     {
-        String status = "";
-        if (!includeWithdrawn)
+        if (status == null)
         {
-            status = " . FILTER (?status!=<" + Status.WITHDRAWN.getUri() + ">)";
+            return " . FILTER (?status!=<" + Status.WITHDRAWN.getUri() + ">)";
         }
-        return status;
+        else
+        {
+            return " . FILTER (?status=<" + status.getUri() + ">)";
+        }
     }
 
     /**
@@ -76,6 +85,7 @@ public class SimpleSecurityQuery
         String privileges = "";
         if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
         {
+            int count = 0;
             for (Grant g : user.getGrants())
             {
                 if (GrantType.CONTAINER_ADMIN.equals(g.asGrantType())
@@ -85,17 +95,19 @@ public class SimpleSecurityQuery
                         || (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType) && GrantType.PROFILE_ADMIN
                                 .equals(g.asGrantType())))
                 {
-                    if (!"".equals(privileges))
+                    if (count > 0)
                     {
                         privileges += " || ";
                     }
                     privileges += getVariableName(rdfType) + "=<" + g.getGrantFor() + ">";
+                    count++;
                 }
                 else if (GrantType.SYSADMIN.equals(g.asGrantType()))
                 {
-                    if (!"".equals(privileges))
+                    if (count > 0)
                         privileges += " || ";
                     privileges += "true";
+                    count++;
                 }
             }
         }
@@ -103,7 +115,7 @@ public class SimpleSecurityQuery
         {
             return " . FILTER(" + privileges + " || ?status=<http://imeji.org/terms/status#RELEASED>)";
         }
-        return "";
+        return " . FILTER(?status=<http://imeji.org/terms/status#RELEASED>)";
     }
 
     /**

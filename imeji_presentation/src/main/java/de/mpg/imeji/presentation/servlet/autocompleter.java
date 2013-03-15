@@ -2,8 +2,6 @@ package de.mpg.imeji.presentation.servlet;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URLEncoder;
@@ -15,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -24,7 +21,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.openjena.atlas.json.JsonArray;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -44,8 +40,6 @@ public class autocompleter extends HttpServlet
     private Pattern googleGeoAPIPattern = Pattern.compile(
             "https://maps.googleapis.com/maps/api/geocode/json.*address=", Pattern.CASE_INSENSITIVE);
     private Pattern ccLicensePattern = Pattern.compile("http://api.creativecommons.org/rest/.*/simple/chooser.*");
-    private String coneAuthorUri = "cone/persons/query?format=json&n=10&m=full&q=";
-    private String googleAPIUri = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=";
 
     /**
      * @see HttpServlet#HttpServlet()

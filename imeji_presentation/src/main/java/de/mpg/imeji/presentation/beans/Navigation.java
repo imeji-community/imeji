@@ -76,7 +76,7 @@ public class Navigation
 
     public String getHomeUrl()
     {
-        return applicationUrl + HOME.getPath();
+        return getApplicationUri();
     }
 
     public String getBrowseUrl()

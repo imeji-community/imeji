@@ -58,7 +58,7 @@
 			<ui:include src="ui/MetaMenu.jspf"/>
 		
 			<div class="imj_siteHeaderLogoSearchSection imj_simpleSearch">
-				<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage }" value="#{Navigation.applicationUrl}">
+				<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage }" value="#{Navigation.homeUrl}">
 					<h:panelGroup styleClass="imj_siteHeaderLogo">
 						<h:panelGroup styleClass="imj_siteHeaderLogoTheme"></h:panelGroup>
 					</h:panelGroup>

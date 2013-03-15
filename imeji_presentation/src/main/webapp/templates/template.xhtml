@@ -92,7 +92,8 @@ All rights reserved. Use is subject to license terms.
 											<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
 										</h:panelGroup>
 	                                    <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{MessagesBean.hasMessages and !MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
-	                                        <h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
+	                                        <h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2>
+	                                      	<h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
 	                                    </h:panelGroup>
 	                                    <h:outputText value="&#160;" rendered="#{!MessagesBean.hasErrorMessages}"/>
 	                                    <!-- Subheadline ends here -->

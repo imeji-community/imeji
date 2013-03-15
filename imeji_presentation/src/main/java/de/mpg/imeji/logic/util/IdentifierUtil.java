@@ -29,16 +29,9 @@
 package de.mpg.imeji.logic.util;
 
 import java.net.URI;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.axis.encoding.Base64;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.openjena.atlas.lib.Bytes;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -74,7 +67,7 @@ public class IdentifierUtil
      * The size of the random id. Since the RANDOM_ID_CHARSET has 64 elements, to calculate the number of possible id,
      * do 64^RANDOM_ID_SIZE with: - 1: 6 bits - 10: 60 bits - 12: 72 bits - 15: 90bits
      */
-    private static final int RANDOM_ID_SIZE = 12;
+    private static final int RANDOM_ID_SIZE = 16;
 
     /**
      * Initialize the static value for the identifier method

@@ -20,10 +20,9 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
-import javax.media.jai.JAI;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.hamcrest.core.IsAnything;
 
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.jai.codec.ImageCodec;
@@ -68,10 +67,13 @@ public class ImageUtils
     public static byte[] transformImage(byte[] bytes, FileResolution resolution, String mimeType) throws IOException,
             Exception
     {
+        // If it is orginal resolution, don't touch the file, otherwise transform (compress and/or )
         if (!FileResolution.ORIGINAL.equals(resolution))
         {
             if (FileResolution.THUMBNAIL.equals(resolution) || StorageUtils.getMimeType("tif").equals(mimeType))
             {
+                // If it is the thumbnail, compress the images (in jpeg), if it is a tif compress even for WEb
+                // resolution, since resizing not possible with tif
                 byte[] compressed = compressImage(bytes, mimeType);
                 if (!Arrays.equals(compressed, bytes))
                 {
@@ -79,6 +81,7 @@ public class ImageUtils
                 }
                 bytes = compressed;
             }
+            // Read the bytes as BufferedImage
             BufferedImage image;
             if (StorageUtils.getMimeType("jpg").equals(mimeType))
             {
@@ -88,8 +91,15 @@ public class ImageUtils
             {
                 image = ImageIO.read(new ByteArrayInputStream(bytes));
             }
+            if (image == null)
+            {
+                // The image couldn't be read
+                return null;
+            }
+            // Resize image
             if (StorageUtils.getMimeType("gif").equals(mimeType) && GifUtils.isAnimatedGif(bytes))
             {
+                // If it is an animated gif, resize all frame and build a new gif with this resized frames
                 bytes = GifUtils.resizeAnimatedGif(bytes, resolution);
             }
             else
@@ -102,7 +112,7 @@ public class ImageUtils
 
     /**
      * Scale a {@link BufferedImage} to new size. Is faster than the basic {@link ImageUtils}.scaleImage method, has the
-     * same quality
+     * same quality. If it is a thumbnail, cut the images to fit into the raster
      * 
      * @param image original image
      * @param size the size to be resized to
@@ -386,7 +396,7 @@ public class ImageUtils
         }
         catch (Exception e)
         {
-            logger.info("Image could not be compressed: " + e.getMessage());
+            logger.info("Image could not be compressed: ", e);
         }
         return bytes;
     }

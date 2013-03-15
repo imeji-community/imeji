@@ -22,7 +22,9 @@
 									<h:inputText styleClass="half_txtInput endline" value="#{FormularBean.profile.title}" valueChangeListener="#{FormularBean.titleListener}" />
 								</h:panelGroup>
 							</h:panelGroup>
-							<h:panelGroup layout="block" styleClass="free_area0  endline itemLine clear"></h:panelGroup>
+							<h:panelGroup layout="block" styleClass="free_area0  endline itemLine clear">
+								<font color="#FF0000"><h:outputText value="#{lbl.profile_beta_info}"/></font>
+							</h:panelGroup>
 							
 							<h:panelGroup styleClass="full_area0_p8" rendered="#{empty FormularBean.wrappers}">
 								<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl">
@@ -260,7 +262,11 @@
 							</h:panelGroup>
 						</div>
 					</h:panelGroup>
-						
+					
+					<h:panelGroup layout="block" styleClass="free_area0  endline itemLine clear">
+						<h:outputText value="#{lbl.profile_move_info}"/>
+					</h:panelGroup>	
+					
 					<div class="fullItem full_area0_p8 itemLine">
 						<h:commandButton action="#{FormularBean.cancel}"  value="#{lbl.cancel}" styleClass="free_area1_p8 cancelButton"/>		
 						<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					

@@ -29,17 +29,30 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
+/**
+ * Metadata Editor for the detail item page
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SingleEditBean
 {
     private Item item = null;
     private MetadataProfile profile = null;
     private SimpleImageEditor editor = null;
-    private Map<URI, Boolean> valuesMap = new HashMap<URI, Boolean>();
     private String toggleState = "displayMd";
     private int mdPosition = 0;
     private String pageUrl = "";
     private List<SuperMetadataBean> metadataList;
 
+    /**
+     * Constructor
+     * 
+     * @param im
+     * @param profile
+     * @param pageUrl
+     */
     public SingleEditBean(Item im, MetadataProfile profile, String pageUrl)
     {
         item = im;
@@ -48,6 +61,11 @@ public class SingleEditBean
         init();
     }
 
+    /**
+     * Check in the url if the editor should be automatically shown
+     * 
+     * @return
+     */
     public String getCheckToggleState()
     {
         toggleState = "displayMd";
@@ -58,35 +76,44 @@ public class SingleEditBean
         return "";
     }
 
+    /**
+     * Initialize the page
+     */
     public void init()
     {
-        for (Statement st : profile.getStatements())
-        {
-            valuesMap.put(st.getId(), false);
-        }
+        addNewMetadataIfNeeded();
+        editor = new SimpleImageEditor(item, profile, null);
+        ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
+        metadataList = new ArrayList<SuperMetadataBean>();
+        metadataList.addAll(editor.getItems().get(0).getMetadata());
+    }
+
+    /**
+     * For each {@link Statement} where no {@link Metadata} is defined, add a new one to the {@link Item}
+     */
+    private void addNewMetadataIfNeeded()
+    {
+        Map<URI, Boolean> valuesMap = new HashMap<URI, Boolean>();
         for (Metadata md : item.getMetadataSet().getMetadata())
         {
             valuesMap.put(md.getStatement(), true);
         }
         for (Statement st : profile.getStatements())
         {
-            if (!valuesMap.get(st.getId()))
+            if (valuesMap.get(st.getId()) == null)
             {
                 item.getMetadataSet().getMetadata().add(MetadataFactory.createMetadata(st));
             }
             valuesMap.put(st.getId(), true);
         }
-        List<Item> imAsList = new ArrayList<Item>();
-        imAsList.add(item);
-        editor = new SimpleImageEditor(imAsList, profile, null);
-        ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
-        metadataList = new ArrayList<SuperMetadataBean>();
-        for (Metadata metadata : item.getMetadataSet().getMetadata())
-        {
-            metadataList.add(new SuperMetadataBean(metadata));
-        }
     }
 
+    /**
+     * Save the {@link Item} with its {@link Metadata}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String save() throws Exception
     {
         copySuperMetadatatoItem();
@@ -99,6 +126,9 @@ public class SingleEditBean
         return "";
     }
 
+    /**
+     * Transform all {@link SuperMetadataBean} to {@link Metadata} which are going to be saved
+     */
     private void copySuperMetadatatoItem()
     {
         item.getMetadataSet().getMetadata().clear();
@@ -108,6 +138,12 @@ public class SingleEditBean
         }
     }
 
+    /**
+     * Cancel the editing, and reset original values
+     * 
+     * @return
+     * @throws Exception
+     */
     public String cancel() throws Exception
     {
         this.toggleState = "displayMd";
@@ -122,11 +158,19 @@ public class SingleEditBean
         return "";
     }
 
+    /**
+     * Reload the current page
+     * 
+     * @throws IOException
+     */
     private void reloadPage() throws IOException
     {
         FacesContext.getCurrentInstance().getExternalContext().redirect(pageUrl + "?init=1");
     }
 
+    /**
+     * Reload the current image
+     */
     private void reloadImage()
     {
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -154,6 +198,11 @@ public class SingleEditBean
         }
     }
 
+    /**
+     * Show the metadata editor
+     * 
+     * @return
+     */
     public String showEditor()
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -178,18 +227,28 @@ public class SingleEditBean
         return "";
     }
 
+    /**
+     * Add a metadata after the metadata on which the metadata has been clicked
+     * 
+     * @return
+     */
     public String addMetadata()
     {
         editor.addMetadata(0, mdPosition);
-        this.item = editor.getItems().get(0).asItem();
+        item = editor.getItems().get(0).asItem();
         init();
         return "";
     }
 
+    /**
+     * Remove the metadata on which the metadata has been clicked
+     * 
+     * @return
+     */
     public String removeMetadata()
     {
         editor.removeMetadata(0, mdPosition);
-        this.item = editor.getItems().get(0).asItem();
+        item = editor.getItems().get(0).asItem();
         init();
         return "";
     }
@@ -222,16 +281,6 @@ public class SingleEditBean
     public void setProfile(MetadataProfile profile)
     {
         this.profile = profile;
-    }
-
-    public Map<URI, Boolean> getValuesMap()
-    {
-        return valuesMap;
-    }
-
-    public void setValuesMap(Map<URI, Boolean> valuesMap)
-    {
-        this.valuesMap = valuesMap;
     }
 
     public int getMdPosition()

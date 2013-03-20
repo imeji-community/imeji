@@ -108,7 +108,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseInit();
         browseContext = getNavigationString();
-        // initMenus();
         return "";
     }
 
@@ -149,10 +148,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(null, session.getLabel("default")));
-        sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel(SearchIndex.names.created.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel(SearchIndex.names.col.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel(SearchIndex.names.modified.name())));
+        sortMenu.add(new SelectItem(null, "--"));
+        sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel("sort_img_date_created")));
+        sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel("sort_img_date_mod")));
+        sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel("sort_img_collection")));
     }
 
     @Override
@@ -386,8 +385,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private void withdraw(List<String> uris) throws Exception
     {
         ItemController ic = new ItemController(session.getUser());
-        Collection<Item> items = loadImages(uris, getElementsPerPage(), getOffset());
-        int count = 0;
+        Collection<Item> items = loadImages(uris, 0, -1);
+        int count = items.size();
         if ("".equals(discardComment.trim()))
         {
             BeanHelper.error(session.getMessage("error_image_withdraw_discardComment"));

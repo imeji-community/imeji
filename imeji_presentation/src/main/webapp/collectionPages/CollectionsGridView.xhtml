@@ -149,18 +149,25 @@
 									</h:outputLink>
 									
 									<h:panelGroup styleClass="free_area0 small_marginLIncl">
-										<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogRelease');" rendered="#{container.editable and container.status == 'PENDING'}">
+										<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('list:#{index.index}:dialogRelease');" rendered="#{container.editable and container.status == 'PENDING'}">
 											<h:outputText value="#{lbl.collection_release}"/>
 										</h:outputLink>
 										
-										<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogWithdraw');" rendered="#{container.editable and container.status == 'RELEASED'}">
+										<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('list:#{index.index}:dialDiscardContainer:dialogWithdraw');" rendered="#{container.editable and container.status == 'RELEASED'}">
 											<h:outputText value="#{lbl.withdraw}"/>
 										</h:outputLink>
 										
-										<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogDelete');" rendered="#{container.deletable}" >
+										<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('list:#{index.index}:dialogDelete');" rendered="#{container.deletable}" >
 											<h:outputText value="#{lbl.delete}"/>
 										</h:outputLink>
 									</h:panelGroup>
+									<imjc:DiscardContainer id="dialDiscardContainer" bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>
+									<ui:include src="../confirmationPages/ContainerDelete.xhtml">
+										<ui:param name="bean" value="#{container}"/>
+									</ui:include>
+									<ui:include src="../confirmationPages/ContainerRelease.xhtml">
+										<ui:param name="bean" value="#{container}"/>
+									</ui:include>
 								</span>
 							</div>
 						</div>
@@ -200,13 +207,6 @@
 							</div>
 						</div>
 					</li>
-					<imjc:DiscardContainer id="dialDiscardContainer" bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>
-					<ui:include src="../confirmationPages/ContainerDelete.xhtml">
-						<ui:param name="bean" value="#{container}"/>
-						</ui:include>
-					<ui:include src="../confirmationPages/ContainerRelease.xhtml">
-						<ui:param name="bean" value="#{ViewCollectionBean}"/>
-					</ui:include>
 				</ui:repeat>
 			</ol>
 		</div>

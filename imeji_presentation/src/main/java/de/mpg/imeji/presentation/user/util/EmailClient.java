@@ -25,10 +25,27 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
 
+/**
+ * Client to send email
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class EmailClient
 {
     private static Logger logger = Logger.getLogger(EmailClient.class);
 
+    /**
+     * Send an email according to the properties define in imeji.properties
+     * 
+     * @param to
+     * @param from
+     * @param subject
+     * @param message
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     public void sendMail(String to, String from, String subject, String message) throws IOException, URISyntaxException
     {
         String emailUser = PropertyReader.getProperty("imeji.email.user");
@@ -44,6 +61,22 @@ public class EmailClient
         sendMail(server, auth, emailUser, password, sender, recipientsAdress, null, null, null, subject, message);
     }
 
+    /**
+     * Send an email
+     * 
+     * @param smtpHost
+     * @param withAuth
+     * @param usr
+     * @param pwd
+     * @param senderAddress
+     * @param recipientsAddresses
+     * @param recipientsCCAddresses
+     * @param recipientsBCCAddresses
+     * @param replytoAddresses
+     * @param subject
+     * @param text
+     * @return
+     */
     public String sendMail(String smtpHost, String withAuth, String usr, String pwd, String senderAddress,
             String[] recipientsAddresses, String[] recipientsCCAddresses, String[] recipientsBCCAddresses,
             String[] replytoAddresses, String subject, String text)
@@ -135,6 +168,13 @@ public class EmailClient
         return status;
     }
 
+    /**
+     * {@link Authenticator} for imeji
+     * 
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     */
     public class MailAuthenticator extends Authenticator
     {
         private final String user;

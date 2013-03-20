@@ -46,6 +46,7 @@
 		<filter-name>History Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
 	</filter>
+
 	<!-- Mappings -->
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -54,6 +55,10 @@
 	<servlet-mapping>
 		<servlet-name>File Servlet</servlet-name>
 		<url-pattern>/file</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>File Servlet</servlet-name>
+		<url-pattern>/file/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Export Servlet</servlet-name>
@@ -121,4 +126,12 @@
 	<welcome-file-list>
 		<welcome-file>Welcome.xhtml</welcome-file>
 	</welcome-file-list>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/jsf/errorPages/404.xhtml</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/jsf/errorPages/500.xhtml</location>
+	</error-page>
 </web-app>

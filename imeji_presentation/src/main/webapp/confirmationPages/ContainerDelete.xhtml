@@ -2,18 +2,18 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<div id="dialogDelete" class="half_area0_p8 bordst0 shadst1 dialogbox"
+	<h:panelGroup id="dialogDelete" class="half_area0_p8 bordst0 shadst1 dialogbox"
 		style="display: none;">
 		<div class="half_area0_p8">
 			<h:outputText value="#{msg.confirmation_delete_collection}?"
 				rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}" />
-			<h:outputText value="#{msg.confirmation_delete_album}?"
+			<h:outputText value="#{msg.confirmation_delete_album}"
 				rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}" />
 		</div>
 		<div class="half_area0_p8">
 			<div class="large_txtBtn">
 				<a href="#" class="large_txtBtn dialogCancelButton"
-					onclick="closeDialog('dialogDelete');"> <h:outputText
+					onclick="closeDialog('dialogDelete');"><h:outputText
 						value="#{lbl.cancel}" />
 				</a>
 			</div>
@@ -25,5 +25,5 @@
 				</h:form>
 			</div>
 		</div>
-	</div>
+	</h:panelGroup>
 </ui:composition>

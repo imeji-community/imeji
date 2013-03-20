@@ -101,19 +101,21 @@
 				</h:form>
 			</div>
 			<br />
-			<h:panelGroup styleClass="half_area2_p6 messageArea errorMessageArea"  rendered="#{UploadBean.fNum > 0}">	
-				<br />
-				<h2><h:outputText value ="#{UploadBean.fNum} #{msg.error_upload}:"/><br /></h2>
-				<ui:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}" >
-					<h:outputText value="#{fFile}" /><br />
-				</ui:repeat>					
-			</h:panelGroup>
-			<h:panelGroup styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{UploadBean.sNum > 0}">
-				<h2><h:outputText value="#{UploadBean.sNum} #{msg.success_upload}:" /><br /></h2>
-				<ui:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}">
-					<h:outputText value="#{sFile}" /><br />
-				</ui:repeat>
-			</h:panelGroup>
+			<div class="imj_subHeaderMessageSpace">
+				<h:panelGroup styleClass="half_area2_p6 messageArea infoMessageArea"  rendered="#{UploadBean.fNum > 0}">	
+					<br />
+					<h2><h:outputText value ="#{UploadBean.fNum} #{msg.error_upload}:"/><br /></h2>
+					<ui:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}" >
+						<h:outputText styleClass="messageError" value="#{fFile}" /><br />
+					</ui:repeat>
+				</h:panelGroup>
+				<h:panelGroup styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{UploadBean.sNum > 0}">
+					<h2><h:outputText value="#{UploadBean.sNum} #{msg.success_upload}:" /><br /></h2>
+					<ui:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}">
+						<h:outputText value="#{sFile}" styleClass="messageStatus"/><br />
+					</ui:repeat>
+				</h:panelGroup>
+			</div>
 		</div>
 	</ui:define>
 </ui:composition>

@@ -88,7 +88,6 @@ public class ExportManager
     public SearchResult search() throws IOException
     {
         String collectionId = export.getParam("col");
-        System.out.println(collectionId);
         String albumId = export.getParam("alb");
         String query = export.getParam("q");
         String id = export.getParam("id");

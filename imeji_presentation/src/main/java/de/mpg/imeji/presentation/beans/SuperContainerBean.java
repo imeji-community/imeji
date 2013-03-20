@@ -82,9 +82,9 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     protected void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem("PROPERTIES_STATUS", sb.getLabel(SearchIndex.names.status.name())));
-        sortMenu.add(new SelectItem("CONTAINER_METADATA_TITLE", sb.getLabel(SearchIndex.names.cont_title.name())));
-        sortMenu.add(new SelectItem("PROPERTIES_LAST_MODIFICATION_DATE", sb.getLabel(SearchIndex.names.modified.name())));
+        sortMenu.add(new SelectItem(SearchIndex.names.status.name(), sb.getLabel("sort_status")));
+        sortMenu.add(new SelectItem(SearchIndex.names.cont_title.name(), sb.getLabel("sort_title")));
+        sortMenu.add(new SelectItem(SearchIndex.names.modified.name(), sb.getLabel("sort_date_mod")));
         filterMenu = new ArrayList<SelectItem>();
         filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
         if (sb.getUser() != null)
@@ -127,22 +127,22 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         SearchPair pair = null;
         if ("my".equals(selectedFilter))
         {
-            pair = new SearchPair(Search.getIndex("MY_IMAGES"), SearchOperators.EQUALS, ObjectHelper.getURI(User.class,
+            pair = new SearchPair(Search.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper.getURI(User.class,
                     sb.getUser().getEmail()).toString());
         }
         else if ("private".equals(selectedFilter))
         {
-            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.EQUALS,
+            pair = new SearchPair(Search.getIndex(SearchIndex.names.status), SearchOperators.EQUALS,
                     "http://imeji.org/terms/status#PENDING");
         }
         else if ("public".equals(selectedFilter))
         {
-            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.EQUALS,
+            pair = new SearchPair(Search.getIndex(SearchIndex.names.status), SearchOperators.EQUALS,
                     "http://imeji.org/terms/status#RELEASED");
         }
         else if ("withdrawn".equals(selectedFilter))
         {
-            pair = new SearchPair(Search.getIndex("PROPERTIES_STATUS"), SearchOperators.EQUALS,
+            pair = new SearchPair(Search.getIndex(SearchIndex.names.status), SearchOperators.EQUALS,
                     "http://imeji.org/terms/status#WITHDRAWN");
         }
         return pair;

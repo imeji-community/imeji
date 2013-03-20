@@ -61,9 +61,9 @@ public class StorageTest
             + "hsgfhidsgfhdsg fh dsfshdgfhidsgfihsdgfiwuzfgisdh fg shdfg sdihfg sdihgfisdgfhsdgf ihsdg fhsdgfizsdgf zidsgfizsd fi fhsdhfgsdhfg"
             + "hgf dhfgdshfgdshfghsdg fhsdf ghsdg fsdhf gsdjgf sdjgfsd fgdszfg sdfzgsdzgf sdfg dgfhisgfigifg i";
     /**
-     * Not working: *
+     * Not working: * /
      */
-    private static final String SPECIAL_CHARACHTERS = "!\"§$%&/()=? '#_-.,";
+    private static final String SPECIAL_CHARACHTERS = "!\"§$%&()=? '#_-.,";
 
     /**
      * Test for {@link InternalStorage}

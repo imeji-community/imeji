@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
@@ -49,7 +50,10 @@ public class AlbumBean
     private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
     private boolean active;
-    private boolean save;
+    /**
+     * True if the {@link AlbumBean} is used for the crete page, else false
+     */
+    private boolean create;
     private boolean selected;
     private static Logger logger = Logger.getLogger(AlbumBean.class);
 
@@ -90,7 +94,7 @@ public class AlbumBean
             {
                 Album a = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
                 ItemController ic = new ItemController(sessionBean.getUser());
-                ic.loadContainerItems(a, sessionBean.getUser(), 5, 0);
+                ic.loadContainerItems(a, sessionBean.getUser(), 1, 0);
                 setAlbum(a);
                 if (album != null)
                 {
@@ -118,7 +122,7 @@ public class AlbumBean
         try
         {
             setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
-            save = false;
+            create = false;
             if (sessionBean.getActiveAlbum() != null
                     && sessionBean.getActiveAlbum().getId().toString().equals(album.getId().toString()))
             {
@@ -139,7 +143,22 @@ public class AlbumBean
         getAlbum().getMetadata().setDescription("");
         getAlbum().getMetadata().getPersons().clear();
         getAlbum().getMetadata().getPersons().add(ImejiFactory.newPerson());
-        save = true;
+        create = true;
+    }
+
+    /**
+     * Return the link for the Cancel button
+     * 
+     * @return
+     */
+    public String getCancel()
+    {
+        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        if (create)
+        {
+            return nav.getAlbumsUrl();
+        }
+        return nav.getAlbumUrl() + id + "/" + nav.getInfosPath();
     }
 
     public boolean valid()
@@ -203,7 +222,6 @@ public class AlbumBean
 
     public String addOrganization()
     {
-        System.out.println("add org");
         Collection<Person> persons = getAlbum().getMetadata().getPersons();
         List<Organization> orgs = (List<Organization>)((List<Person>)persons).get(authorPosition).getOrganizations();
         orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
@@ -219,6 +237,16 @@ public class AlbumBean
         else
             BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
         return "";
+    }
+
+    /**
+     * Listener for the discard comment
+     * 
+     * @param event
+     */
+    public void discardCommentListener(ValueChangeEvent event)
+    {
+        album.setDiscardComment(event.getNewValue().toString());
     }
 
     protected String getNavigationString()
@@ -322,7 +350,7 @@ public class AlbumBean
      */
     public String save() throws Exception
     {
-        if (save)
+        if (create)
         {
             AlbumController ac = new AlbumController();
             if (valid())
@@ -425,6 +453,11 @@ public class AlbumBean
         return "pretty:";
     }
 
+    /**
+     * delete an {@link Album}
+     * 
+     * @return
+     */
     public String delete()
     {
         AlbumController c = new AlbumController();
@@ -443,6 +476,12 @@ public class AlbumBean
         return "pretty:albums";
     }
 
+    /**
+     * Withdraw an {@link Album}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String withdraw() throws Exception
     {
         AlbumController c = new AlbumController();
@@ -460,6 +499,11 @@ public class AlbumBean
         return "pretty:";
     }
 
+    /**
+     * True if the {@link Album} is selected in the album list
+     * 
+     * @return
+     */
     public boolean getSelected()
     {
         if (sessionBean.getSelectedAlbums().contains(album.getId()))

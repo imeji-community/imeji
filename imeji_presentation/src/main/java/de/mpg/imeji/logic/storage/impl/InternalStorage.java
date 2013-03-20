@@ -73,8 +73,7 @@ public class InternalStorage implements Storage
     public UploadResult upload(String filename, byte[] bytes, String collectionId)
     {
         InternalStorageItem item = manager.addFile(bytes, filename, collectionId);
-        return new UploadResult(item.getId(), manager.transformPathToUrl(item.getOrignalPath()),
-                manager.transformPathToUrl(item.getWebPath()), manager.transformPathToUrl(item.getThumbnailPath()));
+        return new UploadResult(item.getId(), item.getOriginalUrl(), item.getWebUrl(), item.getThumbnailUrl());
     }
 
     /*
@@ -91,7 +90,8 @@ public class InternalStorage implements Storage
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error reading file " + url + " in internal storage: ", e);
+            throw new RuntimeException("Error reading file " + manager.transformUrlToPath(url)
+                    + " in internal storage: ", e);
         }
     }
 
@@ -112,7 +112,7 @@ public class InternalStorage implements Storage
     @Override
     public void update(String url, byte[] bytes)
     {
-        //return upload(url, bytes);
+        // return upload(url, bytes);
     }
 
     /*

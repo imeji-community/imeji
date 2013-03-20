@@ -33,6 +33,8 @@ public class License extends Metadata
     private String license = null;
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
+    @j2jResource("http://purl.org/dc/elements/1.1/identifier")
+    private URI externalUri;
 
     public License()
     {
@@ -73,6 +75,22 @@ public class License extends Metadata
         this.statement = namespace;
     }
 
+    /**
+     * @return the externalUri
+     */
+    public URI getExternalUri()
+    {
+        return externalUri;
+    }
+
+    /**
+     * @param externalUri the externalUri to set
+     */
+    public void setExternalUri(URI externalUri)
+    {
+        this.externalUri = externalUri;
+    }
+
     @Override
     public void copy(Metadata metadata)
     {
@@ -80,6 +98,7 @@ public class License extends Metadata
         {
             this.license = ((License)metadata).getLicense();
             this.statement = metadata.getStatement();
+            this.externalUri = ((License)metadata).getExternalUri();
         }
     }
 

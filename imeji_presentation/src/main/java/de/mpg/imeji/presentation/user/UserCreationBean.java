@@ -99,7 +99,7 @@ public class UserCreationBean
      */
     private boolean isValidEmail(String email)
     {
-        String regexEmailMatch = "[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
+        String regexEmailMatch = "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)";
         return email.matches(regexEmailMatch);
     }
 

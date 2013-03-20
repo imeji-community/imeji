@@ -14,6 +14,7 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.history.HistorySession;
+import de.mpg.imeji.presentation.history.Page;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -82,8 +83,12 @@ public class LoginBean
             BeanHelper.error(sb.getMessage("error_log_in_description"));
             logger.error("Problem logging in User", e);
         }
-        String redirectAfterLogin = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage()
-                .getUri().toString();
+        Page current = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage();
+        String redirectAfterLogin = "";
+        if (current != null)
+        {
+            redirectAfterLogin = current.getUri().toString().replace("?h=", "");
+        }
         FacesContext.getCurrentInstance().getExternalContext().redirect(redirectAfterLogin);
     }
 

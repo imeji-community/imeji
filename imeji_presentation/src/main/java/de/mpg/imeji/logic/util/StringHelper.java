@@ -1,8 +1,11 @@
 package de.mpg.imeji.logic.util;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * Static functions to manipulate {@link String}
@@ -87,14 +90,10 @@ public class StringHelper
         try
         {
             String filextension = getFileExtension(filename);
-            filename = URLEncoder.encode(filename.replace(" ", "_"), "UTF-8");
-            if (filename.length() > FILENAME_MAX_LENGTH)
-            {
-                return filename.substring(0, FILENAME_MAX_LENGTH) + "." + filextension;
-            }
+            filename = DigestUtils.md5Hex(filename) + "." + filextension;
             return filename;
         }
-        catch (UnsupportedEncodingException e)
+        catch (Exception e)
         {
             throw new RuntimeException("Error with filename: " + filename, e);
         }

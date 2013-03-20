@@ -28,10 +28,15 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -56,6 +61,27 @@ public class StorageUtils
      * @return
      */
     public static byte[] toBytes(InputStream stream)
+    {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        int b;
+        try
+        {
+            while ((b = stream.read()) != -1)
+            {
+                bos.write(b);
+            }
+            byte[] ba = bos.toByteArray();
+            bos.flush();
+            bos.close();
+            return ba;
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Error transforming inputstream to bytearryoutputstream", e);
+        }
+    }
+
+    public static byte[] toBytes(ImageOutputStream stream)
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         int b;
@@ -139,6 +165,10 @@ public class StorageUtils
         if ("tif".equals(format))
         {
             format = format + "f";
+        }
+        else if ("jpg".equals(format))
+        {
+            format = "jpeg";
         }
         return "image/" + format;
     }

@@ -5,12 +5,20 @@
 
 var datasourceUrl;
 var result;
+// After how many character the suggest is started
+var offset = 2;
 /*
  * Update remote calling source url Called when input field focus:
  * onfocus="getDatasourceUrl('#{statement.vocabulary}')"
  */
 function getDatasourceUrl(url) {
 	datasourceUrl = url;
+	 offset = 2;
+}
+
+function getDatasourceUrl(url, startAfter) {
+	datasourceUrl = url;
+	offset = startAfter;
 }
 function split(val) {
 	return val.split(/,\s*/);
@@ -23,7 +31,6 @@ $(function() {
 	// i.e, field has class "xHuge_txtInput"
 	$(":input")
 			// don't navigate away from the field on tab when selecting an item
-
 			.bind(
 					"keydown",
 					function(event) {
@@ -56,9 +63,11 @@ $(function() {
 								response(result);
 							});
 						},
+						minLength : 0,
 						messages : {
 							noResults : '',
-							results : function() {return '';
+							results : function() {
+								return '';
 							}
 						},
 						// this search event fired before search beginning
@@ -66,10 +75,10 @@ $(function() {
 						// i.e.,return false;
 						search : function() {
 							// custom minLength, currently start query after
-							// entering 2
+							// entering x
 							// characters,
 							var term = extractLast(this.value);
-							if (term.length < 2) {
+							if (term.length < offset) {
 								return false;
 							}
 						},
@@ -92,7 +101,6 @@ $(function() {
 							 */
 							var idEls = this.id.split(":");
 							var inputId = "";
-
 							for ( var i = 0; i < idEls.length - 1; i++) {
 								inputId = inputId + idEls[i] + ":";
 							}
@@ -128,7 +136,17 @@ $(function() {
 								document.getElementById(inputId
 										+ "inputLongitude").value = ui.item.longitude;
 							}
+							if (ui.item.licenseId != null) {
+								document.getElementById(inputId
+										+ "inputLicenseId").value = ui.item.licenseId;
+							}
 							return false;
 						}
-					});
+					}).focus(function() {
+				// if the offset is 0, then show results on focus
+				if (offset == 0) {
+					this.value = " ";
+					$(this).autocomplete("search");
+				}
+			});
 });

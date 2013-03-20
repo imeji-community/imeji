@@ -70,7 +70,7 @@
 			</h:outputLink>
 			<h:outputLink id="lnkWithdrawCollection"
 				styleClass="imj_SubMenuItem" value="#"
-				onclick="openDialog('dialogWithdraw');"
+				onclick="openDialog('dialDiscardContainer:dialogWithdraw');"
 				rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
 				<h:outputText value="#{lbl.withdraw}" />
 			</h:outputLink>
@@ -83,12 +83,12 @@
 			<h:outputLink
 				value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
 				styleClass="imj_SubMenuItem" target="_blank">
-				<h:outputText value="#{lbl.export_metadata}" />
+				<h:outputText value="#{lbl.export_rdf}" />
 			</h:outputLink>
 			<h:outputLink
 				value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
 				styleClass="imj_SubMenuItem" target="_blank">
-				<h:outputText value="Export for ingest " />
+				<h:outputText value="#{lbl.export_native}" />
 			</h:outputLink>
 		</h:panelGroup>
 		<ui:include src="confirmationPages/ContainerRelease.xhtml">

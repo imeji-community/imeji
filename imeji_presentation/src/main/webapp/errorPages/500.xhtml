@@ -1,0 +1,25 @@
+<ui:composition template="../templates/template.xhtml" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" >
+	
+	<ui:param name="headline" value="#{lbl.ErrorPage500}"/>
+	<ui:define name="mainContent">
+		<h:panelGroup layout="block" styleClass="full_area0 fullItem">
+			<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">		
+				<h3 class="xLarge_area0_p8 endline blockHeader">
+					<h:outputText value="#{lbl.errorNote}"/>
+				</h3>				
+				<span class="seperator"></span>
+				
+					<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+						<div class="Huge_area0_p8 endline clear">
+							<h:outputText value="#{lbl.error500}"/>
+						</div>
+					</h:panelGroup>	
+				
+			</h:panelGroup>		
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

@@ -11,6 +11,13 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Utility class to read property files in Tomcat and JBoss application
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class PropertyReader
 {
     private static Properties properties;

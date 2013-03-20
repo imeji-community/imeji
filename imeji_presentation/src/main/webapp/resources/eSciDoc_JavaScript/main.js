@@ -142,35 +142,6 @@ function submitPanel(panelId, message) {
 				+ message + '</span></h2>';
 	}
 }
-/**
- * When Discard is submitted, check the discard comment
- * 
- * @param index
- * @param panelId
- * @param errorMessage
- * @returns {Boolean}
- */
-function clickOnDiscard(index, button, errorMessage) {
-	var listId = '';
-	if (index != '') {
-		listId = 'list:' + index + ":";
-	}
-	// Get textarea with discard comment
-	var textArea = document.getElementById(listId
-			+ 'dialDiscardContainer:discardForm:discardComment');
-	if (textArea.value != '') {
-		// if discard comment is not empty, then procceed to discard
-		return true;
-	} else {
-		// if discard comment is empty, show error message
-		var message = document.getElementById(listId + 'dialDiscardContainer:discardForm:errorMessage');
-		message.innerHTML = errorMessage;
-		return false;
-	}
-	return false;
-}
-
-
 
 /**
  * Part of the Patch for jsf

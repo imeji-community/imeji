@@ -7,18 +7,50 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
+/**
+ * List of text (messages) sent from imeji to users via email
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class EmailMessages
 {
+    /**
+     * Email content when a new Account is sent
+     * 
+     * @param password
+     * @param email
+     * @param username
+     * @return
+     */
     public String getNewAccountMessage(String password, String email, String username)
     {
         return getEmailMessage(password, email, username, "email_new_user");
     }
 
+    /**
+     * Email content when a new password is sent
+     * 
+     * @param password
+     * @param email
+     * @param username
+     * @return
+     */
     public String getNewPasswordMessage(String password, String email, String username)
     {
         return getEmailMessage(password, email, username, "email_new_password");
     }
 
+    /**
+     * Email content when a collection has been shared with the addressee by the sender
+     * 
+     * @param sender
+     * @param dest
+     * @param collectionName
+     * @param collectionLink
+     * @return
+     */
     public String getSharedCollectionMessage(String sender, String dest, String collectionName, String collectionLink)
     {
         String message = getBundle("email_shared_collection");
@@ -27,6 +59,15 @@ public class EmailMessages
         return message;
     }
 
+    /**
+     * Email content when an album has been shared with the addressee by the sender
+     * 
+     * @param sender
+     * @param dest
+     * @param collectionName
+     * @param collectionLink
+     * @return
+     */
     public String getSharedAlbumMessage(String sender, String dest, String collectionName, String collectionLink)
     {
         String message = getBundle("email_shared_album");
@@ -35,12 +76,27 @@ public class EmailMessages
         return message;
     }
 
+    /**
+     * Read the message bundle (for example: messages_en.properties)
+     * 
+     * @param messageBundle
+     * @return
+     */
     private String getBundle(String messageBundle)
     {
         SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         return session.getMessage(messageBundle);
     }
 
+    /**
+     * Create the content of an email according to the parameters
+     * 
+     * @param password
+     * @param email
+     * @param username
+     * @param message_bundle
+     * @return
+     */
     private String getEmailMessage(String password, String email, String username, String message_bundle)
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
@@ -56,6 +112,12 @@ public class EmailMessages
         return emailMessage;
     }
 
+    /**
+     * Create the subject of the email being send, for either new account or new password
+     * 
+     * @param newAccount
+     * @return
+     */
     public String getEmailSubject(boolean newAccount)
     {
         SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);

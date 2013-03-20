@@ -50,6 +50,12 @@ public class CollectionImageBean extends ImageBean
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect(navigation.getCollectionUrl() + collectionId + "/" + navigation.getBrowsePath());
     }
+    
+    public String test()
+    {
+        System.out.println("TEST");
+        return "";
+    }
 
     public String getCollectionId()
     {

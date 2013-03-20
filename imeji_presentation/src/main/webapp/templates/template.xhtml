@@ -52,7 +52,6 @@ All rights reserved. Use is subject to license terms.
                     </h:inputHidden>
                     <!-- import header -->
                     <ui:include src="/headerPages/Header.jspf"/>
-                    
                     <div class="imj_siteContent">
                         <!-- begin: content section (including elements that visually belong to the header (breadcrumb, headline, subheader and content menu)) - removed id="content" -->
 						<div class="imj_siteContentSection">
@@ -61,16 +60,12 @@ All rights reserved. Use is subject to license terms.
 									<div class="imj_clear breadcrumb"></div>
 								</div>
 							</ui:remove>
-							
-							<ui:fragment rendered="#{headline.length() > 0}">
-								<div id="contentSkipLinkAnchor" class="imj_siteContentHeadline">
-									<!-- Headline starts here, taken from facelets parameter -->
-									<ui:insert name="headline">
-										<h1><h:outputText value="#{headline}"/></h1>
-									</ui:insert><!-- Headline ends here -->
-								</div>
-							</ui:fragment>
-							
+							<div id="contentSkipLinkAnchor" class="imj_siteContentHeadline">
+								<!-- Headline starts here, taken from facelets parameter -->
+								<ui:insert name="headline">
+									<h1><h:outputText value="#{headline}"/></h1>
+								</ui:insert><!-- Headline ends here -->
+							</div>
 							<div class="imj_siteContentSubSection">
 								<div class="imj_contentMenuWrapper">
 									<!-- content menu starts here -->

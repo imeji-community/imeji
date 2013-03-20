@@ -62,12 +62,14 @@ All rights reserved. Use is subject to license terms.
 								</div>
 							</ui:remove>
 							
-							<div id="contentSkipLinkAnchor" class="imj_siteContentHeadline">
-								<!-- Headline starts here, taken from facelets parameter -->
-								<ui:insert name="headline">
-									<h1><h:outputText value="#{headline}"/></h1>
-								</ui:insert><!-- Headline ends here -->
-							</div>
+							<ui:fragment rendered="#{headline.length() > 0}">
+								<div id="contentSkipLinkAnchor" class="imj_siteContentHeadline">
+									<!-- Headline starts here, taken from facelets parameter -->
+									<ui:insert name="headline">
+										<h1><h:outputText value="#{headline}"/></h1>
+									</ui:insert><!-- Headline ends here -->
+								</div>
+							</ui:fragment>
 							
 							<div class="imj_siteContentSubSection">
 								<div class="imj_contentMenuWrapper">

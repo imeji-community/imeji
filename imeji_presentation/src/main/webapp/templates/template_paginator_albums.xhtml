@@ -74,22 +74,26 @@
 							<thead class="listHeader" style="text-align: left; vertical-align:top;">
 							    <tr class="full_area0">
 							      	<th class="free_area0_p8 endline itemSelectArea">
-							      		<h:panelGroup rendered="#{SessionBean.user != null}">
-							      		<input type="button" class="min_imgBtn checkboxSelectButton"/>
-										<div class="large_area1 xTiny_marginLIncl selectMenu" style="display: none;">
-											<span class="medium_area0_p8">
-												<h:outputText value="#{lbl.select_albums}"/>
-											</span>
-											<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
-												<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
-											</h:commandLink>
-							 				<!-- <a class="large_area0 selectTotal"><span class="medium_area0_p8 tiny_marginLIncl">All</span></a>-->
-							 				<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
-												<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
-											</h:commandLink>
-										</div>
+							      		<h:panelGroup rendered="#{SessionBean.user != null}" styleClass="overlayMenu">
+							      			<h:panelGroup styleClass="menuHeader">
+											<input type="button" class="min_imgBtn checkboxSelectButton"/>
 										</h:panelGroup>
-										&#160;
+										<h:panelGroup styleClass="menuBody" style="margin-left:-1em;">
+											<div class="large_area1 selectMenu">
+												<span class="medium_area0_p8">
+													<h:outputText value="#{lbl.select_albums}"/>
+												</span>
+												<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
+													<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
+												</h:commandLink>
+												<!-- <a class="large_area0 selectTotal"><span class="medium_area0_p8 tiny_marginLIncl">All</span></a>-->
+												<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
+													<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
+												</h:commandLink>
+											</div>
+										</h:panelGroup>
+									</h:panelGroup>
+									&#160;
 							      	</th>
 							      	
 							      	<th class="free_area0 endline status statusArea">

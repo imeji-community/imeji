@@ -380,7 +380,7 @@ cut second ?
 
 .imj_siteHeaderLogo {
     background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif");
-    /* ?!? url("../../imj_iconset/logo_imeji.giff"); ?!? */
+    /* ?!? url("../../imj_iconset/logo_imeji.gif"); ?!? */
     background-position: left top;
     background-repeat: no-repeat;
     float: left;
@@ -431,12 +431,10 @@ cut second ?
     display: inline-block;
     height: 2em;
     width: 2em;
-    margin-right: 1em; /*0.636363em*/
+    margin-right: 0.636363em;
     margin-top: -0.1818em;
-    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/All_Search_LensStart_23_Static.gif");
-    /* ?!? url("../../imj_iconset/All_Search_LensStart_23_Static.gif"); - relative path does not work! *** : ;
     background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png");
-    - produces a 'bottom-line' - is not transparent! *** */
+    
     background-position: center center;
     background-repeat: no-repeat;
 }

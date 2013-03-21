@@ -4,9 +4,13 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="FormularBean" value="#{EditMdProfileBean}"/>	
+	<ui:define name="init">
+		<h:outputText value="#{EditMdProfileBean.init}"/>
+	</ui:define>
+	
 	<ui:define name="headline">
 		<h1>
-			<h:outputText value="#{EditMdProfileBean.init}#{lbl.edit} #{EditMdProfileBean.profile.title}"/> 
+			<h:outputText value="#{lbl.edit} #{EditMdProfileBean.profile.title}"/> 
 		</h1>
 	</ui:define>
 			

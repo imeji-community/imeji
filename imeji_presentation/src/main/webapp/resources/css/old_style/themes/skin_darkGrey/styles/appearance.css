@@ -366,6 +366,7 @@ COLOR 4C4C4C was changed to 3C3C3C; - 2011-03-28
 	.pageBrowser input:hover, .pageBrowser button:hover, .pageBrowser a:hover, .pageBrowser input:focus, .pageBrowser button:focus, .pageBrowser a:focus {
 		color: #EEEEEE;
 		cursor: pointer;
+		background-color:transparent;
 	}
 	
 	.pageBrowser .actual, .pageBrowser .actual:hover, .pageBrowser .actual:focus {
@@ -767,6 +768,12 @@ COLOR 4C4C4C was changed to 3C3C3C; - 2011-03-28
 	background-color:#292929;
 	min-width:49%; /* bugfix for chrome 22, without min-width - linebreak before skipToLast */
 	text-align:center;
+	padding:0 1%;
+	border-radius: 0.41666666em;
+	-webkit-border-radius: 0.41666666em;
+	-moz-border-radius: 0.41666666em;
+	-o-border-radius: 0.41666666em;
+	-ms-border-radius: 0.41666666em;
 }
 .tileIconAreaSelected a img { border-color:#33698F; } /* erweitert 2011-04-06 */
 

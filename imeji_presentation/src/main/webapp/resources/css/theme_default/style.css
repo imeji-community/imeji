@@ -113,8 +113,17 @@ div.searchMenu {
 }
 
 .imj_welcomeInfo {
-    overflow: hidden;
     min-height: 34.8333333em;
+    width:37.85%;
+    padding:1%;
+    margin:1.5em 0 2em 0;
+    overflow: hidden;
+    background-color:#292929;
+    border-radius: 0.41666666em;
+    -webkit-border-radius: 0.41666666em;
+    -moz-border-radius: 0.41666666em;
+    -o-border-radius: 0.41666666em;
+    -ms-border-radius: 0.41666666em;
 }
 
 .imj_welcomeInfo .id_tabs ul {
@@ -864,6 +873,7 @@ OLD:
     overflow: hidden;
     width: 81.3636em;
     margin: 0 0.0909em 0 0;
+    background-color:#313131;
 }
 
 /* ===[ Content - Content Header]===

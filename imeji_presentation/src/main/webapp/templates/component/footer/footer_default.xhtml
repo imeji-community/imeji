@@ -1,0 +1,15 @@
+<ui:composition 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<h:panelGroup layout="block" styleClass="imj_siteFooter">
+		<!-- begin: footer section-->
+		<h:outputText value="Powered by "/>
+		<h:outputLink target="_blank" value="http://imeji.org">
+			<h:outputText value="imeji"/>
+		</h:outputLink>
+		<h:outputText value=" - #{SessionBean.version} "/>
+		<!-- end: footer section -->
+	</h:panelGroup>
+</ui:composition>

@@ -18,29 +18,42 @@
  * ====================================================================================  */
 
 
+/* imeji base settings
+   =========================================================================  */
+
 /* overwrite of the old font-family style (in apperance.css) 
  * with font-family: 'Open Sans',sans-serif; 
  * loaded via Google-Webfonts 
+ * choose your own font here!
    =========================================================================  */
    
-@import url(http://fonts.googleapis.com/css?family=Open+Sans); 
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+
+/* imeji base settings - set body width and height to 100% for all pages 
+   =========================================================================  */
+
 html, body {
-	background-color:#292929;
-	height:100%;
-	width:100%;
-	margin:0px;
- 	padding:0px;
+	background-color: #292929;
+	height: 100%;
+	width: 100%;
+	margin: 0px;
+ 	padding: 0px;
 }
 
+
+
+/* imeji base settings - body colors - global and element font definition 
+   =========================================================================  */
+
 body {
- 	background-color:transparent;
-/*	Allgemeine Fontdefinition */
+ 	background-color: transparent;
 	font-family: 'Open Sans',sans-serif;
-	font-size:11px;
-	font-style:normal;
-	text-decoration:none;
-	color:#F0F0F0;
-	vertical-align:top;
+	font-size: 11px;
+	font-style: normal;
+	text-decoration: none;
+	color: #F0F0F0;
+	vertical-align: top;
 	line-height: 145%;
 }
 
@@ -49,11 +62,17 @@ label, input, button, select, textarea {
     font-size: 11px; 
 }
 
+/* imeji base settings - make element <p> a real paragraph  
+   =========================================================================  */
 
 p {
 	display: block;
 	margin: 1em 0;
 }
+
+
+/* imeji base settings - link colors and text decoration - button colors
+   =========================================================================  */
 
 a {
 	color: #6CAD2F;
@@ -68,6 +87,10 @@ a:hover, a:focus, button:hover, button:focus {
 	color: #EEEEEE;
 	text-decoration: none;
 }
+
+
+/* imeji base settings - input, textarea, select fields colors
+   =========================================================================  */
 
 input {
     background-color: #CCCCCC;
@@ -98,23 +121,38 @@ select {
 }
 
 
+
+/* styles for imej startpage - Welcome.xhtml - wrapper
+   =========================================================================  */ 
+
 #imj_welcomeInfoWrapper {
     float: left;
 }
 
 .imj_welcomeInfo {
     min-height: 34.8333333em;
-    width:37.85%;
-    padding:1%;
-    margin:1.5em 0 2em 0;
+    width: 37.85%;
+    padding: 1%;
+    margin: 1.5em 0 2em 0;
     overflow: hidden;
-    background-color:#292929;
+    background-color: #292929;
     border-radius: 0.41666666em;
     -webkit-border-radius: 0.41666666em;
     -moz-border-radius: 0.41666666em;
     -o-border-radius: 0.41666666em;
     -ms-border-radius: 0.41666666em;
 }
+
+
+/* .xSmall_negMarginLExcl {
+    margin-left: -2.8181em;
+}*/ 
+
+
+
+/* styles for imej startpage - Welcome.xhtml - content tabs 
+   =========================================================================  */ 
+
 
 .imj_welcomeInfo .id_tabs ul {
     padding: 0;
@@ -163,6 +201,10 @@ select {
 .imj_welcomeInfoTabContentText {
 	margin-bottom: 1%;
 }
+
+
+/* styles for imej startpage - Welcome.xhtml - image carousel
+   =========================================================================  */ 
 
 
 .imj_startpage_carouselWrapper {
@@ -219,9 +261,9 @@ iframe#twitter-widget-0 div.root div.stream {
     height: 20em !important;
 }
 
-/* * content container for Welcome.xhtml
-   ==================================================
-   ================================================== */
+
+/* styles for imej startpage - Welcome.xhtml - content container
+   =========================================================================  */ 
 
 .imj_cont_1 {
     width: 100%;
@@ -239,6 +281,43 @@ iframe#twitter-widget-0 div.root div.stream {
     width: 59.85%;
 }
 
+
+/* styles for imej startpage - Welcome.xhtml - footer, logos
+   =========================================================================  */ 
+
+.imj_startpageFooter {
+	clear: both;
+	padding: 1.000em 0;
+}
+
+
+.imj_startpageFooter img {
+    border: 0 none;
+    margin: 0 1%;
+}
+
+.imj_startpageFooterLogos {
+    padding: 1em 1.25em 1.25em 1em;
+    text-align: center;
+}
+
+.imj_community_logo {
+    background-color: #ffffff;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    padding: 1%;
+    margin-right: 5%;
+}
+
+/* .imj_build_date {
+    text-align: center;
+    font-size: 75%;
+}*/
+
+
+
+/* ===[ Template ]===
+   ================================================== */
 
 /* * imeji template styles (template.xhtml)
    ==================================================
@@ -266,7 +345,6 @@ input[type="password"],
 textarea {
     font-family: Courier,"Courier New",serif;
 }
-
 
 
 /* ===[ SiteHeader ]===
@@ -339,7 +417,7 @@ margin-bottom: 0.9090em;  */
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] {
     background-color: #292929;
     color: #6CAD2F;
-    font-size: 0.75em;
+    /*font-size: 0.75em;*/
     height: 1.4545em;
     width: 10.2727em;
     border: solid #6CAD2F 0.0909em;
@@ -868,17 +946,19 @@ OLD:
 /* ===[ Content - Main Content - Content Header]===
    ================================================== */
 
-/* clear full_area0 - template.xhtml  */
+/* clear full_area0 - template.xhtml  
+   infoPage - infoPage.css - Welcome.xhtml */
 
 .imj_mainContentWrapper {
     clear: both;
     float: left;
     display: inline;
     overflow: hidden;
-    width:93.95%;
-    padding:0 3%;
-    margin: 0 0.0909em 0 0;
+    width: 93.95%;
+    padding: 0 3%;
+    margin: 2em 0.0909em 0 0;
     background-color:#313131;
+    /*border-top-width: 0.10em;*/
 }
 
 /* ===[ Content - Content Header]===
@@ -991,35 +1071,6 @@ OLD:
     margin-right: 0.364em;
 }
 
-/* ===[ Footer ]===
-   ================================================== */
-
-/* * footer - info, image
-   ==================================================
-   ================================================== */
-
-.imj_footer img {
-    border: 0 none;
-    margin: 0 1%;
-}
-
-.imj_poweredby {
-    padding: 1em 1.25em 1.25em 1em;
-    text-align: center;
-}
-
-.imj_community_logo {
-    background-color: #ffffff;
-    -moz-border-radius: 7px;
-    border-radius: 7px;
-    padding: 1%;
-    margin-right: 5%;
-}
-
-.imj_build_date {
-    text-align: center;
-    font-size: 75%;
-}
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
    ================================================== */

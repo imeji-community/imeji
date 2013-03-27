@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
@@ -184,6 +185,11 @@ public class ShareBean
             shared = sm.share(retrieveProfile(id), session.getUser(), email, selectedGrant, true);
             message = session.getLabel("profile") + " " + id + " " + session.getLabel("shared_with") + " " + email
                     + " " + session.getLabel("share_as") + " " + role;
+            //Add grant VIEWER so the user can see the collection
+            if (GrantType.PROFILE_EDITOR.equals(selectedGrant))
+            {
+            	shared = sm.share(retrieveCollection(id), session.getUser(), email, GrantType.VIEWER, true);
+            }
         }
         if (shared)
         {

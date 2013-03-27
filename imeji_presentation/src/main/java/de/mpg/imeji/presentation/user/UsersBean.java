@@ -128,6 +128,7 @@ public class UsersBean
     {
         String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("email");
         UserController controller = new UserController(session.getUser());
+        
         try
         {
             controller.delete(ObjectLoader.loadUser(email, session.getUser()));

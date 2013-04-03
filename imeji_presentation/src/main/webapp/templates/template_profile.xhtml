@@ -60,15 +60,17 @@
 									 var dragged;
 								 	$( ".draggable" ).draggable({
 								 			zIndex: 100,
-								 			opacity: 0.01,
+								 			opacity: 0.1,
 								 			cursor: "move",
-								 			axis: "y",								 
+								 			axis: "y",
+								 			revert: 'invalid',								 
 								 		});		
 								 	$( ".draggable" ).on( "dragstart", function( event, ui ) {
 								 			dragged = $(this).attr('id') + 'DragButton';
 									 	} );
 								 	 $( ".dropMetadata" ).droppable({
 								 		 hoverClass: "drop-hover",
+								 		 accept: '.draggable',
 								 		 activClass: "dropMetadataActive",
 										 drop: function( event, ui ) {
 											var id = $(this).attr('id') + "Button";
@@ -78,6 +80,7 @@
 										 });
 									 $( ".dropChild" ).droppable({
 										 hoverClass: "drop-hover",
+										 accept: '.draggable',
 										 activeClass :"dropChildActive",
 										 drop: function( event, ui ) {
 											 var id = $(this).attr('id').replace("metadata","dropChildButton");

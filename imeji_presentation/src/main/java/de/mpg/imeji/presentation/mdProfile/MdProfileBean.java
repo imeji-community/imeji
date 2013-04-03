@@ -341,6 +341,11 @@ public class MdProfileBean
         return "pretty:";
     }
 
+    /**
+     * Return the size of the list of statement
+     * 
+     * @return
+     */
     public int getSize()
     {
         return wrappers.size();
@@ -442,7 +447,7 @@ public class MdProfileBean
      */
     private void moveWrapper(StatementWrapper dragged, int from, int to)
     {
-        if (to + 1 < wrappers.size())
+        if (to < wrappers.size())
         {
             wrappers.add(to + 1, dragged);
             if (to < from)
@@ -454,7 +459,6 @@ public class MdProfileBean
                 wrappers.remove(from);
             }
         }
-       // setStatementPositionLikeInList();
         sort();
     }
 

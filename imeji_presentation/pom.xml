@@ -1,8 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>imeji</artifactId>
 		<groupId>de.mpg.mpdl.imeji</groupId>
-		<version>1.1.0.1-SNAPSHOT</version>
+		<version>1.0.0.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>imeji_presentation</artifactId>
@@ -77,10 +78,15 @@
 							the xml schema handling issue (marshalling and unmarshalling) -->
 						<!-- those files will not be copied into the build directories, Maven 
 							does not copy them automatically!!! -->
-						<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
-						<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
-						<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
-						<copy file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
+						<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index"
+							tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
+						<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index"
+							tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
+						<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index"
+							tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
+						<copy
+							file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index"
+							tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
 					</tasks>
 				</configuration>
 			</plugin>
@@ -130,7 +136,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore></ignore>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>

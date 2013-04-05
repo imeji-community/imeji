@@ -12,7 +12,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class MetadataHelper
@@ -61,6 +61,12 @@ public class MetadataHelper
         return false;
     }
 
+    /**
+     * Set the CoNE id of a {@link ConePerson}
+     * 
+     * @param md
+     * @return
+     */
     public static Metadata setConeID(Metadata md)
     {
         if (md.getTypeNamespace().equals(Metadata.Types.CONE_PERSON.getClazzNamespace()))

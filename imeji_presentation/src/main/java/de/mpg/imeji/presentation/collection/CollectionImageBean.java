@@ -35,6 +35,7 @@ public class CollectionImageBean extends ImageBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
+    @Override
     public void initBrowsing()
     {
         String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
@@ -44,10 +45,16 @@ public class CollectionImageBean extends ImageBean
     }
 
     @Override
-    public void redirectAfterRemove() throws IOException
+    public void redirectToBrowsePage() throws IOException
     {
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect(navigation.getCollectionUrl() + collectionId + "/" + navigation.getBrowsePath());
+    }
+    
+    public String test()
+    {
+        System.out.println("TEST");
+        return "";
     }
 
     public String getCollectionId()
@@ -60,11 +67,13 @@ public class CollectionImageBean extends ImageBean
         this.collectionId = collectionId;
     }
 
+    @Override
     public String getPageUrl()
     {
         return navigation.getCollectionUrl() + collectionId + "/" + navigation.ITEM.getPath() + "/" + getId();
     }
 
+    @Override
     public String getNavigationString()
     {
         return "pretty:CollectionItem";

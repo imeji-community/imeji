@@ -4,6 +4,8 @@
 package de.mpg.imeji.presentation.history;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
@@ -11,6 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -20,29 +23,65 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * {@link Filter} for the imeji history
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class HistoryFilter implements Filter
 {
     private FilterConfig filterConfig = null;
     private ServletContext servletContext;
 
+    @Override
     public void destroy()
     {
-        filterConfig = null;
+        setFilterConfig(null);
     }
 
+    @Override
     public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain) throws IOException,
             ServletException
     {
-        HttpServletRequest request = (HttpServletRequest)serv;
-        servletContext = request.getSession().getServletContext();
+        // Limit the case to filter: dispachertype only forward, and only HTTP GET method
+        if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0)
+        {
+            HttpServletRequest request = (HttpServletRequest)serv;
+            if ("GET".equals(request.getMethod()))
+            {
+                servletContext = request.getSession().getServletContext();
+                dofilterImpl(request, resp);
+            }
+        }
+        chain.doFilter(serv, resp);
+    }
+
+    /**
+     * Implement the History filter
+     * 
+     * @param request
+     * @param resp
+     */
+    private void dofilterImpl(HttpServletRequest request, ServletResponse resp)
+    {
         HistorySession hs = getHistorySession(request, resp);
-        String q = (String)request.getParameter("q");
-        String h = (String)request.getParameter("h");
-        String f = (String)request.getParameter("f");
+        String q = request.getParameter("q");
+        String h = request.getParameter("h");
+        String f = request.getParameter("f");
+        String id = request.getParameter("id");
         // Parameter used by pretty query to pass parameter defined in pretty-config in the url pattern
         String[] ids = request.getParameterValues("com.ocpsoft.vP_0");
+        if (id != null)
+        {
+            // The id has been defined as a url parameter
+            List<String> l = new ArrayList<String>();
+            l.add(id);
+            ids = l.toArray(new String[1]);
+        }
         // If f exists, then it is a filter, not added to history
-        if (f == null)
+        if (f == null && request.getPathInfo() != null)
         {
             if (h == null)
             {
@@ -55,19 +94,26 @@ public class HistoryFilter implements Filter
                 hs.remove(Integer.parseInt(h));
             }
         }
-        chain.doFilter(serv, resp);
     }
 
+    @Override
     public void init(FilterConfig arg0) throws ServletException
     {
-        this.filterConfig = arg0;
+        this.setFilterConfig(arg0);
     }
 
+    /**
+     * Get the {@link HistorySession} from the {@link FacesContext}
+     * 
+     * @param request
+     * @param resp
+     * @return
+     */
     private HistorySession getHistorySession(ServletRequest request, ServletResponse resp)
     {
-        String name = (String)HistorySession.class.getSimpleName();
+        String name = HistorySession.class.getSimpleName();
         FacesContext fc = getFacesContext(request, resp);
-        Object result = fc.getCurrentInstance().getExternalContext().getSessionMap().get(name);
+        Object result = fc.getExternalContext().getSessionMap().get(name);
         if (result == null)
         {
             try
@@ -88,7 +134,7 @@ public class HistoryFilter implements Filter
     }
 
     /**
-     * Get Faces Context from Filter
+     * Get {@link FacesContext} from Filter
      * 
      * @param request
      * @param response
@@ -110,6 +156,16 @@ public class HistoryFilter implements Filter
         UIViewRoot view = facesContext.getApplication().getViewHandler().createView(facesContext, "imeji");
         facesContext.setViewRoot(view);
         return facesContext;
+    }
+
+    public FilterConfig getFilterConfig()
+    {
+        return filterConfig;
+    }
+
+    public void setFilterConfig(FilterConfig filterConfig)
+    {
+        this.filterConfig = filterConfig;
     }
 
     public abstract static class InnerFacesContext extends FacesContext

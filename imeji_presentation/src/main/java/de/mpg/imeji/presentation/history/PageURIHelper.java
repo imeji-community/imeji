@@ -12,11 +12,27 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.Page.ImejiPages;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
+/**
+ * Helper for {@link URI} of {@link Page}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class PageURIHelper
 {
+    /**
+     * Create an URI according to the parameters
+     * 
+     * @param pageType
+     * @param q
+     * @param id
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     public static URI getPageURI(ImejiPages pageType, String q, String[] id) throws IOException, URISyntaxException
     {
-        // String baseURL = PropertyReader.getProperty("escidoc.imeji.instance.url");
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         switch (pageType)
         {
@@ -54,6 +70,14 @@ public class PageURIHelper
                 return URI.create(navigation.getCollectionUrl() + id[0] + "/" + navigation.getInfosPath() + "?h=");
             case UPLOAD:
                 return URI.create(navigation.getCollectionUrl() + id[0] + "/" + navigation.getUploadPath() + "?h=");
+            case USER:
+                return URI.create(navigation.getUserUrl() + "?id=" + id[0] + "&h=");
+            case HELP:
+                return URI.create(navigation.getHelpUrl() + "?h=");
+            case EDIT:
+                return URI.create(navigation.getApplicationUrl() + navigation.getEditPath());
+            case ADMIN:
+                return URI.create(navigation.getAdminUrl() + "?h=");
             default:
                 return URI.create(navigation.getHomeUrl());
         }

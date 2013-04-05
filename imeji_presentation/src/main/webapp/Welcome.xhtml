@@ -1,187 +1,35 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="templates/template.xhtml"  
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
-<ui:remove>
-<!--
-
- CDDL HEADER START
-
- The contents of this file are subject to the terms of the
- Common Development and Distribution License, Version 1.0 only
- (the "License"). You may not use this file except in compliance
- with the License.
-
- You can obtain a copy of the license at license/ESCIDOC.LICENSE
- or http://www.escidoc.de/license.
- See the License for the specific language governing permissions
- and limitations under the License.
-
- When distributing Covered Code, include this CDDL HEADER in each
- file and include the License file at license/ESCIDOC.LICENSE.
- If applicable, add the following below this CDDL HEADER, with the
- fields enclosed by brackets "[]" replaced with your own identifying
- information: Portions Copyright [yyyy] [name of copyright owner]
-
- CDDL HEADER END
-
-
- Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
- für wissenschaftlich-technische Information mbH and Max-Planck-
- Gesellschaft zur Förderung der Wissenschaft e.V.
- All rights reserved. Use is subject to license terms.
--->
-</ui:remove>
-
-<body>
-
-	<ui:composition template="templates/template.xhtml">
-		<ui:param name="headline" value="#{lbl.HomePage}"/>
+	xmlns:f="http://java.sun.com/jsf/core">
+		<ui:remove>
+			<ui:param name="headline" value="#{lbl.HomePage}"/>
+		</ui:remove>
+		
 		<ui:define name="mainContent">
-			<div class="imj_cont_1 infoPage small_marginLExcl" >
-				<!-- Main Content -->
-				
-				
-				<div id="welcomeInfo" class="imj_cont_2_5 imj_welcomeInfo" style="float:left;">
-					<style type="text/css">
-						img {
-							border:0 none;
-						}
-						div.LogoNSearch {
-							overflow:visible;
-						}
-						div.header {
-							overflow:visible;
-						}
-						div.searchMenu {
-							position:absolute;
-							margin-top:5.5em;
-							margin-left:5.5em;
-						}
-						.imj_cont_1 {
-							width:100%;
-						}
-						.imj_cont_1_2 {
-							width:49.85%;
-						}
-						.imj_cont_2_5 {
-							width:39.85%;
-						}
-						.imj_cont_3_5 {
-							width:59.85%;
-						}
-						.imj_welcomeInfo {
-							min-height:34.8333333em;
-							overflow:hidden;
-						}
-						
-						.imj_welcomeInfo .id_tabs ul {
-							padding:0;
-							margin-top:0;
-							padding-top:0.333333em;
-							text-align:right;
-							list-style-type:none;
-						}
-						.imj_welcomeInfo .id_tabs ul li {
-							margin-left:1%;
-							padding:1%;
-							display:inline;
-							font-size:1.0909em;
-							background-color:#323232;
-							border-radius:0.41666666em;
-							-webkit-border-radius:0.41666666em;
-							-moz-border-radius:0.41666666em;
-							-o-border-radius:0.41666666em;
-							-ms-border-radius:0.41666666em;
-						}
-						.imj_welcomeInfo .id_tabs .tab_content {
-							float:left;
-							height:90%;
-							overflow:auto;
-							font-size:1.0909em;
-						}
-						.imj_welcomeInfo .id_tabs li.ui-state-active {
-							background-color:#383838;
-							color:#F0F0F0;
-						}
-						.imj_welcomeInfo .id_tabs li.ui-state-active a {
-							color:#F0F0F0;
-						}
-						.imj_welcomeInfo .id_tabs div.ui-tabs-hide {
-							display:none;
-						}
-						
-						
-						.imj_startpage_carousel {
-							min-height:33.333333em; 
-							overflow:hidden;
-						}
-						.imj_startpage_carousel #carousel {
-							height:26.66666666em; 
-							width:90%; 
-							margin:0 auto;
-							background:transparent; 
-							overflow:visible !important; 
-						}
-						.imj_startpage_carousel #cloudinfoText {
-							display:none;
-						}
-						.dynamicCloudinfo {
-							position:absolute;
-							z-index:5600;
-							background-color:#292929;
-							padding:0.75em;
-						}
-						.imj_startpage_carousel #title-text {
-							margin:0;
-						}
-						.imj_startpage_carousel #alt-text {
-							margin:0;
-						}
-						
-						/* footer */
-						.imj_footer img {
-							border:0 none;
-							margin:0 1%;
-						}
-						.imj_poweredby {
-							padding: 1em 1.25em 1.25em 1em; 
-							text-align:center;
-						}
-						.imj_build_date {
-							text-align:center;
-							font-size:75%;
-						}
-						iframe#twitter-widget-0 {
-							width:99.5%;
-							height:43em;
-						}
-						iframe#twitter-widget-0 div.root div.stream{
-							height:20em !important;
-						}
-					</style>
-					 
-					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale == 'en'}">
+			<div class="imj_cont_1 infoPage small_marginLExcl">
+				<!-- Main Content -->							
+				<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo">
+					
+					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
 						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
 						<!-- tabs -->
 						<ul class="imj_cont_1">
-							<li><a href="#formular:tabsEN-1">About</a></li>
-							<li><a href="#formular:tabsEN-2">News</a></li>
-							<li><a href="#formular:tabsEN-3">How To</a></li>
+							<li><a href="#tabsEN-1">About</a></li>
+							<li><a href="#tabsEN-2">News</a></li>
+							<li><a href="#tabsEN-3">How To</a></li>
 						</ul>
 						
 						<!--  tabs content -->
 						<h:panelGroup layout="block" id="tabsEN-1" styleClass="imj_cont_1 tab_content">
-							<p><b>Publish Your Scientific Media Data</b></p>
-							<br/>
-							<p>imeji creates citable research assets by describing, enriching, sharing, exposing and linking data.</p> 
+							<p><b>Publish Your Scientific Multi Media Data</b></p>
+							<p>imeji creates citable research assets by describing, enriching, sharing, exposing, linking and archiving data.</p> 
 							<p>This imeji instance contains test collections for the imeji community. The imeji community aims to sustain an active open source software developer 
 								community around the imeji software. 
 								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank"> [more on the imeji community]</a></p>
-							<p>The imeji software is an open-source, community driven development. Based on the eSciDoc infrastructure, 
-								imeji offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, 
+							<p>The imeji software is an open-source, community driven development. imeji offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, 
 								as simple as liked or as complex as needed. <a href="http://colab.mpdl.mpg.de/mediawiki/Imeji" target="_blank"> [more on the imeji software]</a> </p>
 						</h:panelGroup>
 						
@@ -190,22 +38,22 @@
 							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 						</h:panelGroup>
 						
-						<h:panelGroup layout="block" id="tabsEN-3" styleClass="imj_cont_1 tab_content" >
+						<h:panelGroup layout="block" id="tabsEN-3" styleClass="imj_cont_1 tab_content">
 							<p><b>imeji visitors (not logged in): </b></p>
-								<li>
-									  &nbsp;View collection list <a href="#{Navigation.applicationUrl}help#2.2._Collection_List" target="_blank"> 
-															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
-												 		 </a>
-								</li> 
-								<li>  &nbsp;View album list <a href="#{Navigation.applicationUrl}help#3.2._Album_List" target="_blank"> 
-															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
-												 		  </a> 
-								</li>
-								<li>  &nbsp;Search in collections <a href="#{Navigation.applicationUrl}help#4._Search" target="_blank"> 
-															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
-												 		  </a> 
-								</li>
-								<br/><br/>
+							<li>
+								  &nbsp;View collection list <a href="#{Navigation.applicationUrl}help#2.2._Collection_List" target="_blank"> 
+														<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+											 		 </a>
+							</li> 
+							<li>  &nbsp;View album list <a href="#{Navigation.applicationUrl}help#3.2._Album_List" target="_blank"> 
+														<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+											 		  </a> 
+							</li>
+							<li>  &nbsp;Search in collections <a href="#{Navigation.applicationUrl}help#4._Search" target="_blank"> 
+														<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+											 		  </a> 
+							</li>
+							<br/><br/>
 							<p><b>imeji users (logged in): </b></p>
 								<li>  &nbsp;Create a collection <a href="#{Navigation.applicationUrl}help#2.1._Create_Collection" target="_blank"> 
 															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
@@ -230,26 +78,23 @@
 						</h:panelGroup>
 					</h:panelGroup> <!-- end of tabs international -->
 					
-					
-					
 					<!-- german part -->
 					<h:panelGroup layout="block" id="tabsDE" styleClass="id_tabs" rendered="#{SessionBean.locale == 'de'}">
 						<script type="text/javascript">var placeholder_username = 'Benutzername'; var placeholder_password = 'Passwort'; var placeholder_simpleSearch = 'Suche nach ...';</script>
 						<ul class="imj_cont_1">
-							<li><a href="#formular:tabsDE-1">Über</a></li>
-							<li><a href="#formular:tabsDE-2">Neuigkeiten</a></li>
-							<li><a href="#formular:tabsDE-3">How To</a></li>
+							<li><a href="#tabsDE-1">Über</a></li>
+							<li><a href="#tabsDE-2">Neuigkeiten</a></li>
+							<li><a href="#tabsDE-3">How To</a></li>
 						</ul>
 						
-						<h:panelGroup layout="block" id="tabsDE-1" styleClass="imj_cont_1 tab_content" >
-							<p><b>Publish Your Scientific Media Data</b></p>
-							<br/>
-							<p> imeji erzeugt zitierfähige Forschungsobjekte durch das Beschreiben, Anreichern, Teilen, Bereitstellen und Verlinken von Daten.</p> 
+						<h:panelGroup layout="block" id="tabsDE-1" styleClass="imj_cont_1 tab_content">
+							<p><b>Publish Your Scientific Multi Media Data</b></p>
+							<p> imeji erzeugt zitierfähige Forschungsobjekte durch das Beschreiben, Anreichern, Teilen, Bereitstellen, Verlinken und Archivieren von Daten.</p> 
 							<p> Diese imeji Instanz beinhaltet Testsammlungen für die imeji Community. Die imeji Community zielt darauf ab eine aktive Entwicklungsgemeinschaft rund
 								um die imeji Software zu vereinen.
 								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank"> [mehr zur imeji Community]</a></p>
 							<p> imeji ist eine Open-Source Software, welche von der imeji Community entwickelt wird. 
-								Sie basiert auf der eSciDoc Infrastruktur und unterstützt die beliebige Definition von Metadaten Schemata 
+								Sie unterstützt die beliebige Definition von Metadaten Schemata 
 								wodurch ein dediziertes Metadaten Management ermöglicht wird, so einfach wie möglich und so komplex wie nötig.
 								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji" target="_blank"> [mehr zur imeji Software]</a> </p>
 						</h:panelGroup>
@@ -299,22 +144,19 @@
 								</li>
 						</h:panelGroup>
 					</h:panelGroup>
-				</div>
-				
-				<!-- japanese part -->
-				<h:panelGroup layout="block" id="tabsJP" styleClass="id_tabs" rendered="#{SessionBean.locale == 'jp'}">
+					<!-- japanese part -->
+				<h:panelGroup layout="block" id="tabsJP" styleClass="id_tabs" rendered="#{SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
 						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = '検索キーワード...';</script>
 						<!-- tabs -->
 						<ul class="imj_cont_1">
-							<li><a href="#formular:tabsJP-1">Imejiについて</a></li>
-							<li><a href="#formular:tabsJP-2">ニュース</a></li>
-							<li><a href="#formular:tabsJP-3">登録その他</a></li>
+							<li><a href="#tabsJP-1">Imejiについて</a></li>
+							<li><a href="#tabsJP-2">ニュース</a></li>
+							<li><a href="#tabsJP-3">登録その他</a></li>
 						</ul>
 						
 						<!--  tabs content -->
-						<h:panelGroup layout="block" id="tabsJP-1" styleClass="imj_cont_1 tab_content" >
+						<h:panelGroup layout="block" id="tabsJP-1" styleClass="imj_cont_1 tab_content">
 							<p><b>マルチメディア科学データの提供、配信</b></p>
-							<br/>
 							<p>Imejiは引用可能な研究データ資料集を生成します。マルチメディアデータに説明を付与したり、意味を追加したり、リンクを張るなどして、提供データの価値を高めることができます</p> 
 							<p>Imejiサービスは、コミュニティ向けのテスト用コレクションを含んでいます。Imejiコミュニティは、活発な開発で持続的なコミュニティとなるよう開発しています。
 								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank"> [Imejiコミュニティの説明]</a></p>
@@ -327,7 +169,7 @@
 							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 						</h:panelGroup>
 						
-						<h:panelGroup layout="block" id="tabsJP-3" styleClass="imj_cont_1 tab_content" >
+						<h:panelGroup layout="block" id="tabsJP-3" styleClass="imj_cont_1 tab_content">
 							<p><b>閲覧者向けリンク (非ログイン時): </b></p>
 									<li>
 									  &nbsp;コレクション一覧を見る <a href="#{Navigation.applicationUrl}help#2.2._Collection_List" target="_blank"> 
@@ -365,20 +207,20 @@
 												 		  </a> 
 								</li>
 						</h:panelGroup>
-					</h:panelGroup> <!-- end of tabs international -->
-				
+					</h:panelGroup> 
+				</div>
+				<!-- end of tabs international -->
 				<!-- carousel -->
-				<div class="imj_cont_3_5" style="margin-top:3em; float:left;">
+				<div class="imj_cont_3_5 imj_startpage_carouselWrapper">
 					<div class="imj_cont_1 imj_startpage_carousel">
-						<div style="max-height:400px; overflow:visible; min-width:350px; width:40%; margin:0 auto;">
-							
+						<div class="imj_startpage_carouselContainer">							
 							<!-- Define elements to accept the alt and title text from the images. -->
 							<div id="carousel">
-								<a4j:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0" rowKeyVar="index">
-									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.applicationUri}#{item.id.path}">
-										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{item.thumbnailImageUrl}" height="114"/>
+								<ui:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0">
+									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.itemUrl}#{item.idString}">
+										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}file?id=#{item.thumbnailImageUrl}" height="114"/>
 									</h:outputLink>
-								</a4j:repeat>
+								</ui:repeat>
 							</div>
 							<span id="cloudinfoText">
 								<h4 id="title-text"></h4>
@@ -391,22 +233,20 @@
                 
 				
 				
-				<div class="clear imj_cont_1 imj_footer small_negMarginLExcl">
+				<div class="imj_clear imj_cont_1 imj_footer small_negMarginLExcl">
 				<!-- begin: footer section-->
 					<div class="imj_cont_1 imj_poweredby">
-						<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank"> 
-							<img alt="imeji community logo" width="150em" style="background-color:#ffffff; -moz-border-radius: 7px; border-radius: 7px; padding:1%; margin-right:5%;" src="http://imeji.org/Imeji-Community.png"/> 
+						<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank" title="imeji community"> 
+							<img alt="imeji community logo" src="http://imeji.org/Imeji-Community.png" width="150em" class="imj_community_logo"/> 
 						</a> 
 						<br/><br/>
-						<a href="http://www.escidoc.org/" target="_blank"> 
+						<a href="http://www.escidoc.org/" target="_blank" title="eSciDoc"> 
 							<img alt="eSciDoc logo" src="https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/escidoc_new.png" height="32em"/> 
 						</a>
 					</div>
 				<!-- end: footer section -->
 				</div>
 
-				
-				
 				<script src="http://www.google.com/jsapi" type="text/javascript"> </script>
 				
 				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
@@ -468,9 +308,9 @@
 					};
 					
 					//add placeholder for login menu
-					jQuery(".metaMenu input[type='text']").attr("placeholder", placeholder_username);
-					jQuery(".metaMenu input[type='password']").attr("placeholder", placeholder_password);
-					jQuery(".quickSearchTextInput").attr("placeholder", placeholder_simpleSearch);
+					jQuery(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
+					jQuery(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
+					jQuery(".imj_simpleSearchInput").attr("placeholder", placeholder_simpleSearch);
 					
 					//delete the page title on welcome page
 					jQuery("div#contentSkipLinkAnchor.headLine").remove();
@@ -493,9 +333,5 @@
 				</style>
 		</div>
 	</ui:define>	
-						
 </ui:composition>
-
-</body>
-</html>
 					

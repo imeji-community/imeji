@@ -7,21 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.j2j.transaction.SearchTransaction;
-import de.mpg.j2j.transaction.ThreadedTransaction;
 
 /**
- * 
  * Manage search (sparql) transaction
- *
+ * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
- *
  */
 public class ImejiSPARQL
 {
     /**
-     * Execute a query but doesn't load the object.
+     * Execute a sparql query and return {@link List} of uri
      * 
      * @param query
      * @param c
@@ -55,10 +52,7 @@ public class ImejiSPARQL
         query = query.replace("SELECT DISTINCT ?s WHERE ", "SELECT count(DISTINCT ?s) WHERE ");
         List<String> results = new ArrayList<String>(1);
         SearchTransaction transaction = new SearchTransaction(modelName, query, results, true);
-        ThreadedTransaction ts = new ThreadedTransaction(transaction);
-        ts.start();
-        ts.waitForEnd();
-        // transaction.start();
+        transaction.start();
         try
         {
             transaction.throwException();

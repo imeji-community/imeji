@@ -1,12 +1,10 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.logic.controller.exceptions;
 
 public class AuthenticationException extends Exception
 {
-
     public AuthenticationException()
     {
         super();
@@ -30,6 +28,4 @@ public class AuthenticationException extends Exception
         super(arg0);
         // TODO Auto-generated constructor stub
     }
-    
-    
 }

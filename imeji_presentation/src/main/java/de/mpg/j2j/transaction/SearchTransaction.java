@@ -15,8 +15,15 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.tdb.TDB;
 
-import de.mpg.imeji.logic.search.util.SortHelper;
+import de.mpg.j2j.helper.SortHelper;
 
+/**
+ * {@link Transaction} for search operation
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SearchTransaction extends Transaction
 {
     private String searchQuery;
@@ -24,6 +31,14 @@ public class SearchTransaction extends Transaction
     private String modelName = null;
     private boolean count = false;
 
+    /**
+     * Construct a new {@link SearchTransaction}
+     * 
+     * @param modelName
+     * @param searchQuery
+     * @param results
+     * @param count
+     */
     public SearchTransaction(String modelName, String searchQuery, List<String> results, boolean count)
     {
         super(null);
@@ -53,6 +68,13 @@ public class SearchTransaction extends Transaction
         }
     }
 
+    /**
+     * Initialize a new a {@link QueryExecution} for a SPARQL query
+     * 
+     * @param ds
+     * @param q
+     * @return
+     */
     private QueryExecution initQueryExecution(Dataset ds, Query q)
     {
         if (modelName != null)
@@ -62,6 +84,11 @@ public class SearchTransaction extends Transaction
         return QueryExecutionFactory.create(q, ds);
     }
 
+    /**
+     * Set the results according to the search type
+     * 
+     * @param rs
+     */
     private void setResults(ResultSet rs)
     {
         if (count)
@@ -74,6 +101,11 @@ public class SearchTransaction extends Transaction
         }
     }
 
+    /**
+     * set results results for count results
+     * 
+     * @param rs
+     */
     private void setCountResults(ResultSet rs)
     {
         if (rs.hasNext())
@@ -85,6 +117,11 @@ public class SearchTransaction extends Transaction
         }
     }
 
+    /**
+     * Set results for exec search
+     * 
+     * @param rs
+     */
     private void setExecResults(ResultSet rs)
     {
         for (; rs.hasNext();)
@@ -93,6 +130,12 @@ public class SearchTransaction extends Transaction
         }
     }
 
+    /**
+     * Parse the {@link ResultSet}
+     * 
+     * @param results
+     * @return
+     */
     private String readResult(ResultSet results)
     {
         QuerySolution qs = results.nextSolution();

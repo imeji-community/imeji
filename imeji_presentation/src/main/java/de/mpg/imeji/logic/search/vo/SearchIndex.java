@@ -3,25 +3,31 @@ package de.mpg.imeji.logic.search.vo;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
+
+/**
+ * Element of a {@link SearchPair}, defines the index of the searched elements
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SearchIndex
 {
+    /**
+     * All indexes names, searchable in imeji
+     * 
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     */
     public static enum names
     {
-        ID_URI, MY_IMAGES, PROPERTIES, PROPERTIES_CREATED_BY, PROPERTIES_MODIFIED_BY, PROPERTIES_CREATION_DATE, 
-        PROPERTIES_LAST_MODIFICATION_DATE, PROPERTIES_STATUS, PROPERTIES_CREATED_BY_USER_GRANT,PROPERTIES_CREATED_BY_USER_GRANT_TYPE,
-        PROPERTIES_CREATED_BY_USER_GRANT_FOR,IMAGE_FILENAME, IMAGE_VISIBILITY, IMAGE_METADATA_SET, IMAGE_COLLECTION, 
-        IMAGE_COLLECTION_PROFILE,IMAGE_METADATA_TYPE_RDF,
-        CONTAINER_METADATA, CONTAINER_METADATA_TITLE, CONTAINER_METADATA_DESCRIPTION, CONTAINER_METADATA_PERSON, 
-        CONTAINER_METADATA_PERSON_FAMILY_NAME, CONTAINER_METADATA_PERSON_GIVEN_NAME, CONTAINER_METADATA_PERSON_COMPLETE_NAME, 
-        CONTAINER_METADATA_PERSON_ORGANIZATION, CONTAINER_METADATA_PERSON_ORGANIZATION_NAME, COLLECTION_PROFILE, 
-        IMAGE_METADATA, IMAGE_METADATA_STATEMENT, FULLTEXT,
-        IMAGE_METADATA_TEXT, IMAGE_METADATA_NUMBER, IMAGE_METADATA_DATE, IMAGE_METADATA_TIME, IMAGE_METADATA_TITLE,
-        IMAGE_METADATA_LONGITUDE, IMAGE_METADATA_LATITUTE, IMAGE_METADATA_LICENSE, IMAGE_METADATA_URI,
-        IMAGE_METADATA_LABEL, IMAGE_METADATA_CITATION, IMAGE_METADATA_CITATIONSTYLE, IMAGE_METADATA_CONEID,
-        IMAGE_METADATA_PERSON, IMAGE_METADATA_PERSON_FAMLILYNAME, IMAGE_METADATA_PERSON_GIVENNAME, IMAGE_METADATA_PERSON_IDENTIFIER,
-        IMAGE_METADATA_PERSON_ROLE, IMAGE_METADATA_PERSON_ORGANIZATION, IMAGE_METADATA_PERSON_ORGANIZATION_TITLE, 
-        IMAGE_METADATA_PERSON_ORGANIZATION_IDENTIFIER,IMAGE_METADATA_PERSON_ORGANIZATION_DESCRIPTION, IMAGE_METADATA_PERSON_ORGANIZATION_CITY,
-        IMAGE_METADATA_PERSON_ORGANIZATION_COUNTRY;
+        item, user, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, prof, type, cont_md, cont_title, cont_description, cont_person, cont_person_family, cont_person_given, cont_person_name, cont_person_org, cont_person_org_name, profile, md, statement, all, text, number, date, time, title, longitude, latitude, license, link, label, citation, citation_style, cone, person, person_family, person_given, person_id, person_role, person_org, person_org_title, person_org_id, person_org_description, person_org_city, person_org_country;
     }
 
     private String name;
@@ -30,12 +36,25 @@ public class SearchIndex
     private List<SearchIndex> children = new ArrayList<SearchIndex>();
     private boolean listType = false;
 
+    /**
+     * Construct a new {@link SearchIndex} with a name and a namespace
+     * 
+     * @param name
+     * @param namespace
+     */
     public SearchIndex(String name, String namespace)
     {
         this.name = name;
         this.namespace = namespace;
     }
 
+    /**
+     * Construct a new {@link SearchIndex} with a name and a namespace and parent {@link SearchIndex}
+     * 
+     * @param name
+     * @param namespace
+     * @param parent
+     */
     public SearchIndex(String name, String namespace, SearchIndex parent)
     {
         this(name, namespace);
@@ -46,6 +65,13 @@ public class SearchIndex
         }
     }
 
+    /**
+     * Construct a new {@link SearchIndex} for a list element with a namespace and parent {@link SearchIndex}
+     * 
+     * @param namespace
+     * @param parent
+     * @param listType
+     */
     public SearchIndex(String namespace, SearchIndex parent, boolean listType)
     {
         this.setNamespace(namespace);
@@ -55,6 +81,47 @@ public class SearchIndex
         {
             parent.getChildren().add(this);
         }
+    }
+
+    /**
+     * Return all the necessary {@link SearchIndex} to search for a {@link Metadata} defined with a {@link Statement}
+     * 
+     * @param st
+     * @return
+     */
+    public static List<SearchIndex> getAllIndexForStatement(Statement st)
+    {
+        List<SearchIndex> list = new ArrayList<SearchIndex>();
+        switch (MetadataTypesHelper.getTypesForNamespace(st.getType().toString()))
+        {
+            case DATE:
+                list.add(Search.getIndex(SearchIndex.names.time.name()));
+                break;
+            case GEOLOCATION:
+                list.add(Search.getIndex(SearchIndex.names.title.name()));
+                break;
+            case LICENSE:
+                list.add(Search.getIndex(SearchIndex.names.license.name()));
+                break;
+            case NUMBER:
+                list.add(Search.getIndex(SearchIndex.names.number.name()));
+                break;
+            case CONE_PERSON:
+                list.add(Search.getIndex(SearchIndex.names.person_family.name()));
+                list.add(Search.getIndex(SearchIndex.names.person_given.name()));
+                list.add(Search.getIndex(SearchIndex.names.person_org_title.name()));
+                break;
+            case PUBLICATION:
+                list.add(Search.getIndex(SearchIndex.names.citation.name()));
+                break;
+            case TEXT:
+                list.add(Search.getIndex(SearchIndex.names.text.name()));
+                break;
+            case LINK:
+                list.add(Search.getIndex(SearchIndex.names.link.name()));
+                break;
+        }
+        return list;
     }
 
     public boolean hasParent()

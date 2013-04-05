@@ -3,18 +3,22 @@
  */
 package de.mpg.imeji.logic;
 
+import java.io.File;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.Counter;
+import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
@@ -26,6 +30,13 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.exceptions.NotFoundException;
 
+/**
+ * {@link Jena} interface for imeji
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class ImejiJena
 {
     public static String tdbPath = null;
@@ -39,13 +50,19 @@ public class ImejiJena
     public static URI counterID = URI.create("http://imeji.org/counter/0");
     private static Logger logger = Logger.getLogger(ImejiJena.class);
     public static User adminUser;
+    private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
+    private static final String ADMIN_PASSWORD_INIT = "admin";
 
+    /**
+     * Initialize the {@link Jena} database according to imeji.properties<br/>
+     * Called when the server (Tomcat of JBoss) is started
+     */
     public static void init()
     {
         try
         {
             tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-            //tdbPath = "C:\\Projects\\Imeji\\tdb\\testjena";
+            // tdbPath = "C:\\Projects\\Imeji\\tdb\\testjena";
         }
         catch (Exception e)
         {
@@ -54,9 +71,19 @@ public class ImejiJena
         init(tdbPath);
     }
 
+    /**
+     * Initialize a {@link Jena} database according at one path location in filesystem
+     * 
+     * @param path
+     */
     public static void init(String path)
     {
-        tdbPath = path;
+        File f = new File(path);
+        if (!f.exists())
+        {
+            f.getParentFile().mkdirs();
+        }
+        tdbPath = f.getAbsolutePath();
         logger.info("Initializing Jena dataset (" + tdbPath + ")...");
         imejiDataSet = TDBFactory.createDataset(tdbPath);
         logger.info("... done!");
@@ -72,18 +99,19 @@ public class ImejiJena
         initModel(userModel);
         initModel(profileModel);
         initModel(counterModel);
-        // logger.info("... done!");
         logger.info("Initializing Admin user...");
         initadminUser();
         logger.info("... done!");
         logger.info("Initializing counter...");
         initCounter();
         logger.info("... done!");
-        // logger.info("Transaction supported: " + imejiDataSet.supportsTransactions());
-        // logger.info("Jena file access : " + SystemTDB.fileMode().name());
-        // logger.info("Jena is 64 bit system : " + SystemTDB.is64bitSystem);
     }
 
+    /**
+     * Initialize (Create when not existing) a {@link Model} with a given name
+     * 
+     * @param name
+     */
     private static void initModel(String name)
     {
         try
@@ -108,47 +136,32 @@ public class ImejiJena
         }
     }
 
+    /**
+     * Initialize the system administrator {@link User}, accoring to credentials in imeji.properties
+     */
     private static void initadminUser()
     {
+        adminUser = new User();
+        adminUser.setEmail(ADMIN_EMAIL_INIT);
+        adminUser.setName("imeji Sysadmin");
+        adminUser.setNick("sysadmin");
         try
         {
-            if (PropertyReader.getProperty("imeji.sysadmin.email") != null)
-            {
-                adminUser = new User();
-                adminUser.setEmail(PropertyReader.getProperty("imeji.sysadmin.email"));
-                adminUser.setName("imeji Sysadmin");
-                adminUser.setNick("sysadmin");
-                adminUser.setEncryptedPassword(UserController.convertToMD5(PropertyReader
-                        .getProperty("imeji.sysadmin.password")));
-                adminUser.getGrants().add(new Grant(GrantType.SYSADMIN, URI.create("http://imeji.org/")));
-            }
+            adminUser.setEncryptedPassword(StringHelper.convertToMD5(ADMIN_PASSWORD_INIT));
         }
         catch (Exception e)
         {
-            adminUser = new User();
-            adminUser.setEmail("admin@imeji.org");
-            adminUser.setName("imeji Sysadmin");
-            adminUser.setNick("sysadmin");
-            try
-            {
-                adminUser.setEncryptedPassword(UserController.convertToMD5("password"));
-            }
-            catch (Exception e1)
-            {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-            adminUser.getGrants().add(new Grant(GrantType.SYSADMIN, URI.create("http://imeji.org/")));
-            // throw new RuntimeException("Error initializing admin user, check your properties", e);
+            throw new RuntimeException("error creating admin user: ", e);
         }
+        Grant grant = new Grant();
+        grant.setGrantType(URI.create("http://imeji.org/terms/grantType#" + GrantType.SYSADMIN.name()));
+        grant.setGrantFor(URI.create("http://imeji.org/"));
+        adminUser.getGrants().add(grant);
     }
 
-    public static String getModelName(Class<?> voClass)
-    {
-        j2jModel j2jModel = voClass.getAnnotation(j2jModel.class);
-        return "http://imeji.org/" + j2jModel.value();
-    }
-
+    /**
+     * Initialized the {@link Counter}
+     */
     public static void initCounter()
     {
         int counterFirstValue = 0;
@@ -182,6 +195,12 @@ public class ImejiJena
         }
     }
 
+    /**
+     * Create a new {@link Counter}
+     * 
+     * @param c
+     * @param counterFirstValue
+     */
     private static void createNewCouter(Counter c, int counterFirstValue)
     {
         c.setCounter(counterFirstValue);
@@ -197,12 +216,29 @@ public class ImejiJena
         }
     }
 
-    public static void printModel(String name)
+    /**
+     * Return the name of the model if defined in a {@link Class} with {@link j2jModel} annotation
+     * 
+     * @param voClass
+     * @return
+     */
+    private static String getModelName(Class<?> voClass)
+    {
+        j2jModel j2jModel = voClass.getAnnotation(j2jModel.class);
+        return "http://imeji.org/" + j2jModel.value();
+    }
+
+    /**
+     * Print all data in one {@link Model} as RDF
+     * 
+     * @param modelName
+     */
+    public static void printModel(String modelName)
     {
         try
         {
             imejiDataSet.begin(ReadWrite.READ);
-            imejiDataSet.getNamedModel(name).write(System.out, "RDF/XML-ABBREV");
+            imejiDataSet.getNamedModel(modelName).write(System.out, "RDF/XML-ABBREV");
             imejiDataSet.commit();
         }
         finally

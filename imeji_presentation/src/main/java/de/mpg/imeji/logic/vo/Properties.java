@@ -3,15 +3,32 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Calendar;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * Common properties to all imeji objects
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/properties")
+@XmlRootElement(name = "properties")
+@XmlType(name = "properties")
+@XmlSeeAlso({ MetadataProfile.class })
 public class Properties
 {
+    private URI id;
     @j2jResource("http://purl.org/dc/terms/creator")
     private URI createdBy;
     @j2jResource("http://imeji.org/terms/modifiedBy")
@@ -129,5 +146,70 @@ public class Properties
     public void setVersionDate(Calendar versionDate)
     {
         this.versionDate = versionDate;
+    }
+
+    public void setId(URI id)
+    {
+        this.id = id;
+    }
+
+    public URI getId()
+    {
+        return id;
+    }
+
+    /**
+     * return the id of this object defined in the last number in its {@link URI}.
+     * 
+     * @return
+     */
+    public String getIdString()
+    {
+        if (id != null)
+        {
+            return id.getPath().substring(id.getPath().lastIndexOf("/")+1);
+        }
+        return "";
+    }
+
+    /**
+     * TODO : check this method
+     * 
+     * @param methodName
+     * @return
+     */
+    public Object getValueFromMethod(String methodName)
+    {
+        Method method;
+        Object ret = null;
+        try
+        {
+            method = this.getClass().getMethod(methodName);
+            ret = method.invoke(this);
+        }
+        catch (SecurityException e)
+        {
+            e.printStackTrace();
+        }
+        catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return ret;
     }
 }

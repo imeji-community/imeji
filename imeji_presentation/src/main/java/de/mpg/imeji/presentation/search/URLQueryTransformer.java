@@ -5,12 +5,14 @@ package de.mpg.imeji.presentation.search;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
@@ -21,17 +23,57 @@ import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
+/**
+ * Static methods to manipulate imeji url search queries
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class URLQueryTransformer
 {
+    /**
+     * The Pattern to match a metadata search
+     */
+    private static String SEARCH_METADATA_PATTERN = "[a-z0-9-]+:[a-z_]+[=<>]{1,2}\".+\"";
+    /**
+     * The Pattern to match a search pair
+     */
+    private static String SEARCH_PAIR_PATTERN = "[a-z_]+[=<>]{1,2}\".+\"";
+
+    /**
+     * Parse a url search query into a {@link SearchQuery}. Decode the query with UTF-8
+     * 
+     * @param query
+     * @return
+     * @throws IOException
+     */
     public static SearchQuery parseStringQuery(String query) throws IOException
+    {
+        if (query == null)
+            query = "";
+        return parseStringQueryDecoded(URLDecoder.decode(query, "UTF-8"));
+    }
+
+    /**
+     * Parse a url search query into a {@link SearchQuery}. The query should be already decoded
+     * 
+     * @param query
+     * @return
+     * @throws IOException
+     */
+    public static SearchQuery parseStringQueryDecoded(String query) throws IOException
     {
         SearchQuery searchQuery = new SearchQuery();
         String subQuery = "";
         String scString = "";
         boolean not = false;
+        boolean hasBracket = false; // don't try to look for group if there isn't any bracket
         int bracketsOpened = 0;
         int bracketsClosed = 0;
         if (query == null)
@@ -46,6 +88,7 @@ public class URLQueryTransformer
                 scString += (char)c;
             if (c == '(')
             {
+                hasBracket = true;
                 bracketsOpened++;
             }
             if (c == ')')
@@ -63,44 +106,47 @@ public class URLQueryTransformer
                 not = true;
                 scString = "";
             }
-            if (bracketsOpened - bracketsClosed == 0)
+            if (hasBracket && (bracketsOpened - bracketsClosed == 0))
             {
-                SearchQuery subSearchQuery = parseStringQuery(subQuery);
+                SearchQuery subSearchQuery = parseStringQueryDecoded(subQuery);
                 if (!subSearchQuery.isEmpty())
                 {
                     SearchGroup searchGroup = new SearchGroup();
-                    searchGroup.getGroup().addAll(parseStringQuery(subQuery).getElements());
+                    searchGroup.getGroup().addAll(parseStringQueryDecoded(subQuery).getElements());
                     searchQuery.getElements().add(searchGroup);
                     subQuery = "";
                 }
             }
             if (matchSearchMetadataPattern(scString))
             {
-                String[] pairString = scString.split("=");
-                scString = "";
-                String value = pairString[2].trim();
-                String ns = pairString[0].split(",")[0].replace("IMAGE_METADATA[", "").replaceAll(" ", "");
-                value = value.substring(1, value.length() - 1);
+                String op = parseOperatorInSearchPattern(scString, SEARCH_METADATA_PATTERN);
+                int indexOp = scString.indexOf(op);
+                int indexValue = scString.indexOf("\"");
+                int indexIndex = scString.indexOf(":");
+                String value = scString.substring(indexValue + 1, scString.length() - 1).trim();
                 if (value.startsWith("\""))
                 {
                     value += "\"";
                 }
-                SearchIndex index = Search.getIndex(pairString[0].split(",")[1].replace("]", "").trim());
-                SearchOperators operator = SearchOperators.valueOf(pairString[1].trim());
-                searchQuery.addPair(new SearchMetadata(index, operator, value, URI.create(ns), not));
+                SearchIndex index = Search.getIndex(scString.substring(indexIndex + 1, indexOp).trim());
+                SearchOperators operator = stringOperator2SearchOperator(op);
+                searchQuery.addPair(new SearchMetadata(index, operator, value, ObjectHelper.getURI(Statement.class,
+                        scString.substring(0, indexIndex).trim()), not));
                 not = false;
+                scString = "";
             }
-            if (matchSearchPairPattern(scString) && !matchSearchMetadataPattern(scString))
+            else if (matchSearchPairPattern(scString))
             {
-                String[] pairString = scString.split("=");
-                String value = pairString[2].trim();
-                value = value.substring(1, value.length() - 1);
+                String op = parseOperatorInSearchPattern(scString, SEARCH_PAIR_PATTERN);
+                int indexOp = scString.indexOf(op);
+                int indexValue = scString.indexOf("\"");
+                String value = scString.substring(indexValue + 1, scString.length() - 1).trim();
                 if (value.startsWith("\""))
                 {
                     value += "\"";
                 }
-                SearchIndex index = Search.getIndex(pairString[0].trim());
-                SearchOperators operator = SearchOperators.valueOf(pairString[1].trim());
+                SearchIndex index = Search.getIndex(scString.substring(0, indexOp).trim());
+                SearchOperators operator = stringOperator2SearchOperator(op);
                 searchQuery.addPair(new SearchPair(index, operator, value, not));
                 scString = "";
                 not = false;
@@ -108,28 +154,91 @@ public class URLQueryTransformer
         }
         if (!"".equals(query) && searchQuery.isEmpty())
         {
-            searchQuery.addPair(new SearchPair(Search.getIndex(SearchIndex.names.FULLTEXT), SearchOperators.REGEX,
-                    query.trim()));
+            searchQuery.addPair(new SearchPair(Search.getIndex(SearchIndex.names.all), SearchOperators.REGEX, query
+                    .trim()));
         }
         return searchQuery;
     }
 
+    /**
+     * Parse the operator (=, ==, =<, >=) in the search pattern
+     * 
+     * @param pattern
+     * @return
+     */
+    private static String parseOperatorInSearchPattern(String str, String pattern)
+    {
+        for (SearchOperators op : SearchOperators.values())
+        {
+            String opString = operator2URL(op);
+            String opPattern = pattern.replace("[=<>]{1,2}", opString);
+            if (str.trim().matches(opPattern))
+                return opString;
+        }
+        throw new RuntimeException("Operator not found in " + pattern);
+    }
+
+    /**
+     * Pattern to parse a {@link SearchPair} from an url query
+     * 
+     * @param str
+     * @return
+     */
     private static boolean matchSearchPairPattern(String str)
     {
-        return str.matches("\\s*[^\\s]+=.*=\".+\"\\s*");
+        return str.trim().matches(SEARCH_PAIR_PATTERN);
     }
 
+    /**
+     * Pattern to parse a {@link SearchMetadata} from a url query
+     * 
+     * @param str
+     * @return
+     */
     private static boolean matchSearchMetadataPattern(String str)
     {
-        return str.matches("\\s*" + SearchIndex.names.IMAGE_METADATA.name() + "\\[[^\\s]+\\]=.*=\".+\"\\s*");
+        return str.trim().matches(SEARCH_METADATA_PATTERN);
     }
 
+    /**
+     * Transform a {@link String} to a {@link SearchOperators}
+     * 
+     * @param str
+     * @return
+     */
+    private static SearchOperators stringOperator2SearchOperator(String str)
+    {
+        if ("=".equals(str))
+        {
+            return SearchOperators.REGEX;
+        }
+        else if ("==".equals(str))
+        {
+            return SearchOperators.EQUALS;
+        }
+        else if (">=".equals(str))
+        {
+            return SearchOperators.GREATER;
+        }
+        else if ("<=".equals(str))
+        {
+            return SearchOperators.LESSER;
+        }
+        return null;
+    }
+
+    /**
+     * True is a {@link SearchQuery} is a simple search (i.e. triggered from the simple search form)
+     * 
+     * @param searchQuery
+     * @return
+     */
     public static boolean isSimpleSearch(SearchQuery searchQuery)
     {
         for (SearchElement element : searchQuery.getElements())
         {
             if (SEARCH_ELEMENTS.PAIR.equals(element.getType())
-                    && ((SearchPair)element).getIndex().getName().equals(SearchIndex.names.FULLTEXT.name()))
+                    && ((SearchPair)element).getIndex().getName().equals(SearchIndex.names.all.name()))
             {
                 return true;
             }
@@ -137,6 +246,30 @@ public class URLQueryTransformer
         return false;
     }
 
+    /**
+     * Transform a {@link SearchQuery} into a url search query encorded in UTF-8
+     * 
+     * @param searchQuery
+     * @return
+     */
+    public static String transform2UTF8URL(SearchQuery searchQuery)
+    {
+        try
+        {
+            return URLEncoder.encode(transform2URL(searchQuery), "UTF-8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            throw new RuntimeException("Error encoding search query: " + searchQuery, e);
+        }
+    }
+
+    /**
+     * Transform a {@link SearchQuery} into a url search query
+     * 
+     * @param searchQuery
+     * @return
+     */
     public static String transform2URL(SearchQuery searchQuery)
     {
         String query = "";
@@ -159,34 +292,90 @@ public class URLQueryTransformer
                     {
                         query += " NOT";
                     }
-                    query += ((SearchPair)se).getIndex().getName() + "=" + ((SearchPair)se).getOperator().name()
-                            + "=\"" + ((SearchPair)se).getValue() + "\"";
+                    query += ((SearchPair)se).getIndex().getName() + operator2URL(((SearchPair)se).getOperator())
+                            + searchValue2URL(((SearchPair)se));
                     break;
                 case METADATA:
                     if (((SearchMetadata)se).isNot())
                     {
                         query += " NOT";
                     }
-                    query += SearchIndex.names.IMAGE_METADATA.name() + "[" + ((SearchMetadata)se).getStatement() + ","
-                            + ((SearchPair)se).getIndex().getName() + "]" + "="
-                            + ((SearchMetadata)se).getOperator().name() + "=\"" + ((SearchMetadata)se).getValue()
-                            + "\"";
+                    query += transformStatementToIndex(((SearchMetadata)se).getStatement(), ((SearchPair)se).getIndex())
+                            + operator2URL(((SearchMetadata)se).getOperator()) + searchValue2URL(((SearchMetadata)se));
+                    break;
+                default:
                     break;
             }
         }
         return query.trim();
     }
 
+    /**
+     * Transform a {@link Statement} to an index
+     * 
+     * @param statement
+     * @param index
+     * @return
+     */
+    public static String transformStatementToIndex(URI statement, SearchIndex index)
+    {
+        return ObjectHelper.getId(statement) + ":" + index.getName();
+    }
+
+    /**
+     * REturn the search value of the {@link SearchMetadata} as string for an url
+     * 
+     * @param md
+     * @return
+     */
+    private static String searchValue2URL(SearchPair pair)
+    {
+        return "\"" + pair.getValue() + "\"";
+    }
+
+    /**
+     * Transform a {@link SearchOperators} to a {@link String} value used in url query
+     * 
+     * @param op
+     * @return
+     */
+    private static String operator2URL(SearchOperators op)
+    {
+        switch (op)
+        {
+            case GREATER:
+                return ">=";
+            case LESSER:
+                return "<=";
+            case REGEX:
+                return "=";
+            default:
+                return "==";
+        }
+    }
+
+    /**
+     * Transform a {@link SearchQuery} into a user friendly query
+     * 
+     * @param sq
+     * @return
+     */
     public static String searchQuery2PrettyQuery(SearchQuery sq)
     {
         return searchElements2PrettyQuery(sq.getElements());
     }
 
+    /**
+     * Transform a {@link SearchPair} into a user friendly query
+     * 
+     * @param pair
+     * @return
+     */
     private static String searchPair2PrettyQuery(SearchPair pair)
     {
         if (pair.getValue() == null || pair.getValue() == "")
             return "";
-        if (pair.getIndex().getName().equals(SearchIndex.names.FULLTEXT.name()))
+        if (pair.getIndex().getName().equals(SearchIndex.names.all.name()))
         {
             return pair.getValue();
         }
@@ -198,6 +387,12 @@ public class URLQueryTransformer
         }
     }
 
+    /**
+     * Transform a {@link SearchGroup} into a user friendly query
+     * 
+     * @param group
+     * @return
+     */
     private static String searchGroup2PrettyQuery(SearchGroup group)
     {
         String str = "";
@@ -245,18 +440,28 @@ public class URLQueryTransformer
         return false;
     }
 
+    /**
+     * transform a {@link SearchLogicalRelation} into a user friendly query
+     * 
+     * @param rel
+     * @return
+     */
     private static String searchLogicalRelation2PrettyQuery(SearchLogicalRelation rel)
     {
         return " " + rel.getLogicalRelation().name() + " ";
     }
 
+    /**
+     * Transform a {@link SearchElement} into a user friendly query
+     * 
+     * @param els
+     * @return
+     */
     private static String searchElements2PrettyQuery(List<SearchElement> els)
     {
         String q = "";
-        int position = 0;
         for (SearchElement el : els)
         {
-            position++;
             switch (el.getType())
             {
                 case PAIR:
@@ -270,6 +475,8 @@ public class URLQueryTransformer
                     break;
                 case METADATA:
                     q += searchMetadata2PrettyQuery((SearchMetadata)el);
+                default:
+                    break;
             }
         }
         return removeUseLessLogicalOperation(q).trim();
@@ -292,6 +499,12 @@ public class URLQueryTransformer
         return q;
     }
 
+    /**
+     * transform a namespace of a {@link SearchIndex} into a user friendly value
+     * 
+     * @param namespace
+     * @return
+     */
     public static String indexNamespace2PrettyQuery(String namespace)
     {
         String s[] = namespace.split("/");
@@ -302,23 +515,33 @@ public class URLQueryTransformer
         return namespace;
     }
 
+    /**
+     * Transform a {@link SearchOperators} into a user friendly label
+     * 
+     * @param op
+     * @return
+     */
     private static String searchOperator2PrettyQuery(SearchOperators op)
     {
         switch (op)
         {
-            case GREATER_DATE:
+            case GREATER:
                 return ">=";
-            case GREATER_NUMBER:
-                return ">=";
-            case LESSER_DATE:
+            case LESSER:
                 return "<=";
-            case LESSER_NUMBER:
-                return "<=";
+            case EQUALS:
+                return "==";
             default:
                 return "=";
         }
     }
 
+    /**
+     * Display a negation in a user friendly way
+     * 
+     * @param isNot
+     * @return
+     */
     private static String negation2PrettyQuery(boolean isNot)
     {
         if (isNot)

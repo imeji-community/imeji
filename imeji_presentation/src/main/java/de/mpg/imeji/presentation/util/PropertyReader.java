@@ -11,13 +11,21 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Utility class to read property files in Tomcat and JBoss application
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class PropertyReader
 {
     private static Properties properties;
-    private static final String DEFAULT_PROPERTY_FILE = "faces.properties";
+    private static final String DEFAULT_PROPERTY_FILE = "imeji.properties";
     private static URL solution;
     private static String fileLocation = null;
     private static String version = null;
+    private static Logger logger = Logger.getLogger(PropertyReader.class);
 
     /**
      * Gets the value of a property for the given key from the system properties or the escidoc property file. It is
@@ -97,8 +105,6 @@ public class PropertyReader
         properties = new Properties();
         properties.load(instream);
         properties.putAll(solProperties);
-        Logger.getLogger(PropertyReader.class).info("Properties loaded from " + fileLocation);
-        // Logger.getLogger(PropertyReader.class).info(properties.toString());
     }
 
     /**
@@ -109,14 +115,29 @@ public class PropertyReader
      * @return The inputstream of the given file path.
      * @throws IOException If the file could not be found neither in the file system nor in the classpath.
      */
+    @SuppressWarnings("resource")
     public static InputStream getInputStream(String filepath) throws IOException
     {
         InputStream instream = null;
         // First try to search in file system
         try
         {
-            instream = new FileInputStream(filepath);
-            fileLocation = (new File(filepath)).getAbsolutePath();
+            String serverConfDirectory;
+            if (System.getProperty("jboss.server.config.dir") != null)
+            {
+                serverConfDirectory = System.getProperty("jboss.server.config.dir");
+            }
+            else if (System.getProperty("catalina.home") != null)
+            {
+                serverConfDirectory = System.getProperty("catalina.home") + "/conf";
+            }
+            else
+            {
+                serverConfDirectory = "/src/test/resources";
+            }
+            logger.info("loading properties from " + serverConfDirectory + "/" + filepath);
+            instream = new FileInputStream(serverConfDirectory + "/" + filepath);
+            fileLocation = (new File(serverConfDirectory + "/" + filepath)).getAbsolutePath();
         }
         catch (Exception e)
         {

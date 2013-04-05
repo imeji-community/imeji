@@ -4,60 +4,75 @@
 package de.mpg.imeji.presentation.mdProfile.wrapper;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import com.hp.hpl.jena.util.Metadata;
+
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.mdProfile.MdProfileBean;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
-import de.mpg.j2j.misc.LocalizedString;
 
+/**
+ * Wrapper for {@link Statement}, used in java bean {@link MdProfileBean}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class StatementWrapper
 {
-    private boolean required = false;
-    private boolean multiple = false;
     private Statement statement;
+    private boolean multiple = false;
     private String vocabularyString;
-    private boolean preview = true;
-    // private URI profile;
-    private List<LocalizedString> labels;
     private VocabularyHelper vocabularyHelper;
-    private boolean description = false;
     private boolean showRemoveWarning = false;
+    private int level = 0;
 
-    public StatementWrapper(Statement st, URI profile)
+    /**
+     * Create a new {@link StatementWrapper}
+     * 
+     * @param st
+     * @param profile
+     */
+    public StatementWrapper(Statement st, URI profile, int level)
     {
-        // this.profile = profile;
         init(st);
+        this.level = level;
     }
 
+    /**
+     * Reset this {@link StatementWrapper} with emtpy {@link Statement}
+     */
     public void reset()
     {
         Statement newSt = ImejiFactory.newStatement();
-        newSt.setType(getType());
+        newSt.setType(statement.getType());
         init(newSt);
     }
 
+    /**
+     * Initialize the {@link StatementWrapper} fields with {@link Statement} fields
+     * 
+     * @param st
+     */
     public void init(Statement st)
     {
         statement = st;
-        statement.setLiteralConstraints(st.getLiteralConstraints());
-        statement.setMinOccurs(st.getMinOccurs());
-        statement.setMaxOccurs(st.getMaxOccurs());
-        statement.setLabels(st.getLabels());
-        statement.setType(st.getType());
-        statement.setVocabulary(st.getVocabulary());
-        description = st.isDescription();
-        this.preview = st.isPreview();
-        if (Integer.parseInt(st.getMinOccurs()) > 0)
-        {
-            required = true;
-        }
-        if ("unbounded".equals(st.getMaxOccurs()) || Integer.parseInt(st.getMaxOccurs()) > 1)
+        initMultiple();
+        initVocabulary();
+    }
+
+    /**
+     * Initialize the multiple value according to the {@link Statement}
+     */
+    private void initMultiple()
+    {
+        if ("unbounded".equals(statement.getMaxOccurs()) || Integer.parseInt(statement.getMaxOccurs()) > 1)
         {
             multiple = true;
         }
@@ -65,8 +80,13 @@ public class StatementWrapper
         {
             multiple = false;
         }
-        labels = new ArrayList<LocalizedString>();
-        labels.addAll(st.getLabels());
+    }
+
+    /**
+     * Initialize the {@link VocabularyHelper} according to the {@link Statement}
+     */
+    private void initVocabulary()
+    {
         vocabularyHelper = new VocabularyHelper();
         if (statement.getVocabulary() != null)
         {
@@ -83,17 +103,26 @@ public class StatementWrapper
         }
     }
 
+    /**
+     * Return the {@link StatementWrapper} as a {@link Statement}
+     * 
+     * @return
+     */
     public Statement getAsStatement()
     {
-        statement.setLabels(labels);
         if (vocabularyString != null)
         {
             statement.setVocabulary(URI.create(vocabularyString));
         }
-        statement.setDescription(description);
         return statement;
     }
 
+    /**
+     * True if at least one item in imeji has one {@link Metadata} defined with the {@link Statement} attached to this
+     * {@link StatementWrapper}
+     * 
+     * @return
+     */
     public boolean isUsedByAtLeastOnItem()
     {
         return ImejiSPARQL
@@ -101,20 +130,35 @@ public class StatementWrapper
                         + statement.getId() + ">} LIMIT 1 ", null).size() > 0;
     }
 
+    /**
+     * Return count of defined labels
+     * 
+     * @return
+     */
     public int getLabelsCount()
     {
-        return labels.size();
+        return statement.getLabels().size();
     }
 
+    /**
+     * Listener for the vocabulary menu
+     * 
+     * @param event
+     */
     public void vocabularyListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
-            this.statement.setVocabulary(URI.create(event.getNewValue().toString()));
+            statement.setVocabulary(URI.create(event.getNewValue().toString()));
         }
         vocabularyString = statement.getVocabulary().toString();
     }
 
+    /**
+     * Listener for the constraints fields
+     * 
+     * @param event
+     */
     public void constraintListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
@@ -124,14 +168,24 @@ public class StatementWrapper
         }
     }
 
+    /**
+     * Listener for metadata type menu
+     * 
+     * @param event
+     */
     public void typeListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
-            this.statement.setType(URI.create(event.getNewValue().toString()));
+            statement.setType(URI.create(event.getNewValue().toString()));
         }
     }
 
+    /**
+     * Listener for the preview select box
+     * 
+     * @param event
+     */
     public void previewListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
@@ -140,17 +194,11 @@ public class StatementWrapper
         }
     }
 
-    public void requiredListener(ValueChangeEvent event)
-    {
-        if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
-        {
-            if ((Boolean)event.getNewValue())
-            {
-                statement.setMinOccurs("1");
-            }
-        }
-    }
-
+    /**
+     * Listener for the multiple select box
+     * 
+     * @param event
+     */
     public void multipleListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
@@ -166,106 +214,142 @@ public class StatementWrapper
         }
     }
 
+    /**
+     * Listener for the description select box
+     * 
+     * @param event
+     */
     public void descriptionListener(ValueChangeEvent event)
     {
         if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
         {
-            description = (Boolean)event.getNewValue();
+            statement.setDescription((Boolean)event.getNewValue());
         }
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public Statement getStatement()
     {
         return statement;
     }
 
+    /**
+     * setter
+     * 
+     * @param statement
+     */
     public void setStatement(Statement statement)
     {
         this.statement = statement;
     }
 
+    /**
+     * Return the count of the constraints
+     * 
+     * @return
+     */
     public int getConstraintsSize()
     {
         return statement.getLiteralConstraints().size();
     }
 
-    public URI getType()
-    {
-        return statement.getType();
-    }
-
-    public void setRequired(boolean required)
-    {
-        this.required = required;
-    }
-
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean isMultiple()
     {
         return multiple;
     }
 
+    /**
+     * setter
+     * 
+     * @param statement
+     */
     public void setMultiple(boolean multiple)
     {
         this.multiple = multiple;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getVocabularyString()
     {
         return vocabularyString;
     }
 
+    /**
+     * setter
+     * 
+     * @param statement
+     */
     public void setVocabularyString(String vocabularyString)
     {
         this.vocabularyString = vocabularyString;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public VocabularyHelper getVocabularyHelper()
     {
         return vocabularyHelper;
     }
 
+    /**
+     * setter
+     * 
+     * @param statement
+     */
     public void setVocabularyHelper(VocabularyHelper vocabularyHelper)
     {
         this.vocabularyHelper = vocabularyHelper;
     }
 
-    public boolean isDescription()
-    {
-        return description;
-    }
-
-    public void setDescription(boolean description)
-    {
-        this.description = description;
-    }
-
-    public List<LocalizedString> getLabels()
-    {
-        return labels;
-    }
-
-    public void setLabels(List<LocalizedString> labels)
-    {
-        this.labels = labels;
-    }
-
-    public void setPreview(boolean preview)
-    {
-        this.preview = preview;
-    }
-
-    public boolean isPreview()
-    {
-        return preview;
-    }
-
+    /**
+     * setter
+     * 
+     * @param statement
+     */
     public void setShowRemoveWarning(boolean showRemoveWarning)
     {
         this.showRemoveWarning = showRemoveWarning;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean isShowRemoveWarning()
     {
         return showRemoveWarning;
+    }
+
+    /**
+     * @param level the level to set
+     */
+    public void setLevel(int level)
+    {
+        this.level = level;
+    }
+
+    /**
+     * @return the level
+     */
+    public int getLevel()
+    {
+        return level;
     }
 }

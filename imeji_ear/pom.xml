@@ -1,23 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>imeji</artifactId>
 		<groupId>de.mpg.mpdl.imeji</groupId>
-		<version>1.0.0.1-SNAPSHOT</version>
+		<version>1.1.0.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.mpg.mpdl.imeji</groupId>
 	<artifactId>imeji_ear</artifactId>
 	<name>imeji_ear</name>
 	<packaging>ear</packaging>
-	<version>1.0.0.1-SNAPSHOT</version>
-	
+	<version>1.1.0.1-SNAPSHOT</version>
+
 	<scm>
 		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
 		<developerConnection>scm:git:https://github.com/imeji-community/imeji.git</developerConnection>
 		<url>https://github.com/imeji-community/imeji.git</url>
 	</scm>
-	
+
 	<build>
+		<!-- To use the plugin goals in your POM or parent POM -->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -38,12 +40,10 @@
 							<artifactId>common_presentation</artifactId>
 							<contextRoot>/common</contextRoot>
 						</webModule>
-						<!-- Uncomment to enable OAI-PMH and Sitemaps. Important: Fledgeddata needs to be self compiled! -->
-					 	<webModule>
-							<groupId>de.mpg.escidoc.services</groupId>
-							<artifactId>fledgeddata_presentation</artifactId>
-							<contextRoot>/fledgeddata</contextRoot>
-						</webModule>
+						<!-- Uncomment to enable OAI-PMH and Sitemaps. Important: Fledgeddata 
+							needs to be self compiled! -->
+						<!-- <webModule> <groupId>de.mpg.escidoc.services</groupId> <artifactId>fledgeddata_presentation</artifactId> 
+							<contextRoot>/fledgeddata</contextRoot> </webModule> -->
 					</modules>
 				</configuration>
 			</plugin>
@@ -82,7 +82,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			 <plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
 				<executions>
@@ -102,12 +102,12 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>de.mpg.mpdl.imeji</groupId>
 			<artifactId>imeji_presentation</artifactId>
-			<version>1.0.0.1-SNAPSHOT</version>
+			<version>1.1.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>war</type>
 		</dependency>
@@ -119,57 +119,35 @@
 			<type>war</type>
 			<scope>compile</scope>
 		</dependency>
-		<!-- Uncomment to enable OAI-PMH and Sitemaps. Important: Fledgeddata needs to be self compiled! -->
-		<dependency>
-			<groupId>de.mpg.escidoc.services</groupId>
-			<artifactId>fledgeddata_presentation</artifactId>
-			<version>1.0.0</version>
-			<scope>compile</scope>
-			<type>war</type>
-		</dependency>
-	
+		<!-- Uncomment to enable OAI-PMH and Sitemaps. Important: Fledgeddata needs 
+			to be self compiled! -->
+		<!-- <dependency> <groupId>de.mpg.escidoc.services</groupId> <artifactId>fledgeddata_presentation</artifactId> 
+			<version>1.0.0</version> <scope>compile</scope> <type>war</type> </dependency> -->
+
 	</dependencies>
 
-	
+
 	<profiles>
 		<profile>
-			<id>jboss42</id>
+			<id>jboss71-deployment</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<build>
+				<!-- To use the plugin goals in your POM or parent POM -->
 				<plugins>
+					<!-- The JBoss AS plugin deploys your war to a local JBoss AS container -->
+					<!-- To use, run: mvn package jboss-as:deploy -->
 					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>jboss-maven-plugin</artifactId>
-						<configuration>
-							<jbossHome>${jboss.install.dir}</jbossHome>
-							<hostName>${jboss.deploy.host}</hostName>
-							<port>${jboss.deploy.port}</port>
-						</configuration>
+						<groupId>org.jboss.as.plugins</groupId>
+						<artifactId>jboss-as-maven-plugin</artifactId>
 					</plugin>
+
 					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.1</version>
+						<!-- FIXME This copy task not execute! Error "plugin execution not covered by lifecycle 
+							configuration" need to be solve -->
 						<executions>
-							<execution>
-								<id>prepare-test-deployment</id>
-								<phase>generate-test-sources</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<!-- copy a default jboss server configuration -->
-										<copy todir="${project.build.directory}">
-											<fileset dir="src/jboss/configuration42x" />
-										</copy>
-										<!-- copy over the jboss service descriptor -->
-										<copy overwrite="true" file="${project.build.directory}/classes/jboss-service.xml" todir="${project.build.directory}/jboss/server/conf" />
-										<!-- copy over the configuration file -->
-										<copy overwrite="true" file="${project.build.directory}/classes/imeji.properties" todir="${project.build.directory}/jboss/server/conf" />
-										<!-- copy over the descriptio set template file -->
-										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${project.build.directory}/jboss/server/conf" />
-									</tasks>
-								</configuration>
-							</execution>
 							<execution>
 								<id>prepare-deployment</id>
 								<phase>process-resources</phase>
@@ -178,16 +156,20 @@
 								</goals>
 								<configuration>
 									<tasks>
-										
-										<echo message="Deploy files from ${project.build.directory} to ${jboss.install.dir}" />
+
+										<echo message="Yeah! Deploy files from ${project.build.directory} to ${jboss.install.dir}" />
 
 										<!-- configuration for the deploy jboss server -->
 										<!-- copy over the configuration file -->
-										<copy overwrite="true" file="${project.build.directory}/classes/imeji.properties" todir="${jboss.install.dir}/server/default/conf" />
+										<copy overwrite="true" file="${project.build.directory}/classes/imeji.properties" todir="${jboss.install.dir}/standalone/configuration" />
 										<!-- copy over the screen config file file -->
 										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${jboss.install.dir}/server/default/conf" />
-
-									
+										<!-- copy over the import schema files -->
+										<!--  <copy overwrite="true" file="${project.build.directory}/classes/vo_schema/imeji_item_schema.xsd" todir="${jboss.install.dir}/server/default/conf" />
+										<copy overwrite="true" file="${project.build.directory}/classes/vo_schema/imeji_items_schema.xsd" todir="${jboss.install.dir}/server/default/conf" />
+										<copy overwrite="true" file="${project.build.directory}/classes/vo_schema/imeji_metadataprofile_schema.xsd" todir="${jboss.install.dir}/server/default/conf" />
+										<copy overwrite="true" file="${project.build.directory}/classes/vo_schema/imeji_metadataprofiles_schema.xsd" todir="${jboss.install.dir}/server/default/conf" />
+										-->
 									</tasks>
 								</configuration>
 							</execution>
@@ -198,11 +180,11 @@
 								<artifactId>ant-trax</artifactId>
 								<version>1.6.5</version>
 							</dependency>
-						
 						</dependencies>
 					</plugin>
 				</plugins>
 			</build>
 		</profile>
+
 	</profiles>
 </project>

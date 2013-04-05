@@ -1,11 +1,12 @@
-
-<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.0.2"
+<pretty-config xmlns="http://ocpsoft.org/prettyfaces/3.3.3"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.0.2
-                                   		http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.0.2.xsd">
+	xsi:schemaLocation="http://ocpsoft.org/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.3.xsd">
+
+
 
 	<!-- Begin RewriteRules -->
-	<rewrite trailingSlash="remove"/>
+	<rewrite trailingSlash="remove" />
+		
 	<!-- <rewrite match="^/old-url/(\w+)/$" substitute="/new_url/$1/" redirect="301" 
 		/> -->
 	<!-- Begin UrlMappings -->
@@ -45,6 +46,12 @@
 		<view-id>/jsf/Upload.xhtml</view-id>
 		<action onPostback="false">#{UploadBean.status}</action>
 	</url-mapping>
+	
+	<url-mapping id="ingest">
+		<pattern value="/collection/#{IngestBean.collectionId}/ingest" />
+		<view-id>/jsf/Ingest.xhtml</view-id>
+		<action onPostback="false">#{IngestBean.status}</action>
+	</url-mapping>
 
 	<!-- Collection pages -->
 	<url-mapping id="collection">
@@ -71,12 +78,12 @@
 	</url-mapping>
 
 	<url-mapping id="createCollection">
-		<pattern value="/createcollection"/>
+		<pattern value="/createcollection" />
 		<view-id>/jsf/CollectionCreate.xhtml</view-id>
 	</url-mapping>
 
 	<url-mapping id="editCollection">
-		<pattern value="/collection/#{EditCollectionBean.id}/edit"/>
+		<pattern value="/collection/#{EditCollectionBean.id}/edit" />
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>
 		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>
@@ -157,7 +164,15 @@
 		<pattern value="/user/browse"></pattern>
 		<view-id>/jsf/Users.xhtml</view-id>
 	</url-mapping>
-
-
+	
+	<url-mapping id="share">
+		<pattern value="/share"></pattern>
+		<view-id>/jsf/Share.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="admin">
+		<pattern value="/admin"></pattern>
+		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
+	</url-mapping>
 
 </pretty-config>

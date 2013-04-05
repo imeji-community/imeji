@@ -5,10 +5,10 @@ package de.mpg.imeji.presentation.beans;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-
+import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Defines the page names and Path for imeji. All changes here must be synchronized with WEB-INF/pretty-config.xml The
@@ -20,11 +20,8 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 public class Navigation
 {
-    // public final String LOGIN_URL = "/aa/login?target=$1";
-    // public final String LOGOUT_URL = "/aa/logout?target=$1";
-    // public final String USERHANDLE_PARAMETER_NAME = "eSciDocUserHandle";
     // Url of the FW
-    public final String frameworkUrl;
+    public String frameworkUrl;
     // Url of the application
     public final String applicationUrl;
     // Pages of imeji
@@ -43,13 +40,23 @@ public class Navigation
     public final Page INFOS = new Page("Info", "infos");
     public final Page CREATE = new Page("Create", "create");
     public final Page UPLOAD = new Page("Upload collection", "upload");
+    public final Page SHARE = new Page("Share", "share");
+    public final Page USER = new Page("User", "user");
+    public final Page ADMIN = new Page("Admin", "admin");
     // session
     private SessionBean sessionBean = null;
 
+    /**
+     * Application bean managing navigation
+     * 
+     * @throws Exception
+     */
     public Navigation() throws Exception
     {
-        frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.ur");
-        applicationUrl = PropertyReader.getProperty("escidoc.imeji.instance.url");
+        frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.url");
+        if (frameworkUrl != null)
+            frameworkUrl = StringHelper.normalizeURI(frameworkUrl);
+        applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
     }
 
     public String getApplicationUrl()
@@ -69,7 +76,7 @@ public class Navigation
 
     public String getHomeUrl()
     {
-        return applicationUrl + HOME.getPath();
+        return getApplicationUri();
     }
 
     public String getBrowseUrl()
@@ -137,6 +144,21 @@ public class Navigation
         return PropertyReader.getProperty("escidoc.imeji.blog.url");
     }
 
+    public String getShareUrl()
+    {
+        return applicationUrl + SHARE.getPath();
+    }
+
+    public String getUserUrl()
+    {
+        return applicationUrl + USER.getPath();
+    }
+
+    public String getAdminUrl()
+    {
+        return applicationUrl + ADMIN.getPath();
+    }
+
     /*
      * Paths
      */
@@ -164,7 +186,7 @@ public class Navigation
     {
         return ITEM.path;
     }
-    
+
     public String getUploadPath()
     {
         return UPLOAD.path;
@@ -177,69 +199,51 @@ public class Navigation
      */
     public String getContext()
     {
-        String context = "#";
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if ("help".equals(sessionBean.getCurrentPage()))
+        if (sessionBean.getCurrentPage() == null)
+        {
+            return "";
+        }
+        String context = "#";
+        if ("help".equals(sessionBean.getCurrentPage().name))
         {
             context += "";
         }
-        if ("welcome".equals(sessionBean.getCurrentPage()) || "about".equals(sessionBean.getCurrentPage())
-                || "legal".equals(sessionBean.getCurrentPage()))
+        if ("welcome".equals(sessionBean.getCurrentPage().name) || "about".equals(sessionBean.getCurrentPage().name)
+                || "legal".equals(sessionBean.getCurrentPage().name))
         {
             context += "1._Home";
         }
-        if ("home".equals(sessionBean.getCurrentPage()))
+        if ("home".equals(sessionBean.getCurrentPage().name))
         {
             context += "2._Pictures";
         }
-        if ("search".equals(sessionBean.getCurrentPage()) || "searchResult".equals(sessionBean.getCurrentPage()))
+        if ("search".equals(sessionBean.getCurrentPage().name)
+                || "searchResult".equals(sessionBean.getCurrentPage().name))
         {
             context += "4.1_Advanced_Search";
         }
-        if ("albumssearch".equals(sessionBean.getCurrentPage()))
+        if ("albumssearch".equals(sessionBean.getCurrentPage().name))
         {
             context += "4.2_Public_Album_Search";
         }
-        if ("details".equals(sessionBean.getCurrentPage()) || "comparison".equals(sessionBean.getCurrentPage())
-                || "detailsFromAlbum".equals(sessionBean.getCurrentPage())
-                || "comparisonFromAlbum".equals(sessionBean.getCurrentPage())
-                || "person".equals(sessionBean.getCurrentPage()))
+        if ("details".equals(sessionBean.getCurrentPage().name)
+                || "comparison".equals(sessionBean.getCurrentPage().name)
+                || "detailsFromAlbum".equals(sessionBean.getCurrentPage().name)
+                || "comparisonFromAlbum".equals(sessionBean.getCurrentPage().name)
+                || "person".equals(sessionBean.getCurrentPage().name))
         {
             context += "2.2_Picture_View";
         }
-        if ("albums".equals(sessionBean.getCurrentPage()) || "createalbum".equals(sessionBean.getCurrentPage())
-                || "editalbum".equals(sessionBean.getCurrentPage()))
+        if ("albums".equals(sessionBean.getCurrentPage().name)
+                || "createalbum".equals(sessionBean.getCurrentPage().name)
+                || "editalbum".equals(sessionBean.getCurrentPage().name))
         {
             context += "3._Album";
         }
-        if ("viewAlbum".equals(sessionBean.getCurrentPage()))
+        if ("viewAlbum".equals(sessionBean.getCurrentPage().name))
         {
             context += "3.2_Album_View";
-        }
-        if (("confirmation".equals(sessionBean.getCurrentPage()) && "delete".equals(UrlHelper
-                .getParameterValue("action"))))
-        {
-            context += "Delete_album";
-        }
-        if (("confirmation".equals(sessionBean.getCurrentPage()) && "publish".equals(UrlHelper
-                .getParameterValue("action"))))
-        {
-            context += "Publish_album";
-        }
-        if (("confirmation".equals(sessionBean.getCurrentPage()) && "withdraw".equals(UrlHelper
-                .getParameterValue("action"))))
-        {
-            context += "Withdraw_album";
-        }
-        if ("export".equals(sessionBean.getCurrentPage())
-                || ("confirmation".equals(sessionBean.getCurrentPage()) && "export".equals(UrlHelper
-                        .getParameterValue("action"))))
-        {
-            context += "3.3_Export";
-        }
-        if ("statistics".equals(sessionBean.getCurrentPage()))
-        {
-            context += "5._Usage_Statistics";
         }
         return context;
     }

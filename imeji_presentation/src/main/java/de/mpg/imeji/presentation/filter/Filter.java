@@ -9,6 +9,11 @@ import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.presentation.facet.Facet;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 
+/**
+ * {@link Facet} with extended
+ * 
+ * @author saquet
+ */
 public class Filter extends Facet
 {
     private String query = "";
@@ -18,6 +23,15 @@ public class Filter extends Facet
     private String removeQuery = "";
     private SearchQuery searchQuery;
 
+    /**
+     * Constructor
+     * 
+     * @param label
+     * @param query
+     * @param count
+     * @param type
+     * @param metadataURI
+     */
     public Filter(String label, String query, int count, FacetType type, URI metadataURI)
     {
         super(null, label, count, type, metadataURI);
@@ -27,6 +41,9 @@ public class Filter extends Facet
         init();
     }
 
+    /**
+     * Initialize the {@link Filter}
+     */
     public void init()
     {
         if (label == null)
@@ -46,11 +63,13 @@ public class Filter extends Facet
         }
     }
 
+    @Override
     public String getLabel()
     {
         return label;
     }
 
+    @Override
     public void setLabel(String label)
     {
         this.label = label;
@@ -66,11 +85,13 @@ public class Filter extends Facet
         this.collectionID = collectionID;
     }
 
+    @Override
     public int getCount()
     {
         return count;
     }
 
+    @Override
     public void setCount(int count)
     {
         this.count = count;

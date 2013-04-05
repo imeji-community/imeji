@@ -17,22 +17,38 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
+/**
+ * Java Bean for the {@link Filter}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class FiltersBean
 {
     private FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
     private int count = 0;
     private static Logger logger = Logger.getLogger(FiltersBean.class);
 
+    /**
+     * Default constructor
+     */
     public FiltersBean()
     {
     }
 
-    public FiltersBean(String query, int count)
+    /**
+     * Constructor with one string query and one count (total number of elements on the current page)
+     * 
+     * @param query
+     * @param count
+     */
+    public FiltersBean(SearchQuery sq, int count)
     {
         try
         {
             this.count = count;
-            String q = UrlHelper.getParameterValue("q");
+            String q = URLQueryTransformer.transform2URL(sq);
             String n = UrlHelper.getParameterValue("f");
             String t = UrlHelper.getParameterValue("t");
             if (n != null)
@@ -41,7 +57,6 @@ public class FiltersBean
                 t = FacetType.SEARCH.name();
             if (q != null)
             {
-                q = formatQuery(q);
                 List<Filter> filters = parseQueryAndSetFilters(q, n, t);
                 resetFiltersSession(q, filters);
             }
@@ -79,7 +94,6 @@ public class FiltersBean
      */
     private List<Filter> parseQueryAndSetFilters(String q, String n, String t) throws IOException
     {
-        
         List<Filter> filters = findAlreadyDefinedFilters(q, n, t);
         String newQuery = removeFiltersQueryFromQuery(q, filters);
         Filter newFilter = createNewFilter(newQuery, n, t);
@@ -111,7 +125,7 @@ public class FiltersBean
     }
 
     /**
-     * Find the filters which were alredy defined (in previous queries)
+     * Find the filters which were already defined (in previous queries)
      * 
      * @param q
      * @param n
@@ -137,9 +151,10 @@ public class FiltersBean
      * @param q
      * @param filters
      * @return
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
-    private List<Filter> resetQueriesToRemoveFilters(String q, List<Filter> filters) throws UnsupportedEncodingException
+    private List<Filter> resetQueriesToRemoveFilters(String q, List<Filter> filters)
+            throws UnsupportedEncodingException
     {
         for (Filter f : filters)
         {
@@ -186,24 +201,11 @@ public class FiltersBean
      * @param f
      * @param q
      * @return
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
     public String createQueryToRemoveFilter(Filter f, String q) throws UnsupportedEncodingException
     {
-        return URLEncoder.encode(removeFilterQueryFromQuery(q, f),"UTF-8") + "&f=" + f.getLabel();
-    }
-
-    /**
-     * Make transformation of the query from String to {@link SearchQuery} and from {@link SearchQuery} to String to
-     * ensure the query to be always in the same format
-     * 
-     * @param q
-     * @return
-     * @throws IOException
-     */
-    private String formatQuery(String q) throws IOException
-    {
-        return URLQueryTransformer.transform2URL(URLQueryTransformer.parseStringQuery(q));
+        return URLEncoder.encode(removeFilterQueryFromQuery(q, f), "UTF-8") + "&f=" + f.getLabel();
     }
 
     public FiltersSession getSession()

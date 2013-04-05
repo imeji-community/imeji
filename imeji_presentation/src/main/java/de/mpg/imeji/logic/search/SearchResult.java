@@ -6,9 +6,18 @@ package de.mpg.imeji.logic.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.search.util.SortHelper;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import com.hp.hpl.jena.Jena;
 
+import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.j2j.helper.SortHelper;
+
+/**
+ * Result {@link Object} for {@link Search}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SearchResult
 {
     private int numberOfRecords = 0;
@@ -16,6 +25,14 @@ public class SearchResult
     private String query = null;
     private SortCriterion sort = new SortCriterion();
 
+    /**
+     * Create a new {@link SearchResult} from a {@link List} of String, and sort it if a {@link SortCriterion} has been
+     * defined <br/>
+     * Sorting not made on {@link Jena} level, for performance purpose
+     * 
+     * @param unsortedResults
+     * @param sort
+     */
     public SearchResult(List<String> unsortedResults, SortCriterion sort)
     {
         numberOfRecords = unsortedResults.size();

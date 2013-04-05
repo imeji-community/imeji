@@ -2,8 +2,17 @@ package de.mpg.imeji.logic.search.vo;
 
 import java.util.List;
 
+import com.hp.hpl.jena.graph.query.Element;
+
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 
+/**
+ * Element of a {@link SearchQuery}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public abstract class SearchElement
 {
     public enum SEARCH_ELEMENTS
@@ -15,6 +24,11 @@ public abstract class SearchElement
 
     public abstract List<SearchElement> getElements();
 
+    /**
+     * Add a {@link LOGICAL_RELATIONS} after a {@link SearchElement}
+     * 
+     * @param lr
+     */
     public void addLogicalRelation(LOGICAL_RELATIONS lr)
     {
         if (!hasElements())
@@ -32,6 +46,11 @@ public abstract class SearchElement
         }
     }
 
+    /**
+     * Add a {@link SearchPair} after a {@link SearchElement}
+     * 
+     * @param pair
+     */
     public void addPair(SearchPair pair)
     {
         if (!hasElements())
@@ -49,6 +68,11 @@ public abstract class SearchElement
         }
     }
 
+    /**
+     * Add a {@link SearchGroup} after a {@link SearchElement}
+     * 
+     * @param group
+     */
     public void addGroup(SearchGroup group)
     {
         if (!hasElements())
@@ -66,6 +90,12 @@ public abstract class SearchElement
         }
     }
 
+    /**
+     * Get the {@link SEARCH_ELEMENTS} of the last element of a {@link SearchElement} (if it is a {@link SearchGroup} or
+     * a {@link SearchQuery})
+     * 
+     * @return
+     */
     public SEARCH_ELEMENTS getTypeOfLastElement()
     {
         SearchElement se = getLastElement();

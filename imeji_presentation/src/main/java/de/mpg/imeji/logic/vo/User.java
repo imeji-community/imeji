@@ -14,6 +14,13 @@ import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * imeji user
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 @j2jResource("http://imeji.org/terms/user")
 @j2jModel("user")
 @j2jId(getMethod = "getId", setMethod = "setId")
@@ -39,7 +46,7 @@ public class User
     public void setEmail(String email)
     {
         this.email = email;
-        this.id = ObjectHelper.getURI(User.class, email);
+        this.id = ObjectHelper.getURI(User.class, this.email);
     }
 
     public String getName()

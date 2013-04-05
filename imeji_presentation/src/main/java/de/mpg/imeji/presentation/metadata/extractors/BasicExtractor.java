@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.presentation.metadata.extractors;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
@@ -14,31 +16,37 @@ import javax.imageio.ImageReader;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.stream.ImageInputStream;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.presentation.util.LoginHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
+/**
+ * Extract technical metadata with {@link ImageIO}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class BasicExtractor
 {
+    /**
+     * Extract Metadata from one {@link Item} with {@link ImageIO}
+     * 
+     * @param item
+     * @return
+     * @throws Exception
+     */
     public static List<String> extractTechMd(Item item) throws Exception
     {
         List<String> techMd = new ArrayList<String>();
         URI uri = item.getFullImageUrl();
         String imageUrl = uri.toURL().toString();
-        GetMethod method = new GetMethod(imageUrl);
-        method.setFollowRedirects(false);
-        String userHandle = null;
-        userHandle = LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"),
-                PropertyReader.getProperty("imeji.escidoc.password"));
-        method.addRequestHeader("Cookie", "escidocCookie=" + userHandle);
-        HttpClient client = new HttpClient();
-        client.executeMethod(method);
-        InputStream input = method.getResponseBodyAsStream();
+        StorageController sc = new StorageController();
+        ByteArrayOutputStream bous = new ByteArrayOutputStream();
+        sc.read(imageUrl, bous);
+        InputStream input = new ByteArrayInputStream(bous.toByteArray());
         ImageInputStream iis = ImageIO.createImageInputStream(input);
         Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
         if (readers.hasNext())
@@ -59,12 +67,18 @@ public class BasicExtractor
         return techMd;
     }
 
-    static void displayMetadata(List<String> techMd, Node root)
+    /**
+     * Format the metadata in a convenient xml format for user
+     * 
+     * @param techMd
+     * @param root
+     */
+    private static void displayMetadata(List<String> techMd, Node root)
     {
         displayMetadata(techMd, root, 0);
     }
 
-    static void indent(List<String> techMd, StringBuffer sb, int level)
+    private static void indent(List<String> techMd, StringBuffer sb, int level)
     {
         for (int i = 0; i < level; i++)
         {
@@ -72,6 +86,13 @@ public class BasicExtractor
         }
     }
 
+    /**
+     * Indent the the technical metadata which are diplayed in xml
+     * 
+     * @param techMd
+     * @param node
+     * @param level
+     */
     static void displayMetadata(List<String> techMd, Node node, int level)
     {
         StringBuffer sb = new StringBuffer();

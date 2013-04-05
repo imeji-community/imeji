@@ -11,10 +11,26 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.metadata.EditorItemBean;
+import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 
+/**
+ * Editor for multiple edit (edit selected items or edit all item of a collection)
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class MetadataMultipleEditor extends MetadataEditor
 {
+    /**
+     * Editor for multiple edit (edit selected items or edit all items of a collection)
+     * 
+     * @param items
+     * @param profile
+     * @param statement
+     */
     public MetadataMultipleEditor(List<Item> items, MetadataProfile profile, Statement statement)
     {
         super(items, profile, statement);
@@ -24,19 +40,19 @@ public class MetadataMultipleEditor extends MetadataEditor
     public void initialize()
     {
         boolean hasStatement = (statement != null);
-        for (Item im : items)
+        for (EditorItemBean eib : items)
         {
             boolean empty = true;
-            for (Metadata md : im.getMetadataSet().getMetadata())
+            for (SuperMetadataBean smdb : eib.getMetadata())
             {
-                if (hasStatement && md.getStatement() != null && md.getStatement().equals(statement.getId()))
+                if (hasStatement && smdb.getStatement() != null && smdb.getStatement().equals(statement.getId()))
                 {
                     empty = false;
                 }
             }
             if (empty && hasStatement)
             {
-                addMetadata(im, 0);
+                addMetadata(eib, 0);
             }
         }
     }
@@ -44,22 +60,16 @@ public class MetadataMultipleEditor extends MetadataEditor
     @Override
     public boolean prepareUpdate()
     {
-        for (Item im : items)
+        for (EditorItemBean eib : items)
         {
-            for (int i = 0; i < im.getMetadataSet().getMetadata().size(); i++)
+            for (int i = 0; i < eib.getMetadata().size(); i++)
             {
-                if (MetadataHelper.isEmpty(((List<Metadata>)im.getMetadataSet().getMetadata()).get(i)))
+                if (MetadataHelper.isEmpty(eib.getMetadata().get(i).asMetadata()))
                 {
-                    ((List<Metadata>)im.getMetadataSet().getMetadata()).remove(i);
+                    eib.getMetadata().remove(i);
                 }
                 else
-                {
-                    //((List<Metadata>)im.getMetadataSet().getMetadata()).get(i).setPos(i);
-//                    ((List<Metadata>)im.getMetadataSet().getMetadata()).get(i).setId(
-//                            URI.create(((List<Metadata>)im.getMetadataSet().getMetadata()).get(i).getId().toString()
-//                                    + "?pos=" + i));
-                    MetadataHelper.setConeID(((List<Metadata>)im.getMetadataSet().getMetadata()).get(i));
-                }
+                    eib.getMetadata().get(i).setPos(i);
             }
         }
         if (items.size() == 0)
@@ -78,6 +88,7 @@ public class MetadataMultipleEditor extends MetadataEditor
         return true;
     }
 
+    @Override
     public void addMetadata(int imagePos, int metadataPos)
     {
         if (imagePos < items.size())
@@ -86,16 +97,17 @@ public class MetadataMultipleEditor extends MetadataEditor
         }
     }
 
-    public void addMetadata(Item item, int metadataPos)
+    @Override
+    public void addMetadata(EditorItemBean eib, int metadataPos)
     {
-        if (metadataPos <= item.getMetadataSet().getMetadata().size())
+        if (metadataPos <= eib.getMetadata().size())
         {
             Metadata md = MetadataFactory.createMetadata(getStatement());
-            // md.setId(URI.create(item.getMetadataSet().getId() + "/" + metadataPos));
-            ((List<Metadata>)item.getMetadataSet().getMetadata()).add(metadataPos, md);
+            eib.getMetadata().add(metadataPos, new SuperMetadataBean(md));
         }
     }
 
+    @Override
     public void removeMetadata(int imagePos, int metadataPos)
     {
         if (imagePos < items.size())
@@ -104,11 +116,12 @@ public class MetadataMultipleEditor extends MetadataEditor
         }
     }
 
-    public void removeMetadata(Item item, int metadataPos)
+    @Override
+    public void removeMetadata(EditorItemBean eib, int metadataPos)
     {
-        if (metadataPos < item.getMetadataSet().getMetadata().size())
+        if (metadataPos < eib.getMetadata().size())
         {
-            ((List<Metadata>)item.getMetadataSet().getMetadata()).remove(metadataPos);
+            eib.getMetadata().remove(metadataPos);
         }
     }
 }

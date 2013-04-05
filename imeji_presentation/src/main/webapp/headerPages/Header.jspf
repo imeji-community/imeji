@@ -51,21 +51,21 @@
 		</h:outputLink>
 		<!-- end: skip link navigation -->
 	
-		<div class="full_area0 header clear">
+		<div class="imj_siteHeader">
 		<!-- begin: header section (including meta menu, logo, searchMenu and main menu)-->
 		
 			<!-- import meta menu here -->
 			<ui:include src="ui/MetaMenu.jspf"/>
 		
-			<div class="full_area0 LogoNSearch">
-				<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage }" value="#{Navigation.applicationUrl}">
-					<h:panelGroup styleClass="xTiny_marginLExcl half_area0 headerLogo">
-						<h:panelGroup styleClass="half_area0 themePark"></h:panelGroup>
+			<div class="imj_siteHeaderLogoSearchSection imj_simpleSearch">
+				<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage }" value="#{Navigation.homeUrl}">
+					<h:panelGroup styleClass="imj_siteHeaderLogo">
+						<h:panelGroup styleClass="imj_siteHeaderLogoTheme"></h:panelGroup>
 					</h:panelGroup>
 				</h:outputLink>
 		
 				<!-- import search here-->
-				<ui:include src="ui/SearchMenu.jspf"/>
+				<ui:include src="ui/SearchMenu.xhtml"/>
 		
 			</div>
 		

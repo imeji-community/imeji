@@ -7,37 +7,68 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.filter.Filter;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
+/**
+ * An imeji web page
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class Page
 {
+    /**
+     * Enumeration of all imeji {@link Page}
+     * 
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     */
     public enum ImejiPages
     {
         IMAGES("Images.xhtml", "history_images"), COLLECTION_IMAGES("CollectionBrowse.xhtml",
                 "history_images_collection"), SEARCH("SearchAdvanced.xhtml", "history_advanced_search"), HOME(
                 "Welcome.xhtml", "history_home"), IMAGE("Image.xhtml", "history_image"), COLLECTIONS(
                 "Collections.xhtml", "history_collections"), ALBUMS("Albums.xhtml", "history_albums"), COLLECTION_HOME(
-                "CollectionEntryPage.xhtml", "collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "Search results"), EDIT(
-                "Edit.xhtml", "Edit images"), COLLECTION_IMAGE("CollectionImage.xhtml", "history_image"), ALBUM_IMAGES(
+                "CollectionEntryPage.xhtml", "collection"), SEARCH_RESULTS_IMAGES("Images.xhtml", "history_search_result"), EDIT(
+                "Edit.xhtml", "edit_images"), COLLECTION_IMAGE("CollectionImage.xhtml", "history_image"), ALBUM_IMAGES(
                 "AlbumBrowse.xhtml", "history_images_album"), ALBUM_HOME("AlbumEntryPage.xhtml", "history_album"), ALBUM_IMAGE(
                 "AlbumImage.xhtml", "history_image"), HELP("Help.xhtml", "help"), COLLECTION_INFO(
-                "CollectionView.xhtml", "history_collection_info"), UPLOAD("Upload.xhtml", "history_upload");
+                "CollectionView.xhtml", "history_collection_info"), UPLOAD("Upload.xhtml", "history_upload"), USER(
+                "User.xhtml", "user"), ADMIN("UserAdministrationPage.xhtml", "Admin");
         private String fileName = "";
         private String label;
 
+        /**
+         * Construct an {@link ImejiPages} object
+         * 
+         * @param fileName
+         * @param label
+         */
         private ImejiPages(String fileName, String label)
         {
             this.fileName = fileName;
             this.label = label;
         }
 
+        /**
+         * The label of the {@link ImejiPages}
+         * 
+         * @return
+         */
         public String getLabel()
         {
             return label;
         }
 
+        /**
+         * The filename of the {@link ImejiPages}
+         * 
+         * @return
+         */
         public String getFileName()
         {
             return fileName;
@@ -51,6 +82,12 @@ public class Page
     private String query = "";
     private String id = null;
 
+    /**
+     * Construct a new imeji web page
+     * 
+     * @param type
+     * @param uri
+     */
     public Page(ImejiPages type, URI uri)
     {
         this.uri = uri;
@@ -58,7 +95,13 @@ public class Page
         this.name = type.getLabel();
     }
 
-    public boolean equals(Page page)
+    /**
+     * Compares 2 {@link Page}
+     * 
+     * @param page
+     * @return
+     */
+    public boolean isSame(Page page)
     {
         if (isNull() && page.isNull())
             return true;

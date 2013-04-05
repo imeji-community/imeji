@@ -8,12 +8,25 @@ import java.util.List;
 
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 
+/**
+ * Session where the {@link Filter} are stored
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class FiltersSession
 {
     private List<Filter> filters = new ArrayList<Filter>();
     private String wholeQuery = "";
     private List<Filter> noResultsFilters = new ArrayList<Filter>();
 
+    /**
+     * Check if the name correspond to an existing filter name
+     * 
+     * @param name
+     * @return
+     */
     public boolean isFilter(String name)
     {
         for (Filter f : filters)
@@ -26,6 +39,12 @@ public class FiltersSession
         return false;
     }
 
+    /**
+     * Check if the filter has no results
+     * 
+     * @param name
+     * @return
+     */
     public boolean isNoResultFilter(String name)
     {
         for (Filter f : noResultsFilters)

@@ -1,130 +1,122 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="template.xhtml" 
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<ui:composition template="template.xhtml">
-	<h:messages/>
 	<ui:define name="mainContent">
-
-		<h:panelGroup layout="block" styleClass="full_area0" rendered="true">
+		<h:panelGroup layout="block" styleClass="full_area0">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-				
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
-					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="#{lbl.album_information}"/>
-					</h3>
-					<span class="seperator"></span>
-					<div class="free_area0 itemBlockContent endline">	
-						<!-- Title -->
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="#{lbl.name}*"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:inputText id="inputTitleText" styleClass="quad_txtInput" value="#{FormularBean.album.metadata.title}"/>
-							</span>
-						</h:panelGroup>
-								
-						<!-- Description -->
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<b class="xLarge_area0_p8 endline labelLine clear">
-								<h:outputText value="#{lbl.description}"/>
-								<span class="noDisplay">: </span>
-							</b>
-							<span class="xHuge_area0 xTiny_marginLExcl endline">
-								<h:inputTextarea id="inputDescription" styleClass="quad_txtArea inputTxtArea" cols="15" rows="3" value="#{FormularBean.album.metadata.description}"/>
-							</span>
-						</h:panelGroup>		
-								
-						<!-- Authors -->
-						<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-							<a4j:repeat var="creator" value="#{FormularBean.album.metadata.persons}" rowKeyVar="indexA">
-								<h:panelGroup>
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.author}*"/>
-										<span class="noDisplay">: </span>
-									</b>
+				<h:form id="albumForm">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+						<h3 class="xLarge_area0_p8 endline blockHeader">
+							<h:outputText value="#{lbl.album_information}"/>
+						</h3>
+						<span class="seperator"></span>
+						<div class="free_area0 itemBlockContent endline">	
+							<!-- Title -->
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="#{lbl.name}*"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline">
+									<h:inputText id="inputTitleText" styleClass="quad_txtInput" value="#{FormularBean.album.metadata.title}"/>
+								</span>
+							</h:panelGroup>
 									
-									<!-- Family Name -->
-									<span class="xHuge_area0 xTiny_marginLExcl endline">
-										<h:outputLabel styleClass="full_area0" value="#{lbl.family_name}"/>
-										<h:inputText id="inputFamiliyName" styleClass="quad_txtInput" value="#{creator.familyName}"/>
-									</span>
-									<br/>
+							<!-- Description -->
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="#{lbl.description}"/>
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline">
+									<h:inputTextarea id="inputDescription" styleClass="quad_txtArea inputTxtArea" cols="15" rows="3" value="#{FormularBean.album.metadata.description}"/>
+								</span>
+							</h:panelGroup>		
 									
-									<!-- Given Name -->
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										 <h:outputText value=" #{lbl.first_name} " style="visibility:hidden;"/>
+							<!-- Authors -->
+							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+								<ui:repeat var="creator" value="#{FormularBean.album.metadata.persons}" varStatus="indexA">
+									<h:panelGroup>
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.author}*"/>
 											<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline">
-										<h:outputLabel styleClass="full_area0" value="#{lbl.first_name}"/>
-										<h:inputText id="inputGivenName" styleClass="quad_txtInput" value="#{creator.givenName}"/>
-									</span>
-									
-									<!-- Add/Remove Author buttons -->		
-									<h:panelGroup styleClass="small_area0">
-										<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_author}" action="#{FormularBean.addAuthor}">
-											<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
-										</h:commandButton>
-										<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_author}" action="#{FormularBean.removeAuthor}">
-											<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
-										</h:commandButton>
-									</h:panelGroup>	
-											
-									<!-- Organizations -->
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value=" Organization " style="visibility:hidden;"/>
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline">
-										<h:outputText value="#{lbl.organization}*"/>
-									</span>
-									
-									<a4j:repeat var="organization" value="#{creator.organizations}" rowKeyVar="indexO">
-										<h:panelGroup styleClass="endline">
-											<h:panelGroup>
-												<b class="xLarge_area0_p8 endline labelLine clear">
-													<h:outputText value=" Organization" style="visibility:hidden;"/>
-													<span class="noDisplay">: </span>
-												</b>
-												<span class="huge_area0 xTiny_marginLExcl endline">
-													<h:inputText id="inputCreator" styleClass="huge_txtInput" value="#{organization.name}"/>
-												</span>
+										</b>
+										
+										<!-- Family Name -->
+										<span class="xHuge_area0 xTiny_marginLExcl endline">
+											<h:outputLabel styleClass="full_area0" value="#{lbl.family_name}"/>
+											<h:inputText id="inputFamiliyName" styleClass="quad_txtInput" value="#{creator.familyName}"/>
+										</span>
+										<br/>
+										
+										<!-- Given Name -->
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											 <h:outputText value=" #{lbl.first_name} " style="visibility:hidden;"/>
+												<span class="noDisplay">: </span>
+										</b>
+										<span class="xHuge_area0 xTiny_marginLExcl endline">
+											<h:outputLabel styleClass="full_area0" value="#{lbl.first_name}"/>
+											<h:inputText id="inputGivenName" styleClass="quad_txtInput" value="#{creator.givenName}"/>
+										</span>
+										
+										<!-- Add/Remove Author buttons -->		
+										<h:panelGroup styleClass="small_area0">
+											<h:commandButton styleClass="min_imgBtn add groupTool" title="#{lbl.add_author}" action="#{FormularBean.addAuthor}">
+												<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
+											</h:commandButton>
+											<h:commandButton styleClass="min_imgBtn remove groupTool" title="#{lbl.remove_author}" action="#{FormularBean.removeAuthor}">
+												<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
+											</h:commandButton>
+										</h:panelGroup>	
+												
+										<!-- Organizations -->
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value=" Organization " style="visibility:hidden;"/>
+											<span class="noDisplay">: </span>
+										</b>
+										<span class="xHuge_area0 xTiny_marginLExcl endline">
+											<h:outputText value="#{lbl.organization}*"/>
+										</span>
+										
+										<ui:repeat var="organization" value="#{creator.organizations}" varStatus="indexO">
+											<h:panelGroup styleClass="endline">
+												<h:panelGroup>
+													<b class="xLarge_area0_p8 endline labelLine clear">
+														<h:outputText value=" Organization" style="visibility:hidden;"/>
+														<span class="noDisplay">: </span>
+													</b>
+													<span class="huge_area0 xTiny_marginLExcl endline">
+														<h:inputText id="inputCreator" styleClass="huge_txtInput" value="#{organization.name}"/>
+													</span>
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="large_area0 sectionToolSection xLarge_marginRExcl">
+													<h:commandButton styleClass="min_imgBtn add groupTool" title="#{lbl.add_organization}" action="#{FormularBean.addOrganization}">
+														<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
+														<f:setPropertyActionListener value="#{indexO.index}" target="#{FormularBean.organizationPosition}"/>
+													</h:commandButton>
+													<h:commandButton styleClass="min_imgBtn remove groupTool" title="#{lbl.remove_organization}" action="#{FormularBean.removeOrganization}">
+														<f:setPropertyActionListener value="#{indexA.index}" target="#{FormularBean.authorPosition}"/>
+														<f:setPropertyActionListener value="#{indexO.index}" target="#{FormularBean.organizationPosition}"/>
+													</h:commandButton>
+												</h:panelGroup>
 											</h:panelGroup>
-											<h:panelGroup layout="block" styleClass="large_area0 sectionToolSection xLarge_marginRExcl">
-												<h:commandButton styleClass="min_imgBtn add groupTool" shortDesc="#{lbl.add_organization}" action="#{FormularBean.addOrganization}">
-													<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
-													<f:setPropertyActionListener value="#{indexO}" target="#{FormularBean.organizationPosition}"/>
-												</h:commandButton>
-												<h:commandButton styleClass="min_imgBtn remove groupTool" shortDesc="#{lbl.remove_organization}" action="#{FormularBean.removeOrganization}">
-													<f:setPropertyActionListener value="#{indexA}" target="#{FormularBean.authorPosition}"/>
-													<f:setPropertyActionListener value="#{indexO}" target="#{FormularBean.organizationPosition}"/>
-												</h:commandButton>
-											</h:panelGroup>
-										</h:panelGroup>
-									</a4j:repeat>
-								</h:panelGroup>
-							</a4j:repeat>
-						</h:panelGroup>
+										</ui:repeat>
+									</h:panelGroup>
+								</ui:repeat>
+							</h:panelGroup>
+						</div>
+					</h:panelGroup>
+					<div class="full_area0 formButtonArea">
+						<h:outputLink value="#{AlbumBean.cancel}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
+							<h:outputText value="#{lbl.cancel}" />
+						</h:outputLink>
+						<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
 					</div>
-				</h:panelGroup>
-				<div class="full_area0 formButtonArea">
-					<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.infosPath}" rendered="#{AlbumBean.id != null}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
-						<h:outputText value="#{lbl.cancel}" />
-					</h:outputLink>
-					<h:outputLink value="#{Navigation.albumsUrl}" rendered="#{AlbumBean.id == null}" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
-						<h:outputText value="#{lbl.cancel}" />
-					</h:outputLink>
-					<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
-				</div>
-					
-				</h:panelGroup>
-				</h:panelGroup>
+				</h:form>
+			</h:panelGroup>
+		</h:panelGroup>
 	</ui:define>
 </ui:composition>
-</html>

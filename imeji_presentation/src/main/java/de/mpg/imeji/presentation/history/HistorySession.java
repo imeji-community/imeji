@@ -8,20 +8,72 @@ import java.util.List;
 
 import de.mpg.imeji.presentation.history.Page.ImejiPages;
 
+/**
+ * JavaBean for the http session object related to the history
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class HistorySession
 {
+    /**
+     * {@link List} of {@link Page} stored in the history
+     */
     private List<Page> pages = new ArrayList<Page>();
+    /**
+     * The maximum count of {@link Page} stored in the history
+     */
     private static int HISTORY_SIZE = 10;
 
+    /**
+     * Create new {@link HistorySession}
+     */
     public HistorySession()
     {
-        // TODO Auto-generated constructor stub
     }
 
+    /**
+     * Add a new {@link Page} to the History
+     * 
+     * @param filename
+     * @param query
+     * @param id
+     */
     public void add(String filename, String query, String[] id)
     {
-        Page newPage = null;
-        // pages.clear();
+        Page newPage = createPage(filename, query, id);
+        addPage(newPage);
+        removeOldPages();
+    }
+
+    /**
+     * Add a {@link Page} to the history
+     * 
+     * @param page
+     * @param id - the ids defined in the url
+     */
+    public void addPage(Page page)
+    {
+        if (page != null)
+        {
+            if (!page.isSame(getCurrentPage()))
+            {
+                pages.add(page);
+            }
+        }
+    }
+
+    /**
+     * Create {@link Page} according to the url
+     * 
+     * @param filename: the name of the xhtml file
+     * @param query the current query (defined by parameter q)
+     * @param id - the ids found in the url
+     * @return
+     */
+    private Page createPage(String filename, String query, String[] id)
+    {
         for (ImejiPages type : ImejiPages.values())
         {
             if (type.getFileName().equals(filename))
@@ -38,7 +90,19 @@ public class HistorySession
                         // If a searchPage doesn't have a query, change the type to Browse page
                         type = ImejiPages.IMAGES;
                     }
-                    newPage = new Page(type, PageURIHelper.getPageURI(type, query, id));
+                    Page page = new Page(type, PageURIHelper.getPageURI(type, query, id));
+                    if (id != null)
+                    {
+                        if (id.length == 2)
+                        {
+                            page.setId(id[1]);
+                        }
+                        if (id.length == 1)
+                        {
+                            page.setId(id[0]);
+                        }
+                    }
+                    return page;
                 }
                 catch (Exception e)
                 {
@@ -46,24 +110,25 @@ public class HistorySession
                 }
             }
         }
-        if (newPage != null)
-        {
-            if (id != null)
-            {
-                if (id.length == 2)
-                    newPage.setId(id[1]);
-                if (id.length == 1)
-                    newPage.setId(id[0]);
-            }
-            if (!newPage.equals(getCurrentPage()))
-            {
-                pages.add(newPage);
-            }
-        }
-        while (pages.size() > HISTORY_SIZE)
-            pages.remove(0);
+        return null;
     }
 
+    /**
+     * Remove {@link Page} of the history, when the size of the history is greater thant the maximum size
+     */
+    private void removeOldPages()
+    {
+        while (pages.size() > HISTORY_SIZE)
+        {
+            pages.remove(0);
+        }
+    }
+
+    /**
+     * Remove a {@link Page} of the history according to its position in the history
+     * 
+     * @param pos
+     */
     public void remove(int pos)
     {
         for (int i = 0; i < pages.size(); i++)
@@ -76,6 +141,11 @@ public class HistorySession
         }
     }
 
+    /**
+     * Return the current {@link Page}
+     * 
+     * @return
+     */
     public Page getCurrentPage()
     {
         if (!pages.isEmpty())
@@ -85,6 +155,11 @@ public class HistorySession
         return null;
     }
 
+    /**
+     * Return the previous {@link Page} in the history
+     * 
+     * @return
+     */
     public Page getPreviousPage()
     {
         if (!pages.isEmpty())
@@ -94,16 +169,31 @@ public class HistorySession
         return null;
     }
 
+    /**
+     * Return the size of the history
+     * 
+     * @return
+     */
     public int getHistorySize()
     {
         return pages.size();
     }
 
+    /**
+     * Getter- Return the {@link List} of {@link Page} of the history
+     * 
+     * @return
+     */
     public List<Page> getPages()
     {
         return pages;
     }
 
+    /**
+     * setter
+     * 
+     * @param pages
+     */
     public void setPages(List<Page> pages)
     {
         this.pages = pages;

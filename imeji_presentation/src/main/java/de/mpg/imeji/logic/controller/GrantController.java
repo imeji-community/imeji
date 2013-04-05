@@ -9,8 +9,16 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 
+/**
+ * Controller for {@link Grant}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class GrantController extends ImejiController
 {
     public GrantController(User user)
@@ -18,8 +26,17 @@ public class GrantController extends ImejiController
         super(user);
     }
 
+    /**
+     * Add a {@link Grant} to a {@link User}
+     * 
+     * @param user
+     * @param grant
+     * @return
+     * @throws Exception
+     */
     public User addGrant(User user, Grant grant) throws Exception
     {
+
         if (!isValid(grant))
         {
             throw new RuntimeException("Grant: " + grant.getGrantType() + " for " + grant.getGrantFor() + " not valid");

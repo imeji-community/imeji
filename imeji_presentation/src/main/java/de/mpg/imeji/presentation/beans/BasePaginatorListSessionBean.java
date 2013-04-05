@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.beans;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -137,7 +137,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     public void update()
     {
-        //ImejiJena.printModel(ImejiJena.imageModel);
         try
         {
             if (elementsPerPage == 0)
@@ -209,6 +208,25 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     public int getOffset()
     {
         return ((currentPageNumber - 1) * elementsPerPage);
+    }
+
+    /**
+     * Return the first page of the paginator
+     * 
+     * @return
+     */
+    public int getPageOffset()
+    {
+        if (getFirstPaginatorPageNumber() > 1)
+        {
+            return getFirstPaginatorPageNumber() - 1;
+        }
+        return 0;
+    }
+
+    public void setPageOffset(int i)
+    {
+        //
     }
 
     /*
@@ -448,7 +466,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      * @author $Author: haarlaender $ (last modification)
      * @version $Revision: 3185 $ $LastChangedDate: 2009-11-20 14:30:15 +0100 (Fri, 20 Nov 2009) $
      */
-    public class PaginatorPage implements Serializable
+    public class PaginatorPage
     {
         /**
          * The page number of the paginator button

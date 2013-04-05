@@ -14,13 +14,15 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersSession;
+import de.mpg.imeji.presentation.image.ImagesBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class TechnicalFacets
@@ -46,8 +48,8 @@ public class TechnicalFacets
                 {
                     if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
-                        SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.MY_IMAGES),
-                                SearchOperators.EQUALS, "my");
+                        SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.user),
+                                SearchOperators.EQUALS, sb.getUser().getEmail());
                         count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
                         if (count > 0)
                         {
@@ -61,8 +63,8 @@ public class TechnicalFacets
                     }
                     if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                     {
-                        SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
-                                SearchOperators.URI, Status.PENDING.getUri().toString());
+                        SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.status),
+                              SearchOperators.EQUALS, Status.PENDING.getUri().toString());
                         count = getCount(searchQuery, privatePair, allImages.getResults());
                         if (count > 0)
                         {
@@ -72,8 +74,8 @@ public class TechnicalFacets
                     }
                     if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
                     {
-                        SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.PROPERTIES_STATUS),
-                                SearchOperators.URI, Status.RELEASED.getUri().toString());
+                        SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.status),
+                              SearchOperators.EQUALS, Status.RELEASED.getUri().toString());
                         count = getCount(searchQuery, publicPair, allImages.getResults());
                         if (count > 0)
                         {
@@ -86,17 +88,17 @@ public class TechnicalFacets
                 {
                     if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
                     {
-                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.IMAGE_METADATA_TYPE_RDF),
-                                SearchOperators.URI, t.getClazzNamespace());
+                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.type), SearchOperators.EQUALS,
+                                t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());
                         if (count > 0)
                         {
                             techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, pair, t.name(),
-                                    FacetType.TECHNICAL), t.name().toLowerCase(), count, FacetType.TECHNICAL, null));
+                                    FacetType.TECHNICAL), t.toString(), count, FacetType.TECHNICAL, null));
                         }
                         else
                         {
-                            fs.getNoResultsFilters().add(new Filter(t.name(), "", 0, FacetType.TECHNICAL, null));
+                            fs.getNoResultsFilters().add(new Filter(t.toString(), "", 0, FacetType.TECHNICAL, null));
                         }
                         count = 0;
                     }
@@ -110,18 +112,31 @@ public class TechnicalFacets
         }
     }
 
+    /**
+     * Retrieve all {@link Item} currently browsed
+     * 
+     * @param searchQuery
+     * @return
+     */
     public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
-        ItemController ic = new ItemController(sb.getUser());
-        return ic.searchImages(searchQuery, null);
+        return ((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class)).getSearchResult();
     }
 
+    /**
+     * Count the number of item for a facet with one {@link SearchPair}
+     * 
+     * @param searchQuery
+     * @param pair
+     * @param allImages
+     * @return
+     */
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages)
     {
         ItemController ic = new ItemController(sb.getUser());
         SearchQuery sq = new SearchQuery();
         sq.addPair(pair);
-        return ic.countImages(sq, allImages);
+        return ic.search(null, sq, null, allImages).getNumberOfRecords();
     }
 
     public List<List<Facet>> getFacets()

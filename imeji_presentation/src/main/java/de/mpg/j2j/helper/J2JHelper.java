@@ -14,6 +14,13 @@ import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
+/**
+ * Helper related to j2j
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class J2JHelper
 {
     /**
@@ -69,6 +76,12 @@ public class J2JHelper
         return o;
     }
 
+    /**
+     * Cast a {@link List} of any type to a {@link List} of {@link Object}
+     * 
+     * @param l
+     * @return
+     */
     public static List<Object> cast2ObjectList(List<?> l)
     {
         List<Object> list = new ArrayList<Object>();
@@ -79,6 +92,12 @@ public class J2JHelper
         return list;
     }
 
+    /**
+     * Read the {@link j2jDataType} value
+     * 
+     * @param o
+     * @return
+     */
     public static String getType(Object o)
     {
         if (hasDataType(o))
@@ -88,11 +107,25 @@ public class J2JHelper
         return null;
     }
 
+    /**
+     * Read the {@link j2jModel} value
+     * 
+     * @param o
+     * @return
+     */
     public static String getModel(Object o)
     {
         return o.getClass().getAnnotation(j2jModel.class).value();
     }
 
+    /**
+     * Read the namespace of an imeji {@link Object}<br/>
+     * - if a {@link Field} is passed, look for the namespace of this {@link Field}
+     * 
+     * @param o
+     * @param f
+     * @return
+     */
     public static String getNamespace(Object o, Field f)
     {
         if (isResource(o))
@@ -126,7 +159,7 @@ public class J2JHelper
     }
 
     /**
-     * Return the namespace of an object described as a {@link j2jResource}
+     * Return {@link j2jResource} value
      * 
      * @param o
      * @return
@@ -182,6 +215,12 @@ public class J2JHelper
             return null;
     }
 
+    /**
+     * Read {@link j2jList} value
+     * 
+     * @param f
+     * @return
+     */
     public static String getListNamespace(Field f)
     {
         if (isList(f))
@@ -190,6 +229,12 @@ public class J2JHelper
             return null;
     }
 
+    /**
+     * Read the {@link j2jLazyList} value
+     * 
+     * @param f
+     * @return
+     */
     public static String getLazyListNamespace(Field f)
     {
         if (isLazyList(f))
@@ -198,42 +243,92 @@ public class J2JHelper
             return null;
     }
 
+    /**
+     * True if object is a {@link j2jResource}
+     * 
+     * @param o
+     * @return
+     */
     public static boolean isResource(Object o)
     {
         return o != null && o.getClass().getAnnotation(j2jResource.class) != null;
     }
 
+    /**
+     * True id the {@link Field} is a {@link j2jResource}
+     * 
+     * @param f
+     * @return
+     */
     public static boolean isResource(Field f)
     {
         return f != null && f.getAnnotation(j2jResource.class) != null;
     }
 
+    /**
+     * True if the {@link Field} is a {@link j2jResource} and and {@link URI}
+     * 
+     * @param o
+     * @param f
+     * @return
+     */
     public static boolean isURIResource(Object o, Field f)
     {
         return f != null
                 && (f.getType().equals(URI.class) && f.getAnnotation(j2jResource.class) != null || ((isList(f) || isLazyList(f)) && o instanceof URI));
     }
 
+    /**
+     * True if the {@link Field} is a {@link j2jLiteral}
+     * 
+     * @param f
+     * @return
+     */
     public static boolean isLiteral(Field f)
     {
         return f != null && f.getAnnotation(j2jLiteral.class) != null;
     }
 
+    /**
+     * True if the {@link Field} is a {@link j2jList}
+     * 
+     * @param f
+     * @return
+     */
     public static boolean isList(Field f)
     {
         return f != null && f.getAnnotation(j2jList.class) != null;
     }
 
+    /**
+     * True if the {@link Field} is a {@link j2jLazyList}
+     * 
+     * @param f
+     * @return
+     */
     public static boolean isLazyList(Field f)
     {
         return f != null && f.getAnnotation(j2jLazyList.class) != null;
     }
 
+    /**
+     * true if the {@link Object} has a {@link j2jDataType} value
+     * 
+     * @param o
+     * @return
+     */
     public static boolean hasDataType(Object o)
     {
         return o.getClass().getAnnotation(j2jDataType.class) != null;
     }
 
+    /**
+     * Return a {@link Field} as a {@link Object} of the same {@link Class} as the {@link Object} passed as parameter
+     * 
+     * @param f
+     * @param o
+     * @return
+     */
     public static Object getFieldAsJavaObject(Field f, Object o)
     {
         f.setAccessible(true);

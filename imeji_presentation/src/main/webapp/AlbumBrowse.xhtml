@@ -1,115 +1,59 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="templates/template_paginator_images.xhtml"  
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" 
-	xmlns:rich="http://richfaces.org/rich"
-	xmlns:pretty="http://ocpsoft.com/prettyfaces">
-<ui:remove>
-<!--
-
- CDDL HEADER START
-
- The contents of this file are subject to the terms of the
- Common Development and Distribution License, Version 1.0 only
- (the "License"). You may not use this file except in compliance
- with the License.
-
- You can obtain a copy of the license at license/ESCIDOC.LICENSE
- or http://www.escidoc.de/license.
- See the License for the specific language governing permissions
- and limitations under the License.
-
- When distributing Covered Code, include this CDDL HEADER in each
- file and include the License file at license/ESCIDOC.LICENSE.
- If applicable, add the following below this CDDL HEADER, with the
- fields enclosed by brackets "[]" replaced with your own identifying
- information: Portions Copyright [yyyy] [name of copyright owner]
-
- CDDL HEADER END
-
-
- Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
- für wissenschaftlich-technische Information mbH and Max-Planck-
- Gesellschaft zur Förderung der Wissenschaft e.V.
- All rights reserved. Use is subject to license terms.
--->
-</ui:remove>
-
-<body>
-	<ui:composition template="templates/template_paginator_images.xhtml">	
-			<ui:param name="paginatorListSessionBean" value="#{AlbumImagesBean}" />
-			<ui:param name="headline" value="#{AlbumImagesBean.album.metadata.title}"/>
-	
-
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">	
+		<ui:param name="paginatorListSessionBean" value="#{AlbumImagesBean}" />
+		<ui:param name="headline" value="#{AlbumImagesBean.album.metadata.title}"/>
 		<ui:define name="contentMenu">
-			<h:outputText value="#{AlbumImagesBean.init}"/>
-			
-			<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}" rendered="true">
+			<h:outputText value="#{AlbumImagesBean.initPage}"/>
+			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}" rendered="true">
 				<h:outputText value="#{lbl.album_home}"/>
 			</h:outputLink>
-			
-			<h:outputText styleClass="seperator void" />
-			
-			<h:outputText  styleClass="free_area0" value="#{lbl.view_images}"/>
-			
-			<h:outputText styleClass="seperator void" />
-			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
+			<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.view_images}"/>
+			<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
 				<h:outputText value="#{lbl.album_metadata}"/>
 			</h:outputLink>
-			
 		</ui:define>
-		
 		<ui:define name="actionsMenu">
-			<h:panelGroup layout="block" styleClass="free_area0 sub action">
+			<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 				<h:panelGroup>
-					<h:panelGroup styleClass="free_area0">
+					<h:panelGroup styleClass="imj_contentSubMenuItem">
 						<!-- SORTING content menu lower line starts here -->
 						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" />
 						<h:selectOneMenu id="selSort" value="#{AlbumImagesBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
 							<f:selectItems id="sortItem" value="#{AlbumImagesBean.sortMenu}" />
 						</h:selectOneMenu>
-						<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-						<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-						<h:outputText styleClass="seperator void" />
+						<h:form>
+							<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
+							<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
+						</h:form>
+						<h:outputText styleClass="imj_contentMenuSeparator" />
 						<!-- SORTING content menu lower line ends here -->
 					</h:panelGroup>
-					
-					<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='PENDING'}">
+					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='PENDING'}">
 						<h:outputText value="#{lbl.release}"/>
-						<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
 					</h:outputLink>
-					
-					<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='RELEASED'}">
+					<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialDiscardContainer:dialogWithdraw');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='RELEASED'}">
 						<h:outputText value="#{lbl.withdraw}"/>
-						<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
 					</h:outputLink>
-					
-					<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumImagesBean.deletable}">
+					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{AlbumImagesBean.deletable}">
 						<h:outputText value="#{lbl.delete}"/>
-						<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
 					</h:outputLink>
-					
-					<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
+					<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="imj_contentSubMenuItem" target="_blank">
 						<h:outputText value="#{lbl.export_metadata}"/>
 					</h:outputLink>
 				</h:panelGroup>	
-				
-				<ui:include src="confirmationPages/ContainerRelease.xhtml">
-					<ui:param name="bean" value="#{AlbumImagesBean}"/>
-				</ui:include>
-				<ui:include src="confirmationPages/ContainerDelete.xhtml">
-					<ui:param name="bean" value="#{AlbumImagesBean}"/>
-				</ui:include>
-				<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
-					<ui:param name="bean" value="#{AlbumImagesBean}"/>
-					<ui:param name="discardComment" value="#{AlbumImagesBean.album.discardComment}"/>
-				</ui:include>
 			</h:panelGroup>
+			<ui:include src="confirmationPages/ContainerDelete.xhtml">
+				<ui:param name="bean" value="#{AlbumImagesBean}"/>
+			</ui:include>
+			<ui:include src="confirmationPages/ContainerRelease.xhtml">
+				<ui:param name="bean" value="#{AlbumImagesBean}"/>
+			</ui:include>
+			<imjc:DiscardContainer id="dialDiscardContainer" bean="#{AlbumImagesBean}" discardComment="#{AlbumImagesBean.album.discardComment}"/>
 		</ui:define>
-	
-	</ui:composition>
-</body>
-</html>
+</ui:composition>

@@ -1,7 +1,6 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-
 package de.mpg.imeji.presentation.beans;
 
 import de.mpg.imeji.logic.controller.AdminController;
@@ -9,10 +8,9 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class AdminInterfaceBean
 {
-    
     private String username;
     private String password;
-    
+
     public String cleanGraph() throws Exception
     {
         checkUsername();
@@ -20,9 +18,8 @@ public class AdminInterfaceBean
         ac.cleanGraph();
         BeanHelper.info("Graph cleaned up");
         return "pretty:";
-        
     }
-    
+
     private void checkUsername() throws Exception
     {
         if (this.username.equals("admin") && this.password.equals("noSciDoc"))

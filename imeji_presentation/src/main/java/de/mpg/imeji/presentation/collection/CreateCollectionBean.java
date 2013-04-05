@@ -10,26 +10,35 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SessionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
+/**
+ * Java Bean for the create Collection Page
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class CreateCollectionBean extends CollectionBean
 {
     private String reset;
-    private CollectionController collectionController = null;
     private SessionBean sessionBean = null;
     private CollectionSessionBean collectionSession = null;
 
+    /**
+     * Bean Constructor
+     */
     public CreateCollectionBean()
     {
         super();
         collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        collectionController = new CollectionController(sessionBean.getUser());
         super.setTab(TabType.COLLECTION);
         super.setCollection(collectionSession.getActive());
         super.getProfilesMenu().add(new SelectItem("sdsdss", "sdsad"));
@@ -39,20 +48,32 @@ public class CreateCollectionBean extends CollectionBean
         }
     }
 
+    /**
+     * Load the Profile TODO check if this is used...
+     * 
+     * @return
+     */
     public String loadProfile()
     {
         return getNavigationString();
     }
 
+    /**
+     * Method for save button. Create the {@link CollectionImeji} according to the form
+     * 
+     * @return
+     * @throws Exception
+     */
     public String save() throws Exception
     {
         if (valid())
         {
-            ProfileController profileController = new ProfileController(sessionBean.getUser());
+            ProfileController profileController = new ProfileController();
             MetadataProfile mdp = new MetadataProfile();
             mdp.setDescription(getCollection().getMetadata().getDescription());
             mdp.setTitle(getCollection().getMetadata().getTitle());
-            URI profile = profileController.create(mdp);
+            URI profile = profileController.create(mdp, sessionBean.getUser());
+            CollectionController collectionController = new CollectionController(sessionBean.getUser());
             collectionController.create(getCollection(), profile);
             BeanHelper.info(sessionBean.getMessage("success_collection_create"));
             FacesContext
@@ -67,6 +88,9 @@ public class CreateCollectionBean extends CollectionBean
             return "";
     }
 
+    /**
+     * Method for Rest button. Reset all form value to empty value
+     */
     public void reset()
     {
         setCollection(ImejiFactory.newCollection());

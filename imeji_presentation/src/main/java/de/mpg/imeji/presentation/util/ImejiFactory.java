@@ -14,22 +14,23 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
-import de.mpg.imeji.presentation.beans.SessionBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
-import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.j2j.misc.LocalizedString;
 
 /**
- * Create objects ready to be displayed in JSF TODO Description
+ * Create objects ready to be displayed in JSF
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -45,7 +46,7 @@ public class ImejiFactory
         coll.setMetadata(newContainerMetadata());
         return coll;
     }
-    
+
     public static MetadataProfile newProfile()
     {
         MetadataProfile p = new MetadataProfile();
@@ -59,10 +60,29 @@ public class ImejiFactory
         return cm;
     }
 
+    /**
+     * Crate a new emtpy {@link Statement}
+     * 
+     * @return
+     */
     public static Statement newStatement()
     {
         Statement s = new Statement();
         s.getLabels().add(new LocalizedString("", null));
+        return s;
+    }
+
+    /**
+     * Create an emtpy {@link Statement} as a child of another {@link Statement}
+     * 
+     * @param parent
+     * @param isFirstChild
+     * @return
+     */
+    public static Statement newStatement(URI parent)
+    {
+        Statement s = newStatement();
+        s.setParent(parent);
         return s;
     }
 
@@ -91,14 +111,63 @@ public class ImejiFactory
         return mds;
     }
 
+    /**
+     * Create a new emtpy {@link Item}
+     * 
+     * @param collection
+     * @return
+     */
     public static Item newItem(CollectionImeji collection)
     {
         Item item = new Item();
+        if (collection == null || collection.getId() == null)
+        {
+            throw new RuntimeException("Can not create item with a collection null");
+        }
         item.setCollection(collection.getId());
         item.getMetadataSets().add(newMetadataSet(collection.getProfile()));
         return item;
     }
 
+    /**
+     * Factory Method used during the upload
+     * 
+     * @param collection
+     * @param user
+     * @param storageId
+     * @param title
+     * @param fullImageURI
+     * @param thumbnailURI
+     * @param webURI
+     * @return
+     */
+    public static Item newItem(CollectionImeji collection, User user, String storageId, String title, URI fullImageURI,
+            URI thumbnailURI, URI webURI)
+    {
+        Item item = ImejiFactory.newItem(collection);
+        item.setFullImageUrl(fullImageURI);
+        item.setThumbnailImageUrl(thumbnailURI);
+        item.setWebImageUrl(webURI);
+        item.setVisibility(Visibility.PUBLIC);
+        item.setFilename(title);
+        if (storageId != null)
+        {
+            item.setStorageId(storageId);
+        }
+        if (collection.getStatus() == Status.RELEASED)
+        {
+            item.setStatus(Status.RELEASED);
+        }
+        return item;
+    }
+
+    /**
+     * Transform a {@link List} of {@link CollectionImeji} to a {@link List} of {@link CollectionListItem}
+     * 
+     * @param collList
+     * @param user
+     * @return
+     */
     public static List<CollectionListItem> collectionListToListItem(Collection<CollectionImeji> collList, User user)
     {
         List<CollectionListItem> l = new ArrayList<CollectionListItem>();
@@ -109,16 +178,12 @@ public class ImejiFactory
         return l;
     }
 
-    public static List<ViewCollectionBean> collectionListToBeanList(Collection<CollectionImeji> collList)
-    {
-        List<ViewCollectionBean> beanList = new ArrayList<ViewCollectionBean>();
-        for (CollectionImeji coll : collList)
-        {
-            beanList.add(new ViewCollectionBean(coll));
-        }
-        return beanList;
-    }
-
+    /**
+     * Transform a {@link List} of {@link Album} to a {@link List} of {@link AlbumBean}
+     * 
+     * @param albumList
+     * @return
+     */
     public static List<AlbumBean> albumListToBeanList(Collection<Album> albumList)
     {
         List<AlbumBean> beanList = new ArrayList<AlbumBean>();
@@ -129,19 +194,25 @@ public class ImejiFactory
         return beanList;
     }
 
-    public static List<ThumbnailBean> imageListToThumbList(Collection<Item> imgList)
+    /**
+     * Transform a {@link List} of {@link Item} to a {@link List} of {@link ThumbnailBean}
+     * 
+     * @param itemList
+     * @return
+     */
+    public static List<ThumbnailBean> imageListToThumbList(Collection<Item> itemList)
     {
         List<ThumbnailBean> beanList = new ArrayList<ThumbnailBean>();
         try
         {
             ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).setProfileCached(ProfileHelper
-                    .loadProfiles((List<Item>)imgList));
+                    .loadProfiles(new ArrayList<Item>(itemList)));
         }
         catch (Exception e)
         {
             logger.error("Error loading profiles", e);
         }
-        for (Item img : imgList)
+        for (Item img : itemList)
         {
             try
             {
@@ -150,32 +221,6 @@ public class ImejiFactory
             catch (Exception e)
             {
                 logger.error("Error creating ThumbnailBean list", e);
-            }
-        }
-        return beanList;
-    }
-
-    public static List<ImageBean> imageListToBeanList(Collection<Item> imgList)
-    {
-        List<ImageBean> beanList = new ArrayList<ImageBean>();
-        try
-        {
-            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).setProfileCached(ProfileHelper
-                    .loadProfiles((List<Item>)imgList));
-        }
-        catch (Exception e1)
-        {
-            e1.printStackTrace();
-        }
-        for (Item img : imgList)
-        {
-            try
-            {
-                beanList.add(new ImageBean(img));
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
             }
         }
         return beanList;

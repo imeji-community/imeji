@@ -3,17 +3,17 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
@@ -22,14 +22,20 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.SessionBean;
-import de.mpg.imeji.presentation.image.ImageBean;
+import de.mpg.imeji.presentation.image.ThumbnailBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
+/**
+ * Abstract bean for all collection beans
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public abstract class CollectionBean
 {
     public enum TabType
@@ -50,6 +56,11 @@ public abstract class CollectionBean
     private boolean selected;
     private int size = 0;
 
+    /**
+     * Initialize the {@link CollectionBean} with a {@link CollectionImeji}
+     * 
+     * @param coll
+     */
     public CollectionBean(CollectionImeji coll)
     {
         collection = coll;
@@ -58,12 +69,20 @@ public abstract class CollectionBean
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
+    /**
+     * New default {@link CollectionBean}
+     */
     public CollectionBean()
     {
         collection = new CollectionImeji();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
+    /**
+     * Validate whether the {@link CollectionImeji} values are correct
+     * 
+     * @return
+     */
     public boolean valid()
     {
         if (collection.getMetadata().getTitle() == null || "".equals(collection.getMetadata().getTitle()))
@@ -110,6 +129,11 @@ public abstract class CollectionBean
         return true;
     }
 
+    /**
+     * Add a new author to the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String addAuthor()
     {
         List<Person> c = (List<Person>)collection.getMetadata().getPersons();
@@ -119,6 +143,11 @@ public abstract class CollectionBean
         return getNavigationString();
     }
 
+    /**
+     * Remove an author of the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String removeAuthor()
     {
         List<Person> c = (List<Person>)collection.getMetadata().getPersons();
@@ -129,6 +158,11 @@ public abstract class CollectionBean
         return getNavigationString();
     }
 
+    /**
+     * Add an organization to an author of the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String addOrganization()
     {
         List<Person> persons = (List<Person>)collection.getMetadata().getPersons();
@@ -139,6 +173,11 @@ public abstract class CollectionBean
         return getNavigationString();
     }
 
+    /**
+     * Remove an organization to an author of the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String removeOrganization()
     {
         List<Person> persons = (List<Person>)collection.getMetadata().getPersons();
@@ -150,13 +189,28 @@ public abstract class CollectionBean
         return getNavigationString();
     }
 
+    /**
+     * return the navigation value (according to jsf2 standard) of the current page
+     * 
+     * @return
+     */
     protected abstract String getNavigationString();
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public int getAuthorPosition()
     {
         return authorPosition;
     }
 
+    /**
+     * setter
+     * 
+     * @param pos
+     */
     public void setAuthorPosition(int pos)
     {
         this.authorPosition = pos;
@@ -179,6 +233,21 @@ public abstract class CollectionBean
     }
 
     /**
+     * Listener for the discard comment
+     * 
+     * @param event
+     */
+    public void discardCommentListener(ValueChangeEvent event)
+    {
+        if (event.getNewValue() != null)
+        {
+            collection.setDiscardComment(event.getNewValue().toString());
+        }
+    }
+
+    /**
+     * getter
+     * 
      * @return the tab
      */
     public TabType getTab()
@@ -191,6 +260,8 @@ public abstract class CollectionBean
     }
 
     /**
+     * setter
+     * 
      * @param tab the tab to set
      */
     public void setTab(TabType tab)
@@ -230,11 +301,21 @@ public abstract class CollectionBean
         this.id = id;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<SelectItem> getProfilesMenu()
     {
         return profilesMenu;
     }
 
+    /**
+     * setter
+     * 
+     * @param profilesMenu
+     */
     public void setProfilesMenu(List<SelectItem> profilesMenu)
     {
         this.profilesMenu = profilesMenu;
@@ -267,16 +348,31 @@ public abstract class CollectionBean
         this.selected = selected;
     }
 
+    /**
+     * setter
+     * 
+     * @param size
+     */
     public void setSize(int size)
     {
         this.size = size;
     }
 
+    /**
+     * getter (get size of collection)
+     * 
+     * @return
+     */
     public int getSize()
     {
         return size;
     }
 
+    /**
+     * True if the current {@link User} is the creator of the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public boolean getIsOwner()
     {
         if (collection != null && collection.getCreatedBy() != null && sessionBean.getUser() != null)
@@ -286,9 +382,14 @@ public abstract class CollectionBean
         return false;
     }
 
+    /**
+     * release the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String release()
     {
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
             cc.release(collection, sessionBean.getUser());
@@ -303,9 +404,14 @@ public abstract class CollectionBean
         return "pretty:";
     }
 
+    /**
+     * Delete the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public String delete()
     {
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
             cc.delete(collection, sessionBean.getUser());
@@ -319,88 +425,140 @@ public abstract class CollectionBean
         return "pretty:collections";
     }
 
+    /**
+     * Discard the {@link CollectionImeji} of this {@link CollectionBean}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String withdraw() throws Exception
     {
-        CollectionController cc = new CollectionController(sessionBean.getUser());
+        CollectionController cc = new CollectionController();
         try
         {
-            cc.withdraw(collection);
+            cc.withdraw(collection, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
         }
         catch (Exception e)
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error discarding collection:", e);
         }
         return "pretty:";
     }
 
-    public List<ImageBean> getImages() throws Exception
+    /**
+     * Return the 5 {@link ThumbnailBean} for the {@link CollectionImeji} startpage. Use a specific sparql query with a
+     * limit, to increase performance
+     * 
+     * @return
+     * @throws Exception
+     */
+    public List<ThumbnailBean> getThumbnails() throws Exception
     {
-        ItemController ic = new ItemController(sessionBean.getUser());
-        if (collection == null || collection.getId() == null)
-            return null;
-        try
+        if (collection != null)
         {
-            Search search = new Search(null, collection.getId().toString());
-            List<String> uris = search.searchSimpleForQuery(
-                    "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT ?s WHERE { ?s <http://imeji.org/terms/collection> <"
-                            + collection.getId().toString()
-                            + "> . ?s <http://imeji.org/terms/status> ?status   .FILTER(?status!=<"
-                            + Status.WITHDRAWN.getUri() + ">)} LIMIT 5", new SortCriterion());
-            return ImejiFactory.imageListToBeanList(ic.loadItems(uris, 5, 0));
+            List<String> uris = new ArrayList<String>();
+            for (URI uri : getCollection().getImages())
+            {
+                uris.add(uri.toString());
+            }
+            ItemController ic = new ItemController(sessionBean.getUser());
+            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 5, 0));
         }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+        return null;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public MetadataProfile getProfile()
     {
         return profile;
     }
 
+    /**
+     * setter
+     * 
+     * @param profile
+     */
     public void setProfile(MetadataProfile profile)
     {
         this.profile = profile;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getProfileId()
     {
         return profileId;
     }
 
+    /**
+     * setter
+     * 
+     * @param profileId
+     */
     public void setProfileId(String profileId)
     {
         this.profileId = profileId;
     }
 
+    /**
+     * true if current {@link User} can UPDATE the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public boolean isEditable()
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, sessionBean.getUser(), collection);
     }
 
+    /**
+     * true if current {@link User} can VIEW the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public boolean isVisible()
     {
         Security security = new Security();
         return security.check(OperationsType.READ, sessionBean.getUser(), collection);
     }
 
+    /**
+     * true if current {@link User} can DELETE the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public boolean isDeletable()
     {
         Security security = new Security();
         return security.check(OperationsType.DELETE, sessionBean.getUser(), collection);
     }
 
+    /**
+     * true if current {@link User} can EDIT the {@link MetadataProfile} of the {@link CollectionImeji}
+     * 
+     * @return
+     */
     public boolean isProfileEditor()
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, sessionBean.getUser(), profile);
     }
 
+    /**
+     * True if the current {@link User} is SYSADMIN
+     * 
+     * @return
+     */
     public boolean isAdmin()
     {
         Authorization auth = new Authorization();

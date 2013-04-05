@@ -1,83 +1,78 @@
-<div xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
+<div  xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
 <ui:remove>
 <!--
-            /* 
-            CDDL HEADER START
+/*
+   CDDL HEADER START
 
-            The contents of this file are subject to the terms of the
-            Common Development and Distribution License, Version 1.0 only
-            (the "License"). You may not use this file except in compliance
-            with the License.
+   The contents of this file are subject to the terms of the
+   Common Development and Distribution License, Version 1.0 only
+   (the "License"). You may not use this file except in compliance
+   with the License.
 
-            You can obtain a copy of the license at license/ESCIDOC.LICENSE
-            or http://www.escidoc.de/license.
-            See the License for the specific language governing permissions
-            and limitations under the License.
+   You can obtain a copy of the license at license/ESCIDOC.LICENSE
+   or http://www.escidoc.de/license.
+   See the License for the specific language governing permissions
+   and limitations under the License.
 
-            When distributing Covered Code, include this CDDL HEADER in each
-            file and include the License file at license/ESCIDOC.LICENSE.
-            If applicable, add the following below this CDDL HEADER, with the
-            fields enclosed by brackets "[]" replaced with your own identifying
-            information: Portions Copyright [yyyy] [name of copyright owner]
+   When distributing Covered Code, include this CDDL HEADER in each
+   file and include the License file at license/ESCIDOC.LICENSE.
+   If applicable, add the following below this CDDL HEADER, with the
+   fields enclosed by brackets "[]" replaced with your own identifying
+   information: Portions Copyright [yyyy] [name of copyright owner]
 
-            CDDL HEADER END
+   CDDL HEADER END
 
 
-            Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
-            f�r wissenschaftlich-technische Information mbH and Max-Planck-
-            Gesellschaft zur F�rderung der Wissenschaft e.V.
-            All rights reserved. Use is subject to license terms.
-             */
+   Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+   f�r wissenschaftlich-technische Information mbH and Max-Planck-
+   Gesellschaft zur F�rderung der Wissenschaft e.V.
+   All rights reserved. Use is subject to license terms.
+*/
 -->
 </ui:remove>
-
-<span id="metaMenuSkipLinkAnchor" class="full_area0 metaMenu">
 	<!-- meta Menu starts here -->
-
-	<!-- Language -->
-	<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit(); return false;" rendered="true">
-		<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
-	</h:selectOneMenu>
-
-
-	
-	<h:panelGroup styleClass="seperator"></h:panelGroup>
-	<!-- Help -->
-	<h:outputLink id="lnkHelp" styleClass="medium_area0_p8 endline" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
-		<h:outputText value="#{lbl.help}"/>
-	</h:outputLink>
-	<h:panelGroup styleClass="seperator"></h:panelGroup>
-
-	<!-- LogIn, LogOut -->
-	<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="free_area0_p4">
-		<h:inputText styleClass="medium_txtInput" value="#{LoginBean.login}"/>
-		<h:inputSecret styleClass="medium_txtInput" value="#{LoginBean.passwd}" onkeypress="return loginOnEnter(event)"/>
-		<h:commandButton id="lnkLogin" styleClass="medium_area0 endline" style="text-align:left;" title="#{lbl.login}" value="#{lbl.login}" action ="#{LoginBean.login}"/>
+	<h:panelGroup layout="block" styleClass="imj_metaMenuStandardSingleLine">
+		<h:panelGroup styleClass="imj_metaMenuItemsAlign">
+			<!-- Username if logged in -->
+			<ui:fragment rendered="#{SessionBean.user != null}">
+				<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="imj_metaMenuItem" value="#{Navigation.applicationUrl}user?id=#{SessionBean.user.email}">
+					<h:outputText value="#{SessionBean.user.name}"/>
+				</h:outputLink>
+				
+				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
+			</ui:fragment>
+			
+			<!-- LogIn, LogOut -->
+			<h:form id="loginForm">
+				<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="imj_metaMenuItem">
+					<h:inputText value="#{LoginBean.login}"/>
+					<h:inputSecret value="#{LoginBean.passwd}"/>
+					<h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}"/>
+				</h:panelGroup>
+				
+				<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="imj_metaMenuItem" rendered="#{SessionBean.user != null}">
+			    	<h:outputText value="#{lbl.logout}"></h:outputText>
+			    </h:commandLink>
+			</h:form>
+			
+			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
+		
+			<!-- Help -->
+			<h:outputLink id="lnkHelp" styleClass="imj_metaMenuItem" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
+				<h:outputText value="#{lbl.help}"/>
+			</h:outputLink>
+			
+			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
+			
+			<!-- Language -->
+			<h:form id="langForm">
+				<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItem">
+					<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
+				</h:selectOneMenu>
+			</h:form>
+		</h:panelGroup>
 	</h:panelGroup>
-	
-
-	<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="medium_area0_p8 endline" rendered="#{SessionBean.user != null}">
-    	<h:outputText value="#{lbl.logout}"></h:outputText>
-    </h:commandLink>
-
-	<h:panelGroup styleClass="seperator"></h:panelGroup>
-
-	<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="free_area0_p8 endline" value="#{Navigation.applicationUrl}user?id=#{SessionBean.user.email}" rendered="#{SessionBean.user != null}">
-		<h:outputText  value="#{SessionBean.user.name}"/>
-	</h:outputLink>
-	
 	<!-- meta Menu ends here -->
-</span>
-	<script type="text/javascript">
-		function loginOnEnter(event)
-		{
-			if (event.keyCode == 13)
-			{
-				document.getElementById('formular:Header:lnkLogin').click();
-			}
-		}
-	</script>
 </div>

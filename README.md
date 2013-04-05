@@ -1,9 +1,9 @@
-<h1>imeji - Publish Your Scientific Media Data</h1>
+<h1>imeji - Publish Your Scientific Multi Media Data</h1>
 
 <h2>The imeji software</h2>
-<p><b>imeji creates citable research assets by describing, enriching, sharing, exposing and linking data. </b></p>
+<p><b>imeji creates citable research assets by describing, enriching, sharing, exposing, linking and atchiving data. </b></p>
 <p><strong>The imeji software is an open-source, community driven development.</strong>
-<p>The software, based on the <a href="https://www.escidoc.org/" target="_blank" title="eSciDoc">eSciDoc</a> infrastructure, offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, as simple as liked or as complex as needed.</p>
+<p>The software offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, as simple as liked or as complex as needed.</p>
 <p>All objects within the imeji software have a unique identifier and therefore can be referenced in publications or reused in other contexts (dissemination). Large collections can be organized in different albums to focus special items of interest.</p>
 <p>For a full description of the imeji software and detailled information of the functionalities please visit the <a href="http://colab.mpdl.mpg.de/mediawiki/Imeji" target="_blank" title="imeji software description">imeji software</a> page.</p>
 <p>imeji is developed by the <a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank" title="imeji community">imeji community</a> under the <a href="http://hub.opensolaris.org/bin/download/Main/licensing/cddllicense.txt" target="_blank">CDDL-License</a>.</p>

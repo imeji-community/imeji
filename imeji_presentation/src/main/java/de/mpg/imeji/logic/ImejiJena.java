@@ -222,7 +222,7 @@ public class ImejiJena
      * @param voClass
      * @return
      */
-    private static String getModelName(Class<?> voClass)
+    public static String getModelName(Class<?> voClass)
     {
         j2jModel j2jModel = voClass.getAnnotation(j2jModel.class);
         return "http://imeji.org/" + j2jModel.value();

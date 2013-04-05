@@ -3,22 +3,23 @@
  */
 package de.mpg.imeji.presentation.init;
 
-import java.net.URI;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.lf5.util.StreamUtils;
 
 import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.exceptions.AlreadyExistsException;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Initialize application on server start
@@ -44,11 +45,15 @@ public class InitializerServlet extends HttpServlet
         // escidocInitializer.run();
     }
 
+    /**
+     * Initialize the imeji jena tdb
+     */
     public void initModel()
     {
         try
         {
             ImejiJena.init();
+            runMigration();
         }
         catch (Exception e)
         {
@@ -56,34 +61,19 @@ public class InitializerServlet extends HttpServlet
         }
     }
 
-    public void startLocksSurveyor()
+    /**
+     * Start thread {@link LocksSurveyor}
+     */
+    private void startLocksSurveyor()
     {
         LocksSurveyor locksSurveyor = new LocksSurveyor();
         locksSurveyor.start();
     }
 
-    public void createTestUser() throws Exception
-    {
-        UserController uc = new UserController(null);
-        try
-        {
-            User u = uc.retrieve("imeji@mpdl.mpg.de");
-            logger.info("Test User " + u.getEmail() + " already exists!");
-        }
-        catch (NotFoundException e)
-        {
-            User user = new User();
-            user.setEmail("imeji@mpdl.mpg.de");
-            user.setName("imeji Test User");
-            user.setNick("itu");
-            user.setEncryptedPassword(StringHelper.convertToMD5("test"));
-            user.getGrants().add(new Grant(GrantType.CONTAINER_ADMIN, URI.create("http://test.de")));
-            uc.create(user);
-            logger.info("Created test user successfully");
-        }
-    }
-
-    public void createSysadminUser()
+    /**
+     * Create the imeji system user if it doesn't exists
+     */
+    private void createSysadminUser()
     {
         try
         {
@@ -105,6 +95,33 @@ public class InitializerServlet extends HttpServlet
             {
                 throw new RuntimeException("Error initializing Admin user! ", e);
             }
+        }
+    }
+
+    /**
+     * look to the migration File (migration.txt)
+     * 
+     * @throws IOException
+     */
+    private void runMigration() throws IOException
+    {
+        File f = new File(ImejiJena.tdbPath + StringHelper.urlSeparator + "migration.txt");
+        FileInputStream in = null;
+        try
+        {
+            in = new FileInputStream(f);
+        }
+        catch (FileNotFoundException e)
+        {
+            logger.info("No" + f.getAbsolutePath() + " found, no migration runs");
+        }
+        if (in != null)
+        {
+            String migrationRequests = new String(StreamUtils.getBytes(in), "UTF-8");
+            logger.info("Running migration with query: ");
+            logger.info(migrationRequests);
+            ImejiSPARQL.execUpdate(migrationRequests);
+            logger.info("Migration done!");
         }
     }
 

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>imeji</artifactId>
 		<groupId>de.mpg.mpdl.imeji</groupId>
-		<version>1.0.0.1-SNAPSHOT</version>
+		<version>1.1.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.mpg.mpdl.imeji</groupId>
 	<artifactId>imeji_ear</artifactId>
 	<name>imeji_ear</name>
 	<packaging>ear</packaging>
-	<version>1.0.0.1-SNAPSHOT</version>
+	<version>1.1.0.0</version>
 
 	<scm>
 		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
@@ -108,7 +107,7 @@
 		<dependency>
 			<groupId>de.mpg.mpdl.imeji</groupId>
 			<artifactId>imeji_presentation</artifactId>
-			<version>1.0.0.1-SNAPSHOT</version>
+			<version>1.1.0.0</version>
 			<scope>compile</scope>
 			<type>war</type>
 		</dependency>
@@ -158,14 +157,11 @@
 								<configuration>
 									<tasks>
 
-										<echo
-											message="Yeah! Deploy files from ${project.build.directory} to ${jboss.install.dir}" />
+										<echo message="Yeah! Deploy files from ${project.build.directory} to ${jboss.install.dir}" />
 
 										<!-- configuration for the deploy jboss server -->
 										<!-- copy over the configuration file -->
-										<copy overwrite="true"
-											file="${project.build.directory}/classes/imeji.properties"
-											todir="${jboss.install.dir}/standalone/configuration" />
+										<copy overwrite="true" file="${project.build.directory}/classes/imeji.properties" todir="${jboss.install.dir}/standalone/configuration" />
 										<!-- copy over the screen config file file -->
 										<copy overwrite="true" file="${project.build.directory}/classes/vocabulary.properties" todir="${jboss.install.dir}/server/default/conf" />
 										<!-- copy over the import schema files -->

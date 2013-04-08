@@ -56,6 +56,18 @@ public class IdentifierUtil
      * The counter identifier is composed with a first random part, to avoid easy identifier guess
      */
     private static final int COUNTER_PREFIX_RANGE = 1000;
+    /**
+     * Array of alla possible {@link String} characters which are used to generate a random Id
+     */
+    private static final String[] RANDOM_ID_CHARSET = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
+            "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G",
+            "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1",
+            "2", "3", "4", "5", "6", "7", "8", "9", "_", "" };
+    /**
+     * The size of the random id. Since the RANDOM_ID_CHARSET has 64 elements, to calculate the number of possible id,
+     * do 64^RANDOM_ID_SIZE with: - 1: 6 bits - 10: 60 bits - 12: 72 bits - 15: 90bits
+     */
+    private static final int RANDOM_ID_SIZE = 16;
 
     /**
      * Initialize the static value for the identifier method
@@ -87,9 +99,13 @@ public class IdentifierUtil
         {
             return newRandomId();
         }
-        else
+        else if ("counter".equals(method))
         {
             return newLocalUniqueId();
+        }
+        else
+        {
+            return newRandomId();
         }
     }
 
@@ -129,7 +145,12 @@ public class IdentifierUtil
      */
     public static String newRandomId()
     {
-        return Long.toString(rand.nextLong(), Character.MAX_RADIX);
+        String id = "";
+        for (int i = 0; i < RANDOM_ID_SIZE; i++)
+        {
+            id += RANDOM_ID_CHARSET[rand.nextInt(RANDOM_ID_CHARSET.length)];
+        }
+        return id;
     }
 
     /**

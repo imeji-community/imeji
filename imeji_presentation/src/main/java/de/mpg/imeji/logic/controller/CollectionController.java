@@ -26,6 +26,9 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -131,7 +134,8 @@ public class CollectionController extends ImejiController
         List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
-            throw new RuntimeException("Collection has at least one image locked by another user.");
+            throw new RuntimeException(
+                    ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("collection_locked"));
         }
         else
         {
@@ -160,7 +164,8 @@ public class CollectionController extends ImejiController
         List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
-            throw new RuntimeException("Collection has at least one image locked by another user.");
+            throw new RuntimeException(
+                    ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("collection_locked"));
         }
         else if (itemUris.isEmpty())
         {
@@ -189,7 +194,8 @@ public class CollectionController extends ImejiController
         List<String> itemUris = itemController.search(collection.getId(), null, null, null).getResults();
         if (hasImageLocked(itemUris, user))
         {
-            throw new RuntimeException("Collection has at least one image locked by another user.");
+            throw new RuntimeException(
+                    ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("collection_locked"));
         }
         else if (!Status.RELEASED.equals(collection.getStatus()))
         {
@@ -302,6 +308,7 @@ public class CollectionController extends ImejiController
             return null;
         }
         User simplifiedUser = new User();
+        simplifiedUser.setId(user.getId());
         for (Grant g : user.getGrants())
         {
             if (GrantType.SYSADMIN.equals(g.asGrantType()))

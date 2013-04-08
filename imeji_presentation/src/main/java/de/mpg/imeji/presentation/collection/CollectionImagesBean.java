@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -83,7 +84,7 @@ public class CollectionImagesBean extends ImagesBean
     public void initMenus()
     {
         List<SelectItem> sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(null, sb.getLabel("default")));
+        sortMenu.add(new SelectItem(null, "--"));
         sortMenu.add(new SelectItem(SearchIndex.names.created, sb.getLabel(SearchIndex.names.created.name())));
         sortMenu.add(new SelectItem(SearchIndex.names.modified, sb.getLabel(SearchIndex.names.modified.name())));
         setSortMenu(sortMenu);

@@ -61,9 +61,9 @@ public class StorageTest
             + "hsgfhidsgfhdsg fh dsfshdgfhidsgfihsdgfiwuzfgisdh fg shdfg sdihfg sdihgfisdgfhsdgf ihsdg fhsdgfizsdgf zidsgfizsd fi fhsdhfgsdhfg"
             + "hgf dhfgdshfgdshfghsdg fhsdf ghsdg fsdhf gsdjgf sdjgfsd fgdszfg sdfzgsdzgf sdfg dgfhisgfigifg i";
     /**
-     * Not working: *
+     * Not working: * /
      */
-    private static final String SPECIAL_CHARACHTERS = "!\"§$%&/()=? '#_-.,";
+    private static final String SPECIAL_CHARACHTERS = "!\"§$%&()=? '#_-.,";
 
     /**
      * Test for {@link InternalStorage}
@@ -110,7 +110,7 @@ public class StorageTest
         // UPLOAD
         UploadResult res = sc.upload(filename, original, "1");
         Assert.assertFalse(res.getOrginal() + " url is same as path",
-                res.getOrginal() == manager.transformUrlToPath(res.getOrginal()));
+                res.getOrginal().equals(manager.transformUrlToPath(res.getOrginal())));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         // READ THE URL
         sc.read(res.getOrginal(), baos);

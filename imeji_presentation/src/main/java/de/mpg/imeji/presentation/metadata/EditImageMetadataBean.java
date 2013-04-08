@@ -125,7 +125,7 @@ public class EditImageMetadataBean
     }
 
     /**
-     * Read the url paramameters when the page is first called
+     * Read the url paramameters when the page is first called. This method ios called directly from the xhtml page
      * 
      * @return
      */
@@ -150,9 +150,13 @@ public class EditImageMetadataBean
         {
             uris = getSelectedItems();
         }
-        else if ("all".equals(type))
+        else if ("all".equals(type) && query != null && collectionId != null)
         {
             uris = searchItems();
+        }
+        else
+        {
+            return allItems;
         }
         return loaditems(uris);
     }
@@ -311,10 +315,7 @@ public class EditImageMetadataBean
     public String addToAllSaveAndRedirect() throws IOException
     {
         addToAll();
-        long before = System.currentTimeMillis();
         editor.save();
-        long after = System.currentTimeMillis();
-        logger.info("saving = " + Long.valueOf(after - before));
         redirectToView();
         return "";
     }
@@ -327,10 +328,7 @@ public class EditImageMetadataBean
      */
     public String saveAndRedirect() throws IOException
     {
-        long before = System.currentTimeMillis();
         editor.save();
-        long after = System.currentTimeMillis();
-        logger.info("saving = " + Long.valueOf(after - before));
         redirectToView();
         return "";
     }

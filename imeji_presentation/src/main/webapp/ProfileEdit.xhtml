@@ -4,28 +4,40 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="FormularBean" value="#{EditMdProfileBean}"/>	
+	<ui:define name="init">
+		<h:outputText value="#{EditMdProfileBean.init}"/>
+	</ui:define>
+	
 	<ui:define name="headline">
 		<h1>
-			<h:outputText value="#{EditMdProfileBean.init}#{lbl.edit} #{EditMdProfileBean.profile.title}"/> 
+			<h:outputText value="#{lbl.edit} #{EditMdProfileBean.profile.title}"/> 
 		</h1>
 	</ui:define>
 			
 	<ui:define name="contentMenu">
-		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}" rendered="true">
+	
+		<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}" rendered="true">
 			<h:outputText value="#{lbl.collection_home}"/>
 		</h:outputLink>			
-		<h:outputText styleClass="seperator void"/>
-		<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
+	
+		<h:outputText styleClass="imj_contentMenuSeparator"/>
+	
+		<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
 			<h:outputText value="#{lbl.view_images}"/>
 		</h:outputLink>
-		<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
-		<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}/#{Navigation.infosPath}?init=1" rendered="#{prettyContext.currentMapping.id != 'viewCollection'}">
+	
+		<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{ViewCollectionBean.size > 0}"/>
+	
+		<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}/#{Navigation.infosPath}?init=1" rendered="#{prettyContext.currentMapping.id != 'viewCollection'}">
 			<h:outputText value="#{lbl.collection_metadata}"/>
 		</h:outputLink>
-		<h:outputText styleClass="seperator void"/>
-		<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable}">
+	
+		<h:outputText styleClass="imj_contentMenuSeparator"/>
+	
+		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable}">
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
 		</h:outputLink>
+	
 	</ui:define>
 	
 	<ui:define name="actionsMenu">

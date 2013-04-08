@@ -22,7 +22,9 @@
 									<h:inputText styleClass="half_txtInput endline" value="#{FormularBean.profile.title}" valueChangeListener="#{FormularBean.titleListener}" />
 								</h:panelGroup>
 							</h:panelGroup>
-							<h:panelGroup layout="block" styleClass="free_area0  endline itemLine clear"></h:panelGroup>
+							<h:panelGroup layout="block" styleClass="free_area0  endline itemLine clear">
+								<font color="#FF0000"><h:outputText value="#{lbl.profile_beta_info}"/></font>
+							</h:panelGroup>
 							
 							<h:panelGroup styleClass="full_area0_p8" rendered="#{empty FormularBean.wrappers}">
 								<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl">
@@ -58,15 +60,17 @@
 									 var dragged;
 								 	$( ".draggable" ).draggable({
 								 			zIndex: 100,
-								 			opacity: 0.01,
+								 			opacity: 0.1,
 								 			cursor: "move",
-								 			axis: "y",								 
+								 			axis: "y",
+								 			revert: 'invalid',								 
 								 		});		
 								 	$( ".draggable" ).on( "dragstart", function( event, ui ) {
 								 			dragged = $(this).attr('id') + 'DragButton';
 									 	} );
 								 	 $( ".dropMetadata" ).droppable({
 								 		 hoverClass: "drop-hover",
+								 		 accept: '.draggable',
 								 		 activClass: "dropMetadataActive",
 										 drop: function( event, ui ) {
 											var id = $(this).attr('id') + "Button";
@@ -76,6 +80,7 @@
 										 });
 									 $( ".dropChild" ).droppable({
 										 hoverClass: "drop-hover",
+										 accept: '.draggable',
 										 activeClass :"dropChildActive",
 										 drop: function( event, ui ) {
 											 var id = $(this).attr('id').replace("metadata","dropChildButton");
@@ -165,14 +170,14 @@
 											<h:panelGroup styleClass="full_area0 medium_marginLExcl endline" rendered="#{wrapper.constraintsSize == 0 and wrapper.vocabularyString == null}">
 												<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}">
 													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
-													<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+													<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 												</h:commandButton>
 												<h:outputLabel styleClass="" value="#{lbl.add_vocabulary}" />
 												<span style="padding-left:20px"></span>
 												<h:panelGroup rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson' and wrapper.statement.type != 'http://imeji.org/terms/metadata#geolocation' and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication'}">
 													<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addConstraint}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
-														<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 													</h:commandButton>
 													<h:outputLabel value="#{lbl.add_constraint}" />
 												</h:panelGroup>
@@ -187,7 +192,7 @@
 			  										<h:outputLabel for="btnRemoveVocabulary" styleClass="free_area0" value="#{lbl.remove_vocabulary}" />
 			  										<h:commandButton id="btnRemoveVocabulary" styleClass="free_area0 min_imgBtn remove"  shortDesc="#{lbl.remove_vocabulary}" action="#{FormularBean.removeVocabulary}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
-														<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 													</h:commandButton>
 												</h:panelGroup>
 											</h:panelGroup>	
@@ -218,7 +223,7 @@
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="quad_area2_p0 messageArea warnMessageArea" rendered="#{wrapper.showRemoveWarning}">
-	                                	<h:outputText styleClass="free_area0_p0" value="#{msg.remove_statement_used}"/><br/><br/>
+	                                	<h:outputText styleClass="free_area0_p0 messageWarn" value="#{msg.remove_statement_used}"/><br/><br/>
 	                                	<h:commandButton action="#{FormularBean.closeRemoveWarning}" value="#{lbl.no}" styleClass="free_area1_p8 cancelButton">
 	                                		<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 	                                		<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
@@ -260,9 +265,13 @@
 							</h:panelGroup>
 						</div>
 					</h:panelGroup>
-						
+					
+					<h:panelGroup layout="block" styleClass="free_area0  endline itemLine clear">
+						<h:outputText value="#{lbl.profile_move_info}"/>
+					</h:panelGroup>	
+					
 					<div class="fullItem full_area0_p8 itemLine">
-						<h:commandButton action="#{FormularBean.cancel}"  value="#{lbl.reset}" styleClass="free_area1_p8 cancelButton"/>		
+						<h:commandButton action="#{FormularBean.cancel}"  value="#{lbl.cancel}" styleClass="free_area1_p8 cancelButton"/>		
 						<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
 					</div>
 						

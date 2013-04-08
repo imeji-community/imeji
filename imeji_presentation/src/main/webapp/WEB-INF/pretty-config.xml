@@ -165,9 +165,14 @@
 		<view-id>/jsf/Users.xhtml</view-id>
 	</url-mapping>
 	
-	<url-mapping id="sharee">
+	<url-mapping id="share">
 		<pattern value="/share"></pattern>
 		<view-id>/jsf/Share.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="admin">
+		<pattern value="/admin"></pattern>
+		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
 	</url-mapping>
 
 </pretty-config>

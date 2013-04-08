@@ -4,82 +4,61 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
-			
 	<ui:define name="headline">
 		<h1>
 			<h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> 
 		</h1>
 	</ui:define>
-	
 	<ui:define name="contentMenu">
-		<h:panelGroup rendered="#{ViewCollectionBean.visible}" styleClass="half_area0">
-			
-			<h:outputText styleClass="free_area0" value="#{lbl.collection_home}"/>
-			
-			<h:outputText styleClass="seperator void"/>
-			
-			<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
+		<h:panelGroup rendered="#{ViewCollectionBean.visible}">
+		<!-- removed styleClass="half_area0" -->
+			<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.collection_home}"/>
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
 				<h:outputText value="#{lbl.view_images}"/>
 			</h:outputLink>
-			
-			<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
-			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/infos?init=1" rendered="true">
+			<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{ViewCollectionBean.size > 0}"/>
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/infos?init=1" rendered="true">
 				<h:outputText value="#{lbl.collection_metadata}"/>
 			</h:outputLink>
-			
-			<h:outputText styleClass="seperator void"/>
-			
-			<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
+			<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 				<h:outputText value="#{lbl.upload_images}"></h:outputText>
 			</h:outputLink>
 		</h:panelGroup>
 	</ui:define>
-	
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="half_area0 sub action" rendered="#{ViewCollectionBean.visible}">
-      		<h:outputLink styleClass="free_area0" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" >
+		<h:panelGroup layout="block" styleClass="imj_contentSubMenu" rendered="#{ViewCollectionBean.visible}">
+      		<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" >
 				<h:outputText value="#{lbl.collection_share}"/>		
 			</h:outputLink>
-      
-			<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogRelease');"  rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='PENDING'}">
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');"  rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='PENDING'}">
 				<h:outputText value="#{lbl.collection_release}"/>
 			</h:outputLink>
-			
-			<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" onclick="openDialog('dialogWithdraw');"  value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='RELEASED'}">
+			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" onclick="openDialog('dialDiscardContainer:dialogWithdraw');"  value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='RELEASED'}">
 				<h:outputText value="#{lbl.withdraw}"/>
 			</h:outputLink>
-			
-			<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('dialogDelete');" rendered="#{ViewCollectionBean.deletable}">
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{ViewCollectionBean.deletable}">
 				<h:outputText value="#{lbl.delete}"/>
 			</h:outputLink>
-				
 		</h:panelGroup>
-		
-		<h:panelGroup rendered="#{CollectionImagesBean.collection != null}">
-			<ui:include src="confirmationPages/ContainerRelease.xhtml">
-				<ui:param name="bean" value="#{ViewCollectionBean}"/>
-			</ui:include>
-			<ui:include src="confirmationPages/ContainerDelete.xhtml">
-				<ui:param name="bean" value="#{ViewCollectionBean}"/>
-			</ui:include>
-			<imjc:DiscardContainer id="dialDiscardContainer" bean="#{ViewCollectionBean}" discardComment="#{ViewCollectionBean.collection.discardComment}"/>
-		</h:panelGroup>
+		<ui:include src="confirmationPages/ContainerRelease.xhtml">
+			<ui:param name="bean" value="#{ViewCollectionBean}"/>
+		</ui:include>
+		<ui:include src="confirmationPages/ContainerDelete.xhtml">
+			<ui:param name="bean" value="#{ViewCollectionBean}"/>
+		</ui:include>
+		<imjc:DiscardContainer id="dialDiscardContainer" bean="#{ViewCollectionBean}" discardComment="#{ViewCollectionBean.collection.discardComment}"/>
 	</ui:define>
-	
-	
 	<ui:define name="mainContent">
-		
 		<div id="preListHeader" class="full_area0 itemList" style="border-width: 0px !important;">
 			<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 				 	<ui:include src="./include/History.xhtml"></ui:include>
 			 </h:panelGroup>
 		</div>
-		
 		<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!ViewCollectionBean.visible}">
 		 	<ui:include src="./include/LoginFormular.xhtml"/>
 		 </h:panelGroup>
-		
 		<h:panelGroup layout="block" styleClass="full_area0" rendered="#{ViewCollectionBean.visible}">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
@@ -89,7 +68,6 @@
 						<h1><h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> </h1>
 					</h:panelGroup>
 					</ui:remove>
-					
 					<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 						<!-- COLLECTION IMAGES -->
 						<h:outputLink value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
@@ -97,7 +75,6 @@
 								<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}file?id=#{thumb.link}"/>
 							</ui:repeat>
 						</h:outputLink>
-						
 						<h:panelGroup styleClass="medium_area0" style="text-align:center;" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}">
 							<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
 							<br/>
@@ -113,28 +90,22 @@
 							<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 						</h2>
 					</h:panelGroup>
-					
 					<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 						<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
 							<h1>
 								<h:outputText styleClass="full_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
 							</h1>
-					
 							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{ViewCollectionBean.collection.discardComment != null and ViewCollectionBean.collection.discardComment != ''}">
 								<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
 								<h:outputText styleClass="free_area0"  value=" #{ViewCollectionBean.collection.discardComment}"/>
 							</h:panelGroup>
-							
 							<h:panelGroup styleClass="full_area0">
 								<h:outputText escape="false" value="#{ViewCollectionBean.formattedDescription}"/>
 							</h:panelGroup>
-					
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
-		
 	</ui:define>
-	
 </ui:composition>

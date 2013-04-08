@@ -34,14 +34,6 @@
 -->
 </ui:remove>
 
-<style type="text/css">
-
-
-
-}
-
-</style>
-
 	<f:subview id="Header">
 	
 		<!-- start: skip link navigation -->
@@ -66,8 +58,9 @@
 			<ui:include src="ui/MetaMenu.jspf"/>
 		
 			<div class="imj_siteHeaderLogoSearchSection imj_simpleSearch">
-				<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage }" value="#{Navigation.applicationUrl}">
-					<h:panelGroup styleClass="imj_siteHeaderLogo"> 
+				<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage }" value="#{Navigation.homeUrl}">
+					<h:panelGroup styleClass="imj_siteHeaderLogo">
+						<h:panelGroup styleClass="imj_siteHeaderLogoTheme"></h:panelGroup>
 					</h:panelGroup>
 				</h:outputLink>
 		

@@ -363,6 +363,7 @@ public class ItemController extends ImejiController
             return null;
         }
         User simplifiedUser = new User();
+        simplifiedUser.setId(user.getId());
         for (Grant g : user.getGrants())
         {
             if (GrantType.SYSADMIN.equals(g.asGrantType()))

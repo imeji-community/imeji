@@ -64,7 +64,7 @@ public class TechnicalFacets
                     if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                     {
                         SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.status),
-                                SearchOperators.URI, Status.PENDING.getUri().toString());
+                              SearchOperators.EQUALS, Status.PENDING.getUri().toString());
                         count = getCount(searchQuery, privatePair, allImages.getResults());
                         if (count > 0)
                         {
@@ -75,7 +75,7 @@ public class TechnicalFacets
                     if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
                     {
                         SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.status),
-                                SearchOperators.URI, Status.RELEASED.getUri().toString());
+                              SearchOperators.EQUALS, Status.RELEASED.getUri().toString());
                         count = getCount(searchQuery, publicPair, allImages.getResults());
                         if (count > 0)
                         {
@@ -88,7 +88,7 @@ public class TechnicalFacets
                 {
                     if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
                     {
-                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.type), SearchOperators.URI,
+                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.type), SearchOperators.EQUALS,
                                 t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());
                         if (count > 0)

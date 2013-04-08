@@ -11,24 +11,24 @@
 			</ui:define>
 			
 			<ui:define name="contentMenu">
-				<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}" rendered="true">
+				<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}" rendered="true">
 					<h:outputText value="#{lbl.collection_home}"/>
 				</h:outputLink>			
 				
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="imj_contentMenuSeparator" />
 				
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
 					<h:outputText value="#{lbl.view_images}"/>
 				</h:outputLink>
 				
-				<h:outputText styleClass="seperator void" rendered="#{ViewCollectionBean.size > 0}"/>
+				<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{ViewCollectionBean.size > 0}"/>
 				
 				
-				<h:outputText styleClass="free_area0" value="#{lbl.collection_metadata}"/>
+				<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.collection_metadata}"/>
 				
-				<h:outputText styleClass="seperator void" />
+				<h:outputText styleClass="imj_contentMenuSeparator" />
 
-				<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
+				<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
 			</ui:define>
@@ -88,7 +88,7 @@
 											</b>
 											
 											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputLabel value="#{lbl.family_name} :   "/>
+												<h:outputLabel value="#{lbl.family_name}:   "/>
 												<h:outputText id="inputCreator" styleClass="quad_txtOutput" value="  #{creator.familyName}"/>
 											</span>
 											
@@ -97,7 +97,7 @@
 												<span class="noDisplay">: </span>
 											</b>
 											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputLabel value="#{lbl.first_name} :   "/>
+												<h:outputLabel value="#{lbl.first_name}:   "/>
 												<h:outputText id="inputCreator2" styleClass="quad_txtOutput" value="   #{creator.givenName}"/>
 											</span>
 												
@@ -106,7 +106,7 @@
 												<span class="noDisplay">: </span>
 											</b>
 											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputText value="#{lbl.organization} : "/>
+												<h:outputText value="#{lbl.organization}: "/>
 												<ui:repeat var="organization" value="#{creator.organizations}" varStatus="indexO">
 													<h:panelGroup styleClass="endline">
 														<span class="endline">
@@ -126,9 +126,9 @@
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.collection_profile}"/>								
-								
-								<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=profile&amp;id=#{ViewCollectionBean.collection.profile}" styleClass="free_area0 xTiny_marginLIncl" target="_blank">
-									<h:outputText value="XML View"/>
+
+								<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=profile&amp;id=#{ViewCollectionBean.collection.profile}" styleClass="large_area0" target="_blank">
+									<h:outputText value="#{lbl.collection_profile_view}"/>
 								</h:outputLink>
 								
 								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.profileUrl}#{ViewCollectionBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.profileEditor and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
@@ -141,21 +141,24 @@
 								<div class="free_area0 itemBlockContent endline">	
 									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 										<b class="xLarge_area0_p8 endline labelLine clear">
-											<h:outputText value="URI "/>
+											<h:outputText value="URI   "/>
 											<span class="noDisplay">: </span>
 										</b>
-										<h:outputText value="#{ViewCollectionBean.collection.profile}"/>
+										<span class="xHuge_area0 xTiny_marginLExcl endline">										
+											<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{ViewCollectionBean.collection.profile}"/>
+										</span>
 										<!-- Picture status of the Collection -->
 										<div class="free_area0 itemBlockContent endline">	
 											<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 												<ui:repeat var="statement" value="#{ViewCollectionBean.profile.statements}">
+													
 													<b class="xLarge_area0_p8 endline labelLine clear">
 														<h:outputText value="#{lbl.metadata}"/>
 														<span class="noDisplay">: </span>
 													</b>
 													
 													<span class="xHuge_area0 xTiny_marginLExcl endline">
-														<h:outputLabel value="#{lbl.name} :   "/>
+														<h:outputLabel value="#{lbl.metadata_id}:   "/>
 														<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{statement.id}"/>
 													</span>
 													
@@ -164,7 +167,7 @@
 														<span class="noDisplay">: </span>
 													</b>
 													<span class="xHuge_area0 xTiny_marginLExcl endline">
-														<h:outputLabel value="#{lbl.type} :   "/>
+														<h:outputLabel value="#{lbl.type}:   "/>
 														<h:outputText id="inputCreator4" styleClass="quad_txtOutput" value="   #{statement.type}"/>
 													</span>
 														
@@ -173,7 +176,7 @@
 														<span class="noDisplay">: </span>
 													</b>
 													<span class="xHuge_area0 xTiny_marginLExcl endline">
-														<h:outputText value="#{lbl.labels} : "/>
+														<h:outputText value="#{lbl.labels}: "/>
 													
 														<ui:repeat var="label" value="#{statement.labels}" varStatus="indexO">
 															<h:panelGroup styleClass="endline">

@@ -71,7 +71,7 @@ public class UserController extends ImejiController
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
         // remove user grant
-        imejiBean2RDF.delete(new ArrayList<Object>(user.getGrants()), user);
+        imejiBean2RDF.delete(new ArrayList<Object>(user.getGrants()), this.user);
         // remove user
         imejiBean2RDF.delete(imejiBean2RDF.toList(user), this.user);
     }
@@ -86,7 +86,8 @@ public class UserController extends ImejiController
     public User retrieve(String email) throws Exception
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
-        return (User)imejiRDF2Bean.load(ObjectHelper.getURI(User.class, email).toString(), user, new User());
+        User loadedUser = (User)imejiRDF2Bean.load(ObjectHelper.getURI(User.class, email).toString(), user, new User());
+        return loadedUser;
     }
 
     /**

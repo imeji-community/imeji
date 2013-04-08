@@ -4,8 +4,8 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<h:panelGroup styleClass="small_marginLExcl quad_area0_p8">
 		<h3>
-			<h:outputText rendered="#{SessionBean.user == null}" styleClass="free_area0_p8" value="To view this page you need to login!"/>
-			<h:outputText rendered="#{SessionBean.user != null}" styleClass="free_area0_p8" value="You are not allowed to see this page with your account. You can try with another account."/>
+			<h:outputText rendered="#{SessionBean.user == null}" styleClass="free_area0_p8" value="#{lbl.view_page_disallowed}"/>
+			<h:outputText rendered="#{SessionBean.user != null}" styleClass="free_area0_p8" value="#{lbl.view_page_disallowed2}"/>
 		</h3>
 		<h:form>
 			<h:panelGroup styleClass="full_area0_p8">
@@ -14,7 +14,7 @@
 					<h:inputText id="inputEmail" styleClass="double_txtInput" value="#{LoginBean.login}"/>
 				</h:panelGroup>
 				<h:panelGroup styleClass="double_area0 tiny_marginLExcl">
-					<h:outputLabel for="inputPasswd" styleClass="free_label " value="Password"/>
+					<h:outputLabel for="inputPasswd" styleClass="free_label " value="#{lbl.admin_pwd}"/>
 					<h:inputSecret id="inputPasswd" styleClass="double_txtInput" value="#{LoginBean.passwd}"/>
 				</h:panelGroup>
 			</h:panelGroup>

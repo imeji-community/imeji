@@ -9,54 +9,48 @@
 				<h:outputText value="#{paginatorListSessionBean.urlParameters}" style="visibility:hidden;"/>
 				<h:panelGroup id="ajaxPaginatorTop">
 					<h:outputText value="#{paginatorListSessionBean.initPaginator}" style="visibility:hidden;"/>
-					
 				 	<div class="large_area0 small_marginLIncl rangeSelector">
 				 		<h:selectOneMenu id="extSelectTop" styleClass="free_select" value="#{paginatorListSessionBean.elementsPerPageTop}" onchange="getElementById('navTop:btnChangeElementsPerPageTop').click();">
 				 			<f:selectItems value="#{paginatorListSessionBean.elementsPerPageSelectItems}"/>
 				 		</h:selectOneMenu>
-						<h:commandButton id="btnChangeElementsPerPageTop" title="#{lbl.paginator_go}" styleClass="xTiny_txtBtn paginatorFallbackGoBtn hiddenElementsNumberChangedButton"  value=""  action="#{paginatorListSessionBean.changeElementsPerPageTop}"/>
+						<h:commandButton id="btnChangeElementsPerPageTop" title="#{lbl.paginator_go}" styleClass="xTiny_txtBtn paginatorFallbackGoBtn hiddenElementsNumberChangedButton" value="" action="#{paginatorListSessionBean.changeElementsPerPageTop}"/>
 				 		<h:outputLabel id="lblItemList_ObjectsPerPage" for="extSelectTop" styleClass="free_label hitsLabel" value=" #{lbl.paginator_objectsPerPage}" />
 				 	</div>
-					
 				 	<div class="small_marginLExcl pageBrowser">
 				 		<label id="lblPage" class="noDisplay pageLabel">Page</label>
-				 		
-				 		
 				 		<!-- ajax mode -->
 				 		<h:commandButton id="btPartListSizeAjax" onclick="setOpacityToImages();"  styleClass="min_imgBtn skipToFirst" value=" " title="#{lbl.paginator_results} 1 - #{paginatorListSessionBean.partListSize}" action="#{paginatorListSessionBean.goToFirstPage}" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber != 1}">
-				 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
+				 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :imj_subHeaderMessage"/>
 				 		</h:commandButton>
 				 		<h:panelGroup styleClass="min_imgBtn skipToFirst deactivated" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber == 1}">
 				 			<h:outputText value=" "/>
 				 		</h:panelGroup>
 				 		<h:commandButton id="btList_lkPreviousAjax"  onclick="setOpacityToImages();" styleClass="backward" value="#{lbl.paginator_previous}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 - paginatorListSessionBean.elementsPerPage} - #{paginatorListSessionBean.offset}" action="#{paginatorListSessionBean.goToPreviousPage}" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber != 1}">
-				 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
+				 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :imj_subHeaderMessage"/>
 				 		</h:commandButton>
 				 		<h:panelGroup styleClass="backward deactivated" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber == 1}">
 				 			<h:outputText value="#{lbl.paginator_previous}"/>
 				 		</h:panelGroup>
 				 		<h:panelGroup styleClass="seperator" />
-						
 				 		<ui:repeat id="paginator" var="paginatorPage" value="#{paginatorListSessionBean.paginatorPages}" varStatus="var">
 				 			<h:panelGroup rendered="#{var.index &gt; (paginatorListSessionBean.firstPaginatorPageNumber - 2) and var.index &lt; (paginatorListSessionBean.firstPaginatorPageNumber + 6)}">
 					 			<h:panelGroup styleClass="xSmall_txtBtn actual deactivated" rendered="#{paginatorPage.number == paginatorListSessionBean.currentPageNumber}">
 					 				<h:outputText value="#{paginatorPage.number}"/>
 					 			</h:panelGroup>
 					 			<h:commandButton id="btPageNumber1Ajax" onclick="setOpacityToImages();"  styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{paginatorListSessionBean.ajaxMode and !(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}">
-					 				<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
+					 				<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :imj_subHeaderMessage"/>
 					 			</h:commandButton>
 					 			<h:panelGroup styleClass="seperator"/>
 				 			</h:panelGroup>
 				 		</ui:repeat>
-						
 				 		<h:commandButton id="btList_lkNextAjax" onclick="setOpacityToImages();" styleClass="forward" value="#{lbl.paginator_next}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 + paginatorListSessionBean.elementsPerPage} -  #{paginatorListSessionBean.offset + 1 + 2*paginatorListSessionBean.elementsPerPage}" action="#{paginatorListSessionBean.goToNextPage}" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber != paginatorListSessionBean.paginatorPageSize}">
-				 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
+				 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :imj_subHeaderMessage"/>
 				 		</h:commandButton>
 				 		<h:panelGroup styleClass="forward deactivated" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}">
 				 			<h:outputText value="#{lbl.paginator_next}"/>
 				 		</h:panelGroup>
 				 		<h:commandButton id="btLinkForLastPageAjax" onclick="setOpacityToImages();" styleClass="min_imgBtn skipToLast" value=" " title="#{lbl.paginator_results} #{((paginatorListSessionBean.paginatorPageSize-1) * paginatorListSessionBean.elementsPerPage + 1)} - #{paginatorListSessionBean.totalNumberOfElements}" action="#{paginatorListSessionBean.goToLastPage}" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber != paginatorListSessionBean.paginatorPageSize}">
-				 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
+				 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :imj_subHeaderMessage"/>
 				 		</h:commandButton>
 				 		<h:panelGroup styleClass="min_imgBtn skipToLast deactivated" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}">
 				 			<h:outputText value=" "/>
@@ -73,7 +67,7 @@
 			 	
 			 </div>
 		</h:form>
-		 <h:panelGroup layout="block" styleClass="contentHeader">
+		 <h:panelGroup layout="block" styleClass="imj_mainContentHeader">
 		 	<ui:include src="../include/History.xhtml"/>
 		 	<ui:insert name="prelistHeader"/>
 		 </h:panelGroup>
@@ -100,13 +94,13 @@
 	 			<label class="noDisplay pageLabel"><h:outputText value="#{lbl.List_lblPage}"/></label>
 		 		
 		 		<h:commandButton id="btPartListSizeAjaxBottom" onclick="setOpacityToImages();" styleClass="min_imgBtn skipToFirst" value=" " title="#{lbl.paginator_results} 1 - #{paginatorListSessionBean.partListSize}" action="#{paginatorListSessionBean.goToFirstPage}" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber != 1}">				 				
-		 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
+		 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :imj_subHeaderMessage"/>
 		 		</h:commandButton>
 		 		<h:panelGroup styleClass="min_imgBtn skipToFirst deactivated" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber == 1}">
 		 			<h:outputText value=" "/>
 		 		</h:panelGroup>
 		 		<h:commandButton id="btList_lkPreviousAjaxBottom" onclick="setOpacityToImages();" styleClass="backward" value="#{lbl.paginator_previous}" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 - paginatorListSessionBean.elementsPerPage} - #{paginatorListSessionBean.offset}" action="#{paginatorListSessionBean.goToPreviousPage}" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber != 1}">				 				
-		 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
+		 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :imj_subHeaderMessage"/>
 		 		</h:commandButton>
 		 		<h:panelGroup styleClass="backward deactivated" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber == 1}">
 		 			<h:outputText value="#{lbl.paginator_previous}"/>
@@ -120,20 +114,20 @@
 			 				<h:outputText value="#{paginatorPage.number}"/>
 			 			</h:panelGroup>
 			 			<h:commandButton id="btPageNumber1AjaxBottom" onclick="setOpacityToImages();" styleClass="xSmall_txtBtn" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * paginatorListSessionBean.elementsPerPage +1} -  #{paginatorPage.number*paginatorListSessionBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{paginatorListSessionBean.ajaxMode and !(paginatorPage.number == paginatorListSessionBean.currentPageNumber)}">				 				
-			 				<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
+			 				<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :imj_subHeaderMessage"/>
 			 			</h:commandButton>
 			 			<h:panelGroup styleClass="seperator" />
 		 			</h:panelGroup>
 		 		</ui:repeat>
 				
 		 		<h:commandButton id="btList_lkNextAjaxBottom" styleClass="forward" value="#{lbl.paginator_next}" onclick="setOpacityToImages();" title="#{lbl.paginator_results} #{paginatorListSessionBean.offset + 1 + paginatorListSessionBean.elementsPerPage} -  #{paginatorListSessionBean.offset + 1 + 2*paginatorListSessionBean.elementsPerPage}" action="#{paginatorListSessionBean.goToNextPage}" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber != paginatorListSessionBean.paginatorPageSize}">				 				
-		 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
+		 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :imj_subHeaderMessage"/>
 		 		</h:commandButton>
 		 		<h:panelGroup styleClass="forward deactivated" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}">
 		 			<h:outputText value="#{lbl.paginator_next}"/>
 		 		</h:panelGroup>
 		 		<h:commandButton id="btLinkForLastPageAjaxBottom" styleClass="min_imgBtn skipToLast" value=" " onclick="setOpacityToImages();" title="#{lbl.paginator_results} #{((paginatorListSessionBean.paginatorPageSize-1) * paginatorListSessionBean.elementsPerPage + 1)} - #{paginatorListSessionBean.totalNumberOfElements}" action="#{paginatorListSessionBean.goToLastPage}" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber != paginatorListSessionBean.paginatorPageSize}">				 				
-		 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :subHeader"/>
+		 			<f:ajax disabled="#{!paginatorListSessionBean.ajaxMode}" execute="@this" render=":navTop:ajaxPaginatorTop :navBot:ajaxPaginatorBottom: :ajaxList :imj_subHeaderMessage"/>
 		 		</h:commandButton>
 		 		<h:panelGroup styleClass="min_imgBtn skipToLast deactivated" rendered="#{paginatorListSessionBean.ajaxMode and paginatorListSessionBean.currentPageNumber == paginatorListSessionBean.paginatorPageSize}">
 		 			<h:outputText value=" "/>
@@ -149,8 +143,6 @@
 	 	</div>
  	</h:form>
 	</div>
-	
-	
 	<script type="text/javascript">
 		function setOpacityToImages()
 		{
@@ -159,7 +151,6 @@
 			return true;
 		}
 	</script>
-
 </ui:define>
 
 </ui:composition>

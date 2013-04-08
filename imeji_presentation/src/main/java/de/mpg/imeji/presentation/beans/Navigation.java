@@ -21,7 +21,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class Navigation
 {
     // Url of the FW
-    public final String frameworkUrl;
+    public String frameworkUrl;
     // Url of the application
     public final String applicationUrl;
     // Pages of imeji
@@ -42,6 +42,7 @@ public class Navigation
     public final Page UPLOAD = new Page("Upload collection", "upload");
     public final Page SHARE = new Page("Share", "share");
     public final Page USER = new Page("User", "user");
+    public final Page ADMIN = new Page("Admin", "admin");
     // session
     private SessionBean sessionBean = null;
 
@@ -52,7 +53,9 @@ public class Navigation
      */
     public Navigation() throws Exception
     {
-        frameworkUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.framework_access.framework.url"));
+        frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.url");
+        if (frameworkUrl != null)
+            frameworkUrl = StringHelper.normalizeURI(frameworkUrl);
         applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
     }
 
@@ -73,7 +76,7 @@ public class Navigation
 
     public String getHomeUrl()
     {
-        return applicationUrl + HOME.getPath();
+        return getApplicationUri();
     }
 
     public String getBrowseUrl()
@@ -149,6 +152,11 @@ public class Navigation
     public String getUserUrl()
     {
         return applicationUrl + USER.getPath();
+    }
+
+    public String getAdminUrl()
+    {
+        return applicationUrl + ADMIN.getPath();
     }
 
     /*

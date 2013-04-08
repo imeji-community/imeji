@@ -2,9 +2,11 @@ package de.mpg.imeji.presentation.metadata;
 
 import java.net.URI;
 
+import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 
 /**
  * Bean for all Metadata types. This bean should have all variable that have been defined in all metadata types.
@@ -22,6 +24,7 @@ public class SuperMetadataBean
     private URI uri;
     private String label;
     private String date;
+    private long time;
     private double longitude = Double.NaN;
     private double latitude = Double.NaN;
     private String name;
@@ -29,6 +32,7 @@ public class SuperMetadataBean
     private String citation;
     private double number = Double.NaN;
     private String license = null;
+    private URI externalUri;
 
     /**
      * Bean for all Metadata types. This bean should have all variable that have been defined in all metadata types.
@@ -49,6 +53,7 @@ public class SuperMetadataBean
     public Metadata asMetadata()
     {
         ObjectHelper.copyFields(this, metadata);
+        MetadataHelper.setConeID(metadata);
         return metadata;
     }
 
@@ -119,6 +124,11 @@ public class SuperMetadataBean
 
     public void setDate(String date)
     {
+        if (date != null && !"".equals(date))
+        {
+            time = DateFormatter.getTime(date);
+            this.date = date;
+        }
         this.date = date;
     }
 
@@ -200,5 +210,21 @@ public class SuperMetadataBean
     public void setPos(int pos)
     {
         this.pos = pos;
+    }
+
+    /**
+     * @return the externalUri
+     */
+    public URI getExternalUri()
+    {
+        return externalUri;
+    }
+
+    /**
+     * @param externalUri the externalUri to set
+     */
+    public void setExternalUri(URI externalUri)
+    {
+        this.externalUri = externalUri;
     }
 }

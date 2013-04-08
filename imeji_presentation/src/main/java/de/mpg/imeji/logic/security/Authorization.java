@@ -197,41 +197,6 @@ public class Authorization
     }
 
     /**
-     * True if {@link User} is privileged viewer for this {@link container}
-     * 
-     * @param user
-     * @param container
-     * @return
-     */
-    public boolean isPrivilegedViewer(User user, Container container)
-    {
-        for (Grant g : getGrantsForObject(user, container))
-        {
-            if (GrantType.PRIVILEGED_VIEWER.equals(g.asGrantType()))
-                return true;
-        }
-        return isSysAdmin(user);
-    }
-
-    /**
-     * True if {@link User} is privileged viewer for this {@link Item}
-     * 
-     * @param user
-     * @return
-     */
-    public boolean isPrivilegedViewer(User user, Item item)
-    {
-        if (user == null)
-            return false;
-        for (Grant g : getGrantsForURI(user, item.getCollection()))
-        {
-            if (GrantType.PRIVILEGED_VIEWER.equals(g.asGrantType()))
-                return true;
-        }
-        return false;
-    }
-
-    /**
      * True if {@link User} has admin role for this {@link container}
      * 
      * @param user

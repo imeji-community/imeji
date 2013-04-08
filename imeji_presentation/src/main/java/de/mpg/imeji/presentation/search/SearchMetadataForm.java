@@ -20,30 +20,47 @@ import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
-public class FormularElement
+/**
+ * An element in the advanced search form
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
+public class SearchMetadataForm
 {
     private String searchValue;
     private SearchOperators operator;
     private LOGICAL_RELATIONS logicalRelation;
     private boolean not = false;
     private String namespace;
-    private List<SelectItem> filtersMenu;
+    private List<SelectItem> operatorMenu;
     private List<SelectItem> predefinedValues;
     private Statement statement;
 
-    public FormularElement()
+    /**
+     * Default constructor, create empty {@link SearchMetadataForm}
+     */
+    public SearchMetadataForm()
     {
         this.logicalRelation = LOGICAL_RELATIONS.OR;
         this.operator = SearchOperators.REGEX;
     }
 
-    public FormularElement(SearchGroup searchGroup, MetadataProfile profile)
+    /**
+     * Create a new {@link SearchMetadataForm} from a {@link SearchGroup}
+     * 
+     * @param searchGroup
+     * @param profile
+     */
+    public SearchMetadataForm(SearchGroup searchGroup, MetadataProfile profile)
     {
         this();
         for (SearchElement se : searchGroup.getElements())
@@ -70,33 +87,38 @@ public class FormularElement
             }
         }
         initStatement(profile, namespace);
-        initFiltersMenu();
+        initOperatorMenu();
     }
 
-    public void initFiltersMenu()
+    /**
+     * Intialize the filtrsMenu
+     */
+    public void initOperatorMenu()
     {
-        filtersMenu = new ArrayList<SelectItem>();
+        operatorMenu = new ArrayList<SelectItem>();
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
         {
             case DATE:
-                this.operator = SearchOperators.EQUALS;
-                filtersMenu.add(new SelectItem(SearchOperators.EQUALS_DATE, "="));
-                filtersMenu.add(new SelectItem(SearchOperators.GREATER_DATE, ">="));
-                filtersMenu.add(new SelectItem(SearchOperators.LESSER_DATE, "<="));
+                operatorMenu.add(new SelectItem(SearchOperators.EQUALS, "="));
+                operatorMenu.add(new SelectItem(SearchOperators.GREATER, ">="));
+                operatorMenu.add(new SelectItem(SearchOperators.LESSER, "<="));
                 break;
             case NUMBER:
-                this.operator = SearchOperators.EQUALS;
-                filtersMenu.add(new SelectItem(SearchOperators.EQUALS_NUMBER, "="));
-                filtersMenu.add(new SelectItem(SearchOperators.GREATER_NUMBER, ">="));
-                filtersMenu.add(new SelectItem(SearchOperators.LESSER_NUMBER, "<="));
+                operatorMenu.add(new SelectItem(SearchOperators.EQUALS, "="));
+                operatorMenu.add(new SelectItem(SearchOperators.GREATER, ">="));
+                operatorMenu.add(new SelectItem(SearchOperators.LESSER, "<="));
                 break;
             default:
-                filtersMenu.add(new SelectItem(SearchOperators.REGEX, "--"));
-                filtersMenu.add(new SelectItem(SearchOperators.EQUALS, sessionBean.getLabel("exactly")));
+                operatorMenu.add(new SelectItem(SearchOperators.REGEX, "--"));
+                operatorMenu.add(new SelectItem(SearchOperators.EQUALS, sessionBean.getLabel("exactly")));
         }
     }
 
+    /**
+     * @param p
+     * @param namespace
+     */
     public void initStatement(MetadataProfile p, String namespace)
     {
         for (Statement st : p.getStatements())
@@ -106,12 +128,18 @@ public class FormularElement
                 statement = st;
             }
         }
-        initPredefinedValues(p);
+        if (statement == null)
+            throw new RuntimeException("Statement with namespace \"" + namespace + "\" not found in profile "
+                    + p.getId());
+        initPredefinedValues();
     }
 
-    public void initPredefinedValues(MetadataProfile profile)
+    /**
+     * Initialize the predefined values if there are some defined in the profile
+     */
+    public void initPredefinedValues()
     {
-        if (statement.getLiteralConstraints().size() > 0)
+        if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
         {
             predefinedValues = new ArrayList<SelectItem>();
             predefinedValues.add(new SelectItem(null, "Select"));
@@ -124,20 +152,17 @@ public class FormularElement
             predefinedValues = null;
     }
 
-    public SearchGroup getAsSearchGroupNew()
+    /**
+     * Return the {@link SearchMetadataForm} as a {@link SearchGroup}
+     * 
+     * @return
+     */
+    public SearchGroup getAsSearchGroup()
     {
         SearchGroup group = new SearchGroup();
         if (searchValue == null || "".equals(searchValue.trim()))
         {
             return group;
-        }
-        try
-        {
-            searchValue = URLEncoder.encode(searchValue, "UTF-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new RuntimeException("Error encoding search value: " + searchValue, e);
         }
         if (namespace != null)
         {
@@ -146,7 +171,7 @@ public class FormularElement
             {
                 case DATE:
                     group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.time.name()), operator,
-                            searchValue, ns, not));
+                            DateFormatter.format(searchValue), ns, not));
                     break;
                 case GEOLOCATION:
                     group.setNot(not);
@@ -219,24 +244,24 @@ public class FormularElement
         this.logicalRelation = lr;
     }
 
-    public SearchOperators getFilter()
+    public SearchOperators getOperator()
     {
         return operator;
     }
 
-    public void setFilter(SearchOperators op)
+    public void setOperator(SearchOperators op)
     {
         this.operator = op;
     }
 
-    public List<SelectItem> getFiltersMenu()
+    public List<SelectItem> getOperatorMenu()
     {
-        return filtersMenu;
+        return operatorMenu;
     }
 
-    public void setFiltersMenu(List<SelectItem> filtersMenu)
+    public void setOperatorMenu(List<SelectItem> filtersMenu)
     {
-        this.filtersMenu = filtersMenu;
+        this.operatorMenu = filtersMenu;
     }
 
     public List<SelectItem> getPredefinedValues()

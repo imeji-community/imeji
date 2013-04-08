@@ -50,7 +50,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private SessionBean session;
     private List<SelectItem> sortMenu;
     private String selectedSortCriterion;
-    private String selectedSortOrder;
+    private String selectedSortOrder = SortOrder.DESCENDING.name();
     private FacetsBean facets;
     protected FiltersBean filters;
     private String query;
@@ -108,12 +108,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseInit();
         browseContext = getNavigationString();
-        initMenus();
         return "";
     }
 
     /**
-     * Initialization for all browse pages for get queries (non ajay queries)
+     * Initialization for all browse pages for get queries (non ajax queries)
      */
     protected void browseInit()
     {
@@ -149,11 +148,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(null, session.getLabel("default")));
-        sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel(SearchIndex.names.created.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel(SearchIndex.names.col.name())));
-        sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel(SearchIndex.names.modified.name())));
-        selectedSortOrder = SortOrder.DESCENDING.name();
+        sortMenu.add(new SelectItem(null, "--"));
+        sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel("sort_img_date_created")));
+        sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel("sort_img_date_mod")));
+        sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel("sort_img_collection")));
     }
 
     @Override
@@ -194,8 +192,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     public void cleanSelectItems()
     {
-        if (session.getSelectedImagesContext() != null
-                && !(session.getSelectedImagesContext().equals(browseContext)))
+        if (session.getSelectedImagesContext() != null && !(session.getSelectedImagesContext().equals(browseContext)))
         {
             session.getSelected().clear();
         }
@@ -388,8 +385,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private void withdraw(List<String> uris) throws Exception
     {
         ItemController ic = new ItemController(session.getUser());
-        Collection<Item> items = loadImages(uris, getElementsPerPage(), getOffset());
-        int count = 0;
+        Collection<Item> items = loadImages(uris, 0, -1);
+        int count = items.size();
         if ("".equals(discardComment.trim()))
         {
             BeanHelper.error(session.getMessage("error_image_withdraw_discardComment"));
@@ -449,15 +446,19 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         int added = sizeAfter - sizeBefore;
         int notAdded = sizeToAdd - added;
         String message = "";
+        String error = "";
         if (added > 0)
         {
             message = " " + added + " " + session.getMessage("images_added_to_active_album");
         }
         if (notAdded > 0)
         {
-            message += " " + notAdded + " " + session.getMessage("already_in_active_album");
+            error += " " + notAdded + " " + session.getMessage("already_in_active_album");
         }
-        BeanHelper.info(message);
+        if ("".equals(message))
+            BeanHelper.info(message);
+        if ("".equals(error))
+            BeanHelper.error(error);
     }
 
     public String getInitComment()
@@ -530,6 +531,11 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         this.selectedSortOrder = selectedSortOrder;
     }
 
+    /**
+     * Method called when user toggle the sort order
+     * 
+     * @return
+     */
     public String toggleSortOrder()
     {
         if (selectedSortOrder.equals("DESCENDING"))

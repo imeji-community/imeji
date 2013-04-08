@@ -7,26 +7,26 @@
 	<ui:param name="headline" value="#{lbl.details}" />
 	
 	<ui:define name="contentMenu">
-			
-			<h:outputLink id="lnkViewHome" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}" rendered="true">
+			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}">
 				<h:outputText value="#{lbl.album_home}"/>
 			</h:outputLink>
 			
-			<h:outputText styleClass="seperator void" />
+			<h:outputText styleClass="imj_contentMenuSeparator" />
 			
-			<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}?q=">
 				<h:outputText value="#{lbl.view_images}"/>
 			</h:outputLink>
 			
-			<h:outputText styleClass="seperator void" />
+			<h:outputText styleClass="imj_contentMenuSeparator" />
 			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.infosPath}?init=1">
 				<h:outputText value="#{lbl.album_metadata}"/>
 			</h:outputLink>
 			
 		</ui:define>
 			
 	<ui:define name="preListHeader">
+	
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
 		<ui:include src="./include/History.xhtml"></ui:include><br/>
 			<h:outputLink value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}" styleClass="free_area1_p6 small_marginLIncl">

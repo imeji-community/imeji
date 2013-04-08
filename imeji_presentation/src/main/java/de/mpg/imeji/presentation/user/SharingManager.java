@@ -50,6 +50,7 @@ public class SharingManager
                     target = gc.updateGrant(target, ng);
                 else
                     target = gc.addGrant(target, ng);
+
                 if (o instanceof CollectionImeji)
                 {
                     try

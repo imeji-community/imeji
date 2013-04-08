@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 
 /**
@@ -35,6 +36,7 @@ public class GrantController extends ImejiController
      */
     public User addGrant(User user, Grant grant) throws Exception
     {
+
         if (!isValid(grant))
         {
             throw new RuntimeException("Grant: " + grant.getGrantType() + " for " + grant.getGrantFor() + " not valid");

@@ -77,13 +77,4 @@ public class MetadataProfile extends Properties
     {
         this.statements = statements;
     }
-    // public void setProperties(Properties properties)
-    // {
-    // this.properties = properties;
-    // }
-    //
-    // public Properties getProperties()
-    // {
-    // return properties;
-    // }
 }

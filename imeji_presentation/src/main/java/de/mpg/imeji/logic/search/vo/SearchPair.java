@@ -17,6 +17,14 @@ public class SearchPair extends SearchElement
     private SearchOperators operator;
     private String value;
 
+    /**
+     * Default constructor
+     */
+    public SearchPair()
+    {
+        // TODO Auto-generated constructor stub
+    }
+
     public SearchPair(SearchIndex index, SearchOperators operator, String value)
     {
         this(index, operator, value, false);

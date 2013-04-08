@@ -6,6 +6,17 @@ package de.mpg.imeji.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.ReadWrite;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.Syntax;
+import com.hp.hpl.jena.tdb.TDB;
+import com.hp.hpl.jena.update.UpdateAction;
+import com.hp.hpl.jena.update.UpdateFactory;
+import com.hp.hpl.jena.update.UpdateRequest;
+
 import de.mpg.j2j.transaction.SearchTransaction;
 
 /**
@@ -66,5 +77,24 @@ public class ImejiSPARQL
             return Integer.parseInt(results.get(0));
         }
         return 0;
+    }
+
+    /**
+     * execute a sparql update (this is not implemented in multi-thread manner, so only use to admin purpose)
+     * 
+     * @param query
+     */
+    public static void execUpdate(String query)
+    {
+        ImejiJena.imejiDataSet.begin(ReadWrite.WRITE);
+        try
+        {
+            UpdateAction.parseExecute(query, ImejiJena.imejiDataSet);
+            ImejiJena.imejiDataSet.commit();
+        }
+        finally
+        {
+            ImejiJena.imejiDataSet.end();
+        }
     }
 }

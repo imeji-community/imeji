@@ -1,7 +1,16 @@
-/* For imeji we use normalize.css as a base, customised with own imeji styles! 
+
+/* ========================================================================== 
+ ***************************** imeji basic styles ***************************
  * 
- * 
- * ! normalize.css v2.1.0 | MIT License | git.io/normalize */
+ * for imeji we use normalize.css as a base and additional CSS resets 
+ * (to ensure relatively universal default browser-style uniformity) 
+ * customised with own imeji styles in style.css 
+ *
+ ====================================================================================== */
+
+
+
+/* ! normalize.css v2.1.0 | MIT License | git.io/normalize */
 
 /* ==========================================================================
 HTML5 display definitions
@@ -76,6 +85,7 @@ html {
 
 body {
     margin: 0;
+    padding: 0;
 }
 
 /* ==========================================================================
@@ -399,17 +409,54 @@ table {
 }
 
 
+
+
 /* ========================================================================== 
- *********** imeji specific styles ********** 
- * imeji style prefix for all classes and ids: imj_ 
- ========================================================================== */
+ ***************************** imeji basic styles ***************************
+ * Additional CSS Resets
+ * ========================================================================== */
+
 
 form {
-	display:inline;
+	display: inline;
 }
 
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, 
+pre, form, fieldset, input, textarea, p, blockquote, th, td { 
+	padding: 0;
+	margin: 0;
+}
 
+html {
+    font-size: 1em;
+}
 
+body {
+    font-size: 100%;
+}
 
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+	font-size: 100%;
+}
 
+ol, ul {
+	list-style: none;
+}
 
+address, caption, cite, code, dfn, em, strong, th, var {
+	font-weight: normal;
+	font-style: normal;
+}
+
+caption, th {
+	text-align: left;
+}
+
+q:before, q:after {
+	content:'';
+}
+
+abbr, acronym { 
+	border: 0;
+}

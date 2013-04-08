@@ -13,12 +13,16 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
+import de.mpg.imeji.presentation.user.util.GrantHelper;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.LocalizedStringHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
@@ -105,6 +109,16 @@ public class UsersBean
         }
     }
 
+    public String grantsString (Grant grant)
+    {
+    	String grantStr = "";   	
+        String role = GrantHelper.grantString(grant);
+    	
+        grantStr = role + " "+  ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("for") + " " + grant.getGrantFor();
+        
+    	return grantStr;
+    }
+    
     /**
      * Delete a {@link User}
      * 
@@ -114,6 +128,7 @@ public class UsersBean
     {
         String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("email");
         UserController controller = new UserController(session.getUser());
+        
         try
         {
             controller.delete(ObjectLoader.loadUser(email, session.getUser()));

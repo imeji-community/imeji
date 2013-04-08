@@ -48,7 +48,7 @@
 							
 							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="Send an email"/>
+									<h:outputText value="#{lbl.user_send_mail}"/>
 									<span class="noDisplay">: </span>
 								</b>
 								<span class="xHuge_area0 xTiny_marginLExcl endline">
@@ -60,7 +60,7 @@
 					</h:panelGroup>
 					<div class="full_area0 formButtonArea">
 						
-						<h:outputLink value="?reset=1" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" >
+						<h:outputLink value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" >
 							<h:outputText value="#{lbl.cancel}" />
 						</h:outputLink>
 						<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					

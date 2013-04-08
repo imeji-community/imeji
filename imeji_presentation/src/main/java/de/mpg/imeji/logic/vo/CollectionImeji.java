@@ -4,8 +4,11 @@
 package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -25,6 +28,11 @@ public class CollectionImeji extends Container
     private URI profile = null;
     @j2jResource("http://imeji.org/terms/metadataSet")
     private MetadataSet metadataSet = new MetadataSet();
+    /**
+     * Item list is not defined as a {@link j2jList}, i.e. there is no triple like "collection has item", but only
+     * "item is in collection". This avoid performance issue when the collection is growing.
+     */
+    private Collection<URI> images = new ArrayList<URI>();
 
     public URI getProfile()
     {
@@ -44,5 +52,15 @@ public class CollectionImeji extends Container
     public void setMetadataSet(MetadataSet metadataSet)
     {
         this.metadataSet = metadataSet;
+    }
+
+    public void setImages(Collection<URI> images)
+    {
+        this.images = images;
+    }
+
+    public Collection<URI> getImages()
+    {
+        return images;
     }
 }

@@ -45,6 +45,11 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
+		<managed-bean-name>UploadBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.upload.UploadBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>CollectionImagesBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionImagesBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -52,16 +57,6 @@
 	<managed-bean>
 		<managed-bean-name>CollectionImageBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionImageBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>UploadBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.upload.UploadBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>IngestBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.ingest.IngestBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

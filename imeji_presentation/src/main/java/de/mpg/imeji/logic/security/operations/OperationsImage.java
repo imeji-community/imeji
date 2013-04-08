@@ -88,7 +88,7 @@ public class OperationsImage implements Operations
      */
     public boolean readRestricted(User user, Object object)
     {
-        return auth.isPrivilegedViewer(user, (Item)object) || auth.isPictureEditor(user, (Item)object)
+        return  auth.isPictureEditor(user, (Item)object)
                 || auth.isContainerEditor(user, ((Item)object)) || auth.isContainerAdmin(user, ((Item)object));
     }
 }

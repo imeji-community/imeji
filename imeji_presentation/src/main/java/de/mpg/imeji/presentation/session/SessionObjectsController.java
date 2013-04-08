@@ -53,6 +53,8 @@ public class SessionObjectsController
     }
 
     /**
+     * Add a list of uri to the active {@link Album} in the session
+     * 
      * @param uris
      * @throws Exception
      */
@@ -64,6 +66,8 @@ public class SessionObjectsController
     }
 
     /**
+     * Remove the list of uri from the active {@link Album} in the session
+     * 
      * @param uris
      * @throws Exception
      */

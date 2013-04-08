@@ -1,11 +1,12 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.export.format;
+package de.mpg.imeji.logic.export.format.rdf;
 
 import java.util.HashMap;
 
 import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.User;

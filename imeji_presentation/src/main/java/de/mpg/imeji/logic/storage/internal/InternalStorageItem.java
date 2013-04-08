@@ -37,9 +37,9 @@ package de.mpg.imeji.logic.storage.internal;
  */
 public class InternalStorageItem
 {
-    private String orignalPath;
-    private String webPath;
-    private String thumbnailPath;
+    private String originalUrl;
+    private String webUrl;
+    private String thumbnailUrl;
     private String fileName;
     private String id;
     private int version;
@@ -59,36 +59,6 @@ public class InternalStorageItem
     public InternalStorageItem(String id)
     {
         this.id = id;
-    }
-
-    public String getOrignalPath()
-    {
-        return orignalPath;
-    }
-
-    public void setOrignalPath(String orignalPath)
-    {
-        this.orignalPath = orignalPath;
-    }
-
-    public String getWebPath()
-    {
-        return webPath;
-    }
-
-    public void setWebPath(String webPath)
-    {
-        this.webPath = webPath;
-    }
-
-    public String getThumbnailPath()
-    {
-        return thumbnailPath;
-    }
-
-    public void setThumbnailPath(String thumbnailPath)
-    {
-        this.thumbnailPath = thumbnailPath;
     }
 
     public String getFileName()
@@ -119,5 +89,35 @@ public class InternalStorageItem
     public void setVersion(int version)
     {
         this.version = version;
+    }
+
+    public String getOriginalUrl()
+    {
+        return originalUrl;
+    }
+
+    public void setOriginalUrl(String originalUrl)
+    {
+        this.originalUrl = originalUrl;
+    }
+
+    public String getWebUrl()
+    {
+        return webUrl;
+    }
+
+    public void setWebUrl(String webUrl)
+    {
+        this.webUrl = webUrl;
+    }
+
+    public String getThumbnailUrl()
+    {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl)
+    {
+        this.thumbnailUrl = thumbnailUrl;
     }
 }

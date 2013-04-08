@@ -75,11 +75,6 @@ public class ImageBean
         labels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
     }
 
-    // public String getInitPopup() throws Exception
-    // {
-    // labels.init(profile);
-    // return "";
-    // }
     /**
      * Initialize the {@link ImageBean}
      * 

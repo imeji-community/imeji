@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -83,19 +84,6 @@ public class AlbumImagesBean extends ImagesBean
         album = ObjectLoader.loadAlbumLazy(uri, session.getUser());
     }
 
-    /**
-     * Set the {@link Item} of the {@link AlbumBean}
-     * 
-     * @param uris
-     */
-    public void setAlbumItems(List<String> uris)
-    {
-        for (String uri : uris)
-        {
-            album.getImages().add(URI.create(uri));
-        }
-    }
-
     @Override
     public String initFacets() throws Exception
     {
@@ -103,6 +91,12 @@ public class AlbumImagesBean extends ImagesBean
         return "";
     }
 
+    /**
+     * Remove the selected {@link Item} from the current {@link Album}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String removeFromAlbum() throws Exception
     {
         removeFromAlbum(session.getSelected());
@@ -131,7 +125,7 @@ public class AlbumImagesBean extends ImagesBean
      */
     public String removeAllFromAlbum() throws Exception
     {
-        removeFromAlbum(itemsUris);
+        removeAllFromAlbum(album);
         return "pretty:";
     }
 
@@ -143,8 +137,21 @@ public class AlbumImagesBean extends ImagesBean
      */
     public String removeAllFromActiveAlbum() throws Exception
     {
-        removeFromActive(itemsUris);
+        removeAllFromAlbum(session.getActiveAlbum());
         return "pretty:";
+    }
+
+    /**
+     * Remove all {@link Item} from an {@link Album}
+     * 
+     * @param album
+     * @throws Exception
+     */
+    private void removeAllFromAlbum(Album album) throws Exception
+    {
+        album.setImages(new ArrayList<URI>());
+        AlbumController ac = new AlbumController();
+        ac.update(album, session.getUser());
     }
 
     /**
@@ -158,11 +165,13 @@ public class AlbumImagesBean extends ImagesBean
         if (session.getActiveAlbum() != null
                 && album.getId().toString().equals(session.getActiveAlbum().getId().toString()))
         {
+            // if the current album is the active album as well
             removeFromActive(uris);
         }
         else
         {
             AlbumController ac = new AlbumController();
+            album = (Album)ac.loadContainerItems(album, session.getUser(), -1, 0);
             int deletedCount = ac.removeFromAlbum(album, uris, session.getUser());
             BeanHelper.info(deletedCount + " " + session.getMessage("success_album_remove_images"));
         }
@@ -238,6 +247,16 @@ public class AlbumImagesBean extends ImagesBean
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).getAlbum().setDiscardComment(dc);
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
         return "pretty:";
+    }
+    
+    /**
+     * Listener for the discard comment
+     * 
+     * @param event
+     */
+    public void discardCommentListener(ValueChangeEvent event)
+    {
+        album.setDiscardComment(event.getNewValue().toString());
     }
 
     @Override

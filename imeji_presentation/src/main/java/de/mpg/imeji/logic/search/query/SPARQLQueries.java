@@ -70,6 +70,19 @@ public class SPARQLQueries
     }
 
     /**
+     * @param fileUrl
+     * @return
+     */
+    public static String selectCollectionIdOfFile(String fileUrl)
+    {
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {" + "optional{"
+                + "?it <http://imeji.org/terms/webImageUrl> <" + fileUrl
+                + ">} . optional {?it <http://imeji.org/terms/thumbnailImageUrl> <" + fileUrl
+                + ">} . optional{ ?it <http://imeji.org/terms/fullImageUrl> <" + fileUrl + ">}"
+                + " . ?it <http://imeji.org/terms/collection> ?s . } LIMIT 1 ";
+    }
+
+    /**
      * Select all {@link Metadata} which are not related to a statement. Happens when a {@link Statement} is removed
      * from a {@link MetadataProfile}
      * 

@@ -196,7 +196,7 @@ public class MdProfileBean
             ProfileController pc = new ProfileController();
             for (MetadataProfile mdp : pc.search(sessionBean.getUser()))
             {
-                if (mdp.getId().toString().equals(profile.getId().toString()))
+                if (!mdp.getId().toString().equals(profile.getId().toString()))
                 {
                     profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
                 }
@@ -275,7 +275,7 @@ public class MdProfileBean
                 BeanHelper.error(s.getId() + " " + sessionBean.getMessage("error_profile_name_not_valid"));
                 return false;
             }
-            else if (s.getLabels().isEmpty() || "".equals(((List<LocalizedString>)s.getLabels()).get(0).toString()))
+            else if (s.getLabels().isEmpty() || "".equals(((List<LocalizedString>)s.getLabels()).get(0).getValue()))
             {
                 BeanHelper.error(sessionBean.getMessage("error_profile_name_required"));
                 return false;
@@ -341,6 +341,11 @@ public class MdProfileBean
         return "pretty:";
     }
 
+    /**
+     * Return the size of the list of statement
+     * 
+     * @return
+     */
     public int getSize()
     {
         return wrappers.size();
@@ -442,7 +447,7 @@ public class MdProfileBean
      */
     private void moveWrapper(StatementWrapper dragged, int from, int to)
     {
-        if (to + 1 < wrappers.size())
+        if (to < wrappers.size())
         {
             wrappers.add(to + 1, dragged);
             if (to < from)
@@ -454,7 +459,6 @@ public class MdProfileBean
                 wrappers.remove(from);
             }
         }
-       // setStatementPositionLikeInList();
         sort();
     }
 

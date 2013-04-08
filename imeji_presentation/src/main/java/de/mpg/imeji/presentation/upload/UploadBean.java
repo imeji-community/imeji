@@ -128,6 +128,8 @@ public class UploadBean
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             externalController.read(url.toString(), baos);
             Item item = uploadFile(baos.toByteArray());
+            UserController uc = new UserController(null);
+            user = uc.retrieve(getUser().getEmail());
             ItemController ic = new ItemController(user);
             ic.create(item, collection.getId());
             externalUrl = "";

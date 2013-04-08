@@ -8,10 +8,10 @@
 
 	<ui:define name="actionsMenu">
 		<h:outputText value="#{paginatorListSessionBean.initPage}" />
-		<h:panelGroup layout="block" styleClass="free_area0 sub action">
+		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 			<!-- SORTING content menu lower line starts here -->
 			<h:outputText id="txtSort" value="#{lbl.sort_by}"
-				styleClass="freee_area0" style="margin-top:0.18em;" />
+				styleClass="imj_contentSubMenuItemSorting" />
 			<h:form>
 				<h:selectOneMenu id="selSort"
 					value="#{ImagesBean.selectedSortCriterion}"
@@ -25,7 +25,7 @@
 					action="#{paginatorListSessionBean.toggleSortOrder}"
 					rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
 			</h:form>
-			<h:outputText styleClass="seperator void" />
+			<h:outputText styleClass="imj_contentMenuSeparator" />
 			<!-- SORTING content menu lower line ends here -->
 			<h:outputLink
 				value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}"

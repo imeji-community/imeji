@@ -33,7 +33,8 @@
 						styleClass="full_area0" />
 				</h2>
 				<h:outputLink
-					value="#{Navigation.applicationUri}/jsf/AdminInterface.xhtml" target="_blank">
+					value="#{Navigation.applicationUri}/jsf/AdminInterface.xhtml"
+					target="_blank">
 					<h:outputText value="#{lbl.view_detail}" />
 				</h:outputLink>
 			</h:panelGroup>
@@ -45,11 +46,12 @@
 				</h2>
 				<h:form>
 					<h:commandLink styleClass="free_area0"
-						action="#{AdminBean.reIndex}" value="ReIndex" />
+						action="#{AdminBean.reIndex}"
+						value="#{lbl.admin_advanced_reindex}" />
 					<h:commandLink styleClass="free_area0 xTiny_marginLExcl"
-						action="#{AdminBean.status}" value="Status" />
+						action="#{AdminBean.status}" value="#{lbl.admin_advanced_state}" />
 					<h:commandLink styleClass="free_area0 xTiny_marginLExcl"
-						action="#{AdminBean.clean}" value="!!Clean!!" />
+						action="#{AdminBean.clean}" value="#{lbl.admin_advanced_clean}" />
 				</h:form>
 			</h:panelGroup>
 

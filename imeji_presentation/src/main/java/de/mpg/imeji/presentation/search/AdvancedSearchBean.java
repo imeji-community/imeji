@@ -39,7 +39,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  */
 public class AdvancedSearchBean
 {
-    private SearchFormular formular = null;
+    private SearchForm formular = null;
     // Menus
     private List<SelectItem> collectionsMenu;
     private List<SelectItem> operatorsMenu;
@@ -89,7 +89,7 @@ public class AdvancedSearchBean
         Map<String, MetadataProfile> profs = loadProfilesAndInitCollectionsMenu(cols.values());
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init1((new ArrayList<MetadataProfile>(profs
                 .values())));
-        formular = new SearchFormular(searchQuery, cols, profs);
+        formular = new SearchForm(searchQuery, cols, profs);
         if (formular.getGroups().size() == 0)
         {
             formular.addSearchGroup(0);
@@ -173,7 +173,7 @@ public class AdvancedSearchBean
                     .getExternalContext()
                     .redirect(
                             navigation.getBrowseUrl() + "?q="
-                                    + URLQueryTransformer.transform2URL(formular.getFormularAsSearchQuery()));
+                                    + URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery()));
         }
         catch (IOException e)
         {
@@ -192,7 +192,7 @@ public class AdvancedSearchBean
     }
 
     /**
-     * Add a new {@link FormularGroup}
+     * Add a new {@link SearchGroupForm}
      */
     public void addGroup()
     {
@@ -202,7 +202,7 @@ public class AdvancedSearchBean
     }
 
     /**
-     * Remove a {@link FormularGroup}
+     * Remove a {@link SearchGroupForm}
      */
     public void removeGroup()
     {
@@ -216,7 +216,7 @@ public class AdvancedSearchBean
     }
 
     /**
-     * Change a {@link FormularElement}. The search value is removed
+     * Change a {@link SearchMetadataForm}. The search value is removed
      */
     public void changeElement()
     {
@@ -228,7 +228,7 @@ public class AdvancedSearchBean
     }
 
     /**
-     * Update a {@link FormularElement}. The search value is keeped
+     * Update a {@link SearchMetadataForm}. The search value is keeped
      */
     public void updateElement()
     {
@@ -240,7 +240,7 @@ public class AdvancedSearchBean
     }
 
     /**
-     * Add a new {@link FormularElement}
+     * Add a new {@link SearchMetadataForm}
      */
     public void addElement()
     {
@@ -252,7 +252,7 @@ public class AdvancedSearchBean
     }
 
     /**
-     * Remove a new {@link FormularElement}
+     * Remove a new {@link SearchMetadataForm}
      */
     public void removeElement()
     {
@@ -261,7 +261,7 @@ public class AdvancedSearchBean
         int elPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
                 .get("elPos"));
         formular.removeElement(gPos, elPos);
-        if (formular.getGroups().get(gPos).getElements().size() == 0)
+        if (formular.getGroups().get(gPos).getSearchElementForms().size() == 0)
         {
             formular.removeSearchGroup(gPos);
             formular.addSearchGroup(gPos);
@@ -303,12 +303,12 @@ public class AdvancedSearchBean
      * 
      * @return
      */
-    public SearchFormular getFormular()
+    public SearchForm getFormular()
     {
         return formular;
     }
 
-    public void setFormular(SearchFormular formular)
+    public void setFormular(SearchForm formular)
     {
         this.formular = formular;
     }

@@ -7,25 +7,25 @@
 	<ui:param name="headline" value="#{lbl.technical_metadata}" />
 	
 	<ui:define name="contentMenu">
-		<h:outputLink id="lnkViewCollectionStart" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.id}" rendered="true">
+		<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.applicationUri}#{CollectionImagesBean.id}" rendered="true">
 			<h:outputText value="#{lbl.collection_home}"/>
 		</h:outputLink>			
 		
-		<h:outputText styleClass="seperator void" />
+		<h:outputText styleClass="imj_contentMenuSeparator" />
 		
-		<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.id}/details?init=1" rendered="true">
+		<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.applicationUri}#{CollectionImagesBean.id}/details?init=1" rendered="true">
 			<h:outputText value="#{lbl.collection_metadata}"/>
 		</h:outputLink>
 		
-		<h:outputText styleClass="seperator void" />
+		<h:outputText styleClass="imj_contentMenuSeparator" />
 		
-		<h:outputLink id="lnkViewProfile" styleClass="free_area0" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.profile.path}?init=1" rendered="true">
+		<h:outputLink id="lnkViewProfile" styleClass="imj_contentMenuItem" value="#{Navigation.applicationUri}#{CollectionImagesBean.collection.profile.path}?init=1" rendered="true">
 			<h:outputText value="#{lbl.collection_profile}"></h:outputText>
 		</h:outputLink>
 		
-		<h:outputText styleClass="seperator void" />
+		<h:outputText styleClass="imj_contentMenuSeparator" />
 		
-		<h:outputLink id="lnkUploadImages" styleClass="free_area0" value="#{Navigation.applicationUrl}upload#{CollectionImagesBean.id}?init=1" rendered="true">
+		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.applicationUrl}upload#{CollectionImagesBean.id}?init=1" rendered="true">
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
 		</h:outputLink>
 	</ui:define>

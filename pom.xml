@@ -3,7 +3,7 @@
 	<groupId>de.mpg.mpdl.imeji</groupId>
 	<artifactId>imeji</artifactId>
 	<packaging>pom</packaging>
-	<version>1.1.0.1-SNAPSHOT</version>
+	<version>1.1.0.2-SNAPSHOT</version>
 	<name>imeji</name>
 	<url>http://imeji.org</url>
 	<description>

@@ -66,6 +66,11 @@ public class EscidocStorage implements Storage
     private Item item;
     private HttpClient client;
     private static Logger logger = Logger.getLogger(EscidocStorage.class);
+    private static long lastLoginTime = System.currentTimeMillis();
+    /**
+     * How a long a login in escidoc is considered as valid. Time is define in ms. The time is set to 1 hour
+     */
+    private static long LOGIN_TIME_VALIDITY = 3600000;
 
     /**
      * Constructor for {@link EscidocStorage}
@@ -226,13 +231,23 @@ public class EscidocStorage implements Storage
      * @throws URISyntaxException
      * @throws Exception
      */
-    private String getEscidocCookie()
+    private synchronized String getEscidocCookie()
     {
-        if (auth.getHandle() == null)
+        if (auth.getHandle() == null || loginIsExpired())
         {
             login();
         }
         return "escidocCookie=" + auth.getHandle();
+    }
+
+    /**
+     * If the login is older then the LOGIN_TIME_VALIDITY, return true
+     * 
+     * @return
+     */
+    private boolean loginIsExpired()
+    {
+        return (System.currentTimeMillis() - lastLoginTime) > LOGIN_TIME_VALIDITY;
     }
 
     /**
@@ -244,6 +259,7 @@ public class EscidocStorage implements Storage
         {
             logger.info("Logging in escidoc");
             auth = util.login();
+            lastLoginTime = System.currentTimeMillis();
         }
         catch (Exception e)
         {

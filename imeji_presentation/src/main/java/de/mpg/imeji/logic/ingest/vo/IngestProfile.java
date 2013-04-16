@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * @author hnguyen
  */
-@XmlRootElement(name = "ingestProfile")
+@XmlRootElement(name = "ingestProfile", namespace = "http://imeji.org/terms/ingestprofile")
 public class IngestProfile
 {
     private MetadataProfiles mdProfiles;

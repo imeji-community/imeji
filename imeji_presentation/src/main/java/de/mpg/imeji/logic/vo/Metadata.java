@@ -7,8 +7,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
@@ -34,7 +37,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name = "metadata")
+@XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms/metadata")
 @XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class, Geolocation.class, License.class, Link.class,
         Publication.class })
 public abstract class Metadata
@@ -43,10 +46,18 @@ public abstract class Metadata
     private URI id = IdentifierUtil.newURI(Metadata.class);
     private int pos = 0;
 
+    @XmlEnum(Types.class)
     public enum Types
     {
-        TEXT(Text.class), NUMBER(Number.class), CONE_PERSON(ConePerson.class), DATE(Date.class), GEOLOCATION(
-                Geolocation.class), LICENSE(License.class), LINK(Link.class), PUBLICATION(Publication.class);
+    	TEXT(Text.class), 
+    	NUMBER(Number.class), 
+    	CONE_PERSON(ConePerson.class), 
+    	DATE(Date.class), 
+    	GEOLOCATION(Geolocation.class),
+    	LICENSE(License.class), 
+    	LINK(Link.class), 
+    	PUBLICATION(Publication.class);
+        
         private Class<? extends Metadata> clazz = null;
 
         private Types(Class<? extends Metadata> clazz)
@@ -54,13 +65,6 @@ public abstract class Metadata
             this.clazz = clazz;
         }
 
-        @XmlElements({ @XmlElement(name = "text", type = Text.class),
-                @XmlElement(name = "number", type = Number.class),
-                @XmlElement(name = "conePerson", type = ConePerson.class),
-                @XmlElement(name = "date", type = Date.class),
-                @XmlElement(name = "geolocation", type = Geolocation.class),
-                @XmlElement(name = "license", type = License.class), @XmlElement(name = "link", type = Link.class),
-                @XmlElement(name = "publication", type = Publication.class) })
         public Class<? extends Metadata> getClazz()
         {
             return clazz;

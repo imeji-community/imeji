@@ -5,6 +5,8 @@ package de.mpg.imeji.logic.vo.predefinedMetadata;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.util.DateFormatter;
@@ -24,7 +26,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jDataType("http://imeji.org/terms/metadata#date")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlType(name = "date")
+@XmlRootElement(name = "date", namespace = "http://imeji.org/terms/metadata#date")
 public class Date extends Metadata
 {
     @j2jLiteral("http://imeji.org/terms/date")
@@ -38,6 +40,7 @@ public class Date extends Metadata
     {
     }
 
+    @XmlElement(name = "date", namespace="http://imeji.org/terms/date")
     public String getDate()
     {
         return date;
@@ -52,6 +55,7 @@ public class Date extends Metadata
         }
     }
 
+    @XmlElement(name = "time", namespace="http://imeji.org/terms/time")
     public long getTime()
     {
         return time;
@@ -63,6 +67,7 @@ public class Date extends Metadata
     }
 
     @Override
+    @XmlElement(name = "statement", namespace="http://imeji.org/terms/statement")
     public URI getStatement()
     {
         return statement;

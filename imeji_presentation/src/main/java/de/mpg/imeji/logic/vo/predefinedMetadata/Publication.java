@@ -5,6 +5,8 @@ package de.mpg.imeji.logic.vo.predefinedMetadata;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.vo.Metadata;
@@ -23,7 +25,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jDataType("http://imeji.org/terms/metadata#publication")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlType(name = "publication")
+@XmlRootElement(name = "publication", namespace = "http://imeji.org/terms/metadata#publication")
 public class Publication extends Metadata
 {
     @j2jLiteral("http://imeji.org/terms/uri")
@@ -39,6 +41,7 @@ public class Publication extends Metadata
     {
     }
 
+    @XmlElement(name = "uri", namespace="http://imeji.org/terms/uri")
     public java.net.URI getUri()
     {
         return uri;
@@ -48,7 +51,8 @@ public class Publication extends Metadata
     {
         this.uri = uri;
     }
-
+    
+    @XmlElement(name = "exportFormat", namespace="http://imeji.org/terms/citationStyle")
     public String getExportFormat()
     {
         return exportFormat;
@@ -59,6 +63,7 @@ public class Publication extends Metadata
         this.exportFormat = exportFormat;
     }
 
+    @XmlElement(name = "citation", namespace="http://imeji.org/terms/citationi")
     public String getCitation()
     {
         return citation;
@@ -70,6 +75,7 @@ public class Publication extends Metadata
     }
 
     @Override
+    @XmlElement(name = "statement", namespace="http://imeji.org/terms/statement")
     public URI getStatement()
     {
         return statement;

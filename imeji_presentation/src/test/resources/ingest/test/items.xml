@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<items>
+    <item>
+        <created>2013-04-10T14:02:22.021Z</created>
+        <createdBy>http://localhost:8080/imeji/user/admin%40imeji.org</createdBy>
+        <discardComment></discardComment>
+        <id>http://localhost:8080/imeji/item/H60SzgTY4im4Pgb</id>
+        <modified>2013-04-10T15:56:08.782Z</modified>
+        <modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</modifiedBy>
+        <status>PENDING</status>
+        <version>0</version>
+        <checksum>8e5060d2b6544e033132d11d8cb00c80</checksum>
+        <collection>http://localhost:8080/imeji/collection/6eQFSDakubQj_BfA</collection>
+        <escidocId></escidocId>
+        <filename>DMA_NL_207_00004_sq.jpg</filename>
+        <fullImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/c5/ba/10/d3-adaf-4fef-b075-cded3f4850fc/0/original/fba4bf51eb92606159becf6641b2a9be.jpg</fullImageUrl>
+        <fulltextIndex>DMA_NL_207_00004_sq.jpg Bild 1 Titel Bild 1 Beschreibung Bild 1 Untertitel http://localhost:8080/imeji/</fulltextIndex>
+        <metadataSets>
+            <id>http://localhost:8080/imeji/item/H60SzgTY4im4Pgb/metadataSet/0</id>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/rZ0waX1zUieRtGLe</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/Qzo4omiNDB4_hoJW</statement>
+                <text>Bild 1 Titel</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/E3t_xQCd35U8KdXP</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/Y0PApu1ufvATTiPM</statement>
+                <text>Bild 1 Beschreibung</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/jKApEpRx1zkuNhFy</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/8GeUXwIWMuRONz</statement>
+                <text>Bild 1 Untertitel</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/2__tzvjfxUArQUOf</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/1Ewn_BdKFUr897aL</statement>
+                <text>http://localhost:8080/imeji/</text>
+            </metadata>
+            <profile>http://localhost:8080/imeji/metadataProfile/5yWA6RhasrQMBr1m</profile>
+        </metadataSets>
+        <storageId>6eQFSDakubQj_BfA/c5/ba/10/d3-adaf-4fef-b075-cded3f4850fc/0</storageId>
+        <thumbnailImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/c5/ba/10/d3-adaf-4fef-b075-cded3f4850fc/0/thumbnail/fba4bf51eb92606159becf6641b2a9be.jpg</thumbnailImageUrl>
+        <visibility>PRIVATE</visibility>
+        <webImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/c5/ba/10/d3-adaf-4fef-b075-cded3f4850fc/0/web/fba4bf51eb92606159becf6641b2a9be.jpg</webImageUrl>
+    </item>
+    <item>
+        <created>2013-04-10T14:02:22.021Z</created>
+        <createdBy>http://localhost:8080/imeji/user/admin%40imeji.org</createdBy>
+        <discardComment></discardComment>
+        <id>http://localhost:8080/imeji/item/Xqp88xB1BZFj3JJ</id>
+        <modified>2013-04-10T15:56:48.073Z</modified>
+        <modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</modifiedBy>
+        <status>PENDING</status>
+        <version>0</version>
+        <checksum>606d5cda9740b75a4c34b28ff2b62c4b</checksum>
+        <collection>http://localhost:8080/imeji/collection/6eQFSDakubQj_BfA</collection>
+        <escidocId></escidocId>
+        <filename>DMA_NL_207_00003_sq.jpg</filename>
+        <fullImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/f7/72/2f/16-4ccb-4c94-a61e-b723b9bb454d/0/original/4d4ea8a1fae0a189d6a0ebce3190955a.jpg</fullImageUrl>
+        <fulltextIndex>DMA_NL_207_00003_sq.jpg Bild 2 Titel Bild 2 Beschreibung Bild 2 Untertitel http://localhost:8080/imeji/</fulltextIndex>
+        <metadataSets>
+            <id>http://localhost:8080/imeji/item/Xqp88xB1BZFj3JJ/metadataSet/0</id>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/xvzljKW0BSv7vtZ8</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/Qzo4omiNDB4_hoJW</statement>
+                <text>Bild 2 Titel</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/yw7PkUZk692yEoLA</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/Y0PApu1ufvATTiPM</statement>
+                <text>Bild 2 Beschreibung</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/Uqy0FKWL9A74Yk9g</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/8GeUXwIWMuRONz</statement>
+                <text>Bild 2 Untertitel</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/eYJjwgUQRW3Gki_a</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/1Ewn_BdKFUr897aL</statement>
+                <text>http://localhost:8080/imeji/</text>
+            </metadata>
+            <profile>http://localhost:8080/imeji/metadataProfile/5yWA6RhasrQMBr1m</profile>
+        </metadataSets>
+        <storageId>6eQFSDakubQj_BfA/f7/72/2f/16-4ccb-4c94-a61e-b723b9bb454d/0</storageId>
+        <thumbnailImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/f7/72/2f/16-4ccb-4c94-a61e-b723b9bb454d/0/thumbnail/4d4ea8a1fae0a189d6a0ebce3190955a.jpg</thumbnailImageUrl>
+        <visibility>PRIVATE</visibility>
+        <webImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/f7/72/2f/16-4ccb-4c94-a61e-b723b9bb454d/0/web/4d4ea8a1fae0a189d6a0ebce3190955a.jpg</webImageUrl>
+    </item>
+    <item>
+        <created>2013-04-10T14:02:22.021Z</created>
+        <createdBy>http://localhost:8080/imeji/user/admin%40imeji.org</createdBy>
+        <discardComment></discardComment>
+        <id>http://localhost:8080/imeji/item/XvMQHtnKos3IbyTW</id>
+        <modified>2013-04-10T15:57:05.274Z</modified>
+        <modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</modifiedBy>
+        <status>PENDING</status>
+        <version>0</version>
+        <checksum>f40c1644a3ba6740be261df6734a50c7</checksum>
+        <collection>http://localhost:8080/imeji/collection/6eQFSDakubQj_BfA</collection>
+        <escidocId></escidocId>
+        <filename>DMA_NL_207_00002_sq.jpg</filename>
+        <fullImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/15/e6/59/56-950f-4e0f-81b6-69954c07166f/0/original/1ac6c6634a1e39e561468cd9852ed46e.jpg</fullImageUrl>
+        <fulltextIndex>DMA_NL_207_00002_sq.jpg Bild 3 Titel Bild 3 Beschreibung Bild 3 Untertitel http://localhost:8080/imeji/</fulltextIndex>
+        <metadataSets>
+            <id>http://localhost:8080/imeji/item/XvMQHtnKos3IbyTW/metadataSet/0</id>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/2p_7VBg6fjOmlPu</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/Qzo4omiNDB4_hoJW</statement>
+                <text>Bild 3 Titel</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/hsaPO4OaLD84OtNw</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/Y0PApu1ufvATTiPM</statement>
+                <text>Bild 3 Beschreibung</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/uspCNQBCa0HJOwQ5</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/8GeUXwIWMuRONz</statement>
+                <text>Bild 3 Untertitel</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/_BUMXle61hve7fR</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/1Ewn_BdKFUr897aL</statement>
+                <text>http://localhost:8080/imeji/</text>
+            </metadata>
+            <profile>http://localhost:8080/imeji/metadataProfile/5yWA6RhasrQMBr1m</profile>
+        </metadataSets>
+        <storageId>6eQFSDakubQj_BfA/15/e6/59/56-950f-4e0f-81b6-69954c07166f/0</storageId>
+        <thumbnailImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/15/e6/59/56-950f-4e0f-81b6-69954c07166f/0/thumbnail/1ac6c6634a1e39e561468cd9852ed46e.jpg</thumbnailImageUrl>
+        <visibility>PRIVATE</visibility>
+        <webImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/15/e6/59/56-950f-4e0f-81b6-69954c07166f/0/web/1ac6c6634a1e39e561468cd9852ed46e.jpg</webImageUrl>
+    </item>
+    <item>
+        <created>2013-04-10T14:02:22.021Z</created>
+        <createdBy>http://localhost:8080/imeji/user/admin%40imeji.org</createdBy>
+        <discardComment></discardComment>
+        <id>http://localhost:8080/imeji/item/Gz8F0Ygm5HxwwdiM</id>
+        <modified>2013-04-10T15:58:01.277Z</modified>
+        <modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</modifiedBy>
+        <status>PENDING</status>
+        <version>0</version>
+        <checksum>968231ae35ce8e69a4a8ebdd200decc6</checksum>
+        <collection>http://localhost:8080/imeji/collection/6eQFSDakubQj_BfA</collection>
+        <escidocId></escidocId>
+        <filename>DMA_NL_207_00001_sq.jpg</filename>
+        <fullImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/4d/77/d7/20-ba7e-4685-bbca-ca8c872a6284/0/original/b81165f5b1b322fe716ee2409d78d2fd.jpg</fullImageUrl>
+        <fulltextIndex>DMA_NL_207_00001_sq.jpg Bild 4 Titel Bild 4 Beschreibung Bild 4 Untertitel http://localhost:8080/imeji/</fulltextIndex>
+        <metadataSets>
+            <id>http://localhost:8080/imeji/item/Gz8F0Ygm5HxwwdiM/metadataSet/0</id>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/zpz7vdI6vv1QJQ</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/Qzo4omiNDB4_hoJW</statement>
+                <text>Bild 4 Titel</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/YpPSHOAa09CPNxNA</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/Y0PApu1ufvATTiPM</statement>
+                <text>Bild 4 Beschreibung</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/6s2LM3yMfzI0GJ2</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/8GeUXwIWMuRONz</statement>
+                <text>Bild 4 Untertitel</text>
+            </metadata>
+            <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text">
+                <id>http://imeji.org/terms/metadata/zvFEIHqkrFCxHl</id>
+                <pos>0</pos>
+                <statement>http://imeji.org/terms/statement/1Ewn_BdKFUr897aL</statement>
+                <text>http://localhost:8080/imeji/</text>
+            </metadata>
+            <profile>http://localhost:8080/imeji/metadataProfile/5yWA6RhasrQMBr1m</profile>
+        </metadataSets>
+        <storageId>6eQFSDakubQj_BfA/4d/77/d7/20-ba7e-4685-bbca-ca8c872a6284/0</storageId>
+        <thumbnailImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/4d/77/d7/20-ba7e-4685-bbca-ca8c872a6284/0/thumbnail/b81165f5b1b322fe716ee2409d78d2fd.jpg</thumbnailImageUrl>
+        <visibility>PRIVATE</visibility>
+        <webImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/4d/77/d7/20-ba7e-4685-bbca-ca8c872a6284/0/web/b81165f5b1b322fe716ee2409d78d2fd.jpg</webImageUrl>
+    </item>
+</items>

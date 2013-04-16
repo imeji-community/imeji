@@ -8,6 +8,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.joda.time.chrono.AssembledChronology.Fields;
@@ -29,18 +34,15 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/item")
 @j2jModel("item")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name = "item")
+@XmlRootElement(name = "item", namespace = "http://imeji.org/terms/item")
 public class Item extends Properties implements FulltextIndex
 {
     public enum Visibility
-    {
+    {		
         PUBLIC, PRIVATE;
     }
-
-    private URI id;
-    // @j2jResource("http://imeji.org/terms/properties")
-    // private Properties properties = new Properties();
-    @j2jResource("http://imeji.org/terms/collection")
+	
+    @j2jResource("http://imeji.org/terms/collection")    
     private URI collection;
     @j2jList("http://imeji.org/terms/metadataSet")
     private List<MetadataSet> metadataSets = new ArrayList<MetadataSet>();
@@ -71,7 +73,8 @@ public class Item extends Properties implements FulltextIndex
     {
         copyInFields(im);
     }
-
+    
+	@XmlElement(name = "escidocId", namespace = "http://imeji.org/terms/escidocId")
     public String getEscidocId()
     {
         return escidocId;
@@ -82,6 +85,7 @@ public class Item extends Properties implements FulltextIndex
         this.escidocId = escidocId;
     }
 
+    @XmlElement(name = "webImageUrl", namespace = "http://imeji.org/terms/webImageUrl")
     public URI getWebImageUrl()
     {
         return webImageUrl;
@@ -92,6 +96,7 @@ public class Item extends Properties implements FulltextIndex
         this.webImageUrl = webImageUrl;
     }
 
+    @XmlElement(name = "thumbnailImageUrl", namespace = "http://imeji.org/terms/thumbnailImageUrl")
     public URI getThumbnailImageUrl()
     {
         return thumbnailImageUrl;
@@ -102,6 +107,7 @@ public class Item extends Properties implements FulltextIndex
         this.thumbnailImageUrl = thumbnailImageUrl;
     }
 
+    @XmlElement(name = "fullImageUrl", namespace = "http://imeji.org/terms/fullImageUrl")
     public URI getFullImageUrl()
     {
         return fullImageUrl;
@@ -117,11 +123,12 @@ public class Item extends Properties implements FulltextIndex
         this.visibility = URI.create("http://imeji.org/terms/visibility#" + visibility.name());
     }
 
+    @XmlElement(name = "visibility", namespace = "http://imeji.org/terms/visibility")    
     public Visibility getVisibility()
     {
         return Visibility.valueOf(visibility.getFragment());
     }
-
+    
     public MetadataSet getMetadataSet()
     {
         if (metadataSets.size() > 0)
@@ -134,6 +141,7 @@ public class Item extends Properties implements FulltextIndex
         this.collection = collection;
     }
 
+    @XmlElement(name = "collection", namespace = "http://imeji.org/terms/collection")
     public URI getCollection()
     {
         return collection;
@@ -144,6 +152,7 @@ public class Item extends Properties implements FulltextIndex
         this.filename = filename;
     }
 
+    @XmlElement(name = "filename", namespace = "http://imeji.org/terms/filename")
     public String getFilename()
     {
         return filename;
@@ -156,8 +165,8 @@ public class Item extends Properties implements FulltextIndex
      */
     protected void copyInFields(Item copyFrom)
     {
-        Class copyFromClass = copyFrom.getClass();
-        Class copyToClass = this.getClass();
+        Class<? extends Item> copyFromClass = copyFrom.getClass();
+        Class<? extends Item> copyToClass = this.getClass();
         for (Method methodFrom : copyFromClass.getDeclaredMethods())
         {
             String setMethodName = null;
@@ -176,7 +185,7 @@ public class Item extends Properties implements FulltextIndex
                     Method methodTo = copyToClass.getMethod(setMethodName, methodFrom.getReturnType());
                     try
                     {
-                        methodTo.invoke(this, methodFrom.invoke(copyFrom, null));
+                        methodTo.invoke(this, methodFrom.invoke(copyFrom, (Object) null));
                     }
                     catch (Exception e)
                     {
@@ -196,6 +205,7 @@ public class Item extends Properties implements FulltextIndex
         this.metadataSets = metadataSets;
     }
 
+    @XmlElement(name = "metadataSets", namespace = "http://imeji.org/terms/metadataSet")
     public List<MetadataSet> getMetadataSets()
     {
         return metadataSets;
@@ -204,6 +214,7 @@ public class Item extends Properties implements FulltextIndex
     /**
      * @return the storageId
      */
+    @XmlElement(name = "storageId", namespace = "http://imeji.org/terms/storageId")
     public String getStorageId()
     {
         return storageId;
@@ -224,6 +235,7 @@ public class Item extends Properties implements FulltextIndex
     }
 
     @Override
+    @XmlElement(name = "fulltext", namespace = "http://imeji.org/terms/fulltext")
     public String getFulltextIndex()
     {
         return fulltext;
@@ -249,6 +261,7 @@ public class Item extends Properties implements FulltextIndex
     /**
      * @return the checksum
      */
+    @XmlElement(name = "checksum", namespace = "http://imeji.org/terms/checksum")
     public String getChecksum()
     {
         return checksum;

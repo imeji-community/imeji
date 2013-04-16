@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.vo.predefinedMetadata;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -24,8 +25,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jDataType("http://imeji.org/terms/metadata#text")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlType(name = "text")
-@XmlRootElement
+@XmlRootElement(name = "text", namespace = "http://imeji.org/terms/metadata#text")
 public class Text extends Metadata
 {
     @j2jLiteral("http://imeji.org/terms/text")
@@ -37,6 +37,7 @@ public class Text extends Metadata
     {
     }
 
+    @XmlElement(name = "text", namespace="http://imeji.org/terms/text")
     public String getText()
     {
         return text;
@@ -48,6 +49,7 @@ public class Text extends Metadata
     }
 
     @Override
+    @XmlElement(name = "statement", namespace="http://imeji.org/terms/statement")
     public URI getStatement()
     {
         return statement;

@@ -67,10 +67,7 @@
 										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
 											<h:outputText value="#{lbl.remove_from_album_all}"/>
 										</h:outputLink>										
-										<!--<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
-											<h:outputText value="#{lbl.remove_from_active_all}"/>
-										</h:outputLink>
-										  -->
+
 									</h:panelGroup>
 								</div>
 							</h:panelGroup>
@@ -123,13 +120,9 @@
 											<h:panelGroup rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">
 												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromAlbum}" 
 															  rendered="#{paginatorListSessionBean.deletable}">
-													<h:outputText value="#{lbl.remove_from_album}"/>
+													<h:outputText value="#{lbl.remove_from_album_selected}"/>
 												</h:outputLink>										
-												<!-- <h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromActiveAlbum}" 
-															  rendered="#{SessionBean.activeAlbum != null}">
-													<h:outputText value="#{lbl.remove_from_active}"/>
-												 
-												</h:outputLink>-->
+
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>

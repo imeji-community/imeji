@@ -67,9 +67,10 @@
 										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
 											<h:outputText value="#{lbl.remove_from_album_all}"/>
 										</h:outputLink>										
-										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+										<!--<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
 											<h:outputText value="#{lbl.remove_from_active_all}"/>
 										</h:outputLink>
+										  -->
 									</h:panelGroup>
 								</div>
 							</h:panelGroup>
@@ -91,7 +92,7 @@
 						<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="float:right; margin-top:-1.9090em;">
 								<h:panelGroup layout="block" styleClass="selectMenu xLarge_area2 bordst2">
 									<h:panelGroup id="preListHeaderSelectedMenu">
-										<h:outputText styleClass="free_area0_p8" value="#{lbl.no_image_selected}" rendered="#{SessionBean.selectedSize == 0}"/>
+										<h:outputText styleClass="free_area0" value="#{lbl.no_image_selected}" rendered="#{SessionBean.selectedSize == 0}"/>
 										<h:panelGroup rendered="#{SessionBean.selectedSize > 0}">
 											<!-- No active album selected -->
 											<h:outputLink value="#{Navigation.albumsUrl}" styleClass="xLarge_area0_p8 noPaddingTopBottom" title="#{lbl.activate}" rendered="#{SessionBean.activeAlbum == null}">
@@ -99,16 +100,16 @@
 												<h:panelGroup styleClass="quickSearchIconSmall" style="float:right; margin-top:0.2727em;"/>
 											</h:outputLink>
 											<!-- Add to active album -->
-											<h:commandLink styleClass="free_area0" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse' and SessionBean.activeAlbum != null}">
-												<h:outputText styleClass="free_area0" value="#{lbl.add_to_active_album}"/>
+											<h:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.addSelectedToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
+												<h:outputText value="#{lbl.add_to_active_album}"/>
 											</h:commandLink>
 											<!-- Edit selected -->
 											<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit" 
 														  rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null and paginatorListSessionBean.imageEditable}">
-												<h:outputText value="#{lbl.edit}"/>
+												<h:outputText value="#{lbl.edit_selected}"/>
 											</h:outputLink>
 											<!-- Delete/Discard selected images -->
-											<h:panelGroup rendered="#{paginatorListSessionBean.collection != null}">
+											<h:panelGroup rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
 												<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" 
 															  rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and  paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
 													<h:outputText value="#{lbl.delete_selectedImages}"/>
@@ -124,10 +125,11 @@
 															  rendered="#{paginatorListSessionBean.deletable}">
 													<h:outputText value="#{lbl.remove_from_album}"/>
 												</h:outputLink>										
-												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromActiveAlbum}" 
+												<!-- <h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{paginatorListSessionBean.removeAllFromActiveAlbum}" 
 															  rendered="#{SessionBean.activeAlbum != null}">
 													<h:outputText value="#{lbl.remove_from_active}"/>
-												</h:outputLink>
+												 
+												</h:outputLink>-->
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>

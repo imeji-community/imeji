@@ -465,7 +465,7 @@ public abstract class CollectionBean
                 uris.add(uri.toString());
             }
             ItemController ic = new ItemController(sessionBean.getUser());
-            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 5, 0));
+            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 13, 0));
         }
         return null;
     }

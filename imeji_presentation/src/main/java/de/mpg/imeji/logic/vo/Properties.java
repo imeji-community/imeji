@@ -8,6 +8,8 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Calendar;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
@@ -25,6 +27,7 @@ import de.mpg.j2j.annotations.j2jResource;
  * @version $Revision$ $LastChangedDate$
  */
 @j2jResource("http://imeji.org/terms/properties")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlRootElement(name = "properties", namespace = "http://imeji.org/terms/properties")
 @XmlSeeAlso({Item.class, MetadataProfile.class})
 public class Properties
@@ -47,7 +50,7 @@ public class Properties
     @j2jLiteral("http://imeji.org/terms/discardComment")
     private String discardComment;
     
-    @XmlEnum(URI.class)
+    @XmlEnum(String.class)
     public enum Status
     {
         PENDING("http://imeji.org/terms/status#PENDING"),
@@ -165,7 +168,7 @@ public class Properties
         this.id = id;
     }
     
-    
+    @XmlAttribute(name = "id")
     public URI getId()
     {
         return id;

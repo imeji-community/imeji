@@ -5,9 +5,9 @@ package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -43,7 +43,7 @@ public class Organization
         // TODO Auto-generated constructor stub
     }
 
-    @XmlElement(name = "name", namespace = "http://purl.org/dc/terms/title", type = String.class)
+    @XmlElement(name = "name", namespace = "http://purl.org/dc/terms/title")
     public String getName()
     {
         return name;
@@ -54,7 +54,7 @@ public class Organization
         this.name = name;
     }
 
-    @XmlElement(name = "description", namespace = "http://purl.org/dc/terms/description", type = String.class)
+    @XmlElement(name = "description", namespace = "http://purl.org/dc/terms/description")
     public String getDescription()
     {
         return description;
@@ -65,7 +65,7 @@ public class Organization
         this.description = description;
     }
 
-    @XmlElement(name = "identifier", namespace = "http://purl.org/dc/terms/identifier", type = String.class)
+    @XmlElement(name = "identifier", namespace = "http://purl.org/dc/terms/identifier")
     public String getIdentifier()
     {
         return identifier;
@@ -76,7 +76,7 @@ public class Organization
         this.identifier = identifier;
     }
 
-    @XmlElement(name = "city", namespace = "http://purl.org/escidoc/metadata/terms/0.1/city", type = String.class)
+    @XmlElement(name = "city", namespace = "http://purl.org/escidoc/metadata/terms/0.1/city")
     public String getCity()
     {
         return city;
@@ -87,7 +87,7 @@ public class Organization
         this.city = city;
     }
 
-    @XmlElement(name = "country", namespace = "http://purl.org/escidoc/metadata/terms/0.1/country", type = String.class)
+    @XmlElement(name = "country", namespace = "http://purl.org/escidoc/metadata/terms/0.1/country")
     public String getCountry()
     {
         return country;
@@ -123,6 +123,7 @@ public class Organization
         this.id = id;
     }
 
+    @XmlAttribute(name = "id")
     public URI getId()
     {
         return id;

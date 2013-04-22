@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.hp.hpl.jena.ontology.Profile;
@@ -70,6 +69,7 @@ public class MetadataSet
         this.id = id;
     }
 
+    @XmlAttribute(name = "id")
     public URI getId()
     {
         return id;

@@ -7,11 +7,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
@@ -37,6 +36,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms/metadata")
 @XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class, Geolocation.class, License.class, Link.class,
         Publication.class })
@@ -108,6 +108,7 @@ public abstract class Metadata
         this.id = metadata.getId();
     }
 
+    @XmlAttribute(name = "id")
     public URI getId()
     {
         return id;

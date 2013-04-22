@@ -8,11 +8,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.joda.time.chrono.AssembledChronology.Fields;
@@ -34,6 +32,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/item")
 @j2jModel("item")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlRootElement(name = "item", namespace = "http://imeji.org/terms/item")
 public class Item extends Properties implements FulltextIndex
 {
@@ -41,7 +40,7 @@ public class Item extends Properties implements FulltextIndex
     {		
         PUBLIC, PRIVATE;
     }
-	
+
     @j2jResource("http://imeji.org/terms/collection")    
     private URI collection;
     @j2jList("http://imeji.org/terms/metadataSet")
@@ -65,7 +64,9 @@ public class Item extends Properties implements FulltextIndex
     @j2jLiteral("http://imeji.org/terms/checksum")
     private String checksum;
 
-    public Item()
+
+
+	public Item()
     {
     }
 
@@ -73,7 +74,7 @@ public class Item extends Properties implements FulltextIndex
     {
         copyInFields(im);
     }
-    
+
 	@XmlElement(name = "escidocId", namespace = "http://imeji.org/terms/escidocId")
     public String getEscidocId()
     {

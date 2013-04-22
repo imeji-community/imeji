@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.mpg.imeji.logic.vo.Item;
@@ -33,7 +32,7 @@ public class Items
     /**
      * @return the items
      */
-    @XmlElement(name = "item", namespace="http://imeji.org/terms/item")
+    @XmlElement(name = "item", namespace = "ttp://imeji.org/terms/item")
     public List<Item> getItem()
     {
         return item;

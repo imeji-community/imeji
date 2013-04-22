@@ -56,7 +56,7 @@ public class JaxbIngestProfileTest
         }
     }
     
-    //@Test
+    @Test
     public void testItemView() throws URISyntaxException
     {
         try
@@ -158,14 +158,14 @@ public class JaxbIngestProfileTest
         }
     }
 
-     @Test
+     //@Test
     public void testUnmarshalMarshalMdProfile()
     {
         String xmlFile = "C:/Users/hnguyen/Development/GitHub/workspace130409/imeji-community/imeji/imeji_presentation/src/test/resources/ingest/test/mdp.xml";
         try
         {
             JaxbIngestProfile jmp = new JaxbIngestProfile();
-            MetadataProfile mpd = jmp.unmarshalMdProfile(xmlFile);
+            MetadataProfile mpd = jmp.unmarshalMdProfile(xmlFile);            
             if (mpd.getStatements().isEmpty())
             {
                 fail("no statements...");

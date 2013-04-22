@@ -32,7 +32,7 @@ public class IngestItemController
     public IngestItemController(User user, MetadataProfile profile)
     {
         this.user = user;
-        this.profile = profile;
+        this.setProfile(profile);
     }
 
     /**
@@ -50,4 +50,12 @@ public class IngestItemController
         ItemController ic = new ItemController(user);
         ic.update(im.getMappedItemObjects());
     }
+
+	public MetadataProfile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(MetadataProfile profile) {
+		this.profile = profile;
+	}
 }

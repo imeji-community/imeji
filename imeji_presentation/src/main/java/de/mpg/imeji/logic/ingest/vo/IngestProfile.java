@@ -3,15 +3,16 @@
  */
 package de.mpg.imeji.logic.ingest.vo;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author hnguyen
  */
-@XmlRootElement(name = "ingestProfile")
+@XmlRootElement(name = "ingestProfile", namespace = "http://imeji.org/terms/ingestProfile")
 public class IngestProfile
 {
-    private MetadataProfiles mdProfiles;
+    private MetadataProfiles metadataProfiles;
     private Items items;
 
     /**
@@ -25,22 +26,24 @@ public class IngestProfile
     /**
      * @return the mdProfile
      */
-    public MetadataProfiles getMdProfiles()
+    @XmlElement(name = "metadataProfiles", namespace="http://imeji.org/terms/mdprofiles")
+    public MetadataProfiles getMetadataProfiles()
     {
-        return mdProfiles;
+        return metadataProfiles;
     }
 
     /**
      * @param mdProfile the mdProfile to set
      */
-    public void setMdProfile(MetadataProfiles mdProfiles)
+    public void setMetadataProfiles(MetadataProfiles metadataProfiles)
     {
-        this.mdProfiles = mdProfiles;
+        this.metadataProfiles = metadataProfiles;
     }
 
     /**
      * @return the items
      */
+    @XmlElement(name = "items", namespace="http://imeji.org/terms/items")
     public Items getItems()
     {
         return items;

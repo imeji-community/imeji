@@ -7,8 +7,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.j2j.annotations.j2jId;
@@ -26,15 +28,15 @@ import de.mpg.j2j.misc.LocalizedString;
  */
 @j2jResource("http://imeji.org/terms/statement")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name = "statement")
-@XmlType(name = "statement")
+@XmlRootElement(name = "statement", namespace = "http://imeji.org/terms/statement")
 public class Statement implements Comparable<Statement>
 {
     // Id: creation to be changed with pretty ids
     private URI id = IdentifierUtil.newURI(Statement.class);
     @j2jResource("http://purl.org/dc/terms/type")
     private URI type = URI.create("http://imeji.org/terms/metadata#text");
-    @j2jList("http://www.w3.org/2000/01/rdf-schema#label")
+    //@j2jList("http://www.w3.org/2000/01/rdf-schema#label") because # does not work in  jaxb
+    @j2jList("http://www.w3.org/2000/01/rdf-schema-label")
     private Collection<LocalizedString> labels = new ArrayList<LocalizedString>();
     @j2jResource("http://purl.org/dc/dcam/VocabularyEncodingScheme")
     private URI vocabulary;
@@ -59,6 +61,7 @@ public class Statement implements Comparable<Statement>
     {
     }
 
+    @XmlElement(name = "type", namespace = "http://purl.org/dc/terms/type")
     public URI getType()
     {
         return type;
@@ -69,6 +72,7 @@ public class Statement implements Comparable<Statement>
         this.type = type;
     }
 
+    @XmlElement(name = "labels", namespace = "http://www.w3.org/2000/01/rdf-schema-label")    
     public Collection<LocalizedString> getLabels()
     {
         return labels;
@@ -79,6 +83,7 @@ public class Statement implements Comparable<Statement>
         this.labels = labels;
     }
 
+    @XmlElement(name = "vocabulary", namespace = "http://purl.org/dc/dcam/VocabularyEncodingScheme")
     public URI getVocabulary()
     {
         return vocabulary;
@@ -89,6 +94,7 @@ public class Statement implements Comparable<Statement>
         this.vocabulary = vocabulary;
     }
 
+    @XmlElement(name = "literalConstraints", namespace = "http://imeji.org/terms/literalConstraint")    
     public Collection<String> getLiteralConstraints()
     {
         return literalConstraints;
@@ -99,6 +105,7 @@ public class Statement implements Comparable<Statement>
         this.literalConstraints = literalConstraints;
     }
 
+    @XmlElement(name = "minOccurs", namespace = "http://imeji.org/terms/minOccurs")
     public String getMinOccurs()
     {
         return minOccurs;
@@ -109,6 +116,7 @@ public class Statement implements Comparable<Statement>
         this.minOccurs = minOccurs;
     }
 
+    @XmlElement(name = "maxOccurs", namespace = "http://imeji.org/terms/maxOccurs")
     public String getMaxOccurs()
     {
         return maxOccurs;
@@ -119,6 +127,7 @@ public class Statement implements Comparable<Statement>
         this.maxOccurs = maxOccurs;
     }
 
+    @XmlElement(name = "pos", namespace = "http://imeji.org/terms/position")
     public int getPos()
     {
         return pos;
@@ -140,6 +149,8 @@ public class Statement implements Comparable<Statement>
             return 1;
     }
 
+    
+    @XmlElement(name = "isDescription", namespace = "http://imeji.org/terms/isDescription")
     public boolean isDescription()
     {
         return isDescription;
@@ -155,6 +166,7 @@ public class Statement implements Comparable<Statement>
         this.id = id;
     }
 
+    @XmlAttribute(name = "id")
     public URI getId()
     {
         return id;
@@ -165,6 +177,7 @@ public class Statement implements Comparable<Statement>
         this.parent = parent;
     }
 
+    @XmlElement(name = "parent", namespace = "http://imeji.org/terms/parent")
     public URI getParent()
     {
         return parent;
@@ -175,11 +188,13 @@ public class Statement implements Comparable<Statement>
         this.isPreview = isPreview;
     }
 
+    @XmlElement(name = "isPreview", namespace = "http://imeji.org/terms/isPreview")
     public boolean isPreview()
     {
         return isPreview;
     }
 
+    @XmlElement(name = "restricted", namespace = "http://imeji.org/terms/restricted")
     public boolean isRestricted()
     {
         return restricted;

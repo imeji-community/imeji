@@ -5,7 +5,11 @@ package de.mpg.imeji.logic.vo.predefinedMetadata;
 
 import java.net.URI;
 
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.j2j.annotations.j2jDataType;
@@ -23,12 +27,13 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jDataType("http://imeji.org/terms/metadata#link")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlType(name = "link")
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlRootElement(name = "link", namespace = "http://imeji.org/terms/metadata#link")
 public class Link extends Metadata
 {
     @j2jResource("http://imeji.org/terms/uri")
     private URI uri;
-    @j2jLiteral("http://www.w3.org/2000/01/rdf-schema#label")
+    @j2jLiteral("http://www.w3.org/2000/01/rdf-schema-label")
     private String label;
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
@@ -37,6 +42,7 @@ public class Link extends Metadata
     {
     }
 
+    @XmlElement(name = "uri", namespace="http://imeji.org/terms/uri")
     public java.net.URI getUri()
     {
         return uri;
@@ -51,13 +57,15 @@ public class Link extends Metadata
     {
         this.label = label;
     }
-
+    
+    @XmlElement(name = "label", namespace = "http://www.w3.org/2000/01/rdf-schema-label")
     public String getLabel()
     {
         return label;
     }
 
     @Override
+    @XmlElement(name = "statement", namespace="http://imeji.org/terms/statement")
     public URI getStatement()
     {
         return statement;

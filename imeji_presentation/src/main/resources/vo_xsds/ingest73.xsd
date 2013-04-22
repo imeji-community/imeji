@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns42="http://purl.org/dc/terms/title" xmlns:ns41="http://purl.org/dc/terms/identifier" xmlns:ns40="http://purl.org/dc/terms/description" xmlns:ns46="http://imeji.org/terms/longitude" xmlns:ns45="http://imeji.org/terms/latitude" xmlns:ns44="http://imeji.org/terms/time" xmlns:ns43="http://imeji.org/terms/date" xmlns:ns49="http://imeji.org/terms/uri" xmlns:ns48="http://www.w3.org/2000/01/rdf-schema-label" xmlns:ns47="http://imeji.org/terms/license" xmlns:ns16="http://imeji.org/terms/webImageUrl" xmlns:ns17="http://purl.org/dc/terms/created" xmlns:ns14="http://imeji.org/terms/thumbnailImageUrl" xmlns:ns15="http://imeji.org/terms/visibility" xmlns:ns18="http://purl.org/dc/terms/creator" xmlns:ns19="http://imeji.org/terms/discardComment" xmlns:ns12="http://imeji.org/terms/metadata" xmlns:ns13="http://imeji.org/terms/storageId" xmlns:ns10="http://imeji.org/terms/fullImageUrl" xmlns:ns11="http://imeji.org/terms/fulltext" xmlns:ns60="http://imeji.org/terms/restricted" xmlns:ns51="http://imeji.org/terms/citationStyle" xmlns:ns50="http://imeji.org/terms/citation" xmlns:ns53="http://purl.org/dc/elements/1.1/title" xmlns:ns52="http://purl.org/dc/elements/1.1/description" xmlns:ns55="http://imeji.org/terms/literalConstraint" xmlns:ns54="http://imeji.org/terms/isDescription" xmlns:ns57="http://imeji.org/terms/minOccurs" xmlns:ns56="http://imeji.org/terms/maxOccurs" xmlns:ns59="http://imeji.org/terms/isPreview" xmlns:ns58="http://imeji.org/terms/parent" xmlns:ns29="http://imeji.org/terms/coneId" xmlns:ns25="http://imeji.org/terms/position" xmlns:ns26="http://imeji.org/terms/statement" xmlns:ns27="http://imeji.org/terms/text" xmlns:ns28="http://imeji.org/terms/number" xmlns:ns21="http://imeji.org/terms/modifiedBy" xmlns:ns22="http://imeji.org/terms/status" xmlns:ns23="http://imeji.org/terms/version" xmlns:ns24="http://purl.org/dc/terms/issued" xmlns:ns20="http://purl.org/dc/terms/modified" xmlns:ns62="http://purl.org/dc/dcam/VocabularyEncodingScheme" xmlns:ns61="http://purl.org/dc/terms/type" xmlns:ns38="http://purl.org/escidoc/metadata/terms/0.1/city" xmlns:ns39="http://purl.org/escidoc/metadata/terms/0.1/country" xmlns:ns36="http://purl.org/dc/elements/1.1/identifier" xmlns:ns37="http://purl.org/escidoc/metadata/terms/0.1/role" xmlns:ns9="http://imeji.org/terms/filename" xmlns:ns34="http://purl.org/escidoc/metadata/terms/0.1/family-name" xmlns:ns35="http://purl.org/escidoc/metadata/terms/0.1/given-name" xmlns:ns32="http://purl.org/escidoc/metadata/terms/0.1/alternative-name" xmlns:ns33="http://purl.org/escidoc/metadata/terms/0.1/complete-name" xmlns:ns5="http://imeji.org/terms/metadataSet" xmlns:ns30="http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit" xmlns:ns6="http://imeji.org/terms/checksum" xmlns:ns31="http://xmlns.com/foaf/0.1/person" xmlns:ns7="http://imeji.org/terms/collection" xmlns:ns8="http://imeji.org/terms/escidocId" xmlns:ns2="http://imeji.org/terms/items" xmlns:ns1="http://imeji.org/terms/item" xmlns:ns4="http://imeji.org/terms/mdprofiles" xmlns:ns3="http://imeji.org/terms/mdprofile">
+
+  <xs:import namespace="http://imeji.org/terms/item" schemaLocation="imeji.org_terms_item.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/items" schemaLocation="imeji.org_terms_items.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/mdprofile" schemaLocation="imeji.org_terms_mdprofile.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/mdprofiles" schemaLocation="imeji.org_terms_mdprofiles.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/metadataSet" schemaLocation="imeji.org_terms_metadataSet.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/checksum" schemaLocation="imeji.org_terms_checksum.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/collection" schemaLocation="imeji.org_terms_collection.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/escidocId" schemaLocation="imeji.org_terms_escidocId.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/filename" schemaLocation="imeji.org_terms_filename.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/fullImageUrl" schemaLocation="imeji.org_terms_fullImageUrl.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/fulltext" schemaLocation="imeji.org_terms_fulltext.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/metadata" schemaLocation="imeji.org_terms_metadata.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/storageId" schemaLocation="imeji.org_terms_storageId.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/thumbnailImageUrl" schemaLocation="imeji.org_terms_thumbnailImageUrl.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/visibility" schemaLocation="imeji.org_terms_visibility.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/webImageUrl" schemaLocation="imeji.org_terms_webImageUrl.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/terms/created" schemaLocation="purl.org_dc_terms_created.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/terms/creator" schemaLocation="purl.org_dc_terms_creator.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/discardComment" schemaLocation="imeji.org_terms_discardComment.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/terms/modified" schemaLocation="purl.org_dc_terms_modified.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/modifiedBy" schemaLocation="imeji.org_terms_modifiedBy.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/status" schemaLocation="imeji.org_terms_status.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/version" schemaLocation="imeji.org_terms_version.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/terms/issued" schemaLocation="purl.org_dc_terms_issued.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/position" schemaLocation="imeji.org_terms_position.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/statement" schemaLocation="imeji.org_terms_statement.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/text" schemaLocation="imeji.org_terms_text.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/number" schemaLocation="imeji.org_terms_number.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/coneId" schemaLocation="imeji.org_terms_coneId.xsd"/>
+
+  <xs:import namespace="http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit" schemaLocation="purl.org_escidoc_metadata_profiles_0.1_organizationalunit.xsd"/>
+
+  <xs:import namespace="http://xmlns.com/foaf/0.1/person" schemaLocation="xmlns.com_foaf_0.1_person.xsd"/>
+
+  <xs:import namespace="http://purl.org/escidoc/metadata/terms/0.1/alternative-name" schemaLocation="purl.org_escidoc_metadata_terms_0.1_alternative-name.xsd"/>
+
+  <xs:import namespace="http://purl.org/escidoc/metadata/terms/0.1/complete-name" schemaLocation="purl.org_escidoc_metadata_terms_0.1_complete-name.xsd"/>
+
+  <xs:import namespace="http://purl.org/escidoc/metadata/terms/0.1/family-name" schemaLocation="purl.org_escidoc_metadata_terms_0.1_family-name.xsd"/>
+
+  <xs:import namespace="http://purl.org/escidoc/metadata/terms/0.1/given-name" schemaLocation="purl.org_escidoc_metadata_terms_0.1_given-name.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/elements/1.1/identifier" schemaLocation="purl.org_dc_elements_1.1_identifier.xsd"/>
+
+  <xs:import namespace="http://purl.org/escidoc/metadata/terms/0.1/role" schemaLocation="purl.org_escidoc_metadata_terms_0.1_role.xsd"/>
+
+  <xs:import namespace="http://purl.org/escidoc/metadata/terms/0.1/city" schemaLocation="purl.org_escidoc_metadata_terms_0.1_city.xsd"/>
+
+  <xs:import namespace="http://purl.org/escidoc/metadata/terms/0.1/country" schemaLocation="purl.org_escidoc_metadata_terms_0.1_country.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/terms/description" schemaLocation="purl.org_dc_terms_description.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/terms/identifier" schemaLocation="purl.org_dc_terms_identifier.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/terms/title" schemaLocation="purl.org_dc_terms_title.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/date" schemaLocation="imeji.org_terms_date.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/time" schemaLocation="imeji.org_terms_time.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/latitude" schemaLocation="imeji.org_terms_latitude.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/longitude" schemaLocation="imeji.org_terms_longitude.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/license" schemaLocation="imeji.org_terms_license.xsd"/>
+
+  <xs:import namespace="http://www.w3.org/2000/01/rdf-schema-label" schemaLocation="www.w3.org_2000_01_rdf-schema-label.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/uri" schemaLocation="imeji.org_terms_uri.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/citation" schemaLocation="imeji.org_terms_citation.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/citationStyle" schemaLocation="imeji.org_terms_citationStyle.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/elements/1.1/description" schemaLocation="purl.org_dc_elements_1.1_description.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/elements/1.1/title" schemaLocation="purl.org_dc_elements_1.1_title.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/isDescription" schemaLocation="imeji.org_terms_isDescription.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/literalConstraint" schemaLocation="imeji.org_terms_literalConstraint.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/maxOccurs" schemaLocation="imeji.org_terms_maxOccurs.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/minOccurs" schemaLocation="imeji.org_terms_minOccurs.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/parent" schemaLocation="imeji.org_terms_parent.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/isPreview" schemaLocation="imeji.org_terms_isPreview.xsd"/>
+
+  <xs:import namespace="http://imeji.org/terms/restricted" schemaLocation="imeji.org_terms_restricted.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/terms/type" schemaLocation="purl.org_dc_terms_type.xsd"/>
+
+  <xs:import namespace="http://purl.org/dc/dcam/VocabularyEncodingScheme" schemaLocation="purl.org_dc_dcam_VocabularyEncodingScheme.xsd"/>
+
+  <xs:complexType name="ingestProfile">
+    <xs:sequence>
+      <xs:element ref="ns2:items" minOccurs="0"/>
+      <xs:element ref="ns4:metadataProfiles" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="items">
+    <xs:sequence>
+      <xs:element ref="ns1:item" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="item">
+    <xs:complexContent>
+      <xs:extension base="properties">
+        <xs:sequence>
+          <xs:element ref="ns6:checksum" minOccurs="0"/>
+          <xs:element ref="ns7:collection" minOccurs="0"/>
+          <xs:element ref="ns8:escidocId" minOccurs="0"/>
+          <xs:element ref="ns9:filename" minOccurs="0"/>
+          <xs:element ref="ns10:fullImageUrl" minOccurs="0"/>
+          <xs:element ref="ns11:fulltext" minOccurs="0"/>
+          <xs:element ref="ns5:metadataSets" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element ref="ns13:storageId" minOccurs="0"/>
+          <xs:element ref="ns14:thumbnailImageUrl" minOccurs="0"/>
+          <xs:element ref="ns15:visibility" minOccurs="0"/>
+          <xs:element ref="ns16:webImageUrl" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="properties">
+    <xs:sequence>
+      <xs:element ref="ns17:created" minOccurs="0"/>
+      <xs:element ref="ns18:createdBy" minOccurs="0"/>
+      <xs:element ref="ns19:discardComment" minOccurs="0"/>
+      <xs:element ref="ns20:modified" minOccurs="0"/>
+      <xs:element ref="ns21:modifiedBy" minOccurs="0"/>
+      <xs:element ref="ns22:status" minOccurs="0"/>
+      <xs:element ref="ns23:version"/>
+      <xs:element ref="ns24:versionDate" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="metadataSet">
+    <xs:sequence>
+      <xs:element ref="ns12:metadata" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="ns3:profile" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="metadata" abstract="true">
+    <xs:sequence>
+      <xs:element ref="ns25:pos"/>
+      <xs:element name="statement" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="text">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element ref="ns26:statement" minOccurs="0"/>
+          <xs:element ref="ns27:text" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="number">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element ref="ns28:number"/>
+          <xs:element ref="ns26:statement" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="conePerson">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element ref="ns29:coneId" minOccurs="0"/>
+          <xs:element ref="ns31:person" minOccurs="0"/>
+          <xs:element ref="ns26:statement" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="person">
+    <xs:sequence>
+      <xs:element ref="ns32:alternativeName" minOccurs="0"/>
+      <xs:element ref="ns33:completeName" minOccurs="0"/>
+      <xs:element ref="ns34:familyName" minOccurs="0"/>
+      <xs:element ref="ns35:givenName" minOccurs="0"/>
+      <xs:element ref="ns36:identifier" minOccurs="0"/>
+      <xs:element ref="ns30:organizations" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="ns25:pos"/>
+      <xs:element ref="ns37:role" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="organization">
+    <xs:sequence>
+      <xs:element ref="ns38:city" minOccurs="0"/>
+      <xs:element ref="ns39:country" minOccurs="0"/>
+      <xs:element ref="ns40:description" minOccurs="0"/>
+      <xs:element ref="ns41:identifier" minOccurs="0"/>
+      <xs:element ref="ns42:name" minOccurs="0"/>
+      <xs:element ref="ns25:pos"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="date">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element ref="ns43:date" minOccurs="0"/>
+          <xs:element ref="ns26:statement" minOccurs="0"/>
+          <xs:element ref="ns44:time"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="geolocation">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element ref="ns45:latitude"/>
+          <xs:element ref="ns46:longitude"/>
+          <xs:element ref="ns42:name" minOccurs="0"/>
+          <xs:element ref="ns26:statement" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="license">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element ref="ns36:externalUri" minOccurs="0"/>
+          <xs:element ref="ns47:license" minOccurs="0"/>
+          <xs:element ref="ns26:statement" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="link">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element ref="ns48:label" minOccurs="0"/>
+          <xs:element ref="ns26:statement" minOccurs="0"/>
+          <xs:element ref="ns49:uri" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="publication">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element ref="ns50:citation" minOccurs="0"/>
+          <xs:element ref="ns51:exportFormat" minOccurs="0"/>
+          <xs:element ref="ns26:statement" minOccurs="0"/>
+          <xs:element ref="ns49:uri" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="metadataProfile">
+    <xs:complexContent>
+      <xs:extension base="properties">
+        <xs:sequence>
+          <xs:element ref="ns52:description" minOccurs="0"/>
+          <xs:element ref="ns26:statements" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element ref="ns53:title" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="statement">
+    <xs:sequence>
+      <xs:element ref="ns54:isDescription"/>
+      <xs:element ref="ns48:labels" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="ns55:literalConstraints" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="ns56:maxOccurs" minOccurs="0"/>
+      <xs:element ref="ns57:minOccurs" minOccurs="0"/>
+      <xs:element ref="ns58:parent" minOccurs="0"/>
+      <xs:element ref="ns25:pos"/>
+      <xs:element ref="ns59:isPreview"/>
+      <xs:element ref="ns60:restricted"/>
+      <xs:element ref="ns61:type" minOccurs="0"/>
+      <xs:element ref="ns62:vocabulary" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="localizedString">
+    <xs:sequence/>
+    <xs:attribute name="lang" type="xs:string"/>
+    <xs:attribute name="value" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="metadataProfiles">
+    <xs:sequence>
+      <xs:element ref="ns3:metadataProfile" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="visibility">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PUBLIC"/>
+      <xs:enumeration value="PRIVATE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="status">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PENDING"/>
+      <xs:enumeration value="RELEASED"/>
+      <xs:enumeration value="WITHDRAWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+

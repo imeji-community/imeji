@@ -27,7 +27,7 @@ public class XMLItemsExport extends XMLExport
     @Override
     public void init()
     {
-        // Not initialization so far
+        // No initialization so far
     }
 
     @Override

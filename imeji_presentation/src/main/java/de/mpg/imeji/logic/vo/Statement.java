@@ -94,7 +94,7 @@ public class Statement implements Comparable<Statement>
         this.vocabulary = vocabulary;
     }
 
-    @XmlElements({@XmlElement(name = "literalConstraints", namespace = "http://imeji.org/terms/literalConstraint")})    
+    @XmlElement(name = "literalConstraints", namespace = "http://imeji.org/terms/literalConstraint")    
     public Collection<String> getLiteralConstraints()
     {
         return literalConstraints;

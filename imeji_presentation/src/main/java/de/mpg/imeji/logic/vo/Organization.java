@@ -98,6 +98,7 @@ public class Organization
         this.country = country;
     }
 
+    @XmlElement(name = "pos", namespace = "http://imeji.org/terms/position")
     public int getPos()
     {
         return pos;

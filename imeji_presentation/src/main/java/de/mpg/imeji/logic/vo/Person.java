@@ -133,6 +133,7 @@ public class Person
         return pos;
     }
 
+    @XmlElement(name = "pos", namespace = "http://imeji.org/terms/position")
     public void setPos(int pos)
     {
         this.pos = pos;

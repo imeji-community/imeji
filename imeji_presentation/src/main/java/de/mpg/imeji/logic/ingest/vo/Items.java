@@ -32,7 +32,7 @@ public class Items
     /**
      * @return the items
      */
-    @XmlElement(name = "item", namespace = "ttp://imeji.org/terms/item")
+    @XmlElement(name = "item", namespace = "http://imeji.org/terms/item")
     public List<Item> getItem()
     {
         return item;

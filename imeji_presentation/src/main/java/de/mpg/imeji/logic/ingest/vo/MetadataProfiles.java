@@ -25,7 +25,7 @@ public class MetadataProfiles
     /**
      * @return the meta data profiles
      */
-    @XmlElement(name = "metadataProfile", namespace = "ttp://imeji.org/terms/mdprofile")
+    @XmlElement(name = "metadataProfile", namespace = "http://imeji.org/terms/mdprofile")
     public List<MetadataProfile> getMetadataProfile()
     {
         return metadataProfile;

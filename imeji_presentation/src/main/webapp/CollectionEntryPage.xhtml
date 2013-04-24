@@ -70,11 +70,18 @@
 					</ui:remove>
 					<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 						<!-- COLLECTION IMAGES -->
-						<h:outputLink value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
+						<h:outputLink value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny">
 							<ui:repeat var="thumb" value="#{ViewCollectionBean.thumbnails}">
 								<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}file?id=#{thumb.link}"/>
-							</ui:repeat>
-						</h:outputLink>
+							</ui:repeat>	
+						
+								<h:outputLink  styleClass="medium_txtArea medium_marginRExcl" style="float:right;" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.collection.status != 'WITHDRAWN'}" >
+									<h:outputText value ="#{lbl.collection_view_all_images}"/> <br/>
+									<h:graphicImage value="/resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png" style="float:right"/>
+								</h:outputLink>
+							
+						</h:outputLink>	
+
 						<h:panelGroup styleClass="medium_area0" style="text-align:center;" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}">
 							<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
 							<br/>
@@ -84,17 +91,14 @@
 							<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}" url="../../../imeji/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
 						</ui:remove>
 						<h2 class="clear">
-							<h:outputLink value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.collection.status != 'WITHDRAWN'}">
-								<h:outputText value ="#{lbl.collection_view_all_images}"/>
-							</h:outputLink>
 							<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 						</h2>
 					</h:panelGroup>
 					<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 						<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
-							<h1>
+							<h2>
 								<h:outputText styleClass="full_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
-							</h1>
+							</h2>
 							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{ViewCollectionBean.collection.discardComment != null and ViewCollectionBean.collection.discardComment != ''}">
 								<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
 								<h:outputText styleClass="free_area0"  value=" #{ViewCollectionBean.collection.discardComment}"/>

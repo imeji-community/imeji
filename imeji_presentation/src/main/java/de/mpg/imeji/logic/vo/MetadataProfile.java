@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 

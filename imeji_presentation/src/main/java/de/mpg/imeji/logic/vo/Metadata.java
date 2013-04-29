@@ -38,7 +38,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
-@XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms/metadata")
+@XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms")
 @XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class, Geolocation.class, License.class, Link.class,
         Publication.class })
 public abstract class Metadata
@@ -97,7 +97,7 @@ public abstract class Metadata
     }
 
     public abstract void copy(Metadata metadata);
-
+        
     public abstract URI getStatement();
 
     public abstract void setStatement(URI namespace);
@@ -120,7 +120,7 @@ public abstract class Metadata
         this.id = id;
     }
 
-    @XmlElement(name = "pos", namespace = "http://imeji.org/terms/position")
+    @XmlElement(name = "position", namespace = "http://imeji.org/terms")
     public int getPos()
     {
         return pos;

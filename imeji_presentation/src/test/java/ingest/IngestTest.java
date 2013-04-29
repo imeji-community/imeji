@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -109,11 +110,25 @@ public class IngestTest
             List<MetadataSet> mdsList = item.getMetadataSets();
             MetadataSet mds = new MetadataSet();
             Collection<Metadata> mdC = new LinkedList<Metadata>();
+            
+            item.setCreatedBy(new URI("http://zuse2.zib.de/user/admin%40imeji.org"));
+            item.setCreated(Calendar.getInstance());
+            item.setModified(Calendar.getInstance());             
+            
+            
             Text text = new Text();
-            text.setId(new URI("id"));
-            text.setStatement(new URI("stsid"));
+            text.setId(new URI("http://imeji.org/terms/metadata/eWqXRoUcpi9XvXg"));
+            text.setStatement(new URI("http://imeji.org/terms/statement/h3uvXnK61DoMvPJB"));
             text.setText("a new text here");
             mdC.add(text);
+            
+            
+            Text text2 = new Text();
+            text2.setId(new URI("http://imeji.org/terms/metadata/5WqXRoUcpi9XvX1"));
+            text2.setStatement(new URI("http://imeji.org/terms/statement/hbuvXnK61DoMvPJA"));
+            text2.setText("a new text here");
+            mdC.add(text2);
+            
             mds.setMetadata(mdC);
             mdsList.add(mds);
             item.setMetadataSets(mdsList);

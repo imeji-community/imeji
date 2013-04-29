@@ -29,7 +29,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/metadataSet")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms/metadataSet")
+@XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms")
 public class MetadataSet
 {
     @j2jList("http://imeji.org/terms/metadata")
@@ -42,7 +42,7 @@ public class MetadataSet
     {
     }
 
-    @XmlElement(name = "metadata", namespace = "http://imeji.org/terms/metadata")
+    @XmlElement(name = "metadata", namespace = "http://imeji.org/terms")
     public Collection<Metadata> getMetadata()
     {
         return metadata;
@@ -53,7 +53,7 @@ public class MetadataSet
         this.metadata = metadata;
     }
 
-    @XmlElement(name = "profile", namespace = "http://imeji.org/terms/mdprofile")
+    @XmlElement(name = "profile", namespace = "http://imeji.org/terms")
     public URI getProfile()
     {
         return profile;

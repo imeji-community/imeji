@@ -7,7 +7,6 @@ import java.net.URI;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -28,7 +27,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jDataType("http://imeji.org/terms/metadata#geolocation")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
-@XmlRootElement(name = "geolocation", namespace = "http://imeji.org/terms/metadata#geolocation")
+@XmlRootElement(name = "geolocation", namespace = "http://imeji.org/terms/metadata#")
 public class Geolocation extends Metadata
 {
     @j2jLiteral("http://imeji.org/terms/longitude")
@@ -48,7 +47,7 @@ public class Geolocation extends Metadata
     {
     }
 
-    @XmlElement(name = "longitude", namespace="http://imeji.org/terms/longitude")
+    @XmlElement(name = "longitude", namespace="http://imeji.org/terms")
     public double getLongitude()
     {
         return longitude;
@@ -59,7 +58,7 @@ public class Geolocation extends Metadata
         this.longitude = longitude;
     }
 
-    @XmlElement(name = "latitude", namespace="http://imeji.org/terms/latitude")
+    @XmlElement(name = "latitude", namespace="http://imeji.org/terms")
     public double getLatitude()
     {
         return latitude;
@@ -70,7 +69,7 @@ public class Geolocation extends Metadata
         this.latitude = latitude;
     }
 
-    @XmlElement(name = "name", namespace="http://purl.org/dc/terms/title")
+    @XmlElement(name = "title", namespace="http://purl.org/dc/terms")
     public String getName()
     {
         return name;
@@ -82,7 +81,7 @@ public class Geolocation extends Metadata
     }
 
     @Override
-    @XmlElement(name = "statement", namespace="http://imeji.org/terms/statement")
+    @XmlElement(name = "statement", namespace="http://imeji.org/terms")
     public URI getStatement()
     {
         return statement;

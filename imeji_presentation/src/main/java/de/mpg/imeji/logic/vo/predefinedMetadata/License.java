@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -29,7 +28,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jDataType("http://imeji.org/terms/metadata#license")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
-@XmlRootElement(name = "license", namespace = "http://imeji.org/terms/metadata#license")
+@XmlRootElement(name = "license", namespace = "http://imeji.org/terms/metadata#")
 public class License extends Metadata
 {
     private SimpleDateFormat date;
@@ -58,7 +57,7 @@ public class License extends Metadata
         return date.format(date);
     }
 
-    @XmlElement(name = "license", namespace="http://imeji.org/terms/license")
+    @XmlElement(name = "license", namespace="http://imeji.org/terms")
     public String getLicense()
     {
         return license;
@@ -70,7 +69,7 @@ public class License extends Metadata
     }
 
     @Override
-    @XmlElement(name = "statement", namespace="http://imeji.org/terms/statement")
+    @XmlElement(name = "statement", namespace="http://imeji.org/terms")
     public URI getStatement()
     {
         return statement;
@@ -85,7 +84,7 @@ public class License extends Metadata
     /**
      * @return the externalUri
      */
-    @XmlElement(name = "externalUri", namespace="http://purl.org/dc/elements/1.1/identifier")
+    @XmlElement(name = "identifier", namespace="http://purl.org/dc/elements/1.1")
     public URI getExternalUri()
     {
         return externalUri;

@@ -7,7 +7,6 @@ import java.net.URI;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -28,7 +27,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jDataType("http://imeji.org/terms/metadata#number")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
-@XmlRootElement(name = "number", namespace = "http://imeji.org/terms/metadata#number")
+@XmlRootElement(name = "number", namespace = "http://imeji.org/terms/metadata#")
 public class Number extends Metadata
 {
     @j2jLiteral("http://imeji.org/terms/number")
@@ -50,14 +49,14 @@ public class Number extends Metadata
         this.number = number;
     }
 
-    @XmlElement(name = "number", namespace="http://imeji.org/terms/number")
+    @XmlElement(name = "number", namespace="http://imeji.org/terms")
     public double getNumber()
     {
         return number;
     }
 
     @Override
-    @XmlElement(name = "statement", namespace="http://imeji.org/terms/statement")
+    @XmlElement(name = "statement", namespace="http://imeji.org/terms")
     public URI getStatement()
     {
         return statement;

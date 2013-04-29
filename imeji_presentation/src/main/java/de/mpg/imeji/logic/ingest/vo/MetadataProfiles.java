@@ -13,7 +13,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 /**
  * @author hnguyen
  */
-@XmlRootElement(name = "metadataProfiles", namespace = "http://imeji.org/terms/mdprofiles")
+@XmlRootElement(name = "metadataProfiles", namespace = "http://imeji.org/terms")
 public class MetadataProfiles
 {
     private List<MetadataProfile> metadataProfile;
@@ -25,7 +25,7 @@ public class MetadataProfiles
     /**
      * @return the meta data profiles
      */
-    @XmlElement(name = "metadataProfile", namespace = "http://imeji.org/terms/mdprofile")
+    @XmlElement(name = "mdprofile", namespace = "http://imeji.org/terms")
     public List<MetadataProfile> getMetadataProfile()
     {
         return metadataProfile;

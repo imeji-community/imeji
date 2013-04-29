@@ -28,7 +28,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/properties")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@XmlRootElement(name = "properties", namespace = "http://imeji.org/terms/properties")
+@XmlRootElement(name = "properties", namespace = "http://imeji.org/terms")
 @XmlSeeAlso({Item.class, MetadataProfile.class})
 public class Properties
 {
@@ -80,7 +80,7 @@ public class Properties
         this.createdBy = createdBy;
     }
 
-    @XmlElement(name = "createdBy", namespace = "http://purl.org/dc/terms/creator")
+    @XmlElement(name = "creator", namespace = "http://purl.org/dc/terms")
     public URI getCreatedBy()
     {
         return createdBy;
@@ -91,7 +91,7 @@ public class Properties
         this.modifiedBy = modifiedBy;
     }
 
-    @XmlElement(name = "modifiedBy", namespace = "http://imeji.org/terms/modifiedBy")
+    @XmlElement(name = "modifiedBy", namespace = "http://imeji.org/terms")
     public URI getModifiedBy()
     {
         return modifiedBy;
@@ -102,7 +102,7 @@ public class Properties
         this.status = status.getUri();
     }
 
-    @XmlElement(name = "status", namespace = "http://imeji.org/terms/status")
+    @XmlElement(name = "status", namespace = "http://imeji.org/terms")
     public Status getStatus()
     {
         return Status.valueOf(status.getFragment());
@@ -113,13 +113,13 @@ public class Properties
         this.version = version;
     }
 
-    @XmlElement(name = "version", namespace = "http://imeji.org/terms/version")
+    @XmlElement(name = "version", namespace = "http://imeji.org/terms")
     public int getVersion()
     {
         return version;
     }
 
-    @XmlElement(name = "discardComment", namespace = "http://imeji.org/terms/discardComment")
+    @XmlElement(name = "discardComment", namespace = "http://imeji.org/terms")
     public String getDiscardComment()
     {
         return discardComment;
@@ -130,7 +130,7 @@ public class Properties
         this.discardComment = discardComment;
     }
 
-    @XmlElement(name = "created", namespace = "http://purl.org/dc/terms/created")
+    @XmlElement(name = "created", namespace = "http://purl.org/dc/terms")
     public Calendar getCreated()
     {
         return created;
@@ -141,7 +141,7 @@ public class Properties
         this.created = created;
     }
     
-    @XmlElement(name = "modified", namespace = "http://purl.org/dc/terms/modified")
+    @XmlElement(name = "modified", namespace = "http://purl.org/dc/terms")
     public Calendar getModified()
     {
         return modified;
@@ -152,7 +152,7 @@ public class Properties
         this.modified = modified;
     }
     
-    @XmlElement(name = "versionDate", namespace = "http://purl.org/dc/terms/issued")
+    @XmlElement(name = "issued", namespace = "http://purl.org/dc/terms")
     public Calendar getVersionDate()
     {
         return versionDate;

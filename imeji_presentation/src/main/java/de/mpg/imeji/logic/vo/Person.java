@@ -27,7 +27,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://xmlns.com/foaf/0.1/person")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name = "person", namespace = "http://xmlns.com/foaf/0.1/person")
+@XmlRootElement(name = "person", namespace = "http://xmlns.com/foaf/0.1")
 public class Person
 {
     private URI id = IdentifierUtil.newURI(Person.class);
@@ -51,7 +51,7 @@ public class Person
     {
     }
 
-    @XmlElement(name = "familyName", namespace = "http://purl.org/escidoc/metadata/terms/0.1/family-name")
+    @XmlElement(name = "family-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
     public String getFamilyName()
     {
         return familyName;
@@ -62,7 +62,7 @@ public class Person
         this.familyName = familyName;
     }
 
-    @XmlElement(name = "givenName", namespace = "http://purl.org/escidoc/metadata/terms/0.1/given-name")
+    @XmlElement(name = "given-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
     public String getGivenName()
     {
         return givenName;
@@ -73,7 +73,7 @@ public class Person
         this.givenName = givenName;
     }
 
-    @XmlElement(name = "alternativeName", namespace = "http://purl.org/escidoc/metadata/terms/0.1/alternative-name")
+    @XmlElement(name = "alternative-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
     public String getAlternativeName()
     {
         return alternativeName;
@@ -84,7 +84,7 @@ public class Person
         this.alternativeName = alternativeName;
     }
 
-    @XmlElement(name = "identifier", namespace = "http://purl.org/dc/elements/1.1/identifier")
+    @XmlElement(name = "identifier", namespace = "http://purl.org/dc/elements/1.1")
     public String getIdentifier()
     {
         return identifier;
@@ -95,7 +95,7 @@ public class Person
         this.identifier = identifier;
     }
 
-    @XmlElement(name = "role", namespace = "http://purl.org/escidoc/metadata/terms/0.1/role")
+    @XmlElement(name = "role", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
     public URI getRole()
     {
         return role;
@@ -106,7 +106,7 @@ public class Person
         this.role = role;
     }
     
-    @XmlElements(value=@XmlElement(name = "organizations", namespace = "http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit"))
+    @XmlElements(value=@XmlElement(name = "organizationalunit", namespace = "http://purl.org/escidoc/metadata/profiles/0.1"))
     public Collection<Organization> getOrganizations()
     {
         return organizations;
@@ -117,7 +117,7 @@ public class Person
         this.organizations = organizations;
     }
 
-    @XmlElement(name = "completeName", namespace = "http://purl.org/escidoc/metadata/terms/0.1/complete-name")
+    @XmlElement(name = "complete-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
     public String getCompleteName()
     {
         return completeName;
@@ -133,7 +133,7 @@ public class Person
         return pos;
     }
 
-    @XmlElement(name = "pos", namespace = "http://imeji.org/terms/position")
+    @XmlElement(name = "position", namespace = "http://imeji.org/terms")
     public void setPos(int pos)
     {
         this.pos = pos;

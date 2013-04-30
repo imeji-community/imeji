@@ -113,7 +113,16 @@ public class IngestTest
             
             item.setCreatedBy(new URI("http://zuse2.zib.de/user/admin%40imeji.org"));
             item.setCreated(Calendar.getInstance());
-            item.setModified(Calendar.getInstance());             
+            item.setModified(Calendar.getInstance()); 
+            item.setVersionDate(Calendar.getInstance());
+            item.setCollection(new URI("http://zuse2.zib.de/collecation/admin%40imeji.org"));
+            item.setChecksum("1ab123b413d233");
+            item.setDiscardComment("a discard comment");
+            item.setFilename("a filen name");
+            item.setFullImageUrl(new URI("http://zuse2.zib.de/fullimage/admin%40imeji.org"));
+            item.setWebImageUrl(new URI("http://zuse2.zib.de/webimage/admin%40imeji.org"));
+            item.setThumbnailImageUrl(new URI("http://zuse2.zib.de/thumbnailimage/admin%40imeji.org"));
+            item.setModifiedBy(new URI("http://zuse2.zib.de/modifiedby/admin%40imeji.org"));
             
             
             Text text = new Text();

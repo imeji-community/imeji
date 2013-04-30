@@ -5,6 +5,8 @@ package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,6 +24,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "organizationalunit", namespace = "http://purl.org/escidoc/metadata/profiles/0.1")
 public class Organization
 {

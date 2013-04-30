@@ -27,7 +27,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/mdprofile")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @j2jModel("metadataProfile")
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "mdprofile", namespace = "http://imeji.org/terms")
 public class MetadataProfile extends Properties
 {    

@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
@@ -37,7 +38,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms")
 @XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class, Geolocation.class, License.class, Link.class,
         Publication.class })

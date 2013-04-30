@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -29,6 +31,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/metadataSet")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms")
 public class MetadataSet
 {

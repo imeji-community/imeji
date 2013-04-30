@@ -27,7 +27,7 @@ import de.mpg.j2j.annotations.j2jResource;
  * @version $Revision$ $LastChangedDate$
  */
 @j2jResource("http://imeji.org/terms/properties")
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "properties", namespace = "http://imeji.org/terms")
 @XmlSeeAlso({Item.class, MetadataProfile.class})
 public class Properties

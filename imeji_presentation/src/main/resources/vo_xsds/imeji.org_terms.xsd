@@ -1,104 +1,278 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" targetNamespace="http://imeji.org/terms" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://imeji.org/terms" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema" xmlns:foaf="http://xmlns.com/foaf/0.1" xmlns:tns="http://imeji.org/terms" xmlns:eterms="http://purl.org/escidoc/metadata/terms/0.1" xmlns:eprofiles="http://purl.org/escidoc/metadata/profiles/0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:imeji="http://imeji.org/terms" xmlns:dcam="http://purl.org/dc/dcam" xmlns:imeji-metadata="http://imeji.org/terms/metadata" xmlns:dcterms="http://purl.org/dc/terms">
 
-  <xs:import schemaLocation="ingest10.xsd"/>
+  <xs:import namespace="http://purl.org/dc/terms" schemaLocation="purl.org_dc_terms.xsd"/>
 
-  <xs:element name="checksum" type="xs:string"/>
+  <xs:import namespace="http://purl.org/escidoc/metadata/profiles/0.1" schemaLocation="purl.org_escidoc_metadata_profiles_0.1.xsd"/>
 
-  <xs:element name="citation" type="xs:string"/>
+  <xs:import namespace="http://xmlns.com/foaf/0.1" schemaLocation="xmlns.com_foaf_0.1.xsd"/>
 
-  <xs:element name="citationStyle" type="xs:string"/>
+  <xs:import namespace="http://purl.org/escidoc/metadata/terms/0.1" schemaLocation="purl.org_escidoc_metadata_terms_0.1.xsd"/>
 
-  <xs:element name="collection" type="xs:string"/>
+  <xs:import namespace="http://purl.org/dc/elements/1.1" schemaLocation="purl.org_dc_elements_1.1.xsd"/>
 
-  <xs:element name="coneId" type="xs:string"/>
+  <xs:import namespace="http://www.w3.org/2000/01/rdf-schema" schemaLocation="www.w3.org_2000_01_rdf-schema.xsd"/>
 
-  <xs:element name="date" type="xs:string"/>
+  <xs:import namespace="http://purl.org/dc/dcam" schemaLocation="purl.org_dc_dcam.xsd"/>
 
-  <xs:element name="discardComment" type="xs:string"/>
+  <xs:element name="ingestProfile" type="tns:ingestProfile"/>
 
-  <xs:element name="escidocId" type="xs:string"/>
+  <xs:element name="item" type="tns:item"/>
 
-  <xs:element name="filename" type="xs:string"/>
+  <xs:element name="items" type="tns:items"/>
 
-  <xs:element name="fullImageUrl" type="xs:string"/>
+  <xs:element name="label" type="tns:localizedString"/>
 
-  <xs:element name="fulltext" type="xs:string"/>
+  <xs:element name="mdprofile" type="tns:metadataProfile"/>
 
-  <xs:element name="ingestProfile" type="ingestProfile"/>
+  <xs:element name="metadata" type="tns:metadata"/>
 
-  <xs:element name="isDescription" type="xs:boolean"/>
+  <xs:element name="metadataProfiles" type="tns:metadataProfiles"/>
 
-  <xs:element name="isPreview" type="xs:boolean"/>
+  <xs:element name="metadataSet" type="tns:metadataSet"/>
 
-  <xs:element name="item" type="item"/>
+  <xs:element name="properties" type="tns:properties"/>
 
-  <xs:element name="items" type="items"/>
+  <xs:element name="statement" type="tns:statement"/>
 
-  <xs:element name="label" type="localizedString"/>
+  <xs:complexType name="ingestProfile">
+    <xs:sequence>
+      <xs:element ref="tns:items" minOccurs="0"/>
+      <xs:element ref="tns:metadataProfiles" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
 
-  <xs:element name="latitude" type="xs:double"/>
+  <xs:complexType name="items">
+    <xs:sequence>
+      <xs:element ref="tns:item" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
 
-  <xs:element name="license" type="xs:string"/>
+  <xs:complexType name="item">
+    <xs:complexContent>
+      <xs:extension base="tns:properties">
+        <xs:sequence>
+          <xs:element name="checksum" type="xs:string" minOccurs="0"/>
+          <xs:element name="collection" type="xs:string" minOccurs="0"/>
+          <xs:element name="escidocId" type="xs:string" minOccurs="0"/>
+          <xs:element name="filename" type="xs:string" minOccurs="0"/>
+          <xs:element name="fullImageUrl" type="xs:string" minOccurs="0"/>
+          <xs:element name="fulltext" type="xs:string" minOccurs="0"/>
+          <xs:element ref="tns:metadataSet" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="storageId" type="xs:string" minOccurs="0"/>
+          <xs:element name="thumbnailImageUrl" type="xs:string" minOccurs="0"/>
+          <xs:element name="visibility" type="tns:visibility" minOccurs="0"/>
+          <xs:element name="webImageUrl" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="literalConstraint" type="xs:string"/>
+  <xs:complexType name="properties">
+    <xs:sequence>
+      <xs:element ref="dcterms:created" minOccurs="0"/>
+      <xs:element ref="dcterms:creator" minOccurs="0"/>
+      <xs:element name="discardComment" type="xs:string" minOccurs="0"/>
+      <xs:element ref="dcterms:modified" minOccurs="0"/>
+      <xs:element name="modifiedBy" type="xs:string" minOccurs="0"/>
+      <xs:element name="status" type="tns:status" minOccurs="0"/>
+      <xs:element name="version" type="xs:int"/>
+      <xs:element ref="dcterms:issued" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
 
-  <xs:element name="longitude" type="xs:double"/>
+  <xs:complexType name="metadataSet">
+    <xs:sequence>
+      <xs:element ref="tns:metadata" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="profile" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
 
-  <xs:element name="maxOccurs" type="xs:string"/>
+  <xs:complexType name="metadata" abstract="true">
+    <xs:sequence>
+      <xs:element name="position" type="xs:int"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
 
-  <xs:element name="mdprofile" type="metadataProfile"/>
+  <xs:complexType name="text">
+    <xs:complexContent>
+      <xs:extension base="tns:metadata">
+        <xs:sequence>
+          <xs:element name="statement" type="xs:string" minOccurs="0"/>
+          <xs:element name="text" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="metadata" type="metadata"/>
+  <xs:complexType name="number">
+    <xs:complexContent>
+      <xs:extension base="tns:metadata">
+        <xs:sequence>
+          <xs:element name="number" type="xs:double"/>
+          <xs:element name="statement" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="metadataProfiles" type="metadataProfiles"/>
+  <xs:complexType name="conePerson">
+    <xs:complexContent>
+      <xs:extension base="tns:metadata">
+        <xs:sequence>
+          <xs:element name="coneId" type="xs:string" minOccurs="0"/>
+          <xs:element ref="foaf:person" minOccurs="0"/>
+          <xs:element name="statement" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="metadataSet" type="metadataSet"/>
+  <xs:complexType name="person">
+    <xs:sequence>
+      <xs:element ref="eterms:alternative-name" minOccurs="0"/>
+      <xs:element ref="eterms:complete-name" minOccurs="0"/>
+      <xs:element ref="eterms:family-name" minOccurs="0"/>
+      <xs:element ref="eterms:given-name" minOccurs="0"/>
+      <xs:element ref="dc:identifier" minOccurs="0"/>
+      <xs:element ref="eprofiles:organizationalunit" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="position" type="xs:int"/>
+      <xs:element ref="eterms:role" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
 
-  <xs:element name="minOccurs" type="xs:string"/>
+  <xs:complexType name="organization">
+    <xs:sequence>
+      <xs:element ref="eterms:city" minOccurs="0"/>
+      <xs:element ref="eterms:country" minOccurs="0"/>
+      <xs:element ref="dcterms:description" minOccurs="0"/>
+      <xs:element ref="dcterms:identifier" minOccurs="0"/>
+      <xs:element ref="dcterms:title" minOccurs="0"/>
+      <xs:element name="position" type="xs:int"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
 
-  <xs:element name="modifiedBy" type="xs:string"/>
+  <xs:complexType name="date">
+    <xs:complexContent>
+      <xs:extension base="tns:metadata">
+        <xs:sequence>
+          <xs:element name="date" type="xs:string" minOccurs="0"/>
+          <xs:element name="statement" type="xs:string" minOccurs="0"/>
+          <xs:element name="time" type="xs:long"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="number" type="xs:double"/>
+  <xs:complexType name="geolocation">
+    <xs:complexContent>
+      <xs:extension base="tns:metadata">
+        <xs:sequence>
+          <xs:element name="latitude" type="xs:double"/>
+          <xs:element name="longitude" type="xs:double"/>
+          <xs:element ref="dcterms:title" minOccurs="0"/>
+          <xs:element name="statement" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="parent" type="xs:string"/>
+  <xs:complexType name="license">
+    <xs:complexContent>
+      <xs:extension base="tns:metadata">
+        <xs:sequence>
+          <xs:element ref="dc:identifier" minOccurs="0"/>
+          <xs:element name="license" type="xs:string" minOccurs="0"/>
+          <xs:element name="statement" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="position" type="xs:int"/>
+  <xs:complexType name="link">
+    <xs:complexContent>
+      <xs:extension base="tns:metadata">
+        <xs:sequence>
+          <xs:element ref="rdfs:label" minOccurs="0"/>
+          <xs:element name="statement" type="xs:string" minOccurs="0"/>
+          <xs:element name="uri" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="profile" type="xs:string"/>
+  <xs:complexType name="publication">
+    <xs:complexContent>
+      <xs:extension base="tns:metadata">
+        <xs:sequence>
+          <xs:element name="citation" type="xs:string" minOccurs="0"/>
+          <xs:element name="citationStyle" type="xs:string" minOccurs="0"/>
+          <xs:element name="statement" type="xs:string" minOccurs="0"/>
+          <xs:element name="uri" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="properties" type="properties"/>
+  <xs:complexType name="metadataProfile">
+    <xs:complexContent>
+      <xs:extension base="tns:properties">
+        <xs:sequence>
+          <xs:element ref="dc:description" minOccurs="0"/>
+          <xs:element ref="tns:statement" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element ref="dc:title" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:element name="restricted" type="xs:boolean"/>
+  <xs:complexType name="statement">
+    <xs:sequence>
+      <xs:element name="isDescription" type="xs:boolean"/>
+      <xs:element ref="tns:label" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="literalConstraint" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="maxOccurs" type="xs:string" minOccurs="0"/>
+      <xs:element name="minOccurs" type="xs:string" minOccurs="0"/>
+      <xs:element name="parent" type="xs:string" minOccurs="0"/>
+      <xs:element name="position" type="xs:int"/>
+      <xs:element name="isPreview" type="xs:boolean"/>
+      <xs:element name="restricted" type="xs:boolean"/>
+      <xs:element ref="dcterms:type" minOccurs="0"/>
+      <xs:element ref="dcam:VocabularyEncodingScheme" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
 
-  <xs:element name="statement" nillable="true" type="xs:anyType"/>
+  <xs:complexType name="localizedString">
+    <xs:sequence/>
+    <xs:attribute name="lang" type="xs:string"/>
+    <xs:attribute name="value" type="xs:string"/>
+  </xs:complexType>
 
-  <xs:element name="status" type="status"/>
+  <xs:complexType name="metadataProfiles">
+    <xs:sequence>
+      <xs:element ref="tns:mdprofile" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
 
-  <xs:element name="storageId" type="xs:string"/>
+  <xs:simpleType name="visibility">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PUBLIC"/>
+      <xs:enumeration value="PRIVATE"/>
+    </xs:restriction>
+  </xs:simpleType>
 
-  <xs:element name="text" type="xs:string"/>
-
-  <xs:element name="thumbnailImageUrl" type="xs:string"/>
-
-  <xs:element name="time" type="xs:long"/>
-
-  <xs:element name="uri" type="xs:string"/>
-
-  <xs:element name="version" type="xs:int"/>
-
-  <xs:element name="visibility" type="visibility"/>
-
-  <xs:element name="webImageUrl" type="xs:string"/>
-
-
-
-
-
-
-
-
-
-
+  <xs:simpleType name="status">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PENDING"/>
+      <xs:enumeration value="RELEASED"/>
+      <xs:enumeration value="WITHDRAWN"/>
+    </xs:restriction>
+  </xs:simpleType>
 </xs:schema>
 

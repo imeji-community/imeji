@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
@@ -27,6 +29,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://xmlns.com/foaf/0.1/person")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "person", namespace = "http://xmlns.com/foaf/0.1")
 public class Person
 {

@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,6 +29,7 @@ import de.mpg.j2j.misc.LocalizedString;
  */
 @j2jResource("http://imeji.org/terms/statement")
 @j2jId(getMethod = "getId", setMethod = "setId")
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "statement", namespace = "http://imeji.org/terms")
 public class Statement implements Comparable<Statement>
 {

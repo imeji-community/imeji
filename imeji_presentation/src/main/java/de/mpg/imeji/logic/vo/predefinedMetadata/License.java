@@ -27,8 +27,8 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jDataType("http://imeji.org/terms/metadata#license")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
-@XmlRootElement(name = "license", namespace = "http://imeji.org/terms/metadata#")
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlRootElement(name = "license", namespace = "http://imeji.org/terms/metadata")
 public class License extends Metadata
 {
     private SimpleDateFormat date;

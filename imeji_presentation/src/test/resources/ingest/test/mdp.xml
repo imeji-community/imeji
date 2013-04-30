@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:mdprofile xmlns:ns2="http://imeji.org/terms" xmlns:ns3="http://purl.org/dc/elements/1.1" xmlns:ns4="http://www.w3.org/2000/01/rdf-schema#" xmlns:ns5="http://purl.org/dc/dcam" xmlns:ns6="http://purl.org/dc/terms" xmlns:ns7="http://imeji.org/terms/metadata#" xmlns:ns8="http://purl.org/escidoc/metadata/terms/0.1" xmlns:ns9="http://purl.org/escidoc/metadata/profiles/0.1" xmlns:ns10="http://xmlns.com/foaf/0.1" id="http://localhost:8080/imeji/metadataProfile/3Qs4l2XRTejl02h0">
-    <ns6:created>2013-04-30T09:04:53.810Z</ns6:created>
-    <ns6:creator>http://localhost:8080/imeji/user/admin%40imeji.org</ns6:creator>
-    <ns2:discardComment></ns2:discardComment>
-    <ns6:modified>2013-04-30T09:05:59.011Z</ns6:modified>
-    <ns2:modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns2:modifiedBy>
-    <ns2:status>PENDING</ns2:status>
-    <ns2:version>0</ns2:version>
-    <ns3:description></ns3:description>
-    <ns2:statement id="http://imeji.org/terms/statement/QcUiLN6wTO2rIFZ7">
-        <ns2:isDescription>false</ns2:isDescription>
-        <ns4:label lang="en" value="Title"/>
-        <ns4:label lang="de" value="Titel"/>
-        <ns2:maxOccurs>1</ns2:maxOccurs>
-        <ns2:minOccurs>0</ns2:minOccurs>
-        <ns2:position>0</ns2:position>
-        <ns2:isPreview>true</ns2:isPreview>
-        <ns2:restricted>false</ns2:restricted>
-        <ns6:type>http://imeji.org/terms/metadata#text</ns6:type>
-    </ns2:statement>
-    <ns2:statement id="http://imeji.org/terms/statement/hr8dTjVoGbsnVTrA">
-        <ns2:isDescription>false</ns2:isDescription>
-        <ns4:label lang="de" value="Zahl"/>
-        <ns4:label lang="en" value="Number"/>
-        <ns2:maxOccurs>1</ns2:maxOccurs>
-        <ns2:minOccurs>0</ns2:minOccurs>
-        <ns2:position>1</ns2:position>
-        <ns2:isPreview>true</ns2:isPreview>
-        <ns2:restricted>false</ns2:restricted>
-        <ns6:type>http://imeji.org/terms/metadata#number</ns6:type>
-    </ns2:statement>
-    <ns3:title>Ingest Testsammlung 3</ns3:title>
-</ns2:mdprofile>
+<imeji:mdprofile xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema" xmlns:imeji-metadata="http://imeji.org/terms/metadata" xmlns:imeji="http://imeji.org/terms" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:eprofiles="http://purl.org/escidoc/metadata/profiles/0.1" xmlns:dcterms="http://purl.org/dc/terms" xmlns:eterms="http://purl.org/escidoc/metadata/terms/0.1" xmlns:foaf="http://xmlns.com/foaf/0.1" xmlns:dcam="http://purl.org/dc/dcam" id="http://localhost:8080/imeji/metadataProfile/3Qs4l2XRTejl02h0">
+    <dcterms:created>2013-04-30T09:04:53.810Z</dcterms:created>
+    <dcterms:creator>http://localhost:8080/imeji/user/admin%40imeji.org</dcterms:creator>
+    <imeji:discardComment></imeji:discardComment>
+    <dcterms:modified>2013-04-30T09:05:59.011Z</dcterms:modified>
+    <imeji:modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</imeji:modifiedBy>
+    <imeji:status>PENDING</imeji:status>
+    <imeji:version>0</imeji:version>
+    <dc:description></dc:description>
+    <imeji:statement id="http://imeji.org/terms/statement/QcUiLN6wTO2rIFZ7">
+        <imeji:isDescription>false</imeji:isDescription>
+        <rdfs:label lang="en" value="Title"/>
+        <rdfs:label lang="de" value="Titel"/>
+        <imeji:maxOccurs>1</imeji:maxOccurs>
+        <imeji:minOccurs>0</imeji:minOccurs>
+        <imeji:position>0</imeji:position>
+        <imeji:isPreview>true</imeji:isPreview>
+        <imeji:restricted>false</imeji:restricted>
+        <dcterms:type>http://imeji.org/terms/metadata#text</dcterms:type>
+    </imeji:statement>
+    <imeji:statement id="http://imeji.org/terms/statement/hr8dTjVoGbsnVTrA">
+        <imeji:isDescription>false</imeji:isDescription>
+        <rdfs:label lang="de" value="Zahl"/>
+        <rdfs:label lang="en" value="Number"/>
+        <imeji:maxOccurs>1</imeji:maxOccurs>
+        <imeji:minOccurs>0</imeji:minOccurs>
+        <imeji:position>1</imeji:position>
+        <imeji:isPreview>true</imeji:isPreview>
+        <imeji:restricted>false</imeji:restricted>
+        <dcterms:type>http://imeji.org/terms/metadata#number</dcterms:type>
+    </imeji:statement>
+    <dc:title>Ingest Testsammlung 3</dc:title>
+</imeji:mdprofile>

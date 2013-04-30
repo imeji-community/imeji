@@ -32,9 +32,8 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/item")
 @j2jModel("item")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "item", namespace = "http://imeji.org/terms")
-
 public class Item extends Properties implements FulltextIndex
 {
     public enum Visibility

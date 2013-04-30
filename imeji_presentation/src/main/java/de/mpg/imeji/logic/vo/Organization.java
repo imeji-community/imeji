@@ -5,8 +5,9 @@ package de.mpg.imeji.logic.vo;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -21,8 +22,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name = "organization")
-@XmlType(name = "organization")
+@XmlRootElement(name = "organizationalunit", namespace = "http://purl.org/escidoc/metadata/profiles/0.1")
 public class Organization
 {
     private URI id;
@@ -43,6 +43,7 @@ public class Organization
         // TODO Auto-generated constructor stub
     }
 
+    @XmlElement(name = "title", namespace = "http://purl.org/dc/terms")
     public String getName()
     {
         return name;
@@ -53,6 +54,7 @@ public class Organization
         this.name = name;
     }
 
+    @XmlElement(name = "description", namespace = "http://purl.org/dc/terms")
     public String getDescription()
     {
         return description;
@@ -63,6 +65,7 @@ public class Organization
         this.description = description;
     }
 
+    @XmlElement(name = "identifier", namespace = "http://purl.org/dc/terms")
     public String getIdentifier()
     {
         return identifier;
@@ -73,6 +76,7 @@ public class Organization
         this.identifier = identifier;
     }
 
+    @XmlElement(name = "city", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
     public String getCity()
     {
         return city;
@@ -83,6 +87,7 @@ public class Organization
         this.city = city;
     }
 
+    @XmlElement(name = "country", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
     public String getCountry()
     {
         return country;
@@ -93,6 +98,7 @@ public class Organization
         this.country = country;
     }
 
+    @XmlElement(name = "position", namespace = "http://imeji.org/terms")
     public int getPos()
     {
         return pos;
@@ -118,6 +124,7 @@ public class Organization
         this.id = id;
     }
 
+    @XmlAttribute(name = "id")
     public URI getId()
     {
         return id;

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>imeji</artifactId>
 		<groupId>de.mpg.mpdl.imeji</groupId>
@@ -23,6 +24,9 @@
 		<org.richfaces.bom.version>4.2.2.Final</org.richfaces.bom.version>
 		<!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
 		<project.warName>imeji</project.warName>
+		<!-- specify this to copy the war file directly into the tomcat deploy 
+			folder -->
+		<tomcat.webapps>C:/tomcat/apache-tomcat-7.0.33/webapps</tomcat.webapps>
 	</properties>
 
 	<build>
@@ -32,7 +36,6 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 			</plugin>
-			<!-- -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -65,25 +68,48 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>process-resources</id>
 						<phase>process-resources</phase>
+						<configuration>
+							<tasks>
+								<!-- copying the jaxb files into the build directories, because of 
+									the xml schema handling issue (marshalling and unmarshalling) -->
+								<!-- those files will not be copied into the build directories, Maven 
+									does not copy them automatically!!! -->
+								<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index"
+									tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
+								<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index"
+									tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
+								<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index"
+									tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
+								<copy
+									file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index"
+									tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+
+					<!-- copy the war folder into the tomcat deploy folder ($TOMCAT_HOME/webapps) -->
+					<execution>
+						<id>install</id>
+						<phase>install</phase>
+						<configuration>
+							<tasks>
+								<copy file="${project.build.directory}/${project.warName}.war"
+									tofile="${tomcat.webapps}/${project.warName}.war" />
+							</tasks>
+						</configuration>
 						<goals>
 							<goal>run</goal>
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<tasks>
-						<!-- copying the jaxb files into the build directories, because of 
-							the xml schema handling issue (marshalling and unmarshalling) -->
-						<!-- those files will not be copied into the build directories, Maven 
-							does not copy them automatically!!! -->
-						<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
-						<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
-						<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
-						<copy file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
-					</tasks>
-				</configuration>
+
 			</plugin>
+			
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>

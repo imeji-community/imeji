@@ -4,11 +4,10 @@
 package de.mpg.imeji.logic.ingest.mapper;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.List;
 
+import de.mpg.imeji.logic.ingest.template.DuplicatedObject;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
@@ -16,51 +15,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
  */
 public class ProfileMapper
 {
-    private class DuplicateProfileObject
-    {
-        private List<String> duplicateFilenames;
-        Hashtable<String, MetadataProfile> hashTableFilename;
-
-        public DuplicateProfileObject()
-        {
-            this.setDuplicateFilenames(new ArrayList<String>());
-            this.setHashTableFilename(new Hashtable<String, MetadataProfile>());
-        }
-
-        /**
-         * @return the duplicateFilenames
-         */
-        public List<String> getDuplicateFilenames()
-        {
-            return duplicateFilenames;
-        }
-
-        /**
-         * @param duplicateFilenames the duplicateFilenames to set
-         */
-        public void setDuplicateFilenames(List<String> duplicateFilenames)
-        {
-            this.duplicateFilenames = duplicateFilenames;
-        }
-
-        /**
-         * @return the hashTableFilename
-         */
-        public Hashtable<String, MetadataProfile> getHashTableFilename()
-        {
-            return hashTableFilename;
-        }
-
-        /**
-         * @param hashTableFilename the hashTableFilename to set
-         */
-        public void setHashTableFilename(Hashtable<String, MetadataProfile> hashTableFilename)
-        {
-            this.hashTableFilename = hashTableFilename;
-        }
-    }
-
-    private DuplicateProfileObject dupProfiles;
+    private DuplicatedObject<MetadataProfile, ?> dupProfiles;
 
     /**
      * @throws URISyntaxException
@@ -70,9 +25,9 @@ public class ProfileMapper
         this.dupProfiles = this.process(profileList);
     }
 
-    private DuplicateProfileObject process(List<MetadataProfile> profileList)
+    private DuplicatedObject<MetadataProfile, ?> process(List<MetadataProfile> profileList)
     {
-        DuplicateProfileObject dupProfiles = new DuplicateProfileObject();
+    	DuplicatedObject<MetadataProfile, ?> dupProfiles = new DuplicatedObject<MetadataProfile, Object>();
         for (MetadataProfile profile : profileList)
         {
             MetadataProfile profileAsFilename = dupProfiles.getHashTableFilename().get(profile.getTitle());
@@ -100,12 +55,12 @@ public class ProfileMapper
 
     private Collection<MetadataProfile> getUniqueFilenameListsAsProfileList()
     {
-        return this.dupProfiles.hashTableFilename.values();
+        return this.dupProfiles.getHashTableFilename().values();
     }
 
     private Collection<String> getUniqueFilenameListsAsStringList()
     {
-        return this.dupProfiles.hashTableFilename.keySet();
+        return this.dupProfiles.getHashTableFilename().keySet();
     }
 
     public Collection<MetadataProfile> getMappedProfileObjects()

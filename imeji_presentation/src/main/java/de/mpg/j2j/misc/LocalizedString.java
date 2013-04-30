@@ -1,7 +1,7 @@
 package de.mpg.j2j.misc;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * Java representation for rdf label with a lang property
@@ -10,8 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@XmlType(name = "LocalizedString")
-@XmlRootElement(name = "LocalizedString")
+@XmlRootElement(name = "label", namespace = "http://imeji.org/terms")
 public class LocalizedString
 {
     private String value;
@@ -41,6 +40,7 @@ public class LocalizedString
      * 
      * @return
      */
+    @XmlAttribute(name = "value")
     public String getValue()
     {
         return value;
@@ -61,6 +61,7 @@ public class LocalizedString
      * 
      * @return
      */
+    @XmlAttribute(name = "lang")
     public String getLang()
     {
         return lang;

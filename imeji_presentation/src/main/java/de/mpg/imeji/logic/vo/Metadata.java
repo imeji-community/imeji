@@ -97,7 +97,7 @@ public abstract class Metadata
     }
 
     public abstract void copy(Metadata metadata);
-        
+
     public abstract URI getStatement();
 
     public abstract void setStatement(URI namespace);

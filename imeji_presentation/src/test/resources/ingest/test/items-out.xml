@@ -1,175 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns26:items xmlns:ns2="http://purl.org/dc/terms/creator" xmlns:ns3="http://imeji.org/terms/discardComment" xmlns:ns4="http://purl.org/dc/terms/modified" xmlns:ns5="http://imeji.org/terms/modifiedBy" xmlns:ns6="http://imeji.org/terms/status" xmlns:ns7="http://imeji.org/terms/version" xmlns:ns8="http://purl.org/dc/terms/issued" xmlns:ns9="http://imeji.org/terms/properties" xmlns:ns10="http://imeji.org/terms/checksum" xmlns:ns11="http://imeji.org/terms/collection" xmlns:ns12="http://imeji.org/terms/escidocId" xmlns:ns13="http://imeji.org/terms/filename" xmlns:ns14="http://imeji.org/terms/fullImageUrl" xmlns:ns15="http://imeji.org/terms/fulltext" xmlns:ns16="http://imeji.org/terms/position" xmlns:ns17="http://purl.org/dc/terms/created" xmlns:ns18="http://imeji.org/terms/metadata" xmlns:ns19="http://imeji.org/terms/mdprofile" xmlns:ns20="http://imeji.org/terms/metadataSet" xmlns:ns21="http://imeji.org/terms/storageId" xmlns:ns22="http://imeji.org/terms/thumbnailImageUrl" xmlns:ns23="http://imeji.org/terms/visibility" xmlns:ns24="http://imeji.org/terms/webImageUrl" xmlns:ns25="http://imeji.org/terms/item" xmlns:ns26="http://imeji.org/terms/items" xmlns:ns27="http://imeji.org/terms/statement" xmlns:ns28="http://imeji.org/terms/text" xmlns:ns29="http://imeji.org/terms/metadata#text" xmlns:ns30="http://imeji.org/terms/number" xmlns:ns31="http://imeji.org/terms/metadata#number" xmlns:ns32="http://imeji.org/terms/coneId" xmlns:ns33="http://purl.org/escidoc/metadata/terms/0.1/alternative-name" xmlns:ns34="http://purl.org/escidoc/metadata/terms/0.1/complete-name" xmlns:ns35="http://purl.org/escidoc/metadata/terms/0.1/family-name" xmlns:ns36="http://purl.org/escidoc/metadata/terms/0.1/given-name" xmlns:ns37="http://purl.org/dc/elements/1.1/identifier" xmlns:ns38="http://purl.org/escidoc/metadata/terms/0.1/city" xmlns:ns39="http://purl.org/escidoc/metadata/terms/0.1/country" xmlns:ns40="http://purl.org/dc/terms/description" xmlns:ns41="http://purl.org/dc/terms/identifier" xmlns:ns42="http://purl.org/dc/terms/title" xmlns:ns43="http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit" xmlns:ns44="http://purl.org/escidoc/metadata/terms/0.1/role" xmlns:ns45="http://xmlns.com/foaf/0.1/person" xmlns:ns46="http://imeji.org/terms/metadata#conePerson" xmlns:ns47="http://imeji.org/terms/date" xmlns:ns48="http://imeji.org/terms/time" xmlns:ns49="http://imeji.org/terms/metadata#date" xmlns:ns50="http://imeji.org/terms/latitude" xmlns:ns51="http://imeji.org/terms/longitude" xmlns:ns52="http://imeji.org/terms/metadata#geolocation" xmlns:ns53="http://imeji.org/terms/license" xmlns:ns54="http://imeji.org/terms/metadata#license" xmlns:ns55="http://www.w3.org/2000/01/rdf-schema-label" xmlns:ns56="http://imeji.org/terms/uri" xmlns:ns57="http://imeji.org/terms/metadata#link" xmlns:ns58="http://imeji.org/terms/citation" xmlns:ns59="http://imeji.org/terms/citationStyle" xmlns:ns60="http://imeji.org/terms/metadata#publication" xmlns:ns61="http://purl.org/dc/elements/1.1/description" xmlns:ns62="http://imeji.org/terms/isDescription" xmlns:ns63="http://imeji.org/terms/literalConstraint" xmlns:ns64="http://imeji.org/terms/maxOccurs" xmlns:ns65="http://imeji.org/terms/minOccurs" xmlns:ns66="http://imeji.org/terms/parent" xmlns:ns67="http://imeji.org/terms/isPreview" xmlns:ns68="http://imeji.org/terms/restricted" xmlns:ns69="http://purl.org/dc/terms/type" xmlns:ns70="http://purl.org/dc/dcam/VocabularyEncodingScheme" xmlns:ns71="http://purl.org/dc/elements/1.1/title">
-    <ns25:item id="http://localhost:8080/imeji/item/Gz8F0Ygm5HxwwdiM">
-        <ns17:created>2013-04-10T14:02:22.021Z</ns17:created>
-        <ns2:createdBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns2:createdBy>
-        <ns3:discardComment></ns3:discardComment>
-        <ns4:modified>2013-04-22T13:22:16.488Z</ns4:modified>
-        <ns5:modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns5:modifiedBy>
-        <ns6:status>RELEASED</ns6:status>
-        <ns7:version>1</ns7:version>
-        <ns8:versionDate>2013-04-22T13:22:16.488Z</ns8:versionDate>
-        <ns10:checksum>968231ae35ce8e69a4a8ebdd200decc6</ns10:checksum>
-        <ns11:collection>http://localhost:8080/imeji/collection/6eQFSDakubQj_BfA</ns11:collection>
-        <ns12:escidocId></ns12:escidocId>
-        <ns13:filename>DMA_NL_207_00001_sq.jpg</ns13:filename>
-        <ns14:fullImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/4d/77/d7/20-ba7e-4685-bbca-ca8c872a6284/0/original/b81165f5b1b322fe716ee2409d78d2fd.jpg</ns14:fullImageUrl>
-        <ns15:fulltext>DMA_NL_207_00001_sq.jpg Bild 4 Titel Bild 4 Beschreibung Bild 4 Untertitel http://localhost:8080/imeji/</ns15:fulltext>
-        <ns20:metadataSets id="http://localhost:8080/imeji/item/Gz8F0Ygm5HxwwdiM/metadataSet/0">
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/zpz7vdI6vv1QJQ">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/Qzo4omiNDB4_hoJW</ns27:statement>
-                <ns28:text>Bild 4 Titel</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/YpPSHOAa09CPNxNA">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/Y0PApu1ufvATTiPM</ns27:statement>
-                <ns28:text>Bild 4 Beschreibung</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/6s2LM3yMfzI0GJ2">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/8GeUXwIWMuRONz</ns27:statement>
-                <ns28:text>Bild 4 Untertitel</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/zvFEIHqkrFCxHl">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/1Ewn_BdKFUr897aL</ns27:statement>
-                <ns28:text>http://localhost:8080/imeji/</ns28:text>
-            </ns18:metadata>
-            <ns19:profile>http://localhost:8080/imeji/metadataProfile/5yWA6RhasrQMBr1m</ns19:profile>
-        </ns20:metadataSets>
-        <ns21:storageId>6eQFSDakubQj_BfA/4d/77/d7/20-ba7e-4685-bbca-ca8c872a6284/0</ns21:storageId>
-        <ns22:thumbnailImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/4d/77/d7/20-ba7e-4685-bbca-ca8c872a6284/0/thumbnail/b81165f5b1b322fe716ee2409d78d2fd.jpg</ns22:thumbnailImageUrl>
-        <ns23:visibility>PUBLIC</ns23:visibility>
-        <ns24:webImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/4d/77/d7/20-ba7e-4685-bbca-ca8c872a6284/0/web/b81165f5b1b322fe716ee2409d78d2fd.jpg</ns24:webImageUrl>
-    </ns25:item>
-    <ns25:item id="http://localhost:8080/imeji/item/XvMQHtnKos3IbyTW">
-        <ns17:created>2013-04-10T14:02:22.021Z</ns17:created>
-        <ns2:createdBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns2:createdBy>
-        <ns3:discardComment></ns3:discardComment>
-        <ns4:modified>2013-04-22T13:22:16.488Z</ns4:modified>
-        <ns5:modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns5:modifiedBy>
-        <ns6:status>RELEASED</ns6:status>
-        <ns7:version>1</ns7:version>
-        <ns8:versionDate>2013-04-22T13:22:16.488Z</ns8:versionDate>
-        <ns10:checksum>f40c1644a3ba6740be261df6734a50c7</ns10:checksum>
-        <ns11:collection>http://localhost:8080/imeji/collection/6eQFSDakubQj_BfA</ns11:collection>
-        <ns12:escidocId></ns12:escidocId>
-        <ns13:filename>DMA_NL_207_00002_sq.jpg</ns13:filename>
-        <ns14:fullImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/15/e6/59/56-950f-4e0f-81b6-69954c07166f/0/original/1ac6c6634a1e39e561468cd9852ed46e.jpg</ns14:fullImageUrl>
-        <ns15:fulltext>DMA_NL_207_00002_sq.jpg Bild 3 Titel Bild 3 Beschreibung Bild 3 Untertitel http://localhost:8080/imeji/</ns15:fulltext>
-        <ns20:metadataSets id="http://localhost:8080/imeji/item/XvMQHtnKos3IbyTW/metadataSet/0">
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/2p_7VBg6fjOmlPu">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/Qzo4omiNDB4_hoJW</ns27:statement>
-                <ns28:text>Bild 3 Titel</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/hsaPO4OaLD84OtNw">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/Y0PApu1ufvATTiPM</ns27:statement>
-                <ns28:text>Bild 3 Beschreibung</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/uspCNQBCa0HJOwQ5">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/8GeUXwIWMuRONz</ns27:statement>
-                <ns28:text>Bild 3 Untertitel</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/_BUMXle61hve7fR">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/1Ewn_BdKFUr897aL</ns27:statement>
-                <ns28:text>http://localhost:8080/imeji/</ns28:text>
-            </ns18:metadata>
-            <ns19:profile>http://localhost:8080/imeji/metadataProfile/5yWA6RhasrQMBr1m</ns19:profile>
-        </ns20:metadataSets>
-        <ns21:storageId>6eQFSDakubQj_BfA/15/e6/59/56-950f-4e0f-81b6-69954c07166f/0</ns21:storageId>
-        <ns22:thumbnailImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/15/e6/59/56-950f-4e0f-81b6-69954c07166f/0/thumbnail/1ac6c6634a1e39e561468cd9852ed46e.jpg</ns22:thumbnailImageUrl>
-        <ns23:visibility>PUBLIC</ns23:visibility>
-        <ns24:webImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/15/e6/59/56-950f-4e0f-81b6-69954c07166f/0/web/1ac6c6634a1e39e561468cd9852ed46e.jpg</ns24:webImageUrl>
-    </ns25:item>
-    <ns25:item id="http://localhost:8080/imeji/item/Xqp88xB1BZFj3JJ">
-        <ns17:created>2013-04-10T14:02:22.021Z</ns17:created>
-        <ns2:createdBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns2:createdBy>
-        <ns3:discardComment></ns3:discardComment>
-        <ns4:modified>2013-04-22T13:22:16.488Z</ns4:modified>
-        <ns5:modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns5:modifiedBy>
-        <ns6:status>RELEASED</ns6:status>
-        <ns7:version>1</ns7:version>
-        <ns8:versionDate>2013-04-22T13:22:16.488Z</ns8:versionDate>
-        <ns10:checksum>606d5cda9740b75a4c34b28ff2b62c4b</ns10:checksum>
-        <ns11:collection>http://localhost:8080/imeji/collection/6eQFSDakubQj_BfA</ns11:collection>
-        <ns12:escidocId></ns12:escidocId>
-        <ns13:filename>DMA_NL_207_00003_sq.jpg</ns13:filename>
-        <ns14:fullImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/f7/72/2f/16-4ccb-4c94-a61e-b723b9bb454d/0/original/4d4ea8a1fae0a189d6a0ebce3190955a.jpg</ns14:fullImageUrl>
-        <ns15:fulltext>DMA_NL_207_00003_sq.jpg Bild 2 Titel Bild 2 Beschreibung Bild 2 Untertitel http://localhost:8080/imeji/</ns15:fulltext>
-        <ns20:metadataSets id="http://localhost:8080/imeji/item/Xqp88xB1BZFj3JJ/metadataSet/0">
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/xvzljKW0BSv7vtZ8">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/Qzo4omiNDB4_hoJW</ns27:statement>
-                <ns28:text>Bild 2 Titel</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/yw7PkUZk692yEoLA">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/Y0PApu1ufvATTiPM</ns27:statement>
-                <ns28:text>Bild 2 Beschreibung</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/Uqy0FKWL9A74Yk9g">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/8GeUXwIWMuRONz</ns27:statement>
-                <ns28:text>Bild 2 Untertitel</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/eYJjwgUQRW3Gki_a">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/1Ewn_BdKFUr897aL</ns27:statement>
-                <ns28:text>http://localhost:8080/imeji/</ns28:text>
-            </ns18:metadata>
-            <ns19:profile>http://localhost:8080/imeji/metadataProfile/5yWA6RhasrQMBr1m</ns19:profile>
-        </ns20:metadataSets>
-        <ns21:storageId>6eQFSDakubQj_BfA/f7/72/2f/16-4ccb-4c94-a61e-b723b9bb454d/0</ns21:storageId>
-        <ns22:thumbnailImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/f7/72/2f/16-4ccb-4c94-a61e-b723b9bb454d/0/thumbnail/4d4ea8a1fae0a189d6a0ebce3190955a.jpg</ns22:thumbnailImageUrl>
-        <ns23:visibility>PUBLIC</ns23:visibility>
-        <ns24:webImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/f7/72/2f/16-4ccb-4c94-a61e-b723b9bb454d/0/web/4d4ea8a1fae0a189d6a0ebce3190955a.jpg</ns24:webImageUrl>
-    </ns25:item>
-    <ns25:item id="http://localhost:8080/imeji/item/H60SzgTY4im4Pgb">
-        <ns17:created>2013-04-10T14:02:22.021Z</ns17:created>
-        <ns2:createdBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns2:createdBy>
-        <ns3:discardComment></ns3:discardComment>
-        <ns4:modified>2013-04-22T13:22:16.488Z</ns4:modified>
-        <ns5:modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns5:modifiedBy>
-        <ns6:status>RELEASED</ns6:status>
-        <ns7:version>1</ns7:version>
-        <ns8:versionDate>2013-04-22T13:22:16.488Z</ns8:versionDate>
-        <ns10:checksum>8e5060d2b6544e033132d11d8cb00c80</ns10:checksum>
-        <ns11:collection>http://localhost:8080/imeji/collection/6eQFSDakubQj_BfA</ns11:collection>
-        <ns12:escidocId></ns12:escidocId>
-        <ns13:filename>DMA_NL_207_00004_sq.jpg</ns13:filename>
-        <ns14:fullImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/c5/ba/10/d3-adaf-4fef-b075-cded3f4850fc/0/original/fba4bf51eb92606159becf6641b2a9be.jpg</ns14:fullImageUrl>
-        <ns15:fulltext>DMA_NL_207_00004_sq.jpg Bild 1 Titel Bild 1 Beschreibung Bild 1 Untertitel http://localhost:8080/imeji/</ns15:fulltext>
-        <ns20:metadataSets id="http://localhost:8080/imeji/item/H60SzgTY4im4Pgb/metadataSet/0">
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/rZ0waX1zUieRtGLe">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/Qzo4omiNDB4_hoJW</ns27:statement>
-                <ns28:text>Bild 1 Titel</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/E3t_xQCd35U8KdXP">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/Y0PApu1ufvATTiPM</ns27:statement>
-                <ns28:text>Bild 1 Beschreibung</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/jKApEpRx1zkuNhFy">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/8GeUXwIWMuRONz</ns27:statement>
-                <ns28:text>Bild 1 Untertitel</ns28:text>
-            </ns18:metadata>
-            <ns18:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/2__tzvjfxUArQUOf">
-                <ns16:pos>0</ns16:pos>
-                <ns27:statement>http://imeji.org/terms/statement/1Ewn_BdKFUr897aL</ns27:statement>
-                <ns28:text>http://localhost:8080/imeji/</ns28:text>
-            </ns18:metadata>
-            <ns19:profile>http://localhost:8080/imeji/metadataProfile/5yWA6RhasrQMBr1m</ns19:profile>
-        </ns20:metadataSets>
-        <ns21:storageId>6eQFSDakubQj_BfA/c5/ba/10/d3-adaf-4fef-b075-cded3f4850fc/0</ns21:storageId>
-        <ns22:thumbnailImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/c5/ba/10/d3-adaf-4fef-b075-cded3f4850fc/0/thumbnail/fba4bf51eb92606159becf6641b2a9be.jpg</ns22:thumbnailImageUrl>
-        <ns23:visibility>PUBLIC</ns23:visibility>
-        <ns24:webImageUrl>http://localhost:8080/imeji/file/6eQFSDakubQj_BfA/c5/ba/10/d3-adaf-4fef-b075-cded3f4850fc/0/web/fba4bf51eb92606159becf6641b2a9be.jpg</ns24:webImageUrl>
-    </ns25:item>
-</ns26:items>
+<ns2:items xmlns:ns2="http://imeji.org/terms" xmlns:ns3="http://purl.org/dc/terms" xmlns:ns4="http://imeji.org/terms/metadata#" xmlns:ns5="http://purl.org/escidoc/metadata/terms/0.1" xmlns:ns6="http://purl.org/dc/elements/1.1" xmlns:ns7="http://purl.org/escidoc/metadata/profiles/0.1" xmlns:ns8="http://xmlns.com/foaf/0.1" xmlns:ns9="http://www.w3.org/2000/01/rdf-schema" xmlns:ns10="http://purl.org/dc/dcam">
+    <ns2:item id="http://localhost:8080/imeji/item/B7W3omA7_Sm2GTmk">
+        <ns3:created>2013-04-30T09:05:18.136Z</ns3:created>
+        <ns3:creator>http://localhost:8080/imeji/user/admin%40imeji.org</ns3:creator>
+        <ns2:discardComment></ns2:discardComment>
+        <ns3:modified>2013-04-30T09:06:26.326Z</ns3:modified>
+        <ns2:modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns2:modifiedBy>
+        <ns2:status>PENDING</ns2:status>
+        <ns2:version>0</ns2:version>
+        <ns2:checksum>582398b2dd9f629abc49706ec0fbc403</ns2:checksum>
+        <ns2:collection>http://localhost:8080/imeji/collection/aPWbUesZxwZEYEjA</ns2:collection>
+        <ns2:escidocId></ns2:escidocId>
+        <ns2:filename>facesErr2.PNG</ns2:filename>
+        <ns2:fullImageUrl>http://localhost:8080/imeji/file/aPWbUesZxwZEYEjA/97/ca/ab/f4-e7d2-4257-abca-b76138f1041e/0/original/e3425d3e4166aae62c39f8fd8cffce05.PNG</ns2:fullImageUrl>
+        <ns2:fulltext>facesErr2.PNG Titel 123.0</ns2:fulltext>
+        <ns2:metadataSet id="http://localhost:8080/imeji/item/B7W3omA7_Sm2GTmk/metadataSet/0">
+            <ns2:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/HYxURF854VV9f3Nu">
+                <ns2:position>0</ns2:position>
+                <ns2:statement>http://imeji.org/terms/statement/QcUiLN6wTO2rIFZ7</ns2:statement>
+                <ns2:text>Titel</ns2:text>
+            </ns2:metadata>
+            <ns2:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="number" id="http://imeji.org/terms/metadata/7kgZHWTrynQiAnq">
+                <ns2:position>0</ns2:position>
+                <ns2:number>123.0</ns2:number>
+                <ns2:statement>http://imeji.org/terms/statement/hr8dTjVoGbsnVTrA</ns2:statement>
+            </ns2:metadata>
+            <ns2:profile>http://localhost:8080/imeji/metadataProfile/3Qs4l2XRTejl02h0</ns2:profile>
+        </ns2:metadataSet>
+        <ns2:storageId>aPWbUesZxwZEYEjA/97/ca/ab/f4-e7d2-4257-abca-b76138f1041e/0</ns2:storageId>
+        <ns2:thumbnailImageUrl>http://localhost:8080/imeji/file/aPWbUesZxwZEYEjA/97/ca/ab/f4-e7d2-4257-abca-b76138f1041e/0/thumbnail/e3425d3e4166aae62c39f8fd8cffce05.PNG</ns2:thumbnailImageUrl>
+        <ns2:visibility>PRIVATE</ns2:visibility>
+        <ns2:webImageUrl>http://localhost:8080/imeji/file/aPWbUesZxwZEYEjA/97/ca/ab/f4-e7d2-4257-abca-b76138f1041e/0/web/e3425d3e4166aae62c39f8fd8cffce05.PNG</ns2:webImageUrl>
+    </ns2:item>
+    <ns2:item id="http://localhost:8080/imeji/item/qnc2AkSxansuNuU">
+        <ns3:created>2013-04-30T09:05:18.136Z</ns3:created>
+        <ns3:creator>http://localhost:8080/imeji/user/admin%40imeji.org</ns3:creator>
+        <ns2:discardComment></ns2:discardComment>
+        <ns3:modified>2013-04-30T09:06:40.218Z</ns3:modified>
+        <ns2:modifiedBy>http://localhost:8080/imeji/user/admin%40imeji.org</ns2:modifiedBy>
+        <ns2:status>PENDING</ns2:status>
+        <ns2:version>0</ns2:version>
+        <ns2:checksum>c1a6ee10cec3ab2925e362ce65fb1a31</ns2:checksum>
+        <ns2:collection>http://localhost:8080/imeji/collection/aPWbUesZxwZEYEjA</ns2:collection>
+        <ns2:escidocId></ns2:escidocId>
+        <ns2:filename>facesErr1.PNG</ns2:filename>
+        <ns2:fullImageUrl>http://localhost:8080/imeji/file/aPWbUesZxwZEYEjA/da/89/ed/95-281d-4c66-acfe-842f694b98ef/0/original/4e68f73e5dd4f059caccf3add74f7d9e.PNG</ns2:fullImageUrl>
+        <ns2:fulltext>facesErr1.PNG Title 2 654.0</ns2:fulltext>
+        <ns2:metadataSet id="http://localhost:8080/imeji/item/qnc2AkSxansuNuU/metadataSet/0">
+            <ns2:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="text" id="http://imeji.org/terms/metadata/LHEvLzWBALWK15DK">
+                <ns2:position>0</ns2:position>
+                <ns2:statement>http://imeji.org/terms/statement/QcUiLN6wTO2rIFZ7</ns2:statement>
+                <ns2:text>Title 2</ns2:text>
+            </ns2:metadata>
+            <ns2:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="number" id="http://imeji.org/terms/metadata/RsPBOolAZYnY_6NB">
+                <ns2:position>0</ns2:position>
+                <ns2:number>654.0</ns2:number>
+                <ns2:statement>http://imeji.org/terms/statement/hr8dTjVoGbsnVTrA</ns2:statement>
+            </ns2:metadata>
+            <ns2:profile>http://localhost:8080/imeji/metadataProfile/3Qs4l2XRTejl02h0</ns2:profile>
+        </ns2:metadataSet>
+        <ns2:storageId>aPWbUesZxwZEYEjA/da/89/ed/95-281d-4c66-acfe-842f694b98ef/0</ns2:storageId>
+        <ns2:thumbnailImageUrl>http://localhost:8080/imeji/file/aPWbUesZxwZEYEjA/da/89/ed/95-281d-4c66-acfe-842f694b98ef/0/thumbnail/4e68f73e5dd4f059caccf3add74f7d9e.PNG</ns2:thumbnailImageUrl>
+        <ns2:visibility>PRIVATE</ns2:visibility>
+        <ns2:webImageUrl>http://localhost:8080/imeji/file/aPWbUesZxwZEYEjA/da/89/ed/95-281d-4c66-acfe-842f694b98ef/0/web/4e68f73e5dd4f059caccf3add74f7d9e.PNG</ns2:webImageUrl>
+    </ns2:item>
+</ns2:items>

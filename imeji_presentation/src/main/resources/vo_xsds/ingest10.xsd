@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" xmlns:ns2="http://purl.org/dc/terms" xmlns:ns1="http://imeji.org/terms" xmlns:ns4="http://xmlns.com/foaf/0.1" xmlns:ns3="http://purl.org/escidoc/metadata/profiles/0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns5="http://purl.org/escidoc/metadata/terms/0.1" xmlns:ns6="http://purl.org/dc/elements/1.1" xmlns:ns7="http://www.w3.org/2000/01/rdf-schema#" xmlns:ns8="http://purl.org/dc/dcam">
+<xs:schema version="1.0" xmlns:ns2="http://purl.org/dc/terms" xmlns:ns1="http://imeji.org/terms" xmlns:ns4="http://xmlns.com/foaf/0.1" xmlns:ns3="http://purl.org/escidoc/metadata/profiles/0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns5="http://purl.org/escidoc/metadata/terms/0.1" xmlns:ns6="http://purl.org/dc/elements/1.1" xmlns:ns7="http://www.w3.org/2000/01/rdf-schema" xmlns:ns8="http://purl.org/dc/dcam">
 
   <xs:import namespace="http://imeji.org/terms" schemaLocation="imeji.org_terms.xsd"/>
 
@@ -13,7 +13,7 @@
 
   <xs:import namespace="http://purl.org/dc/elements/1.1" schemaLocation="purl.org_dc_elements_1.1.xsd"/>
 
-  <xs:import namespace="http://www.w3.org/2000/01/rdf-schema#" schemaLocation="www.w3.org_2000_01_rdf-schema#.xsd"/>
+  <xs:import namespace="http://www.w3.org/2000/01/rdf-schema" schemaLocation="www.w3.org_2000_01_rdf-schema.xsd"/>
 
   <xs:import namespace="http://purl.org/dc/dcam" schemaLocation="purl.org_dc_dcam.xsd"/>
 

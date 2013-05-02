@@ -52,11 +52,9 @@ public class CollectionListItem
     private boolean deletable = false;
     private boolean editable = false;
     private static Logger logger = Logger.getLogger(CollectionListItem.class);
-    
     private ThumbnailBean thumbnail = null;
 
-
-	/**
+    /**
      * Construct a new {@link CollectionListItem} with a {@link CollectionImeji}
      * 
      * @param collection
@@ -88,24 +86,22 @@ public class CollectionListItem
             {
                 versionDate = collection.getVersionDate().getTime().toString();
             }
-            
-            //Load collection to get first thumbnail (only in preview for not logged in users)
-        	CollectionImeji fullCollection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user);
-        	SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        	if (fullCollection != null &&  fullCollection.getId() != null && user == null)
-            {            	
+            // Load collection to get first thumbnail (only in preview for not logged in users)
+            CollectionImeji fullCollection = ObjectLoader.loadCollectionLazy(
+                    ObjectHelper.getURI(CollectionImeji.class, id), user);
+            SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+            if (fullCollection != null && fullCollection.getId() != null && user == null)
+            {
                 ItemController ic = new ItemController(sessionBean.getUser());
                 ic.loadContainerItems(fullCollection, user, 1, 0);
                 List<String> uri = new ArrayList<String>();
                 uri.add(fullCollection.getImages().toArray()[0].toString());
                 if (uri != null && uri.size() > 0)
                 {
-                	ic = new ItemController(sessionBean.getUser());
-                	this.thumbnail = (ThumbnailBean)ImejiFactory.imageListToThumbList(ic.loadItems(uri, 1, 0)).get(0);
+                    ic = new ItemController(sessionBean.getUser());
+                    this.thumbnail = (ThumbnailBean)ImejiFactory.imageListToThumbList(ic.loadItems(uri, 1, 0)).get(0);
                 }
             }
-
-            
             // initializations
             initSize(user);
             initSelected();
@@ -392,12 +388,14 @@ public class CollectionListItem
     {
         return id;
     }
-   
-    public ThumbnailBean getThumbnail() {
-		return thumbnail;
-	}
 
-	public void setThumbnail(ThumbnailBean thumbnail) {
-		this.thumbnail = thumbnail;
-	}
+    public ThumbnailBean getThumbnail()
+    {
+        return thumbnail;
+    }
+
+    public void setThumbnail(ThumbnailBean thumbnail)
+    {
+        this.thumbnail = thumbnail;
+    }
 }

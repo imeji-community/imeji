@@ -5,7 +5,7 @@
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<ui:remove><!-- License: src/main/resources/license/escidoc.license --></ui:remove>
-	
+
 	<h:panelGroup id="ajaxList">
 		<div class="full_area0 itemList loggedIn collectionList">
 			<div class="full_area0 listHeader">
@@ -35,8 +35,9 @@
 						&#160;
 					</h:panelGroup>
 					
-					<span class="seperator"></span>
-					<span class="free_area0 endline status statusArea">
+					
+					<h:panelGroup class="free_area0 endline status statusArea" rendered="#{SessionBean.user != null}">
+						<span class="seperator"></span>
 						<h:commandLink id="lnkStateSort" styleClass="free_area0_p8" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'PROPERTIES_STATUS'}">
 							<f:setPropertyActionListener value="PROPERTIES_STATUS" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
 							<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
@@ -51,7 +52,7 @@
 							<h:outputText value="#{lbl.state}"/>
 						</h:commandLink>
 						&#160;
-					</span>
+					</h:panelGroup>
 				</h:form>
 				<span class="seperator"></span>
 				<span class="half_area0_p6 headerSwitchView">
@@ -65,7 +66,7 @@
 			<ol>
 				<ui:repeat var="container" value="#{paginatorListSessionBean.currentPartList}" id="list" rows="0"  varStatus="index">
 					<li class="full_area0 listItem">
-						<div class="free_area0 itemHeader">
+						<div class="xLarge_area0">
 							<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea">
 								<h:form>
 									<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{SessionBean.user != null and container.deletable}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
@@ -74,10 +75,10 @@
 								</h:form>
 								&#160;
 							</h:panelGroup>
-							
-							<span class="seperator"></span>
-							
-							<h:panelGroup class="free_area0_p0 endline statusArea">
+
+							<!-- Status display for logged in users -->
+							<h:panelGroup class="free_area0_p0 endline statusArea" rendered="#{SessionBean.user != null}">
+								<span class="seperator"></span>
 								<span class="noDisplay">(</span>
 								
 								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.status == 'WITHDRAWN'}"/>
@@ -94,118 +95,105 @@
 								
 								<h:outputLabel styleClass="medium_label endline" rendered="#{container.status == 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.withdrawn}"/>
-								</h:outputLabel>
-								
+								</h:outputLabel>								
 							</h:panelGroup>
 							
+							<!-- Image stack display for not logged in users -->
+							<h:panelGroup class="free_area0_p0" rendered="#{SessionBean.user == null}">									
+								<div class="big_imgArea imj_stack">							
+									<h:graphicImage style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;" 
+									value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}" alt=""/>
+								</div>																						
+							</h:panelGroup>
+						</div>
+						
+						<div class="xHuge_area0">
 							<span class="seperator status"></span>
-							<span class="free_area0_p6 endline itemHeadline">
-								<h:outputLink value="#{Navigation.collectionUrl}#{container.id}">
+							<h:panelGroup styleClass="free_area0_p6 ">
+								<h:outputLink class="endline itemHeadline" value="#{Navigation.collectionUrl}#{container.id}">
 									<b><h:outputText value="#{container.title}"/></b>
 								</h:outputLink>
-							</span>
-						</div>
-						
-						<div class="full_area0 shortView">
-							<div class="free_area0_p2 small_marginLIncl endline listItemLine">
-								<span class="huge_area0_p8 endline labelLine">
-									<a class="collapse">
-										<span class="noDisplay"><h:outputText value="#{lbl.show}"/> </span><h:outputText value="#{lbl.less}"/><span class="noDisplay"> Details</span>
-									</a>
-									<a class="expand">
-										<span class="noDisplay"><h:outputText value="#{lbl.show}"/> </span><h:outputText value="#{lbl.more}"/><span class="noDisplay"> Details</span>
-									</a>
-									<h:outputText value="#{lbl.creator_s}"/><span class="noDisplay">: </span>
-								</span>
-								<span class="xHuge_area0 endline">
-									<h:outputText value="#{container.authors}"/>
-								</span>
-							</div>
-							
-							<div class="free_area0_p2 small_marginLIncl endline listItemLine">
-								<span class="huge_area0_p8 endline labelLine">
-									<h:outputText value="#{lbl.description}"/><span class="noDisplay">: </span>
-								</span>
-								<span class="xHuge_area0 endline">
-									<h:outputText title="#{container.description}" value="#{container.description}"/>
-								</span>
-							</div>
-							
-							<div class="free_area0_p2 small_marginLIncl endline listItemLine">
-								<span class="huge_area0_p8 endline labelLine">
-									<h:outputText value="#{lbl.images}"/><span class="noDisplay">: </span>
-								</span>
-								<span class="third_area0_p8 endline">
-									<h:outputText value="#{container.size}" styleClass="free_area0"/>
-									<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.browsePath}?q=" rendered="#{container.size > 0}">
-										<h:outputText value="#{lbl.view_images}"/>
-									</h:outputLink>
-									<h:outputLink id="lnkUploadImages" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.uploadPath}?init=1" rendered="#{container.editable and container.status != 'WITHDRAWN'}">
-										<h:outputText value="#{lbl.upload_images}"></h:outputText>
-									</h:outputLink>
+							</h:panelGroup>
 									
-									<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0 xTiny_marginLIncl" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.infosPath}?init=1">
-										<h:outputText value="#{lbl.view_md}"/>
-									</h:outputLink>
+							<h:panelGroup class="free_area0_p0 endline listItemLine shortView" >
 									
-									<h:panelGroup styleClass="free_area0 small_marginLIncl">
-										<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('list:#{index.index}:dialogRelease');" rendered="#{container.editable and container.status == 'PENDING'}">
-											<h:outputText value="#{lbl.collection_release}"/>
-										</h:outputLink>
-										
-										<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('list:#{index.index}:dialDiscardContainer:dialogWithdraw');" rendered="#{container.editable and container.status == 'RELEASED'}">
-											<h:outputText value="#{lbl.withdraw}"/>
-										</h:outputLink>
-										
-										<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" onclick="openDialog('list:#{index.index}:dialogDelete');" rendered="#{container.deletable}" >
-											<h:outputText value="#{lbl.delete}"/>
-										</h:outputLink>
-									</h:panelGroup>
-									<imjc:DiscardContainer id="dialDiscardContainer" bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>
-									<ui:include src="../confirmationPages/ContainerDelete.xhtml">
-										<ui:param name="bean" value="#{container}"/>
-									</ui:include>
-									<ui:include src="../confirmationPages/ContainerRelease.xhtml">
-										<ui:param name="bean" value="#{container}"/>
-									</ui:include>
-								</span>
-							</div>
-						</div>
-						
-						<div class="full_area0 mediumView">
-							<div class="free_area0_p0 small_marginLIncl endline listItemLine">
-								<span class="huge_area0_p8 endline labelLine">
-									<h:outputText value="#{lbl.date_creation}"/><span class="noDisplay">: </span>
-								</span>
-								<span class="xHuge_area0 endline">
-									<h:outputText value="#{container.creationDate}"/>
-									&#160;
-								</span>
-							</div>
-							
-							<div class="free_area0_p0 small_marginLIncl endline listItemLine">
-								<span class="huge_area0_p8 endline labelLine">
-									<h:outputText value="#{lbl.date_last_modification}"/><span class="noDisplay">: </span>
-								</span>
+								<h:panelGroup class="endline listItemLine">						
+									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.creator_s}"/><span class="noDisplay">: </span>
+									<h:outputText class="xHuge_area0 endline" value="#{container.authors}"/>
+								</h:panelGroup>
 								
-								<span class="xHuge_area0 endline">
-									<h:outputText value="#{container.lastModificationDate}"/>
-									&#160;
-								</span>
-							</div>
-							
-							<div class="free_area0_p0 small_marginLIncl endline listItemLine">
-								<span class="huge_area0_p8 endline labelLine">
-									<h:outputText value="#{lbl.date_released}" rendered="#{container.status == 'RELEASED'}"/>
-									<h:outputText value="#{lbl.date_withdraw}" rendered="#{container.status == 'WITHDRAWN'}"/>
+								<h:panelGroup class="endline listItemLine">	
+									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.description}"/><span class="noDisplay">: </span>
+									<h:outputText class="xHuge_area0 endline" title="#{container.description}" value="#{container.description}"/>
+								</h:panelGroup>
+								
+								<h:panelGroup class="free_area0_p0 endline listItemLine">	
+									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.images}"/><span class="noDisplay">: </span>							
+									<span class="third_area0_p8">
+										<h:outputText value="#{container.size}"/>
+										<h:outputLink styleClass="xTiny_marginLIncl" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.browsePath}?q=" rendered="#{container.size > 0}">
+											<h:outputText value="#{lbl.view_images}"/>
+										</h:outputLink>
+										<h:outputLink id="lnkUploadImages" styleClass="xTiny_marginLIncl" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.uploadPath}?init=1" rendered="#{container.editable and container.status != 'WITHDRAWN'}">
+											<h:outputText value="#{lbl.upload_images}"></h:outputText>
+										</h:outputLink>
+													
+										<h:outputLink id="lnkViewCollectionDetail" styleClass="xTiny_marginLIncl" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.infosPath}?init=1">
+											<h:outputText value="#{lbl.view_md}"/>
+										</h:outputLink>
+													
+										<h:panelGroup styleClass="small_marginLIncl">
+											<h:outputLink styleClass="xTiny_marginLIncl" value="#" onclick="openDialog('list:#{index.index}:dialogRelease');" rendered="#{container.editable and container.status == 'PENDING'}">
+												<h:outputText value="#{lbl.collection_release}"/>
+											</h:outputLink>
+														
+											<h:outputLink id="lnkWithdrawCollection" styleClass="xTiny_marginLIncl" value="#" onclick="openDialog('list:#{index.index}:dialDiscardContainer:dialogWithdraw');" rendered="#{container.editable and container.status == 'RELEASED'}">
+												<h:outputText value="#{lbl.withdraw}"/>
+											</h:outputLink>
+														
+											<h:outputLink styleClass="xTiny_marginLIncl" value="#" onclick="openDialog('list:#{index.index}:dialogDelete');" rendered="#{container.deletable}" >
+												<h:outputText value="#{lbl.delete}"/>
+											</h:outputLink>
+										</h:panelGroup>											
+										<imjc:DiscardContainer id="dialDiscardContainer" bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>
+										<ui:include src="../confirmationPages/ContainerDelete.xhtml">
+											<ui:param name="bean" value="#{container}"/>
+										</ui:include>
+										<ui:include src="../confirmationPages/ContainerRelease.xhtml">
+											<ui:param name="bean" value="#{container}"/>											
+										</ui:include>
+									</span>																													
+								</h:panelGroup>
+								<h:panelGroup class="free_area0_p0 small_marginLIncl endline listItemLine">
+										<a class="collapse">
+											<span class="noDisplay"><h:outputText value="#{lbl.show}"/> </span><h:outputText value="#{lbl.less}"/><span class="noDisplay"> Details</span>
+										</a>
+										<a class="expand">
+											<span class="noDisplay"><h:outputText value="#{lbl.show}"/> </span><h:outputText value="#{lbl.more}"/><span class="noDisplay"> Details</span>
+										</a>										
+								</h:panelGroup>
+							</h:panelGroup>
+		
+							<h:panelGroup class="free_area0_p2 endline listItemLine mediumView">
+								<div class="free_area0 endline listItemLine">
+									<h:outputText class="free_area0 huge_area0_p8 endline labelLine" value="#{lbl.date_creation}"/>
 									<span class="noDisplay">: </span>
-								</span>
-								<span class="xHuge_area0 endline">
-									<h:outputText value="#{container.versionDate}"/>
-									&#160;
-								</span>
-							</div>
+									<h:outputText class="xHuge_area0 endline" value="#{container.creationDate}"/>&#160;
+								</div>
+								<div class="free_area0 endline listItemLine">
+									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.date_last_modification}"/>
+									<span class="noDisplay">: </span>
+									<h:outputText class="xHuge_area0 endline" value="#{container.lastModificationDate}"/>&#160;
+								</div>
+								<div class="free_area0 endline listItemLine">
+									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.date_released}" rendered="#{container.status == 'RELEASED'}"/>
+									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.date_withdraw}" rendered="#{container.status == 'WITHDRAWN'}"/>
+									<span class="noDisplay">: </span>
+									<h:outputText class="xHuge_area0 endline" value="#{container.versionDate}"/>&#160;
+								</div>
+							</h:panelGroup>
 						</div>
+
 					</li>
 				</ui:repeat>
 			</ol>
@@ -215,7 +203,6 @@
 		/*	jQuery(document).ready(function(){
 				setTimeout("addItemListFunctions()", 200);
 			}); */
-			
 		</script>
 	</h:panelGroup>
 </ui:composition>						

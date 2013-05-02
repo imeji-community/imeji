@@ -470,8 +470,8 @@ th .selectMenu {
 }
 
 .listItemLine .labelLine {
-	text-align: right;
-	width: 22.45em;
+	text-align: left;
+	width: 18.65em;
 	margin-right: 0.82em !important;
 	padding-top: 0px;
 	padding-bottom: 0px;

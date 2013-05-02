@@ -49,7 +49,15 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     public SuperContainerBean()
     {
         selectedMenu = "SORTING";
-        selectedFilter = "all";
+        SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        if (sessionBean.getUser() != null)
+        {
+        	selectedFilter = "my";
+        }
+        else
+        {
+        	selectedFilter = "all";
+        }
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         initMenus();
         selectedSortCriterion = SearchIndex.names.modified.name();

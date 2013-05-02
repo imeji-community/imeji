@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="templates/template.xhtml"  
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+		<ui:remove>
+			<ui:param name="headline" value="#{lbl.HomePage}"/>
+		</ui:remove>
+		
+		<ui:define name="mainContent">
+			<div class="imj_cont_1 infoPage small_marginLExcl">
+				<!-- Main Content -->							
+				<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo">
+					
+					<h:panelGroup layout="block" id="tabsEN" styleClass="id_tabs" rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
+						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
+						<!-- tabs -->
+						<ul class="imj_cont_1">
+							<li><a href="#tabsEN-1">About</a></li>
+							<li><a href="#tabsEN-2">News</a></li>
+							<li><a href="#tabsEN-3">How To</a></li>
+						</ul>
+						
+						<!--  tabs content -->
+						<h:panelGroup layout="block" id="tabsEN-1" styleClass="imj_cont_1 tab_content">
+							<p><b>Publish Your Scientific Multi Media Data</b></p>
+							<p>imeji creates citable research assets by describing, enriching, sharing, exposing, linking and archiving data.</p> 
+							<p>This imeji instance contains test collections for the imeji community. The imeji community aims to sustain an active open source software developer 
+								community around the imeji software. 
+								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank"> [more on the imeji community]</a></p>
+							<p>The imeji software is an open-source, community driven development. imeji offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, 
+								as simple as liked or as complex as needed. <a href="http://colab.mpdl.mpg.de/mediawiki/Imeji" target="_blank"> [more on the imeji software]</a> </p>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" id="tabsEN-2" styleClass="imj_cont_1 tab_content" style="overflow:hidden;">
+							<a class="twitter-timeline" href="https://twitter.com/imeji_org" data-widget-id="245097651257876480">Tweets von @imeji_org</a>
+							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" id="tabsEN-3" styleClass="imj_cont_1 tab_content">
+							<p><b>imeji visitors (not logged in): </b></p>
+							<li>
+								  &nbsp;View collection list <a href="#{Navigation.applicationUrl}help#2.2._Collection_List" target="_blank"> 
+														<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+											 		 </a>
+							</li> 
+							<li>  &nbsp;View album list <a href="#{Navigation.applicationUrl}help#3.2._Album_List" target="_blank"> 
+														<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+											 		  </a> 
+							</li>
+							<li>  &nbsp;Search in collections <a href="#{Navigation.applicationUrl}help#4._Search" target="_blank"> 
+														<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+											 		  </a> 
+							</li>
+							<br/><br/>
+							<p><b>imeji users (logged in): </b></p>
+								<li>  &nbsp;Create a collection <a href="#{Navigation.applicationUrl}help#2.1._Create_Collection" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;Upload pictures <a href="#{Navigation.applicationUrl}help#2.4._Manage_Collection" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;Create a metadata profile <a href="#{Navigation.applicationUrl}help#2.3._Create_Metadata_Profile" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;Organize images in albums <a href="#{Navigation.applicationUrl}help#3.1._Create_Album" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;Share albums with coworkers <a href="#{Navigation.applicationUrl}help#3.6._Share_Album" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+						</h:panelGroup>
+					</h:panelGroup> <!-- end of tabs international -->
+					
+					<!-- german part -->
+					<h:panelGroup layout="block" id="tabsDE" styleClass="id_tabs" rendered="#{SessionBean.locale == 'de'}">
+						<script type="text/javascript">var placeholder_username = 'Benutzername'; var placeholder_password = 'Passwort'; var placeholder_simpleSearch = 'Suche nach ...';</script>
+						<ul class="imj_cont_1">
+							<li><a href="#tabsDE-1">Über</a></li>
+							<li><a href="#tabsDE-2">Neuigkeiten</a></li>
+							<li><a href="#tabsDE-3">How To</a></li>
+						</ul>
+						
+						<h:panelGroup layout="block" id="tabsDE-1" styleClass="imj_cont_1 tab_content">
+							<p><b>Publish Your Scientific Multi Media Data</b></p>
+							<p> imeji erzeugt zitierfähige Forschungsobjekte durch das Beschreiben, Anreichern, Teilen, Bereitstellen, Verlinken und Archivieren von Daten.</p> 
+							<p> Diese imeji Instanz beinhaltet Testsammlungen für die imeji Community. Die imeji Community zielt darauf ab eine aktive Entwicklungsgemeinschaft rund
+								um die imeji Software zu vereinen.
+								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank"> [mehr zur imeji Community]</a></p>
+							<p> imeji ist eine Open-Source Software, welche von der imeji Community entwickelt wird. 
+								Sie unterstützt die beliebige Definition von Metadaten Schemata 
+								wodurch ein dediziertes Metadaten Management ermöglicht wird, so einfach wie möglich und so komplex wie nötig.
+								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji" target="_blank"> [mehr zur imeji Software]</a> </p>
+						</h:panelGroup>
+					
+						<h:panelGroup layout="block" id="tabsDE-2" styleClass="imj_cont_1 tab_content" style="overflow:hidden;">
+							<a class="twitter-timeline" href="https://twitter.com/imeji_org" data-widget-id="245097651257876480">Tweets von @imeji_org</a>
+							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" id="tabsDE-3" styleClass="imj_cont_1 tab_content">
+							<p><b>imeji Besucher (nicht angemeldet): </b></p>
+								<li>
+									  &nbsp;Sammlungen ansehen 	<a href="#{Navigation.applicationUrl}help#2.2._Collection_List" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		 </a>
+								</li> 
+								<li>  &nbsp;Alben ansehen <a href="#{Navigation.applicationUrl}help#3.2._Album_List" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;Suchen in Sammlungen <a href="#{Navigation.applicationUrl}help#4._Search" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<br/>
+								<br/>
+							<p><b>imeji Nutzer (angemeldet): </b></p>
+								<li>  &nbsp;Sammlungen erstellen <a href="#{Navigation.applicationUrl}help#2.1._Create_Collection" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;Bilder hochladen <a href="#{Navigation.applicationUrl}help#2.4._Manage_Collection" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;Ein Metadaten Profil erstellen <a href="#{Navigation.applicationUrl}help#2.3._Create_Metadata_Profile" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;Alben erstellen <a href="#{Navigation.applicationUrl}help#3.1._Create_Album" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;Teilen von Alben <a href="#{Navigation.applicationUrl}help#3.6._Share_Album" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+						</h:panelGroup>
+					</h:panelGroup>
+					<!-- japanese part -->
+				<h:panelGroup layout="block" id="tabsJP" styleClass="id_tabs" rendered="#{SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
+						<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = '検索キーワード...';</script>
+						<!-- tabs -->
+						<ul class="imj_cont_1">
+							<li><a href="#tabsJP-1">Imejiについて</a></li>
+							<li><a href="#tabsJP-2">ニュース</a></li>
+							<li><a href="#tabsJP-3">登録その他</a></li>
+						</ul>
+						
+						<!--  tabs content -->
+						<h:panelGroup layout="block" id="tabsJP-1" styleClass="imj_cont_1 tab_content">
+							<p><b>マルチメディア科学データの提供、配信</b></p>
+							<p>Imejiは引用可能な研究データ資料集を生成します。マルチメディアデータに説明を付与したり、意味を追加したり、リンクを張るなどして、提供データの価値を高めることができます</p> 
+							<p>Imejiサービスは、コミュニティ向けのテスト用コレクションを含んでいます。Imejiコミュニティは、活発な開発で持続的なコミュニティとなるよう開発しています。
+								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank"> [Imejiコミュニティの説明]</a></p>
+							<p>Imejiソフトウェアはオープンソースソフトウェアとして提供され、コミュニティ主導により開発している。eSciDocリポジトリ基盤ソフトウェアを基礎として構築されたImejiは、自由なメタデータスキーマをサポートし、拡張的なメタデータ管理を可能としています。ニーズに応じてシンプルなメタデータや複雑なメタデータを構成することができます。
+								<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji" target="_blank"> [Imejiソフトウェアの説明]</a> </p>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" id="tabsJP-2" styleClass="imj_cont_1 tab_content" style="overflow:hidden;">
+							<a class="twitter-timeline" href="https://twitter.com/imeji_org" data-widget-id="245097651257876480">Tweets von @imeji_org</a>
+							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" id="tabsJP-3" styleClass="imj_cont_1 tab_content">
+							<p><b>閲覧者向けリンク (非ログイン時): </b></p>
+									<li>
+									  &nbsp;コレクション一覧を見る <a href="#{Navigation.applicationUrl}help#2.2._Collection_List" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		 </a>
+								</li> 
+								<li>  &nbsp;アルバム一覧を見る <a href="#{Navigation.applicationUrl}help#3.2._Album_List" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;コレクション全体を検索する <a href="#{Navigation.applicationUrl}help#4._Search" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<br/><br/>
+							<p><b>Imeji登録利用者 (ログイン時): </b></p>
+								<li>  &nbsp;コレクションを作る <a href="#{Navigation.applicationUrl}help#2.1._Create_Collection" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;画像をアップロードする <a href="#{Navigation.applicationUrl}help#2.4._Manage_Collection" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;メタデータ構造を新規作成する <a href="#{Navigation.applicationUrl}help#2.3._Create_Metadata_Profile" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;アルバム内の画像を編集する <a href="#{Navigation.applicationUrl}help#3.1._Create_Album" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+								<li>  &nbsp;アルバム画像を共有する <a href="#{Navigation.applicationUrl}help#3.6._Share_Album" target="_blank"> 
+															<img alt="help - search" src="#{Navigation.applicationUrl}resources/icon/All_Paginator_ArrowNext_15_Deactivated.gif"/> 
+												 		  </a> 
+								</li>
+						</h:panelGroup>
+					</h:panelGroup> 
+				</div>
+				<!-- end of tabs international -->
+				<!-- carousel -->
+				<div class="imj_cont_3_5 imj_startpage_carouselWrapper">
+					<div class="imj_cont_1 imj_startpage_carousel">
+						<div class="imj_startpage_carouselContainer">							
+							<!-- Define elements to accept the alt and title text from the images. -->
+							<div id="carousel">
+								<ui:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0">
+									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.itemUrl}#{item.idString}">
+										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}file?id=#{item.thumbnailImageUrl}" height="114"/>
+									</h:outputLink>
+								</ui:repeat>
+							</div>
+							<span id="cloudinfoText">
+								<h4 id="title-text"></h4>
+								<h5 id="alt-text"></h5>
+							</span>
+						</div>
+					</div>
+					
+				</div> <!-- end right content -->
+                
+				
+				
+				<div class="imj_clear imj_cont_1 imj_footer small_negMarginLExcl">
+				<!-- begin: footer section-->
+					<div class="imj_cont_1 imj_poweredby">
+						<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank" title="imeji community"> 
+							<img alt="imeji community logo" src="http://imeji.org/Imeji-Community.png" width="150em" class="imj_community_logo"/> 
+						</a> 
+						<br/><br/>
+						<a href="http://www.escidoc.org/" target="_blank" title="eSciDoc"> 
+							<img alt="eSciDoc logo" src="https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/escidoc_new.png" height="32em"/> 
+						</a>
+					</div>
+				<!-- end: footer section -->
+				</div>
+
+				<script src="http://www.google.com/jsapi" type="text/javascript"> </script>
+				
+				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+				<script type="text/javascript">
+				  jQuery.noConflict();
+				  // Code that uses other library's $ can follow here.
+				</script>
+				
+				<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/jquery/jquery.mousewheel.3.0.2.js"></script>
+				
+				<script type="text/javascript" src="http://code.jquery.com/ui/1.8.23/jquery-ui.min.js"></script>
+				<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/jquery/cloud-carousel.1.0.5.min.js"></script>
+				
+				
+				<script type="text/javascript">
+					function createCarousel() {
+						jQuery("#carousel").CloudCarousel(		
+						{	
+							reflHeight: 56,
+							reflGap:2,
+							yRadius:90,
+							xPos: 145,
+							yPos: 80,
+							speed:0.15,
+							autoRotate:"right",
+							autoRotateDelay:8500,
+							bringToFront:false,
+							mouseWheel:true
+						});
+						
+						jQuery("img.cloudcarousel").bind({
+							mouseover: function(ev) {
+								var img = this;
+								jQuery("#title-text").text(img.title);
+								jQuery("#alt-text").text(img.alt);
+								
+								var cloudInfo = jQuery("#cloudinfoText");
+								cloudInfo.addClass("dynamicCloudinfo borderradius_5");
+								cloudInfo.show();
+								jQuery(this).bind({
+									mousemove: function(ev) {
+										jQuery("#cloudinfoText").css("left", ev.pageX).css("top", ev.pageY+10);
+									}
+								});
+								img.title = '';
+							},
+							mouseout: function(ev) {
+								jQuery("#cloudinfoText").hide();
+								jQuery(this).unbind("mousemove");
+								this.title = jQuery("#title-text").text();
+							}
+						});
+						//jQuery("#carousel a").removeAttr("title");
+					}
+					
+					function initStartpage() {
+						jQuery( ".id_tabs" ).tabs();
+						createCarousel();
+					};
+					
+					//add placeholder for login menu
+					jQuery(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
+					jQuery(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
+					jQuery(".imj_simpleSearchInput").attr("placeholder", placeholder_simpleSearch);
+					
+					//delete the page title on welcome page
+					jQuery("div#contentSkipLinkAnchor.headLine").remove();
+					
+					//initialize the tab menu and carousel
+					initStartpage();
+				</script>
+				
+				
+				<style type="text/css">
+					/* reset the css settings for the footer */
+					div.footer div.full_area0 {
+						width:100%;
+						text-align:center;
+					}
+					div.footer div.full_area0 div.huge_area0 {
+						width:0;
+						display:none;
+					}
+				</style>
+		</div>
+	</ui:define>	
+</ui:composition>
+					

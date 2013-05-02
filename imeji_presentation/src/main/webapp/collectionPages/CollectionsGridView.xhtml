@@ -99,9 +99,9 @@
 							</h:panelGroup>
 							
 							<!-- Image stack display for not logged in users -->
-							<h:panelGroup class="free_area0_p6" rendered="#{SessionBean.user == null}">									
+							<h:panelGroup class="free_area0_p0" rendered="#{SessionBean.user == null}">									
 								<div class="big_imgArea imj_stack">							
-									<h:graphicImage class="" style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;" 
+									<h:graphicImage style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;" 
 									value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}" alt=""/>
 								</div>																						
 							</h:panelGroup>
@@ -109,7 +109,7 @@
 						
 						<div class="xHuge_area0">
 							<span class="seperator status"></span>
-							<h:panelGroup class="free_area0_p6 ">
+							<h:panelGroup styleClass="free_area0_p6 ">
 								<h:outputLink class="endline itemHeadline" value="#{Navigation.collectionUrl}#{container.id}">
 									<b><h:outputText value="#{container.title}"/></b>
 								</h:outputLink>
@@ -174,16 +174,18 @@
 								</h:panelGroup>
 							</h:panelGroup>
 		
-							<h:panelGroup class="free_area0_p0 endline listItemLine mediumView">
-								<div class="endline listItemLine">
-									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.date_creation}"/><span class="noDisplay">: </span>
+							<h:panelGroup class="free_area0_p2 endline listItemLine mediumView">
+								<div class="free_area0 endline listItemLine">
+									<h:outputText class="free_area0 huge_area0_p8 endline labelLine" value="#{lbl.date_creation}"/>
+									<span class="noDisplay">: </span>
 									<h:outputText class="xHuge_area0 endline" value="#{container.creationDate}"/>&#160;
 								</div>
-								<div class="endline listItemLine">
-									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.date_last_modification}"/><span class="noDisplay">: </span>
+								<div class="free_area0 endline listItemLine">
+									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.date_last_modification}"/>
+									<span class="noDisplay">: </span>
 									<h:outputText class="xHuge_area0 endline" value="#{container.lastModificationDate}"/>&#160;
 								</div>
-								<div class="endline listItemLine">
+								<div class="free_area0 endline listItemLine">
 									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.date_released}" rendered="#{container.status == 'RELEASED'}"/>
 									<h:outputText class="huge_area0_p8 endline labelLine" value="#{lbl.date_withdraw}" rendered="#{container.status == 'WITHDRAWN'}"/>
 									<span class="noDisplay">: </span>

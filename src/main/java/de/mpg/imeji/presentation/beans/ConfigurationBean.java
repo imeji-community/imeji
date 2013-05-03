@@ -38,6 +38,8 @@ import java.util.Properties;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -59,6 +61,7 @@ public class ConfigurationBean
 
     private Properties config;
     private File configFile;
+    private final static Logger logger = Logger.getLogger(ConfigurationBean.class);
 
     /**
      * Constructor, create the file if not existing
@@ -68,7 +71,7 @@ public class ConfigurationBean
      */
     public ConfigurationBean() throws IOException, URISyntaxException
     {
-        configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf");
+        configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf.xml");
         if (!configFile.exists())
         {
             configFile.createNewFile();
@@ -86,7 +89,14 @@ public class ConfigurationBean
     {
         config = new Properties();
         FileInputStream in = new FileInputStream(configFile);
-        config.loadFromXML(in);
+        try
+        {
+            config.loadFromXML(in);
+        }
+        catch (Exception e)
+        {
+            logger.info("conf.xml can not be read, probably emtpy");
+        }
     }
 
     /**

@@ -15,90 +15,74 @@
 		<pattern value="/" />
 		<view-id>/jsf/Welcome.xhtml</view-id>
 	</url-mapping>
-
 	<url-mapping id="albums">
 		<pattern value="/albums" />
 		<view-id>/jsf/Albums.xhtml</view-id>
 	</url-mapping>
-
 	<url-mapping id="collections">
 		<pattern value="/collections" />
 		<view-id>/jsf/Collections.xhtml</view-id>
 	</url-mapping>
-
 	<url-mapping id="browse">
 		<pattern value="/browse" />
 		<view-id>/jsf/Images.xhtml</view-id>
 	</url-mapping>
-
 	<url-mapping id="editPage">
 		<pattern value="/edit"></pattern>
 		<view-id>/jsf/Edit.xhtml</view-id>
 	</url-mapping>
-
 	<url-mapping id="item">
 		<pattern value="/item/#{ImageBean.id}" />
 		<view-id>/jsf/Image.xhtml</view-id>
 	</url-mapping>
-
 	<url-mapping id="upload">
 		<pattern value="/collection/#{UploadBean.id}/upload" />
 		<view-id>/jsf/Upload.xhtml</view-id>
 		<action onPostback="false">#{UploadBean.status}</action>
 	</url-mapping>
-	
 	<url-mapping id="ingest">
 		<pattern value="/collection/#{IngestBean.collectionId}/ingest" />
 		<view-id>/jsf/Ingest.xhtml</view-id>
 		<action onPostback="false">#{IngestBean.status}</action>
 	</url-mapping>
-
 	<!-- Collection pages -->
 	<url-mapping id="collection">
 		<pattern value="/collection/#{ViewCollectionBean.id}" />
 		<view-id>/jsf/CollectionEntryPage.xhtml</view-id>
 		<action>#{ViewCollectionBean.init}</action>
 	</url-mapping>
-
 	<url-mapping id="collectionInfos">
 		<pattern value="/collection/#{ViewCollectionBean.id}/infos" />
 		<view-id>/jsf/CollectionView.xhtml</view-id>
 		<action>#{ViewCollectionBean.init}</action>
 	</url-mapping>
-
 	<url-mapping id="collectionBrowse">
 		<pattern value="/collection/#{CollectionImagesBean.id}/browse" />
 		<view-id>/jsf/CollectionBrowse.xhtml</view-id>
 	</url-mapping>
-
 	<url-mapping id="collectionItem">
 		<pattern
 			value="/collection/#{CollectionImageBean.collectionId}/item/#{CollectionImageBean.id}" />
 		<view-id>/jsf/CollectionImage.xhtml</view-id>
 	</url-mapping>
-
 	<url-mapping id="createCollection">
 		<pattern value="/createcollection" />
 		<view-id>/jsf/CollectionCreate.xhtml</view-id>
 	</url-mapping>
-
 	<url-mapping id="editCollection">
 		<pattern value="/collection/#{EditCollectionBean.id}/edit" />
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>
 		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>
-
 	<!-- Profile Pages -->
 	<url-mapping id="viewProfile">
 		<pattern value="/profile/#{ViewMdProfileBean.id}" />
 		<view-id>/jsf/ProfileView.xhtml</view-id>
 	</url-mapping>
-
 	<url-mapping id="editProfile">
 		<pattern value="/profile/#{EditMdProfileBean.id}/edit" />
 		<view-id>/jsf/ProfileEdit.xhtml</view-id>
 	</url-mapping>
-
 	<!-- Album Pages -->
 	<url-mapping id="createalbum">
 		<pattern value="/createalbum" />
@@ -173,6 +157,10 @@
 	<url-mapping id="admin">
 		<pattern value="/admin"></pattern>
 		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="config">
+		<pattern value="/config"></pattern>
+		<view-id>/jsf/Config.xhtml</view-id>
 	</url-mapping>
 
 </pretty-config>

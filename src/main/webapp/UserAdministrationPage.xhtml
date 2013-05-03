@@ -29,6 +29,15 @@
 			<h:panelGroup layout="block"
 				styleClass="full_area0_p8 endline medium_marginLExcl">
 				<h2>
+					<h:outputText value="#{lbl.configuration}" styleClass="full_area0" />
+				</h2>
+				<h:outputLink value="#{Navigation.applicationUri}/config">
+					<h:outputText value="#{lbl.edit}" />
+				</h:outputLink>
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="full_area0_p8 endline medium_marginLExcl">
+				<h2>
 					<h:outputText value="#{lbl.administration_storage}"
 						styleClass="full_area0" />
 				</h2>

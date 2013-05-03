@@ -225,37 +225,26 @@
 		<managed-bean-class>de.mpg.imeji.presentation.search.QuickSearchBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
-	<managed-bean>
-		<managed-bean-name>AdminInterfaceBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.AdminInterfaceBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-
 	<managed-bean>
 		<managed-bean-name>AdminBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.admin.AdminBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
-
 	<managed-bean>
 		<managed-bean-name>SuggestBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.metadata.util.SuggestBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
 	<managed-bean>
 		<managed-bean-name>Internationalization</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.lang.InternationalizationBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
 	<managed-bean>
 		<managed-bean-name>StartPageBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.beans.StartPageBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
-
 	<converter>
 		<converter-id>DoubleConverter</converter-id>
 		<converter-class>de.mpg.imeji.presentation.converter.DoubleConverter</converter-class>

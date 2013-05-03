@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hp.hpl.jena.util.Metadata;
+
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -17,12 +19,25 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.j2j.misc.LocalizedString;
 
+/**
+ * Utility class for the labels of the {@link Metadata}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class MetadataLabels
 {
     private String lang = "en";
-    private Map<URI, String> labels;
-    private Map<URI, String> internationalizedLabels;
+    private Map<URI, String> labels = new HashMap<URI, String>();
+    private Map<URI, String> internationalizedLabels = new HashMap<URI, String>();
 
+    /**
+     * Initialize the labels for a {@link List} of {@link Item}
+     * 
+     * @param items
+     * @throws Exception
+     */
     public void init(List<Item> items) throws Exception
     {
         labels = new HashMap<URI, String>();
@@ -30,6 +45,12 @@ public class MetadataLabels
         init1(new ArrayList<MetadataProfile>(profiles.values()));
     }
 
+    /**
+     * initialize the labels for a {@link List} of {@link MetadataProfile}
+     * 
+     * @param profiles
+     * @throws Exception
+     */
     public void init1(List<MetadataProfile> profiles) throws Exception
     {
         HashMap<URI, String> map = new HashMap<URI, String>();
@@ -44,6 +65,12 @@ public class MetadataLabels
         internationalizedLabels = new HashMap<URI, String>(map);
     }
 
+    /**
+     * Initialize the labels for one {@link MetadataProfile}
+     * 
+     * @param profile
+     * @throws Exception
+     */
     public void init(MetadataProfile profile) throws Exception
     {
         labels = new HashMap<URI, String>();

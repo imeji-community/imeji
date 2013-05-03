@@ -29,6 +29,7 @@ import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersBean;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.history.HistorySession;
+import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
@@ -159,6 +160,15 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         // load images
         Collection<Item> items = loadImages(searchResult.getResults(), offset, limit);
+        try
+        {
+            ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init((List<Item>)items);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return ImejiFactory.imageListToThumbList(items);
     }
 

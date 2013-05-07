@@ -4,20 +4,29 @@
 package de.mpg.imeji.logic;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URI;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.lf5.util.StreamUtils;
 
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.ReadWrite;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.imeji.logic.util.Counter;
-import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -69,6 +78,32 @@ public class ImejiJena
             throw new RuntimeException("Error reading property imeji.tdb.path", e);
         }
         init(tdbPath);
+    }
+
+    /**
+     * Run the migration instruction (SPARQL Update queries defines in the migration.xml file)
+     * @throws IOException
+     */
+    public static void runMigration() throws IOException
+    {
+        File f = new File(ImejiJena.tdbPath + StringHelper.urlSeparator + "migration.txt");
+        FileInputStream in = null;
+        try
+        {
+            in = new FileInputStream(f);
+        }
+        catch (FileNotFoundException e)
+        {
+            logger.info("No" + f.getAbsolutePath() + " found, no migration runs");
+        }
+        if (in != null)
+        {
+            String migrationRequests = new String(StreamUtils.getBytes(in), "UTF-8");
+            logger.info("Running migration with query: ");
+            logger.info(migrationRequests);
+            ImejiSPARQL.execUpdate(migrationRequests);
+            logger.info("Migration done!");
+        }
     }
 
     /**
@@ -244,6 +279,32 @@ public class ImejiJena
         finally
         {
             imejiDataSet.end();
+        }
+    }
+
+    /**
+     * For testing/debugging purpose: run a select query an display the result
+     * 
+     * @param q
+     */
+    public static void selectQueryForTesting(String q)
+    {
+        try
+        {
+            ImejiJena.imejiDataSet.begin(ReadWrite.READ);
+            for(Iterator<String> it = ImejiJena.imejiDataSet.listNames();it.hasNext();)
+            {
+                String s = it.next();
+                System.out.println(s);
+            }
+            QueryExecution qe = QueryExecutionFactory.create(q, Syntax.syntaxARQ, ImejiJena.imejiDataSet);
+            qe.getContext().set(TDB.symUnionDefaultGraph, true);
+            ResultSet rs = qe.execSelect();
+            ResultSetFormatter.out(System.out, rs);
+        }
+        finally
+        {
+            ImejiJena.imejiDataSet.end();
         }
     }
 }

@@ -55,7 +55,7 @@ $(function() {
 						 * label&value into result.
 						 */
 						source : function(request, response) {
-							$.getJSON("/imeji/autocompleter", {
+							$.getJSON("/autocompleter", {
 								searchkeyword : request.term,
 								datasource : datasourceUrl
 							}, function(jsonData) {

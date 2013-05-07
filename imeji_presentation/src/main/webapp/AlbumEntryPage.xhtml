@@ -45,7 +45,7 @@
 								<ui:repeat var="thumb" value="#{AlbumBean.thumbnails}" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
 									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}file?id=#{thumb.link}"/>
 								</ui:repeat>
-								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}" url="../../../imeji/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
+								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}" url="../../../resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
 							</h:outputLink>
 						<h2>
 							<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">

@@ -114,7 +114,8 @@ public class IngestBean
 
     private File write2File(String fileName, InputStream is) throws Exception
     {
-        File f = new File(fileName);
+    	
+        File f = new File(System.getProperty("java.io.tmpdir"), fileName);
         try
         {
             OutputStream os = new FileOutputStream(f);

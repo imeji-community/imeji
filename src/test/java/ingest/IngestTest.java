@@ -2,12 +2,15 @@ package ingest;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -15,6 +18,9 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import junit.framework.Assert;
+
+import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -36,71 +42,8 @@ public class IngestTest
     public static void setUpBeforeClass() throws Exception
     {
     }
-
-    @Test
-    public void itemsParsingTest() throws JAXBException, SAXException
-    {
-        String xmlFilename = "./src/test/resources/ingest/test/items.xml";
-        ItemParser ip = new ItemParser();
-        List<Item> itemList = ip.parseItemList(new File(xmlFilename));
-        ItemMapper im = new ItemMapper(itemList);
-        Collection<Item> mappedItemList = im.getMappedItemObjects();
-        Items items = new Items();
-        items.setItem(new ArrayList<Item>(mappedItemList));
-        try
-        {
-            JaxbUtil.toString(items);            
-        }
-        catch (JAXBException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
     
-    @Test
-    public void itemsParsingWrite2FileTest() throws JAXBException, SAXException, IOException
-    {
-        String xmlFilename = "./src/test/resources/ingest/test/items.xml";
-        String xmlOutputFilename = "./src/test/resources/ingest/test/items-out.xml";
-        
-        
-        
-        ItemParser ip = new ItemParser();
-        List<Item> itemList = ip.parseItemList(new File(xmlFilename));
-        ItemMapper im = new ItemMapper(itemList);
-        Collection<Item> mappedItemList = im.getMappedItemObjects();
-        Items items = new Items();
-        items.setItem(new ArrayList<Item>(mappedItemList));
-        try
-        {
-            JaxbUtil.writeToOutputStream(items,new FileOutputStream(xmlOutputFilename));            
-        }
-        catch (JAXBException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void profileParsingTest() throws JAXBException, SAXException
-    {    	
-        String xmlFilename = "./src/test/resources/ingest/test/mdp.xml";
-        ProfileParser pp = new ProfileParser();
-        MetadataProfile profile = pp.parse(new File(xmlFilename));
-        try
-        {
-            JaxbUtil.toString(profile);
-        }
-        catch (JAXBException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
+    //@Test
     public void testItemView() throws URISyntaxException
     {
         try
@@ -147,6 +90,75 @@ public class IngestTest
         {
             e.printStackTrace();
             fail("JAXBException");
+        }
+    }
+
+    //@Test
+    public void profileParsingTest() throws JAXBException, SAXException
+    {    	
+        String xmlFilename = "src/test/resources/ingest/mdp.xml";
+        ProfileParser pp = new ProfileParser();
+        MetadataProfile profile = pp.parse(new File(xmlFilename));
+        try
+        {
+            JaxbUtil.toString(profile);
+        }
+        catch (JAXBException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    //@Test
+    public void itemsParsingTest() throws JAXBException, SAXException
+    {
+        String xmlFilename = "src/test/resources/ingest/items.xml";
+        ItemParser ip = new ItemParser();
+        List<Item> itemList = ip.parseItemList(new File(xmlFilename));
+        ItemMapper im = new ItemMapper(itemList);
+        Collection<Item> mappedItemList = im.getMappedItemObjects();
+        Items items = new Items();
+        items.setItem(new ArrayList<Item>(mappedItemList));
+        try
+        {
+            JaxbUtil.toString(items);   
+        }
+        catch (JAXBException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    public void itemsParsingWrite2FileTest() throws JAXBException, SAXException, IOException
+    {
+        String xmlFilename = "src/test/resources/ingest/items.xml";
+        String xmlOutputFilename = "src/test/resources/ingest/items-out.xml";
+        
+        ItemParser ip = new ItemParser();
+        List<Item> itemList = ip.parseItemList(new File(xmlFilename));
+        ItemMapper im = new ItemMapper(itemList);
+        Collection<Item> mappedItemList = im.getMappedItemObjects();
+        Items items = new Items();
+        items.setItem(new ArrayList<Item>(mappedItemList));
+        try
+        {
+            JaxbUtil.writeToOutputStream(items,new FileOutputStream(xmlOutputFilename));
+            
+//            File file1 = new File(xmlFilename);
+//            File file2 = new File(xmlOutputFilename);
+//           byte[] b1 = FileUtils.readFileToByteArray(file1);
+//           byte[] b2 = FileUtils.readFileToByteArray(file2);
+//           
+//            Assert.assertEquals(Arrays.hashCode(b1),Arrays.hashCode(b2));
+            
+        }
+        catch (JAXBException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }

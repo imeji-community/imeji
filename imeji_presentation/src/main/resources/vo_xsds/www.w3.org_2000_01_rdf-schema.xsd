@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" targetNamespace="http://www.w3.org/2000/01/rdf-schema" xmlns:ns1="http://imeji.org/terms" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
-  <xs:import namespace="http://imeji.org/terms" schemaLocation="imeji.org_terms.xsd"/>
-
-  <xs:element name="label" nillable="true" type="xs:anyType"/>
-</xs:schema>
-

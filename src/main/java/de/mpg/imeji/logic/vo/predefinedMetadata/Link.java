@@ -57,7 +57,7 @@ public class Link extends Metadata
         this.label = label;
     }
     
-    @XmlElement(name="label", namespace = "http://www.w3.org/2000/01/rdf-schema")
+    @XmlElement(name="label", namespace = "http://www.w3.org/2000/01/rdf-schema#")
     public String getLabel()
     {
         return label;

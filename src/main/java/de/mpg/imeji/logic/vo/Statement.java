@@ -74,7 +74,7 @@ public class Statement implements Comparable<Statement>
         this.type = type;
     }
 
-    @XmlElement(name = "label", namespace = "http://www.w3.org/2000/01/rdf-schema")    
+    @XmlElement(name = "label", namespace = "http://www.w3.org/2000/01/rdf-schema#")    
     public Collection<LocalizedString> getLabels()
     {
         return labels;

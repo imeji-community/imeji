@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@XmlRootElement(name = "label", namespace = "http://imeji.org/terms")
+@XmlRootElement(name = "label", namespace = "http://www.w3.org/2000/01/rdf-schema#")
 public class LocalizedString
 {
     private String value;

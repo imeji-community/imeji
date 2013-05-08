@@ -1,0 +1,50 @@
+<metadataProfile>
+	<created>2012-12-04T13:26:48.599Z</created>
+	<createdBy>http://zuse.zib.de/user/zusearchiv%40zib.de</createdBy>
+	<discardComment />
+	<modified>2012-12-04T14:10:51.660Z</modified>
+	<modifiedBy>http://zuse.zib.de/user/zusearchiv%40zib.de</modifiedBy>
+	<status>PENDING</status>
+	<version>0</version>
+	<description />
+	<id>http://zuse.zib.de/metadataProfile/0</id>
+	<statements>
+		<description>false</description>
+		<id>
+			http://imeji.org/statement/f9872875-746c-4791-b43e-8d3fe4e14064
+		</id>
+		<labels>
+			<lang>en</lang>
+			<value>Tilte</value>
+		</labels>
+		<labels>
+			<lang>de</lang>
+			<value>Titel</value>
+		</labels>
+		<maxOccurs>1</maxOccurs>
+		<minOccurs>0</minOccurs>
+		<pos>0</pos>
+		<preview>true</preview>
+		<type>http://imeji.org/terms/metadata#text</type>
+	</statements>
+	<statements>
+		<description>false</description>
+		<id>
+			http://imeji.org/statement/8c6bc155-e154-4398-8375-4175b422a7e8
+		</id>
+		<labels>
+			<lang>de</lang>
+			<value>Beschreibung</value>
+		</labels>
+		<labels>
+			<lang>en</lang>
+			<value>Description</value>
+		</labels>
+		<maxOccurs>1</maxOccurs>
+		<minOccurs>0</minOccurs>
+		<pos>0</pos>
+		<preview>true</preview>
+		<type>http://imeji.org/terms/metadata#text</type>
+	</statements>
+	<title>Test collection 1</title>
+</metadataProfile>

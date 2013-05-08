@@ -1,0 +1,30 @@
+<ui:composition template="templates/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<ui:param name="headline" value="#{lbl.configuration}" />
+	<ui:define name="mainContent">
+		<h:panelGroup rendered="#{SessionBean.admin}">
+			<div
+				class="full_area0 endline itemLine noTopBorder medium_marginLExcl">
+				<h:form>
+					<div class="full_area0_p8 ">
+						<h:outputLabel value="#{lbl.snippet}" styleClass="full_label" />
+						<h:inputTextarea value="#{Configuration.snippet}"
+							styleClass="half_area0_p8" />
+					</div>
+					<div class="full_area0_p8 ">
+						<h:commandButton action="#{Configuration.saveConfig}"
+							value="#{lbl.configuration_save}"
+							styleClass="free_area1_p0 activeButton" style="float:left" />
+						<h:outputLink value="#{Navigation.adminUrl}"
+							styleClass="free_label xTiny_marginLExcl">
+							<h:outputText value="#{lbl.back_to_admin}" />
+						</h:outputLink>
+					</div>
+				</h:form>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

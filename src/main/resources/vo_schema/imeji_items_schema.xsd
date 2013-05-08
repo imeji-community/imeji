@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="items" type="items"/>
+
+  <xs:complexType name="items">
+    <xs:sequence>
+      <xs:element name="item" type="item" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="item">
+    <xs:complexContent>
+      <xs:extension base="properties">
+        <xs:sequence>
+          <xs:element name="collection" type="xs:string" minOccurs="0"/>
+          <xs:element name="escidocId" type="xs:string" minOccurs="0"/>
+          <xs:element name="filename" type="xs:string" minOccurs="0"/>
+          <xs:element name="fullImageUrl" type="xs:string" minOccurs="0"/>
+          <xs:element name="fulltextIndex" type="xs:string" minOccurs="0"/>
+          <xs:element name="id" type="xs:string" minOccurs="0"/>
+          <xs:element name="metadataSets" type="metadataSet" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="thumbnailImageUrl" type="xs:string" minOccurs="0"/>
+          <xs:element name="visibility" type="visibility" minOccurs="0"/>
+          <xs:element name="webImageUrl" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="properties">
+    <xs:sequence>
+      <xs:element name="created" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="createdBy" type="xs:string" minOccurs="0"/>
+      <xs:element name="discardComment" type="xs:string" minOccurs="0"/>
+      <xs:element name="modified" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="modifiedBy" type="xs:string" minOccurs="0"/>
+      <xs:element name="status" type="status" minOccurs="0"/>
+      <xs:element name="version" type="xs:int"/>
+      <xs:element name="versionDate" type="xs:dateTime" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="metadataSet">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+      <xs:element name="metadata" type="metadata" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="profile" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="metadata" abstract="true">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+      <xs:element name="pos" type="xs:int"/>
+      <xs:element name="statement" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+    <xs:complexType name="number">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element name="number" type="xs:double"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="link">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element name="label" type="xs:string" minOccurs="0"/>
+          <xs:element name="uri" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="publication">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element name="citation" type="xs:string" minOccurs="0"/>
+          <xs:element name="exportFormat" type="xs:string" minOccurs="0"/>
+          <xs:element name="uri" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="conePerson">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element name="coneId" type="xs:string" minOccurs="0"/>
+          <xs:element name="person" type="person" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="person">
+    <xs:sequence>
+      <xs:element name="alternativeName" type="xs:string" minOccurs="0"/>
+      <xs:element name="completeName" type="xs:string" minOccurs="0"/>
+      <xs:element name="familyName" type="xs:string" minOccurs="0"/>
+      <xs:element name="givenName" type="xs:string" minOccurs="0"/>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+      <xs:element name="identifier" type="xs:string" minOccurs="0"/>
+      <xs:element name="organizations" type="organization" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="pos" type="xs:int"/>
+      <xs:element name="role" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="organization">
+    <xs:sequence>
+      <xs:element name="city" type="xs:string" minOccurs="0"/>
+      <xs:element name="country" type="xs:string" minOccurs="0"/>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+      <xs:element name="identifier" type="xs:string" minOccurs="0"/>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="pos" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="date">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element name="date" type="xs:string" minOccurs="0"/>
+          <xs:element name="time" type="xs:long"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="text">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element name="text" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="license">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element name="license" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="geolocation">
+    <xs:complexContent>
+      <xs:extension base="metadata">
+        <xs:sequence>
+          <xs:element name="latitude" type="xs:double"/>
+          <xs:element name="longitude" type="xs:double"/>
+          <xs:element name="name" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:simpleType name="visibility">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PUBLIC"/>
+      <xs:enumeration value="PRIVATE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="status">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PENDING"/>
+      <xs:enumeration value="RELEASED"/>
+      <xs:enumeration value="WITHDRAWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+

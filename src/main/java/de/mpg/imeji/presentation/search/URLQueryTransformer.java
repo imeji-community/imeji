@@ -40,11 +40,11 @@ public class URLQueryTransformer
     /**
      * The Pattern to match a metadata search
      */
-    private static String SEARCH_METADATA_PATTERN = "[a-z0-9-]+:[a-z_]+[=<>]{1,2}\".+\"";
+    private static String SEARCH_METADATA_PATTERN = "[a-zA-Z0-9-_]+:[a-z_]+[=<>]{1,2}\".+\"";
     /**
      * The Pattern to match a search pair
      */
-    private static String SEARCH_PAIR_PATTERN = "[a-z_]+[=<>]{1,2}\".+\"";
+    private static String SEARCH_PAIR_PATTERN = "[a-zA-Z_]+[=<>]{1,2}\".+\"";
 
     /**
      * Parse a url search query into a {@link SearchQuery}. Decode the query with UTF-8

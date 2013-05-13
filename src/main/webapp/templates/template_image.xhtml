@@ -210,6 +210,15 @@
 								</h:panelGroup>
 								<div class="vertDist050 linebreak"></div>
 							</h:panelGroup>
+							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+								<b class="xLarge_area0_p8 endline labelLine clear">
+									<h:outputText value="#{lbl.qrcode}" /> 
+									<span class="noDisplay">: </span>
+								</b>
+								<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+									<div id="qr"></div>
+								</span>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
 					</h:form>
@@ -223,5 +232,21 @@
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup> 
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"/>
+		<script>
+			jQuery(document).ready(function() {
+				document.getElementById('qr').innerHTML = create_qrcode(document.URL);
+			});
+			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
+				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
+			};
+			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+				var qr = qrcode(typeNumber || 4, errorCorrectLevel || 'M');
+				qr.addData(text);
+				qr.make();
+				// return qr.createTableTag();
+				return qr.createImgTag();
+			};
+		</script>
 	</ui:define>
 </ui:composition>

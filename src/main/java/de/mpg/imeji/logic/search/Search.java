@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.jena.iri.impl.Main;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Model;

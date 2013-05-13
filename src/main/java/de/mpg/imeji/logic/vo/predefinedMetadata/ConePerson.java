@@ -5,7 +5,10 @@ package de.mpg.imeji.logic.vo.predefinedMetadata;
 
 import java.net.URI;
 
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Person;
@@ -23,7 +26,8 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jDataType("http://imeji.org/terms/metadata#conePerson")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlType(name = "conePerson")
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlRootElement(name = "conePerson", namespace = "http://imeji.org/terms/metadata")
 public class ConePerson extends Metadata
 {
     @j2jResource("http://xmlns.com/foaf/0.1/person")
@@ -42,6 +46,7 @@ public class ConePerson extends Metadata
         this.person = pers;
     }
 
+    @XmlElement(name = "person", namespace="http://xmlns.com/foaf/0.1")
     public Person getPerson()
     {
         return person;
@@ -52,6 +57,7 @@ public class ConePerson extends Metadata
         this.person = person;
     }
 
+    @XmlElement(name = "coneId", namespace="http://imeji.org/terms")
     public URI getConeId()
     {
         return coneId;
@@ -63,6 +69,7 @@ public class ConePerson extends Metadata
     }
 
     @Override
+    @XmlElement(name = "statement", namespace="http://imeji.org/terms")
     public URI getStatement()
     {
         return statement;

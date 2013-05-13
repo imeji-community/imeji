@@ -7,10 +7,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
@@ -34,7 +38,8 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
-@XmlRootElement(name = "metadata")
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms")
 @XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class, Geolocation.class, License.class, Link.class,
         Publication.class })
 public abstract class Metadata
@@ -43,10 +48,18 @@ public abstract class Metadata
     private URI id = IdentifierUtil.newURI(Metadata.class);
     private int pos = 0;
 
+    @XmlEnum(Types.class)
     public enum Types
     {
-        TEXT(Text.class), NUMBER(Number.class), CONE_PERSON(ConePerson.class), DATE(Date.class), GEOLOCATION(
-                Geolocation.class), LICENSE(License.class), LINK(Link.class), PUBLICATION(Publication.class);
+    	TEXT(Text.class), 
+    	NUMBER(Number.class), 
+    	CONE_PERSON(ConePerson.class), 
+    	DATE(Date.class), 
+    	GEOLOCATION(Geolocation.class),
+    	LICENSE(License.class), 
+    	LINK(Link.class), 
+    	PUBLICATION(Publication.class);
+        
         private Class<? extends Metadata> clazz = null;
 
         private Types(Class<? extends Metadata> clazz)
@@ -54,13 +67,6 @@ public abstract class Metadata
             this.clazz = clazz;
         }
 
-        @XmlElements({ @XmlElement(name = "text", type = Text.class),
-                @XmlElement(name = "number", type = Number.class),
-                @XmlElement(name = "conePerson", type = ConePerson.class),
-                @XmlElement(name = "date", type = Date.class),
-                @XmlElement(name = "geolocation", type = Geolocation.class),
-                @XmlElement(name = "license", type = License.class), @XmlElement(name = "link", type = Link.class),
-                @XmlElement(name = "publication", type = Publication.class) })
         public Class<? extends Metadata> getClazz()
         {
             return clazz;
@@ -104,6 +110,7 @@ public abstract class Metadata
         this.id = metadata.getId();
     }
 
+    @XmlAttribute(name = "id")
     public URI getId()
     {
         return id;
@@ -114,6 +121,7 @@ public abstract class Metadata
         this.id = id;
     }
 
+    @XmlElement(name = "position", namespace = "http://imeji.org/terms")
     public int getPos()
     {
         return pos;

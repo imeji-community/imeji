@@ -2,16 +2,20 @@ if(typeof(cookieVersion) == 'undefined') {
 	var cookieVersion = "1.1";
 }
 if (typeof(jsfURL) == 'undefined') {
-	var jsfURL = homeURL + '/';
+	var jsfURL = endsWith(homeURL, '/') ? homeURL : homeURL + '/';
+	
 }
 if(typeof(jsURL) == 'undefined') {
-	var jsURL = homeURL + '/resources/eSciDoc_JavaScript/';
+	var jsURL = endsWith(homeURL, '/') ? homeURL + 'resources/eSciDoc_JavaScript/' : homeURL + '/resources/eSciDoc_JavaScript/';
 }
 if(typeof(coneURL) == 'undefined') {
 	/* var coneURL = '../../cone/'; */
 	var coneURL = 'http://pubman.mpdl.mpg.de/cone/';
 }
 
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
 
 function appendScript(link) {
 	var script = document.createElement('script');

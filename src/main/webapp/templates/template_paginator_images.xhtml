@@ -101,7 +101,7 @@
 												<h:outputText value="#{lbl.add_to_active_album}"/>
 											</h:commandLink>
 											<!-- Edit selected -->
-											<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit" 
+											<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=selected&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit" 
 														  rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null and paginatorListSessionBean.imageEditable}">
 												<h:outputText value="#{lbl.edit_selected}"/>
 											</h:outputLink>

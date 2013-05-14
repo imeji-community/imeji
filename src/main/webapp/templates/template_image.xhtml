@@ -65,6 +65,12 @@
 				</h:panelGroup>
 				<div class="full_area0 fullItem">
 					<div class="fullItemControls">
+						<h:outputLink id="lnkViewItemUtilPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}?tab=util" rendered="#{imageBean.tab == 'util'}">
+							<h:outputText value="#{lbl.view_util}"/>
+						</h:outputLink>
+						<h:outputLink id="lnkViewItemUtilPage2" styleClass="free_area0" value="#{imageBean.pageUrl}?tab=util" rendered="#{imageBean.tab != 'util'}">
+							<h:outputText value="#{lbl.view_util}"/>
+						</h:outputLink>
 						<h:panelGroup styleClass="seperator" />
 						<h:outputLink id="lnkViewItemMdPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}?tab=techmd" rendered="#{imageBean.tab == 'techmd'}">
 							<h:outputText value="#{lbl.view_tech_md}"/>
@@ -73,16 +79,16 @@
 							<h:outputText value="#{lbl.view_tech_md}"/>
 						</h:outputLink>
 						<h:panelGroup styleClass="seperator" />
-						<h:outputLink id="lnkViewItemPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab != 'techmd'}">
+						<h:outputLink id="lnkViewItemPage" styleClass="free_area0 actual" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab != 'techmd' and imageBean.tab != 'util'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
-						<h:outputLink id="lnkViewItemPage2" styleClass="free_area0" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab == 'techmd'}">
+						<h:outputLink id="lnkViewItemPage2" styleClass="free_area0" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab == 'techmd' or imageBean.tab == 'util'}">
 							<h:outputText value="#{lbl.view_md}"/>
 						</h:outputLink>
 					</div>
 				</div>
 				<h:outputText value="#{imageBean.edit.checkToggleState}"/>
-				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab != 'techmd'}">	
+				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab != 'techmd' and imageBean.tab != 'util'}">	
 					<h:form>
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
@@ -123,15 +129,6 @@
 									<h:outputLink value="#{Navigation.collectionUrl}#{imageBean.collection.idString}">
 										<h:outputText value="#{imageBean.collection.metadata.title}" />
 									</h:outputLink>
-								</span>
-							</h:panelGroup>
-							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="#{lbl.checksum} (MD5)" /> 
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-									<h:outputText value="#{imageBean.image.checksum}" />
 								</span>
 							</h:panelGroup>
 							<h:panelGroup id="singleEditPanel" style="border-width:0px;" styleClass="free_area0" bodyClass="free_area0" headerClass="free_area0">
@@ -210,15 +207,7 @@
 								</h:panelGroup>
 								<div class="vertDist050 linebreak"></div>
 							</h:panelGroup>
-							<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="#{lbl.qrcode}" /> 
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-									<div id="qr"></div>
-								</span>
-							</h:panelGroup>
+							
 						</h:panelGroup>
 					</h:panelGroup>
 					</h:form>
@@ -229,6 +218,51 @@
 							<h:outputText value="#{techMd}" style="white-space: pre;"/>
 						</h:panelGroup>
 					</ui:repeat>
+				</h:panelGroup>
+				<h:panelGroup id="util" styleClass="full_area0" rendered="#{imageBean.tab == 'util'}">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">						
+							<h3 class="xLarge_area0_p8 endline blockHeader">
+								<h:outputText id="lblViewItemFull_lblUtil" value="#{lbl.imageUtil}" /><br/>
+							</h3>
+							<span class="seperator"></span>
+							<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.checksum} (MD5)" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:outputText value="#{imageBean.image.checksum}" />
+									</span>
+								</h:panelGroup>
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.imageSizes}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:outputLink value="#{imageBean.image.thumbnailImageUrl}">
+											<h:outputText value="#{lbl.imageSizesThumb}" />
+										</h:outputLink> <br/>
+										<h:outputLink value="#{imageBean.image.webImageUrl}">
+											<h:outputText value="#{lbl.imageSizesWeb}" />
+										</h:outputLink> <br/>
+										<h:outputLink value="#{imageBean.image.fullImageUrl}">
+											<h:outputText value="#{lbl.imageSizesOrg}" />
+										</h:outputLink>
+									</span>
+								</h:panelGroup>
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.qrcode}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<div id="qr"></div>
+									</span>
+								</h:panelGroup>
+							</h:panelGroup>						
+					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup> 

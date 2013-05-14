@@ -93,7 +93,14 @@ public class ImageBean
             }
             else
             {
-                initViewMetadataTab();
+	            if ("util".equals(tab))
+	            {
+	               //TODO
+	            }
+	            else
+	            {
+	                initViewMetadataTab();
+	            }
             }
             initBrowsing();
             selected = sessionBean.getSelected().contains(item.getId().toString());
@@ -267,7 +274,7 @@ public class ImageBean
         }
         catch (Exception e)
         {
-            /* this user has not the priviliges to update the image */
+            /* this user has not the privileges to update the image */
         }
     }
 

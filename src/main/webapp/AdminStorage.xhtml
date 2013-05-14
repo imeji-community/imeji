@@ -1,0 +1,22 @@
+<ui:composition template="templates/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<ui:param name="headline" value="Administration" />
+	<ui:define name="mainContent">
+		<h:panelGroup layout="block" styleClass="full_area0 endline" rendered="#{SessionBean.admin}">
+			<div class="full_area0">
+				<h2>
+					<h:outputText value="#{lbl.import_to_internal}" />
+				</h2>
+				<h:form>
+					<div class="free_area0_p8">
+						<h:outputText styleClass="free_area0" style="color:red;" value="Important: Please make sure to do a backup before running this method. When the import is done (check in the log file), restart imeji with the correct storage" />
+						<h:commandLink styleClass="free_area0" action="#{AdminBean.importToInternalStorage}" value="#{lbl.import_to_internal} (#{AdminBean.internalStorageLocation})" />
+					</div>
+				</h:form>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

@@ -92,7 +92,6 @@
 		<org.richfaces.bom.version>4.2.2.Final</org.richfaces.bom.version>
 		<!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
 		<project.warName>imeji</project.warName>
-		<tomcat.webapps>C:/tomcat/apache-tomcat-7.0.33/webapps</tomcat.webapps>
 	</properties>
 	<repositories>
 		<repository>
@@ -123,6 +122,18 @@
 		</repository>
 	</repositories>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -139,12 +150,26 @@
 						to application server conf directory -->
 					<packagingExcludes>**/imeji.properties</packagingExcludes>
 					<warName>${project.warName}</warName>
+					 <archive>
+			            <manifest>
+			              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+			            </manifest>
+			            <manifestEntries>
+			              <Implementation-Build>${buildNumber}</Implementation-Build>
+			            </manifestEntries>
+			          </archive>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.12.3</version>
+				<configuration>
+					<!-- if there are no tests, don't bail out -->
+					<failIfNoTests>false</failIfNoTests>
+					<!-- avoid the out of memory exception thrown in some test scenarios -->
+					<argLine>-Xmx1000M</argLine>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>integration-test</phase>
@@ -179,21 +204,6 @@
 								<copy
 									file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index"
 									tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-
-					<!-- copy the war folder into the tomcat deploy folder ($TOMCAT_HOME/webapps) -->
-					<execution>
-						<id>install</id>
-						<phase>install</phase>
-						<configuration>
-							<tasks>
-								<copy file="${project.build.directory}/${project.warName}.war"
-									tofile="${tomcat.webapps}/${project.warName}.war" />
 							</tasks>
 						</configuration>
 						<goals>
@@ -417,6 +427,25 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<!-- copy the war folder into the tomcat deploy folder ($TOMCAT_HOME/webapps) -->
+							<execution>
+								<id>install</id>
+								<phase>install</phase>
+								<configuration>
+									<tasks>
+										<copy file="${project.build.directory}/${project.warName}.war"
+											tofile="${tomcat.webapps}/${project.warName}.war" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 				<pluginManagement>
 					<plugins>
@@ -444,19 +473,7 @@
 								</lifecycleMappingMetadata>
 							</configuration>
 						</plugin>
-
-						<plugin>
-							<artifactId>maven-surefire-plugin</artifactId>
-							<configuration>
-								<!-- if there are no tests, don't bail out -->
-								<failIfNoTests>false</failIfNoTests>
-								<!-- avoid the outofmemory exception thrown in some test scenarios -->
-								<argLine>-Xmx1000M</argLine>
-							</configuration>
-						</plugin>
-
 					</plugins>
-
 				</pluginManagement>
 			</build>
 			<properties>

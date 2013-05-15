@@ -108,10 +108,13 @@
 						<!-- To be removed with new CSS -->
 						<style>
 							.collection_list_infos_class{
-							 width: 120em;
+							 width: 110em;
 							}
 							.collection_list_infos_entry_row{
-							 width: 70em;
+							 width: 65em;
+							}
+							.collection_list_infos_entry_row_right{
+							 width: 50em;
 							}
 						</style>
 						<div class="collection_list_infos_class shortView xLarge_marginLIncl">
@@ -126,7 +129,7 @@
 							</h:panelGroup>
 							<h:panelGroup class="collection_list_infos_entry_row free_area0  endline">	
 								<h:outputText class="large_area0 endline" value="#{lbl.description}"/><span class="noDisplay">: </span>
-								<h:outputText class="free_area0 endline" title="#{container.description}" value="#{container.description}"/>
+								<h:outputText class="collection_list_infos_entry_row_right free_area0 endline" title="#{container.description}" value="#{container.description}"/>
 							</h:panelGroup>
 							<h:panelGroup class="collection_list_infos_entry_row free_area0 endline">	
 								<h:outputText class="large_area0 endline" value="#{lbl.images}"/><span class="noDisplay">: </span>							

@@ -53,6 +53,10 @@ public class CollectionListItem
     private boolean editable = false;
     private static Logger logger = Logger.getLogger(CollectionListItem.class);
     private ThumbnailBean thumbnail = null;
+    /**
+     * Maximum number of character displayed in the list for the description
+     */
+    private static final int DESCRIPTION_MAX_SIZE = 300;
 
     /**
      * Construct a new {@link CollectionListItem} with a {@link CollectionImeji}
@@ -66,9 +70,9 @@ public class CollectionListItem
         {
             title = collection.getMetadata().getTitle();
             description = collection.getMetadata().getDescription();
-            if (description != null && description.length() > 100)
+            if (description != null && description.length() > DESCRIPTION_MAX_SIZE)
             {
-                description = description.substring(0, 100) + "...";
+                description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
             }
             for (Person p : collection.getMetadata().getPersons())
             {

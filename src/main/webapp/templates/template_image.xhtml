@@ -226,6 +226,7 @@
 							</h3>
 							<span class="seperator"></span>
 							<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
+							
 								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 									<b class="xLarge_area0_p8 endline labelLine clear">
 										<h:outputText value="#{lbl.checksum} (MD5)" /> 
@@ -235,6 +236,17 @@
 										<h:outputText value="#{imageBean.image.checksum}" />
 									</span>
 								</h:panelGroup>
+								
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.imageUploader}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:outputText value="#{imageBean.imageUploader.name}" />
+									</span>
+								</h:panelGroup>
+								
 								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 									<b class="xLarge_area0_p8 endline labelLine clear">
 										<h:outputText value="#{lbl.imageSizes}" /> 
@@ -252,6 +264,21 @@
 										</h:outputLink>
 									</span>
 								</h:panelGroup>
+								
+								<h:panelGroup rendered="#{imageBean.relatedAlbums != null}" styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.relatedAlbum}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<ui:repeat var="albums" value="#{imageBean.relatedAlbums}">
+											<h:outputLink value="#{albums.id}">
+												<h:outputText value="#{albums.metadata.title}" />
+											</h:outputLink><br/>
+										</ui:repeat>
+									</span>
+								</h:panelGroup>
+										
 								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 									<b class="xLarge_area0_p8 endline labelLine clear">
 										<h:outputText value="#{lbl.qrcode}" /> 

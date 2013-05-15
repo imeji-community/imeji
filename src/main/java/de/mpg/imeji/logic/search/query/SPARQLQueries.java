@@ -81,6 +81,16 @@ public class SPARQLQueries
                 + ">} . optional{ ?it <http://imeji.org/terms/fullImageUrl> <" + fileUrl + ">}"
                 + " . ?it <http://imeji.org/terms/collection> ?s . } LIMIT 1 ";
     }
+    
+    /**
+     * @param fileUrl
+     * @return
+     */
+    public static String selectAlbumIdOfFile(String id)
+    {
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {"
+                + " ?s a <http://imeji.org/terms/album> . ?s <http://imeji.org/terms/item> <" + id + "> } ";
+    }
 
     /**
      * Select all {@link Metadata} which are not related to a statement. Happens when a {@link Statement} is removed
@@ -136,7 +146,7 @@ public class SPARQLQueries
      */
     public static String selectAlbumAll()
     {
-        return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/collection>}";
+        return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/album>}";
     }
 
     /**

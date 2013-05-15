@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.image;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,7 +16,18 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.concurrency.locks.Locks;
+import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.vo.SearchGroup;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -26,6 +38,8 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
@@ -34,6 +48,7 @@ import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -595,5 +610,32 @@ public class ImageBean
             }
         }
         return item.getFilename();
+    }
+    
+    /**
+     * Returns a list of all albums this image is added to.
+     * @return
+     * @throws Exception 
+     */
+    public List<Album> getRelatedAlbums() throws Exception
+    {
+    	List <Album> albums = new ArrayList<Album>();
+    	AlbumController ac = new AlbumController();
+    	Search s = new Search(SearchType.ALL, null);
+        List<String> res = s.searchSimpleForQuery(SPARQLQueries.selectAlbumIdOfFile(item.getId().toString()), null);
+        for (int i =0; i<res.size(); i++)
+        {
+        	albums.add(ac.retrieveLazy(new URI(res.get(i)), sessionBean.getUser()));
+        }
+        return albums;
+    
+    }
+    
+    public User getImageUploader() throws Exception
+    {
+    	User user = null;
+    	UserController uc = new UserController();
+    	user = uc.retrieve(item.getCreatedBy());
+    	return user;
     }
 }

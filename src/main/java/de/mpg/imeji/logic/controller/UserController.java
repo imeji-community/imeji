@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -87,6 +88,20 @@ public class UserController extends ImejiController
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
         User loadedUser = (User)imejiRDF2Bean.load(ObjectHelper.getURI(User.class, email).toString(), user, new User());
+        return loadedUser;
+    }
+    
+    /**
+     * Retrieve a {@link User} according to its uri (id)
+     * 
+     * @param email
+     * @return
+     * @throws Exception
+     */
+    public User retrieve(URI uri) throws Exception
+    {
+        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
+        User loadedUser = (User)imejiRDF2Bean.load(uri.toString(), user, new User());
         return loadedUser;
     }
 

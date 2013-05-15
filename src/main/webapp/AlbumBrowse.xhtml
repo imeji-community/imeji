@@ -43,9 +43,25 @@
 					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{AlbumImagesBean.deletable}">
 						<h:outputText value="#{lbl.delete}"/>
 					</h:outputLink>
-					<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" styleClass="imj_contentSubMenuItem" target="_blank">
-						<h:outputText value="#{lbl.export_metadata}"/>
-					</h:outputLink>
+			<h:panelGroup layout="block" styleClass="free_area0_p0 endline overlayMenu">
+				<h:panelGroup layout="block" styleClass="menuHeader free_area0">
+					<h:panelGroup styleClass="free_area0">
+						<h:outputText value="#{lbl.download} " styleClass="free_area0 "/>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
+					<div class="selectMenu xLarge_area2 bordst2">
+						<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;album=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
+									  styleClass="imj_SubMenuItem" target="_blank">
+							<h:outputText value="#{lbl.export_rdf}" />
+						</h:outputLink>
+						<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;album=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
+									  styleClass="imj_SubMenuItem" target="_blank">
+							<h:outputText value="#{lbl.export_native}" />
+						</h:outputLink>
+					</div>
+				</h:panelGroup>
+			</h:panelGroup>
 				</h:panelGroup>	
 			</h:panelGroup>
 			<ui:include src="confirmationPages/ContainerDelete.xhtml">

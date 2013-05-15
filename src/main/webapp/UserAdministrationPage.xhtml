@@ -41,10 +41,15 @@
 					<h:outputText value="#{lbl.administration_storage}"
 						styleClass="full_area0" />
 				</h2>
-				<h:outputLink
+				<h:outputLink  styleClass="free_area0"
 					value="#{Navigation.applicationUri}/jsf/AdminInterface.xhtml"
 					target="_blank">
 					<h:outputText value="#{lbl.view_detail}" />
+				</h:outputLink>
+				<h:outputLink  styleClass="free_area0 xTiny_marginLExcl"
+					value="#{Navigation.applicationUri}/jsf/AdminStorage.xhtml"
+					target="_blank">
+					<h:outputText value="#{lbl.storage_tools}" />
 				</h:outputLink>
 			</h:panelGroup>
 			<h:panelGroup layout="block"

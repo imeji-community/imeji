@@ -112,6 +112,7 @@ public class ItemController extends ImejiController
      * Update an {@link Item} in the database
      * 
      * @param item
+     * @deprecated
      * @throws Exception
      */
     public void update(Item item) throws Exception
@@ -125,9 +126,43 @@ public class ItemController extends ImejiController
      * Update a {@link Collection} of {@link Item}
      * 
      * @param items
+     * @deprecated
      * @throws Exception
      */
     public void update(Collection<Item> items) throws Exception
+    {
+        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+        List<Object> imBeans = new ArrayList<Object>();
+        for (Item item : items)
+        {
+            writeUpdateProperties(item, user);
+            imBeans.add(createFulltextForMetadata(item));
+        }
+        imejiBean2RDF.update(imBeans, user);
+    }
+
+    /**
+     * Update an {@link Item} in the database
+     * 
+     * @param item
+     * @param user
+     * @throws Exception
+     */
+    public void update(Item item, User user) throws Exception
+    {
+        Collection<Item> l = new ArrayList<Item>();
+        l.add(item);
+        update(l, user);
+    }
+
+    /**
+     * Update a {@link Collection} of {@link Item}
+     * 
+     * @param items
+     * @param user
+     * @throws Exception
+     */
+    public void update(Collection<Item> items, User user) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
         List<Object> imBeans = new ArrayList<Object>();

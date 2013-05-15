@@ -20,8 +20,8 @@ import de.mpg.j2j.misc.LocalizedString;
 public class MetadataLabels
 {
     private String lang = "en";
-    private Map<URI, String> labels;
-    private Map<URI, String> internationalizedLabels;
+    private Map<URI, String> labels = new HashMap<URI, String>();
+    private Map<URI, String> internationalizedLabels = new HashMap<URI, String>(); 
 
     public void init(List<Item> items) throws Exception
     {

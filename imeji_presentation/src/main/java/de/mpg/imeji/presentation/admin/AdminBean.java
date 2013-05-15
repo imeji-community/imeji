@@ -3,10 +3,15 @@
  */
 package de.mpg.imeji.presentation.admin;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.lf5.util.StreamUtils;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -23,8 +28,10 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.util.MetadataFactory;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
@@ -35,6 +42,7 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.helper.SortHelper;
 
@@ -54,6 +62,63 @@ public class AdminBean
     public AdminBean()
     {
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    }
+
+    /**
+     * Import the files in an external storage (for instance escidoc) into the internal storage
+     * 
+     * @throws Exception
+     */
+    public void importToInternalStorage() throws Exception
+    {
+        StorageController internal = new StorageController("internal");
+        StorageController escidoc = new StorageController("escidoc");
+        ItemController ic = new ItemController(sb.getUser());
+        for (Item item : ic.retrieveAll())
+        {
+            try
+            {
+                // Get escidoc url for all files
+                URI escidocUrl = item.getFullImageUrl();
+                logger.info("Importing file " + escidocUrl + " for item " + item.getId());
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                // Read the file in a stream
+                escidoc.read(escidocUrl.toString(), out);
+                // Upload the file in the internal storage
+                if (out.toByteArray() != null)
+                {
+                    UploadResult result = internal.upload(item.getFilename(), out.toByteArray(),
+                            ObjectHelper.getId(item.getCollection()));
+                    item.setChecksum(result.getChecksum());
+                    item.setFullImageUrl(URI.create(result.getOrginal()));
+                    item.setWebImageUrl(URI.create(result.getWeb()));
+                    item.setThumbnailImageUrl(URI.create(result.getThumb()));
+                    item.setStorageId(result.getId());
+                    // Update the item with the new values
+                    ic.update(item, sb.getUser());
+                }
+                else
+                {
+                    logger.error("File not found: " + escidocUrl + " for item " + item.getId());
+                }
+            }
+            catch (Exception e)
+            {
+                logger.error("Error importing item " + item.getId(), e);
+            }
+        }
+    }
+
+    /**
+     * Return the location of the internal storage
+     * 
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    public String getInternalStorageLocation() throws IOException, URISyntaxException
+    {
+        return PropertyReader.getProperty("imeji.storage.path");
     }
 
     /**

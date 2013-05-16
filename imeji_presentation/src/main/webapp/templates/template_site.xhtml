@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+
+<!--
+/* 
+CDDL HEADER START
+
+The contents of this file are subject to the terms of the
+Common Development and Distribution License, Version 1.0 only
+(the "License"). You may not use this file except in compliance
+with the License.
+
+You can obtain a copy of the license at license/ESCIDOC.LICENSE
+or http://www.escidoc.de/license.
+See the License for the specific language governing permissions
+and limitations under the License.
+
+When distributing Covered Code, include this CDDL HEADER in each
+file and include the License file at license/ESCIDOC.LICENSE.
+If applicable, add the following below this CDDL HEADER, with the
+fields enclosed by brackets "[]" replaced with your own identifying
+information: Portions Copyright [yyyy] [name of copyright owner]
+
+CDDL HEADER END
+
+
+Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+fuer wissenschaftlich-technische Information mbH and Max-Planck-
+Gesellschaft zur Foerderung der Wissenschaft e.V.
+All rights reserved. Use is subject to license terms.
+*/
+-->
+
+
+<f:view encoding="UTF-8" locale="#{SessionBean.locale}" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<f:loadBundle var="lbl" basename="labels"/>
+	<f:loadBundle var="msg" basename="messages"/>
+	<html xmlns="http://www.w3.org/1999/xhtml">
+	
+		<h:head>
+			<ui:include src="component/header/html_head_default.xhtml"/>
+		</h:head>
+	
+		<h:body lang="#{SessionBean.locale}">
+			<h:panelGroup layout="block" styleClass="imj_siteWrapper">
+				<ui:insert name="init"/>
+				<ui:include src="component/header/header_default.xhtml"/>
+				
+				<ui:insert name="mainContent"/>
+				
+				<ui:include src="component/footer/footer_default.xhtml"/>
+			</h:panelGroup>
+		</h:body>
+	</html>
+</f:view>

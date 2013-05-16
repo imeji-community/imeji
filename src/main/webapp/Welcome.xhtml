@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition template="templates/template.xhtml"  
+<ui:composition template="templates/template_site.xhtml"  
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -9,7 +9,7 @@
 		</ui:remove>
 		
 		<ui:define name="mainContent">
-			<div class="imj_cont_1 infoPage small_marginLExcl">
+			<div class="imj_mainContentWrapper">
 				<!-- Main Content -->							
 				<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo">
 					
@@ -233,9 +233,9 @@
                 
 				
 				
-				<div class="imj_clear imj_cont_1 imj_footer small_negMarginLExcl">
+				<div class="imj_cont_1 imj_startpageFooter">
 				<!-- begin: footer section-->
-					<div class="imj_cont_1 imj_poweredby">
+					<div class="imj_cont_1 imj_startpageFooterLogos">
 						<a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank" title="imeji community"> 
 							<img alt="imeji community logo" src="http://imeji.org/Imeji-Community.png" width="150em" class="imj_community_logo"/> 
 						</a> 
@@ -319,18 +319,19 @@
 					initStartpage();
 				</script>
 				
-				
-				<style type="text/css">
-					/* reset the css settings for the footer */
-					div.footer div.full_area0 {
-						width:100%;
-						text-align:center;
-					}
-					div.footer div.full_area0 div.huge_area0 {
-						width:0;
-						display:none;
-					}
-				</style>
+				<ui:remove>
+					<style type="text/css">
+						/* reset the css settings for the footer */
+							div.footer div.full_area0 {
+								width:100%;
+								text-align:center;
+							}
+							div.footer div.full_area0 div.huge_area0 {
+								width:0;
+								display:none;
+							}
+					</style>
+				</ui:remove>
 		</div>
 	</ui:define>	
 </ui:composition>

@@ -109,7 +109,7 @@ public class EmailMessages
         }
         emailMessage = emailMessage.replace("XXX_USER_NAME_XXX,", username).replace("XXX_LOGIN_XXX", email)
                 .replace("XXX_PASSWORD_XXX", password).replace("XXX_LINK_TO_USER_PAGE_XXX", userPage)
-                .replace("XXX_INSTANCE_NAME_XXX", session.getInstanceName());
+                .replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName());
         return emailMessage;
     }
 
@@ -131,6 +131,6 @@ public class EmailMessages
         {
             emailsubject = session.getMessage("email_new_password_subject");
         }
-        return emailsubject;
+        return emailsubject.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName());
     }
 }

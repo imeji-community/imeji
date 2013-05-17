@@ -7,7 +7,6 @@
 		<ui:param name="paginatorListSessionBean" value="#{AlbumImagesBean}" />
 		<ui:param name="headline" value="#{AlbumImagesBean.album.metadata.title}"/>
 		<ui:define name="contentMenu">
-			<h:outputText value="#{AlbumImagesBean.initPage}"/>
 			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}" rendered="true">
 				<h:outputText value="#{lbl.album_home}"/>
 			</h:outputLink>

@@ -3,7 +3,9 @@
  */
 package de.mpg.imeji.presentation.session;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,25 +102,57 @@ public class SessionBean
         }
     }
 
-    // Getters and Setters
-    public String getSelectedLabelBundle()
+    /**
+     * Get the bundle for the labels
+     * 
+     * @return
+     */
+    private String getSelectedLabelBundle()
     {
         return LABEL_BUNDLE + "_" + locale.getLanguage();
     }
 
-    public String getSelectedMessagesBundle()
+    /**
+     * Get the bundle for the messages
+     * 
+     * @return
+     */
+    private String getSelectedMessagesBundle()
     {
         return MESSAGES_BUNDLE + "_" + locale.getLanguage();
     }
 
-    public String getSelectedMetadataBundle()
-    {
-        return METADATA_BUNDLE + "_" + locale.getLanguage();
-    }
-
+    // public String getSelectedMetadataBundle()
+    // {
+    // return METADATA_BUNDLE + "_" + locale.getLanguage();
+    // }
+    /**
+     * Return the version of the software
+     * 
+     * @return
+     */
     public String getVersion()
     {
         return PropertyReader.getVersion();
+    }
+
+    /**
+     * Return the name of the current application (defined in the property)
+     * 
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
+     */
+    public String getInstanceName()
+    {
+        try
+        {
+            return PropertyReader.getProperty("imeji.instance.name");
+        }
+        catch (Exception e)
+        {
+            return "imeji";
+        }
     }
 
     /**
@@ -168,6 +202,11 @@ public class SessionBean
         return selectedImagesContext;
     }
 
+    /**
+     * setter
+     * 
+     * @param selectedImagesContext
+     */
     public void setSelectedImagesContext(String selectedImagesContext)
     {
         this.selectedImagesContext = selectedImagesContext;
@@ -189,92 +228,182 @@ public class SessionBean
         this.user = user;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public Page getCurrentPage()
     {
         return currentPage;
     }
 
+    /**
+     * setter
+     * 
+     * @param currentPage
+     */
     public void setCurrentPage(Page currentPage)
     {
         this.currentPage = currentPage;
     }
 
+    /**
+     * True if the current user is the system administrator
+     * 
+     * @return
+     */
     public boolean isAdmin()
     {
         Security security = new Security();
         return security.isSysAdmin(user);
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<String> getSelected()
     {
         return selected;
     }
 
+    /**
+     * setter
+     * 
+     * @param selected
+     */
     public void setSelected(List<String> selected)
     {
         this.selected = selected;
     }
 
+    /**
+     * Return the number of item selected
+     * 
+     * @return
+     */
     public int getSelectedSize()
     {
         return selected.size();
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<URI> getSelectedCollections()
     {
         return selectedCollections;
     }
 
+    /**
+     * setter
+     * 
+     * @param selectedCollections
+     */
     public void setSelectedCollections(List<URI> selectedCollections)
     {
         this.selectedCollections = selectedCollections;
     }
 
+    /**
+     * Return the number of selected collections
+     * 
+     * @return
+     */
     public int getSelectCollectionsSize()
     {
         return this.selectedCollections.size();
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<URI> getSelectedAlbums()
     {
         return selectedAlbums;
     }
 
+    /**
+     * setter
+     * 
+     * @param selectedAlbums
+     */
     public void setSelectedAlbums(List<URI> selectedAlbums)
     {
         this.selectedAlbums = selectedAlbums;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public int getSelectedAlbumsSize()
     {
         return this.selectedAlbums.size();
     }
 
+    /**
+     * setter
+     * 
+     * @param activeAlbum
+     */
     public void setActiveAlbum(Album activeAlbum)
     {
         this.activeAlbum = activeAlbum;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public Album getActiveAlbum()
     {
         return activeAlbum;
     }
 
+    /**
+     * setter
+     * 
+     * @return
+     */
     public String getActiveAlbumId()
     {
         return ObjectHelper.getId(activeAlbum.getId());
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public int getActiveAlbumSize()
     {
         return activeAlbum.getImages().size();
     }
 
+    /**
+     * Getter
+     * 
+     * @return
+     */
     public Map<URI, MetadataProfile> getProfileCached()
     {
         return profileCached;
     }
 
+    /**
+     * Setter
+     * 
+     * @param profileCached
+     */
     public void setProfileCached(Map<URI, MetadataProfile> profileCached)
     {
         this.profileCached = profileCached;

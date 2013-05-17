@@ -10,8 +10,6 @@
 	<ui:param name="headline"
 		value="#{CollectionImagesBean.collection.metadata.title}" />
 	<ui:define name="contentMenu">
-		<h:outputText value="#{CollectionImagesBean.initPage}" />
-
 		<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}"
 			rendered="true">

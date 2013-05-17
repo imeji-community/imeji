@@ -4,6 +4,9 @@
 package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
@@ -22,9 +25,7 @@ import org.apache.http.client.HttpResponseException;
 
 import de.mpg.imeji.logic.export.ExportManager;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 
 public class ExportServlet extends HttpServlet
@@ -43,12 +44,29 @@ public class ExportServlet extends HttpServlet
         //String query = req.getParameter("q");
         User user = getSessionBean(req, resp).getUser();
       //  SearchQuery searchQuery = new SearchQuery();
+        
         try
         {
             //searchQuery = URLQueryTransformer.parseStringQuery(query);
             ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap());
+            
+            //TODO replace imeji with instance name when set in conf
+            String exportName = "imeji_";
+            
+            exportName += new Date().toString().replace(" ", "_");
+            
+            if (exportManager.getContentType().equalsIgnoreCase("application/xml"))
+            {
+            	exportName += ".xml";
+            }
+            if (exportManager.getContentType().equalsIgnoreCase("application/zip"))
+            {
+            	exportName += ".zip";
+            }
+            
             resp.setHeader("Connection", "close");
             resp.setHeader("Content-Type", exportManager.getContentType());
+            resp.setHeader("Content-disposition", "attachment; filename=" + exportName);
             SearchResult result = exportManager.search();
             exportManager.export(result);
         }

@@ -66,7 +66,7 @@ public class ExportServlet extends HttpServlet
             
             resp.setHeader("Connection", "close");
             resp.setHeader("Content-Type", exportManager.getContentType());
-            resp.setHeader("Content-disposition", "attachment; filename=" + exportName);
+            resp.setHeader("Content-disposition", "filename=" + exportName);
             SearchResult result = exportManager.search();
             exportManager.export(result);
         }

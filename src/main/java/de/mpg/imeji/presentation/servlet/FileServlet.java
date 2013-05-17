@@ -82,7 +82,7 @@ public class FileServlet extends HttpServlet
         SessionBean session = getSession(req);
         if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
         {
-            storageController.read(url, resp.getOutputStream());
+            storageController.read(url, resp.getOutputStream(), false);
         }
         else
         {

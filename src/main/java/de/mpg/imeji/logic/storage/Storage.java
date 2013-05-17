@@ -75,7 +75,7 @@ public interface Storage
      * @param url
      * @param out
      */
-    public void read(String url, OutputStream out);
+    public void read(String url, OutputStream out, boolean close);
 
     /**
      * Delete the file stored in the passed url

@@ -81,12 +81,12 @@ public class InternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#read(java.lang.String)
      */
     @Override
-    public void read(String url, OutputStream out)
+    public void read(String url, OutputStream out, boolean close)
     {
         try
         {
             FileInputStream fis = new FileInputStream(manager.transformUrlToPath(url));
-            StorageUtils.writeInOut(fis, out);
+            StorageUtils.writeInOut(fis, out, close);
         }
         catch (Exception e)
         {

@@ -88,6 +88,10 @@
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
 					<div class="selectMenu xLarge_area2 bordst2">
+						<h:outputLink value="#{Navigation.applicationUrl}export?format=zip&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
+									  styleClass="imj_SubMenuItem" target="_blank">
+							<h:outputText value="#{lbl.export_zip}" />
+						</h:outputLink>
 						<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
 									  styleClass="imj_SubMenuItem" target="_blank">
 							<h:outputText value="#{lbl.export_rdf}" />

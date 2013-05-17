@@ -127,7 +127,7 @@ public class EscidocStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#read(java.lang.String)
      */
     @Override
-    public void read(String url, OutputStream out)
+    public void read(String url, OutputStream out, boolean close)
     {
         GetMethod get = StorageUtils.newGetMethod(client, url);
         get.addRequestHeader("Cookie", getEscidocCookie());
@@ -143,7 +143,7 @@ public class EscidocStorage implements Storage
                 get.addRequestHeader("Cookie", getEscidocCookie());
                 client.executeMethod(get);
             }
-            StorageUtils.writeInOut(get.getResponseBodyAsStream(), out);
+            StorageUtils.writeInOut(get.getResponseBodyAsStream(), out, close);
         }
         catch (Exception e)
         {

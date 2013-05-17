@@ -83,7 +83,7 @@ public class AdminBean
                 logger.info("Importing file " + escidocUrl + " for item " + item.getId());
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 // Read the file in a stream
-                escidoc.read(escidocUrl.toString(), out);
+                escidoc.read(escidocUrl.toString(), out, true);
                 // Upload the file in the internal storage
                 if (out.toByteArray() != null)
                 {

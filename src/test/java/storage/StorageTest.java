@@ -22,8 +22,8 @@
  */
 /*
  * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
- * für wissenschaftlich-technische Information mbH and Max-Planck-
- * Gesellschaft zur Förderung der Wissenschaft e.V.
+ * fÃ¼r wissenschaftlich-technische Information mbH and Max-Planck-
+ * Gesellschaft zur FÃ¶rderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
 package storage;
@@ -55,7 +55,7 @@ public class StorageTest
 {
     private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
     private static final String FILENAME = "test";
-    private static final String INTERNATIONAL_CHARACHTERS = "japanese:テスト  chinese:實驗 yiddish:פּראָבע arab:اختبار bengali: পরীক্ষা";
+    private static final String INTERNATIONAL_CHARACHTERS = "japanese:ãƒ†ã‚¹ãƒˆ  chinese:å¯¦é©— yiddish:×¤Ö¼×¨×�Ö¸×‘×¢ arab:Ø§Ø®ØªØ¨Ø§Ø± bengali: à¦ªà¦°à§€à¦•à§�à¦·à¦¾";
     private static final String LONG_NAME = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
             + "0123456789012345678901234567890adasd dsdfdj ghdjghfdgh gfhg df gfhdfghdgf hisfgshdfghsdi gfhsdigf sdi gfidsf gsidfhsidf gsdih "
             + "hsgfhidsgfhdsg fh dsfshdgfhidsgfihsdgfiwuzfgisdh fg shdfg sdihfg sdihgfisdgfhsdgf ihsdg fhsdgfizsdgf zidsgfizsd fi fhsdhfgsdhfg"
@@ -63,7 +63,7 @@ public class StorageTest
     /**
      * Not working: * /
      */
-    private static final String SPECIAL_CHARACHTERS = "!\"§$%&()=? '#_-.,";
+    private static final String SPECIAL_CHARACHTERS = "!\"Â§$%&()=? '#_-.,";
 
     /**
      * Test for {@link InternalStorage}
@@ -113,7 +113,7 @@ public class StorageTest
                 res.getOrginal().equals(manager.transformUrlToPath(res.getOrginal())));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         // READ THE URL
-        sc.read(res.getOrginal(), baos);
+        sc.read(res.getOrginal(), baos, true);
         byte[] stored = baos.toByteArray();
         // DELETE THE FILE
         sc.delete(res.getId());
@@ -127,7 +127,7 @@ public class StorageTest
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         FileInputStream fis;
         fis = new FileInputStream(path);
-        StorageUtils.writeInOut(fis, baos);
+        StorageUtils.writeInOut(fis, baos, true);
         return baos.toByteArray();
     }
 }

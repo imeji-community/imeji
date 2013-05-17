@@ -45,7 +45,7 @@ public class BasicExtractor
         String imageUrl = uri.toURL().toString();
         StorageController sc = new StorageController();
         ByteArrayOutputStream bous = new ByteArrayOutputStream();
-        sc.read(imageUrl, bous);
+        sc.read(imageUrl, bous, true);
         InputStream input = new ByteArrayInputStream(bous.toByteArray());
         ImageInputStream iis = ImageIO.createImageInputStream(input);
         Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);

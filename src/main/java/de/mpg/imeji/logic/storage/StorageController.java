@@ -99,9 +99,9 @@ public class StorageController
      * @param url
      * @param out
      */
-    public void read(String url, OutputStream out)
+    public void read(String url, OutputStream out, boolean close)
     {
-        storage.read(url, out);
+        storage.read(url, out, close);
     }
 
     /**

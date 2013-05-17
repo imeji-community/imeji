@@ -109,7 +109,7 @@ public class StorageUtils
      * @param input
      * @throws IOException
      */
-    public static void writeInOut(InputStream in, OutputStream out)
+    public static void writeInOut(InputStream in, OutputStream out, boolean close)
     {
         byte[] buffer = new byte[1024];
         int numRead;
@@ -121,7 +121,10 @@ public class StorageUtils
             }
             in.close();
             out.flush();
-            out.close();
+            if (close)
+            {
+            	out.close();
+            }
         }
         catch (Exception e)
         {

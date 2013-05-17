@@ -126,7 +126,7 @@ public class UploadBean
             URL url = new URL(externalUrl);
             title = url.getPath().substring(url.getPath().lastIndexOf("/") + 1);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            externalController.read(url.toString(), baos);
+            externalController.read(url.toString(), baos, true);
             Item item = uploadFile(baos.toByteArray());
             UserController uc = new UserController(null);
             user = uc.retrieve(getUser().getEmail());

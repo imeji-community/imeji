@@ -73,46 +73,52 @@
 						<table class="full_area0 itemList loggedIn" rules="none" style="border-collapse: collapse;">
 							<thead class="listHeader" style="text-align: left; vertical-align:top;">
 							    <tr class="full_area0">
-							      	<th class="free_area0_p8 endline itemSelectArea">
-							      		<h:panelGroup rendered="#{SessionBean.user != null}" styleClass="overlayMenu">
-							      			<h:panelGroup styleClass="menuHeader">
-											<input type="button" class="min_imgBtn checkboxSelectButton"/>
+							    	<h:panelGroup rendered="#{SessionBean.user != null}">
+								      	<th class="free_area0_p8 endline itemSelectArea">
+								      		<h:panelGroup rendered="#{SessionBean.user != null}" styleClass="overlayMenu">
+								      			<h:panelGroup styleClass="menuHeader">
+												<input type="button" class="min_imgBtn checkboxSelectButton"/>
+											</h:panelGroup>
+											<h:panelGroup styleClass="menuBody" style="margin-left:-1em;">
+												<div class="large_area1 selectMenu">
+													<span class="medium_area0_p8">
+														<h:outputText value="#{lbl.select_albums}"/>
+													</span>
+													<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
+														<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
+													</h:commandLink>
+													<!-- <a class="large_area0 selectTotal"><span class="medium_area0_p8 tiny_marginLIncl">All</span></a>-->
+													<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
+														<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
+													</h:commandLink>
+												</div>
+											</h:panelGroup>
 										</h:panelGroup>
-										<h:panelGroup styleClass="menuBody" style="margin-left:-1em;">
-											<div class="large_area1 selectMenu">
-												<span class="medium_area0_p8">
-													<h:outputText value="#{lbl.select_albums}"/>
-												</span>
-												<h:commandLink action="#{paginatorListSessionBean.selectAll}" id="lnkSelectAll" title="#{lbl.select_all}" immediate="true" styleClass="large_area0 selectAll">
-													<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.all_on_page}"/></span>
-												</h:commandLink>
-												<!-- <a class="large_area0 selectTotal"><span class="medium_area0_p8 tiny_marginLIncl">All</span></a>-->
-												<h:commandLink action="#{paginatorListSessionBean.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="large_area0 selectNone">
-													<span class="medium_area0_p8 tiny_marginLIncl"><h:outputText value="#{lbl.none}"/></span>
-												</h:commandLink>
-											</div>
-										</h:panelGroup>
-									</h:panelGroup>
-									&#160;
-							      	</th>
-							      	
-							      	<th class="free_area0 endline status statusArea">
-							      		<span class="seperator"></span>
-							      		<h:commandLink id="lnkStateSort" styleClass="free_area0_p6" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'PROPERTIES_STATUS'}">
-											<f:setPropertyActionListener value="PROPERTIES_STATUS" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
-											<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
-											<h:outputText value="#{lbl.state}"/>
-										</h:commandLink>
-										<h:commandLink id="lnkStateSortAsc" styleClass="free_area0_p6 ascSort"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
-											<h:outputText id="txtSortBy2" styleClass="noDisplay" value="#{lbl.sort_by} "/>
-											<h:outputText value="#{lbl.state}"/>
-										</h:commandLink>
-										<h:commandLink id="lnkStateSortDesc" styleClass="free_area0_p6 desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
-											<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
-											<h:outputText value="#{lbl.state}"/>
-										</h:commandLink>
 										&#160;
-									</th>
+								      	</th>
+								      	
+								      	<th class="free_area0 endline status statusArea">
+								      		<span class="seperator"></span>
+								      		<h:commandLink id="lnkStateSort" styleClass="free_area0_p6" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'PROPERTIES_STATUS'}">
+												<f:setPropertyActionListener value="PROPERTIES_STATUS" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
+												<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+												<h:outputText value="#{lbl.state}"/>
+											</h:commandLink>
+											<h:commandLink id="lnkStateSortAsc" styleClass="free_area0_p6 ascSort"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
+												<h:outputText id="txtSortBy2" styleClass="noDisplay" value="#{lbl.sort_by} "/>
+												<h:outputText value="#{lbl.state}"/>
+											</h:commandLink>
+											<h:commandLink id="lnkStateSortDesc" styleClass="free_area0_p6 desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
+												<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
+												<h:outputText value="#{lbl.state}"/>
+											</h:commandLink>
+											&#160;
+										</th>
+									</h:panelGroup>
+										<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="large_area0">
+											<th class="large_area0 endline">
+											</th>
+										</h:panelGroup>
 									<th class="free_area0">
 							      		<span class="seperator"></span>
 							      		<h:commandLink id="lnkNameSort" styleClass="free_area0_p8 itemHeadline" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'CONTAINER_METADATA_TITLE'}">
@@ -140,10 +146,10 @@
 							     		<span class="seperator"></span>
 										<h:outputText styleClass="small_area0_p8" value="#{lbl.images}"/>
 							      	</th>
-							      	<th class="large_area0">
+							      	<th class="#{SessionBean.user != null ? 'large_area0' : 'double_area0'}">
 										<!-- Currently disabled bacause not possible to sort by this criterium at the moment -->
 										<span class="seperator"></span>
-										<h:outputText styleClass="large_area0_p8" value="#{lbl.description}"/>
+										<h:outputText styleClass="free_area0_p8" value="#{lbl.description}"/>
 								  	</th>
 							      	<th class="medium_area0">
 										<span class="seperator"></span>
@@ -161,10 +167,12 @@
 											<h:outputText value="#{lbl.last_modified}"/>
 										</h:commandLink>
 									</th>
-									<th class="medium_area0">
-										<span class="seperator"></span>
-										<h:outputText styleClass="free_area0_p8" value="#{lbl.active}"/>
-									</th>
+									<h:panelGroup rendered="#{SessionBean.user != null}" styleClass="large_area0">
+										<th class="medium_area0">
+											<span class="seperator"></span>
+											<h:outputText styleClass="free_area0_p8" value="#{lbl.active}"/>
+										</th>
+									</h:panelGroup>
 								</tr>
 							</thead>
 							
@@ -175,33 +183,42 @@
 									<h:panelGroup>
 									   
 									    <tr class="full_0area0 listItem #{container.active ? 'activeAlbum' : ''}">
-									      	
-									      	<td class="free_area0 endline">
-									      		<span class="free_area0_p8 endline itemSelectArea">
-													<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" value="#{container.selected}" rendered="#{container.deletable}" disabled="#{container.album.status=='RELEASED'}">
-														<f:ajax event="change"/>
-													</h:selectBooleanCheckbox>
-													&#160;
-									      		</span>
-									      	</td>
-									      	
-									      	<td class="free_area0 endline status">
-									      		<span class="seperator"></span>
-									      		<span class="free_area0_p0 endline statusArea">
-													<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.album.status == 'WITHDRAWN'}"/>
-													<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.album.status == 'PENDING'}"/>
-													<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.album.status == 'RELEASED'}"/>
-													<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'PENDING'}">
-														<h:outputText value="#{lbl['private']}"/>
-													</h:outputLabel>
-													<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'RELEASED'}">
-														<h:outputText value="#{lbl.published}"/>
-													</h:outputLabel>
-													<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'WITHDRAWN'}">
-														<h:outputText value="#{lbl.withdrawn}"/>
-													</h:outputLabel>
-												</span>
-									      	</td>
+									      	<h:panelGroup rendered="#{SessionBean.user != null}">
+										      	<td class="free_area0 endline">
+										      		<span class="free_area0_p8 endline itemSelectArea">
+														<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" value="#{container.selected}" rendered="#{container.deletable}" disabled="#{container.album.status=='RELEASED'}">
+															<f:ajax event="change"/>
+														</h:selectBooleanCheckbox>
+														&#160;
+										      		</span>
+										      	</td>
+									      
+										      	<td class="free_area0 endline status">
+										      		<span class="seperator"></span>
+										      		<span class="free_area0_p0 endline statusArea">
+														<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.album.status == 'WITHDRAWN'}"/>
+														<h:panelGroup styleClass="big_imgArea statusIcon pendingItem" rendered="#{container.album.status == 'PENDING'}"/>
+														<h:panelGroup styleClass="big_imgArea statusIcon releasedItem" rendered="#{container.album.status == 'RELEASED'}"/>
+														<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'PENDING'}">
+															<h:outputText value="#{lbl['private']}"/>
+														</h:outputLabel>
+														<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'RELEASED'}">
+															<h:outputText value="#{lbl.published}"/>
+														</h:outputLabel>
+														<h:outputLabel styleClass="medium_label endline" rendered="#{container.album.status == 'WITHDRAWN'}">
+															<h:outputText value="#{lbl.withdrawn}"/>
+														</h:outputLabel>
+													</span>
+										      	</td>
+									      	</h:panelGroup>
+									      	<h:panelGroup rendered="#{SessionBean.user == null}">
+										      	<td class="large_area0_p0 endline" >
+											      	<div class="imj_stack">							
+														<h:graphicImage style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;" 
+														value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}" alt="No files"/>
+													</div>
+										      	</td>
+										    </h:panelGroup>
 									      	
 									      	<td class="free_area0 endline">
 									      		<span class="seperator"></span>
@@ -228,7 +245,7 @@
 									      	
 									      	<td class="free_area0 endline">
 									      		<span class="seperator"></span>
-										      	<h:outputText styleClass="large_area0_p8" escape="false" title="#{container.smallDescription}" value="#{container.smallDescription} &#160;"/>
+										      	<h:outputText styleClass="#{SessionBean.user != null ? 'large_area0' : 'double_area0_p8'} " title="#{container.smallDescription}" value="#{container.smallDescription} &#160;"/>
 										    </td>
 									      	
 									      	<td class="free_area0 endline">
@@ -237,14 +254,16 @@
 									      			<h:outputText value="#{container.album.modified.time}"/>&#160;
 									      		</span>
 									      	</td>
-									      	<td class="free_area0 endline">
-									      		<span class="seperator"></span>
-									      		<span class="medium_area0_p8">
-									      			<h:commandLink value="#{lbl.make_active}" action="#{container.makeActive}" rendered="#{!container.active and container.album.status=='PENDING' and container.editable}"/>
-									      			<h:outputText value="Only View allowed" rendered="#{!container.active and container.album.status=='PENDING' and !container.editable}"/>
-									      			<h:commandLink value="#{lbl.make_inactive}" action="#{container.makeInactive}" rendered="#{container.active}"/>
-									      		</span>
-									      	</td>
+									      	<h:panelGroup rendered="#{SessionBean.user != null}" styleClass="large_area0">
+										      	<td class="free_area0 endline">
+										      		<span class="seperator"></span>
+										      		<span class="medium_area0_p8">
+										      			<h:commandLink value="#{lbl.make_active}" action="#{container.makeActive}" rendered="#{!container.active and container.album.status=='PENDING' and container.editable}"/>
+										      			<h:outputText value="Only View allowed" rendered="#{!container.active and container.album.status=='PENDING' and !container.editable}"/>
+										      			<h:commandLink value="#{lbl.make_inactive}" action="#{container.makeInactive}" rendered="#{container.active}"/>
+										      		</span>
+										      	</td>
+									      	</h:panelGroup>
 									    </tr>
 									</h:panelGroup>
 								</ui:repeat>

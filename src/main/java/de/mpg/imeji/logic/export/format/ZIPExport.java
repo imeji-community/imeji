@@ -29,7 +29,6 @@
 package de.mpg.imeji.logic.export.format;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -60,10 +59,6 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class ZIPExport extends Export
 {
-    private String[] filteredTriples = { "http://imeji.org/terms/metadata/pos",
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://imeji.org/terms/metadata/id",
-            "http://imeji.org/terms/id", "http://imeji.org/terms/metadata/searchValue",
-            "http://purl.org/escidoc/metadata/profiles/0.1/pos", "http://imeji.org/terms/fulltext" };
     protected List<String> filteredResources = new ArrayList<String>();
     protected String modelURI;
 

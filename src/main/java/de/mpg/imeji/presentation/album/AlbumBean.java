@@ -64,6 +64,7 @@ public class AlbumBean
      * A small description when the description of the {@link Album} is too large for the list view
      */
     private String smallDescription = null;
+    private ThumbnailBean thumbnail;
 
     /**
      * Construct an {@link AlbumBean} from an {@link Album}
@@ -85,6 +86,19 @@ public class AlbumBean
         if (smallDescription != null && smallDescription.length() > DESCRIPTION_MAX_SIZE)
         {
             smallDescription = smallDescription.substring(0, DESCRIPTION_MAX_SIZE) + "...";
+        }
+        // Init the thumbnail
+        if (!album.getImages().isEmpty())
+        {
+            ItemController ic = new ItemController();
+            try
+            {
+                thumbnail = new ThumbnailBean(ic.retrieve(album.getImages().iterator().next()));
+            }
+            catch (Exception e)
+            {
+                logger.error("Erro loading thumbnail of album", e);
+            }
         }
     }
 
@@ -702,5 +716,25 @@ public class AlbumBean
     {
         Authorization auth = new Authorization();
         return auth.isContainerAdmin(sessionBean.getUser(), album);
+    }
+
+    /**
+     * getter
+     * 
+     * @return the thumbnail
+     */
+    public ThumbnailBean getThumbnail()
+    {
+        return thumbnail;
+    }
+
+    /**
+     * setter
+     * 
+     * @param thumbnail the thumbnail to set
+     */
+    public void setThumbnail(ThumbnailBean thumbnail)
+    {
+        this.thumbnail = thumbnail;
     }
 }

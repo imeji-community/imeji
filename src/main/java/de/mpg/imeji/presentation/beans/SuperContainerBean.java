@@ -90,13 +90,13 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     protected void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(SearchIndex.names.status.name(), sb.getLabel("sort_status")));
         sortMenu.add(new SelectItem(SearchIndex.names.cont_title.name(), sb.getLabel("sort_title")));
         sortMenu.add(new SelectItem(SearchIndex.names.modified.name(), sb.getLabel("sort_date_mod")));
         filterMenu = new ArrayList<SelectItem>();
         filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
         if (sb.getUser() != null)
         {
+            sortMenu.add(new SelectItem(SearchIndex.names.status.name(), sb.getLabel("sort_status")));
             filterMenu.add(new SelectItem("my", sb.getLabel("my_except_withdrawn")));
             filterMenu.add(new SelectItem("private", sb.getLabel("only_private")));
         }

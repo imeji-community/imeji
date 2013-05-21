@@ -53,7 +53,7 @@ public class ExportServlet extends HttpServlet
             //TODO replace imeji with instance name when set in conf
             String exportName = "imeji_";
             
-            exportName += new Date().toString().replace(" ", "_");
+            exportName += new Date().toString().replace(" ", "_").replace(":", "-");
             
             if (exportManager.getContentType().equalsIgnoreCase("application/xml"))
             {

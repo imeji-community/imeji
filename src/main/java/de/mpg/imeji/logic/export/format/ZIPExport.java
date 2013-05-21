@@ -68,41 +68,44 @@ public class ZIPExport extends Export
     protected String modelURI;
 
     /**
-     * 
      * @param type
      * @return
      * @throws HttpResponseException
      */
-    public ZIPExport (String type) throws HttpResponseException
+    public ZIPExport(String type) throws HttpResponseException
     {
-    	boolean supported = false;
+        boolean supported = false;
         if ("image".equalsIgnoreCase(type))
         {
-        	modelURI = ImejiJena.imageModel;
-        	supported = true;
+            modelURI = ImejiJena.imageModel;
+            supported = true;
         }
         if (!supported)
         {
-        	throw new HttpResponseException(400, "Type " + type + " is not supported.");
+            throw new HttpResponseException(400, "Type " + type + " is not supported.");
         }
     }
-    
+
     public void init()
     {
-
     }
 
-	@Override
-	public void export(OutputStream out, SearchResult sr) {
-        try {
-			exportAllImages(sr, out);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-	}
-    
-    /* (non-Javadoc)
+    @Override
+    public void export(OutputStream out, SearchResult sr)
+    {
+        try
+        {
+            exportAllImages(sr, out);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     * (non-Javadoc)
      * @see de.mpg.imeji.logic.export.Export#getContentType()
      */
     @Override
@@ -111,57 +114,55 @@ public class ZIPExport extends Export
         return "application/zip";
     }
 
-	protected void filterResources(SearchResult sr, User user) {
-		// TODO Auto-generated method stub
-		
-	}
-	
+    protected void filterResources(SearchResult sr, User user)
+    {
+        // TODO Auto-generated method stub
+    }
+
     /**
      * This method exports all images of the current browse page as a zip file
-     * @throws Exception 
-     * @throws URISyntaxException 
+     * 
+     * @throws Exception
+     * @throws URISyntaxException
      */
     public void exportAllImages(SearchResult sr, OutputStream out) throws URISyntaxException, Exception
     {
         List<String> source = sr.getResults();
-        
-        try {
+        try
+        {
             // Create the ZIP file
             ZipOutputStream zip = new ZipOutputStream(out);
-        
-            for (int i=0; i<source.size(); i++) {
-            	
+            for (int i = 0; i < source.size(); i++)
+            {
                 SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
                 ItemController ic = new ItemController(session.getUser());
-            	
-                Item item = ic.retrieve(new URI(source.get(i))); 
+                Item item = ic.retrieve(new URI(source.get(i)));
                 StorageController sc = new StorageController();
-
                 try
                 {
-                	zip.putNextEntry(new ZipEntry(item.getFilename()));               	
+                    zip.putNextEntry(new ZipEntry(item.getFilename()));
                     sc.read(item.getFullImageUrl().toString(), zip, false);
-
                     // Complete the entry
                     zip.closeEntry();
                 }
-                catch (ZipException ze) {
-                	if (ze.getMessage().contains("duplicate entry"))
-                	{
-                		String name = i + "_" + item.getFilename();
-                    	zip.putNextEntry(new ZipEntry(name));               	
+                catch (ZipException ze)
+                {
+                    if (ze.getMessage().contains("duplicate entry"))
+                    {
+                        String name = i + "_" + item.getFilename();
+                        zip.putNextEntry(new ZipEntry(name));
                         sc.read(item.getFullImageUrl().toString(), zip, false);
-
                         // Complete the entry
                         zip.closeEntry();
-                	}
+                    }
                 }
-            }      
+            }
             // Complete the ZIP file
             zip.close();
-            
-        } 
-        catch (IOException e) {e.printStackTrace();}
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
-
 }

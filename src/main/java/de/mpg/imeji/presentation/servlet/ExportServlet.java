@@ -41,29 +41,25 @@ public class ExportServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
-        //String query = req.getParameter("q");
-        User user = getSessionBean(req, resp).getUser();
-      //  SearchQuery searchQuery = new SearchQuery();
-        
+        // String query = req.getParameter("q");
+        SessionBean session = getSessionBean(req, resp);
+        User user = session.getUser();
+        String instanceName = session.getInstanceName();
+        // SearchQuery searchQuery = new SearchQuery();
         try
         {
-            //searchQuery = URLQueryTransformer.parseStringQuery(query);
+            // searchQuery = URLQueryTransformer.parseStringQuery(query);
             ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap());
-            
-            //TODO replace imeji with instance name when set in conf
-            String exportName = "imeji_";
-            
+            String exportName = instanceName + "_";
             exportName += new Date().toString().replace(" ", "_").replace(":", "-");
-            
             if (exportManager.getContentType().equalsIgnoreCase("application/xml"))
             {
-            	exportName += ".xml";
+                exportName += ".xml";
             }
             if (exportManager.getContentType().equalsIgnoreCase("application/zip"))
             {
-            	exportName += ".zip";
+                exportName += ".zip";
             }
-            
             resp.setHeader("Connection", "close");
             resp.setHeader("Content-Type", exportManager.getContentType());
             resp.setHeader("Content-disposition", "filename=" + exportName);

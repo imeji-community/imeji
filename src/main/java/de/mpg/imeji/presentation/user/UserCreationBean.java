@@ -135,7 +135,7 @@ public class UserCreationBean
         EmailMessages emailMessages = new EmailMessages();
         try
         {
-            emailClient.sendMail(user.getEmail(), null, sb.getMessage("email_new_user_subject"),
+            emailClient.sendMail(user.getEmail(), null, emailMessages.getEmailSubject(true),
                     emailMessages.getNewAccountMessage(password, user.getEmail(), user.getName()));
         }
         catch (Exception e)

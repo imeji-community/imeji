@@ -99,7 +99,7 @@ public class UsersBean
         EmailMessages emailMessages = new EmailMessages();
         try
         {
-            emailClient.sendMail(email, null, session.getMessage("email_new_password_subject"),
+            emailClient.sendMail(email, null, emailMessages.getEmailSubject(false),
                     emailMessages.getNewPasswordMessage(password, email, username));
         }
         catch (Exception e)

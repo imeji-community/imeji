@@ -17,7 +17,6 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
@@ -185,10 +184,10 @@ public class ShareBean
             shared = sm.share(retrieveProfile(id), session.getUser(), email, selectedGrant, true);
             message = session.getLabel("profile") + " " + id + " " + session.getLabel("shared_with") + " " + email
                     + " " + session.getLabel("share_as") + " " + role;
-            //Add grant VIEWER so the user can see the collection
+            // Add grant VIEWER so the user can see the collection
             if (GrantType.PROFILE_EDITOR.equals(selectedGrant))
             {
-            	shared = sm.share(retrieveCollection(id), session.getUser(), email, GrantType.VIEWER, true);
+                shared = sm.share(retrieveCollection(id), session.getUser(), email, GrantType.VIEWER, true);
             }
         }
         if (shared)
@@ -264,7 +263,8 @@ public class ShareBean
         EmailClient emailClient = new EmailClient();
         try
         {
-            emailClient.sendMail(dest.getEmail(), null, subject, message);
+            emailClient.sendMail(dest.getEmail(), null,
+                    subject.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName()), message);
         }
         catch (Exception e)
         {
@@ -288,66 +288,134 @@ public class ShareBean
         return navigation.getCollectionUrl() + id;
     }
 
+    /**
+     * Retrieve the collection to share with the specified Id in the url
+     * 
+     * @param id
+     * @return
+     */
     public CollectionImeji retrieveCollection(String id)
     {
         return ObjectLoader.loadCollectionLazy(URI.create(id), session.getUser());
     }
 
+    /**
+     * Retrieve the profile to share with the specified collection Id in the url
+     * 
+     * @param collId
+     * @return
+     */
     public MetadataProfile retrieveProfile(String collId)
     {
         return ObjectLoader.loadProfile(retrieveCollection(collId).getProfile(), session.getUser());
     }
 
+    /**
+     * Retrieve the album to share with the specified Id in the url
+     * 
+     * @param albId
+     * @return
+     */
     public Album retrieveAlbum(String albId)
     {
         return ObjectLoader.loadAlbumLazy(URI.create(albId), session.getUser());
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getEmail()
     {
         return email;
     }
 
+    /**
+     * setter
+     * 
+     * @param email
+     */
     public void setEmail(String email)
     {
         this.email = email;
     }
 
+    /**
+     * gettet
+     * 
+     * @return
+     */
     public GrantType getSelectedGrant()
     {
         return selectedGrant;
     }
 
+    /**
+     * setter
+     * 
+     * @param selectedGrant
+     */
     public void setSelectedGrant(GrantType selectedGrant)
     {
         this.selectedGrant = selectedGrant;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getColId()
     {
         return colId;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<SelectItem> getGrantsMenu()
     {
         return grantsMenu;
     }
 
+    /**
+     * setter
+     * 
+     * @param grantsMenu
+     */
     public void setGrantsMenu(List<SelectItem> grantsMenu)
     {
         this.grantsMenu = grantsMenu;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public Container getContainer()
     {
         return container;
     }
 
+    /**
+     * setter
+     * 
+     * @param container
+     */
     public void setContainer(Container container)
     {
         this.container = container;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean isAlbum()
     {
         return this.isAlbum;

@@ -133,6 +133,7 @@
 							</h:panelGroup>
 							<h:panelGroup id="singleEditPanel" style="border-width:0px;" styleClass="free_area0" bodyClass="free_area0" headerClass="free_area0">
 							 	<h:panelGroup layout="block" rendered="#{imageBean.edit.toggleState == 'displayMd'}">
+							 		<ui:remove>
 							 		<ui:repeat var="statement" value="#{imageBean.edit.profile.statements}" rows="0">
 									 	<ui:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0">
 									 		<h:panelGroup rendered="#{md.statement == statement.id}" styleClass="free_area0 endline itemLine noTopBorder">
@@ -149,6 +150,21 @@
 												<br/>
 											</h:panelGroup>
 										</ui:repeat>
+									</ui:repeat>
+									</ui:remove>
+									<ui:repeat var="metadata" value="#{imageBean.mds.metadata}" rows="0">
+										<h:panelGroup styleClass="free_Area0">
+											<b class="xLarge_area0_p8 endline labelLine clear" style="margin-left: #{metadata.hierarchyLevel}em ">
+												<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement]}" /> 
+												<span class="noDisplay">: </span>
+											</b>
+											<h:panelGroup layout="block"
+													styleClass="double_area0_p2 xTiny_marginLExcl endline">
+												<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
+													<ui:param name="md" value="#{metadata}" />
+												</ui:include>
+											</h:panelGroup>
+										</h:panelGroup>
 									</ui:repeat>
 								</h:panelGroup>
 								<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">

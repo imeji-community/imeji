@@ -1,11 +1,16 @@
 package de.mpg.imeji.presentation.metadata;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 
 /**
@@ -15,8 +20,23 @@ import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
  */
 public class SuperMetadataBean
 {
+    /**
+     * The {@link Metadata} defined within thie {@link SuperMetadataBean}
+     */
     private Metadata metadata;
+    /**
+     * The position of the {@link Metadata} in the {@link MetadataSet}
+     */
     private int pos = 0;
+    /**
+     * The parent {@link SuperMetadataBean} (i.e {@link Metadata}), according to what is defined in the
+     * {@link MetadataProfile}
+     */
+    private SuperMetadataBean parent = null;
+    /**
+     * Define how many parents this {@link Metadata} has until the highest parent
+     */
+    private int hierarchyLevel = 0;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -57,71 +77,141 @@ public class SuperMetadataBean
         return metadata;
     }
 
+    /**
+     * getter for the {@link Statement} defining this {@link Metadata}
+     * 
+     * @return
+     */
     public URI getStatement()
     {
         return metadata.getStatement();
     }
 
+    /**
+     * getter for the namespace defining the type of the {@link Metadata}
+     * 
+     * @return
+     */
     public String getTypeNamespace()
     {
         return metadata.getTypeNamespace();
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getText()
     {
         return text;
     }
 
+    /**
+     * setter
+     * 
+     * @param text
+     */
     public void setText(String text)
     {
         this.text = text;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public Person getPerson()
     {
         return person;
     }
 
+    /**
+     * setter
+     * 
+     * @param person
+     */
     public void setPerson(Person person)
     {
         this.person = person;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public URI getConeId()
     {
         return coneId;
     }
 
+    /**
+     * setter
+     * 
+     * @param coneId
+     */
     public void setConeId(URI coneId)
     {
         this.coneId = coneId;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public URI getUri()
     {
         return uri;
     }
 
+    /**
+     * setter
+     * 
+     * @param uri
+     */
     public void setUri(URI uri)
     {
         this.uri = uri;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getLabel()
     {
         return label;
     }
 
+    /**
+     * setter
+     * 
+     * @param label
+     */
     public void setLabel(String label)
     {
         this.label = label;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getDate()
     {
         return date;
     }
 
+    /**
+     * setter
+     * 
+     * @param date
+     */
     public void setDate(String date)
     {
         if (date != null && !"".equals(date))
@@ -132,81 +222,161 @@ public class SuperMetadataBean
         this.date = date;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public double getLongitude()
     {
         return longitude;
     }
 
+    /**
+     * setter
+     * 
+     * @param longitude
+     */
     public void setLongitude(double longitude)
     {
         this.longitude = longitude;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public double getLatitude()
     {
         return latitude;
     }
 
+    /**
+     * setter
+     * 
+     * @param latitude
+     */
     public void setLatitude(double latitude)
     {
         this.latitude = latitude;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * setter
+     * 
+     * @param name
+     */
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getExportFormat()
     {
         return exportFormat;
     }
 
+    /**
+     * setter
+     * 
+     * @param exportFormat
+     */
     public void setExportFormat(String exportFormat)
     {
         this.exportFormat = exportFormat;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getCitation()
     {
         return citation;
     }
 
+    /**
+     * setter
+     * 
+     * @param citation
+     */
     public void setCitation(String citation)
     {
         this.citation = citation;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public double getNumber()
     {
         return number;
     }
 
+    /**
+     * setter
+     * 
+     * @param number
+     */
     public void setNumber(double number)
     {
         this.number = number;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getLicense()
     {
         return license;
     }
 
+    /**
+     * setter
+     * 
+     * @param license
+     */
     public void setLicense(String license)
     {
         this.license = license;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public int getPos()
     {
         return pos;
     }
 
+    /**
+     * setter
+     * 
+     * @param pos
+     */
     public void setPos(int pos)
     {
         this.pos = pos;
@@ -226,5 +396,47 @@ public class SuperMetadataBean
     public void setExternalUri(URI externalUri)
     {
         this.externalUri = externalUri;
+    }
+
+    /**
+     * setter
+     * 
+     * @param parent the parent to set
+     */
+    public void setParent(SuperMetadataBean parent)
+    {
+        this.parent = parent;
+        if (parent != null)
+            this.hierarchyLevel = parent.getHierarchyLevel() + 1;
+    }
+
+    /**
+     * getter
+     * 
+     * @return the parent
+     */
+    public SuperMetadataBean getParent()
+    {
+        return parent;
+    }
+
+    /**
+     * getter
+     * 
+     * @return the hierarchyLevel
+     */
+    public int getHierarchyLevel()
+    {
+        return hierarchyLevel;
+    }
+
+    /**
+     * setter
+     * 
+     * @param hierarchyLevel the hierarchyLevel to set
+     */
+    public void setHierarchyLevel(int hierarchyLevel)
+    {
+        this.hierarchyLevel = hierarchyLevel;
     }
 }

@@ -1,39 +1,8 @@
-<div xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-<ui:remove>
-	  <!--  
-            CDDL HEADER START
-
-            The contents of this file are subject to the terms of the
-            Common Development and Distribution License, Version 1.0 only
-            (the "License"). You may not use this file except in compliance
-            with the License.
-
-            You can obtain a copy of the license at license/ESCIDOC.LICENSE
-            or http://www.escidoc.de/license.
-            See the License for the specific language governing permissions
-            and limitations under the License.
-
-            When distributing Covered Code, include this CDDL HEADER in each
-            file and include the License file at license/ESCIDOC.LICENSE.
-            If applicable, add the following below this CDDL HEADER, with the
-            fields enclosed by brackets "[]" replaced with your own identifying
-            information: Portions Copyright [yyyy] [name of copyright owner]
-
-            CDDL HEADER END
-
-
-            Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
-          	 fï¿½r wissenschaftlich-technische Information mbH and Max-Planck-
-            Gesellschaft zur Fï¿½rderung der Wissenschaft e.V.
-            All rights reserved. Use is subject to license terms.
--->
-</ui:remove>
-
-
-<f:subview id="MetadataOuptut">
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
 	<h:panelGroup layout="block" styleClass="free_area0">
 		<h:panelGroup layout="block" styleClass="free_area0_p0 endline">
 			<h:outputText styleClass="free_area0" value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text' and md.text != null  }"/>
@@ -68,6 +37,4 @@
 			</h:panelGroup>
 		</h:panelGroup>
 	</h:panelGroup>
-	
-</f:subview>
-</div>
+</ui:composition>

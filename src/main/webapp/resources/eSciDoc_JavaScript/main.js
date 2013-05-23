@@ -1,3 +1,43 @@
+/**
+ * Highlight the element wit th id passed in the parameter. If it has children
+ * hightlight them. This method should be triggered on mouse over. This element
+ * is then recognized by the css class "id_ +id"
+ * 
+ * @param id
+ */
+function highlight(id) {
+	jQuery('.id_' + id).css('background-color', '#292929');
+	highlight_childs(id);
+}
+/**
+ * Higlight the child of an element defined by the id passed in the parameters.
+ * the children are recognized when they defined the css class 'parent_ + id'
+ * 
+ * @param id
+ */
+function highlight_childs(id) {
+	var childs = jQuery('.parent_' + id);
+	childs.css('background-color', '#494949');
+	childs.each(function() {
+		var childId = jQuery(this).attr('class').split(' ')[1].substring(3);
+		highlight_childs(childId);
+	});
+}
+/**
+ * Reset higlighted element to their original value. Sould be triggered on mouse
+ * out
+ */
+function reset_highlight() {
+	jQuery('.highlight_area').css('background-color', '');
+}
+
+/**
+ * 
+ * @param suggestionBox
+ * @param index
+ * @param pos
+ * @param type
+ */
 function autosuggestGoogleGeoAPI(suggestionBox, index, pos, type) {
 	var items = suggestionBox.getSelectedItems();
 	var address, longitude, latitude;

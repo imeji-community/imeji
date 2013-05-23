@@ -88,6 +88,16 @@ public class SuperMetadataBean
     }
 
     /**
+     * Retun the id (last part of the {@link URI}) of the {@link Statement}. Used for GUI representation
+     * 
+     * @return
+     */
+    public String getStatementId()
+    {
+        return ObjectHelper.getId(getStatement());
+    }
+
+    /**
      * getter for the namespace defining the type of the {@link Metadata}
      * 
      * @return

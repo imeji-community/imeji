@@ -153,24 +153,23 @@
 									</ui:repeat>
 									</ui:remove>
 									<ui:repeat var="metadata" value="#{imageBean.mds.metadata}" rows="0">
-										<h:panelGroup styleClass="free_Area0">
-											<b class="xLarge_area0_p8 endline labelLine clear" style="margin-left: #{metadata.hierarchyLevel}em ">
+										<div class="full_area0_p4 id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area" onmouseover="highlight('#{metadata.statementId}');" onmouseout="reset_highlight();">
+											<b class="xLarge_area0_p8 endline labelLine clear" style="margin-left: #{metadata.hierarchyLevel}em;">
 												<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement]}" /> 
 												<span class="noDisplay">: </span>
 											</b>
-											<h:panelGroup layout="block"
-													styleClass="double_area0_p2 xTiny_marginLExcl endline">
+											<div class="double_area0_p2 xTiny_marginLExcl endline">
 												<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
 													<ui:param name="md" value="#{metadata}" />
 												</ui:include>
-											</h:panelGroup>
-										</h:panelGroup>
+											</div>
+										</div>
 									</ui:repeat>
 								</h:panelGroup>
 								<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">
 									<ui:repeat id="statementList" var="statement" value="#{imageBean.edit.profile.statements}" rows="0" varStatus="indexStatement">
 										<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-											<b class="xLarge_area0_p8 endline labelLine clear">
+											<b class="xLarge_area0_p8 endline labelLine clear" >
 												<h:outputText value="#{MetadataLabels.internationalizedLabels[statement.id]}"/>
 												<span class="noDisplay">: </span> 
 											</b>
@@ -324,6 +323,7 @@
 				// return qr.createTableTag();
 				return qr.createImgTag();
 			};
+			
 		</script>
 	</ui:define>
 </ui:composition>

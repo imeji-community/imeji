@@ -12,6 +12,7 @@ import javax.faces.model.SelectItem;
 import com.hp.hpl.jena.util.Metadata;
 
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.mdProfile.MdProfileBean;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -115,6 +116,28 @@ public class StatementWrapper
             statement.setVocabulary(URI.create(vocabularyString));
         }
         return statement;
+    }
+
+    /**
+     * Return the id of the {@link Statement} (i.e. the last part of the {@link URI})
+     * 
+     * @return
+     */
+    public String getStatementId()
+    {
+        return ObjectHelper.getId(statement.getId());
+    }
+
+    /**
+     * Return the id of the parent of the current {@link Statement}
+     * 
+     * @return
+     */
+    public String getParentId()
+    {
+        if (statement.getParent() != null)
+            return ObjectHelper.getId(statement.getParent());
+        return null;
     }
 
     /**

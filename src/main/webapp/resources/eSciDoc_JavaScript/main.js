@@ -18,10 +18,14 @@ function highlight(id) {
 function highlight_childs(id) {
 	var childs = jQuery('.parent_' + id);
 	childs.css('background-color', '#494949');
-	childs.each(function() {
-		var childId = jQuery(this).attr('class').split(' ')[1].substring(3);
-		highlight_childs(childId);
-	});
+	childs
+			.each(function() {
+				// find all non space character after the string "id_"
+				var pattern = new RegExp("id_" + "\\S*");
+				var childId = jQuery(this).attr('class').match(pattern)[0]
+						.substring(3);
+				highlight_childs(childId);
+			});
 }
 /**
  * Reset higlighted element to their original value. Sould be triggered on mouse

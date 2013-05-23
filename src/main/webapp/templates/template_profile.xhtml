@@ -93,7 +93,7 @@
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
 								
 	                            <div id="metadata" style="margin-left:#{wrapper.level}px; margin-top:10px" 
-	                            class="full_area0_p0 id_#{wrapper.statementId}  parent_#{wrapper.parentId} highlight_area noTopBorder draggable dropChild "
+	                            class="full_area0_p0  noTopBorder draggable dropChild id_#{wrapper.statementId}  parent_#{wrapper.parentId} highlight_area"
 	                            onmouseover="highlight('#{wrapper.statementId}');" onmouseout="reset_highlight();">
 	                            	<div class="free_area0">
 										<h:outputText styleClass="full_area0" value="Add Child here" style="display:none;"/>

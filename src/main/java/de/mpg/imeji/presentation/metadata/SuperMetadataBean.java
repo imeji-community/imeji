@@ -37,6 +37,10 @@ public class SuperMetadataBean
      * Define how many parents this {@link Metadata} has until the highest parent
      */
     private int hierarchyLevel = 0;
+    /**
+     * True if the {@link Metadata} has no value defined
+     */
+    private boolean empty = false;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -62,6 +66,7 @@ public class SuperMetadataBean
     public SuperMetadataBean(Metadata metadata)
     {
         this.metadata = metadata;
+        this.empty = MetadataHelper.isEmpty(metadata);
         ObjectHelper.copyFields(metadata, this);
     }
 
@@ -448,5 +453,15 @@ public class SuperMetadataBean
     public void setHierarchyLevel(int hierarchyLevel)
     {
         this.hierarchyLevel = hierarchyLevel;
+    }
+
+    /**
+     * getter
+     * 
+     * @return the empty
+     */
+    public boolean isEmpty()
+    {
+        return empty;
     }
 }

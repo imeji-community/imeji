@@ -4,9 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 	<ui:define name="mainContent">	
-	
 		<h:form id="profileForm">
-		
 			<h:panelGroup layout="block" styleClass="full_area0">
 				<h:panelGroup layout="block" styleClass="full_area0">					
 					<h:panelGroup layout="block" styleClass="full_area0">
@@ -88,13 +86,13 @@
 											 document.getElementById(id).click();
 										 	}
 										 });
+									
 									});
+								 highlighter();
 							</script>
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
-								
-	                            <div id="metadata" style="margin-left:#{wrapper.level}px; margin-top:10px" 
-	                            class="full_area0_p0  noTopBorder draggable dropChild id_#{wrapper.statementId}  parent_#{wrapper.parentId} highlight_area"
-	                            onmouseover="highlight('#{wrapper.statementId}');" onmouseout="reset_highlight();">
+	                            <h:panelGroup layout="block" id="metadata" style="margin-left:#{wrapper.level}px; margin-top:10px" 
+	                            class="full_area0_p0 noTopBorder draggable dropChild id_#{wrapper.statementId}  parent_#{wrapper.parentId} highlight_area">
 	                            	<div class="free_area0">
 										<h:outputText styleClass="full_area0" value="Add Child here" style="display:none;"/>
 										<h:commandButton  id="dropChildButton" value="Insert metadata" action="#{FormularBean.insertChild}" style="display:none;">
@@ -255,7 +253,7 @@
 										</span>
 									</h:panelGroup>
 									</div>
-								</div>
+								</h:panelGroup>
 								<h:panelGroup id="dropMetadata" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8 dropMetadata">
 									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
 									<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{FormularBean.insertMetadata}" style="display:none;">

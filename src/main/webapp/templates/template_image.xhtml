@@ -153,17 +153,19 @@
 									</ui:repeat>
 									</ui:remove>
 									<ui:repeat var="metadata" value="#{imageBean.mds.metadata}" rows="0">
-										<div class="full_area0_p4 id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area" onmouseover="highlight('#{metadata.statementId}');" onmouseout="reset_highlight();">
-											<b class="xLarge_area0_p8 endline labelLine clear" style="margin-left: #{metadata.hierarchyLevel}em;">
-												<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement]}" /> 
-												<span class="noDisplay">: </span>
-											</b>
-											<div class="double_area0_p2 xTiny_marginLExcl endline">
-												<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
-													<ui:param name="md" value="#{metadata}" />
-												</ui:include>
+										<h:panelGroup rendered="#{!metadata.isEmpty()}">
+											<div class="full_area0_p4 id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area">
+												<b class="xLarge_area0_p8 endline labelLine clear" style="margin-left: #{metadata.hierarchyLevel}em;">
+													<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement]}" /> 
+													<span class="noDisplay">: </span>
+												</b>
+												<div class="double_area0_p2 xTiny_marginLExcl endline">
+													<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
+														<ui:param name="md" value="#{metadata}" />
+													</ui:include>
+												</div>
 											</div>
-										</div>
+										</h:panelGroup>
 									</ui:repeat>
 								</h:panelGroup>
 								<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">
@@ -311,7 +313,10 @@
 		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"/>
 		<script>
 			jQuery(document).ready(function() {
-				document.getElementById('qr').innerHTML = create_qrcode(document.URL);
+				var qrHtml = document.getElementById('qr');
+				if (qrHtml != null){
+					qrHtml.innerHTML = create_qrcode(document.URL);
+				}
 			});
 			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
 				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );

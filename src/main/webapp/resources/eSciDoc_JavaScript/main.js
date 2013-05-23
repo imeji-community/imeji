@@ -1,6 +1,24 @@
 /**
+ * JQuery event for Highlight methods
+ */
+function highlighter() {
+	jQuery(function() {
+		jQuery(".highlight_area").mouseover(function() {
+			highlight(parseId(jQuery(this).attr('class')));
+		}).mouseout(function() {
+			reset_highlight();
+		});
+	});
+}
+/**
+ * Trigger the highlight on page load
+ */
+jQuery(document).ready(function() {
+	highlighter();
+});
+/**
  * Highlight the element wit th id passed in the parameter. If it has children
- * hightlight them. This method should be triggered on mouse over. This element
+ * highlight them. This method should be triggered on mouse over. This element
  * is then recognized by the css class "id_ +id"
  * 
  * @param id
@@ -10,7 +28,7 @@ function highlight(id) {
 	highlight_childs(id);
 }
 /**
- * Higlight the child of an element defined by the id passed in the parameters.
+ * Highlight the child of an element defined by the id passed in the parameters.
  * the children are recognized when they defined the css class 'parent_ + id'
  * 
  * @param id
@@ -18,21 +36,28 @@ function highlight(id) {
 function highlight_childs(id) {
 	var childs = jQuery('.parent_' + id);
 	childs.css('background-color', '#494949');
-	childs
-			.each(function() {
-				// find all non space character after the string "id_"
-				var pattern = new RegExp("id_" + "\\S*");
-				var childId = jQuery(this).attr('class').match(pattern)[0]
-						.substring(3);
-				highlight_childs(childId);
-			});
+	childs.each(function() {
+		// find all non space character after the string "id_"
+		var childId = parseId(jQuery(this).attr('class'));
+		highlight_childs(childId);
+	});
 }
 /**
- * Reset higlighted element to their original value. Sould be triggered on mouse
- * out
+ * Reset highlighted element to their original value. Sould be triggered on
+ * mouse out
  */
 function reset_highlight() {
 	jQuery('.highlight_area').css('background-color', '');
+}
+/**
+ * Parse the id define in the css class by id_class
+ * 
+ * @param classname
+ * @returns
+ */
+function parseId(classname) {
+	var pattern = new RegExp("id_" + "\\S*");
+	return classname.match(pattern)[0].substring(3);
 }
 
 /**

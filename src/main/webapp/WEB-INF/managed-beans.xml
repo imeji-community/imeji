@@ -250,6 +250,11 @@
 		<managed-bean-class>de.mpg.imeji.presentation.beans.StartPageBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>AuthorizationBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.AuthorizationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	<converter>
 		<converter-id>DoubleConverter</converter-id>
 		<converter-class>de.mpg.imeji.presentation.converter.DoubleConverter</converter-class>

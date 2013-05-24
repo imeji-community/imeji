@@ -14,7 +14,9 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.ingest.controller.IngestController;
+import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.presentation.beans.AuthorizationBean;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -50,6 +52,7 @@ public class IngestBean
         if (UrlHelper.getParameterBoolean("init"))
         {
             loadCollection();
+            ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(collection);
         }
         else if ("itemlist".equals(UrlHelper.getParameterValue("start")))
         {

@@ -146,7 +146,7 @@
 												<ui:repeat id="labels" var="label" value="#{wrapper.statement.labels}" varStatus="labelPosition">
 													<h:panelGroup styleClass="free_area0 xSmall_marginRIncl">
 														<h:inputText id="inputLabel" value="#{label.value}" styleClass="xLarge_txtInput"/>
-														<h:panelGroup rendered="#{statement.labelsCount > 1}">
+														<h:panelGroup rendered="#{wrapper.labelsCount > 1}">
 															<h:commandButton styleClass="min_imgBtn remove" title="#{lbl.label_remove}"  action="#{FormularBean.removeLabel}">
 																<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 																<f:setPropertyActionListener value="#{labelPosition.index}" target="#{FormularBean.labelPosition}"/>

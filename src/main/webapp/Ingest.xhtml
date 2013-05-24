@@ -13,7 +13,7 @@
 			
 			<h:outputText styleClass="imj_contentMenuSeparator" />
 			
-			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{IngestBean.collectionId}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{IngestBean.collectionId}/#{Navigation.browsePath}?q=" rendered="#{IngestBean.collectionSize > 0}">
 				<h:outputText value="#{lbl.view_images}"/>
 			</h:outputLink>
 			
@@ -62,6 +62,17 @@
 							title : "Item list xml", 
 							extensions : "xml,XML"}
 						],
+						init : {
+							 StateChanged: function(up) {
+									// Called when the state of the queue is changed
+									if( up.state == plupload.STOPPED){
+										report();
+									}
+									if( up.state == plupload.STARTED){
+										openDialog('dialogWait');
+									}
+								},
+						 }
 						});
 				});
 
@@ -81,45 +92,24 @@
 							title : "Item list xml", 
 							extensions : "xml,XML"}
 						],
+						init : {
+							 StateChanged: function(up) {
+									// Called when the state of the queue is changed
+									if( up.state == plupload.STOPPED){
+										report();
+									}
+									if( up.state == plupload.STARTED){
+										openDialog('dialogWait');
+									}
+								},
+						 }
 						});
 				});
+
+				function report(){
+					window.location.href = location.pathname + "?done=1";
+				}
 				
-				function getUploadTitle()
-				{
-					return '';
-				}				
-				function getUploadDescription()
-				{
-					return '';
-				}
-				function getUploadFilename()
-				{
-					return '<h:outputText value="#{lbl.filename}"/>';
-				}
-				function getUploadStatus()
-				{
-					return '<h:outputText value="#{lbl.status}"/>';
-				}
-				function getUploadSize()
-				{
-					return '<h:outputText value="#{lbl.size}"/>';
-				}
-				function getUploadAddFiles()
-				{
-					return '<h:outputText value="#{lbl.upload_add_files}"/>';
-				}
-				function getUploadStart()
-				{
-					return '<h:outputText value="#{lbl.ingest_start}"/>';
-				}
-				function getDragHere()
-				{
-					return '<h:outputText value="#{lbl.upload_drag_files_here}"/>';
-				}
-				function getUsingRuntime()
-				{
-					return '<h:outputText value="#{lbl.upload_using_runtime}"/>';
-				}
 				
 				</script>
 				<style>

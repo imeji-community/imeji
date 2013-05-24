@@ -52,6 +52,9 @@
 								.dropArea{
 									display:none;
 								}
+								.highlight_area{
+									background-color:#292929;
+								}
 							</style>
 							<script>
 								 $(function() {
@@ -91,8 +94,8 @@
 								 highlighter();
 							</script>
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
-	                            <h:panelGroup layout="block" id="metadata" style="margin-left:#{wrapper.level}px; margin-top:10px" 
-	                            class="full_area0_p0 noTopBorder draggable dropChild id_#{wrapper.statementId}  parent_#{wrapper.parentId} highlight_area">
+	                            <h:panelGroup layout="block" id="metadata" style="margin-left:#{wrapper.level}px; margin-top:10px;" 
+	                            class="full_area0_p0 draggable dropChild id_#{wrapper.statementId}  parent_#{wrapper.parentId} highlight_area">
 	                            	<div class="free_area0">
 										<h:outputText styleClass="full_area0" value="Add Child here" style="display:none;"/>
 										<h:commandButton  id="dropChildButton" value="Insert metadata" action="#{FormularBean.insertChild}" style="display:none;">

@@ -20,6 +20,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -51,6 +52,7 @@ public class ThumbnailBean
     private boolean deletable = false;
     private SessionBean sessionBean;
     private static Logger logger = Logger.getLogger(ThumbnailBean.class);
+    private MetadataSetBean mds;
 
     /**
      * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a {@link ThumbnailBean}
@@ -74,6 +76,7 @@ public class ThumbnailBean
             isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
         }
         initSecurity(item);
+        mds = new MetadataSetBean(item.getMetadataSet());
     }
 
     /**
@@ -175,133 +178,281 @@ public class ThumbnailBean
         }
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getLink()
     {
         return link;
     }
 
+    /**
+     * setter
+     * 
+     * @param link
+     */
     public void setLink(String link)
     {
         this.link = link;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getFilename()
     {
         return filename;
     }
 
+    /**
+     * setter
+     * 
+     * @param filename
+     */
     public void setFilename(String filename)
     {
         this.filename = filename;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getCaption()
     {
         return caption;
     }
 
+    /**
+     * setter
+     * 
+     * @param caption
+     */
     public void setCaption(String caption)
     {
         this.caption = caption;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public URI getUri()
     {
         return uri;
     }
 
+    /**
+     * setter
+     * 
+     * @param id
+     */
     public void setUri(URI id)
     {
         this.uri = id;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<Metadata> getMetadata()
     {
         return metadata;
     }
 
+    /**
+     * setter
+     * 
+     * @param metadata
+     */
     public void setMetadata(List<Metadata> metadata)
     {
         this.metadata = metadata;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<Statement> getStatements()
     {
         return statements;
     }
 
+    /**
+     * setter
+     * 
+     * @param statements
+     */
     public void setStatements(List<Statement> statements)
     {
         this.statements = statements;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean isSelected()
     {
         return selected;
     }
 
+    /**
+     * setter
+     * 
+     * @param selected
+     */
     public void setSelected(boolean selected)
     {
         this.selected = selected;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public static Logger getLogger()
     {
         return logger;
     }
 
+    /**
+     * setter
+     * 
+     * @param logger
+     */
     public static void setLogger(Logger logger)
     {
         ThumbnailBean.logger = logger;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean isInActiveAlbum()
     {
         return isInActiveAlbum;
     }
 
+    /**
+     * setter
+     * 
+     * @param isInActiveAlbum
+     */
     public void setInActiveAlbum(boolean isInActiveAlbum)
     {
         this.isInActiveAlbum = isInActiveAlbum;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean isEditable()
     {
         return editable;
     }
 
+    /**
+     * setter
+     * 
+     * @param editable
+     */
     public void setEditable(boolean editable)
     {
         this.editable = editable;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean isVisible()
     {
         return visible;
     }
 
+    /**
+     * setter
+     * 
+     * @param visible
+     */
     public void setVisible(boolean visible)
     {
         this.visible = visible;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean isDeletable()
     {
         return deletable;
     }
 
+    /**
+     * setter
+     * 
+     * @param deletable
+     */
     public void setDeletable(boolean deletable)
     {
         this.deletable = deletable;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getId()
     {
         return id;
     }
 
+    /**
+     * @param id
+     */
     public void setId(String id)
     {
         this.id = id;
+    }
+
+    /**
+     * getter
+     * 
+     * @return the mds
+     */
+    public MetadataSetBean getMds()
+    {
+        return mds;
+    }
+
+    /**
+     * setter
+     * 
+     * @param mds the mds to set
+     */
+    public void setMds(MetadataSetBean mds)
+    {
+        this.mds = mds;
     }
 }

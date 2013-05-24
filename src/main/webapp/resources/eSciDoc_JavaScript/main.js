@@ -24,7 +24,7 @@ jQuery(document).ready(function() {
  * @param id
  */
 function highlight(id) {
-	jQuery('.id_' + id).css('background-color', '#292929');
+	jQuery('.id_' + id).css('background-color', '#393939 !important');
 	highlight_childs(id);
 }
 /**

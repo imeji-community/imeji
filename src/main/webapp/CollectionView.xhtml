@@ -31,6 +31,12 @@
 				<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
+				
+				<h:outputText styleClass="imj_contentMenuSeparator"	rendered="#{AuthorizationBean.admin}" />
+				
+				<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
+					<h:outputText value="#{lbl.ingest}" />
+				</h:outputLink>
 			</ui:define>
 			
 			

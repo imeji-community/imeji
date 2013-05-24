@@ -29,6 +29,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.AuthorizationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -78,6 +79,7 @@ public class UploadBean
         {
             removeFiles();
             loadCollection();
+            ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(collection);
             totalNum = "";
             sNum = 0;
             fNum = 0;

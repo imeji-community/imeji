@@ -3,12 +3,7 @@
  */
 package de.mpg.imeji.presentation.metadata.util;
 
-import java.net.URI;
-import java.util.List;
-
 import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
@@ -19,10 +14,22 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 
+/**
+ * Uitlity class to {@link Metadata}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class MetadataHelper
 {
+    /**
+     * Return true if the {@link Metadata} has an empty value (which shouldn't be store in the database)
+     * 
+     * @param md
+     * @return
+     */
     public static boolean isEmpty(Metadata md)
     {
         if (md instanceof Text)

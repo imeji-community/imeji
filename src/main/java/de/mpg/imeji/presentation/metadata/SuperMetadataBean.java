@@ -1,8 +1,6 @@
 package de.mpg.imeji.presentation.metadata;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;

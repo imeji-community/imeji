@@ -59,26 +59,51 @@ public class EditorItemBean
         return item;
     }
 
+    /**
+     * get the thumbnail of the {@link Item}
+     * 
+     * @return
+     */
     public URI getThumbnail()
     {
         return item.getThumbnailImageUrl();
     }
 
+    /**
+     * get the filename of the {@link Item}
+     * 
+     * @return
+     */
     public String getFilename()
     {
         return item.getFilename();
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public URI getProfile()
     {
         return item.getMetadataSet().getProfile();
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<SuperMetadataBean> getMetadata()
     {
         return metadata;
     }
 
+    /**
+     * setter
+     * 
+     * @param metadata
+     */
     public void setMetadata(List<SuperMetadataBean> metadata)
     {
         this.metadata = metadata;

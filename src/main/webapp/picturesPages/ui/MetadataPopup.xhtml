@@ -37,7 +37,7 @@
 			</h:panelGroup>
 			<div class="marginTExcl075 linebreak">&#160;</div>
 			<ui:repeat var="md" value="#{item.mds.metadata}" rows="0">
-				<h:panelGroup rendered="#{!md.isEmpty()}">
+				<h:panelGroup rendered="#{!md.isEmpty() and md.preview}">
 					<div class="full_area0 id_#{md.statementId}  parent_#{md.parent.statementId} highlight_area">
 						<h:panelGroup layout="block" styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right; margin-left: #{metadata.hierarchyLevel}em;">
 							<h:outputText value="#{MetadataLabels.internationalizedLabels[md.statement]}" />

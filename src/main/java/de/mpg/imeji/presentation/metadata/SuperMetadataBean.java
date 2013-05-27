@@ -2,6 +2,7 @@ package de.mpg.imeji.presentation.metadata;
 
 import java.net.URI;
 
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -39,6 +40,7 @@ public class SuperMetadataBean
      * True if the {@link Metadata} has no value defined
      */
     private boolean empty = false;
+    private boolean preview = true;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -461,5 +463,25 @@ public class SuperMetadataBean
     public boolean isEmpty()
     {
         return empty;
+    }
+
+    /**
+     * getter
+     * 
+     * @return the preview
+     */
+    public boolean isPreview()
+    {
+        return preview;
+    }
+
+    /**
+     * setter
+     * 
+     * @param preview the preview to set
+     */
+    public void setPreview(boolean preview)
+    {
+        this.preview = preview;
     }
 }

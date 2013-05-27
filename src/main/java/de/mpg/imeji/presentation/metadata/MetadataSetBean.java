@@ -65,6 +65,7 @@ public class MetadataSetBean
         {
             SuperMetadataBean smd = new SuperMetadataBean(md);
             smd.setParent(findParent(smd));
+            smd.setPreview(ProfileHelper.getStatement(md.getStatement(), profile).isPreview());
             metadata.add(smd);
         }
     }

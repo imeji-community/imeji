@@ -2,8 +2,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="mainContent" >
+	<ui:define name="init">
 		<h:outputText value="#{imageBean.init}"/>
+	</ui:define>
+	<ui:define name="mainContent" >
 		<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
             <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
         </h:panelGroup>
@@ -315,7 +317,7 @@
 			jQuery(document).ready(function() {
 				var qrHtml = document.getElementById('qr');
 				if (qrHtml != null){
-					qrHtml.innerHTML = create_qrcode(document.URL);
+					qrHtml.innerHTML = create_qrcode('#{imageBean.pageUrl}');
 				}
 			});
 			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {

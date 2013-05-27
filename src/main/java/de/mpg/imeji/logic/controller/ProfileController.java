@@ -11,13 +11,16 @@ import java.util.List;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
@@ -133,6 +136,13 @@ public class ProfileController extends ImejiController
         gc.removeAllGrantsFor(user, mdp.getId());
     }
 
+    /**
+     * Withdraw a {@link MetadataProfile}
+     * 
+     * @param mdp
+     * @param user
+     * @throws Exception
+     */
     public void withdraw(MetadataProfile mdp, User user) throws Exception
     {
         mdp.setStatus(Status.WITHDRAWN);
@@ -173,5 +183,15 @@ public class ProfileController extends ImejiController
             l.add(retrieve(URI.create(uri), user));
         }
         return l;
+    }
+
+    /**
+     * Remove all the {@link Metadata} not having a {@link Statement}. This happens when a {@link Statement} has been
+     * removed from a {@link MetadataProfile}.
+     */
+    public void removeMetadataWithoutStatement()
+    {
+        ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveAllMetadataWithoutStatement());
+        ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
     }
 }

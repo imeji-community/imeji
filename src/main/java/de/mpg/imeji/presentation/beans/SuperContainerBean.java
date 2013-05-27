@@ -163,10 +163,6 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
      */
     public String getSelectedMenu()
     {
-        if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("tab"))
-        {
-            selectedMenu = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tab");
-        }
         return selectedMenu;
     }
 

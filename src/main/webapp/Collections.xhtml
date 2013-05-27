@@ -5,7 +5,71 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="paginatorListSessionBean" value="#{CollectionsBean}" />
 	<ui:param name="headline" value="#{msg.collections_headline}" />
-	<ui:define name="init">
-		<h:outputText value="#{CollectionsBean.init}" />
+	
+	<ui:define name="contentMenu">
+		<h:outputLink id="lnkSort" styleClass="imj_contentMenuItem"
+			value="#{Navigation.collectionsUrl}?tab=SORTING"
+			rendered="#{paginatorListSessionBean.selectedMenu != 'SORTING'}">
+			<h:outputText value="#{lbl.sorting}" />
+		</h:outputLink>
+		<h:outputText id="txtSortLink" styleClass="imj_contentMenuItem"
+			value="#{lbl.sorting}"
+			rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}" />
+		<h:outputText styleClass="imj_contentMenuSeparator" />
+		<h:outputLink id="lnkFilter" styleClass="imj_contentMenuItem"
+			value="#{Navigation.collectionsUrl}?tab=FILTER"
+			rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER' and SessionBean.user != null}">
+			<h:outputText value="#{lbl.filter}" />
+		</h:outputLink>
+		<h:outputText id="txtFilterLink" styleClass="imj_contentMenuItem"
+			value="#{lbl.filter}"
+			rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' }" />
+		<h:outputText styleClass="imj_contentMenuSeparator" />
+		<h:outputLink id="lnkCreate" styleClass="imj_contentMenuItem"
+			value="#{Navigation.createCollectionUrl}?reset=1"
+			rendered="#{SessionBean.user != null}">
+			<h:outputText value="#{lbl.collection_create}" />
+		</h:outputLink>
+		<!--<h:outputText id="textCreateCollection" styleClass="free_area0" value="#{lbl.collection_create}" rendered="#{SessionBean.user != null}"/>-->
+		<h:outputText styleClass="imj_contentMenuSeparator" />
+	</ui:define>
+	<ui:define name="actionsMenu">
+		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
+			<h:panelGroup
+				rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"
+				styleClass="imj_contentSubMenuItem">
+				<h:outputText id="txtSort" value="#{lbl.sort_by}"
+					styleClass="imj_contentSubMenuItemSorting" />
+				<h:form>
+					<h:selectOneMenu id="selSort"
+						value="#{paginatorListSessionBean.selectedSortCriterion}"
+						styleClass="free_select" onchange="submit();">
+						<f:selectItems id="sortItem"
+							value="#{paginatorListSessionBean.sortMenu}" />
+					</h:selectOneMenu>
+					<h:commandLink id="lnkSortAsc" styleClass="ascSort"
+						action="#{paginatorListSessionBean.toggleSortOrder}"
+						rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
+					<h:commandLink id="lnkSortDesc" styleClass="desSort"
+						action="#{paginatorListSessionBean.toggleSortOrder}"
+						rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
+				</h:form>
+				<h:outputText styleClass="imj_contentMenuSeparator" />
+			</h:panelGroup>
+			<h:panelGroup
+				rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' and SessionBean.user != null}"
+				styleClass="imj_contentSubMenuItem"> <!-- xHuge_area0 -->
+				<h:outputText id="txtFilter" value="#{lbl.filter_by}"
+					styleClass="imj_contentSubMenuItemFiltering" />
+				<h:selectOneMenu id="selFilter"
+					value="#{paginatorListSessionBean.selectedFilter}"
+					styleClass="free_select"
+					onchange="window.location.href = '?f=' + this.value">
+					<f:selectItems id="filterItem"
+						value="#{paginatorListSessionBean.filterMenu}" />
+				</h:selectOneMenu>
+				<h:outputText styleClass="imj_contentMenuSeparator" />
+			</h:panelGroup>
+		</h:panelGroup>
 	</ui:define>
 </ui:composition>

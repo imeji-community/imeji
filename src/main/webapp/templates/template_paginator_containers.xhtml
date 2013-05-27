@@ -4,9 +4,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-
 	<ui:define name="contentMenu">
-
 		<h:outputLink id="lnkSort" styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionsUrl}?tab=SORTING"
 			rendered="#{paginatorListSessionBean.selectedMenu != 'SORTING'}">
@@ -16,7 +14,6 @@
 			value="#{lbl.sorting}"
 			rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}" />
 		<h:outputText styleClass="imj_contentMenuSeparator" />
-
 		<h:outputLink id="lnkFilter" styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionsUrl}?tab=FILTER"
 			rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER' and SessionBean.user != null}">
@@ -26,7 +23,6 @@
 			value="#{lbl.filter}"
 			rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' }" />
 		<h:outputText styleClass="imj_contentMenuSeparator" />
-
 		<h:outputLink id="lnkCreate" styleClass="imj_contentMenuItem"
 			value="#{Navigation.createCollectionUrl}?reset=1"
 			rendered="#{SessionBean.user != null}">
@@ -35,10 +31,8 @@
 		<!--<h:outputText id="textCreateCollection" styleClass="free_area0" value="#{lbl.collection_create}" rendered="#{SessionBean.user != null}"/>-->
 		<h:outputText styleClass="imj_contentMenuSeparator" />
 	</ui:define>
-
 	<ui:define name="actionsMenu">
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-			<h:outputText value="#{paginatorListSessionBean.initMenus}" />
 			<h:panelGroup
 				rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"
 				styleClass="imj_contentSubMenuItem">
@@ -60,7 +54,6 @@
 				</h:form>
 				<h:outputText styleClass="imj_contentMenuSeparator" />
 			</h:panelGroup>
-
 			<h:panelGroup
 				rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' and SessionBean.user != null}"
 				styleClass="imj_contentSubMenuItem"> <!-- xHuge_area0 -->
@@ -79,12 +72,10 @@
 	</ui:define>
 
 	<ui:define name="prelistHeader">
-
 		<h:outputLink styleClass="imj_mainContentPreListHeaderItemAll" 
 			value="?q=&amp;f=all">
 			<h:outputText value="#{lbl.all}" />
 		</h:outputLink>
-
 		<h:outputText value="#{lbl.search}"
 			styleClass="imj_mainContentPreListHeaderItemFilter"
 			rendered="#{paginatorListSessionBean.query != ''}" />
@@ -103,21 +94,16 @@
 		</h:outputLink>
 		<h:outputText styleClass="imj_mainContentPreListHeaderItemCounter"
 			value=" (#{paginatorListSessionBean.totalNumberOfElements})" />
-
 		<h:outputLink styleClass="imj_mainContentPreListHeaderItemDelete"
 			value="#"
 			onclick="openDialog('dialogDeleteSelectedContainer');">
 			<h:outputText value="#{lbl.delete_selected_collections}"
 				rendered="#{SessionBean.user != null}" />
 		</h:outputLink>
-
 	</ui:define>
-
-
 	<ui:define name="list">
 		<ui:include src="../collectionPages/CollectionsGridView.xhtml" />
 	</ui:define>
-
 	<ui:define name="listFooter">
 		<h:outputLink styleClass="free_area0 xTiny_marginRIncl"
 			style="float:right" value="#"
@@ -127,5 +113,4 @@
 		</h:outputLink>
 		<ui:include src="../confirmationPages/SelectedContainerDelete.xhtml" />
 	</ui:define>
-
 </ui:composition>

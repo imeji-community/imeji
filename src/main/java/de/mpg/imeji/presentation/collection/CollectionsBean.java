@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -51,6 +53,25 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    }
+
+    /**
+     * Initialize the page
+     * 
+     * @return
+     */
+    public String getInit()
+    {
+        if (UrlHelper.getParameterValue("f") != null && !UrlHelper.getParameterValue("f").equals(""))
+        {
+            setSelectedFilter(UrlHelper.getParameterValue("f"));
+        }
+        if (UrlHelper.getParameterValue("tab") != null && !UrlHelper.getParameterValue("tab").equals(""))
+        {
+            selectedMenu = UrlHelper.getParameterValue("tab");
+        }
+        initMenus();
+        return "";
     }
 
     @Override

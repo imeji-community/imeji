@@ -5,4 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="paginatorListSessionBean" value="#{CollectionsBean}" />
 	<ui:param name="headline" value="#{msg.collections_headline}" />
+	<ui:define name="init">
+		<h:outputText value="#{CollectionsBean.init}" />
+	</ui:define>
 </ui:composition>

@@ -23,6 +23,7 @@ import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Java Bean for {@link Container} browse pages (collections and albums)
@@ -52,11 +53,11 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         if (sessionBean.getUser() != null)
         {
-        	selectedFilter = "my";
+            selectedFilter = "my";
         }
         else
         {
-        	selectedFilter = "all";
+            selectedFilter = "all";
         }
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         initMenus();
@@ -105,17 +106,6 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     }
 
     /**
-     * Method called from the xhtml page, to initialize the menus
-     * 
-     * @return
-     */
-    public String getInitMenus()
-    {
-        initMenus();
-        return "";
-    }
-
-    /**
      * Reset the page, called when url paramenter "init" is set to 1
      */
     @Override
@@ -135,8 +125,8 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         SearchPair pair = null;
         if ("my".equals(selectedFilter))
         {
-            pair = new SearchPair(Search.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper.getURI(User.class,
-                    sb.getUser().getEmail()).toString());
+            pair = new SearchPair(Search.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper.getURI(
+                    User.class, sb.getUser().getEmail()).toString());
         }
         else if ("private".equals(selectedFilter))
         {
@@ -280,12 +270,6 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
      */
     public String getSelectedFilter()
     {
-        if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("f")
-                && !FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("f").toString()
-                        .equals(""))
-        {
-            selectedFilter = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("f");
-        }
         return selectedFilter;
     }
 

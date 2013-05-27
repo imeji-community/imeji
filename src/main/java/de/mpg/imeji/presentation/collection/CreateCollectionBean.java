@@ -73,8 +73,8 @@ public class CreateCollectionBean extends CollectionBean
             mdp.setDescription(getCollection().getMetadata().getDescription());
             mdp.setTitle(getCollection().getMetadata().getTitle());
             URI profile = profileController.create(mdp, sessionBean.getUser());
-            CollectionController collectionController = new CollectionController(sessionBean.getUser());
-            collectionController.create(getCollection(), profile);
+            CollectionController collectionController = new CollectionController();
+            collectionController.create(getCollection(), profile, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_create"));
             FacesContext
                     .getCurrentInstance()

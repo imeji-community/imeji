@@ -104,6 +104,7 @@ public class ImejiJena
             ImejiSPARQL.execUpdate(migrationRequests);
             logger.info("Migration done!");
         }
+       
     }
 
     /**

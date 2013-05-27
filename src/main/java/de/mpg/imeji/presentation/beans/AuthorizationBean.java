@@ -63,7 +63,6 @@ public class AuthorizationBean
     public AuthorizationBean()
     {
         security = new Security();
-        user = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser();
     }
 
     /**
@@ -73,6 +72,7 @@ public class AuthorizationBean
      */
     public void init(CollectionImeji collection)
     {
+        user = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser();
         admin = security.isSysAdmin(user);
         edit = security.check(OperationsType.UPDATE, user, collection);
         imageEdit = collectionItemAllEditable(collection);

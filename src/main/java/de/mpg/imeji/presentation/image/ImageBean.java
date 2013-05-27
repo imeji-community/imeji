@@ -274,21 +274,6 @@ public class ImageBean
         }
     }
 
-    /**
-     * Remove empty metadata
-     */
-    private void cleanImageMetadata()
-    {
-        for (int i = 0; i < item.getMetadataSet().getMetadata().size(); i++)
-        {
-            if (MetadataHelper.isEmpty(((List<Metadata>)item.getMetadataSet().getMetadata()).get(i)))
-            {
-                ((List<Metadata>)item.getMetadataSet().getMetadata()).remove(i);
-                i--;
-            }
-        }
-    }
-
     public String getInitLabels() throws Exception
     {
         labels.init(profile);

@@ -35,6 +35,7 @@ import java.util.List;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ProfileHelper;
 
@@ -76,17 +77,19 @@ public class MetadataSetBean
      */
     private SuperMetadataBean findParent(SuperMetadataBean smd)
     {
-        URI parentURI = ProfileHelper.getStatement(smd.getStatement(), profile).getParent();
-        if (parentURI != null)
+        Statement st = ProfileHelper.getStatement(smd.getStatement(), profile);
+        if (st == null)
+            return null;
+        URI parentURI = st.getParent();
+        if (parentURI == null)
+            return null;
+        // Go to the metadata list backward, and search for the parent
+        for (int i = metadata.size() - 1; i >= 0; i--)
         {
-            // Go to the metadata list backward, and search for the parent
-            for (int i = metadata.size() - 1; i >= 0; i--)
+            // If the metadata is the defined with the parent statement, then it is the parent metadata
+            if (metadata.get(i).getStatement().compareTo(parentURI) == 0)
             {
-                // If the metadata is the defined with the parent statement, then it is the parent metadata
-                if (metadata.get(i).getStatement().compareTo(parentURI) == 0)
-                {
-                    return metadata.get(i);
-                }
+                return metadata.get(i);
             }
         }
         return null;

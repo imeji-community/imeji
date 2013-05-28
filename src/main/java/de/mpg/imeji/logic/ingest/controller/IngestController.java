@@ -43,7 +43,7 @@ public class IngestController
         if (profileXmlFile != null)
         {
             IngestProfileController ipc = new IngestProfileController(user);
-            ipc.ingest(profileXmlFile);
+            ipc.ingest(profileXmlFile, collection.getProfile());
         }
         if (itemListXmlFile != null)
         {

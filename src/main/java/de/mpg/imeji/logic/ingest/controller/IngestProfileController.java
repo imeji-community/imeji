@@ -1,6 +1,7 @@
 package de.mpg.imeji.logic.ingest.controller;
 
 import java.io.File;
+import java.net.URI;
 
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.ingest.parser.ProfileParser;
@@ -35,13 +36,14 @@ public class IngestProfileController
      * @param profileXmlFile
      * @throws Exception
      */
-    public void ingest(File profileXmlFile) throws Exception
+    public void ingest(File profileXmlFile, URI profile) throws Exception
     {
         ProfileValidator pv = new ProfileValidator();
         pv.valid(profileXmlFile);
         ProfileParser pp = new ProfileParser();
         MetadataProfile mdp = pp.parse(profileXmlFile);
         ProfileController pc = new ProfileController();
+        mdp.setId(profile);
         pc.update(mdp, user);
     }
 }

@@ -41,13 +41,5 @@
 		<ui:include src="../collectionPages/CollectionsGridView.xhtml" />
 		
 	</ui:define>
-	<ui:define name="listFooter">
-		<h:outputLink styleClass="free_area0 xTiny_marginRIncl"
-			style="float:right" value="#"
-			onclick="openDialog('dialogDeleteSelectedContainer');">
-			<h:outputText value="#{lbl.delete_selected_collections}"
-				rendered="#{SessionBean.user != null}" />
-		</h:outputLink>
-		<ui:include src="../confirmationPages/SelectedContainerDelete.xhtml" />
-	</ui:define>
+	
 </ui:composition>

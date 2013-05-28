@@ -98,8 +98,8 @@
 							<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
 						</h2>
 					</h:panelGroup>
-					<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
-						<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
+					<h:panelGroup styleClass="full_area0_p8">
+						<h:panelGroup>
 							<h2>
 								<h:outputText styleClass="full_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
 							</h2>
@@ -108,6 +108,7 @@
 								<h:outputText styleClass="free_area0"  value=" #{ViewCollectionBean.collection.discardComment}"/>
 							</h:panelGroup>
 							<h:panelGroup styleClass="full_area0">
+								<br/>
 								<h:outputText escape="false" value="#{ViewCollectionBean.formattedDescription}"/>
 							</h:panelGroup>
 						</h:panelGroup>

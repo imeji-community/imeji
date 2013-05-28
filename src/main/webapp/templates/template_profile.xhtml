@@ -9,7 +9,6 @@
 				<h:panelGroup layout="block" styleClass="full_area0">					
 					<h:panelGroup layout="block" styleClass="full_area0">
 						<div class="full_area0 itemLine endline">
-							
 							<h:panelGroup layout="block" styleClass="fullItem full_area0_p8 itemLine">
 								<b class="xLarge_area0_p8 labelLine clear">
 									<h:outputText value="#{lbl.title}"/>
@@ -106,7 +105,6 @@
 											<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.draggedStatementPosition}"/>
 											<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 										</h:commandButton>
-									
 									<h:panelGroup layout="block" styleClass="full_area0 endline clear">
 										<b class="medium_area0_p2 endline labelLine clear">
 											<h:outputText value="#{lbl.metadata}"/>
@@ -135,8 +133,8 @@
 										</h:panelGroup>
 										<h:panelGroup class="full_area0">
 											<h:panelGroup styleClass="medium_area0 xTiny_marginLIncl">
-												<h:outputLabel styleClass="medium_label" value="#{lbl.type}"/>										
-												<h:selectOneMenu  id="selStatementType" styleClass="medium_select" onchange="getElementById('profileForm:profile:#{position.index}:changeType').click();" value="#{wrapper.statement.type}" valueChangeListener="#{wrapper.typeListener}">
+												<h:outputLabel styleClass="medium_label" value="#{lbl.type}"/>							
+												<h:selectOneMenu  id="selStatementType" disabled="#{wrapper.used}"  styleClass="medium_select" onchange="getElementById('profileForm:profile:#{position.index}:changeType').click();" value="#{wrapper.statement.type}" valueChangeListener="#{wrapper.typeListener}">
 													<f:converter converterId="URIConverter" />
 													<f:selectItems value="#{FormularBean.mdTypesMenu}"/>
 												</h:selectOneMenu>

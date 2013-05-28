@@ -84,6 +84,25 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
             logger.error("Error reading property imeji.container.list.size.options", e);
         }
     }
+    
+    /**
+     * Initialize the page
+     * 
+     * @return
+     */
+    public String getInit()
+    {
+        if (UrlHelper.getParameterValue("f") != null && !UrlHelper.getParameterValue("f").equals(""))
+        {
+            selectedFilter = UrlHelper.getParameterValue("f");
+        }
+        if (UrlHelper.getParameterValue("tab") != null && !UrlHelper.getParameterValue("tab").equals(""))
+        {
+            selectedMenu = UrlHelper.getParameterValue("tab");
+        }
+        initMenus();
+        return "";
+    }
 
     /**
      * Initialize the menus of the page

@@ -44,7 +44,7 @@
 							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
 								<h:outputText value="#{lbl.remove_from_col}" />
 							</h:commandLink>
-							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.navigationString == 'pretty:albumItem'}">
+							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.editable and imageBean.navigationString == 'pretty:albumItem'}">
 								<h:outputText value="#{lbl.remove_from_album}" />
 							</h:commandLink>
 							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">

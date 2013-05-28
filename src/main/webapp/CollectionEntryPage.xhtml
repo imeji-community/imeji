@@ -85,17 +85,12 @@
 							</h:outputLink>							
 						</h:outputLink>	
 
-						<h:panelGroup styleClass="medium_area0" style="text-align:center;" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}">
+						<h:panelGroup styleClass="free_area0" style="text-align:center;" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}">
 							<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
 							<br/>
-							<h:outputText value="#{lbl.withdrawn}"/>
+							<h:outputText value="#{lbl.withdrawn}"/>							
 						</h:panelGroup>
-						<ui:remove>
-							<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}" url="../../../resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
-						</ui:remove>
-						<h2 class="clear">
-							<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
-						</h2>
+						
 					</h:panelGroup>
 					<h:panelGroup styleClass="full_area0_p8">
 						<h:panelGroup>
@@ -103,6 +98,7 @@
 								<h:outputText styleClass="full_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
 							</h2>
 							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{ViewCollectionBean.collection.discardComment != null and ViewCollectionBean.collection.discardComment != ''}">
+								<br/>
 								<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
 								<h:outputText styleClass="free_area0"  value=" #{ViewCollectionBean.collection.discardComment}"/>
 							</h:panelGroup>

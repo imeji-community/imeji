@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -35,8 +37,11 @@ public class IngestBean
     private String collectionId;
     private CollectionImeji collection;
     private static Logger logger = Logger.getLogger(IngestBean.class);
+    private boolean error = false;
+    private boolean success = false;
+    private String msg = "";
 
-    /**
+	/**
      * Default constructor
      */
     public IngestBean()
@@ -53,29 +58,44 @@ public class IngestBean
         {
             loadCollection();
             ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(collection);
+            this.error = false;
+            this.success = false;
+            this.msg = "";
         }
         else if ("itemlist".equals(UrlHelper.getParameterValue("start")))
         {
+            this.error = false;
+            this.success = false;
+            this.msg = "";
             try
             {
                 IngestController ic = new IngestController(session.getUser(), collection);
                 ic.ingest(upload(), null);
+                this.success = true;
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Error during ingest. ", e);
+                error = true;
+                this.msg = e.getMessage();
             }
         }
         else if ("profile".equals(UrlHelper.getParameterValue("start")))
         {
+            this.error = false;
+            this.success = false;
+            this.msg = "";
             try
             {
                 IngestController ic = new IngestController(session.getUser(), collection);
                 ic.ingest(null, upload());
+                this.success = true;
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Error during ingest. ", e);
+                error = true;
+                this.msg = e.getMessage();
             }
         }
         else if (UrlHelper.getParameterBoolean("done"))
@@ -86,12 +106,22 @@ public class IngestBean
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Error during ingest. ", e);
+                error = true;
+                this.msg = e.getMessage();
             }
         }
     }
 
-    /**
+    public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
+	/**
      * Upload the files for the ingest
      * 
      * @return
@@ -99,24 +129,35 @@ public class IngestBean
      */
     public File upload() throws Exception
     {
-        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
-        boolean isMultipart = ServletFileUpload.isMultipartContent(req);
-        File f = null;
-        if (isMultipart)
+    	File f = null;
+    	
+        try
         {
-            ServletFileUpload upload = new ServletFileUpload();
-            // Parse the request
-            FileItemIterator iter = upload.getItemIterator(req);
-            while (iter.hasNext())
-            {
-                FileItemStream item = iter.next();
-                if (item != null && item.getName() != null)
-                {
-                    logger.info("Ingesting file  " + item.getName());
-                    f = write2File("itemListXml", item.openStream());
-                }
-            }
+	        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
+	                .getRequest();
+	        boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+	        
+	        if (isMultipart)
+	        {
+	            ServletFileUpload upload = new ServletFileUpload();
+	            // Parse the request
+	            FileItemIterator iter = upload.getItemIterator(req);
+	            while (iter.hasNext())
+	            {
+	                FileItemStream item = iter.next();
+	                if (item != null && item.getName() != null)
+	                {
+	                    logger.info("Ingesting file  " + item.getName());
+	                    f = write2File("itemListXml", item.openStream());
+	                }
+	            }
+	        }
+        }
+        catch (Exception e)
+        {
+            logger.error("Error during ingest. ", e);
+            error = true;
+            this.msg = e.getMessage();
         }
         return f;
     }
@@ -221,4 +262,22 @@ public class IngestBean
     {
         return getCollection().getImages().size();
     }
+
+	public boolean isError() {
+		return error;
+	}
+
+	public void setError(boolean error) {
+		this.error = error;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+    
 }

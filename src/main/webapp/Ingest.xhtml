@@ -47,6 +47,25 @@
 	</ui:define>
 
 	<ui:define name="mainContent">
+		<div class="imj_subHeaderMessageSpace">
+			<h:panelGroup styleClass="full_area0_p6 messageArea errorMessageArea small_marginLExcl" rendered="#{IngestBean.error}">
+				<br/>
+				<h2>
+					<h:outputText value="#{lbl.ingestFail}:" />
+				<br/>
+				</h2>
+	
+				<h:outputText styleClass="messageError" value="#{IngestBean.msg}" />
+				<br />
+			</h:panelGroup>
+			<h:panelGroup styleClass="half_area2_p6 messageArea infoMessageArea small_marginLExcl" rendered="#{IngestBean.success}">
+				<h2>
+					<h:outputText value="#{lbl.ingestSuccess}" />
+				<br />
+				</h2>
+			</h:panelGroup>
+
+		</div>
 		<h:panelGroup rendered="#{!AuthorizationBean.admin}"
 			styleClass="full_area0_p8 itemList">
 			<h2>
@@ -149,7 +168,7 @@
 				<br />
 				<h:outputText value="#{lbl.ingest_item}"
 					styleClass="half_area0_p8 double_marginLExcl" />
-				<div class="half_area0 double_marginLExcl">
+				<div class="half_area0 double_marginLExcl listBackground">
 					<div id="uploader">
 						Your browser doens't support native upload!<br /> Please use HTML5
 						compatible browser (Firefox 4.x, Safari 4, Chrome) or download

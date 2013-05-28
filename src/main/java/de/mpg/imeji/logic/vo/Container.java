@@ -75,4 +75,5 @@ public class Container extends Properties implements FulltextIndex
         }
         fulltext = fulltext.trim();
     }
+
 }

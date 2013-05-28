@@ -31,6 +31,7 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -400,7 +401,7 @@ public class AlbumBean
      */
     public String getSmallDescription()
     {
-        return smallDescription;
+        return CommonUtils.removeTags(smallDescription);
     }
 
     /**

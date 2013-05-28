@@ -67,7 +67,7 @@
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 					<ui:remove>
-						<!-- COLLECTION TITLE -->
+					<!-- COLLECTION TITLE -->
 					<h:panelGroup styleClass="full_area0_p8">
 						<h1><h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> </h1>
 					</h:panelGroup>
@@ -79,11 +79,10 @@
 								<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}file?id=#{thumb.link}"/>
 							</ui:repeat>	
 						
-								<h:outputLink  styleClass="medium_txtArea medium_marginRExcl" style="float:right;" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.collection.status != 'WITHDRAWN'}" >
-									<h:outputText value ="#{lbl.collection_view_all_images}"/> <br/>
-									<h:graphicImage value="/resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png" style="float:right"/>
-								</h:outputLink>
-							
+							<h:outputLink  styleClass="medium_txtArea medium_marginRExcl" style="float:right;" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.collection.status != 'WITHDRAWN'}" >
+								<h:outputText value ="#{lbl.collection_view_all_images}"/> <br/>
+								<h:graphicImage value="/resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png" style="float:right"/>
+							</h:outputLink>							
 						</h:outputLink>	
 
 						<h:panelGroup styleClass="medium_area0" style="text-align:center;" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}">

@@ -38,34 +38,39 @@
 						<h1><h:outputText value="#{AlbumBean.album.metadata.title}"/> </h1>
 					</h:panelGroup>
 					</ui:remove>
-					<h:panelGroup styleClass="full_area0_p8 small_marginLExcl">
+					<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
 						<!-- ALBUM IMAGES -->
-						<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
+						<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny">
 							<f:param value="#{AlbumBean.id}"/>
 								<ui:repeat var="thumb" value="#{AlbumBean.thumbnails}" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
 									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}file?id=#{thumb.link}"/>
 								</ui:repeat>
 								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}" url="../../../resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
-							</h:outputLink>
-						<h2>
-							<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
-								<h:outputText value ="#{lbl.album_view_all_images}"/>
-							</h:outputLink>
-							<h:outputText value="#{lbl.withdrawn}" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}"/>
-						</h2>
+							
+							<h:outputLink  styleClass="medium_txtArea medium_marginRExcl" style="float:right;" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.collection.status != 'WITHDRAWN'}" >
+								<h:outputText value ="#{lbl.collection_view_all_images}"/> <br/>
+								<h:graphicImage value="/resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png" style="float:right"/>
+							</h:outputLink>	
+						</h:outputLink>
 					</h:panelGroup>
-					<h:panelGroup styleClass="full_area0_p8 small_marginLExcl">
-						<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
-							<h1><h:outputText value="#{AlbumBean.album.metadata.title}"/></h1>
-						</h:panelGroup>
-						<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}">
-							<h:outputText value="#{lbl.withdraw_comment}: "/>
-							<h:outputText value="#{AlbumBean.album.discardComment}"/><br/><br/><br/>
-						</h:panelGroup>
-						<h:panelGroup styleClass="full_area0">
-							<h:outputText escape="false" value="#{AlbumBean.album.metadata.description}"/>
+					
+					<h:panelGroup styleClass="full_area0_p8">
+						<h:panelGroup>
+							<h2>
+								<h:outputText styleClass="full_area0" value="#{AlbumBean.album.metadata.title}"/>
+							</h2>
+							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}">
+								<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
+								<h:outputText styleClass="free_area0" value="#{AlbumBean.album.discardComment}"/>
+							</h:panelGroup>
+							<h:panelGroup styleClass="full_area0">
+								<br/>
+								<h:outputText escape="false" value="#{AlbumBean.formattedDescription}"/>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
+					
+					
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>

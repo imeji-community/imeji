@@ -434,7 +434,7 @@ public class AlbumBean
             {
                 uris.add(uri.toString());
             }
-            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 5, 0));
+            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 13, 0));
         }
         return null;
     }
@@ -736,5 +736,12 @@ public class AlbumBean
     public void setThumbnail(ThumbnailBean thumbnail)
     {
         this.thumbnail = thumbnail;
+    }
+    
+    public String getFormattedDescription()
+    {
+        if (this.getAlbum() == null || this.getAlbum().getMetadata().getDescription() == null)
+            return "";
+        return this.getAlbum().getMetadata().getDescription().replaceAll("\n", "<br/>");
     }
 }

@@ -48,17 +48,23 @@
 
 	<ui:define name="mainContent">
 		<div class="imj_subHeaderMessageSpace">
-			<h:panelGroup styleClass="full_area0_p6 messageArea errorMessageArea small_marginLExcl" rendered="#{IngestBean.fNum > 0}">
+			<h:panelGroup styleClass="full_area0_p6 messageArea errorMessageArea small_marginLExcl" rendered="#{IngestBean.error}">
 				<br/>
 				<h2>
 					<h:outputText value="#{lbl.ingestFail}:" />
 				<br/>
 				</h2>
-				<ui:repeat id="fFile" var="fFile" value="#{IngestBean.fFiles}">
-					<h:outputText styleClass="messageError" value="#{fFile}" />
-					<br />
-				</ui:repeat>
+	
+				<h:outputText styleClass="messageError" value="#{IngestBean.msg}" />
+				<br />
 			</h:panelGroup>
+			<h:panelGroup styleClass="half_area2_p6 messageArea infoMessageArea small_marginLExcl" rendered="#{IngestBean.success}">
+				<h2>
+					<h:outputText value="#{lbl.ingestSuccess}" />
+				<br />
+				</h2>
+			</h:panelGroup>
+
 		</div>
 		<h:panelGroup rendered="#{!AuthorizationBean.admin}"
 			styleClass="full_area0_p8 itemList">

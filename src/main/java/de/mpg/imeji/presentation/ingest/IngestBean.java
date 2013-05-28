@@ -37,10 +37,9 @@ public class IngestBean
     private String collectionId;
     private CollectionImeji collection;
     private static Logger logger = Logger.getLogger(IngestBean.class);
-    private int fNum = 0;
-	private List<String> fFiles = new ArrayList<String>();
-
-
+    private boolean error = false;
+    private boolean success = false;
+    private String msg = "";
 
 	/**
      * Default constructor
@@ -59,39 +58,44 @@ public class IngestBean
         {
             loadCollection();
             ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(collection);
-            this.fNum = 0;
-            this.fFiles = new ArrayList<String>();
+            this.error = false;
+            this.success = false;
+            this.msg = "";
         }
         else if ("itemlist".equals(UrlHelper.getParameterValue("start")))
         {
-            this.fNum = 0;
-            this.fFiles = new ArrayList<String>();
+            this.error = false;
+            this.success = false;
+            this.msg = "";
             try
             {
                 IngestController ic = new IngestController(session.getUser(), collection);
                 ic.ingest(upload(), null);
+                this.success = true;
             }
             catch (Exception e)
             {
                 logger.error("Error during ingest. ", e);
-                fNum += 1;
-                fFiles.add(e.getMessage());
+                error = true;
+                this.msg = e.getMessage();
             }
         }
         else if ("profile".equals(UrlHelper.getParameterValue("start")))
         {
-            this.fNum = 0;
-            this.fFiles = new ArrayList<String>();
+            this.error = false;
+            this.success = false;
+            this.msg = "";
             try
             {
                 IngestController ic = new IngestController(session.getUser(), collection);
                 ic.ingest(null, upload());
+                this.success = true;
             }
             catch (Exception e)
             {
                 logger.error("Error during ingest. ", e);
-                fNum += 1;
-                fFiles.add(e.getMessage());
+                error = true;
+                this.msg = e.getMessage();
             }
         }
         else if (UrlHelper.getParameterBoolean("done"))
@@ -103,13 +107,21 @@ public class IngestBean
             catch (Exception e)
             {
                 logger.error("Error during ingest. ", e);
-                fNum += 1;
-                fFiles.add(e.getMessage());
+                error = true;
+                this.msg = e.getMessage();
             }
         }
     }
 
-    /**
+    public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
+	/**
      * Upload the files for the ingest
      * 
      * @return
@@ -144,8 +156,8 @@ public class IngestBean
         catch (Exception e)
         {
             logger.error("Error during ingest. ", e);
-            fNum += 1;
-            fFiles.add(e.getMessage());
+            error = true;
+            this.msg = e.getMessage();
         }
         return f;
     }
@@ -250,20 +262,22 @@ public class IngestBean
     {
         return getCollection().getImages().size();
     }
+
+	public boolean isError() {
+		return error;
+	}
+
+	public void setError(boolean error) {
+		this.error = error;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
     
-    public int getfNum() {
-		return fNum;
-	}
-
-	public void setfNum(int fNum) {
-		this.fNum = fNum;
-	}
-	
-    public List<String> getfFiles() {
-		return fFiles;
-	}
-
-	public void setfFiles(List<String> fFiles) {
-		this.fFiles = fFiles;
-	}
 }

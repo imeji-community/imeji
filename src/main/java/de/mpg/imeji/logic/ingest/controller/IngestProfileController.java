@@ -45,5 +45,6 @@ public class IngestProfileController
         ProfileController pc = new ProfileController();
         mdp.setId(profile);
         pc.update(mdp, user);
+        pc.removeMetadataWithoutStatement();
     }
 }

@@ -111,7 +111,7 @@ public class IngestTest
     }
     
     //@Test
-    public void itemsParsingTest() throws JAXBException, SAXException
+    public void itemsParsingTest() throws Exception
     {
         String xmlFilename = "src/test/resources/ingest/items.xml";
         ItemParser ip = new ItemParser();
@@ -132,7 +132,7 @@ public class IngestTest
     }
     
     @Test
-    public void itemsParsingWrite2FileTest() throws JAXBException, SAXException, IOException
+    public void itemsParsingWrite2FileTest() throws Exception
     {
         String xmlFilename = "src/test/resources/ingest/items.xml";
         String xmlOutputFilename = "src/test/resources/ingest/items-out.xml";

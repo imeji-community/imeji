@@ -8,8 +8,6 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.ingest.IngestBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Controller for ingest
@@ -20,7 +18,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class IngestController
 {
-	private static Logger logger = Logger.getLogger(IngestController.class);
+    private static Logger logger = Logger.getLogger(IngestController.class);
     /**
      * The collection in with the ingest will be done.
      */
@@ -45,18 +43,17 @@ public class IngestController
      */
     public void ingest(File itemListXmlFile, File profileXmlFile) throws Exception
     {
-	        if (profileXmlFile != null)
-	        {
-	            IngestProfileController ipc = new IngestProfileController(user);
-	            ipc.ingest(profileXmlFile, collection.getProfile());
-	        }
-	        if (itemListXmlFile != null)
-	        {
-	            ProfileController pc = new ProfileController();
-	            MetadataProfile mdp = pc.retrieve(collection.getProfile(), user);
-	            IngestItemController iic = new IngestItemController(user, mdp);
-	            iic.ingest(itemListXmlFile);
-	        }
-    	
+        if (profileXmlFile != null)
+        {
+            IngestProfileController ipc = new IngestProfileController(user);
+            ipc.ingest(profileXmlFile, collection.getProfile());
+        }
+        if (itemListXmlFile != null)
+        {
+            ProfileController pc = new ProfileController();
+            MetadataProfile mdp = pc.retrieve(collection.getProfile(), user);
+            IngestItemController iic = new IngestItemController(user, mdp);
+            iic.ingest(itemListXmlFile);
+        }
     }
 }

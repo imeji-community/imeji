@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -35,8 +37,12 @@ public class IngestBean
     private String collectionId;
     private CollectionImeji collection;
     private static Logger logger = Logger.getLogger(IngestBean.class);
+    private int fNum = 0;
+	private List<String> fFiles = new ArrayList<String>();
 
-    /**
+
+
+	/**
      * Default constructor
      */
     public IngestBean()
@@ -53,9 +59,13 @@ public class IngestBean
         {
             loadCollection();
             ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(collection);
+            this.fNum = 0;
+            this.fFiles = new ArrayList<String>();
         }
         else if ("itemlist".equals(UrlHelper.getParameterValue("start")))
         {
+            this.fNum = 0;
+            this.fFiles = new ArrayList<String>();
             try
             {
                 IngestController ic = new IngestController(session.getUser(), collection);
@@ -63,11 +73,15 @@ public class IngestBean
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Error during ingest. ", e);
+                fNum += 1;
+                fFiles.add(e.getMessage());
             }
         }
         else if ("profile".equals(UrlHelper.getParameterValue("start")))
         {
+            this.fNum = 0;
+            this.fFiles = new ArrayList<String>();
             try
             {
                 IngestController ic = new IngestController(session.getUser(), collection);
@@ -75,7 +89,9 @@ public class IngestBean
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Error during ingest. ", e);
+                fNum += 1;
+                fFiles.add(e.getMessage());
             }
         }
         else if (UrlHelper.getParameterBoolean("done"))
@@ -86,7 +102,9 @@ public class IngestBean
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Error during ingest. ", e);
+                fNum += 1;
+                fFiles.add(e.getMessage());
             }
         }
     }
@@ -99,24 +117,35 @@ public class IngestBean
      */
     public File upload() throws Exception
     {
-        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
-        boolean isMultipart = ServletFileUpload.isMultipartContent(req);
-        File f = null;
-        if (isMultipart)
+    	File f = null;
+    	
+        try
         {
-            ServletFileUpload upload = new ServletFileUpload();
-            // Parse the request
-            FileItemIterator iter = upload.getItemIterator(req);
-            while (iter.hasNext())
-            {
-                FileItemStream item = iter.next();
-                if (item != null && item.getName() != null)
-                {
-                    logger.info("Ingesting file  " + item.getName());
-                    f = write2File("itemListXml", item.openStream());
-                }
-            }
+	        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
+	                .getRequest();
+	        boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+	        
+	        if (isMultipart)
+	        {
+	            ServletFileUpload upload = new ServletFileUpload();
+	            // Parse the request
+	            FileItemIterator iter = upload.getItemIterator(req);
+	            while (iter.hasNext())
+	            {
+	                FileItemStream item = iter.next();
+	                if (item != null && item.getName() != null)
+	                {
+	                    logger.info("Ingesting file  " + item.getName());
+	                    f = write2File("itemListXml", item.openStream());
+	                }
+	            }
+	        }
+        }
+        catch (Exception e)
+        {
+            logger.error("Error during ingest. ", e);
+            fNum += 1;
+            fFiles.add(e.getMessage());
         }
         return f;
     }
@@ -221,4 +250,20 @@ public class IngestBean
     {
         return getCollection().getImages().size();
     }
+    
+    public int getfNum() {
+		return fNum;
+	}
+
+	public void setfNum(int fNum) {
+		this.fNum = fNum;
+	}
+	
+    public List<String> getfFiles() {
+		return fFiles;
+	}
+
+	public void setfFiles(List<String> fFiles) {
+		this.fFiles = fFiles;
+	}
 }

@@ -6,6 +6,8 @@ import java.util.List;
 
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * Bean for item element in the metadata editors
@@ -24,9 +26,9 @@ public class EditorItemBean
      * 
      * @param item
      */
-    public EditorItemBean(Item item)
+    public EditorItemBean(Item item, MetadataProfile profile)
     {
-        init(item);
+        init(item, profile);
     }
 
     /**
@@ -34,13 +36,13 @@ public class EditorItemBean
      * 
      * @param item
      */
-    public void init(Item item)
+    public void init(Item item, MetadataProfile profile)
     {
         this.item = item;
         metadata = new ArrayList<SuperMetadataBean>();
         for (Metadata md : item.getMetadataSet().getMetadata())
         {
-            metadata.add(new SuperMetadataBean(md));
+            metadata.add(new SuperMetadataBean(md, ProfileHelper.getStatement(md.getStatement(), profile)));
         }
     }
 

@@ -29,7 +29,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "number", namespace = "http://imeji.org/terms/metadata")
 public class Number extends Metadata
-{
+{ 
     @j2jLiteral("http://imeji.org/terms/number")
     private double number = Double.NaN;
     @j2jResource("http://imeji.org/terms/statement")

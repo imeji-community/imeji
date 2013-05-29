@@ -27,6 +27,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 /**
@@ -42,10 +43,11 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms")
 @XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class, Geolocation.class, License.class, Link.class,
         Publication.class })
-public abstract class Metadata
+public abstract class Metadata implements Comparable<Metadata>
 {
     // private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
     private URI id = IdentifierUtil.newURI(Metadata.class);
+    @j2jLiteral("http://imeji.org/terms/position")
     private int pos = 0;
 
     @XmlEnum(Types.class)
@@ -87,6 +89,11 @@ public abstract class Metadata
         return this.getClass().getAnnotation(j2jDataType.class).value();
     }
 
+    /**
+     * Compare metadata
+     * @param imd
+     * @return
+     */
     public int compareTo(Metadata imd)
     {
         if (imd.getPos() > this.pos)

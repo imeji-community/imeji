@@ -101,16 +101,13 @@ public class ImageBean
             {
                 initViewTechnicalMetadata();
             }
+            else if ("util".equals(tab))
+            {
+                // TODO
+            }
             else
             {
-                if ("util".equals(tab))
-                {
-                    // TODO
-                }
-                else
-                {
-                    initViewMetadataTab();
-                }
+                initViewMetadataTab();
             }
             initBrowsing();
             selected = sessionBean.getSelected().contains(item.getId().toString());
@@ -134,7 +131,6 @@ public class ImageBean
             loadCollection();
             loadProfile();
             removeDeadMetadata();
-            sortMetadataAccordingtoProfile();
             labels.init(profile);
             edit = new SingleEditBean(item, profile, getPageUrl());
             mds = new MetadataSetBean(item.getMetadataSet());
@@ -170,27 +166,6 @@ public class ImageBean
             browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item, "item", "");
     }
 
-    /**
-     * Order the metadata of the {@link Item} according to the order defined in its {@link MetadataProfile}
-     */
-    private void sortMetadataAccordingtoProfile()
-    {
-        Collection<Metadata> mdSorted = new ArrayList<Metadata>();
-        if (profile != null)
-        {
-            for (Statement st : profile.getStatements())
-            {
-                for (Metadata md : item.getMetadataSet().getMetadata())
-                {
-                    if (st.getId().equals(md.getStatement()))
-                    {
-                        mdSorted.add(md);
-                    }
-                }
-            }
-        }
-        item.getMetadataSet().setMetadata(mdSorted);
-    }
 
     /**
      * Load the item according to the idntifier defined in the URL

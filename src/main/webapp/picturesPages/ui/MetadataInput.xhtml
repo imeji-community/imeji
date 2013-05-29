@@ -36,41 +36,41 @@
 		<h:outputLabel value="#{MetadataLabels.internationalizedLabels[metadata.statement]} (#{MetadataLabels.lang})" rendered="#{hideLabel != true}" styleClass="huge_label"/>
 		<!-- METADATA TYPE TEXT -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#text'}">
-			<h:inputTextarea id="inputText" name="inputText" styleClass="#{areaClass} inputTxtArea" value="#{metadata.text}" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}" onfocus="getDatasourceUrl('#{statement.vocabulary}')"/>
-			<h:selectOneMenu styleClass="#{areaClass}" value="#{metadata.text}" rendered="#{SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
-				<f:selectItems value="#{SuggestBean.suggests[metadata.statement].restrictedValues}"/>
+			<h:inputTextarea id="inputText" name="inputText" styleClass="#{areaClass} inputTxtArea" value="#{metadata.text}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="getDatasourceUrl('#{statement.vocabulary}')"/>
+			<h:selectOneMenu styleClass="#{areaClass}" value="#{metadata.text}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>
 		<!-- METADATA TYPE NUMBER -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#number'}">
-			<h:inputText immediate="false" onfocus="this.select();" styleClass="huge_txtInput" value="#{metadata.number}" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
+			<h:inputText immediate="false" onfocus="this.select();" styleClass="huge_txtInput" value="#{metadata.number}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:converter converterId="DoubleConverter" />
 			</h:inputText>
-			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.number}" rendered="#{SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
-				<f:selectItems value="#{SuggestBean.suggests[metadata.statement].restrictedValues}"/>
+			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.number}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>
 		<!-- METADATA TYPE LINK -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#link'}">
-			<h:outputLabel value="#{lbl.title}" styleClass="huge_label" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}"/>
-			<h:inputText id="inputLinkLabel" styleClass="xHuge_txtInput" value="#{metadata.label}" immediate="true"  rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}')">
+			<h:outputLabel value="#{lbl.title}" styleClass="huge_label" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"/>
+			<h:inputText id="inputLinkLabel" styleClass="xHuge_txtInput" value="#{metadata.label}" immediate="true"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}')">
 				</h:inputText>
-			<h:outputLabel value="#{lbl.url}" styleClass="huge_label" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}"/>
-			<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}" onfocus="this.select();">
+			<h:outputLabel value="#{lbl.url}" styleClass="huge_label" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"/>
+			<h:inputText id="inputURI" styleClass="xHuge_txtInput" value="#{metadata.uri}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select();">
 				<f:converter converterId="URIConverter" />
 			</h:inputText>
-			<h:selectOneMenu styleClass="#{areaClass}" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
+			<h:selectOneMenu styleClass="#{areaClass}" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:converter converterId="URIConverter" />
-				<f:selectItems value="#{SuggestBean.suggests[metadata.statement].restrictedValues}"/>
+				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>
 		<!-- METADATA TYPE PUBLICATION -->
 		<h:panelGroup rendered="#{metadata.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
-			<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.uri}"  rendered="#{SuggestBean.suggests[metadata.statement].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}')">
+			<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.uri}"  rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}')">
 				<f:converter converterId="URIConverter" />
 			</h:inputText>
-			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
-				<f:selectItems value="#{SuggestBean.suggests[metadata.statement].restrictedValues}"/>
+			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 			<h:outputLabel value="#{lbl.export_formats}" styleClass="xHuge_label"/>
 			<h:selectOneMenu value="#{metadata.exportFormat}" styleClass="xLarge_select">
@@ -80,23 +80,23 @@
 			</h:selectOneMenu>
 		</h:panelGroup>
 		<!-- METADATA TYPE DATE -->
-		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and !SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
+		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and !SuggestBean.suggests[statement.id].hasRestrictedValues}">
 			<h:inputText styleClass="huge_txtInput" value="#{metadata.date}" immediate="false"/>
 			<h:outputLabel value="YYYY-MM-DD" styleClass="medium_label"/>		
 		</h:panelGroup>
-		<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.date}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
-			<f:selectItems value="#{SuggestBean.suggests[metadata.statement].restrictedValues}"/>
+		<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.date}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and SuggestBean.suggests[statement.id].hasRestrictedValues}">
+			<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 		</h:selectOneMenu>
 		<!-- METADATA TYPE LICENSE -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#license'}">
 			<h:outputLabel value="#{lbl.name}" styleClass="huge_label" />
-			<h:inputText id="inputLicense" styleClass="huge_txtInput" value="#{metadata.license}" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}" immediate="true" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', 0)"/>
+			<h:inputText id="inputLicense" styleClass="huge_txtInput" value="#{metadata.license}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" immediate="true" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', 0)"/>
 			<h:outputLabel value="#{lbl.url}" styleClass="huge_label" />
-			<h:inputText id="inputLicenseId" styleClass="huge_txtInput" value="#{metadata.externalUri}" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}" immediate="true" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}')">
+			<h:inputText id="inputLicenseId" styleClass="huge_txtInput" value="#{metadata.externalUri}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" immediate="true" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}')">
 				<f:converter converterId="URIConverter"/>
 			</h:inputText>
-			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
-				<f:selectItems value="#{SuggestBean.suggests[metadata.statement].restrictedValues}"/>
+			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>
 		<!-- METADATA TYPE CONE AUTHOR -->
@@ -115,9 +115,9 @@
 		<!-- METADATA TYPE GEOLOCATION -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#geolocation'}">
 			<h:outputLabel value="#{lbl.name}" styleClass="huge_label" />
-			<h:inputText id="inputLocationName" styleClass="xHuge_txtInput" value="#{metadata.name}" immediate="true" rendered="#{!SuggestBean.suggests[metadata.statement].hasRestrictedValues}"  onfocus="getDatasourceUrl('#{statement.vocabulary}')" />
-			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.name}" rendered="#{SuggestBean.suggests[metadata.statement].hasRestrictedValues}">
-				<f:selectItems value="#{SuggestBean.suggests[metadata.statement].restrictedValues}"/>
+			<h:inputText id="inputLocationName" styleClass="xHuge_txtInput" value="#{metadata.name}" immediate="true" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"  onfocus="getDatasourceUrl('#{statement.vocabulary}')" />
+			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.name}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 			<h:outputLabel value="#{lbl.geolocation_latitude}" styleClass="huge_label" />
 			<h:inputText id="inputLatitude" styleClass="xHuge_txtInput" value="#{metadata.latitude}"  immediate="true"/>

@@ -384,7 +384,7 @@ public class EditImageMetadataBean
             {
                 addMetadataIfNotExists(item, MetadataFactory.copyMetadata(metadata));
             }
-            eib.init(item);
+            eib.init(item, profile);
         }
         metadata = MetadataFactory.createMetadata(getSelectedStatement());
         return "";

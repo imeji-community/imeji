@@ -103,7 +103,7 @@ public class MetadataMultipleEditor extends MetadataEditor
         if (metadataPos <= eib.getMetadata().size())
         {
             Metadata md = MetadataFactory.createMetadata(getStatement());
-            eib.getMetadata().add(metadataPos, new SuperMetadataBean(md));
+            eib.getMetadata().add(metadataPos, new SuperMetadataBean(md, getStatement()));
         }
     }
 

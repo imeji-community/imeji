@@ -3,18 +3,19 @@
  */
 package de.mpg.imeji.presentation.metadata.editors;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.EditorItemBean;
 import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * Editor for one item (by the item detail page)
@@ -25,6 +26,8 @@ import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
  */
 public class SimpleImageEditor extends MetadataEditor
 {
+    private List<Statement> statementChilds = new ArrayList<Statement>();
+
     /**
      * Editor for one item (by the item detail page)
      * 
@@ -67,7 +70,7 @@ public class SimpleImageEditor extends MetadataEditor
                 }
                 else
                 {
-                    eib.getMetadata().get(i).setPos(i);
+                   // eib.getMetadata().get(i).setPos(i);
                 }
             }
         }
@@ -97,10 +100,14 @@ public class SimpleImageEditor extends MetadataEditor
     @Override
     public void addMetadata(EditorItemBean eib, int metadataPos)
     {
-        if (metadataPos <= eib.getMetadata().size())
+        statementChilds = ProfileHelper.getChilds(getStatement(), profile, false);
+        if (metadataPos + statementChilds.size() <= eib.getMetadata().size())
         {
-            eib.getMetadata().add(metadataPos + 1,
-                    new SuperMetadataBean(MetadataFactory.createMetadata(getStatement())));
+            metadataPos = metadataPos + statementChilds.size() + 1;
+            Metadata md = MetadataFactory.createMetadata(getStatement());
+            md.setPos(metadataPos);
+            eib.getMetadata().add(metadataPos, new SuperMetadataBean(md, getStatement()));
+            addChilds(eib, metadataPos);
         }
     }
 
@@ -119,6 +126,23 @@ public class SimpleImageEditor extends MetadataEditor
         if (metadataPos < eib.getMetadata().size())
         {
             eib.getMetadata().remove(metadataPos);
+        }
+    }
+
+    /**
+     * Add all {@link Metadata} that are defined as a child of the current {@link Statement}
+     * 
+     * @param eib
+     * @param metadataPos
+     */
+    private void addChilds(EditorItemBean eib, int metadataPos)
+    {
+        for (Statement st : statementChilds)
+        {
+            metadataPos = metadataPos + 1;
+            Metadata md = MetadataFactory.createMetadata(st);
+            md.setPos(metadataPos);
+            eib.getMetadata().add(metadataPos, new SuperMetadataBean(md, getStatement()));
         }
     }
 }

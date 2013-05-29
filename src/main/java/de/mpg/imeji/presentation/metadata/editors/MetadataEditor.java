@@ -44,7 +44,7 @@ public abstract class MetadataEditor
         items = new ArrayList<EditorItemBean>();
         for (Item item : itemList)
         {
-            items.add(new EditorItemBean(item));
+            items.add(new EditorItemBean(item, profile));
         }
         initialize();
     }
@@ -74,7 +74,7 @@ public abstract class MetadataEditor
                 {
                     try
                     {
-                        addPositionToMetadata();
+                         addPositionToMetadata();
                         List<Item> itemList = new ArrayList<Item>();
                         for (EditorItemBean eib : items)
                         {
@@ -112,7 +112,7 @@ public abstract class MetadataEditor
     /**
      * enable ordering for metadata values
      */
-    private void addPositionToMetadata()
+    protected void addPositionToMetadata()
     {
         for (EditorItemBean eib : items)
         {

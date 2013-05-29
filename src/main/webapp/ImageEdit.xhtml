@@ -4,14 +4,11 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="imageBean" value="#{ImageBean}" />
-
 	<ui:param name="headline"
 		value="#{lbl.edit} #{ImageBean.image.filename}" />
-
 	<ui:define name="editImage">
 		<ui:insert name="subImagesContent"></ui:insert>
 	</ui:define>
-
 	<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block"
 			styleClass="full_area0 preListHeader">

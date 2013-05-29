@@ -63,9 +63,10 @@ public class MetadataSetBean
         // Init the list of metadata
         for (Metadata md : mds.getMetadata())
         {
-            SuperMetadataBean smd = new SuperMetadataBean(md);
+            Statement st = ProfileHelper.getStatement(md.getStatement(), profile);
+            SuperMetadataBean smd = new SuperMetadataBean(md, st);
             smd.setParent(findParent(smd));
-            smd.setPreview(ProfileHelper.getStatement(md.getStatement(), profile).isPreview());
+            smd.setPreview(st.isPreview());
             metadata.add(smd);
         }
     }
@@ -78,7 +79,7 @@ public class MetadataSetBean
      */
     private SuperMetadataBean findParent(SuperMetadataBean smd)
     {
-        Statement st = ProfileHelper.getStatement(smd.getStatement(), profile);
+        Statement st = ProfileHelper.getStatement(smd.getStatement().getId(), profile);
         if (st == null)
             return null;
         URI parentURI = st.getParent();
@@ -88,7 +89,7 @@ public class MetadataSetBean
         for (int i = metadata.size() - 1; i >= 0; i--)
         {
             // If the metadata is the defined with the parent statement, then it is the parent metadata
-            if (metadata.get(i).getStatement().compareTo(parentURI) == 0)
+            if (metadata.get(i).getStatement().getId().compareTo(parentURI) == 0)
             {
                 return metadata.get(i);
             }

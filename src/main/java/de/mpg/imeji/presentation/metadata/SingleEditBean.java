@@ -12,6 +12,11 @@ import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.httpclient.util.URIUtil;
+import org.apache.http.client.utils.URIUtils;
+
+import com.hp.hpl.jena.ontology.Profile;
+
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -27,6 +32,7 @@ import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -93,19 +99,75 @@ public class SingleEditBean
      */
     private void addNewMetadataIfNeeded()
     {
-        Map<URI, Boolean> valuesMap = new HashMap<URI, Boolean>();
+        if (item.getMetadataSet().getMetadata().size() == 0)
+            item.getMetadataSet().getMetadata()
+                    .add(MetadataFactory.createMetadata(profile.getStatements().iterator().next()));
+        for (int i = 0; i < item.getMetadataSet().getMetadata().size(); i++)
+        {
+            Metadata md = ((List<Metadata>)item.getMetadataSet().getMetadata()).get(i);
+            Statement st = ProfileHelper.getStatement(md.getStatement(), profile);
+            int curentPosition = i;
+            st = getPreviousStatement(st);
+            while (st != null && !hasAtLeastOneMetadata(st))
+            {
+                ((List<Metadata>)item.getMetadataSet().getMetadata()).add(curentPosition,
+                        MetadataFactory.createMetadata(st));
+                st = getPreviousStatement(st);
+                i++;
+            }
+            st = ProfileHelper.getStatement(md.getStatement(), profile);
+            st = getNextStatement(st);
+            while (st != null && !hasAtLeastOneMetadata(st))
+            {
+                Metadata newMd = MetadataFactory.createMetadata(st);
+                newMd.setPos(i + 1);
+                ((List<Metadata>)item.getMetadataSet().getMetadata()).add(i + 1, newMd);
+                st = getNextStatement(st);
+                i++;
+            }
+        }
+    }
+
+    /**
+     * True if the {@link Statement} is used for at least one {@link Metadata} in this {@link Item}
+     * 
+     * @param st
+     * @return
+     */
+    private boolean hasAtLeastOneMetadata(Statement st)
+    {
         for (Metadata md : item.getMetadataSet().getMetadata())
         {
-            valuesMap.put(md.getStatement(), true);
+            if (md.getStatement().compareTo(st.getId()) == 0)
+                return true;
         }
-        for (Statement st : profile.getStatements())
-        {
-            if (valuesMap.get(st.getId()) == null)
-            {
-                item.getMetadataSet().getMetadata().add(MetadataFactory.createMetadata(st));
-            }
-            valuesMap.put(st.getId(), true);
-        }
+        return false;
+    }
+
+    /**
+     * Find the previous {@link Statement} in the {@link Profile}
+     * 
+     * @param st
+     * @return
+     */
+    private Statement getPreviousStatement(Statement st)
+    {
+        if (st.getPos() > 0)
+            return ((List<Statement>)profile.getStatements()).get(st.getPos() - 1);
+        return null;
+    }
+
+    /**
+     * Find the next {@link Statement} in the {@link Profile}
+     * 
+     * @param st
+     * @return
+     */
+    private Statement getNextStatement(Statement st)
+    {
+        if (st.getPos() + 1 < profile.getStatements().size())
+            return ((List<Statement>)profile.getStatements()).get(st.getPos() + 1);
+        return null;
     }
 
     /**
@@ -119,7 +181,7 @@ public class SingleEditBean
         copySuperMetadatatoItem();
         cleanImageMetadata();
         editor.getItems().clear();
-        editor.getItems().add(new EditorItemBean(item));
+        editor.getItems().add(new EditorItemBean(item, profile));
         editor.save();
         reloadPage();
         cancel();

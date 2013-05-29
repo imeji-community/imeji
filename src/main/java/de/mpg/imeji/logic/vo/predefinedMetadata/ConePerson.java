@@ -46,7 +46,7 @@ public class ConePerson extends Metadata
         this.person = pers;
     }
 
-    @XmlElement(name = "person", namespace="http://xmlns.com/foaf/0.1")
+    @XmlElement(name = "person", namespace = "http://xmlns.com/foaf/0.1")
     public Person getPerson()
     {
         return person;
@@ -57,7 +57,7 @@ public class ConePerson extends Metadata
         this.person = person;
     }
 
-    @XmlElement(name = "coneId", namespace="http://imeji.org/terms")
+    @XmlElement(name = "coneId", namespace = "http://imeji.org/terms")
     public URI getConeId()
     {
         return coneId;
@@ -69,7 +69,7 @@ public class ConePerson extends Metadata
     }
 
     @Override
-    @XmlElement(name = "statement", namespace="http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
     public URI getStatement()
     {
         return statement;

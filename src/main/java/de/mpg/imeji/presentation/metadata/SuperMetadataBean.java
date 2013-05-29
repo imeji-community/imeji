@@ -2,6 +2,8 @@ package de.mpg.imeji.presentation.metadata;
 
 import java.net.URI;
 
+import org.apache.bcel.generic.GETSTATIC;
+
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -11,6 +13,7 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * Bean for all Metadata types. This bean should have all variable that have been defined in all metadata types.
@@ -36,6 +39,10 @@ public class SuperMetadataBean
      * Define how many parents this {@link Metadata} has until the highest parent
      */
     private int hierarchyLevel = 0;
+    /**
+     * The {@link Statement} of this {@link Metadata}
+     */
+    private Statement statement;
     /**
      * True if the {@link Metadata} has no value defined
      */
@@ -63,11 +70,12 @@ public class SuperMetadataBean
      * 
      * @param metadata
      */
-    public SuperMetadataBean(Metadata metadata)
+    public SuperMetadataBean(Metadata metadata, Statement statement)
     {
         this.metadata = metadata;
         this.empty = MetadataHelper.isEmpty(metadata);
-        ObjectHelper.copyFields(metadata, this);
+        this.statement = statement;
+        ObjectHelper.copyAllFields(metadata, this);
     }
 
     /**
@@ -77,21 +85,20 @@ public class SuperMetadataBean
      */
     public Metadata asMetadata()
     {
-        ObjectHelper.copyFields(this, metadata);
+        ObjectHelper.copyAllFields(this, metadata);
         MetadataHelper.setConeID(metadata);
         return metadata;
     }
 
-    /**
-     * getter for the {@link Statement} defining this {@link Metadata}
-     * 
-     * @return
-     */
-    public URI getStatement()
-    {
-        return metadata.getStatement();
-    }
-
+    // /**
+    // * getter for the {@link Statement} defining this {@link Metadata}
+    // *
+    // * @return
+    // */
+    // public URI getStatement()
+    // {
+    // return metadata.getStatement();
+    // }
     /**
      * Retun the id (last part of the {@link URI}) of the {@link Statement}. Used for GUI representation
      * 
@@ -99,7 +106,7 @@ public class SuperMetadataBean
      */
     public String getStatementId()
     {
-        return ObjectHelper.getId(getStatement());
+        return ObjectHelper.getId(getStatement().getId());
     }
 
     /**
@@ -483,5 +490,25 @@ public class SuperMetadataBean
     public void setPreview(boolean preview)
     {
         this.preview = preview;
+    }
+
+    /**
+     * getter
+     * 
+     * @return the statement
+     */
+    public Statement getStatement()
+    {
+        return statement;
+    }
+
+    /**
+     * setter
+     * 
+     * @param statement the statement to set
+     */
+    public void setStatement(Statement statement)
+    {
+        this.statement = statement;
     }
 }

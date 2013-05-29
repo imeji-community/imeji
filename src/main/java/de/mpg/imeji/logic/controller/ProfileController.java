@@ -100,7 +100,7 @@ public class ProfileController extends ImejiController
      * @param user
      * @throws Exception
      */
-    public void update(MetadataProfile mdp, User user) throws Exception
+    public void update(MetadataProfile mdp, User user) throws Exception 
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
         writeUpdateProperties(mdp, user);

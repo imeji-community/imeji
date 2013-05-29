@@ -76,7 +76,7 @@ public class CollectionController extends ImejiController
         writeCreateProperties(ic, user);
         ic.setProfile(profile);
         imejiBean2RDF.create(imejiBean2RDF.toList(ic), user);
-        user = addCreatorGrant(ic.getId(), user);
+        addCreatorGrant(ic.getId(), user);
         return ic.getId();
     }
 

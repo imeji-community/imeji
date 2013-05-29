@@ -65,7 +65,10 @@ public class AlbumBean
      * A small description when the description of the {@link Album} is too large for the list view
      */
     private String smallDescription = null;
-    private ThumbnailBean thumbnail;
+    private String description = "";
+
+
+	private ThumbnailBean thumbnail;
 
     /**
      * Construct an {@link AlbumBean} from an {@link Album}
@@ -83,7 +86,9 @@ public class AlbumBean
         }
         AlbumController ac = new AlbumController();
         this.album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
-        smallDescription = album.getMetadata().getDescription();
+        
+        description = album.getMetadata().getDescription();
+        smallDescription = description;
         if (smallDescription != null && smallDescription.length() > DESCRIPTION_MAX_SIZE)
         {
             smallDescription = smallDescription.substring(0, DESCRIPTION_MAX_SIZE) + "...";
@@ -745,4 +750,12 @@ public class AlbumBean
             return "";
         return this.getAlbum().getMetadata().getDescription().replaceAll("\n", "<br/>");
     }
+    
+    public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

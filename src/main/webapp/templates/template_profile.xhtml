@@ -134,7 +134,7 @@
 										<h:panelGroup class="full_area0">
 											<h:panelGroup styleClass="medium_area0 xTiny_marginLIncl">
 												<h:outputLabel styleClass="medium_label" value="#{lbl.type}"/>							
-												<h:selectOneMenu  id="selStatementType" disabled="#{wrapper.used}"  styleClass="medium_select" onchange="getElementById('profileForm:profile:#{position.index}:changeType').click();" value="#{wrapper.statement.type}" valueChangeListener="#{wrapper.typeListener}">
+												<h:selectOneMenu  id="selStatementType" title="#{wrapper.used ? lbl.statement_used : lbl.statement_change_type}" disabled="#{wrapper.used}"  styleClass="medium_select" onchange="getElementById('profileForm:profile:#{position.index}:changeType').click();" value="#{wrapper.statement.type}" valueChangeListener="#{wrapper.typeListener}">
 													<f:converter converterId="URIConverter" />
 													<f:selectItems value="#{FormularBean.mdTypesMenu}"/>
 												</h:selectOneMenu>

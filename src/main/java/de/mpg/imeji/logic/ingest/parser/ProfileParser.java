@@ -6,6 +6,7 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
 import de.mpg.imeji.logic.vo.MetadataProfile;

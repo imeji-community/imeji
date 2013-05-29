@@ -110,7 +110,7 @@ public class ImejiBean2RDF
      * @param lazy
      * @throws Exception
      */
-    private void runTransaction(List<Object> objects, OperationsType type, boolean lazy) throws Exception
+    private void runTransaction(List<Object> objects, OperationsType type, boolean lazy) throws Exception 
     {
         index(objects);
         Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);

@@ -21,7 +21,7 @@ public class ItemParser
      * @throws SAXException
      * @throws JAXBException
      */
-    public List<Item> parseItemList(File itemListXmlFile) throws Exception
+    public List<Item> parseItemList(File itemListXmlFile) throws JAXBException, SAXException 
     {
         return new JaxbIngestProfile().unmarshalItems(itemListXmlFile).getItem();
     }

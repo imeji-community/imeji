@@ -156,19 +156,23 @@
 					window.location.href = location.pathname + "?done=1";
 				}
 				
+				plupload.addI18n({
+				    'Add files' : '<h:outputText value="#{lbl.uploadStart}" />', 			    
+				    'Drag files here.' : ' <h:outputText value="#{lbl.uploadDrag}" />',				    
+				});
 				
 				</script>
 			<style>
 .plupload_filelist {
-	height: 5em;
+	height: 2em;
 	overflow-y: auto:
 }
 </style>
 			<div class="full_area0  infoPage">
 				<br />
-				<h:outputText value="#{lbl.ingest_item}"
-					styleClass="half_area0_p8 double_marginLExcl" />
-				<div class="half_area0 double_marginLExcl listBackground">
+				<h2><h:outputText value="#{lbl.uploadMd}" styleClass="half_area0_p2" /></h2>
+				<h:outputText value="(#{lbl.ingest_item})" styleClass="half_area0_p2" />
+				<div class="xHuge_area0 double_marginLExcl listBackground">
 					<div id="uploader">
 						Your browser doens't support native upload!<br /> Please use HTML5
 						compatible browser (Firefox 4.x, Safari 4, Chrome) or download
@@ -182,12 +186,11 @@
 
 				<br style="clear: both" />
 
-				<h:outputText value="#{lbl.or_big}"
-					styleClass="half_area0_p8 double_marginLExcl" />
-				<h:outputText value="#{lbl.ingest_profile}"
-					styleClass="half_area0_p8 double_marginLExcl" />
-
-				<div class="half_area0 double_marginLExcl">
+				<b><h:outputText value="#{lbl.or_big}" styleClass="half_area0_p8" /></b>
+				
+				<h2><h:outputText value="#{lbl.uploadProfile}" styleClass="half_area0_p2" /></h2>
+				<h:outputText value="(#{lbl.ingest_profile})" styleClass="half_area0_p2"/>
+				<div class="xHuge_area0 double_marginLExcl">
 					<div id="uploaderProfile">
 						Your browser doens't support native upload!<br /> Please use HTML5
 						compatible browser (Firefox 4.x, Safari 4, Chrome) or download

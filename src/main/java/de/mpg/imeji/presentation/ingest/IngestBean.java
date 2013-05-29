@@ -41,6 +41,8 @@ public class IngestBean
     private boolean error = false;
     private boolean success = false;
     private String msg = "";
+    private File file = null;
+
 
 	/**
      * Default constructor
@@ -149,7 +151,6 @@ public class IngestBean
      */
     public File upload() throws Exception
     {
-    	File f = null;
     	
         try
         {
@@ -168,7 +169,7 @@ public class IngestBean
 	                if (item != null && item.getName() != null)
 	                {
 	                    logger.info("Ingesting file  " + item.getName());
-	                    f = write2File("itemListXml", item.openStream());
+	                    file = write2File("itemListXml", item.openStream());
 	                }
 	            }
 	        }
@@ -179,7 +180,7 @@ public class IngestBean
             error = true;
             this.msg = e.getMessage();
         }
-        return f;
+        return file;
     }
 
     /**
@@ -299,5 +300,12 @@ public class IngestBean
 		this.msg = msg;
 	}
 
-    
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
 }

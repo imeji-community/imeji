@@ -2,8 +2,6 @@ package de.mpg.imeji.logic.search.vo;
 
 import java.util.List;
 
-import com.hp.hpl.jena.graph.query.Element;
-
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 
 /**

@@ -37,11 +37,13 @@ import java.net.URLEncoder;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.im4java.core.InfoException;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
+import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -190,9 +192,10 @@ public class InternalStorageManager
      * 
      * @param filename
      * @return
+     * @throws InfoException 
      * @throws UnsupportedEncodingException
      */
-    private InternalStorageItem generateInternalStorageItem(String filename, String collectionId)
+    private InternalStorageItem generateInternalStorageItem(String filename, String collectionId) throws InfoException
     {
         String id = generateIdWithVersion(collectionId);
         InternalStorageItem item = new InternalStorageItem();
@@ -247,12 +250,17 @@ public class InternalStorageManager
      * @return
      * @throws UnsupportedEncodingException
      */
-    private String generateUrl(String id, String filename, FileResolution resolution)
-    {
-        filename = StringHelper.normalizeFilename(filename);
-        return storageUrl + id + StringHelper.urlSeparator + resolution.name().toLowerCase()
-                + StringHelper.urlSeparator + filename;
-    }
+	private String generateUrl(String id, String filename,
+			FileResolution resolution) throws InfoException {
+		filename = StringHelper.normalizeFilename(filename);
+		if (resolution != FileResolution.ORIGINAL) {
+			filename = filename + ".jpg";
+		}
+
+		return storageUrl + id + StringHelper.urlSeparator
+				+ resolution.name().toLowerCase() + StringHelper.urlSeparator
+				+ filename;
+	}
 
     /**
      * Write a new file for the 3 resolution of one file
@@ -262,17 +270,44 @@ public class InternalStorageManager
      * @throws IOException
      * @throws Exception
      */
-    private InternalStorageItem writeItemFiles(InternalStorageItem item, byte[] bytes) throws IOException, Exception
-    {
-        write(bytes, transformUrlToPath(item.getOriginalUrl()));
-        write(ImageUtils.transformImage(bytes, FileResolution.WEB,
-                StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-                transformUrlToPath(item.getWebUrl()));
-        write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
-                StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-                transformUrlToPath(item.getThumbnailUrl()));
-        return item;
-    }
+	private InternalStorageItem writeItemFiles(InternalStorageItem item,
+			byte[] bytes) throws IOException, Exception {
+		
+		String orginalPath = transformUrlToPath(item.getOriginalUrl());
+		write(bytes, orginalPath);
+		System.out.println("Add Orginal file:" + orginalPath);
+		if (!MediaUtils.verifyMediaFormatSupport(orginalPath)) {
+			// TODO Ye: handle not support media data
+		}
+		String mimeType = StorageUtils.getMimeType(StringHelper
+				.getFileExtension(item.getFileName()));
+		String webPath = transformUrlToPath(item.getWebUrl());
+		String thumbnailPath = transformUrlToPath(item
+				.getThumbnailUrl());
+		
+		if (mimeType.indexOf("image") != -1) {
+			System.out.println("Add image WEB:" + webPath);
+			System.out.println("Add image THUMBNAIL:" + thumbnailPath);
+			MediaUtils.resizeImage("image",orginalPath, webPath,
+					FileResolution.WEB, mimeType);
+			MediaUtils.resizeImage("image",orginalPath, thumbnailPath,
+					FileResolution.THUMBNAIL, mimeType);
+	
+			//write(ImageUtils.transformImage(bytes, FileResolution.WEB, mimeType),transformUrlToPath(item.getWebUrl()));
+			//write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,mimeType), transformUrlToPath(item.getThumbnailUrl()));
+					
+		} else if (mimeType.indexOf("video") != -1) {	
+				System.out.println("Add video WEB:" + webPath);
+				System.out.println("Add video THUMBNAIL:" + thumbnailPath);
+				MediaUtils.resizeImage("video",orginalPath, webPath,
+						FileResolution.WEB, mimeType);
+				MediaUtils.resizeImage("video",orginalPath, thumbnailPath,
+						FileResolution.THUMBNAIL, mimeType);
+			
+		}
+
+		return item;
+	}
 
     /**
      * Write the bytes in the filesystem

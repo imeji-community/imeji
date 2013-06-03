@@ -76,7 +76,6 @@ public class JaxbUtil
         marshaller.setSchema(schema);
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//        marshaller.setProperty("com.sun.xml.bind.marshaller.NamespacePrefixMapper", new IngestNamespaceMapper());
         marshaller.marshal(jaxbElement, new FileOutputStream(new File(xmlFilename)));
     }
 
@@ -97,7 +96,6 @@ public class JaxbUtil
         marshaller.setSchema(schema);
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//        marshaller.setProperty("com.sun.xml.bind.marshaller.NamespacePrefixMapper", new IngestNamespaceMapper());
         marshaller.marshal(jaxbElement, new FileOutputStream(xmlFile));
     }
 
@@ -107,7 +105,6 @@ public class JaxbUtil
         Marshaller marshaller = ctx.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//        marshaller.setProperty("com.sun.xml.bind.marshaller.NamespacePrefixMapper", new IngestNamespaceMapper());
         marshaller.marshal(obj, System.out);
     }
 
@@ -117,7 +114,6 @@ public class JaxbUtil
         Marshaller marshaller = ctx.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//        marshaller.setProperty("com.sun.xml.bind.marshaller.NamespacePrefixMapper", new IngestNamespaceMapper());
         marshaller.marshal(obj, os);
     }
 

@@ -53,6 +53,8 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
+   
+
     @Override
     public String getNavigationString()
     {

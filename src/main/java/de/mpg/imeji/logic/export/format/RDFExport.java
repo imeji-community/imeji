@@ -109,7 +109,7 @@ public abstract class RDFExport extends Export
             }
             newLine(writer);
             writer.append("</rdf:RDF>");
-            out.write(writer.getBuffer().toString().getBytes());
+            out.write(writer.getBuffer().toString().replace("&", "&amp;").getBytes());
         }
         catch (Exception e)
         {

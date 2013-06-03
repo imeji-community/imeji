@@ -12,6 +12,13 @@ import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.image.SingleImageBrowse;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
+/**
+ * Bean for the detail item page when viewed within a collection
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class CollectionImageBean extends ImageBean
 {
     private String collectionId;
@@ -50,7 +57,7 @@ public class CollectionImageBean extends ImageBean
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect(navigation.getCollectionUrl() + collectionId + "/" + navigation.getBrowsePath());
     }
-    
+
     public String test()
     {
         System.out.println("TEST");

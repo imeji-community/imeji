@@ -22,12 +22,6 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
-import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -39,16 +33,16 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
 import de.mpg.imeji.presentation.metadata.extractors.BasicExtractor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -75,6 +69,7 @@ public class ImageBean
     protected String prettyLink;
     private MetadataLabels labels;
     private SingleImageBrowse browse = null;
+    private MetadataSetBean mds;
 
     /**
      * Construct a default {@link ImageBean}
@@ -108,14 +103,14 @@ public class ImageBean
             }
             else
             {
-	            if ("util".equals(tab))
-	            {
-	               //TODO
-	            }
-	            else
-	            {
-	                initViewMetadataTab();
-	            }
+                if ("util".equals(tab))
+                {
+                    // TODO
+                }
+                else
+                {
+                    initViewMetadataTab();
+                }
             }
             initBrowsing();
             selected = sessionBean.getSelected().contains(item.getId().toString());
@@ -142,7 +137,7 @@ public class ImageBean
             sortMetadataAccordingtoProfile();
             labels.init(profile);
             edit = new SingleEditBean(item, profile, getPageUrl());
-            cleanImageMetadata();
+            mds = new MetadataSetBean(item.getMetadataSet());
         }
     }
 
@@ -227,24 +222,10 @@ public class ImageBean
      */
     public void loadProfile()
     {
-        try
+        profile = ObjectCachedLoader.loadProfile(item.getMetadataSet().getProfile());
+        if (profile == null)
         {
-            profile = sessionBean.getProfileCached().get(item.getMetadataSet().getProfile());
-            if (profile == null)
-            {
-                profile = ObjectLoader.loadProfile(item.getMetadataSet().getProfile(), sessionBean.getUser());
-            }
-            if (profile == null)
-            {
-                profile = new MetadataProfile();
-            }
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(sessionBean.getMessage("error_profile_load") + " " + item.getMetadataSet().getProfile()
-                    + "  " + sessionBean.getLabel("of") + " " + item.getId());
             profile = new MetadataProfile();
-            logger.error("Error load profile " + item.getMetadataSet().getProfile() + " of image " + item.getId(), e);
         }
     }
 
@@ -290,21 +271,6 @@ public class ImageBean
         catch (Exception e)
         {
             /* this user has not the privileges to update the image */
-        }
-    }
-
-    /**
-     * Remove empty metadata
-     */
-    private void cleanImageMetadata()
-    {
-        for (int i = 0; i < item.getMetadataSet().getMetadata().size(); i++)
-        {
-            if (MetadataHelper.isEmpty(((List<Metadata>)item.getMetadataSet().getMetadata()).get(i)))
-            {
-                ((List<Metadata>)item.getMetadataSet().getMetadata()).remove(i);
-                i--;
-            }
         }
     }
 
@@ -611,31 +577,57 @@ public class ImageBean
         }
         return item.getFilename();
     }
-    
+
     /**
      * Returns a list of all albums this image is added to.
+     * 
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     public List<Album> getRelatedAlbums() throws Exception
     {
-    	List <Album> albums = new ArrayList<Album>();
-    	AlbumController ac = new AlbumController();
-    	Search s = new Search(SearchType.ALL, null);
+        List<Album> albums = new ArrayList<Album>();
+        AlbumController ac = new AlbumController();
+        Search s = new Search(SearchType.ALL, null);
         List<String> res = s.searchSimpleForQuery(SPARQLQueries.selectAlbumIdOfFile(item.getId().toString()), null);
-        for (int i =0; i<res.size(); i++)
+        for (int i = 0; i < res.size(); i++)
         {
-        	albums.add(ac.retrieveLazy(new URI(res.get(i)), sessionBean.getUser()));
+            albums.add(ac.retrieveLazy(new URI(res.get(i)), sessionBean.getUser()));
         }
         return albums;
-    
     }
-    
+
+    /**
+     * Return the {@link User} having uploaded the file for this item
+     * 
+     * @return
+     * @throws Exception
+     */
     public User getImageUploader() throws Exception
     {
-    	User user = null;
-    	UserController uc = new UserController();
-    	user = uc.retrieve(item.getCreatedBy());
-    	return user;
+        User user = null;
+        UserController uc = new UserController();
+        user = uc.retrieve(item.getCreatedBy());
+        return user;
+    }
+
+    /**
+     * setter
+     * 
+     * @param mds the mds to set
+     */
+    public void setMds(MetadataSetBean mds)
+    {
+        this.mds = mds;
+    }
+
+    /**
+     * getter
+     * 
+     * @return the mds
+     */
+    public MetadataSetBean getMds()
+    {
+        return mds;
     }
 }

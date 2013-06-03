@@ -2,8 +2,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:define name="mainContent" >
+	<ui:define name="init">
 		<h:outputText value="#{imageBean.init}"/>
+	</ui:define>
+	<ui:define name="mainContent" >
 		<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
             <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
         </h:panelGroup>
@@ -42,7 +44,7 @@
 							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
 								<h:outputText value="#{lbl.remove_from_col}" />
 							</h:commandLink>
-							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.navigationString == 'pretty:albumItem'}">
+							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.editable and imageBean.navigationString == 'pretty:albumItem'}">
 								<h:outputText value="#{lbl.remove_from_album}" />
 							</h:commandLink>
 							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
@@ -133,6 +135,7 @@
 							</h:panelGroup>
 							<h:panelGroup id="singleEditPanel" style="border-width:0px;" styleClass="free_area0" bodyClass="free_area0" headerClass="free_area0">
 							 	<h:panelGroup layout="block" rendered="#{imageBean.edit.toggleState == 'displayMd'}">
+							 		<ui:remove>
 							 		<ui:repeat var="statement" value="#{imageBean.edit.profile.statements}" rows="0">
 									 	<ui:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0">
 									 		<h:panelGroup rendered="#{md.statement == statement.id}" styleClass="free_area0 endline itemLine noTopBorder">
@@ -150,11 +153,27 @@
 											</h:panelGroup>
 										</ui:repeat>
 									</ui:repeat>
+									</ui:remove>
+									<ui:repeat var="metadata" value="#{imageBean.mds.metadata}" rows="0">
+										<h:panelGroup rendered="#{!metadata.isEmpty()}">
+											<div class="full_area0_p4 id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area">
+												<b class="xLarge_area0_p8 endline labelLine clear" style="margin-left: #{metadata.hierarchyLevel}em;">
+													<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement]}" /> 
+													<span class="noDisplay">: </span>
+												</b>
+												<div class="double_area0_p2 xTiny_marginLExcl endline">
+													<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
+														<ui:param name="md" value="#{metadata}" />
+													</ui:include>
+												</div>
+											</div>
+										</h:panelGroup>
+									</ui:repeat>
 								</h:panelGroup>
 								<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">
 									<ui:repeat id="statementList" var="statement" value="#{imageBean.edit.profile.statements}" rows="0" varStatus="indexStatement">
 										<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-											<b class="xLarge_area0_p8 endline labelLine clear">
+											<b class="xLarge_area0_p8 endline labelLine clear" >
 												<h:outputText value="#{MetadataLabels.internationalizedLabels[statement.id]}"/>
 												<span class="noDisplay">: </span> 
 											</b>
@@ -207,10 +226,10 @@
 								</h:panelGroup>
 								<div class="vertDist050 linebreak"></div>
 							</h:panelGroup>
-							
 						</h:panelGroup>
 					</h:panelGroup>
 					</h:form>
+					<script>highlighter();</script>
 				</h:panelGroup>
 				<h:panelGroup id="techmetadata" styleClass="full_area0_p4" style="background-color:#494949" rendered="#{imageBean.tab == 'techmd'}">
 					<ui:repeat id="techMd" var="techMd" value="#{imageBean.techMd}">
@@ -296,7 +315,10 @@
 		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"/>
 		<script>
 			jQuery(document).ready(function() {
-				document.getElementById('qr').innerHTML = create_qrcode(document.URL);
+				var qrHtml = document.getElementById('qr');
+				if (qrHtml != null){
+					qrHtml.innerHTML = create_qrcode('#{imageBean.pageUrl}');
+				}
 			});
 			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
 				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );

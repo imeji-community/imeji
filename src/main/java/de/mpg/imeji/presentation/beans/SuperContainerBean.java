@@ -23,6 +23,7 @@ import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Java Bean for {@link Container} browse pages (collections and albums)
@@ -52,11 +53,11 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         if (sessionBean.getUser() != null)
         {
-        	selectedFilter = "my";
+            selectedFilter = "my";
         }
         else
         {
-        	selectedFilter = "all";
+            selectedFilter = "all";
         }
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         initMenus();
@@ -83,6 +84,25 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
             logger.error("Error reading property imeji.container.list.size.options", e);
         }
     }
+    
+    /**
+     * Initialize the page
+     * 
+     * @return
+     */
+    public String getInit()
+    {
+        if (UrlHelper.getParameterValue("f") != null && !UrlHelper.getParameterValue("f").equals(""))
+        {
+            selectedFilter = UrlHelper.getParameterValue("f");
+        }
+        if (UrlHelper.getParameterValue("tab") != null && !UrlHelper.getParameterValue("tab").equals(""))
+        {
+            selectedMenu = UrlHelper.getParameterValue("tab");
+        }
+        initMenus();
+        return "";
+    }
 
     /**
      * Initialize the menus of the page
@@ -90,29 +110,18 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     protected void initMenus()
     {
         sortMenu = new ArrayList<SelectItem>();
-        sortMenu.add(new SelectItem(SearchIndex.names.status.name(), sb.getLabel("sort_status")));
         sortMenu.add(new SelectItem(SearchIndex.names.cont_title.name(), sb.getLabel("sort_title")));
         sortMenu.add(new SelectItem(SearchIndex.names.modified.name(), sb.getLabel("sort_date_mod")));
         filterMenu = new ArrayList<SelectItem>();
         filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
         if (sb.getUser() != null)
         {
+            sortMenu.add(new SelectItem(SearchIndex.names.status.name(), sb.getLabel("sort_status")));
             filterMenu.add(new SelectItem("my", sb.getLabel("my_except_withdrawn")));
             filterMenu.add(new SelectItem("private", sb.getLabel("only_private")));
         }
         filterMenu.add(new SelectItem("public", sb.getLabel("only_public")));
         filterMenu.add(new SelectItem("withdrawn", sb.getLabel("only_withdrawn")));
-    }
-
-    /**
-     * Method called from the xhtml page, to initialize the menus
-     * 
-     * @return
-     */
-    public String getInitMenus()
-    {
-        initMenus();
-        return "";
     }
 
     /**
@@ -135,8 +144,8 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         SearchPair pair = null;
         if ("my".equals(selectedFilter))
         {
-            pair = new SearchPair(Search.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper.getURI(User.class,
-                    sb.getUser().getEmail()).toString());
+            pair = new SearchPair(Search.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper.getURI(
+                    User.class, sb.getUser().getEmail()).toString());
         }
         else if ("private".equals(selectedFilter))
         {
@@ -173,10 +182,6 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
      */
     public String getSelectedMenu()
     {
-        if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("tab"))
-        {
-            selectedMenu = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tab");
-        }
         return selectedMenu;
     }
 
@@ -280,12 +285,6 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
      */
     public String getSelectedFilter()
     {
-        if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("f")
-                && !FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("f").toString()
-                        .equals(""))
-        {
-            selectedFilter = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("f");
-        }
         return selectedFilter;
     }
 

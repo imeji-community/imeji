@@ -17,9 +17,15 @@ import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
+/**
+ * Abstract call for the {@link Metadata} editors
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public abstract class MetadataEditor
 {
-    // protected List<Item> items = new ArrayList<Item>();
     protected List<EditorItemBean> items;
     protected Statement statement;
     protected MetadataProfile profile;
@@ -43,6 +49,9 @@ public abstract class MetadataEditor
         initialize();
     }
 
+    /**
+     * Reset all value to empty state
+     */
     public void reset()
     {
         items = new ArrayList<EditorItemBean>();
@@ -50,6 +59,9 @@ public abstract class MetadataEditor
         profile = null;
     }
 
+    /**
+     * Save the {@link Item} and {@link Metadata} defined in the editor
+     */
     public void save()
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);

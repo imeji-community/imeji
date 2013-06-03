@@ -28,7 +28,6 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -72,7 +71,7 @@ public class CollectionController extends ImejiController
      * @param ic
      * @param user
      */
-    public URI create(CollectionImeji ic, URI profile) throws Exception
+    public URI create(CollectionImeji ic, URI profile, User user) throws Exception
     {
         writeCreateProperties(ic, user);
         ic.setProfile(profile);

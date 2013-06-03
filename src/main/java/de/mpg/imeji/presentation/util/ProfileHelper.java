@@ -10,6 +10,7 @@ import java.util.Map;
 
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
 
 /**
  * Helper methods related to {@link MetadataProfile}
@@ -40,4 +41,22 @@ public class ProfileHelper
         }
         return pMap;
     }
+
+    /**
+     * Return a {@link Statement} according to its {@link URI} if defined within the provided {@link MetadataProfile}
+     * 
+     * @param uri
+     * @param profile
+     * @return
+     */
+    public static Statement getStatement(URI uri, MetadataProfile profile)
+    {
+        for (Statement st : profile.getStatements())
+        {
+            if (st.getId().toString().equals(uri.toString()))
+                return st;
+        }
+        return null;
+    }
+    
 }

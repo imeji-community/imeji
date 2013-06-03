@@ -9,9 +9,9 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import com.hp.hpl.jena.util.Metadata;
-
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.mdProfile.MdProfileBean;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -32,6 +32,10 @@ public class StatementWrapper
     private VocabularyHelper vocabularyHelper;
     private boolean showRemoveWarning = false;
     private int level = 0;
+    /**
+     * True if this {@link Statement} is used by at least on {@link Metadata} in imeji
+     */
+    private boolean used;
 
     /**
      * Create a new {@link StatementWrapper}
@@ -65,6 +69,9 @@ public class StatementWrapper
         statement = st;
         initMultiple();
         initVocabulary();
+        used = ImejiSPARQL
+                .exec("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/metadata> ?md . ?md <http://imeji.org/terms/statement> <"
+                        + statement.getId() + ">} LIMIT 1 ", null).size() > 0;
     }
 
     /**
@@ -118,16 +125,25 @@ public class StatementWrapper
     }
 
     /**
-     * True if at least one item in imeji has one {@link Metadata} defined with the {@link Statement} attached to this
-     * {@link StatementWrapper}
+     * Return the id of the {@link Statement} (i.e. the last part of the {@link URI})
      * 
      * @return
      */
-    public boolean isUsedByAtLeastOnItem()
+    public String getStatementId()
     {
-        return ImejiSPARQL
-                .exec("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/metadata> ?md . ?md <http://imeji.org/terms/statement> <"
-                        + statement.getId() + ">} LIMIT 1 ", null).size() > 0;
+        return ObjectHelper.getId(statement.getId());
+    }
+
+    /**
+     * Return the id of the parent of the current {@link Statement}
+     * 
+     * @return
+     */
+    public String getParentId()
+    {
+        if (statement.getParent() != null)
+            return ObjectHelper.getId(statement.getParent());
+        return null;
     }
 
     /**
@@ -338,6 +354,8 @@ public class StatementWrapper
     }
 
     /**
+     * setter
+     * 
      * @param level the level to set
      */
     public void setLevel(int level)
@@ -346,10 +364,32 @@ public class StatementWrapper
     }
 
     /**
+     * getter
+     * 
      * @return the level
      */
     public int getLevel()
     {
         return level;
+    }
+
+    /**
+     * getter
+     * 
+     * @return the used
+     */
+    public boolean isUsed()
+    {
+        return used;
+    }
+
+    /**
+     * setter
+     * 
+     * @param used the used to set
+     */
+    public void setUsed(boolean used)
+    {
+        this.used = used;
     }
 }

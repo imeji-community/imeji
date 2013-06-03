@@ -62,6 +62,10 @@ public class MdProfileBean
     private int constraintPosition = 0;
     private int labelPosition = 0;
     private static final int MARGIN_PIXELS_FOR_STATEMENT_CHILD = 30;
+    /**
+     * If a {@link Statement} already used by {@link Metadata} has been removed, return true;
+     */
+    protected boolean cleanMetadata = false;
 
     /**
      * initialize a default {@link MdProfileBean}
@@ -88,6 +92,7 @@ public class MdProfileBean
     {
         parseID();
         initMenus();
+        cleanMetadata = false;
         if (UrlHelper.getParameterBoolean("reset"))
         {
             reset();
@@ -576,7 +581,7 @@ public class MdProfileBean
      */
     public void removeStatement()
     {
-        if (!wrappers.get(getStatementPosition()).isUsedByAtLeastOnItem())
+        if (!wrappers.get(getStatementPosition()).isUsed())
         {
             wrappers.remove(getStatementPosition());
         }
@@ -602,11 +607,13 @@ public class MdProfileBean
     }
 
     /**
-     * Remove a statement even if it is used by a an item
+     * Remove a {@link Statement} even if it is used by a an item. All {@link Metadata} using this {@link Statement} are
+     * then removed.
      */
     public void forceRemoveStatement()
     {
         wrappers.remove(getStatementPosition());
+        cleanMetadata = true;
     }
 
     /**

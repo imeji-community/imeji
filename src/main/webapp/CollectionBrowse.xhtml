@@ -35,6 +35,16 @@
 			rendered="#{CollectionImagesBean.editable}">
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
 		</h:outputLink>
+		
+		<h:outputText styleClass="imj_contentMenuSeparator"
+			rendered="#{AuthorizationBean.admin}" />
+			
+		<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem"
+			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/ingest?init=1"
+			rendered="#{AuthorizationBean.admin}">
+			<h:outputText value="#{lbl.ingest}" />
+		</h:outputLink>
+		
 	</ui:define>
 	<ui:define name="actionsMenu">
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">

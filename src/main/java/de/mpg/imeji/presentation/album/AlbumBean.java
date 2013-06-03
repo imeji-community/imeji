@@ -31,6 +31,7 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -56,6 +57,15 @@ public class AlbumBean
     private boolean create;
     private boolean selected;
     private static Logger logger = Logger.getLogger(AlbumBean.class);
+    /**
+     * Maximum number of character displayed in the list for the description
+     */
+    private static final int DESCRIPTION_MAX_SIZE = 100;
+    /**
+     * A small description when the description of the {@link Album} is too large for the list view
+     */
+    private String smallDescription = null;
+    private ThumbnailBean thumbnail;
 
     /**
      * Construct an {@link AlbumBean} from an {@link Album}
@@ -73,6 +83,24 @@ public class AlbumBean
         }
         AlbumController ac = new AlbumController();
         this.album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
+        smallDescription = album.getMetadata().getDescription();
+        if (smallDescription != null && smallDescription.length() > DESCRIPTION_MAX_SIZE)
+        {
+            smallDescription = smallDescription.substring(0, DESCRIPTION_MAX_SIZE) + "...";
+        }
+        // Init the thumbnail
+        if (!album.getImages().isEmpty())
+        {
+            ItemController ic = new ItemController();
+            try
+            {
+                thumbnail = new ThumbnailBean(ic.retrieve(album.getImages().iterator().next()));
+            }
+            catch (Exception e)
+            {
+                logger.error("Erro loading thumbnail of album", e);
+            }
+        }
     }
 
     /**
@@ -161,6 +189,11 @@ public class AlbumBean
         return nav.getAlbumUrl() + id + "/" + nav.getInfosPath();
     }
 
+    /**
+     * True if a the information about the {@link Album} are valid
+     * 
+     * @return
+     */
     public boolean valid()
     {
         boolean valid = true;
@@ -203,6 +236,11 @@ public class AlbumBean
         return valid;
     }
 
+    /**
+     * Add a {@link Person} as an author of the album
+     * 
+     * @return
+     */
     public String addAuthor()
     {
         List<Person> list = (List<Person>)getAlbum().getMetadata().getPersons();
@@ -210,6 +248,11 @@ public class AlbumBean
         return "";
     }
 
+    /**
+     * Remvoe a {@link Person} as an author of the album
+     * 
+     * @return
+     */
     public String removeAuthor()
     {
         List<Person> list = (List<Person>)getAlbum().getMetadata().getPersons();
@@ -220,6 +263,11 @@ public class AlbumBean
         return "";
     }
 
+    /**
+     * add an {@link Organization} to the author
+     * 
+     * @return
+     */
     public String addOrganization()
     {
         Collection<Person> persons = getAlbum().getMetadata().getPersons();
@@ -228,6 +276,11 @@ public class AlbumBean
         return "";
     }
 
+    /**
+     * Remove an {@link Organization} to the author
+     * 
+     * @return
+     */
     public String removeOrganization()
     {
         List<Person> persons = (List<Person>)getAlbum().getMetadata().getPersons();
@@ -249,16 +302,31 @@ public class AlbumBean
         album.setDiscardComment(event.getNewValue().toString());
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     protected String getNavigationString()
     {
         return "pretty:";
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public int getAuthorPosition()
     {
         return authorPosition;
     }
 
+    /**
+     * setter
+     * 
+     * @param pos
+     */
     public void setAuthorPosition(int pos)
     {
         this.authorPosition = pos;
@@ -296,21 +364,51 @@ public class AlbumBean
         this.id = id;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<SelectItem> getProfilesMenu()
     {
         return profilesMenu;
     }
 
+    /**
+     * setter
+     * 
+     * @param profilesMenu
+     */
     public void setProfilesMenu(List<SelectItem> profilesMenu)
     {
         this.profilesMenu = profilesMenu;
     }
 
+    /**
+     * return thr number of item in the album
+     * 
+     * @return
+     */
     public int getSize()
     {
         return album.getImages().size();
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
+    public String getSmallDescription()
+    {
+        return CommonUtils.removeTags(smallDescription);
+    }
+
+    /**
+     * True if the current user is the owner of the albun
+     * 
+     * @return
+     */
     public boolean getIsOwner()
     {
         if (sessionBean.getUser() != null)
@@ -337,7 +435,7 @@ public class AlbumBean
             {
                 uris.add(uri.toString());
             }
-            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 5, 0));
+            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 13, 0));
         }
         return null;
     }
@@ -369,6 +467,12 @@ public class AlbumBean
         return "";
     }
 
+    /**
+     * Update the {@link Album} in the dabatase with the values defined in this {@link AlbumBean}
+     * 
+     * @return
+     * @throws Exception
+     */
     public String update() throws Exception
     {
         AlbumController ac = new AlbumController();
@@ -387,16 +491,31 @@ public class AlbumBean
         return "";
     }
 
+    /**
+     * setter
+     * 
+     * @param album
+     */
     public void setAlbum(Album album)
     {
         this.album = album;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public Album getAlbum()
     {
         return album;
     }
 
+    /**
+     * Return the all author of this album as a single {@link String}
+     * 
+     * @return
+     */
     public String getPersonString()
     {
         String personString = "";
@@ -411,16 +530,31 @@ public class AlbumBean
         return personString;
     }
 
+    /**
+     * setter
+     * 
+     * @param active
+     */
     public void setActive(boolean active)
     {
         this.active = active;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public boolean getActive()
     {
         return active;
     }
 
+    /**
+     * Make the current {@link Album} active
+     * 
+     * @return
+     */
     public String makeActive()
     {
         sessionBean.setActiveAlbum(this.album);
@@ -428,6 +562,11 @@ public class AlbumBean
         return "pretty:";
     }
 
+    /**
+     * Make the current {@link Album} inactive
+     * 
+     * @return
+     */
     public String makeInactive()
     {
         sessionBean.setActiveAlbum(null);
@@ -435,6 +574,11 @@ public class AlbumBean
         return "pretty:";
     }
 
+    /**
+     * Release the current {@link Album}
+     * 
+     * @return
+     */
     public String release()
     {
         AlbumController ac = new AlbumController();
@@ -513,6 +657,12 @@ public class AlbumBean
         return selected;
     }
 
+    /**
+     * setter: called when the user click on the select box to select the {@link Album}. Set the status "selected" in
+     * the session
+     * 
+     * @param selected
+     */
     public void setSelected(boolean selected)
     {
         if (selected)
@@ -525,27 +675,74 @@ public class AlbumBean
         this.selected = selected;
     }
 
+    /**
+     * True if the current {@link User} is allowed to edit the {@link Album}
+     * 
+     * @return
+     */
     public boolean isEditable()
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, sessionBean.getUser(), album);
     }
 
+    /**
+     * True if the current {@link User} is allowed to view the {@link Album}
+     * 
+     * @return
+     */
     public boolean isVisible()
     {
         Security security = new Security();
         return security.check(OperationsType.READ, sessionBean.getUser(), album);
     }
 
+    /**
+     * True if the current {@link User} is allowed to delete the {@link Album}
+     * 
+     * @return
+     */
     public boolean isDeletable()
     {
         Security security = new Security();
         return security.check(OperationsType.DELETE, sessionBean.getUser(), album);
     }
 
+    /**
+     * True if the current {@link User} has administration priviliges for this {@link Album}
+     * 
+     * @return
+     */
     public boolean isAdmin()
     {
         Authorization auth = new Authorization();
         return auth.isContainerAdmin(sessionBean.getUser(), album);
+    }
+
+    /**
+     * getter
+     * 
+     * @return the thumbnail
+     */
+    public ThumbnailBean getThumbnail()
+    {
+        return thumbnail;
+    }
+
+    /**
+     * setter
+     * 
+     * @param thumbnail the thumbnail to set
+     */
+    public void setThumbnail(ThumbnailBean thumbnail)
+    {
+        this.thumbnail = thumbnail;
+    }
+    
+    public String getFormattedDescription()
+    {
+        if (this.getAlbum() == null || this.getAlbum().getMetadata().getDescription() == null)
+            return "";
+        return this.getAlbum().getMetadata().getDescription().replaceAll("\n", "<br/>");
     }
 }

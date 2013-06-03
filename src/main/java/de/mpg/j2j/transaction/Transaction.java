@@ -58,7 +58,7 @@ public abstract class Transaction
             dataset.abort();
             isException = true;
             exception = e;
-            logger.error("Exception in a transaction: has been aborted");
+            logger.error("Exception in a transaction: has been aborted", e);
         }
         finally
         {

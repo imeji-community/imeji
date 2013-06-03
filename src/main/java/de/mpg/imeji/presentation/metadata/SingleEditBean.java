@@ -186,6 +186,9 @@ public class SingleEditBean
         }
     }
 
+    /**
+     * Remove Metadata which are emtpy to avoid to display then
+     */
     private void cleanImageMetadata()
     {
         for (int i = 0; i < item.getMetadataSet().getMetadata().size(); i++)

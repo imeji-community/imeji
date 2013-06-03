@@ -81,7 +81,7 @@ public class SPARQLQueries
                 + ">} . optional{ ?it <http://imeji.org/terms/fullImageUrl> <" + fileUrl + ">}"
                 + " . ?it <http://imeji.org/terms/collection> ?s . } LIMIT 1 ";
     }
-    
+
     /**
      * @param fileUrl
      * @return
@@ -157,5 +157,32 @@ public class SPARQLQueries
     public static String selectItemAll()
     {
         return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/item>}";
+    }
+
+    /**
+     * Update all {@link Item}. Remove the {@link Metadata} which have a non existing {@link Statement}
+     * 
+     * @return
+     */
+    public static String updateRemoveAllMetadataWithoutStatement()
+    {
+        return "WITH <http://imeji.org/item> "
+                + "DELETE {?mds <http://imeji.org/terms/metadata> ?s . ?s ?p ?o } "
+                + "USING <http://imeji.org/item> "
+                + "USING <http://imeji.org/metadataProfile> "
+                + "WHERE {?mds <http://imeji.org/terms/metadata> ?s . ?s <http://imeji.org/terms/statement> ?st . ?s ?p ?o "
+                + "NOT EXISTS{?profile a <http://imeji.org/terms/mdprofile> . ?profile <http://imeji.org/terms/statement> ?st}}";
+    }
+
+    /**
+     * Update all {@link Item}. Remove all {@link Metadata} which doesn't have any content (no triples as subject)
+     * 
+     * @return
+     */
+    public static String updateEmptyMetadata()
+    {
+        return "WITH <http://imeji.org/item> " + "DELETE {?mds <http://imeji.org/terms/metadata> ?s} "
+                + "USING <http://imeji.org/item> "
+                + "WHERE {?mds <http://imeji.org/terms/metadata> ?s . NOT EXISTS{?s ?p ?o}}";
     }
 }

@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -401,5 +402,13 @@ public class CollectionListItem
     public void setThumbnail(ThumbnailBean thumbnail)
     {
         this.thumbnail = thumbnail;
+    }
+    
+    
+    public String getDescriptionWithoutHtml()
+    {
+        if (this.getDescription() == null)
+            return "";
+        return CommonUtils.removeTags(this.getDescription());
     }
 }

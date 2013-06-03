@@ -22,7 +22,7 @@ public class ItemParser
      * @throws SAXException
      * @throws JAXBException
      */
-    public List<Item> parseItemList(File itemListXmlFile) throws JAXBException, SAXException
+    public List<Item> parseItemList(File itemListXmlFile) throws Exception
     {
         return new JaxbGenericObject<Items>(Items.class).unmarshal(itemListXmlFile).getItem();
     }
@@ -41,7 +41,7 @@ public class ItemParser
     }
 
     @SuppressWarnings("unused")
-    private List<String> parseItemList2ListOfItems(File itemListXmlFile) throws JAXBException, SAXException
+    private List<String> parseItemList2ListOfItems(File itemListXmlFile) throws Exception
     {
         List<String> l = new ArrayList<String>();
         List<Item> items = parseItemList(itemListXmlFile);

@@ -92,9 +92,11 @@
 							</h:panelGroup>
 							<!-- Image stack display for not logged in users -->
 							<h:panelGroup class="free_area0_p0 endline" rendered="#{SessionBean.user == null}">									
-								<div class="imj_stack">							
-									<h:graphicImage style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;" 
-									value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}" alt=""/>
+								<div class="imj_stack">	
+									<h:outputLink value="#{Navigation.collectionUrl}#{container.id}">						
+										<h:graphicImage style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;" 
+										value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}" alt=""/>
+									</h:outputLink>
 								</div>																						
 							</h:panelGroup>
 							<span class="seperator status"></span>

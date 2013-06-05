@@ -1,123 +1,160 @@
 <ui:composition template="templates/template.xhtml"
-	 xmlns="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline" value="#{UploadBean.collection.metadata.title}"/>
+	<ui:param name="headline"
+		value="#{UploadBean.collection.metadata.title}" />
 	<ui:define name="contentMenu">
-		<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}" >
-			<h:outputText value="#{lbl.collection_home}"/>
-		</h:outputLink>			
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-		<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.browsePath}?q=" rendered="#{UploadBean.collectionSize > 0}">
-			<h:outputText value="#{lbl.view_images}"/>
-		</h:outputLink>
-		<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{UploadBean.collectionSize > 0}"/>
-		<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.infosPath}?init=1">
-			<h:outputText value="#{lbl.collection_metadata}"/>
+		<h:outputLink id="lnkViewCollectionStart"
+			styleClass="imj_contentMenuItem"
+			value="#{Navigation.collectionUrl}#{UploadBean.id}">
+			<h:outputText value="#{lbl.collection_home}" />
 		</h:outputLink>
 		<h:outputText styleClass="imj_contentMenuSeparator" />
-		<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.upload_images}"/>
-	</ui:define>
-	
-	<ui:define name="mainContent">
-		<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
-		 	<ui:include src="./include/History.xhtml"></ui:include>
-		 </h:panelGroup>
-		<!-- Load Queue widget CSS and jQuery -->
-		<!-- style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style -->
-		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-		<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.full.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/i18n/#{Internationalization.currentLanguage}.js"></script>
-	
-		<script>
-		
-			$(function() {
-				// Setup html5 version
-				$("#uploader").pluploadQueue({
-					// General settings
-					runtimes : 'html5,silverlight,flash,html4',
-					url : location.pathname  + "?start=1",
-					//max_file_size : '10mb',
-					multi_selection : true,
-					//chunk_size : '1mb',
-					unique_names : false,
-					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.flash.swf',
-					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.silverlight.xap',
-					//filters : [{
-						//title : "imeji files", 
-						//extensions : "jpg,jpeg,png,bmp,gif,tif,JPG,JPEG,PNG,TIF,GIF"
-						//}
-						//{title : "Zip files", extensions : "zip"}
-					//],
-			
-					// Resize images on clientside
-					//resize : {width : 320, height : 240, quality : 90},
-					 init : {
-						 StateChanged: function(up) {
-								// Called when the state of the queue is changed
-								if( up.state == plupload.STOPPED){
-									report();
-								}
-								if( up.state == plupload.STARTED){
-									openDialog('dialogWait');
-								}
-							},
-					 }
-					});
-			});
+		<h:outputLink id="lnkViewCollectionAllImages"
+			styleClass="imj_contentMenuItem"
+			value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.browsePath}?q="
+			rendered="#{UploadBean.collectionSize > 0}">
+			<h:outputText value="#{lbl.view_images}" />
+		</h:outputLink>
+		<h:outputText styleClass="imj_contentMenuSeparator"
+			rendered="#{UploadBean.collectionSize > 0}" />
+		<h:outputLink id="lnkViewCollectionDetail"
+			styleClass="imj_contentMenuItem"
+			value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.infosPath}?init=1">
+			<h:outputText value="#{lbl.collection_metadata}" />
+		</h:outputLink>
+		<h:outputText styleClass="imj_contentMenuSeparator" />
+		<h:outputText styleClass="imj_contentMenuItem"
+			value="#{lbl.upload_images}" />
+		<h:outputText styleClass="imj_contentMenuSeparator"
+			rendered="#{AuthorizationBean.admin}" />
+		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem"
+			value="#{Navigation.collectionUrl}#{UploadBean.id}/ingest?init=1"
+			rendered="#{AuthorizationBean.admin}">
+			<h:outputText value="#{lbl.ingest}" />
+		</h:outputLink>
 
-			function report(){
-				window.location.href = location.pathname + "?done=1";
-			}
+	</ui:define>
+
+	<ui:define name="mainContent">
+		<h:panelGroup rendered="#{AuthorizationBean.edit}">
+			<h:panelGroup layout="block" styleClass="full_area0 itemList"
+				style="border-bottom-width:0 !important;">
+				<ui:include src="./include/History.xhtml"></ui:include>
+			</h:panelGroup>
+			<!-- Load Queue widget CSS and jQuery -->
+			<!-- style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style -->
+			<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+			<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
+			<script type="text/javascript"
+				src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+			<script type="text/javascript"
+				src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.full.js"></script>
+			<script type="text/javascript"
+				src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+			<script type="text/javascript"
+				src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/i18n/#{Internationalization.currentLanguage}.js"></script>
+
+			<script>
 			
-			
-		</script>
-		<div class="full_area0_p8 small_marginLExcl infoPage">
-		<br/>
-			<div class="half_area0_p8 listBackground" style="width:41.15em;">
-				<div id="uploader" class="half_area0_p0">
-					Your browser doens't support native upload!<br/>
-					Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br/>
-				<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">
-					Download Siverlight
-				</a>
-				<br/>
-				or
-				<br/>
-				<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">
-					Download Flash
-				</a></div>
+				$(function() {
+					// Setup html5 version
+					$("#uploader").pluploadQueue({
+						// General settings
+						runtimes : 'html5,silverlight,flash,html4',
+						url : location.pathname  + "?start=1",
+						//max_file_size : '10mb',
+						multi_selection : true,
+						//chunk_size : '1mb',
+						unique_names : false,
+						flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.flash.swf',
+						silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.silverlight.xap',
+						filters : [{
+							title : "imeji files", 
+							extensions : "jpg,jpeg,png,bmp,gif,tif,JPG,JPEG,PNG,TIF,GIF"}
+							//{title : "Zip files", extensions : "zip"}
+						],
+				
+						// Resize images on clientside
+						//resize : {width : 320, height : 240, quality : 90},
+						 init : {
+							 StateChanged: function(up) {
+									// Called when the state of the queue is changed
+									if( up.state == plupload.STOPPED){
+										report();
+									}
+									if( up.state == plupload.STARTED){
+										openDialog('dialogWait');
+									}
+								},
+						 }
+						});
+				});
+	
+				function report(){
+					window.location.href = location.pathname + "?done=1";
+				}
+				
+				
+			</script>
+			<div class="full_area0_p8 small_marginLExcl infoPage">
+				<br />
+				<h2><h:outputText value="#{lbl.uploadFiles}" styleClass="half_area0_p8" /></h2>
+				<div class="half_area0_p8 listBackground" style="width: 41.15em;">
+					<div id="uploader" class="half_area0_p0">
+						Your browser doens't support native upload!<br /> Please use HTML5
+						compatible browser (Firefox 4.x, Safari 4, Chrome) or download
+						following tools:<br /> <a
+							href="http://www.microsoft.com/germany/silverlight/downloads.aspx"
+							target="_blank"> Download Siverlight </a> <br /> or <br /> <a
+							href="http://get.adobe.com/de/flashplayer/download/"
+							target="_blank"> Download Flash </a>
+					</div>
+				</div>
+				<br style="clear: both" />
+				<div class="full_area0_p8">
+					<h:outputText value="#{lbl.or_big}" styleClass="full_area0" />
+					<h:outputText value="#{lbl.upload_from_link}"
+						styleClass="full_area0" />
+					<h:form>
+						<h:inputText value="#{UploadBean.externalUrl}"
+							styleClass="half_area0" />
+						<h:commandLink value="#{lbl.upload_start}"
+							action="#{UploadBean.uploadFromLink}" styleClass="free_area0_p0" />
+					</h:form>
+				</div>
+				<br />
+				<div class="imj_subHeaderMessageSpace">
+					<h:panelGroup
+						styleClass="half_area2_p6 messageArea infoMessageArea"
+						rendered="#{UploadBean.fNum > 0}">
+						<br />
+						<h2>
+							<h:outputText value="#{UploadBean.fNum} #{msg.error_upload}:" />
+							<br />
+						</h2>
+						<ui:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}">
+							<h:outputText styleClass="messageError" value="#{fFile}" />
+							<br />
+						</ui:repeat>
+					</h:panelGroup>
+					<h:panelGroup
+						styleClass="half_area2_p6 messageArea infoMessageArea"
+						rendered="#{UploadBean.sNum > 0}">
+						<h2>
+							<h:outputText value="#{UploadBean.sNum} #{msg.success_upload}:" />
+							<br />
+						</h2>
+						<ui:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}">
+							<h:outputText value="#{sFile}" styleClass="messageStatus" />
+							<br />
+						</ui:repeat>
+					</h:panelGroup>
+				</div>
 			</div>
-			<br style="clear: both"/>
-			<div class="full_area0_p8">
-				<h:outputText value ="#{lbl.or_big}" styleClass="full_area0"/>
-				<h:outputText value ="#{lbl.upload_from_link}" styleClass="full_area0"/>
-				<h:form>
-					<h:inputText value="#{UploadBean.externalUrl}" styleClass="half_area0"/>
-					<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="free_area0_p0"/>
-				</h:form>
-			</div>
-			<br />
-			<div class="imj_subHeaderMessageSpace">
-				<h:panelGroup styleClass="half_area2_p6 messageArea infoMessageArea"  rendered="#{UploadBean.fNum > 0}">	
-					<br />
-					<h2><h:outputText value ="#{UploadBean.fNum} #{msg.error_upload}:"/><br /></h2>
-					<ui:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}" >
-						<h:outputText styleClass="messageError" value="#{fFile}" /><br />
-					</ui:repeat>
-				</h:panelGroup>
-				<h:panelGroup styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{UploadBean.sNum > 0}">
-					<h2><h:outputText value="#{UploadBean.sNum} #{msg.success_upload}:" /><br /></h2>
-					<ui:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}">
-						<h:outputText value="#{sFile}" styleClass="messageStatus"/><br />
-					</ui:repeat>
-				</h:panelGroup>
-			</div>
-		</div>
+		</h:panelGroup>
 	</ui:define>
 </ui:composition>
 

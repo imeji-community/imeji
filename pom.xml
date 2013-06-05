@@ -399,11 +399,6 @@
 			<version>0.97</version>
 			<classifier>incubator</classifier>
 		</dependency>
-		<dependency>
-		  <groupId>org.im4java</groupId>
-		  <artifactId>im4java</artifactId>
-		  <version>1.2.0</version>
-		</dependency>
 		<!-- Test with bioformats jar -->
 		<!-- <dependency> <groupId>org.loci.bioformats</groupId> <artifactId>bioformats</artifactId> 
 			<version>4.4.6</version> <type>pom.lastUpdated</type> </dependency> -->

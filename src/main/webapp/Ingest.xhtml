@@ -170,8 +170,9 @@
 </style>
 			<div class="full_area0  infoPage">
 
-				<h2><h:outputText value="1. #{lbl.uploadProfile}" styleClass="half_area0_p2" /></h2>
-				<h:outputText value="(#{lbl.ingest_profile})" styleClass="half_area0_p2"/>
+				<h2><h:outputText value="1. #{lbl.uploadProfile}" styleClass="full_area0_p2" /></h2>
+				<h:outputText value="(#{lbl.ingest_profile} #{IngestBean.collection.metadata.title})" styleClass="full_area0_p2"/>
+				<font color="#FF0000"><h:outputText value="#{lbl.ingest_warning}" styleClass="full_area0_p2"/></font>
 				<div class="xHuge_area0 double_marginLExcl">
 					<div id="uploaderProfile">
 						Your browser doens't support native upload!<br /> Please use HTML5
@@ -188,8 +189,9 @@
 				
 				<br style="clear: both" />
 				<br />
-				<h2><h:outputText value="2. #{lbl.uploadMd}" styleClass="half_area0_p2" /></h2>
-				<h:outputText value="(#{lbl.ingest_item})" styleClass="half_area0_p2" />
+				<h2><h:outputText value="2. #{lbl.uploadMd}" styleClass="full_area0_p2" /></h2>
+				<h:outputText value="(#{lbl.ingest_item}  #{IngestBean.collection.metadata.title})" styleClass="full_area0_p2" />
+				<font color="#FF0000"><h:outputText value="#{lbl.ingest_warning}" styleClass="full_area0_p2"/></font>
 				<div class="xHuge_area0 double_marginLExcl listBackground">
 					<div id="uploader">
 						Your browser doens't support native upload!<br /> Please use HTML5

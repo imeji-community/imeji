@@ -10,15 +10,17 @@
 		</h1>
 	</ui:define>
 	<ui:define name="contentMenu">
-		<h:outputText value="#{lbl.album_home}" styleClass="imj_contentMenuItem"/>
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-		<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
-			<h:outputText value="#{lbl.view_images}"/>
-		</h:outputLink>
-		<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{AlbumBean.size > 0}"/>
-		<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
-			<h:outputText value="#{lbl.album_metadata}"/>
-		</h:outputLink>
+		<h:panelGroup rendered="#{AlbumBean.visible}">
+			<h:outputText value="#{lbl.album_home}" styleClass="imj_contentMenuItem"/>
+			<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
+				<h:outputText value="#{lbl.view_images}"/>
+			</h:outputLink>
+			<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{AlbumBean.size > 0}"/>
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
+				<h:outputText value="#{lbl.album_metadata}"/>
+			</h:outputLink>
+		</h:panelGroup>
 	</ui:define>
 	<ui:define name="mainContent">
 		<div id="preListHeader" class="full_area0 itemList" style="border-width: 0px !important;">

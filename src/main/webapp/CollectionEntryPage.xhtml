@@ -97,10 +97,10 @@
 							<h2>
 								<h:outputText styleClass="full_area0" value="#{ViewCollectionBean.collection.metadata.title}"/>
 							</h2>
-							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{ViewCollectionBean.collection.discardComment != null and ViewCollectionBean.collection.discardComment != ''}">
+							<h:panelGroup styleClass="full_area0_p8" style="color:red;" rendered="#{ViewCollectionBean.collection.discardComment != null and ViewCollectionBean.collection.discardComment != ''}">
 								<br/>
-								<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
-								<h:outputText styleClass="free_area0"  value=" #{ViewCollectionBean.collection.discardComment}"/>
+								<h:outputText value="#{lbl.withdraw_comment}:"/><br/>
+								<h:outputText value="#{ViewCollectionBean.collection.discardComment}"/>
 							</h:panelGroup>
 							<h:panelGroup styleClass="full_area0">
 								<br/>

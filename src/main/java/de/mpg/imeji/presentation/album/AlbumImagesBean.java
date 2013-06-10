@@ -254,6 +254,7 @@ public class AlbumImagesBean extends ImagesBean
      * 
      * @param event
      */
+    @Override
     public void discardCommentListener(ValueChangeEvent event)
     {
         album.setDiscardComment(event.getNewValue().toString());

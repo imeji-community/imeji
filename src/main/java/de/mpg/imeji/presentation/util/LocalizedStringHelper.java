@@ -3,9 +3,6 @@
  */
 package de.mpg.imeji.presentation.util;
 
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.j2j.misc.LocalizedString;
 
 public class LocalizedStringHelper

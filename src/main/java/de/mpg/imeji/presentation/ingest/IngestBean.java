@@ -8,13 +8,10 @@ import java.io.OutputStream;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.UnmarshalException;
-
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import de.mpg.imeji.logic.ingest.controller.IngestController;

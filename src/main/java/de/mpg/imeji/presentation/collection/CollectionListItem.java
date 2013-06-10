@@ -107,7 +107,7 @@ public class CollectionListItem
                 if (uri != null && uri.size() > 0)
                 {
                     ic = new ItemController(sessionBean.getUser());
-                    this.thumbnail = (ThumbnailBean)ImejiFactory.imageListToThumbList(ic.loadItems(uri, 1, 0)).get(0);
+                    this.thumbnail = ImejiFactory.imageListToThumbList(ic.loadItems(uri, 1, 0)).get(0);
                 }
             }
             // initializations

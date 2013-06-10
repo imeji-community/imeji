@@ -1,8 +1,6 @@
 package de.mpg.imeji.logic.util;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
 
 import org.apache.commons.codec.digest.DigestUtils;

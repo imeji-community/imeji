@@ -2,9 +2,6 @@ package de.mpg.imeji.presentation.metadata;
 
 import java.net.URI;
 
-import org.apache.bcel.generic.GETSTATIC;
-
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -13,7 +10,6 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * Bean for all Metadata types. This bean should have all variable that have been defined in all metadata types.

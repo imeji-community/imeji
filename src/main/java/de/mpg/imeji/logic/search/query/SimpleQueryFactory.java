@@ -85,8 +85,7 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.item.name().equals(pair.getIndex().getName()))
         {
-            searchQuery = "";
-            variable = "s";
+            return " FILTER(" + getSimpleFilter(pair, "s") + ") .";
         }
         else if (SearchIndex.names.status.name().equals(pair.getIndex().getName()))
         {

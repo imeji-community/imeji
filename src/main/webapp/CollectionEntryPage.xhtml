@@ -32,6 +32,7 @@
 		</h:panelGroup>
 	</ui:define>
 	<ui:define name="actionsMenu">
+		<h:panelGroup styleClass="full_area0"> <!-- This panelGroup is needed for IE -->
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu" rendered="#{ViewCollectionBean.visible}">
       		<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" >
 				<h:outputText value="#{lbl.collection_share}"/>		
@@ -45,6 +46,7 @@
 			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{ViewCollectionBean.deletable}">
 				<h:outputText value="#{lbl.delete}"/>
 			</h:outputLink>
+		</h:panelGroup>
 		</h:panelGroup>
 		<ui:include src="confirmationPages/ContainerRelease.xhtml">
 			<ui:param name="bean" value="#{ViewCollectionBean}"/>

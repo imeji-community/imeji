@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.metadata.editors;
 
-import java.net.URI;
 import java.util.List;
 
 import de.mpg.imeji.logic.util.MetadataFactory;

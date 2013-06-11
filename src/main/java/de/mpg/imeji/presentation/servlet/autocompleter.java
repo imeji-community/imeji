@@ -52,6 +52,7 @@ public class autocompleter extends HttpServlet
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         String suggest = request.getParameter("searchkeyword");
@@ -220,7 +221,7 @@ public class autocompleter extends HttpServlet
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             org.w3c.dom.Document doc = dBuilder.parse(new ByteArrayInputStream(str.getBytes()));
             doc.getDocumentElement().normalize();
-            NodeList nList = ((org.w3c.dom.Document)doc).getElementsByTagName("option");
+            NodeList nList = doc.getElementsByTagName("option");
             for (int i = 0; i < nList.getLength(); i++)
             {
                 Node nNode = nList.item(i);

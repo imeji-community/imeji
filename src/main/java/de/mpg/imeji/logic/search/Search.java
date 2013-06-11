@@ -18,7 +18,6 @@ import com.hp.hpl.jena.Jena;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
-import de.mpg.imeji.logic.search.query.SimpleSecurityQuery;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.search.vo.SearchElement;

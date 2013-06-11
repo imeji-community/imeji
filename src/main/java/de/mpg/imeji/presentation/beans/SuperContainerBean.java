@@ -6,7 +6,6 @@ package de.mpg.imeji.presentation.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;

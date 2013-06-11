@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;

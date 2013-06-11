@@ -162,7 +162,7 @@ public class SearchForm
     public void changeElement(int groupPos, int elPos, boolean keepValue)
     {
         SearchGroupForm group = groups.get(groupPos);
-        SearchMetadataForm fe = (SearchMetadataForm)group.getSearchElementForms().get(elPos);
+        SearchMetadataForm fe = group.getSearchElementForms().get(elPos);
         String collectionId = group.getCollectionId();
         String namespace = fe.getNamespace();
         fe.initStatement(profilesMap.get(collectionId), namespace);

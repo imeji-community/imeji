@@ -70,7 +70,7 @@ public class SimpleImageEditor extends MetadataEditor
                 }
                 else
                 {
-                   // eib.getMetadata().get(i).setPos(i);
+                    // eib.getMetadata().get(i).setPos(i);
                 }
             }
         }
@@ -100,15 +100,16 @@ public class SimpleImageEditor extends MetadataEditor
     @Override
     public void addMetadata(EditorItemBean eib, int metadataPos)
     {
-        statementChilds = ProfileHelper.getChilds(getStatement(), profile, false);
-        if (metadataPos + statementChilds.size() <= eib.getMetadata().size())
-        {
-            metadataPos = metadataPos + statementChilds.size() + 1;
-            Metadata md = MetadataFactory.createMetadata(getStatement());
-            md.setPos(metadataPos);
-            eib.getMetadata().add(metadataPos, new SuperMetadataBean(md, getStatement()));
-            addChilds(eib, metadataPos);
-        }
+        eib.addMetadata(metadataPos);
+        // statementChilds = ProfileHelper.getChilds(getStatement(), profile, false);
+        // if (metadataPos + statementChilds.size() <= eib.getMetadata().size())
+        // {
+        // metadataPos = metadataPos + statementChilds.size() + 1;
+        // Metadata md = MetadataFactory.createMetadata(getStatement());
+        // md.setPos(metadataPos);
+        // eib.getMetadata().add(metadataPos, new SuperMetadataBean(md, getStatement()));
+        // addChilds(eib, metadataPos);
+        // }
     }
 
     @Override
@@ -123,10 +124,12 @@ public class SimpleImageEditor extends MetadataEditor
     @Override
     public void removeMetadata(EditorItemBean eib, int metadataPos)
     {
-        if (metadataPos < eib.getMetadata().size())
-        {
-            eib.getMetadata().remove(metadataPos);
-        }
+        eib.removeMetadata(metadataPos);
+//        statementChilds = ProfileHelper.getChilds(getStatement(), profile, false);
+//        if (metadataPos < eib.getMetadata().size())
+//        {
+//            eib.getMetadata().remove(metadataPos);
+//        }
     }
 
     /**

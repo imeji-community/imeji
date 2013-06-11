@@ -6,14 +6,9 @@ package de.mpg.imeji.presentation.metadata;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
+
 import javax.faces.context.FacesContext;
-
-import org.apache.axis.utils.ArrayUtil;
-
-import com.hp.hpl.jena.ontology.Profile;
 
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -32,7 +27,6 @@ import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -65,6 +59,7 @@ public class SingleEditBean
         item = im;
         this.profile = profile;
         this.pageUrl = pageUrl;
+        prepareMetadataSetForEditor();
         init();
     }
 
@@ -88,7 +83,6 @@ public class SingleEditBean
      */
     public void init()
     {
-        prepareMetadataSetForEditor();
         editor = new SimpleImageEditor(item, profile, null);
         ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
         metadataList = new ArrayList<SuperMetadataBean>();
@@ -128,11 +122,8 @@ public class SingleEditBean
                 // Add all metadata that should be before the next metadata in the list
                 l.addAll(createMetadataBetween(l.get(l.size() - 1).getStatement(), md.getStatement()));
             }
-            else
-            {
-                // Add the existing metadata
-                l.add(md);
-            }
+            // Add the existing metadata
+            l.add(md);
         }
         URI lastStatement = null;
         if (!l.isEmpty())
@@ -155,13 +146,13 @@ public class SingleEditBean
         List<Metadata> l = new ArrayList<Metadata>();
         int fromPosition = 0;
         if (from != null)
-            fromPosition = ProfileHelper.getStatement(from, profile).getPos();
+            fromPosition = ProfileHelper.getStatement(from, profile).getPos() + 1;
         int toPosition = profile.getStatements().size();
         if (to != null)
             toPosition = ProfileHelper.getStatement(to, profile).getPos();
         for (Statement st : profile.getStatements())
         {
-            if (st.getPos() > fromPosition && st.getPos() < toPosition)
+            if (st.getPos() >= fromPosition && st.getPos() < toPosition)
             {
                 l.add(MetadataFactory.createMetadata(st));
             }
@@ -218,7 +209,6 @@ public class SingleEditBean
         {
             md.setPos(pos);
             pos++;
-            System.out.println(md.asFulltext());
         }
         return l;
     }

@@ -4,9 +4,12 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
@@ -59,6 +62,73 @@ public class EditorItemBean
             item.getMetadataSet().getMetadata().add(smdb.asMetadata());
         }
         return item;
+    }
+
+    /**
+     * Add a {@link Metadata} and all its childs to this {@link EditorItemBean} after the position requested
+     * 
+     * @param position
+     */
+    public void addMetadata(int position)
+    {
+        Statement s = metadata.get(position).getStatement();
+        List<Statement> childs = ProfileHelper.getChilds(s, ObjectCachedLoader.loadProfile(getProfile()), false);
+        // increment the position with the number of childs
+        position = position + childs.size();
+        // Add a new metadata with the same statement
+        addMetadata(s, position + 1);
+        // Add the childs
+        int i = 2;
+        for (Statement st : childs)
+        {
+            addMetadata(st, position + i);
+            i++;
+        }
+        resetPositionToMetadata();
+    }
+
+    /**
+     * Rmove the {@link SuperMetadataBean} and all its childs at the defined position in the editor
+     * 
+     * @param position
+     */
+    public void removeMetadata(int position)
+    {
+        Statement s = metadata.get(position).getStatement();
+        List<Statement> childs = ProfileHelper.getChilds(s, ObjectCachedLoader.loadProfile(getProfile()), false);
+        // remove the first metadata
+        metadata.remove(position);
+        // remove the childs
+        for (int i = 0; i < childs.size(); i++)
+        {
+            metadata.remove(position);
+        }
+        resetPositionToMetadata();
+    }
+
+    /**
+     * Add a {@link Metadata} to this {@link EditorItemBean} at the position requested
+     * 
+     * @param s
+     * @param position
+     */
+    private void addMetadata(Statement s, int position)
+    {
+        Metadata newMd = MetadataFactory.createMetadata(s);
+        metadata.add(position, new SuperMetadataBean(newMd, s));
+    }
+
+    /**
+     * reset the position of all {@link SuperMetadataBean}
+     */
+    private void resetPositionToMetadata()
+    {
+        int pos = 0;
+        for (SuperMetadataBean smd : metadata)
+        {
+            smd.setPos(pos);
+            pos++;
+        }
     }
 
     /**

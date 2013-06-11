@@ -31,6 +31,8 @@ package storage;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import junit.framework.Assert;
@@ -42,6 +44,7 @@ import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
+import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**

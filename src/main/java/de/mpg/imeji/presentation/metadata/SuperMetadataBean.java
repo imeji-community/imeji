@@ -86,15 +86,23 @@ public class SuperMetadataBean
         return metadata;
     }
 
-    // /**
-    // * getter for the {@link Statement} defining this {@link Metadata}
-    // *
-    // * @return
-    // */
-    // public URI getStatement()
-    // {
-    // return metadata.getStatement();
-    // }
+    /**
+     * Get the last parent {@link Statement} of the current {@link Statement}. If no parent found, return null;
+     * 
+     * @return
+     */
+    public URI getLastParent()
+    {
+        SuperMetadataBean parent = getParent();
+        URI lastParent = null;
+        while (parent != null)
+        {
+            lastParent = parent.getStatement().getId();
+            parent = parent.getParent();
+        }
+        return lastParent;
+    }
+
     /**
      * Retun the id (last part of the {@link URI}) of the {@link Statement}. Used for GUI representation
      * 

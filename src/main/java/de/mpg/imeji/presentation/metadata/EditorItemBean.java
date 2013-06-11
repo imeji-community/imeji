@@ -43,10 +43,12 @@ public class EditorItemBean
     {
         this.item = item;
         metadata = new ArrayList<SuperMetadataBean>();
-        for (Metadata md : item.getMetadataSet().getMetadata())
-        {
-            metadata.add(new SuperMetadataBean(md, ProfileHelper.getStatement(md.getStatement(), profile)));
-        }
+        MetadataSetBean mdsb = new MetadataSetBean(item.getMetadataSet());
+        metadata = mdsb.getMetadata();
+        // for (Metadata md : item.getMetadataSet().getMetadata())
+        // {
+        // metadata.add(new SuperMetadataBean(md, ProfileHelper.getStatement(md.getStatement(), profile)));
+        // }
     }
 
     /**

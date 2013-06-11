@@ -72,16 +72,17 @@ public class ProfileHelper
     public static List<Statement> getChilds(Statement statement, MetadataProfile profile, boolean onlyFirst)
     {
         List<Statement> childs = new ArrayList<Statement>();
-        if (statement == null)
-            return childs;
-        for (int i = ((List<Statement>)profile.getStatements()).indexOf(statement) + 1; i < profile.getStatements()
-                .size(); i++)
+        if (statement != null)
         {
-            Statement st = ((List<Statement>)profile.getStatements()).get(i);
-            if (st.getParent() != null && st.getParent().compareTo(statement.getId()) == 0)
-                childs.add(st);
-            if (!onlyFirst)
-                childs.addAll(getChilds(st, profile, onlyFirst));
+            for (int i = ((List<Statement>)profile.getStatements()).indexOf(statement) + 1; i < profile.getStatements()
+                    .size(); i++)
+            {
+                Statement st = ((List<Statement>)profile.getStatements()).get(i);
+                if (st.getParent() != null && st.getParent().compareTo(statement.getId()) == 0)
+                    childs.add(st);
+                if (!onlyFirst)
+                    childs.addAll(getChilds(st, profile, onlyFirst));
+            }
         }
         return childs;
     }

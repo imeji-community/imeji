@@ -33,6 +33,7 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -236,8 +237,13 @@ public class EditImageMetadataBean
         statementMenu = new ArrayList<SelectItem>();
         for (Statement s : profile.getStatements())
         {
-            statementMenu.add(new SelectItem(s.getId().toString(), ((MetadataLabels)BeanHelper
-                    .getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(s.getId())));
+            if (s.getParent() == null)
+            {
+                // Add a statement to the menu only if it doen'st have a parent statement. If it has a parent, then it
+                // will will be editble by choosing the parent in the menu
+                statementMenu.add(new SelectItem(s.getId().toString(), ((MetadataLabels)BeanHelper
+                        .getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(s.getId())));
+            }
         }
     }
 

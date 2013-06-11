@@ -44,7 +44,8 @@ public class MetadataMultipleEditor extends MetadataEditor
             boolean empty = true;
             for (SuperMetadataBean smdb : eib.getMetadata())
             {
-                if (hasStatement && smdb.getStatement() != null && smdb.getStatement().equals(statement.getId()))
+                if (hasStatement && smdb.getStatement() != null
+                        && smdb.getStatement().getId().compareTo(statement.getId()) == 0)
                 {
                     empty = false;
                 }

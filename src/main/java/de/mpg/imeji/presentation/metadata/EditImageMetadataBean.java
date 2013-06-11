@@ -333,6 +333,12 @@ public class EditImageMetadataBean
         return "";
     }
 
+    /**
+     * Lock the {@link Item} which are currently in the editor. This prevent other users to make concurrent
+     * modification.
+     * 
+     * @param items
+     */
     private void lockImages(List<Item> items)
     {
         lockedImages = 0;
@@ -351,6 +357,9 @@ public class EditImageMetadataBean
         }
     }
 
+    /**
+     * Release the lock on all current {@link Item}
+     */
     private void unlockImages()
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);

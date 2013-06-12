@@ -381,35 +381,22 @@ public class EditImageMetadataBean
      */
     public String addToAll()
     {
-        // TODO remove the item with only the editoritembeans
         for (EditorItemBean eib : editor.getItems())
         {
-            Item item = eib.asItem();
             if ("overwrite".equals(selectedMode))
             {
                 // remove all metadata which have the same statement
                 eib.clear(statement);
-                // item = removeAllMetadata(item);
-                // item.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
-                // eib = addMetadataIfNotExists(eib, MetadataFactory.copyMetadata(metadata));
-                // item = eib.asItem();
             }
             else if ("append".equals(selectedMode))
             {
                 // Add an emtpy metadata at the position we want to have it
                 eib.addMetadata(eib.getLastPosition(statement));
-                // item.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
-                // eib = addMetadataIfNotExists(eib, MetadataFactory.copyMetadata(metadata));
-                // item = eib.asItem();
             }
-            else if ("basic".equals(selectedMode))
-            {
-                // eib = addMetadataIfNotExists(eib, MetadataFactory.copyMetadata(metadata));
-                // item = eib.asItem();
-            }
+            // Add the Metadata which has been entered to the emtpy Metadata with the same statement in the editor
             eib = addMetadataIfNotExists(eib, MetadataFactory.copyMetadata(metadata));
-            // eib.init(item);
         }
+        // Make a new Emtpy Metadata of the same statement
         metadata = MetadataFactory.createMetadata(getSelectedStatement());
         return "";
     }

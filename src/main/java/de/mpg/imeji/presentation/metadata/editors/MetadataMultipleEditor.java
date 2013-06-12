@@ -42,17 +42,21 @@ public class MetadataMultipleEditor extends MetadataEditor
         for (EditorItemBean eib : items)
         {
             boolean empty = true;
+            int position = 0;
+            boolean positionFound = false;
             for (SuperMetadataBean smdb : eib.getMetadata())
             {
                 if (hasStatement && smdb.getStatement() != null
                         && smdb.getStatement().getId().compareTo(statement.getId()) == 0)
-                {
                     empty = false;
-                }
+                if (smdb.getStatement().getPos() > statement.getPos())
+                    positionFound = true;
+                if (!positionFound)
+                    position++;
             }
             if (empty && hasStatement)
             {
-                addMetadata(eib, 0);
+                addMetadata(eib, position);
             }
         }
     }
@@ -102,8 +106,7 @@ public class MetadataMultipleEditor extends MetadataEditor
     {
         if (metadataPos <= eib.getMetadata().size())
         {
-            Metadata md = MetadataFactory.createMetadata(getStatement());
-            eib.getMetadata().add(metadataPos, new SuperMetadataBean(md, getStatement()));
+            eib.addMetadata(metadataPos);
         }
     }
 
@@ -121,7 +124,7 @@ public class MetadataMultipleEditor extends MetadataEditor
     {
         if (metadataPos < eib.getMetadata().size())
         {
-            eib.getMetadata().remove(metadataPos);
+            eib.removeMetadata(metadataPos);
         }
     }
 }

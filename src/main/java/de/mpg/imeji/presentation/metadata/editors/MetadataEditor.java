@@ -74,7 +74,7 @@ public abstract class MetadataEditor
                 {
                     try
                     {
-                         addPositionToMetadata();
+                        addPositionToMetadata();
                         List<Item> itemList = new ArrayList<Item>();
                         for (EditorItemBean eib : items)
                         {

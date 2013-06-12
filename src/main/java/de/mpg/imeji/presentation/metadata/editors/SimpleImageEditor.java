@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.metadata.editors;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

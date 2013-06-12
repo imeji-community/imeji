@@ -12,6 +12,7 @@ import java.util.Map;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 
 /**
  * Helper methods related to {@link MetadataProfile}
@@ -85,5 +86,24 @@ public class ProfileHelper
             }
         }
         return childs;
+    }
+
+    /**
+     * Return the {@link URI} of the last parent {@link Statement}. Null if no parent
+     * 
+     * @param st
+     * @param profile
+     * @return
+     */
+    public static URI getLastParent(Statement st, MetadataProfile profile)
+    {
+        URI parent = st.getParent();
+        URI lastParent = null;
+        while (parent != null)
+        {
+            lastParent = parent;
+            parent = getStatement(parent, profile).getParent();
+        }
+        return lastParent;
     }
 }

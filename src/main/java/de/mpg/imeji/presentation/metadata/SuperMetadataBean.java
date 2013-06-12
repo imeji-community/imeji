@@ -10,6 +10,7 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * Bean for all Metadata types. This bean should have all variable that have been defined in all metadata types.
@@ -44,6 +45,7 @@ public class SuperMetadataBean
      */
     private boolean empty = false;
     private boolean preview = true;
+    private URI lastParent = null;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -84,23 +86,6 @@ public class SuperMetadataBean
         ObjectHelper.copyAllFields(this, metadata);
         MetadataHelper.setConeID(metadata);
         return metadata;
-    }
-
-    /**
-     * Get the last parent {@link Statement} of the current {@link Statement}. If no parent found, return null;
-     * 
-     * @return
-     */
-    public URI getLastParent()
-    {
-        SuperMetadataBean parent = getParent();
-        URI lastParent = null;
-        while (parent != null)
-        {
-            lastParent = parent.getStatement().getId();
-            parent = parent.getParent();
-        }
-        return lastParent;
     }
 
     /**
@@ -514,5 +499,23 @@ public class SuperMetadataBean
     public void setStatement(Statement statement)
     {
         this.statement = statement;
+    }
+
+    /**
+     * Get the last parent {@link Statement} of the current {@link Statement}. If no parent found, return null;
+     * 
+     * @return
+     */
+    public URI getLastParent()
+    {
+        return lastParent;
+    }
+
+    /**
+     * @param lastParent the lastParent to set
+     */
+    public void setLastParent(URI lastParent)
+    {
+        this.lastParent = lastParent;
     }
 }

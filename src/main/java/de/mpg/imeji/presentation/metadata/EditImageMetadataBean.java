@@ -33,7 +33,6 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -509,12 +508,22 @@ public class EditImageMetadataBean
         return null;
     }
 
+    /**
+     * Add a new emtpy {@link Metadata} into the editor
+     * 
+     * @return
+     */
     public String addMetadata()
     {
         editor.addMetadata(getImagePosition(), getMdPosition());
         return "";
     }
 
+    /**
+     * Remove a {@link Metadata} into the editor
+     * 
+     * @return
+     */
     public String removeMetadata()
     {
         editor.removeMetadata(getImagePosition(), getMdPosition());
@@ -551,15 +560,6 @@ public class EditImageMetadataBean
         this.editor = editor;
     }
 
-    // public ImagesBean getImagesBean()
-    // {
-    // return imagesBean;
-    // }
-    //
-    // public void setImagesBean(ImagesBean imagesBean)
-    // {
-    // this.imagesBean = imagesBean;
-    // }
     public List<SelectItem> getStatementMenu()
     {
         return statementMenu;

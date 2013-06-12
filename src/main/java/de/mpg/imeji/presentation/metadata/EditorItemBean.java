@@ -44,11 +44,8 @@ public class EditorItemBean
         this.item = item;
         metadata = new ArrayList<SuperMetadataBean>();
         MetadataSetBean mdsb = new MetadataSetBean(item.getMetadataSet());
+        mdsb.prepareMetadataSetForEditor();
         metadata = mdsb.getMetadata();
-        // for (Metadata md : item.getMetadataSet().getMetadata())
-        // {
-        // metadata.add(new SuperMetadataBean(md, ProfileHelper.getStatement(md.getStatement(), profile)));
-        // }
     }
 
     /**
@@ -116,8 +113,9 @@ public class EditorItemBean
      */
     private void addMetadata(Statement s, int position)
     {
-        Metadata newMd = MetadataFactory.createMetadata(s);
-        metadata.add(position, new SuperMetadataBean(newMd, s));
+        SuperMetadataBean smd = new SuperMetadataBean(MetadataFactory.createMetadata(s), s);
+        smd.setLastParent(ProfileHelper.getLastParent(s, ObjectCachedLoader.loadProfile(getProfile())));
+        metadata.add(position, smd);
     }
 
     /**

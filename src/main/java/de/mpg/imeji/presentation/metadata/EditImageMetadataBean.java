@@ -387,18 +387,28 @@ public class EditImageMetadataBean
             Item item = eib.asItem();
             if ("overwrite".equals(selectedMode))
             {
-                item = removeAllMetadata(item);
-                item.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
+                // remove all metadata which have the same statement
+                eib.clear(statement);
+                // item = removeAllMetadata(item);
+                // item.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
+                // eib = addMetadataIfNotExists(eib, MetadataFactory.copyMetadata(metadata));
+                // item = eib.asItem();
             }
             else if ("append".equals(selectedMode))
             {
-                item.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
+                // Add an emtpy metadata at the position we want to have it
+                eib.addMetadata(eib.getLastPosition(statement));
+                // item.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
+                // eib = addMetadataIfNotExists(eib, MetadataFactory.copyMetadata(metadata));
+                // item = eib.asItem();
             }
             else if ("basic".equals(selectedMode))
             {
-                addMetadataIfNotExists(item, MetadataFactory.copyMetadata(metadata));
+                // eib = addMetadataIfNotExists(eib, MetadataFactory.copyMetadata(metadata));
+                // item = eib.asItem();
             }
-            eib.init(item, profile);
+            eib = addMetadataIfNotExists(eib, MetadataFactory.copyMetadata(metadata));
+            // eib.init(item);
         }
         metadata = MetadataFactory.createMetadata(getSelectedStatement());
         return "";
@@ -428,7 +438,7 @@ public class EditImageMetadataBean
         metadata = MetadataFactory.createMetadata(statement);
         for (EditorItemBean eib : editor.getItems())
         {
-            removeAllMetadata(eib.asItem());
+            eib.clear(statement);
         }
         return "";
     }
@@ -440,17 +450,19 @@ public class EditImageMetadataBean
      * @param metadata
      * @return
      */
-    private Item addMetadataIfNotExists(Item im, Metadata metadata)
+    private EditorItemBean addMetadataIfNotExists(EditorItemBean eib, Metadata metadata)
     {
         boolean hasValue = false;
         int i = 0;
-        for (Metadata md : im.getMetadataSet().getMetadata())
+        for (SuperMetadataBean smd : eib.getMetadata())
         {
-            if (md.getStatement().toString().equals(metadata.getStatement().toString()))
+            if (smd.getStatement().getId().toString().equals(metadata.getStatement().toString()))
             {
-                if (MetadataHelper.isEmpty(md))
+                if (smd.isEmpty())
                 {
-                    ((List<Metadata>)im.getMetadataSet().getMetadata()).set(i, metadata);
+                    SuperMetadataBean newSmb = new SuperMetadataBean(metadata, smd.getStatement());
+                    newSmb.setPos(i);
+                    eib.getMetadata().set(i, newSmb);
                 }
                 hasValue = true;
             }
@@ -458,30 +470,9 @@ public class EditImageMetadataBean
         }
         if (!hasValue)
         {
-            im.getMetadataSet().getMetadata().add(metadata);
+            eib.getMetadata().add(new SuperMetadataBean(metadata, statement));
         }
-        return im;
-    }
-
-    /**
-     * Remove all metadata values with the same type as the current selected metadata
-     * 
-     * @param im
-     * @return
-     */
-    private Item removeAllMetadata(Item im)
-    {
-        for (int i = 0; i < im.getMetadataSet().getMetadata().size(); i++)
-        {
-            if (((List<Metadata>)im.getMetadataSet().getMetadata()).get(i).getStatement() == null
-                    || ((List<Metadata>)im.getMetadataSet().getMetadata()).get(i).getStatement().toString()
-                            .equals(metadata.getStatement().toString()))
-            {
-                ((List<Metadata>)im.getMetadataSet().getMetadata()).remove(i);
-                i--;
-            }
-        }
-        return im;
+        return eib;
     }
 
     public Statement getSelectedStatement()

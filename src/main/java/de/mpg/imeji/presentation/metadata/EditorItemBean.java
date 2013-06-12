@@ -29,9 +29,9 @@ public class EditorItemBean
      * 
      * @param item
      */
-    public EditorItemBean(Item item, MetadataProfile profile)
+    public EditorItemBean(Item item)
     {
-        init(item, profile);
+        init(item);
     }
 
     /**
@@ -39,7 +39,7 @@ public class EditorItemBean
      * 
      * @param item
      */
-    public void init(Item item, MetadataProfile profile)
+    public void init(Item item)
     {
         this.item = item;
         metadata = new ArrayList<SuperMetadataBean>();
@@ -103,6 +103,42 @@ public class EditorItemBean
             metadata.remove(position);
         }
         resetPositionToMetadata();
+    }
+
+    /**
+     * Clear the {@link Metadata} for one {@link Statement}: remove all {@link Metadata} and its Childs and add an empty
+     * one
+     * 
+     * @param st
+     */
+    public void clear(Statement st)
+    {
+        List<SuperMetadataBean> l = new ArrayList<SuperMetadataBean>();
+        for (SuperMetadataBean smd : metadata)
+        {
+            if (st.getId().compareTo(smd.getStatement().getId()) != 0
+                    && (smd.getLastParent() != null && st.getId().compareTo(smd.getLastParent()) != 0))
+                l.add(smd);
+        }
+        metadata = l;
+        init(asItem());
+    }
+
+    /**
+     * Return the position of the last {@link SuperMetadataBean} in the editor for this {@link Statement}
+     * 
+     * @param st
+     * @return
+     */
+    public int getLastPosition(Statement st)
+    {
+        int p = 0;
+        for (SuperMetadataBean smd : metadata)
+        {
+            if (st.getId().compareTo(smd.getStatement().getId()) == 0 && smd.getPos() > p)
+                p = smd.getPos();
+        }
+        return p;
     }
 
     /**

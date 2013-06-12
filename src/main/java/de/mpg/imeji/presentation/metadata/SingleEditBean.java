@@ -218,7 +218,7 @@ public class SingleEditBean
         copySuperMetadatatoItem();
         cleanImageMetadata();
         editor.getItems().clear();
-        editor.getItems().add(new EditorItemBean(item, profile));
+        editor.getItems().add(new EditorItemBean(item));
         editor.save();
         reloadPage();
         cancel();

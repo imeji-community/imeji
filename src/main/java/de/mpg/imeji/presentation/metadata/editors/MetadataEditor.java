@@ -44,7 +44,7 @@ public abstract class MetadataEditor
         items = new ArrayList<EditorItemBean>();
         for (Item item : itemList)
         {
-            items.add(new EditorItemBean(item, profile));
+            items.add(new EditorItemBean(item));
         }
         initialize();
     }

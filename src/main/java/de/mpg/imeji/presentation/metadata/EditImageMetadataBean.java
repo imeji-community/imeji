@@ -27,11 +27,11 @@ import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.editors.MetadataEditor;
 import de.mpg.imeji.presentation.metadata.editors.MetadataMultipleEditor;
-import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -48,6 +48,10 @@ public class EditImageMetadataBean
     private MetadataProfile profile = null;
     private Statement statement = null;
     private Metadata metadata = null;
+    /**
+     * the {@link EditorItemBean} used to for the editor and which will be copied to all {@link Item}
+     */
+    private EditorItemBean editorItem = null;
     // menus
     private List<SelectItem> statementMenu = null;
     private String selectedStatementName = null;
@@ -190,6 +194,7 @@ public class EditImageMetadataBean
             if (statement != null)
             {
                 metadata = MetadataFactory.createMetadata(statement);
+                initEmtpyEditorItem();
                 editor = new MetadataMultipleEditor(items, profile, getSelectedStatement());
                 lockImages(items);
                 ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
@@ -208,6 +213,16 @@ public class EditImageMetadataBean
             logger.error("Error init Edit page", e);
         }
         return "";
+    }
+
+    /**
+     * Initialize the {@link EditorItemBean} with a new emtpy one;
+     */
+    private void initEmtpyEditorItem()
+    {
+        Item emtpyItem = new Item();
+        emtpyItem.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
+        editorItem = new EditorItemBean(emtpyItem);
     }
 
     /**
@@ -398,6 +413,7 @@ public class EditImageMetadataBean
         }
         // Make a new Emtpy Metadata of the same statement
         metadata = MetadataFactory.createMetadata(getSelectedStatement());
+        initEmtpyEditorItem();
         return "";
     }
 
@@ -443,21 +459,30 @@ public class EditImageMetadataBean
         int i = 0;
         for (SuperMetadataBean smd : eib.getMetadata())
         {
-            if (smd.getStatement().getId().toString().equals(metadata.getStatement().toString()))
+            for (SuperMetadataBean smdNew : editorItem.getMetadata())
             {
-                if (smd.isEmpty())
+                if (smdNew.getStatementId().equals(smd.getStatementId()) && smd.isEmpty())
                 {
-                    SuperMetadataBean newSmb = new SuperMetadataBean(metadata, smd.getStatement());
-                    newSmb.setPos(i);
-                    eib.getMetadata().set(i, newSmb);
+                    smdNew.setPos(i);
+                    eib.getMetadata().set(i, smdNew);
                 }
                 hasValue = true;
             }
+            // if (smd.getStatement().getId().toString().equals(metadata.getStatement().toString()))
+            // {
+            // if (smd.isEmpty())
+            // {
+            // SuperMetadataBean newSmb = new SuperMetadataBean(metadata, smd.getStatement());
+            // newSmb.setPos(i);
+            // eib.getMetadata().set(i, newSmb);
+            // }
+            // hasValue = true;
+            // }
             i++;
         }
         if (!hasValue)
         {
-            eib.getMetadata().add(new SuperMetadataBean(metadata, statement));
+            // eib.getMetadata().add(new SuperMetadataBean(metadata, statement));
         }
         return eib;
     }
@@ -646,5 +671,21 @@ public class EditImageMetadataBean
     public boolean isInitialized()
     {
         return initialized;
+    }
+
+    /**
+     * @return the editorItemBean
+     */
+    public EditorItemBean getEditorItem()
+    {
+        return editorItem;
+    }
+
+    /**
+     * @param editorItemBean the editorItemBean to set
+     */
+    public void setEditorItem(EditorItemBean editorItemBean)
+    {
+        this.editorItem = editorItemBean;
     }
 }

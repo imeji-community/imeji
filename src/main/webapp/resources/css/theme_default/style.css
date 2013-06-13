@@ -82,7 +82,9 @@ select {
     background-color: #F0F0F0; /*#F3F8FA*/
 }
 
-
+input[type="radio"] {
+    margin: 0; 
+}
 
 /* special styles for welcome-page - start-page 
  * infos, tabs, carousel, twitter-widget - Welcome.xhtml 

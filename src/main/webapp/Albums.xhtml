@@ -59,7 +59,7 @@
 					styleClass="imj_contentSubMenuItemFiltering" />
 				<h:selectOneMenu id="selFilter" value="#{AlbumsBean.selectedFilter}"
 					styleClass="free_select"
-					onchange="window.location.href = '?f=' + this.value">
+					onchange="window.location.href = '?f=' + this.value" readonly="true">
 					<f:selectItems id="filterItem" value="#{AlbumsBean.filterMenu}" />
 				</h:selectOneMenu>
 				<h:outputText styleClass="imj_contentMenuSeparator" />

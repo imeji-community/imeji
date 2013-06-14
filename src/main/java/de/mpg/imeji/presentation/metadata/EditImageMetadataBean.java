@@ -412,7 +412,6 @@ public class EditImageMetadataBean
             eib = addMetadataIfNotExists(eib, MetadataFactory.copyMetadata(metadata));
         }
         // Make a new Emtpy Metadata of the same statement
-        metadata = MetadataFactory.createMetadata(getSelectedStatement());
         initEmtpyEditorItem();
         return "";
     }
@@ -455,7 +454,6 @@ public class EditImageMetadataBean
      */
     private EditorItemBean addMetadataIfNotExists(EditorItemBean eib, Metadata metadata)
     {
-        boolean hasValue = false;
         int i = 0;
         for (SuperMetadataBean smd : eib.getMetadata())
         {
@@ -466,27 +464,17 @@ public class EditImageMetadataBean
                     smdNew.setPos(i);
                     eib.getMetadata().set(i, smdNew);
                 }
-                hasValue = true;
             }
-            // if (smd.getStatement().getId().toString().equals(metadata.getStatement().toString()))
-            // {
-            // if (smd.isEmpty())
-            // {
-            // SuperMetadataBean newSmb = new SuperMetadataBean(metadata, smd.getStatement());
-            // newSmb.setPos(i);
-            // eib.getMetadata().set(i, newSmb);
-            // }
-            // hasValue = true;
-            // }
             i++;
-        }
-        if (!hasValue)
-        {
-            // eib.getMetadata().add(new SuperMetadataBean(metadata, statement));
         }
         return eib;
     }
 
+    /**
+     * Return the {@link Statement} which is currently edited
+     * 
+     * @return
+     */
     public Statement getSelectedStatement()
     {
         if (profile != null)
@@ -502,6 +490,11 @@ public class EditImageMetadataBean
         return getDefaultStatement();
     }
 
+    /**
+     * Return the first {@link Statement} of the current {@link MetadataProfile}
+     * 
+     * @return
+     */
     public Statement getDefaultStatement()
     {
         if (profile != null && profile.getStatements().iterator().hasNext())

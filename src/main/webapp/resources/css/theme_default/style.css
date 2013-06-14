@@ -94,6 +94,9 @@ input[type="radio"] {
     width: 98%;
 }
 
+.menuHeader {
+	color: #6CAD2F;
+}
 
 /* special styles for welcome-page - start-page 
  * infos, tabs, carousel, twitter-widget - Welcome.xhtml 

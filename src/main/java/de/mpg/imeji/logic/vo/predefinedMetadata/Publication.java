@@ -43,7 +43,7 @@ public class Publication extends Metadata
     {
     }
 
-    @XmlElement(name = "uri", namespace="http://imeji.org/terms")
+    @XmlElement(name = "uri", namespace = "http://imeji.org/terms")
     public java.net.URI getUri()
     {
         return uri;
@@ -53,8 +53,8 @@ public class Publication extends Metadata
     {
         this.uri = uri;
     }
-    
-    @XmlElement(name = "citationStyle", namespace="http://imeji.org/terms")
+
+    @XmlElement(name = "citationStyle", namespace = "http://imeji.org/terms")
     public String getExportFormat()
     {
         return exportFormat;
@@ -65,7 +65,7 @@ public class Publication extends Metadata
         this.exportFormat = exportFormat;
     }
 
-    @XmlElement(name = "citation", namespace="http://imeji.org/terms")
+    @XmlElement(name = "citation", namespace = "http://imeji.org/terms")
     public String getCitation()
     {
         return citation;
@@ -77,7 +77,7 @@ public class Publication extends Metadata
     }
 
     @Override
-    @XmlElement(name = "statement", namespace="http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
     public URI getStatement()
     {
         return statement;
@@ -94,6 +94,7 @@ public class Publication extends Metadata
     {
         if (metadata instanceof Publication)
         {
+            setPos(metadata.getPos());
             this.citation = ((Publication)metadata).getCitation();
             this.exportFormat = ((Publication)metadata).getExportFormat();
             this.uri = ((Publication)metadata).getUri();

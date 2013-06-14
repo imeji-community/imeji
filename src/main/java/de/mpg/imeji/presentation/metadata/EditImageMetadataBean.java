@@ -47,7 +47,6 @@ public class EditImageMetadataBean
     private MetadataEditor editor = null;
     private MetadataProfile profile = null;
     private Statement statement = null;
-    private Metadata metadata = null;
     /**
      * the {@link EditorItemBean} used to for the editor and which will be copied to all {@link Item}
      */
@@ -193,7 +192,6 @@ public class EditImageMetadataBean
             isProfileWithStatements = true;
             if (statement != null)
             {
-                metadata = MetadataFactory.createMetadata(statement);
                 initEmtpyEditorItem();
                 editor = new MetadataMultipleEditor(items, profile, getSelectedStatement());
                 lockImages(items);
@@ -254,7 +252,7 @@ public class EditImageMetadataBean
             if (s.getParent() == null)
             {
                 // Add a statement to the menu only if it doen'st have a parent statement. If it has a parent, then it
-                // will will be editble by choosing the parent in the menu
+                // will be editable by choosing the parent in the menu
                 statementMenu.add(new SelectItem(s.getId().toString(), ((MetadataLabels)BeanHelper
                         .getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(s.getId())));
             }
@@ -335,8 +333,7 @@ public class EditImageMetadataBean
     public String addToAllSaveAndRedirect() throws IOException
     {
         addToAll();
-        editor.save();
-        redirectToView();
+        saveAndRedirect();
         return "";
     }
 
@@ -406,10 +403,10 @@ public class EditImageMetadataBean
             else if ("append".equals(selectedMode))
             {
                 // Add an emtpy metadata at the position we want to have it
-                eib.addMetadata(eib.getLastPosition(statement));
+                appendEmtpyMetadataIfNecessary(eib);
             }
             // Add the Metadata which has been entered to the emtpy Metadata with the same statement in the editor
-            eib = addMetadataIfNotExists(eib, MetadataFactory.copyMetadata(metadata));
+            eib = pasteMetadataIfEmtpy(eib);
         }
         // Make a new Emtpy Metadata of the same statement
         initEmtpyEditorItem();
@@ -437,7 +434,6 @@ public class EditImageMetadataBean
      */
     public String clearAll()
     {
-        metadata = MetadataFactory.createMetadata(statement);
         for (EditorItemBean eib : editor.getItems())
         {
             eib.clear(statement);
@@ -449,10 +445,9 @@ public class EditImageMetadataBean
      * Add a the same metadata to all item having no value defined for this statement
      * 
      * @param im
-     * @param metadata
      * @return
      */
-    private EditorItemBean addMetadataIfNotExists(EditorItemBean eib, Metadata metadata)
+    private EditorItemBean pasteMetadataIfEmtpy(EditorItemBean eib)
     {
         int i = 0;
         for (SuperMetadataBean smd : eib.getMetadata())
@@ -462,12 +457,27 @@ public class EditImageMetadataBean
                 if (smdNew.getStatementId().equals(smd.getStatementId()) && smd.isEmpty())
                 {
                     smdNew.setPos(i);
-                    eib.getMetadata().set(i, smdNew);
+                    eib.getMetadata().set(i, smdNew.copy());
                 }
             }
             i++;
         }
         return eib;
+    }
+
+    /**
+     * Add an emtpy {@link Metadata} accroding to the current {@link Statement} to the {@link EditorItemBean}. If the
+     * {@link EditorItemBean} has already an emtpy {@link Metadata} for this {@link Statement}, then don't had it.
+     * 
+     * @param eib
+     */
+    private void appendEmtpyMetadataIfNecessary(EditorItemBean eib)
+    {
+        int addAt = eib.getLastPosition(statement);
+        if (!eib.getMetadata().get(addAt).isEmpty())
+        {
+            eib.addMetadata(eib.getLastPosition(statement));
+        }
     }
 
     /**
@@ -574,16 +584,6 @@ public class EditImageMetadataBean
     public void setSelectedStatementName(String selectedStatementName)
     {
         this.selectedStatementName = selectedStatementName;
-    }
-
-    public Metadata getMetadata()
-    {
-        return metadata;
-    }
-
-    public void setMetadata(Metadata metadata)
-    {
-        this.metadata = metadata;
     }
 
     public MetadataProfile getProfile()

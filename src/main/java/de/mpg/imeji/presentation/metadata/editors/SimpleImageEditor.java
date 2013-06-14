@@ -61,10 +61,6 @@ public class SimpleImageEditor extends MetadataEditor
                 {
                     eib.getMetadata().remove(i);
                 }
-                else
-                {
-                    // eib.getMetadata().get(i).setPos(i);
-                }
             }
         }
         if (items.size() == 0)

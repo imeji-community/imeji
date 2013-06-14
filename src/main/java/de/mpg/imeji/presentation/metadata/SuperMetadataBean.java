@@ -3,6 +3,8 @@ package de.mpg.imeji.presentation.metadata;
 import java.net.URI;
 
 import de.mpg.imeji.logic.util.DateFormatter;
+import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -72,6 +74,7 @@ public class SuperMetadataBean
     {
         this.metadata = metadata;
         this.empty = MetadataHelper.isEmpty(metadata);
+        this.preview = statement.isPreview();
         this.statement = statement;
         ObjectHelper.copyAllFields(metadata, this);
     }
@@ -86,6 +89,20 @@ public class SuperMetadataBean
         ObjectHelper.copyAllFields(this, metadata);
         MetadataHelper.setConeID(metadata);
         return metadata;
+    }
+
+    /**
+     * Change the Id of the {@link Metadata} which will force the create a new {@link Metadata} resource in the database
+     * 
+     * @return a new {@link SuperMetadataBean} with the same values
+     */
+    public SuperMetadataBean copy()
+    {
+        metadata.setId(IdentifierUtil.newURI(Metadata.class));
+        SuperMetadataBean copy = new SuperMetadataBean(MetadataFactory.copyMetadata(asMetadata()), statement);
+        copy.setParent(parent);
+        copy.setLastParent(lastParent);
+        return copy;
     }
 
     /**

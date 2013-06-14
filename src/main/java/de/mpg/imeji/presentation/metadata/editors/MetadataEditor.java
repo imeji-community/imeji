@@ -6,7 +6,10 @@ package de.mpg.imeji.presentation.metadata.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -81,6 +84,7 @@ public abstract class MetadataEditor
                             itemList.add(eib.asItem());
                         }
                         ic.update(itemList);
+                        ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
                         BeanHelper.info(sb.getMessage("success_editor_edit"));
                         String str = items.size() + " " + sb.getMessage("success_editor_images");
                         if (items.size() == 1)

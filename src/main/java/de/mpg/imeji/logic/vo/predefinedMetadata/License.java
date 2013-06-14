@@ -103,6 +103,7 @@ public class License extends Metadata
     {
         if (metadata instanceof License)
         {
+            setPos(metadata.getPos());
             this.license = ((License)metadata).getLicense();
             this.statement = metadata.getStatement();
             this.externalUri = ((License)metadata).getExternalUri();

@@ -73,6 +73,7 @@ public class Number extends Metadata
     {
         if (metadata instanceof Number)
         {
+            setPos(metadata.getPos());
             this.number = ((Number)metadata).getNumber();
             this.statement = metadata.getStatement();
         }

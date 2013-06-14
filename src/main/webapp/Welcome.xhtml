@@ -217,8 +217,8 @@
 							<!-- Define elements to accept the alt and title text from the images. -->
 							<div id="carousel">
 								<ui:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0">
-									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.itemUrl}#{item.idString}">
-										<h:graphicImage styleClass="cloudcarousel" title="#{item.filename}" alt="#{item.collection}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}file?id=#{item.thumbnailImageUrl}" height="114"/>
+									<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.itemUrl}#{item.id}">
+										<h:graphicImage styleClass="cloudcarousel" title="#{item.caption}" alt="#{lbl.collection} : #{item.collectionName}" id="picThumbResolutionCaroussel" url="#{Navigation.applicationUrl}file?id=#{item.link}" height="114"/>
 									</h:outputLink>
 								</ui:repeat>
 							</div>

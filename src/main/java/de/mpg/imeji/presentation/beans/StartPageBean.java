@@ -13,9 +13,11 @@ import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -27,7 +29,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 public class StartPageBean
 {
-    private List<Item> carousselImages = new ArrayList<Item>();
+    private List<ThumbnailBean> carousselImages = new ArrayList<ThumbnailBean>();
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private final static int CAROUSSEL_SIZE = 6;
 
@@ -118,7 +120,7 @@ public class StartPageBean
                 uris = sr.getResults().subList(0, sublistSize - 1);
         }
         List<Item> items = (List<Item>)ic.loadItems(uris, -1, 0);
-        carousselImages = new ArrayList<Item>(items);
+        carousselImages = ImejiFactory.imageListToThumbList(items);
     }
 
     /**
@@ -146,7 +148,7 @@ public class StartPageBean
      * 
      * @param carousselImages
      */
-    public void setCarousselImages(List<Item> carousselImages)
+    public void setCarousselImages(List<ThumbnailBean> carousselImages)
     {
         this.carousselImages = carousselImages;
     }
@@ -156,7 +158,7 @@ public class StartPageBean
      * 
      * @return
      */
-    public List<Item> getCarousselImages()
+    public List<ThumbnailBean> getCarousselImages()
     {
         return carousselImages;
     }

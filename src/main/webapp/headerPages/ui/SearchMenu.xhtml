@@ -32,6 +32,21 @@
       */
 -->
 	</ui:remove>
+	
+	
+	<h:panelGroup rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
+		<script type="text/javascript">var placeholder_simpleSearch = 'search for ...';</script>
+	</h:panelGroup>
+	
+	<h:panelGroup rendered="#{SessionBean.locale == 'de'}">
+		<script type="text/javascript">placeholder_simpleSearch = 'Suche nach ...';</script>
+	</h:panelGroup>
+	
+	<h:panelGroup rendered="#{SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
+		<script type="text/javascript">var placeholder_simpleSearch = '検索キーワード...';</script>
+	</h:panelGroup>
+		
+	
 	<h:panelGroup layout="block" styleClass="imj_simpleSearch">
 		<h:form>
 			<span class="imj_icoMagnifier_ffffff_23">&#160;</span>
@@ -51,4 +66,10 @@
 		   	</h:outputLink>
 		</h:form>
 	</h:panelGroup>
+	
+	<script type="text/javascript">
+	//add placeholders to simple search
+		jQuery(".imj_simpleSearchInput").attr("placeholder", placeholder_simpleSearch);
+	</script>
+	
 </div>

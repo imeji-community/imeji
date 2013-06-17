@@ -4,11 +4,8 @@
 package de.mpg.imeji.presentation.metadata;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
@@ -17,11 +14,9 @@ import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
-import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.editors.SimpleImageEditor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
@@ -58,6 +53,7 @@ public class SingleEditBean
         item = im;
         this.profile = profile;
         this.pageUrl = pageUrl;
+       // prepareMetadataSetForEditor();
         init();
     }
 
@@ -81,32 +77,135 @@ public class SingleEditBean
      */
     public void init()
     {
-        addNewMetadataIfNeeded();
         editor = new SimpleImageEditor(item, profile, null);
         ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
         metadataList = new ArrayList<SuperMetadataBean>();
         metadataList.addAll(editor.getItems().get(0).getMetadata());
     }
 
-    /**
-     * For each {@link Statement} where no {@link Metadata} is defined, add a new one to the {@link Item}
-     */
-    private void addNewMetadataIfNeeded()
-    {
-        Map<URI, Boolean> valuesMap = new HashMap<URI, Boolean>();
-        for (Metadata md : item.getMetadataSet().getMetadata())
-        {
-            valuesMap.put(md.getStatement(), true);
-        }
-        for (Statement st : profile.getStatements())
-        {
-            if (valuesMap.get(st.getId()) == null)
-            {
-                item.getMetadataSet().getMetadata().add(MetadataFactory.createMetadata(st));
-            }
-            valuesMap.put(st.getId(), true);
-        }
-    }
+//    /**
+//     * Prepare the {@link MetadataSet}of the current {@link Item} for the {@link MetadataEditor}, i.e, add emtpy
+//     * {@link Metadata} if none is defined for one {@link Statement}
+//     */
+//    private void prepareMetadataSetForEditor()
+//    {
+//        item.getMetadataSet().sortMetadata();
+//        item.getMetadataSet().setMetadata(createListOfMetadataWithExistingValuesAndEmtpyValues());
+//    }
+//
+//    /**
+//     * Create a new {@link List} of {@link Metadata} with the {@link Metadata} of the current {@link Item} plus, if
+//     * missing according to the {@link MetadataProfile}, new emtpy {@link Metadata}
+//     * 
+//     * @return
+//     */
+//    private List<Metadata> createListOfMetadataWithExistingValuesAndEmtpyValues()
+//    {
+//        List<Metadata> l = new ArrayList<Metadata>();
+//        // add the existing Metadata to the list, and if they is a missing metadata, add a new emtpy one
+//        for (Metadata md : item.getMetadataSet().getMetadata())
+//        {
+//            if (l.isEmpty() && !isFirstStatement(md.getStatement()))
+//            {
+//                // Add all metadata that should be before the first existing metadata
+//                l.addAll(createMetadataBetween(null, md.getStatement()));
+//            }
+//            else if (!l.isEmpty() && !isNextStatement(l.get(l.size() - 1).getStatement(), md.getStatement())
+//                    && !isbefore(md.getStatement(), l.get(l.size() - 1).getStatement()))
+//            {
+//                // Add all metadata that should be before the next metadata in the list
+//                l.addAll(createMetadataBetween(l.get(l.size() - 1).getStatement(), md.getStatement()));
+//            }
+//            // Add the existing metadata
+//            l.add(md);
+//        }
+//        URI lastStatement = null;
+//        if (!l.isEmpty())
+//            lastStatement = l.get(l.size() - 1).getStatement();
+//        // add all no created metadata after the last metadata
+//        l.addAll(createMetadataBetween(lastStatement, null));
+//        return setPositionToMetadata(l);
+//    }
+//
+//    /**
+//     * Create new {@link Metadata} for the {@link Statement} which are ordered betwenn from and to according to the
+//     * {@link MetadataProfile}
+//     * 
+//     * @param from
+//     * @param to
+//     * @return
+//     */
+//    private List<Metadata> createMetadataBetween(URI from, URI to)
+//    {
+//        List<Metadata> l = new ArrayList<Metadata>();
+//        int fromPosition = 0;
+//        if (from != null)
+//            fromPosition = ProfileHelper.getStatement(from, profile).getPos() + 1;
+//        int toPosition = profile.getStatements().size();
+//        if (to != null)
+//            toPosition = ProfileHelper.getStatement(to, profile).getPos();
+//        for (Statement st : profile.getStatements())
+//        {
+//            if (st.getPos() >= fromPosition && st.getPos() < toPosition)
+//            {
+//                l.add(MetadataFactory.createMetadata(st));
+//            }
+//        }
+//        return l;
+//    }
+//
+//    /**
+//     * True if the {@link Statement} with the give {@link URI} is the first in the current {@link MetadataProfile}
+//     * 
+//     * @param st
+//     * @return
+//     */
+//    private boolean isFirstStatement(URI st)
+//    {
+//        return ProfileHelper.getStatement(st, profile).getPos() == 0;
+//    }
+//
+//    /**
+//     * True if the {@link Statement} st2 is next to st1 according to the order in the current {@link MetadataProfile}
+//     * 
+//     * @param st1
+//     * @param st2
+//     * @return
+//     */
+//    private boolean isNextStatement(URI st1, URI st2)
+//    {
+//        return ProfileHelper.getStatement(st1, profile).getPos() + 1 == ProfileHelper.getStatement(st2, profile)
+//                .getPos();
+//    }
+//
+//    /**
+//     * True if st1 is before than st2 according to the order in the current {@link MetadataProfile}
+//     * 
+//     * @param st1
+//     * @param st2
+//     * @return
+//     */
+//    private boolean isbefore(URI st1, URI st2)
+//    {
+//        return ProfileHelper.getStatement(st1, profile).getPos() < ProfileHelper.getStatement(st2, profile).getPos();
+//    }
+//
+//    /**
+//     * /** Set the position of the {@link Metadata} according to their current order
+//     * 
+//     * @param mds
+//     * @return
+//     */
+//    private List<Metadata> setPositionToMetadata(List<Metadata> l)
+//    {
+//        int pos = 0;
+//        for (Metadata md : l)
+//        {
+//            md.setPos(pos);
+//            pos++;
+//        }
+//        return l;
+//    }
 
     /**
      * Save the {@link Item} with its {@link Metadata}
@@ -221,7 +320,7 @@ public class SingleEditBean
             {
                 BeanHelper.error(sb.getMessage("error_editor_image_locked"));
             }
-            init();
+            // init();
         }
         else
         {

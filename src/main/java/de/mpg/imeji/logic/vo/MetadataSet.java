@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -48,12 +49,13 @@ public class MetadataSet
     @XmlElement(name = "metadata", namespace = "http://imeji.org/terms")
     public Collection<Metadata> getMetadata()
     {
+        sortMetadata();
         return metadata;
     }
 
     public void setMetadata(Collection<Metadata> metadata)
     {
-        this.metadata = metadata;
+         this.metadata = metadata;
     }
 
     @XmlElement(name = "profile", namespace = "http://imeji.org/terms")
@@ -76,6 +78,14 @@ public class MetadataSet
     public URI getId()
     {
         return id;
+    }
+
+    /**
+     * sort the {@link Metadata} according to their position
+     */
+    public void sortMetadata()
+    {
+        Collections.sort((List<Metadata>)metadata);
     }
 
     public Object getValueFromMethod(String methodName)

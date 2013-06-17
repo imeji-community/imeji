@@ -82,7 +82,21 @@ select {
     background-color: #F0F0F0; /*#F3F8FA*/
 }
 
+input[type="radio"] {
+    margin: 0; 
+}
 
+
+/* ******** css fixes for release 1.2.0.0 ***********
+ * ================================================== */
+
+.free_txtInput, .xHuge_txtInput, .xHuge_txtInput input {
+    width: 98%;
+}
+
+.menuHeader {
+	color: #6CAD2F;
+}
 
 /* special styles for welcome-page - start-page 
  * infos, tabs, carousel, twitter-widget - Welcome.xhtml 

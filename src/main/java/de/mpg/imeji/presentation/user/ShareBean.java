@@ -157,19 +157,19 @@ public class ShareBean
         boolean shared = false;
         String message = "";
         String role = "";
-        if (selectedGrant.toString() == GrantType.VIEWER.name())
+        if (selectedGrant.toString().equals(GrantType.VIEWER.name()))
         {
             role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_viewer");
         }
-        if (selectedGrant.toString() == GrantType.CONTAINER_EDITOR.name())
+        if (selectedGrant.toString().equals(GrantType.CONTAINER_EDITOR.name()))
         {
             role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_collection_editor");
         }
-        if (selectedGrant.toString() == GrantType.IMAGE_EDITOR.name())
+        if (selectedGrant.toString().equals(GrantType.IMAGE_EDITOR.name()))
         {
             role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_image_editor");
         }
-        if (selectedGrant.toString() == GrantType.PROFILE_EDITOR.name())
+        if (selectedGrant.toString().equals(GrantType.PROFILE_EDITOR.name()))
         {
             role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_profile_editor");
         }

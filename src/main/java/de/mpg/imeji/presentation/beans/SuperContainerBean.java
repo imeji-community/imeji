@@ -6,7 +6,6 @@ package de.mpg.imeji.presentation.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
@@ -49,16 +48,6 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
      */
     public SuperContainerBean()
     {
-        selectedMenu = "SORTING";
-        SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (sessionBean.getUser() != null)
-        {
-            selectedFilter = "my";
-        }
-        else
-        {
-            selectedFilter = "all";
-        }
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         initMenus();
         selectedSortCriterion = SearchIndex.names.modified.name();
@@ -84,7 +73,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
             logger.error("Error reading property imeji.container.list.size.options", e);
         }
     }
-    
+
     /**
      * Initialize the page
      * 
@@ -99,6 +88,21 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         if (UrlHelper.getParameterValue("tab") != null && !UrlHelper.getParameterValue("tab").equals(""))
         {
             selectedMenu = UrlHelper.getParameterValue("tab");
+        }
+        if (selectedFilter == null)
+        {
+            if (sb.getUser() != null)
+            {
+                selectedFilter = "my";
+            }
+            else
+            {
+                selectedFilter = "all";
+            }
+        }
+        if (selectedMenu == null)
+        {
+            selectedMenu = "SORTING";
         }
         initMenus();
         return "";

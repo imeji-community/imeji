@@ -40,7 +40,7 @@
 				<h:panelGroup rendered="#{!md.isEmpty() and md.preview}">
 					<div class="full_area0 id_#{md.statementId}  parent_#{md.parent.statementId} highlight_area">
 						<h:panelGroup layout="block" styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right; margin-left: #{metadata.hierarchyLevel}em;">
-							<h:outputText value="#{MetadataLabels.internationalizedLabels[md.statement]}" />
+							<h:outputText value="#{MetadataLabels.internationalizedLabels[md.statement.id]}" />
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">
 							<h:outputText value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}" />

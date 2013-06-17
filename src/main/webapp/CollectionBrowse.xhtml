@@ -47,6 +47,7 @@
 		
 	</ui:define>
 	<ui:define name="actionsMenu">
+	<h:panelGroup styleClass="full_area0"> <!-- This panelGroup is needed for IE -->
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 
 			<h:panelGroup styleClass="imj_contentSubMenuItem">
@@ -121,5 +122,6 @@
 		<imjc:DiscardContainer id="dialDiscardContainer"
 			bean="#{CollectionImagesBean}"
 			discardComment="#{CollectionImagesBean.collection.discardComment}" />
+	</h:panelGroup>
 	</ui:define>
 </ui:composition>

@@ -64,7 +64,7 @@
 				<h:selectOneMenu id="selFilter"
 					value="#{paginatorListSessionBean.selectedFilter}"
 					styleClass="free_select"
-					onchange="window.location.href = '?f=' + this.value">
+					onchange="window.location.href = '?f=' + this.value" readonly="true">
 					<f:selectItems id="filterItem"
 						value="#{paginatorListSessionBean.filterMenu}" />
 				</h:selectOneMenu>

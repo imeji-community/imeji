@@ -52,7 +52,7 @@ public class SuggestBean
             if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
             {
                 List<SelectItem> list = new ArrayList<SelectItem>();
-                list.add(new SelectItem(null, "-"));
+                list.add(new SelectItem("", "-"));
                 for (String str : statement.getLiteralConstraints())
                 {
                     list.add(new SelectItem(str, str));

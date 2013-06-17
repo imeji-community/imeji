@@ -46,6 +46,7 @@ public class ThumbnailBean
     private List<Statement> statements = new ArrayList<Statement>();
     private boolean selected = false;
     private boolean isInActiveAlbum = false;
+    private String collectionName = "";
     // security
     private boolean editable = false;
     private boolean visible = false;
@@ -67,6 +68,7 @@ public class ThumbnailBean
         link = item.getThumbnailImageUrl().toString();
         profile = item.getMetadataSet().getProfile();
         filename = item.getFilename();
+        collectionName = ObjectCachedLoader.loadCollection(item.getCollection()).getMetadata().getTitle();
         metadata = (List<Metadata>)item.getMetadataSet().getMetadata();
         statements = loadStatements(item.getMetadataSet().getProfile());
         caption = findCaption();
@@ -454,5 +456,21 @@ public class ThumbnailBean
     public void setMds(MetadataSetBean mds)
     {
         this.mds = mds;
+    }
+
+    /**
+     * @return the collectionName
+     */
+    public String getCollectionName()
+    {
+        return collectionName;
+    }
+
+    /**
+     * @param collectionName the collectionName to set
+     */
+    public void setCollectionName(String collectionName)
+    {
+        this.collectionName = collectionName;
     }
 }

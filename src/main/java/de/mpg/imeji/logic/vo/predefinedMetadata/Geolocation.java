@@ -98,6 +98,7 @@ public class Geolocation extends Metadata
     {
         if (metadata instanceof Geolocation)
         {
+            setPos(metadata.getPos());
             this.latitude = ((Geolocation)metadata).getLatitude();
             this.longitude = ((Geolocation)metadata).getLongitude();
             this.name = ((Geolocation)metadata).getName();

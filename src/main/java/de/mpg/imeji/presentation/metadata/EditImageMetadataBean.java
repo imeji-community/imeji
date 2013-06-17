@@ -18,7 +18,6 @@ import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -27,11 +26,11 @@ import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.editors.MetadataEditor;
 import de.mpg.imeji.presentation.metadata.editors.MetadataMultipleEditor;
-import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -47,7 +46,10 @@ public class EditImageMetadataBean
     private MetadataEditor editor = null;
     private MetadataProfile profile = null;
     private Statement statement = null;
-    private Metadata metadata = null;
+    /**
+     * the {@link EditorItemBean} used to for the editor and which will be copied to all {@link Item}
+     */
+    private EditorItemBean editorItem = null;
     // menus
     private List<SelectItem> statementMenu = null;
     private String selectedStatementName = null;
@@ -189,7 +191,7 @@ public class EditImageMetadataBean
             isProfileWithStatements = true;
             if (statement != null)
             {
-                metadata = MetadataFactory.createMetadata(statement);
+                initEmtpyEditorItem();
                 editor = new MetadataMultipleEditor(items, profile, getSelectedStatement());
                 lockImages(items);
                 ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
@@ -208,6 +210,16 @@ public class EditImageMetadataBean
             logger.error("Error init Edit page", e);
         }
         return "";
+    }
+
+    /**
+     * Initialize the {@link EditorItemBean} with a new emtpy one;
+     */
+    private void initEmtpyEditorItem()
+    {
+        Item emtpyItem = new Item();
+        emtpyItem.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
+        editorItem = new EditorItemBean(emtpyItem);
     }
 
     /**
@@ -236,8 +248,13 @@ public class EditImageMetadataBean
         statementMenu = new ArrayList<SelectItem>();
         for (Statement s : profile.getStatements())
         {
-            statementMenu.add(new SelectItem(s.getId().toString(), ((MetadataLabels)BeanHelper
-                    .getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(s.getId())));
+            if (s.getParent() == null)
+            {
+                // Add a statement to the menu only if it doen'st have a parent statement. If it has a parent, then it
+                // will be editable by choosing the parent in the menu
+                statementMenu.add(new SelectItem(s.getId().toString(), ((MetadataLabels)BeanHelper
+                        .getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(s.getId())));
+            }
         }
     }
 
@@ -315,8 +332,7 @@ public class EditImageMetadataBean
     public String addToAllSaveAndRedirect() throws IOException
     {
         addToAll();
-        editor.save();
-        redirectToView();
+        saveAndRedirect();
         return "";
     }
 
@@ -333,6 +349,12 @@ public class EditImageMetadataBean
         return "";
     }
 
+    /**
+     * Lock the {@link Item} which are currently in the editor. This prevent other users to make concurrent
+     * modification.
+     * 
+     * @param items
+     */
     private void lockImages(List<Item> items)
     {
         lockedImages = 0;
@@ -351,6 +373,9 @@ public class EditImageMetadataBean
         }
     }
 
+    /**
+     * Release the lock on all current {@link Item}
+     */
     private void unlockImages()
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -367,26 +392,23 @@ public class EditImageMetadataBean
      */
     public String addToAll()
     {
-        // TODO remove the item with only the editoritembeans
         for (EditorItemBean eib : editor.getItems())
         {
-            Item item = eib.asItem();
             if ("overwrite".equals(selectedMode))
             {
-                item = removeAllMetadata(item);
-                item.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
+                // remove all metadata which have the same statement
+                eib.clear(statement);
             }
             else if ("append".equals(selectedMode))
             {
-                item.getMetadataSet().getMetadata().add(MetadataFactory.copyMetadata(metadata));
+                // Add an emtpy metadata at the position we want to have it
+                appendEmtpyMetadataIfNecessary(eib);
             }
-            else if ("basic".equals(selectedMode))
-            {
-                addMetadataIfNotExists(item, MetadataFactory.copyMetadata(metadata));
-            }
-            eib.init(item);
+            // Add the Metadata which has been entered to the emtpy Metadata with the same statement in the editor
+            eib = pasteMetadataIfEmtpy(eib);
         }
-        metadata = MetadataFactory.createMetadata(getSelectedStatement());
+        // Make a new Emtpy Metadata of the same statement
+        initEmtpyEditorItem();
         return "";
     }
 
@@ -411,10 +433,9 @@ public class EditImageMetadataBean
      */
     public String clearAll()
     {
-        metadata = MetadataFactory.createMetadata(statement);
         for (EditorItemBean eib : editor.getItems())
         {
-            removeAllMetadata(eib.asItem());
+            eib.clear(statement);
         }
         return "";
     }
@@ -423,53 +444,46 @@ public class EditImageMetadataBean
      * Add a the same metadata to all item having no value defined for this statement
      * 
      * @param im
-     * @param metadata
      * @return
      */
-    private Item addMetadataIfNotExists(Item im, Metadata metadata)
+    private EditorItemBean pasteMetadataIfEmtpy(EditorItemBean eib)
     {
-        boolean hasValue = false;
         int i = 0;
-        for (Metadata md : im.getMetadataSet().getMetadata())
+        for (SuperMetadataBean smd : eib.getMetadata())
         {
-            if (md.getStatement().toString().equals(metadata.getStatement().toString()))
+            for (SuperMetadataBean smdNew : editorItem.getMetadata())
             {
-                if (MetadataHelper.isEmpty(md))
+                if (smdNew.getStatementId().equals(smd.getStatementId()) && smd.isEmpty())
                 {
-                    ((List<Metadata>)im.getMetadataSet().getMetadata()).set(i, metadata);
+                    smdNew.setPos(i);
+                    eib.getMetadata().set(i, smdNew.copy());
                 }
-                hasValue = true;
             }
             i++;
         }
-        if (!hasValue)
-        {
-            im.getMetadataSet().getMetadata().add(metadata);
-        }
-        return im;
+        return eib;
     }
 
     /**
-     * Remove all metadata values with the same type as the current selected metadata
+     * Add an emtpy {@link Metadata} accroding to the current {@link Statement} to the {@link EditorItemBean}. If the
+     * {@link EditorItemBean} has already an emtpy {@link Metadata} for this {@link Statement}, then don't had it.
      * 
-     * @param im
-     * @return
+     * @param eib
      */
-    private Item removeAllMetadata(Item im)
+    private void appendEmtpyMetadataIfNecessary(EditorItemBean eib)
     {
-        for (int i = 0; i < im.getMetadataSet().getMetadata().size(); i++)
+        int addAt = eib.getLastPosition(statement);
+        if (!eib.getMetadata().get(addAt).isEmpty())
         {
-            if (((List<Metadata>)im.getMetadataSet().getMetadata()).get(i).getStatement() == null
-                    || ((List<Metadata>)im.getMetadataSet().getMetadata()).get(i).getStatement().toString()
-                            .equals(metadata.getStatement().toString()))
-            {
-                ((List<Metadata>)im.getMetadataSet().getMetadata()).remove(i);
-                i--;
-            }
+            eib.addMetadata(eib.getLastPosition(statement));
         }
-        return im;
     }
 
+    /**
+     * Return the {@link Statement} which is currently edited
+     * 
+     * @return
+     */
     public Statement getSelectedStatement()
     {
         if (profile != null)
@@ -485,6 +499,11 @@ public class EditImageMetadataBean
         return getDefaultStatement();
     }
 
+    /**
+     * Return the first {@link Statement} of the current {@link MetadataProfile}
+     * 
+     * @return
+     */
     public Statement getDefaultStatement()
     {
         if (profile != null && profile.getStatements().iterator().hasNext())
@@ -494,12 +513,22 @@ public class EditImageMetadataBean
         return null;
     }
 
+    /**
+     * Add a new emtpy {@link Metadata} into the editor
+     * 
+     * @return
+     */
     public String addMetadata()
     {
         editor.addMetadata(getImagePosition(), getMdPosition());
         return "";
     }
 
+    /**
+     * Remove a {@link Metadata} into the editor
+     * 
+     * @return
+     */
     public String removeMetadata()
     {
         editor.removeMetadata(getImagePosition(), getMdPosition());
@@ -536,15 +565,6 @@ public class EditImageMetadataBean
         this.editor = editor;
     }
 
-    // public ImagesBean getImagesBean()
-    // {
-    // return imagesBean;
-    // }
-    //
-    // public void setImagesBean(ImagesBean imagesBean)
-    // {
-    // this.imagesBean = imagesBean;
-    // }
     public List<SelectItem> getStatementMenu()
     {
         return statementMenu;
@@ -563,16 +583,6 @@ public class EditImageMetadataBean
     public void setSelectedStatementName(String selectedStatementName)
     {
         this.selectedStatementName = selectedStatementName;
-    }
-
-    public Metadata getMetadata()
-    {
-        return metadata;
-    }
-
-    public void setMetadata(Metadata metadata)
-    {
-        this.metadata = metadata;
     }
 
     public MetadataProfile getProfile()
@@ -653,5 +663,21 @@ public class EditImageMetadataBean
     public boolean isInitialized()
     {
         return initialized;
+    }
+
+    /**
+     * @return the editorItemBean
+     */
+    public EditorItemBean getEditorItem()
+    {
+        return editorItem;
+    }
+
+    /**
+     * @param editorItemBean the editorItemBean to set
+     */
+    public void setEditorItem(EditorItemBean editorItemBean)
+    {
+        this.editorItem = editorItemBean;
     }
 }

@@ -32,9 +32,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -42,6 +39,7 @@ import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
+import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -250,6 +248,9 @@ public class InternalStorageManager
     private String generateUrl(String id, String filename, FileResolution resolution)
     {
         filename = StringHelper.normalizeFilename(filename);
+        if (resolution != FileResolution.ORIGINAL) {
+			filename = filename + ".jpg";
+		}
         return storageUrl + id + StringHelper.urlSeparator + resolution.name().toLowerCase()
                 + StringHelper.urlSeparator + filename;
     }
@@ -264,14 +265,23 @@ public class InternalStorageManager
      */
     private InternalStorageItem writeItemFiles(InternalStorageItem item, byte[] bytes) throws IOException, Exception
     {
-        write(bytes, transformUrlToPath(item.getOriginalUrl()));
-        write(ImageUtils.transformImage(bytes, FileResolution.WEB,
-                StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-                transformUrlToPath(item.getWebUrl()));
-        write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
-                StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-                transformUrlToPath(item.getThumbnailUrl()));
-        return item;
+    	String orginalPath = transformUrlToPath(item.getOriginalUrl());
+		write(bytes, orginalPath);
+		if (!MediaUtils.verifyMediaFormatSupport(orginalPath)) {
+			// TODO Ye: handle not support media data
+		}
+		String mimeType = MediaUtils.getMimeType(orginalPath);
+		String webPath = transformUrlToPath(item.getWebUrl());
+		String thumbnailPath = transformUrlToPath(item
+				.getThumbnailUrl());
+		MediaUtils.resizeImage(mimeType,orginalPath, webPath,
+				FileResolution.WEB);
+		MediaUtils.resizeImage(mimeType,orginalPath, thumbnailPath,
+				FileResolution.THUMBNAIL);
+		
+		
+
+		return item;
     }
 
     /**

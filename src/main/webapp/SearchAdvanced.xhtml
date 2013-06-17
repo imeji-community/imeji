@@ -9,8 +9,8 @@
 		<ui:define name="additionalSubheaders">
 			<h:outputText value="#{AdvancedSearchBean.newSearch}"/>
 			<h:panelGroup id="ajaxQuery" styleClass="full_area0">
-				<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p4" rendered="#{AdvancedSearchBean.simpleQuery != ''}"/>
-				<h:outputText value="#{AdvancedSearchBean.simpleQuery} " styleClass="xHuge_area0_p4"/>
+				<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p4 " rendered="#{AdvancedSearchBean.simpleQuery != ''}"/>
+				<h:outputText value="#{AdvancedSearchBean.simpleQuery}" styleClass="xHuge_area0_p4 #{AdvancedSearchBean.errorQuery ? 'messageError' : ''}"/>
 			</h:panelGroup>
 		</ui:define>
 		
@@ -39,49 +39,50 @@
 										<f:param name="gPos" value="#{gIndex.index}"/>
 									</h:commandButton>
 									<ui:repeat id="els" var="el" value="#{g.searchElementForms}" rows="0" varStatus="elIndex">
-										<h:panelGroup styleClass="tiny_marginLExcl full_area0_p8">
-											<h:panelGroup styleClass="free_area0">
-												<h:selectOneMenu id="selNot" value="#{el.inverse}" styleClass="small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
-													<f:selectItem itemValue="false" itemLabel="--"/>
-													<f:selectItem itemValue="true" itemLabel="#{lbl.NOT}"/>
-												</h:selectOneMenu>
-											</h:panelGroup>
+										<h:panelGroup styleClass="tiny_marginLExcl full_area0_p8">											
+											<h:selectOneMenu id="selNot" value="#{el.inverse}" styleClass="small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
+												<f:selectItem itemValue="false" itemLabel="--"/>
+												<f:selectItem itemValue="true" itemLabel="#{lbl.NOT}"/>
+											</h:selectOneMenu>											
 											<h:selectOneMenu id="selStatement" value="#{el.namespace}" styleClass="xTiny_marginLExcl double_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':changeEl').click();">
 												<f:selectItems value="#{g.statementMenu}"/>
 											</h:selectOneMenu>
-											<h:commandButton type="button" id="changeEl" action="#{AdvancedSearchBean.changeElement}" style="visibility:hidden;">
+											<h:commandButton type="button" id="changeEl" action="#{AdvancedSearchBean.changeElement}" style="visibility:hidden;" styleClass="free_area0">
 												<f:ajax execute="@form" render="@form :ajaxQuery"/>
 												<f:param name="gPos" value="#{gIndex.index}"/>
 												<f:param name="elPos" value="#{elIndex.index}"/>
 											</h:commandButton>
-											<h:commandButton type="button" id="updateEl" action="#{AdvancedSearchBean.updateElement}" style="visibility:hidden;">
+											<h:commandButton type="button" id="updateEl" action="#{AdvancedSearchBean.updateElement}" style="visibility:hidden;" styleClass="free_area0">
 												<f:ajax execute="@form" render=":ajaxQuery"/>
 												<f:param name="gPos" value="#{gIndex.index}"/>
 												<f:param name="elPos" value="#{elIndex.index}"/>
-											</h:commandButton>
-											<h:panelGroup styleClass="medium_are0">
-												<h:outputText value="#{lbl.is}" styleClass="xTiny_marginLExcl free_area0"/>
-												<h:panelGroup rendered="#{el.operatorMenu == null}" styleClass="xTiny_marginLExcl small_area0">
-													<h:outputText value=" = " style="visibility:hidden;"/>
-												</h:panelGroup>
-												<h:selectOneMenu id="selFilter" value="#{el.operator}" rendered="#{el.operatorMenu != null}" styleClass="xTiny_marginLExcl small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
-													<f:selectItems value="#{el.operatorMenu}"/>
-												</h:selectOneMenu>
+											</h:commandButton>								
+											<h:outputText value="#{lbl.is}" styleClass="xTiny_marginLExcl xSmall_area0"/>
+											<h:panelGroup rendered="#{el.operatorMenu == null}" styleClass="xTiny_marginLExcl small_area0">
+												<h:outputText value=" = " style="visibility:hidden;"/>
 											</h:panelGroup>
-											<h:inputText id="input" autocomplete="false" value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues == null}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+											<h:selectOneMenu id="selFilter" value="#{el.operator}" rendered="#{el.operatorMenu != null}" styleClass="xTiny_marginLExcl small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
+												<f:selectItems value="#{el.operatorMenu}"/>
+											</h:selectOneMenu>
+											<h:outputText value="#{el.type != 'DATE'}" />							
+											<h:inputText id="input" autocomplete="false" value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues == null}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
+												<f:validateRegex pattern="[0-9]+" disabled="#{el.type != 'DATE'}" />
+											</h:inputText>
 											<h:selectOneMenu id="select" value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues != null}" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 												<f:selectItems value="#{el.predefinedValues}"/>
 											</h:selectOneMenu>
-											<h:commandButton type="button" value="" action="#{AdvancedSearchBean.addElement}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add">
-												<f:ajax execute="@form" render="@form :ajaxQuery"/>
-												<f:param name="gPos" value="#{gIndex.index}"/>
-												<f:param name="elPos" value="#{elIndex.index}"/>
-											</h:commandButton>
-											<h:commandButton type="button" value="" action="#{AdvancedSearchBean.removeElement}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool remove">
-												<f:ajax execute="@form" render="@form :ajaxQuery"/>
-												<f:param name="gPos" value="#{gIndex.index}"/>
-												<f:param name="elPos" value="#{elIndex.index}"/>
-											</h:commandButton>
+											<h:panelGroup styleClass="small_area0"> <!-- This panelGroup is needed for IE -->
+												<h:commandButton type="button" value="" action="#{AdvancedSearchBean.addElement}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add">
+													<f:ajax execute="@form" render="@form :ajaxQuery"/>
+													<f:param name="gPos" value="#{gIndex.index}"/>
+													<f:param name="elPos" value="#{elIndex.index}"/>
+												</h:commandButton>
+												<h:commandButton type="button" value="" action="#{AdvancedSearchBean.removeElement}" render="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool remove">
+													<f:ajax execute="@form" render="@form :ajaxQuery"/>
+													<f:param name="gPos" value="#{gIndex.index}"/>
+													<f:param name="elPos" value="#{elIndex.index}"/>
+												</h:commandButton>
+											</h:panelGroup>
 										</h:panelGroup>
 										<h:panelGroup styleClass="full_area0_p8" rendered="#{elIndex.index &lt; (g.size - 1)}">
 											<h:selectOneMenu id="selLogicalRelation" value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">

@@ -6,19 +6,8 @@ package de.mpg.imeji.logic;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openjena.atlas.io.IndentedWriter;
-
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ReadWrite;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.Syntax;
-import com.hp.hpl.jena.tdb.TDB;
-import com.hp.hpl.jena.update.Update;
 import com.hp.hpl.jena.update.UpdateAction;
-import com.hp.hpl.jena.update.UpdateFactory;
-import com.hp.hpl.jena.update.UpdateRequest;
 
 import de.mpg.j2j.transaction.SearchTransaction;
 

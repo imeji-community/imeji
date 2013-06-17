@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.util;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 
 /**
  * Helper methods related to {@link MetadataProfile}
@@ -58,5 +60,50 @@ public class ProfileHelper
         }
         return null;
     }
-    
+
+    /**
+     * Get the all {@link Statement} that are childs of the passed statement. If onlyFirst ist true, then give back only
+     * childs that are direct child of this {@link Statement}
+     * 
+     * @param statement
+     * @param profile
+     * @param onlyFirst
+     * @return
+     */
+    public static List<Statement> getChilds(Statement statement, MetadataProfile profile, boolean onlyFirst)
+    {
+        List<Statement> childs = new ArrayList<Statement>();
+        if (statement != null)
+        {
+            for (int i = ((List<Statement>)profile.getStatements()).indexOf(statement) + 1; i < profile.getStatements()
+                    .size(); i++)
+            {
+                Statement st = ((List<Statement>)profile.getStatements()).get(i);
+                if (st.getParent() != null && st.getParent().compareTo(statement.getId()) == 0)
+                    childs.add(st);
+                if (!onlyFirst)
+                    childs.addAll(getChilds(st, profile, onlyFirst));
+            }
+        }
+        return childs;
+    }
+
+    /**
+     * Return the {@link URI} of the last parent {@link Statement}. Null if no parent
+     * 
+     * @param st
+     * @param profile
+     * @return
+     */
+    public static URI getLastParent(Statement st, MetadataProfile profile)
+    {
+        URI parent = st.getParent();
+        URI lastParent = null;
+        while (parent != null)
+        {
+            lastParent = parent;
+            parent = getStatement(parent, profile).getParent();
+        }
+        return lastParent;
+    }
 }

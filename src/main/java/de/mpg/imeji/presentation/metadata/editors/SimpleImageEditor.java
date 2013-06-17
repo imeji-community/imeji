@@ -3,17 +3,13 @@
  */
 package de.mpg.imeji.presentation.metadata.editors;
 
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.EditorItemBean;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 
 /**
@@ -65,10 +61,6 @@ public class SimpleImageEditor extends MetadataEditor
                 {
                     eib.getMetadata().remove(i);
                 }
-                else
-                {
-                    eib.getMetadata().get(i).setPos(i);
-                }
             }
         }
         if (items.size() == 0)
@@ -97,11 +89,7 @@ public class SimpleImageEditor extends MetadataEditor
     @Override
     public void addMetadata(EditorItemBean eib, int metadataPos)
     {
-        if (metadataPos <= eib.getMetadata().size())
-        {
-            eib.getMetadata().add(metadataPos + 1,
-                    new SuperMetadataBean(MetadataFactory.createMetadata(getStatement())));
-        }
+        eib.addMetadata(metadataPos);
     }
 
     @Override
@@ -116,9 +104,6 @@ public class SimpleImageEditor extends MetadataEditor
     @Override
     public void removeMetadata(EditorItemBean eib, int metadataPos)
     {
-        if (metadataPos < eib.getMetadata().size())
-        {
-            eib.getMetadata().remove(metadataPos);
-        }
+        eib.removeMetadata(metadataPos);
     }
 }

@@ -92,9 +92,11 @@
 							</h:panelGroup>
 							<!-- Image stack display for not logged in users -->
 							<h:panelGroup class="free_area0_p0 endline" rendered="#{SessionBean.user == null}">									
-								<div class="imj_stack">							
-									<h:graphicImage style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;" 
-									value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}" alt=""/>
+								<div class="imj_stack">	
+									<h:outputLink value="#{Navigation.collectionUrl}#{container.id}">						
+										<h:graphicImage style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;" 
+										value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}" alt=""/>
+									</h:outputLink>
 								</div>																						
 							</h:panelGroup>
 							<span class="seperator status"></span>
@@ -123,7 +125,7 @@
 							</h:panelGroup>
 							<h:panelGroup class="collection_list_infos_entry_row free_area0  endline">	
 								<h:outputText class="large_area0 endline" value="#{lbl.description}"/><span class="noDisplay">: </span>
-								<h:outputText class="collection_list_infos_entry_row_right free_area0 endline" title="#{container.descriptionWithoutHtml}" value="#{container.descriptionWithoutHtml}"/>
+								<h:outputText class="collection_list_infos_entry_row_right free_area0 endline" title="#{container.descriptionFull}" value="#{container.descriptionWithoutHtml}"/>
 							</h:panelGroup>
 							<h:panelGroup class="collection_list_infos_entry_row free_area0 endline">	
 								<h:outputText class="large_area0 endline" value="#{lbl.images}"/><span class="noDisplay">: </span>							

@@ -2,8 +2,9 @@ package de.mpg.imeji.presentation.metadata;
 
 import java.net.URI;
 
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.DateFormatter;
+import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -11,6 +12,7 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * Bean for all Metadata types. This bean should have all variable that have been defined in all metadata types.
@@ -37,10 +39,15 @@ public class SuperMetadataBean
      */
     private int hierarchyLevel = 0;
     /**
+     * The {@link Statement} of this {@link Metadata}
+     */
+    private Statement statement;
+    /**
      * True if the {@link Metadata} has no value defined
      */
     private boolean empty = false;
     private boolean preview = true;
+    private URI lastParent = null;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -63,11 +70,13 @@ public class SuperMetadataBean
      * 
      * @param metadata
      */
-    public SuperMetadataBean(Metadata metadata)
+    public SuperMetadataBean(Metadata metadata, Statement statement)
     {
         this.metadata = metadata;
         this.empty = MetadataHelper.isEmpty(metadata);
-        ObjectHelper.copyFields(metadata, this);
+        this.preview = statement.isPreview();
+        this.statement = statement;
+        ObjectHelper.copyAllFields(metadata, this);
     }
 
     /**
@@ -77,19 +86,23 @@ public class SuperMetadataBean
      */
     public Metadata asMetadata()
     {
-        ObjectHelper.copyFields(this, metadata);
+        ObjectHelper.copyAllFields(this, metadata);
         MetadataHelper.setConeID(metadata);
         return metadata;
     }
 
     /**
-     * getter for the {@link Statement} defining this {@link Metadata}
+     * Change the Id of the {@link Metadata} which will force the create a new {@link Metadata} resource in the database
      * 
-     * @return
+     * @return a new {@link SuperMetadataBean} with the same values
      */
-    public URI getStatement()
+    public SuperMetadataBean copy()
     {
-        return metadata.getStatement();
+        metadata.setId(IdentifierUtil.newURI(Metadata.class));
+        SuperMetadataBean copy = new SuperMetadataBean(MetadataFactory.copyMetadata(asMetadata()), statement);
+        copy.setParent(parent);
+        copy.setLastParent(lastParent);
+        return copy;
     }
 
     /**
@@ -99,7 +112,7 @@ public class SuperMetadataBean
      */
     public String getStatementId()
     {
-        return ObjectHelper.getId(getStatement());
+        return ObjectHelper.getId(getStatement().getId());
     }
 
     /**
@@ -483,5 +496,43 @@ public class SuperMetadataBean
     public void setPreview(boolean preview)
     {
         this.preview = preview;
+    }
+
+    /**
+     * getter
+     * 
+     * @return the statement
+     */
+    public Statement getStatement()
+    {
+        return statement;
+    }
+
+    /**
+     * setter
+     * 
+     * @param statement the statement to set
+     */
+    public void setStatement(Statement statement)
+    {
+        this.statement = statement;
+    }
+
+    /**
+     * Get the last parent {@link Statement} of the current {@link Statement}. If no parent found, return null;
+     * 
+     * @return
+     */
+    public URI getLastParent()
+    {
+        return lastParent;
+    }
+
+    /**
+     * @param lastParent the lastParent to set
+     */
+    public void setLastParent(URI lastParent)
+    {
+        this.lastParent = lastParent;
     }
 }

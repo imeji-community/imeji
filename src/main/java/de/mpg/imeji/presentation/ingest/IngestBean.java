@@ -7,11 +7,12 @@ import java.io.OutputStream;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-
+import javax.xml.bind.JAXBException;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXParseException;
 
 import de.mpg.imeji.logic.ingest.controller.IngestController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -37,6 +38,8 @@ public class IngestBean
     private boolean error = false;
     private boolean success = false;
     private String msg = "";
+    private File file = null;
+
 
 	/**
      * Default constructor
@@ -88,12 +91,31 @@ public class IngestBean
                 ic.ingest(null, upload());
                 this.success = true;
             }
-            catch (Exception e)
-            {
+             catch (JAXBException e) {
+                 logger.error("Error parsing profile. ", e);
+                 error = true;
+                 if (e.getLinkedException() != null)
+                 {
+                     logger.error("Error parsing profile. ", e);
+                     error = true;
+                     SAXParseException se = (SAXParseException) e.getLinkedException();
+                     this.msg = se.getMessage();
+                 }
+                 else
+                 {
+                	 this.msg = e.getMessage(); 
+                 }
+			} 
+            catch (SAXParseException e) {
+                logger.error("Error parsing profile. ", e);
+                error = true;
+                this.msg = e.getMessage();
+			}
+            catch (Exception e) {
                 logger.error("Error during ingest. ", e);
                 error = true;
                 this.msg = e.getMessage();
-            }
+			}
         }
         else if (UrlHelper.getParameterBoolean("done"))
         {
@@ -126,7 +148,6 @@ public class IngestBean
      */
     public File upload() throws Exception
     {
-    	File f = null;
     	
         try
         {
@@ -145,7 +166,7 @@ public class IngestBean
 	                if (item != null && item.getName() != null)
 	                {
 	                    logger.info("Ingesting file  " + item.getName());
-	                    f = write2File("itemListXml", item.openStream());
+	                    file = write2File("itemListXml", item.openStream());
 	                }
 	            }
 	        }
@@ -156,7 +177,7 @@ public class IngestBean
             error = true;
             this.msg = e.getMessage();
         }
-        return f;
+        return file;
     }
 
     /**
@@ -276,5 +297,12 @@ public class IngestBean
 		this.msg = msg;
 	}
 
-    
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
 }

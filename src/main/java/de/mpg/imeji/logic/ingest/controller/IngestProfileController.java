@@ -3,6 +3,10 @@ package de.mpg.imeji.logic.ingest.controller;
 import java.io.File;
 import java.net.URI;
 
+import javax.xml.bind.JAXBException;
+
+import org.xml.sax.SAXException;
+
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.ingest.parser.ProfileParser;
 import de.mpg.imeji.logic.ingest.validator.ProfileValidator;
@@ -34,9 +38,11 @@ public class IngestProfileController
      * Ingest a {@link MetadataProfile} as defined in an xml {@link File}
      * 
      * @param profileXmlFile
+     * @throws SAXException 
+     * @throws JAXBException 
      * @throws Exception
      */
-    public void ingest(File profileXmlFile, URI profile) throws Exception
+    public void ingest(File profileXmlFile, URI profile) throws JAXBException, SAXException 
     {
         ProfileValidator pv = new ProfileValidator();
         pv.valid(profileXmlFile);
@@ -44,7 +50,11 @@ public class IngestProfileController
         MetadataProfile mdp = pp.parse(profileXmlFile);
         ProfileController pc = new ProfileController();
         mdp.setId(profile);
-        pc.update(mdp, user);
+        try {
+			pc.update(mdp, user);
+		} catch (Exception e) {
+			throw new RuntimeException();
+		}
         pc.removeMetadataWithoutStatement();
     }
 }

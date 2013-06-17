@@ -6,7 +6,6 @@ package de.mpg.imeji.logic.search.query;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,12 +16,8 @@ import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.DateFormatter;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Factory to created Sparql query from a {@link SearchPair}
@@ -85,8 +80,7 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.item.name().equals(pair.getIndex().getName()))
         {
-            searchQuery = "";
-            variable = "s";
+            return " FILTER(" + getSimpleFilter(pair, "s") + ") .";
         }
         else if (SearchIndex.names.status.name().equals(pair.getIndex().getName()))
         {
@@ -96,7 +90,7 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.col.name().equals(pair.getIndex().getName()))
         {
-            return "";
+            return " FILTER(" + getSimpleFilter(pair, "c") + ") .";
         }
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {

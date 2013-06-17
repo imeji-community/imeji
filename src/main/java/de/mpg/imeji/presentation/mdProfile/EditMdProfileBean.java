@@ -1,29 +1,12 @@
 package de.mpg.imeji.presentation.mdProfile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.ReadWrite;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
-import com.hp.hpl.jena.query.Syntax;
-import com.hp.hpl.jena.tdb.TDB;
-
-import de.mpg.imeji.logic.ImejiJena;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
@@ -32,7 +15,6 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
-import de.mpg.j2j.helper.SortHelper;
 
 /**
  * Java Bean for the edit metadata Profile page

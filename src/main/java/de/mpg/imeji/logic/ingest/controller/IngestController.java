@@ -2,7 +2,10 @@ package de.mpg.imeji.logic.ingest.controller;
 
 import java.io.File;
 
+import javax.xml.bind.JAXBException;
+
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -39,9 +42,11 @@ public class IngestController
      * 
      * @param itemListXml
      * @param profileXml
+     * @throws SAXException 
+     * @throws JAXBException 
      * @throws Exception
      */
-    public void ingest(File itemListXmlFile, File profileXmlFile) throws Exception
+    public void ingest(File itemListXmlFile, File profileXmlFile) throws JAXBException, SAXException 
     {
         if (profileXmlFile != null)
         {
@@ -51,9 +56,15 @@ public class IngestController
         if (itemListXmlFile != null)
         {
             ProfileController pc = new ProfileController();
-            MetadataProfile mdp = pc.retrieve(collection.getProfile(), user);
-            IngestItemController iic = new IngestItemController(user, mdp);
-            iic.ingest(itemListXmlFile);
+            try {
+	            MetadataProfile mdp = pc.retrieve(collection.getProfile(), user);
+	            IngestItemController iic = new IngestItemController(user, mdp);
+	            iic.ingest(itemListXmlFile);
+            }
+            catch (Exception e)
+            {
+            	throw new RuntimeException();
+            }
         }
     }
 }

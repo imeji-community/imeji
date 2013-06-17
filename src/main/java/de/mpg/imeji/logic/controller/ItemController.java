@@ -115,6 +115,7 @@ public class ItemController extends ImejiController
      * @deprecated
      * @throws Exception
      */
+    @Deprecated
     public void update(Item item) throws Exception
     {
         Collection<Item> l = new ArrayList<Item>();
@@ -129,6 +130,7 @@ public class ItemController extends ImejiController
      * @deprecated
      * @throws Exception
      */
+    @Deprecated
     public void update(Collection<Item> items) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);

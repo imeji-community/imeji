@@ -14,8 +14,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlTransient;
-
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
@@ -27,6 +25,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
 /**
@@ -42,10 +41,11 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms")
 @XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class, Geolocation.class, License.class, Link.class,
         Publication.class })
-public abstract class Metadata
+public abstract class Metadata implements Comparable<Metadata>
 {
     // private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
     private URI id = IdentifierUtil.newURI(Metadata.class);
+    @j2jLiteral("http://imeji.org/terms/position")
     private int pos = 0;
 
     @XmlEnum(Types.class)
@@ -87,6 +87,12 @@ public abstract class Metadata
         return this.getClass().getAnnotation(j2jDataType.class).value();
     }
 
+    /**
+     * Compare metadata
+     * @param imd
+     * @return
+     */
+    @Override
     public int compareTo(Metadata imd)
     {
         if (imd.getPos() > this.pos)

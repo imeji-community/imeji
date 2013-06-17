@@ -11,18 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.util.StreamUtils;
-
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.index.Index;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -128,37 +125,39 @@ public class AdminBean
      */
     public void reIndex() throws Exception
     {
-        List<Object> toReindex = new ArrayList<Object>();
-        ImejiBean2RDF imejiBean2RDF;
-        // load items
-        ItemController ic = new ItemController();
-        for (Item item : ic.retrieveAll())
-        {
-            item.indexFulltext();
-            toReindex.add(item);
-        }
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-        imejiBean2RDF.updateLazy(toReindex, sb.getUser());
-        // Load collections
-        toReindex = new ArrayList<Object>();
-        CollectionController cc = new CollectionController();
-        for (CollectionImeji c : cc.retrieveAllCollections())
-        {
-            c.indexFulltext();
-            toReindex.add(c);
-        }
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
-        imejiBean2RDF.updateLazy(toReindex, sb.getUser());
-        // Load albums
-        toReindex = new ArrayList<Object>();
-        AlbumController ac = new AlbumController();
-        for (Album a : ac.retrieveAll())
-        {
-            a.indexFulltext();
-            toReindex.add(a);
-        }
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-        imejiBean2RDF.updateLazy(toReindex, sb.getUser());
+//        List<Object> toReindex = new ArrayList<Object>();
+//        ImejiBean2RDF imejiBean2RDF;
+//        // load items
+//        ItemController ic = new ItemController();
+//        for (Item item : ic.retrieveAll())
+//        {
+//            item.indexFulltext();
+//            toReindex.add(item);
+//        }
+//        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+//        imejiBean2RDF.updateLazy(toReindex, sb.getUser());
+//        // Load collections
+//        toReindex = new ArrayList<Object>();
+//        CollectionController cc = new CollectionController();
+//        for (CollectionImeji c : cc.retrieveAllCollections())
+//        {
+//            c.indexFulltext();
+//            toReindex.add(c);
+//        }
+//        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
+//        imejiBean2RDF.updateLazy(toReindex, sb.getUser());
+//        // Load albums
+//        toReindex = new ArrayList<Object>();
+//        AlbumController ac = new AlbumController();
+//        for (Album a : ac.retrieveAll())
+//        {
+//            a.indexFulltext();
+//            toReindex.add(a);
+//        }
+//        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+//        imejiBean2RDF.updateLazy(toReindex, sb.getUser());
+        Index index = new Index();
+        index.reindex();
     }
 
     /**

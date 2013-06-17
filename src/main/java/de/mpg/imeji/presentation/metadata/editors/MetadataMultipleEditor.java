@@ -3,12 +3,9 @@
  */
 package de.mpg.imeji.presentation.metadata.editors;
 
-import java.net.URI;
 import java.util.List;
 
-import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.EditorItemBean;
@@ -43,16 +40,21 @@ public class MetadataMultipleEditor extends MetadataEditor
         for (EditorItemBean eib : items)
         {
             boolean empty = true;
+            int position = 0;
+            boolean positionFound = false;
             for (SuperMetadataBean smdb : eib.getMetadata())
             {
-                if (hasStatement && smdb.getStatement() != null && smdb.getStatement().equals(statement.getId()))
-                {
+                if (hasStatement && smdb.getStatement() != null
+                        && smdb.getStatement().getId().compareTo(statement.getId()) == 0)
                     empty = false;
-                }
+                if (smdb.getStatement().getPos() > statement.getPos())
+                    positionFound = true;
+                if (!positionFound)
+                    position++;
             }
             if (empty && hasStatement)
             {
-                addMetadata(eib, 0);
+                addMetadata(eib, position);
             }
         }
     }
@@ -102,8 +104,7 @@ public class MetadataMultipleEditor extends MetadataEditor
     {
         if (metadataPos <= eib.getMetadata().size())
         {
-            Metadata md = MetadataFactory.createMetadata(getStatement());
-            eib.getMetadata().add(metadataPos, new SuperMetadataBean(md));
+            eib.addMetadata(metadataPos);
         }
     }
 
@@ -121,7 +122,7 @@ public class MetadataMultipleEditor extends MetadataEditor
     {
         if (metadataPos < eib.getMetadata().size())
         {
-            eib.getMetadata().remove(metadataPos);
+            eib.removeMetadata(metadataPos);
         }
     }
 }

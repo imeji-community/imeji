@@ -68,6 +68,7 @@ public class Text extends Metadata
     {
         if (metadata instanceof Text)
         {
+            setPos(metadata.getPos());
             this.text = ((Text)metadata).getText();
             this.statement = metadata.getStatement();
         }

@@ -71,11 +71,7 @@
 						unique_names : false,
 						flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.flash.swf',
 						silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.silverlight.xap',
-						filters : [{
-							title : "imeji files", 
-							extensions : "jpg,jpeg,png,bmp,gif,tif,JPG,JPEG,PNG,TIF,GIF"}
-							//{title : "Zip files", extensions : "zip"}
-						],
+					
 				
 						// Resize images on clientside
 						//resize : {width : 320, height : 240, quality : 90},
@@ -101,6 +97,7 @@
 			</script>
 			<div class="full_area0_p8 small_marginLExcl infoPage">
 				<br />
+				<h2><h:outputText value="#{lbl.uploadFiles}" styleClass="half_area0_p8" /></h2>
 				<div class="half_area0_p8 listBackground" style="width: 41.15em;">
 					<div id="uploader" class="half_area0_p0">
 						Your browser doens't support native upload!<br /> Please use HTML5

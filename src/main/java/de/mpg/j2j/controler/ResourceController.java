@@ -109,6 +109,7 @@ public class ResourceController
             throw new NotFoundException("Resource " + J2JHelper.getId(o) + " not found!");
         }
         o = rdf2Java.loadResource(o);
+
         return o;
     }
 
@@ -143,11 +144,21 @@ public class ResourceController
         java2rdf.remove(o);
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public Model getModel()
     {
         return model;
     }
 
+    /**
+     * setter
+     * 
+     * @param model
+     */
     public void setModel(Model model)
     {
         this.model = model;

@@ -59,7 +59,7 @@
 					styleClass="imj_contentSubMenuItemFiltering" />
 				<h:selectOneMenu id="selFilter" value="#{AlbumsBean.selectedFilter}"
 					styleClass="free_select"
-					onchange="window.location.href = '?f=' + this.value">
+					onchange="window.location.href = '?f=' + this.value" readonly="true">
 					<f:selectItems id="filterItem" value="#{AlbumsBean.filterMenu}" />
 				</h:selectOneMenu>
 				<h:outputText styleClass="imj_contentMenuSeparator" />
@@ -256,18 +256,19 @@
 									<h:panelGroup rendered="#{SessionBean.user == null}">
 										<td class="large_area0_p0 endline">
 											<div class="imj_stack">
-												<h:graphicImage
-													style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;"
-													value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}"
-													alt="No files" />
+												<h:outputLink value="#{Navigation.albumUrl}#{container.id}">
+													<h:graphicImage
+														style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;"
+														value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}"
+														alt="No files" />
+												</h:outputLink>
 											</div>
 										</td>
 									</h:panelGroup>
 									<td class="free_area0 endline"><span class="seperator"></span>
-										<span class="free_area0_p8 itemHeadline"> <h:outputLink
-												value="#{Navigation.albumUrl}#{container.id}">
-												<b><h:outputText
-														value="#{container.album.metadata.title}" /></b>
+										<span class="free_area0_p8 itemHeadline"> 
+											<h:outputLink value="#{Navigation.albumUrl}#{container.id}">
+												<b><h:outputText value="#{container.album.metadata.title}" /></b>
 											</h:outputLink>
 									</span></td>
 									<td class="free_area0 endline"><span class="seperator"></span>
@@ -281,7 +282,7 @@
 									<td class="free_area0 endline"><span class="seperator"></span>
 										<h:outputText
 											styleClass="#{SessionBean.user != null ? 'large_area0' : 'double_area0_p8'} "
-											title="#{container.smallDescription}"
+											title="#{container.description}"
 											value="#{container.smallDescription} &#160;" /></td>
 
 									<td class="free_area0 endline"><span class="seperator"></span>

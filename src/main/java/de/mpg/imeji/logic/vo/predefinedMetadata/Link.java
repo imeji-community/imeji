@@ -81,6 +81,7 @@ public class Link extends Metadata
     {
         if (metadata instanceof Link)
         {
+            setPos(metadata.getPos());
             this.label = ((Link)metadata).getLabel();
             this.uri = ((Link)metadata).getUri();
             this.statement = metadata.getStatement();

@@ -86,6 +86,7 @@ public class Date extends Metadata
     {
         if (metadata instanceof Date)
         {
+            setPos(metadata.getPos());
             setDate(((Date)metadata).getDate());
             this.statement = metadata.getStatement();
         }

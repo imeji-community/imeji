@@ -1,11 +1,37 @@
-<ui:composition template="templates/template_image.xhtml" 
+
+<ui:composition template="templates/sub_template/template_image.xhtml" 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="imageBean" value="#{ImageBean}" />
 	<ui:param name="headline" value="#{lbl.details}" />
-
+	
+	<ui:define name="selectionInfoPanel">
+		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
+			<h:outputLink value="#{Navigation.browseUrl}" styleClass="free_area1_p6 small_marginLIncl">
+				<h:outputText value="#{lbl.images_all}"/>
+			</h:outputLink>
+			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})" styleClass="free_area1_p6 xHuge_marginLIncl"/>
+		</h:panelGroup>
+	</ui:define>
+	
+	<ui:define name="paginatorTop">
+		<h:panelGroup layout="block" id="paginatorTop" styleClass="paginator">
+			<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
+				<h:outputLink value="#{imageBean.browse.previous}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
+					<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
+				</h:outputLink>
+				<h:outputText value=" " styleClass="small_area0"/>
+				<h:outputLink value="#{imageBean.browse.next}" styleClass="forward small_marginLExcl"  disabled="#{imageBean.browse.next == null}">
+					<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
+				</h:outputLink>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+	
+	
+	
 	<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
 		
@@ -22,4 +48,5 @@
 	</ui:define>
 	<ui:define name="viewImage">
 	</ui:define>
+	
 </ui:composition>

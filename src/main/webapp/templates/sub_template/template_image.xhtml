@@ -1,0 +1,16 @@
+<ui:composition template="../template_site.xhtml"  xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="init">
+		<h:outputText value="#{imageBean.init}"/>
+	</ui:define>
+	<ui:define name="mainContent">
+		
+		<ui:include src="../../include/History.xhtml"></ui:include>
+		<ui:insert name="selectionInfoPanel"/>
+		<ui:insert name="paginatorTop"/>
+		
+		
+	</ui:define>
+</ui:composition>

@@ -29,6 +29,7 @@ import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Java bean for the advanced search page
@@ -43,6 +44,10 @@ public class AdvancedSearchBean
     // Menus
     private List<SelectItem> collectionsMenu;
     private List<SelectItem> operatorsMenu;
+    /**
+     * True if the query got an error (for instance wrong date format). Then the message is written in red
+     */
+    private boolean errorQuery = false;
     private SessionBean session;
     private static Logger logger = Logger.getLogger(AdvancedSearchBean.class);
 
@@ -67,7 +72,11 @@ public class AdvancedSearchBean
         try
         {
             String query = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("q");
-            initForm(URLQueryTransformer.parseStringQuery(query));
+            if (!UrlHelper.getParameterBoolean("error"))
+            {
+                errorQuery = false;
+                initForm(URLQueryTransformer.parseStringQuery(query));
+            }
         }
         catch (Exception e)
         {
@@ -151,8 +160,9 @@ public class AdvancedSearchBean
      * Method called when form is submitted
      * 
      * @return
+     * @throws IOException
      */
-    public String search()
+    public String search() throws IOException
     {
         FiltersSession filtersSession = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
         filtersSession.getFilters().clear();
@@ -162,12 +172,15 @@ public class AdvancedSearchBean
 
     /**
      * Redirect to the search result page
+     * 
+     * @throws IOException
      */
-    public void goToResultPage()
+    public void goToResultPage() throws IOException
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         try
         {
+            errorQuery = false;
             FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
@@ -175,9 +188,10 @@ public class AdvancedSearchBean
                             navigation.getBrowseUrl() + "?q="
                                     + URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery()));
         }
-        catch (IOException e)
+        catch (Exception e)
         {
-            e.printStackTrace();
+            errorQuery = true;
+            FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getSearchUrl() + "?error=1");
         }
     }
 
@@ -275,7 +289,18 @@ public class AdvancedSearchBean
      */
     public String getSimpleQuery()
     {
-        return URLQueryTransformer.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
+        try
+        {
+            errorQuery = false;
+            return URLQueryTransformer.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
+        }
+        catch (Exception e)
+        {
+            errorQuery = true;
+            if ("Wrong date format".equals(e.getMessage()))
+                return session.getMessage("error_date_format");
+            return e.getMessage();
+        }
     }
 
     /**
@@ -308,6 +333,11 @@ public class AdvancedSearchBean
         return formular;
     }
 
+    /**
+     * stter
+     * 
+     * @param formular
+     */
     public void setFormular(SearchForm formular)
     {
         this.formular = formular;
@@ -331,5 +361,21 @@ public class AdvancedSearchBean
     public void setOperatorsMenu(List<SelectItem> operatorsMenu)
     {
         this.operatorsMenu = operatorsMenu;
+    }
+
+    /**
+     * @return the errorQuery
+     */
+    public boolean getErrorQuery()
+    {
+        return errorQuery;
+    }
+
+    /**
+     * @param errorQuery the errorQuery to set
+     */
+    public void setErrorQuery(boolean errorQuery)
+    {
+        this.errorQuery = errorQuery;
     }
 }

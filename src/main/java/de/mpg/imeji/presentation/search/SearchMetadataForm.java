@@ -212,6 +212,16 @@ public class SearchMetadataForm
         return group;
     }
 
+    /**
+     * Return the type of the current statement (text, number, etc.)
+     * 
+     * @return
+     */
+    public String getType()
+    {
+        return MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()).name();
+    }
+
     public String getSearchValue()
     {
         return searchValue;

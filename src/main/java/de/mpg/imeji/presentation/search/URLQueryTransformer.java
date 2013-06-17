@@ -288,7 +288,6 @@ public class URLQueryTransformer
                         query += logical + "(" + g + ")";
                     break;
                 case LOGICAL_RELATIONS:
-                    // query += " " + ((SearchLogicalRelation)se).getLogicalRelation().name() + " ";
                     logical = " " + ((SearchLogicalRelation)se).getLogicalRelation().name() + " ";
                     break;
                 case PAIR:

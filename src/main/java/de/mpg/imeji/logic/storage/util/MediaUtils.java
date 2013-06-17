@@ -161,7 +161,7 @@ public class MediaUtils
 
     private static String getImageMagickInstallationPath() throws IOException, URISyntaxException
     {
-        return PropertyReader.getProperty("imagemagick_install_path");
+    	return PropertyReader.getProperty("imeji.imagemagick.installpath");
     }
 
     /**

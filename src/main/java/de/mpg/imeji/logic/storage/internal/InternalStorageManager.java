@@ -23,7 +23,7 @@
 /*
  * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
  * für wissenschaftlich-technische Information mbH and Max-Planck-
- * Gesellschaft zur Förderung der Wissenschaft e.V.
+ * Gesellschaft zur F?rderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
 package de.mpg.imeji.logic.storage.internal;
@@ -265,22 +265,33 @@ public class InternalStorageManager
      */
     private InternalStorageItem writeItemFiles(InternalStorageItem item, byte[] bytes) throws IOException, Exception
     {
-    	String orginalPath = transformUrlToPath(item.getOriginalUrl());
-		write(bytes, orginalPath);
-		if (!MediaUtils.verifyMediaFormatSupport(orginalPath)) {
-			// TODO Ye: handle not support media data
-		}
-		String mimeType = MediaUtils.getMimeType(orginalPath);
-		String webPath = transformUrlToPath(item.getWebUrl());
-		String thumbnailPath = transformUrlToPath(item
-				.getThumbnailUrl());
-		MediaUtils.resizeImage(mimeType,orginalPath, webPath,
-				FileResolution.WEB);
-		MediaUtils.resizeImage(mimeType,orginalPath, thumbnailPath,
-				FileResolution.THUMBNAIL);
-		
-		
-
+    	boolean enableImagemagick=Boolean.parseBoolean(PropertyReader.getProperty("imeji.imagemagick.enable"));
+    	if(enableImagemagick){
+    		String orginalPath = transformUrlToPath(item.getOriginalUrl());
+    		write(bytes, orginalPath);
+    		if (MediaUtils.verifyMediaFormatSupport(orginalPath)) {
+    			String mimeType = MediaUtils.getMimeType(orginalPath);
+        		String webPath = transformUrlToPath(item.getWebUrl());
+        		String thumbnailPath = transformUrlToPath(item
+        				.getThumbnailUrl());
+        		MediaUtils.resizeImage(mimeType,orginalPath, webPath,
+        				FileResolution.WEB);
+        		MediaUtils.resizeImage(mimeType,orginalPath, thumbnailPath,
+        				FileResolution.THUMBNAIL);
+    		}
+    		else {
+    			//YE: TODO set default image for the file(e.g, with text "thumbnail not supported" )
+    		}
+    	}
+    	else{
+    		write(bytes, transformUrlToPath(item.getOriginalUrl()));
+    		write(ImageUtils.transformImage(bytes, FileResolution.WEB,
+    				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
+    				transformUrlToPath(item.getWebUrl()));
+    		write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
+    				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
+    				transformUrlToPath(item.getThumbnailUrl()));
+    	}
 		return item;
     }
 

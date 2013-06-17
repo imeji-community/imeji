@@ -164,12 +164,33 @@ public class StorageUtils
         format = format.toLowerCase();
         if ("tif".equals(format))
         {
-            format = format + "f";
+            return "image/"+"tiff";
         }
         else if ("jpg".equals(format))
         {
-            format = "jpeg";
+            return "image/jpeg";
         }
-        return "image/" + format;
+        else if ("png".equals(format))
+        {
+            return "image/png";
+        }
+        else if ("png".equals(format))
+        {
+            return "image/png";
+        }
+        else if ("gif".equals(format))
+        {
+            return "image/gif";
+        }
+        else if ("mov".equals(format))
+        {
+            return "video/quicktime";
+        }
+        else if ("flv".equals(format))
+        {
+            //still not support directly played in browser
+        	return "video/x-flv";
+        }
+        return "video/" + format;
     }
 }

@@ -90,7 +90,7 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.col.name().equals(pair.getIndex().getName()))
         {
-            return "";
+            return " FILTER(" + getSimpleFilter(pair, "c") + ") .";
         }
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {

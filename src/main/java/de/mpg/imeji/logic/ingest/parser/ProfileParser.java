@@ -6,7 +6,9 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
-import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+
+import de.mpg.imeji.logic.ingest.jaxb.JaxbGenericObject;
+import de.mpg.imeji.logic.ingest.vo.MetadataProfiles;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
 public class ProfileParser
@@ -21,7 +23,7 @@ public class ProfileParser
      */
     public MetadataProfile parse(File profileXmlFile) throws JAXBException, SAXException
     {
-        return new JaxbIngestProfile().unmarshalMdProfile(profileXmlFile);
+        return new JaxbGenericObject<MetadataProfile>(MetadataProfile.class).unmarshal(profileXmlFile);
     }
 
     /**
@@ -34,6 +36,6 @@ public class ProfileParser
      */
     public List<MetadataProfile> parseList(File profileListXmlFile) throws JAXBException, SAXException
     {
-        return new JaxbIngestProfile().unmarshalMdProfiles(profileListXmlFile).getMetadataProfile();
+        return new JaxbGenericObject<MetadataProfiles>(MetadataProfiles.class).unmarshal(profileListXmlFile).getMetadataProfile();
     }
 }

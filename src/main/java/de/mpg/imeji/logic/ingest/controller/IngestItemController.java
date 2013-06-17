@@ -9,7 +9,7 @@ import javax.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.ingest.mapper.ItemMapper;
+import de.mpg.imeji.logic.ingest.mapper.ItemMapperTask;
 import de.mpg.imeji.logic.ingest.parser.ItemParser;
 import de.mpg.imeji.logic.ingest.validator.ItemContentValidator;
 import de.mpg.imeji.logic.vo.Item;
@@ -51,16 +51,18 @@ public class IngestItemController
      */
     public void ingest(File itemListXmlFile) throws JAXBException, SAXException
     {
-        ItemParser ip = new ItemParser();
-        List<Item> itemList = ip.parseItemList(itemListXmlFile);
-        
         try
         {
+        	ItemParser ip = new ItemParser();
+            List<Item> itemList = ip.parseItemList(itemListXmlFile);
         	itemList = copyIngestedMetadataToCurrentItem(itemList);
-	        ItemContentValidator.validate(itemList);
-	        ItemMapper im = new ItemMapper(itemList);
-	        ItemController ic = new ItemController(user);
-	        ic.update(im.getMappedItemObjects(), user);
+        	/* TODO: This part pertains to the content validator, not finished yet
+         	 * ItemContentValidator.validate(itemList);
+         	 */
+        	ItemMapperTask im = new ItemMapperTask(itemList);   	
+        	im.execute();
+        	ItemController ic = new ItemController(user);
+        	ic.update(im.get(), user);
         }
         catch(Exception e)
         {

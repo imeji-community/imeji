@@ -8,7 +8,8 @@ import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
 
-import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+import de.mpg.imeji.logic.ingest.jaxb.JaxbGenericObject;
+import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.vo.Item;
 
 public class ItemParser
@@ -23,7 +24,7 @@ public class ItemParser
      */
     public List<Item> parseItemList(File itemListXmlFile) throws JAXBException, SAXException 
     {
-        return new JaxbIngestProfile().unmarshalItems(itemListXmlFile).getItem();
+        return new JaxbGenericObject<Items>(Items.class).unmarshal(itemListXmlFile).getItem();
     }
 
     /**
@@ -36,7 +37,7 @@ public class ItemParser
      */
     public Item parseItem(String itemXml) throws JAXBException, SAXException
     {
-        return new JaxbIngestProfile().unmarshalItem(itemXml);
+        return new JaxbGenericObject<Item>(Item.class).unmarshal(itemXml);
     }
 
     @SuppressWarnings("unused")

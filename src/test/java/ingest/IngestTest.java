@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
-import de.mpg.imeji.logic.ingest.mapper.ItemMapper;
+import de.mpg.imeji.logic.ingest.mapper.ItemMapperTask;
 import de.mpg.imeji.logic.ingest.parser.ItemParser;
 import de.mpg.imeji.logic.ingest.parser.ProfileParser;
 import de.mpg.imeji.logic.ingest.vo.Items;
@@ -109,8 +109,9 @@ public class IngestTest
         String xmlFilename = "src/test/resources/ingest/items.xml";
         ItemParser ip = new ItemParser();
         List<Item> itemList = ip.parseItemList(new File(xmlFilename));
-        ItemMapper im = new ItemMapper(itemList);
-        Collection<Item> mappedItemList = im.getMappedItemObjects();
+        ItemMapperTask im = new ItemMapperTask(itemList);
+        im.execute();
+        Collection<Item> mappedItemList = im.get();
         Items items = new Items();
         items.setItem(new ArrayList<Item>(mappedItemList));
         try
@@ -132,8 +133,9 @@ public class IngestTest
         
         ItemParser ip = new ItemParser();
         List<Item> itemList = ip.parseItemList(new File(xmlFilename));
-        ItemMapper im = new ItemMapper(itemList);
-        Collection<Item> mappedItemList = im.getMappedItemObjects();
+        ItemMapperTask im = new ItemMapperTask(itemList);
+        im.execute();
+        Collection<Item> mappedItemList = im.get();
         Items items = new Items();
         items.setItem(new ArrayList<Item>(mappedItemList));
         try

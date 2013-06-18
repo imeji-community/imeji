@@ -1,4 +1,3 @@
-
 <ui:composition template="templates/sub_template/template_image.xhtml" 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -22,7 +21,7 @@
 				<h:outputLink value="#{imageBean.browse.previous}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
 					<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
 				</h:outputLink>
-				<h:outputText value=" " styleClass="small_area0"/>
+				<h:outputText value="klasjdfkljasdfjsdjfklasdjfkljasdklfj" styleClass="small_area0"/>
 				<h:outputLink value="#{imageBean.browse.next}" styleClass="forward small_marginLExcl"  disabled="#{imageBean.browse.next == null}">
 					<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
 				</h:outputLink>
@@ -31,22 +30,21 @@
 	</ui:define>
 	
 	
-	
-	<ui:define name="preListHeader">
-		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-		
-			<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
-			 	<ui:include src="./include/History.xhtml"></ui:include>
-			 </h:panelGroup>
+	<ui:remove>
+		<ui:define name="preListHeader">
+			<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
 			
-			<h:outputLink value="#{Navigation.browseUrl}" styleClass="free_area1_p6 small_marginLIncl">
-				<h:outputText value="#{lbl.images_all}"/>
-			</h:outputLink>
-			
-			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})" styleClass="free_area1_p6 xHuge_marginLIncl"/>
-		</h:panelGroup>
-	</ui:define>
-	<ui:define name="viewImage">
-	</ui:define>
-	
+				<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
+				 	<ui:include src="./include/History.xhtml"></ui:include>
+				 </h:panelGroup>
+				
+				<h:outputLink value="#{Navigation.browseUrl}" styleClass="free_area1_p6 small_marginLIncl">
+					<h:outputText value="#{lbl.images_all}"/>
+				</h:outputLink>
+				
+				<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})" styleClass="free_area1_p6 xHuge_marginLIncl"/>
+			</h:panelGroup>
+		</ui:define>
+		<ui:define name="viewImage"> </ui:define>
+	</ui:remove>
 </ui:composition>

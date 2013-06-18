@@ -2,15 +2,25 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
+	
 	<ui:define name="init">
 		<h:outputText value="#{imageBean.init}"/>
 	</ui:define>
+	
+	<!-- Main Content - Image Detail View -->
 	<ui:define name="mainContent">
 		
-		<ui:include src="../../include/History.xhtml"></ui:include>
-		<ui:insert name="selectionInfoPanel"/>
-		<ui:insert name="paginatorTop"/>
-		
-		
+		<ui:fragment rendered="#{imageBean.image != null}">
+			<ui:include src="../../include/History.xhtml"></ui:include>
+			<ui:insert name="selectionInfoPanel"/>
+			<ui:insert name="paginatorTop"/>
+			<ui:include src="../component/images/image_details.xhtml"/>
+		</ui:fragment>
+		<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
+            <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
+        </h:panelGroup>
 	</ui:define>
+	
+	
+	
 </ui:composition>

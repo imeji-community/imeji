@@ -16,13 +16,13 @@
 	</ui:define>
 	
 	<ui:define name="paginatorTop">
-		<h:panelGroup layout="block" id="paginatorTop" styleClass="paginator">
-			<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
-				<h:outputLink value="#{imageBean.browse.previous}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
+		<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
+			<h:panelGroup styleClass="imj_simplePageBrowser">
+				<h:outputLink value="#{imageBean.browse.previous}" styleClass="imj_backwardButton" disabled="#{imageBean.browse.previous == null}">
 					<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
 				</h:outputLink>
-				<h:outputText value="klasjdfkljasdfjsdjfklasdjfkljasdklfj" styleClass="small_area0"/>
-				<h:outputLink value="#{imageBean.browse.next}" styleClass="forward small_marginLExcl"  disabled="#{imageBean.browse.next == null}">
+				
+				<h:outputLink value="#{imageBean.browse.next}" styleClass="imj_forwardButton" disabled="#{imageBean.browse.next == null}">
 					<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
 				</h:outputLink>
 			</h:panelGroup>

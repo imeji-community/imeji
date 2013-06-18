@@ -1004,10 +1004,10 @@ OLD:
     border-top: 0.182em /*0.1818em*/ solid #6CAD2F; background-color: #313131;
 }
 
-/* ===[ Content - Content Header]===
+/* ===[ Content - Content Header]=== 
    ================================================== */
 
-/* prelistHeader - free_area0 small_marginLExcl *
+/* prelistHeader - free_area0 small_marginLExcl * -- must be redefined in img_selectionInfoPanel and imj_breadcrumpHistory
    hardcoded style - style="margin-right:0.36em; 
    in template_paginator_albums.xhtml and template_paginator_containers.xhtml  */
 
@@ -1065,6 +1065,14 @@ OLD:
     font-size: 1.045em; /*1.091em*/
 }
 
+.imj_selectionInfoPanel {
+	width:91.75%;
+	padding: 0 4%;
+	margin-bottom:0.5em;
+}
+
+
+
 /* ===[ Content - Breadcrump History Navigation ]===
    ================================================== */
 
@@ -1073,8 +1081,8 @@ OLD:
    ================================================== */
 
 .imj_breadcrumpHistory {
-    width: 92.75%;
-    margin-left: 7%;
+    width: 91.75%;
+    padding: 0 4%;
     /*padding-left: 5.636em; 7%; */
 }
 
@@ -1104,12 +1112,12 @@ OLD:
    ================================================== */
 
 .imj_pageMessageArea {
-    width: 100%;
+    width: 91.75%;
     display: inline-block;
     color:#F0F0F0;
     
     margin-bottom: 1em;
-    padding: 0 2%;
+    padding: 0 4%;
 }
 
 .imj_messageList {
@@ -1135,3 +1143,32 @@ OLD:
 	background-color:#DDDDDD;
 }
 
+
+
+/* paginator */
+.imj_paginator {
+	width:91.75%;
+	padding:0 4%;
+	text-align:center;
+}
+.imj_paginator .imj_backwardButton {
+	background:url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTrianglePrevious_15.png") transparent no-repeat center left;
+	padding-left: 1.5em;
+}
+.imj_paginator .imj_backwardButton:hover {
+	color: #4AFF00;
+	background:url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTrianglePrevious_15.png") transparent no-repeat center left;
+}
+
+.imj_paginator .imj_forwardButton {
+	background:url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTriangleNext_15.png") transparent no-repeat center right;
+	padding-right: 1.5em;
+}
+.imj_paginator .imj_forwardButton:hover {
+	color: #4AFF00;
+	background:url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTriangleNext_15.png") transparent no-repeat center right;
+}
+
+.imj_simplePageBrowser .imj_backwardButton+.imj_forwardButton {
+	margin-left:1em;
+}

@@ -43,40 +43,50 @@ All rights reserved. Use is subject to license terms.
 		<h:head>
 			<ui:include src="component/header/html_head_default.xhtml"/>
 		</h:head>
-	
+		
 		<h:body lang="#{SessionBean.locale}">
-			<h:panelGroup layout="block" styleClass="imj_siteWrapper">
+		
+			<div class="imj_siteWrapper">
 				<ui:insert name="init"/>
 				<ui:include src="component/header/header_default.xhtml"/>
+				
 				<div class="imj_mainContentWrapper">
-					<ui:fragment rendered="#{imageBean != null and imageBean.image == null}">
-						<div class="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl">
-				            <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
-				        </div>
-				    </ui:fragment>
-			        <div class="imj_subHeaderMessageSpace">
-						<!-- Subheadline starts here  - old: id="subHeader" -->
-						<h:panelGroup id="imj_subHeaderMessage">
-							<h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
-							<h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
-								<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
+					
+					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml')}">
+						
+						<ui:fragment rendered="#{MessagesBean.hasMessages}">
+							<ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
+									<h:messages styleClass="imj_messageList"
+												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+							</ui:fragment>
+							
+							<ui:fragment rendered="#{MessagesBean.numberOfMessages != 1}">
+								<ui:fragment rendered="#{MessagesBean.hasErrorMessages}">
+									<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2>
+									<h:messages styleClass="imj_messageList"
+												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+								</ui:fragment>
+							
+								<ui:fragment rendered="#{!MessagesBean.hasErrorMessages}">
+									<h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2>
+									<h:messages styleClass="imj_messageList"
+												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+								</ui:fragment>
+							</ui:fragment>
+						</ui:fragment>
+						
+						<ui:fragment rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml'}">
+							<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="imj_messageStatus">
+								<h:outputText value="#{lbl.active_album}: "/>
+								<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">
+									<h:outputText value="#{SessionBean.activeAlbum.metadata.title} (#{SessionBean.activeAlbumSize})"/>
+								</h:outputLink>
 							</h:panelGroup>
-                                  <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{MessagesBean.hasMessages and !MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
-                                      <h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2>
-                                    	<h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
-                                  </h:panelGroup>
-                                  <h:outputText value="&#160;" rendered="#{!MessagesBean.hasErrorMessages}"/>
-                                  <!-- Subheadline ends here -->
-                                 	<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="full_area0" rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml'}">
-								<h:panelGroup styleClass="huge_area0">
-									<h:outputText value="#{lbl.active_album}: "/>
-									<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">
-										<h:outputText value="#{SessionBean.activeAlbum.metadata.title} (#{SessionBean.activeAlbumSize})"/>
-									</h:outputLink>
-								</h:panelGroup>
-							</h:panelGroup>
-						</h:panelGroup>
-					</div>
+						</ui:fragment>
+					</h:panelGroup>
 					
 					
 					
@@ -87,7 +97,7 @@ All rights reserved. Use is subject to license terms.
 				</div>
 				
 				<ui:include src="component/footer/footer_default.xhtml"/>
-			</h:panelGroup>
+			</div>
 		</h:body>
 	</html>
 </f:view>

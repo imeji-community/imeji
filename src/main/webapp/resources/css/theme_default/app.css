@@ -30,6 +30,30 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
 
+
+
+/* OLD STYLES */
+/* ******** css fixes for release 1.2.0.0 ***********
+ * ================================================== */
+.free_txtInput, .xHuge_txtInput, .xHuge_txtInput input {
+    width: 98%;
+}
+
+.menuHeader {
+	color: #6CAD2F;
+}
+
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+
+
+
+
+
+/* NEW STYLES */
+
 /* imeji base settings - set body width and height to 100% for all pages 
    =========================================================================  */
 
@@ -120,6 +144,10 @@ select {
     background-color: #F0F0F0; /*#F3F8FA*/
 }
 
+
+input[type="radio"] {
+    margin: 0; 
+}
 
 
 /* styles for imej startpage - Welcome.xhtml - wrapper
@@ -1075,20 +1103,35 @@ OLD:
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
    ================================================== */
 
-.messageArea {
-    width: 39.1818em;
-    display: inline;
-    float: left;
-    background-color: #F0F0F0;
-    border-style: solid;
-    border-width: 0.091em;
-    margin-bottom: 1em;
-    padding: 0.83em 0.92em 1.37em 0.92em  !important;
-       
+.imj_pageMessageArea {
+    width: 100%;
+    display: inline-block;
+    color:#F0F0F0;
     
+    margin-bottom: 1em;
+    padding: 0 2%;
 }
 
-.errorMessageArea {
-    border-color: #D80000;
+.imj_messageList {
+	width: 100%;
+	padding:0;
+}
+.imj_messageList li {
+	width: 95.95%;
+	padding:0 2%;
+}
+
+.imj_messageStatus a {
+    color:#6CAD2F;
+}
+.imj_messageInfo {
+	color:#6CAD2F;
+	background-color: #444444;
+}
+.imj_messageError,
+.imj_messageFatal,
+.imj_messageWarn {
+	color:#D80000;
+	background-color:#DDDDDD;
 }
 

@@ -386,10 +386,6 @@ margin-top: 0.5454em;
 margin-bottom: 0.9090em;  */
 
 .imj_siteHeader {
-    clear: both;
-    float: left;
-    display: inline;
-    overflow: hidden;
     width: 81.3636em;
     margin: 0 0.0909em 0 0;
     padding: 0;
@@ -816,14 +812,6 @@ span.imj_contentMenuItem {
 /* .contentMenu .action *  xHuge_area0 sub action - template_paginator_containers.xhtml - Images.xhtml */
 
 .imj_contentSubMenu {
-    overflow: visible;
-    clear: left;
-    display: inline;
-    margin: 0;
-    padding: 0.1818em 0 0 0;
-    height: 1.6363em;
-    max-height: 1.6363em;
-    white-space: nowrap;
     text-transform: none;
     letter-spacing: 0.045em; /*0.091em*/
 }
@@ -836,11 +824,9 @@ span.imj_contentMenuItem {
  * free_area0 xTiny_marginLInc - AlbumEntryPage.xhtml - AlbumBrowse.xhtml  */
 
 .imj_contentSubMenuItem {
-    display: inline;
-    float: left;
-    margin: 0 0.0909em 0 0;
-    overflow: hidden;
+    display: inline-block;
     padding: 0;
+    color: #6CAD2F;
 }
 
 /* .contentMenu .action *  - 
@@ -1065,13 +1051,6 @@ OLD:
     font-size: 1.045em; /*1.091em*/
 }
 
-.imj_selectionInfoPanel {
-	width: 91.75%;
-	padding: 0 4%;
-	margin-bottom: 0.5em;
-}
-
-
 
 /* ===[ Content - Breadcrump History Navigation ]===
    ================================================== */
@@ -1083,6 +1062,7 @@ OLD:
 .imj_breadcrumpHistory {
     width: 91.75%;
     padding: 0 4%;
+    margin-bottom: 0.5em;    
     /*padding-left: 5.636em; 7%; */
 }
 
@@ -1106,6 +1086,92 @@ OLD:
     margin-left: 0.364em; /*0.3636em*/
     margin-right: 0.364em;
 }
+
+
+/* * info panel (Image.xhtml)
+   ==================================================
+   ================================================== */
+
+
+.imj_selectionInfoPanel {
+	width: 91.75%;
+	padding: 0 4%;
+	margin-bottom: 0.5em;
+	/*border-bottom: solid #6CAD2F 0.0909em;*/
+	/*border-bottom: 0.1818em solid #6CAD2F;*/
+}
+
+.imj_selectionInfoPanelItemSelect {
+	float: right;
+}
+
+
+
+/* * paginator component (Image.xhtml)
+   ==================================================
+   ================================================== */
+.imj_paginator {
+	width: 91.75%;
+	margin-top: 1.000em;
+	margin-bottom: 1.000em;
+	padding: 0 4%;	
+	text-align: center;
+	border-top: solid #6CAD2F 0.0909em;
+}
+.imj_paginator .imj_backwardButton {
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTrianglePrevious_15.png") transparent no-repeat center left;
+	padding-left: 1.5em;
+}
+.imj_paginator .imj_backwardButton:hover {
+	color: #4AFF00;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTrianglePrevious_15.png") transparent no-repeat center left;
+}
+
+.imj_paginator .imj_forwardButton {
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTriangleNext_15.png") transparent no-repeat center right;
+	padding-right: 1.5em;
+}
+.imj_paginator .imj_forwardButton:hover {
+	color: #4AFF00;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTriangleNext_15.png") transparent no-repeat center right;
+}
+
+.imj_simplePageBrowser .imj_backwardButton+.imj_forwardButton {
+	margin-left: 1em;
+}
+
+
+
+/* * mediaDisplayContainer (image_deatails.xhtml)
+   ==================================================
+   ================================================== */
+   
+   
+.imj_mediaDisplayContainer {
+	width: 98%;
+	margin: 0;
+	padding: 0;
+	
+}   
+
+
+.imj_mediaDisplayContainerItem {
+	text-align: center;
+	margin: 0.500em 0 0.500em 0;
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
@@ -1158,35 +1224,4 @@ OLD:
 	line-height: 110%;
 	color: #D80000;
 	background-color: #DDDDDD;
-}
-
-
-/* * paginator component (Image.xhtml)
-   ==================================================
-   ================================================== */
-.imj_paginator {
-	width: 91.75%;
-	padding: 0 4%;
-	text-align: center;
-}
-.imj_paginator .imj_backwardButton {
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTrianglePrevious_15.png") transparent no-repeat center left;
-	padding-left: 1.5em;
-}
-.imj_paginator .imj_backwardButton:hover {
-	color: #4AFF00;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTrianglePrevious_15.png") transparent no-repeat center left;
-}
-
-.imj_paginator .imj_forwardButton {
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTriangleNext_15.png") transparent no-repeat center right;
-	padding-right: 1.5em;
-}
-.imj_paginator .imj_forwardButton:hover {
-	color: #4AFF00;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTriangleNext_15.png") transparent no-repeat center right;
-}
-
-.imj_simplePageBrowser .imj_backwardButton+.imj_forwardButton {
-	margin-left: 1em;
 }

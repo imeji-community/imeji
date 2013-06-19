@@ -1188,14 +1188,16 @@ OLD:
 
 
 
-/* * mediaDisplayContainer (image_deatails.xhtml)
+/* * mediaDisplayContainer + mediaEditPanel
+	(image_deatails.xhtml)
    ==================================================
    ================================================== */
    
-   
 .imj_mediaDisplayContainer {
-	padding: 1em 0;
+	padding: 1.000em 0;
 	text-align: center;
+	border-bottom: solid #6CAD2F 0.0909em;
+	margin-bottom: 0.545em;
 }   
 
 
@@ -1213,13 +1215,32 @@ OLD:
 }
 
 
+.imj_mediaDataTypePanelContainer {
+		
+}
 
+.imj_mediaDataTypePanel {
+	float: right;
+	border-bottom: solid #6CAD2F 0.0909em;
+}
 
+.imj_mediaDataTypePanel a {
+	margin: 0.37em 0.28em 0.36em;
+	padding: 0 0.37em;
+	float: right;
+}
 
+.imj_mediaDataTypePanel .imj_mediaDataTypePanelSeparator {
+    width: 0.0909em;
+    float: right;
+    border: solid #6CAD2F;
+    border-width: 1.3em 0 0;
+    margin-top: 0.45em;
+}
 
-
-
-
+.imj_metaDataListing {
+	
+}
 
 
 

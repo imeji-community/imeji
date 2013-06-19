@@ -532,16 +532,21 @@ cut second ?
     padding: 0;
 }
 
-/* ===[ SiteHeader - SimpleSearch ]===
+
+/* ===[ ICONS ]===
    ================================================== */
-
-.imj_simpleSearch {
-    float: right;
-    margin: 1.5em 0 0 0;
-    overflow: visible;
+.imj_icoMagnifier_15 {
+	display: inline-block;
+	width: 1.36363636em;
+	height: 1.36363636em;
+	margin-right: 0.5em;
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjMagnifierTopLeft_15.png");
+	vertical-align: middle;
 }
-
-.imj_icoMagnifier_ffffff_23 {
+.imj_icoMagnifier_15:hover {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_15.png");
+}
+.imj_icoMagnifier_23 {
     float: left;
     display: inline-block;
     height: 2em;
@@ -552,6 +557,43 @@ cut second ?
     
     background-position: center center;
     background-repeat: no-repeat;
+}
+
+
+/* ===[ Overlay Menu ]===
+   ================================================== */
+.imj_overlayMenu {
+	padding: 0.125em 0.25em;
+	display: inline-block;
+}
+.imj_overlayMenu .imj_menuHeader {
+	text-align: left;
+}
+.imj_overlayMenu .imj_menuBody {
+	display: none;
+}
+.imj_overlayMenu:hover .imj_menuBody {
+	position: absolute;
+	display: block;
+    padding: 0.25em 1em;
+    background-color: #444444;
+}
+.imj_overlayMenuListItem:hover .imj_icoMagnifier_15 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_15.png");
+}
+.imj_overlayMenu .imj_criticalItem:hover {
+	background-color: #D80000;
+}
+
+
+
+/* ===[ SiteHeader - SimpleSearch ]===
+   ================================================== */
+
+.imj_simpleSearch {
+    float: right;
+    margin: 1.5em 0 0 0;
+    overflow: visible;
 }
 
 .imj_simpleSearchInputWrapper {
@@ -812,7 +854,10 @@ span.imj_contentMenuItem {
 /* .contentMenu .action *  xHuge_area0 sub action - template_paginator_containers.xhtml - Images.xhtml */
 
 .imj_contentSubMenu {
-    text-transform: none;
+    clear:left;
+	width: 86.95%;
+	padding: 0 6.5%;
+	text-transform: none;
     letter-spacing: 0.045em; /*0.091em*/
 }
 
@@ -857,6 +902,7 @@ span.imj_contentMenuItem {
 
 .imj_contentSubMenuItemSorting {
     margin: 0 0.364em 0 0;
+    color: #F0F0F0;
 }
 
 /* free_area0 - template_paginator_containers.xhtml - template_paginator_albums.xhtml   */
@@ -1229,3 +1275,4 @@ OLD:
 	color: #D80000;
 	background-color: #DDDDDD;
 }
+

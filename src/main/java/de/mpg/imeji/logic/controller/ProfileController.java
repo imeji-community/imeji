@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.omg.CosNaming.NamingContextPackage.NotFoundReasonHelper;
+
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
@@ -25,6 +27,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
 
 /**
@@ -83,12 +86,18 @@ public class ProfileController extends ImejiController
      * @param uri
      * @param user
      * @return
+     * @throws NotFoundException 
      * @throws Exception
      */
-    public MetadataProfile retrieve(URI uri, User user) throws Exception
+    public MetadataProfile retrieve(URI uri, User user) throws NotFoundException
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
-        MetadataProfile p = ((MetadataProfile)imejiRDF2Bean.load(uri.toString(), user, new MetadataProfile()));
+        MetadataProfile p;
+		try {
+			p = ((MetadataProfile)imejiRDF2Bean.load(uri.toString(), user, new MetadataProfile()));
+		} catch (Exception e) {
+			throw new NotFoundException("TODO: Profile (URL: "+uri+" ) not found.");
+		}
         Collections.sort((List<Statement>)p.getStatements());
         return p;
     }

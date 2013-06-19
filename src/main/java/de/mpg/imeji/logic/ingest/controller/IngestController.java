@@ -11,6 +11,7 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Controller for ingest
@@ -44,9 +45,10 @@ public class IngestController
      * @param profileXml
      * @throws SAXException 
      * @throws JAXBException 
+     * @throws NotFoundException 
      * @throws Exception
      */
-    public void ingest(File itemListXmlFile, File profileXmlFile) throws JAXBException, SAXException 
+    public void ingest(File itemListXmlFile, File profileXmlFile) throws JAXBException, SAXException, NotFoundException 
     {
         if (profileXmlFile != null)
         {
@@ -56,15 +58,9 @@ public class IngestController
         if (itemListXmlFile != null)
         {
             ProfileController pc = new ProfileController();
-            try {
-	            MetadataProfile mdp = pc.retrieve(collection.getProfile(), user);
-	            IngestItemController iic = new IngestItemController(user, mdp);
-	            iic.ingest(itemListXmlFile);
-            }
-            catch (Exception e)
-            {
-            	throw new RuntimeException();
-            }
+	        MetadataProfile mdp = pc.retrieve(collection.getProfile(), user);
+	        IngestItemController iic = new IngestItemController(user, mdp);
+	        iic.ingest(itemListXmlFile);
         }
     }
 }

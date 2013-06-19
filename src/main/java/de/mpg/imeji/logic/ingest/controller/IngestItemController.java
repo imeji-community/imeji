@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Controller to ingest {@link Item}
@@ -47,27 +48,28 @@ public class IngestItemController
      * @param itemListXmlFile
      * @throws SAXException 
      * @throws JAXBException 
+     * @throws NotFoundException 
      * @throws Exception
      */
-    public void ingest(File itemListXmlFile) throws JAXBException, SAXException
+    public void ingest(File itemListXmlFile) throws JAXBException, SAXException, ClassCastException, NotFoundException
     {
-        try
-        {
         	ItemParser ip = new ItemParser();
             List<Item> itemList = ip.parseItemList(itemListXmlFile);
-        	itemList = copyIngestedMetadataToCurrentItem(itemList);
-        	/* TODO: This part pertains to the content validator, not finished yet
-         	 * ItemContentValidator.validate(itemList);
-         	 */
-        	ItemMapperTask im = new ItemMapperTask(itemList);   	
-        	im.execute();
-        	ItemController ic = new ItemController(user);
-        	ic.update(im.get(), user);
-        }
-        catch(Exception e)
-        {
-        	throw new RuntimeException();
-        }
+            itemList = copyIngestedMetadataToCurrentItem(itemList);
+            
+        	try {
+				
+	        	/* TODO: This part pertains to the content validator, not finished yet
+	         	 * ItemContentValidator.validate(itemList);
+	         	 */
+	        	ItemMapperTask im = new ItemMapperTask(itemList);   	
+	        	im.execute();
+	        	ItemController ic = new ItemController(user);
+	        	ic.update(im.get(), user);
+
+			} catch (Exception e) {
+				throw new RuntimeException();
+			}
     }
 
     /**
@@ -77,16 +79,24 @@ public class IngestItemController
      * @param originalList
      * @param ingestedList
      * @return
+     * @throws NotFoundException 
      * @throws Exception
      */
-    private List<Item> copyIngestedMetadataToCurrentItem(List<Item> ingestedList) throws Exception
+    private List<Item> copyIngestedMetadataToCurrentItem(List<Item> ingestedList) throws NotFoundException
     {
         List<Item> originalList = new ArrayList<Item>();
         for (Item ingested : ingestedList)
         {
-            Item original = retrieveItem(ingested);
-            original.setMetadataSets(ingested.getMetadataSets());
-            originalList.add(original);
+            Item original;
+			try {
+				original = retrieveItem(ingested);
+	            original.setMetadataSets(ingested.getMetadataSets());
+	            originalList.add(original);
+	            
+			} catch (Exception e) {
+				throw new NotFoundException("Item with identifier: " + ingested.getId() + 
+						" could not be found in the system. Please make sure you have the right identifiers and try again.");
+			}
         }
         return originalList;
     }

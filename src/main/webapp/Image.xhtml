@@ -7,12 +7,7 @@
 	<ui:param name="headline" value="#{lbl.details}" />
 	
 	<ui:define name="selectionInfoPanel">
-		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
-			<h:outputLink value="#{Navigation.browseUrl}">
-				<h:outputText value="#{lbl.images_all}"/>
-			</h:outputLink>
-			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})" styleClass="imj_selectionInfoPanelItemSelect"/>
-		</h:panelGroup>
+		<ui:include src="templates/component/images/selectionInfoPanel.xhtml"/>
 	</ui:define>
 	
 	<ui:define name="paginatorTop">

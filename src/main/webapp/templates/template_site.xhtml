@@ -1,5 +1,4 @@
 <!DOCTYPE HTML>
-
 <!--
 /* 
 CDDL HEADER START
@@ -29,8 +28,6 @@ Gesellschaft zur Foerderung der Wissenschaft e.V.
 All rights reserved. Use is subject to license terms.
 */
 -->
-
-
 <f:view encoding="UTF-8" locale="#{SessionBean.locale}" 
 	xmlns:f="http://java.sun.com/jsf/core" 
 	xmlns:h="http://java.sun.com/jsf/html" 
@@ -45,12 +42,12 @@ All rights reserved. Use is subject to license terms.
 		</h:head>
 		
 		<h:body lang="#{SessionBean.locale}">
-		
+			
 			<div class="imj_siteWrapper">
 				<ui:insert name="init"/>
 				<ui:include src="component/header/header_default.xhtml"/>
 				
-				<div class="imj_mainContentWrapper">
+				
 					
 					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml')}">
 						
@@ -63,14 +60,14 @@ All rights reserved. Use is subject to license terms.
 							
 							<ui:fragment rendered="#{MessagesBean.numberOfMessages != 1}">
 								<ui:fragment rendered="#{MessagesBean.hasErrorMessages}">
-									<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2>
+									<div class="imj_messageTitleWarn"><h:outputText value="#{lbl.warning_lblMessageHeader}"/></div>
 									<h:messages styleClass="imj_messageList"
 												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
 												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
 								</ui:fragment>
 							
 								<ui:fragment rendered="#{!MessagesBean.hasErrorMessages}">
-									<h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2>
+									<div class="imj_messageTitleInfo"><h:outputText value="#{lbl.info_lblMessageHeader}"/></div>
 									<h:messages styleClass="imj_messageList"
 												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
 												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
@@ -88,14 +85,11 @@ All rights reserved. Use is subject to license terms.
 						</ui:fragment>
 					</h:panelGroup>
 					
-					
-					
-					
+				<div class="imj_mainContentWrapper">	
 					<ui:insert name="mainContent"/>
 					
-					
 				</div>
-				
+					
 				<ui:include src="component/footer/footer_default.xhtml"/>
 			</div>
 		</h:body>

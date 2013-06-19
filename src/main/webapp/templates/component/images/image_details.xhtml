@@ -4,6 +4,61 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 
+
+	<!-- Media Display Container -->
+	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
+		<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank">
+			<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
+		</h:outputLink>	
+	
+	<h:panelGroup styleClass="free_area0 xSmall_marginLIncl" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
+		<h:outputText styleClass="free_area0_p8 xDouble_marginLIncl" value="#{lbl.withdraw_image_content}"/>
+	</h:panelGroup>
+
+
+	<!-- Media Edit Panel select and/or delete item -->
+		<h:panelGroup id="image" layout="block" rendered="#{imageBean.image.status != 'WITHDRAWN'}">
+			<h:form id="itemForm">
+				<h:outputText value=":" styleClass="imj_invisible"/>
+				<h:selectBooleanCheckbox styleClass="imj_mediaEditPanelSelect" id="pictureCheckbox" value="#{imageBean.selected}" valueChangeListener="#{imageBean.selectedChanged}" rendered="#{SessionBean.user != null}">
+					<f:ajax execute="@this" render=":selectionInfoPanel :paginatorTop"/>
+				</h:selectBooleanCheckbox>
+				<h:outputText value="#{lbl.selected}" rendered="#{SessionBean.user != null}"/>
+				<h:commandLink styleClass="imj_mediaEditPanelRemove" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
+					<h:outputText value="#{lbl.remove_from_col}"/>
+				</h:commandLink>
+				<h:commandLink styleClass="imj_mediaEditPanelRemove" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.editable and imageBean.navigationString == 'pretty:albumItem'}">
+					<h:outputText value="#{lbl.remove_from_album}"/>
+				</h:commandLink>
+				<h:commandLink styleClass="imj_mediaEditPanelAdd" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
+					<h:outputText value="#{lbl.add_to_active_album}"/>
+				</h:commandLink>
+				<h:panelGroup rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
+					<h:outputText styleClass="imj_mediaEditPanelActive" value="(Image in"/>
+					<h:outputText value=":" styleClass="imj_invisible"/>
+					<h:outputLink styleClass="" value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.id.path}">
+						<h:outputText value="#{lbl.active_album}"/>
+					</h:outputLink>
+					<h:outputText styleClass="" value=" - "/>
+					<h:commandLink styleClass="" id="lnkPicRemoveFromAvtiveAlbum" action="#{imageBean.removeFromActiveAlbum}">
+						<h:outputText value="#{lbl.remove}"/>
+					</h:commandLink>
+					<h:outputText styleClass="" value=")"/>
+				</h:panelGroup>
+			</h:form>
+		</h:panelGroup>
+	</h:panelGroup>
+
+
+
+
+
+
+<ui:remove>
+<h:panelGroup styleClass="imj_mediaDisplayContainerItem">
+</h:panelGroup>
+
+<div class="imj_mediaDisplayContainer"></div>
 	<h:panelGroup styleClass="full_area0 fullItem">
 		<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl">
 			<h:panelGroup layout="block" styleClass="full_area detailedItem">
@@ -12,7 +67,10 @@
 						<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 					</h:outputLink>
 				</span>
-			</h:panelGroup>
+			</h:panelGroup>			
+
+			
+			
 			<h:panelGroup styleClass="free_area0 xSmall_marginLIncl" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
 				<h:outputText styleClass="free_area0_p8 xDouble_marginLIncl" value="#{lbl.withdraw_image_content}" />
 			</h:panelGroup>
@@ -324,4 +382,7 @@
 			return qr.createImgTag();
 		};
 	</script>
+	
+	</ui:remove>
+	
 </ui:composition>

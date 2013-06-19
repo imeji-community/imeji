@@ -1148,19 +1148,23 @@ OLD:
    
    
 .imj_mediaDisplayContainer {
-	width: 98%;
-	margin: 0;
-	padding: 0;
-	
+	padding: 1em 0;
+	text-align: center;
 }   
 
 
 .imj_mediaDisplayContainerItem {
-	text-align: center;
-	margin: 0.500em 0 0.500em 0;
-	
+		
 }
 
+.imj_mediaEditPanelSelect {
+	 /*width: 1.545em; /*1.273em;*/
+	 margin: 1.000em 0.273em 0 0;
+}
+
+.imj_mediaEditPanelRemove, .imj_mediaEditPanelAdd, .imj_mediaEditPanelActive {
+	 padding-left: 2.000em;	
+}
 
 
 

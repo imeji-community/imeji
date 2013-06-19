@@ -8,10 +8,10 @@
 	
 	<ui:define name="selectionInfoPanel">
 		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
-			<h:outputLink value="#{Navigation.browseUrl}" styleClass="free_area1_p6 small_marginLIncl">
+			<h:outputLink value="#{Navigation.browseUrl}">
 				<h:outputText value="#{lbl.images_all}"/>
 			</h:outputLink>
-			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})" styleClass="free_area1_p6 xHuge_marginLIncl"/>
+			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})" styleClass="imj_selectionInfoPanelItemSelect"/>
 		</h:panelGroup>
 	</ui:define>
 	

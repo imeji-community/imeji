@@ -1205,32 +1205,32 @@ OLD:
 		
 }
 
-.imj_mediaEditPanelSelect {
+.imj_selectMedia {
 	 /*width: 1.545em; /*1.273em;*/
 	 margin: 1.000em 0.273em 0 0;
 }
 
-.imj_mediaEditPanelRemove, .imj_mediaEditPanelAdd, .imj_mediaEditPanelActive {
+.imj_removeMedia, .imj_addMedia, .imj_activeMedia {
 	 padding-left: 2.000em;	
 }
 
 
-.imj_mediaDataTypePanelContainer {
-		
+.imj_metadataList {
+	
 }
 
-.imj_mediaDataTypePanel {
-	float: right;
-	border-bottom: solid #6CAD2F 0.0909em;
+.imj_metadataList .imj_listHeader {
+	width: 100%;
+	/*border-bottom: solid #6CAD2F 0.0909em;*/	
 }
 
-.imj_mediaDataTypePanel a {
+.imj_metadataList .imj_listHeader a {
 	margin: 0.37em 0.28em 0.36em;
 	padding: 0 0.37em;
 	float: right;
 }
 
-.imj_mediaDataTypePanel .imj_mediaDataTypePanelSeparator {
+.imj_metadataList  .imj_listHeader .imj_separator {
     width: 0.0909em;
     float: right;
     border: solid #6CAD2F;
@@ -1238,11 +1238,73 @@ OLD:
     margin-top: 0.45em;
 }
 
+.imj_metadataList .imj_listHeader .imj_active {
+    background-color: #6CAD2F;
+    color: #F0F0F0;
+}
+
+
+.imj_metadataList .imj_listBody {
+	width: 100%;
+	border-top: solid #BAB4B3 0.0909em;
+	clear: both;
+}
+
+
+/*h3 class="xLarge_area0_p8 endline blockHeader"*/
+
+.imj_metadataList .imj_metaDataEditLink {
+	text-align: right;
+	margin-right: 0;
+	width:91.95%;
+	padding:0 4%;
+}
+
+
+.imj_metadataSet {
+	width: 100%;
+	display: inline-block;
+	padding-bottom: 1em;
+}
+
+.imj_metadataLabel {
+	font-weight: bold;
+	display: inline-block;
+	min-width:19%;
+}
+
+
+.imj_metadataValue {
+	display: inline-block;
+}
+.imj_metadataValueEntry {
+	display: inline-block;
+}
+.imj_metadataEditButtonArea {
+	display: inline-block;
+}
+
+.imj_globalMetadataSet, 
+.imj_metadataWrapper {
+	width: 100%;
+}
+
+
+
 .imj_metaDataListing {
 	
 }
 
-
+.imj_submitPanel {
+	display: inline-block;
+	width: 100%;
+}
+.imj_cancelButton {
+	
+}
+.imj_submitButton {
+	
+}
 
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===

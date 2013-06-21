@@ -207,6 +207,7 @@
 			<script type="text/javascript">highlighter();</script>
 		</ui:fragment>
 	
+	
 		<!-- Tech Data List Body - show media tech data  -->		
 		
 		<ui:fragment rendered="#{imageBean.tab == 'techmd'}">
@@ -219,15 +220,22 @@
 			</h:panelGroup>
 		</ui:fragment>
 		
+		
+		<!-- IN PROGRESS !!! Utilities List Body - show MD5, QR-Tag   <h:panelGroup id="util" styleClass="full_area0"> -->
+		
 		<ui:fragment rendered="#{imageBean.tab == 'util'}">
-			<h:panelGroup id="util" styleClass="full_area0">
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+			<h:panelGroup id="util" layout="block" styleClass="imj_infodataWrapper">
+			
+			<!-- <h:panelGroup layout="block" styleClass="full_area0 itemBlock"> -->
+				<h:panelGroup layout="block" styleClass="imj_infodataTitle">
 					<h3 class="xLarge_area0_p8 endline blockHeader">
 						<h:outputText id="lblViewItemFull_lblUtil" value="#{lbl.imageUtil}" />
 						<br/>
 					</h3>
 					<span class="seperator"></span>
-					<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
+					
+					
+				<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
 						<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 							<b class="xLarge_area0_p8 endline labelLine clear">
 								<h:outputText value="#{lbl.checksum} (MD5)" />
@@ -296,6 +304,10 @@
 				</h:panelGroup>
 			</h:panelGroup>
 		</ui:fragment>
+		
+		
+		
+		
 		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"> </script>
 		<script type="text/javascript">
 			jQuery(document).ready(function() {

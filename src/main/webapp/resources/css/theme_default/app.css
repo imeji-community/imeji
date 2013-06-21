@@ -1407,7 +1407,9 @@ OLD:
 
 .imj_metadataValue {
 	display: inline-block;
+	margin-left: 1.0em;
 }
+
 .imj_metadataValueEntry {
 	display: inline-block;
 }
@@ -1416,7 +1418,8 @@ OLD:
 }
 
 .imj_globalMetadataSet, 
-.imj_metadataWrapper {
+.imj_metadataWrapper,
+.imj_infodataWrapper {
 	width: 100%;
 }
 
@@ -1434,6 +1437,21 @@ OLD:
 .imj_techdataValue {
 	white-space: pre;
 }
+
+
+
+.imj_infodataTitle {
+	text-align: left;
+	margin-right: 0;
+	width:91.95%;
+	padding:0 4%;
+}
+
+
+
+
+
+
 
 
 .imj_submitPanel {
@@ -1500,7 +1518,6 @@ OLD:
 	display:none;
 	position:absolute;
 	z-index:10;
-	background-color: #292929;
 	width:30em;
 }
 .imj_tiledMediaList .imj_tileItem:hover .imj_tooltip {
@@ -1599,8 +1616,7 @@ OLD:
     width: 87.95%;
     display: inline-block;
     color: #F0F0F0;
-    
-    margin-bottom: 1em;
+    margin: 1em 0;
     padding: 0 6%;
 }
 

@@ -560,6 +560,85 @@ cut second ?
 }
 
 
+.imj_buttonBrowseToFirst_15 {
+	display: inline-block;
+	width: 2.363636em;
+	height: 1.363636em;
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonGotoFirst_15.png");
+	background-color: inherit;
+	background-repeat: no-repeat;
+	background-position: left;
+	vertical-align: middle;
+    border: 0 none;
+}
+.imj_buttonBrowseToFirst_15.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
+}
+.imj_buttonBrowseToFirst_15:hover {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
+	background-color: inherit;
+}
+
+.imj_buttonBrowseBackward_15 {
+	display: inline-block;
+	width: 2.363636em;
+	height: 1.363636em;
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTrianglePrevious_15.png");
+	background-color: inherit;
+	background-repeat: no-repeat;
+	background-position: left;
+	vertical-align: middle;
+    border: 0 none;
+}
+.imj_buttonBrowseBackward_15.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
+}
+.imj_buttonBrowseBackward_15:hover {
+	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
+	background-color: inherit;
+}
+
+.imj_buttonBrowseForward_15 {
+	display: inline-block;
+	width: 2.363636em;
+	height: 1.363636em;
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTriangleNext_15.png");
+	background-color: inherit;
+	background-repeat: no-repeat;
+	background-position: right;
+	vertical-align: middle;
+    border: 0 none;
+}
+.imj_buttonBrowseForward_15.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
+}
+.imj_buttonBrowseForward_15:hover {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
+	background-color: inherit;
+}
+
+.imj_buttonBrowseToLast_15 {
+	display: inline-block;
+	width: 2.363636em;
+	height: 1.363636em;
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonGotoLast_15.png");
+	background-color: inherit;
+	background-repeat: no-repeat;
+	background-position: right;
+	vertical-align: middle;
+    border: 0 none;
+}
+.imj_buttonBrowseToLast_15.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
+}
+.imj_buttonBrowseToLast_15:hover {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
+	background-color: inherit;
+}
+
+
+
+
 /* ===[ Overlay Menu ]===
    ================================================== */
 .imj_overlayMenu {
@@ -1424,14 +1503,14 @@ OLD:
 	height: 10.545454em;
 }
 .imj_iconTriangleBottomRight_15 {
-	background-image: url("resources/imj_iconset/6CAD2F/imjButtonTriangleLargeBottomRight_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTriangleLargeBottomRight_15.png");
 	display: inline-block;
 	width: 1.363636em;
 	height: 1.363636em;
 	vertical-align: middle;
 }
 .imj_iconTriangleBottomRight_15:hover {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
 }
 .imj_overlayMenu .imj_menuHeader {
 	color: #6CAD2F;
@@ -1441,88 +1520,13 @@ OLD:
 	color: #F0F0F0;
 }
 .imj_overlayMenu:hover .imj_iconTriangleBottomRight_15 {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
 }
 .imj_facetSeparator {
 	margin:0 0.25em;
 	color: #F0F0F0; 
 }
 
-.imj_buttonBrowseToFirst_15 {
-	display: inline-block;
-	width: 2.363636em;
-	height: 1.363636em;
-	background-image: url("resources/imj_iconset/6CAD2F/imjButtonGotoFirst_15.png");
-	background-color: inherit;
-	background-repeat: no-repeat;
-	background-position: left;
-	vertical-align: middle;
-    border: 0 none;
-}
-.imj_buttonBrowseToFirst_15.imj_deactivated {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
-}
-.imj_buttonBrowseToFirst_15:hover {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
-	background-color: inherit;
-}
-
-.imj_buttonBrowseBackward_15 {
-	display: inline-block;
-	width: 2.363636em;
-	height: 1.363636em;
-	background-image: url("resources/imj_iconset/6CAD2F/imjButtonTrianglePrevious_15.png");
-	background-color: inherit;
-	background-repeat: no-repeat;
-	background-position: left;
-	vertical-align: middle;
-    border: 0 none;
-}
-.imj_buttonBrowseBackward_15.imj_deactivated {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
-}
-.imj_buttonBrowseBackward_15:hover {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
-	background-color: inherit;
-}
-
-.imj_buttonBrowseForward_15 {
-	display: inline-block;
-	width: 2.363636em;
-	height: 1.363636em;
-	background-image: url("resources/imj_iconset/6CAD2F/imjButtonTriangleNext_15.png");
-	background-color: inherit;
-	background-repeat: no-repeat;
-	background-position: right;
-	vertical-align: middle;
-    border: 0 none;
-}
-.imj_buttonBrowseForward_15.imj_deactivated {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
-}
-.imj_buttonBrowseForward_15:hover {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
-	background-color: inherit;
-}
-
-.imj_buttonBrowseToLast_15 {
-	display: inline-block;
-	width: 2.363636em;
-	height: 1.363636em;
-	background-image: url("resources/imj_iconset/6CAD2F/imjButtonGotoLast_15.png");
-	background-color: inherit;
-	background-repeat: no-repeat;
-	background-position: right;
-	vertical-align: middle;
-    border: 0 none;
-}
-.imj_buttonBrowseToLast_15.imj_deactivated {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
-}
-.imj_buttonBrowseToLast_15:hover {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
-	background-color: inherit;
-}
 .imj_singlePageBrowser .imj_separator {
 	display: inline-block;
 	height: 1.81818181em;

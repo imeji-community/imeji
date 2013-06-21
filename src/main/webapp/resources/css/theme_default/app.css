@@ -1160,7 +1160,7 @@ OLD:
 	width: 91.75%;
 	margin-top: 1.000em;
 	margin-bottom: 1.000em;
-	padding: 0 4%;	
+	padding: 0.636363em 4%;	
 	text-align: center;
 	border-top: solid #6CAD2F 0.0909em;
 }
@@ -1188,7 +1188,8 @@ OLD:
 
 
 
-/* * mediaDisplayContainer + mediaEditPanel
+/* * mediaDisplayContainer + mediaEditPanel 
+	MetaDataList + Submit Panel + Buttons
 	(image_deatails.xhtml)
    ==================================================
    ================================================== */
@@ -1273,7 +1274,6 @@ OLD:
 	min-width:19%;
 }
 
-
 .imj_metadataValue {
 	display: inline-block;
 }
@@ -1290,21 +1290,89 @@ OLD:
 }
 
 
+.imj_techdataList {
+	width: 100%;
+	background-color: #494949;
+}
 
-.imj_metaDataListing {
-	
+.imj_techdataEntry {
+	width: 100%;
+	display: inline-block;
+}
+
+.imj_techdataValue {
+	white-space: pre;
+}
+
+
+
+.imj_addButton_15 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonPlusBorder_15.png");
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    height: 1.3636em;
+    width: 1.3636em;
+    margin-right: 0.182em;	
+	border: 0 none;
+}
+
+.imj_addButton_15:hover  {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_15.png");
+	background-color: inherit;
+}
+
+.imj_removeButton_15 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonMinusBorder_15.png");
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    height: 1.3636em;
+    width: 1.3636em;
+    margin-right: 0.182em;	
+	border: 0 none;
+}
+
+.imj_removeButton_15:hover {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusBorder_15.png");
+	background-color: inherit;
 }
 
 .imj_submitPanel {
 	display: inline-block;
 	width: 100%;
+	text-align: right;
 }
+
 .imj_cancelButton {
-	
+	color: #FFFFFF;
+	background-color: #D80000;
+	border: solid #D80000;
+    padding: 0 0.3333333em;
+    margin: 0 1em;
 }
+
+.imj_cancelButton:hover {
+	color: #FFFFFF;
+    background-color: #990000;
+    border: solid #990000;
+}
+
 .imj_submitButton {
-	
+	color: #FFFFFF;
+	background-color: #6CAD2F;
+	border: solid #6CAD2F;
+	padding: 0 0.3333333em;
+	margin-left: 1em;
 }
+
+.imj_submitButton:hover {
+	color: #000000;
+    background-color: #4AFF00;
+    border: solid #4AFF00;
+}
+
+
 
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===

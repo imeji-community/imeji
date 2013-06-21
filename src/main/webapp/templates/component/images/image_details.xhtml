@@ -173,13 +173,13 @@
 													<ui:param name="hideLabel" value="true"/>
 												</ui:include>
 											</span>
-											<span class="imj_metadataEditButtonArea"><!-- imj_multipleButtons (+) (-) -->
-												<h:commandButton type="button" styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
+											<span class="imj_metadataEditButtonArea"><!-- imj_multipleButtons (-) (+)  min_imgBtn groupTool remove af_commandButton - min_imgBtn groupTool add af_commandButton -->
+												<h:commandButton type="button" styleClass="imj_removeButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
 													<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
 													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
 													<f:ajax execute="@form" render="@form" />
 												</h:commandButton>
-												<h:commandButton type="button" styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.addMetadata}" value="">
+												<h:commandButton type="button" styleClass="imj_addButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.addMetadata}" value="">
 													<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
 													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
 													<f:ajax execute="@form" render="@form" />
@@ -190,7 +190,7 @@
 								</ui:repeat>
 								
 								<h:panelGroup layout="block" styleClass="imj_submitPanel">
-									<h:commandLink styleClass="imj_cancelButton"  action="#{imageBean.edit.cancel}">
+									<h:commandLink styleClass="imj_cancelButton" action="#{imageBean.edit.cancel}">
 										<f:ajax execute="@this" render="@form"/>
 										<h:outputText value="#{lbl.cancel}"/>
 									</h:commandLink>
@@ -207,17 +207,13 @@
 			<script type="text/javascript">highlighter();</script>
 		</ui:fragment>
 	
-	
-	
-	
-	
-		<!-- Tech Data List Body - show media tech data -->		
+		<!-- Tech Data List Body - show media tech data  -->		
 		
 		<ui:fragment rendered="#{imageBean.tab == 'techmd'}">
-			<h:panelGroup id="techmetadata" styleClass="full_area0_p4" style="background-color:#494949">
+			<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList">
 				<ui:repeat id="techMd" var="techMd" value="#{imageBean.techMd}">
-					<h:panelGroup styleClass="full_area0_p0 ">
-						<h:outputText value="#{techMd}" style="white-space: pre;"/>
+					<h:panelGroup styleClass="imj_techdataEntry">
+						<h:outputText value="#{techMd}" styleClass="imj_techdataValue"/>
 					</h:panelGroup>
 				</ui:repeat>
 			</h:panelGroup>

@@ -103,26 +103,44 @@
 						<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}"/>
 						<span class="imj_iconTriangleBottomRight_15"/>
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="imj_menuBody" style="float:right; margin-top:-1.9090em;">
-							<h:panelGroup id="preListHeaderSelectedMenu">
-								<h:outputText styleClass="free_area0" value="#{lbl.no_image_selected}" rendered="#{SessionBean.selectedSize == 0}"/>
-								<h:panelGroup rendered="#{SessionBean.selectedSize > 0}">
-									<!-- No active album selected -->
-									<h:outputLink value="#{Navigation.albumsUrl}" styleClass="xLarge_area0_p8 noPaddingTopBottom" title="#{lbl.activate}" rendered="#{SessionBean.activeAlbum == null}">
-										<h:outputText value="#{lbl.no_album_selected}" styleClass="free_area0" title="#{lbl.album_please_activate}"/>
-										<h:panelGroup styleClass="quickSearchIconSmall" style="float:right; margin-top:0.2727em;"/>
-									</h:outputLink>
-									<!-- Add to active album -->
-									<h:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{cc.attrs.paginatorBean.addSelectedToActiveAlbum}" rendered="#{SessionBean.activeAlbum != null}">
-										<h:outputText value="#{lbl.add_to_active_album}"/>
-									</h:commandLink>
-									<!-- Edit selected -->
-									<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=selected&amp;c=#{cc.attrs.paginatorBean.collection.id}&amp;q=#{cc.attrs.paginatorBean.query}" id="lnkSelectEdit" 
-												  rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.paginatorBean.collection != null and cc.attrs.paginatorBean.imageEditable}">
-										<h:outputText value="#{lbl.edit_selected}"/>
-									</h:outputLink>
-									<!-- Delete/Discard selected images -->
-									<h:panelGroup rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.paginatorBean.collection != null}">
+					
+					<h:panelGroup layout="block" styleClass="imj_menuBody">
+						
+						<h:outputText styleClass="free_area0" value="#{lbl.no_image_selected}" rendered="#{SessionBean.selectedSize == 0}"/>
+						
+						<ui:fragment rendered="#{SessionBean.selectedSize > 0}">
+							<ul class="imj_overlayMenuList">
+								<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
+									<li class="imj_overlayMenuListItem">
+										<!-- No active album selected -->
+										<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
+											<h:panelGroup styleClass="imj_icoMagnifier_15"/>
+											<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
+								
+								<ui:fragment rendered="#{SessionBean.activeAlbum != null}">
+									<li class="imj_overlayMenuListItem">
+										<!-- Add to active album -->
+										<h:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{cc.attrs.paginatorBean.addSelectedToActiveAlbum}">
+											<h:outputText value="#{lbl.add_to_active_album}"/>
+										</h:commandLink>
+									</li>
+								</ui:fragment>
+								
+								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.paginatorBean.collection != null and cc.attrs.paginatorBean.imageEditable}">
+									<li class="imj_overlayMenuListItem">
+										<!-- Edit selected -->
+										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=selected&amp;c=#{cc.attrs.paginatorBean.collection.id}&amp;q=#{cc.attrs.paginatorBean.query}" id="lnkSelectEdit">
+											<h:outputText value="#{lbl.edit_selected}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
+								
+								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.paginatorBean.collection != null}">
+									<li class="imj_overlayMenuListItem">
+										<!-- Delete/Discard selected images -->
 										<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" 
 													  rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and  cc.attrs.paginatorBean.imageDeletable and cc.attrs.paginatorBean.collection.status == 'PENDING'}">
 											<h:outputText value="#{lbl.delete_selectedImages}"/>
@@ -131,15 +149,17 @@
 													  rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and  cc.attrs.paginatorBean.editable and cc.attrs.paginatorBean.collection.status == 'RELEASED'}">
 											<h:outputText value="#{lbl.withdraw_selected}"/>
 										</h:outputLink>
-									</h:panelGroup>
-									<!-- Remove selected from album -->
-									<h:panelGroup rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:albumBrowse'}">
-										<h:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom"  value="#{lbl.remove_from_album}" action="#{cc.attrs.paginatorBean.removeFromAlbum}" 
-													  rendered="#{cc.attrs.paginatorBean.deletable}">
-										</h:commandLink>	
-									</h:panelGroup>
-								</h:panelGroup>
-							</h:panelGroup>
+									</li>
+								</ui:fragment>
+								
+								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:albumBrowse' and cc.attrs.paginatorBean.deletable}">
+									<li class="imj_overlayMenuListItem">
+										<!-- Remove selected from album -->
+										<h:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom"  value="#{lbl.remove_from_album}" action="#{cc.attrs.paginatorBean.removeFromAlbum}"/>
+									</li>
+								</ui:fragment>
+							</ul>
+						</ui:fragment>
 					</h:panelGroup>
 				</h:panelGroup>
 			</h:form>

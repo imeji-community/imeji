@@ -35,8 +35,9 @@ All rights reserved. Use is subject to license terms.
 	
 	<f:loadBundle var="lbl" basename="labels"/>
 	<f:loadBundle var="msg" basename="messages"/>
-	<html xmlns="http://www.w3.org/1999/xhtml">
 	
+	<html xmlns="http://www.w3.org/1999/xhtml">
+		
 		<h:head>
 			<ui:include src="component/header/html_head_default.xhtml"/>
 		</h:head>
@@ -49,7 +50,7 @@ All rights reserved. Use is subject to license terms.
 				
 				<ui:insert name="actionsMenu"/>
 				
-				<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml')}">
+				<h:panelGroup id="imj_pageMessageArea" layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml')}">
 					
 					<ui:fragment rendered="#{MessagesBean.hasMessages}">
 						<ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
@@ -86,6 +87,7 @@ All rights reserved. Use is subject to license terms.
 				</h:panelGroup>
 					
 				<div class="imj_mainContentWrapper">	
+					<ui:insert name="searchQuery"/>
 					<ui:insert name="mainContent"/>
 					
 				</div>

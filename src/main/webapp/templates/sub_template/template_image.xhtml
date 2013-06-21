@@ -1,7 +1,8 @@
 <ui:composition template="../template_site.xhtml"  xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<ui:define name="init">
 		<h:outputText value="#{imageBean.init}"/>
@@ -12,7 +13,9 @@
 		
 		<ui:fragment rendered="#{imageBean.image != null}">
 			<ui:include src="../../include/History.xhtml"></ui:include>
-			<ui:insert name="selectionInfoPanel"/>
+			<h:panelGroup layout="block" id="selectionInfoPanel">
+				<imjc:selectionInfoPanel/>
+			</h:panelGroup>
 			<ui:insert name="paginatorTop"/>
 			<ui:include src="../component/images/image_details.xhtml"/>
 		</ui:fragment>

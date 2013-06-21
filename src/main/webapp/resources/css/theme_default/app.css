@@ -533,7 +533,7 @@ cut second ?
 }
 
 
-/* ===[ ICONS ]===
+/* ===[ ICONS - Buttons ]===
    ================================================== */
 .imj_icoMagnifier_15 {
 	display: inline-block;
@@ -543,9 +543,11 @@ cut second ?
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjMagnifierTopLeft_15.png");
 	vertical-align: middle;
 }
+
 .imj_icoMagnifier_15:hover {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_15.png");
 }
+
 .imj_icoMagnifier_23 {
     float: left;
     display: inline-block;
@@ -559,7 +561,6 @@ cut second ?
     background-repeat: no-repeat;
 }
 
-
 .imj_buttonBrowseToFirst_15 {
 	display: inline-block;
 	width: 2.363636em;
@@ -571,9 +572,11 @@ cut second ?
 	vertical-align: middle;
     border: 0 none;
 }
+
 .imj_buttonBrowseToFirst_15.imj_deactivated {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
 }
+
 .imj_buttonBrowseToFirst_15:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
 	background-color: inherit;
@@ -590,9 +593,11 @@ cut second ?
 	vertical-align: middle;
     border: 0 none;
 }
+
 .imj_buttonBrowseBackward_15.imj_deactivated {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
 }
+
 .imj_buttonBrowseBackward_15:hover {
 	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
 	background-color: inherit;
@@ -609,9 +614,11 @@ cut second ?
 	vertical-align: middle;
     border: 0 none;
 }
+
 .imj_buttonBrowseForward_15.imj_deactivated {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
 }
+
 .imj_buttonBrowseForward_15:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
 	background-color: inherit;
@@ -628,13 +635,48 @@ cut second ?
 	vertical-align: middle;
     border: 0 none;
 }
+
 .imj_buttonBrowseToLast_15.imj_deactivated {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
 }
+
 .imj_buttonBrowseToLast_15:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
 	background-color: inherit;
 }
+
+.imj_addButton_15 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonPlusBorder_15.png");
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    height: 1.3636em;
+    width: 1.3636em;
+    margin-right: 0.182em;	
+	border: 0 none;
+}
+
+.imj_addButton_15:hover  {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_15.png");
+	background-color: inherit;
+}
+
+.imj_removeButton_15 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonMinusBorder_15.png");
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    height: 1.3636em;
+    width: 1.3636em;
+    margin-right: 0.182em;	
+	border: 0 none;
+}
+
+.imj_removeButton_15:hover {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusBorder_15.png");
+	background-color: inherit;
+}
+
 
 
 
@@ -1216,8 +1258,6 @@ OLD:
 /* * info panel (Image.xhtml)
    ==================================================
    ================================================== */
-
-
 .imj_selectionInfoPanel {
 	width: 91.75%;
 	padding: 0 4%;
@@ -1229,8 +1269,6 @@ OLD:
 .imj_selectionInfoPanelItemSelect {
 	float: right;
 }
-
-
 
 /* * paginator component (Image.xhtml)
    ==================================================
@@ -1264,7 +1302,6 @@ OLD:
 .imj_simplePageBrowser .imj_backwardButton+.imj_forwardButton {
 	margin-left: 1em;
 }
-
 
 
 /* * mediaDisplayContainer + mediaEditPanel 
@@ -1383,39 +1420,6 @@ OLD:
 	white-space: pre;
 }
 
-
-
-.imj_addButton_15 {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonPlusBorder_15.png");
-    vertical-align: middle;
-    background-repeat: no-repeat;
-    background-color: inherit;
-    height: 1.3636em;
-    width: 1.3636em;
-    margin-right: 0.182em;	
-	border: 0 none;
-}
-
-.imj_addButton_15:hover  {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_15.png");
-	background-color: inherit;
-}
-
-.imj_removeButton_15 {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonMinusBorder_15.png");
-    vertical-align: middle;
-    background-repeat: no-repeat;
-    background-color: inherit;
-    height: 1.3636em;
-    width: 1.3636em;
-    margin-right: 0.182em;	
-	border: 0 none;
-}
-
-.imj_removeButton_15:hover {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusBorder_15.png");
-	background-color: inherit;
-}
 
 .imj_submitPanel {
 	display: inline-block;

@@ -535,6 +535,9 @@ cut second ?
 
 /* ===[ ICONS - Buttons ]===
    ================================================== */
+   
+/* * Search Buttons
+   ================================================== */   
 .imj_icoMagnifier_15 {
 	display: inline-block;
 	width: 1.36363636em;
@@ -560,6 +563,10 @@ cut second ?
     background-position: center center;
     background-repeat: no-repeat;
 }
+
+
+/* * Paginator Buttons (Tiled List)
+   ================================================== */ 
 
 .imj_buttonBrowseToFirst_15 {
 	display: inline-block;
@@ -644,6 +651,31 @@ cut second ?
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
 	background-color: inherit;
 }
+
+/* * Paginator Buttons (Image.xhtml)
+   ================================================== */
+
+.imj_paginator .imj_backwardButton {
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTrianglePrevious_15.png") transparent no-repeat center left;
+	padding-left: 1.5em;
+}
+.imj_paginator .imj_backwardButton:hover {
+	color: #4AFF00;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTrianglePrevious_15.png") transparent no-repeat center left;
+}
+
+.imj_paginator .imj_forwardButton {
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTriangleNext_15.png") transparent no-repeat center right;
+	padding-right: 1.5em;
+}
+.imj_paginator .imj_forwardButton:hover {
+	color: #4AFF00;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTriangleNext_15.png") transparent no-repeat center right;
+}
+
+
+/* * Add + Remove Buttons - MetaData List
+   ================================================== */
 
 .imj_addButton_15 {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonPlusBorder_15.png");
@@ -1280,23 +1312,6 @@ OLD:
 	padding: 0.636363em 4%;	
 	text-align: center;
 	border-top: solid #6CAD2F 0.0909em;
-}
-.imj_paginator .imj_backwardButton {
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTrianglePrevious_15.png") transparent no-repeat center left;
-	padding-left: 1.5em;
-}
-.imj_paginator .imj_backwardButton:hover {
-	color: #4AFF00;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTrianglePrevious_15.png") transparent no-repeat center left;
-}
-
-.imj_paginator .imj_forwardButton {
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTriangleNext_15.png") transparent no-repeat center right;
-	padding-right: 1.5em;
-}
-.imj_paginator .imj_forwardButton:hover {
-	color: #4AFF00;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTriangleNext_15.png") transparent no-repeat center right;
 }
 
 .imj_simplePageBrowser .imj_backwardButton+.imj_forwardButton {

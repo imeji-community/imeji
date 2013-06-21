@@ -20,7 +20,63 @@
 				return true;
 			};
 		</script>
-				
+		
+		<style type="text/css">
+			.imj_imageInfoLayer {
+				width: 95.95%;
+				padding: 0 2%;
+				background-color: #444444;
+			}
+			.imj_imageInfoLayer a {
+				margin-left: 1em;
+			}
+			.imj_imageInfoLayer .imj_infoNavigation {
+				width: 95.95%; 
+				padding: 0 2%; 
+				text-align: right;
+				margin-bottom: 1.454545em;
+			}
+			.imj_imageInfoLayer .imj_infoNavigation a:hover .imj_iconEyeOpen_15 { 
+				background-image: url("resources/imj_iconset/F0F0F0/imjEyeOpen_15.png");
+			}
+			.imj_imageInfoLayer .imj_infoNavigation a:hover .imj_buttonEdit_15 {
+				background-image: url("resources/imj_iconset/F0F0F0/imjButtonEdit_15.png");
+			}
+			.imj_iconEyeOpen_15 {
+				background-image: url("resources/imj_iconset/6CAD2F/imjEyeOpen_15.png");
+				background-color: inherit;
+				background-position: left;
+				background-repeat: no-repeat;
+				border: 0 none;
+				width: 1.363636em;
+				height: 1.363636em;
+				display: inline-block;
+				vertical-align: middle;
+			}
+			.imj_iconEyeOpen_15:hover { 
+				background-image: url("resources/imj_iconset/F0F0F0/imjEyeOpen_15.png");
+			}
+			.imj_buttonEdit_15 {
+				background-image: url("resources/imj_iconset/6CAD2F/imjButtonEdit_15.png");
+				background-color: inherit;
+				background-position: left;
+				background-repeat: no-repeat;
+				border: 0 none;
+				width: 1.363636em;
+				height: 1.363636em;
+				display: inline-block;
+				vertical-align: middle;
+			}
+			.imj_buttonEdit_15:hover {
+				background-image: url("resources/imj_iconset/F0F0F0/imjButtonEdit_15.png");
+			}
+			.imj_messageStatus {
+				margin-top: 1em;
+				width: 97.95%;
+				padding: 0 1%;
+			}
+		</style>
+		
 		<ui:include src="../../confirmationPages/SelectedDeleteWithdraw.xhtml">
 			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
 		</ui:include>

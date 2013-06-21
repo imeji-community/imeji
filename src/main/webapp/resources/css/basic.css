@@ -474,4 +474,11 @@ abbr, acronym {
 	visibility: hidden; 
 }
 
+.imj_noDisplay {
+	display: none;
+}
+
+
+}
+
 	

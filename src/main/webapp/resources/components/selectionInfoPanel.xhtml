@@ -123,7 +123,7 @@
 								<ui:fragment rendered="#{SessionBean.activeAlbum != null}">
 									<li class="imj_overlayMenuListItem">
 										<!-- Add to active album -->
-										<h:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" action="#{cc.attrs.paginatorBean.addSelectedToActiveAlbum}">
+										<h:commandLink action="#{cc.attrs.paginatorBean.addSelectedToActiveAlbum}">
 											<h:outputText value="#{lbl.add_to_active_album}"/>
 										</h:commandLink>
 									</li>
@@ -132,7 +132,7 @@
 								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.paginatorBean.collection != null and cc.attrs.paginatorBean.imageEditable}">
 									<li class="imj_overlayMenuListItem">
 										<!-- Edit selected -->
-										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=selected&amp;c=#{cc.attrs.paginatorBean.collection.id}&amp;q=#{cc.attrs.paginatorBean.query}" id="lnkSelectEdit">
+										<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected&amp;c=#{cc.attrs.paginatorBean.collection.id}&amp;q=#{cc.attrs.paginatorBean.query}" id="lnkSelectEdit">
 											<h:outputText value="#{lbl.edit_selected}"/>
 										</h:outputLink>
 									</li>
@@ -141,11 +141,11 @@
 								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.paginatorBean.collection != null}">
 									<li class="imj_overlayMenuListItem">
 										<!-- Delete/Discard selected images -->
-										<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" 
+										<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="imj_criticalItem" value="#" 
 													  rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and  cc.attrs.paginatorBean.imageDeletable and cc.attrs.paginatorBean.collection.status == 'PENDING'}">
 											<h:outputText value="#{lbl.delete_selectedImages}"/>
 										</h:outputLink>
-										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" onclick="openDialog('dialogDeleteSelected')" 
+										<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogDeleteSelected')" 
 													  rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and  cc.attrs.paginatorBean.editable and cc.attrs.paginatorBean.collection.status == 'RELEASED'}">
 											<h:outputText value="#{lbl.withdraw_selected}"/>
 										</h:outputLink>
@@ -155,7 +155,7 @@
 								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:albumBrowse' and cc.attrs.paginatorBean.deletable}">
 									<li class="imj_overlayMenuListItem">
 										<!-- Remove selected from album -->
-										<h:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom"  value="#{lbl.remove_from_album}" action="#{cc.attrs.paginatorBean.removeFromAlbum}"/>
+										<h:commandLink value="#{lbl.remove_from_album}" action="#{cc.attrs.paginatorBean.removeFromAlbum}"/>
 									</li>
 								</ui:fragment>
 							</ul>

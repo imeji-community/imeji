@@ -40,22 +40,21 @@ public class IngestProfileController
      * Ingest a {@link MetadataProfile} as defined in an xml {@link File}
      * 
      * @param profileXmlFile
-     * @throws SAXException
-     * @throws JAXBException
      * @throws Exception
      */
-    public void ingest(File profileXmlFile, URI profile) throws JAXBException, SAXException
+    public void ingest(File profileXmlFile, URI profile) throws Exception
     {
         ProfileValidator pv = new ProfileValidator();
         pv.valid(profileXmlFile);
         ProfileParser pp = new ProfileParser();
         MetadataProfile mdp = pp.parse(profileXmlFile);
-        ProfileController pc = new ProfileController();
         if (isCopyOfOther(mdp, profile))
         {
-            mdp.setId(profile);
             changeStatementURI(mdp);
         }
+        ProfileController pc = new ProfileController();
+        MetadataProfile original = pc.retrieve(profile, user);
+        original.setStatements(mdp.getStatements());
         try
         {
             pc.update(mdp, user);
@@ -83,7 +82,9 @@ public class IngestProfileController
     }
 
     /**
-     * True if the {@link URI} is different to the {@link URI} of the {@link MetadataProfile}. In that case, the ingested file is a copy of anther existing profile
+     * True if the {@link URI} is different to the {@link URI} of the {@link MetadataProfile}. In that case, the
+     * ingested file is a copy of anther existing profile
+     * 
      * @param mdp
      * @param uri
      * @return

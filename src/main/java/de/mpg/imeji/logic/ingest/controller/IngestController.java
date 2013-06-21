@@ -43,12 +43,9 @@ public class IngestController
      * 
      * @param itemListXml
      * @param profileXml
-     * @throws SAXException 
-     * @throws JAXBException 
-     * @throws NotFoundException 
      * @throws Exception
      */
-    public void ingest(File itemListXmlFile, File profileXmlFile) throws JAXBException, SAXException, NotFoundException 
+    public void ingest(File itemListXmlFile, File profileXmlFile) throws Exception 
     {
         if (profileXmlFile != null)
         {

@@ -1,4 +1,4 @@
-<ui:composition 
+﻿<ui:composition 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -208,17 +208,15 @@
 		</ui:fragment>
 	
 	
-		<!-- Tech Data List Body - show media tech data  -->		
+		<!-- Tech Data List Body - show media tech data entries -->		
 		
 		<ui:fragment rendered="#{imageBean.tab == 'techmd'}">
 			<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList">
 				<ui:repeat id="techMd" var="techMd" value="#{imageBean.techMd}">
-					<h:panelGroup styleClass="imj_techdataEntry">
-						<h:outputText value="#{techMd}" styleClass="imj_techdataValue"/>
-					</h:panelGroup>
+					<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
 				</ui:repeat>
 			</h:panelGroup>
-		</ui:fragment>
+		</ui:fragment>	
 		
 		
 		<!-- IN PROGRESS !!! Utilities List Body - show MD5, QR-Tag   <h:panelGroup id="util" styleClass="full_area0"> -->

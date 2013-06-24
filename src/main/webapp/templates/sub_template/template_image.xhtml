@@ -9,8 +9,7 @@
 	</ui:define>
 	
 	<!-- Main Content - Image Detail View -->
-	<ui:define name="mainContent">
-		
+	<ui:define name="mainContent">		
 		<ui:fragment rendered="#{imageBean.image != null}">
 			<ui:include src="../../include/History.xhtml"></ui:include>
 			<h:panelGroup layout="block" id="selectionInfoPanel">
@@ -22,8 +21,5 @@
 		<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
             <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
         </h:panelGroup>
-	</ui:define>
-	
-	
-	
+	</ui:define>	
 </ui:composition>

@@ -1431,13 +1431,9 @@ OLD:
 
 .imj_techdataEntry {
 	width: 100%;
+	white-space: pre;
 	display: inline-block;
 }
-
-.imj_techdataValue {
-	white-space: pre;
-}
-
 
 
 .imj_infodataTitle {

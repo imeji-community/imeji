@@ -659,9 +659,9 @@ cut second ?
 	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTrianglePrevious_15.png") transparent no-repeat center left;
 	padding-left: 1.5em;
 }
-.imj_paginator .imj_backwardButton:hover {
-	color: #4AFF00;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTrianglePrevious_15.png") transparent no-repeat center left;
+.imj_paginator .imj_backwardButton:hover { /*4AFF00*/
+	color: #F0F0F0;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjTrianglePrevious_15.png") transparent no-repeat center left;
 }
 
 .imj_paginator .imj_forwardButton {
@@ -669,8 +669,8 @@ cut second ?
 	padding-right: 1.5em;
 }
 .imj_paginator .imj_forwardButton:hover {
-	color: #4AFF00;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/4AFF00/imjTriangleNext_15.png") transparent no-repeat center right;
+	color: #F0F0F0;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjTriangleNext_15.png") transparent no-repeat center right;
 }
 
 
@@ -1386,12 +1386,12 @@ OLD:
 /*h3 class="xLarge_area0_p8 endline blockHeader"*/
 
 .imj_metadataList .imj_metaDataEditLink {
-	text-align: right;
+	text-align: center;
 	margin-right: 0;
-	width:91.95%;
-	padding:0 4%;
+	width: 91.95%;
+	padding: 0 26%;
+	
 }
-
 
 .imj_metadataSet {
 	width: 100%;

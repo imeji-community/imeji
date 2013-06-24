@@ -86,18 +86,21 @@ public class ProfileController extends ImejiController
      * @param uri
      * @param user
      * @return
-     * @throws NotFoundException 
+     * @throws NotFoundException
      * @throws Exception
      */
     public MetadataProfile retrieve(URI uri, User user) throws NotFoundException
     {
         imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
         MetadataProfile p;
-		try {
-			p = ((MetadataProfile)imejiRDF2Bean.load(uri.toString(), user, new MetadataProfile()));
-		} catch (Exception e) {
-			throw new NotFoundException("TODO: Profile (URL: "+uri+" ) not found.");
-		}
+        try
+        {
+            p = ((MetadataProfile)imejiRDF2Bean.load(uri.toString(), user, new MetadataProfile()));
+        }
+        catch (Exception e)
+        {
+            throw new NotFoundException("Profile (URL: " + uri + " ) not found.");
+        }
         Collections.sort((List<Statement>)p.getStatements());
         return p;
     }
@@ -109,7 +112,7 @@ public class ProfileController extends ImejiController
      * @param user
      * @throws Exception
      */
-    public void update(MetadataProfile mdp, User user) throws Exception 
+    public void update(MetadataProfile mdp, User user) throws Exception
     {
         imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
         writeUpdateProperties(mdp, user);

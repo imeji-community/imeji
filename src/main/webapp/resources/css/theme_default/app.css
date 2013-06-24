@@ -1337,18 +1337,48 @@ OLD:
 		
 }
 
+/* * mediaEditPanel + Items 
+	(image_deatails.xhtml)
+   ================================================== */
+
+
+.imj_mediaEditPanel {
+	width: 100%;
+	margin-top: 0.545em;
+}
+
+.imj_mediaEditPanelItem  {
+	letter-spacing: 0.045em;
+    border-radius: 0.41666666em;
+    -webkit-border-radius: 0.41666666em;
+    -moz-border-radius: 0.41666666em;
+    -o-border-radius: 0.41666666em;
+    -ms-border-radius: 0.41666666em;
+	margin: 1.000em 0.273em 0 2.000em;
+    /*text-align: left;
+	margin-left: 2.000em;*/
+}
+
+/* item-styles - .imj_removeMedia, .imj_addMedia , .imj_activeMedia, .imj_selectMedia */
+
 .imj_selectMedia {
-	 /*width: 1.545em; /*1.273em;*/
-	 margin: 1.000em 0.273em 0 0;
+	margin-right: 0.636em; 
 }
 
-.imj_removeMedia, .imj_addMedia, .imj_activeMedia {
-	 padding-left: 2.000em;	
+.imj_activeMedia:hover, .imj_addMedia:hover {
+	background-color: #444444;
+}
+ 
+.imj_removeMedia:hover {
+	color: #FFFFFF;
+    background-color: #990000;
 }
 
+
+/* * metadataLists (image_deatails.xhtml)
+   ================================================== */
 
 .imj_metadataList {
-	
 }
 
 .imj_metadataList .imj_listHeader {
@@ -1360,6 +1390,10 @@ OLD:
 	margin: 0.37em 0.28em 0.36em;
 	padding: 0 0.37em;
 	float: right;
+}
+
+.imj_metadataList .imj_listHeader a:hover {
+	background-color: #6CAD2F;
 }
 
 .imj_metadataList  .imj_listHeader .imj_separator {
@@ -1383,14 +1417,25 @@ OLD:
 }
 
 
-/*h3 class="xLarge_area0_p8 endline blockHeader"*/
-
-.imj_metadataList .imj_metaDataEditLink {
-	text-align: center;
-	margin-right: 0;
+.imj_metadataSubPanel {
+	text-align: left;
 	width: 91.95%;
-	padding: 0 26%;
+	padding: 1% 4%;
+	
 }
+
+ .imj_metadataSubPanelItem {
+	font-weight: bold;
+	border-bottom: solid #BAB4B3 0.0909em;
+ }
+ 
+  .imj_metadataSubPanelItem:hover {
+	background-color: #6CAD2F;
+ }
+ 
+
+ /*h3 class="xLarge_area0_p8 endline blockHeader"*/
+
 
 .imj_metadataSet, .imj_infodataSet {
 	width: 100%;
@@ -1435,19 +1480,8 @@ OLD:
 	display: inline-block;
 }
 
-
-.imj_infodataTitle {
-	text-align: left;
-	width: 91.95%;
-	padding: 1% 4%;
-}
-
-
-.imj_infodataHeadline {
-	font-weight: bold;
-	border-bottom: solid #BAB4B3 0.0909em;
-}
-
+/* * SubmitPanel (image_deatails.xhtml)
+   ================================================== */
 
 .imj_submitPanel {
 	display: inline-block;
@@ -1457,16 +1491,16 @@ OLD:
 
 .imj_cancelButton {
 	color: #FFFFFF;
-	background-color: #D80000;
-	border: solid #D80000;
+	background-color: #990000;
+    border: solid #990000;
     padding: 0 0.3333333em;
     margin: 0 1em;
 }
 
 .imj_cancelButton:hover {
 	color: #FFFFFF;
-    background-color: #990000;
-    border: solid #990000;
+	background-color: #D80000;
+	border: solid #D80000;
 }
 
 .imj_submitButton {

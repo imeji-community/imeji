@@ -15,32 +15,32 @@
 		</h:panelGroup>
 
 
-		<!-- MediaEditPanel - select, add, delete items -->
-		<h:panelGroup id="image" layout="block" rendered="#{imageBean.image.status != 'WITHDRAWN'}">
+		<!-- MediaEditPanel - select, add, remove media items -->
+		<h:panelGroup id="image" layout="block" rendered="#{imageBean.image.status != 'WITHDRAWN'}" styleClass="imj_mediaEditPanel">
 			<h:form id="itemForm">
 				<h:outputText value=":" styleClass="imj_invisible"/>
-				<h:selectBooleanCheckbox styleClass="imj_selectMedia" id="pictureCheckbox" value="#{imageBean.selected}" valueChangeListener="#{imageBean.selectedChanged}" rendered="#{SessionBean.user != null}">
+				<h:selectBooleanCheckbox styleClass="imj_mediaEditPanelItem imj_selectMedia" id="pictureCheckbox" value="#{imageBean.selected}" valueChangeListener="#{imageBean.selectedChanged}" rendered="#{SessionBean.user != null}">
 					<f:ajax execute="@this" render=":selectionInfoPanel :paginatorTop"/>
 				</h:selectBooleanCheckbox>
 				<h:outputText value="#{lbl.selected}" rendered="#{SessionBean.user != null}"/>
-				<h:commandLink styleClass="imj_removeMedia" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
+				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeMedia" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
 					<h:outputText value="#{lbl.remove_from_col}"/>
 				</h:commandLink>
-				<h:commandLink styleClass="imj_removeMedia" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.editable and imageBean.navigationString == 'pretty:albumItem'}">
+				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeMedia" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.editable and imageBean.navigationString == 'pretty:albumItem'}">
 					<h:outputText value="#{lbl.remove_from_album}"/>
 				</h:commandLink>
-				<h:commandLink styleClass="imj_addMedia" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
+				<h:commandLink styleClass="imj_mediaEditPanelItem imj_addMedia" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
 					<h:outputText value="#{lbl.add_to_active_album}"/>
 				</h:commandLink>
 				<h:panelGroup rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
-					<h:outputText styleClass="imj_activeMedia" value="(Image in"/>
+					<h:outputText styleClass="imj_mediaEditPanelItem" value="(Image in"/>
 					<h:outputText value=":" styleClass="imj_invisible"/>
-					<h:outputLink styleClass="" value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.id.path}">
+					<h:outputLink styleClass="imj_activeMedia" value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.id.path}">
 						<h:outputText value="#{lbl.active_album}"/>
 					</h:outputLink>
 					<h:outputText value=" - "/>
 					<h:commandLink id="lnkPicRemoveFromAvtiveAlbum" action="#{imageBean.removeFromActiveAlbum}">
-						<h:outputText value="#{lbl.remove}"/>
+						<h:outputText value="#{lbl.remove}" styleClass="imj_removeMedia"/>
 					</h:commandLink>
 					<h:outputText value=")"/>
 				</h:panelGroup>
@@ -52,7 +52,7 @@
 	<!-- MetaDataList - START -->
 	<div class="imj_metadataList">
 	
-		<!-- MetaDataTypes ListHeader - show media meta data, tech., QR -->
+		<!-- MetaDataTypes ListHeader - show media meta data, tech., other -->
 		<div class="imj_listHeader">
 			<h:outputLink id="lnkViewItemUtilPage" styleClass="imj_active" value="#{imageBean.pageUrl}?tab=util" rendered="#{imageBean.tab == 'util'}">
 				<h:outputText value="#{lbl.view_util}"/>
@@ -77,26 +77,29 @@
 			<h:outputText value="#{imageBean.edit.checkToggleState}"/>
 		</div>
 		
-		<!-- MetaDataList - LIST BODY START - show media meta data -->
+		<!-- MetaDataList - LIST BODY START -->
 		<h:panelGroup id="metadata" layout="block" styleClass="imj_listBody">
 			<ui:fragment rendered="#{imageBean.tab != 'techmd' and imageBean.tab != 'util'}">
 				<h:form>
-					
-					<!-- For future - panel, sub action menu, right now only one edit link -->
-					<h:panelGroup layout="block" styleClass="imj_metaDataEditLink">
-						<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} "/>
-						<h:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}">
-							<f:ajax execute="@this" render="@form"/>
-						</h:commandLink>
-						<h:outputText value="Image locked " rendered="#{imageBean.editable and imageBean.locked}"/>
-						<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
+					<!-- For future - panel / sub action menu - link to edit metadata -->
+					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
+						<span class="imj_metadataSubPanelItem">
+							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} "/>
+								<h:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}">
+								<f:ajax execute="@this" render="@form"/>
+								</h:commandLink>
+						</span>
+							<h:outputText value="Image locked " rendered="#{imageBean.editable and imageBean.locked}"/>
+							<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
 					</h:panelGroup>
 					
-					<!-- MetaDataList styleClass="free_area0 itemBlockContent endline" -->
+					<!-- MetaDataList - media data Wrapper START -->
 					<h:panelGroup layout="block" styleClass="imj_metadataWrapper">
-						<!-- MetaDataList - media status withdrawn -->
+			
+						<!-- MetaDataList - media data entries global - container set -->
 						<h:panelGroup layout="block" styleClass="imj_globalMetadataSet">
-							
+					
+							<!-- MetaDataList - media data - status withdrawn - container set -->
 							<h:panelGroup styleClass="imj_metadataSet" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
 								<span class="imj_metadataLabel">
 									<h:outputText value="#{lbl.withdraw_comment}" />
@@ -106,7 +109,8 @@
 									<h:outputText value="#{imageBean.image.discardComment}" />
 								</span>
 							</h:panelGroup>
-						
+					
+							<!-- MetaDataList - global / basic metadata -->
 							<!-- MetaDataList - Filename -->
 							<h:panelGroup styleClass="imj_metadataSet">
 								<span class="imj_metadataLabel">
@@ -117,7 +121,6 @@
 									<h:outputText id="txtUrl" value="#{imageBean.image.filename}" />
 								</span>
 							</h:panelGroup>
-						
 							<!-- MetaDataList - Collection -->
 							<h:panelGroup styleClass="imj_metadataSet">
 								<span class="imj_metadataLabel">
@@ -131,10 +134,11 @@
 								</span>
 							</h:panelGroup>
 						</h:panelGroup>
-						
-						<!-- MetaDataList - Further MetaData -->	
+
+						<!-- MetaDataList - further metadata - single edit panel - Wrapper -->				
 						<h:panelGroup id="singleEditPanel" layout="block" class="imj_metadataWrapper">
-							
+					
+							<!-- MetaDataList - show further MetaData -->
 							<ui:fragment rendered="#{imageBean.edit.toggleState == 'displayMd'}">
 								<ui:repeat var="metadata" value="#{imageBean.mds.metadata}" rows="0">
 									<h:panelGroup rendered="#{!metadata.isEmpty()}" styleClass="imj_metadataSet id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area">
@@ -151,19 +155,16 @@
 								</ui:repeat>
 							</ui:fragment>
 							
-							<!-- MetaDataList - EDIT MetaData -->
+							<!-- MetaDataList - EDIT MetaData - panel START -->
 							<ui:fragment rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">
 								<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.metadataList}" rows="0" varStatus="indexMetadata">
-								
-									<!-- MetaDataList - styleClass="free_area0 endline itemLine noTopBorder" -->
+									
+									<!-- MetaDataList - edit panel container set -->
 									<span class="imj_metadataSet">
 										<span class="imj_metadataLabel">
 											<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
 											<span class="imj_invisible">: </span>
 										</span>
-										
-										<!--  layout="block" styleClass="huge_area0 xTiny_marginLExcl endline -->
-										
 										<span class="imj_metadataValue">
 											<span class="imj_metadataValueEntry">
 												<ui:include src="../../../picturesPages/ui/MetadataInput.xhtml">
@@ -173,7 +174,8 @@
 													<ui:param name="hideLabel" value="true"/>
 												</ui:include>
 											</span>
-											<span class="imj_metadataEditButtonArea"><!-- imj_multipleButtons (-) (+)  min_imgBtn groupTool remove af_commandButton - min_imgBtn groupTool add af_commandButton -->
+											<!-- imj_multipleButtons (-) (+) command buttons -->
+											<span class="imj_metadataEditButtonArea">
 												<h:commandButton type="button" styleClass="imj_removeButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
 													<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
 													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
@@ -189,151 +191,138 @@
 									</span>
 								</ui:repeat>
 								
+								<!-- MetaDataList - EDIT - imj_submitPanel - cancel + submit command buttons -->
 								<h:panelGroup layout="block" styleClass="imj_submitPanel">
 									<h:commandLink styleClass="imj_cancelButton" action="#{imageBean.edit.cancel}">
 										<f:ajax execute="@this" render="@form"/>
-										<h:outputText value="#{lbl.cancel}"/>
+											<h:outputText value="#{lbl.cancel}"/>
 									</h:commandLink>
-									
 									<h:commandButton type="submit" styleClass="imj_submitButton"  action="#{imageBean.edit.save}" value="#{lbl.save}">
 										<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
 									</h:commandButton>
 								</h:panelGroup>
-							</ui:fragment>
+							</ui:fragment> <!-- MetaDataList - EDIT MetaData - panel END -->
+						</h:panelGroup> <!-- MetaDataList - further metadata - single edit panel - Wrapper END -->
+					</h:panelGroup> <!-- MetaDataList - media data Wrapper END -->
+				</h:form>
+				<script type="text/javascript">highlighter();</script>
+			</ui:fragment>
+	
+	
+			<!-- Tech Data List Body - tech data list - show media tech data entries -->		
+			<ui:fragment rendered="#{imageBean.tab == 'techmd'}">
+				<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
+						<!-- <h:outputText id="" styleClass="imj_metadataSubPanelItem" value=""/>  - - - label for value="#{lbl.techMD}" and id="lblViewItemFull_lbltechMD needed here -->
+				</h:panelGroup>	
+					<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList">
+						<ui:repeat id="techMd" var="techMd" value="#{imageBean.techMd}">
+							<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
+						</ui:repeat>
+					</h:panelGroup>
+			</ui:fragment>	
+		
+		
+			<!-- Utilities List Body - info data list - show MD5, album name, QR-Tag, link to image versions in blank page -->		
+			<ui:fragment rendered="#{imageBean.tab == 'util'}">
+				<h:panelGroup id="util" layout="block" styleClass="imj_infodataWrapper">
+					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
+						<h:outputText id="lblViewItemFull_lblUtil" styleClass="imj_metadataSubPanelItem" value="#{lbl.imageUtil}"/>
+					</h:panelGroup>				
+	
+					<!-- InfoDataList - MD5 -->
+					<h:panelGroup styleClass="imj_infodataSet">
+						<span class="imj_infodataLabel">
+							<h:outputText value="#{lbl.checksum} (MD5)" />
+							<span class="imj_invisible">: </span>
+						</span>							
+						<span class="imj_infodataValue">
+							<h:outputText value="#{imageBean.image.checksum}" />
+						</span>
+					</h:panelGroup>
+					
+					<!-- InfoDataList - Uploader / File-Author -->
+					<h:panelGroup styleClass="imj_infodataSet">
+						<span class="imj_infodataLabel">
+							<h:outputText value="#{lbl.imageUploader}" />
+							<span class="imj_invisible">: </span>
+						</span>
+						<span class="imj_infodataValue">
+							<h:outputText value="#{imageBean.imageUploader.name}" />
+						</span>
+					</h:panelGroup>
+					
+					<!-- InfoDataList - Images File Sizes -->						
+					<h:panelGroup styleClass="imj_infodataSet">
+						<span class="imj_infodataLabel">
+							<h:outputText value="#{lbl.imageSizes}" />
+							<span class="imj_invisible">: </span>
+						</span>
+						<span class="imj_infodataValue">
+							<h:outputLink value="#{imageBean.image.thumbnailImageUrl}" target="_blank">
+								<h:outputText value="#{lbl.imageSizesThumb}" />
+							</h:outputLink>
+						</span>
+						<span class="imj_infodataValue">
+							<h:outputLink value="#{imageBean.image.webImageUrl}" target="_blank">
+								<h:outputText value="#{lbl.imageSizesWeb}" />
+							</h:outputLink>
+						</span>
+						<span class="imj_infodataValue">
+							<h:outputLink value="#{imageBean.image.fullImageUrl}" target="_blank">
+								<h:outputText value="#{lbl.imageSizesOrg}" />
+							</h:outputLink>
+						</span>
+					</h:panelGroup>				
+					
+					<!-- InfoDataList - Image Album Info -->
+					<ui:fragment rendered="#{imageBean.relatedAlbums != null}">
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.relatedAlbum}" />
+									<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<ui:repeat var="albums" value="#{imageBean.relatedAlbums}">
+									<h:outputLink value="#{albums.id}">
+										<h:outputText value="#{albums.metadata.title}" />
+									</h:outputLink>
+								</ui:repeat>
+							</span>
 						</h:panelGroup>
+					</ui:fragment>
 						
+					<!-- InfoDataList - QR-Tag <div id="qr"></div> --> 						
+					<h:panelGroup styleClass="imj_infodataSet">
+						<span class="imj_infodataLabel">
+							<h:outputText value="#{lbl.qrcode}" />
+							<span class="imj_invisible">: </span>
+						</span>
+						<span class="imj_infodataValue" id="qr"> </span>
+					</h:panelGroup>
 				</h:panelGroup>
-			</h:form>
-			<script type="text/javascript">highlighter();</script>
-		</ui:fragment>
-	
-	
-		<!-- Tech Data List Body - show media tech data entries -->		
+			</ui:fragment>		
 		
-		<ui:fragment rendered="#{imageBean.tab == 'techmd'}">
-			<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList">
-				<ui:repeat id="techMd" var="techMd" value="#{imageBean.techMd}">
-					<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
-				</ui:repeat>
-			</h:panelGroup>
-		</ui:fragment>	
-		
-		
-		<!-- IN PROGRESS !!! Utilities List Body - show MD5, QR-Tag   <h:panelGroup id="util" styleClass="full_area0"> <h3 class="xLarge_area0_p8 endline blockHeader"> <span class="seperator"></span> -->
-		
-		<ui:fragment rendered="#{imageBean.tab == 'util'}">
-			<h:panelGroup id="util" layout="block" styleClass="imj_infodataWrapper">
-				<h:panelGroup layout="block" styleClass="imj_infodataTitle">
-					<h:outputText id="lblViewItemFull_lblUtil" styleClass="imj_infodataHeadline" value="#{lbl.imageUtil}"/>
-				</h:panelGroup>							
-					
-					
-						
-					
-				<!-- <h:panelGroup  styleClass="free_area0 itemBlockContent endline"> +++
-						<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">  -->
-						
-						<!-- InfoDataList - MD5 -->
-						<h:panelGroup styleClass="imj_infodataSet">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.checksum} (MD5)" />
-								<span class="imj_invisible">: </span>
-							</span>							
-							<span class="imj_infodataValue">
-								<h:outputText value="#{imageBean.image.checksum}" />
-							</span>
-						</h:panelGroup>
-						
-						
-						<!-- InfoDataList - Uploader -->
-						<h:panelGroup styleClass="imj_infodataSet">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.imageUploader}" />
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputText value="#{imageBean.imageUploader.name}" />
-							</span>
-						</h:panelGroup>
-						
-						<!-- InfoDataList - Images File Sizes -->						
-						<h:panelGroup styleClass="imj_infodataSet">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.imageSizes}" />
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputLink value="#{imageBean.image.thumbnailImageUrl}" target="_blank">
-									<h:outputText value="#{lbl.imageSizesThumb}" />
-								</h:outputLink>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputLink value="#{imageBean.image.webImageUrl}" target="_blank">
-									<h:outputText value="#{lbl.imageSizesWeb}" />
-								</h:outputLink>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputLink value="#{imageBean.image.fullImageUrl}" target="_blank">
-									<h:outputText value="#{lbl.imageSizesOrg}" />
-								</h:outputLink>
-							</span>
-						</h:panelGroup>
-						
-						
-						<!-- InfoDataList - Image Album Info -->
-						<ui:fragment rendered="#{imageBean.relatedAlbums != null}">
-							<h:panelGroup styleClass="imj_infodataSet">
-								<span class="imj_infodataLabel">
-									<h:outputText value="#{lbl.relatedAlbum}" />
-										<span class="imj_invisible">: </span>
-								</span>
-								<span class="imj_infodataValue">
-									<ui:repeat var="albums" value="#{imageBean.relatedAlbums}">
-										<h:outputLink value="#{albums.id}">
-											<h:outputText value="#{albums.metadata.title}" />
-										</h:outputLink>
-									</ui:repeat>
-								</span>
-							</h:panelGroup>
-						</ui:fragment>
-						
-						<!-- InfoDataList - QR-Tag <div id="qr"></div> --> 						
-						<h:panelGroup styleClass="imj_infodataSet">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.qrcode}" />
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue" id="qr"> </span>
-						</h:panelGroup>
+			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"> </script>
+			<script type="text/javascript">
+				jQuery(document).ready(function() {
+					var qrHtml = document.getElementById('qr');
+					if (qrHtml != null) {
+						qrHtml.innerHTML = create_qrcode('#{imageBean.pageUrl}');
+					}
+				});
+				
+				var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
+					document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
+				};
+				var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+					var qr = qrcode(typeNumber || 10, errorCorrectLevel || 'M');
+					qr.addData(text);
+					qr.make();
+					// return qr.createTableTag();
+					return qr.createImgTag();
+				};
+			</script>
 			
-			</h:panelGroup>
-		</ui:fragment>
-		
-		
-		
-		
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"> </script>
-		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				var qrHtml = document.getElementById('qr');
-				if (qrHtml != null) {
-					qrHtml.innerHTML = create_qrcode('#{imageBean.pageUrl}');
-				}
-			});
-			
-			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
-				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
-			};
-			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
-				var qr = qrcode(typeNumber || 10, errorCorrectLevel || 'M');
-				qr.addData(text);
-				qr.make();
-				// return qr.createTableTag();
-				return qr.createImgTag();
-			};
-		</script>
-
 		</h:panelGroup><!-- END LISTBODY -->
 	</div> <!-- END LIST -->
-
 </ui:composition>

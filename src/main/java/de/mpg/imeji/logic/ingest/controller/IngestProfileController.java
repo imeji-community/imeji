@@ -44,8 +44,6 @@ public class IngestProfileController
      */
     public void ingest(File profileXmlFile, URI profile) throws Exception
     {
-        ProfileValidator pv = new ProfileValidator();
-        pv.valid(profileXmlFile);
         ProfileParser pp = new ProfileParser();
         MetadataProfile mdp = pp.parse(profileXmlFile);
         if (isCopyOfOther(mdp, profile))

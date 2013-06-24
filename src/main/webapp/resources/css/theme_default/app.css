@@ -1390,22 +1390,22 @@ OLD:
 	margin-right: 0;
 	width: 91.95%;
 	padding: 0 26%;
-	
 }
 
-.imj_metadataSet {
+.imj_metadataSet, .imj_infodataSet {
 	width: 100%;
 	display: inline-block;
 	padding-bottom: 1em;
 }
 
-.imj_metadataLabel {
+.imj_metadataLabel, .imj_infodataLabel {
 	font-weight: bold;
 	display: inline-block;
 	min-width:19%;
+	vertical-align: top;
 }
 
-.imj_metadataValue {
+.imj_metadataValue, .imj_infodataValue  {
 	display: inline-block;
 	margin-left: 1.0em;
 }
@@ -1438,16 +1438,15 @@ OLD:
 
 .imj_infodataTitle {
 	text-align: left;
-	margin-right: 0;
-	width:91.95%;
-	padding:0 4%;
+	width: 91.95%;
+	padding: 1% 4%;
 }
 
 
-
-
-
-
+.imj_infodataHeadline {
+	font-weight: bold;
+	border-bottom: solid #BAB4B3 0.0909em;
+}
 
 
 .imj_submitPanel {

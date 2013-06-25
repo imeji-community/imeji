@@ -81,7 +81,7 @@ public class IngestItemController
         }
         catch (Exception e)
         {
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
     }
 

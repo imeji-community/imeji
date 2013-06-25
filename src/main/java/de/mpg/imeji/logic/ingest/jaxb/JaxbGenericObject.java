@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.ingest.jaxb.interfaces.IJaxbGenericObject;
 import de.mpg.imeji.logic.ingest.util.ImejiSchemaFilename;
+import de.mpg.imeji.logic.ingest.vo.Items;
 
 /**
  * @author hnguyen
@@ -19,17 +20,18 @@ import de.mpg.imeji.logic.ingest.util.ImejiSchemaFilename;
  */
 public class JaxbGenericObject<T> extends JaxbUtil implements IJaxbGenericObject<T>
 {
-    protected String xsdFilename = ImejiSchemaFilename.IMEJI_INGEST_PROFILE_XSDFILE;
+    protected String xsdFilename = null;
     protected Class<T> type;
 
     public JaxbGenericObject(Class<T> type)
     {
         this.type = type;
+        xsdFilename = (type.equals(Items.class)) ? ImejiSchemaFilename.IMEJI_ITEM_XSDFILE : ImejiSchemaFilename.IMEJI_INGEST_PROFILE_XSDFILE;
     }
 
     public JaxbGenericObject(Class<T> type, String xsdFilename)
     {
-        this.type = type;
+        this(type);
         this.xsdFilename = xsdFilename;
     }
 

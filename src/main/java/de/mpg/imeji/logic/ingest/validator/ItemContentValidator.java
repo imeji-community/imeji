@@ -27,7 +27,7 @@ public class ItemContentValidator
      * @throws Exception
      * @throws IntrospectionException
      */
-    public static void validate(Item item) throws Exception, IntrospectionException
+    public static void validate(Item item)
     {
         MetadataProfile profile = ObjectCachedLoader.loadProfile(item.getMetadataSet().getProfile());
         for (Metadata md : item.getMetadataSet().getMetadata())
@@ -38,7 +38,7 @@ public class ItemContentValidator
                         + " is not allowed in collection  " + item.getCollection());
             else
             {
-                if (st.getLiteralConstraints() != null)
+                if (!st.getLiteralConstraints().isEmpty())
                 {
                     boolean constraintsFound = false;
                     for (String s : st.getLiteralConstraints())

@@ -460,25 +460,3 @@ q:before, q:after {
 abbr, acronym { 
 	border: 0;
 }
-
-/* ========================================================================== 
- ***************************** imeji basic styles ***************************
- * Global CSS Helpers
- * ========================================================================== */
-
-.imj_clear {
-	clear: both;	
-}
-
-.imj_invisible {
-	visibility: hidden; 
-}
-
-.imj_noDisplay {
-	display: none;
-}
-
-
-}
-
-	

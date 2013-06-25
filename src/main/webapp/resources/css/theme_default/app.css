@@ -7,15 +7,56 @@
  * of the original imeji theme/template based on the eSciDoc GUI V2 (core and appearance 
  * styles - http://colab.mpdl.mpg.de/mediawiki/images/0/02/MPDL_StyleGuide.pdf).
  *
+ * Since we are developing a new template and styles in a parallel run, in branch 
+ * "gui-restructure" - https://github.com/imeji-community/imeji/tree/gui-restructure 
+ * this style-sheet contains only *new* imeji styles (and some additional hot fixes for 
+ * the original theme)!
+ * 
  * Please check the new base.css with normalize.css and additional CSS-resets.
  * 
  * New imeji style prefix for all classes and ids: imj_
  *
  * New naming - list of the renamed styles 
  * old version -> new version (file.name)
- * are documented in changes.css 
+ * (are documented in changes.css)  
  * 
+ * Karsten Asshauer & Marco Schlender for the imeji community * http://imeji.org *
  * ====================================================================================  */
+
+/* OLD STYLES */
+/* ******** css hot fixes for release 1.2.0.0 ***********
+ * ================================================== */
+.free_txtInput, .xHuge_txtInput, .xHuge_txtInput input {
+    width: 98%;
+}
+
+.menuHeader {
+	color: #6CAD2F;
+}
+
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+
+
+/* NEW STYLES */
+
+/* ========================================================================== 
+ ***************************** imeji basic styles ***************************
+ * Global CSS Helpers
+ * ========================================================================== */
+
+.imj_clear {
+	clear: both;	
+}
+
+.imj_invisible {
+	visibility: hidden; 
+}
+
+.imj_noDisplay {
+	display: none;
+}
 
 
 /* imeji base settings
@@ -30,30 +71,6 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
 
-
-
-/* OLD STYLES */
-/* ******** css fixes for release 1.2.0.0 ***********
- * ================================================== */
-.free_txtInput, .xHuge_txtInput, .xHuge_txtInput input {
-    width: 98%;
-}
-
-.menuHeader {
-	color: #6CAD2F;
-}
-
-/*********************************************************************************/
-/*********************************************************************************/
-/*********************************************************************************/
-/*********************************************************************************/
-
-
-
-
-
-/* NEW STYLES */
-
 /* imeji base settings - set body width and height to 100% for all pages 
    =========================================================================  */
 
@@ -64,8 +81,6 @@ html, body {
 	margin: 0px;
  	padding: 0px;
 }
-
-
 
 /* imeji base settings - body colors - global and element font definition 
    =========================================================================  */

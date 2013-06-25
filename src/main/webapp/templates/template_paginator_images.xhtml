@@ -15,7 +15,7 @@
 					</h:outputLink>
 					<ui:repeat id="filterList" var="filter" value="#{FiltersSession.filters}" rows="0" rowKeyVar="index">
 						<h:outputText value=" / " styleClass="free_area0"/>
-						<h:outputText value="#{filter.internationalizedLabel} " styleClass="free_area0"/>
+						<h:outputText value="#{filter.internationalizedLabel}" styleClass="free_area0"/>
 						<h:outputText value="(#{filter.notDefineType})" styleClass="free_area0"	rendered="#{filter.notDefine}"/>
 						<h:outputLink value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{paginatorListSessionBean.navigationString == 'pretty:browse'}" styleClass="free_area0 ">
 							<h:outputText value="[x]" styleClass="free_area0 "/>

@@ -159,17 +159,12 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     @Override
     public List<ThumbnailBean> retrieveList(int offset, int limit)
     {
-        // load images
+        // load the item
         Collection<Item> items = loadImages(searchResult.getResults(), offset, limit);
-        try
-        {
+        // Init the labels for the item
+        if (!items.isEmpty())
             ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init((List<Item>)items);
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // Return the item as thumbnailBean
         return ImejiFactory.imageListToThumbList(items);
     }
 
@@ -707,5 +702,4 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         return searchResult;
     }
-    
 }

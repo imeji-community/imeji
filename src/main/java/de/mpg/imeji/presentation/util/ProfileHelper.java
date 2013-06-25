@@ -30,7 +30,7 @@ public class ProfileHelper
      * @return
      * @throws Exception
      */
-    public static Map<URI, MetadataProfile> loadProfiles(List<Item> imgs) throws Exception
+    public static Map<URI, MetadataProfile> loadProfiles(List<Item> imgs)
     {
         Map<URI, MetadataProfile> pMap = new HashMap<URI, MetadataProfile>();
         for (Item im : imgs)

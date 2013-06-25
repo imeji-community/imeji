@@ -122,7 +122,7 @@ public class IngestItemController
 
     /**
      * Copy the {@link Metadata} of mds1 into mds2, if: <br/>
-     * - the {@link Metadata} doens't exist in mds2 and the {@link Statement} belongs to the {@link MetadataProfile} <br/>
+     * - the {@link Metadata} doens't exist in mds2 <br/>
      * - the {@link Metadata} exists and has the same {@link Statement} in mds2
      * 
      * @param mds1
@@ -135,33 +135,19 @@ public class IngestItemController
         for (Metadata md : mds1.getMetadata())
         {
             Metadata copyTo = findMetadata(md.getId(), mds2);
-            if (hasValidStatement(md))
+            if (copyTo == null)
             {
-                if (copyTo == null)
-                {
-                    // If the metadata doesn't exist, give it a new id
-                    md.setId(IdentifierUtil.newURI(Metadata.class));
-                    l.add(md);
-                }
-                else if (copyTo != null && copyTo.getStatement().compareTo(md.getStatement()) == 0)
-                {
-                    l.add(md);
-                }
+                // If the metadata doesn't exist, give it a new id
+                md.setId(IdentifierUtil.newURI(Metadata.class));
+                l.add(md);
+            }
+            else if (copyTo != null && copyTo.getStatement().compareTo(md.getStatement()) == 0)
+            {
+                l.add(md);
             }
         }
         mds2.setMetadata(l);
         return mds2;
-    }
-
-    /**
-     * True if the {@link Statement} of the given {@link Metadata} belongs to the {@link MetadataProfile} and has the same type
-     * @param md
-     * @return
-     */
-    private boolean hasValidStatement(Metadata md)
-    {
-        Statement st = ProfileHelper.getStatement(md.getStatement(), profile);
-        return st != null && md.getTypeNamespace().equals(st.getType().toString());
     }
 
     /**

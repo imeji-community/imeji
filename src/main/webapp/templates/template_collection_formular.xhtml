@@ -120,7 +120,7 @@
 						<h:outputLink rendered="#{FormularBean.id == null}" value="#{Navigation.applicationUrl}collections" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
 							<h:outputText value="#{lbl.cancel}" />
 						</h:outputLink>
-						<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
+						<h:commandButton action="#{FormularBean.save}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton" onclick="openDialog('dialogWait');"/>					
 					</div>
 				</h:form>	
 			</h:panelGroup>

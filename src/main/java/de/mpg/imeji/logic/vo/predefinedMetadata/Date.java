@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -29,6 +30,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "date", namespace = "http://imeji.org/terms/metadata")
+@XmlType(propOrder={"date", "time", "statement"})
 public class Date extends Metadata
 {
     @j2jLiteral("http://imeji.org/terms/date")

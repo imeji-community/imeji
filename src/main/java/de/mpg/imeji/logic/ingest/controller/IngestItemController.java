@@ -73,6 +73,7 @@ public class IngestItemController
              * TODO: This part pertains to the content validator, not finished yet
              * ItemContentValidator.validate(itemList);
              */
+            ItemContentValidator.validate(itemList);
             ItemMapperTask im = new ItemMapperTask(itemList);
             im.execute();
             ItemController ic = new ItemController(user);

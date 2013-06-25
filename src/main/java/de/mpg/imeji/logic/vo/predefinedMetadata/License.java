@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.j2j.annotations.j2jDataType;
@@ -29,6 +30,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "license", namespace = "http://imeji.org/terms/metadata")
+@XmlType(propOrder = { "externalUri", "license", "statement" })
 public class License extends Metadata
 {
     private SimpleDateFormat date;

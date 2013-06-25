@@ -1,51 +1,51 @@
 package de.mpg.imeji.logic.ingest.validator;
 
 import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataSet;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * @author hnguyen
  */
 public class ItemContentValidator
 {
-    private static final ArrayList<String> notRequiredList = new ArrayList<String>(Arrays.asList("discardComment",
-            "versionDate"));
-
     /**
+     * Validate the content of an {@link Item} according to its profile. Throw an exception if: <br/>
+     * * the {@link Statement} of the {@link Metadata} is not found in the {@link MetadataProfile} of the current
+     * {@link CollectionImeji} <br/>
+     * * The value of the {@link Metadata} is not following the literals constraints (if define for this
+     * {@link Statement})
+     * 
      * @param item
      * @throws Exception
      * @throws IntrospectionException
      */
-    @SuppressWarnings("unchecked")
     public static void validate(Item item) throws Exception, IntrospectionException
     {
-        if (item == null)
-            throw new Exception(new Throwable("Item is null"));
-        for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(Item.class).getPropertyDescriptors())
+        MetadataProfile profile = ObjectCachedLoader.loadProfile(item.getMetadataSet().getProfile());
+        for (Metadata md : item.getMetadataSet().getMetadata())
         {
-            if (propertyDescriptor.getWriteMethod() == null)
-                continue;
-            if (!notRequiredList.contains(propertyDescriptor.getName()))
+            Statement st = ProfileHelper.getStatement(md.getStatement(), profile);
+            if (st == null)
+                throw new RuntimeException("Error Ingest: Statement " + md.getStatement()
+                        + " is not allowed in collection  " + item.getCollection());
+            else
             {
-                if (item.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null)
+                if (st.getLiteralConstraints() != null)
                 {
-                    throw new Exception(new Throwable("Item object (" + item.getId().toString()
-                            + ")has invalid setting for element: " + propertyDescriptor.getName()));
-                }
-                else
-                {
-                    if (propertyDescriptor.getPropertyType() == List.class)
-                    {
-                        MetadataSetContentValidator.validate((List<MetadataSet>)item
-                                .getValueFromMethod(propertyDescriptor.getReadMethod().getName()), item);
-                    }
+                    boolean constraintsFound = false;
+                    for (String s : st.getLiteralConstraints())
+                        constraintsFound = md.asFulltext().contains(s) || constraintsFound;
+                    if (!constraintsFound)
+                        throw new RuntimeException("Error Ingest: Found not allowed value in  metadata " + md.getId()
+                                + " Check restricted values in profile");
                 }
             }
         }

@@ -132,9 +132,10 @@
 			        </h:panelGroup>
 			        <!-- SAVE BUTTON -->
 					<h:panelGroup styleClass="full_area0_p8 preListHeader"  rendered="#{EditImageMetadataBean.profileWithStatements and EditImageMetadataBean.editType == 'selected'}">
-							
 						<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
-							<h:commandButton render="ajaxContent" styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}"/>
+							<h:commandButton  styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}">
+								<f:ajax render="ajaxContent"/>
+							</h:commandButton >
 							<h:outputLink value="" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
 								<h:outputText value="#{lbl.reset_changes}" />
 							</h:outputLink>

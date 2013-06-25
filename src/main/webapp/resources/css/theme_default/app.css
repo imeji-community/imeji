@@ -930,9 +930,9 @@ cut second ?
     margin-left: 5.636em; /* 5.8181em*/
 }
 
-/* ===[ Content - Menu ]===
+/* ===[ Content - Menu ]=== * AlbumImage.xhmtl
    ================================================== */
-
+/*
 .imj_contentMenuWrapper {
     margin-top: 0.500em;
     padding-top: 0;
@@ -940,21 +940,28 @@ cut second ?
 
 .imj_contentMenuWrapper * {
     float: left;
-    /*line-height: normal;*/
+    /*line-height: normal;
 }
+
+*/
 
 /* .contentMenu .sub  */
 
 .imj_contentMenu {
-    float: left;
+	margin-top: 0.500em;
+    padding-top: 0;
+    /*float: left;*/
     display: inline;
     overflow: hidden;
     height: 1.6363em;
-    margin: 0;
-    padding: 0;
+    
     text-transform: uppercase;
     /*line-height: normal;*/
     letter-spacing: 0.045em; /*0.091em;*/
+	
+	width: 91.75%;
+    padding: 0 4%;
+    margin-bottom: 0.5em;
 }
 
 /* free_area0 span - template_paginator_containers.xhtml   */
@@ -982,7 +989,8 @@ span.imj_contentMenuItem {
     /* border-bottom: 0.091em dotted #6CAD2F;*/ 
 }
 
-/* .contentMenu .seperator .void- template_paginator_containers.xhtml - Images.xhtml - template_paginator_albums.xhtml *    
+/* .contentMenu .seperator .void- template_paginator_containers.xhtml - 
+*  Images.xhtml - template_paginator_albums.xhtml *    
 
     margin-left: 0.46em;
     margin-right: 0.46em;
@@ -999,7 +1007,7 @@ span.imj_contentMenuItem {
    ==================================================
    ================================================== */
 
-.imj_contentMenuWrapper .imj_contentMenuSeparator {
+.imj_contentMenu .imj_contentMenuSeparator {
     float: left;
     width: 0.091em; /*0.10em*/
     height: 1.091em; /* 1.15em*/
@@ -1008,7 +1016,10 @@ span.imj_contentMenuItem {
     /* background-color: #6CAD2F; */
 }
 
-/* ===[ Content - SubMenu ]===
+
+
+
+/* ===[ Content - SubMenu ]=== *** ACTION MENU ***
    ================================================== */
 
 /* .contentMenu * !!!
@@ -1019,7 +1030,7 @@ span.imj_contentMenuItem {
 
 */
 
-/* .contentMenu .action *  xHuge_area0 sub action - template_paginator_containers.xhtml - Images.xhtml */
+/* *** Images.xhtml *** */
 
 .imj_contentSubMenu {
     clear:left;
@@ -1042,23 +1053,6 @@ span.imj_contentMenuItem {
     color: #6CAD2F;
 }
 
-/* .contentMenu .action *  - 
-.imj_contentSubMenuItem * {
-    margin-right: 0.364em;
-}
- */
-
-/* .imj_contenSubMenu input, .imj_siteContenSubMenu a, .imj_siteContenSubMenu span {
-    font-size: 1.273em; /*1.455em
- */
-
-/* margin-right: 0.636em; /*0.8181em */
-
-/* text-align: left;
-   text-decoration: none;
-}   
-*/
-
 /* SubMenu - Sort by - Filter by */
 .imj_contentSubMenuItem span,
 .imj_contentSubMenuItem a {
@@ -1066,18 +1060,25 @@ span.imj_contentMenuItem {
 } 
 
 
-/* hard-coded span style - style="margin-top:0.18em; - template_paginator_containers.xhtml - Images.xhtml */
+/* template_paginator_containers.xhtml - Images.xhtml */
 
 .imj_contentSubMenuItemSorting {
     margin: 0 0.364em 0 0;
     color: #F0F0F0;
 }
 
-/* free_area0 - template_paginator_containers.xhtml - template_paginator_albums.xhtml   */
+/* template_paginator_containers.xhtml - template_paginator_albums.xhtml   */
 
 span.imj_contentSubMenuItemFiltering {
     margin: 0.18em 0.364em 0 0; /*6.364em 6.000em*/
 }
+
+
+
+
+
+
+
 
 /* ===[ Content Headline ]===
    ================================================== */

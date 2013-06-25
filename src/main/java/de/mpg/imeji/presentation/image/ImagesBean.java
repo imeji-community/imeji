@@ -632,7 +632,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         for (ThumbnailBean tb : getCurrentPartList())
         {
-            if (tb.isEditable())
+            if (tb.isDeletable())
             {
                 return true;
             }

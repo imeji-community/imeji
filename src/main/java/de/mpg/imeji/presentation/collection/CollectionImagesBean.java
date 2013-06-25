@@ -47,7 +47,7 @@ public class CollectionImagesBean extends ImagesBean
     private CollectionImeji collection;
     private Navigation navigation;
     private SearchQuery searchQuery = new SearchQuery();
-
+	
     /**
      * Initialize the bean
      */
@@ -232,7 +232,7 @@ public class CollectionImagesBean extends ImagesBean
     @Override
     public boolean isImageEditable()
     {
-        return super.isImageDeletable()
+        return super.isImageEditable()
                 && ObjectCachedLoader.loadProfile(collection.getProfile()).getStatements().size() > 0;
     }
 
@@ -249,4 +249,5 @@ public class CollectionImagesBean extends ImagesBean
         Security security = new Security();
         return security.check(OperationsType.DELETE, sb.getUser(), collection);
     }
+
 }

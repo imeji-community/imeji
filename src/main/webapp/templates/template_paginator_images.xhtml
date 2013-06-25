@@ -55,12 +55,16 @@
 									</h:outputLink>
 									<!-- Delete/Discard all from collection-->
 									<h:panelGroup rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
-										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" onclick="openDialog('dialogDeleteAll')" 
-													  rendered="#{paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
+										<h:outputLink 	styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" 
+														value="#" 
+														onclick="openDialog('dialogDeleteAll')" 
+													  	rendered="#{paginatorListSessionBean.deletable}">
 											<h:outputText value="#{lbl.delete_all}"/>
 										</h:outputLink>
-										<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" onclick="openDialog('dialogDeleteAll')" 
-													  rendered="#{paginatorListSessionBean.collection != null and paginatorListSessionBean.editable  and paginatorListSessionBean.collection.status == 'RELEASED'}">
+										<h:outputLink 	styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" 
+														value="#" 
+														onclick="openDialog('dialogWithdrawAll')" 
+													  	rendered="#{paginatorListSessionBean.collection != null and paginatorListSessionBean.editable  and paginatorListSessionBean.collection.status == 'RELEASED'}">
 											<h:outputText value="#{lbl.withdraw_all}"/>
 										</h:outputLink>
 									</h:panelGroup>
@@ -108,11 +112,11 @@
 											<!-- Delete/Discard selected images -->
 											<h:panelGroup rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
 												<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" 
-															  rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and  paginatorListSessionBean.imageDeletable and paginatorListSessionBean.collection.status == 'PENDING'}">
+															  rendered="#{paginatorListSessionBean.imageDeletable}">
 													<h:outputText value="#{lbl.delete_selectedImages}"/>
 												</h:outputLink>
-												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" onclick="openDialog('dialogDeleteSelected')" 
-															  rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and  paginatorListSessionBean.editable and paginatorListSessionBean.collection.status == 'RELEASED'}">
+												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" onclick="openDialog('dialogWithdrawSelected')" 
+															  rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.collection.status == 'RELEASED'}">
 													<h:outputText value="#{lbl.withdraw_selected}"/>
 												</h:outputLink>
 											</h:panelGroup>
@@ -131,10 +135,16 @@
 			<ui:remove><!-- END OF div id="preListHeader" --></ui:remove>
 		</div>
 		</h:form>
-		<ui:include src="../confirmationPages/SelectedDeleteWithdraw.xhtml">
+		<ui:include src="../confirmationPages/SelectedDelete.xhtml">
 				<ui:param name="bean" value="#{paginatorListSessionBean}"/>
 		</ui:include>
-		<ui:include src="../confirmationPages/AllDeleteWithdraw.xhtml">
+		<ui:include src="../confirmationPages/SelectedWithdraw.xhtml">
+				<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+		<ui:include src="../confirmationPages/AllDelete.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+		<ui:include src="../confirmationPages/AllWithdraw.xhtml">
 			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
 		</ui:include>
 	</ui:define>

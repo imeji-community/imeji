@@ -13,12 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.axis.transport.http.HTTPConstants;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.http.protocol.HTTP;
 import org.apache.log4j.Logger;
-import org.opensaml.ws.security.provider.HTTPRule;
 
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -181,7 +176,7 @@ public class FileServlet extends HttpServlet
      */
     private SessionBean getSession(HttpServletRequest req)
     {
-        return (SessionBean)req.getSession().getAttribute(SessionBean.class.getSimpleName());
+        return (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
     }
 
     /**

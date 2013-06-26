@@ -274,15 +274,18 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
         FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
-        if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
+        if (hs != null && fs != null)
         {
-            hs.getCurrentPage().setFilters(fs.getFilters());
-            hs.getCurrentPage().setQuery(fs.getWholeQuery());
-        }
-        else
-        {
-            hs.getCurrentPage().setFilters(fs.getFilters());
-            hs.getCurrentPage().setQuery(fs.getWholeQuery());
+            if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
+            {
+                hs.getCurrentPage().setFilters(fs.getFilters());
+                hs.getCurrentPage().setQuery(fs.getWholeQuery());
+            }
+            else
+            {
+                hs.getCurrentPage().setFilters(fs.getFilters());
+                hs.getCurrentPage().setQuery(fs.getWholeQuery());
+            }
         }
     }
 

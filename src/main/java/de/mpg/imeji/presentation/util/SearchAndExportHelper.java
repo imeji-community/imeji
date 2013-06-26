@@ -13,36 +13,54 @@ import org.apache.commons.httpclient.methods.GetMethod;
 
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 
+/**
+ * Utility class to work with PubMan search and export interface
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class SearchAndExportHelper
 {
+    /**
+     * {@link Pattern} to find an escidoc id
+     */
     private static Pattern ESCIDOC_ID_PATTERN = Pattern.compile("escidoc:[0-9]+");
 
+    /**
+     * Used the Search and export interface to return the styled citation of the current {@link Publication}
+     * 
+     * @param publication
+     * @return
+     */
     public static String getCitation(Publication publication)
     {
         URI uri = publication.getUri();
-        URI searchAndExportUri = URI.create("http://" + uri.getHost() + "/search/SearchAndExport");
-        String itemId = null;
-        Matcher matcher = ESCIDOC_ID_PATTERN.matcher(uri.toString());
-        if (matcher.find())
-            itemId = matcher.group();
-        if (UrlHelper.isValidURI(searchAndExportUri))
+        if (uri != null)
         {
-            try
+            URI searchAndExportUri = URI.create("http://" + uri.getHost() + "/search/SearchAndExport");
+            String itemId = null;
+            Matcher matcher = ESCIDOC_ID_PATTERN.matcher(uri.toString());
+            if (matcher.find())
+                itemId = matcher.group();
+            if (UrlHelper.isValidURI(searchAndExportUri))
             {
-                HttpClient client = new HttpClient();
-                String exportUri = searchAndExportUri.toString()
-                        + "?cqlQuery="
-                        + URLEncoder.encode("escidoc.objid=" + itemId + " or escidoc.property.version.objid=" + itemId,
-                                "UTF-8") + "&exportFormat=" + publication.getExportFormat()
-                        + "&outputFormat=html_linked";
-                System.out.println(exportUri);
-                GetMethod method = new GetMethod(exportUri);
-                client.executeMethod(method);
-                return method.getResponseBodyAsString();
-            }
-            catch (Exception e)
-            {
-                return null;
+                try
+                {
+                    HttpClient client = new HttpClient();
+                    String exportUri = searchAndExportUri.toString()
+                            + "?cqlQuery="
+                            + URLEncoder.encode("escidoc.objid=" + itemId + " or escidoc.property.version.objid="
+                                    + itemId, "UTF-8") + "&exportFormat=" + publication.getExportFormat()
+                            + "&outputFormat=html_linked";
+                    GetMethod method = new GetMethod(exportUri);
+                    client.executeMethod(method);
+                    return method.getResponseBodyAsString();
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
             }
         }
         return null;

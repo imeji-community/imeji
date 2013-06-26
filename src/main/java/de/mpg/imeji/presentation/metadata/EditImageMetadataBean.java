@@ -122,7 +122,6 @@ public class EditImageMetadataBean
      */
     public String cancel() throws IOException
     {
-        System.out.println("cancel");
         redirectToView();
         return "";
     }

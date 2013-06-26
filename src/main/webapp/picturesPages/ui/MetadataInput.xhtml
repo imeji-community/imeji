@@ -66,7 +66,7 @@
 		</h:panelGroup>
 		<!-- METADATA TYPE PUBLICATION -->
 		<h:panelGroup rendered="#{metadata.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
-			<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.uri}"  rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}')">
+			<h:inputText id="inputPublicationURI" styleClass="xHuge_txtInput" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}')">
 				<f:converter converterId="URIConverter" />
 			</h:inputText>
 			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">

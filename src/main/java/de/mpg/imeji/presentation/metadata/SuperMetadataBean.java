@@ -88,6 +88,7 @@ public class SuperMetadataBean
     {
         ObjectHelper.copyAllFields(this, metadata);
         MetadataHelper.setConeID(metadata);
+        MetadataHelper.setCitationForPublication(metadata);
         return metadata;
     }
 

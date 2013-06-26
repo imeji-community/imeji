@@ -32,7 +32,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlType(propOrder = { "citation", "exportFormat", "uri", "statement" })
 public class Publication extends Metadata
 {
-    @j2jLiteral("http://imeji.org/terms/uri")
+    @j2jResource("http://imeji.org/terms/uri")
     private URI uri;
     @j2jLiteral("http://imeji.org/terms/citationStyle")
     private String exportFormat;

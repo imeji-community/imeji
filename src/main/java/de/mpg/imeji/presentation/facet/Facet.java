@@ -121,11 +121,11 @@ public class Facet
     /**
      * @return
      */
-    // public String getNotDefineType()
-    // {
-    // return ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(
-    // metadataURI);
-    // }
+    public String getNotDefineType()
+    {
+        return ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(
+                metadataURI);
+    }
     /**
      * True if the current {@link Facet} is a negation facet
      * 

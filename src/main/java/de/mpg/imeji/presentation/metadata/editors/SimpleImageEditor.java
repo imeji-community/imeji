@@ -59,7 +59,8 @@ public class SimpleImageEditor extends MetadataEditor
             {
                 if (MetadataHelper.isEmpty(eib.getMetadata().get(i).asMetadata()))
                 {
-                    eib.getMetadata().remove(i);
+                    System.out.println("remove " + eib.getMetadata().get(i).asMetadata().getTypeNamespace());
+                    i = i > 0 ? i - 1 : 0;
                 }
             }
         }

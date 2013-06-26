@@ -37,6 +37,12 @@ public class SortHelper
         return SortHelper.removeSortValue(l);
     }
 
+    /**
+     * Extract the value used by the sortering for this {@link String}. If no Sort value, return an emtpy {@link String}
+     * 
+     * @param s
+     * @return
+     */
     public final static String parseSortValue(String s)
     {
         String[] t = s.split(SortHelper.SORT_VALUE_REGEX);
@@ -47,11 +53,23 @@ public class SortHelper
         return "";
     }
 
+    /**
+     * Remove the Sort value in the given String.
+     * 
+     * @param s
+     * @return
+     */
     public final static String removeSortValue(String s)
     {
         return SORT_VALUE_PATTERN.split(s)[0];
     }
 
+    /**
+     * True if the {@link List} of String is sortable (i.e. that the String are defined with a sort value)
+     * 
+     * @param l
+     * @return
+     */
     public final static boolean isListToSort(List<String> l)
     {
         if (!l.isEmpty())
@@ -61,11 +79,24 @@ public class SortHelper
         return false;
     }
 
+    /**
+     * A a sort value to a {@link String}. The String is then sortable by imeji Sort implementation
+     * 
+     * @param s
+     * @param sortValue
+     * @return
+     */
     public final static String addSortValue(String s, String sortValue)
     {
         return s + SORT_VALUE_REGEX + sortValue;
     }
 
+    /**
+     * Remove the sort value to all element of the {@link List}
+     * 
+     * @param l
+     * @return
+     */
     public final static List<String> removeSortValue(List<String> l)
     {
         if (!isListToSort(l))
@@ -80,6 +111,12 @@ public class SortHelper
         return l1;
     }
 
+    /**
+     * Transform a {@link List} of {@link ComparableSearchResult} into a {@link List} of {@link String}
+     * 
+     * @param unsortedResults
+     * @return
+     */
     public final static List<String> toStringList(List<ComparableSearchResult> unsortedResults)
     {
         List<String> sortedResults = new ArrayList<String>(unsortedResults.size());
@@ -90,6 +127,14 @@ public class SortHelper
         return sortedResults;
     }
 
+    /**
+     * Transform a {@link List} of {@link String} into a {@link List} of {@link ComparableSearchResult} for the give
+     * {@link SortOrder}
+     * 
+     * @param l
+     * @param order
+     * @return
+     */
     public final static List<ComparableSearchResult> toComparableSearchResultList(List<String> l, SortOrder order)
     {
         List<ComparableSearchResult> csrl = new ArrayList<ComparableSearchResult>(l.size());

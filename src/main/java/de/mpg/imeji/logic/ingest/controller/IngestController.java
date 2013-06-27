@@ -2,16 +2,11 @@ package de.mpg.imeji.logic.ingest.controller;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBException;
-
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Controller for ingest

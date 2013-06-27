@@ -83,7 +83,8 @@ public class ProfileMapperTask extends SwingWorker<Collection<MetadataProfile>,V
 		return this.getMappedProfileObjects();
 	}
 	
-	public void done() {
+	@Override
+    public void done() {
 	    
 	}
 }

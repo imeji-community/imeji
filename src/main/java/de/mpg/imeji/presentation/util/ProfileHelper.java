@@ -12,7 +12,6 @@ import java.util.Map;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 
 /**
  * Helper methods related to {@link MetadataProfile}

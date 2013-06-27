@@ -177,15 +177,13 @@ public class MediaUtils
         try
         {
             imageInfo = new Info(filepath, true);
-            System.out.println("file Format: " + imageInfo.getImageFormat());
-            System.out.println("file Width: " + imageInfo.getImageWidth());
-            System.out.println("file Height: " + imageInfo.getImageHeight());
+            return imageInfo.getImageFormat();
         }
         catch (InfoException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return imageInfo.getImageFormat();
+        return null;
     }
 }

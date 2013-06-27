@@ -29,6 +29,7 @@
 package storage;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,6 +38,8 @@ import java.util.Arrays;
 
 import junit.framework.Assert;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import de.mpg.imeji.logic.storage.Storage;
@@ -46,6 +49,7 @@ import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Test {@link Storage}
@@ -67,6 +71,19 @@ public class StorageTest
      * Not working: * /
      */
     private static final String SPECIAL_CHARACHTERS = "!\"Â§$%&()=? '#_-.,";
+
+    @Before
+    public void cleanFiles()
+    {
+        try
+        {
+            FileUtils.cleanDirectory(new File(PropertyReader.getProperty("imeji.storage.path")));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Test for {@link InternalStorage}

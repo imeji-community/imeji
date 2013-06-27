@@ -32,8 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import junit.framework.Assert;
@@ -47,7 +45,6 @@ import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
-import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -114,6 +111,11 @@ public class StorageTest
         uploadReadDelete(LONG_NAME + ".png");
     }
 
+    /**
+     * Do upload - read - delete methods in a row
+     * 
+     * @param filename
+     */
     private void uploadReadDelete(String filename)
     {
         StorageController sc = new StorageController("internal");
@@ -142,6 +144,13 @@ public class StorageTest
         Assert.assertTrue(Arrays.hashCode(original) == Arrays.hashCode(stored));
     }
 
+    /**
+     * Read a file at the given path
+     * 
+     * @param path
+     * @return
+     * @throws FileNotFoundException
+     */
     private byte[] readFile(String path) throws FileNotFoundException
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

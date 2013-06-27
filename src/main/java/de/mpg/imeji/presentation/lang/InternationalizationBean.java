@@ -69,10 +69,10 @@ public class InternationalizationBean
     {
         // Add first languages out of properties
         languages = new ArrayList<SelectItem>();
-        languages.add(new SelectItem("", "--"));
+        languages.add(new SelectItem(null, "--"));
         languages.addAll(getsupportedLanguages(true));
         // add a separator
-        languages.add(new SelectItem("", "--"));
+        languages.add(new SelectItem(null, "--"));
         // Add the other languages (non supported)
         languages.addAll(getsupportedLanguages(false));
     }
@@ -133,7 +133,8 @@ public class InternationalizationBean
         List<SelectItem> l = new ArrayList<SelectItem>();
         for (SelectItem iso : isolanguages)
         {
-            if (supported && isSupported(iso.getValue().toString()))
+            if (supported && isSupported(iso.getValue().toString())
+                    || (!supported && !isSupported(iso.getValue().toString())))
             {
                 l.add(iso);
             }
@@ -173,31 +174,64 @@ public class InternationalizationBean
         }
     }
 
+    /**
+     * setter
+     * 
+     * @param currentLanguage
+     */
     public void setCurrentLanguage(String currentLanguage)
     {
         this.currentLanguage = currentLanguage;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getCurrentLanguage()
     {
         return currentLanguage;
     }
 
+    /**
+     * setter
+     * 
+     * @return
+     */
     public List<SelectItem> getLanguages()
     {
+        Iso639_1Helper iso639_1Helper = new Iso639_1Helper();
+        isolanguages = iso639_1Helper.getList();
+        initLanguagesMenu();
         return languages;
     }
 
+    /**
+     * setter
+     * 
+     * @param languages
+     */
     public void setLanguages(List<SelectItem> languages)
     {
         this.languages = languages;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<SelectItem> getInternationalizedLanguages()
     {
         return internationalizedLanguages;
     }
 
+    /**
+     * setter
+     * 
+     * @param internationalizedLanguages
+     */
     public void setInternationalizedLanguages(List<SelectItem> internationalizedLanguages)
     {
         this.internationalizedLanguages = internationalizedLanguages;

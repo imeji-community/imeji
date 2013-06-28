@@ -426,13 +426,31 @@
 			<artifactId>scifio</artifactId>
 			<version>4.4.8</version>
 		</dependency>
-		<!--  <dependency>
-			<groupId>openmicroscopy</groupId>
-			<artifactId>loci-tools</artifactId>
-			<version>4.4.8</version>
-			<type>pom</type>
-		</dependency>-->
+		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>loci-tools</artifactId> 
+			<version>4.4.8</version> <type>pom</type> </dependency> -->
 		<!-- End: bio formats dependencies -->
+
+		<!-- pdf handling -->
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>1.8.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15</artifactId>
+			<version>1.44</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcmail-jdk15</artifactId>
+			<version>1.44</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.icu</groupId>
+			<artifactId>icu4j</artifactId>
+			<version>3.8</version>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

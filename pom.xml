@@ -401,13 +401,38 @@
 		</dependency>
 		<!-- JAVA API lib for imagemagick -->
 		<dependency>
-		  <groupId>org.im4java</groupId>
-		  <artifactId>im4java</artifactId>
-		  <version>1.2.0</version>
+			<groupId>org.im4java</groupId>
+			<artifactId>im4java</artifactId>
+			<version>1.2.0</version>
 		</dependency>
-		<!-- Test with bioformats jar -->
-		<!-- <dependency> <groupId>org.loci.bioformats</groupId> <artifactId>bioformats</artifactId> 
-			<version>4.4.6</version> <type>pom.lastUpdated</type> </dependency> -->
+		<!-- Start: bio formats dependencies -->
+		<dependency>
+			<groupId>openmicroscopy</groupId>
+			<artifactId>bio-formats</artifactId>
+			<version>4.4.8</version>
+		</dependency>
+		<dependency>
+			<groupId>openmicroscopy</groupId>
+			<artifactId>loci-common</artifactId>
+			<version>4.4.8</version>
+		</dependency>
+		<dependency>
+			<groupId>openmicroscopy</groupId>
+			<artifactId>ome-xml</artifactId>
+			<version>4.4.8</version>
+		</dependency>
+		<dependency>
+			<groupId>openmicroscopy</groupId>
+			<artifactId>scifio</artifactId>
+			<version>4.4.8</version>
+		</dependency>
+		<!--  <dependency>
+			<groupId>openmicroscopy</groupId>
+			<artifactId>loci-tools</artifactId>
+			<version>4.4.8</version>
+			<type>pom</type>
+		</dependency>-->
+		<!-- End: bio formats dependencies -->
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

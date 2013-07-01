@@ -130,19 +130,16 @@
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
 	<managed-bean>
 		<managed-bean-name>AlbumImagesBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumImagesBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
 	<managed-bean>
 		<managed-bean-name>AlbumImageBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumImageBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
 	<!-- Users bean -->
 	<managed-bean>
 		<managed-bean-name>UsersBean</managed-bean-name>

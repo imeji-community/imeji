@@ -108,8 +108,8 @@ public class Person
     {
         this.role = role;
     }
-    
-    @XmlElements(value=@XmlElement(name = "organizationalunit", namespace = "http://purl.org/escidoc/metadata/profiles/0.1"))
+
+    @XmlElements(value = @XmlElement(name = "organizationalunit", namespace = "http://purl.org/escidoc/metadata/profiles/0.1"))
     public Collection<Organization> getOrganizations()
     {
         return organizations;
@@ -165,6 +165,11 @@ public class Person
         return s;
     }
 
+    /**
+     * The full text to search for this person
+     * 
+     * @return
+     */
     public String AsFullText()
     {
         String str = givenName + " " + familyName + " " + alternativeName;
@@ -173,5 +178,23 @@ public class Person
             str += " " + org.getName();
         }
         return str.trim();
+    }
+
+    @Override
+    public Person clone()
+    {
+        Person clone = new Person();
+        clone.alternativeName = this.alternativeName;
+        clone.completeName = this.completeName;
+        clone.familyName = this.familyName;
+        clone.givenName = this.givenName;
+        clone.identifier = this.identifier;
+        for (Organization org : this.organizations)
+        {
+            clone.organizations.add(org.clone());
+        }
+        clone.role = this.role;
+        clone.pos = this.pos;
+        return clone;
     }
 }

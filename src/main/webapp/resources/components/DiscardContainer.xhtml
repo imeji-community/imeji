@@ -11,7 +11,7 @@
 <composite:implementation>
 	<h:panelGroup id="dialogWithdraw"
 		class="half_area0_p8 bordst0 shadst1 dialogbox" style="display: none;">
-		<h:form id="discardForm" onsubmit="return checkDiscardComment(this);">
+		<h:form id="discardForm">
 			<h:panelGroup styleClass="half_area0_p8">
 				<h:outputText value="#{msg.confirmation_withdraw_collection}"
 					rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}" />
@@ -19,13 +19,21 @@
 					rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}" />
 				<h:outputText id="errorMessage"
 					styleClass="quad_area0_p0 messageError" value="" />
+				<br/>
+				<h:outputText value="#{lbl.images_withdraw_comment_col}"
+						      styleClass="messageError"
+						      rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}"/>
+				<h:outputText value="#{lbl.images_withdraw_comment_alb}"
+						      styleClass="messageError"
+						      rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}"/>				
 				<h:inputTextarea id="discardComment"
-					value="#{cc.attrs.discardComment}" rows="6"
-					styleClass="quad_area0_p0 discardComment"
-					valueChangeListener="#{cc.attrs.bean.discardCommentListener}" immediate="true">
-				</h:inputTextarea>
+					value="#{cc.attrs.discardComment}"
+					valueChangeListener="#{cc.attrs.bean.discardCommentListener}"
+					rows="6" styleClass="quad_area0_p0">
+					<f:ajax execute="@this" render="buttonDiscard" event="keyup" />
+				</h:inputTextarea>				
 			</h:panelGroup>
-			<h:panelGroup styleClass="half_area0_p8">
+			<h:panelGroup class="half_area0_p8" id="buttonDiscard">
 				<div class="large_txtBtn">
 					<h:outputLink href="#" class="large_txtBtn dialogCancelButton"
 						rendered="#{cc.attrs.index == null}"
@@ -38,27 +46,15 @@
 						<h:outputText value="#{lbl.cancel}" />
 					</h:outputLink>
 				</div>
-				<h:panelGroup id="buttonDiscard"
-					styleClass="xLarge_txtBtn tiny_marginLExcl">
-					<h:commandButton id="btnDiscard" action="#{cc.attrs.bean.withdraw}"
+				<h:panelGroup styleClass="xLarge_txtBtn tiny_marginLExcl">
+					<h:commandButton id="btnDiscardContainer"
+						action="#{cc.attrs.bean.withdraw}"
 						value="#{lbl.withdraw}"
 						styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"
-						type="submit"></h:commandButton>
+						onclick="if(#{cc.attrs.discardComment == ''}){return false};"/>
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:form>
 	</h:panelGroup>
-	<script>
-		function checkDiscardComment(form)
-		{
-			if($(form).find(".discardComment").val() == ''){
-				$(form).find('.messageError').html('#{msg.error_withdraw_comment}');
-				return false;
-			} 
-			else{
-				return true;
-			}
-		}
-	</script>
 </composite:implementation>
 </html>

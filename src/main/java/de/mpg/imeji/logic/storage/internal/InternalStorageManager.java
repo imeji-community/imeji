@@ -40,6 +40,7 @@ import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.MediaUtils;
+import de.mpg.imeji.logic.storage.util.PdfUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -136,7 +137,7 @@ public class InternalStorageManager
      */
     public String transformUrlToPath(String url)
     {
-        String filename = getFileName(url, StringHelper.urlSeparator);
+        //String filename = getFileName(url, StringHelper.urlSeparator);
         return url.replace(storageUrl, storagePath).replace(StringHelper.urlSeparator, StringHelper.fileSeparator);
         // .replace(filename, StringHelper.normalizeFilename(filename));
     }
@@ -285,12 +286,27 @@ public class InternalStorageManager
     	}
     	else{
     		write(bytes, transformUrlToPath(item.getOriginalUrl()));
-    		write(ImageUtils.transformImage(bytes, FileResolution.WEB,
-    				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-    				transformUrlToPath(item.getWebUrl()));
-    		write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
-    				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-    				transformUrlToPath(item.getThumbnailUrl()));
+
+    		// hn: pdf handling
+    		if(StorageUtils.getMimeType("pdf").endsWith(StringHelper.getFileExtension(item.getFileName())))
+    		{
+    			byte[] newBytes = PdfUtils.pdfsToImageBytes(bytes);
+    			write(ImageUtils.transformImage(newBytes, FileResolution.WEB,
+        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getWebUrl()))),
+        				transformUrlToPath(item.getWebUrl()));
+    			write(ImageUtils.transformImage(newBytes, FileResolution.THUMBNAIL,
+        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getThumbnailUrl()))),
+        				transformUrlToPath(item.getThumbnailUrl()));
+    		}
+    		else
+    		{
+    			write(ImageUtils.transformImage(bytes, FileResolution.WEB,
+        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
+        				transformUrlToPath(item.getWebUrl()));
+        		write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
+        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
+        				transformUrlToPath(item.getThumbnailUrl()));
+    		}
     	}
 		return item;
     }

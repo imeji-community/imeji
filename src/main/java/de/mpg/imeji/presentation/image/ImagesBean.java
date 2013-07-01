@@ -153,23 +153,18 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         sortMenu.add(new SelectItem(null, "--"));
         sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel("sort_img_date_created")));
         sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel("sort_img_date_mod")));
-        sortMenu.add(new SelectItem(SearchIndex.names.col, session.getLabel("sort_img_collection")));
+        sortMenu.add(new SelectItem(SearchIndex.names.cont_title, session.getLabel("sort_img_collection")));
     }
 
     @Override
     public List<ThumbnailBean> retrieveList(int offset, int limit)
     {
-        // load images
+        // load the item
         Collection<Item> items = loadImages(searchResult.getResults(), offset, limit);
-        try
-        {
+        // Init the labels for the item
+        if (!items.isEmpty())
             ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init((List<Item>)items);
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // Return the item as thumbnailBean
         return ImejiFactory.imageListToThumbList(items);
     }
 
@@ -279,15 +274,21 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
         FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
-        if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
+        if (hs != null && fs != null)
         {
-            hs.getCurrentPage().setFilters(fs.getFilters());
-            hs.getCurrentPage().setQuery(fs.getWholeQuery());
-        }
-        else
-        {
-            hs.getCurrentPage().setFilters(fs.getFilters());
-            hs.getCurrentPage().setQuery(fs.getWholeQuery());
+            if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
+            {
+                if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("h") != null)
+                {
+                    hs.getCurrentPage().setFilters(fs.getFilters());
+                    hs.getCurrentPage().setQuery(fs.getWholeQuery());
+                }
+                else
+                {
+                    hs.getCurrentPage().setFilters(fs.getFilters());
+                    hs.getCurrentPage().setQuery(fs.getWholeQuery());
+                }
+            }
         }
     }
 
@@ -632,7 +633,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         for (ThumbnailBean tb : getCurrentPartList())
         {
-            if (tb.isEditable())
+            if (tb.isDeletable())
             {
                 return true;
             }
@@ -707,5 +708,4 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     {
         return searchResult;
     }
-    
 }

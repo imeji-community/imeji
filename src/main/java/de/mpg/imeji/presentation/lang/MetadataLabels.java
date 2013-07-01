@@ -38,7 +38,7 @@ public class MetadataLabels
      * @param items
      * @throws Exception
      */
-    public void init(List<Item> items) throws Exception
+    public void init(List<Item> items)
     {
         labels = new HashMap<URI, String>();
         Map<URI, MetadataProfile> profiles = ProfileHelper.loadProfiles(items);
@@ -51,7 +51,7 @@ public class MetadataLabels
      * @param profiles
      * @throws Exception
      */
-    public void init1(List<MetadataProfile> profiles) throws Exception
+    public void init1(List<MetadataProfile> profiles)
     {
         HashMap<URI, String> map = new HashMap<URI, String>();
         for (MetadataProfile p : profiles)
@@ -71,7 +71,7 @@ public class MetadataLabels
      * @param profile
      * @throws Exception
      */
-    public void init(MetadataProfile profile) throws Exception
+    public void init(MetadataProfile profile)
     {
         labels = new HashMap<URI, String>();
         internationalizedLabels = new HashMap<URI, String>();
@@ -81,14 +81,14 @@ public class MetadataLabels
             for (Statement s : profile.getStatements())
             {
                 boolean hasInternationalizedLabel = false;
-                boolean hasLabel = false;
+                boolean hasEnglishLabel = false;
                 String labelFallBack = null;
                 for (LocalizedString ls : s.getLabels())
                 {
                     if (ls.getLang().equals("en"))
                     {
                         labels.put(s.getId(), ls.getValue());
-                        hasLabel = true;
+                        hasEnglishLabel = true;
                     }
                     if (ls.getLang().equals(lang))
                     {
@@ -97,7 +97,7 @@ public class MetadataLabels
                     }
                     labelFallBack = ls.getValue();
                 }
-                if (!hasLabel)
+                if (!hasEnglishLabel)
                 {
                     labels.put(s.getId(), labelFallBack);
                 }
@@ -109,31 +109,61 @@ public class MetadataLabels
         }
     }
 
+    /**
+     * Getter
+     * 
+     * @return
+     */
     public String getLang()
     {
         return lang;
     }
 
+    /**
+     * Setter
+     * 
+     * @param lang
+     */
     public void setLang(String lang)
     {
         this.lang = lang;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public Map<URI, String> getLabels()
     {
         return labels;
     }
 
+    /**
+     * setter
+     * 
+     * @param labels
+     */
     public void setLabels(Map<URI, String> labels)
     {
         this.labels = labels;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public Map<URI, String> getInternationalizedLabels()
     {
         return internationalizedLabels;
     }
 
+    /**
+     * setter
+     * 
+     * @param internationalizedLabels
+     */
     public void setInternationalizedLabels(Map<URI, String> internationalizedLabels)
     {
         this.internationalizedLabels = internationalizedLabels;

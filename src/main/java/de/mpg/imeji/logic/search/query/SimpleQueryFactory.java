@@ -52,7 +52,8 @@ public class SimpleQueryFactory
                         SimpleSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair)))
                 .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType))
                 .replace("XXX_SEARCH_TYPE_ELEMENT_XXX", rdfType)
-                .replace("XXX_SORT_ELEMENT_XXX", getSortElement(sortCriterion))
+                .replace("XXX_SORT_ELEMENT_XXX",
+                        getSortElement(sortCriterion, "http://imeji.org/terms/collection".equals(rdfType)))
                 .replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
     }
 
@@ -90,7 +91,7 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.col.name().equals(pair.getIndex().getName()))
         {
-            return "";
+            return " FILTER(" + getSimpleFilter(pair, "c") + ") .";
         }
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
@@ -199,7 +200,7 @@ public class SimpleQueryFactory
      * @param sortCriterion
      * @return
      */
-    private static String getSortElement(SortCriterion sortCriterion)
+    private static String getSortElement(SortCriterion sortCriterion, boolean collection)
     {
         if (sortCriterion != null && sortCriterion.getIndex() != null)
         {
@@ -217,7 +218,8 @@ public class SimpleQueryFactory
             }
             else if (SearchIndex.names.cont_title.name().equals(sortCriterion.getIndex().getName()))
             {
-                return ". ?s <http://imeji.org/terms/container/metadata> ?cmd . ?cmd <"
+                return (collection ? " . ?s" : " . ?c")
+                        + " <http://imeji.org/terms/container/metadata> ?title . ?title <"
                         + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
         }

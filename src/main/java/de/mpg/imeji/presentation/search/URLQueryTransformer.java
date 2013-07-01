@@ -273,6 +273,7 @@ public class URLQueryTransformer
     public static String transform2URL(SearchQuery searchQuery)
     {
         String query = "";
+        String logical = "";
         for (SearchElement se : searchQuery.getElements())
         {
             switch (se.getType())
@@ -282,26 +283,30 @@ public class URLQueryTransformer
                     {
                         query += " NOT";
                     }
-                    query += "(" + transform2URL(new SearchQuery(((SearchGroup)se).getGroup())) + ")";
+                    String g = transform2URL(new SearchQuery(((SearchGroup)se).getGroup()));
+                    if (!"".equals(g))
+                        query += logical + "(" + g + ")";
                     break;
                 case LOGICAL_RELATIONS:
-                    query += " " + ((SearchLogicalRelation)se).getLogicalRelation().name() + " ";
+                    logical = " " + ((SearchLogicalRelation)se).getLogicalRelation().name() + " ";
                     break;
                 case PAIR:
                     if (((SearchPair)se).isNot())
                     {
                         query += " NOT";
                     }
-                    query += ((SearchPair)se).getIndex().getName() + operator2URL(((SearchPair)se).getOperator())
-                            + searchValue2URL(((SearchPair)se));
+                    query += logical + ((SearchPair)se).getIndex().getName()
+                            + operator2URL(((SearchPair)se).getOperator()) + searchValue2URL(((SearchPair)se));
                     break;
                 case METADATA:
                     if (((SearchMetadata)se).isNot())
                     {
                         query += " NOT";
                     }
-                    query += transformStatementToIndex(((SearchMetadata)se).getStatement(), ((SearchPair)se).getIndex())
-                            + operator2URL(((SearchMetadata)se).getOperator()) + searchValue2URL(((SearchMetadata)se));
+                    query += logical
+                            + transformStatementToIndex(((SearchMetadata)se).getStatement(),
+                                    ((SearchPair)se).getIndex()) + operator2URL(((SearchMetadata)se).getOperator())
+                            + searchValue2URL(((SearchMetadata)se));
                     break;
                 default:
                     break;

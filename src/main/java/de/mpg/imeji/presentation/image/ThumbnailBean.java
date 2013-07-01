@@ -19,7 +19,6 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
@@ -93,7 +92,6 @@ public class ThumbnailBean
         Item im = new Item();
         im.getMetadataSets().add(ImejiFactory.newMetadataSet(profile));
         l.add(im);
-        ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(l);
         return "";
     }
 

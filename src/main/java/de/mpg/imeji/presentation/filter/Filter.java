@@ -75,11 +75,21 @@ public class Filter extends Facet
         this.label = label;
     }
 
+    /**
+     * Getter
+     * 
+     * @return
+     */
     public URI getCollectionID()
     {
         return collectionID;
     }
 
+    /**
+     * Setter
+     * 
+     * @param collectionID
+     */
     public void setCollectionID(URI collectionID)
     {
         this.collectionID = collectionID;
@@ -97,31 +107,61 @@ public class Filter extends Facet
         this.count = count;
     }
 
+    /**
+     * Getter
+     * 
+     * @return
+     */
     public String getQuery()
     {
         return query;
     }
 
+    /**
+     * setter
+     * 
+     * @param query
+     */
     public void setQuery(String query)
     {
         this.query = query;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public String getRemoveQuery()
     {
         return removeQuery;
     }
 
+    /**
+     * setter
+     * 
+     * @param removeQuery
+     */
     public void setRemoveQuery(String removeQuery)
     {
         this.removeQuery = removeQuery;
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public SearchQuery getSearchQuery()
     {
         return searchQuery;
     }
 
+    /**
+     * setter
+     * 
+     * @param searchQuery
+     */
     public void setSearchQuery(SearchQuery searchQuery)
     {
         this.searchQuery = searchQuery;

@@ -190,6 +190,9 @@ public class StorageUtils
         {
             //still not support directly played in browser
         	return "video/x-flv";
+        }else if ("pdf".equals(format))
+        {
+            return "application/"+"pdf";
         }
         return "video/" + format;
     }

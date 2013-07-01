@@ -6,7 +6,7 @@ import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
 
-import de.mpg.imeji.logic.ingest.jaxb.JaxbIngestProfile;
+import de.mpg.imeji.logic.ingest.jaxb.JaxbGenericObject;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
 public class ItemSchemaFactory
@@ -19,7 +19,7 @@ public class ItemSchemaFactory
         String xmlOutputFilename = "mdp-output.xml";
         try
         {
-            new JaxbIngestProfile().marshalMdProfile(xmlOutputFilename, mdp);
+            new JaxbGenericObject<MetadataProfile>(MetadataProfile.class).marshal(xmlOutputFilename, mdp);
         }
         catch (JAXBException e)
         {

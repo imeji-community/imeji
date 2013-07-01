@@ -1,18 +1,20 @@
 package pdf;
 
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
+
 import org.apache.pdfbox.exceptions.COSVisitorException;
+import org.apache.pdfbox.io.RandomAccess;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.util.PDFImageWriter;
 import org.junit.Test;
 
 public class PdfHandlingTest {
@@ -109,16 +111,32 @@ public class PdfHandlingTest {
 	public void createImageFromPdfTest() throws IOException,
 			COSVisitorException {
 		// Lead a pdf document
-		PDDocument document = PDDocument.load(new File(
-				"src/test/resources/pdf/pdfWith4Pages.pdf"));
+		
+		RandomAccess rac = null;
+		
+		PDDocument document = PDDocument.loadNonSeq(new File(
+				"src/test/resources/pdf/249scan.pdf"), rac);
 
-		int i = new Random().nextInt(document.getNumberOfPages()) + 1;
-		System.out.println(i);
-		PDFImageWriter imageWriter = new PDFImageWriter();
-		imageWriter.writeImage(document, "png", null, i, i,
-				"src/test/resources/pdf/image_", BufferedImage.TYPE_INT_RGB,
-				300);
+		@SuppressWarnings("unchecked")
+		List<PDPage> pages = document.getDocumentCatalog().getAllPages();
+		
+		 PDPage page = pages.get(0);
+		 BufferedImage bi = page.convertToImage();
+		
+		
+		 ImageIO.write(bi, "png", new File("src/test/resources/pdf/test.png"));
 
+		// PDFImageWriter piw = new PDFImageWriter();
+		// piw.writeImage(document, "png", null, 1, 1,
+		// "src/test/resources/pdf/test_");
+
+		// int i = new Random().nextInt(document.getNumberOfPages()) + 1;
+		// System.out.println(i);
+		// PDFImageWriter imageWriter = new PDFImageWriter();
+		// imageWriter.writeImage(document, "png", null, i, i,
+		// "src/test/resources/pdf/image_", BufferedImage.TYPE_INT_RGB,
+		// 300);
+		//
 		// finally make sure that the document is properly
 		// closed.
 		document.close();

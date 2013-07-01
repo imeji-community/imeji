@@ -22,8 +22,6 @@ public class PdfUtils {
 	final static int DPI_WEB = 92;
 	final static int DPI_THUMB = 72;
 	final static int DPI_ORIGINAL = 300;
-	
-	static enum RES { RES_ORI, RES_WEB, RES_THUMB};
 
 	/**
 	 * Gets byte array of an uploaded file as well in a provided byte array.
@@ -34,7 +32,7 @@ public class PdfUtils {
 	 */
 	public static byte[] pdfsToImageBytes(byte[] bytes) throws FileNotFoundException, IOException {
 		PDDocument pdfDoc = PDDocument.load(new ByteArrayInputStream(bytes));
-		byte[] newBytes = PdfUtils.pdfFileToByteAray(pdfDoc, PdfUtils.PAGENUMBERTOIMAGE, BufferedImage.TYPE_INT_RGB, PdfUtils.DPI_THUMB);
+		byte[] newBytes = PdfUtils.pdfFileToByteAray(pdfDoc, PdfUtils.PAGENUMBERTOIMAGE, BufferedImage.TYPE_INT_RGB, PdfUtils.DPI_ORIGINAL);
 		pdfDoc.close();
 		return newBytes;
 	}

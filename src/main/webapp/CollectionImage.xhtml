@@ -1,32 +1,63 @@
-<ui:composition template="templates/template_image.xhtml" 
- 	xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="templates/sub_template/template_image.xhtml" 
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="imageBean" value="#{CollectionImageBean}" />
-	<ui:param name="headline" value="#{lbl.details}" />
-	<ui:define name="contentMenu">
-		<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}" rendered="true">
-			<h:outputText value="#{lbl.collection_home}"/>
-		</h:outputLink>			
+	<ui:param name="headline" value="#{lbl.details}" />	
+	
+	
+	<ui:define name="actionsMenu">
+		<!-- content menu starts here -->
+		<h:panelGroup layout="block" styleClass="imj_contentMenu">
+			<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}" rendered="true">
+				<h:outputText value="#{lbl.collection_home}"/>
+			</h:outputLink>			
 		
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-		<h:outputLink value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/#{Navigation.browsePath}?q=" styleClass="imj_contentMenuItem">
-			<h:outputText value="#{lbl.view_images}"/>
-		</h:outputLink>
+			<h:outputText styleClass="imj_contentMenuSeparator" />
+			
+			<h:outputLink value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/#{Navigation.browsePath}?q=" styleClass="imj_contentMenuItem">
+				<h:outputText value="#{lbl.view_images}"/>
+			</h:outputLink>
 		
-		<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputText styleClass="imj_contentMenuSeparator" />
 		
-		<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
-			<h:outputText value="#{lbl.collection_metadata}"/>
-		</h:outputLink>
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
+				<h:outputText value="#{lbl.collection_metadata}"/>
+			</h:outputLink>
 		
-		<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputText styleClass="imj_contentMenuSeparator" />
 		
-		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{CollectionImagesBean.editable}">
-			<h:outputText value="#{lbl.upload_images}"></h:outputText>
-		</h:outputLink>
+			<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{CollectionImagesBean.editable}">
+				<h:outputText value="#{lbl.upload_images}"></h:outputText>
+			</h:outputLink>
+		</h:panelGroup>
+		<!-- content menu END -->
 	</ui:define>
+	
+	
+	<ui:define name="selectionInfoPanel">
+		<ui:include src="templates/component/images/selectionInfoPanelCollections.xhtml"/>
+	</ui:define>
+	
+	<ui:define name="paginatorTop">
+		<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
+			<h:panelGroup styleClass="imj_simplePageBrowser">
+				<h:outputLink value="#{imageBean.browse.previous}" styleClass="imj_backwardButton" disabled="#{imageBean.browse.previous == null}">
+					<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
+				</h:outputLink>
+				
+				<h:outputLink value="#{imageBean.browse.next}" styleClass="imj_forwardButton" disabled="#{imageBean.browse.next == null}">
+					<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
+				</h:outputLink>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+	
+	
+	
+	<ui:remove>
+	
 	<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 			<ui:include src="./include/History.xhtml"></ui:include><br/>
@@ -36,4 +67,7 @@
 			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})"  styleClass="free_area2_p6 xHuge_marginLIncl"/>
 		</h:panelGroup>
 	</ui:define>
+	
+	</ui:remove>
+	
 </ui:composition>

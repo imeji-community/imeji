@@ -12,12 +12,15 @@ var offset = 2;
  * onfocus="getDatasourceUrl('#{statement.vocabulary}')"
  */
 function getDatasourceUrl(url) {
-	alert(url);
 	datasourceUrl = url;
 	offset = 2;
 }
-
-function getDatasourceUrl(url, startAfter) {
+/*
+ * Same a getDatasourceUrl, but with a fixed offset. This allow to force the
+ * number of character to wait for before starting the suggest
+ * 
+ */
+function getDatasourceUrlWithFixedDelay(url, startAfter) {
 	datasourceUrl = url;
 	offset = startAfter;
 }
@@ -56,7 +59,7 @@ $(function() {
 						 * label&value into result.
 						 */
 						source : function(request, response) {
-							$.getJSON("/autocompleter", {
+							$.getJSON("./autocompleter", {
 								searchkeyword : request.term,
 								datasource : datasourceUrl
 							}, function(jsonData) {

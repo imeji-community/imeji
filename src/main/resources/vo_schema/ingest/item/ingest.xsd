@@ -88,7 +88,7 @@
 
 	<xs:complexType name="metadata" abstract="true">
 		<xs:sequence>
-			<xs:element ref="imeji:position" />
+			<xs:element ref="imeji:position" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" />
 	</xs:complexType>
@@ -108,8 +108,8 @@
 		<xs:complexContent>
 			<xs:extension base="metadata">
 				<xs:sequence>
-					<xs:element ref="imeji:number"  minOccurs="1"/>
-					<xs:element ref="imeji:statement"  minOccurs="1" />
+					<xs:element ref="imeji:number" minOccurs="1" />
+					<xs:element ref="imeji:statement" minOccurs="1" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -120,8 +120,8 @@
 			<xs:extension base="metadata">
 				<xs:sequence>
 					<xs:element ref="imeji:coneId" minOccurs="0" />
-					<xs:element ref="foaf:person"  minOccurs="1" />
-					<xs:element ref="imeji:statement"  minOccurs="1" />
+					<xs:element ref="foaf:person" minOccurs="1" />
+					<xs:element ref="imeji:statement" minOccurs="1" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -129,27 +129,27 @@
 
 	<xs:complexType name="person">
 		<xs:sequence>
-			<xs:element ref="eterms:alternative-name"  minOccurs="1" />
-			<xs:element ref="eterms:complete-name"  minOccurs="1" />
-			<xs:element ref="eterms:family-name"  minOccurs="1" />
-			<xs:element ref="eterms:given-name"  minOccurs="1" />
-			<xs:element ref="dc:identifier"  minOccurs="1" />
-			<xs:element ref="eprofiles:organizationalunit"  minOccurs="1"
+			<xs:element ref="eterms:alternative-name" minOccurs="1" />
+			<xs:element ref="eterms:complete-name" minOccurs="1" />
+			<xs:element ref="eterms:family-name" minOccurs="1" />
+			<xs:element ref="eterms:given-name" minOccurs="0" />
+			<xs:element ref="dc:identifier" minOccurs="0" />
+			<xs:element ref="eprofiles:organizationalunit" minOccurs="1"
 				maxOccurs="unbounded" />
-			<xs:element ref="imeji:position" />
-			<xs:element ref="eterms:role"  minOccurs="1" />
+			<xs:element ref="imeji:position" minOccurs="0" />
+			<xs:element ref="eterms:role" minOccurs="0" />
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" />
 	</xs:complexType>
 
 	<xs:complexType name="organization">
 		<xs:sequence>
-			<xs:element ref="eterms:city" minOccurs="1" />
-			<xs:element ref="eterms:country"  minOccurs="1" />
-			<xs:element ref="dcterms:description" minOccurs="1" />
-			<xs:element ref="dcterms:identifier"  minOccurs="1" />
-			<xs:element ref="dcterms:title"  minOccurs="1" />
-			<xs:element ref="imeji:position" />
+			<xs:element ref="eterms:city" minOccurs="0" />
+			<xs:element ref="eterms:country" minOccurs="0" />
+			<xs:element ref="dcterms:description" minOccurs="0" />
+			<xs:element ref="dcterms:identifier" minOccurs="0" />
+			<xs:element ref="dcterms:title" minOccurs="1" />
+			<xs:element ref="imeji:position" minOccurs="0" />
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" />
 	</xs:complexType>
@@ -158,9 +158,9 @@
 		<xs:complexContent>
 			<xs:extension base="metadata">
 				<xs:sequence>
-					<xs:element ref="imeji:date"  minOccurs="1" />
-					<xs:element ref="imeji:time" />
-					<xs:element ref="imeji:statement"  minOccurs="1" />
+					<xs:element ref="imeji:date" minOccurs="1" />
+					<xs:element ref="imeji:time" minOccurs="0" />
+					<xs:element ref="imeji:statement" minOccurs="1" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -170,10 +170,10 @@
 		<xs:complexContent>
 			<xs:extension base="metadata">
 				<xs:sequence>
-					<xs:element ref="imeji:latitude"  minOccurs="1"/>
+					<xs:element ref="imeji:latitude" minOccurs="1" />
 					<xs:element ref="imeji:longitude" minOccurs="1" />
 					<xs:element ref="dcterms:title" minOccurs="1" />
-					<xs:element ref="imeji:statement"  minOccurs="1" />
+					<xs:element ref="imeji:statement" minOccurs="1" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -183,9 +183,9 @@
 		<xs:complexContent>
 			<xs:extension base="metadata">
 				<xs:sequence>
-					<xs:element ref="dc:identifier"  minOccurs="1" />
-					<xs:element ref="imeji:license"  minOccurs="1" />
-					<xs:element ref="imeji:statement"  minOccurs="1"/>
+					<xs:element ref="dc:identifier" minOccurs="1" />
+					<xs:element ref="imeji:license" minOccurs="1" />
+					<xs:element ref="imeji:statement" minOccurs="1" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -195,9 +195,9 @@
 		<xs:complexContent>
 			<xs:extension base="metadata">
 				<xs:sequence>
-					<xs:element ref="rdfs:label"  minOccurs="1" />
-					<xs:element ref="imeji:uri"  minOccurs="1" />
-					<xs:element ref="imeji:statement"  minOccurs="1" />
+					<xs:element ref="rdfs:label" minOccurs="1" />
+					<xs:element ref="imeji:uri" minOccurs="1" />
+					<xs:element ref="imeji:statement" minOccurs="1" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -209,8 +209,8 @@
 				<xs:sequence>
 					<xs:element ref="imeji:citation" minOccurs="0" />
 					<xs:element ref="imeji:citationStyle" minOccurs="0" />
-					<xs:element ref="imeji:uri"  minOccurs="1" />
-					<xs:element ref="imeji:statement"  minOccurs="1" />
+					<xs:element ref="imeji:uri" minOccurs="1" />
+					<xs:element ref="imeji:statement" minOccurs="1" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -231,16 +231,16 @@
 
 	<xs:complexType name="statement">
 		<xs:sequence>
-			<xs:element ref="imeji:isDescription"  minOccurs="1"/>
+			<xs:element ref="imeji:isDescription" minOccurs="1" />
 			<xs:element ref="rdfs:label" minOccurs="1" maxOccurs="unbounded" />
 			<xs:element ref="imeji:literalConstraint" minOccurs="0"
 				maxOccurs="unbounded" />
-			<xs:element ref="imeji:maxOccurs"  minOccurs="1"/>
-			<xs:element ref="imeji:minOccurs"  minOccurs="1" />
+			<xs:element ref="imeji:maxOccurs" minOccurs="1" />
+			<xs:element ref="imeji:minOccurs" minOccurs="1" />
 			<xs:element ref="imeji:parent" minOccurs="0" />
-			<xs:element ref="imeji:position"  minOccurs="1"/>
-			<xs:element ref="imeji:isPreview"  minOccurs="1"/>
-			<xs:element ref="imeji:restricted"  minOccurs="1"/>
+			<xs:element ref="imeji:position" minOccurs="1" />
+			<xs:element ref="imeji:isPreview" minOccurs="1" />
+			<xs:element ref="imeji:restricted" minOccurs="1" />
 			<xs:element ref="dcterms:type" minOccurs="1" />
 			<xs:element ref="dcam:VocabularyEncodingScheme" minOccurs="0" />
 		</xs:sequence>

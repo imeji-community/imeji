@@ -50,11 +50,11 @@ public class IngestProfileController
         original.setStatements(mdp.getStatements());
         try
         {
-            pc.update(mdp, user);
+            pc.update(original, user);
         }
         catch (Exception e)
         {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
         pc.removeMetadataWithoutStatement();
     }

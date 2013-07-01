@@ -62,10 +62,6 @@ public class IngestItemController
         itemList = copyIngestedMetadataToCurrentItem(itemList);
         try
         {
-            /*
-             * TODO: This part pertains to the content validator, not finished yet
-             * ItemContentValidator.validate(itemList);
-             */
             ItemContentValidator.validate(itemList);
             ItemMapperTask im = new ItemMapperTask(itemList);
             im.execute();

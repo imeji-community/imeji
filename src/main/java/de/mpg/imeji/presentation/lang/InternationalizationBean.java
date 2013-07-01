@@ -24,7 +24,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class InternationalizationBean
 {
     private List<SelectItem> languages = null;
-    List<SelectItem> isolanguages = null;
+    private List<SelectItem> isolanguages = null;
     private String currentLanguage = "en";
     private SessionBean session = null;
     private List<SelectItem> internationalizedLanguages;
@@ -201,9 +201,6 @@ public class InternationalizationBean
      */
     public List<SelectItem> getLanguages()
     {
-        Iso639_1Helper iso639_1Helper = new Iso639_1Helper();
-        isolanguages = iso639_1Helper.getList();
-        initLanguagesMenu();
         return languages;
     }
 

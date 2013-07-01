@@ -12,8 +12,9 @@ var offset = 2;
  * onfocus="getDatasourceUrl('#{statement.vocabulary}')"
  */
 function getDatasourceUrl(url) {
+	alert(url);
 	datasourceUrl = url;
-	 offset = 2;
+	offset = 2;
 }
 
 function getDatasourceUrl(url, startAfter) {

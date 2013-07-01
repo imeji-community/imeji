@@ -58,6 +58,7 @@ public class autocompleter extends HttpServlet
         String suggest = request.getParameter("searchkeyword");
         String datasource = request.getParameter("datasource");
         String responseString = "";
+        System.out.println("suggest " + suggest);
         if (suggest.isEmpty())
         {
             suggest = "a";

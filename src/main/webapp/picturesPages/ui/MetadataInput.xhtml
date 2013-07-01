@@ -115,7 +115,7 @@
 		<!-- METADATA TYPE GEOLOCATION -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#geolocation'}">
 			<h:outputLabel value="#{lbl.name}" styleClass="huge_label" />
-			<h:inputText id="inputLocationName" styleClass="xHuge_txtInput" value="#{metadata.name}" immediate="true" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"  onfocus="getDatasourceUrl('#{statement.vocabulary}')" />
+			<h:inputText id="inputLocationName" styleClass="xHuge_txtInput" value="#{metadata.name}" immediate="true" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"  onfocus="alert('aaa');getDatasourceUrl('#{statement.vocabulary}')" />
 			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.name}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>

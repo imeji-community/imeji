@@ -859,8 +859,8 @@ cut second ?
     display: inline;
     /*overflow: hidden;*/
     width: 81.3636em;
-    height: 2.4545em;
-    max-height: 2.4545em;
+    height: 3.0em; /*2.4545em*/
+    max-height: 3.0em; /*2.4545em;*/
     margin: -0.500em 0.0909em 0 5.273em; /*5.74em*/
     padding: 0.2727em 0 0 0;
     /* text-transform: uppercase;*/ 
@@ -920,7 +920,7 @@ cut second ?
     color: #F0F0F0;
 }
 
-/* ===[ SiteHeader - Content Sub Section (Content-Menus) ]===
+/* ===[ SiteHeader - actionsMenu ]===
    ================================================== */
 
 /* small_marginLIncl subHeaderSection   */
@@ -948,20 +948,12 @@ cut second ?
 /* .contentMenu .sub  */
 
 .imj_contentMenu {
-	margin-top: 0.500em;
-    padding-top: 0;
-    /*float: left;*/
-    display: inline;
-    overflow: hidden;
-    height: 1.6363em;
-    
-    text-transform: uppercase;
-    /*line-height: normal;*/
-    letter-spacing: 0.045em; /*0.091em;*/
+	clear: both;
+	width: 86.95%;
+	padding: 0 6.5%;
+	text-transform: uppercase;
+	letter-spacing: 0.045em; /*0.091em;*/
 	
-	width: 91.75%;
-    padding: 0 4%;
-    margin-bottom: 0.5em;
 }
 
 /* free_area0 span - template_paginator_containers.xhtml   */
@@ -1019,7 +1011,7 @@ span.imj_contentMenuItem {
 
 
 
-/* ===[ Content - SubMenu ]=== *** ACTION MENU ***
+/* ===[ Content - SubMenu ]=== *** actionsMenu ***
    ================================================== */
 
 /* .contentMenu * !!!

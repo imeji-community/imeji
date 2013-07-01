@@ -31,7 +31,7 @@ public class PdfUtils {
 	 * @throws IOException
 	 */
 	public static byte[] pdfsToImageBytes(byte[] bytes) throws FileNotFoundException, IOException {
-		PDDocument pdfDoc = PDDocument.load(new ByteArrayInputStream(bytes));
+		PDDocument pdfDoc = PDDocument.loadNonSeq(new ByteArrayInputStream(bytes), null);
 		byte[] newBytes = PdfUtils.pdfFileToByteAray(pdfDoc, PdfUtils.PAGENUMBERTOIMAGE, BufferedImage.TYPE_INT_RGB, PdfUtils.DPI_ORIGINAL);
 		pdfDoc.close();
 		return newBytes;
@@ -46,7 +46,7 @@ public class PdfUtils {
 	 * @throws IOException
 	 */
 	public static byte[] pdfsToImageBytes(byte[] bytes, FileResolution resolution) throws FileNotFoundException, IOException {
-		PDDocument pdfDoc = PDDocument.load(new ByteArrayInputStream(bytes));
+		PDDocument pdfDoc = PDDocument.loadNonSeq(new ByteArrayInputStream(bytes), null);
 		
 		if(resolution == FileResolution.WEB) {
 			byte[] newBytes = PdfUtils.pdfFileToByteAray(pdfDoc, PdfUtils.PAGENUMBERTOIMAGE, BufferedImage.TYPE_INT_RGB, PdfUtils.DPI_WEB);

@@ -133,6 +133,18 @@
 			<url>http://rd.mpdl.mpg.de/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>central</id>
+			<url>http://central</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 	<build>
 		<resources>
 			<resource>

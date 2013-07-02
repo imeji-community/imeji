@@ -121,6 +121,18 @@
 			</snapshots>
 		</repository>
 	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Nexus Managed Releases</name>
+			<url>http://rd.mpdl.mpg.de/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Nexus Managed Snapshots</name>
+			<url>http://rd.mpdl.mpg.de/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<build>
 		<resources>
 			<resource>
@@ -401,9 +413,9 @@
 		</dependency>
 		<!-- JAVA API lib for imagemagick -->
 		<dependency>
-		  <groupId>org.im4java</groupId>
-		  <artifactId>im4java</artifactId>
-		  <version>1.2.0</version>
+			<groupId>org.im4java</groupId>
+			<artifactId>im4java</artifactId>
+			<version>1.2.0</version>
 		</dependency>
 		<!-- Test with bioformats jar -->
 		<!-- <dependency> <groupId>org.loci.bioformats</groupId> <artifactId>bioformats</artifactId> 

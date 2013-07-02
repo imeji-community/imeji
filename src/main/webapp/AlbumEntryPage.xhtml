@@ -63,7 +63,25 @@
 						
 					</h:panelGroup>
 					
-					<h:panelGroup styleClass="full_area0_p8">
+					<div class="full_area0 fullItem">
+						<div class="fullItemControls">
+							<h:outputLink id="lnkViewAlbumUtilPage" styleClass="free_area0 actual" value="#{AlbumBean.pageUrl}?tab=UTIL" rendered="#{AlbumBean.tab == 'UTIL'}">
+								<h:outputText value="#{lbl.view_util}"/>
+							</h:outputLink>
+							<h:outputLink id="lnkViewAlbumUtilPage2" styleClass="free_area0" value="#{AlbumBean.pageUrl}?tab=UTIL" rendered="#{AlbumBean.tab != 'UTIL'}">
+								<h:outputText value="#{lbl.view_util}"/>
+							</h:outputLink>
+							<h:panelGroup styleClass="seperator" />
+							<h:outputLink id="lnkViewAlbumPage" styleClass="free_area0 actual" value="#{AlbumBean.pageUrl}?tab=HOME" rendered="#{AlbumBean.tab != 'UTIL'}">
+								<h:outputText value="#{lbl.view_desc}"/>
+							</h:outputLink>
+							<h:outputLink id="lnkViewAlbumPage2" styleClass="free_area0" value="#{AlbumBean.pageUrl}?tab=HOME" rendered="#{AlbumBean.tab == 'UTIL'}">
+								<h:outputText value="#{lbl.view_desc}"/>
+							</h:outputLink>
+						</div>
+					</div>
+					
+					<h:panelGroup styleClass="full_area0_p8" rendered="#{AlbumBean.tab != 'UTIL'}">
 						<h:panelGroup>
 							<h2>
 								<h:outputText styleClass="full_area0" value="#{AlbumBean.album.metadata.title}"/>
@@ -81,10 +99,82 @@
 						</h:panelGroup>
 					</h:panelGroup>
 					
+					<h:panelGroup id="util" styleClass="full_area0_p8" rendered="#{AlbumBean.tab == 'UTIL'}">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">						
+							<h3 class="xLarge_area0_p8 endline blockHeader">
+								<h:outputText id="lblViewColFull_lblUtil" value="#{lbl.colUtil}" /><br/>
+							</h3>
+							<span class="seperator"></span>
+							<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
+							
+								<br/>
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.cite}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:outputText value="#{AlbumBean.citation}" escape="false"/>
+									</span>
+								</h:panelGroup>
+														
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.albumCreator}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:outputText value="#{AlbumBean.albumCreator.name}" />
+									</span>
+								</h:panelGroup>		
+								
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.albumNumItems}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:outputText value="#{AlbumBean.size}" />
+									</span>
+								</h:panelGroup>							
+										
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.qrcode}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<div id="qr"></div>
+									</span>
+								</h:panelGroup>
+							</h:panelGroup>						
+					</h:panelGroup>
+				</h:panelGroup>
 					
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
+		
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"/>
+		<script>
+			jQuery(document).ready(function() {
+				var qrHtml = document.getElementById('qr');
+				if (qrHtml != null){
+					qrHtml.innerHTML = create_qrcode('#{albumBean.pageUrl}');
+				}
+			});
+			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
+				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
+			};
+			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+				var qr = qrcode(typeNumber || 10, errorCorrectLevel || 'M');
+				qr.addData(text);
+				qr.make();
+				// return qr.createTableTag();
+				return qr.createImgTag();
+			};
+		</script>
+		
 	</ui:define>
 	<ui:define name="actionsMenu">
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
@@ -109,6 +199,7 @@
 				<ui:param name="bean" value="#{AlbumBean}"/>
 			</ui:include>
 			<imjc:DiscardContainer id="dialDiscardContainer" bean="#{AlbumBean}" discardComment="#{AlbumBean.album.discardComment}"/>
-		</h:panelGroup>
+		</h:panelGroup>		
 	</ui:define>
+		
 </ui:composition>

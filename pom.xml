@@ -460,12 +460,6 @@
 			<artifactId>pdf-renderer</artifactId>
 			<version>1.0.5</version>
 		</dependency>
-		<dependency>
-			<groupId>com.kenai.nbpwr</groupId>
-			<artifactId>com-sun-pdfview</artifactId>
-			<version>1.0.5-201003191900</version>
-			<type>nbm</type>
-		</dependency>
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

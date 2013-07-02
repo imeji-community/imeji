@@ -83,7 +83,6 @@ public class PdfUtils {
 	public static byte[] pdfFileToByteAray(PDFFile pdfFile, int pageNumber, int imageType, int resolution) throws IOException {	
 		if (pageNumber < 0 || pageNumber >= pdfFile.getNumPages()) // hn: randomize a page number if provided page number is not proper 
 			pageNumber = new Random().nextInt(pdfFile.getNumPages());
-		System.out.println(pdfFile.getNumPages());		
 		return PdfUtils.pdfPageToByteAray(pdfFile.getPage(pageNumber,true),imageType,resolution);
 	}
 	

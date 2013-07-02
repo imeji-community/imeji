@@ -2,6 +2,7 @@ package de.mpg.imeji.logic.ingest.controller;
 
 import java.io.File;
 import java.net.URI;
+import java.util.HashMap;
 
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.ingest.parser.ProfileParser;
@@ -67,9 +68,31 @@ public class IngestProfileController
      */
     private MetadataProfile changeStatementURI(MetadataProfile mdp)
     {
+        HashMap<URI, URI> idMap = new HashMap<URI, URI>();
         for (Statement st : mdp.getStatements())
         {
+            URI oldURI = st.getId();
             st.setId(IdentifierUtil.newURI(Statement.class));
+            idMap.put(oldURI, st.getId());
+        }
+        return changeParentId(mdp, idMap);
+    }
+
+    /**
+     * Change the {@link URI} of the parent {@link Statement} with the newly created ids
+     * 
+     * @param mdp
+     * @param idMap
+     * @return
+     */
+    private MetadataProfile changeParentId(MetadataProfile mdp, HashMap<URI, URI> idMap)
+    {
+        for (Statement st : mdp.getStatements())
+        {
+            if (st.getParent() != null)
+            {
+                st.setParent(idMap.get(st.getParent()));
+            }
         }
         return mdp;
     }

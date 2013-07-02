@@ -56,7 +56,12 @@ public class FiltersBean
             String t = UrlHelper.getParameterValue("t");
             URI metadataURI = null;
             if (n != null)
-                metadataURI = ObjectHelper.getURI(Statement.class, n);
+            {
+                if(n.startsWith("No"))
+                    metadataURI =ObjectHelper.getURI(Statement.class, n.substring(3));
+                else
+                    metadataURI = ObjectHelper.getURI(Statement.class, n);
+            }
             if (t == null)
                 t = FacetType.SEARCH.name();
             if (q != null)

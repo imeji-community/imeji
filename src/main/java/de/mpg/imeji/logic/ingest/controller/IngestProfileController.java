@@ -3,13 +3,8 @@ package de.mpg.imeji.logic.ingest.controller;
 import java.io.File;
 import java.net.URI;
 
-import javax.xml.bind.JAXBException;
-
-import org.xml.sax.SAXException;
-
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.ingest.parser.ProfileParser;
-import de.mpg.imeji.logic.ingest.validator.ProfileValidator;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -55,11 +50,11 @@ public class IngestProfileController
         original.setStatements(mdp.getStatements());
         try
         {
-            pc.update(mdp, user);
+            pc.update(original, user);
         }
         catch (Exception e)
         {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
         pc.removeMetadataWithoutStatement();
     }

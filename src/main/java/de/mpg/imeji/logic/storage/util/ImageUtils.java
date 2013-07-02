@@ -91,8 +91,8 @@ public class ImageUtils
             {
                 image = ImageIO.read(new ByteArrayInputStream(bytes));
             }
-            if (image == null)
             {
+            	if (image == null)
                 // The image couldn't be read
                 return null;
             }

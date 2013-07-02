@@ -189,7 +189,6 @@ public class IngestBean
 	                FileItemStream item = iter.next();
 	                if (item != null && item.getName() != null)
 	                {
-	                    logger.info("Ingesting file  " + item.getName());
 	                    file = write2File("itemListXml", item.openStream());
 	                }
 	            }

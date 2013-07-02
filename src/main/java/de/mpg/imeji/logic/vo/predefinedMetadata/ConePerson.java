@@ -89,7 +89,7 @@ public class ConePerson extends Metadata
         if (metadata instanceof ConePerson)
         {
             setPos(metadata.getPos());
-            this.person = ((ConePerson)metadata).getPerson();
+            this.person = ((ConePerson)metadata).getPerson().clone();
             this.coneId = ((ConePerson)metadata).getConeId();
             this.statement = metadata.getStatement();
         }

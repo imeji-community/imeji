@@ -188,7 +188,7 @@
 				<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialDiscardContainer:dialogWithdraw');"  rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}">
 					<h:outputText value="#{lbl.withdraw}"/>
 				</h:outputLink>
-				<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');"  rendered="#{AlbumBean.deletable}">
+				<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{AlbumBean.deletable}">
 					<h:outputText value="#{lbl.delete}"/>
 				</h:outputLink>
 			</h:panelGroup>

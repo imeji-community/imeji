@@ -84,7 +84,8 @@ public class ItemMapperTask extends SwingWorker<Collection<Item>,Void>
 		return this.getMappedItemObjects();
 	}
 	
-	public void done() {
+	@Override
+    public void done() {
 	    
 	}
 

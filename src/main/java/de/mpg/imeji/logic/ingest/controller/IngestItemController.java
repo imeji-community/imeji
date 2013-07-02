@@ -7,11 +7,7 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
-import org.opensaml.ws.wsaddressing.impl.MetadataUnmarshaller;
 import org.xml.sax.SAXException;
-
-import com.hp.hpl.jena.rdf.arp.StatementHandler;
-import com.sun.xml.bind.v2.schemagen.xmlschema.TypeHost;
 
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.ingest.mapper.ItemMapperTask;
@@ -20,13 +16,10 @@ import de.mpg.imeji.logic.ingest.validator.ItemContentValidator;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
@@ -69,10 +62,6 @@ public class IngestItemController
         itemList = copyIngestedMetadataToCurrentItem(itemList);
         try
         {
-            /*
-             * TODO: This part pertains to the content validator, not finished yet
-             * ItemContentValidator.validate(itemList);
-             */
             ItemContentValidator.validate(itemList);
             ItemMapperTask im = new ItemMapperTask(itemList);
             im.execute();

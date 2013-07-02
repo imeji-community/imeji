@@ -70,9 +70,9 @@ public class AlbumBean
     private String smallDescription = null;
     private String description = "";
 
+    private ThumbnailBean thumbnail;
+    private Navigation navigation;
 
-	private ThumbnailBean thumbnail;
-	private Navigation navigation;
 
     /**
      * Construct an {@link AlbumBean} from an {@link Album}
@@ -91,7 +91,6 @@ public class AlbumBean
         }
         AlbumController ac = new AlbumController();
         this.album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
-        
         description = album.getMetadata().getDescription();
         smallDescription = description;
         if (smallDescription != null && smallDescription.length() > DESCRIPTION_MAX_SIZE)
@@ -751,21 +750,17 @@ public class AlbumBean
     {
         this.thumbnail = thumbnail;
     }
-    
+
     public String getFormattedDescription()
     {
         if (this.getAlbum() == null || this.getAlbum().getMetadata().getDescription() == null)
             return "";
         return this.getAlbum().getMetadata().getDescription().replaceAll("\n", "<br/>");
     }
-    
-    public String getDescription() {
-		return description;
-	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+	this.description = description;
+    }
 	
     public String getTab()
     {

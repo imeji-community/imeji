@@ -60,6 +60,12 @@
 								<h:outputText value="#{md.longitude}/#{md.latitude}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}" />
 								<h:outputText value=")" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}" />
 							</h:outputLink>
+							<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication'}">
+								<h:outputText value="#{md.citation}" rendered="#{md.citation != ''}" styleClass="free_area0 endline" escape="false"/>
+								<h:outputLink value="#{md.uri}" target="_blank" styleClass="free_area0 endline">
+									<h:outputText value="#{md.uri}" rendered="#{md.citation == ''}" styleClass="free_area0 endline"/>
+								</h:outputLink>
+							</h:panelGroup>
 							<br/>
 						</h:panelGroup>
 					</div>

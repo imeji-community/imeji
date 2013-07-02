@@ -159,6 +159,11 @@ public class Navigation
         return applicationUrl + ADMIN.getPath();
     }
 
+    public String getAutocompleteUrl()
+    {
+        return applicationUrl + "autocompleter";
+    }
+
     /*
      * Paths
      */

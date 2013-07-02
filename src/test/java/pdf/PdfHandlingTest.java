@@ -1,145 +1,149 @@
 package pdf;
 
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
-import java.util.Random;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 import javax.imageio.ImageIO;
 
-import org.apache.pdfbox.exceptions.COSVisitorException;
-import org.apache.pdfbox.io.RandomAccess;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 
+import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.PDFPage;
+
+import de.mpg.imeji.logic.storage.util.PdfUtils;
+
 public class PdfHandlingTest {
+	//@Test
+	public void createImageFromPdfRendererTest() {
+		
+		RandomAccessFile raf;
+		try {
+			raf = new RandomAccessFile(new File("src/test/resources/pdf/pdfWith4Pages.pdf"), "r");
 
-	// http://pdfbox.apache.org/cookbook/documentcreation.html
+			FileChannel channel = raf.getChannel();
+			ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+			PDFFile pdffile = new PDFFile(buf);
+			// draw the first page to an image
+			int num=pdffile.getNumPages();
+			for(int i=0; i < num; i++) {
+				PDFPage page = pdffile.getPage(i);
+				
+				
+				//get the width and height for the doc at the default zoom				
+				int width=(int)page.getWidth();
+				int height=(int)page.getHeight();	
+				
+				float widthPt = width;
+		        float heightPt = height;
+		        float scaling = 300 / (float)72;
+		        int widthPx = Math.round(widthPt * scaling);
+		        int heightPx = Math.round(heightPt * scaling);
+				
+				Rectangle rect = new Rectangle(0,0,(int)widthPt, (int)heightPt);
+				
+				int rotationAngle=page.getRotation();
+				Rectangle rect1=rect;
+				if(rotationAngle==90 || rotationAngle==270)
+					rect1=new Rectangle(0,0,rect.height,rect.width);
+				
+		        
+		        BufferedImage retval = null;
+		        
+		        // normalize the rotation angle
+		        if (rotationAngle < 0)
+		        {
+		            rotationAngle += 360;
+		        }
+		        else if (rotationAngle >= 360)
+		        {
+		            rotationAngle -= 360;
+		        }
+		        // swap width and height
+		        if (rotationAngle == 90 || rotationAngle == 270)
+		        {
+		            retval = (BufferedImage)page.getImage(
+		            		heightPx, widthPx, //width & height
+							rect1, // clip rect
+							null, // null for the ImageObserver
+							true, // fill background with white
+							true  // block until drawing is done
+					);
+		        }
+		        else
+		        {
+		        	retval = (BufferedImage)page.getImage(
+		        			widthPx, heightPx, //width & height
+							rect1, // clip rect
+							null, // null for the ImageObserver
+							true, // fill background with white
+							true  // block until drawing is done
+					);
+		        }
 
-	// @Test
-	public void createBlankPdfTest() throws IOException, COSVisitorException {
-		// Create a new empty document
-		PDDocument document = new PDDocument();
+		        
+		        Graphics2D graphics = (Graphics2D)retval.getGraphics();
+		        //graphics.setBackground( TRANSPARENT_WHITE );
+		        //graphics.clearRect( 0, 0, retval.getWidth(), retval.getHeight() );
+		        if (rotationAngle != 0)
+		        {
+		            int translateX = 0;
+		            int translateY = 0;
+		            switch(rotationAngle) 
+		            {
+		                case 90:
+		                    translateX = retval.getWidth();
+		                    break;
+		                case 270:
+		                    translateY = retval.getHeight();
+		                    break;
+		                case 180:
+		                    translateX = retval.getWidth();
+		                    translateY = retval.getHeight();
+		                    break;
+		                default:
+		                    break;
+		            }
+		            graphics.translate(translateX,translateY);
+		            graphics.rotate((float)Math.toRadians(rotationAngle));
+		        }
+		        graphics.scale( scaling, scaling );
+				
 
-		// Create a new blank page and add it to the document
-		PDPage blankPage = new PDPage();
-		document.addPage(blankPage);
-
-		// Save the newly created document
-		document.save("src/test/resources/pdf/BlankPage.pdf");
-
-		// finally make sure that the document is properly
-		// closed.
-		document.close();
-	}
-
-	// @Test
-	public void createHelloWorldPdfTest() throws IOException,
-			COSVisitorException {
-		// Create a document and add a page to it
-		PDDocument document = new PDDocument();
-		PDPage page = new PDPage();
-		document.addPage(page);
-
-		// Create a new font object selecting one of the PDF base fonts
-		PDFont font = PDType1Font.HELVETICA_BOLD;
-
-		// Start a new content stream which will "hold" the to be created
-		// content
-		PDPageContentStream contentStream = new PDPageContentStream(document,
-				page);
-
-		// Define a text content stream using the selected font, moving the
-		// cursor and drawing the text "Hello World"
-		contentStream.beginText();
-		contentStream.setFont(font, 12);
-		contentStream.moveTextPositionByAmount(100, 700);
-		contentStream.drawString("Hello World");
-		contentStream.endText();
-
-		// Make sure that the content stream is closed:
-		contentStream.close();
-
-		// Save the results and ensure that the document is properly closed:
-		document.save("src/test/resources/pdf/Hello World.pdf");
-		document.close();
-	}
-
-	// @Test
-	public void createMultiPagePdfFIleTest() throws IOException,
-			COSVisitorException {
-		// Create a document and add a page to it
-		PDDocument document = new PDDocument();
-
-		int p = new Random().nextInt(10);
-
-		for (int i = 0; i < p; i++) {
-			PDPage page = new PDPage();
-			document.addPage(page);
-
-			// Create a new font object selecting one of the PDF base fonts
-			PDFont font = PDType1Font.HELVETICA_BOLD;
-
-			// Start a new content stream which will "hold" the to be created
-			// content
-			PDPageContentStream contentStream = new PDPageContentStream(
-					document, page);
-
-			// Define a text content stream using the selected font, moving the
-			// cursor and drawing the text "Hello World"
-			contentStream.beginText();
-			contentStream.setFont(font, 12);
-			contentStream.moveTextPositionByAmount(100, 700);
-			contentStream.drawString("Hello World in page: " + (i + 1));
-			contentStream.endText();
-
-			// Make sure that the content stream is closed:
-			contentStream.close();
-
+				//BufferedImage sImg = (BufferedImage)img.getScaledInstance(width*3, height*3, BufferedImage.SCALE_FAST);
+//				
+//				BufferedImage buffered = new BufferedImage(width*3, height*3, BufferedImage.SCALE_FAST);
+//				buffered.getGraphics().drawImage(img, 0, 0 , null);
+				
+				ImageIO.write(retval, "png", new File("src/test/resources/pdf/test.png"));
+				break;
+			}
+		} 
+		catch (FileNotFoundException e1) {
+			System.err.println(e1.getLocalizedMessage());
+		} catch (IOException e) {
+			System.err.println(e.getLocalizedMessage());
 		}
-		// Save the results and ensure that the document is properly closed:
-		document.save("src/test/resources/pdf/pdfWith" + p + "Pages.pdf");
-		document.close();
 	}
-
+	
 	@Test
-	public void createImageFromPdfTest() throws IOException,
-			COSVisitorException {
-		// Lead a pdf document
+	public void createImageFromPdfRenderer2Test() throws IOException {
+		File file = new File("src/test/resources/pdf/dfg.pdf");
+			
+		byte[] bytes = org.apache.commons.io.FileUtils.readFileToByteArray(file);
+			
+		ByteArrayInputStream baos = new ByteArrayInputStream(PdfUtils.pdfsToImageBytes(bytes));
 		
-		RandomAccess rac = null;
+		BufferedImage srcImage = ImageIO.read(baos);
 		
-		PDDocument document = PDDocument.loadNonSeq(new File(
-				"src/test/resources/pdf/Hello World.pdf"), rac);
-
-		@SuppressWarnings("unchecked")
-		List<PDPage> pages = document.getDocumentCatalog().getAllPages();
-		
-		 PDPage page = pages.get(0);
-		 BufferedImage bi = page.convertToImage();
-		
-		
-		 ImageIO.write(bi, "jpg", new File("src/test/resources/pdf/test.jpg"));
-
-		// PDFImageWriter piw = new PDFImageWriter();
-		// piw.writeImage(document, "png", null, 1, 1,
-		// "src/test/resources/pdf/test_");
-
-		// int i = new Random().nextInt(document.getNumberOfPages()) + 1;
-		// System.out.println(i);
-		// PDFImageWriter imageWriter = new PDFImageWriter();
-		// imageWriter.writeImage(document, "png", null, i, i,
-		// "src/test/resources/pdf/image_", BufferedImage.TYPE_INT_RGB,
-		// 300);
-		//
-		// finally make sure that the document is properly
-		// closed.
-		document.close();
+		ImageIO.write(srcImage, "png", new File("src/test/resources/pdf/test.jpg"));
 	}
 
 }

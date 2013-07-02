@@ -98,7 +98,6 @@ public class MediaUtils
         file.getParentFile().mkdirs();
         file = new File(targetPath);
         file.getParentFile().mkdirs();
-        // TODO set in properties
         String imPath = getImageMagickInstallationPath();
         // TODO Ye:ConvertCmd(true) to use GraphicsMagick, which is said faster
         ConvertCmd cmd = new ConvertCmd(false);
@@ -111,13 +110,31 @@ public class MediaUtils
             orginalPath = orginalPath + "[0]";
         }
         op.addImage(orginalPath);
-        // TODO Ye: replace with scaleImageFast method algorithm
         int size = getResolution(resolution);
-        op.resize(size, size);
+        Info imageObject;
+        int width = 0;
+        int height = 0;
+		try {
+			imageObject=getMediaInfo(orginalPath);
+			width=imageObject.getImageWidth();
+			height = imageObject.getImageHeight();
+		} catch (InfoException e1) {
+			e1.printStackTrace();
+		}
+		if(width==0||height==0){
+			//TODO Ye: return link to default thumbnail
+			return;
+		}
+			
+        if (width > size) {
+            height = size * height / width;
+            width = size;
+        }
+        //Only Shrink Larger Images ('>' flag)
+        op.resize(width, height,">");
         op.addImage(targetPath);
-        // execute the operation
         try
-        {
+        {// execute the operation
             cmd.run(op);
         }
         catch (IOException e)

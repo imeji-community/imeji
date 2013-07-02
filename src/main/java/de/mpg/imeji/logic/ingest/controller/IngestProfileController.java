@@ -91,6 +91,8 @@ public class IngestProfileController
         {
             if (st.getParent() != null)
             {
+                if (idMap.get(st.getParent()) == null)
+                    throw new RuntimeException("Unknown parent " + st.getParent() + " in current profile");
                 st.setParent(idMap.get(st.getParent()));
             }
         }

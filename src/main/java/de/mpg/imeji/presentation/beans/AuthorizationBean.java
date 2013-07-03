@@ -77,8 +77,11 @@ public class AuthorizationBean
         edit = security.check(OperationsType.UPDATE, user, collection);
         imageEdit = collectionItemAllEditable(collection);
         view = security.check(OperationsType.READ, user, collection);
-        delete = security.check(OperationsType.DELETE, user, collection)
-                && collection.getStatus().equals(Status.PENDING);
+        delete = security.check(OperationsType.DELETE, user, collection);
+        if (collection.getStatus().equals(Status.RELEASED) && security.isSysAdmin(user))
+        {
+        	delete = false;
+        }
     }
 
     /**

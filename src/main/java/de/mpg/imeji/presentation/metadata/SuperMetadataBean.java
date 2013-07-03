@@ -12,7 +12,6 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * Bean for all Metadata types. This bean should have all variable that have been defined in all metadata types.
@@ -88,6 +87,7 @@ public class SuperMetadataBean
     {
         ObjectHelper.copyAllFields(this, metadata);
         MetadataHelper.setConeID(metadata);
+        MetadataHelper.setCitationForPublication(metadata);
         return metadata;
     }
 

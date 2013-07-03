@@ -50,7 +50,7 @@ public class FacetURIFactory
         SearchQuery sq = new SearchQuery(searchQuery.getElements());
         sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
         sq.addPair(pair);
-        String uri = baseURI + getCommonURI(sq, facetName.toLowerCase(), type);
+        String uri = baseURI + getCommonURI(sq, facetName, type);
         return URI.create(uri);
     }
 

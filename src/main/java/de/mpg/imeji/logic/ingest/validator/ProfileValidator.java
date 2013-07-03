@@ -7,6 +7,5 @@ public class ProfileValidator
     public void valid(File profileXml)
     {
         // if not valid, through exception
-        // TODO
     }
 }

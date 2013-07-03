@@ -24,7 +24,6 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.CollectionImagesBean;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.FiltersSession;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
@@ -56,7 +55,7 @@ public class CollectionFacets
         MetadataProfile profile = ObjectCachedLoader.loadProfile(col.getProfile());
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         String baseURI = nav.getCollectionUrl() + ObjectHelper.getId(colURI) + "/" + nav.getBrowsePath() + "?q=";
-        ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
+       // ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
         FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
         int count = 0;
         SearchResult allImages = retrieveAllImages(searchQuery);
@@ -66,8 +65,8 @@ public class CollectionFacets
             List<Facet> group = new ArrayList<Facet>();
             if (st.isPreview() && !fs.isFilter(getName(st.getId())))
             {
-                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement), SearchOperators.EQUALS, st
-                        .getId().toString());
+                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement), SearchOperators.EQUALS,
+                        st.getId().toString());
                 count = getCount(searchQuery, pair, allImages.getResults());
                 if (count > 0 || true)
                 {
@@ -88,9 +87,10 @@ public class CollectionFacets
 
     public String getName(URI uri)
     {
-        MetadataLabels metadataLabels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
-        String name = metadataLabels.getLabels().get(uri);
-        return name;
+        // MetadataLabels metadataLabels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
+        // String name = metadataLabels.getLabels().get(uri);
+        // return name;
+        return ObjectHelper.getId(uri);
     }
 
     /**

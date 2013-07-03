@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Person;
@@ -28,6 +29,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "conePerson", namespace = "http://imeji.org/terms/metadata")
+@XmlType(propOrder={"coneId", "person", "statement"})
 public class ConePerson extends Metadata
 {
     @j2jResource("http://xmlns.com/foaf/0.1/person")
@@ -87,7 +89,7 @@ public class ConePerson extends Metadata
         if (metadata instanceof ConePerson)
         {
             setPos(metadata.getPos());
-            this.person = ((ConePerson)metadata).getPerson();
+            this.person = ((ConePerson)metadata).getPerson().clone();
             this.coneId = ((ConePerson)metadata).getConeId();
             this.statement = metadata.getStatement();
         }

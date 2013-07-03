@@ -165,7 +165,6 @@ public class ImageBean
             browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item, "item", "");
     }
 
-
     /**
      * Load the item according to the idntifier defined in the URL
      */
@@ -563,10 +562,13 @@ public class ImageBean
         List<Album> albums = new ArrayList<Album>();
         AlbumController ac = new AlbumController();
         Search s = new Search(SearchType.ALL, null);
-        List<String> res = s.searchSimpleForQuery(SPARQLQueries.selectAlbumIdOfFile(item.getId().toString()), null);
-        for (int i = 0; i < res.size(); i++)
+        if (item != null)
         {
-            albums.add(ac.retrieveLazy(new URI(res.get(i)), sessionBean.getUser()));
+            List<String> res = s.searchSimpleForQuery(SPARQLQueries.selectAlbumIdOfFile(item.getId().toString()), null);
+            for (int i = 0; i < res.size(); i++)
+            {
+                albums.add(ac.retrieveLazy(new URI(res.get(i)), sessionBean.getUser()));
+            }
         }
         return albums;
     }

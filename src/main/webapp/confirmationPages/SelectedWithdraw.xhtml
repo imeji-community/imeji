@@ -2,41 +2,35 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<div id="dialogDeleteSelected"
+	<div id="dialogWithdrawSelected"
 		class="half_area0_p8 bordst0 shadst1 dialogbox" style="display: none;">
 		<h:form>
 			<div class="half_area0_p8">
-				<h:outputText value="#{lbl.delete_images}?"
-					rendered="#{bean.deletable}" />
 				<h:outputText
-					value="#{lbl.withdraw_images}? #{lbl.images_withdraw_comment}"
-					rendered="#{!bean.deletable and bean.editable}" />
+					value="#{lbl.withdraw_images}"/>
+				<br/>
+				<h:outputText
+					value="#{lbl.images_withdraw_comment}" 
+					styleClass="messageError"/>
 				<h:outputText value="#{paginatorListSessionBean.initComment}" />
-				<h:outputText id="errorMessageS"
-					styleClass="xDouble_area0_p0 messageError" value="" />
 				<h:inputTextarea id="discardCommentS"
 					value="#{paginatorListSessionBean.discardComment}"
 					valueChangeListener="#{paginatorListSessionBean.discardCommentListener}"
-					rows="6" styleClass="quad_area0_p0"
-					rendered="#{!bean.deletable and bean.editable}">
+					rows="6" styleClass="quad_area0_p0">
 					<f:ajax execute="@this" render="buttonDiscard" event="keyup" />
 				</h:inputTextarea>
 			</div>
 			<div class="half_area0_p8">
 				<div class="large_txtBtn">
 					<a href="#" class="large_txtBtn dialogCancelButton"
-						onclick="closeDialog('dialogDeleteSelected');"> <h:outputText
+						onclick="closeDialog('dialogWithdrawSelected');"> <h:outputText
 							value="#{lbl.cancel}" />
 					</a>
 				</div>
 				<h:panelGroup id="buttonDiscard" class="xLarge_txtBtn tiny_marginLExcl">
-					<h:commandButton id="btnDelete"
-						action="#{paginatorListSessionBean.deleteSelected}"
-						rendered="#{bean.deletable}" value="#{lbl.delete}"
-						styleClass="xLarge_area0_p0  xLarge_txtBtn activeButton" />
 					<h:commandButton id="btnDiscard"
 						action="#{paginatorListSessionBean.withdrawSelected}"
-						rendered="#{paginatorListSessionBean.discardComment != '' and !bean.deletable and paginatorListSessionBean.editable}"
+						rendered="#{paginatorListSessionBean.discardComment != ''}"
 						value="#{lbl.withdraw}"
 						styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton" />
 				</h:panelGroup>

@@ -132,4 +132,17 @@ public class Organization
     {
         return id;
     }
+
+    @Override
+    public Organization clone()
+    {
+        Organization clone = new Organization();
+        clone.city = this.city;
+        clone.country = this.country;
+        clone.description = this.description;
+        clone.identifier = this.identifier;
+        clone.name = this.name;
+        clone.pos = this.pos;
+        return clone;
+    }
 }

@@ -27,6 +27,12 @@
 				<h:outputText styleClass="free_area0" value="#{md.person.familyName}, #{md.person.givenName}"/>
 				<h:outputText styleClass="free_area0" value=" (#{md.person.organizationString})" rendered="#{md.person.organizationString != ''}"/>
 			</h:panelGroup>
+			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication'}">
+				<h:outputText value="#{md.citation}" rendered="#{md.citation != ''}" styleClass="free_area0 endline" escape="false"/>
+				<h:outputLink value="#{md.uri}" target="_blank" styleClass="free_area0 endline">
+					<h:outputText value="#{md.uri}" rendered="#{md.citation == ''}" styleClass="free_area0 endline"/>
+				</h:outputLink>
+			</h:panelGroup>
 			<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">
 				<h:outputText value="#{md.name} (" rendered="#{md.name != null}"/>
 				<h:outputText value="#{md.longitude}/#{md.latitude}"/>

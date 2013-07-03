@@ -73,12 +73,36 @@ public class IngestBean
                 ic.ingest(upload(), null);
                 this.success = true;
             }
-            catch (Exception e)
-            {
-                logger.error("Error during ingest. ", e);
+            catch (JAXBException e) {
+                logger.error("Error parsing item metadata. ", e);
                 error = true;
-                this.msg = e.getMessage();
-            }
+                if (e.getLinkedException() != null)
+                {
+                    logger.error("Error parsing item metadata. ", e);
+                    error = true;
+                    SAXParseException se = (SAXParseException) e.getLinkedException();
+                    this.msg = se.getMessage();
+                }
+                else
+                {
+               	 this.msg = e.getMessage(); 
+                }
+			} 
+           catch (SAXParseException e) {
+               logger.error("Error parsing item metadata. ", e);
+               error = true;
+               this.msg = e.getMessage();
+			}
+            catch (ClassCastException e) {
+                logger.error("Item metadata not valid. ", e);
+                error = true;
+                this.msg = "The metadata of the items are not valid. System failed to convert them to imeji objects.";
+ 			}
+           catch (Exception e) {
+               logger.error("Error during the ingest of item metadata. ", e);
+               error = true;
+               this.msg = e.getMessage();
+			}
         }
         else if ("profile".equals(UrlHelper.getParameterValue("start")))
         {
@@ -165,7 +189,6 @@ public class IngestBean
 	                FileItemStream item = iter.next();
 	                if (item != null && item.getName() != null)
 	                {
-	                    logger.info("Ingesting file  " + item.getName());
 	                    file = write2File("itemListXml", item.openStream());
 	                }
 	            }

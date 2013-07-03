@@ -264,7 +264,7 @@ public class MdProfileBean
         {
             for (LocalizedString ls : s.getLabels())
             {
-                if (ls.getLang() == null)
+                if (ls.getLang() == null || "".equals(ls.getLang()))
                 {
                     BeanHelper.error(sessionBean.getMessage("error_profile_label_no_lang"));
                     return false;

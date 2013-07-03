@@ -9,8 +9,8 @@
 		<ui:define name="additionalSubheaders">
 			<h:outputText value="#{AdvancedSearchBean.newSearch}"/>
 			<h:panelGroup id="ajaxQuery" styleClass="full_area0">
-				<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p4" rendered="#{AdvancedSearchBean.simpleQuery != ''}"/>
-				<h:outputText value="#{AdvancedSearchBean.simpleQuery} " styleClass="xHuge_area0_p4"/>
+				<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p4 " rendered="#{AdvancedSearchBean.simpleQuery != ''}"/>
+				<h:outputText value="#{AdvancedSearchBean.simpleQuery}" styleClass="xHuge_area0_p4 #{AdvancedSearchBean.errorQuery ? 'messageError' : ''}"/>
 			</h:panelGroup>
 		</ui:define>
 		
@@ -63,8 +63,10 @@
 											</h:panelGroup>
 											<h:selectOneMenu id="selFilter" value="#{el.operator}" rendered="#{el.operatorMenu != null}" styleClass="xTiny_marginLExcl small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 												<f:selectItems value="#{el.operatorMenu}"/>
-											</h:selectOneMenu>										
-											<h:inputText id="input" autocomplete="false" value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues == null}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+											</h:selectOneMenu>						
+											<h:inputText id="input" autocomplete="false" value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues == null}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
+												<f:validateRegex pattern="[0-9]+" disabled="#{el.type != 'DATE'}" />
+											</h:inputText>
 											<h:selectOneMenu id="select" value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues != null}" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 												<f:selectItems value="#{el.predefinedValues}"/>
 											</h:selectOneMenu>

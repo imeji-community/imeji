@@ -28,12 +28,14 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.collection.CollectionBean.TabType;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * The javabean for the {@link Album}
@@ -51,8 +53,9 @@ public class AlbumBean
     private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
     private boolean active;
+    private String tab;
     /**
-     * True if the {@link AlbumBean} is used for the crete page, else false
+     * True if the {@link AlbumBean} is used for the create page, else false
      */
     private boolean create;
     private boolean selected;
@@ -67,8 +70,9 @@ public class AlbumBean
     private String smallDescription = null;
     private String description = "";
 
+    private ThumbnailBean thumbnail;
+    private Navigation navigation;
 
-	private ThumbnailBean thumbnail;
 
     /**
      * Construct an {@link AlbumBean} from an {@link Album}
@@ -79,6 +83,7 @@ public class AlbumBean
     {
         this.album = album;
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         this.id = ObjectHelper.getId(album.getId());
         if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
         {
@@ -86,7 +91,6 @@ public class AlbumBean
         }
         AlbumController ac = new AlbumController();
         this.album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
-        
         description = album.getMetadata().getDescription();
         smallDescription = description;
         if (smallDescription != null && smallDescription.length() > DESCRIPTION_MAX_SIZE)
@@ -114,6 +118,7 @@ public class AlbumBean
     public AlbumBean()
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        
     }
 
     /**
@@ -121,6 +126,8 @@ public class AlbumBean
      */
     public void initView()
     {
+    	navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+    	
         try
         {
             if (id != null)
@@ -743,19 +750,58 @@ public class AlbumBean
     {
         this.thumbnail = thumbnail;
     }
-    
+
     public String getFormattedDescription()
     {
         if (this.getAlbum() == null || this.getAlbum().getMetadata().getDescription() == null)
             return "";
         return this.getAlbum().getMetadata().getDescription().replaceAll("\n", "<br/>");
     }
-    
+
+    public void setDescription(String description) 
+    {
+    	this.description = description;
+    }
+	
     public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	public String getTab()
+    {
+        if (UrlHelper.getParameterValue("tab") != null)
+        {
+            tab = UrlHelper.getParameterValue("tab").toUpperCase();
+        }
+        return tab;
+    }
+
+    public void setTab(String tab)
+    {
+        this.tab = tab.toUpperCase();
+    }
+    
+    public String getPageUrl()
+    {
+        return navigation.getAlbumUrl() + id;
+    }
+    
+    public User getAlbumCreator() throws Exception
+    {
+        User user = null;
+        UserController uc = new UserController();
+        user = uc.retrieve(album.getCreatedBy());
+        return user;
+    }
+    
+    public String getCitation()
+    {
+    	String title = album.getMetadata().getTitle();
+    	String author = this.getPersonString();
+    	String url = this.getPageUrl();
+    	
+    	String citation = title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
+    	
+    	return citation;
+    }
 }

@@ -72,21 +72,31 @@ public class FileServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         String url = req.getParameter("id");
-        if (url == null)
+        if (req.getRequestedSessionId() != null)
         {
-            // if the id parameter is null, interpret the whole url as a direct to the file (can only work if the
-            // internal storage is used)
-            url = domain + req.getRequestURI();
-        }
-        resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
-        SessionBean session = getSession(req);
-        if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
-        {
-            storageController.read(url, resp.getOutputStream(), false);
+            if (url == null)
+            {
+                // if the id parameter is null, interpret the whole url as a direct to the file (can only work if the
+                // internal storage is used)
+                url = domain + req.getRequestURI();
+            }
+            resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
+            SessionBean session = getSession(req);
+            if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
+            {
+                storageController.read(url, resp.getOutputStream(), false);
+            }
+            else
+            {
+                resp.sendError(403, "imeji security: You are not allowed to view this file");
+            }
         }
         else
         {
-            resp.sendError(403, "imeji security: You are not allowed to view this file");
+            // Avoid to reset the session. If the session in request has no id, this means there has been a problem
+            // (because of some redirect?). To avoid the session to be killed, this make a redirect to the correct page,
+            // where the session should be non null
+            resp.sendRedirect(req.getRequestURL().toString() + "?id=" + url);
         }
     }
 
@@ -166,7 +176,7 @@ public class FileServlet extends HttpServlet
      */
     private SessionBean getSession(HttpServletRequest req)
     {
-        return (SessionBean)req.getSession().getAttribute(SessionBean.class.getSimpleName());
+        return (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
     }
 
     /**

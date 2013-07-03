@@ -26,6 +26,7 @@ import de.mpg.imeji.presentation.beans.AuthorizationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ImagesBean;
+import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -47,7 +48,7 @@ public class CollectionImagesBean extends ImagesBean
     private CollectionImeji collection;
     private Navigation navigation;
     private SearchQuery searchQuery = new SearchQuery();
-
+	
     /**
      * Initialize the bean
      */
@@ -62,12 +63,14 @@ public class CollectionImagesBean extends ImagesBean
      * Initialize the elements of the page
      * 
      * @return
+     * @throws Exception 
      */
     @Override
     public String getInitPage()
     {
         uri = ObjectHelper.getURI(CollectionImeji.class, id);
         collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
+        ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(ObjectCachedLoader.loadProfile(collection.getProfile()));
         ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(collection);
         browseInit();
         browseContext = getNavigationString() + id;
@@ -232,7 +235,7 @@ public class CollectionImagesBean extends ImagesBean
     @Override
     public boolean isImageEditable()
     {
-        return super.isImageDeletable()
+        return super.isImageEditable()
                 && ObjectCachedLoader.loadProfile(collection.getProfile()).getStatements().size() > 0;
     }
 
@@ -249,4 +252,5 @@ public class CollectionImagesBean extends ImagesBean
         Security security = new Security();
         return security.check(OperationsType.DELETE, sb.getUser(), collection);
     }
+
 }

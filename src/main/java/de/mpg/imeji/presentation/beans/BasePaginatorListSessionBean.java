@@ -82,6 +82,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     private int totalNumberOfElements = 0;
     private boolean ajaxMode = true;
 
+
     /**
      * Initializes a new BasePaginatorListSessionBean
      */
@@ -685,4 +686,5 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     {
         return ajaxMode;
     }
+
 }

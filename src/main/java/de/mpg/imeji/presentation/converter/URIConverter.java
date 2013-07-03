@@ -21,7 +21,7 @@ public class URIConverter implements Converter
     @Override
     public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2)
     {
-        if (arg2 == null)
+        if (arg2 == null || "".equals(arg2))
             return null;
         return URI.create(arg2.trim());
     }

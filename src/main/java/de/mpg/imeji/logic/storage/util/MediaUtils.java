@@ -98,7 +98,6 @@ public class MediaUtils
         file.getParentFile().mkdirs();
         file = new File(targetPath);
         file.getParentFile().mkdirs();
-        // TODO set in properties
         String imPath = getImageMagickInstallationPath();
         // TODO Ye:ConvertCmd(true) to use GraphicsMagick, which is said faster
         ConvertCmd cmd = new ConvertCmd(false);
@@ -111,13 +110,31 @@ public class MediaUtils
             orginalPath = orginalPath + "[0]";
         }
         op.addImage(orginalPath);
-        // TODO Ye: replace with scaleImageFast method algorithm
         int size = getResolution(resolution);
-        op.resize(size, size);
+        Info imageObject;
+        int width = 0;
+        int height = 0;
+		try {
+			imageObject=getMediaInfo(orginalPath);
+			width=imageObject.getImageWidth();
+			height = imageObject.getImageHeight();
+		} catch (InfoException e1) {
+			e1.printStackTrace();
+		}
+		if(width==0||height==0){
+			//TODO Ye: return link to default thumbnail
+			return;
+		}
+			
+        if (width > size) {
+            height = size * height / width;
+            width = size;
+        }
+        //Only Shrink Larger Images ('>' flag)
+        op.resize(width, height,">");
         op.addImage(targetPath);
-        // execute the operation
         try
-        {
+        {// execute the operation
             cmd.run(op);
         }
         catch (IOException e)
@@ -161,7 +178,7 @@ public class MediaUtils
 
     private static String getImageMagickInstallationPath() throws IOException, URISyntaxException
     {
-        return PropertyReader.getProperty("imagemagick_install_path");
+    	return PropertyReader.getProperty("imeji.imagemagick.installpath");
     }
 
     /**
@@ -177,15 +194,13 @@ public class MediaUtils
         try
         {
             imageInfo = new Info(filepath, true);
-            System.out.println("file Format: " + imageInfo.getImageFormat());
-            System.out.println("file Width: " + imageInfo.getImageWidth());
-            System.out.println("file Height: " + imageInfo.getImageHeight());
+            return imageInfo.getImageFormat();
         }
         catch (InfoException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return imageInfo.getImageFormat();
+        return null;
     }
 }

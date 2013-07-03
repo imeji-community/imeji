@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<div id="dialogDeleteSelected"
+		class="half_area0_p8 bordst0 shadst1 dialogbox" style="display: none;">
+		<h:form>
+			<div class="half_area0_p8">
+				<h:outputText value="#{lbl.delete_images}?"/>
+				<h:outputText id="errorMessageS"
+					styleClass="xDouble_area0_p0 messageError" value="" />				
+			</div>
+			<div class="half_area0_p8">
+				<div class="large_txtBtn">
+					<a href="#" class="large_txtBtn dialogCancelButton"
+						onclick="closeDialog('dialogDeleteSelected');"> <h:outputText
+							value="#{lbl.cancel}" />
+					</a>
+				</div>
+				<h:panelGroup id="buttonDiscard" class="xLarge_txtBtn tiny_marginLExcl">
+					<h:commandButton id="btnDelete"
+						action="#{paginatorListSessionBean.deleteSelected}"
+						value="#{lbl.delete}"
+						styleClass="xLarge_area0_p0  xLarge_txtBtn activeButton" />				
+				</h:panelGroup>
+			</div>
+		</h:form>
+	</div>
+</ui:composition>

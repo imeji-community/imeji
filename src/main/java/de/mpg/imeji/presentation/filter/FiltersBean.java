@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -51,13 +54,19 @@ public class FiltersBean
             String q = URLQueryTransformer.transform2URL(sq);
             String n = UrlHelper.getParameterValue("f");
             String t = UrlHelper.getParameterValue("t");
+            URI metadataURI = null;
             if (n != null)
-                n = n.toLowerCase();
+            {
+                if(n.startsWith("No"))
+                    metadataURI =ObjectHelper.getURI(Statement.class, n.substring(3));
+                else
+                    metadataURI = ObjectHelper.getURI(Statement.class, n);
+            }
             if (t == null)
                 t = FacetType.SEARCH.name();
             if (q != null)
             {
-                List<Filter> filters = parseQueryAndSetFilters(q, n, t);
+                List<Filter> filters = parseQueryAndSetFilters(q, n, t, metadataURI);
                 resetFiltersSession(q, filters);
             }
         }
@@ -92,11 +101,11 @@ public class FiltersBean
      * @return
      * @throws IOException
      */
-    private List<Filter> parseQueryAndSetFilters(String q, String n, String t) throws IOException
+    private List<Filter> parseQueryAndSetFilters(String q, String n, String t, URI metadataURI) throws IOException
     {
         List<Filter> filters = findAlreadyDefinedFilters(q, n, t);
         String newQuery = removeFiltersQueryFromQuery(q, filters);
-        Filter newFilter = createNewFilter(newQuery, n, t);
+        Filter newFilter = createNewFilter(newQuery, n, t, metadataURI);
         if (newFilter != null)
         {
             filters.add(newFilter);
@@ -115,11 +124,11 @@ public class FiltersBean
      * @return
      * @throws IOException
      */
-    private Filter createNewFilter(String q, String n, String t) throws IOException
+    private Filter createNewFilter(String q, String n, String t, URI metadataURI) throws IOException
     {
         if (q != null && !"".equals(q.trim()))
         {
-            return new Filter(n, q, count, FacetType.valueOf(t.toUpperCase()), null);
+            return new Filter(n, q, count, FacetType.valueOf(t.toUpperCase()), metadataURI);
         }
         return null;
     }

@@ -5,19 +5,25 @@
 
 var datasourceUrl;
 var result;
+var servlet;
 // After how many character the suggest is started
 var offset = 2;
 /*
  * Update remote calling source url Called when input field focus:
  * onfocus="getDatasourceUrl('#{statement.vocabulary}')"
  */
-function getDatasourceUrl(url) {
+function getDatasourceUrl(url, servlet) {
 	datasourceUrl = url;
-	 offset = 2;
+	this.servlet = servlet;
+	offset = 2;
 }
-
-function getDatasourceUrl(url, startAfter) {
-	datasourceUrl = url;
+/*
+ * Same a getDatasourceUrl, but with a fixed offset. This allow to force the
+ * number of character to wait for before starting the suggest
+ * 
+ */
+function getDatasourceUrlWithFixedDelay(url, servlet, startAfter) {
+	getDatasourceUrl(url, servlet);
 	offset = startAfter;
 }
 function split(val) {
@@ -55,7 +61,7 @@ $(function() {
 						 * label&value into result.
 						 */
 						source : function(request, response) {
-							$.getJSON("/autocompleter", {
+							$.getJSON(servlet, {
 								searchkeyword : request.term,
 								datasource : datasourceUrl
 							}, function(jsonData) {

@@ -1,0 +1,61 @@
+<ui:composition template="../template_site.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	
+	<ui:define name="init">
+		<h:outputText value="#{paginatorListSessionBean.initPage}"/>
+	</ui:define>
+	
+	<!-- Main Content - Image tiled list -->
+	<ui:define name="mainContent">
+		<script type="text/javascript">
+			function setOpacityToImages()
+			{
+				$("#ajaxList").css({opacity:0.3});
+				/*try {document.getElementById('ajaxList').style.opacity = 0.3;}
+				catch (e) {/* No opacity*/
+				return true;
+			};
+		</script>
+		
+		<ui:include src="../../confirmationPages/SelectedDeleteWithdraw.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+		<ui:include src="../../confirmationPages/AllDeleteWithdraw.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+		
+		<ui:include src="../../include/History.xhtml"></ui:include>
+		
+		<h:panelGroup layout="block" id="imj_ajaxWrapper">
+			
+			
+			<imjc:selectionInfoPanel fSession="#{FiltersSession}" paginatorBean="#{paginatorListSessionBean}"/>
+			
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+			
+			<imjc:tiledMediaList picList="#{paginatorListSessionBean}"/>
+			
+			<h:panelGroup layout="block" id="imj_ajaxFacets">
+				<imjc:facets paginatorBean="#{paginatorListSessionBean}"/>
+			</h:panelGroup>
+			
+			
+			<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden" styleClass="imj_activateFacets">
+				<f:ajax event="change" execute="@this" render=":imj_ajaxFacets" listener="#{paginatorListSessionBean.initFacets}"/>
+			</h:selectBooleanCheckbox>
+			<script type="text/javascript">
+				$(function(){
+					$(".imj_activateFacets").click().remove();
+				});
+			</script>
+			
+			
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+		</h:panelGroup>
+	</ui:define>
+	
+</ui:composition>

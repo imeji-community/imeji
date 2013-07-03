@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	<composite:interface>
+		<composite:attribute name="paginatorBean"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<!-- FACETS -->
+		<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString != 'pretty:albumBrowse'}">
+			<h:form id="facetForm">
+				<h:panelGroup id="facetGroup" layout="block" styleClass="imj_facetArea">
+					<ui:repeat var="groups" value="#{cc.attrs.paginatorBean.facets.facets}" varStatus="index">
+						<div class="imj_facetGroup">
+							<ui:repeat var="facets" value="#{groups}" varStatus="index">
+								<h:outputText value="|" styleClass="imj_facetSeparator" rendered="#{index.index > 0 }"/>
+								<h:outputLink value="#{facets.uri}" styleClass="imj_facetGroupItem">
+									<h:outputText value="#{facets.internationalizedLabel} (#{facets.count})"/>
+								</h:outputLink>
+							</ui:repeat>
+						</div>
+					</ui:repeat>
+				</h:panelGroup>
+			</h:form>	
+		</ui:fragment>
+	</composite:implementation>
+</html>

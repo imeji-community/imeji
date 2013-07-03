@@ -1,0 +1,170 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	<composite:interface>
+		<composite:attribute name="fSession" required="false"/>
+		<composite:attribute name="paginatorBean" required="false"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		
+		
+		
+		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
+			<h:outputLink value="#{Navigation.browseUrl}">
+				<h:outputText value="#{lbl.images_all}"/>
+			</h:outputLink>
+			
+			<h:form id="preListForm">
+				<ui:repeat id="filterList" var="filter" value="#{cc.attrs.fSession.filters}" offset="0" varStatus="index">
+					<h:outputText value=" / " styleClass="imj_facetSeparator"/>
+					<h:outputText value="#{filter.internationalizedLabel} "/>
+					<h:outputText value="(#{filter.notDefineType})" rendered="#{filter.notDefine}"/>
+					<h:outputLink value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:browse'}">
+						<h:outputText value="[x]"/>
+					</h:outputLink>
+					<h:outputLink value="#{Navigation.collectionUrl}#{cc.attrs.paginatorBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{cc.attrs.paginatorBean.navigationString != 'pretty:browse' and cc.attrs.paginatorBean.collection != null}">
+						<h:outputText value="[x]"/>
+					</h:outputLink>
+				</ui:repeat>
+				
+				<!-- Select menu for all images [LEFT] -->
+				<h:panelGroup rendered="#{SessionBean.user != null}">
+					<h:panelGroup layout="block" styleClass="imj_overlayMenu">
+						<div class="imj_menuHeader">
+							<h:outputText value="( "/>
+							<h:outputText value="#{cc.attrs.paginatorBean.totalNumberOfElements} #{lbl.images}"/>
+							<span class="imj_iconTriangleBottomRight_15"/>
+							<h:outputText value=" )"/>
+						</div>
+						<div class="imj_menuBody">
+							<ul class="imj_overlayMenuList">
+								<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
+									<!-- No active album selected -->
+									<li class="imj_overlayMenuListItem">
+										<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
+											<h:panelGroup styleClass="imj_icoMagnifier_15"/>
+											<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
+								
+								<!-- Add all to active album -->
+								<ui:fragment rendered="#{SessionBean.activeAlbum != null}">
+									<li>
+										<h:commandLink action="#{cc.attrs.paginatorBean.addAllToActiveAlbum}">
+											<h:outputText value="#{lbl.add_to_active_album_all}"/>
+										</h:commandLink>
+									</li>
+								</ui:fragment>
+								
+								<!-- Edit all -->
+								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.paginatorBean.collection != null and cc.attrs.paginatorBean.imageEditable}">
+									<li>
+										<h:outputLink value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{cc.attrs.paginatorBean.collection.id}&amp;q=#{cc.attrs.paginatorBean.query}" id="lnkSelectEdit2">
+											<h:outputText value="#{lbl.edit_all}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
+								
+								<!-- Delete/Discard all from collection-->
+								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.paginatorBean.collection != null}">
+									<li>
+										<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogDeleteAll')" 
+														rendered="#{cc.attrs.paginatorBean.imageDeletable and cc.attrs.paginatorBean.collection.status == 'PENDING'}">
+											<h:outputText value="#{lbl.delete_all}"/>
+										</h:outputLink>
+										
+										<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogDeleteAll')"
+														rendered="#{cc.attrs.paginatorBean.collection != null and cc.attrs.paginatorBean.editable  and cc.attrs.paginatorBean.collection.status == 'RELEASED'}">
+											<h:outputText value="#{lbl.withdraw_all}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
+								
+								<!-- Remove all from album -->
+								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:albumBrowse' and cc.attrs.paginatorBean.deletable}">
+									<li>
+										<h:commandLink value="#{lbl.remove_from_album_all}" action="#{cc.attrs.paginatorBean.removeAllFromAlbum}">
+										</h:commandLink>
+									</li>
+								</ui:fragment>
+							</ul>
+						</div>
+					</h:panelGroup>
+				</h:panelGroup>
+				
+				
+				<!-- Select menu for all images [RIGHT] - MISSING: copy from template_paginator_images.xhtml -->
+				<h:panelGroup layout="block" styleClass="imj_overlayMenu imj_selectionInfoPanelItemSelect" rendered="#{SessionBean.user != null}">
+					<h:panelGroup layout="block" id="preListHeaderSelected" styleClass="imj_menuHeader">
+						<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}"/>
+						<span class="imj_iconTriangleBottomRight_15"/>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="imj_menuBody">
+						
+						<h:outputText styleClass="free_area0" value="#{lbl.no_image_selected}" rendered="#{SessionBean.selectedSize == 0}"/>
+						
+						<ui:fragment rendered="#{SessionBean.selectedSize > 0}">
+							<ul class="imj_overlayMenuList">
+								<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
+									<li class="imj_overlayMenuListItem">
+										<!-- No active album selected -->
+										<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
+											<h:panelGroup styleClass="imj_icoMagnifier_15"/>
+											<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
+								
+								<ui:fragment rendered="#{SessionBean.activeAlbum != null}">
+									<li class="imj_overlayMenuListItem">
+										<!-- Add to active album -->
+										<h:commandLink action="#{cc.attrs.paginatorBean.addSelectedToActiveAlbum}">
+											<h:outputText value="#{lbl.add_to_active_album}"/>
+										</h:commandLink>
+									</li>
+								</ui:fragment>
+								
+								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.paginatorBean.collection != null and cc.attrs.paginatorBean.imageEditable}">
+									<li class="imj_overlayMenuListItem">
+										<!-- Edit selected -->
+										<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected&amp;c=#{cc.attrs.paginatorBean.collection.id}&amp;q=#{cc.attrs.paginatorBean.query}" id="lnkSelectEdit">
+											<h:outputText value="#{lbl.edit_selected}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
+								
+								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.paginatorBean.collection != null}">
+									<li class="imj_overlayMenuListItem">
+										<!-- Delete/Discard selected images -->
+										<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="imj_criticalItem" value="#" 
+													  rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and  cc.attrs.paginatorBean.imageDeletable and cc.attrs.paginatorBean.collection.status == 'PENDING'}">
+											<h:outputText value="#{lbl.delete_selectedImages}"/>
+										</h:outputLink>
+										<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogDeleteSelected')" 
+													  rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:collectionBrowse' and  cc.attrs.paginatorBean.editable and cc.attrs.paginatorBean.collection.status == 'RELEASED'}">
+											<h:outputText value="#{lbl.withdraw_selected}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
+								
+								<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString == 'pretty:albumBrowse' and cc.attrs.paginatorBean.deletable}">
+									<li class="imj_overlayMenuListItem">
+										<!-- Remove selected from album -->
+										<h:commandLink value="#{lbl.remove_from_album}" action="#{cc.attrs.paginatorBean.removeFromAlbum}"/>
+									</li>
+								</ui:fragment>
+							</ul>
+						</ui:fragment>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:form>
+		</h:panelGroup>
+		
+		
+	</composite:implementation>
+</html>

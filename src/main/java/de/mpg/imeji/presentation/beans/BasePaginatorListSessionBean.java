@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
@@ -312,6 +313,21 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         // set new PageNumber to a number where the first element of the current Page is still displayed
         setCurrentPageNumber(((currentPageNumber - 1 * elementsPerPage + 1) / (elementsPerPage)) + 1);
         return getPrettyNavigation();
+    }
+    
+    /**
+     * Listener for elementsPerPageTop
+     * @param event
+     * @throws Exception
+     */
+    public void elementsPerPageTopListener(ValueChangeEvent event) throws Exception
+    {
+    	if(event != null)
+    	{
+    		setElementsPerPage((Integer) event.getNewValue());
+            // set new PageNumber to a number where the first element of the current Page is still displayed
+            setCurrentPageNumber(((currentPageNumber - 1 * elementsPerPage + 1) / (elementsPerPage)) + 1);
+    	}
     }
 
     /**

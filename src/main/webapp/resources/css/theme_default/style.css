@@ -7,23 +7,90 @@
  * of the original imeji theme/template based on the eSciDoc GUI V2 (core and appearance 
  * styles - http://colab.mpdl.mpg.de/mediawiki/images/0/02/MPDL_StyleGuide.pdf).
  *
- * Please check the new base.css with normalize.css and additional CSS-resets.
+ * Since we are developing a new template and styles ("app.css") in a parallel run, in 
+ * branch "gui-restructure" https://github.com/imeji-community/imeji/tree/gui-restructure 
+ * this *old* style-sheet contains only some additional hot fixes for the original theme 
+ * but is *in use* for the running release!
+ * 
+ * Please check out the new styles in app.css 
+ * and basic.css (with normalize.css and additional CSS-resets).
  * 
  * New imeji style prefix for all classes and ids: imj_
  *
  * New naming - list of the renamed styles 
  * old version -> new version (file.name)
- * are documented in changes.css 
+ * (are documented in changes.css)  
  * 
+ * Karsten Asshauer & Marco Schlender for the imeji community * http://imeji.org *
  * ====================================================================================  */
 
+ /* OLD STYLES */
+/* ******** css hot fixes for release 1.2.0.0 ***********
+ * ================================================== */
+.free_txtInput, .xHuge_txtInput, .xHuge_txtInput input {
+    width: 98%;
+}
+
+.menuHeader {
+	color: #6CAD2F;
+}
+
+/*
+.imj_mainContentPreListHeaderItemDelete:hover {
+	background-color: #D80000;
+	border-radius: 0.41666666em;
+    -webkit-border-radius: 0.41666666em;
+    -moz-border-radius: 0.41666666em;
+    -o-border-radius: 0.41666666em;
+    -ms-border-radius: 0.41666666em;
+}
+*/
+
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+
+
+/* NEW STYLES */
+
+
+/* ========================================================================== 
+ ***************************** imeji basic styles ***************************
+ * Global CSS Helpers
+ * ========================================================================== */
+
+.imj_clear {
+	clear: both;	
+}
+
+.imj_invisible {
+	visibility: hidden; 
+}
+
+.imj_noDisplay {
+	display: none;
+}
 
 /* overwrite of the old font-family style (in apperance.css) 
  * with font-family: 'Open Sans',sans-serif; 
  * loaded via Google-Webfonts 
+ * choose your own font here!
    =========================================================================  */
    
 @import url(http://fonts.googleapis.com/css?family=Open+Sans); 
+
+
+/* imeji base settings - set body width and height to 100% for all pages 
+   =========================================================================  */
+
+html, body {
+	background-color: #292929;
+	height: 100%;
+	width: 100%;
+	margin: 0px;
+ 	padding: 0px;
+}
+
 
 body, label, input, textarea, select, button, input.numberLabel, h1, h2, h3, h4, h5, h6, a, p {
     font-family: 'Open Sans',sans-serif;
@@ -86,17 +153,6 @@ input[type="radio"] {
     margin: 0; 
 }
 
-
-/* ******** css fixes for release 1.2.0.0 ***********
- * ================================================== */
-
-.free_txtInput, .xHuge_txtInput, .xHuge_txtInput input {
-    width: 98%;
-}
-
-.menuHeader {
-	color: #6CAD2F;
-}
 
 /* special styles for welcome-page - start-page 
  * infos, tabs, carousel, twitter-widget - Welcome.xhtml 

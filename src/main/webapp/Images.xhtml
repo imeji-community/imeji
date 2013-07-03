@@ -1,16 +1,17 @@
-<ui:composition template="templates/template_paginator_images.xhtml"
+<ui:composition template="templates/sub_template/template_image_tiledlist.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="paginatorListSessionBean" value="#{ImagesBean}" />
 	<ui:param name="headline" value="#{lbl.images}" />
-
+	
+	
 	<ui:define name="actionsMenu">
+		
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 			<!-- SORTING content menu lower line starts here -->
-			<h:outputText id="txtSort" value="#{lbl.sort_by}"
-				styleClass="imj_contentSubMenuItemSorting" />
+			<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="imj_contentSubMenuItemSorting"/>
 			<h:form>
 				<h:selectOneMenu id="selSort"
 					value="#{ImagesBean.selectedSortCriterion}"
@@ -24,44 +25,43 @@
 					action="#{paginatorListSessionBean.toggleSortOrder}"
 					rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
 			</h:form>
-			<h:outputText styleClass="imj_contentMenuSeparator" />
+			
+			<h:outputText value="|" styleClass="imj_contentMenuSeparator"/>
 			<!-- SORTING content menu lower line ends here -->
-			<h:panelGroup layout="block" styleClass="free_area0_p0 endline overlayMenu">
-				<h:panelGroup layout="block" styleClass="menuHeader free_area0">
-					<h:panelGroup styleClass="free_area0">
-						<h:outputText value="#{lbl.download} " styleClass="free_area0 "/>
-					</h:panelGroup>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
-					<div class="selectMenu xLarge_area2 bordst2">
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=zip&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_zip}" />
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_rdf}" />
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_native}" />
-						</h:outputLink>
-					</div>
-				</h:panelGroup>
-			</h:panelGroup>
+			
+			<div class="imj_overlayMenu imj_contentSubMenuItem">
+				<div class="imj_menuHeader">
+					<h:outputText value="#{lbl.download}" styleClass="imj_headerEntry"/>
+				</div>
+				<div class="imj_menuBody">
+					<ul class="imj_overlayMenuList">
+						<li>
+							<h:outputLink value="#{Navigation.applicationUrl}export?format=zip&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}" target="_blank">
+								<h:outputText value="#{lbl.export_zip}"/>
+							</h:outputLink>
+						</li>
+						<li>
+							<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}" target="_blank">
+								<h:outputText value="#{lbl.export_rdf}" />
+							</h:outputLink>
+						</li>
+						<li>
+							<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}" target="_blank">
+								<h:outputText value="#{lbl.export_native}" />
+							</h:outputLink>
+						</li>
+					</ul>
+				</div>
+			</div>
 		</h:panelGroup>
 	</ui:define>
 
 	<ui:define name="searchQuery">
-		<h:panelGroup styleClass="full_area0 small_marginLExcl"
-			rendered="#{paginatorListSessionBean.searchFilter != null}">
-			<h:outputText value="#{lbl.search_query}: "
-				styleClass="free_area0_p2" />
+		<h:panelGroup styleClass="full_area0 small_marginLExcl" rendered="#{paginatorListSessionBean.searchFilter != null}">
+			<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p2" />
 			<h:panelGroup styleClass="xHuge_area0">
-				<h:outputText value="#{lbl.search_for}" styleClass="free_area0_p2"
-					rendered="#{paginatorListSessionBean.simpleSearch}" />
-				<h:outputText value="#{ImagesBean.simpleQuery}"
-					styleClass="free_area0_p2" />
+				<h:outputText value="#{lbl.search_for}" styleClass="free_area0_p2" rendered="#{paginatorListSessionBean.simpleSearch}" />
+				<h:outputText value="#{ImagesBean.simpleQuery}" styleClass="free_area0_p2" />
 				<h:outputLink
 					value="#{Navigation.searchUrl}?q=#{paginatorListSessionBean.query}"
 					rendered="#{!paginatorListSessionBean.simpleSearch}"
@@ -71,4 +71,7 @@
 			</h:panelGroup>
 		</h:panelGroup>
 	</ui:define>
+	
+	
+	
 </ui:composition>

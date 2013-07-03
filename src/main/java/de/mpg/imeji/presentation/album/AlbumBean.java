@@ -758,11 +758,16 @@ public class AlbumBean
         return this.getAlbum().getMetadata().getDescription().replaceAll("\n", "<br/>");
     }
 
-    public void setDescription(String description) {
-	this.description = description;
+    public void setDescription(String description) 
+    {
+    	this.description = description;
     }
 	
-    public String getTab()
+    public String getDescription() {
+		return description;
+	}
+
+	public String getTab()
     {
         if (UrlHelper.getParameterValue("tab") != null)
         {

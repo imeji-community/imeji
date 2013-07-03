@@ -135,7 +135,7 @@ public class PdfHandlingTest {
 	
 	@Test
 	public void createImageFromPdfRenderer2Test() throws IOException {
-		File file = new File("src/test/resources/pdf/dfg.pdf");
+		File file = new File("src/test/resources/pdf/pdfWith4Pages.pdf");
 			
 		byte[] bytes = org.apache.commons.io.FileUtils.readFileToByteArray(file);
 			

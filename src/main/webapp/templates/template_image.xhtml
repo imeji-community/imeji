@@ -294,6 +294,16 @@
 										
 								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.embed}"/> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:inputText value="&lt;a href='#{imageBean.pageUrl}' title='#{imageBean.image.filename}'&gt; &lt;img src='#{imageBean.image.webImageUrl}' alt='#{imageBean.image.filename}' title='#{imageBean.image.filename}'&gt;&lt;/a&gt;" size="50" onclick="this.select();" escape="false"/>
+									</span>
+								</h:panelGroup>
+										
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
 										<h:outputText value="#{lbl.qrcode}" /> 
 										<span class="noDisplay">: </span>
 									</b>

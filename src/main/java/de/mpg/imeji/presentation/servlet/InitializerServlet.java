@@ -129,7 +129,7 @@ public class InitializerServlet extends HttpServlet
     public void destroy()
     {
         super.destroy();
-        System.out.println("Shutting down imeji, Jena TDB will be closed");
+        logger.warn("Shutting down imeji, Jena TDB will be closed");
         ImejiJena.imejiDataSet.end();
         ImejiJena.imejiDataSet.close();
     }

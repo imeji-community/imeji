@@ -170,9 +170,9 @@ public class StorageUtils
         {
             return "image/jpeg";
         }
-        else if ("png".equals(format))
+        else if ("jpeg".equals(format))
         {
-            return "image/png";
+            return "image/jpeg";
         }
         else if ("png".equals(format))
         {
@@ -186,13 +186,37 @@ public class StorageUtils
         {
             return "video/quicktime";
         }
+        else if ("avi".equals(format))
+        {
+            return "video/avi";
+        }
+        else if ("mpeg".equals(format))
+        {
+            return "video/mpeg";
+        }
+        else if ("mp4".equals(format))
+        {
+            return "video/mp4";
+        }
+        else if ("wmv".equals(format))
+        {
+            return "video/x-ms-wmv";
+        }
+        else if ("webm".equals(format))
+        {
+            return "video/webm";
+        }
+        else if ("ogg".equals(format))
+        {
+            return "video/ogg";
+        }
         else if ("flv".equals(format))
         {
             //still not support directly played in browser
         	return "video/x-flv";
         }else if ("pdf".equals(format))
         {
-            return "application/"+"pdf";
+            return "application/pdf";
         }
         return "video/" + format;
     }

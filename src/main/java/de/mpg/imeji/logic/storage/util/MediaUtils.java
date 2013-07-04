@@ -203,4 +203,13 @@ public class MediaUtils
         }
         return null;
     }
+    
+    /**
+     * Create a temporary file or directory
+     * @return temparory file or diectory
+     * @throws IOException
+     */
+    public static File createTempDirectory() throws IOException {
+		return File.createTempFile("temp", Long.toString(System.nanoTime()));
+	}
 }

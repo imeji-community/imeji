@@ -24,6 +24,8 @@ public class Navigation
     public String frameworkUrl;
     // Url of the application
     public final String applicationUrl;
+    // Url of digilib
+    public String digilibUrl;
     // Pages of imeji
     public final Page HOME = new Page("HomePage", "");
     public final Page SEARCH = new Page("Search", "search");
@@ -57,6 +59,10 @@ public class Navigation
         if (frameworkUrl != null)
             frameworkUrl = StringHelper.normalizeURI(frameworkUrl);
         applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
+        
+        this.digilibUrl = PropertyReader.getProperty("digilib.imeji.instance.url");
+        if(this.digilibUrl != null && !this.digilibUrl.isEmpty())
+        	this.digilibUrl = StringHelper.normalizeURI(PropertyReader.getProperty("digilib.imeji.instance.url"));
     }
 
     public String getApplicationUrl()
@@ -67,6 +73,16 @@ public class Navigation
     public String getApplicationUri()
     {
         return applicationUrl.substring(0, applicationUrl.length() - 1);
+    }
+    
+    public String getDigilibUrl()
+    {
+        return this.digilibUrl;
+    }
+    
+    public String getDigilibUri()
+    {
+        return this.digilibUrl.substring(0, this.digilibUrl.length() - 1);
     }
 
     public String getDomain()

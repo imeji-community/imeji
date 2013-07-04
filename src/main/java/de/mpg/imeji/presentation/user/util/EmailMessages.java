@@ -51,11 +51,11 @@ public class EmailMessages
      * @param collectionLink
      * @return
      */
-    public String getSharedCollectionMessage(String sender, String dest, String collectionName, String collectionLink)
+    public String getSharedCollectionMessage(String sender, String dest, String collectionName, String collectionLink, String role)
     {
         String message = getBundle("email_shared_collection");
         message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", collectionName)
-                .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);
+                .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender).replace("XXX_ROLE_XXX", role);
         return message;
     }
 
@@ -68,11 +68,11 @@ public class EmailMessages
      * @param collectionLink
      * @return
      */
-    public String getSharedAlbumMessage(String sender, String dest, String collectionName, String collectionLink)
+    public String getSharedAlbumMessage(String sender, String dest, String collectionName, String collectionLink, String role)
     {
         String message = getBundle("email_shared_album");
         message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", collectionName)
-                .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);
+                .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender).replace("XXX_ROLE_XXX", role);
         return message;
     }
 

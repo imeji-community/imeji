@@ -28,11 +28,12 @@ import de.mpg.j2j.exceptions.AlreadyExistsException;
  */
 public class InitializerServlet extends HttpServlet
 {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private static Logger logger = Logger.getLogger(InitializerServlet.class);
+    /**
+     * The {@link Thread} which controls the locking in imeji
+     */
+    private LocksSurveyor locksSurveyor = new LocksSurveyor();
 
     @Override
     public void init() throws ServletException
@@ -66,7 +67,6 @@ public class InitializerServlet extends HttpServlet
      */
     private void startLocksSurveyor()
     {
-        LocksSurveyor locksSurveyor = new LocksSurveyor();
         locksSurveyor.start();
     }
 
@@ -128,9 +128,14 @@ public class InitializerServlet extends HttpServlet
     @Override
     public void destroy()
     {
+        logger.info("Shutting down imeji!");
         super.destroy();
-        logger.warn("Shutting down imeji, Jena TDB will be closed");
+        logger.info("Closing Jena TDB...");
         ImejiJena.imejiDataSet.end();
         ImejiJena.imejiDataSet.close();
+        logger.info("...done");
+        logger.info("Ending LockSurveyor...");
+        locksSurveyor.terminate();
+        logger.info("...done");
     }
 }

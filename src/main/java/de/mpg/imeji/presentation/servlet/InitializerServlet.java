@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.init;
+package de.mpg.imeji.presentation.servlet;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -129,5 +129,8 @@ public class InitializerServlet extends HttpServlet
     public void destroy()
     {
         super.destroy();
+        System.out.println("Shutting down imeji, Jena TDB will be closed");
+        ImejiJena.imejiDataSet.end();
+        ImejiJena.imejiDataSet.close();
     }
 }

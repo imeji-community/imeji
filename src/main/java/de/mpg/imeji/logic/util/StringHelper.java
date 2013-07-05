@@ -1,9 +1,13 @@
 package de.mpg.imeji.logic.util;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.security.MessageDigest;
 
 import org.apache.commons.codec.digest.DigestUtils;
+
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Static functions to manipulate {@link String}
@@ -25,7 +29,7 @@ public class StringHelper
     /**
      * Tha maximum size of a file: Theorically, the max length could be 255. For security, imeji uses qa lower count.
      */
-    public static final int FILENAME_MAX_LENGTH = 200;
+    public static final int FILENAME_MAX_LENGTH = 200;    
 
     /**
      * Encode a {@link String} to MD5
@@ -112,4 +116,25 @@ public class StringHelper
         }
         return null;
     }
+
+    /**
+     * Check whether the filename has a video extension name
+     * @param fileName
+     * @return true, if filename is a video format, false otherwise
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+	public static boolean isVideo(String fileName) throws IOException, URISyntaxException {
+		String videoExtensions = PropertyReader.getProperty("imeji.internal.video.whitelist");
+		if(videoExtensions.contains(StringHelper.getFileExtension(fileName)))
+			return true;
+		return false;
+	}
+	
+	public static boolean isImage(String fileName) throws IOException, URISyntaxException {
+		String imageExtensions = PropertyReader.getProperty("imeji.internal.image.whitelist");
+		if(imageExtensions.contains(StringHelper.getFileExtension(fileName)))
+			return true;
+		return false;
+	}
 }

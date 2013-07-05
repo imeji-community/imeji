@@ -42,6 +42,7 @@ import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.logic.storage.util.PdfUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.storage.util.VideoUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -175,6 +176,14 @@ public class InternalStorageManager
     {
         return storageUrl;
     }
+    
+    /**
+     * Get the storage path
+     * @return
+     */
+    public String getStoragePath() {
+		return storagePath;
+	}
 
     /**
      * @return the administrator
@@ -298,7 +307,17 @@ public class InternalStorageManager
         				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getThumbnailUrl()))),
         				transformUrlToPath(item.getThumbnailUrl()));
     		}
-    		else
+    		else if(StringHelper.isVideo(item.getFileName()))
+    		{
+    			byte[] newBytes = VideoUtils.videoToImageBytes(bytes);
+    			write(ImageUtils.transformImage(newBytes, FileResolution.WEB,
+        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getWebUrl()))),
+        				transformUrlToPath(item.getWebUrl()));
+    			write(ImageUtils.transformImage(newBytes, FileResolution.THUMBNAIL,
+        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getThumbnailUrl()))),
+        				transformUrlToPath(item.getThumbnailUrl()));
+    		}
+    		else if(StringHelper.isImage(item.getFileName()))
     		{
     			write(ImageUtils.transformImage(bytes, FileResolution.WEB,
         				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),

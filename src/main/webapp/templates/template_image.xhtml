@@ -26,9 +26,18 @@
 				<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl"> 
 					<h:panelGroup layout="block" styleClass="full_area detailedItem">
 						<span>
-							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank">
+							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.imageFile and (empty Navigation.digilibUrl)}">
 								<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
-							</h:outputLink>			
+							</h:outputLink>
+							<h:outputLink id="lnkPicInDigilib" value="#{Navigation.digilibUrl}jquery/digilib.html?fn=#{imageBean.image.storageId}/original/#{imageBean.itemStorageIdFilename}" target="_blank" rendered="#{imageBean.imageFile and (not empty Navigation.digilibUrl)}">
+								<h:graphicImage id="picWebResolutionDigilib" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
+							</h:outputLink>
+							<h:outputLink id="lnkPicFullResolutionPDF" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.pdfFile}">
+								<h:graphicImage id="picWebResolutionPDF" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
+							</h:outputLink>
+							<h:outputLink id="lnkPicFullResolutionVideo" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.videoFile}">
+								<h:graphicImage id="picWebResolutionVideo" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
+							</h:outputLink>
 						</span>
 					</h:panelGroup>
 					<h:panelGroup styleClass="free_area0 xSmall_marginLIncl" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
@@ -289,6 +298,16 @@
 												<h:outputText value="#{albums.metadata.title}" />
 											</h:outputLink><br/>
 										</ui:repeat>
+									</span>
+								</h:panelGroup>
+										
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.embed}"/> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:inputText value="&lt;a href='#{imageBean.pageUrl}' title='#{imageBean.image.filename}'&gt; &lt;img src='#{imageBean.image.webImageUrl}' alt='#{imageBean.image.filename}' title='#{imageBean.image.filename}'&gt;&lt;/a&gt;" size="50" onclick="this.select();" escape="false"/>
 									</span>
 								</h:panelGroup>
 										

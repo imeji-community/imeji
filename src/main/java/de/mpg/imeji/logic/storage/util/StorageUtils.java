@@ -188,7 +188,15 @@ public class StorageUtils
         }
         else if ("avi".equals(format))
         {
-            return "video/avi";
+            return "video/x-msvideo";
+        }
+        else if ("3gp".equals(format))
+        {
+            return "video/3gpp";
+        }
+        else if ("ts".equals(format))
+        {
+            return "video/MP2T";
         }
         else if ("mpeg".equals(format))
         {

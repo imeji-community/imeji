@@ -70,24 +70,9 @@
    
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
-
-/* OLD STYLES */
-/* ******** css hot fixes for release 1.2.0.0 ***********
- * ================================================== */
-.free_txtInput, .xHuge_txtInput, .xHuge_txtInput input {
-    width: 98%;
-}
-
-.menuHeader {
-	color: #6CAD2F;
-}
-
 /*********************************************************************************/
+/******************************* NEW STYLES **************************************/
 /*********************************************************************************/
-/*********************************************************************************/
-
-
-/* NEW STYLES */
 
 
 /* ========================================================================== 
@@ -1474,7 +1459,7 @@ OLD:
 	border-bottom: solid #BAB4B3 0.0909em;
  }
  
-  .imj_metadataSubPanelItem:hover {
+  .imj_metadataSubPanelItem a:hover  {
 	background-color: #6CAD2F;
  }
  
@@ -1491,13 +1476,14 @@ OLD:
 .imj_metadataLabel, .imj_infodataLabel {
 	font-weight: bold;
 	display: inline-block;
-	min-width:19%;
+	min-width: 16%;
 	vertical-align: top;
 }
 
 .imj_metadataValue, .imj_infodataValue  {
 	display: inline-block;
 	margin-left: 1.0em;
+	max-width: 77%;
 }
 
 .imj_metadataValueEntry {
@@ -1524,6 +1510,71 @@ OLD:
 	white-space: pre;
 	display: inline-block;
 }
+
+/* * mediaEditPanel - METADATA INPUT PANEL ***
+    (MetadataInput.xhtml)
+   ================================================== */
+/*CSS class for autocomplete component */
+
+.ui-menu {
+	color: #292929;
+	 width: 300px;
+	 background-color:#292929;
+}
+.ui-menu-item{
+   background-color:#292929;
+   width: 300px;
+   font-weight: bold;
+   border-left: 5px;
+}
+.ui-corner-all{
+}
+.ui-widget-content{
+}
+.ui-widget{
+}
+.ui-autocomplete{
+	position:absolute;
+	z-index:4000 !important
+}
+.ui-autocomplete-loading { 
+	background-color:#6CAD2F !important;
+}
+.ui-helper-hidden-accessible { display:none; }
+
+
+
+.imj_metadataInputPanel {
+	width: 100%;
+}
+
+/* "huge_label" */
+
+.imj_metadataLabelInput {
+	display: inline-block;
+}
+
+.imj_metadataValueEntryLabel {
+}
+
+
+.imj_metadataLabelInputWrapper {
+	display: inline-block;
+}
+
+/* inputTxtArea
+
+.double_txtArea {
+    width: 18.3636em;
+	 height: 4em;
+    min-height: 4em;
+}
+*/
+
+
+
+
+
 
 /* * SubmitPanel (image_deatails.xhtml)
    ================================================== */

@@ -160,20 +160,21 @@
 								<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.metadataList}" rows="0" varStatus="indexMetadata">
 									
 									<!-- MetaDataList - edit panel container set -->
-									<span class="imj_metadataSet">
-										<span class="imj_metadataLabel">
+									<div class="imj_metadataSet">
+										<div class="imj_metadataLabel">
 											<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
 											<span class="imj_invisible">: </span>
-										</span>
-										<span class="imj_metadataValue">
-											<span class="imj_metadataValueEntry">
-												<ui:include src="../../../picturesPages/ui/MetadataInput.xhtml">
+										</div>
+										<div class="imj_metadataValue">
+											<div class="imj_metadataValueEntry">
+												<!-- MetaDataInput -->
+												<ui:include src="MetadataInput.xhtml">
 													<ui:param name="statement" value="#{metadata.statement}"/>
 													<ui:param name="metadata" value="#{metadata}"/>
 													<ui:param name="areaClass" value="double_txtArea"/>
 													<ui:param name="hideLabel" value="true"/>
 												</ui:include>
-											</span>
+											</div>
 											<!-- imj_multipleButtons (-) (+) command buttons -->
 											<span class="imj_metadataEditButtonArea">
 												<h:commandButton type="button" styleClass="imj_removeButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
@@ -187,8 +188,8 @@
 													<f:ajax execute="@form" render="@form" />
 												</h:commandButton>
 											</span>
-										</span>
-									</span>
+										</div>
+									</div>
 								</ui:repeat>
 								
 								<!-- MetaDataList - EDIT - imj_submitPanel - cancel + submit command buttons -->

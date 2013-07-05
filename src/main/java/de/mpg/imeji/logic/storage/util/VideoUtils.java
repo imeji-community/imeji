@@ -5,12 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.apache.xmlbeans.impl.jam.mutable.MField;
 import org.openimaj.feature.local.list.LocalFeatureList;
-import org.openimaj.image.DisplayUtilities;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.image.MBFImage;
 import org.openimaj.image.feature.local.engine.DoGSIFTEngine;
@@ -198,7 +195,4 @@ public class VideoUtils {
 		}
 		return null;
 	}
-	
-
-
 }

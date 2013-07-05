@@ -9,7 +9,7 @@
 		<h:outputText value="#{paginatorListSessionBean.initPage}"/>
 	</ui:define>
 	
-	<!-- Main Content - Image tiled list -->
+	<!-- Main Content - Image tiled list - START -->
 	<ui:define name="mainContent">
 		<script type="text/javascript">
 			function setOpacityToImages()
@@ -21,24 +21,36 @@
 			};
 		</script>
 		
-		<ui:include src="../../confirmationPages/SelectedDeleteWithdraw.xhtml">
+		<!-- Confirmation Pages -->
+		<ui:include src="../../confirmationPages/AllDelete.xhtml">
 			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
 		</ui:include>
-		<ui:include src="../../confirmationPages/AllDeleteWithdraw.xhtml">
+		<ui:include src="../../confirmationPages/AllWithdraw.xhtml">
 			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
 		</ui:include>
-		
+		<ui:include src="../../confirmationPages/SelectedDelete.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+		<ui:include src="../../confirmationPages/SelectedWithdraw.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+					
+		<!-- Breadcrumb - History -->
 		<ui:include src="../../include/History.xhtml"></ui:include>
 		
+		<!-- AJAX Wrapper - START -->
 		<h:panelGroup layout="block" id="imj_ajaxWrapper">
 			
-			
+			<!-- Selection Info Panel -->
 			<imjc:selectionInfoPanel fSession="#{FiltersSession}" paginatorBean="#{paginatorListSessionBean}"/>
 			
+			<!-- Page Browser GotoBox -->
 			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
 			
+			<!-- Media List -->
 			<imjc:tiledMediaList picList="#{paginatorListSessionBean}"/>
 			
+			<!-- Facets -->
 			<h:panelGroup layout="block" id="imj_ajaxFacets">
 				<imjc:facets paginatorBean="#{paginatorListSessionBean}"/>
 			</h:panelGroup>
@@ -51,11 +63,15 @@
 				$(function(){
 					$(".imj_activateFacets").click().remove();
 				});
-			</script>
+			</script>			
 			
-			
+			<!-- Page Browser GotoBox -->
 			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+			
 		</h:panelGroup>
+		<!-- AJAX Wrapper - END -->
+		
 	</ui:define>
+	<!-- Main Content - END -->
 	
 </ui:composition>

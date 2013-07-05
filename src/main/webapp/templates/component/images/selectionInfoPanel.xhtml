@@ -6,9 +6,28 @@
 	<ui:param name="srcFilterList" value="[]"/>
 	
 	<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
+	
+				
+		<ui:fragment rendered="#{AlbumImageBean.albumId != null}">
+			<h:outputLink value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}" styleClass="">
+				<h:outputText value="#{lbl.album_view_all_images}"/>
+			</h:outputLink>
+		</ui:fragment>
+	
+		<ui:fragment rendered="#{CollectionImageBean.collectionId != null}">
+			<h:outputLink value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/#{Navigation.browsePath}">
+			<h:outputText value="#{lbl.collection_back_to_images}"/>
+		</h:outputLink>
+		</ui:fragment>
+	
+	
 		<h:outputLink value="#{Navigation.browseUrl}">
 			<h:outputText value="#{lbl.images_all}"/>
 		</h:outputLink>
+		
+		
+		
+		
 		<h:outputText value="#{FiltersSession.filters}"/>
 		<ui:repeat id="filterList" var="filter" value="#{srcFilterList.filters}" rows="0" rowKeyVar="index">
 			<h:outputText value=" / " styleClass="free_area0"/>

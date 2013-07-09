@@ -25,6 +25,9 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.storage.Storage.FileResolution;
+import de.mpg.imeji.logic.storage.util.ImageUtils;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -45,6 +48,7 @@ import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -625,5 +629,13 @@ public class ImageBean
     
     public boolean isVideoFile() throws IOException, URISyntaxException {
     	return StringHelper.isVideo(this.item.getFilename());
+    }
+    
+    public String getMimeType() throws IOException, URISyntaxException {
+    	return StorageUtils.getMimeType(StringHelper.getFileExtension(this.item.getFilename()));
+    }
+    
+    public int getWebResolutionWidth() throws IOException, URISyntaxException {
+    	return ImageUtils.getResolution(FileResolution.WEB);
     }
 }

@@ -1,0 +1,793 @@
+@charset "UTF-8";
+
+/*
+*
+* CDDL HEADER START
+*
+* The contents of this file are subject to the terms of the
+* Common Development and Distribution License, Version 1.0 only
+* (the "License"). You may not use this file except in compliance
+* with the License.
+*
+* You can obtain a copy of the license at license/ESCIDOC.LICENSE
+* or http://www.escidoc.de/license.
+* See the License for the specific language governing permissions
+* and limitations under the License.
+*
+* When distributing Covered Code, include this CDDL HEADER in each
+* file and include the License file at license/ESCIDOC.LICENSE.
+* If applicable, add the following below this CDDL HEADER, with the
+* fields enclosed by brackets "[]" replaced with your own identifying
+* information: Portions Copyright [yyyy] [name of copyright owner]
+*
+* CDDL HEADER END
+*/
+
+/*
+* Copyright 2006-2010 Fachinformationszentrum Karlsruhe Gesellschaft
+* für wissenschaftlich-technische Information mbH and Max-Planck-
+* Gesellschaft zur Förderung der Wissenschaft e.V.
+* All rights reserved. Use is subject to license terms.
+*/
+
+/*
+*
+* COMPONENT RELATED IMAGES
+*
+*/
+
+/* HEADER
+-----------------------------------------------
+|[ Logo ]                 [      Meta Menu   ]|
+|                           [   Breadcrumb   ]|
+|[ Main Menu ]                   [   Title   ]|
+|[ Options ]                        	      |
+|[ Actions ]                         	      |
+|[ Message ]                        	      |
+-----------------------------------------------
+*/
+	
+	body .wrapper, body .footer {
+		background-image: url('../images/background.gif');
+	}
+
+	/*HEADER LOGO*/
+
+	.headerLogo {
+		background-image: url('http://zuse.zib.de/infos/images/banner.png');
+		background-repeat: no-repeat;
+		background-position: top left;
+	}
+		/*PUT IN HEADER LOGO FOR PRINT DISPLAY HERE*/
+		@media print {
+			.contentMenu {
+				list-style-image: url('http://zuse.zib.de/infos/images/banner.png');
+			}
+		}
+	
+	.themePark {
+		background: inherit;
+	/*	background-image: url('../images/logo_overlay_beta.png');*/
+		background-repeat: no-repeat;
+		background-position: top left;
+	}
+	
+	.overlayDev {
+		background: inherit;
+		background-image: url('../images/logo_pubman_overlay_dev.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.overlayTest {
+		background: inherit;
+		background-image: url('../images/logo_pubman_overlay_test.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.overlayQA {
+		background: inherit;
+		background-image: url('../images/logo_pubman_overlay_qa.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.smallThrobber {
+		background: inherit;
+		background-image: url('../images/throbber_31x31.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+		margin-top: 1.37em;
+		margin-bottom: 1.37em;
+	}
+	
+	.bigThrobber {
+		background: inherit;
+		background-image: url('../images/throbber_63x63.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+		margin-top: 2.83em;
+		margin-bottom: 2.83em;
+	}
+
+	/*SEARCH MENU*/
+	
+	.quickSearchIcon {
+		background-image: url('../images/All_Search_LensStart_23_Static.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+/*	
+	.quickSearchIcon:hover, .quickSearchIcon:focus {
+		background-image: url('../images/All_Search_LensStart_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.quickSearchIcon:disabled {
+		background-image: url('../images/All_Search_LensStart_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+*/
+	/*SORTING IMAGES FOR CONTENT MENU*/
+	.ascSort {
+		background-image: url('../images/All_Sorting_TriangleAscending_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: right;
+	}
+	
+	.ascSort:hover, .ascSort:focus {
+		background-image: url('../images/All_Sorting_TriangleAscending_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: right;
+	}
+	
+	.ascSort:disabled {
+		background-image: url('../images/All_Sorting_TriangleAscending_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: right;
+	}
+	
+	.desSort {
+		background-image: url('../images/All_Sorting_TriangleDescending_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: right;
+	}
+	
+	.desSort:hover, .desSort:focus {
+		background-image: url('../images/All_Sorting_TriangleDescending_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: right;
+	}
+	
+	.desSort:disabled {
+		background-image: url('../images/All_Sorting_TriangleDescending_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: right;
+	}
+
+/*BODY*/
+
+	body .wrapper {
+		
+	}
+
+/* CONTENT
+-----------------------------------------------
+|         [      Paginator      ]             |
+|                               	      |
+|[ Lists & Full Item ]                        |
+|         [        Footer       ]             |
+-----------------------------------------------*/
+	
+	/*START PAGE*/
+
+	.myItemsIcon {
+		background-image: url('../images/PM_Startpage_MyItems.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.qaWSIcon {
+		background-image: url('../images/PM_Startpage_QA.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.submIcon {
+		background-image: url('../images/PM_Startpage_Submission.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+
+	/*EXTENDED PAGINATOR*/
+
+		/*PAGE BROWSER*/
+		.pageBrowser .skipToFirst {
+			background-image: url('../images/All_Paginator_ArrowFirst_15_Active.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}	
+	
+		.pageBrowser .skipToFirst:hover, .pageBrowser .skipToFirst:focus {
+			background-image: url('../images/All_Paginator_ArrowFirst_15_Hover.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}	
+	
+		.pageBrowser .skipToFirst:disabled {
+			background-image: url('../images/All_Paginator_ArrowFirst_15_Deactivated.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}	
+
+		.pageBrowser .skipToFirst.deactivated {
+			background-image: url('../images/All_Paginator_ArrowFirst_15_Deactivated.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+		
+		.pageBrowser .backward {
+			background-image: url('../images/All_Paginator_ArrowPrevious_15_Active.png');
+			background-repeat: no-repeat;
+			background-position: left;
+			padding-right: 0px;
+			padding-left: 20px;
+		}
+	
+		/*REPLACEMENT HACK FOR IE LESS THAN 6*/
+			* html .pageBrowser .backward {
+				padding-left: 0px;
+			}
+		/*REPLACEMENT HACK FOR IE 7*/
+			*:first-child+html .pageBrowser .backward {
+				padding-left: 0px;
+			}
+	
+		.pageBrowser .backward:hover, .pageBrowser .backward:focus {
+			background-image: url('../images/All_Paginator_ArrowPrevious_15_Hover.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.pageBrowser .backward:disabled {
+			background-image: url('../images/All_Paginator_ArrowPrevious_15_Deactivated.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+		
+		.pageBrowser .backward.deactivated {
+			background-image: url('../images/All_Paginator_ArrowPrevious_15_Deactivated.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.pageBrowser .forward {
+			background-image: url('../images/All_Paginator_ArrowNext_15_Active.png');
+			background-repeat: no-repeat;
+			background-position: right;
+			padding-right: 20px;
+			padding-left: 0px;
+		}
+	
+		/*REPLACEMENT HACK FOR IE LESS THAN 6*/
+			* html .pageBrowser .forward {
+				padding-right: 2px;
+			}
+		/*REPLACEMENT HACK FOR IE 7*/
+			*:first-child+html .pageBrowser .forward {
+				padding-right: 2px;
+			}
+	
+		.pageBrowser .forward:hover, .pageBrowser .forward:focus {
+			background-image: url('../images/All_Paginator_ArrowNext_15_Hover.png');
+			background-repeat: no-repeat;
+			background-position: right;
+		}
+	
+		.pageBrowser .forward:disabled {
+			background-image: url('../images/All_Paginator_ArrowNext_15_Deactivated.png');
+			background-repeat: no-repeat;
+			background-position: right;
+		}
+		
+		.pageBrowser .forward.deactivated {
+			background-image: url('../images/All_Paginator_ArrowNext_15_Deactivated.png');
+			background-repeat: no-repeat;
+			background-position: right;
+		}
+
+		.pageBrowser .skipToLast {
+			background-image: url('../images/All_Paginator_ArrowLast_15_Active.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+	
+		.pageBrowser .skipToLast:hover, .pageBrowser .skipToLast:focus {
+			background-image: url('../images/All_Paginator_ArrowLast_15_Hover.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+	
+		.pageBrowser .skipToLast:disabled {
+			background-image: url('../images/All_Paginator_ArrowLast_15_Deactivated.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+		
+		.pageBrowser .skipToLast.deactivated {
+			background-image: url('../images/All_Paginator_ArrowLast_15_Deactivated.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+		
+	
+	/*LIST COMPONENT*/
+	
+		.itemList .checkboxSelectButton {
+			background-image: url('../images/All_DropDown_TriangleOpen_15_Active.png');
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+	
+		.itemList .checkboxSelectButton:hover, .itemList .checkboxSelectButton:focus {
+			background-image: url('../images/All_DropDown_TriangleOpen_15_Hover.png');
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+	
+		.itemList .checkboxSelectButton:disabled {
+			background-image: url('../images/All_DropDown_TriangleOpen_15_Deactivated.png');
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+	
+		.selectMenu .checkBoxCloseSelectButton {
+			background-image: url('../images/All_DropDown_CrossClose_15_Active.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+	
+		.selectMenu .checkBoxCloseSelectButton:hover, .selectMenu .checkBoxCloseSelectButton:focus {
+			background-image: url('../images/All_DropDown_CrossClose_15_Hover.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+	
+		.selectMenu .checkBoxCloseSelectButton:disabled {
+			background-image: url('../images/All_DropDown_CrossClose_15_Deactivated.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+
+		.submittedItem {
+			background-image: url('../images/All_Status_ItemSubmitted_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.pendingItem {
+			background-image: url('../images/All_Status_ItemPending_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.releasedItem {
+			background-image: url('../images/All_Status_ItemReleased_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.inRevisionItem {
+			background-image: url('../images/All_Status_ItemRework_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+
+		.withdrawnItem {
+			background-image: url('../images/All_Status_ItemWithdrawn_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+		
+		.virrMediaTypeV {
+			background-image: url('../images/Virr_Media_TypeVolume_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+		
+		.virrMediaTypeMG {
+			background-image: url('../images/Virr_Media_TypeMonographie_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+		
+		.virrMediaTypeM {
+			background-image: url('../images/Virr_Media_TypeMultivolume_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+
+	/*AFFILIATION TREE*/
+		.organisationalUnit {
+			background-image: url('../images/All_Status_Organization_23_Static.png');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+	
+		.mpgUnit {
+			background-image: url('../images/mnrv_23x23.gif');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+	
+	/*IMPORT WORKSPACE*/
+		.importFINISHEDFINE  {
+			background-image: url('../images/All_Import_FinishedFine_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.importFINISHEDWARNING  {
+			background-image: url('../images/All_Import_FinishedProblem_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+
+		.importFINISHEDERROR, .importFINISHEDPROBLEM, .importFINISHEDFATAL  {
+			background-image: url('../images/All_Import_FinishedError_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.importPENDINGFINE  {
+			background-image: url('../images/All_Import_PendingFine_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.importPENDINGWARNING  {
+			background-image: url('../images/All_Import_PendingProblem_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+
+		.importPENDINGERROR, .importPENDINGPROBLEM, .importPENDINGFATAL  {
+			background-image: url('../images/All_Import_PendingError_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.importROLLBACKFINE  {
+			background-image: url('../images/All_Import_RollbackFine_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.importROLLBACKWARNING  {
+			background-image: url('../images/All_Import_RollbackProblem_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+
+		.importROLLBACKERROR, .importROLLBACKPROBLEM, .importROLLBACKFATAL  {
+			background-image: url('../images/All_Import_RollbackError_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.importSUSPENDEDFINE  {
+			background-image: url('../images/All_Import_SuspendedFine_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+	
+		.importSUSPENDEDWARNING  {
+			background-image: url('../images/All_Import_SuspendedProblem_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+
+		.importSUSPENDEDERROR, .importSUSPENDEDPROBLEM, .importSUSPENDEDFATAL  {
+			background-image: url('../images/All_Import_SuspendedError_31_Static.png');
+			background-repeat: no-repeat;
+			background-position: left;
+		}
+
+/*MISC*/
+
+	.collapse, .expand /*, .files, .locators*/ {
+		cursor: pointer;
+	}
+	
+	.collapse {
+		background-image: url('../images/All_ListView_MinusSmallview_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+		padding-left: 2.10em !important;
+	}
+	
+	.collapse:hover, .collapse:focus {
+		background-image: url('../images/All_ListView_MinusSmallview_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+		padding-left: 2.10em !important;
+	}
+	
+	.collapse:disabled {
+		background-image: url('../images/All_ListView_MinusSmallview_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+		padding-left: 2.10em !important;
+	}
+
+	.expand {
+		background-image: url('../images/All_ListView_PlusMediumview_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+		padding-left: 2.10em !important;
+	}
+	
+	.expand:hover, .expand:focus {
+		background-image: url('../images/All_ListView_PlusMediumview_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+		padding-left: 2.10em !important;
+	}
+	
+	.expand:disabled {
+		background-image: url('../images/All_ListView_PlusMediumview_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+		padding-left: 2.10em !important;
+	}
+	
+	@media print {
+		.collapse, .expand {
+			display: none !important;
+		}
+	}
+	
+	.left {
+		background-image: url('../images/All_Paginator_ArrowPrevious_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+	}
+	
+	.left:hover, .left:focus {
+		background-image: url('../images/All_Paginator_ArrowPrevious_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+	}
+	
+	.left:disabled {
+		background-image: url('../images/All_Paginator_ArrowPrevious_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+	}
+	
+	.right {
+		background-image: url('../images/All_Paginator_ArrowNext_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+	}
+	
+	.right:hover, .right:focus {
+		background-image: url('../images/All_Paginator_ArrowNext_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+	}
+	
+	.right:disabled {
+		background-image: url('../images/All_Paginator_ArrowNext_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: center left;
+	}
+	
+	.add, .remove {
+		background-color: #ffffff;
+	}
+	
+	.add {
+		background-image: url('../images/All_Complete_PlusAdd_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+		margin-right: 0.37em;
+	}
+	
+	.add:hover, .add:focus {
+		background-image: url('../images/All_Complete_PlusAdd_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.add:disabled {
+		background-image: url('../images/All_Complete_PlusAdd_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.remove {
+		background-image: url('../images/All_Complete_MinusRemove_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.remove:hover, remove:focus {
+		background-image: url('../images/All_Complete_MinusRemove_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.remove:disabled {
+		background-image: url('../images/All_Complete_MinusRemove_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.assign {
+		background-image: url('../images/Virr_Work_Assign_31_Active.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.assign:hover, .assign:focus {
+		background-image: url('../images/Virr_Work_Assign_31_Hover.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.assign:disabled {
+		background-image: url('../images/Virr_Work_Assign_31_Deactivated.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.unassign {
+		background-image: url('../images/Virr_Work_Assign_31_Active.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.unassign:hover, .unassign:focus {
+		background-image: url('../images/Virr_Work_Assign_31_Hover.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.unassign:disabled {
+		background-image: url('../images/Virr_Work_Assign_31_Deactivated.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.fixMessageBlockBtn {
+		background-image: url('../images/All_DropDown_CrossClose_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.fixMessageBlockBtn:hover, .fixMessageBlockBtn:focus {
+		background-image: url('../images/All_DropDown_CrossClose_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.fixMessageBlockBtn:disabled {
+		background-image: url('../images/All_DropDown_CrossClose_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.fixErrorMessageBlockBtn {
+		background-image: url('../images/All_DropDown_CrossClose_15_Error.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.fixSuccessMessageBlockBtn {
+		background-image: url('../images/All_DropDown_CrossClose_15_Success.png');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+
+	.files {
+		background-image: url('../images/All_Attached_ClipAttached_15_Static.png');
+		background-repeat: no-repeat;
+		background-position: bottom left;
+		padding-left: 2.10em !important;
+	}
+
+	.locators {
+		background-image: url('../images/All_Attached_ClipAttached_15_Static.png');
+		background-repeat: no-repeat;
+		background-position: bottom left;
+		padding-left: 2.10em !important;
+	}
+	
+	.editFileIcon {
+		background-image: url('../images/All_Status_AlbumEdit_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: bottom left;
+		padding-left: 2.10em !important;
+	}
+	
+	.viewFileIcon {
+		background-image: url('../images/All_File_EyeTrue_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: bottom left;
+		padding-left: 2.10em !important;
+	}
+	
+	@media print {
+		.files, .locators {
+			padding-left: 0em !important;
+		}
+	}
+	
+	.authorCard {
+		width: 2.83em;
+		height: 1.37em;
+		background-image: url('../images/All_Info_Author_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: left center;
+	}
+	
+	.authorCard:hover, .authorCard:focus {
+		background-image: url('../images/All_Info_Author_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: left center;
+	}
+	
+	.authorCard:disabled {
+		background-image: url('../images/All_Info_Author_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: left center;
+	}
+	
+	.ouCard {
+		width: 2.83em;
+		height: 1.37em;
+		background-image: url('../images/All_Info_Organization_15_Active.png');
+		background-repeat: no-repeat;
+		background-position: left center;
+	}
+	
+	.ouCard:hover, .ouCard:focus {
+		background-image: url('../images/All_Info_Organization_15_Hover.png');
+		background-repeat: no-repeat;
+		background-position: left center;
+	}
+	
+	.ouCard:disabled {
+		background-image: url('../images/All_Info_Organization_15_Deactivated.png');
+		background-repeat: no-repeat;
+		background-position: left center;
+	}
+	
+	.ccLicense {
+		padding-left: 1.37em;
+		background-image: url('../images/cc.gif');
+		background-repeat: no-repeat;
+		background-position: center left;
+	}
+	
+	.visibilityIcon {
+		background-image: url('../images/Virr_Visibility_EyeTrue_15_Active.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.visibilityIcon:hover, .visibilityIcon:focus {
+		background-image: url('../images/Virr_Visibility_EyeTrue_15_Hover.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	
+	.visibilityIcon:disabled {
+		background-image: url('../images/Virr_Visibility_EyeTrue_15_Deactivated.gif');
+		background-repeat: no-repeat;
+		background-position: center center;
+	}

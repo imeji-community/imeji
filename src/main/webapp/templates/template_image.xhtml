@@ -34,9 +34,9 @@
 							</h:outputLink>
 							<h:outputLink id="lnkPicFullResolutionPDF" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.pdfFile}">
 								<h:graphicImage id="picWebResolutionPDF" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
-							</h:outputLink>
+							</h:outputLink>							
 							<h:outputLink id="lnkPicFullResolutionVideo" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.videoFile}">
-								<h:graphicImage id="picWebResolutionVideo" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
+								<h:outputText  value="&lt;video controls=&quot;controls&quot; autoplay=&quot;autoplay&quot; poster=&quot;#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}&quot; width=&quot;#{imageBean.webResolutionWidth}px&quot; &gt; &lt;source src=&quot;#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}&quot; type=&quot;#{imageBean.mimeType}&quot; /&gt; &lt;/video&gt;" escape="false" />
 							</h:outputLink>
 						</span>
 					</h:panelGroup>

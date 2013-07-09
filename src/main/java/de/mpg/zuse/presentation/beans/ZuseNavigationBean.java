@@ -63,7 +63,7 @@ public class ZuseNavigationBean extends Navigation
     
     public final Page SHIFTERCIRCUITZ3 = new Page("Shifter Circuit", "z3ShifterCircuit"); // http://zuse.zib.de/infos/simulations/Shifter/shifter.html
     public final Page NORMALIZERCIRCUITZ3 = new Page("Normalizer Circuit", "z3NormalizerCircuit"); // http://zuse.zib.de/infos/simulations/Normalizer/normalizer.html
-    public final Page DECIMAL2BINARYCONVERTERZ3 = new Page("Decimal to Binary Converter", "z3Dec2BinConveter"); // http://zuse.zib.de/infos/simulations/DecKey/decKey.html
+    public final Page DECIMAL2BINARYCONVERTERZ3 = new Page("Decimal to Binary Converter", "z3Dec2BinConverter"); // http://zuse.zib.de/infos/simulations/DecKey/decKey.html
     public final Page DECIMALPLACEADJUSTER = new Page("Decimal Place Adjuster", "z3DecPlaceAdjuster"); // http://zuse.zib.de/infos/simulations/DecPlaceAdjuster/decPlaceAdjuster.html
     
     public final Page ENIAC = new Page("Eniac", "eniac");
@@ -73,7 +73,7 @@ public class ZuseNavigationBean extends Navigation
     public final Page PLANKALKUELEDITOR = new Page("Editor", "plankalkuelEditor"); // http://zuse.zib.de/infos/simulations/Plankalkuel/Editor/pk.html
     public final Page PLANKALKUELCOMPILER = new Page("Compiler", "plankalkuelCompiler"); // http://zuse.zib.de/infos/simulations/Plankalkuel/Compiler/plankalk.html
     
-    public final Page PLANKALKUELAPPLICATIONS = new Page("Applications", "plankalkuelapplication"); // http://zuse.zib.de/infos/simulations/Plankalkuel/Chess/JavaApplet/chess.html
+    public final Page PLANKALKUELAPPLICATIONS = new Page("Applications", "plankalkuelApplication"); // http://zuse.zib.de/infos/simulations/Plankalkuel/Chess/JavaApplet/chess.html
     
     public final Page RECONSTRUCTIONZ3 = new Page("Recontruction of the Z3", "reconstructionZ3");
 

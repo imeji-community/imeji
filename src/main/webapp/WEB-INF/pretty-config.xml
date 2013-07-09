@@ -324,9 +324,9 @@
 		<pattern value="/z3NormalizerCircuit"></pattern>
 		<view-id>/jsf/zusePages/z3NormalizerCircuit.xhtml</view-id>
 	</url-mapping>
-	<url-mapping id="z3Dec2BinConveter">
-		<pattern value="/z3Dec2BinConveter"></pattern>
-		<view-id>/jsf/zusePages/z3Dec2BinConveter.xhtml</view-id>
+	<url-mapping id="z3Dec2BinConverter">
+		<pattern value="/z3Dec2BinConverter"></pattern>
+		<view-id>/jsf/zusePages/z3Dec2BinConverter.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="z3DecPlaceAdjuster">
 		<pattern value="/z3DecPlaceAdjuster"></pattern>
@@ -352,9 +352,9 @@
 		<pattern value="/plankalkuelCompiler"></pattern>
 		<view-id>/jsf/zusePages/plankalkuelCompiler.xhtml</view-id>
 	</url-mapping>
-	<url-mapping id="plankalkuelapplication">
-		<pattern value="/plankalkuelapplication"></pattern>
-		<view-id>/jsf/zusePages/plankalkuelapplication.xhtml</view-id>
+	<url-mapping id="plankalkuelApplication">
+		<pattern value="/plankalkuelApplication"></pattern>
+		<view-id>/jsf/zusePages/plankalkuelApplication.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="reconstructionZ3">
 		<pattern value="/reconstructionZ3"></pattern>

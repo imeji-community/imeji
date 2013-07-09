@@ -163,4 +163,201 @@
 		<view-id>/jsf/Config.xhtml</view-id>
 	</url-mapping>
 
+	<!-- zuse pages -->
+	<url-mapping id="welcomePage">
+		<pattern value="/welcomePage"></pattern>
+		<view-id>/jsf/zusePages/welcomePage.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="partnersAndCo">
+		<pattern value="/partnersAndCo"></pattern>
+		<view-id>/jsf/zusePages/partnersAndCo.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="imprint">
+		<pattern value="/imprint"></pattern>
+		<view-id>/jsf/zusePages/imprint.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="aboutAndContact">
+		<pattern value="/aboutAndContact"></pattern>
+		<view-id>/jsf/zusePages/aboutAndContact.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="encyclopedia">
+		<pattern value="/encyclopedia"></pattern>
+		<view-id>/jsf/zusePages/ecyclopedia.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="zuse">
+		<pattern value="/zuse"></pattern>
+		<view-id>/jsf/zusePages/konradZuse.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z1">
+		<pattern value="/z1"></pattern>
+		<view-id>/jsf/zusePages/z1.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z2">
+		<pattern value="/z2"></pattern>
+		<view-id>/jsf/zusePages/z2.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z3">
+		<pattern value="/z3"></pattern>
+		<view-id>/jsf/zusePages/z3.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z4">
+		<pattern value="/z4"></pattern>
+		<view-id>/jsf/zusePages/z4.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="assemblyLineSelfReplicatingSystems">
+		<pattern value="/assemblyLineSelfReplicatingSystems"></pattern>
+		<view-id>/jsf/zusePages/assemblyLineSelfReplicatingSystems.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="helixTower">
+		<pattern value="/helixTower"></pattern>
+		<view-id>/jsf/zusePages/helixTower.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="mechanicalSystem">
+		<pattern value="/mechanicalSystem"></pattern>
+		<view-id>/jsf/zusePages/mechanicalSystem.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="electromechanics">
+		<pattern value="/electromechanics"></pattern>
+		<view-id>/jsf/zusePages/electromechanics.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="electronics">
+		<pattern value="/electronics"></pattern>
+		<view-id>/jsf/zusePages/electronics.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="relay">
+		<pattern value="/relay"></pattern>
+		<view-id>/jsf/zusePages/relay.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="vacuumTube">
+		<pattern value="/vacuumTube"></pattern>
+		<view-id>/jsf/zusePages/vacuumTube.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="transistor">
+		<pattern value="/transistor"></pattern>
+		<view-id>/jsf/zusePages/transistor.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="binaryNumber">
+		<pattern value="/binaryNumber"></pattern>
+		<view-id>/jsf/zusePages/binaryNumber.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="bit">
+		<pattern value="/bit"></pattern>
+		<view-id>/jsf/zusePages/bit.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="punchedTape">
+		<pattern value="/punchedTape"></pattern>
+		<view-id>/jsf/zusePages/punchedTape.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="booleanAlgebra">
+		<pattern value="/booleanAlgebra"></pattern>
+		<view-id>/jsf/zusePages/booleanAlgebra.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="logicGate">
+		<pattern value="/logicGate"></pattern>
+		<view-id>/jsf/zusePages/logicGate.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="floatingPoint">
+		<pattern value="/floatingPoint"></pattern>
+		<view-id>/jsf/zusePages/floatingPoint.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="resources">
+		<pattern value="/resources"></pattern>
+		<view-id>/jsf/zusePages/resources.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="simulations">
+		<pattern value="/simulations"></pattern>
+		<view-id>/jsf/zusePages/simulations.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="simulationsZ1">
+		<pattern value="/simulationsZ1"></pattern>
+		<view-id>/jsf/zusePages/simulationsZ1.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z1SimpleMechSwitch">
+		<pattern value="/z1SimpleMechSwitch"></pattern>
+		<view-id>/jsf/zusePages/z1SimpleMechSwitch.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z1MoreComplexMechSwitch">
+		<pattern value="/z1MoreComplexMechSwitch"></pattern>
+		<view-id>/jsf/zusePages/z1MoreComplexMechSwitch.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z1MechSwitchCalcEquivalence">
+		<pattern value="/z1MechSwitchCalcEquivalence"></pattern>
+		<view-id>/jsf/zusePages/z1MechSwitchCalcEquivalence.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z1MechAddUnit">
+		<pattern value="/z1MechAddUnit"></pattern>
+		<view-id>/jsf/zusePages/z1MechAddUnit.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z1AdderWebGL">
+		<pattern value="/z1AdderWebGL"></pattern>
+		<view-id>/jsf/zusePages/z1AdderWebGL.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z1AdderLWJGL">
+		<pattern value="/z1AdderLWJGL"></pattern>
+		<view-id>/jsf/zusePages/z1AdderLWJGL.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z1AdderJavaApplet">
+		<pattern value="/z1AdderJavaApplet"></pattern>
+		<view-id>/jsf/zusePages/z1AdderJavaApplet.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="simulationsZ3">
+		<pattern value="/simulationsZ3"></pattern>
+		<view-id>/jsf/zusePages/simulationsZ3.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z3SimulationsEntire">
+		<pattern value="/z3SimulationsEntire"></pattern>
+		<view-id>/jsf/zusePages/z3SimulationsEntire.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z3Simulations3D">
+		<pattern value="/z3Simulations3D"></pattern>
+		<view-id>/jsf/zusePages/z3Simulations3D.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z3AdderCircuit">
+		<pattern value="/z3AdderCircuit"></pattern>
+		<view-id>/jsf/zusePages/z3AdderCircuit.xhtml</view-id>
+	</url-mapping>
+    <url-mapping id="z3ShifterCircuit">
+		<pattern value="/z3ShifterCircuit"></pattern>
+		<view-id>/jsf/zusePages/z3ShifterCircuit.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z3NormalizerCircuit">
+		<pattern value="/z3NormalizerCircuit"></pattern>
+		<view-id>/jsf/zusePages/z3NormalizerCircuit.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z3Dec2BinConveter">
+		<pattern value="/z3Dec2BinConveter"></pattern>
+		<view-id>/jsf/zusePages/z3Dec2BinConveter.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="z3DecPlaceAdjuster">
+		<pattern value="/z3DecPlaceAdjuster"></pattern>
+		<view-id>/jsf/zusePages/z3DecPlaceAdjuster.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="eniac">
+		<pattern value="/eniac"></pattern>
+		<view-id>/jsf/zusePages/eniac.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="plankalkuel">
+		<pattern value="/plankalkuel"></pattern>
+		<view-id>/jsf/zusePages/plankalkuel.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="plankalkuelSystem">
+		<pattern value="/plankalkuelSystem"></pattern>
+		<view-id>/jsf/zusePages/plankalkuelSystem.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="plankalkuelEditor">
+		<pattern value="/plankalkuelEditor"></pattern>
+		<view-id>/jsf/zusePages/plankalkuelEditor.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="plankalkuelCompiler">
+		<pattern value="/plankalkuelCompiler"></pattern>
+		<view-id>/jsf/zusePages/plankalkuelCompiler.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="plankalkuelapplication">
+		<pattern value="/plankalkuelapplication"></pattern>
+		<view-id>/jsf/zusePages/plankalkuelapplication.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="reconstructionZ3">
+		<pattern value="/reconstructionZ3"></pattern>
+		<view-id>/jsf/zusePages/reconstructionZ3.xhtml</view-id>
+	</url-mapping>
 </pretty-config>

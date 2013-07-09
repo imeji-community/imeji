@@ -9,12 +9,16 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.zuse.presentation.util.ZusePropertyReader;
 
-public class ZuseStaticContentbean extends StaticContentBean {
+public class ZuseStaticContentBean extends StaticContentBean {
 
 	
 	enum ZuseStaticPageEntry {
-		ENCYCLOPEDIA("zuse.imeji.url.encyclopedia"),
+		WELCOMEPAGE("zuse.imeji.url.welcomepage"),
+		PARTNERSANDCOLLABORATORERS("zuse.imeji.url.partnersandcollaboraters"),
+		IMPRINT("zuse.imeji.url.imprint"),
+		ABOUTANDCONTACT("zuse.imeji.url.aboutandcontact"),
 		KONRADZUSE("zuse.imeji.url.konradzuse"),
+		ENCYCLOPEDIA("zuse.imeji.url.encyclopedia"),
 		Z1("zuse.imeji.url.z1"),
 		Z2("zuse.imeji.url.z2"),
 		Z3("zuse.imeji.url.z3"),
@@ -56,7 +60,7 @@ public class ZuseStaticContentbean extends StaticContentBean {
 		PLANKALKUELSYSTEM("zuse.imeji.url.plansys"),
 		PLANKALKUELEDITOR("zuse.imeji.url.planeditor"),
 		PLANKALKUELCOMPILER("zuse.imeji.url.plancompiler"),
-		PLANKALKUELAPPLICATIONS("zuse.imeji.url.apps"),
+		PLANKALKUELAPPLICATIONS("zuse.imeji.url.planapps"),
 		RECONSTRUCTIONZ3("zuse.imeji.url.recontructionz3");
 		
 		boolean enabled;
@@ -119,9 +123,118 @@ public class ZuseStaticContentbean extends StaticContentBean {
      * @throws IOException
      * @throws URISyntaxException
      */
-	public ZuseStaticContentbean() throws IOException, URISyntaxException {
+	public ZuseStaticContentBean() throws IOException, URISyntaxException {
 
 	}
+	
+	public String getWelcomePageContent() throws IOException, URISyntaxException
+    {
+        String html = "";
+        String urlString = ZusePropertyReader.getProperty(ZuseStaticPageEntry.WELCOMEPAGE.getUrlString());
+        try
+        {
+            html = getContent(urlString);
+        }
+        catch (Exception e)
+        {
+            html = urlString
+                    + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
+                    + "<br/><br/>" + e.toString();
+        }
+        return html;
+    }
+    
+    public boolean isWelcomePage()
+    {
+        return ZuseStaticPageEntry.WELCOMEPAGE.getEnabled();
+    }
+
+    public void setWelcomePage(boolean enable)
+    {
+    	ZuseStaticPageEntry.WELCOMEPAGE.setEnabled(enable);
+    }
+	
+    public String getPartnersAndCollaboratersContent() throws IOException, URISyntaxException
+    {
+        String html = "";
+        String urlString = ZusePropertyReader.getProperty(ZuseStaticPageEntry.PARTNERSANDCOLLABORATORERS.getUrlString());
+        try
+        {
+            html = getContent(urlString);
+        }
+        catch (Exception e)
+        {
+            html = urlString
+                    + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
+                    + "<br/><br/>" + e.toString();
+        }
+        return html;
+    }
+    
+    public boolean isPartnersAndCollaboraters()
+    {
+        return ZuseStaticPageEntry.PARTNERSANDCOLLABORATORERS.getEnabled();
+    }
+
+    public void setPartnersAndCollaboraters(boolean enable)
+    {
+    	ZuseStaticPageEntry.PARTNERSANDCOLLABORATORERS.setEnabled(enable);
+    }
+		
+	public String getImprintContent() throws IOException, URISyntaxException
+    {
+        String html = "";
+        String urlString = ZusePropertyReader.getProperty(ZuseStaticPageEntry.IMPRINT.getUrlString());
+        try
+        {
+            html = getContent(urlString);
+        }
+        catch (Exception e)
+        {
+            html = urlString
+                    + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
+                    + "<br/><br/>" + e.toString();
+        }
+        return html;
+    }
+    
+    public boolean isImprint()
+    {
+        return ZuseStaticPageEntry.IMPRINT.getEnabled();
+    }
+
+    public void setImprint(boolean enable)
+    {
+    	ZuseStaticPageEntry.IMPRINT.setEnabled(enable);
+    }
+    
+	public String getAboutAndContactContent() throws IOException, URISyntaxException
+    {
+        String html = "";
+        String urlString = ZusePropertyReader.getProperty(ZuseStaticPageEntry.ABOUTANDCONTACT.getUrlString());
+        try
+        {
+            html = getContent(urlString);
+        }
+        catch (Exception e)
+        {
+            html = urlString
+                    + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
+                    + "<br/><br/>" + e.toString();
+        }
+        return html;
+    }
+    
+    public boolean isAboutAndContact()
+    {
+        return ZuseStaticPageEntry.ABOUTANDCONTACT.getEnabled();
+    }
+
+    public void setAboutAndContact(boolean enable)
+    {
+    	ZuseStaticPageEntry.ABOUTANDCONTACT.setEnabled(enable);
+    }
+	
 	
     /**
      * Get the HTML content of the Encyclopedia page. URL of the Legal page is defined in properties.

@@ -17,7 +17,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ZuseNavigation extends Navigation
+public class ZuseNavigationBean extends Navigation
 {
 
 	// Pages of zuse
@@ -86,7 +86,7 @@ public class ZuseNavigation extends Navigation
      * 
      * @throws Exception
      */
-    public ZuseNavigation() throws Exception
+    public ZuseNavigationBean() throws Exception
     {
         
     }

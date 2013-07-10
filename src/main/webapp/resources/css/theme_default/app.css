@@ -1489,6 +1489,11 @@ OLD:
 .imj_metadataValueEntry {
 	display: inline-block;
 }
+
+.imj_metadataValueEntryViewMap {
+	display: block;
+}
+
 .imj_metadataEditButtonArea {
 	display: inline-block;
 }

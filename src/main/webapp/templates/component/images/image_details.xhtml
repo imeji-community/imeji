@@ -99,39 +99,39 @@
 						<!-- MetaDataList - media data entries global - container set -->
 						<h:panelGroup layout="block" styleClass="imj_globalMetadataSet">
 					
-							<!-- MetaDataList - media data - status withdrawn - container set -->
-							<h:panelGroup styleClass="imj_metadataSet" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
-								<span class="imj_metadataLabel">
+							<!-- MetaDataList - media data - status withdrawn - container set - Hardcoded style -->
+							<h:panelGroup layout="block" styleClass="imj_metadataSet" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
+								<div class="imj_metadataLabel">
 									<h:outputText value="#{lbl.withdraw_comment}" />
 									<span class="imj_invisible">: </span>
-								</span>
-								<span class="imj_metadataValue">
+								</div>
+								<div class="imj_metadataValue">
 									<h:outputText value="#{imageBean.image.discardComment}" />
-								</span>
+								</div>
 							</h:panelGroup>
 					
 							<!-- MetaDataList - global / basic metadata -->
 							<!-- MetaDataList - Filename -->
-							<h:panelGroup styleClass="imj_metadataSet">
-								<span class="imj_metadataLabel">
+							<h:panelGroup layout="block" styleClass="imj_metadataSet">
+								<div class="imj_metadataLabel">
 									<h:outputText value="#{lbl.filename} "/>
 									<span class="imj_invisible">: </span>
-								</span>
-								<span class="imj_metadataValue">
+								</div>
+								<div class="imj_metadataValue">
 									<h:outputText id="txtUrl" value="#{imageBean.image.filename}" />
-								</span>
+								</div>
 							</h:panelGroup>
 							<!-- MetaDataList - Collection -->
-							<h:panelGroup styleClass="imj_metadataSet">
-								<span class="imj_metadataLabel">
+							<h:panelGroup layout="block" styleClass="imj_metadataSet">
+								<div class="imj_metadataLabel">
 									<h:outputText value="#{lbl.collection }" />
 									<span class="imj_invisible">: </span>
-								</span>
-								<span class="imj_metadataValue">
+								</div>
+								<div class="imj_metadataValue">
 									<h:outputLink value="#{Navigation.collectionUrl}#{imageBean.collection.idString}">
 										<h:outputText value="#{imageBean.collection.metadata.title}" />
 									</h:outputLink>
-								</span>
+								</div>
 							</h:panelGroup>
 						</h:panelGroup>
 
@@ -141,16 +141,18 @@
 							<!-- MetaDataList - show further MetaData -->
 							<ui:fragment rendered="#{imageBean.edit.toggleState == 'displayMd'}">
 								<ui:repeat var="metadata" value="#{imageBean.mds.metadata}" rows="0">
-									<h:panelGroup rendered="#{!metadata.isEmpty()}" styleClass="imj_metadataSet id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area">
-										<span class="imj_metadataLabel" style="margin-left: #{metadata.hierarchyLevel}em;">
+									<h:panelGroup layout="block" rendered="#{!metadata.isEmpty()}" styleClass="imj_metadataSet id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area">
+									<!-- MetaDataList - MetaData Hierachy Hardcoded! -->
+										<div class="imj_metadataLabel" style="margin-left: #{metadata.hierarchyLevel}em;">
 											<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
 											<span class="imj_invisible">: </span>
-										</span>
-										<span class="imj_metadataValue">
-											<ui:include src="../../../picturesPages/ui/MetadataOutput.xhtml">
+										</div>
+										<div class="imj_metadataValue">
+											<!-- MetaDataOutput -->
+											<ui:include src="MetadataOutput.xhtml">
 												<ui:param name="md" value="#{metadata}" />
 											</ui:include>
-										</span>
+										</div>
 									</h:panelGroup>
 								</ui:repeat>
 							</ui:fragment>

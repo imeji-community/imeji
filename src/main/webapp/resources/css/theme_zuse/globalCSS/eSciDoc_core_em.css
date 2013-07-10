@@ -1,0 +1,3908 @@
+@charset "UTF-8";
+/*
+ *
+ * CDDL HEADER START
+ *
+ * The contents of this file are subject to the terms of the
+ * Common Development and Distribution License, Version 1.0 only
+ * (the "License"). You may not use this file except in compliance
+ * with the License.
+ *
+ * You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ * or http://www.escidoc.de/license.
+ * See the License for the specific language governing permissions
+ * and limitations under the License.
+ *
+ * When distributing Covered Code, include this CDDL HEADER in each
+ * file and include the License file at license/ESCIDOC.LICENSE.
+ * If applicable, add the following below this CDDL HEADER, with the
+ * fields enclosed by brackets "[]" replaced with your own identifying
+ * information: Portions Copyright [yyyy] [name of copyright owner]
+ *
+ * CDDL HEADER END
+ */
+/*
+ * Copyright 2006-2012 Fachinformationszentrum Karlsruhe Gesellschaft
+ * für wissenschaftlich-technische Information mbH and Max-Planck-
+ * Gesellschaft zur Förderung der Wissenschaft e.V.
+ * All rights reserved. Use is subject to license terms.
+ */
+/*FOR TESTING PURPOSES*/
+body {
+    /*
+     background-image: url('../../images/unit.gif');
+     */
+}
+
+/*GENERAL DEFINITIONS*/
+button, input, selection {
+    font-size: 0.5em;
+    /*	height: 1.5em; */
+    vertical-align: top;
+}
+
+body {
+    padding:0;
+    margin:0;
+    /*margin-left: 17px;
+     margin-right: 17px;*/
+}
+
+html, body, form {
+    height: 100%;
+}
+
+html > body .wrapper {
+    min-height: 100%;
+    height: auto !important;
+}
+
+
+/* 
+ * IE 7 HACK
+ * wrapper - bug in IE7- 
+ * 6px to much in width
+ */
+*:first-child+html .full.wrapper {
+	width:83.5454em !important;
+	overflow:hidden;
+}
+
+
+body .wrapper, body .footer {
+    margin: 0 auto 0 auto;
+    overflow: hidden;
+    width: 84.0909em;
+}
+
+body .footer {
+    height: 2.001em;
+}
+
+#content {
+    padding-bottom: 2.001em;
+}
+
+body .wrapper {
+    margin-bottom: -2.001em;
+}
+
+b {
+	font-weight:normal;
+}
+
+textarea {
+	resize:vertical;
+}
+
+.noDisplay {
+    display: none !important;
+}
+
+.noPaddingTopBottom {
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.browserSupport * {
+    float: left;
+}
+
+/*SKIP LINK NAVIGATION*/
+.skipLink {
+    position: absolute;
+    top: -1000em;
+    left: -1000em;
+    height: 1px;
+    width: 1px;
+}
+
+.skipLink:focus, .skipLink:active {
+    position: static;
+    top: 0;
+    left: 0;
+    height: auto;
+    width: auto;
+}
+
+/*FONT SIZE RELATED DEFINITIONS*/
+body, label, input, button, select, textarea {
+    font-size: 11px !important;
+}
+
+label {
+    padding-top: 0.2727em;
+}
+
+select {
+    border-width: 0.0909em;;
+}
+
+input[type =
+"file"] {
+    border-width: 0.0909em;
+}
+
+/*BASE ELEMENTS*/
+/*HEADER*/
+/*H1*/
+h1 {
+    font-size: 38px;
+    line-height: 1em;
+	font-weight:normal; /* fix for different browser, e.g. on Macintosh */
+}
+
+/*H2*/
+h2 {
+    font-size: 20px !important;
+    line-height: 1em;
+	font-weight:normal; /* fix for different browser, e.g. on Macintosh */
+}
+
+/*H3*/
+h3 {
+    font-size: 11px !important;
+	font-weight:normal;
+}
+
+/*H4*/
+h4 {
+    font-size: 11px;
+	font-weight:normal; /* fix for different browser, e.g. on Macintosh */
+}
+
+/*H5*/
+h5 {
+	font-weight:normal; /* fix for different browser, e.g. on Macintosh */
+}
+
+/*H6*/
+h6 {
+    font-size: 11px;
+	font-weight:normal; /* fix for different browser, e.g. on Macintosh */
+}
+
+option {	/* fix for FF2 and floating contents */
+	float:none !important;
+}
+
+/*LINEBREAK AND LAST IN LINE*/
+.clear {
+    clear: both;
+}
+
+.clearLeft {
+    clear: left;
+}
+
+.clearRight {
+    clear: right;
+}
+
+.linebreak {
+    width: 100%;
+    height:0;
+    display: block;
+    float: left;
+}
+
+.endline {
+    margin-right:0 !important;
+}
+
+/*STANDARD WIDTHS*/
+.xTiny {
+    width: 1.3636em;
+}
+
+.tiny {
+    width: 2.0909em;
+}
+
+.xSmall {
+    width: 2.8181em;
+}
+
+.small {
+    width: 5.7272em;
+}
+
+.medium {
+    width: 8.6363em;
+}
+
+.large {
+    width: 11.5454em;
+}
+
+.xLarge {
+    width: 14.4545em;
+}
+
+.double {
+    width: 18.8181em;
+}
+
+.xDouble {
+    width: 25.3636em;
+}
+
+.quad {
+    width: 39.1818em;
+}
+
+.huge {
+    width: 23.1818em;
+}
+
+.xHuge {
+    width: 43.5454em;
+}
+
+.half {
+    width: 40.6363em;
+}
+
+.full {
+    width: 81.3636em;
+}
+
+/*LINE HEIGHTS*/
+.full, .full_txtBtn, .full_txtInput, .full_txtArea, .full_select, .full_label, .full_radioBtn, .full_checkbox, .full_area0, .full_area0_p0, .full_area0_p1, .full_area0_p2, .full_area0_p3, .full_area0_p4, .full_area0_p6, .full_area0_p7, .full_area0_p8, .full_area1, .full_area1_p0, .full_area1_p1, .full_area1_p2, .full_area1_p3, .full_area1_p4, .full_area1_p6, .full_area1_p7, .full_area1_p8, .full_area2, .full_area2_p0, .full_area2_p1, .full_area2_p2, .full_area2_p3, .full_area2_p4, .full_area2_p6, .full_area2_p7, .full_area2_p8 {
+    margin-top: 0.5454em;
+    margin-bottom: 0.9090em;
+}
+
+/*IMAGE BUTTONS AND ICON AREAS*/
+.min_imgBtn, .min_imgArea, .std_imgBtn, .std_imgArea, .big_imgBtn, .big_imgArea {
+    border:0;
+    margin:0;
+    margin-right:0.0909em;
+    padding:0;
+    background-position: center center;
+    background-color: inherit;
+}
+
+.min_imgBtn, .std_imgBtn, .big_imgBtn {
+    cursor: pointer;
+}
+
+.min_imgBtn, .min_imgArea {
+    width: 1.3636em;
+    height: 1.3636em;
+}
+
+.std_imgBtn, .std_imgArea {
+    width: 2.0909em;
+    height: 2.0909em;
+}
+
+.big_imgBtn, .big_imgArea {
+    width: 2.8181em;
+    height: 2.8181em;
+}
+
+/*TEXT BUTTONS (base size)*/
+.free_txtBtn, .xTiny_txtBtn, .tiny_txtBtn, .xSmall_txtBtn, .small_txtBtn, .medium_txtBtn, .large_txtBtn, .xLarge_txtBtn, .double_txtBtn, .xDouble_txtBtn, .quad_txtBtn, .huge_txtBtn, .xHuge_txtBtn, .half_txtBtn, .full_txtBtn {
+    padding:0;
+    margin:0;
+    border:0;
+    display: inline;
+    margin-right: 0.0909em;
+    float: left;
+    cursor: pointer;
+}
+
+.xTiny_txtBtn {
+    width: 1.3636em;
+}
+
+.tiny_txtBtn {
+    width: 2.0909em;
+}
+
+.xSmall_txtBtn {
+    width: 2.8181em;
+}
+
+.small_txtBtn {
+    width: 5.7272em;
+}
+
+.medium_txtBtn {
+    width: 8.6363em;
+}
+
+.large_txtBtn {
+    width: 11.5454em;
+}
+
+.xLarge_txtBtn {
+    width: 14.4545em;
+}
+
+.double_txtBtn {
+    width: 18.8181em;
+}
+
+.xDouble_txtBtn {
+    width: 25.3636em;
+}
+
+.quad_txtBtn {
+    width: 39.1818em;
+}
+
+.huge_txtBtn {
+    width: 23.1818em;
+}
+
+.xHuge_txtBtn {
+    width: 43.5454em;
+}
+
+.half_txtBtn {
+    width: 40.6363em;
+}
+
+.full_area0_p1 .half_txtBtn, .full_area1 .half_txtBtn, .full_area1_p0 .half_txtBtn {
+    width: 40.5454em;
+}
+
+.full_area0_p2 .half_txtBtn, .full_area1_p1 .half_txtBtn, .full_area2 .half_txtBtn, .full_area2_p0 .half_txtBtn {
+    width: 40.4545em;
+}
+
+.full_txtBtn {
+    width: 81.3636em;
+}
+
+/*TEXT INPUTS (base size-6px)*/
+.free_txtInput, .free_txtInput input, .xTiny_txtInput, .xTiny_txtInput input, .tiny_txtInput, .tiny_txtInput input, .xSmall_txtInput, .xSmall_txtInput input, .small_txtInput, .small_txtInput input, .medium_txtInput, .medium_txtInput input, .large_txtInput, .large_txtInput input, .xLarge_txtInput, .xLarge_txtInput input, .double_txtInput, .double_txtInput input, .xDouble_txtInput, .xDouble_txtInput input, .quad_txtInput, .quad_txtInput input, .huge_txtInput, .huge_txtInput input, .xHuge_txtInput, .xHuge_txtInput input, .half_txtInput, .half_txtInput input, .full_txtInput, .full_txtInput input {
+    padding-left: 0.0909em;
+    padding-right: 0.0909em;
+    border-width: 0.0909em;
+    margin:0;
+    display: inline;
+    margin-right: 0.0909em;
+    float: left;
+}
+
+.xTiny_txtInput, .xTiny_txtInput input {
+    width: 1.01em;
+}
+
+.tiny_txtInput, .tiny_txtInput input {
+    width: 1.7272em;
+}
+
+.xSmall_txtInput, .xSmall_txtInput input {
+    width: 2.4545em;
+}
+
+.small_txtInput, .small_txtInput input {
+    width: 5.3636em;
+}
+
+.medium_txtInput, .medium_txtInput input {
+    width: 8.2727em;
+}
+
+.large_txtInput, .large_txtInput input {
+    width: 11.1818em;
+}
+
+.xLarge_txtInput, .xLarge_txtInput input {
+    width: 14.0909em;
+}
+
+.double_txtInput, .double_txtInput input {
+    width: 18.2727em;
+}
+
+.xDouble_txtInput, .xDouble_txtInput input {
+    width: 24.8181em;
+}
+
+.third_txtInput, .third_txtInput input {	/* erweitert 2011-03-29 - Marco Schlender */
+	padding-left: 0.0909em;
+    padding-right: 0.0909em;
+    border-width: 0.0909em;
+    margin:0;
+    display: inline;
+    margin-right: 0.0909em;
+    float: left;
+	width:34.3636em;
+}
+
+.quad_txtInput, .quad_txtInput input {
+    width: 38.6363em;
+}
+
+.huge_txtInput, .huge_txtInput input {
+    width: 22.8181em;
+}
+
+.xHuge_txtInput, .xHuge_txtInput input {
+    width: 43.1818em;
+}
+
+.half_txtInput, .half_txtInput input {
+    width: 40.24em;
+}
+
+.full_area0_p1 .half_txtInput, .full_area0_p1 .half_txtInput input, .full_area1 .half_txtInput, .full_area1 .half_txtInput input, .full_area1_p0 .half_txtInput, .full_area1_p0 .half_txtInput input {
+    width: 40.1818em;
+}
+
+.full_area0_p2 .half_txtInput, .full_area0_p2 .half_txtInput input, .full_area1_p1 .half_txtInput, .full_area1_p1 .half_txtInput input, .full_area2 .half_txtInput, .full_area2 .half_txtInput input, .full_area2_p0 .half_txtInput, .full_area2_p0 .half_txtInput input {
+    width: 40.0909em;
+}
+
+.full_txtInput, .full_txtInput input {
+    width: 81.01em;
+}
+
+/*TEXT AREAS (base size-5px)*/
+.free_txtArea, .xTiny_txtArea, .tiny_txtArea, .xSmall_txtArea, .small_txtArea, .medium_txtArea, .large_txtArea, .xLarge_txtArea, .double_txtArea, .xDouble_txtArea, .quad_txtArea, .huge_txtArea, .xHuge_txtArea, .half_txtArea, .full_txtArea {
+    padding-left: 0.0909em;
+    margin:0;
+    display: inline;
+    margin-right: 0.0909em;
+    border-width: 0.0909em;
+    float: left;
+}
+
+.xTiny_txtArea {
+    width: 1.0909em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .xTiny_txtArea {
+    width: 1.01em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .xTiny_txtArea {
+    width: 1.01em;
+}
+
+.tiny_txtArea {
+    width: 1.8181em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .tiny_txtArea {
+    width: 1.7272em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .tiny_txtArea {
+    width: 1.7272em;
+}
+
+.xSmall_txtArea {
+    width: 2.5454em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .xSmall_txtArea {
+    width: 2.4545em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .xSmall_txtArea {
+    width: 2.4545em;
+}
+
+.small_txtArea {
+    width: 5.3636em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .small_txtArea {
+    width: 5.3636em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .small_txtArea {
+    width: 5.3636em;
+}
+
+.medium_txtArea {
+    width: 8.3636em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .medium_txtArea {
+    width: 8.2727em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .medium_txtArea {
+    width: 8.2727em;
+}
+
+.large_txtArea {
+    width: 11.2727em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .large_txtArea {
+    width: 11.1818em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .large_txtArea {
+    width: 11.1818em;
+}
+
+.xLarge_txtArea {
+    width: 14.1818em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .xLarge_txtArea {
+    width: 14.0909em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .xLarge_txtArea {
+    width: 14.0909em;
+}
+
+.double_txtArea {
+    width: 18.3636em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .double_txtArea {
+    width: 18.2727em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .double_txtArea {
+    width: 18.2727em;
+}
+
+.xDouble_txtArea {
+    width: 24.9090em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .xDouble_txtArea {
+    width: 24.8181em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .xDouble_txtArea {
+    width: 24.8181em;
+}
+
+.quad_txtArea {
+    width: 38.7272em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .quad_txtArea {
+    width: 38.6363em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .quad_txtArea {
+    width: 38.6363em;
+}
+
+.huge_txtArea {
+    width: 22.9090em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .huge_txtArea {
+    width: 22.8181em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .huge_txtArea {
+    width: 22.8181em;
+}
+
+.xHuge_txtArea {
+    width: 43.2727em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .xHuge_txtArea {
+    width: 43.1818em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .xHuge_txtArea {
+    width: 43.1818em;
+}
+
+.half_txtArea {
+    width: 40.3636em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .half_txtArea {
+    width: 40.24em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .half_txtArea {
+    width: 40.24em;
+}
+
+.full_area0_p1 .half_txtArea, .full_area1 .half_txtArea, .full_area1_p0 .half_txtArea {
+    width: 40.24em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .full_area0_p1 .half_txtArea, * html .full_area1 .half_txtArea, * html .full_area1_p0 .half_txtArea {
+    width: 40.1818em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .full_area0_p1 .half_txtArea, *:first-child + html .full_area1 .half_txtArea, *:first-child + html .full_area1_p0 .half_txtArea {
+    width: 40.1818em;
+}
+
+.full_area0_p2 .half_txtArea, .full_area1_p1 .half_txtArea, .full_area2 .half_txtArea, .full_area2_p0 .half_txtArea {
+    width: 40.1818em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .full_area0_p2 .half_txtArea, * html .full_area1_p1 .half_txtArea, * html .full_area2 .half_txtArea, * html .full_area2_p0 .half_txtArea {
+    width: 40.0909em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .full_area0_p2 .half_txtArea, *:first-child + html .full_area1_p1 .half_txtArea, *:first-child + html .full_area2 .half_txtArea, *:first-child + html .full_area2_p0 .half_txtArea {
+    width: 40.0909em;
+}
+
+.full_txtArea {
+    width: 81.0909em;
+}
+
+/*REPLACEMENT HACK FOR IE LESS THAN 6*/ * html .full_txtArea {
+    width: 81.01em;
+}
+
+/*REPLACEMENT HACK FOR IE 7*/ *:first-child + html .full_txtArea {
+    width: 81.01em;
+}
+
+/*SELECTION BOXES (base size)*/
+.free_select, .xTiny_select, .tiny_select, .xSmall_select, .small_select, .medium_select, .large_select, .xLarge_select, .double_select, .xDouble_select, .quad_select, .huge_select, .xHuge_select, .half_select, .full_select {
+    padding-left: 0.0909em;
+    padding-right: 0.0909em;
+    margin:0;
+    display: inline;
+    margin-right: 0.0909em;
+    float: left;
+}
+
+.xTiny_select {
+    width: 1.3636em;
+}
+
+.tiny_select {
+    width: 2.0909em;
+}
+
+.xSmall_select {
+    width: 2.8181em;
+}
+
+.small_select {
+    width: 5.7272em;
+}
+
+.medium_select {
+    width: 8.6363em;
+}
+
+.large_select {
+    width: 11.5454em;
+}
+
+.xLarge_select {
+    width: 14.4545em;
+}
+
+.double_select {
+    width: 18.8181em;
+}
+
+.xDouble_select {
+    width: 25.3636em;
+}
+
+.quad_select {
+    width: 39.1818em;
+}
+
+.huge_select {
+    width: 23.1818em;
+}
+
+.xHuge_select {
+    width: 43.5454em;
+}
+
+.half_select {
+    width: 40.6363em;
+}
+
+.full_area0_p1 .half_select, .full_area1 .half_select, .full_area1_p0 .half_select {
+    width: 40.5454em;
+}
+
+.full_area0_p2 .half_select, .full_area1_p1 .half_select, .full_area2 .half_select, .full_area2_p0 .half_select {
+    width: 40.4545em;
+}
+
+.full_select {
+    width: 81.3636em;
+}
+
+/*LABELS (base size-1px)*/
+.free_label, .xTiny_label, .tiny_label, .xSmall_label, .small_label, .medium_label, .large_label, .xLarge_label, .double_label, .xDouble_label, .quad_label, .huge_label, .xHuge_label, .half_label, .full_label {
+    padding-left: 0.0909em;
+    display: inline;
+    overflow: hidden;
+    margin:0;
+    margin-right: 0.0909em;
+    white-space: nowrap;
+    float: left;
+}
+
+.xTiny_label {
+    width: 1.2727em;
+}
+
+.tiny_label {
+    width: 2.01em;
+}
+
+.xSmall_label {
+    width: 2.7272em;
+}
+
+.small_label {
+    width: 5.6363em;
+}
+
+.medium_label {
+    width: 8.5454em;
+}
+
+.large_label {
+    width: 11.4545em;
+}
+
+.xLarge_label {
+    width: 14.3636em;
+}
+
+.double_label {
+    width: 18.7272em;
+}
+
+.xDouble_label {
+    width: 25.2727em;
+}
+
+.quad_label {
+    width: 39.0909em;
+}
+
+.huge_label {
+    width: 23.0909em;
+}
+
+.xHuge_label {
+    width: 43.4545em;
+}
+
+.half_label {
+    width: 40.5454em;
+}
+
+.full_area0_p1 .half_label, .full_area1 .half_label, .full_area1_p0 .half_label {
+    width: 40.4545em;
+}
+
+.full_area0_p2 .half_label, .full_area1_p1 .half_label, .full_area2 .half_label, .full_area2_p0 .half_label {
+    width: 40.3636em;
+}
+
+.full_label {
+    width: 81.2727em;
+}
+
+/*RADIO BUTTONS WITH LABEL (base size (-21 for label))*/
+.xTiny_radioBtn, .tiny_radioBtn, .xSmall_radioBtn, .small_radioBtn, .medium_radioBtn, .large_radioBtn, .xLarge_radioBtn, .double_radioBtn, .xDouble_radioBtb, .quad_radioBtn, .huge_radioBtn, .xHuge_radioBtn, .half_radioBtn, .full_radioBtn {
+    overflow: hidden;
+    margin:0;
+    display: inline;
+    margin-right: 0.0909em;
+    float: left;
+}
+
+.xTiny_radioBtn {
+    width: 1.3636em;
+    /*to small to be displayed*/
+    display: none;
+}
+
+.xTiny_radioBtn input, .xTiny_radioBtn label {
+    float: left;
+    border:0;
+    /*too small to be displayed*/
+    display: none;
+}
+
+.xTiny_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+/*				.xTiny_radioBtn label {
+ padding-top:0;
+ display: inline;
+ white-space:nowrap;
+ overflow: hidden;
+ width: -9px !important;
+ }
+ 
+ */
+/*ridicoulus - no more room for the label left*/
+.tiny_radioBtn {
+    width: 2.0909em;
+}
+
+.tiny_radioBtn input, .tiny_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.tiny_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.tiny_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0.17em !important;
+}
+
+.xSmall_radioBtn {
+    width: 2.8181em;
+}
+
+.xSmall_radioBtn input, .xSmall_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.xSmall_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.xSmall_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0.8em !important;
+}
+
+.small_radioBtn {
+    width: 5.7272em;;
+}
+
+.small_radioBtn input, .small_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.small_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.small_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 3.7272em !important;
+}
+
+.medium_radioBtn {
+    width: 8.6363em;
+}
+
+.medium_radioBtn input, .medium_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.medium_radioBtn input {
+    height: 1.2em;
+    width: 1.2em;
+}
+
+.medium_radioBtn input {
+	margin-top:0;
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.medium_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 6.7em !important;
+}
+
+.large_radioBtn {
+    width: 11.5454em;
+}
+
+.large_radioBtn input, .large_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.large_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.large_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 9.5454em !important;
+}
+
+.xLarge_radioBtn {
+    width: 14.4545em;
+}
+
+.xLarge_radioBtn input, .xLarge_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.xLarge_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.xLarge_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 12.4545em !important;
+}
+
+.double_radioBtn {
+    width: 18.8181em;
+}
+
+.double_radioBtn input, .double_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.double_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.double_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 16.9090em !important;
+}
+
+.xDouble_radioBtn {
+    width: 25.3636em;
+}
+
+.xDouble_radioBtn input, .xDouble_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.xDouble_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.xDouble_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 23.4545em !important;
+}
+
+.quad_radioBtn {
+    width: 39.1818em;
+}
+
+.quad_radioBtn input, .quad_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.quad_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.quad_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 37.2727em !important;
+}
+
+.huge_radioBtn {
+    width: 23.1818em;
+}
+
+.huge_radioBtn input, .huge_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.huge_radioBtn input {
+	margin-top:0;
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.huge_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 21.1818em !important;
+}
+
+.xHuge_radioBtn {
+    width: 43.5454em;
+}
+
+.xHuge_radioBtn input, .xHuge_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.xHuge_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.xHuge_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 41.5454em !important;
+}
+
+.half_radioBtn {
+    width: 40.6363em;
+}
+
+.half_radioBtn input, .half_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.half_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.half_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 38.6363em !important;
+}
+
+.full_area0_p1 .half_radioBtn, .full_area1 .half_radioBtn, .full_area1_p0 .half_radioBtn {
+    width: 40.5454em;
+}
+
+.full_area0_p1 .half_radioBtn label, .full_area1 .half_radioBtn label, .full_area1_p0 .half_radioBtn label {
+    width: 38.5454em !important;
+}
+
+.full__area0_p2 .half_radioBtn, .full_area1_p1 .half_radioBtn, .full_area2 .half_radioBtn, .full_area2_p0 .half_radioBtn {
+    width: 40.4545em;
+}
+
+.full__area0_p2 .half_radioBtn label, .full_area1_p1 .half_radioBtn label, .full_area2 .half_radioBtn label, .full_area2_p0 .half_radioBtn label {
+    width: 38.4545em !important;
+}
+
+.full_radioBtn {
+    width: 81.3636em;
+}
+
+.full_radioBtn input, .full_radioBtn label {
+    float: left;
+    border:0;
+}
+
+.full_radioBtn input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.full_radioBtn label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 79.3636em !important;
+}
+
+/*CHECKBOXES WITH LABEL (base size (-21 for label))*/
+.free_checkbox, .xTiny_checkbox, .tiny_checkbox, .xSmall_checkbox, .small_checkbox, .medium_checkbox, .large_checkbox, .xLarge_checkbox, .double_checkbox, .xDouble_checkbox, .quad_checkbox, .huge_checkbox, .xHuge_checkbox, .half_checkbox, .full_checkbox {
+    overflow: hidden;
+    margin:0;
+    display: inline;
+    margin-right: 0.0909em;
+    float: left;
+}
+
+.free_checkbox input, .free_checkbox label {
+	float:left;
+	border:0;
+	margin-left:0;
+}
+.free_checkbox label {
+	float:left;
+	border:0;
+}
+.free_checkbox input+label {
+	white-space:nowrap;
+}
+.xTiny_checkbox {
+    width: 1.3636em;
+    /*too small to be displayed*/
+    display: none;
+}
+
+.xTiny_checkbox input, .xTiny_checkbox label {
+    float: left;
+    border:0;
+    /*too small to be displayed*/
+    display: none;
+}
+
+.xTiny_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+/*
+ .xTiny_checkbox label {
+ padding-top:0;
+ display: inline;
+ white-space:nowrap;
+ overflow: hidden;
+ width: -8px !important;
+ }
+ 
+ */
+/*ridicoulus - no more room for the label left*/
+.tiny_checkbox {
+    width: 1.3em;
+}
+
+.tiny_checkbox input, .tiny_checkbox label {
+    float: left;
+    border:0;
+}
+
+.tiny_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.tiny_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0.0909em !important;
+}
+
+.xSmall_checkbox {
+    width: 2.8181em;
+}
+
+.xSmall_checkbox input, .xSmall_checkbox label {
+    float: left;
+    border:0;
+}
+
+.xSmall_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.xSmall_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0.8em !important;
+}
+
+.small_checkbox {
+    width: 5.7272em;
+}
+
+.small_checkbox input, .small_checkbox label {
+    float: left;
+    border:0;
+}
+
+.small_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.small_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 3.7272em !important;
+}
+
+.medium_checkbox {
+    width: 8.6363em;
+}
+
+.medium_checkbox input, .medium_checkbox label {
+    float: left;
+    border:0;
+}
+
+.medium_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.medium_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 6.7em !important;
+}
+
+.large_checkbox {
+    width: 11.5454em;
+}
+
+.large_checkbox input, .large_checkbox label {
+    float: left;
+    border:0;
+}
+
+.large_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.large_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 9.4545em !important;
+}
+
+.xLarge_checkbox {
+    width: 14.4545em;
+}
+
+.xLarge_checkbox input, .xLarge_checkbox label {
+    float: left;
+    border:0;
+}
+
+.xLarge_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.xLarge_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 12.4545em !important;
+}
+
+.double_checkbox {
+    width: 18.8181em;
+}
+
+.double_checkbox input, .double_checkbox label {
+    float: left;
+    border:0;
+}
+
+.double_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.double_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 16.9090em !important;
+}
+
+.xDouble_checkbox {
+    width: 25.3636em;
+}
+
+.xDouble_checkbox input, .xDouble_checkbox label {
+    float: left;
+    border:0;
+}
+
+.xDouble_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.xDouble_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 23.4545em !important;
+}
+
+.quad_checkbox {
+    width: 39.1818em;
+}
+
+.quad_checkbox input, .quad_checkbox label {
+    float: left;
+    border:0;
+}
+
+.quad_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.quad_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 37.2727em !important;
+}
+
+.huge_checkbox {
+    width: 23.1818em;
+}
+
+.huge_checkbox input, .huge_checkbox label {
+    float: left;
+    border:0;
+}
+
+.huge_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.huge_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 21.1818em !important;
+}
+
+.xHuge_checkbox {
+    width: 43.5454em;
+}
+
+.xHuge_checkbox input, .xHuge_checkbox label {
+    float: left;
+    border:0;
+}
+
+.xHuge_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.xHuge_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 41.5454em !important;
+}
+
+.half_checkbox {
+    width: 40.6363em;
+}
+
+.half_checkbox input, .half_checkbox label {
+    float: left;
+    border:0;
+}
+
+.half_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.half_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 38.6363em !important;
+}
+
+.full_area0_p1 .half_checkbox, .full_area1 .half_checkbox, .full_area1_p0 .half_checkbox {
+    width: 40.5454em;
+}
+
+.full_area0_p1 .half_checkbox label, .full_area1 .half_checkbox label, .full_area1_p0 .half_checkbox label {
+    width: 38.5454em !important;
+}
+
+.full__area0_p2 .half_area0_p1, .full_area1_p1 .half_checkbox, .full_area2 .half_checkbox, .full_area2_p0 .half_checkbox {
+    width: 40.4545em;
+}
+
+.full__area0_p2 .half_area0_p1 label, .full_area1_p1 .half_checkbox label, .full_area2 .half_checkbox label, .full_area2_p0 .half_checkbox label {
+    width: 38.4545em !important;
+}
+
+.full_checkbox {
+    width: 81.3636em;
+}
+
+.full_checkbox input, .full_checkbox label {
+    float: left;
+    border:0;
+}
+
+.full_checkbox input {
+    margin-left:0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.full_checkbox label {
+    padding-top:0;
+    display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 79.3636em !important;
+}
+
+/*AREAS with no border (base size-padding)*/
+/*AREAS with no padding*/
+.free_area0, .free_area0_p0, .xTiny_area0, .xTiny_area0_p0, .tiny_area0, .tiny_area0_p0, .xSmall_area0, .xSmall_area0_p0, .small_area0, .small_area0_p0, .medium_area0, .medium_area0_p0, .large_area0, .large_area0_p0, .xLarge_area0, .xLarge_area0_p0, .double_area0, .double_area0_p0, .xDouble_area0, .xDouble_area0_p0, .quad_area0, .quad_area0_p0, .huge_area0, .huge_area0_p0, .xHuge_area0, .xHuge_area0_p0, .half_area0, .half_area0_p0, .full_area0, .full_area0_p0 {
+    padding-left:0 !important;
+    padding-right:0 !important;
+    padding-top:0;
+    padding-bottom:0;
+    margin:0;
+    border-width:0 !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.full_area0 {
+	float:left !important;
+}
+
+.xTiny_area0, .xTiny_area0_p0 {
+    width: 1.3636em;
+}
+
+.tiny_area0, .tiny_area0_p0 {
+    width: 2.0909em;
+}
+
+.xSmall_area0, .xSmall_area0_p0 {
+    width: 2.8181em;
+}
+
+.small_area0, .small_area0_p0 {
+    width: 5.7272em;
+}
+
+.medium_area0, .medium_area0_p0 {
+    width: 8.6363em;
+}
+
+.large_area0, .large_area0_p0 {
+    width: 11.5454em;
+}
+
+.xLarge_area0, .xLarge_area0_p0 {
+    width: 14.4545em;
+}
+
+.double_area0, .double_area0_p0 {
+    width: 18.8181em;
+}
+
+.xDouble_area0, .xDouble_area0_p0 {
+    width: 25.3636em;
+}
+
+.quad_area0, .quad_area0_p0 {
+    width: 39.1818em;
+}
+
+.huge_area0, .huge_area0_p0 {
+    width: 23.1818em;
+}
+
+.xHuge_area0, .xHuge_area0_p0 {
+    width: 43.5454em;
+}
+
+.half_area0, .half_area0_p0 {
+    width: 40.6363em;
+}
+
+.full_area0_p1 .half_area0_p0, .full_area0_p1 .half_area0, .full_area1 .half_area0_p0, .full_area1 .half_area0, .full_area1_p0 .half_area0_p0, .full_area1_p0 .half_area0_p0 {
+    width: 40.5454em;
+}
+
+.full_area0_p2 .half_area0_p0, .full_area0_p2 .half_area0, .full_area1_p1 .half_area0_p0, .full_area1_p1 .half_area0, .full_area2 .half_area0_p0, .full_area2 .half_area0, .full_area2_p0 .half_area0_p0, .full_area2_p0 .half_area0 {
+    width: 40.4545em;
+}
+
+.full_area0, .full_area0_p0 {
+    width: 81.3636em;
+}
+
+/*AREAS with 1px padding*/
+.free_area0_p1, .xTiny_area0_p1, .tiny_area0_p1, .xSmall_area0_p1, .small_area0_p1, .medium_area0_p1, .large_area0_p1, .xLarge_area0_p1, .double_area0_p1, .xDouble_area0_p1, .quad_area0_p1, .huge_area0_p1, .xHuge_area0_p1, .half_area0_p1, .full_area0_p1 {
+    padding-left: 0.0909em !important;
+    padding-right: 0.0909em !important;
+    padding-top: 0.0909em;
+    padding-bottom: 0.0909em;
+    margin:0;
+    border-width:0 !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area0_p1 {
+    width: 1.1818em;
+}
+
+.tiny_area0_p1 {
+    width: 1.9090em;
+}
+
+.xSmall_area0_p1 {
+    width: 2.6363em;
+}
+
+.small_area0_p1 {
+    width: 5.5454em;
+}
+
+.medium_area0_p1 {
+    width: 8.4545em;
+}
+
+.large_area0_p1 {
+    width: 11.3636em;
+}
+
+.xLarge_area0_p1 {
+    width: 14.2727em;
+}
+
+.double_area0_p1 {
+    width: 18.6363em;
+}
+
+.xDouble_area0_p1 {
+    width: 25.1818em;
+}
+
+.quad_area0_p1 {
+    width: 39.001em;
+}
+
+.huge_area0_p1 {
+    width: 23.01em;
+}
+
+.xHuge_area0_p1 {
+    width: 43.3636em;
+}
+
+.half_area0_p1 {
+    width: 40.4545em;
+}
+
+.full_area0_p1 .half_area0_p1, .full_area1 .half_area0_p1, .full_area1_p0 .half_area0_p1 {
+    width: 40.3636em;
+}
+
+.full_area0_p2 .half_area0_p1, .full_area1_p1 .half_area0_p1, .full_area2 .half_area0_p1, .full_area2_p0 .half_area0_p1 {
+    width: 40.24em;
+}
+
+.full_area0_p1 {
+    width: 81.1818em;
+}
+
+/*AREAS with 2px padding*/
+.free_area0_p2, .xTiny_area0_p2, .tiny_area0_p2, .xSmall_area0_p2, .small_area0_p2, .medium_area0_p2, .large_area0_p2, .xLarge_area0_p2, .double_area0_p2, .xDouble_area0_p2, .quad_area0_p2, .huge_area0_p2, .xHuge_area0_p2, .half_area0_p2, .full_area0_p2 {
+    padding-left: 0.1818em !important;
+    padding-right: 0.1818em !important;
+    padding-top: 0.1818em;
+    padding-bottom: 0.1818em;
+    margin:0;
+    border-width:0 !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area0_p2 {
+    width: 1.01em;
+}
+
+.tiny_area0_p2 {
+    width: 1.7272em;
+}
+
+.xSmall_area0_p2 {
+    width: 2.4545em;
+}
+
+.small_area0_p2 {
+    width: 5.3636em;
+}
+
+.medium_area0_p2 {
+    width: 8.2727em;
+}
+
+.large_area0_p2 {
+    width: 11.1818em;
+}
+
+.xLarge_area0_p2 {
+    width: 14.0909em;
+}
+
+.double_area0_p2 {
+    width: 18.4545em;
+}
+
+.xDouble_area0_p2 {
+    width: 25.001em;
+}
+
+.quad_area0_p2 {
+    width: 38.8181em;
+}
+
+.huge_area0_p2 {
+    width: 22.8181em;
+}
+
+.xHuge_area0_p2 {
+    width: 43.1818em;
+}
+
+.half_area0_p2 {
+    width: 40.24em;
+}
+
+.full_area0_p1 .half_area0_p2, .full_area1 .half_area0_p2, .full_area1_p0 .half_area0_p2 {
+    width: 40.1818em;
+}
+
+.full_area0_p2 .half_area0_p2, .full_area1_p1 .half_area0_p2, .full_area2 .half_area0_p2, .full_area2_p0 .half_area0_p2 {
+    width: 40.0909em;
+}
+
+.full_area0_p2 {
+    width: 81.01em;
+}
+
+/*AREAS with 3px padding*/
+.free_area0_p3, .xTiny_area0_p3, .tiny_area0_p3, .xSmall_area0_p3, .small_area0_p3, .medium_area0_p3, .large_area0_p3, .xLarge_area0_p3, .double_area0_p3, .xDouble_area0_p3, .quad_area0_p3, .huge_area0_p3, .xHuge_area0_p3, .half_area0_p3, .full_area0_p3 {
+    padding-left: 0.2727em !important;
+    padding-right: 0.2727em !important;
+    padding-top: 0.2727em;
+    padding-bottom: 0.2727em;
+    margin:0;
+    border-width:0 !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area0_p3 {
+    width: 0.8181em;
+}
+
+.tiny_area0_p3 {
+    width: 1.5454em;
+}
+
+.xSmall_area0_p3 {
+    width: 2.2727em;
+}
+
+.small_area0_p3 {
+    width: 5.1818em;
+}
+
+.medium_area0_p3 {
+    width: 8.0909em;
+}
+
+.large_area0_p3 {
+    width: 11.01em;
+}
+
+.xLarge_area0_p3 {
+    width: 13.9090em;
+}
+
+.double_area0_p3 {
+    width: 18.2727em;
+}
+
+.xDouble_area0_p3 {
+    width: 24.8181em;
+}
+
+.quad_area0_p3 {
+    width: 38.6363em;
+}
+
+.huge_area0_p3 {
+    width: 22.6363em;
+}
+
+.xHuge_area0_p3 {
+    width: 43.01em;
+}
+
+.half_area0_p3 {
+    width: 40.0909em;
+}
+
+.full_area0_p1 .half_area0_p3, .full_area1 .half_area0_p3, .full_area1_p0 .half_area0_p3 {
+    width: 39.97em;
+}
+
+.full_area0_p2 .half_area0_p3, .full_area1_p1 .half_area0_p3, .full_area2 .half_area0_p3, .full_area2_p0 .half_area0_p3 {
+    width: 39.9090em;
+}
+
+.full_area0_p3 {
+    width: 80.8181em;
+}
+
+/*AREAS with 4px padding*/
+.free_area0_p4, .xTiny_area0_p4, .tiny_area0_p4, .xSmall_area0_p4, .small_area0_p4, .medium_area0_p4, .large_area0_p4, .xLarge_area0_p4, .double_area0_p4, .xDouble_area0_p4, .quad_area0_p4, .huge_area0_p4, .xHuge_area0_p4, .half_area0_p4, .full_area0_p4 {
+    padding-left: 0.3636em !important;
+    padding-right: 0.3636em !important;
+    padding-top: 0.3636em;
+    padding-bottom: 0.3636em;
+    margin:0;
+    border-width:0 !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area0_p4 {
+    width: 0.6363em;
+}
+
+.tiny_area0_p4 {
+    width: 1.3636em;
+}
+
+.xSmall_area0_p4 {
+    width: 2.0909em;
+}
+
+.small_area0_p4 {
+    width: 5.001em;
+}
+
+.medium_area0_p4 {
+    width: 7.9090em;
+}
+
+.large_area0_p4 {
+    width: 10.8181em;
+}
+
+.xLarge_area0_p4 {
+    width: 13.7272em;
+}
+
+.double_area0_p4 {
+    width: 18.0909em;
+}
+
+.xDouble_area0_p4 {
+    width: 24.6363em;
+}
+
+.quad_area0_p4 {
+    width: 38.4545em;
+}
+
+.huge_area0_p4 {
+    width: 22.4545em;
+}
+
+.xHuge_area0_p4 {
+    width: 42.8181em;
+}
+
+.half_area0_p4 {
+    width: 39.9090em;
+}
+
+.full_area0_p1 .half_area0_p4, .full_area1 .half_area0_p4, .full_area1_p0 .half_area0_p4 {
+    width: 39.79em;
+}
+
+.full_area0_p2 .half_area0_p4, .full_area1_p1 .half_area0_p4, .full_area2 .half_area0_p4, .full_area2_p0 .half_area0_p4 {
+    width: 39.7272em;
+}
+
+.full_area0_p4 {
+    width: 80.6363em;
+}
+
+/*AREAS with 6px padding*/
+.free_area0_p6, /*.xTiny_area0_p6,*/
+.tiny_area0_p6, .xSmall_area0_p6, .small_area0_p6, .medium_area0_p6, .large_area0_p6, .xLarge_area0_p6, .double_area0_p6, .xDouble_area0_p6, .quad_area0_p6, .huge_area0_p6, .xHuge_area0_p6, .half_area0_p6, .full_area0_p6 {
+    padding-left: 0.5454em !important;
+    padding-right: 0.5454em !important;
+    padding-top: 0.5454em;
+    padding-bottom: 0.5454em;
+    margin:0;
+    border-width:0 !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+/*
+ .xTiny_area0_p6 {
+ width: 3px;
+ }
+ */
+.tiny_area0_p6 {
+    width: 1.01em;
+}
+
+.xSmall_area0_p6 {
+    width: 1.7272em;
+}
+
+.small_area0_p6 {
+    width: 4.6363em;
+}
+
+.medium_area0_p6 {
+    width: 7.5454em;
+}
+
+.large_area0_p6 {
+    width: 10.4545em;
+}
+
+.xLarge_area0_p6 {
+    width: 13.3636em;
+}
+
+.double_area0_p6 {
+    width: 17.7272em;
+}
+
+.xDouble_area0_p6 {
+    width: 24.2727em;
+}
+
+.quad_area0_p6 {
+    width: 38.0909em;
+}
+
+.huge_area0_p6 {
+    width: 22.0909em;
+}
+
+.xHuge_area0_p6 {
+    width: 42.4545em;
+}
+
+.half_area0_p6 {
+    width: 39.5454em;
+}
+
+.full_area0_p1 .half_area0_p6, .full_area1 .half_area0_p6, .full_area1_p0 .half_area0_p6 {
+    width: 39.4545em;
+}
+
+.full_area0_p2 .half_area0_p6, .full_area1_p1 .half_area0_p6, .full_area2 .half_area0_p6, .full_area2_p0 .half_area0_p6 {
+    width: 39.3636em;
+}
+
+.full_area0_p6 {
+    width: 80.2727em;
+}
+
+/*AREAS with 7px padding*/
+.free_area0_p7, /*.xTiny_area0_p7,*/
+.tiny_area0_p7, .xSmall_area0_p7, .small_area0_p7, .medium_area0_p7, .large_area0_p7, .xLarge_area0_p7, .double_area0_p7, .xDouble_area0_p7, .quad_area0_p7, .huge_area0_p7, .xHuge_area0_p7, .half_area0_p7, .full_area0_p7 {
+    padding-left: 0.6363em !important;
+    padding-right: 0.6363em !important;
+    padding-top: 0.6363em;
+    padding-bottom: 0.6363em;
+    margin:0;
+    border-width:0 !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+/*
+ .xTiny_area0_p7 {
+ width: 1px;
+ }
+ */
+.tiny_area0_p7 {
+    width: 0.8181em;
+}
+
+.xSmall_area0_p7 {
+    width: 1.5454em;
+}
+
+.small_area0_p7 {
+    width: 4.4545em;
+}
+
+.medium_area0_p7 {
+    width: 7.3636em;
+}
+
+.large_area0_p7 {
+    width: 10.2727em;
+}
+
+.xLarge_area0_p7 {
+    width: 13.1818em;
+}
+
+.double_area0_p7 {
+    width: 17.5454em;
+}
+
+.xDouble_area0_p7 {
+    width: 24.0909em;
+}
+
+.quad_area0_p7 {
+    width: 37.9090em;
+}
+
+.huge_area0_p7 {
+    width: 21.9090em;
+}
+
+.xHuge_area0_p7 {
+    width: 42.2727em;
+}
+
+.half_area0_p7 {
+    width: 39.3636em;
+}
+
+.full_area0_p1 .half_area0_p7, .full_area1 .half_area0_p7, .full_area1_p0 .half_area0_p7 {
+    width: 39.24em;
+}
+
+.full_area0_p2 .half_area0_p7, .full_area1_p1 .half_area0_p7, .full_area2 .half_area0_p7, .full_area2_p0 .half_area0_p7 {
+    width: 39.14em;
+}
+
+.full_area0_p7 {
+    width: 80.0909em;
+}
+
+/*AREAS with 8px padding*/
+.free_area0_p8, /*.xTiny_area0_p8,*/
+.tiny_area0_p8, .xSmall_area0_p8, .small_area0_p8, .medium_area0_p8, .large_area0_p8, .xLarge_area0_p8, .double_area0_p8, .xDouble_area0_p8, .quad_area0_p8, .huge_area0_p8, .xHuge_area0_p8, .half_area0_p8, .full_area0_p8 {
+    padding-left: 0.7272em !important;
+    padding-right: 0.7272em !important;
+    padding-top: 0.7272em;
+    padding-bottom: 0.7272em;
+    margin:0;
+    border-width:0 !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+/*
+ .xTiny_area0_p8 {
+ width: -1px;
+ }
+ */
+.tiny_area0_p8 {
+    width: 0.6363em;
+}
+
+.xSmall_area0_p8 {
+    width: 1.3636em;
+}
+
+.small_area0_p8 {
+    width: 4.2727em;
+}
+
+.medium_area0_p8 {
+    width: 7.1818em;
+}
+
+.large_area0_p8 {
+    width: 10.0909em;
+}
+
+.xLarge_area0_p8 {
+    width: 13.001em;
+}
+
+.double_area0_p8 {
+    width: 17.3636em;
+}
+
+.xDouble_area0_p8 {
+    width: 23.9090em;
+}
+
+.quad_area0_p8 {
+    width: 37.7272em;
+}
+
+.huge_area0_p8 {
+    width: 21.7272em;
+}
+
+.xHuge_area0_p8 {
+    width: 42.0909em;
+}
+
+.half_area0_p8 {
+    width: 39.1818em;
+}
+
+.full_area0_p1 .half_area0_p8, .full_area1 .half_area0_p8, .full_area1_p0 .half_area0_p8 {
+    width: 39.0909em;
+}
+
+.full_area0_p2 .half_area0_p8, .full_area1_p1 .half_area0_p8, .full_area2 .half_area0_p8, .full_area2_p0 .half_area0_p8 {
+    width: 38.9090em;
+}
+
+.full_area0_p8 {
+    width: 79.9090em;
+}
+
+/*AREAS with common 1 px border (base size-2px(+padding))*/
+/*AREAS with no padding*/
+.free_area1, .free_area1_p0, .xTiny_area1, .xTiny_area1_p0, .tiny_area1, .tiny_area1_p0, .xSmall_area1, .xSmall_area1_p0, .small_area1, .small_area1_p0, .medium_area1, .medium_area1_p0, .large_area1, .large_area1_p0, .xLarge_area1, .xLarge_area1_p0, .double_area1, .double_area1_p0, .xDouble_area1, .xDouble_area1_p0, .quad_area1, .quad_area1_p0, .huge_area1, .huge_area1_p0, .xHuge_area1, .xHuge_area1_p0, .half_area1, .half_area1_p0, .full_area1, .full_area1_p0 {
+    padding-left:0 !important;
+    padding-right:0 !important;
+    padding-top:0;
+    padding-bottom:0;
+    margin:0;
+    border-width: 0.0909em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area1, .xTiny_area1_p0 {
+    width: 1.1818em;
+}
+
+.tiny_area1, .tiny_area1_p0 {
+    width: 1.9090em;
+}
+
+.xSmall_area1, .xSmall_area1_p0 {
+    width: 2.6363em;
+}
+
+.small_area1, .small_area1_p0 {
+    width: 5.5454em;
+}
+
+.medium_area1, .medium_area1_p0 {
+    width: 8.4545em;
+}
+
+.large_area1, .large_area1_p0 {
+    width: 11.3636em;
+}
+
+.xLarge_area1, .xLarge_area1_p0 {
+    width: 14.2727em;
+}
+
+.double_area1, .double_area1_p0 {
+    width: 18.6363em;
+}
+
+.xDouble_area1, .xDouble_area1_p0 {
+    width: 25.1818em;
+}
+
+.quad_area1, .quad_area1_p0 {
+    width: 39.001em;
+}
+
+.huge_area1, .huge_area1_p0 {
+    width: 23.01em;
+}
+
+.xHuge_area1, .xHuge_area1_p0 {
+    width: 43.3636em;
+}
+
+.half_area1, .half_area1_p0 {
+    width: 40.4545em;
+}
+
+.full_area0_p1 .half_area1_p0, .full_area0_p1 .half_area1, .full_area1 .half_area1_p0, .full_area1 .half_area1, .full_area1_p0 .half_area1_p0, .full_area1_p0 .half_area1_p0 {
+    width: 40.3636em;
+}
+
+.full_area0_p2 .half_area1_p0, .full_area0_p2 .half_area1, .full_area1_p1 .half_area1_p0, .full_area1_p1 .half_area1, .full_area2 .half_area1_p0, .full_area2 .half_area1, .full_area2_p0 .half_area1_p0, .full_area2_p0 .half_area1 {
+    width: 40.24em;
+}
+
+.full_area1, .full_area1_p0 {
+    width: 81.1818em;
+}
+
+/*AREAS with 1px padding*/
+.free_area1_p1, .xTiny_area1_p1, .tiny_area1_p1, .xSmall_area1_p1, .small_area1_p1, .medium_area1_p1, .large_area1_p1, .xLarge_area1_p1, .double_area1_p1, .xDouble_area1_p1, .quad_area1_p1, .huge_area1_p1, .xHuge_area1_p1, .half_area1_p1, .full_area1_p1 {
+    padding-left: 0.0909em !important;
+    padding-right: 0.0909em !important;
+    padding-top: 0.0909em;
+    padding-bottom: 0.0909em;
+    margin:0;
+    border-width: 0.0909em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area1_p1 {
+    width: 1.01em;
+}
+
+.tiny_area1_p1 {
+    width: 1.7272em;
+}
+
+.xSmall_area1_p1 {
+    width: 2.4545em;
+}
+
+.small_area1_p1 {
+    width: 5.3636em;
+}
+
+.medium_area1_p1 {
+    width: 8.2727em;
+}
+
+.large_area1_p1 {
+    width: 11.1818em;
+}
+
+.xLarge_area1_p1 {
+    width: 14.0909em;
+}
+
+.double_area1_p1 {
+    width: 18.4545em;
+}
+
+.xDouble_area1_p1 {
+    width: 25.001em;
+}
+
+.quad_area1_p1 {
+    width: 38.8181em;
+}
+
+.huge_area1_p1 {
+    width: 22.8181em;
+}
+
+.xHuge_area1_p1 {
+    width: 43.1818em;
+}
+
+.half_area1_p1 {
+    width: 40.24em;
+}
+
+.full_area0_p1 .half_area1_p1, .full_area1 .half_area1_p1, .full_area1_p0 .half_area1_p1 {
+    width: 40.1818em;
+}
+
+.full_area0_p2 .half_area1_p1, .full_area1_p1 .half_area1_p1, .full_area2 .half_area1_p1, .full_area2_p0 .half_area1_p1 {
+    width: 40.0909em;
+}
+
+.full_area1_p1 {
+    width: 81.001em;
+}
+
+/*AREAS with 2px padding*/
+.free_area1_p2, .xTiny_area1_p2, .tiny_area1_p2, .xSmall_area1_p2, .small_area1_p2, .medium_area1_p2, .large_area1_p2, .xLarge_area1_p2, .double_area1_p2, .xDouble_area1_p2, .quad_area1_p2, .huge_area1_p2, .xHuge_area1_p2, .half_area1_p2, .full_area1_p2 {
+    padding-left: 0.1818em !important;
+    padding-right: 0.1818em !important;
+    padding-top: 0.1818em;
+    padding-bottom: 0.1818em;
+    margin:0;
+    border-width: 0.0909em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area1_p2 {
+    width: 0.8181em;
+}
+
+.tiny_area1_p2 {
+    width: 1.5454em;
+}
+
+.xSmall_area1_p2 {
+    width: 2.2727em;
+}
+
+.selCriterionType label {
+	margin-right:3em;
+	width:auto !important;
+}
+.small_area1_p2 {
+    width: 5.1818em;
+}
+
+.medium_area1_p2 {
+    width: 8.0909em;
+}
+
+.large_area1_p2 {
+    width: 11.001em;
+}
+
+.xLarge_area1_p2 {
+    width: 13.9090em;
+}
+
+.double_area1_p2 {
+    width: 18.2727em;
+}
+
+.xDouble_area1_p2 {
+    width: 24.8181em;
+}
+
+.quad_area1_p2 {
+    width: 38.6363em;
+}
+
+.huge_area1_p2 {
+    width: 22.6363em;
+}
+
+.xHuge_area1_p2 {
+    width: 43.001em;
+}
+
+.half_area1_p2 {
+    width: 40.0909em;
+}
+
+.full_area0_p1 .half_area1_p2, .full_area1 .half_area1_p2, .full_area1_p0 .half_area1_p2 {
+    width: 39.97em;
+}
+
+.full_area0_p2 .half_area1_p2, .full_area1_p1 .half_area1_p2, .full_area2 .half_area1_p2, .full_area2_p0 .half_area1_p2 {
+    width: 39.9090em;
+}
+
+.full_area1_p2 {
+    width: 80.8181em;
+}
+
+/*AREAS with 3px padding*/
+.free_area1_p3, .xTiny_area1_p3, .tiny_area1_p3, .xSmall_area1_p3, .small_area1_p3, .medium_area1_p3, .large_area1_p3, .xLarge_area1_p3, .double_area1_p3, .xDouble_area0_p3, .quad_area1_p3, .huge_area1_p3, .xHuge_area1_p3, .half_area1_p3, .full_area1_p3 {
+    padding-left: 0.2727em !important;
+    padding-right: 0.2727em !important;
+    padding-top: 0.2727em;
+    padding-bottom: 0.2727em;
+    margin:0;
+    border-width: 0.0909em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area1_p3 {
+    width: 0.6363em;
+}
+
+.tiny_area1_p3 {
+    width: 1.3636em;
+}
+
+.xSmall_area1_p3 {
+    width: 2.0909em;
+}
+
+.small_area1_p3 {
+    width: 5.001em;
+}
+
+.medium_area1_p3 {
+    width: 7.9090em;
+}
+
+.large_area1_p3 {
+    width: 10.8181em;
+}
+
+.xLarge_area1_p3 {
+    width: 13.7272em;
+}
+
+.double_area1_p3 {
+    width: 18.0909em;
+}
+
+.xDouble_area1_p3 {
+    width: 24.6363em;
+}
+
+.quad_area1_p3 {
+    width: 38.4545em;
+}
+
+.huge_area1_p3 {
+    width: 22.4545em;
+}
+
+.xHuge_area1_p3 {
+    width: 42.8181em;
+}
+
+.half_area1_p3 {
+    width: 39.9090em;
+}
+
+.full_area0_p1 .half_area1_p3, .full_area1 .half_area1_p3, .full_area1_p0 .half_area1_p3 {
+    width: 39.79em;
+}
+
+.full_area0_p2 .half_area1_p3, .full_area1_p1 .half_area1_p3, .full_area2 .half_area1_p3, .full_area2_p0 .half_area1_p3 {
+    width: 39.7272em;
+}
+
+.full_area1_p3 {
+    width: 80.6363em;
+}
+
+/*AREAS with 4px padding*/
+.free_area1_p4, .xTiny_area1_p4, .tiny_area1_p4, .xSmall_area1_p4, .small_area1_p4, .medium_area1_p4, .large_area1_p4, .xLarge_area1_p4, .double_area1_p4, .xDouble_area1_p4, .quad_area1_p4, .huge_area1_p4, .xHuge_area1_p4, .half_area1_p4, .full_area1_p4 {
+    padding-left: 0.3636em !important;
+    padding-right: 0.3636em !important;
+    padding-top: 0.3636em;
+    padding-bottom: 0.3636em;
+    margin:0;
+    border-width: 0.0909em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area1_p4 {
+    width: 0.4545em;
+}
+
+.tiny_area1_p4 {
+    width: 1.1818em;
+}
+
+.xSmall_area1_p4 {
+    width: 1.9090em;
+}
+
+.small_area1_p4 {
+    width: 4.8181em;
+}
+
+.medium_area1_p4 {
+    width: 7.7272em;
+}
+
+.large_area1_p4 {
+    width: 10.6363em;
+}
+
+.xLarge_area1_p4 {
+    width: 13.5454em;
+}
+
+.double_area1_p4 {
+    width: 17.9090em;
+}
+
+.xDouble_area1_p4 {
+    width: 24.4545em;
+}
+
+.quad_area1_p4 {
+    width: 38.2727em;
+}
+
+.huge_area1_p4 {
+    width: 22.2727em;
+}
+
+.xHuge_area1_p4 {
+    width: 42.6363em;
+}
+
+.half_area1_p4 {
+    width: 39.7272em;
+}
+
+.full_area0_p1 .half_area1_p4, .full_area1 .half_area1_p4, .full_area1_p0 .half_area1_p4 {
+    width: 39.6363em;
+}
+
+.full_area0_p2 .half_area1_p4, .full_area1_p1 .half_area1_p4, .full_area2 .half_area1_p4, .full_area2_p0 .half_area1_p4 {
+    width: 39.5454em;
+}
+
+.full_area1_p4 {
+    width: 80.4545em;
+}
+
+/*AREAS with 6px padding*/
+.free_area1_p6, .xTiny_area1_p6, .tiny_area1_p6, .xSmall_area1_p6, .small_area1_p6, .medium_area1_p6, .large_area1_p6, .xLarge_area1_p6, .double_area1_p6, .xDouble_area1_p6, .quad_area1_p6, .huge_area1_p6, .xHuge_area1_p6, .half_area1_p6, .full_area1_p6 {
+    padding-left: 0.5454em !important;
+    padding-right: 0.5454em !important;
+    padding-top: 0.5454em;
+    padding-bottom: 0.5454em;
+    margin:0;
+    border-width: 0.0909em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+/*
+ .xTiny_area1_p6 {
+ width: 1px;
+ }
+ */
+.tiny_area1_p6 {
+    width: 0.8181em;
+}
+
+.xSmall_area1_p6 {
+    width: 1.5454em;
+}
+
+.small_area1_p6 {
+    width: 4.4545em;
+}
+
+.medium_area1_p6 {
+    width: 7.3636em;
+}
+
+.large_area1_p6 {
+    width: 10.2727em;
+}
+
+.xLarge_area1_p6 {
+    width: 13.1818em;
+}
+
+.double_area1_p6 {
+    width: 17.5454em;
+}
+
+.xDouble_area1_p6 {
+    width: 24.0909em;
+}
+
+.quad_area1_p6 {
+    width: 37.9090em;
+}
+
+.huge_area1_p6 {
+    width: 21.9090em;
+}
+
+.xHuge_area1_p6 {
+    width: 42.2727em;
+}
+
+.half_area1_p6 {
+    width: 39.3636em;
+}
+
+.full_area0_p1 .half_area1_p6, .full_area1 .half_area1_p6, .full_area1_p0 .half_area1_p6 {
+    width: 39.2727em;
+}
+
+.full_area0_p2 .half_area1_p6, .full_area1_p1 .half_area1_p6, .full_area2 .half_area1_p6, .full_area2_p0 .half_area1_p6 {
+    width: 39.1818em;
+}
+
+.full_area1_p6 {
+    width: 80.0909em;
+}
+
+/*AREAS with 7px padding*/
+.free_area1_p7, .xTiny_area1_p7, .tiny_area1_p7, .xSmall_area1_p7, .small_area1_p7, .medium_area1_p7, .large_area1_p7, .xLarge_area1_p7, .double_area1_p7, .xDouble_area1_p7, .quad_area1_p7, .huge_area1_p7, .xHuge_area1_p7, .half_area1_p7, .full_area1_p7 {
+    padding-left: 0.6363em !important;
+    padding-right: 0.6363em !important;
+    padding-top: 0.6363em;
+    padding-bottom: 0.6363em;
+    margin:0;
+    border-width: 0.0909em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+/*
+ .xTiny_area1_p7 {
+ width: -1px;
+ }
+ */
+.tiny_area1_p7 {
+    width: 0.6363em;
+}
+
+.xSmall_area1_p7 {
+    width: 1.3636em;
+}
+
+.small_area1_p7 {
+    width: 4.2727em;
+}
+
+.medium_area1_p7 {
+    width: 7.1818em;
+}
+
+.large_area1_p7 {
+    width: 10.0909em;
+}
+
+.xLarge_area1_p7 {
+    width: 13.001em;
+}
+
+.double_area1_p7 {
+    width: 17.3636em;
+}
+
+.xDouble_area1_p7 {
+    width: 23.9090em;
+}
+
+.quad_area1_p7 {
+    width: 37.7272em;
+}
+
+.huge_area1_p7 {
+    width: 21.7272em;
+}
+
+.xHuge_area1_p7 {
+    width: 42.0909em;
+}
+
+.half_area1_p7 {
+    width: 39.1818em;
+}
+
+.full_area0_p1 .half_area1_p7, .full_area1 .half_area1_p7, .full_area1_p0 .half_area1_p7 {
+    width: 39.0909em;
+}
+
+.full_area0_p2 .half_area1_p7, .full_area1_p1 .half_area1_p7, .full_area2 .half_area1_p7, .full_area2_p0 .half_area1_p7 {
+    width: 38.97em;
+}
+
+.full_area1_p7 {
+    width: 79.9090em;
+}
+
+/*AREAS with 8px padding*/
+.free_area1_p8, .xTiny_area1_p8, .tiny_area1_p8, .xSmall_area1_p8, .small_area1_p8, .medium_area1_p8, .large_area1_p8, .xLarge_area1_p8, .double_area1_p8, .xDouble_area1_p8, .quad_area1_p8, .huge_area1_p8, .xHuge_area1_p8, .half_area1_p8, .full_area1_p8 {
+    padding-left: 0.7272em !important;
+    padding-right: 0.7272em !important;
+    padding-top: 0.7272em;
+    padding-bottom: 0.7272em;
+    margin:0;
+    border-width: 0.0909em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+/*
+ .xTiny_area1_p8 {
+ width: -3px;
+ }
+ */
+.tiny_area1_p8 {
+    width: 0.4545em;
+}
+
+.xSmall_area1_p8 {
+    width: 1.1818em;
+}
+
+.small_area1_p8 {
+    width: 4.0909em;
+}
+
+.medium_area1_p8 {
+    width: 7.02em;
+}
+
+.large_area1_p8 {
+    width: 9.9090em;
+}
+
+.xLarge_area1_p8 {
+    width: 12.8181em;
+}
+
+.double_area1_p8 {
+    width: 17.1818em;
+}
+
+.xDouble_area1_p8 {
+    width: 23.7272em;
+}
+
+.quad_area1_p8 {
+    width: 37.5454em;
+}
+
+.huge_area1_p8 {
+    width: 21.5454em;
+}
+
+.xHuge_area1_p8 {
+    width: 41.9090em;
+}
+
+.half_area1_p8 {
+    width: 38.97em;
+}
+
+.full_area0_p1 .half_area1_p8, .full_area1 .half_area1_p8, .full_area1_p0 .half_area1_p8 {
+    width: 38.9090em;
+}
+
+.full_area0_p2 .half_area1_p8, .full_area1_p1 .half_area1_p8, .full_area2 .half_area1_p8, .full_area2_p0 .half_area1_p8 {
+    width: 38.79em;
+}
+
+.full_area1_p8 {
+    width: 79.7272em;
+}
+
+/*AREAS with 2 px border (base size-2px(+padding))*/
+/*AREAS with no padding*/
+.free_area2, .free_area2_p0, .xTiny_area2, .xTiny_area2_p0, .tiny_area2, .tiny_area2_p0, .xSmall_area2, .xSmall_area2_p0, .small_area2, .small_area2_p0, .medium_area2, .medium_area2_p0, .large_area2, .large_area2_p0, .xLarge_area2, .xLarge_area2_p0, .double_area2, .double_area2_p0, .xDouble_area2, .xDouble_area2_p0, .quad_area2, .quad_area2_p0, .huge_area2, .huge_area2_p0, .xHuge_area2, .xHuge_area2_p0, .half_area2, .half_area2_p0, .full_area2, .full_area2_p0 {
+    padding-left:0 !important;
+    padding-right:0 !important;
+    padding-top:0;
+    padding-bottom:0;
+    margin:0;
+    border-width: 0.1818em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area2, .xTiny_area2_p0 {
+    width: 1.01em;
+}
+
+.tiny_area2, .tiny_area2_p0 {
+    width: 1.7272em;
+}
+
+.xSmall_area2, .xSmall_area2_p0 {
+    width: 2.4545em;
+}
+
+.small_area2, .small_area2_p0 {
+    width: 5.3636em;
+}
+
+.medium_area2, .medium_area2_p0 {
+    width: 8.2727em;
+}
+
+.large_area2, .large_area2_p0 {
+    width: 11.1818em;
+}
+
+.xLarge_area2, .xLarge_area2_p0 {
+    width: 14.0909em;
+}
+
+.double_area2, .double_area2_p0 {
+    width: 18.6363em;
+}
+
+.xDouble_area2, .xDouble_area2_p0 {
+    width: 25.1818em;
+}
+
+.quad_area2, .quad_area2_p0 {
+    width: 39.001em;
+}
+
+.huge_area2, .huge_area2_p0 {
+    width: 22.8181em;
+}
+
+.xHuge_area2, .xHuge_area2_p0 {
+    width: 43.1818em;
+}
+
+.half_area2, .half_area2_p0 {
+    width: 40.23em;
+}
+
+.full_area0_p1 .half_area2_p0, .full_area0_p1 .half_area2, .full_area1 .half_area2_p0, .full_area1 .half_area2, .full_area1_p0 .half_area2_p0, .full_area1_p0 .half_area2_p0 {
+    width: 40.1818em;
+}
+
+.full_area0_p2 .half_area2_p0, .full_area0_p2 .half_area2, .full_area1_p1 .half_area2_p0, .full_area1_p1 .half_area2, .full_area2 .half_area2_p0, .full_area2 .half_area2, .full_area2_p0 .half_area2_p0, .full_area2_p0 .half_area2 {
+    width: 40.0909em;
+}
+
+.full_area2, .full_area2_p0 {
+    width: 80.01em;
+}
+
+/*AREAS with 1px padding*/
+.free_area2_p1, .xTiny_area2_p1, .tiny_area2_p1, .xSmall_area2_p1, .small_area2_p1, .medium_area2_p1, .large_area2_p1, .xLarge_area2_p1, .double_area2_p1, .xDouble_area2_p1, .quad_area2_p1, .huge_area2_p1, .xHuge_area2_p1, .half_area2_p1, .full_area2_p1 {
+    padding-left: 0.0909em !important;
+    padding-right: 0.0909em !important;
+    padding-top: 0.0909em;
+    padding-bottom: 0.0909em;
+    margin:0;
+    border-width: 0.1818em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area2_p1 {
+    width: 0.8181em;
+}
+
+.tiny_area2_p1 {
+    width: 1.5454em;
+}
+
+.xSmall_area2_p1 {
+    width: 2.2727em;
+}
+
+.small_area2_p1 {
+    width: 5.1818em;
+}
+
+.medium_area2_p1 {
+    width: 8.0909em;
+}
+
+.large_area2_p1 {
+    width: 11.01em;
+}
+
+.xLarge_area2_p1 {
+    width: 13.9090em;
+}
+
+.double_area2_p1 {
+    width: 18.4545em;
+}
+
+.xDouble_area2_p1 {
+    width: 25.001em;
+}
+
+.quad_area2_p1 {
+    width: 38.8181em;
+}
+
+.huge_area2_p1 {
+    width: 22.6363em;
+}
+
+.xHuge_area2_p1 {
+    width: 43.01em;
+}
+
+.half_area2_p1 {
+    width: 40.0909em;
+}
+
+.full_area0_p1 .half_area2_p1, .full_area1 .half_area2_p1, .full_area1_p0 .half_area2_p1 {
+    width: 39.97em;
+}
+
+.full_area0_p2 .half_area2_p1, .full_area1_p1 .half_area2_p1, .full_area2 .half_area2_p1, .full_area2_p0 .half_area2_p1 {
+    width: 39.9090em;
+}
+
+.full_area2_p1 {
+    width: 80.8181em;
+}
+
+/*AREAS with 2px padding*/
+.free_area2_p2, .xTiny_area2_p2, .tiny_area2_p2, .xSmall_area2_p2, .small_area2_p2, .medium_area2_p2, .large_area2_p2, .xLarge_area2_p2, .double_area2_p2, .xDouble_area2_p2, .quad_area2_p2, .huge_area2_p2, .xHuge_area2_p2, .half_area2_p2, .full_area2_p2 {
+    padding-left: 0.1818em !important;
+    padding-right: 0.1818em !important;
+    padding-top: 0.1818em;
+    padding-bottom: 0.1818em;
+    margin:0;
+    border-width: 0.1818em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area2_p2 {
+    width: 0.6363em;
+}
+
+.tiny_area2_p2 {
+    width: 1.3636em;
+}
+
+.xSmall_area2_p2 {
+    width: 2.0909em;
+}
+
+.small_area2_p2 {
+    width: 5.001em;
+}
+
+.medium_area2_p2 {
+    width: 7.9090em;
+}
+
+.large_area2_p2 {
+    width: 10.8181em;
+}
+
+.xLarge_area2_p2 {
+    width: 13.7272em;
+}
+
+.double_area2_p2 {
+    width: 18.2727em;
+}
+
+.xDouble_area2_p2 {
+    width: 24.8181em;
+}
+
+.quad_area2_p2 {
+    width: 38.6363em;
+}
+
+.huge_area2_p2 {
+    width: 22.4545em;
+}
+
+.xHuge_area2_p2 {
+    width: 42.8181em;
+}
+
+.half_area2_p2 {
+    width: 39.9090em;
+}
+
+.full_area0_p1 .half_area2_p2, .full_area1 .half_area2_p2, .full_area1_p0 .half_area2_p2 {
+    width: 39.79em;
+}
+
+.full_area0_p2 .half_area2_p2, .full_area1_p1 .half_area2_p2, .full_area2 .half_area2_p2, .full_area2_p0 .half_area2_p2 {
+    width: 39.7272em;
+}
+
+.full_area2_p2 {
+    width: 80.6363em;
+}
+
+/*AREAS with 3px padding*/
+.free_area2_p3, .xTiny_area2_p3, .tiny_area2_p3, .xSmall_area2_p3, .small_area2_p3, .medium_area2_p3, .large_area2_p3, .xLarge_area2_p3, .double_area2_p3, .xDouble_area2_p3, .quad_area2_p3, .huge_area2_p3, .xHuge_area2_p3, .half_area2_p3, .full_area2_p3 {
+    padding-left: 0.2727em !important;
+    padding-right: 0.2727em !important;
+    padding-top: 0.2727em;
+    padding-bottom: 0.2727em;
+    margin:0;
+    border-width: 0.1818em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area2_p3 {
+    width: 0.4545em;
+}
+
+.tiny_area2_p3 {
+    width: 1.1818em;
+}
+
+.xSmall_area2_p3 {
+    width: 1.9090em;
+}
+
+.small_area2_p3 {
+    width: 4.8181em;
+}
+
+.medium_area2_p3 {
+    width: 7.7272em;
+}
+
+.large_area2_p3 {
+    width: 10.6363em;
+}
+
+.xLarge_area2_p3 {
+    width: 13.5454em;
+}
+
+.double_area2_p3 {
+    width: 18.0909em;
+}
+
+.xDouble_area2_p3 {
+    width: 24.6363em;
+}
+
+.quad_area2_p3 {
+    width: 38.4545em;
+}
+
+.huge_area2_p3 {
+    width: 22.2727em;
+}
+
+.xHuge_area2_p3 {
+    width: 42.6363em;
+}
+
+.half_area2_p3 {
+    width: 39.7272em;
+}
+
+.full_area0_p1 .half_area2_p3, .full_area1 .half_area2_p3, .full_area1_p0 .half_area2_p3 {
+    width: 39.6363em;
+}
+
+.full_area0_p2 .half_area2_p3, .full_area1_p1 .half_area2_p3, .full_area2 .half_area2_p3, .full_area2_p0 .half_area2_p3 {
+    width: 39.5454em;
+}
+
+.full_area2_p3 {
+    width: 80.4545em;
+}
+
+/*AREAS with 4px padding*/
+.free_area2_p4, .xTiny_area2_p4, .tiny_area2_p4, .xSmall_area2_p4, .small_area2_p4, .medium_area2_p4, .large_area2_p4, .xLarge_area2_p4, .double_area2_p4, .xDouble_area2_p4, .quad_area2_p4, .huge_area2_p4, .xHuge_area2_p4, .half_area2_p4, .full_area2_p4 {
+    padding-left: 0.3636em !important;
+    padding-right: 0.3636em !important;
+    padding-top: 0.3636em;
+    padding-bottom: 0.3636em;
+    margin:0;
+    border-width: 0.1818em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+.xTiny_area2_p4 {
+    width: 0.2727em;
+}
+
+.tiny_area2_p4 {
+    width: 1.01em;
+}
+
+.xSmall_area2_p4 {
+    width: 1.7272em;
+}
+
+.small_area2_p4 {
+    width: 4.6363em;
+}
+
+.medium_area2_p4 {
+    width: 7.5454em;
+}
+
+.large_area2_p4 {
+    width: 10.4545em;
+}
+
+.xLarge_area2_p4 {
+    width: 13.3636em;
+}
+
+.double_area2_p4 {
+    width: 17.9090em;
+}
+
+.xDouble_area2_p4 {
+    width: 24.4545em;
+}
+
+.quad_area2_p4 {
+    width: 38.2727em;
+}
+
+.huge_area2_p4 {
+    width: 22.0909em;
+}
+
+.xHuge_area2_p4 {
+    width: 42.4545em;
+}
+
+.half_area2_p4 {
+    width: 40.5454em;
+}
+
+.full_area0_p1 .half_area2_p4, .full_area1 .half_area2_p4, .full_area1_p0 .half_area2_p4 {
+    width: 39.4545em;
+}
+
+.full_area0_p2 .half_area2_p4, .full_area1_p1 .half_area2_p4, .full_area2 .half_area2_p4, .full_area2_p0 .half_area2_p4 {
+    width: 39.3636em;
+}
+
+.full_area2_p4 {
+    width: 80.2727em;
+}
+
+/*AREAS with 6px padding*/
+.free_area2_p6, .xTiny_area2_p6, .tiny_area2_p6, .xSmall_area2_p6, .small_area2_p6, .medium_area2_p6, .large_area2_p6, .xLarge_area2_p6, .double_area2_p6, .xDouble_area2_p6, .quad_area2_p6, .huge_area2_p6, .xHuge_area2_p6, .half_area2_p6, .full_area2_p6 {
+    padding-left: 0.5454em !important;
+    padding-right: 0.5454em !important;
+    padding-top: 0.5454em;
+    padding-bottom: 0.5454em;
+    margin:0;
+    border-width: 0.1818em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+/*
+ .xTiny_area2_p6 {
+ width: -1px;
+ }
+ */
+.tiny_area2_p6 {
+    width: 0.6363em;
+}
+
+.xSmall_area2_p6 {
+    width: 1.3636em;
+}
+
+.small_area2_p6 {
+    width: 4.2727em;
+}
+
+.medium_area2_p6 {
+    width: 7.1818em;
+}
+
+.large_area2_p6 {
+    width: 10.0909em;
+}
+
+.xLarge_area2_p6 {
+    width: 13.001em;
+}
+
+.double_area2_p6 {
+    width: 17.5454em;
+}
+
+.xDouble_area2_p6 {
+    width: 24.0909em;
+}
+
+.quad_area2_p6 {
+    width: 37.9090em;
+}
+
+.huge_area2_p6 {
+    width: 21.7272em;
+}
+
+.xHuge_area2_p6 {
+    width: 42.0909em;
+}
+
+.half_area2_p6 {
+    width: 39.1818em;
+}
+
+.full_area0_p1 .half_area2_p6, .full_area1 .half_area2_p6, .full_area1_p0 .half_area2_p6 {
+    width: 39.0909em;
+}
+
+.full_area0_p2 .half_area2_p6, .full_area1_p1 .half_area2_p6, .full_area2 .half_area2_p6, .full_area2_p0 .half_area2_p6 {
+    width: 38.97em;
+}
+
+.full_area2_p6 {
+    width: 79.9090em;
+}
+
+/*AREAS with 7px padding*/
+.free_area2_p7, .xTiny_area2_p7, .tiny_area2_p7, .xSmall_area2_p7, .small_area2_p7, .medium_area2_p7, .large_area2_p7, .xLarge_area2_p7, .double_area2_p7, .xDouble_area2_p7, .quad_area2_p7, .huge_area2_p7, .xHuge_area2_p7, .half_area2_p7, .full_area2_p7 {
+    padding-left: 0.6363em !important;
+    padding-right: 0.6363em !important;
+    padding-top: 0.6363em;
+    padding-bottom: 0.6363em;
+    margin:0;
+    border-width: 0.1818em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+/*
+ .xTiny_area2_p7 {
+ width: -3px;
+ }
+ */
+.tiny_area2_p7 {
+    width: 0.4545em;
+}
+
+.xSmall_area2_p7 {
+    width: 1.1818em;
+}
+
+.small_area2_p7 {
+    width: 4.0909em;
+}
+
+.medium_area2_p7 {
+    width: 7.01em;
+}
+
+.large_area2_p7 {
+    width: 9.9090em;
+}
+
+.xLarge_area2_p7 {
+    width: 12.8181em;
+}
+
+.double_area2_p7 {
+    width: 17.3636em;
+}
+
+.xDouble_area2_p7 {
+    width: 23.9090em;
+}
+
+.quad_area2_p7 {
+    width: 38.7272em;
+}
+
+.huge_area2_p7 {
+    width: 21.5454em;
+}
+
+.xHuge_area2_p7 {
+    width: 41.9090em;
+}
+
+.half_area2_p7 {
+    width: 38.97em;
+}
+
+.full_area0_p1 .half_area2_p7, .full_area1 .half_area2_p7, .full_area1_p0 .half_area2_p7 {
+    width: 38.9090em;
+}
+
+.full_area0_p2 .half_area2_p7, .full_area1_p1 .half_area2_p7, .full_area2 .half_area2_p7, .full_area2_p0 .half_area2_p7 {
+    width: 38.79em;
+}
+
+.full_area2_p7 {
+    width: 79.7272em;
+}
+
+/*AREAS with 8px padding*/
+.free_area2_p8, .xTiny_area2_p8, .tiny_area2_p8, .xSmall_area2_p8, .small_area2_p8, .medium_area2_p8, .large_area2_p8, .xLarge_area2_p8, .double_area2_p8, .xDouble_area2_p8, .quad_area2_p8, .huge_area2_p8, .xHuge_area2_p8, .half_area2_p8, .full_area2_p8 {
+    padding-left: 0.7272em !important;
+    padding-right: 0.7272em !important;
+    padding-top: 0.7272em;
+    padding-bottom: 0.7272em;
+    margin:0;
+    border-width: 0.1818em !important;
+    margin-right: 0.0909em;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+
+/*
+ .xTiny_area2_p8 {
+ width: -5px;
+ }
+ */
+.tiny_area2_p8 {
+    width: 0.2727em;
+}
+
+.xSmall_area2_p8 {
+    width: 1.01em;
+}
+
+.small_area2_p8 {
+    width: 3.9090em;
+}
+
+.medium_area2_p8 {
+    width: 6.8181em;
+}
+
+.large_area2_p8 {
+    width: 9.7272em;
+}
+
+.xLarge_area2_p8 {
+    width: 12.6363em;
+}
+
+.double_area2_p8 {
+    width: 17.1818em;
+}
+
+.xDouble_area2_p8 {
+    width: 23.7272em;
+}
+
+.quad_area2_p8 {
+    width: 37.5454em;
+}
+
+.huge_area2_p8 {
+    width: 21.3636em;
+}
+
+.xHuge_area2_p8 {
+    width: 41.7272em;
+}
+
+.half_area2_p8 {
+    width: 38.78em;
+}
+
+.full_area0_p1 .half_area2_p8, .full_area1 .half_area2_p8, .full_area1_p0 .half_area2_p8 {
+    width: 38.7272em;
+}
+
+.full_area0_p2 .half_area2_p8, .full_area1_p1 .half_area2_p8, .full_area2 .half_area2_p8, .full_area2_p0 .half_area2_p8 {
+    width: 38.6363em;
+}
+
+.full_area2_p8 {
+    width: 79.5454em;
+}
+
+/*BASE ELEMENTS*/
+/*MARGINS*/
+/*RIGHT MARGINS WITHOUT WHITESPACE*/
+.xTiny_marginRExcl {
+    margin-right: 1.3636em;
+}
+
+.tiny_marginRExcl {
+    margin-right: 2.0909em;
+}
+
+.xSmall_marginRExcl {
+    margin-right: 2.8181em;
+}
+
+.small_marginRExcl {
+    margin-right: 5.7272em;
+}
+
+.medium_marginRExcl {
+    margin-right: 8.6363em;
+}
+
+.large_marginRExcl {
+    margin-right: 11.5454em;
+}
+
+.xLarge_marginRExcl {
+    margin-right: 14.4545em;
+}
+
+.double_marginRExcl {
+    margin-right: 18.8181em;
+}
+
+.xDouble_marginRExcl {
+    margin-right: 25.3636em;
+}
+
+.quad_marginRExcl {
+    margin-right: 39.1818em;
+}
+
+.huge_marginRExcl {
+    margin-right: 23.1818em;
+}
+
+.xHuge_marginRExcl {
+    margin-right: 43.5454em;
+}
+
+.half_marginRExcl {
+    margin-right: 40.6363em;
+}
+
+.full_marginRExcl {
+    margin-right: 81.3636em;
+}
+
+/*NEGATIVE RIGHT MARGINS WITHOUT WHITESPACE*/
+.xTiny_negMarginRExcl {
+    margin-right: -1.3636em;
+}
+
+.tiny_negMarginRExcl {
+    margin-right: -2.0909em;
+}
+
+.xSmall_negMarginRExcl {
+    margin-right: -2.8181em;
+}
+
+.small_negMarginRExcl {
+    margin-right: -5.7272em;
+}
+
+.medium_negMarginRExcl {
+    margin-right: -8.6363em;
+}
+
+.large_negMarginRExcl {
+    margin-right: -11.5454em;
+}
+
+.xLarge_negMarginRExcl {
+    margin-right: -14.4545em;
+}
+
+.double_negMarginRExcl {
+    margin-right: -18.8181em;
+}
+
+.xDouble_negMarginRExcl {
+    margin-right: -25.3636em;
+}
+
+.quad_negMarginRExcl {
+    margin-right: -39.1818em;
+}
+
+.huge_negMarginRExcl {
+    margin-right: -23.1818em;
+}
+
+.xHuge_negMarginRExcl {
+    margin-right: -43.5454em;
+}
+
+.half_negMarginRExcl {
+    margin-right: -40.6363em;
+}
+
+.full_negMarginRExcl {
+    margin-right: -81.3636em;
+}
+
+/*RIGHT MARGINS WITH WHITESPACE*/
+.xTiny_marginRIncl {
+    margin-right: 1.4545em;
+}
+
+.tiny_marginRIncl {
+    margin-right: 2.1818em;
+}
+
+.xSmall_marginRIncl {
+    margin-right: 2.9090em;
+}
+
+.small_marginRIncl {
+    margin-right: 5.8181em;
+}
+
+.medium_marginRIncl {
+    margin-right: 8.7272em;
+}
+
+.large_marginRIncl {
+    margin-right: 11.6363em;
+}
+
+.xLarge_marginRIncl {
+    margin-right: 14.5454em;
+}
+
+.double_marginRIncl {
+    margin-right: 18.9090em;
+}
+
+.xDouble_marginRIncl {
+    margin-right: 25.4545em;
+}
+
+.quad_marginRIncl {
+    margin-right: 39.2727em;
+}
+
+.huge_marginRIncl {
+    margin-right: 23.2727em;
+}
+
+.xHuge_marginRIncl {
+    margin-right: 43.6363em;
+}
+
+.half_marginRIncl {
+    margin-right: 40.7272em;
+}
+
+.full_marginRIncl {
+    margin-right: 81.4545em;
+}
+
+/*NEGATIVE RIGHT MARGINS WITH WHITESPACE*/
+.xTiny_negMarginRIncl {
+    margin-right: -1.4545em;
+}
+
+.tiny_negMarginRIncl {
+    margin-right: -2.1818em;
+}
+
+.xSmall_negMarginRIncl {
+    margin-right: -2.9090em;
+}
+
+.small_negMarginRIncl {
+    margin-right: -5.8181em;
+}
+
+.medium_negMarginRIncl {
+    margin-right: -8.7272em;
+}
+
+.large_negMarginRIncl {
+    margin-right: -11.6363em;
+}
+
+.xLarge_negMarginRIncl {
+    margin-right: -14.5454em;
+}
+
+.double_negMarginRIncl {
+    margin-right: -18.9090em;
+}
+
+.xDouble_negMarginRIncl {
+    margin-right: -25.4545em;
+}
+
+.quad_negMarginRIncl {
+    margin-right: -39.2727em;
+}
+
+.huge_negMarginRIncl {
+    margin-right: -23.2727em;
+}
+
+.xHuge_negMarginRIncl {
+    margin-right: -43.6363em;
+}
+
+.half_negMarginRIncl {
+    margin-right: -40.7272em;
+}
+
+.full_negMarginRIncl {
+    margin-right: -81.4545em;
+}
+
+/*LEFT MARGINS WITHOUT WHITESPACE*/
+.xTiny_marginLExcl {
+    margin-left: 1.3636em;
+}
+
+.tiny_marginLExcl {
+    margin-left: 2.0909em;
+}
+
+.xSmall_marginLExcl {
+    margin-left: 2.8181em;
+}
+
+.small_marginLExcl {
+    margin-left: 5.7272em;
+}
+
+.medium_marginLExcl {
+    margin-left: 8.6363em;
+}
+
+.large_marginLExcl {
+    margin-left: 11.5454em;
+}
+
+.xLarge_marginLExcl {
+    margin-left: 14.4545em;
+}
+
+.double_marginLExcl {
+    margin-left: 18.8181em;
+}
+
+.xDouble_marginLExcl {
+    margin-left: 25.3636em;
+}
+
+.quad_marginLExcl {
+    margin-left: 39.1818em;
+}
+
+.huge_marginLExcl {
+    margin-left: 23.1818em;
+}
+
+.xHuge_marginLExcl {
+    margin-left: 43.5454em;
+}
+
+.half_marginLExcl {
+    margin-left: 40.6363em;
+}
+
+.full_marginLExcl {
+    margin-left: 81.3636em;
+}
+
+/*NEGATIVE LEFT MARGINS WITHOUT WHITESPACE*/
+.xTiny_negMarginLExcl {
+    margin-left: -1.3636em;
+}
+
+.tiny_negMarginLExcl {
+    margin-left: -2.0909em;
+}
+
+.xSmall_negMarginLExcl {
+    margin-left: -2.8181em;
+}
+
+.small_negMarginLExcl {
+    margin-left: -5.7272em;
+}
+
+.medium_negMarginLExcl {
+    margin-left: -8.6363em;
+}
+
+.large_negMarginLExcl {
+    margin-left: -11.5454em;
+}
+
+.xLarge_negMarginLExcl {
+    margin-left: -14.4545em;
+}
+
+.double_negMarginLExcl {
+    margin-left: -18.8181em;
+}
+
+.xDouble_negMarginLExcl {
+    margin-left: -25.3636em;
+}
+
+.quad_negMarginLExcl {
+    margin-left: -39.1818em;
+}
+
+.huge_negMarginLExcl {
+    margin-left: -23.1818em;
+}
+
+.xHuge_negMarginLExcl {
+    margin-left: -43.5454em;
+}
+
+.half_negMarginLExcl {
+    margin-left: -40.6363em;
+}
+
+.full_negMarginLExcl {
+    margin-left: -81.3636em;
+}
+
+/*LEFT MARGINS WITH WHITESPACE*/
+.xTiny_marginLIncl {
+    margin-left: 1.4545em;
+}
+
+.tiny_marginLIncl {
+    margin-left: 2.1818em;
+}
+
+.xSmall_marginLIncl {
+    margin-left: 2.9090em;
+}
+
+.small_marginLIncl {
+    margin-left: 5.8181em;
+}
+
+.medium_marginLIncl {
+    margin-left: 8.7272em;
+}
+
+.large_marginLIncl {
+    margin-left: 11.6363em;
+}
+
+.xLarge_marginLIncl {
+    margin-left: 14.5454em;
+}
+
+.double_marginLIncl {
+    margin-left: 18.9090em;
+}
+
+.xDouble_marginLIncl {
+    margin-left: 25.4545em;
+}
+
+.quad_marginLIncl {
+    margin-left: 39.2727em;
+}
+
+.huge_marginLIncl {
+    margin-left: 23.2727em;
+}
+
+.xHuge_marginLIncl {
+    margin-left: 43.6363em;
+}
+
+.half_marginLIncl {
+    margin-left: 40.7272em;
+}
+
+.full_marginLIncl {
+    margin-left: 81.4545em;
+}
+
+/*NEGATIVE LEFT MARGINS WITH WHITESPACE*/
+.xTiny_negMarginLIncl {
+    margin-left: -1.4545em;
+}
+
+.tiny_negMarginLIncl {
+    margin-left: -2.1818em;
+}
+
+.xSmall_negMarginLIncl {
+    margin-left: -2.9090em;
+}
+
+.small_negMarginLIncl {
+    margin-left: -5.8181em;
+}
+
+.medium_negMarginLIncl {
+    margin-left: -8.7272em;
+}
+
+.large_negMarginLIncl {
+    margin-left: -11.6363em;
+}
+
+.xLarge_negMarginLIncl {
+    margin-left: -14.5454em;
+}
+
+.double_negMarginLIncl {
+    margin-left: -18.9090em;
+}
+
+.xDouble_negMarginLIncl {
+    margin-left: -25.4545em;
+}
+
+.quad_negMarginLIncl {
+    margin-left: -39.2727em;
+}
+
+.huge_negMarginLIncl {
+    margin-left: -23.2727em;
+}
+
+.xHuge_negMarginLIncl {
+    margin-left: -43.6363em;
+}
+
+.half_negMarginLIncl {
+    margin-left: -40.7272em;
+}
+
+.full_negMarginLIncl {
+    margin-left: -81.4545em;
+}
+
+/*MARGINS*/
+/*GENERAL DEFINITIONS*/
+/* distance for different input fields after top-border */
+.marginTExcl6p { margin-top:0.5454em; }
+
+.showAll {
+	overflow:visible !important;
+}
+

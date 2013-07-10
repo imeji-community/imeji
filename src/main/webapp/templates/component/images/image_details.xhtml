@@ -176,7 +176,7 @@
 												</ui:include>
 											</div>
 											<!-- imj_multipleButtons (-) (+) command buttons -->
-											<span class="imj_metadataEditButtonArea">
+											<div class="imj_metadataEditButtonArea">
 												<h:commandButton type="button" styleClass="imj_removeButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
 													<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
 													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
@@ -187,7 +187,7 @@
 													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
 													<f:ajax execute="@form" render="@form" />
 												</h:commandButton>
-											</span>
+											</div>
 										</div>
 									</div>
 								</ui:repeat>

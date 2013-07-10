@@ -1512,7 +1512,7 @@ OLD:
 }
 
 /* * mediaEditPanel - METADATA INPUT PANEL ***
-    (MetadataInput.xhtml)
+    (was hardcoded in MetadataInput.xhtml)
    ================================================== */
 /*CSS class for autocomplete component */
 
@@ -1558,9 +1558,23 @@ OLD:
 }
 
 
-.imj_metadataLabelInputWrapper {
+/* .imj_metadataLabelInputWrapper {
 	display: inline-block;
 }
+*/
+
+.imj_metadataEditText {
+	width: 55em;
+	min-height: 6em;
+}
+.imj_metadataEditNumber, .imj_metadataEditLink, .imj_metadataEditPublication, .imj_metadataEditLicence, .imj_metadataEditPerson, .imj_metadataEditGeo {
+	width: 55em;
+}
+
+.imj_metadataEditDate {
+	width: 7em;
+}
+
 
 /* inputTxtArea
 
@@ -1569,10 +1583,12 @@ OLD:
 	 height: 4em;
     min-height: 4em;
 }
+
+.double_txtArea {
+width: 55em;
+min-height: 6em;
+}
 */
-
-
-
 
 
 
@@ -1583,6 +1599,7 @@ OLD:
 	display: inline-block;
 	width: 100%;
 	text-align: right;
+	margin-top: 1em;
 }
 
 .imj_cancelButton {

@@ -1,7 +1,7 @@
 <h1>imeji - Publish Your Scientific Multimedia Data</h1>
 
 <h2>The imeji software</h2>
-<p><b>imeji creates citable research assets by describing, enriching, sharing, exposing, linking and atchiving data. </b></p>
+<p><b>imeji creates citable research assets by describing, enriching, sharing, exposing, linking and archiving data. </b></p>
 <p><strong>The imeji software is an open-source, community driven development.</strong>
 <p>The software offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, as simple as liked or as complex as needed.</p>
 <p>All objects within the imeji software have a unique identifier and therefore can be referenced in publications or reused in other contexts (dissemination). Large collections can be organized in different albums to focus special items of interest.</p>

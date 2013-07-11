@@ -1,9 +1,13 @@
 package de.mpg.imeji.logic.util;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.security.MessageDigest;
 
 import org.apache.commons.codec.digest.DigestUtils;
+
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Static functions to manipulate {@link String}
@@ -111,5 +115,29 @@ public class StringHelper
             return filename.substring(i + 1);
         }
         return null;
+    }
+
+    /**
+     * Check whether the filename has a video extension name
+     * 
+     * @param fileName
+     * @return true, if filename is a video format, false otherwise
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    public static boolean isVideo(String fileName) throws IOException, URISyntaxException
+    {
+        String videoExtensions = PropertyReader.getProperty("imeji.internal.video.whitelist");
+        if (videoExtensions.contains(StringHelper.getFileExtension(fileName).toLowerCase()))
+            return true;
+        return false;
+    }
+
+    public static boolean isImage(String fileName) throws IOException, URISyntaxException
+    {
+        String imageExtensions = PropertyReader.getProperty("imeji.internal.image.whitelist");
+        if (imageExtensions.contains(StringHelper.getFileExtension(fileName).toLowerCase()))
+            return true;
+        return false;
     }
 }

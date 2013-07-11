@@ -1,33 +1,36 @@
-//package video;
-//
-//
-//import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.io.IOException;
-//import java.net.URL;
-//
-//
-//import org.junit.Test;
-//import org.openimaj.image.DisplayUtilities;
-//import org.openimaj.image.ImageUtilities;
-//import org.openimaj.image.MBFImage;
-//import org.openimaj.video.Video;
-//import org.openimaj.video.xuggle.XuggleVideo;
-//
-//
-//
-//public class VideoHandlingTest {
-//
-//	//@Test
-//	public void test() throws FileNotFoundException, IOException {
-//		Video<MBFImage> video;
-//		
-//		//video = new XuggleVideo(new File("src/test/resources/video/Wildlife.wmv"));
-//		
+package video;
+
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+
+
+import org.junit.Test;
+import org.openimaj.feature.local.list.LocalFeatureList;
+import org.openimaj.image.DisplayUtilities;
+import org.openimaj.image.MBFImage;
+import org.openimaj.image.feature.local.engine.DoGSIFTEngine;
+import org.openimaj.image.feature.local.keypoints.Keypoint;
+import org.openimaj.video.Video;
+import org.openimaj.video.xuggle.XuggleVideo;
+
+
+
+public class VideoHandlingTest {
+
+	//@Test
+	public void test() throws FileNotFoundException, IOException {
+		Video<MBFImage> video;
+		
+		
+		video = new XuggleVideo(new File("src/test/resouces/video/keyboardcat.flv"));
+		
 //		video = new XuggleVideo(new URL("http://download.blender.org/peach/bigbuckbunny_movies/big_buck_bunny_480p_surround-fix.avi"));
-//		
-//		for (MBFImage mbfImage : video) {
-//			
+		
+		for (MBFImage mbfImage : video) {
+			
 //			float d = 0;
 //			float c = 1;
 //			float m = 0;
@@ -44,10 +47,27 @@
 //				ImageUtilities.write(mbfImage, "png", new File("src/test/resources/video/cat.jpg"));
 //				break;
 //			}
-//		    //DisplayUtilities.displayName(mbfImage.process(new CannyEdgeDetector()), "videoFrames");
-//			DisplayUtilities.displayName(mbfImage, "videoFrames");
-//			
-//		}
-//	}
-//
-//}
+
+			
+			
+			DoGSIFTEngine engine = new DoGSIFTEngine();	
+			LocalFeatureList<Keypoint> queryKeypoints = engine.findFeatures(mbfImage.flatten());
+			if(queryKeypoints.size() > 0) {
+				System.out.println("features: " + queryKeypoints.size());
+				DisplayUtilities.displayName(mbfImage, "videoFrames");
+			}
+			
+			
+//			FImage iimg = ImageUtilities.createFImage(ImageUtilities.createBufferedImageForDisplay(mbfImage));
+//			DifferenceOfGaussian e = new DifferenceOfGaussian();
+//			e.processImage(iimg);
+			
+			
+			
+		    //DisplayUtilities.displayName(mbfImage.process(new CannyEdgeDetector()), "videoFrames");
+			//DisplayUtilities.displayName(iimg, "videoFrames");
+			
+		}
+	}
+
+}

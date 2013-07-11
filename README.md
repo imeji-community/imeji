@@ -1,4 +1,4 @@
-<h1>imeji - Publish Your Scientific Multi Media Data</h1>
+<h1>imeji - Publish Your Scientific Multimedia Data</h1>
 
 <h2>The imeji software</h2>
 <p><b>imeji creates citable research assets by describing, enriching, sharing, exposing, linking and atchiving data. </b></p>

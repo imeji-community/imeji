@@ -150,4 +150,14 @@ public class StorageController
     {
         return DigestUtils.md5Hex(bytes);
     }
+
+    /**
+     * Get the {@link Storage} used by the {@link StorageController}
+     * 
+     * @return
+     */
+    public Storage getStorage()
+    {
+        return storage;
+    }
 }

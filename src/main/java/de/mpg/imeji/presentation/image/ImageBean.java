@@ -608,22 +608,26 @@ public class ImageBean
     {
         return mds;
     }
-    
-    public String getItemStorageIdFilename() {
-    	return StringHelper.normalizeFilename(this.item.getFilename());
+
+    public String getItemStorageIdFilename()
+    {
+        return StringHelper.normalizeFilename(this.item.getFilename());
     }
-    
-    public boolean isPdfFile() {
-    	if(StringHelper.getFileExtension(this.item.getFilename()).equalsIgnoreCase("pdf"))
-    		return true;
-    	return false;
+
+    public boolean isPdfFile()
+    {
+        if (StringHelper.getFileExtension(this.item.getFilename()).equalsIgnoreCase("pdf"))
+            return true;
+        return false;
     }
-    
-    public boolean isImageFile() throws IOException, URISyntaxException {
-    	return StringHelper.isImage(this.item.getFilename());
+
+    public boolean isImageFile() throws IOException, URISyntaxException
+    {
+        return StringHelper.isImage(this.item.getFilename());
     }
-    
-    public boolean isVideoFile() throws IOException, URISyntaxException {
-    	return StringHelper.isVideo(this.item.getFilename());
+
+    public boolean isVideoFile() throws IOException, URISyntaxException
+    {
+        return StringHelper.isVideo(this.item.getFilename());
     }
 }

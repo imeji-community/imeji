@@ -477,7 +477,7 @@
 			<version>1.0.5</version>
 		</dependency>
 		<!-- image/video hanlding -->
-		<dependency>
+		<!--  <dependency>
 			<groupId>org.openimaj</groupId>
 			<artifactId>core-video</artifactId>
 			<version>1.1</version>
@@ -494,7 +494,7 @@
 			<artifactId>xuggle-video</artifactId>
 			<version>1.1</version>
 			<scope>compile</scope>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

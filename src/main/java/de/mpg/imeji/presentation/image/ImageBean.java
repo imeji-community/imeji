@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.image;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +26,7 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -605,5 +607,27 @@ public class ImageBean
     public MetadataSetBean getMds()
     {
         return mds;
+    }
+
+    public String getItemStorageIdFilename()
+    {
+        return StringHelper.normalizeFilename(this.item.getFilename());
+    }
+
+    public boolean isPdfFile()
+    {
+        if (StringHelper.getFileExtension(this.item.getFilename()).equalsIgnoreCase("pdf"))
+            return true;
+        return false;
+    }
+
+    public boolean isImageFile() throws IOException, URISyntaxException
+    {
+        return StringHelper.isImage(this.item.getFilename());
+    }
+
+    public boolean isVideoFile() throws IOException, URISyntaxException
+    {
+        return StringHelper.isVideo(this.item.getFilename());
     }
 }

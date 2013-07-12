@@ -24,7 +24,7 @@
 	</servlet>
 	<servlet>
 		<servlet-name>Initializer Servlet</servlet-name>
-		<servlet-class>de.mpg.imeji.presentation.init.InitializerServlet</servlet-class>
+		<servlet-class>de.mpg.imeji.presentation.servlet.InitializerServlet</servlet-class>
 		<load-on-startup>4</load-on-startup>
 	</servlet>
 	<servlet>
@@ -46,7 +46,6 @@
 		<filter-name>History Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
 	</filter>
-
 	<!-- Mappings -->
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>

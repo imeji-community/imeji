@@ -19,12 +19,14 @@ public class LocksSurveyor extends Thread
 {
     private static Logger logger = Logger.getLogger(LocksSurveyor.class);
     private boolean signal = false;
+    private boolean running = false;
 
     @Override
     public void run()
     {
-        logger.info("Lock Surveyor started.");
+        logger.info("Lock Surveyor started: " + getName());
         Locks.init();
+        running = true;
         while (!signal)
         {
             try
@@ -60,12 +62,20 @@ public class LocksSurveyor extends Thread
                 logger.error("Locks Surveyor encountered a problem: ", e);
             }
         }
-        logger.error("Lock Surveyor stopped. It should not occurs if application is still running!");
+        logger.warn("Lock Surveyor stopped. It should not occurs if application is still running!");
+        running = false;
     }
 
+    /**
+     * End the {@link Thread}
+     */
     public void terminate()
     {
-        logger.warn("Locks surveyor signaled to terminate.");
+        logger.warn("Locks surveyor signaled to terminate!");
         signal = true;
+        while (running)
+        {
+            logger.debug("Waiting for LocksSurveyor to stop...");
+        }
     }
 }

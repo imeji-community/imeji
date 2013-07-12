@@ -42,12 +42,18 @@ public class ThreadedTransaction extends Thread
     @Override
     public void run()
     {
-        transaction.start(TDBFactory.createDataset(ImejiJena.tdbPath));
-        running = false;
+        try
+        {
+            transaction.start(TDBFactory.createDataset(ImejiJena.tdbPath));
+        }
+        finally
+        {
+            running = false;
+        }
     }
 
     /**
-     * Method waiting for the wait to be finished. Used when synchronization needed
+     * Method waiting for the {@link Thread} to be finished. Used when synchronization needed
      */
     public void waitForEnd()
     {

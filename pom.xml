@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>imeji</artifactId>
 	<groupId>org.imeji</groupId>
@@ -119,6 +120,18 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>OpenIMAJ maven releases repository</id>
+			<url>http://maven.openimaj.org</url>
+		</repository>
+		<repository>
+			<id>xuggle repo</id>
+			<url>http://xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
+		</repository>
+		<repository>
+			<id>nexus</id>
+			<url>http://rd.mpdl.mpg.de/nexus/content/groups/public</url>
+		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
@@ -218,10 +231,15 @@
 									the xml schema handling issue (marshalling and unmarshalling) -->
 								<!-- those files will not be copied into the build directories, Maven 
 									does not copy them automatically!!! -->
-								<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
-								<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
-								<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
-								<copy file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
+								<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index"
+									tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
+								<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index"
+									tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
+								<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index"
+									tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
+								<copy
+									file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index"
+									tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
 							</tasks>
 						</configuration>
 						<goals>
@@ -412,10 +430,9 @@
 		</dependency>
 		<!-- Used for CMYK images -->
 		<dependency>
-			<groupId>org.apache.commons.imaging</groupId>
+			<groupId>org.apache.sanselan</groupId>
 			<artifactId>sanselan</artifactId>
-			<version>0.97</version>
-			<classifier>incubator</classifier>
+			<version>0.97-incubator</version>
 		</dependency>
 		<!-- JAVA API lib for imagemagick -->
 		<dependency>
@@ -447,12 +464,70 @@
 		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>loci-tools</artifactId> 
 			<version>4.4.8</version> <type>pom</type> </dependency> -->
 		<!-- End: bio formats dependencies -->
-
 		<!-- pdf handling -->
 		<dependency>
 			<groupId>org.swinglabs</groupId>
 			<artifactId>pdf-renderer</artifactId>
 			<version>1.0.5</version>
+		</dependency>
+		<!-- image/video hanlding -->
+		<dependency>
+			<groupId>org.openimaj</groupId>
+			<artifactId>core</artifactId>
+			<version>1.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openimaj</groupId>
+			<artifactId>core-math</artifactId>
+			<version>1.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openimaj</groupId>
+			<artifactId>core-image</artifactId>
+			<version>1.1</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>  <!-- declare the exclusion here -->
+					<groupId>com.twelvemonkeys.imageio</groupId>
+					<artifactId>imageio-core</artifactId>
+				</exclusion>
+				<exclusion>  <!-- declare the exclusion here -->
+					<groupId>com.twelvemonkeys.imageio</groupId>
+					<artifactId>imageio-metadata</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<artifactId>image-processing</artifactId>
+			<groupId>org.openimaj</groupId>
+			<version>1.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<artifactId>image-local-features</artifactId>
+			<groupId>org.openimaj</groupId>
+			<version>1.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openimaj</groupId>
+			<artifactId>core-video</artifactId>
+			<version>1.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openimaj</groupId>
+			<artifactId>video-processing</artifactId>
+			<version>1.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openimaj</groupId>
+			<artifactId>xuggle-video</artifactId>
+			<version>1.1</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 	<profiles>
@@ -497,7 +572,8 @@
 								<phase>install</phase>
 								<configuration>
 									<tasks>
-										<copy file="${project.build.directory}/${project.warName}.war" tofile="${tomcat.webapps}/${project.warName}.war" />
+										<copy file="${project.build.directory}/${project.warName}.war"
+											tofile="${tomcat.webapps}/${project.warName}.war" />
 									</tasks>
 								</configuration>
 								<goals>

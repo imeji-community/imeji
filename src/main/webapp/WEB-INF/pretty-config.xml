@@ -158,9 +158,15 @@
 		<pattern value="/admin"></pattern>
 		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
 	</url-mapping>
+	
 	<url-mapping id="config">
 		<pattern value="/config"></pattern>
 		<view-id>/jsf/Config.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="digilib">
+		<pattern value="/digilib"></pattern>
+		<view-id>/jsf/Digilib.xhtml</view-id>
 	</url-mapping>
 
 </pretty-config>

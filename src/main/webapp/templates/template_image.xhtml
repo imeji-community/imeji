@@ -99,14 +99,15 @@
 					</div>
 				</div>
 				<h:outputText value="#{imageBean.edit.checkToggleState}"/>
-				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab != 'techmd' and imageBean.tab != 'util'}">	
-					<h:form>
+				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab != 'techmd' and imageBean.tab != 'util'}">
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata}" /><br/>
-								<h:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}">
-									<f:ajax execute="@this" render="@form"/>
-								</h:commandLink>
+								<h:form>
+									<h:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}">
+										<f:ajax execute="@this" render=":metadata"/>
+									</h:commandLink>
+								</h:form>
 							<h:outputText value="Image locked " rendered="#{imageBean.editable and imageBean.locked}"/>
 							<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
 							<br/>
@@ -144,25 +145,6 @@
 							</h:panelGroup>
 							<h:panelGroup id="singleEditPanel" style="border-width:0px;" styleClass="free_area0" bodyClass="free_area0" headerClass="free_area0">
 							 	<h:panelGroup layout="block" rendered="#{imageBean.edit.toggleState == 'displayMd'}">
-							 		<ui:remove>
-							 		<ui:repeat var="statement" value="#{imageBean.edit.profile.statements}" rows="0">
-									 	<ui:repeat var="md" value="#{imageBean.edit.image.metadataSet.metadata}" rows="0">
-									 		<h:panelGroup rendered="#{md.statement == statement.id}" styleClass="free_area0 endline itemLine noTopBorder">
-												<b class="xLarge_area0_p8 endline labelLine clear">
-													<h:outputText value="#{MetadataLabels.internationalizedLabels[md.statement]}" /> 
-													<span class="noDisplay">: </span>
-												</b>
-												<h:panelGroup layout="block"
-													styleClass="double_area0_p2 xTiny_marginLExcl endline">
-													<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
-														<ui:param name="md" value="#{md}" />
-													</ui:include>
-												</h:panelGroup>
-												<br/>
-											</h:panelGroup>
-										</ui:repeat>
-									</ui:repeat>
-									</ui:remove>
 									<ui:repeat var="metadata" value="#{imageBean.mds.metadata}" rows="0">
 										<h:panelGroup rendered="#{!metadata.isEmpty()}">
 											<div class="full_area0_p4 id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area">
@@ -180,6 +162,7 @@
 									</ui:repeat>
 								</h:panelGroup>
 								<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">
+								<h:form>
 									<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.metadataList}" rows="0" varStatus="indexMetadata">
 										<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
 											<b class="xLarge_area0_p8 endline labelLine clear" >
@@ -214,24 +197,25 @@
 									<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd'}" layout="block" styleClass="quad_area0_p1">
 										<div class="free_area0_p4 large_marginLExcl marginTExcl025">
 											<div class="small_txtBtn">
-												<h:commandLink styleClass="small_txtBtn dialogCancelButton"  action="#{imageBean.edit.cancel}">
+												<h:commandLink styleClass="small_txtBtn dialogCancelButton" type="button"  action="#{imageBean.edit.cancel}">
 													<f:ajax execute="@this" render=":metadata"/>
 													<h:outputText value="#{lbl.cancel}"/>
 												</h:commandLink>
 											</div>
 											<div class="small_txtBtn xTiny_marginLExcl">
 												<h:commandButton type="submit" styleClass="free_area0_p0 medium_marginLExcl small_txtBtn dialogActiveButton"  action="#{imageBean.edit.save}" value="#{lbl.save}">
-													<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
+													<f:ajax execute="@form" render="@all"/>
 												</h:commandButton>
 											</div>
 										</div>
 									</h:panelGroup>
+									</h:form>
 								</h:panelGroup>
 								<div class="vertDist050 linebreak"></div>
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
-					</h:form>
+					
 					<script>highlighter();</script>
 				</h:panelGroup>
 				<h:panelGroup id="techmetadata" styleClass="full_area0_p4" style="background-color:#494949" rendered="#{imageBean.tab == 'techmd'}">

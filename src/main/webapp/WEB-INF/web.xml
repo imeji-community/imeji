@@ -46,7 +46,6 @@
 		<filter-name>History Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
 	</filter>
-
 	<!-- Mappings -->
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>

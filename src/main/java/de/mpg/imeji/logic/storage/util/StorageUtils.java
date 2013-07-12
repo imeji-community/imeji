@@ -29,9 +29,14 @@
 package de.mpg.imeji.logic.storage.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URL;
 
 import javax.imageio.stream.ImageOutputStream;
 
@@ -39,6 +44,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+
+import com.hp.hpl.jena.util.FileUtils;
 
 import de.mpg.imeji.presentation.util.ProxyHelper;
 
@@ -228,5 +235,9 @@ public class StorageUtils
         }
         return "video/" + format;
     }
+
+	public static byte[] getBytes(URL url) throws FileNotFoundException {
+		return StorageUtils.toBytes(new FileInputStream(new File(url.getFile())));		
+	}
     
 }

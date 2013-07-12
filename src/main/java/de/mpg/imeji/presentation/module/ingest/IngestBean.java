@@ -1,4 +1,4 @@
-package de.mpg.imeji.presentation.ingest;
+package de.mpg.imeji.presentation.module.ingest;
 
 import java.io.File;
 import java.io.FileOutputStream;

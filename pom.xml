@@ -132,6 +132,10 @@
 			<id>nexus</id>
 			<url>http://rd.mpdl.mpg.de/nexus/content/groups/public</url>
 		</repository>
+		<repository>
+			<id>digilib repo</id>
+			<url>http://hg.berlios.de/repos/digilib</url>
+		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
@@ -528,6 +532,13 @@
 			<artifactId>xuggle-video</artifactId>
 			<version>1.1</version>
 			<scope>compile</scope>
+		</dependency>
+		<!-- Digilib integration -->
+		<dependency>
+			<groupId>digilib</groupId>
+			<artifactId>digilib-common</artifactId>
+			<version>2.1-SNAPSHOT</version>
+			<type>jar</type>
 		</dependency>
 	</dependencies>
 	<profiles>

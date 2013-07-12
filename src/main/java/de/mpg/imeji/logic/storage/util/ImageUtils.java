@@ -16,7 +16,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
@@ -476,4 +478,13 @@ public class ImageUtils
     {
         return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
     }
+    
+    public static BufferedImage getImageFromUrl(URL url) throws IOException {
+    	return ImageUtils.byteArrayToBufferedImage(StorageUtils.getBytes(url));
+    }
+    
+    public static BufferedImage byteArrayToBufferedImage(byte[] imageInBytes) throws IOException {
+    	return ImageIO.read(new ByteArrayInputStream(imageInBytes));
+    }
+    
 }

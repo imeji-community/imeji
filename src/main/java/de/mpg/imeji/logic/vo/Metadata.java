@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 
+import javax.faces.event.ValueChangeEvent;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -51,15 +52,8 @@ public abstract class Metadata implements Comparable<Metadata>
     @XmlEnum(Types.class)
     public enum Types
     {
-    	TEXT(Text.class), 
-    	NUMBER(Number.class), 
-    	CONE_PERSON(ConePerson.class), 
-    	DATE(Date.class), 
-    	GEOLOCATION(Geolocation.class),
-    	LICENSE(License.class), 
-    	LINK(Link.class), 
-    	PUBLICATION(Publication.class);
-        
+        TEXT(Text.class), NUMBER(Number.class), CONE_PERSON(ConePerson.class), DATE(Date.class), GEOLOCATION(
+                Geolocation.class), LICENSE(License.class), LINK(Link.class), PUBLICATION(Publication.class);
         private Class<? extends Metadata> clazz = null;
 
         private Types(Class<? extends Metadata> clazz)
@@ -89,6 +83,7 @@ public abstract class Metadata implements Comparable<Metadata>
 
     /**
      * Compare metadata
+     * 
      * @param imd
      * @return
      */

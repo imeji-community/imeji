@@ -37,11 +37,11 @@ import de.mpg.j2j.annotations.j2jResource;
 public class Item extends Properties implements FulltextIndex
 {
     public enum Visibility
-    {		
+    {
         PUBLIC, PRIVATE;
     }
 
-    @j2jResource("http://imeji.org/terms/collection")    
+    @j2jResource("http://imeji.org/terms/collection")
     private URI collection;
     @j2jList("http://imeji.org/terms/metadataSet")
     private List<MetadataSet> metadataSets = new ArrayList<MetadataSet>();
@@ -64,9 +64,7 @@ public class Item extends Properties implements FulltextIndex
     @j2jLiteral("http://imeji.org/terms/checksum")
     private String checksum;
 
-
-
-	public Item()
+    public Item()
     {
     }
 
@@ -75,7 +73,7 @@ public class Item extends Properties implements FulltextIndex
         copyInFields(im);
     }
 
-	@XmlElement(name = "escidocId", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "escidocId", namespace = "http://imeji.org/terms")
     public String getEscidocId()
     {
         return escidocId;
@@ -124,12 +122,12 @@ public class Item extends Properties implements FulltextIndex
         this.visibility = URI.create("http://imeji.org/terms/visibility#" + visibility.name());
     }
 
-    @XmlElement(name = "visibility", namespace = "http://imeji.org/terms")    
+    @XmlElement(name = "visibility", namespace = "http://imeji.org/terms")
     public Visibility getVisibility()
     {
         return Visibility.valueOf(visibility.getFragment());
     }
-    
+
     public MetadataSet getMetadataSet()
     {
         if (metadataSets.size() > 0)
@@ -186,7 +184,7 @@ public class Item extends Properties implements FulltextIndex
                     Method methodTo = copyToClass.getMethod(setMethodName, methodFrom.getReturnType());
                     try
                     {
-                        methodTo.invoke(this, methodFrom.invoke(copyFrom, (Object) null));
+                        methodTo.invoke(this, methodFrom.invoke(copyFrom, (Object)null));
                     }
                     catch (Exception e)
                     {
@@ -275,6 +273,4 @@ public class Item extends Properties implements FulltextIndex
     {
         this.checksum = checksum;
     }
-
-    
 }

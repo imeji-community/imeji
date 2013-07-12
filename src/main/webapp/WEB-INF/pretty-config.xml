@@ -158,9 +158,15 @@
 		<pattern value="/admin"></pattern>
 		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
 	</url-mapping>
+	
 	<url-mapping id="config">
 		<pattern value="/config"></pattern>
 		<view-id>/jsf/Config.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="digilibImage">
+		<pattern value="/digilibImage"></pattern>
+		<view-id>/jsf/DigilibImage.xhtml</view-id>
 	</url-mapping>
 
 	<!-- zuse pages -->

@@ -79,7 +79,6 @@ public class InternalStorageAdministrator implements StorageAdministrator
     public long getNumberOfFilesOfCollection(String collectionId)
     {
         return getNumberOfFiles(storageDir.getAbsolutePath() + StringHelper.fileSeparator + collectionId);
-        
     }
 
     /**

@@ -90,7 +90,7 @@ public class UserController extends ImejiController
         User loadedUser = (User)imejiRDF2Bean.load(ObjectHelper.getURI(User.class, email).toString(), user, new User());
         return loadedUser;
     }
-    
+
     /**
      * Retrieve a {@link User} according to its uri (id)
      * 

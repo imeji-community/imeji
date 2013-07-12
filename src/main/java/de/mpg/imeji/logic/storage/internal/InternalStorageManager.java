@@ -33,16 +33,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
+import de.mpg.imeji.logic.storage.transform.ImageGeneratorManager;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.logic.storage.util.PdfUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.storage.util.VideoUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -138,7 +139,7 @@ public class InternalStorageManager
      */
     public String transformUrlToPath(String url)
     {
-        //String filename = getFileName(url, StringHelper.urlSeparator);
+        // String filename = getFileName(url, StringHelper.urlSeparator);
         return url.replace(storageUrl, storagePath).replace(StringHelper.urlSeparator, StringHelper.fileSeparator);
         // .replace(filename, StringHelper.normalizeFilename(filename));
     }
@@ -176,14 +177,16 @@ public class InternalStorageManager
     {
         return storageUrl;
     }
-    
+
     /**
      * Get the storage path
+     * 
      * @return
      */
-    public String getStoragePath() {
-		return storagePath;
-	}
+    public String getStoragePath()
+    {
+        return storagePath;
+    }
 
     /**
      * @return the administrator
@@ -258,9 +261,10 @@ public class InternalStorageManager
     private String generateUrl(String id, String filename, FileResolution resolution)
     {
         filename = StringHelper.normalizeFilename(filename);
-        if (resolution != FileResolution.ORIGINAL) {
-			filename = filename + ".jpg";
-		}
+        if (resolution != FileResolution.ORIGINAL)
+        {
+            filename = filename + ".jpg";
+        }
         return storageUrl + id + StringHelper.urlSeparator + resolution.name().toLowerCase()
                 + StringHelper.urlSeparator + filename;
     }
@@ -275,59 +279,71 @@ public class InternalStorageManager
      */
     private InternalStorageItem writeItemFiles(InternalStorageItem item, byte[] bytes) throws IOException, Exception
     {
-    	boolean enableImagemagick=Boolean.parseBoolean(PropertyReader.getProperty("imeji.imagemagick.enable"));
-    	if(enableImagemagick){
-    		String orginalPath = transformUrlToPath(item.getOriginalUrl());
-    		write(bytes, orginalPath);
-    		if (MediaUtils.verifyMediaFormatSupport(orginalPath)) {
-    			String mimeType = MediaUtils.getMimeType(orginalPath);
-        		String webPath = transformUrlToPath(item.getWebUrl());
-        		String thumbnailPath = transformUrlToPath(item
-        				.getThumbnailUrl());
-        		MediaUtils.resizeImage(mimeType,orginalPath, webPath,
-        				FileResolution.WEB);
-        		MediaUtils.resizeImage(mimeType,orginalPath, thumbnailPath,
-        				FileResolution.THUMBNAIL);
-    		}
-    		else {
-    			//YE: TODO set default image for the file(e.g, with text "thumbnail not supported" )
-    		}
-    	}
-    	else{
-    		write(bytes, transformUrlToPath(item.getOriginalUrl()));
-
-    		// hn: pdf handling
-    		if(StorageUtils.getMimeType("pdf").endsWith(StringHelper.getFileExtension(item.getFileName())))
-    		{
-    			byte[] newBytes = PdfUtils.pdfsToImageBytes(bytes);
-    			write(ImageUtils.transformImage(newBytes, FileResolution.WEB,
-        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getWebUrl()))),
-        				transformUrlToPath(item.getWebUrl()));
-    			write(ImageUtils.transformImage(newBytes, FileResolution.THUMBNAIL,
-        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getThumbnailUrl()))),
-        				transformUrlToPath(item.getThumbnailUrl()));
-    		}
-    		else if(StringHelper.isVideo(item.getFileName()))
-    		{
-    			byte[] newBytes = VideoUtils.videoToImageBytes(bytes);
-    			write(ImageUtils.transformImage(newBytes, FileResolution.WEB,
-        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getWebUrl()))),
-        				transformUrlToPath(item.getWebUrl()));
-    			write(ImageUtils.transformImage(newBytes, FileResolution.THUMBNAIL,
-        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getThumbnailUrl()))),
-        				transformUrlToPath(item.getThumbnailUrl()));
-    		}
-    		else if(StringHelper.isImage(item.getFileName()))
-    		{
-    			write(ImageUtils.transformImage(bytes, FileResolution.WEB,
-        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-        				transformUrlToPath(item.getWebUrl()));
-        		write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
-        				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-        				transformUrlToPath(item.getThumbnailUrl()));
-    		}
-    	}
-		return item;
+        ImageGeneratorManager generatorManager = new ImageGeneratorManager();
+        String extension = FilenameUtils.getExtension(item.getFileName());
+        // write thumbnail in storage
+        write(generatorManager.generateThumbnail(bytes, extension), transformUrlToPath(item.getThumbnailUrl()));
+        // write we resolution file in storage
+        write(generatorManager.generateWebResolution(bytes, extension), transformUrlToPath(item.getWebUrl()));
+        // write original file in storage
+        write(bytes, transformUrlToPath(item.getOriginalUrl()));
+        // boolean enableImagemagick = Boolean.parseBoolean(PropertyReader.getProperty("imeji.imagemagick.enable"));
+        // if (enableImagemagick)
+        // {
+        // String orginalPath = transformUrlToPath(item.getOriginalUrl());
+        // write(bytes, orginalPath);
+        // if (MediaUtils.verifyMediaFormatSupport(orginalPath))
+        // {
+        // String mimeType = MediaUtils.getMimeType(orginalPath);
+        // String webPath = transformUrlToPath(item.getWebUrl());
+        // String thumbnailPath = transformUrlToPath(item.getThumbnailUrl());
+        // ImageGeneratorManager generatorManager = new ImageGeneratorManager();
+        // write(generatorManager.generateThumbnail(bytes, FilenameUtils.getExtension(item.getThumbnailUrl())),
+        // thumbnailPath);
+        // write(generatorManager.generateWebResolution(bytes, FilenameUtils.getExtension(item.getWebUrl())), webPath);
+        // //MediaUtils.resizeImage(mimeType, orginalPath, webPath, FileResolution.WEB);
+        // //MediaUtils.resizeImage(mimeType, orginalPath, thumbnailPath, FileResolution.THUMBNAIL);
+        // }
+        // else
+        // {
+        // // YE: TODO set default image for the file(e.g, with text "thumbnail not supported" )
+        // }
+        // }
+        // else
+        // {
+        // write(bytes, transformUrlToPath(item.getOriginalUrl()));
+        // // hn: pdf handling
+        // if (StorageUtils.getMimeType("pdf").endsWith(StringHelper.getFileExtension(item.getFileName())))
+        // {
+        // byte[] newBytes = PdfUtils.pdfsToImageBytes(bytes);
+        // write(ImageUtils.transformImage(newBytes, FileResolution.WEB,
+        // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getWebUrl()))),
+        // transformUrlToPath(item.getWebUrl()));
+        // write(ImageUtils.transformImage(newBytes, FileResolution.THUMBNAIL,
+        // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getThumbnailUrl()))),
+        // transformUrlToPath(item.getThumbnailUrl()));
+        // }
+        // else if (StringHelper.isVideo(item.getFileName()))
+        // {
+        // // byte[] newBytes = VideoUtils.videoToImageBytes(bytes);
+        // // write(ImageUtils.transformImage(newBytes, FileResolution.WEB,
+        // // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getWebUrl()))),
+        // // transformUrlToPath(item.getWebUrl()));
+        // // write(ImageUtils.transformImage(newBytes, FileResolution.THUMBNAIL,
+        // // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getThumbnailUrl()))),
+        // // transformUrlToPath(item.getThumbnailUrl()));
+        // }
+        // else if (StringHelper.isImage(item.getFileName()))
+        // {
+        // write(ImageUtils.transformImage(bytes, FileResolution.WEB,
+        // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
+        // transformUrlToPath(item.getWebUrl()));
+        // write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
+        // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
+        // transformUrlToPath(item.getThumbnailUrl()));
+        // }
+        // }
+        return item;
     }
 
     /**

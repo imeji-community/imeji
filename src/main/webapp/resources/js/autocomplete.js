@@ -40,11 +40,13 @@ $(function() {
 			.bind(
 					"keydown",
 					function(event) {
-						if (event.keyCode === $.ui.keyCode.TAB
+						if (datasourceUrl != null && datasourceUrl != ''
+								&& event.keyCode === $.ui.keyCode.TAB
 								&& $(this).data("autocomplete").menu.active) {
 							event.preventDefault();
 						}
 					})
+
 			.autocomplete(
 					{
 						// source: datasourceUrl,
@@ -80,9 +82,13 @@ $(function() {
 						// and it is used to cancel "unqualified" search,
 						// i.e.,return false;
 						search : function() {
+							if (datasourceUrl == null || datasourceUrl == '') {
+								return false;
+							}
 							// custom minLength, currently start query after
 							// entering x
 							// characters,
+
 							var term = extractLast(this.value);
 							if (term.length < offset) {
 								return false;

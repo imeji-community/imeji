@@ -25,7 +25,7 @@ public class Navigation
     // Url of the application
     public final String applicationUrl;
     // Url of digilib
-    public String digilibUrl;
+    public String externalDigilibUrl;
     // Pages of imeji
     public final Page HOME = new Page("HomePage", "");
     public final Page SEARCH = new Page("Search", "search");
@@ -45,6 +45,7 @@ public class Navigation
     public final Page SHARE = new Page("Share", "share");
     public final Page USER = new Page("User", "user");
     public final Page ADMIN = new Page("Admin", "admin");
+    public final Page DIGILIB = new Page("Digilib", "digilib");
     // session
     private SessionBean sessionBean = null;
 
@@ -59,10 +60,7 @@ public class Navigation
         if (frameworkUrl != null)
             frameworkUrl = StringHelper.normalizeURI(frameworkUrl);
         applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
-        
-        this.digilibUrl = PropertyReader.getProperty("digilib.imeji.instance.url");
-        if(this.digilibUrl != null && !this.digilibUrl.isEmpty())
-        	this.digilibUrl = StringHelper.normalizeURI(PropertyReader.getProperty("digilib.imeji.instance.url"));
+        externalDigilibUrl = PropertyReader.getProperty("digilib.imeji.instance.url");
     }
 
     public String getApplicationUrl()
@@ -74,15 +72,15 @@ public class Navigation
     {
         return applicationUrl.substring(0, applicationUrl.length() - 1);
     }
-    
+
     public String getDigilibUrl()
     {
-        return this.digilibUrl;
+        return applicationUrl + DIGILIB.getPath();
     }
-    
-    public String getDigilibUri()
+
+    public String getExternalDigilibUrl()
     {
-        return this.digilibUrl.substring(0, this.digilibUrl.length() - 1);
+        return this.externalDigilibUrl;
     }
 
     public String getDomain()

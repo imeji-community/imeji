@@ -29,6 +29,7 @@
 package de.mpg.imeji.logic.storage;
 
 import java.io.OutputStream;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
@@ -149,5 +150,15 @@ public class StorageController
     public String calculateChecksum(byte[] bytes)
     {
         return DigestUtils.md5Hex(bytes);
+    }
+
+    /**
+     * Get the {@link Storage} used by the {@link StorageController}
+     * 
+     * @return
+     */
+    public Storage getStorage()
+    {
+        return storage;
     }
 }

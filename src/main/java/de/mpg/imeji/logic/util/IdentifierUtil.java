@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
- * Provides A utility Method to create identifers in imeji<
+ * Provides A utility Method to create identifers in imeji
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -57,7 +57,7 @@ public class IdentifierUtil
      */
     private static final int COUNTER_PREFIX_RANGE = 1000;
     /**
-     * Array of alla possible {@link String} characters which are used to generate a random Id
+     * Array of all possible {@link String} characters which are used to generate a random Id
      */
     private static final String[] RANDOM_ID_CHARSET = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
             "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G",

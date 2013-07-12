@@ -1,6 +1,5 @@
 package video;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,8 +13,6 @@ import org.openimaj.image.feature.local.keypoints.Keypoint;
 import org.openimaj.video.Video;
 import org.openimaj.video.VideoDisplay;
 import org.openimaj.video.xuggle.XuggleVideo;
-
-
 
 public class VideoHandlingTest {
 
@@ -75,5 +72,4 @@ public class VideoHandlingTest {
 //			
 //		}
 	}
-
 }

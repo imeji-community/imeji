@@ -21,32 +21,43 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported> 
 	</servlet>
 	<servlet>
 		<servlet-name>Initializer Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.presentation.servlet.InitializerServlet</servlet-class>
 		<load-on-startup>4</load-on-startup>
+		<async-supported>true</async-supported> 
 	</servlet>
 	<servlet>
 		<servlet-name>File Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.presentation.servlet.FileServlet</servlet-class>
 		<load-on-startup>2</load-on-startup>
+		<async-supported>true</async-supported> 
 	</servlet>
 	<servlet>
 		<servlet-name>Export Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.presentation.servlet.ExportServlet</servlet-class>
 		<load-on-startup>3</load-on-startup>
+		<async-supported>true</async-supported> 
+	</servlet>
+	<servlet>
+		<servlet-name>Digilib Servlet</servlet-name>
+		<servlet-class>de.mpg.imeji.presentation.servlet.DigilibServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+		<async-supported>true</async-supported>
 	</servlet>
 	<!-- Filters (order is important) -->
 	<filter>
 		<filter-name>Encoder Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.util.EncoderFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	<filter>
 		<filter-name>History Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
+		<async-supported>true</async-supported> 
 	</filter>
-
 	<!-- Mappings -->
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -63,6 +74,10 @@
 	<servlet-mapping>
 		<servlet-name>Export Servlet</servlet-name>
 		<url-pattern>/export</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Digilib Servlet</servlet-name>
+		<url-pattern>/digilib</url-pattern>
 	</servlet-mapping>
 	<filter-mapping>
 		<filter-name>Encoder Filter</filter-name>
@@ -134,4 +149,26 @@
 		<error-code>500</error-code>
 		<location>/jsf/errorPages/500.xhtml</location>
 	</error-page>
+	<!-- Digilib staff -->
+	<!-- The Intialisation Listener -->
+	<listener>
+		<listener-class>digilib.conf.DigilibServletConfiguration</listener-class>
+	</listener>
+	<!-- The Scaler servlet -->
+	<servlet>
+		<servlet-name>Scaler</servlet-name>
+		<servlet-class>digilib.servlet.Scaler</servlet-class>
+		<!-- Load this servlet at server startup time -->
+		<load-on-startup>6</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<!-- The mapping for the Scaler servlet -->
+	<servlet-mapping>
+		<servlet-name>Scaler</servlet-name>
+		<url-pattern>/servlet/Scaler/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Scaler</servlet-name>
+		<url-pattern>/Scaler/*</url-pattern>
+	</servlet-mapping>
 </web-app>

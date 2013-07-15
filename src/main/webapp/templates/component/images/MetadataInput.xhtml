@@ -17,10 +17,10 @@
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>
-		
+
 		<!-- METADATA TYPE NUMBER -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#number'}">
-			<h:inputText immediate="false" onfocus="this.select();" styleClass="imj_metadataEditNumber" value="#{metadata.number}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}">
+			<h:inputText styleClass="imj_metadataEditNumber" immediate="false" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" value="#{metadata.number}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:converter converterId="DoubleConverter" />
 			</h:inputText>
 			<h:selectOneMenu styleClass="imj_metadataEditNumber" immediate="true" value="#{metadata.number}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
@@ -64,10 +64,10 @@
 				<f:selectItem itemLabel="JUS" itemValue="JUS"></f:selectItem>
 			</h:selectOneMenu>
 		</h:panelGroup>
-		
+			
 		<!-- METADATA TYPE DATE -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and !SuggestBean.suggests[statement.id].hasRestrictedValues}">
-			<h:inputText styleClass="imj_metadataEditDate" value="#{metadata.date}" immediate="false"/>
+			<h:inputText styleClass="imj_metadataEditDate" value="#{metadata.date}" immediate="false" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}');"/>
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="YYYY-MM-DD"/>
 			</div>
@@ -92,7 +92,7 @@
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>
-		
+	
 		<!-- METADATA TYPE CONE AUTHOR + PERSON -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#conePerson'}">
 			<div class="imj_metadataValueEntryLabel">
@@ -122,18 +122,19 @@
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.name}"/>
 			</div>
-			<h:inputText id="inputLocationName" styleClass="imj_metadataEditGeo" value="#{metadata.name}" immediate="true" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"  onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}'); " />
+			<h:inputText id="inputLocationName" styleClass="imj_metadataEditGeo" value="#{metadata.name}" immediate="true" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"  onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}');"/>
 			<h:selectOneMenu styleClass="imj_metadataEditGeo" immediate="true" value="#{metadata.name}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.geolocation_latitude}"/>
 			</div>
-			<h:inputText id="inputLatitude" styleClass="imj_metadataEditGeo" value="#{metadata.latitude}"  immediate="true"/>
+			<h:inputText id="inputLatitude" styleClass="imj_metadataEditGeo" value="#{metadata.latitude}" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')"/>
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.geolocation_longitude}"/>
 			</div>
-			<h:inputText id="inputLongitude" styleClass="imj_metadataEditGeo" value="#{metadata.longitude}" immediate="true"/>
+			<h:inputText id="inputLongitude" styleClass="imj_metadataEditGeo" value="#{metadata.longitude}" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')"/>
 		</h:panelGroup>
+			
 	<!-- METADATA INPUT PANEL </h:panelGroup> -->
 </ui:composition>

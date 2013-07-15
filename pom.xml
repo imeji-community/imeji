@@ -132,9 +132,16 @@
 			<id>nexus</id>
 			<url>http://rd.mpdl.mpg.de/nexus/content/groups/public</url>
 		</repository>
+		<!-- <repository> <id>digilib</id> <name>The Digital Image Library</name> 
+			<url>http://hg.berlios.de/repos/digilib/</url> </repository> -->
 		<repository>
-			<id>digilib repo</id>
-			<url>http://hg.berlios.de/repos/digilib</url>
+			<releases />
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>mygrid-repository</id>
+			<name>myGrid Repository</name>
+			<url>http://www.mygrid.org.uk/maven/repository</url>
 		</repository>
 	</repositories>
 	<distributionManagement>
@@ -534,12 +541,21 @@
 			<scope>compile</scope>
 		</dependency>
 		<!-- Digilib integration -->
+		<!-- <dependency> <groupId>digilib</groupId> <artifactId>digilib-common</artifactId> 
+			<version>2.2-SNAPSHOT</version> <type>jar</type> </dependency> -->
 		<dependency>
-			<groupId>digilib</groupId>
-			<artifactId>digilib-common</artifactId>
-			<version>2.1-SNAPSHOT</version>
-			<type>jar</type>
+			<groupId>net.java.dev.jai-imageio</groupId>
+			<artifactId>jai-imageio-core-standalone</artifactId>
+			<version>1.2-pre-dr-b04-2011-07-04</version>
 		</dependency>
+		<dependency>
+			<groupId>org.devlib.schmidt</groupId>
+			<artifactId>imageinfo</artifactId>
+			<version>1.9</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

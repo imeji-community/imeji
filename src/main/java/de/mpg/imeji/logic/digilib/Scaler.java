@@ -1,18 +1,13 @@
 package de.mpg.imeji.logic.digilib;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
-import javax.imageio.ImageIO;
 import javax.xml.ws.Holder;
 
 import org.apache.log4j.Logger;
@@ -20,14 +15,13 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.shared.NotFoundException;
 
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.util.StringHelper;
 import digilib.image.ImageJobDescription;
 import digilib.image.ImageLoaderDocuImage;
 import digilib.image.ImageOpException;
 import digilib.image.ImageWorker;
 import digilib.io.ImageCacheStream;
-import digilib.servlet.DigilibConfiguration;
-import digilib.servlet.DigilibRequest;
+import digilib.conf.DigilibConfiguration;
+import digilib.conf.DigilibRequest;
 
 public class Scaler {
 

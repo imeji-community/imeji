@@ -1,25 +1,239 @@
-<ui:composition template="templates/template_image.xhtml" 
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="imageBean" value="#{ImageBean}" />
-	<ui:param name="headline" value="#{lbl.details}" />
+<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <f:loadBundle var="lbl" basename="labels"/>
+    <f:loadBundle var="msg" basename="messages"/>
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <h:head>
+       		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+            <meta http-equiv="pragma" content="no-cache"/>
+            <meta http-equiv="cache-control" content="no-cache"/>
+            <meta http-equiv="expires" content="0"/>
+            <title><h:outputText value="imeji - #{HistorySession.currentPage.internationalizedName}"/></title>
+            <link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
+            <link rel="stylesheet" href="#{Navigation.applicationUrl}resources/css/old_style/themes/skin_darkGrey/styles/theme.css" type="text/css" media="all"/>
 
-	<ui:define name="preListHeader">
-		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
+			<h:outputStylesheet library="css" name="basic.css"></h:outputStylesheet>
+			<h:outputStylesheet library="css/theme_default" name="style.css" id="themeDefault"></h:outputStylesheet>
+
+			<link rel="stylesheet" type="text/css" href="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.range.css" />
+			<link rel="stylesheet" type="text/css" href="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.css" />
 		
-			<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
-			 	<ui:include src="./include/History.xhtml"></ui:include>
-			 </h:panelGroup>
+			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>  
+			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
+			<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+			<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 			
-			<h:outputLink value="#{Navigation.browseUrl}" styleClass="free_area1_p6 small_marginLIncl">
-				<h:outputText value="#{lbl.images_all}"/>
-			</h:outputLink>
+			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.js"></script>
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.cookie.js"></script>
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.js"></script>
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.geometry.js"></script>
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.arrows.js"></script>
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.range.js"></script>	        
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.buttons.js"></script>
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.dialogs.js"></script>
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.sliders.js"></script>
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.birdseye.js"></script>
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.marks.js"></script>
+	        <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.regions.js"></script>
+        
+
+	        <script type="text/javascript">
+	            $(document).ready(function(){
+	                var opts = {
+	                    interactionMode : 'fullscreen',
+	                    showRegionNumbers : true
+	                    };
+	                var $div = $('div#digilib');
+	                $div.digilib(opts);
+	            });
+	
+	        </script>
 			
-			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})" styleClass="free_area1_p6 xHuge_marginLIncl"/>
-		</h:panelGroup>
-	</ui:define>
-	<ui:define name="viewImage">
-	</ui:define>
-</ui:composition>
+        </h:head>
+        <h:body lang="#{SessionBean.locale}">
+            	<style type="text/css">
+            	</style>
+		        
+                <h:panelGroup layout="block" styleClass="imj_siteWrapper">
+                    <ui:insert name="init"/>
+                    <h:inputHidden id="offset" styleClass="offset">
+                    </h:inputHidden>
+                    <h:inputHidden id="rssFeedUrl" value="#{BlogBean.rssFeedUrl}">
+                    </h:inputHidden>
+                    <!-- import header -->
+                    <ui:include src="/headerPages/Header.jspf"/>
+                    <div class="imj_siteContent">
+                        <!-- begin: content section (including elements that visually belong to the header (breadcrumb, headline, subheader and content menu)) - removed id="content" -->
+						<div class="imj_siteContentSection">
+							<ui:remove>
+								<div class="headerSection">
+									<div class="imj_clear breadcrumb"></div>
+								</div>
+							</ui:remove>
+							<div id="contentSkipLinkAnchor" class="imj_siteContentHeadline">
+								<!-- Headline starts here, taken from facelets parameter -->
+								<ui:insert name="headline">
+									<h1><h:outputText value="#{headline}"/></h1>
+								</ui:insert><!-- Headline ends here -->
+							</div>
+							<div class="imj_siteContentSubSection">
+								<div class="imj_contentMenuWrapper">
+									<!-- content menu starts here -->
+									<div class="imj_contentMenu">
+										<!-- content menu upper line starts here -->
+										<ui:insert name="contentMenu">
+											&#160;
+										</ui:insert>
+										<!-- content menu upper line ends here -->
+									</div>
+									<ui:insert name="actionsMenu"/>								
+								</div>
+								<ui:insert name="additionalSubheaders">
+									&#160;
+								</ui:insert>
+								<div class="imj_subHeaderMessageSpace">
+									<!-- Subheadline starts here  - old: id="subHeader" -->
+									<h:panelGroup id="imj_subHeaderMessage">
+										<h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
+										<h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
+											<h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
+										</h:panelGroup>
+	                                    <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{MessagesBean.hasMessages and !MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
+	                                        <h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2>
+	                                      	<h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
+	                                    </h:panelGroup>
+	                                    <h:outputText value="&#160;" rendered="#{!MessagesBean.hasErrorMessages}"/>
+	                                    <!-- Subheadline ends here -->
+	                                   	<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="full_area0" rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml'}">
+											<h:panelGroup styleClass="huge_area0">
+												<h:outputText value="#{lbl.active_album}: "/>
+												<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">
+													<h:outputText value="#{SessionBean.activeAlbum.metadata.title} (#{SessionBean.activeAlbumSize})"/>
+												</h:outputLink>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="imj_mainContentWrapper">
+                            <!-- Main Content -->
+                            <ui:insert name="paginationTop"></ui:insert>
+                            <ui:insert name="searchQuery"/>
+                            <div id="digilib">
+					            <p>digilib doesn't work! Please switch on Javascript or notify the server administrator!</p>
+					            <img src="http://digilib.berlios.de/images/digilib-logo-big.png" />
+					        </div>
+                            <ui:insert name="paginationBottom"></ui:insert>
+                        </div>
+                        
+                    </div>
+                    <!-- end: content section -->
+                    <div id="dialogs"></div>
+                </h:panelGroup>
+                  &#160;
+               	<ui:include src="/footerPages/Footer.xhtml"/>
+                <script type="text/javascript">
+                /* open a dialog*/
+				function openDialog(id) {
+					/*set the dialog in center of the screen*/
+					var dialog = $(document.getElementById(id));
+					dialog.css("position","absolute");
+					dialog.css("z-index", 1000);
+					dialog.css("background-color","#434343");
+					dialog.css("top", 250+"px");
+					dialog.css("left", Math.max(0, (($(window).width() - $(dialog).outerWidth()) / 2) + 
+				                                                $(window).scrollLeft()) + "px");
+					/*open the dialog*/
+					dialog.show();		
+					/* lock the page*/
+					var content = $(".imj_siteWrapper");
+					content.css({ opacity: 0.3});
+					$.lock(dialog);	
+					
+				}
+				/*close a dialog*/
+				function closeDialog(id) {
+					var dialog = $(document.getElementById(id));
+					var content = $(".imj_siteWrapper");
+					content.css({ opacity: 1});
+					dialog.hide();
+					$.unlock(dialog);
+				}
+				/*
+				* Lock/unlock html elements
+				*/
+				(function($) {
+				    $.extend({
+				lock: function(content){
+				            if(content == 'undefined') content = '';
+				            $("&lt;div&gt;&lt;/div&gt;").attr('id', 'uiLockId').css({
+				                'position': 'absolute',
+				                'top': 0,
+				                'left': 0,
+				                'opacity': 1,
+				                'width':'100%',
+				                'height':'100%',
+				            }).html(content).appendTo('body');
+				        },
+				unlock: function(content){
+							/*remove the lock*/
+		            		$('#uiLockId').remove();
+		            		/*reappend the dialog, otherwise is null by next call*/
+				            $('#dialogs').html(content).appendTo('body');
+				        }
+				    });
+				})(jQuery);
+                </script>	
+        </h:body>
+    </html>
+</f:view>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="initial-scale=1.0"/>
+        <title>Digilib jQuery: fullscreen</title>
+
+        <style type="text/css">
+            body {
+                 background: silver;
+            }
+        </style>
+
+        <script type="text/javascript" src="jquery/jquery.js"></script>
+        <script type="text/javascript" src="jquery/jquery.cookie.js"></script>
+        <script type="text/javascript" src="jquery/jquery.digilib.js"></script>
+        <script type="text/javascript" src="jquery/jquery.digilib.geometry.js"></script>
+        <script type="text/javascript" src="jquery/jquery.digilib.arrows.js"></script>
+        <script type="text/javascript" src="jquery/jquery.range.js"></script>
+        <link rel="stylesheet" type="text/css" href="jquery/jquery.range.css" />
+        <script type="text/javascript" src="jquery/jquery.digilib.buttons.js"></script>
+        <script type="text/javascript" src="jquery/jquery.digilib.dialogs.js"></script>
+        <script type="text/javascript" src="jquery/jquery.digilib.sliders.js"></script>
+        <script type="text/javascript" src="jquery/jquery.digilib.birdseye.js"></script>
+        <script type="text/javascript" src="jquery/jquery.digilib.marks.js"></script>
+        <script type="text/javascript" src="jquery/jquery.digilib.regions.js"></script>
+        <link rel="stylesheet" type="text/css" href="jquery/jquery.digilib.css" />
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var opts = {
+                    interactionMode : 'fullscreen',
+                    showRegionNumbers : true
+                    };
+                var $div = $('div#digilib');
+                $div.digilib(opts);
+            });
+
+        </script>
+    </head>
+
+    <body>
+        <div id="digilib">
+            <p>digilib doesn't work! Please switch on Javascript or notify the server administrator!</p>
+            <img src="http://digilib.berlios.de/images/digilib-logo-big.png" />
+        </div>
+    </body>
+</html>

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -19,7 +18,6 @@ import org.junit.Test;
 
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.presentation.module.digilib.DigilibBean;
-import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * @author hnguyen
@@ -27,7 +25,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
  */
 public class DigilibTest {
 
-	@Test
+	//@Test
 	public void test() throws MalformedURLException, IOException {
 		
 		DigilibBean db = new DigilibBean();

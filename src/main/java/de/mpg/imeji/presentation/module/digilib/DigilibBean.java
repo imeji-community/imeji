@@ -1,31 +1,24 @@
 package de.mpg.imeji.presentation.module.digilib;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.JAXBException;
 import javax.xml.ws.Holder;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXParseException;
 
 import de.mpg.imeji.logic.digilib.Scaler;
-import de.mpg.imeji.logic.ingest.controller.IngestController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.beans.AuthorizationBean;
-import de.mpg.imeji.presentation.collection.ViewCollectionBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.UrlHelper;
 
+/**
+ * Bean for a Single image in digilib
+ * 
+ * @author hnguyen (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class DigilibBean {
 
 	private SessionBean session = null;
@@ -44,7 +37,7 @@ public class DigilibBean {
      */
     public DigilibBean()
     {
-        //this.session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        this.session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.digilibScaler = new Scaler();
     }
     

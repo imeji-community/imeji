@@ -51,7 +51,7 @@
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>IngestBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.ingest.IngestBean</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.module.ingest.IngestBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
@@ -257,4 +257,10 @@
 		<converter-class>de.mpg.imeji.presentation.converter.DoubleConverter</converter-class>
 	</converter>
 
+	<!-- Diglib beans -->
+	<managed-bean>
+		<managed-bean-name>DigilibBean</managed-bean-name>		
+		<managed-bean-class>de.mpg.imeji.presentation.module.digilib.DigilibBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 </faces-config>

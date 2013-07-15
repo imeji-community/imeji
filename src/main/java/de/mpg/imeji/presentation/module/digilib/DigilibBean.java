@@ -44,7 +44,7 @@ public class DigilibBean {
      */
     public DigilibBean()
     {
-        this.session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        //this.session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.digilibScaler = new Scaler();
     }
     
@@ -71,6 +71,10 @@ public class DigilibBean {
         return imageData.value;
     }
     
+    
+    public byte[] getScaledImage(String sid, String uri, String query) {
+    	return this.digilibScaler.getScaledImage(uri, query);
+    }
 
 //    /**
 //     * Method reading url to trigger event

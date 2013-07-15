@@ -1,16 +1,26 @@
 package de.mpg.imeji.logic.digilib;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+import javax.imageio.ImageIO;
 import javax.xml.ws.Holder;
 
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.shared.NotFoundException;
 
+import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.StringHelper;
 import digilib.image.ImageJobDescription;
 import digilib.image.ImageLoaderDocuImage;
 import digilib.image.ImageOpException;
@@ -25,34 +35,34 @@ public class Scaler {
     private static Logger logger = Logger.getLogger(Scaler.class);
 	
     // currently only one output format
-    private final String outputFormat = "image/jpeg";
+    private final String outputFormat = StorageUtils.getMimeType("jpeg");
 
 	
     public void getScaledImage(String sessionId, String url, String query, String logParameter, Holder<String> mimeType,
             Holder<byte[]> imageData, Holder<Integer> width, Holder<Integer> height, Holder<Integer> originalWidth,
-            Holder<Integer> originalHeight, Holder<Integer> originalDpi) {    	
+            Holder<Integer> originalHeight, Holder<Integer> originalDpi) {    	    	
     	
-        logger.debug("getScaledImage: sid=" + sessionId + " uri=" + url + " query=" + query);
+//        logger.debug("getScaledImage: sid=" + sessionId + " uri=" + url + " query=" + query);
 
         try {
-            long startTime = System.currentTimeMillis();
+//            long startTime = System.currentTimeMillis();
             // do read         
-            logger.debug(Long.toString(System.currentTimeMillis() - startTime) + " ms");
+//            logger.debug(Long.toString(System.currentTimeMillis() - startTime) + " ms");
 
             InputStream istream = new FileInputStream(url);
             // get mime-type from metadata
             String mt = mimeType.value;
-            logger.debug("Stream=" + istream.toString() + " type=" + mt);
+//            logger.debug("Stream=" + istream.toString() + " type=" + mt);
             /*
              * set up digilib operation
              */
             ImageCacheStream imgStream = new ImageCacheStream(istream, mt);
-            logger.debug("iis=" + imgStream.getImageInputStream());
+//            logger.debug("iis=" + imgStream.getImageInputStream());
             ImageLoaderDocuImage img = new ImageLoaderDocuImage();
             // reuse reader for stream input
             img.reuseReader = true;
             // identify image size
-            logger.debug("Identifying...");
+//            logger.debug("Identifying...");
             img.identify(imgStream);
             // save original size
             originalWidth.value = img.getWidth();
@@ -66,16 +76,16 @@ public class Scaler {
             job.setDocuImage(img);
             job.setInput(imgStream);
             ImageWorker digilib = new ImageWorker(dlConfig, job);
-            logger.debug("Scaling with " + digilib);
+//            logger.debug("Scaling with " + digilib);
             /*
              * do process image
              */
             digilib.call();
-            logger.debug(Long.toString(System.currentTimeMillis() - startTime) + " ms");
+//            logger.debug(Long.toString(System.currentTimeMillis() - startTime) + " ms");
             // write image to buffer
             ByteArrayOutputStream ostream = new ByteArrayOutputStream();
             img.writeImage(outputFormat, ostream);
-            logger.debug("written in " + (System.currentTimeMillis() - startTime) + " ms");
+//            logger.debug("written in " + (System.currentTimeMillis() - startTime) + " ms");
             // set buffer in Holder
             imageData.value = ostream.toByteArray();
             mimeType.value = outputFormat;
@@ -83,16 +93,8 @@ public class Scaler {
             height.value = img.getHeight();
             // we have no original-dpi yet
             originalDpi.value = 0;
-            logger.debug("done.");
+//            logger.debug("done.");
 
-            /*
-             * save to file 
-             * File f = new File("/tmp/tgimg.jpg"); 
-             * OutputStream ostream = new FileOutputStream(f);
-             * img.writeImage("image/jpeg", ostream); 
-             * System.out.println(Long.toString(System.currentTimeMillis() - startTime) +
-             * " ms");
-             */
         } catch (NotFoundException e) {
             logger.error("Object not found", e);
         } catch (IOException e) {
@@ -100,5 +102,62 @@ public class Scaler {
         } catch (ImageOpException e) {
             logger.error("ImageOp exception", e);
         }
+    }
+    
+    public byte[] getScaledImage(String objectPath, String query) {    	    	
+
+    	InputStream istream = null;
+    	
+    	try {
+			istream = new URL(objectPath).openStream();
+		} catch (MalformedURLException e1) {
+			try {
+				istream = new FileInputStream(objectPath);
+			} catch (FileNotFoundException e) {
+				logger.error("File Not Found Exception", e);
+				return null;
+			}
+		} catch (IOException e1) {
+			logger.error("IO Exception", e1);
+			return null;
+		}   
+
+        try {
+            /*
+             * set up digilib operation
+             */
+            ImageCacheStream imgStream = new ImageCacheStream(istream, null);
+            ImageLoaderDocuImage img = new ImageLoaderDocuImage();
+            // reuse reader for stream input
+            img.reuseReader = true;
+            // identify image size
+            img.identify(imgStream);
+
+            // set up job description
+            DigilibConfiguration dlConfig = new DigilibConfiguration();
+            DigilibRequest dlReq = new DigilibRequest();
+            // get operation parameters from query String 
+            dlReq.setWithParamString(query, "&");
+            ImageJobDescription job = ImageJobDescription.getInstance(dlReq, dlConfig);
+            job.setDocuImage(img);
+            job.setInput(imgStream);
+            ImageWorker digilib = new ImageWorker(dlConfig, job);
+            /*
+             * do process image
+             */
+            digilib.call();
+            // write image to buffer
+            ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+            img.writeImage(outputFormat, ostream);
+            ostream.close();
+            return ostream.toByteArray();
+
+        } catch (IOException e) {
+            logger.error("IO Exception", e);
+        } catch (ImageOpException e) {
+            logger.error("ImageOp exception", e);
+        }
+        
+        return null;
     }
 }

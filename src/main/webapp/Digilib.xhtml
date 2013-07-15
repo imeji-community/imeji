@@ -1,0 +1,25 @@
+<ui:composition template="templates/template_image.xhtml" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<ui:param name="imageBean" value="#{ImageBean}" />
+	<ui:param name="headline" value="#{lbl.details}" />
+
+	<ui:define name="preListHeader">
+		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
+		
+			<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
+			 	<ui:include src="./include/History.xhtml"></ui:include>
+			 </h:panelGroup>
+			
+			<h:outputLink value="#{Navigation.browseUrl}" styleClass="free_area1_p6 small_marginLIncl">
+				<h:outputText value="#{lbl.images_all}"/>
+			</h:outputLink>
+			
+			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})" styleClass="free_area1_p6 xHuge_marginLIncl"/>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="viewImage">
+	</ui:define>
+</ui:composition>

@@ -1066,14 +1066,14 @@ cut second ?
 
 /* template_paginator_containers.xhtml - Images.xhtml */
 
-.imj_contentSubMenuItemSorting {
+.imj_contentMenuItemSorting {
     margin: 0 0.364em 0 0;
     color: #F0F0F0;
 }
 
 /* template_paginator_containers.xhtml - template_paginator_albums.xhtml   */
 
-span.imj_contentSubMenuItemFiltering {
+.imj_contentMenuItemFiltering {
     margin: 0.18em 0.364em 0 0; /*6.364em 6.000em*/
 }
 

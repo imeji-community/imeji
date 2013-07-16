@@ -216,6 +216,7 @@
 					<failIfNoTests>false</failIfNoTests>
 					<!-- avoid the out of memory exception thrown in some test scenarios -->
 					<argLine>-Xmx1000M</argLine>
+					<skipTests>true</skipTests>
 				</configuration>
 				<executions>
 					<execution>

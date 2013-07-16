@@ -1878,6 +1878,19 @@ min-height: 6em;
 
 /* ===[ Dialog - modalDialogBoxes  ]===
    ======================================================== */
+.imj_modalDialogBackground {
+	display:none;
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background-color:#434343;
+	opacity:0.5;
+	filter: alpha(opacity = 50); /* IE 6, 7, 8 */ 
+	-ms-filter: "alpha(opacity = 50)";
+}
+
 .imj_modalDialogBox {
 	position: absolute;
 	top: 22.7272727272em;
@@ -1899,19 +1912,14 @@ min-height: 6em;
 	-o-border-radius: 0.545454em 0.545454em 0.545454em 0.545454em;
 	-khtml-border-radius: 0.545454em 0.545454em 0.545454em 0.545454em;
 }
-.imj_modalDialogBackground {
-	display:none;
-	position:fixed;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
-	background-color:#434343;
-	opacity:0.5;
-	filter: alpha(opacity = 50); /* IE 6, 7, 8 */ 
-	-ms-filter: "alpha(opacity = 50)";
+
+.imj_modalDialogBox .imj_submitPanel {
+	display: block;
 }
 
-
-
-
+.imj_modalDialogBox .imj_confirmationText p {
+	max-width: 50em;
+}
+.imj_modalDialogBox .imj_confirmationText + textarea {
+	width: 50em;
+}

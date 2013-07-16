@@ -214,7 +214,7 @@ function submitPanel(panelId, message) {
 
 /**
  * Part of the Patch for jsf
- */
+ *//*
 var currentViewState;
 jsf.ajax
 		.addOnEvent(function(e) {
@@ -255,10 +255,10 @@ jsf.ajax
 			}
 
 		});
-
+*/
 /**
  * JSF patch for jsf for reaload of ajax component after ajax request
- */
+ *//*
 var patchJSF = function() {
 	jsf.ajax
 			.addOnEvent(function(e) {
@@ -287,4 +287,20 @@ var patchJSF = function() {
 									});
 				}
 			});
+};
+*/
+/* open a dialog*/
+function openDialog(id) {
+	/*set the dialog in center of the screen*/
+	var dialog = $(document.getElementById(id));
+	dialog.css("left", Math.max(0, Math.round(($(window).width() - $(dialog).outerWidth()) / 2) + $(window).scrollLeft()) + "px");
+	/*open the dialog*/
+	dialog.show();		
+	$(".imj_modalDialogBackground").show();
+}
+/*close a dialog*/
+function closeDialog(id) {
+	var dialog = $(document.getElementById(id));
+	$(".imj_modalDialogBackground").hide();
+	dialog.hide();
 }

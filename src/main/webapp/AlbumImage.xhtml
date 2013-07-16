@@ -3,8 +3,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="imageBean" value="#{AlbumImageBean}" />
-	<ui:param name="headline" value="#{lbl.details}" />		
+	<ui:param name="imageBean" value="#{AlbumImageBean}"/>
+	<ui:param name="headline" value="#{lbl.details}"/>
+	<ui:param name="currentMainMenu" value="album"/>
 
 	<ui:define name="actionsMenu">
 		<!-- content menu starts here -->
@@ -12,24 +13,18 @@
 			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}">
 				<h:outputText value="#{lbl.album_home}"/>
 			</h:outputLink>
-				<h:outputText styleClass="imj_contentMenuSeparator" />
+				<h:outputText styleClass="imj_contentMenuSeparator"/>
 			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}?q=">
 				<h:outputText value="#{lbl.view_images}"/>
 			</h:outputLink>
-				<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
 			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.infosPath}?init=1">
 				<h:outputText value="#{lbl.album_metadata}"/>
 			</h:outputLink>		
 		</h:panelGroup>		
 		<!-- content menu END -->
-	</ui:define>	
-
-	
-	
-	<ui:define name="selectionInfoPanel">
-		<ui:include src="templates/component/images/selectionInfoPanel.xhtml"/>
 	</ui:define>
-	
+
 	<ui:define name="paginatorTop">
 		<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
 			<h:panelGroup styleClass="imj_simplePageBrowser">
@@ -55,13 +50,13 @@
 				<h:outputText value="#{lbl.album_home}"/>
 			</h:outputLink>
 			
-			<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
 			
 			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}?q=">
 				<h:outputText value="#{lbl.view_images}"/>
 			</h:outputLink>
 			
-			<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
 			
 			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.infosPath}?init=1">
 				<h:outputText value="#{lbl.album_metadata}"/>

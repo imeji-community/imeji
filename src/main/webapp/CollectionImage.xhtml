@@ -3,8 +3,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="imageBean" value="#{CollectionImageBean}" />
-	<ui:param name="headline" value="#{lbl.details}" />	
+	<ui:param name="imageBean" value="#{CollectionImageBean}"/>
+	<ui:param name="headline" value="#{lbl.details}"/>
+	<ui:param name="currentMainMenu" value="collection"/>
 	
 	
 	<ui:define name="actionsMenu">
@@ -12,32 +13,27 @@
 		<h:panelGroup layout="block" styleClass="imj_contentMenu">
 			<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}" rendered="true">
 				<h:outputText value="#{lbl.collection_home}"/>
-			</h:outputLink>			
+			</h:outputLink>
 		
-			<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
 			
 			<h:outputLink value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/#{Navigation.browsePath}?q=" styleClass="imj_contentMenuItem">
 				<h:outputText value="#{lbl.view_images}"/>
 			</h:outputLink>
 		
-			<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
 		
 			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
 				<h:outputText value="#{lbl.collection_metadata}"/>
 			</h:outputLink>
 		
-			<h:outputText styleClass="imj_contentMenuSeparator" />
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
 		
 			<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{CollectionImagesBean.editable}">
 				<h:outputText value="#{lbl.upload_images}"></h:outputText>
 			</h:outputLink>
 		</h:panelGroup>
 		<!-- content menu END -->
-	</ui:define>
-	
-	
-	<ui:define name="selectionInfoPanel">
-		<ui:include src="templates/component/images/selectionInfoPanel.xhtml"/>
 	</ui:define>
 	
 	<ui:define name="paginatorTop">

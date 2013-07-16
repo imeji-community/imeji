@@ -12,11 +12,15 @@
 	<ui:define name="mainContent">		
 		<ui:fragment rendered="#{imageBean.image != null}">
 			<ui:include src="../../include/History.xhtml"></ui:include>
+			
 			<h:panelGroup layout="block" id="selectionInfoPanel">
-				<imjc:selectionInfoPanel/>
+				<!-- Selection Info Panel -->
+				<imjc:selectionInfoPanel fSession="#{FiltersSession}" paginatorBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}"/>
 			</h:panelGroup>
+			
 			<ui:insert name="paginatorTop"/>
 			<ui:include src="../component/images/image_details.xhtml"/>
+			
 		</ui:fragment>
 		<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
             <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>

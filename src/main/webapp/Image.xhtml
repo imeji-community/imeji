@@ -5,10 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="imageBean" value="#{ImageBean}" />
 	<ui:param name="headline" value="#{lbl.details}" />
-	
-	<ui:define name="selectionInfoPanel">
-		<ui:include src="templates/component/images/selectionInfoPanel.xhtml"/>
-	</ui:define>
+	<ui:param name="currentMainMenu" value="mediaEntry"/>
 	
 	<ui:define name="paginatorTop">
 		<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">

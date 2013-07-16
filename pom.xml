@@ -94,7 +94,7 @@
 		<project.warName>imeji</project.warName>
 	</properties>
 	<repositories>
-		<repository>
+		<!-- <repository>
 			<id>central</id>
 			<url>http://central</url>
 			<releases>
@@ -103,7 +103,7 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>
+		</repository> -->
 		<repository>
 			<id>prime-repo</id>
 			<name>Prime Technology Maven Repository</name>
@@ -156,7 +156,7 @@
 			<url>http://rd.mpdl.mpg.de/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	<pluginRepositories>
+	<!-- <pluginRepositories>
 		<pluginRepository>
 			<id>central</id>
 			<url>http://central</url>
@@ -167,7 +167,7 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</pluginRepository>
-	</pluginRepositories>
+	</pluginRepositories> -->
 	<build>
 		<resources>
 			<resource>

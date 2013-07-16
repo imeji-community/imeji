@@ -1824,7 +1824,7 @@ min-height: 6em;
 
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
-   ================================================== */
+   ======================================================== */
 
 .imj_pageMessageArea {
     width: 87.95%;
@@ -1873,4 +1873,45 @@ min-height: 6em;
 	color: #D80000;
 	background-color: #DDDDDD;
 }
+
+
+
+/* ===[ Dialog - modalDialogBoxes  ]===
+   ======================================================== */
+.imj_modalDialogBox {
+	position: absolute;
+	top: 22.7272727272em;
+	padding: 0.72727272em;
+	background-color: #434343;
+	display: none;
+	
+	/* CSS3 enhancements */
+	box-shadow: 0.545454em 0.545454em 0.545454em #000000;
+	-moz-box-shadow: 0.545454em 0.545454em 0.545454em #000000;
+	-webkit-box-shadow: 0.545454em 0.545454em 0.545454em #000000;
+	-ms-box-shadow: 0.545454em 0.545454em 0.545454em #000000;
+	-o-box-shadow: 0.545454em 0.545454em 0.545454em #000000;
+	-khtml-box-shadow: 0.545454em 0.545454em 0.545454em #000000;
+	
+	border-radius: 0.545454em 0.545454em 0.545454em 0.545454em;
+	-moz-border-radius: 0.545454em 0.545454em 0.545454em 0.545454em;
+	-webkit-border-radius: 0.545454em 0.545454em 0.545454em 0.545454em;
+	-o-border-radius: 0.545454em 0.545454em 0.545454em 0.545454em;
+	-khtml-border-radius: 0.545454em 0.545454em 0.545454em 0.545454em;
+}
+.imj_modalDialogBackground {
+	display:none;
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background-color:#434343;
+	opacity:0.5;
+	filter: alpha(opacity = 50); /* IE 6, 7, 8 */ 
+	-ms-filter: "alpha(opacity = 50)";
+}
+
+
+
 

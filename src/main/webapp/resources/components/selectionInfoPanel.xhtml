@@ -14,11 +14,25 @@
 	<composite:implementation>
 		
 		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
-			<h:outputLink value="?q=">
-				<h:outputText value="#{lbl.images_all}" rendered="#{ cc.attrs.currentMainMenu == 'mediaEntry' }"/>
-				<h:outputText value="#{lbl.album_view_all_images}" rendered="#{ cc.attrs.currentMainMenu == 'album' }"/>
-				<h:outputText value="#{lbl.collection_back_to_images}" rendered="#{ cc.attrs.currentMainMenu == 'collection' }"/>
-			</h:outputLink>
+			<ui:fragment rendered="#{ cc.attrs.currentMainMenu == 'mediaEntry' }">
+				<h:outputLink value="#{Navigation.browseUrl}?q=" title="#{lbl.images_all}">
+					<h:outputText value="#{lbl.images_all}"/>
+				</h:outputLink>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{ cc.attrs.currentMainMenu == 'album' }">
+				<h:outputLink value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}?q=" title="lbl.album_view_all_images">
+					<h:outputText value="#{lbl.album_view_all_images}"/>
+				</h:outputLink>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{ cc.attrs.currentMainMenu == 'collection' }">
+				<h:outputLink value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.browsePath}?q=" title="#{lbl.collection_back_to_images}">
+					<h:outputText value="#{lbl.collection_back_to_images}"/>
+				</h:outputLink>
+			</ui:fragment>
+				
+			
 			
 			<h:form id="preListForm">
 				<ui:repeat id="filterList" var="filter" value="#{cc.attrs.fSession.filters}" offset="0" varStatus="index">

@@ -12,16 +12,17 @@
 		<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString != 'pretty:albumBrowse'}">
 			<h:form id="facetForm">
 				<h:panelGroup id="facetGroup" layout="block" styleClass="imj_facetArea">
+				<div class="imj_facetGroup">
 					<ui:repeat var="groups" value="#{cc.attrs.paginatorBean.facets.facets}" varStatus="index">
-						<div class="imj_facetGroup">
-							<ui:repeat var="facets" value="#{groups}" varStatus="index">
-								<h:outputText value="|" styleClass="imj_facetSeparator" rendered="#{index.index > 0 }"/>
-								<h:outputLink value="#{facets.uri}" styleClass="imj_facetGroupItem">
-									<h:outputText value="#{facets.internationalizedLabel} (#{facets.count})"/>
-								</h:outputLink>
-							</ui:repeat>
-						</div>
+						<h:outputText value="|" styleClass="imj_facetSeparator" rendered="#{index.index > 0 }"/>
+						<ui:repeat var="facets" value="#{groups}" varStatus="index">
+							<h:outputText value="|" styleClass="imj_facetSeparator" rendered="#{index.index > 0 }"/>
+							<h:outputLink value="#{facets.uri}" styleClass="imj_facetGroupItem">
+								<h:outputText value="#{facets.internationalizedLabel} (#{facets.count})"/>
+							</h:outputLink>
+						</ui:repeat>
 					</ui:repeat>
+				</div>
 				</h:panelGroup>
 			</h:form>	
 		</ui:fragment>

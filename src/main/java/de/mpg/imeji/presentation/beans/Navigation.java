@@ -70,14 +70,17 @@ public class Navigation
 
     public String getApplicationUri()
     {
-        return applicationUrl.substring(0, applicationUrl.length() - 1);
+        //return applicationUrl.substring(0, applicationUrl.length() - 1);
+    	return this.digilibUrl.substring(0, this.digilibUrl.length() - 1);
     }
 
     public String getDigilibUrl()
     {
-        return applicationUrl + DIGILIB.getPath();
+        //return applicationUrl + DIGILIB.getPath();
+    	return this.digilibUrl;
     }
-
+    
+    
     public String getDomain()
     {
         return applicationUrl.replaceAll("imeji/", "");

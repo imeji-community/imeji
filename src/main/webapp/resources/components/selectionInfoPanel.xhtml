@@ -6,15 +6,18 @@
 	<composite:interface>
 		<composite:attribute name="fSession" required="false"/>
 		<composite:attribute name="paginatorBean" required="false"/>
+		<composite:attribute name="currentMainMenu" required="false"/>
+		<composite:attribute name="collectionID" required="false"/>
+		<composite:attribute name="albumID" required="false"/>
 	</composite:interface>
 	
 	<composite:implementation>
 		
-		
-		
 		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
-			<h:outputLink value="#{Navigation.browseUrl}">
-				<h:outputText value="#{lbl.images_all}"/>
+			<h:outputLink value="?q=">
+				<h:outputText value="#{lbl.images_all}" rendered="#{ cc.attrs.currentMainMenu == 'mediaEntry' }"/>
+				<h:outputText value="#{lbl.album_view_all_images}" rendered="#{ cc.attrs.currentMainMenu == 'album' }"/>
+				<h:outputText value="#{lbl.collection_back_to_images}" rendered="#{ cc.attrs.currentMainMenu == 'collection' }"/>
 			</h:outputLink>
 			
 			<h:form id="preListForm">

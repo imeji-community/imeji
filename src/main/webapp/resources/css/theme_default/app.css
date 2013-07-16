@@ -1488,6 +1488,12 @@ OLD:
 	display: inline-block;
 }
 
+.imj_infodataValueEntryEmbed {
+	min-height: 6em;
+    width: 55em;
+}
+
+
 .imj_metadataValueEntryViewMap {
 	display: block;
 }

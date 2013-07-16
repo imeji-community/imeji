@@ -7,8 +7,17 @@
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
 		<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank">
-			<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
-		</h:outputLink>	
+			<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}"/>
+		</h:outputLink>
+		<h:outputLink id="lnkPicDigilib" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}&amp;digilib=1" target="_blank" rendered="#{imageBean.imageFile}">
+			<h:graphicImage id="picWebResolution2" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}"/>
+		</h:outputLink>
+		<h:outputLink id="lnkPicFullResolutionPDF" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.pdfFile}">
+			<h:graphicImage id="picWebResolutionPDF" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}"/>
+		</h:outputLink>
+		<h:outputLink id="lnkPicFullResolutionVideo" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.videoFile}">
+			<h:graphicImage id="picWebResolutionVideo" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}"/>
+		</h:outputLink>
 	
 		<h:panelGroup layout="block" styleClass="imj_mediaWithdrawn" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
 			<h:outputText styleClass="" value="#{lbl.withdraw_image_content}"/>
@@ -193,7 +202,7 @@
 										</div>
 									</div>
 								</ui:repeat>
-								
+																
 								<!-- MetaDataList - EDIT - imj_submitPanel - cancel + submit command buttons -->
 								<h:panelGroup layout="block" styleClass="imj_submitPanel">
 									<h:commandLink styleClass="imj_cancelButton" action="#{imageBean.edit.cancel}">
@@ -215,7 +224,7 @@
 			<!-- Tech Data List Body - tech data list - show media tech data entries -->		
 			<ui:fragment rendered="#{imageBean.tab == 'techmd'}">
 				<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
-						<!-- <h:outputText id="" styleClass="imj_metadataSubPanelItem" value=""/>  - - - label for value="#{lbl.techMD}" and id="lblViewItemFull_lbltechMD needed here -->
+						<!-- <h:outputText id="" styleClass="imj_metadataSubPanelItem" value=""/>  - - - new label for value="#{lbl.techMD}" and id="lblViewItemFull_lbltechMD needed here! -->
 				</h:panelGroup>	
 					<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList">
 						<ui:repeat id="techMd" var="techMd" value="#{imageBean.techMd}">
@@ -293,7 +302,18 @@
 							</span>
 						</h:panelGroup>
 					</ui:fragment>
-						
+										
+					<!-- InfoDataList - embed Link + Image-->
+					<h:panelGroup styleClass="imj_infodataSet">
+						<span class="imj_infodataLabel">
+							<h:outputText value="#{lbl.embed}"/>
+								<span class="imj_invisible">: </span>
+						</span>
+						<span class="imj_infodataValue">
+							<h:inputTextarea styleClass="imj_infodataValueEntryEmbed" value="&lt;a href='#{imageBean.pageUrl}' title='#{imageBean.image.filename}'&gt; &lt;img src='#{imageBean.image.webImageUrl}' alt='#{imageBean.image.filename}' title='#{imageBean.image.filename}'&gt;&lt;/a&gt;" onclick="this.select();" escape="false"/>
+						</span>
+					</h:panelGroup>
+															
 					<!-- InfoDataList - QR-Tag <div id="qr"></div> --> 						
 					<h:panelGroup styleClass="imj_infodataSet">
 						<span class="imj_infodataLabel">

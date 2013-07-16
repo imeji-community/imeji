@@ -113,6 +113,7 @@
 					-khtml-border-radius: 0.545454em 0.545454em 0.545454em 0.545454em;
 				}
 				.imj_modalDialogBackground {
+					display:none;
 					position:fixed;
 					top:0;
 					left:0;
@@ -120,7 +121,8 @@
 					height:100%;
 					background-color:#434343;
 					opacity:0.5;
-					display:none;
+					filter: alpha(opacity = 50); /* IE 6, 7, 8 */ 
+					-ms-filter: "alpha(opacity = 50)";
 				}
 			</style>
 			

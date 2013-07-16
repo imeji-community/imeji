@@ -1379,6 +1379,14 @@ OLD:
 	margin-left: 2.000em;*/
 }
 
+.imj_mediaWithdrawn {
+	width: 100%;
+	color: #D80000; 
+	text-align: center;
+}
+
+
+
 /* item-styles - .imj_removeMedia, .imj_addMedia , .imj_activeMedia, .imj_selectMedia */
 
 .imj_selectMedia {

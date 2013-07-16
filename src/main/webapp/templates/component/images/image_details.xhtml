@@ -10,8 +10,8 @@
 			<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 		</h:outputLink>	
 	
-		<h:panelGroup styleClass="free_area0 xSmall_marginLIncl" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
-			<h:outputText styleClass="free_area0_p8 xDouble_marginLIncl" value="#{lbl.withdraw_image_content}"/>
+		<h:panelGroup layout="block" styleClass="imj_mediaWithdrawn" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
+			<h:outputText styleClass="" value="#{lbl.withdraw_image_content}"/>
 		</h:panelGroup>
 
 

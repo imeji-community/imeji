@@ -1,0 +1,12 @@
+
+
+
+.imj_mediaWithdrawn {
+	color: #D80000; 
+}
+
+
+.imj_mediaWithdrawn {
+	color: #D80000; 
+	text-align: center;
+}

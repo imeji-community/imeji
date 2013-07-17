@@ -33,7 +33,7 @@
 		
 		<div class="imj_contentSubMenu">
 			<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="imj_contentMenuItemSorting"/>
-			<h:panelGroup styleClass="imj_contentSubMenuItem">
+			<h:panelGroup styleClass="imj_SubMenuItem">
 				<h:form>
 					<h:selectOneMenu id="selSort" value="#{CollectionImagesBean.selectedSortCriterion}" onchange="submit();">
 						<f:selectItems id="sortItem" value="#{CollectionImagesBean.sortMenu}"/>

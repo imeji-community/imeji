@@ -19,13 +19,13 @@
 			</ui:fragment>
 			
 			<ui:fragment rendered="#{ cc.attrs.currentMainMenu == 'album' }">
-				<h:outputLink value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}?q=" title="lbl.album_view_all_images">
+				<h:outputLink value="#{cc.attrs.paginatorBean.imageBaseUrl}/#{Navigation.browsePath}?q=" title="lbl.album_view_all_images">
 					<h:outputText value="#{lbl.album_view_all_images}"/>
 				</h:outputLink>
 			</ui:fragment>
 			
 			<ui:fragment rendered="#{ cc.attrs.currentMainMenu == 'collection' }">
-				<h:outputLink value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.browsePath}?q=" title="#{lbl.collection_back_to_images}">
+				<h:outputLink value="#{cc.attrs.paginatorBean.imageBaseUrl}/#{Navigation.browsePath}?q=" title="#{lbl.collection_back_to_images}">
 					<h:outputText value="#{lbl.collection_back_to_images}"/>
 				</h:outputLink>
 			</ui:fragment>

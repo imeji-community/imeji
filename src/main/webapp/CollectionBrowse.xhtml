@@ -9,6 +9,54 @@
 	<ui:param name="headline" value="#{CollectionImagesBean.collection.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	
+	<style type="text/css">
+		/* * Order by Buttons (sub menu)
+	   ================================================== */
+		.imj_buttonOrderByDesc_15 {
+			display: inline-block;
+			width: 2.363636em;
+			height: 1.363636em;
+			background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTriangleSortDesc_15.png");
+			background-color: inherit;
+			background-repeat: no-repeat;
+			background-position: left;
+			vertical-align: middle;
+		    border: 0 none;
+		}
+		.imj_buttonOrderByDesc_15:hover {
+			display: inline-block;
+			width: 2.363636em;
+			height: 1.363636em;
+			background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_15.png");
+			background-color: inherit;
+			background-repeat: no-repeat;
+			background-position: left;
+			vertical-align: middle;
+		    border: 0 none;
+		}
+		.imj_buttonOrderByAsc_15 {
+			display: inline-block;
+			width: 2.363636em;
+			height: 1.363636em;
+			background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTriangleSortAsc_15.png");
+			background-color: inherit;
+			background-repeat: no-repeat;
+			background-position: left;
+			vertical-align: middle;
+		    border: 0 none;
+		}
+		.imj_buttonOrderByAsc_15:hover {
+			display: inline-block;
+			width: 2.363636em;
+			height: 1.363636em;
+			background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_15.png");
+			background-color: inherit;
+			background-repeat: no-repeat;
+			background-position: left;
+			vertical-align: middle;
+		    border: 0 none;
+		}
+	</style>
 	
 	<ui:define name="actionsMenu">
 		<div class="imj_contentMenu">
@@ -40,8 +88,8 @@
 					<h:selectOneMenu id="selSort" value="#{CollectionImagesBean.selectedSortCriterion}" onchange="submit();">
 						<f:selectItems id="sortItem" value="#{CollectionImagesBean.sortMenu}"/>
 					</h:selectOneMenu>
-					<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{CollectionImagesBean.toggleSortOrder}" rendered="#{CollectionImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-					<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{CollectionImagesBean.toggleSortOrder}" rendered="#{CollectionImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
+					<h:commandLink id="lnkSortAsc" styleClass="imj_buttonOrderByAsc_15" action="#{CollectionImagesBean.toggleSortOrder}" rendered="#{CollectionImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
+					<h:commandLink id="lnkSortDesc" styleClass="imj_buttonOrderByDesc_15" action="#{CollectionImagesBean.toggleSortOrder}" rendered="#{CollectionImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
 				</h:form>
 				<h:outputText styleClass="imj_contentMenuSeparator"/>
 			</h:panelGroup>

@@ -18,15 +18,9 @@
 					styleClass="free_select" onchange="submit();">
 					<f:selectItems id="sortItem" value="#{ImagesBean.sortMenu}" />
 				</h:selectOneMenu>
-				<h:commandLink id="lnkSortAsc" styleClass="ascSort"
-					action="#{paginatorListSessionBean.toggleSortOrder}"
-					rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-				<h:commandLink id="lnkSortDesc" styleClass="desSort"
-					action="#{paginatorListSessionBean.toggleSortOrder}"
-					rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
+				<h:commandLink id="lnkSortAsc" styleClass="imj_buttonOrderByAsc_15" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
+				<h:commandLink id="lnkSortDesc" styleClass="imj_buttonOrderByDesc_15" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
 			</h:form>
-			
-			<h:outputText value="|" styleClass="imj_contentMenuSeparator"/>
 			<!-- SORTING content menu lower line ends here -->
 			
 			<div class="imj_overlayMenu imj_contentSubMenuItem">

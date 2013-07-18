@@ -8,13 +8,13 @@
 			<h:form>
 				<div class="imj_confirmationText">
 					<h:outputText value="#{lbl.delete_images}?"/>
-					<h:outputText id="errorMessageS" value="" />
+					<h:outputText id="errorMessageS" styleClass="imj_messageError" value=""/>
 				</div>
 				<div class="imj_submitPanel">
 					<a href="#" class="imj_cancelButton" onclick="closeDialog('dialogDeleteSelected');"> 
-						<h:outputText value="#{lbl.cancel}" />
+						<h:outputText value="#{lbl.cancel}"/>
 					</a>
-					<h:commandButton id="btnDelete" action="#{paginatorListSessionBean.deleteSelected}" value="#{lbl.delete}" styleClass="imj_submitButton" />				
+					<h:commandButton id="btnDelete" action="#{paginatorListSessionBean.deleteSelected}" value="#{lbl.delete}" styleClass="imj_submitButton"/>				
 				</div>
 			</h:form>
 		</div>

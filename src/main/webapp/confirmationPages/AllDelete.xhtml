@@ -2,22 +2,21 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<div id="dialogDeleteAll" class="half_area0_p8 bordst0 shadst1 dialogbox" style="display:none;">
-		<h:form>
-			<div class="half_area0_p8">
-	        	<h:outputText value="#{lbl.delete_images}?"/>	        
-		        <h:outputText id="errorMessageA" styleClass="xDouble_area0_p0 messageError" value=""/>
-		    </div>
-			<div class="half_area0_p8 ">
-				<div class="large_txtBtn">
-	      				<a href="#" class="large_txtBtn dialogCancelButton" onclick="closeDialog('dialogDeleteAll');">
-	      					<h:outputText value="#{lbl.cancel}"/>
-	      				</a>
-	      		</div>
-				<h:panelGroup class="xLarge_txtBtn tiny_marginLExcl" id="buttonDiscard" >			
-					<h:commandButton  action="#{paginatorListSessionBean.deleteAll}" rendered="#{paginatorListSessionBean.deletable}" value="#{lbl.delete}"  styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"/>
-			 	</h:panelGroup>
-			</div>
-		</h:form>
-	</div>
+	
+	<ui:fragment rendered="#{SessionBean.user != null}">
+		<div id="dialogDeleteAll" class="imj_modalDialogBox" style="display:none;">
+			<h:form>
+				<div class="imj_confirmationText">
+		        	<h:outputText value="#{lbl.delete_images}?"/>	        
+			        <h:outputText id="errorMessageA" styleClass="imj_messageError" value=""/>
+			    </div>
+				<div class="imj_submitPanel">
+      				<a href="#" class="imj_cancelButton" onclick="closeDialog('dialogDeleteAll');">
+      					<h:outputText value="#{lbl.cancel}"/>
+      				</a>
+					<h:commandButton action="#{paginatorListSessionBean.deleteAll}" rendered="#{paginatorListSessionBean.deletable}" value="#{lbl.delete}" styleClass="imj_submitButton"/>
+				</div>
+			</h:form>
+		</div>
+	</ui:fragment>
 </ui:composition>

@@ -9,19 +9,7 @@
 		<h:outputText value="#{paginatorListSessionBean.initPage}"/>
 	</ui:define>
 	
-	<!-- Main Content - Image tiled list - START -->
-	<ui:define name="mainContent">
-				
-		<script type="text/javascript">
-			function setOpacityToImages()
-			{
-				$("#ajaxList").css({opacity:0.3});
-				/*try {document.getElementById('ajaxList').style.opacity = 0.3;}
-				catch (e) {/* No opacity*/
-				return true;
-			};
-		</script>
-		
+	<ui:define name="modalDialogs_from_template">
 		<!-- Confirmation Pages -->
 		<ui:include src="../../confirmationPages/AllDelete.xhtml">
 			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
@@ -35,7 +23,22 @@
 		<ui:include src="../../confirmationPages/SelectedWithdraw.xhtml">
 			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
 		</ui:include>
-					
+	</ui:define>
+	
+	
+	<!-- Main Content - Image tiled list - START -->
+	<ui:define name="mainContent">
+				
+		<script type="text/javascript">
+			function setOpacityToImages()
+			{
+				$("#ajaxList").css({opacity:0.3});
+				/*try {document.getElementById('ajaxList').style.opacity = 0.3;}
+				catch (e) {/* No opacity*/
+				return true;
+			};
+		</script>
+		
 		<!-- Breadcrumb - History -->
 		<ui:include src="../../include/History.xhtml"></ui:include>
 		

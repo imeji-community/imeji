@@ -1889,52 +1889,41 @@ min-height: 6em;
 
 .imj_entryPagePreviewTiledListLink {
 	float: right;
+	width: 8em;
+	
+	/* 	vertical-align: top;
+    margin-left: 4em; */
 }
 
 .imj_entryPagePreviewTiledListLinkArrow  {
+	float: right;
 	height: 2em;
     width: 2em;
-	margin-left: 1em;
+	margin-top: 1em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png");
-	display: inline-block;
-	
+		
 	background-color: inherit;
 	background-position: right;
 	background-repeat: no-repeat;
-	
-	/* 
-	background-position: 3em 3em;
-	background-repeat: no-repeat;
-	border: 0 none;
-	
-	width: 1.36363636em;
-	height: 1.36363636em;
-	margin-right: 0.5em;
-
-	vertical-align: middle;  
-	
-	float: right;
-	  float: left;
-
-  margin-right: 0.636363em;
-    margin-top: -0.1818em;
- 
- 
- 
- 
-    background-position: center center;
-    background-repeat: no-repeat;
-	
-	*/
-
-	
+	border: 0 none;		
 }
 
-.imj_entryPagePreviewTiledListLinkArrow:hover{	
+.imj_entryPagePreviewTiledListLinkArrow:hover {	
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjArrowThinRight_23.png");
 }
 
+.imj_entryPageTitle { 
+	color: #F0F0F0;
+    font-size: 1.636em;
+    letter-spacing: 0.045em;
+    line-height: 130%;
+	margin-bottom: 0.455em;
+}
 
+.imj_entryPageDescription{ 
+	color: #F0F0F0;
+    line-height: 130%;
+}
 
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
@@ -2031,9 +2020,10 @@ min-height: 6em;
 	display: block;
 }
 
+.imj_modalDialogBox .imj_dialogReasonText {
+	width: 50em;
+}
+
 .imj_modalDialogBox .imj_confirmationText p {
 	max-width: 50em;
-}
-.imj_modalDialogBox .imj_confirmationText + textarea {
-	width: 50em;
 }

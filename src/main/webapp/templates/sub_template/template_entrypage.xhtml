@@ -1,0 +1,52 @@
+<ui:composition template="../template_site.xhtml"  xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	
+	<ui:define name="init">
+		<h:outputText value="#{imageBean.init}"/>
+	</ui:define>
+	
+	<!-- Main Content - Entry Page -->
+	<ui:define name="mainContent">		
+		
+			<!-- Breadcrumb - History -->
+			<ui:include src="../../include/History.xhtml"></ui:include>				
+				
+			<!-- Login Formular -->
+			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!ViewCollectionBean.visible}">
+				<ui:include src="../../include/LoginFormular.xhtml"/>
+			</h:panelGroup>
+			<h:outputText value=""/>
+			
+			<!-- Collection -->
+			<ui:fragment rendered="#{currentMainMenu == 'collection'}">
+				<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
+				<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
+			</ui:fragment>
+			
+			<!-- Album TODO: modify for album -->
+			<ui:fragment rendered="#{currentMainMenu == 'album'}">
+				<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
+				<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
+			</ui:fragment>
+			
+			<!-- EntryPagePreviewTiledList -->
+			<ui:fragment rendered="#{logicBean.visible}">
+				<ui:fragment rendered="#{listSize != 0}">
+					<imjc:entryPagePreviewTiledList mediaLogicBean="#{logicBean}" lbl="#{lbl}" referenceUrl="#{Navigation.collectionUrl}" applicationUrl="#{Navigation.applicationUrl}" browsePath="#{Navigation.browsePath}"/>
+				</ui:fragment>
+				<ui:fragment rendered="#{listSize == null or listSize == 0}">
+					<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
+						<h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
+					</h:panelGroup>
+				</ui:fragment>
+			</ui:fragment>
+			
+			<!-- EntryPageTabList -->
+			<imjc:entryPageTabList infoLogicBean="#{logicBean}" applicationUrl="#{Navigation.applicationUrl}" lbl="#{lbl}"/>
+
+	</ui:define>	
+
+</ui:composition>

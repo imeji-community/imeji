@@ -263,4 +263,14 @@
 		<managed-bean-class>de.mpg.imeji.presentation.module.digilib.DigilibImageBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>DigilibImageAlbumBean</managed-bean-name>		
+		<managed-bean-class>de.mpg.imeji.presentation.module.digilib.DigilibAlbumImageBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>DigilibImageCollectionBean</managed-bean-name>		
+		<managed-bean-class>de.mpg.imeji.presentation.module.digilib.DigilibCollectionImageBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 </faces-config>

@@ -5,7 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="imageBean" value="#{DigilibImageBean}" />
 	<ui:param name="headline" value="#{lbl.digilibDetails}" />
-
+	
 	<ui:define name="preListHeader">
 		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
 		
@@ -20,6 +20,5 @@
 			<h:outputText value="#{lbl.selected} (#{SessionBean.selectedSize})" styleClass="free_area1_p6 xHuge_marginLIncl"/>
 		</h:panelGroup>
 	</ui:define>
-	<ui:define name="viewImage">
-	</ui:define>
+	<ui:define name="viewImage" />
 </ui:composition>

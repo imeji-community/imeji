@@ -8,7 +8,6 @@ import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.logic.digilib.Diglib;
 import de.mpg.imeji.presentation.collection.CollectionImagesBean;
-import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.image.SingleImageBrowse;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -19,12 +18,14 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class DigilibImageBean extends ImageBean
+public class DigilibAlbumImageBean extends DigilibImageBean
 {
+	
+	private CollectionImagesBean collectionImagesBean;
 	
     private Diglib digilibScaler;
     
-    public DigilibImageBean() throws Exception
+    public DigilibAlbumImageBean() throws Exception
     {
         super();
         
@@ -43,15 +44,24 @@ public class DigilibImageBean extends ImageBean
     public byte[] getScaledImage(String uri, String query) {
     	return this.digilibScaler.getScaledImage(uri, query);
     }
- 
+    
+    public CollectionImagesBean getCollectionImagesBean()
+    {
+        return collectionImagesBean;
+    }
+
+    public void setCollectionImagesBean(CollectionImagesBean collectionImagesBean)
+    {
+        this.collectionImagesBean = collectionImagesBean;
+    }
 
     @Override
     public void initBrowsing()
     {
     	String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-                .get("DigilibImageBean.id");
+                .get("CollectionImagesBean.id");
         setBrowse(new SingleImageBrowse((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class),
-                getImage(), "digilibImage", tempId));
+                getImage(), "collection", tempId));
     }
 
     @Override

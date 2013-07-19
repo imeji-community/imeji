@@ -23,10 +23,10 @@ import digilib.io.ImageCacheStream;
 import digilib.conf.DigilibConfiguration;
 import digilib.conf.DigilibRequest;
 
-public class Scaler {
+public class Diglib {
 
     
-    private static Logger logger = Logger.getLogger(Scaler.class);
+    private static Logger logger = Logger.getLogger(Diglib.class);
 	
     // currently only one output format
     private final String outputFormat = StorageUtils.getMimeType("jpeg");

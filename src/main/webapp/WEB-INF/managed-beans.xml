@@ -259,8 +259,8 @@
 
 	<!-- Diglib beans -->
 	<managed-bean>
-		<managed-bean-name>DigilibBean</managed-bean-name>		
-		<managed-bean-class>de.mpg.imeji.presentation.module.digilib.DigilibBean</managed-bean-class>
+		<managed-bean-name>DigilibImageBean</managed-bean-name>		
+		<managed-bean-class>de.mpg.imeji.presentation.module.digilib.DigilibImageBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 </faces-config>

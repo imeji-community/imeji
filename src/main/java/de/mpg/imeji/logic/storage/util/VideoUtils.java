@@ -51,7 +51,7 @@ public class VideoUtils {
 	}
 	
 	/**
-	 * @return the integer number for using method extracting the snapshop image.
+	 * @return the integer number for using method extracting the snapshot image.
 	 */
 	private static int getSnapshotCreationMethod() {
 		try {
@@ -63,7 +63,7 @@ public class VideoUtils {
 	}
 
 	/**
-	 * Gets byte array of an snapshot image from provided url video
+	 * Gets byte array of an snapshot image from provided URL video
 	 * @param url
 	 * @return byte array of an image from video file
 	 * @throws FileNotFoundException

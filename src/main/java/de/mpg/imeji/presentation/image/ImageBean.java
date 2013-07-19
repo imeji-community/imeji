@@ -45,6 +45,7 @@ import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -64,13 +65,15 @@ public class ImageBean
     private boolean selected;
     private CollectionImeji collection;
     private List<String> techMd;
-    private Navigation navigation;
+    protected Navigation navigation;
     private MetadataProfile profile;
     private SingleEditBean edit;
     protected String prettyLink;
     private MetadataLabels labels;
     private SingleImageBrowse browse = null;
     private MetadataSetBean mds;
+    
+    private boolean digilibEnabled;
 
     /**
      * Construct a default {@link ImageBean}
@@ -84,6 +87,39 @@ public class ImageBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         prettyLink = "pretty:editImage";
         labels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
+        
+        this.digilibEnabled = this.getDigilibEnabledInProperty();
+    }
+    
+    /**
+     * @return true, if the property file turn the DIGILIB view on, otherwise false.
+     */
+    private boolean getDigilibEnabledInProperty() {
+    	boolean value = false; 
+    	try {
+			value = Boolean.valueOf(PropertyReader.getProperty("imeji.digilib.enable"));
+		} catch (IOException e) {
+			value = false;
+		} catch (URISyntaxException e) {
+			value = false;
+		}
+    	return value;
+    }
+    
+    /**
+     * @return true, if DIGILIB is enabled, false otherwise
+     */
+    public boolean getDigilibEnabled() {
+    	return this.digilibEnabled;
+    }
+    
+    /**
+     * @return true, if DIGILIB is disabled, false otherwise
+     */
+    public boolean getDigilibDisabled() {
+    	if(this.digilibEnabled)
+    		return false;
+    	else return true;
     }
 
     /**

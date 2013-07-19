@@ -1,0 +1,26 @@
+<ui:composition template="template.xhtml"  xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="init">
+		<h:outputText value="#{imageBean.init}"/>
+	</ui:define>
+	<ui:define name="mainContent" >
+		<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
+            <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
+        </h:panelGroup>
+		<h:panelGroup rendered="#{imageBean.image != null}">
+			<div class="full_area0 paginator">
+				<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
+					<h:outputLink value="#{imageBean.browse.previous}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
+						<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
+					</h:outputLink>
+					<h:outputText value=" " styleClass="small_area0"/>
+					<h:outputLink value="#{imageBean.browse.next}" styleClass="forward small_marginLExcl"  disabled="#{imageBean.browse.next == null}">
+						<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
+					</h:outputLink>
+				</h:panelGroup>
+			</div>
+		</h:panelGroup> 		
+	</ui:define>
+</ui:composition>

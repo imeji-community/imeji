@@ -165,8 +165,17 @@
 	</url-mapping>
 	
 	<url-mapping id="digilib">
-		<pattern value="/digilib"></pattern>
+		<pattern value="/digilib/item/#{DigilibImageBean.id}"></pattern>
 		<view-id>/jsf/Digilib.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="digilibCollectionItem">
+		<pattern
+			value="/collection/#{CollectionImageBean.collectionId}/digilib/item/#{CollectionImageBean.id}" />
+		<view-id>/jsf/DigilibCollectionImage.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="digilibAlbumItem">
+		<pattern value="/album/#{AlbumImageBean.albumId}/item/#{AlbumImageBean.id}" />
+		<view-id>/jsf/DigilibAlbumImage.xhtml</view-id>
 	</url-mapping>
 
 </pretty-config>

@@ -33,7 +33,6 @@ import java.net.URI;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +43,7 @@ import org.apache.commons.io.FilenameUtils;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
@@ -53,7 +53,6 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import digilib.conf.DigilibServletConfiguration;
 import digilib.servlet.Scaler;
 
 /**
@@ -92,8 +91,7 @@ public class DigilibServlet extends Scaler
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         storageController = new StorageController();
         InternalStorageManager ism = new InternalStorageManager();
@@ -110,7 +108,6 @@ public class DigilibServlet extends Scaler
     {
         String url = req.getParameter("id");
         String fn = req.getParameter("fn");
-        System.out.println(req.isAsyncSupported());
         if (url != null)
         {
             String path = internalStorageBase
@@ -122,35 +119,29 @@ public class DigilibServlet extends Scaler
             }
             catch (IOException e)
             {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
         else if (fn != null)
         {
-            super.doGet(req, resp);
+            SessionBean session = getSession(req);
+            url = navigation.getApplicationUrl() + FileServlet.SERVLET_PATH + fn.replace(internalStorageBase, "");
+            if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
+            {
+                super.doGet(req, resp);
+            }
+            else
+            {
+                try
+                {
+                    resp.sendError(403, "imeji security: You are not allowed to view this file");
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
         }
-        // SessionBean session = getSession(req);
-        // if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
-        // {
-        // resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
-        // String path = internalStoragePath
-        // + url.replaceAll(navigation.getApplicationUrl() + FileServlet.SERVLET_PATH, "");
-        // path = FilenameUtils.separatorsToSystem(path);
-        // System.out.println(path);
-        // req.setAttribute("fn", path);
-        // }
-        // else
-        // {
-        // try
-        // {
-        // resp.sendError(403, "imeji security: You are not allowed to view this file");
-        // }
-        // catch (IOException e)
-        // {
-        // throw new RuntimeException(e);
-        // }
-        // }
     }
 
     /**

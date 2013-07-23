@@ -10,7 +10,7 @@
   <parameter name="denied-image" value="img/digilib-denied.png" />
 
   <!--  Image to be sent to indicate that the request was correct, but the specified image could not be found. -->
-  <parameter name="notfound-image" value="img/digilib-notfound.png" />
+  <parameter name="notfound-image" value="img/digilib-notfound1.png" />
 
   <!-- List of directories where images are searched.
        Directories with low-resolution images are LAST!!! in list.

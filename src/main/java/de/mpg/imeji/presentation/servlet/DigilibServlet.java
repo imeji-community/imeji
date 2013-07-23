@@ -28,16 +28,22 @@
  */
 package de.mpg.imeji.presentation.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import de.mpg.imeji.logic.search.Search;
@@ -53,6 +59,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.PropertyReader;
 import digilib.servlet.Scaler;
 
 /**
@@ -96,6 +103,8 @@ public class DigilibServlet extends Scaler
         storageController = new StorageController();
         InternalStorageManager ism = new InternalStorageManager();
         internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(ism.getStoragePath()));
+        // Copy tihe digilib-config.xml before initialising the digilib servlet, which needs this file
+        copyFile(getDigilibConfigPath(), config.getServletContext().getRealPath("/WEB-INF"));
         super.init(config);
     }
 
@@ -115,7 +124,7 @@ public class DigilibServlet extends Scaler
             path = path.replace("\\", "/");
             try
             {
-                resp.sendRedirect(req.getRequestURL().toString() + "?fn=" + path);
+                resp.sendRedirect(req.getRequestURL().toString() + "?fn=" + path + "&dw=1000");
             }
             catch (IOException e)
             {
@@ -141,6 +150,41 @@ public class DigilibServlet extends Scaler
                     throw new RuntimeException(e);
                 }
             }
+        }
+    }
+
+    /**
+     * Return the location of the digilib-config.xml
+     * 
+     * @return
+     */
+    private String getDigilibConfigPath()
+    {
+        try
+        {
+            return PropertyReader.getProperty("digilib.configuration.path");
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Copy a file from a location to another on the fileSystem
+     * 
+     * @param from
+     * @param to
+     */
+    private void copyFile(String from, String to)
+    {
+        try
+        {
+            FileUtils.copyFileToDirectory(new File(from), new File(to));
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
 

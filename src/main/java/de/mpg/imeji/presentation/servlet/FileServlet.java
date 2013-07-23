@@ -69,7 +69,7 @@ public class FileServlet extends HttpServlet
     /**
      * The path for this servlet as defined in the web.xml
      */
-    private static String SERVLET_PATH = "file";
+    public static final String SERVLET_PATH = "file";
 
     @Override
     public void init()

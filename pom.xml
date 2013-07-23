@@ -94,16 +94,9 @@
 		<project.warName>imeji</project.warName>
 	</properties>
 	<repositories>
-		<!-- <repository>
-			<id>central</id>
-			<url>http://central</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository> -->
+		<!-- <repository> <id>central</id> <url>http://central</url> <releases> 
+			<enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots> 
+			</repository> -->
 		<repository>
 			<id>prime-repo</id>
 			<name>Prime Technology Maven Repository</name>
@@ -156,18 +149,9 @@
 			<url>http://rd.mpdl.mpg.de/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	<!-- <pluginRepositories>
-		<pluginRepository>
-			<id>central</id>
-			<url>http://central</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories> -->
+	<!-- <pluginRepositories> <pluginRepository> <id>central</id> <url>http://central</url> 
+		<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> 
+		</snapshots> </pluginRepository> </pluginRepositories> -->
 	<build>
 		<resources>
 			<resource>
@@ -541,22 +525,32 @@
 			<version>1.1</version>
 			<scope>compile</scope>
 		</dependency>
-		<!-- Digilib integration -->
-		<!-- <dependency> <groupId>digilib</groupId> <artifactId>digilib-common</artifactId> 
-			<version>2.2-SNAPSHOT</version> <type>jar</type> </dependency> -->
+		<!-- START: Digilib integration -->
 		<dependency>
-			<groupId>net.java.dev.jai-imageio</groupId>
-			<artifactId>jai-imageio-core-standalone</artifactId>
-			<version>1.2-pre-dr-b04-2011-07-04</version>
+			<groupId>digilib</groupId>
+			<artifactId>digilib-servlet3</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>digilib</groupId>
+			<artifactId>digilib-common</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>digilib</groupId>
+			<artifactId>digilib-servlet</artifactId>
+			<version>2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.devlib.schmidt</groupId>
 			<artifactId>imageinfo</artifactId>
 			<version>1.9</version>
-			<type>jar</type>
-			<scope>compile</scope>
 		</dependency>
-
+		<!-- END: Digilib integration -->
+		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId> 
+			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 
+			<artifactId>imageinfo</artifactId> <version>1.9</version> <type>jar</type> 
+			<scope>compile</scope> </dependency> -->
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

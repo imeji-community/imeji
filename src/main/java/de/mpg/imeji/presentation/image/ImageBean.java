@@ -167,7 +167,6 @@ public class ImageBean
         {
             loadCollection();
             loadProfile();
-            removeDeadMetadata();
             labels.init(profile);
             edit = new SingleEditBean(item, profile, getPageUrl());
             mds = new MetadataSetBean(item.getMetadataSet());
@@ -237,51 +236,6 @@ public class ImageBean
         if (profile == null)
         {
             profile = new MetadataProfile();
-        }
-    }
-
-    /**
-     * If a metadata is deleted in profile, or the type is changed, the metadata should be removed in image
-     * 
-     * @throws Exception
-     */
-    public void removeDeadMetadata() throws Exception
-    {
-        boolean update = false;
-        Collection<Metadata> mds = new ArrayList<Metadata>();
-        try
-        {
-            for (Metadata md : item.getMetadataSet().getMetadata())
-            {
-                boolean isStatement = false;
-                for (Statement st : profile.getStatements())
-                {
-                    if (st.getId().toString().equals(md.getStatement().toString()))
-                    {
-                        isStatement = true;
-                        if (!st.getType().toString().equals(md.getTypeNamespace()))
-                        {
-                            isStatement = false;
-                        }
-                    }
-                }
-                if (isStatement)
-                    mds.add(md);
-                else
-                    update = true;
-            }
-            if (update)
-            {
-                ItemController itemController = new ItemController(sessionBean.getUser());
-                item.getMetadataSet().setMetadata(mds);
-                List<Item> l = new ArrayList<Item>();
-                l.add(item);
-                itemController.update(l);
-            }
-        }
-        catch (Exception e)
-        {
-            /* this user has not the privileges to update the image */
         }
     }
 

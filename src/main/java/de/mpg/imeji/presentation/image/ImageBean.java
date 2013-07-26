@@ -72,7 +72,6 @@ public class ImageBean
     private MetadataLabels labels;
     private SingleImageBrowse browse = null;
     private MetadataSetBean mds;
-    
     private boolean digilibEnabled;
 
     /**
@@ -87,39 +86,47 @@ public class ImageBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         prettyLink = "pretty:editImage";
         labels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
-        
         this.digilibEnabled = this.getDigilibEnabledInProperty();
     }
-    
+
     /**
      * @return true, if the property file turn the DIGILIB view on, otherwise false.
      */
-    private boolean getDigilibEnabledInProperty() {
-    	boolean value = false; 
-    	try {
-			value = Boolean.valueOf(PropertyReader.getProperty("imeji.digilib.enable"));
-		} catch (IOException e) {
-			value = false;
-		} catch (URISyntaxException e) {
-			value = false;
-		}
-    	return value;
+    private boolean getDigilibEnabledInProperty()
+    {
+        boolean value = false;
+        try
+        {
+            value = Boolean.valueOf(PropertyReader.getProperty("imeji.digilib.enable"));
+        }
+        catch (IOException e)
+        {
+            value = false;
+        }
+        catch (URISyntaxException e)
+        {
+            value = false;
+        }
+        return value;
     }
-    
+
     /**
      * @return true, if DIGILIB is enabled, false otherwise
      */
-    public boolean getDigilibEnabled() {
-    	return this.digilibEnabled;
+    public boolean getDigilibEnabled()
+    {
+        return this.digilibEnabled;
     }
-    
+
     /**
      * @return true, if DIGILIB is disabled, false otherwise
      */
-    public boolean getDigilibDisabled() {
-    	if(this.digilibEnabled)
-    		return false;
-    	else return true;
+    public boolean getDigilibDisabled()
+    {
+        if (this.digilibEnabled)
+            return false;
+        else
+            return true;
     }
 
     /**

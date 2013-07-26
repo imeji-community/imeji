@@ -41,17 +41,17 @@
 							<h:panelGroup id="ajaxArea">
 							 <style>
 							 	.dropMetadataActive , .dropChildActive{
-									border-color:green; 
-									border-style:dotted;
-									border-width:1px !important;
+									border-color:green !important;
 								}
 								.drop-hover{
-									background-color:#494949 !important;
+									background-color:#515151 !important;
 								}
-								.dropArea{
-									display:none;
+								.dropMetadata{
 								}
 								.highlight_area{
+									border-color:#313131; 
+									border-style:dotted;
+									border-width:1px !important;
 									background-color:#292929;
 								}
 							</style>
@@ -67,11 +67,13 @@
 								 		});		
 								 	$( ".draggable" ).on( "dragstart", function( event, ui ) {
 								 			dragged = $(this).attr('id') + 'DragButton';
+								 			hide_non_droppable_area(parseId($(this).attr('class')));
 									 	} );
 								 	 $( ".dropMetadata" ).droppable({
 								 		 hoverClass: "drop-hover",
 								 		 accept: '.draggable',
-								 		 activClass: "dropMetadataActive",
+								 		 activeClass : "dropMetadataActive",
+								 		 greedy: true,
 										 drop: function( event, ui ) {
 											var id = $(this).attr('id') + "Button";
 											document.getElementById(dragged).click();
@@ -88,11 +90,34 @@
 											 document.getElementById(id).click();
 										 	}
 										 });
-									
 									});
 								 highlighter();
+								 function hide_non_droppable_area(statementId){
+									 var area = $('.statement_area_' +statementId);
+									 area.each(function() {
+									 	jQuery(this).css('visibility', 'hidden');
+									 	hide_childs(statementId);
+									});
+								}
+							 	function hide_childs(id) {
+									var childs = jQuery('.statement_area_parent_' + id);
+									childs.css('visibility', 'hidden');
+									childs.each(function() {
+										// find all non space character after the string "id_"
+										var childId = parseId(jQuery(this).attr('class'));
+										hide_childs(childId);
+									});
+								}
 							</script>
+								<h:panelGroup id="dropMetadata" styleClass="full_area0_p8 dropMetadata">
+									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
+									<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{FormularBean.insertMetadata}" style="display:none;">
+										<f:setPropertyActionListener value="0" target="#{FormularBean.statementPosition}"/>
+										<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+									</h:commandButton>
+								</h:panelGroup>
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
+								<h:panelGroup  layout="block" styleClass="free_area0 statement_area  statement_area_parent_#{wrapper.parentId} statement_area_#{wrapper.statementId}">
 	                            <h:panelGroup layout="block" id="metadata" style="margin-left:#{wrapper.level}px; margin-top:10px;" 
 	                            class="full_area0_p0 draggable dropChild id_#{wrapper.statementId}  parent_#{wrapper.parentId} highlight_area">
 	                            	<div class="free_area0">
@@ -258,9 +283,10 @@
 								<h:panelGroup id="dropMetadata" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8 dropMetadata">
 									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
 									<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{FormularBean.insertMetadata}" style="display:none;">
-										<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+										<f:setPropertyActionListener value="#{position.index +1}" target="#{FormularBean.statementPosition}"/>
 										<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
 									</h:commandButton>
+								</h:panelGroup>
 								</h:panelGroup>
 								</ui:repeat>
 							</h:panelGroup>

@@ -101,7 +101,7 @@
 								}
 							 	function hide_childs(id) {
 									var childs = jQuery('.statement_area_parent_' + id);
-									childs.css('visibility', 'hidden');
+										childs.css('visibility', 'hidden');
 									childs.each(function() {
 										// find all non space character after the string "id_"
 										var childId = parseId(jQuery(this).attr('class'));

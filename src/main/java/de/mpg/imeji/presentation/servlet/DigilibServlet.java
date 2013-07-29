@@ -134,7 +134,7 @@ public class DigilibServlet extends Scaler
         else if (fn != null)
         {
             SessionBean session = getSession(req);
-            url = navigation.getApplicationUrl() + FileServlet.SERVLET_PATH + fn.replace(internalStorageBase, "");
+            url = navigation.getApplicationUrl() + FileServlet.SERVLET_PATH + "/" + fn.replace(internalStorageBase, "");
             if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
             {
                 super.doGet(req, resp);

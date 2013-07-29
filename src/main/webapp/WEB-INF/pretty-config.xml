@@ -165,7 +165,7 @@
 	</url-mapping>
 	
 	<url-mapping id="digilibImage">
-		<pattern value="/digilib/item/#{DigilibImageBean.id}"></pattern>
+		<pattern value="/digilibImage"></pattern>
 		<view-id>/jsf/DigilibImage.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="digilibCollectionItem">

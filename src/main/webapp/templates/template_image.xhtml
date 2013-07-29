@@ -29,7 +29,7 @@
 							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.imageFile and imageBean.digilibDisabled}">
 								<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>
-							<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilib/item/#{imageBean.id}" target="_blank" rendered="#{imageBean.imageFile and imageBean.digilibEnabled and (empty Navigation.externalDigilibUrl)}">
+							<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{imageBean.image.storageId}/original/#{imageBean.itemStorageIdFilename}" target="_blank" rendered="#{imageBean.imageFile and imageBean.digilibEnabled and (empty Navigation.externalDigilibUrl)}">
 								<h:graphicImage id="picWebResolutionInternalDigilib" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>
 							<h:outputLink id="lnkPicExternalDigilib" value="#{Navigation.digilibUrl}jquery/digilib.html?fn=#{imageBean.image.storageId}/original/#{imageBean.itemStorageIdFilename}" target="_blank" rendered="#{imageBean.imageFile and imageBean.digilibEnabled and (not empty Navigation.externalDigilibUrl)}">

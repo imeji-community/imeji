@@ -127,7 +127,7 @@ public class StorageUtils
             out.flush();
             if (close)
             {
-            	out.close();
+                out.close();
             }
         }
         catch (Exception e)
@@ -161,83 +161,96 @@ public class StorageUtils
     }
 
     /**
-     * Return the Mime Type of a file according to its format (i.e. file extension)
+     * True if 2 filename extension are the same (jpeg = jpeg = JPG, etc.)
      * 
-     * @param format
+     * @param ext1
+     * @param ext2
      * @return
      */
-    public static String getMimeType(String format)
+    public static boolean compareExtension(String ext1, String ext2)
     {
-        format = format.toLowerCase();
-        if ("tif".equals(format))
+        return getMimeType(ext1).equals(getMimeType(ext2));
+    }
+
+    /**
+     * Return the Mime Type of a file according to its format (i.e. file extension)
+     * 
+     * @param extension
+     * @return
+     */
+    public static String getMimeType(String extension)
+    {
+        extension = extension.toLowerCase();
+        if ("tif".equals(extension))
         {
-            return "image/"+"tiff";
+            return "image/" + "tiff";
         }
-        else if ("jpg".equals(format))
+        else if ("jpg".equals(extension))
         {
             return "image/jpeg";
         }
-        else if ("jpeg".equals(format))
+        else if ("jpeg".equals(extension))
         {
             return "image/jpeg";
         }
-        else if ("png".equals(format))
+        else if ("png".equals(extension))
         {
             return "image/png";
         }
-        else if ("gif".equals(format))
+        else if ("gif".equals(extension))
         {
             return "image/gif";
         }
-        else if ("mov".equals(format))
+        else if ("mov".equals(extension))
         {
             return "video/quicktime";
         }
-        else if ("avi".equals(format))
+        else if ("avi".equals(extension))
         {
             return "video/x-msvideo";
         }
-        else if ("3gp".equals(format))
+        else if ("3gp".equals(extension))
         {
             return "video/3gpp";
         }
-        else if ("ts".equals(format))
+        else if ("ts".equals(extension))
         {
             return "video/MP2T";
         }
-        else if ("mpeg".equals(format))
+        else if ("mpeg".equals(extension))
         {
             return "video/mpeg";
         }
-        else if ("mp4".equals(format))
+        else if ("mp4".equals(extension))
         {
             return "video/mp4";
         }
-        else if ("wmv".equals(format))
+        else if ("wmv".equals(extension))
         {
             return "video/x-ms-wmv";
         }
-        else if ("webm".equals(format))
+        else if ("webm".equals(extension))
         {
             return "video/webm";
         }
-        else if ("ogg".equals(format))
+        else if ("ogg".equals(extension))
         {
             return "video/ogg";
         }
-        else if ("flv".equals(format))
+        else if ("flv".equals(extension))
         {
-            //still not support directly played in browser
-        	return "video/x-flv";
-        }else if ("pdf".equals(format))
+            // still not support directly played in browser
+            return "video/x-flv";
+        }
+        else if ("pdf".equals(extension))
         {
             return "application/pdf";
         }
-        return "video/" + format;
+        return "video/" + extension;
     }
 
-	public static byte[] getBytes(URL url) throws FileNotFoundException {
-		return StorageUtils.toBytes(new FileInputStream(new File(url.getFile())));		
-	}
-    
+    public static byte[] getBytes(URL url) throws FileNotFoundException
+    {
+        return StorageUtils.toBytes(new FileInputStream(new File(url.getFile())));
+    }
 }

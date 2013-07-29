@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
@@ -24,6 +23,7 @@ import java.util.Arrays;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import com.sun.media.jai.codec.FileSeekableStream;
@@ -76,7 +76,7 @@ public class ImageUtils
             {
                 // If it is the thumbnail, compress the images (in jpeg), if it is a tif compress even for WEb
                 // resolution, since resizing not possible with tif
-                byte[] compressed = compressImage(bytes, mimeType);
+                byte[] compressed = toJpeg(bytes, mimeType);
                 if (!Arrays.equals(compressed, bytes))
                 {
                     mimeType = StorageUtils.getMimeType("jpg");
@@ -94,9 +94,9 @@ public class ImageUtils
                 image = ImageIO.read(new ByteArrayInputStream(bytes));
             }
             {
-            	if (image == null)
-                // The image couldn't be read
-                return null;
+                if (image == null)
+                    // The image couldn't be read
+                    return null;
             }
             // Resize image
             if (StorageUtils.getMimeType("gif").equals(mimeType) && GifUtils.isAnimatedGif(bytes))
@@ -369,13 +369,14 @@ public class ImageUtils
     }
 
     /**
-     * Compress an image in jpeg. Useful to reduce size of thumbnail and web resolution images
+     * Compress an image in jpeg. Useful to reduce size of thumbnail and web resolution images. If the format of the
+     * image is not supported, return null
      * 
      * @param bytes
      * @param mimeType
      * @return
      */
-    public static byte[] compressImage(byte[] bytes, String mimeType)
+    public static byte[] toJpeg(byte[] bytes, String mimeType)
     {
         try
         {
@@ -395,12 +396,16 @@ public class ImageUtils
             {
                 bytes = GifUtils.toJPEG(bytes);
             }
+            else if (mimeType.equals(StorageUtils.getMimeType("jpg")))
+            {
+                bytes = GifUtils.toJPEG(bytes);
+            }
         }
         catch (Exception e)
         {
             logger.info("Image could not be compressed: ", e);
         }
-        return bytes;
+        return null;
     }
 
     /**
@@ -478,13 +483,14 @@ public class ImageUtils
     {
         return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
     }
-    
-    public static BufferedImage getImageFromUrl(URL url) throws IOException {
-    	return ImageUtils.byteArrayToBufferedImage(StorageUtils.getBytes(url));
+
+    public static BufferedImage getImageFromUrl(URL url) throws IOException
+    {
+        return ImageUtils.byteArrayToBufferedImage(StorageUtils.getBytes(url));
     }
-    
-    public static BufferedImage byteArrayToBufferedImage(byte[] imageInBytes) throws IOException {
-    	return ImageIO.read(new ByteArrayInputStream(imageInBytes));
+
+    public static BufferedImage byteArrayToBufferedImage(byte[] imageInBytes) throws IOException
+    {
+        return ImageIO.read(new ByteArrayInputStream(imageInBytes));
     }
-    
 }

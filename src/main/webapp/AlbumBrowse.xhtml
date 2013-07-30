@@ -8,7 +8,7 @@
 	<ui:param name="paginatorListSessionBean" value="#{AlbumImagesBean}"/>
 	<ui:param name="headline" value="#{AlbumImagesBean.album.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="album"/>
-	
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/browse?q="/>
 	
 	<ui:define name="actionsMenu">
 		<div class="imj_contentMenu">

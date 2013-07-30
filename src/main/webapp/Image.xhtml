@@ -3,9 +3,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="imageBean" value="#{ImageBean}" />
-	<ui:param name="headline" value="#{lbl.details}" />
+	<ui:param name="imageBean" value="#{ImageBean}"/>
+	<ui:param name="headline" value="#{lbl.details}"/>
 	<ui:param name="currentMainMenu" value="mediaEntry"/>
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.browseUrl}?q="/>
 	
 	<ui:define name="paginatorTop">
 		<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">

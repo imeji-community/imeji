@@ -6,7 +6,7 @@
 	<ui:param name="imageBean" value="#{CollectionImageBean}"/>
 	<ui:param name="headline" value="#{lbl.details}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
-	
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/browse?q="/>
 	
 	<ui:define name="actionsMenu">
 		<!-- content menu starts here -->

@@ -7,6 +7,7 @@
 	
 	<ui:define name="init">
 		<h:outputText value="#{paginatorListSessionBean.initPage}"/>
+		<h:outputText value="#{paginatorListSessionBean.initPaginator}"/>
 	</ui:define>
 	
 	<ui:define name="modalDialogs_from_template">
@@ -28,7 +29,7 @@
 	
 	<!-- Main Content - Image tiled list - START -->
 	<ui:define name="mainContent">
-				
+		
 		<script type="text/javascript">
 			function setOpacityToImages()
 			{
@@ -46,7 +47,8 @@
 		<h:panelGroup layout="block" id="imj_ajaxWrapper">
 			
 			<!-- Selection Info Panel -->
-			<imjc:selectionInfoPanel fSession="#{FiltersSession}" paginatorBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}"/>
+			<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
+									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
 			
 			<!-- Page Browser GotoBox -->
 			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>

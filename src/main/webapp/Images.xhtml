@@ -3,9 +3,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="paginatorListSessionBean" value="#{ImagesBean}" />
-	<ui:param name="headline" value="#{lbl.images}" />
+	<ui:param name="paginatorListSessionBean" value="#{ImagesBean}"/>
+	<ui:param name="headline" value="#{lbl.images}"/>
 	<ui:param name="currentMainMenu" value="mediaEntry"/>
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.browseUrl}?q="/>
 	
 	<ui:define name="actionsMenu">
 		
@@ -16,7 +17,7 @@
 				<h:selectOneMenu id="selSort"
 					value="#{ImagesBean.selectedSortCriterion}"
 					styleClass="free_select" onchange="submit();">
-					<f:selectItems id="sortItem" value="#{ImagesBean.sortMenu}" />
+					<f:selectItems id="sortItem" value="#{ImagesBean.sortMenu}"/>
 				</h:selectOneMenu>
 				<h:commandLink id="lnkSortAsc" styleClass="imj_buttonOrderByAsc_15" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
 				<h:commandLink id="lnkSortDesc" styleClass="imj_buttonOrderByDesc_15" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
@@ -36,12 +37,12 @@
 						</li>
 						<li>
 							<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}" target="_blank">
-								<h:outputText value="#{lbl.export_rdf}" />
+								<h:outputText value="#{lbl.export_rdf}"/>
 							</h:outputLink>
 						</li>
 						<li>
 							<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}" target="_blank">
-								<h:outputText value="#{lbl.export_native}" />
+								<h:outputText value="#{lbl.export_native}"/>
 							</h:outputLink>
 						</li>
 					</ul>
@@ -52,15 +53,15 @@
 
 	<ui:define name="searchQuery">
 		<h:panelGroup styleClass="full_area0 small_marginLExcl" rendered="#{paginatorListSessionBean.searchFilter != null}">
-			<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p2" />
+			<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p2"/>
 			<h:panelGroup styleClass="xHuge_area0">
-				<h:outputText value="#{lbl.search_for}" styleClass="free_area0_p2" rendered="#{paginatorListSessionBean.simpleSearch}" />
-				<h:outputText value="#{ImagesBean.simpleQuery}" styleClass="free_area0_p2" />
+				<h:outputText value="#{lbl.search_for}" styleClass="free_area0_p2" rendered="#{paginatorListSessionBean.simpleSearch}"/>
+				<h:outputText value="#{ImagesBean.simpleQuery}" styleClass="free_area0_p2"/>
 				<h:outputLink
 					value="#{Navigation.searchUrl}?q=#{paginatorListSessionBean.query}"
 					rendered="#{!paginatorListSessionBean.simpleSearch}"
 					styleClass="xHuge_area0_p2 ">
-					<h:outputText value="#{lbl.search_revise}" />
+					<h:outputText value="#{lbl.search_revise}"/>
 				</h:outputLink>
 			</h:panelGroup>
 		</h:panelGroup>

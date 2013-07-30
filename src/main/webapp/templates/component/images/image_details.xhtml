@@ -111,11 +111,11 @@
 							<!-- MetaDataList - media data - status withdrawn - container set - Hardcoded style -->
 							<h:panelGroup layout="block" styleClass="imj_metadataSet" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
 								<div class="imj_metadataLabel">
-									<h:outputText value="#{lbl.withdraw_comment}" />
+									<h:outputText value="#{lbl.withdraw_comment}"/>
 									<span class="imj_invisible">: </span>
 								</div>
 								<div class="imj_metadataValue">
-									<h:outputText value="#{imageBean.image.discardComment}" />
+									<h:outputText value="#{imageBean.image.discardComment}"/>
 								</div>
 							</h:panelGroup>
 					
@@ -127,18 +127,18 @@
 									<span class="imj_invisible">: </span>
 								</div>
 								<div class="imj_metadataValue">
-									<h:outputText id="txtUrl" value="#{imageBean.image.filename}" />
+									<h:outputText id="txtUrl" value="#{imageBean.image.filename}"/>
 								</div>
 							</h:panelGroup>
 							<!-- MetaDataList - Collection -->
 							<h:panelGroup layout="block" styleClass="imj_metadataSet">
 								<div class="imj_metadataLabel">
-									<h:outputText value="#{lbl.collection }" />
+									<h:outputText value="#{lbl.collection }"/>
 									<span class="imj_invisible">: </span>
 								</div>
 								<div class="imj_metadataValue">
 									<h:outputLink value="#{Navigation.collectionUrl}#{imageBean.collection.idString}">
-										<h:outputText value="#{imageBean.collection.metadata.title}" />
+										<h:outputText value="#{imageBean.collection.metadata.title}"/>
 									</h:outputLink>
 								</div>
 							</h:panelGroup>
@@ -159,7 +159,7 @@
 										<div class="imj_metadataValue">
 											<!-- MetaDataOutput -->
 											<ui:include src="MetadataOutput.xhtml">
-												<ui:param name="md" value="#{metadata}" />
+												<ui:param name="md" value="#{metadata}"/>
 											</ui:include>
 										</div>
 									</h:panelGroup>
@@ -189,14 +189,14 @@
 											<!-- imj_multipleButtons (-) (+) command buttons -->
 											<div class="imj_metadataEditButtonArea">
 												<h:commandButton type="button" styleClass="imj_removeButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
-													<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
-													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
-													<f:ajax execute="@form" render="@form" />
+													<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}"/>
+													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}"/>
+													<f:ajax execute="@form" render="@form"/>
 												</h:commandButton>
 												<h:commandButton type="button" styleClass="imj_addButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.addMetadata}" value="">
-													<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
-													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
-													<f:ajax execute="@form" render="@form" />
+													<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}"/>
+													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}"/>
+													<f:ajax execute="@form" render="@form"/>
 												</h:commandButton>
 											</div>
 										</div>
@@ -210,7 +210,7 @@
 											<h:outputText value="#{lbl.cancel}"/>
 									</h:commandLink>
 									<h:commandButton type="submit" styleClass="imj_submitButton"  action="#{imageBean.edit.save}" value="#{lbl.save}">
-										<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}" />
+										<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}"/>
 									</h:commandButton>
 								</h:panelGroup>
 							</ui:fragment> <!-- MetaDataList - EDIT MetaData - panel END -->
@@ -244,44 +244,44 @@
 					<!-- InfoDataList - MD5 -->
 					<h:panelGroup styleClass="imj_infodataSet">
 						<span class="imj_infodataLabel">
-							<h:outputText value="#{lbl.checksum} (MD5)" />
+							<h:outputText value="#{lbl.checksum} (MD5)"/>
 							<span class="imj_invisible">: </span>
 						</span>							
 						<span class="imj_infodataValue">
-							<h:outputText value="#{imageBean.image.checksum}" />
+							<h:outputText value="#{imageBean.image.checksum}"/>
 						</span>
 					</h:panelGroup>
 					
 					<!-- InfoDataList - Uploader / File-Author -->
 					<h:panelGroup styleClass="imj_infodataSet">
 						<span class="imj_infodataLabel">
-							<h:outputText value="#{lbl.imageUploader}" />
+							<h:outputText value="#{lbl.imageUploader}"/>
 							<span class="imj_invisible">: </span>
 						</span>
 						<span class="imj_infodataValue">
-							<h:outputText value="#{imageBean.imageUploader.name}" />
+							<h:outputText value="#{imageBean.imageUploader.name}"/>
 						</span>
 					</h:panelGroup>
 					
 					<!-- InfoDataList - Images File Sizes -->						
 					<h:panelGroup styleClass="imj_infodataSet">
 						<span class="imj_infodataLabel">
-							<h:outputText value="#{lbl.imageSizes}" />
+							<h:outputText value="#{lbl.imageSizes}"/>
 							<span class="imj_invisible">: </span>
 						</span>
 						<span class="imj_infodataValue">
 							<h:outputLink value="#{imageBean.image.thumbnailImageUrl}" target="_blank">
-								<h:outputText value="#{lbl.imageSizesThumb}" />
+								<h:outputText value="#{lbl.imageSizesThumb}"/>
 							</h:outputLink>
 						</span>
 						<span class="imj_infodataValue">
 							<h:outputLink value="#{imageBean.image.webImageUrl}" target="_blank">
-								<h:outputText value="#{lbl.imageSizesWeb}" />
+								<h:outputText value="#{lbl.imageSizesWeb}"/>
 							</h:outputLink>
 						</span>
 						<span class="imj_infodataValue">
 							<h:outputLink value="#{imageBean.image.fullImageUrl}" target="_blank">
-								<h:outputText value="#{lbl.imageSizesOrg}" />
+								<h:outputText value="#{lbl.imageSizesOrg}"/>
 							</h:outputLink>
 						</span>
 					</h:panelGroup>				
@@ -290,13 +290,13 @@
 					<ui:fragment rendered="#{imageBean.relatedAlbums != null}">
 						<h:panelGroup styleClass="imj_infodataSet">
 							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.relatedAlbum}" />
+								<h:outputText value="#{lbl.relatedAlbum}"/>
 									<span class="imj_invisible">: </span>
 							</span>
 							<span class="imj_infodataValue">
 								<ui:repeat var="albums" value="#{imageBean.relatedAlbums}">
 									<h:outputLink value="#{albums.id}">
-										<h:outputText value="#{albums.metadata.title}" />
+										<h:outputText value="#{albums.metadata.title}"/>
 									</h:outputLink>
 								</ui:repeat>
 							</span>
@@ -317,7 +317,7 @@
 					<!-- InfoDataList - QR-Tag <div id="qr"></div> --> 						
 					<h:panelGroup styleClass="imj_infodataSet">
 						<span class="imj_infodataLabel">
-							<h:outputText value="#{lbl.qrcode}" />
+							<h:outputText value="#{lbl.qrcode}"/>
 							<span class="imj_invisible">: </span>
 						</span>
 						<span class="imj_infodataValue" id="qr"> </span>

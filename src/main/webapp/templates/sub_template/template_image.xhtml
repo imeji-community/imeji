@@ -15,7 +15,7 @@
 			
 			<h:panelGroup layout="block" id="selectionInfoPanel">
 				<!-- Selection Info Panel -->
-				<imjc:selectionInfoPanel fSession="#{FiltersSession}" paginatorBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}"/>
+				<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{imageBean}" currentMainMenu="#{currentMainMenu}" browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="0"/>
 			</h:panelGroup>
 			
 			<ui:insert name="paginatorTop"/>

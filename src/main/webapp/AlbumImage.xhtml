@@ -6,7 +6,8 @@
 	<ui:param name="imageBean" value="#{AlbumImageBean}"/>
 	<ui:param name="headline" value="#{lbl.details}"/>
 	<ui:param name="currentMainMenu" value="album"/>
-
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/browse?q="/>
+	
 	<ui:define name="actionsMenu">
 		<!-- content menu starts here -->
 		<h:panelGroup layout="block" styleClass="imj_contentMenu">

@@ -29,7 +29,6 @@
 package de.mpg.imeji.logic.storage.transform.impl;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
-import de.mpg.imeji.logic.storage.util.GifUtils;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 

@@ -51,20 +51,19 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
  */
 public class ImageGeneratorManager
 {
-    public Iterator<ImageGenerator> generators = null;
+    public List<ImageGenerator> generators = null;
 
     /**
      * Default constructor of {@link ImageGeneratorManager}
      */
     public ImageGeneratorManager()
     {
-        List<ImageGenerator> l = new ArrayList<ImageGenerator>();
-        l.add(new PdfImageGenerator());
-        l.add(new XuggleImageGenerator());
-        l.add(new MagickImageGenerator());
-        l.add(new SimpleImageGenerator());
-        l.add(new MicroscopeImageGenerator());
-        generators = l.iterator();
+        generators = new ArrayList<ImageGenerator>();
+        generators.add(new PdfImageGenerator());
+        generators.add(new XuggleImageGenerator());
+        generators.add(new MagickImageGenerator());
+        generators.add(new SimpleImageGenerator());
+        generators.add(new MicroscopeImageGenerator());
     }
 
     /**
@@ -130,6 +129,7 @@ public class ImageGeneratorManager
 
     /**
      * Generate an jpeg image in the wished size.
+     * 
      * @param bytes
      * @param extension
      * @param resolution
@@ -139,7 +139,8 @@ public class ImageGeneratorManager
     {
         try
         {
-            return ImageUtils.transformImage(toJpeg(bytes, extension), resolution, StorageUtils.getMimeType("jpg"));
+            return ImageUtils.resizeJPEG(toJpeg(bytes, extension), resolution);
+            // return ImageUtils.transformImage(toJpeg(bytes, extension), resolution, StorageUtils.getMimeType("jpg"));
         }
         catch (Exception e)
         {
@@ -157,9 +158,10 @@ public class ImageGeneratorManager
     private byte[] toJpeg(byte[] bytes, String extension)
     {
         byte[] jpeg = null;
-        while (generators.hasNext() && jpeg == null)
+        Iterator<ImageGenerator> it = generators.iterator();
+        while (it.hasNext() && jpeg == null)
         {
-            ImageGenerator imageGenerator = (ImageGenerator)generators.next();
+            ImageGenerator imageGenerator = (ImageGenerator)it.next();
             jpeg = imageGenerator.generateJPG(bytes, extension);
         }
         if (jpeg == null)

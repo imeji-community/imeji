@@ -54,6 +54,26 @@ public class ImageUtils
     private static boolean RESCALE_HIGH_QUALITY = true;
 
     /**
+     * Resize an image (only for jpeg) to the given {@link FileResolution}
+     * 
+     * @param bytes
+     * @param resolution
+     * @return
+     * @throws IOException
+     * @throws Exception
+     */
+    public static byte[] resizeJPEG(byte[] bytes, FileResolution resolution) throws IOException, Exception
+    {
+        // If it is orginal resolution, don't touch the file, otherwise resize
+        if (!FileResolution.ORIGINAL.equals(resolution))
+        {
+            BufferedImage image = JpegUtils.readJpeg(bytes);
+            bytes = toBytes(scaleImage(image, resolution), StorageUtils.getMimeType("jpg"));
+        }
+        return bytes;
+    }
+
+    /**
      * Prepare the image for the upload: <br/>
      * if it is original image upload, do nothing <br/>
      * if it is another resolution, resize it <br/>
@@ -382,23 +402,23 @@ public class ImageUtils
         {
             if (mimeType.equals(StorageUtils.getMimeType("tif")))
             {
-                bytes = ImageUtils.tiff2Jpeg(bytes);
+               return ImageUtils.tiff2Jpeg(bytes);
             }
             else if (mimeType.equals(StorageUtils.getMimeType("png")))
             {
-                bytes = ImageUtils.png2Jpeg(bytes);
+                return ImageUtils.png2Jpeg(bytes);
             }
             else if (mimeType.equals(StorageUtils.getMimeType("bmp")))
             {
-                bytes = ImageUtils.bmp2Jpeg(bytes);
+                return ImageUtils.bmp2Jpeg(bytes);
             }
             else if (mimeType.equals(StorageUtils.getMimeType("gif")))
             {
-                bytes = GifUtils.toJPEG(bytes);
+                return GifUtils.toJPEG(bytes);
             }
             else if (mimeType.equals(StorageUtils.getMimeType("jpg")))
             {
-                bytes = GifUtils.toJPEG(bytes);
+                return bytes;
             }
         }
         catch (Exception e)

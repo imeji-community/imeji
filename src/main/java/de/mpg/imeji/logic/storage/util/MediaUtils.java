@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
@@ -36,7 +37,7 @@ public class MediaUtils
     {
         verifyImageMagickInstallation();
     }
-    
+
     /*
      * TODO Ye: Execute when upload page shows and show install ImageMagick tips
      */
@@ -87,6 +88,41 @@ public class MediaUtils
         return mediaInfo;
     }
 
+    /**
+     * User imagemagick to convert any image into a jpeg
+     * 
+     * @param bytes
+     * @param extension
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws InterruptedException
+     * @throws IM4JavaException
+     */
+    public static byte[] convertToJPEG(byte[] bytes, String extension) throws IOException, URISyntaxException,
+            InterruptedException, IM4JavaException
+    {
+        File tmp = File.createTempFile(bytes.toString(), "." + extension);
+        FileUtils.writeByteArrayToFile(tmp, bytes);
+        String path = tmp.getAbsolutePath();
+        String magickPath = getImageMagickInstallationPath();
+        // TODO Ye:ConvertCmd(true) to use GraphicsMagick, which is said faster
+        ConvertCmd cmd = new ConvertCmd(false);
+        cmd.setSearchPath(magickPath);
+        // create the operation, add images and operators/options
+        IMOperation op = new IMOperation();
+        if (StorageUtils.compareExtension("MOV", extension) || StorageUtils.compareExtension("MP4", extension)
+                || StorageUtils.compareExtension("GIF", extension) || StorageUtils.compareExtension("WMV", extension))
+        {
+            // extract the first frame
+            path = path + "[0]";
+        }
+        op.addImage(path);
+        File jpeg = File.createTempFile(bytes.toString(), ".jpg");
+        op.addImage(jpeg.getAbsolutePath());
+        cmd.run(op);
+        return FileUtils.readFileToByteArray(jpeg);
+    }
+
     /*
      * if mimeType is kind of video types, then extract first frame
      */
@@ -114,24 +150,28 @@ public class MediaUtils
         Info imageObject;
         int width = 0;
         int height = 0;
-		try {
-			imageObject=getMediaInfo(orginalPath);
-			width=imageObject.getImageWidth();
-			height = imageObject.getImageHeight();
-		} catch (InfoException e1) {
-			e1.printStackTrace();
-		}
-		if(width==0||height==0){
-			//TODO Ye: return link to default thumbnail
-			return;
-		}
-			
-        if (width > size) {
+        try
+        {
+            imageObject = getMediaInfo(orginalPath);
+            width = imageObject.getImageWidth();
+            height = imageObject.getImageHeight();
+        }
+        catch (InfoException e1)
+        {
+            e1.printStackTrace();
+        }
+        if (width == 0 || height == 0)
+        {
+            // TODO Ye: return link to default thumbnail
+            return;
+        }
+        if (width > size)
+        {
             height = size * height / width;
             width = size;
         }
-        //Only Shrink Larger Images ('>' flag)
-        op.resize(width, height,">");
+        // Only Shrink Larger Images ('>' flag)
+        op.resize(width, height, ">");
         op.addImage(targetPath);
         try
         {// execute the operation
@@ -178,7 +218,7 @@ public class MediaUtils
 
     private static String getImageMagickInstallationPath() throws IOException, URISyntaxException
     {
-    	return PropertyReader.getProperty("imeji.imagemagick.installpath");
+        return PropertyReader.getProperty("imeji.imagemagick.installpath");
     }
 
     /**
@@ -203,13 +243,15 @@ public class MediaUtils
         }
         return null;
     }
-    
+
     /**
      * Create a temporary file or directory
+     * 
      * @return temparory file or diectory
      * @throws IOException
      */
-    public static File createTempDirectory() throws IOException {
-		return File.createTempFile("temp", Long.toString(System.nanoTime()));
-	}
+    public static File createTempDirectory() throws IOException
+    {
+        return File.createTempFile("temp", Long.toString(System.nanoTime()));
+    }
 }

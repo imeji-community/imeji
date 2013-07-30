@@ -55,7 +55,7 @@ public class MetadataSet
 
     public void setMetadata(Collection<Metadata> metadata)
     {
-         this.metadata = metadata;
+        this.metadata = metadata;
     }
 
     @XmlElement(name = "profile", namespace = "http://imeji.org/terms")

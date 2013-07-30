@@ -40,7 +40,7 @@ public class IngestController
      * @param profileXml
      * @throws Exception
      */
-    public void ingest(File itemListXmlFile, File profileXmlFile) throws Exception 
+    public void ingest(File itemListXmlFile, File profileXmlFile) throws Exception
     {
         if (profileXmlFile != null)
         {
@@ -50,9 +50,9 @@ public class IngestController
         if (itemListXmlFile != null)
         {
             ProfileController pc = new ProfileController();
-	        MetadataProfile mdp = pc.retrieve(collection.getProfile(), user);
-	        IngestItemController iic = new IngestItemController(user, mdp);
-	        iic.ingest(itemListXmlFile);
+            MetadataProfile mdp = pc.retrieve(collection.getProfile(), user);
+            IngestItemController iic = new IngestItemController(user, mdp);
+            iic.ingest(itemListXmlFile);
         }
     }
 }

@@ -62,8 +62,9 @@ public abstract class XMLExport extends Export
         }
         throw new HttpResponseException(400, "Type " + type + " is not supported.");
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
      * @see de.mpg.imeji.logic.export.Export#getContentType()
      */
     @Override

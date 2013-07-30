@@ -29,9 +29,9 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "number", namespace = "http://imeji.org/terms/metadata")
-@XmlType(propOrder={"number", "statement"})
+@XmlType(propOrder = { "number", "statement" })
 public class Number extends Metadata
-{ 
+{
     @j2jLiteral("http://imeji.org/terms/number")
     private double number = Double.NaN;
     @j2jResource("http://imeji.org/terms/statement")
@@ -51,14 +51,14 @@ public class Number extends Metadata
         this.number = number;
     }
 
-    @XmlElement(name = "number", namespace="http://imeji.org/terms")
+    @XmlElement(name = "number", namespace = "http://imeji.org/terms")
     public double getNumber()
     {
         return number;
     }
 
     @Override
-    @XmlElement(name = "statement", namespace="http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
     public URI getStatement()
     {
         return statement;

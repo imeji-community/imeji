@@ -285,7 +285,7 @@ public class InternalStorageManager
         write(generatorManager.generateThumbnail(bytes, extension), transformUrlToPath(item.getThumbnailUrl()));
         // write we resolution file in storage
         write(generatorManager.generateWebResolution(bytes, extension), transformUrlToPath(item.getWebUrl()));
-        //  write original file in storage
+        // write original file in storage
         write(bytes, transformUrlToPath(item.getOriginalUrl()));
         // boolean enableImagemagick = Boolean.parseBoolean(PropertyReader.getProperty("imeji.imagemagick.enable"));
         // if (enableImagemagick)

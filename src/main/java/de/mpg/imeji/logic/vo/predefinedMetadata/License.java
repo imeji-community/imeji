@@ -59,7 +59,7 @@ public class License extends Metadata
         return date.format(date);
     }
 
-    @XmlElement(name = "license", namespace="http://imeji.org/terms")
+    @XmlElement(name = "license", namespace = "http://imeji.org/terms")
     public String getLicense()
     {
         return license;
@@ -71,7 +71,7 @@ public class License extends Metadata
     }
 
     @Override
-    @XmlElement(name = "statement", namespace="http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
     public URI getStatement()
     {
         return statement;
@@ -86,7 +86,7 @@ public class License extends Metadata
     /**
      * @return the externalUri
      */
-    @XmlElement(name = "identifier", namespace="http://purl.org/dc/elements/1.1")
+    @XmlElement(name = "identifier", namespace = "http://purl.org/dc/elements/1.1")
     public URI getExternalUri()
     {
         return externalUri;

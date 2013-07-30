@@ -63,7 +63,7 @@ public class ObjectHelper
         }
         else
         {
-             baseURI = StringHelper.normalizeURI(c.getAnnotation(j2jResource.class).value());
+            baseURI = StringHelper.normalizeURI(c.getAnnotation(j2jResource.class).value());
         }
         String encodedId = id;
         try

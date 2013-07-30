@@ -35,7 +35,6 @@ public class GrantController extends ImejiController
      */
     public User addGrant(User user, Grant grant) throws Exception
     {
-
         if (!isValid(grant))
         {
             throw new RuntimeException("Grant: " + grant.getGrantType() + " for " + grant.getGrantFor() + " not valid");

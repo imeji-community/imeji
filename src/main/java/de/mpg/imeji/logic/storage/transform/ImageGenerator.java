@@ -47,5 +47,4 @@ public interface ImageGenerator
      * @return
      */
     public byte[] generateJPG(byte[] bytes, String extension);
-    
 }

@@ -76,15 +76,13 @@ public class Navigation
     public String getDigilibUrl()
     {
         return applicationUrl + DIGILIB.getPath();
-    	
     }
-    
+
     public String getExternalDigilibUrl()
     {
-    	return this.externalDigilibUrl;
+        return this.externalDigilibUrl;
     }
-    
-    
+
     public String getDomain()
     {
         return applicationUrl.replaceAll("imeji/", "");

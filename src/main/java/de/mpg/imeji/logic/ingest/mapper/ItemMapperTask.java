@@ -15,17 +15,17 @@ import de.mpg.imeji.logic.vo.Item;
 /**
  * @author hnguyen
  */
-public class ItemMapperTask extends SwingWorker<Collection<Item>,Void>
+public class ItemMapperTask extends SwingWorker<Collection<Item>, Void>
 {
     private DuplicatedObject<Item, ?> dupItems;
     private Collection<Item> itemList;
-    
+
     /**
      * @throws URISyntaxException
      */
     public ItemMapperTask(List<Item> itemList)
     {
-    	this.itemList = itemList;        
+        this.itemList = itemList;
     }
 
     public List<String> getDuplicateFilenames()
@@ -57,14 +57,13 @@ public class ItemMapperTask extends SwingWorker<Collection<Item>,Void>
     {
         return this.getUniqueFilenameListsAsStringList();
     }
-    
+
     private DuplicatedObject<Item, ?> process(Collection<Item> itemList)
     {
-    	DuplicatedObject<Item, ?> dupItems = new DuplicatedObject<Item, Object>();
+        DuplicatedObject<Item, ?> dupItems = new DuplicatedObject<Item, Object>();
         for (Item item : itemList)
         {
             Item itemAsFilename = dupItems.getHashTableFilename().get(item.getFilename());
-            
             if (itemAsFilename == null)
             {
                 dupItems.getHashTableFilename().put(new String(item.getFilename()), item);
@@ -77,16 +76,15 @@ public class ItemMapperTask extends SwingWorker<Collection<Item>,Void>
         return dupItems;
     }
 
-	@Override
-	protected Collection<Item> doInBackground() throws Exception {
-		this.dupItems = this.process(this.itemList);
-		
-		return this.getMappedItemObjects();
-	}
-	
-	@Override
-    public void done() {
-	    
-	}
+    @Override
+    protected Collection<Item> doInBackground() throws Exception
+    {
+        this.dupItems = this.process(this.itemList);
+        return this.getMappedItemObjects();
+    }
 
+    @Override
+    public void done()
+    {
+    }
 }

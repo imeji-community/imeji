@@ -69,10 +69,8 @@ public class AlbumBean
      */
     private String smallDescription = null;
     private String description = "";
-
     private ThumbnailBean thumbnail;
     private Navigation navigation;
-
 
     /**
      * Construct an {@link AlbumBean} from an {@link Album}
@@ -118,7 +116,6 @@ public class AlbumBean
     public AlbumBean()
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        
     }
 
     /**
@@ -126,8 +123,7 @@ public class AlbumBean
      */
     public void initView()
     {
-    	navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-    	
+        navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         try
         {
             if (id != null)
@@ -758,16 +754,17 @@ public class AlbumBean
         return this.getAlbum().getMetadata().getDescription().replaceAll("\n", "<br/>");
     }
 
-    public void setDescription(String description) 
+    public void setDescription(String description)
     {
-    	this.description = description;
+        this.description = description;
     }
-	
-    public String getDescription() {
-		return description;
-	}
 
-	public String getTab()
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public String getTab()
     {
         if (UrlHelper.getParameterValue("tab") != null)
         {
@@ -780,12 +777,12 @@ public class AlbumBean
     {
         this.tab = tab.toUpperCase();
     }
-    
+
     public String getPageUrl()
     {
         return navigation.getAlbumUrl() + id;
     }
-    
+
     public User getAlbumCreator() throws Exception
     {
         User user = null;
@@ -793,15 +790,13 @@ public class AlbumBean
         user = uc.retrieve(album.getCreatedBy());
         return user;
     }
-    
+
     public String getCitation()
     {
-    	String title = album.getMetadata().getTitle();
-    	String author = this.getPersonString();
-    	String url = this.getPageUrl();
-    	
-    	String citation = title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
-    	
-    	return citation;
+        String title = album.getMetadata().getTitle();
+        String author = this.getPersonString();
+        String url = this.getPageUrl();
+        String citation = title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
+        return citation;
     }
 }

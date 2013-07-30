@@ -1,74 +1,151 @@
-<ui:composition template="templates/template.xhtml"
+<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline" value="imeji Administration" />
+	
+	<ui:param name="headline" value="imeji Administration"/>
+	<ui:param name="currentMainMenu" value="admin"/>
+	
+	
 	<ui:define name="mainContent">
-		<h:panelGroup layout="block"
-			styleClass="full_area0 endline itemLine noTopBorder"
-			rendered="#{!UserCreationBean.sysAdmin}">
-			<h2>
-				<h:outputText value="You are not allowed to view this page" />
-			</h2>
-		</h:panelGroup>
-		<h:panelGroup layout="block" styleClass="#{SessionBean.admin}">
-			<h:panelGroup layout="block"
-				styleClass="full_area0_p8 endline medium_marginLExcl">
-				<h2>
-					<h:outputLink styleClass="free_area0 "
-						value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml">
-						<h:outputText value="#{lbl.admin_user_new}" />
-					</h:outputLink>
-					<h:outputLink value="#{Navigation.applicationUrl}jsf/Users.xhtml"
-						styleClass="free_area0 xSmall_marginLExcl">
-						<h:outputText value="#{lbl.admin_user_view}" />
-					</h:outputLink>
-				</h2>
-			</h:panelGroup>
-			<h:panelGroup layout="block"
-				styleClass="full_area0_p8 endline medium_marginLExcl">
-				<h2>
-					<h:outputText value="#{lbl.configuration}" styleClass="full_area0" />
-				</h2>
-				<h:outputLink value="#{Navigation.applicationUri}/config">
-					<h:outputText value="#{lbl.edit}" />
-				</h:outputLink>
-			</h:panelGroup>
-			<h:panelGroup layout="block"
-				styleClass="full_area0_p8 endline medium_marginLExcl">
-				<h2>
-					<h:outputText value="#{lbl.administration_storage}"
-						styleClass="full_area0" />
-				</h2>
-				<h:outputLink  styleClass="free_area0"
-					value="#{Navigation.applicationUri}/jsf/AdminInterface.xhtml"
-					target="_blank">
-					<h:outputText value="#{lbl.view_detail}" />
-				</h:outputLink>
-				<h:outputLink  styleClass="free_area0 xTiny_marginLExcl"
-					value="#{Navigation.applicationUri}/jsf/AdminStorage.xhtml"
-					target="_blank">
-					<h:outputText value="#{lbl.storage_tools}" />
-				</h:outputLink>
-			</h:panelGroup>
-			<h:panelGroup layout="block"
-				styleClass="full_area0_p8 endline medium_marginLExcl">
-				<h2>
-					<h:outputText value="#{lbl.administration_advanced}"
-						styleClass="full_area0" />
-				</h2>
-				<h:form>
-					<h:commandLink styleClass="free_area0"
-						action="#{AdminBean.reIndex}"
-						value="#{lbl.admin_advanced_reindex}" />
-					<h:commandLink styleClass="free_area0 xTiny_marginLExcl"
-						action="#{AdminBean.status}" value="#{lbl.admin_advanced_state}" />
-					<h:commandLink styleClass="free_area0 xTiny_marginLExcl"
-						action="#{AdminBean.clean}" value="#{lbl.admin_advanced_clean}" />
-				</h:form>
-			</h:panelGroup>
-
-		</h:panelGroup>
+		<!-- Breadcrumb - History -->
+		<ui:include src="include/History.xhtml"></ui:include>
+		
+		<style type="text/css">
+			.imj_administrationTiledList {
+				width:91.95%;
+				padding:2% 4%;
+			}
+			.imj_administrationTiledList .imj_listBody {
+				width: 100%;
+			}
+			
+			.imj_adminPanel {
+				display: inline-block;
+				max-width: 24.89%;
+				padding:0 2%;
+				vertical-align: top;
+				margin-bottom:2em;
+			}
+			.imj_adminPanel h2 {
+				font-size:140%;
+				line-height:normal;
+			}
+			.imj_adminPanel .imj_headline {
+				width: 91.95%;
+				padding:0.454545em 0.81818181em;
+				text-align: center;
+				background-color: #292929;
+				border-radius: 10px 10px 0 0;
+				border-radius: 0.90909090em 0.90909090em 0 0;
+				border: 1px solid #292929;
+				border: 0.0909090909em solid #292929;
+			}
+			.imj_adminPanel .imj_content {
+				width: 91.95%;
+				padding:0.454545em 0.81818181em;
+				min-height:10em;
+				border-radius: 0 0 10px 10px;
+				border-radius: 0 0 0.90909090em 0.90909090em;
+				border: 1px solid #292929;
+				border: 0.0909090909em solid #292929;
+			}
+			.imj_adminPanel ul {
+				line-height: 150%;
+			}
+			
+		</style>
+		<div class="imj_administrationTiledList">
+		
+			<div class="imj_listBody">
+				<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig">
+					<ui:fragment rendered="#{UserCreationBean.sysAdmin}">
+						<div class="imj_headline">
+							<h2><h:outputText value="#{lbl.admin_user_info}"/></h2>
+						</div>
+						<div class="imj_content">
+							<ul>
+								<li>
+									<a href="#{Navigation.applicationUri}/jsf/UserCreate.xhtml" title="#{lbl.admin_user_new}">
+										<h:outputText value="#{lbl.admin_user_new}"/>
+									</a>
+								</li>
+								<li>
+									<a href="#{Navigation.applicationUrl}jsf/Users.xhtml" title="#{lbl.admin_user_view}">
+										<h:outputText value="#{lbl.admin_user_view}" />
+									</a>
+								</li>
+								<li></li>
+							</ul>
+						</div>
+					</ui:fragment>
+					<ui:fragment rendered="#{!UserCreationBean.sysAdmin}">
+						<h2>
+							<h:outputText value="You are not allowed to view this page" />
+						</h2>
+					</ui:fragment>
+				</h:panelGroup>
+				
+				
+				<h:panelGroup layout="block" styleClass="imj_adminPanel imj_config">
+						<div class="imj_headline">
+							<h2><h:outputText value="#{lbl.configuration}"/></h2>
+						</div>
+						<div class="imj_content">
+							<ul>
+								<li>
+									<a href="#{Navigation.applicationUri}/config" title="#{lbl.edit}">
+										<h:outputText value="#{lbl.edit}" />
+									</a>
+								</li>
+							</ul>
+						</div>
+				</h:panelGroup>
+				
+				
+				<h:panelGroup layout="block" styleClass="imj_adminPanel imj_storageConfig">
+						<div class="imj_headline">
+							<h2><h:outputText value="#{lbl.administration_storage}"/></h2>
+						</div>
+						<div class="imj_content">
+							<ul>
+								<li>
+									<a href="#{Navigation.applicationUri}/jsf/AdminInterface.xhtml" title="#{lbl.view_detail}">
+										<h:outputText value="#{lbl.view_detail}" />
+									</a>
+								</li>
+								<li>
+									<a href="#{Navigation.applicationUri}/jsf/AdminStorage.xhtml" title="#{lbl.storage_tools}">
+										<h:outputText value="#{lbl.storage_tools}" />
+									</a>
+								</li>
+							</ul>
+						</div>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" styleClass="imj_adminPanel imj_advancedConfig">
+						<div class="imj_headline">
+							<h2><h:outputText value="#{lbl.administration_advanced}"/></h2>
+						</div>
+						<div class="imj_content">
+							<h:form>
+								<ul>
+									<li>
+										<h:commandLink action="#{AdminBean.reIndex}" value="#{lbl.admin_advanced_reindex}" title="#{lbl.admin_advanced_reindex}"/>
+									</li>
+									<li>
+										<h:commandLink action="#{AdminBean.status}" value="#{lbl.admin_advanced_state}" title="#{lbl.admin_advanced_state}"/>
+									</li>
+									<li>
+										<h:commandLink action="#{AdminBean.clean}" value="#{lbl.admin_advanced_clean}" title="#{lbl.admin_advanced_clean}"/>
+									</li>
+								</ul>
+							</h:form>
+						</div>
+				</h:panelGroup>
+			</div>
+		</div>
 	</ui:define>
+	
 </ui:composition>

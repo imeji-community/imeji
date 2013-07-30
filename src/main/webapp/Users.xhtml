@@ -4,6 +4,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 			<ui:param name="headline" value="#{lbl.admin_users_head}"/>
+			<ui:param name="currentMainMenu" value="admin"/>
+			
 			<ui:define name="mainContent">
 				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!UsersBean.sysAdmin}">
 					<h2><h:outputText value="You are not allowed to view this page"/></h2>

@@ -1138,6 +1138,7 @@ cut second ?
 /* id="contentSkipLinkAnchor" class="headLine"  */
 
 .imj_siteContentHeadline {
+	clear:both;
     float: right;
     text-align: right;
     /*white-space: nowrap;*/

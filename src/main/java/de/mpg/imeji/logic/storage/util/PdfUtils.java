@@ -25,6 +25,10 @@ public class PdfUtils
     final static int RESOLUTION_DPI_SCREEN = 72;
     final static int RESOLUTION_DPI_IMAGE = 150;
 
+    /**
+     * 
+     * @return the pdf rendering DPI
+     */
     private static int getResolutionDPI()
     {
         try
@@ -38,6 +42,26 @@ public class PdfUtils
             return PdfUtils.RESOLUTION_DPI_IMAGE;
         }
         return PdfUtils.RESOLUTION_DPI_IMAGE;
+    }
+    
+    /**
+     * 
+     * @return the page number which will be transformed for the thumbnail image.
+     */
+    private static int getThumbnailPage()
+    {
+        try
+        {
+            int page = Integer.parseInt(PropertyReader.getProperty("imeji.internal.pdf.thumbnail.page"));
+            if (page >= 0)
+                return page;
+        }
+        catch (Exception e)
+        {
+            return PdfUtils.PAGENUMBERTOIMAGE;
+        }
+        
+        return PdfUtils.PAGENUMBERTOIMAGE;
     }
 
     /**
@@ -55,7 +79,7 @@ public class PdfUtils
         // PDFFile pdfFile = new PDFFile(byteBuffer);
         // return PdfUtils.pdfFileToByteAray(pdfFile, PdfUtils.PAGENUMBERTOIMAGE, BufferedImage.TYPE_INT_RGB,
         // PdfUtils.getResolutionDPI());
-        return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(bytes)), PdfUtils.PAGENUMBERTOIMAGE,
+        return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(bytes)), PdfUtils.getThumbnailPage(),
                 BufferedImage.TYPE_INT_RGB, PdfUtils.getResolutionDPI());
     }
 
@@ -73,15 +97,15 @@ public class PdfUtils
     {
         if (resolution == FileResolution.WEB)
         {
-            return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(bytes)), PdfUtils.PAGENUMBERTOIMAGE,
+            return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(bytes)), PdfUtils.getThumbnailPage(),
                     BufferedImage.TYPE_INT_RGB, PdfUtils.DPI_WEB);
         }
         else if (resolution == FileResolution.THUMBNAIL)
         {
-            return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(bytes)), PdfUtils.PAGENUMBERTOIMAGE,
+            return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(bytes)), PdfUtils.getThumbnailPage(),
                     BufferedImage.TYPE_INT_RGB, PdfUtils.DPI_THUMB);
         }
-        return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(bytes)), PdfUtils.PAGENUMBERTOIMAGE,
+        return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(bytes)), PdfUtils.getThumbnailPage(),
                 BufferedImage.TYPE_INT_RGB, PdfUtils.getResolutionDPI());
     }
 

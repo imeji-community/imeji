@@ -125,8 +125,6 @@
 			<id>nexus</id>
 			<url>http://rd.mpdl.mpg.de/nexus/content/groups/public</url>
 		</repository>
-		<!-- <repository> <id>digilib</id> <name>The Digital Image Library</name> 
-			<url>http://hg.berlios.de/repos/digilib/</url> </repository> -->
 		<repository>
 			<releases />
 			<snapshots>

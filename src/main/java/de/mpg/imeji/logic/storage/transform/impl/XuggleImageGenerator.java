@@ -34,7 +34,7 @@ import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.VideoUtils;
 
 /**
- * TODO Description
+ * {@link ImageGenerator} implemted with xuggle (video, audios)
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)

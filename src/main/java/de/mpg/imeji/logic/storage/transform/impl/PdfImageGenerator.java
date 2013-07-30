@@ -34,7 +34,7 @@ import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.PdfUtils;
 
 /**
- * TODO Description
+ * {@link ImageGenerator} to generate image out of pdf
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)

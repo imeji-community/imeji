@@ -17,13 +17,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import com.sun.media.jai.codec.FileSeekableStream;
@@ -64,13 +61,53 @@ public class ImageUtils
      */
     public static byte[] resizeJPEG(byte[] bytes, FileResolution resolution) throws IOException, Exception
     {
-        // If it is orginal resolution, don't touch the file, otherwise resize
+        // If it is original resolution, don't touch the file, otherwise resize
         if (!FileResolution.ORIGINAL.equals(resolution))
         {
             BufferedImage image = JpegUtils.readJpeg(bytes);
             bytes = toBytes(scaleImage(image, resolution), StorageUtils.getMimeType("jpg"));
         }
         return bytes;
+    }
+
+    /**
+     * Transform an image in jpeg. Useful to reduce size of thumbnail and web resolution images. If the format of the
+     * image is not supported, return null
+     * 
+     * @param bytes
+     * @param mimeType
+     * @return
+     */
+    public static byte[] toJpeg(byte[] bytes, String mimeType)
+    {
+        try
+        {
+            if (mimeType.equals(StorageUtils.getMimeType("tif")))
+            {
+                return ImageUtils.tiff2Jpeg(bytes);
+            }
+            else if (mimeType.equals(StorageUtils.getMimeType("png")))
+            {
+                return ImageUtils.png2Jpeg(bytes);
+            }
+            else if (mimeType.equals(StorageUtils.getMimeType("bmp")))
+            {
+                return ImageUtils.bmp2Jpeg(bytes);
+            }
+            else if (mimeType.equals(StorageUtils.getMimeType("gif")))
+            {
+                return GifUtils.toJPEG(bytes);
+            }
+            else if (mimeType.equals(StorageUtils.getMimeType("jpg")))
+            {
+                return bytes;
+            }
+        }
+        catch (Exception e)
+        {
+            logger.info("Image could not be compressed: ", e);
+        }
+        return null;
     }
 
     /**
@@ -86,52 +123,51 @@ public class ImageUtils
      * @throws IOException
      * @throws Exception
      */
-    public static byte[] transformImage(byte[] bytes, FileResolution resolution, String mimeType) throws IOException,
-            Exception
-    {
-        // If it is orginal resolution, don't touch the file, otherwise transform (compress and/or )
-        if (!FileResolution.ORIGINAL.equals(resolution))
-        {
-            if (FileResolution.THUMBNAIL.equals(resolution) || StorageUtils.getMimeType("tif").equals(mimeType))
-            {
-                // If it is the thumbnail, compress the images (in jpeg), if it is a tif compress even for WEb
-                // resolution, since resizing not possible with tif
-                byte[] compressed = toJpeg(bytes, mimeType);
-                if (!Arrays.equals(compressed, bytes))
-                {
-                    mimeType = StorageUtils.getMimeType("jpg");
-                }
-                bytes = compressed;
-            }
-            // Read the bytes as BufferedImage
-            BufferedImage image;
-            if (StorageUtils.getMimeType("jpg").equals(mimeType))
-            {
-                image = JpegUtils.readJpeg(bytes);
-            }
-            else
-            {
-                image = ImageIO.read(new ByteArrayInputStream(bytes));
-            }
-            {
-                if (image == null)
-                    // The image couldn't be read
-                    return null;
-            }
-            // Resize image
-            if (StorageUtils.getMimeType("gif").equals(mimeType) && GifUtils.isAnimatedGif(bytes))
-            {
-                // If it is an animated gif, resize all frame and build a new gif with this resized frames
-                bytes = GifUtils.resizeAnimatedGif(bytes, resolution);
-            }
-            else
-            {
-                bytes = toBytes(scaleImage(image, resolution), mimeType);
-            }
-        }
-        return bytes;
-    }
-
+    // public static byte[] transformImage(byte[] bytes, FileResolution resolution, String mimeType) throws IOException,
+    // Exception
+    // {
+    // // If it is orginal resolution, don't touch the file, otherwise transform (compress and/or )
+    // if (!FileResolution.ORIGINAL.equals(resolution))
+    // {
+    // if (FileResolution.THUMBNAIL.equals(resolution) || StorageUtils.getMimeType("tif").equals(mimeType))
+    // {
+    // // If it is the thumbnail, compress the images (in jpeg), if it is a tif compress even for WEb
+    // // resolution, since resizing not possible with tif
+    // byte[] compressed = toJpeg(bytes, mimeType);
+    // if (!Arrays.equals(compressed, bytes))
+    // {
+    // mimeType = StorageUtils.getMimeType("jpg");
+    // }
+    // bytes = compressed;
+    // }
+    // // Read the bytes as BufferedImage
+    // BufferedImage image;
+    // if (StorageUtils.getMimeType("jpg").equals(mimeType))
+    // {
+    // image = JpegUtils.readJpeg(bytes);
+    // }
+    // else
+    // {
+    // image = ImageIO.read(new ByteArrayInputStream(bytes));
+    // }
+    // {
+    // if (image == null)
+    // // The image couldn't be read
+    // return null;
+    // }
+    // // Resize image
+    // if (StorageUtils.getMimeType("gif").equals(mimeType) && GifUtils.isAnimatedGif(bytes))
+    // {
+    // // If it is an animated gif, resize all frame and build a new gif with this resized frames
+    // bytes = GifUtils.resizeAnimatedGif(bytes, resolution);
+    // }
+    // else
+    // {
+    // bytes = toBytes(scaleImage(image, resolution), mimeType);
+    // }
+    // }
+    // return bytes;
+    // }
     /**
      * Scale a {@link BufferedImage} to new size. Is faster than the basic {@link ImageUtils}.scaleImage method, has the
      * same quality. If it is a thumbnail, cut the images to fit into the raster
@@ -142,7 +178,7 @@ public class ImageUtils
      * @return the resized images
      * @throws Exception
      */
-    public static BufferedImage scaleImageFast(BufferedImage image, int size, FileResolution resolution)
+    private static BufferedImage scaleImageFast(BufferedImage image, int size, FileResolution resolution)
             throws Exception
     {
         int width = image.getWidth(null);
@@ -206,7 +242,7 @@ public class ImageUtils
      *            {@code BILINEAR} hint is specified)
      * @return a scaled version of the original {@link BufferedImage}
      */
-    public static BufferedImage getScaledInstance(BufferedImage img, int targetWidth, int targetHeight, Object hint,
+    private static BufferedImage getScaledInstance(BufferedImage img, int targetWidth, int targetHeight, Object hint,
             boolean higherQuality)
     {
         int type = (img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
@@ -262,7 +298,7 @@ public class ImageUtils
      * @param bytes
      * @return
      */
-    public static byte[] tiff2Jpeg(byte[] bytes)
+    private static byte[] tiff2Jpeg(byte[] bytes)
     {
         try
         {
@@ -285,7 +321,7 @@ public class ImageUtils
      * @param bytes
      * @return
      */
-    public static byte[] png2Jpeg(byte[] bytes)
+    private static byte[] png2Jpeg(byte[] bytes)
     {
         try
         {
@@ -308,18 +344,7 @@ public class ImageUtils
      * @param bytes
      * @return
      */
-    public static byte[] bmp2Jpeg(byte[] bytes)
-    {
-        return image2Jpeg(bytes);
-    }
-
-    /**
-     * Transform a gif image to a jpeg image
-     * 
-     * @param bytes
-     * @return
-     */
-    public static byte[] gif2Jpeg(byte[] bytes)
+    private static byte[] bmp2Jpeg(byte[] bytes)
     {
         return image2Jpeg(bytes);
     }
@@ -389,46 +414,6 @@ public class ImageUtils
     }
 
     /**
-     * Compress an image in jpeg. Useful to reduce size of thumbnail and web resolution images. If the format of the
-     * image is not supported, return null
-     * 
-     * @param bytes
-     * @param mimeType
-     * @return
-     */
-    public static byte[] toJpeg(byte[] bytes, String mimeType)
-    {
-        try
-        {
-            if (mimeType.equals(StorageUtils.getMimeType("tif")))
-            {
-               return ImageUtils.tiff2Jpeg(bytes);
-            }
-            else if (mimeType.equals(StorageUtils.getMimeType("png")))
-            {
-                return ImageUtils.png2Jpeg(bytes);
-            }
-            else if (mimeType.equals(StorageUtils.getMimeType("bmp")))
-            {
-                return ImageUtils.bmp2Jpeg(bytes);
-            }
-            else if (mimeType.equals(StorageUtils.getMimeType("gif")))
-            {
-                return GifUtils.toJPEG(bytes);
-            }
-            else if (mimeType.equals(StorageUtils.getMimeType("jpg")))
-            {
-                return bytes;
-            }
-        }
-        catch (Exception e)
-        {
-            logger.info("Image could not be compressed: ", e);
-        }
-        return null;
-    }
-
-    /**
      * TRansform a {@link BufferedImage} to a {@link Byte} array
      * 
      * @param image
@@ -489,28 +474,39 @@ public class ImageUtils
         }
     }
 
-    public static String getThumb() throws IOException, URISyntaxException
+    /**
+     * Return the property xsd.metadata.content-category.thumbnail
+     * 
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    public static String getEscidocThumbnailContentCategory() throws IOException, URISyntaxException
     {
         return PropertyReader.getProperty("xsd.metadata.content-category.thumbnail");
     }
 
-    public static String getWeb() throws IOException, URISyntaxException
+    /**
+     * Return the property xsd.metadata.content-category.web-resolution
+     * 
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    public static String getEscidocWebContentCategory() throws IOException, URISyntaxException
     {
         return PropertyReader.getProperty("xsd.metadata.content-category.web-resolution");
     }
 
-    public static String getOrig() throws IOException, URISyntaxException
+    /**
+     * Return the property xsd.metadata.content-category.original-resolution
+     * 
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    public static String getEscidocOriginalContentCategory() throws IOException, URISyntaxException
     {
         return PropertyReader.getProperty("xsd.metadata.content-category.original-resolution");
-    }
-
-    public static BufferedImage getImageFromUrl(URL url) throws IOException
-    {
-        return ImageUtils.byteArrayToBufferedImage(StorageUtils.getBytes(url));
-    }
-
-    public static BufferedImage byteArrayToBufferedImage(byte[] imageInBytes) throws IOException
-    {
-        return ImageIO.read(new ByteArrayInputStream(imageInBytes));
     }
 }

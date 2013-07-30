@@ -51,7 +51,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
  */
 public class ImageGeneratorManager
 {
-    public List<ImageGenerator> generators = null;
+    private List<ImageGenerator> generators = null;
 
     /**
      * Default constructor of {@link ImageGeneratorManager}
@@ -98,7 +98,7 @@ public class ImageGeneratorManager
      * @param resolution
      * @return
      */
-    private byte[] generate(byte[] bytes, String extension, FileResolution resolution)
+    public byte[] generate(byte[] bytes, String extension, FileResolution resolution)
     {
         if (StorageUtils.compareExtension("gif", extension))
         {

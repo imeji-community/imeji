@@ -26,19 +26,12 @@
 				<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl"> 
 					<h:panelGroup layout="block" styleClass="full_area detailedItem">
 						<span>
-							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.imageFile and imageBean.digilibDisabled}">
+							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{(imageBean.imageFile and !Property.digilibEnabled) or !imageBean.imageFile}">
 								<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>
-							<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{imageBean.image.storageId}/original/#{imageBean.itemStorageIdFilename}" target="_blank" rendered="#{imageBean.imageFile and imageBean.digilibEnabled and (empty Navigation.externalDigilibUrl)}">
+							<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{imageBean.image.storageId}/original/#{imageBean.itemStorageIdFilename}" target="_blank" rendered="#{imageBean.imageFile and Property.digilibEnabled and (empty Navigation.externalDigilibUrl)}">
 								<h:graphicImage id="picWebResolutionInternalDigilib" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>
-							<h:outputLink id="lnkPicFullResolutionPDF" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.pdfFile}">
-								<h:graphicImage id="picWebResolutionPDF" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
-							</h:outputLink>
-							<h:outputLink id="lnkPicFullResolutionVideo" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.videoFile}">
-								<h:graphicImage id="picWebResolutionVideo" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
-							</h:outputLink>
-
 						</span>
 					</h:panelGroup>
 					<h:panelGroup styleClass="free_area0 xSmall_marginLIncl" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">

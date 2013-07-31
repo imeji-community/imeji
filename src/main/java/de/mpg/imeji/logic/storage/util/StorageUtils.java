@@ -43,6 +43,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.taskdefs.Get;
 
 import de.mpg.imeji.presentation.util.ProxyHelper;
@@ -171,7 +172,8 @@ public class StorageUtils
     }
 
     /**
-     * Return the Mime Type of a file according to its format (i.e. file extension)
+     * Return the Mime Type of a file according to its format (i.e. file extension). <br/>
+     * The File extension can be found via {@link FilenameUtils}
      * 
      * @param extension
      * @return
@@ -183,11 +185,7 @@ public class StorageUtils
         {
             return "image/" + "tiff";
         }
-        else if ("jpg".equals(extension))
-        {
-            return "image/jpeg";
-        }
-        else if ("jpeg".equals(extension))
+        else if ("jpg".equals(extension) || "jpeg".equals(extension))
         {
             return "image/jpeg";
         }

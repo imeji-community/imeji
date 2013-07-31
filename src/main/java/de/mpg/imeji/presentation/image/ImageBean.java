@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -25,6 +25,7 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -72,7 +73,6 @@ public class ImageBean
     private MetadataLabels labels;
     private SingleImageBrowse browse = null;
     private MetadataSetBean mds;
-    private boolean digilibEnabled;
 
     /**
      * Construct a default {@link ImageBean}
@@ -86,48 +86,8 @@ public class ImageBean
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         prettyLink = "pretty:editImage";
         labels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
-        this.digilibEnabled = this.getDigilibEnabledInProperty();
     }
 
-    /**
-     * @return true, if the property file turn the DIGILIB view on, otherwise false.
-     */
-    private boolean getDigilibEnabledInProperty()
-    {
-        boolean value = false;
-        try
-        {
-            value = Boolean.valueOf(PropertyReader.getProperty("imeji.digilib.enable"));
-        }
-        catch (IOException e)
-        {
-            value = false;
-        }
-        catch (URISyntaxException e)
-        {
-            value = false;
-        }
-        return value;
-    }
-
-    /**
-     * @return true, if DIGILIB is enabled, false otherwise
-     */
-    public boolean getDigilibEnabled()
-    {
-        return this.digilibEnabled;
-    }
-
-    /**
-     * @return true, if DIGILIB is disabled, false otherwise
-     */
-    public boolean getDigilibDisabled()
-    {
-        if (this.digilibEnabled)
-            return false;
-        else
-            return true;
-    }
 
     /**
      * Initialize the {@link ImageBean}
@@ -606,25 +566,21 @@ public class ImageBean
         return mds;
     }
 
+    /**
+     * getter
+     * @return
+     */
     public String getItemStorageIdFilename()
     {
         return StringHelper.normalizeFilename(this.item.getFilename());
     }
-
-    public boolean isPdfFile()
+    
+    /**
+     * True if the current file is an image
+     * @return
+     */
+    public boolean isImageFile()
     {
-        if (StringHelper.getFileExtension(this.item.getFilename()).equalsIgnoreCase("pdf"))
-            return true;
-        return false;
-    }
-
-    public boolean isImageFile() throws IOException, URISyntaxException
-    {
-        return StringHelper.isImage(this.item.getFilename());
-    }
-
-    public boolean isVideoFile() throws IOException, URISyntaxException
-    {
-        return StringHelper.isVideo(this.item.getFilename());
+        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("image");
     }
 }
